@@ -21,6 +21,10 @@
     width: auto;
 }
 
+.horizontal>label {
+    width: auto;
+}
+
 .horizontal>*:last-child,
 .horizontal>*.last {
     margin-right: 0;

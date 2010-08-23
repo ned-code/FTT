@@ -33,10 +33,15 @@ class Friendship < ActiveRecord::Base
   # = Class Methods =
   # =================
   
-  def self.create_friendship!(user, friend)
+  def self.create_friendship!(user, friend, with_request=true)
+    if with_request
+      status = REQUESTED
+    else
+      status = ACCEPTED
+    end
     transaction do
-      friendship = Friendship.create!({ :user_id => user.id, :friend_id => friend.id, :status => Friendship::REQUESTED })
-      Friendship.create_friend_mirror!(friend.id,user.id)
+      friendship = Friendship.create!({ :user_id => user.id, :friend_id => friend.id, :status => status })
+      Friendship.create_friend_mirror!(friend.id,user.id, with_request)
     end
     Notifier.request_friendship(user,friend).deliver
     return friendship
@@ -93,8 +98,13 @@ class Friendship < ActiveRecord::Base
   
 private
 
-  def self.create_friend_mirror!(user_id, friend_id)
-    friendship = Friendship.create!({ :user_id => user_id, :friend_id => friend_id, :status => Friendship::PENDING_REQUEST })
+  def self.create_friend_mirror!(user_id, friend_id, with_request=true)
+    if with_request
+      status = PENDING_REQUEST
+    else
+      status = ACCEPTED
+    end
+    friendship = Friendship.create!({ :user_id => user_id, :friend_id => friend_id, :status => status})
   end
   
   def assign_friendship_to_default_user_list

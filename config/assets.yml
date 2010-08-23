@@ -25,12 +25,16 @@ stylesheets:
     
     - public/css/webdoc/flash.css
     - public/css/jquery-ui/jquery-ui-1.8.css
-  application:
-    - public/css/webdoc/session.layout.css
+  home:
+    - public/css/webdoc/home.layout.css
+    - public/css/webdoc/home.color.css
+  account:
+    - public/css/webdoc/account.layout.css
+    - public/css/webdoc/account.color.css
   dashboard:
     - public/css/webdoc/dashboard.layout.css
     - public/css/webdoc/dashboard.color.css
-  page_editor:
+  editor:
     - public/css/webdoc/editor.color.css
     - public/css/webdoc/editor.layout.css
     - public/css/webdoc/editor.typography.css
@@ -53,8 +57,17 @@ stylesheets:
     - public/css/colorpicker/colorpicker.css
     - public/css/text-tool/toolbar.css
     - public/css/codemirror/codemirror.css
+  profile:
+    - public/css/webdoc/profile.layout.css
+    - public/css/webdoc/profile.color.css
+  friends:
+    - public/css/webdoc/friends.layout.css
+    - public/css/webdoc/friends.color.css
+  explore:
+    - public/css/webdoc/explore.layout.css
+    - public/css/webdoc/explore.color.css
   
-#  font_collection:
+#  fonts:
 #    - public/fonts/Aaargh-fontfacekit/stylesheet
 #    - public/fonts/Adler-fontfacekit/stylesheet
 #    - public/fonts/CalligraphyFLF-fontfacekit/stylesheet
@@ -75,8 +88,6 @@ stylesheets:
 #    - public/fonts/SF-Cartoonist-Hand-fontfacekit/stylesheet
 #    - public/fonts/Shardee-fontfacekit/stylesheet
 #    - public/fonts/Underwood-Champion-fontfacekit/stylesheet
-    
-  page_viewer:
   
   feedback:
     - public/css/zenbox/zenbox.css
@@ -120,7 +131,7 @@ javascripts:
     - app/javascripts/webdoc/controllers/document_share_controller.js
     - app/javascripts/webdoc/gui/document_list.js
     - app/javascripts/webdoc/core/document_editor.js
-  page_editor:
+  editor:
     - public/js/sylvester.js
     - public/js/strophe.js
     - public/js/jquery.svg.js

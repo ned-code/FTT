@@ -19,8 +19,9 @@
     <!-- site content -->
 
     <%= yield %>
-
-
+    
+    <!-- site template -->
+    
     <%= render "layouts/siteheader" %>
     <%= render "layouts/flash", :object => flash %>
     <%= render "layouts/feedback" %>
@@ -30,7 +31,8 @@
 
     <%= include_js_assets %>
 
-    <% if false %><!-- TODO really needed? -->
+    <% if false %>
+      <%# TODO need to implement open social apps %>
       <% unless Rails.env.production? %>
         <%= javascript_include_tag "#{APP_CONFIG['shindig_server_base']}js/core:rpc:pubsub.js?c=1&debug=1" %>
       <% end %>
@@ -45,22 +47,22 @@
         cookiesSessionKeyName:"<%= cookies[session_key_name] %>"
       };
 
-      WebDoc.dataServer = "<%= APP_CONFIG['data_server'] %>"; // TODO really needed?
+      WebDoc.dataServer = "<%= APP_CONFIG['data_server'] %>";
 
       <% if false %>
+        // TODO need to implement open social apps
         WebDoc.shindig = {};
         WebDoc.shindig.serverBase = "<%= APP_CONFIG['shindig_server_base'] %>";
       <% end %>
 
       <% current_user_json = current_user.present? ? raw(current_user.as_application_json.to_json.gsub('/script','/sscript')) : {}.to_json %>
-
       WebDoc.Application.currentUser = new WebDoc.User(<%= current_user_json %>);
 
-       WebDoc.Application.start();
+      WebDoc.Application.start();
 
-       jQuery(document).ready(function() {
-         jQuery('time').cuteTime();
-       });
+      jQuery(document).ready(function() {
+        jQuery('time').cuteTime();
+      });
     </script>
 
   </body>

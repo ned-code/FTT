@@ -129,17 +129,18 @@ WebDoc.DocumentList = $.klass({
           }
         },
         documentNode = $("<li/>", {
-          "class": "document-item " +( editor && "document-item-editable" )+ " clear",
+          "class": "document-item " +( editor && "document-item-editable" )+ " clear card",
           data: data
         }),
         documentTitle = $("<a/>", {
-          "class": "document-title wb-document-edit",
+          "class": "document-title wb-document-edit thumb",
           "href": '/documents/'+id,
           "title": "Open '" + $.string().escapeHTML(document.title()) + "'",
+          "style": "background-image: url('/images/icon_no_thumb_page_640x480.png');",
           data: data,
           html: $.string().escapeHTML(document.title())
         });
-    
+            
     documentNode.append( documentTitle );
     if ( editor ) {
       documentNode
@@ -177,7 +178,7 @@ WebDoc.DocumentList = $.klass({
   
   _buildDocumentActionsNode: function( document, data ) {
     var documentActionsNode = $("<ul/>", {
-          "class": "document-actions index"
+          "class": "document-actions index card"
         }),
         infoItemNode = $("<li/>"),
         infoNode = $("<a/>", {

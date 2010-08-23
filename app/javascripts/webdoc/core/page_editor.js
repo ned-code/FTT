@@ -78,12 +78,11 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
       app.themesController = new WebDoc.ThemesController();
       
       // create all tools
-      app.drawingTool = new WebDoc.DrawingTool( "a[href='#draw']", "draw_tool_mode" );
-      app.arrowTool = new WebDoc.ArrowTool( "a[href='#select']", "select_tool_mode" );
-      app.textTool = new WebDoc.TextTool( "a[href='#insert-text']", "text_tool_mode" );
-      app.textboxTool = new WebDoc.TextboxTool( "a[href='#textbox']", "textbox_tool_mode" );
+      app.drawingTool = new WebDoc.DrawingTool( "a[href='#draw_tool']", "draw_tool_mode" );
+      app.textTool = new WebDoc.TextTool( "a[href='#text_tool']", "text_tool_mode" );
+      app.textboxTool = new WebDoc.TextboxTool( "a[href='#textbox_tool']", "textbox_tool_mode" );
       app.htmlSnipplet = new WebDoc.HtmlTool( "a[href='#html_tool']", "html_tool_mode" );
-      app.iframeTool = new WebDoc.IframeTool( "a[href='#insert-iframe']", "iframe_tool_mode" );
+      app.iframeTool = new WebDoc.IframeTool( "a[href='#webpage_tool']", "iframe_tool_mode" );
       app.appTool = new WebDoc.AppTool( "a[href='#insert-app']", "app_tool_mode" );
       app.browserTool = new WebDoc.BrowserTool("a[href='#browser']");
 

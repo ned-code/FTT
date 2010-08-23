@@ -1,17 +1,17 @@
 <% meta_title @document.title %>
 
-<% css_assets 'page_editor' %>
-<% js_assets 'page_editor' %>
+<% css_assets 'editor' %>
+<% js_assets 'editor' %>
 
 <!-- workspace -->
 
 <div class="title_wrap site_wrap wrap horizontal">
   <h1><%= @document.title %></h1>
- <a class="dropdown_button button settings" href="#dropdown" data-for="#doc_settings_dropdown">Settings</a>
-      <ul class="vertical doc_settings_dropdown_index dropdown_index buttons_index index" id="doc_settings_dropdown">
-        <li><a href="/" class="edit_button button">your profile</a></li
-       ><li><a href="/" class="edit_button button">logout</a></li>
-      </ul>
+  <a class="dropdown_button settings_button button" href="#dropdown" data-for="#doc_settings_dropdown">Settings</a>
+  <ul class="vertical doc_settings_dropdown_index dropdown_index buttons_index index" id="doc_settings_dropdown">
+    <li><a href="/" class="edit_button button">your profile</a></li
+   ><li><a href="/" class="edit_button button">logout</a></li>
+  </ul>
 </div>
 
 <section class="workspace_wrap site_wrap wrap">

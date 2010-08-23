@@ -26,9 +26,9 @@
     <% elsif current_user.blocked_friend?(user)%>
      <p>You have blocked <%= user.username %> </p>
      <% else %>
-     <p>
+
        <a class="become_friend_button button green small" href="#become_friend">Become Friend</a>
-     </p>
+
     <% end %>
   <% end %>
   

@@ -10,9 +10,11 @@ WebDoc.DocumentShareController = $.klass({
     
     
     this.friendsSelector = new WebDoc.FriendsSelectorController('share_webdoc');
+    this.emailInvitationForm = new WebDoc.EmailInvitationController('wd_email_share_form');
     
-    this.documentShareDialog = jQuery('#share_webdoc');
-    this.documentShareForm = jQuery("#wd_share_form");
+    this.ShareDialog = jQuery('#share_webdoc');
+    this.ShareForm = jQuery("#wd_share_form");
+    this.emailShareForm = jQuery('#wd_email_share_form');
     
     this.yourConnectionsList = jQuery('#your_connections_list');
     this.onlyParticipantsRadio = jQuery("#only_participants_radio");
@@ -28,54 +30,24 @@ WebDoc.DocumentShareController = $.klass({
     this.onlyParticipantsRadio.bind('change', this._onlyParticipantsRadioChanged.pBind(this));
     this.publicRadio.bind('change', this._publicRadioChanged.pBind(this));
     this.yourConnectionsRadio.bind('change', this._connectionsRadioChanged.pBind(this));
-    this.documentShareForm.bind( 'submit', this._submitForm.pBind(this) );
-    this.documentShareDialog.delegate("a[href='#delete']", "click", this.deleteAccess.pBind(this));
-    
-    // this.documentShareDialog
-    // .remove()
-    // .css({display: ''});
+    this.ShareForm.bind( 'submit', this._submitForm.pBind(this) );
+    this.emailShareForm.bind( 'submit', this._sendInvitations.pBind(this) );
+    this.ShareDialog.delegate("a[href='#delete']", "click", this.deleteAccess.pBind(this));
   },
   
   showShare: function(e, document) {
     var self = this;
     
     this.document = document;
-    this.cleanFriendsList();
+    this.cleanFields();
     
     jQuery.ajax({
       url: "/documents/" + document.uuid() + "/roles",
       type: 'GET',
       dataType: 'json',              
       success: function(data, textStatus) {
-        this.documentShareDialog.show();
-        // this.documentShareDialog.pop({
-        //           attachTo: $(e.currentTarget),
-        //           initCallback: function(){
-        //             var node = $(this);
-        //             
-        //             self._initFields();
-        //             
-        //             self.shareNode.bind('change', function(e){
-        //               self.documentShareDialog.removeClass("state-unshared");
-        //             });
-        //             self.unshareNode.bind('change', function(e){
-        //               self.documentShareDialog.addClass("state-unshared");
-        //             });
-        //             self.sharedDocUrlField.bind('focus', function(e){
-        //               $(this).select();
-        //             });
-        //             
-        //             self.shareDocRadio.bind('change', self._shareDocument.pBind(self));
-        //             self.unshareDocRadio.bind('change', self._unshareDocument.pBind(self));
-        //             
-        //             self.documentShareForm.bind('submit', function(e){
-        //               self._sendInvitations(e);
-        //               
-        //               e.preventDefault();
-        //             });
-        //           }
-        //         });
-        
+        this.ShareDialog.show();
+        this.emailInvitationForm.init();
         this.loadAccess(data);
       }.pBind(this),
     
@@ -187,17 +159,32 @@ WebDoc.DocumentShareController = $.klass({
     var url = '/documents/' + this.document.uuid() + '/roles';
     var jSONData = { accesses : access_content };
     WebDoc.ServerManager.request(url,function(data){
-      //this.friendsSelector.cleanFriendsList();
       this.loadAccess(data);
     }.pBind(this), 'POST', jSONData);
   },
   
-  //Todo for email invitations
   _sendInvitations: function(e) {
-    var recipients = $("#wb-invitation-add-readers").val();
-    var message = $("#wb-invitation-add-readers-message").val();
-    this._createRightsToRecipients(this._getInvitationAccess(recipients, message));
     e.preventDefault();
+    var role;
+    if(this._getAllowCommentsCheckBoxValue()){
+      role = 'viewer_comment';
+    }
+    else{
+      role = 'viewer_only';
+    }
+    
+    var invitations = { invitations : {
+                            role : role,
+                            emails : this.emailInvitationForm.getEmailsList(),
+                            message : this.emailInvitationForm.getMessage(),
+                            document_id: this.document.uuid()
+                           }
+                         };
+                         
+    var url = '/invitations/';
+    WebDoc.ServerManager.request(url,function(data){
+      ddd('email send with sucess');
+    }.pBind(this), 'POST', invitations);
   },
   
   _initAllowCommentsCheckBox:function(role){
@@ -243,10 +230,9 @@ WebDoc.DocumentShareController = $.klass({
     return { accesses : $.toJSON(access_content) }
   },
   
-  //TODO for mail invitation
-  _cleanInvitationFields: function() {
-    $("#wb-invitation-add-readers").val("");
-    $("#wb-invitation-add-readers-message").val("");
+  cleanFields: function(){
+    this.emailInvitationForm.cleanFields();
+    this.friendsSelector.clean();
   },
   
   _closeDialog: function() {

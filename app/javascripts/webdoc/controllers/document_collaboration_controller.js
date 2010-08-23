@@ -6,7 +6,6 @@
 WebDoc.DocumentCollaborationController = $.klass({
   
   documentAccessDialog: null,
-  documentShareTabs: null,
   
   initialize: function() {
     var self = this;
@@ -33,8 +32,7 @@ WebDoc.DocumentCollaborationController = $.klass({
     var that = this;
     
     this.document = document;
-    this.cleanInvitationFields();
-    this.cleanFriendsList();
+    this.cleanFields();
     // document access can be changed only when we are online. So we can do ajax request here
     jQuery.ajax({
       url: this.url(),
@@ -43,15 +41,6 @@ WebDoc.DocumentCollaborationController = $.klass({
       success: function(data, textStatus) {
         ddd("access", data);
         this.documentAccessDialog.show();
-        
-        // this.documentAccessDialog.pop({
-        //   attachTo: $( e.currentTarget ),
-        //   initCallback: function(){
-        //     that.documentAccessForm
-        //     .bind( 'submit', that.sendInvitations.pBind(that) );
-        //     that.domNode.delegate("a[href='#delete']", "click", that.deleteAccess.pBind(that));
-        //   }
-        // });
         this.loadAccess(data);
       }.pBind(this),
       
@@ -161,34 +150,19 @@ WebDoc.DocumentCollaborationController = $.klass({
     });
   },
   
-  //Todo manage the email form
-  cleanInvitationFields: function() {
-    jQuery("#wb-invitation-add-editors").val("");
-    jQuery("#wb-invitation-add-editors-message").val("");
-  },
-  
-  cleanFriendsList: function(){
-    this.friendsSelector.cleanFriendsList();
-  },
-  
-  toggleForm: function(e){
-    e.preventDefault();
-    this.byEmailForm.toggle();
-    this.chooseFriendsForm.toggle();
+  cleanFields: function(){
+    this.emailInvitationForm.cleanFields();
+    this.friendsSelector.clean();
   },
   
   showEmailForm: function(e){
-    ddd('showEmailForm');
     e.preventDefault();
     this.chooseFriendsForm.hide();
-    if(!this.emailInvitationForm.domBuilded){
-      this.emailInvitationForm.buildDom();
-    }
+    this.emailInvitationForm.init();
     this.byEmailForm.show();
   },
   
   showConnectionsForm: function(e){
-    ddd('showConnectionsForm');
     e.preventDefault();
     this.chooseFriendsForm.show();
     this.byEmailForm.hide();

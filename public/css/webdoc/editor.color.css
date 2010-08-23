@@ -63,8 +63,17 @@
 }
 
 .view_button.active,
-.full_view a[href='#full'].view_button {
+.full_view a[href='#view'].view_button {
   background-position: 0 -24px;
+}
+
+.edit_dropdown_index>li a {
+	color:#efefef;
+	background-color: rgba(0,0,0,0);
+}
+
+.edit_dropdown_index>li:hover {
+	background-color: grey;
 }
 
 
