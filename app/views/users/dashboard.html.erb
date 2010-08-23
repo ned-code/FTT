@@ -6,10 +6,14 @@
 <% js_assets 'document_editor' %>
 
 <div class="site_wrap wrap">
-  <div class="column double_column of_four">
+  
+    <div class="absolute_column one">
+
+
     <a id="wb-create-document-button" class="add_button button">New document</a>
-  </div>
-  <div class="column of_four">
+
+    <input id="wb-documents-search" class="ui-corner-all" type="text" name="wb-documents-search" placeholder="Search" />
+    <h3>Your Webdocs</h3>
     <ul class="tabs index">
       <li>
         <ul .filter-bar.bar.index.state-public-hide style="float: right;" >
@@ -17,34 +21,35 @@
          ><li><a id="wb-document-filter-editor-rights" class="state-filter-tab" href="#filter-editable" data-webdoc-documents-filter-type="editor" ><%= t('.editor_rights') %></a></li>
       </li>
     </ul>
-  </div>
-  <div class="column last_column of-four">
-    <input id="wb-documents-search" class="ui-corner-all" type="text" name="wb-documents-search" placeholder="Search" />
-  </div>
-</div>
-
-<div class="site_wrap wrap wrap">
-  <div id="wb-document-list-container" class="column triple of-four">
+  <div id="wb-document-list-container">
     <div class="loading_icon"></div>
   </div>
-  <div class="column last_column of_four state-public-hide" style="text-align: justify;">
-    <h3>Your Webdocs</h3>
+ 
+     </div>
+   <div class="absolute_column two of_two">
+
+    
+  <div class="state-public-hide" style="text-align: justify;">
     <p>Create your own new webdoc, or choose a webdoc to view from the list.</p>
     <p>You can <strong>invite</strong> other people to help you edit your webdocs, and when you're ready to show them to the world, choose <strong>sharing</strong>.</p>
   </div>
   <%= render 'pending_friendships'%>
-</div>
 
-<div class="site_wrap wrap">
+
+<div class="lightbox">
   <%= render 'documents/popup_create_webdoc'%>
 </div>
-<div class="site_wrap wrap">
+<div class="">
   <%= render 'documents/popup_collaborate' %>
 </div>
 
-<div class="site_wrap wrap">
+<div class="">
   <%= render 'documents/popup_share' %>
 </div>
+
+    </div>
+
+    </div>
 
 <% content_for :scripts do %>
   <script>

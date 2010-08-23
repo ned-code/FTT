@@ -173,3 +173,18 @@ body>header {
 	padding-bottom: 0;
 	margin-bottom: 0;
 }
+
+/* CSS Lightbox test */
+			.lightbox { left: -999em; position: absolute; }
+			.lightbox { left: -999em; position: absolute; }
+			.lightbox:target { bottom: 0; left: 0; right: 0; top: 0; position: absolute; }
+			.lightbox:target .close a { background: rgba(0, 0, 0, 0.75); bottom: 0; left: 0; right: 0; top: 0; position: absolute; z-index: 1; }
+			.close span { color: #FFFFFF; font-size: 2em; text-indent: 0; position: absolute; right: 0.5em; top: 0.5em; }
+			.close {text-indent: -999em;}
+			.lightbox:target div { background: #FFFFFF; position: absolute; left: 50%; top: 50%; z-index: 99; }
+			.w60p { margin-left: -30%; width: 60%; } .w300 { margin-left: -150px; width: 300px; } .w640 { margin-left: -320px; width: 640px; }
+			.h60 { height: 60px; margin-top: -30px; } .h400 { height: 400px; margin-top: -200px; } .h386 { height: 386px; margin-top: -193px; }
+			.scroll { overflow-y: scroll; padding: 0 1em; }
+			.boxfocus { bottom: 0; left: 0; right: 0; top: 0; position: absolute; }
+			.boxfocus div {	background: #FFFFFF; position: absolute; left: 50%; top: 50%; z-index: 99; }
+			.boxfocus .close a { background-image: url('trans.png'); bottom: 0; left: 0; right: 0; top: 0; position: absolute; z-index: 1; }
