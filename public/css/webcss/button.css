@@ -30,54 +30,6 @@
   width: 2em;
 }
 
-.button.header {
-  display: inline-block;
-  height: 2em;
-  line-height: 2em;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  background-color: rgb(128,145,152);  
-  text-decoration: none;
-  color: rgb(255,255,255);
-  border-radius:					4px;
-  -moz-border-radius: 		4px;
-  -webkit-border-radius:	4px;
-  padding-left:		10px;
-  padding-right:	10px;
-  text-shadow: 1px 1px 1px rgb(111,126,131);
-  font-weight: bold; 
-}
-
-.button.header:hover,
-.button.header:focus {
-  text-decoration: none;
-  background-color: #6a7e85;
-  color: #fff;
-}
-
-.button.header.icon {
-	/* Notification // friends */
-}
-
-.button.header.current {
-	color:rgb(87,102,108);
-	background-color: rgb(255,255,255);
-	background-image: -moz-linear-gradient(
-    	center bottom,
-    	rgba(0,0,0,0.1) 0%,
-    	rgba(255,255,255,0.1) 100%
-	);
-	background-image: -webkit-gradient(
-		linear,
-    	left bottom,
-    	left top,
-    	color-stop(0, rgba(0,0,0,0.1)),
-    	color-stop(1, rgba(255,255,255,0.1))
-	);
-  	text-shadow: 0px 0px 0px rgb(255,255,255);
-}
-
 .card > .button.orange, .card > .button.orange:visited {
   color: rgb(255,255,255);
   background: rgb(248,153,34);

@@ -8,61 +8,52 @@
   var doc = jQuery(document),
       
       // Store jQuery objects
-      dropdowns = {},
+      dropdowns = {};
+  
+  doc.ready(function(){
+    
+    doc.delegate('a', 'click', function(e){
+      var target = jQuery( e.currentTarget ),
+          href = target.attr('href'),
+          hashRefFlag = /^#/.test(href),
+          anchor, dropdown;
       
-      // Properies in links object correspond to #ref values of links
-      links = {
-        dropdown: function(e){
-          var button = jQuery(this),
-              selector = button.attr('data-for'),
-              dropdown = dropdowns[selector],
-              obj, state;
+      if ( hashRefFlag ) {
+        
+        // Cache the obj against the selector, or false
+        // if there isnt one.
+        if ( dropdowns[href] === undefined ) {
+          anchor = jQuery(href);
           
+          dropdowns[href] = anchor.length && anchor.hasClass('dropdown') ? {
+            obj: jQuery(href),
+            state: false
+          } : false ;
+        }
+        
+        dropdown = dropdowns[href];
+        
+        if ( dropdown ) {
           e.preventDefault();
           
-          // Store dropdown jQuery object and state
-          if ( !dropdown ) {
-            dropdown = dropdowns[selector] = {
-              obj: jQuery(selector),
-              state: false
-            };
-            
-          }
-          
           obj = dropdown.obj;
-          state = dropdown.state;
           
           // Control opening and closing of dropdown menu
-          if (!state) {
-            state = true;
-            obj.addTransitionClass('active');
-            button.addClass("current");
+          if (!dropdown.state) {
+            dropdown.state = true;
+            obj.addTransitionClass("active");
+            target.addClass("active");
             
             doc.bind('click.dropdown', function(e){
-            	
-              state = false;
-              obj.removeTransitionClass('active');
-               button.removeClass("current");
+              dropdown.state = false;
+              obj.removeTransitionClass("active");
+              target.removeClass("active");
               
               doc.unbind('.dropdown');
             });
           }
         }
-      };
-  
-  doc.ready(function(){
-    
-    // Delegate clicked buttons to their interface functions
-    doc.delegate('a', 'click', function(e){
-      var href = jQuery(this).attr('href'),
-          ref = /^#(.+)$/.exec(href);
-      if(ref){
-        return links[ ref[1] ] ? links[ ref[1] ].call(this, e) : undefined ;
-      }
-      else{
-        return undefined;
       }
     });
-    
   });
 })();
