@@ -24,10 +24,6 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
   },
   
   initialize: function($super, item, pageView, afterItem) {
-    var placeholderContent = item.getInnerHtmlPlaceholder() || WebDoc.NEW_TEXTBOX_CONTENT;
-    var shapeId = Math.round(Math.random()*2);
-    
-    this.placeholderNode = jQuery(placeholderContent);
     
     this.editNode = jQuery('<textarea/>', { "class": "text" });
     this.viewNode = jQuery('<div/>', { "class": "text" });
@@ -35,35 +31,22 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
     
     $super(item, pageView, afterItem);
     
-    this.shape = new this.Shape( this.itemDomNode );
-    if(this.item.getShape()){
-      this.shape.id = this.item.getShape().id;
-      this.shape.color = this.item.getShape().color;
-      this.shape.strokeWidth = this.item.getShape().strokeWidth;
-    }else{
-      this.item.setShape({id:shapeId, color:"white", strokeColor:"black", strokeWidth:3});
-      this.shape.id = shapeId;
-    }
-    
-    this.editNode.html( this.item.getText() );
-    
-    // This should be done with model hooks
-    //this.itemDomNode
-    //.bind("resize", function(){that.shape.refresh()});
-    
+    this.shapeUI = new this.ShapeUI( this.itemDomNode );
+    this.shapeUI.setShape(this.item.getShape());
+
     this.innerHtmlChanged();
-    this.setEditable();
-    this.shape.drawShape(this.shape.id);
+    this.shapeUI.drawShape();
   },
   
   objectChanged: function($super, item, options) {
     $super(item, options);
-  	this.shape.refresh();
+  	this.shapeUI.refresh();
   },
-  
+
+  // we redefined this method so that shape is redraw during the resize. Otherwise redraw is done at the end of resize
   _resizeTo: function($super, size) { 
   	$super(size);
-  	this.shape.refresh();
+  	this.shapeUI.refresh();
   },
   
   toggleMode: function(){
@@ -86,12 +69,7 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
       // Parse the text for <br/>s, replace with line breaks
       text = this.viewNode.html().replace( /<br\/>/g, '\n' );
       
-      this.editNode
-      .bind("keypress", function(){
-        that.item.setText( jQuery(this).val() );
-        //that.resizeTextArea();
-      })
-      .appendTo(this.itemDomNode);
+      this.editNode.appendTo(this.itemDomNode);
     	
     	this.viewNode.remove();
     }
@@ -109,13 +87,14 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
       height:this.editNode.height() + this.editNode.position().top*2});*/
   },
   
-  Shape:function(itemNode){
+  ShapeUI:function(itemNode){
     this.itemNode = itemNode;
     this.shapeNode = null;
     this.originalPath = null;
-    this.id = 0;
-    this.strokeWidth = 3;
-    this.color = "white";
+
+    this.setShape = function(shape) {
+      this.shape = shape;  
+    };
 
     this.refresh = function(){
       var path = this.originalPath;
@@ -128,8 +107,8 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
       ];
 
       //  Set the stroke width
-      this.shapeNode.find("#shape").attr("stroke-width", this.strokeWidth);
-      this.shapeNode.find("#shape").attr("fill", this.color);
+      this.shapeNode.find("#shape").attr("stroke-width", this.shape.getStrokeWidth());
+      this.shapeNode.find("#shape").attr("fill", this.shape.getFill());
 
       //  parse the shape and multiply each point by the scale factor
       for(var i=0; i<path.length; i++){
@@ -151,7 +130,7 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
       this.shapeNode.find("#shape").attr("d", newPath);
     };
     
-    this.drawShape = function(shapeId) {
+    this.drawShape = function() {
       var that = this;
 
       // Remove and recreate the div which contains the shape.
@@ -165,7 +144,7 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
         .svg({
           onLoad:function(){
           	that.shapeNode.svg('get').load(
-          	  "/shapes/"+shapeId+".svg", {
+          	  "/shapes/"+that.shape.uuid()+".svg", {
           	    addTo: false,
           	    onLoad: function(){
           	      that.originalPath = that.shapeNode.find("#shape").attr("d");
@@ -176,11 +155,6 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
       	  }
         });
     };
-    
-    this.setBorderWidth = function(bw){
-      this.strokeWidth = bw;
-      this.refresh();
-    }
     
   },
   
@@ -232,7 +206,6 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
   
   edit: function($super) { //called if we clicked on an already selected textbox
     $super();        
-    this.placeholderNode.remove();
   },
   
   setEditable: function($super) { // called when the interaction mode is changed
@@ -246,20 +219,14 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
   },
   
   stopEditing: function($super) {
+    this.item.setInnerHtml(this.editNode.val());    
     $super();
     this._initItemCss(false);
   },
   
   innerHtmlChanged: function() {
-    if (!WebDoc.application.disableHtml) {
-      if (!this.item.getInnerHtml() || $.string(this.item.getInnerHtml()).blank()) {
-        this.itemDomNode.append( this.placeholderNode );
-      }
-      else {
-        this.placeholderNode.remove();
-        this.itemDomNode.html(this.item.getInnerHtml());
-      }
-    }
+    this.editNode.html( this.item.getInnerHtml() );
+    this.setEditable();
   },
   
   _initItemCss: function($super, withAnimate) {

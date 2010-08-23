@@ -10,7 +10,7 @@ class Item < ActiveRecord::Base
   composed_of :preferences, :class_name => 'Hash', :mapping => %w(preferences to_json),
                          :constructor => JsonHelper.method(:decode_json_and_yaml)                         
   
-  attr_accessible :uuid, :media, :media_id, :media_type, :data, :position, :kind, :inner_html, :properties, :preferences, :creator_id
+  attr_accessible :uuid, :media, :media_id, :media_type, :data, :position, :kind, :inner_html, :properties, :preferences, :creator_id, :shape_id
 
   attr_accessor_with_default :touch_page_active, true
   attr_accessor :document_uuid

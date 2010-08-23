@@ -20,7 +20,8 @@ WebDoc.TextboxTool = $.klass(WebDoc.Tool, {
     itemData.media_type = WebDoc.ITEM_TYPE_TEXTBOX;
     itemData.data.tag = "div";
     itemData.data.css = { top: "100px", left: "100px", width: "256px", height: "128px" };
-    
+    item.setShape(WebDoc.ShapeManager.getDefaultShape(), true);
+
     boardController.insertItems( [item] );    
     
     itemView = boardController.currentPageView().itemViews[ item.uuid() ];

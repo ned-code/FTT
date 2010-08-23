@@ -59,7 +59,7 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
   
   load: function(documentId, editable) {
     ddd("[PageEditor] load " + documentId);
-    WebDoc.Application.initializeSingletons([WebDoc.ThemeManager, WebDoc.WidgetManager, WebDoc.DocumentCategoriesManager], function() {
+    WebDoc.Application.initializeSingletons([WebDoc.ThemeManager, WebDoc.WidgetManager, WebDoc.DocumentCategoriesManager, WebDoc.ShapeManager], function() {
       var app = WebDoc.application;
       
       app.undoManager = new WebDoc.UndoManager();
