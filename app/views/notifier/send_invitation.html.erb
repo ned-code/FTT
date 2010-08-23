@@ -1,0 +1,19 @@
+Hi !
+
+<%= @user.username %> invite you on webdoc.
+<% if !@document.nil? %>
+  to see <%= @document.title %>
+<% end %>
+<% if !@role.nil? && @role != ""%>
+  and to participate on it.
+<% end %>
+
+Go on webdoc on signup or signin: <a href="http://webdoc.com/?invitation=<%=@invitation_id%>">
+
+here is is personnal message:
+
+<%= @message %>
+
+Best regards
+
+Your webdoc team

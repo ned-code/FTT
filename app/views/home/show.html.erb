@@ -8,6 +8,7 @@
     <h2>Log in&hellip;</h2>
     
     <fieldset>
+      <input type='hidden' name='invitation' value="<%=params[:invitation]%>"/>
       <div class="stack column one of-two<% if @user.errors[:email].present? %> error<% end %>">
         <%= f.label :email, 'Email <abbr class="required" title="required">*</abbr>' %>
         <%= f.text_field :email, :'data-type' => "email", :maxlength => 255, :required => "required", :autocomplete => "on", :autofocus => "on", :placeholder => "stelio@webdoc.com" %>

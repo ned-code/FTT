@@ -27,8 +27,8 @@ Webdoc::Application.routes.draw do
     end
   end
 
-  get '/explore' => 'documents#explore'
-  get '/featured' => 'documents#featured'
+  get '/explore(.:format)' => 'documents#explore'
+  get '/featured(.:format)' => 'documents#featured'
 
   # TODO rails3 always need :only_current_user => true ?
   get    'items/:item_id/datastore_entries/:key' => 'datastore_entries#index'
@@ -95,6 +95,8 @@ Webdoc::Application.routes.draw do
       resources :photos, :only => [:index]
     end
   end
+  
+  resources :invitations, :except => [:update]
 
   # START OLD ROUTES
   # Jammit::Routes.draw(map)

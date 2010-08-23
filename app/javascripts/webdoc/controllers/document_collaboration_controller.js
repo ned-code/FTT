@@ -12,17 +12,17 @@ WebDoc.DocumentCollaborationController = $.klass({
     var self = this;
     
     this.friendsSelector = new WebDoc.FriendsSelectorController('invite_co_authors');
+    this.emailInvitationForm = new WebDoc.EmailInvitationController('collaborate_by_email_form');
     this.domNode = jQuery("#document_access_list");
     this.documentAccessDialog = jQuery("#invite_co_authors");
     this.chooseFriendsForm = jQuery("#collaborate_by_connection_form");
     this.byEmailForm = jQuery("#collaborate_by_email_form");
-    this.emailsNode = jQuery('#wb-invitation-add-editors');
-    this.failedEmailsWrapper = jQuery('#wb-invitation-failed');
     
     this.chooseFriendsForm.bind( 'submit', this.sendInvitationsByFriends.pBind(this) );
     this.byEmailForm.bind( 'submit', this.sendInvitationsByEmail.pBind(this) );
     this.domNode.delegate("a[href='#delete']", "click", this.deleteAccess.pBind(this));
-    jQuery('.collaborate_form').bind('click', this.toggleForm.pBind(this) );
+    jQuery('#collaborate_by_connection_link').bind('click', this.showConnectionsForm.pBind(this) );
+    jQuery('#collaborate_by_email_link').bind('click', this.showEmailForm.pBind(this) );
     
     //this.documentAccessDialog
     //.remove()
@@ -52,7 +52,6 @@ WebDoc.DocumentCollaborationController = $.klass({
         //     that.domNode.delegate("a[href='#delete']", "click", that.deleteAccess.pBind(that));
         //   }
         // });
-        this.friendsSelector.loadFriendList([]);
         this.loadAccess(data);
       }.pBind(this),
       
@@ -90,42 +89,20 @@ WebDoc.DocumentCollaborationController = $.klass({
   loadAccess: function(json) {
     this.domNode.empty();
     this.access = json.access;
-    
+    var friendslist = [];
+    var user;
     for (var i = 0; i < this.access.length; i++) {
-      this.createAccessItem(this.access[i][0]);     
-    }
-    
-    // TODO: instead of listing the emails again, take the successful ones out of the field, leaving the unsuccessful ones
-    // Display the message - these didn't work - then give them a choice to send a sign up for webdoc email
-    
-    if(json.failed && json.failed.length > 0) {
-      this.failedEmailsWrapper
-      .empty()
-      .append( $('<p/>').html('These people are not yet webdoc users!') )
-      .show()
-      // TODO: Flaky, do it better
-      .parent()
-      .addClass('error');
-      
-      var addresses = "";
-      for (var i = 0; i < json.failed.length; i++) {
-        addresses += json.failed[i];
-        if(i !== json.failed.length -1) { addresses += "\n"; }
+      user = this.access[i][0];
+      if (user.role === "editor" || user.role === "contributor" ) {
+        friendslist.push(user.uuid);
+        this.createAccessItem(user);
       }
-      
-      this.emailsNode.val( addresses );
-      return false;
     }
-    else { 
-      this.failedEmailsWrapper.hide(); 
-      this.cleanInvitationFields();
-      return true;
-    }
+    
+    this.friendsSelector.loadFriendList(friendslist);
   },
   
   createAccessItem: function(userInfos) {
-    if (userInfos.role === "editor" || userInfos.role === "contributor" ) {
-      ddd(userInfos.id +", "+userInfos.role);
       var accessEntry = $("<li>")
         .data('uuid', userInfos.uuid)
         .data('role', userInfos.role)
@@ -136,20 +113,25 @@ WebDoc.DocumentCollaborationController = $.klass({
       if(userInfos.creator) { deleteItem.hide(); }  
       accessEntry.append(deleteItem);    
       this.domNode.append(accessEntry);
-    }
   },
   
   
-  //TODO actually not supported, will be implemented at the same time that invitations
   sendInvitationsByEmail: function(e) {
-    ddd('Send sendInvitationsByEmail');
     e.preventDefault();
-    var recipients = $("#wb-invitation-add-editors").val();
-    var message = $("#wb-invitation-add-editors-message").val();
     
-    var role_type = jQuery('input[name="role_type_email"]:checked').val();
-    
-    this.createRightsToRecipients( this.getInvitationAccess(recipients, message) );
+    var role_type = jQuery('input[name="role_type_email"]:checked').val()
+    var invitations = { invitations : {
+                            role : role_type,
+                            emails : this.emailInvitationForm.getEmailsList(),
+                            message : this.emailInvitationForm.getMessage(),
+                            document_id: this.document.uuid()
+                           }
+                         };
+                         
+    var url = '/invitations/';
+    WebDoc.ServerManager.request(url,function(data){
+      ddd('email send with sucess');
+    }.pBind(this), 'POST', invitations);
   },
   
   sendInvitationsByFriends: function(e) {
@@ -171,28 +153,12 @@ WebDoc.DocumentCollaborationController = $.klass({
       dataType: 'json',
       data: jSONData,
       success: function(data) {
-        this.cleanFriendsList();
         this.loadAccess(data);
       }.pBind(this),
       error: function(MLHttpRequest, textStatus, errorThrown) {
         ddd("createFriendsRights error", textStatus);
       }
     });
-  },
-  
-  getInvitationAccess: function(recipients, message) {
-    var accesses_editors = [];
-    if( recipients !== "") {
-      var recipients_emails = recipients.split(/[;,]/);
-      for (var i = 0; i < recipients_emails.length; i++) {
-        accesses_editors[i] = recipients_emails[i];
-      }
-    }
-    if (window._gaq) {
-      _gaq.push(['_trackEvent', 'share', 'coeditor_invite', this.document.uuid(), accesses_editors.length]);
-    }      
-    var access_content = { role: "editor", recipients: accesses_editors, message: message };
-    return { accesses : $.toJSON(access_content) };
   },
   
   //Todo manage the email form
@@ -205,14 +171,27 @@ WebDoc.DocumentCollaborationController = $.klass({
     this.friendsSelector.cleanFriendsList();
   },
   
-  closeDialog: function() {
-      $(this).dialog('close');
-  },
-  
   toggleForm: function(e){
     e.preventDefault();
     this.byEmailForm.toggle();
     this.chooseFriendsForm.toggle();
+  },
+  
+  showEmailForm: function(e){
+    ddd('showEmailForm');
+    e.preventDefault();
+    this.chooseFriendsForm.hide();
+    if(!this.emailInvitationForm.domBuilded){
+      this.emailInvitationForm.buildDom();
+    }
+    this.byEmailForm.show();
+  },
+  
+  showConnectionsForm: function(e){
+    ddd('showConnectionsForm');
+    e.preventDefault();
+    this.chooseFriendsForm.show();
+    this.byEmailForm.hide();
   },
   
   url: function(){

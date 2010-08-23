@@ -280,14 +280,10 @@ class Document < ActiveRecord::Base
   end
 
   def create_role_for_users(current_user, accesses = {})
-    if accesses[:role] == 'full'
-      role = Role::EDITOR
-    elsif accesses[:role] == 'limited'
-      role = Role::CONTRIBUTOR
-    elsif Role::PUBLIC_ROLES.include?(accesses[:role])
+      role = accesses[:role]
+    if Role::PUBLIC_ROLES.include?(role)
       #if we give public right to a single user, it means that the document is no more public anymore
       self.unshare
-      role = accesses[:role]
     end
     
     friends_list = accesses[:users]

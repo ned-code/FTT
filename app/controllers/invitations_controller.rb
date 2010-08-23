@@ -5,7 +5,7 @@ class InvitationsController < ApplicationController
   end
   
   def create
-    Invitation.generate(current_user.id, params[:mails])
+    Invitation.generate(current_user, params[:invitations])
     render :json => {}
   end
 end

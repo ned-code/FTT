@@ -31,9 +31,15 @@
     </ul>
     <% else %>
 		<ul class="horizontal usernav_index index">
-		  <li><%= link_to "login", root_path, { :class => "login_button button" } %></li
-		 ><li><%= link_to "sign up", new_registration_path(:user), { :class => "signup_button button" } %></li
-		 ><li><%= link_to "sign up/log in with Facebook", user_oauth_authorize_url(:facebook), { :class => "facebook_signup_button button" } %></li>
+		  <% if params[:invitation].nil? %>
+		    <li><%= link_to "login", root_path, { :class => "login_button button" } %></li
+		   ><li><%= link_to "sign up", new_registration_path(:user), { :class => "signup_button button" } %></li
+		   ><li><%= link_to "sign up/in with Facebook", user_oauth_authorize_url(:facebook), { :class => "facebook_signup_button button" } %></li>
+		  <% else %>
+		    <li><%= link_to "login", root_path(:invitation => params[:invitation]), { :class => "login_button button" } %></li
+		   ><li><%= link_to "sign up", new_registration_path(:user, :invitation => params[:invitation]), { :class => "signup_button button" } %></li
+		   ><li><%= link_to "sign up/in with Facebook", user_oauth_authorize_url(:facebook, :invitation => params[:invitation]), { :class => "facebook_signup_button button" } %></li>
+		  <% end %>
 		</ul>
     <% end %>
   </div>

@@ -16,7 +16,7 @@
   <% if local_assigns.has_key? :friendship %>
     <% if current_user.friend?(user)%>
     <a class="cancel_friendship_button button red small" href="#cancel_friendship">Revoke</a>
-    <% elsif current_user.friend?(user)%>
+    <% elsif current_user.pending_requested_friend?(user)%>
       <div id='friend_request_<%=user.id%>'>
         <a class="accept_friend_button button green small" href="#accept_friend_request">Accept</a>
         <a class="reject_friend_button button red small" href="#reject_friend_request">Reject</a>

@@ -1,8 +1,8 @@
 <div id="invite_co_authors" class="collaborate-dialog" style="display: none">
   <h4>Invite co-authors</h4>
   <ul>
-    <li><a id='collaborate_by_connection' class='collaborate_form' href=''>Your connections</a></li>
-    <li><a id='collaborate_by_email' class='collaborate_form' href=''>By email</a></li>
+    <li><a id='collaborate_by_connection_link' class='collaborate_form' href=''>Your connections</a></li>
+    <li><a id='collaborate_by_email_link' class='collaborate_form' href=''>By email</a></li>
   </ul>
   <form id="collaborate_by_connection_form" class="column triple_column of_five">
     <div id="invite_co_authors_friends_list" class='friends_list'>
@@ -10,9 +10,9 @@
       <a id='collaborate_select_all_friends' href="" class="select_all_friends">Select all friends</a>
     </div>
     <div>
-      <input type="radio" name="role_type_friends" value="full" checked='checked' /> Full access
+      <input type="radio" name="role_type_friends" value="editor" checked='checked' /> Full access
       <br />
-      <input type="radio" name="role_type_friends" value="limited"/> Limited access
+      <input type="radio" name="role_type_friends" value="contributor"/> Limited access
     </div>
     <div class="ui-actions state-readonly-hide">
       <a href="#cancel" class="cancel">close</a>
@@ -21,23 +21,14 @@
   </form>
   
   <form id="collaborate_by_email_form" class="column triple_column of_five" style='display:none'>
-    <fieldset>
-      <div class="vertical">
-        <label>By email</label>
-        <textarea id="wb-invitation-add-editors" rows="1" cols="20"></textarea>
-        <div id="wb-invitation-failed"></div>
-      </div>
-      <div class="vertical">
-        <label>Personalisse the invitation</label>
-        <textarea id="wb-invitation-add-editors-message" rows="3" cols="20"></textarea>
-      </div>
-      <div>
-        <input type="radio" name="role_type_email" value="full" checked='checked' /> Full access
-        <br />
-        <input type="radio" name="role_type_email" value="limited"/> Limited access
-      </div>
-    </fieldset>
-    
+    <div class='emails_invitation'>
+      
+    </div>
+    <div>
+      <input type="radio" name="role_type_email" value="editor" checked='checked' /> Full access
+      <br />
+      <input type="radio" name="role_type_email" value="contributor"/> Limited access
+    </div>
     <div class="ui-actions state-readonly-hide">
       <a href="#cancel" class="cancel">close</a>
       <input type="submit" name="new-document" value="Add" />
