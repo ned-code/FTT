@@ -23,7 +23,7 @@ WebDoc.EmailInvitationController = $.klass({
   
   //clean all fields
   cleanFields: function(){
-    this.domNode.find('.email_message').val('');
+    this.domNode.find('.email_input').val('');
     this.domNode.find('.email_message').val('');
   },
   
