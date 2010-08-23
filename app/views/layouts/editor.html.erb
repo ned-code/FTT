@@ -43,6 +43,7 @@
       //WebDoc.shindig = {};
       //WebDoc.shindig.serverBase = "<%= APP_CONFIG['shindig_server_base'] %>";
       WebDoc.Application.currentUser = new WebDoc.User(<%= raw current_user.as_application_json.to_json.gsub('/script','/sscript') %>);
+      WebDoc.WidgetManager.videoWidget = new WebDoc.Widget(<%= raw Rails.cache.fetch("widget_json_video") { Medias::Widget.first(:conditions => {:system_name => 'video'}).to_json } %>);
       WebDoc.WidgetManager.vimeoWidget = new WebDoc.Widget(<%= raw Rails.cache.fetch("widget_json_vimeo") { Medias::Widget.first(:conditions => {:system_name => 'vimeo'}).to_json } %>);
       WebDoc.WidgetManager.youtubeWidget = new WebDoc.Widget(<%= raw Rails.cache.fetch("widget_json_youtube") { Medias::Widget.first(:conditions => {:system_name => 'youtube'}).to_json } %>);
       WebDoc.WidgetManager.dailymotionWidget = new WebDoc.Widget(<%= raw Rails.cache.fetch("widget_json_dailymotion") { Medias::Widget.first(:conditions => {:system_name => 'dailymotion'}).to_json } %>); 
