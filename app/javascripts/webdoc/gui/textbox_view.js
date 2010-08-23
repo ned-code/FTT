@@ -35,7 +35,7 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
     this.shapeUI.setShape(this.item.getShape());
 
     this.innerHtmlChanged();
-    this.shapeUI.drawShape();
+    this.shapeUI.draw();
   },
   
   objectChanged: function($super, item, options) {
@@ -68,9 +68,7 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
     else {
       // Parse the text for <br/>s, replace with line breaks
       text = this.viewNode.html().replace( /<br\/>/g, '\n' );
-      
       this.editNode.appendTo(this.itemDomNode);
-    	
     	this.viewNode.remove();
     }
   },
@@ -105,11 +103,12 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
         this.itemNode.width()/100,
         this.itemNode.height()/100
       ];
-
-      //  Set the stroke width
-      this.shapeNode.find("#shape").attr("stroke-width", this.shape.getStrokeWidth());
-      this.shapeNode.find("#shape").attr("fill", this.shape.getFill());
-
+      
+      this.shapeNode.find("#shape")
+        .attr("stroke", this.shape.getStroke())
+        .attr("stroke-width", this.shape.getStrokeWidth())
+        .attr("fill", this.shape.getFill());
+      
       //  parse the shape and multiply each point by the scale factor
       for(var i=0; i<path.length; i++){
         if(path[i].match(/[a-zA-Z|\-|,| ]/g)){
@@ -122,40 +121,37 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
           currentValue = "";
           continue;
         }
-
         currentValue += path[i];
-
       }
       // Set the new path
       this.shapeNode.find("#shape").attr("d", newPath);
     };
     
-    this.drawShape = function() {
+    this.draw = function() {
+      var svgNS = WebDoc.application.svgRenderer.svgNS;
       var that = this;
+      var path = this.shape.getPath();
+      var svgNode = document.createElementNS(svgNS, "svg");
+      var pathNode = document.createElementNS(svgNS, "path");      
+      
+      jQuery(pathNode)
+        .attr("id", "shape")
+        .attr("d", path);
+      
+      jQuery(svgNode)
+        .append(pathNode);
 
       // Remove and recreate the div which contains the shape.
-      // One cannot use the css attribute due to a Firefox bug?
       if(this.shapeNode) this.shapeNode.remove();
-      this.shapeNode = jQuery("<div class='shape'></div>");
-
-      // Append the shape to the dom and draw the svg used to display the border
+      this.shapeNode = jQuery("<div>", {"class":"shape"});
+      
       this.shapeNode
         .prependTo(this.itemNode)
-        .svg({
-          onLoad:function(){
-          	that.shapeNode.svg('get').load(
-          	  "/shapes/"+that.shape.uuid()+".svg", {
-          	    addTo: false,
-          	    onLoad: function(){
-          	      that.originalPath = that.shapeNode.find("#shape").attr("d");
-          	      that.refresh();
-          	    }
-          	  }
-          	);
-      	  }
-        });
+        .append(svgNode);
+        
+      this.originalPath = path;
+      this.refresh();
     };
-    
   },
   
   // Gotcha! createDomNode creates the itemDomNode

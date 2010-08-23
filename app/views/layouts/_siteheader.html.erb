@@ -8,22 +8,22 @@
     
     <% if user_signed_in? %>
     <ul class="horizontal nav_index index">
-	<li><a class="button header" href="<%= dashboard_path %>">You</a></li
-     ><li><a class="button header" href="<%= explore_path %>" <% if params[:controller]=='documents' && params[:action]=='explore' %>class="current"<% end %>>Explore</a></li>
+	<li><a class="header_button button" href="<%= dashboard_path %>">You</a></li
+     ><li><a class="header_button button" href="<%= explore_path %>" <% if params[:controller]=='documents' && params[:action]=='explore' %>class="current"<% end %>>Explore</a></li>
     </ul>
     <% end %>
     
     <% if user_signed_in? %>
     <ul class="horizontal usernav_index index ">
-      <li><a href="#dropdown" class="button header" data-for="#messages_dropdown">Messages</a>
-              <ul class="messages_dropdown_index dropdown_index index" id="messages_dropdown">
-              	<li><h4>Messages</h4><a href="#" class="sendmessage_button button">Send a message</a></li>
-							  <%= render 'discussions/message' %>
+      <li><a href="#messages_dropdown" class="header_button button">Messages</a>
+        <ul class="messages_dropdown_index dropdown_index index dropdown" id="messages_dropdown">
+          <li><h4>Messages</h4><a href="#" class="sendmessage_button button">Send a message</a></li>
+          <%= render 'discussions/message' %>
         </ul></li
-     ><li><%= link_to "Friends", friendships_path, { :class => "button header #{params[:controller]=='friendships' ? 'current' : '' }" } %></li
+     ><li><%= link_to "Friends", friendships_path, { :class => "header_button button #{params[:controller]=='friendships' ? 'current' : '' }" } %></li
      ><li>
-        <a href="#dropdown" class="button header" data-for="#account_dropdown">Account</a>
-        <ul class="user_index dropdown_index index" id="account_dropdown">
+        <a href="#account_dropdown" class="header_button button">Account</a>
+        <ul class="user_index dropdown_index index dropdown" id="account_dropdown">
           <li><%= link_to "Your profile", edit_registration_path(:user), { :class => "user-edit item #{params[:controller]=='users' ? 'users' : '' }" } %></li
          ><li><%= link_to "Logout", destroy_user_session_path, { :class => "user-logout item" } %></li>
         </ul>
@@ -32,13 +32,13 @@
     <% else %>
 		<ul class="horizontal usernav_index index">
 		  <% if params[:invitation].nil? %>
-		    <li><%= link_to "login", root_path, { :class => "login_button button" } %></li
-		   ><li><%= link_to "sign up", new_registration_path(:user), { :class => "signup_button button" } %></li
-		   ><li><%= link_to "sign up/in with Facebook", user_oauth_authorize_url(:facebook), { :class => "facebook_signup_button button" } %></li>
+		    <li><%= link_to "login", root_path, { :class => "login_button header_button button" } %></li
+		   ><li><%= link_to "sign up", new_registration_path(:user), { :class => "signup_button header_button button" } %></li
+		   ><li><%= link_to "sign up/in with Facebook", user_oauth_authorize_url(:facebook), { :class => "facebook_signup_button header_button button" } %></li>
 		  <% else %>
-		    <li><%= link_to "login", root_path(:invitation => params[:invitation]), { :class => "login_button button" } %></li
-		   ><li><%= link_to "sign up", new_registration_path(:user, :invitation => params[:invitation]), { :class => "signup_button button" } %></li
-		   ><li><%= link_to "sign up/in with Facebook", user_oauth_authorize_url(:facebook, :invitation => params[:invitation]), { :class => "facebook_signup_button button" } %></li>
+		    <li><%= link_to "login", root_path(:invitation => params[:invitation]), { :class => "login_button header_button button" } %></li
+		   ><li><%= link_to "sign up", new_registration_path(:user, :invitation => params[:invitation]), { :class => "signup_button header_button button" } %></li
+		   ><li><%= link_to "sign up/in with Facebook", user_oauth_authorize_url(:facebook, :invitation => params[:invitation]), { :class => "fbsignup_button header_button button" } %></li>
 		  <% end %>
 		</ul>
     <% end %>
