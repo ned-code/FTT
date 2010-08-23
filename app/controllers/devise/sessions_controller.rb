@@ -3,6 +3,7 @@ class Devise::SessionsController < ApplicationController
 
   skip_before_filter :verify_authenticity_token, :only => [:create]
   skip_before_filter :http_authenticate, :only => [:create]
+  skip_before_filter :process_invitation
 
   before_filter :require_no_authentication, :only => [ :new, :create ]
   

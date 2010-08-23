@@ -12,6 +12,7 @@ class ApplicationController < ActionController::Base
   before_filter :token_authenticate
   before_filter :authenticate_user!
   before_filter :set_xmpp_client_id_in_thread
+  before_filter :process_invitation
 
   helper :all
   helper_method :current_session, :current_user
@@ -94,9 +95,7 @@ protected
     end
   end
   
-  #Extension of the devise helpers def authenticate_#{mapping}! to manage invitation
-  def authenticate_user!
-    warden.authenticate!(:scope => :user)
+  def process_invitation
     if params[:invitation]
       invitation = Invitation.pending.where(:uuid => params[:invitation]).first
       if invitation.present?
@@ -109,4 +108,5 @@ protected
       end
     end
   end
+
 end
