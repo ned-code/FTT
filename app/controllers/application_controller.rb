@@ -12,6 +12,7 @@ class ApplicationController < ActionController::Base
   before_filter :token_authenticate
   before_filter :authenticate_user!
   before_filter :set_xmpp_client_id_in_thread
+  before_filter :process_invitation
 
   helper :all
   helper_method :current_session, :current_user
@@ -94,4 +95,18 @@ protected
     end
   end
   
+  def process_invitation
+    if params[:invitation]
+      invitation = Invitation.pending.where(:uuid => params[:invitation]).first
+      if invitation.present?
+        invitation.accept!(current_user)
+        if invitation.document.present?
+          redirect_to document_path(invitation.document)
+        else
+          redirect_to root_path
+        end
+      end
+    end
+  end
+
 end
