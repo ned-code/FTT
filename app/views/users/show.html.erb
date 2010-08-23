@@ -7,14 +7,14 @@
 
 <div class="title_wrap site_wrap wrap">
   <h1><%= @user.first_name %> <%= @user.last_name %></h1>
-  <div id="user_card">
+  <div class="column of_two" id="user_card">
     <% if current_user == @user%>
       <%= render 'card', :user => @user %>
     <% else %>
       <%= render 'card', :user => @user, :subscribed => @user.follower?(current_user), :friendship => @user.friend?(current_user)  %>
     <% end %>
-  </div>
-  <div id="friends_list">
+  </div
+ ><div class="column of_two" id="friends_list">
     <h6><%=  @user.first_name %>'s Friends</h6>
     <ul class='horizontal index friends_index friend_list'>
       <% for user in @user.friends do %>
@@ -66,19 +66,3 @@
     });
   </script>
 <% end %>
-
-
-
-
-
-<!-- 
-name: user.name
-mail: user.email
-username: user.username
-avatar: user.avatar.url(:thumb)
-bio: user.bio
-gender : user.gender
-website: user.website
-friends count: user.friends_count (in friends branch )
-documents count: user.documents_count
--->

@@ -111,7 +111,7 @@ body>header {
 	background-color: grey;
 }
 
-/* .button */
+/* .button extensions */
 
 .header_button {
   display: inline-block;
@@ -164,6 +164,11 @@ body>header {
 .sendmessage_button {
 	top:0;
 	float:right;
+}
+
+.settings_button {
+  color:red;
+  display:inline;
 }
 
 /* .number */

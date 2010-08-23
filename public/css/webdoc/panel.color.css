@@ -1,6 +1,6 @@
 /* .panel classes */
 
-.panel>header {
+.panel>header h3 {
   color: white;
   background: rgba(0,0,0,0.4);
 }
