@@ -11,7 +11,7 @@ WebDoc.WidgetManager = $.klass(
   },
 
   getVideoWidget: function() {
-    return WebDoc.WidgetManager.videoWidget;   
+    return WebDoc.WidgetManager.videoWidget;
   },
   
    _initVideo: function() {

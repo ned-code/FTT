@@ -69,7 +69,7 @@ class PagesController < ApplicationController
   end
 
   def callback_thumbnail
-    Services::Bluga.recieve(params)
+    Services::ThumbnailsGenerator.recieve(params)
     render :text => ''
   end
   
