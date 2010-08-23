@@ -48,7 +48,7 @@ class Devise::SessionsController < ApplicationController
         end
       else
         sign_in_and_redirect(resource_name, resource)
-      end      
+      end
     end
 
     # TODO Rails3 

@@ -94,4 +94,19 @@ protected
     end
   end
   
+  #Extension of the devise helpers def authenticate_#{mapping}! to manage invitation
+  def authenticate_user!
+    warden.authenticate!(:scope => :user)
+    if params[:invitation]
+      invitation = Invitation.pending.where(:uuid => params[:invitation]).first
+      if invitation.present?
+        invitation.accept!(current_user)
+        if invitation.document.present?
+          redirect_to document_path(invitation.document)
+        else
+          redirect_to root_path
+        end
+      end
+    end
+  end
 end
