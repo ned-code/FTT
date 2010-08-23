@@ -78,37 +78,36 @@ WebDoc.handlers = {
   
   // Editor actions (to be bound to the interface panels)
   _panelHandlers: {
-    'full':                 function(e) { WebDoc.application.pageEditor.toggleFullScreen(); },
+    'view':                        function(e) { WebDoc.application.pageEditor.toggleFullScreen(); },
     
     //new ui panel handler, actually the old right bar controller is used
-    'toggle_activity_panel':      function(e){ ddd('no activity yet'); },
-    'toggle_comments_panel':      function(e){ WebDoc.application.panelsController.showDiscussionsPanel(e); },
-    'toggle_inspector_panel':     function(e){ WebDoc.application.panelsController.showItemInspector(e); },
-    'toggle_page_inspector_panel':     function(e){ WebDoc.application.panelsController.showPageInspector(e); },
-    'toggle_author_panel':        function(e){ ddd('author panel is useless') },
-    'toggle_document_panel':      function(e){WebDoc.application.panelsController.showDocumentInspector(e); },
-    'toggle_sharing_panel':       function(e){ ddd('no sharing yet') },
-    'toggle_browse_panel':        function(e) { WebDoc.application.panelsController.showBrowseWeb(); },
-    'toggle_packages_panel':      function(e) { WebDoc.application.panelsController.showPackages(); },
-    'toggle_apps_panel':          function(e) { WebDoc.application.panelsController.showApps(); },
-    'toggle_my_stuff_panel':      function(e) { WebDoc.application.panelsController.showMyContent(); },
-    'toggle_pages_panel':         function(e) { WebDoc.application.panelsController.showPagesPanel(); },
+    'toggle_activity_panel':       function(e){ ddd('no activity yet'); },
+    'toggle_comments_panel':       function(e){ WebDoc.application.panelsController.showDiscussionsPanel(e); },
+    'toggle_inspector_panel':      function(e){ WebDoc.application.panelsController.showItemInspector(e); },
+    'toggle_page_inspector_panel': function(e){ WebDoc.application.panelsController.showPageInspector(e); },
+    'toggle_author_panel':         function(e){ ddd('author panel is useless') },
+    'toggle_document_panel':       function(e){WebDoc.application.panelsController.showDocumentInspector(e); },
+    'toggle_sharing_panel':        function(e){ ddd('no sharing yet') },
+    'toggle_content_panel':        function(e) { WebDoc.application.panelsController.showBrowseWeb(); },
+    'toggle_packages_panel':       function(e) { WebDoc.application.panelsController.showPackages(); },
+    'toggle_apps_panel':           function(e) { WebDoc.application.panelsController.showApps(); },
+    'toggle_my_stuff_panel':       function(e) { WebDoc.application.panelsController.showMyContent(); },
+    'toggle_pages_panel':          function(e) { WebDoc.application.panelsController.showPagesPanel(); },
     
     
-    'add-page':             function(e) { WebDoc.application.pageEditor.addPage(); },
-    'add-web-page':         function(e) { WebDoc.application.pageEditor.addWebPage();},
-    'copy-page':            function(e) { WebDoc.application.pageEditor.copyPage(); },
-    'remove-page':          function(e) { WebDoc.application.pageEditor.removePage(); },
+    'add_page':             function(e) { WebDoc.application.pageEditor.addPage(); },
+    'copy_page':            function(e) { WebDoc.application.pageEditor.copyPage(); },
+    'remove_page':          function(e) { WebDoc.application.pageEditor.removePage(); },
     
     'zoom-in':              function(e) { WebDoc.application.boardController.zoomIn(); },
     'zoom-out':             function(e) { WebDoc.application.boardController.zoomOut(); },
     'move':                 function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.handTool ); },
     'select':               function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.arrowTool ); },
-    'draw':                 function(e) { WebDoc.application.boardController.toggleDrawTool(); },
+    'draw_tool':            function(e) { WebDoc.application.boardController.toggleDrawTool(); },
     'html_tool':            function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.htmlSnipplet ); },
-    'insert-text':          function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.textTool ); },
-    'textbox':              function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.textboxTool ); },
-    'insert-iframe':        function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.iframeTool ); },
+    'text_tool':            function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.textTool ); },
+    'textbox_tool':         function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.textboxTool ); },
+    'webpage_tool':         function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.iframeTool ); },
     'insert-app':           function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.appTool ); },
     
     'to-back':              function(e) { WebDoc.application.boardController.moveSelectionToBack(); },
@@ -123,9 +122,6 @@ WebDoc.handlers = {
     
     'mode-toggle':          function(e) { WebDoc.application.boardController.toggleMode(); },
     'edit':                 function(e) { WebDoc.application.boardController.toggleMode(); },
-    
-    'theme-class':          function(e) {  },
-
     
     'library-images-myimages': function(e) { 
       WebDoc.application.panelsController.showMyContent();

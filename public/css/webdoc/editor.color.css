@@ -63,7 +63,7 @@
 }
 
 .view_button.active,
-.full_view a[href='#full'].view_button {
+.full_view a[href='#view'].view_button {
   background-position: 0 -24px;
 }
 

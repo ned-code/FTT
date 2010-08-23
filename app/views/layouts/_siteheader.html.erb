@@ -17,7 +17,7 @@
     <ul class="horizontal usernav_index index ">
       <li><a href="#dropdown" class="button header" data-for="#messages_dropdown">Messages</a>
               <ul class="messages_dropdown_index dropdown_index index" id="messages_dropdown">
-              	<li><h4>Messages</h4><a href="#" class="button sendmessage">Send a message</a></li>
+              	<li><h4>Messages</h4><a href="#" class="sendmessage_button button">Send a message</a></li>
 							  <%= render 'discussions/message' %>
         </ul></li
      ><li><%= link_to "Friends", friendships_path, { :class => "button header #{params[:controller]=='friendships' ? 'current' : '' }" } %></li
