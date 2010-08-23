@@ -78,6 +78,7 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
       app.themesController = new WebDoc.ThemesController();
       
       // create all tools
+      app.arrowTool = new WebDoc.ArrowTool( "a[href='#select']", "select_tool_mode" );      
       app.drawingTool = new WebDoc.DrawingTool( "a[href='#draw_tool']", "draw_tool_mode" );
       app.textTool = new WebDoc.TextTool( "a[href='#text_tool']", "text_tool_mode" );
       app.textboxTool = new WebDoc.TextboxTool( "a[href='#textbox_tool']", "textbox_tool_mode" );
