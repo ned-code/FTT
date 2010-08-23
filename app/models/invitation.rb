@@ -52,6 +52,7 @@ class Invitation < ActiveRecord::Base
   # ====================
   
   def accept!(friend)
+    self.update_attribute(:status, ACCEPTED)
     if !user.friend?(friend)
       begin
         friendship = Friendship.create_friendship!(friend, self.user,false)
@@ -62,6 +63,5 @@ class Invitation < ActiveRecord::Base
     if !self.role.nil? && self.role != ''
       friend.has_role!(role, document)
     end
-    self.update_attribute(:status, ACCEPTED)
   end
 end
