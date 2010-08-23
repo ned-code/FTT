@@ -2795,7 +2795,7 @@ WebDoc.TextToolView = $.klass({
   },
   
   refreshPalette: function(toolbarHash){
-    WebDoc.application.inspectorController.textInspector.refreshState(toolbarHash, this.parameters);
+   WebDoc.application.inspectorController.getTextInspector().refreshState(toolbarHash, this.parameters);
   },
   
   getParameters: function(){
@@ -2803,7 +2803,7 @@ WebDoc.TextToolView = $.klass({
   },
   
   activateToolbar: function(bool){
-    WebDoc.application.inspectorController.textInspector.activate(bool, this.parameters);
+    WebDoc.application.inspectorController.getTextInspector().activate(bool, this.parameters);
   },
   
   getSelectedText: function(){

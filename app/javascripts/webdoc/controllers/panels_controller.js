@@ -1,6 +1,6 @@
 // Controller of panels or panel controllers
 
-// define all inspector types
+// define all panel types
 WebDoc.PanelControllerType = {
   ITEM: 'item',
   PAGE: 'page',
@@ -38,27 +38,9 @@ WebDoc.PanelsController = $.klass({
   },
   
   initialize: function() {
-    
-    // Some of these are lazily loaded, and some are not -
-    // pageInspector does not work if you try loading it now.
-    
-    var itemInspector = new WebDoc.InspectorController();
-    var myContentController = new WebDoc.MyContentsController();
-    var webSearchController = new WebDoc.WebSearchController();
-    var pageBrowserController = new WebDoc.PageBrowserController();
-    
-    WebDoc.application.inspectorController = itemInspector;
-    WebDoc.application.myContentController = myContentController;
-    WebDoc.application.webSearchController = webSearchController;
-    WebDoc.application.pageBrowserController = pageBrowserController;
-    
+
     this._controllers = {};
-    this._controllers[WebDoc.PanelControllerType.ITEM] = itemInspector;
-    this._controllers[WebDoc.PanelControllerType.MY_CONTENT] = myContentController;
-    this._controllers[WebDoc.PanelControllerType.BROWSE_WEB] = webSearchController;
-    this._controllers[WebDoc.PanelControllerType.PAGE_BROWSER] = pageBrowserController;
-    
-    this._panelControllers = {
+    this._panelControllersClass = {
       item: WebDoc.InspectorController,
       page: WebDoc.PageInspectorController,
       document: WebDoc.DocumentInspectorController,
@@ -70,6 +52,18 @@ WebDoc.PanelsController = $.klass({
       packages: WebDoc.PackagesLibrary,
       page_browser: WebDoc.PageBrowserController
     };
+
+    // Some of these are lazily loaded, and some are not -
+    // pageInspector does not work if you try loading it now.
+    var itemInspector = this.getInspector(WebDoc.PanelControllerType.ITEM);
+    var myContentController = this.getInspector(WebDoc.PanelControllerType.MY_CONTENT);
+    var webSearchController = this.getInspector(WebDoc.PanelControllerType.BROWSE_WEB);
+    var pageBrowserController = this.getInspector(WebDoc.PanelControllerType.PAGE_BROWSER);
+
+    WebDoc.application.inspectorController = itemInspector;
+    WebDoc.application.myContentController = myContentController;
+    WebDoc.application.webSearchController = webSearchController;
+    WebDoc.application.pageBrowserController = pageBrowserController;
     
     this._currentInspectorType = null;      
     this._preloadDragDropIcon();
@@ -114,7 +108,7 @@ WebDoc.PanelsController = $.klass({
     var controller = this._controllers[ controllerType ];
     
     if (!controller) {
-      controller = new this._panelControllers[ controllerType ]();
+      controller = new this._panelControllersClass[ controllerType ]();
       this._controllers[ controllerType ] = controller;
     }
     
@@ -132,6 +126,9 @@ WebDoc.PanelsController = $.klass({
     }
     else if ( controllerType !== this._currentInspectorType ) {
       if ( this._panelGroup[ controllerType ] ) {
+        if (this._currentInspectorType) {
+          this.getInspector( this._currentInspectorType ).domNode.removeTransitionClass( 'active' );
+        }
         this.panelGhostNode.addTransitionClass( this.ACTIVE_CLASS );
         
         if ( this._currentInspectorType ) {
