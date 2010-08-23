@@ -43,8 +43,9 @@ class Friendship < ActiveRecord::Base
       friendship = Friendship.create!({ :user_id => user.id, :friend_id => friend.id, :status => status })
       Friendship.create_friend_mirror!(friend.id,user.id, with_request)
     end
-    Notifier.request_friendship(user,friend).deliver
-    return friendship
+    if with_request
+      Notifier.request_friendship(user,friend).deliver
+    end
   end
   
   # ====================
