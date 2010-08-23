@@ -5,7 +5,7 @@
 <% css_assets 'dashboard' %>
 <% js_assets 'document_editor' %>
 
-<div class="wrap">
+<div class="site_wrap wrap">
   <div class="column double_column of_four">
     <a id="wb-create-document-button" class="add_button button">New document</a>
   </div>
@@ -23,7 +23,7 @@
   </div>
 </div>
 
-<div class="wrap absolute_column two of_two">
+<div class="site_wrap wrap wrap">
   <div id="wb-document-list-container" class="column triple of-four">
     <div class="loading_icon"></div>
   </div>
@@ -35,14 +35,14 @@
   <%= render 'pending_friendships'%>
 </div>
 
-<div class="wrap">
+<div class="site_wrap wrap">
   <%= render 'documents/popup_create_webdoc'%>
 </div>
-<div class="wrap">
+<div class="site_wrap wrap">
   <%= render 'documents/popup_collaborate' %>
 </div>
 
-<div class="wrap">
+<div class="site_wrap wrap">
   <%= render 'documents/popup_share' %>
 </div>
 
