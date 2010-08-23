@@ -1,5 +1,5 @@
 <div class="title_wrap site_wrap wrap">
-    <h1>My Friends</h1>
+    <h1><%= @user.first_name %> <%= @user.last_name %></h1>
 </div>
 
 <section class="site_wrap wrap">
@@ -12,15 +12,22 @@
   </div>
   <div id="friends_list">
     <h6><%=  @user.first_name %>'s Friends</h6>
-    <ul class='friend_list'>
+    <ul class='horizontal index friends_index friend_list'>
       <% for user in @user.friends do %>
         <li>
-          <%= image_tag user.avatar.url(:thumb) %>
-          <%= link_to user.username, "/users/#{user.uuid}" %>
-        </li>
+     <% if user == @user%>
+      <%= render 'card', :user => @user %>
+    <% else %>
+      <%= render 'card', :user => user, :subscribed => @user.follower?(current_user), :friendship => @user.friend?(current_user)  %>
+    <% end %>
+    </li>
       <% end %>
     </ul>
   </div>
+  
+
+<!-- User webdoc here -->
+
 
 </section>
 

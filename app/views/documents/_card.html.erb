@@ -8,37 +8,14 @@
 	</h5>
 	<a class="thumb" href="<%= document_path(document)%>" style="background-image: url('<%= document.pages.first.thumbnail.url %>');"></a>
 
-  <!--  <a href='/users/<%= document.creator_id %>' class="author_name">
-      by <%= document.creator.username %>
-    </a> -->
     
     <time class="ago"><%= document.created_at %></time>
 	<ul class="index horizontal card_stats">
 		<li class="comments">0 </li>
 		<li class="views"> <%= document.views_count %></li>
-		 <!-- <li class="editors"></li>-->
 	</ul>
  </div>
   
-<!-- 
-<div class="card">
-	<h4 class="card-name">
-		 <a href='<%= document_path(document)%>'>
-			<%= document.title %>
-		</a>
-	</h4>
-	<a class="document_thumb" href="<%= document_path(document)%>" style="background-image: url('<%= document.pages.first.thumbnail.url %>');"></a>
-
-    <a href='/users/<%= document.creator %>' class="author_name">
-      by <%= document.creator.username %>
-    </a>
-	<ul class="index horizontal card_stats">
-		<li class="comments">Com: </li>
-		<li class="views">V: <%= document.views_count %></li>
-		<li class="editors"></li>
-	</ul>
- </div>
-  -->
 
 <!-- 
   title: document.title
@@ -55,57 +32,4 @@
   creator url:  '/users/document.creator.uuid'
   
 
--->
-
-<!-- 
-<Document 
-	uuid: "C46CCF14-5180-0001-51CF-C7BE1F201729", 
-	title: "Test", 
-	deleted_at: nil, 
-	created_at: "2010-08-12 10:06:48", 
-	updated_at: "2010-08-12 10:06:48", 
-	description: "", 
-	size: "{\"height\":\"600px\",\"width\":\"800px\"}", 
-	category_id: "11424862-92b3-49d0-a93a-35840c1cf244", 
-	creator_id: "c3b17b6e-43b6-4f0e-be64-0c3f7bc7aca5", 
-	views_count: 5, 
-	theme_id: "1f42699f-e159-46fb-9c7f-32133fae6969", 
-	style_url: "/uploads/theme/1f42699f-e159-46fb-9c7f-32133fae6969...", 
-	featured: 0>
-
--->
-
-<!-- 
-#<User 
-	email: "admin@mnemis.com", 
-	username: "admin", 
-	encrypted_password: "955c6083ac5b381c3587ad2c5c25975483ce5e937dd22e80e16...", 
-	password_salt: "8JqgyC0hHFBu20I2nCuP", 
-	confirmation_token: "09OSBCTog_lcZ9LTbTWH", 
-	confirmed_at: "2010-07-26 09:27:02", 
-	confirmation_sent_at: "2010-07-26 09:27:02", 
-	reset_password_token: nil, 
-	remember_token: "96I8P4witPng0rj_Meew", 
-	remember_created_at: "2010-08-16 07:54:01", 
-	sign_in_count: 59, 
-	current_sign_in_at: "2010-08-17 12:54:43", 
-	last_sign_in_at: "2010-08-17 12:52:49", 
-	current_sign_in_ip: "127.0.0.1", 
-	last_sign_in_ip: "127.0.0.1", 
-	failed_attempts: 0,
-	unlock_token: nil, 
-	locked_at: nil, 
-	created_at: "2010-07-26 09:27:02", 
-	updated_at: "2010-08-17 12:54:43", 
-	first_name: "admin", 
-	last_name: "admin", 
-	avatar_file_name: nil, 
-	bio: nil, gender: nil, 
-	website: nil, 
-	uuid: "c3b17b6e-43b6-4f0e-be64-0c3f7bc7aca5", 
-	avatar_content_type: nil, 
-	avatar_file_size: nil, 
-	avatar_updated_at: nil, 
-	id: "c3b17b6e-43b6-4f0e-be64-0c3f7bc7aca5", 
-	facebook_token: nil>
 -->
