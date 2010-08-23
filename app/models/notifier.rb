@@ -73,7 +73,7 @@ class Notifier < ActionMailer::Base
     @user = user
     @friend = friend
     recipients friend.email
-    subject "#{user.username} wants to connect with you"
+    subject "#{user.username} wants to add you to his connections on webdoc"
     mail(:to => recipients,
          :subject => subject)
   end
