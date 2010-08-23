@@ -77,7 +77,7 @@
     box-shadow: 5px 5px 10px rgba(0,0,0,0.4);
 }
 
-.video_row a strong, span{
+.video_row a strong, .video_row a span {
     display:block;
 }
 
