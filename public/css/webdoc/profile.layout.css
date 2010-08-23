@@ -1,0 +1,84 @@
+/* editor.layout.css */
+
+body {
+	-webkit-transition: padding 0.3s ease-out;
+	   -moz-transition: padding 0.3s ease-out;
+	        transition: padding 0.3s ease-out;
+}
+
+body.full_view {
+  overflow: hidden;
+  /* Compensate for header + top toolbar */ 
+  padding-top: 5.6667em;
+  /* Compensate for bottom toolbar */
+  padding-bottom: 2.6667em;
+}
+
+.transition_support body.transition {
+  overflow: hidden;
+}
+
+/* .wrap extensions ------------------------- */
+
+.wrap {
+  /* Transition to full view. Transitions can't go from % to length
+     values. Boo, rubbish. We have to use a combination of height
+     and min-height to get both types of value to cooperate. */
+  -webkit-transition: width 0.3s ease-out, max-width 0.3s ease-out, height 0.3s ease-out, min-height 0.3s ease-out, max-height 0.3s ease-out, margin 0.3s ease-out, padding 0.3s ease-out, opacity 0.3s ease-out;
+  -moz-transition:    width 0.3s ease-out, max-width 0.3s ease-out, height 0.3s ease-out, min-height 0.3s ease-out, max-height 0.3s ease-out, margin 0.3s ease-out, padding 0.3s ease-out, opacity 0.3s ease-out;
+  transition:         width 0.3s ease-out, max-width 0.3s ease-out, height 0.3s ease-out, min-height 0.3s ease-out, max-height 0.3s ease-out, margin 0.3s ease-out, padding 0.3s ease-out, opacity 0.3s ease-out;
+}
+
+.full_view .wrap {
+  width: 100%;
+}
+
+.site_wrap {
+  padding-right: 288px;
+}
+
+.full_view .site_wrap {
+  max-width: 2400px;
+}
+
+.workspace_wrap {
+  height: 50%;
+  /* must equal editor_wrap min-height */
+  min-height: 400px;
+  /* Makes room for Sharing panel */
+  margin-bottom: 96px;
+}
+
+.full_view .workspace_wrap {
+  padding-right: 0;
+  height: 100%;
+  min-height: 0;
+  margin-bottom: 0;
+}
+
+.title_wrap {
+  height: 3em;
+  margin-top: 1em;
+  margin-bottom: 2.6667em;
+  opacity: 1;
+}
+
+.title_inline {
+	display:inline;
+}
+
+.full_view .title_wrap {
+  height: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  opacity: 0;
+}
+
+.editor_wrap {
+  width: 98%;
+  height: 100%;
+  /* must equal workspace_wrap */
+  min-height: 400px;
+  margin-left: 0;
+  margin-right: 0;
+}

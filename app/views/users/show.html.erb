@@ -1,8 +1,12 @@
-<div class="title_wrap site_wrap wrap">
-    <h1><%= @user.first_name %> <%= @user.last_name %></h1>
-</div>
+<% meta_title @user.username %>
 
-<section class="site_wrap wrap">
+<% css_assets 'editor', 'profile' %>
+<% js_assets 'editor' %>
+
+<!-- workspace -->
+
+<div class="title_wrap site_wrap wrap">
+  <h1><%= @user.first_name %> <%= @user.last_name %></h1>
   <div id="user_card">
     <% if current_user == @user%>
       <%= render 'card', :user => @user %>
@@ -24,12 +28,48 @@
       <% end %>
     </ul>
   </div>
-  
+</div>
 
-<!-- User webdoc here -->
-
-
+<section class="workspace_wrap site_wrap wrap">
+  <div class="editor_wrap wrap" id="editor">
+    <%= render "documents/webdoc" %>
+    <%= render "documents/sidebar" %>
+    <%= render "documents/panels/toolbar_panel" %>
+    <%= render "documents/panels/controls_panel" %>
+    <%= render "documents/inspectors/document_inspector" %>
+    <%= render "documents/panels/discussions_panel" %>
+    <%= render "documents/panels/my_content_panel" %>
+    <%= render "documents/panels/apps_panel" %>
+    <%= render "documents/panels/packages_panel" %>
+    <%= render "documents/panels/browse_web_panel" %>
+    <%= render "documents/inspectors/document_inspector" %>
+    <%#= render :partial => "documents/panels/social_panel" %>
+    <%= render "documents/inspectors/page_inspector" %>
+    <%= render "documents/panels/pages_panel" %>
+    <%= render "documents/panels/inspector_panel" %>
+  </div>
 </section>
+
+<%= render "documents/relatedcontent", :documents => @related_documents %>
+
+<% content_for :scripts do %>
+  <script>
+    WebDoc.WidgetManager.videoWidget = new WebDoc.Widget(<%= raw Rails.cache.fetch("widget_json_video") { Medias::Widget.first(:conditions => {:system_name => 'video'}).to_json } %>);
+
+    new WebDoc.Document(<%= raw Rails.cache.fetch("document_#{@document.uuid}") { @document.as_application_json.to_json.gsub('/script','/sscript') } %>);
+
+    WebDoc.DocumentCategoriesManager._documentCategories = WebDoc.ServerManager.createRecords(WebDoc.Category,<%= raw Rails.cache.fetch("categories_json") { Category.all.to_json } %>);
+    WebDoc.ThemeManager._defaultTheme = new WebDoc.Theme(<%= raw Rails.cache.fetch("default_theme_json") { Theme.default.to_json } %>);
+    WebDoc.Application.main(function() {
+      var editor = new WebDoc.PageEditor();
+      editor.load("<%= @document.uuid %>", <%= edit_mode? %>);
+    });
+  </script>
+<% end %>
+
+
+
+
 
 <!-- 
 name: user.name
