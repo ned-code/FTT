@@ -132,16 +132,30 @@ WebDoc.DocumentList = $.klass({
           "class": "document-item " +( editor && "document-item-editable" )+ " clear card",
           data: data
         }),
-        documentTitle = $("<a/>", {
+        documentThumb = $("<a/>", {
           "class": "document-title wb-document-edit thumb",
           "href": '/documents/'+id,
           "title": "Open '" + $.string().escapeHTML(document.title()) + "'",
           "style": "background-image: url('/images/icon_no_thumb_page_640x480.png');",
           data: data,
+          //html: $.string().escapeHTML(document.title())
+        });
+        documentTitle = $("<a/>", {
+          "class": "document-title wb-document-edit card_document_title",
+          "href": '/documents/'+id,
+          "title": "Open '" + $.string().escapeHTML(document.title()) + "'",
+          data: data,
           html: $.string().escapeHTML(document.title())
         });
-            
+        
+        documentInfos = '<ul class="index horizontal card_stats"><li class="views">'+data.views_count+'</li></ul>';
+        
+        /* thumb: document.pages.first.thumbnail.url */
+      
+    documentNode.append( documentThumb );      
     documentNode.append( documentTitle );
+        documentNode.append( documentInfos );
+
     if ( editor ) {
       documentNode
       .append( this._buildDocumentControlsNode( document, data ) )
@@ -161,7 +175,7 @@ WebDoc.DocumentList = $.klass({
         }),
         deleteItemNode = $("<li/>"),
         deleteNode = $("<a/>", {
-          "class": "wb-document-delete delete-button button",
+          "class": "wb-document-delete delete-button button small red",
           href: "",
           title: "delete",
           html: "delete",
@@ -178,11 +192,11 @@ WebDoc.DocumentList = $.klass({
   
   _buildDocumentActionsNode: function( document, data ) {
     var documentActionsNode = $("<ul/>", {
-          "class": "document-actions index card"
+          "class": "document-actions index horizontal card_buttons"
         }),
         infoItemNode = $("<li/>"),
         infoNode = $("<a/>", {
-          "class": "wb-document-info sec-action info-button button",
+          "class": "wb-document-info sec-action info-button button small",
           href: "",
           title: "info",
           html: "info",
@@ -190,7 +204,7 @@ WebDoc.DocumentList = $.klass({
         }),
         collaborateItemNode = $("<li/>"),
         collaborateNode = $("<a/>", {
-          "class": "wb-document-collaborate sec-action collaborate-button button",
+          "class": "wb-document-collaborate sec-action collaborate-button button small",
           href: "",
           title: "Invite other people to help you edit your webdoc",
           html: "invite co-editors",
@@ -199,14 +213,14 @@ WebDoc.DocumentList = $.klass({
         shareItemNode = $("<li/>"),
         shareNode = ( document.isShared() ) ?
           $("<a/>", {
-            "class": "wb-document-unshare sec-action unshare-button button",
+            "class": "wb-document-unshare sec-action unshare-button button small",
             href: "#unshare",
             title: "Share your webdoc with the world - or just your friends",
             html: "sharing",
             data: data
           }) :     
           $("<a/>", {
-            "class": "wb-document-share sec-action share-button button",
+            "class": "wb-document-share sec-action share-button button small",
             href: "#share",
             title: "Share your webdoc with the world - or just your friends",
             html: "sharing",
