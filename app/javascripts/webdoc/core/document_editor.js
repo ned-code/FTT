@@ -37,6 +37,7 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
     WebDoc.application.documentEditor = this;
     WebDoc.application.undoManager = new WebDoc.UndoManager();
     WebDoc.application.accessController = new WebDoc.DocumentCollaborationController();
+    WebDoc.application.invitationsController = new WebDoc.InvitationsController();
     WebDoc.application.shareController = new WebDoc.DocumentShareController();
 
     infoDialogNode = $("#create_webdoc_form");
@@ -75,7 +76,8 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
 
       $('body')
       .delegate( "a[href='#filter-author']",  'click', this.searchDocuments.pBind(this) )
-      .delegate( "a[href='#filter-editable']",'click', this.searchDocuments.pBind(this) );
+      .delegate( "a[href='#filter-editable']",'click', this.searchDocuments.pBind(this) )
+      .delegate( "a[href='#invite_people']",'click', this.showInvitationsForm.pBind(this) );
       this.queryDomNode.bind('keypress', function(e) {
         var code = (e.keyCode ? e.keyCode : e.which);
         if(code == 13) {
@@ -371,6 +373,11 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
         $("#wb-document-filter-owned-by-me").click();
       }.pBind(this)
     });
+  },
+  
+  showInvitationsForm: function(e){
+    //popup form here
+    WebDoc.application.invitationsController.init();
   }
 });
 

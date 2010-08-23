@@ -152,7 +152,7 @@ WebDoc.DocumentCollaborationController = $.klass({
   
   cleanFields: function(){
     this.emailInvitationForm.cleanFields();
-    this.friendsSelector.cleanFriendsList();
+    this.friendsSelector.clean();
   },
   
   showEmailForm: function(e){

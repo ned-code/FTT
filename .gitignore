@@ -58,3 +58,4 @@ public/themes/*/*.zip
 .externalToolBuilders/
 lock
 public/js/codemirror
+config/allowed_user_email.yml

@@ -86,7 +86,7 @@ $.extend(WebDoc.Application, {
           if (index !== -1) {
             this._singletonsInitMap[index] = true;
           }      
-          if (jQuery.inArray(false, this._singletonsInitMap) === -1 && !this._callbackDone) {
+          if (jQuery.inArray(false, this._singletonsInitMap) === -1 && !this._callbackDone && this._singletonsInitMap.length === singletons.length) {
             this._callbackDone = true;
             callBack.call(this);
           }

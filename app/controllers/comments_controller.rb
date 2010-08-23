@@ -18,6 +18,7 @@ class CommentsController < ApplicationController
 
   def create
     @comment = current_user.comments.new_with_uuid(params[:comment])
+    authorize! :update, @comment
     respond_to do |format|
       if @discussion.present? && @comment.save
         comment_hash = @comment.as_application_json
@@ -33,6 +34,7 @@ class CommentsController < ApplicationController
 
   def destroy
     @comment.safe_delete!
+    authorize! :destroy, @comment
     message = { :source => params[:xmpp_client_id], :comment =>  { :discussion_id => @comment.discussion.id, :uuid => @comment.uuid }, :action => "delete" }
     @@xmpp_notifier.xmpp_notify(message.to_json, @comment.discussion.page.document_id)
     render :json => {}

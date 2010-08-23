@@ -232,7 +232,7 @@ WebDoc.DocumentShareController = $.klass({
   
   cleanFields: function(){
     this.emailInvitationForm.cleanFields();
-    this.friendsSelector.cleanFriendsList();
+    this.friendsSelector.clean();
   },
   
   _closeDialog: function() {

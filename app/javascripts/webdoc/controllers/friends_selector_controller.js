@@ -25,7 +25,7 @@ WebDoc.FriendsSelectorController = $.klass({
     this.domNode.find('.choose_friend').addClass('selected_friend');
   },
   
-  cleanFriendsList: function(){
+  clean: function(){
     this.domNode.find('.choose_friend.selected_friend').removeClass('selected_friend');
   },
   

@@ -115,6 +115,7 @@ class User < ActiveRecord::Base
         Role.create!(:user_id => self.id,
                    :document_id => document.uuid,
                    :name => role)
+        Document.invalidate_cache(document.uuid)
       end
     end
   end
@@ -123,6 +124,7 @@ class User < ActiveRecord::Base
   def has_no_role!(role,document)
     if has_role?(role,document)
       self.roles.where(:name => role, :document_id => document.uuid).delete_all
+      Document.invalidate_cache(document.uuid)
     end
   end
   
@@ -314,7 +316,10 @@ protected
       rescue => exception
         logger.warn("cannot open file '#{Rails.root}/config/allowed_user_email.yml'. Reason: #{exception.message}")
       end
-      errors.add(:email, :not_authorized_email) unless allowed_users.include? self.email
+      email_domain = self.email.split('@')[1]
+      if !(allowed_users.include?(self.email) || allowed_users.include?(email_domain))
+        errors.add(:email, :not_authorized_email)
+      end
     end
   end
   

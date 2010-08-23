@@ -25,7 +25,10 @@ WebDoc.WidgetManager = $.klass(
         }
         this._readyForCallBack();
       }.pBind(this));
-    }  
+    }
+    else {
+      this._readyForCallBack();      
+    }
   },
   
   _readyForCallBack: function() {

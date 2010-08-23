@@ -1,21 +1,11 @@
 class DiscussionsController < ApplicationController
 
-  before_filter :find_discussion
   before_filter :find_document
-
-  # access_control do
-  #   action :index, :create do
-  #     allow all, :if => :document_is_public?
-  #     allow :editor, :of => :pseudo_document
-  #   end
-  #   actions :update, :destroy do
-  #     allow all, :if => :current_user_is_discussion_owner
-  #     allow :editor, :of => :pseudo_document
-  #   end
-  #   allow :admin
-  # end
+  before_filter :find_discussion
   
   def index
+    authorize! :read, @document
+    
     raise 'no params id' if params[:page_id].blank?
     
     if params[:page_id].present?
@@ -34,6 +24,7 @@ class DiscussionsController < ApplicationController
 
   def create
     @discussion = current_user.discussions.new_with_uuid(params[:discussion])
+    authorize! :create, @discussion
     discussion_hash = @discussion.as_application_json
     message = discussion_hash
     message[:source] = params[:xmpp_client_id]
@@ -49,6 +40,7 @@ class DiscussionsController < ApplicationController
   
   def update
     @discussion.update_attributes!(params[:discussion])
+    authorize! :update, @discussion
     discussion_hash = @discussion.as_application_json
     message = discussion_hash
     message[:source] = params[:xmpp_client_id]
@@ -58,6 +50,7 @@ class DiscussionsController < ApplicationController
 
   def destroy
     @discussion.safe_delete!
+    authorize! :destroy, @discussion
     message = { :source => params[:xmpp_client_id], :discussion =>  { :page_id => @discussion.page.id, :uuid => @discussion.uuid }, :action => "delete" }
     @@xmpp_notifier.xmpp_notify(message.to_json, @discussion.page.document.uuid)
     render :json => {}
