@@ -112,12 +112,22 @@ class User < ActiveRecord::Base
         Role.create!(:user_id => self.id,
                    :name => role)
       else
-        Role.create!(:user_id => self.id,
-                   :document_id => document.uuid,
-                   :name => role)
+        if has_another_role?(document)
+          @role.update_attribute('name', role)
+        else
+          Role.create!(:user_id => self.id,
+                     :document_id => document.uuid,
+                     :name => role)
+        end
         Document.invalidate_cache(document.uuid)
       end
     end
+  end
+  
+  #look if the user have another role on document an update it
+  def has_another_role?(document)
+    @role = self.roles.where(:document_id => document.uuid).first
+    @role.present?
   end
   
   #TODO manage list
