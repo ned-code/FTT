@@ -197,7 +197,7 @@ WebDoc.DocumentList = $.klass({
         infoItemNode = $("<li/>"),
         infoNode = $("<a/>", {
           "class": "wb-document-info sec-action info-button button small",
-          href: "",
+          href: "#popup-newwebdoc",
           title: "info",
           html: "info",
           data: data
