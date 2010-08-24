@@ -12,6 +12,9 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
     this.domNode = $("#item_inspector");    
     this.visible = true;
     
+    // Quick hack - this has been moved from inside individual inspector controllers
+    this.propertiesController = WebDoc.application.propertiesController = new WebDoc.PropertiesInspectorController('#item_inspector', false);
+    
     this._inspectorNodes = {};
     this.initPaneWithController('empty', new WebDoc.InspectorEmptyController());
     this.initPaneWithController('DrawingInspectorGroup', new WebDoc.DrawingInspectorController());    
@@ -20,12 +23,13 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
     //this.initPaneWithController('HtmlInspectorGroup', new WebDoc.InnerHtmlController( "#html_inspector", true ));
     this.initPaneWithController('HtmlInspectorGroup', new WebDoc.HtmlInspectorController( "#html_inspector" ));
     
-		// Quick hack - this has been moved from inside individual inspector controllers
-    this.propertiesController = new WebDoc.PropertiesInspectorController('#item_inspector', false);
-    
     WebDoc.application.boardController.addSelectionListener(this);
   },
-  
+
+  getTextInspector: function() {
+    return this._inspectorNodes['TextInspectorGroup'];  
+  },
+
   buttonSelector: function() {
     return this.ITEM_INSPECTOR_BUTTON_SELECTOR;
   },
@@ -66,11 +70,7 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
     
     ddd( "selected item ", selection );
     
-    //we show the inspector only if there is one item in the selection
-    if ( selection.length === 0 ) {
-      this._updateInspector();
-    }
-    else if ( selection.length === 1 ) {
+    if ( selection.length === 1 ) {
     	ddd('[InspectorController] selectionChanged', selection[0].inspectorGroupName());
       this._updateInspector( selection[0].inspectorGroupName() );
     }

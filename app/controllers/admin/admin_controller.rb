@@ -1,6 +1,6 @@
 class Admin::AdminController < ApplicationController
   before_filter :admin_required
-  
+  skip_before_filter :process_invitation
 private
   
   def admin_required
