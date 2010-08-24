@@ -25,7 +25,11 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
     
     WebDoc.application.boardController.addSelectionListener(this);
   },
-  
+
+  getTextInspector: function() {
+    return this._inspectorNodes['TextInspectorGroup'];  
+  },
+
   buttonSelector: function() {
     return this.ITEM_INSPECTOR_BUTTON_SELECTOR;
   },
@@ -66,11 +70,7 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
     
     ddd( "selected item ", selection );
     
-    //we show the inspector only if there is one item in the selection
-    if ( selection.length === 0 ) {
-      this._updateInspector();
-    }
-    else if ( selection.length === 1 ) {
+    if ( selection.length === 1 ) {
     	ddd('[InspectorController] selectionChanged', selection[0].inspectorGroupName());
       this._updateInspector( selection[0].inspectorGroupName() );
     }

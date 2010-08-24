@@ -4,8 +4,8 @@
 
 WebDoc.WebSearchController = $.klass(WebDoc.Library, {
   initialize: function($super, libraryId) {
-    $super('media-browser-web');
-    this.domNode = jQuery('#media-browser-web');
+    $super('web');
+    this.domNode = jQuery('#web');
     //this.createHandlers(this.domNode, 'click', this._webHandlers);
     this.webImagesSearch = new WebDoc.WebImagesSearch('web_images_search_field', this);
     this.webVideosSearch = new WebDoc.WebVideosSearch('web_videos_search_field', this);
