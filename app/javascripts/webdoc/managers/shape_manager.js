@@ -50,7 +50,7 @@ WebDoc.ShapeManager = {
     this._allShapes = {
       s1: this.SHAPE_1,
       s2: this.SHAPE_2
-    }
+    };
     this._initialized = true;
   },
 

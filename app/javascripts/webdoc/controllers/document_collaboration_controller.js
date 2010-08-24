@@ -108,7 +108,7 @@ WebDoc.DocumentCollaborationController = $.klass({
   sendInvitationsByEmail: function(e) {
     e.preventDefault();
     
-    var role_type = jQuery('input[name="role_type_email"]:checked').val()
+    var role_type = jQuery('input[name="role_type_email"]:checked').val();
     var invitations = { invitations : {
                             role : role_type,
                             emails : this.emailInvitationForm.getEmailsList(),
@@ -175,5 +175,5 @@ WebDoc.DocumentCollaborationController = $.klass({
   close: function(e){
     e.preventDefault();
     this.documentAccessDialog.hide();
-  },
+  }
 });
