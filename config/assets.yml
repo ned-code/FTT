@@ -120,7 +120,6 @@ javascripts:
     - app/javascripts/webdoc/common/*.js
     - app/javascripts/webdoc/model/*.js
     - app/javascripts/webdoc/card/card.js
-    - public/js/jquery.RotateResizeExtension.js
 
   document_editor:
     - app/javascripts/webdoc/utils/*.js
