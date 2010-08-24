@@ -62,13 +62,33 @@
 	background-color: grey;
 }
 
-.button {
+.mode_button,
+.pages_button,
+.view_button,
+.app_button,
+.settings_button {
+
   background-image: url('../../images/buttons_editor.png');
   /* Move the image out of any buttons that don't have images.
      It may be a bit safer to apply the image just to the buttons we want,
      but this'll do for now. */
-  background-position: 128px 128px;
+    
+    -webkit-border-radius: 3px;
+    -moz-border-radius:    3px;
+    -o-border-radius:    3px;
+    border-radius:         3px;
+    
+    background-color: rgb(255,255,255);
+    
+    -webkit-box-shadow:rgba(0,0,0,0.5) 0px 1px 3px;
+    -moz-box-shadow:rgba(0,0,0,0.5) 0px 1px 3px;
+    box-shadow:rgba(0,0,0,0.5) 0px 1px 3px;
+    
+    background-position: 128px 128px;
 }
+
+
+
 
 a[href="#toggle_content_panel"] {
 	padding-left: 24px;

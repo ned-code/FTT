@@ -197,7 +197,7 @@ WebDoc.DocumentList = $.klass({
         infoItemNode = $("<li/>"),
         infoNode = $("<a/>", {
           "class": "wb-document-info sec-action info-button button small",
-          href: "",
+          href: "#popup-newwebdoc",
           title: "info",
           html: "info",
           data: data
@@ -205,7 +205,7 @@ WebDoc.DocumentList = $.klass({
         collaborateItemNode = $("<li/>"),
         collaborateNode = $("<a/>", {
           "class": "wb-document-collaborate sec-action collaborate-button button small",
-          href: "",
+          href: "#popup-collaborate",
           title: "Invite other people to help you edit your webdoc",
           html: "invite co-editors",
           data: data
@@ -221,7 +221,7 @@ WebDoc.DocumentList = $.klass({
           }) :     
           $("<a/>", {
             "class": "wb-document-share sec-action share-button button small",
-            href: "#share",
+            href: "#popup-share",
             title: "Share your webdoc with the world - or just your friends",
             html: "sharing",
             data: data

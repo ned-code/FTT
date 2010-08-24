@@ -6,7 +6,7 @@
         <ul class="vertical thumbs_index index">
           <% (0..(@more_author_documents.length - 1)).step(1) do |i| %>
           <li>
-            <%= render 'card', :document => @more_author_documents[i]%>
+            <%= render 'documents/card', :document => @more_author_documents[i]%>
           </li>
           <% end %>
         </ul>

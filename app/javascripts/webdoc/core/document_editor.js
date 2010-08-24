@@ -229,7 +229,7 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
         documentToEdit = data && data.id;
 
     WebDoc.application.accessController.showAccess( e, WebDoc.application.documentEditor.documentWithId(documentToEdit) );
-    e.preventDefault();
+ //   e.preventDefault();
   },
 
   shareDocument: function(e) {
@@ -240,7 +240,7 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
 
     WebDoc.application.shareController.showShare(e, document);
 
-    e.preventDefault();
+   // e.preventDefault();
   },
 
   unshareDocument: function(e) {

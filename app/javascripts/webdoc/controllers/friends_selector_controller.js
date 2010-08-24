@@ -7,7 +7,6 @@ WebDoc.FriendsSelectorController = $.klass({
     this.domNodeId = domNodeId;
     this.domNode = jQuery("#"+this.domNodeId);
     this.friendsListNode = this.domNode.find('.friends_list');
-    this.domNode.find('.select_all_friends').bind('click', this.selectAllFriends.pBind(this));
   },
   
   selectFriend: function(e){
@@ -65,7 +64,14 @@ WebDoc.FriendsSelectorController = $.klass({
       friendNode.append('<input type="hidden" value=0 name="friend['+friend.uuid+']"/>');
       friendsList.append(friendNode);
     }
+    
+    var selectAllLink = jQuery('<a/>', {href: '', 'class' : 'select_all_friends', })
+      .html('Select All friends');
+    
+    this.friendsListNode.append(selectAllLink);
+    ddd(selectAllLink);
     this.friendsListNode.append(friendsList);
+    this.domNode.find('.select_all_friends').bind('click', this.selectAllFriends.pBind(this));
     this.domNode.find('.choose_friend').bind('click', this.selectFriend.pBind(this));
     this.domNode.show();
   },
@@ -87,7 +93,6 @@ WebDoc.FriendsSelectorController = $.klass({
       });
     }
   }
-  
   
 });
 

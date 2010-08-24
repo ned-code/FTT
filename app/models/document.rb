@@ -445,12 +445,6 @@ private
   def refresh_cache
     Document.invalidate_cache(self.uuid)  
   end
-  
-  def add_unvalid_email_to_array(email)
-    @unvalid_access_emails ||= []
-    @unvalid_access_emails << email
-  end
-  
 end
 
 
