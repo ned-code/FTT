@@ -420,6 +420,7 @@ body.full_view {
 .app_index>li,
 .comment_index>li {
 	top: -0.25em;
+	line-height: 1.8333em;
 }
 
 /* better done with a class, perhaps */
