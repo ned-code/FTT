@@ -109,7 +109,7 @@ javascripts:
     - public/js/jquery.cuteTime.min.js
     - public/js/jquery.scrollbars.js
     - public/js/jquery.cookie.js
-    - public/js/klass.js    
+    - public/js/klass.js
     - public/swfupload/swfupload.js
     - public/js/jquery-swfupload.js
     - public/js/jquery.hashchange.js
