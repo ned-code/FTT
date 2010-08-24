@@ -1,8 +1,3 @@
-/**
- * @author Julien Bachmann
- */
-//= require <webdoc/model/document>
-
 WebDoc.InvitationsController = $.klass({
   initialize: function() {
     var self = this;
@@ -12,6 +7,8 @@ WebDoc.InvitationsController = $.klass({
     
     this.emailForm = jQuery("#invitations_email_form");
     this.emailForm.bind( 'submit', this.sendInvitationsByEmail.pBind(this) );
+    
+    this.domNode.find('.cancel').bind('click', this.close.pBind(this));
   },
   
   init: function(){
@@ -37,5 +34,10 @@ WebDoc.InvitationsController = $.klass({
   
   cleanFields: function(){
     this.emailInvitationForm.cleanFields();
+  },
+  
+  close: function(e){
+    e.preventDefault();
+    this.domNode.hide();
   }
 });

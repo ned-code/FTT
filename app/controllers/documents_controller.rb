@@ -29,7 +29,7 @@ class DocumentsController < ApplicationController
         per_page = 20
         @documents = Document.not_deleted_with_filter(current_user, params[:document_filter], params[:query], params[:page], per_page)
         render :json => { 
-          :documents => @documents.map{ |d| d.as_application_json },
+          :documents => @documents.map{ |d| d.as_application_json({ :skip_pages  => true}) },
           :pagination => {
             :per_page => per_page,
             :current_page => @documents.current_page,
