@@ -8,23 +8,25 @@
     
     <% if user_signed_in? %>
     <ul class="horizontal nav_index index">
-	<li><a class="header_button button" href="<%= dashboard_path %>">You</a></li
-     ><li><a class="header_button button" href="<%= explore_path %>" <% if params[:controller]=='documents' && params[:action]=='explore' %>class="current"<% end %>>Explore</a></li>
-    </ul>
+	<li><%= link_to "You", dashboard_path, { :class => "header_button button #{params[:controller]=='users' ? 'active' : '' }" } %></li
+     ><li>
+     <%= link_to "Explore", explore_path, { :class => "header_button butto #{params[:controller]=='documents' && params[:action]=='explore' ? 'active' : '' }" } %></li
+     ></ul>
     <% end %>
     
     <% if user_signed_in? %>
     <ul class="horizontal usernav_index index ">
-      <li><a href="#messages_dropdown" class="header_button button">Messages</a>
+   <!--   <li><a href="#messages_dropdown" class="header_button button">Messages</a>
         <ul class="messages_dropdown_index dropdown_index index dropdown" id="messages_dropdown">
           <li><h4>Messages</h4><a href="#" class="sendmessage_button button">Send a message</a></li>
           <%= render 'discussions/message' %>
         </ul></li
-     ><li><%= link_to "Friends", friendships_path, { :class => "header_button button #{params[:controller]=='friendships' ? 'current' : '' }" } %></li
+     >
+     --><li><%= link_to "Friends", friendships_path, { :class => "header_button button #{params[:controller]=='friendships' ? 'active' : '' }" } %></li
      ><li>
-        <a href="#account_dropdown" class="header_button button">Account</a>
+        <%= link_to "Account", '#account_dropdown', { :class => "header_button button #{params[:controller]=='devise/registrations' ? 'active' : '' }" } %>
         <ul class="user_index dropdown_index index dropdown" id="account_dropdown">
-          <li><%= link_to "Your profile", edit_registration_path(:user), { :class => "user-edit item #{params[:controller]=='users' ? 'users' : '' }" } %></li
+          <li><%= link_to "Edit your profile", edit_registration_path(:user), { :class => "user-edit item #{params[:controller]=='users' ? 'users' : '' }" } %></li
          ><li><%= link_to "Logout", destroy_user_session_path, { :class => "user-logout item" } %></li>
         </ul>
       </li>
