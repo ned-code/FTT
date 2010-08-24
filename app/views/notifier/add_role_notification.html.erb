@@ -1,0 +1,17 @@
+Hi <%= @user.username %>,
+
+<% if Role::PUBLIC_ROLES.include?(@role )%>
+  <%= @current_user.username %> invites you to view the webdoc <a href='<%= document_url(@document)%>'><%= @document.title %></a>
+  
+  <a href='<%= document_url(@document)%>'> Go to <%= @document.title %> right now</a>
+
+<% else %>
+
+  <%= @current_user.username %> invites you to participate to the webdoc <a href='<%= document_url(@document)%>'><%= @document.title %></a>
+  You are now able to express yourself on this webdoc and also to invite your friends to join it!
+  
+  <a href='<%= document_url(@document)%>'> Join <%= @document.title %> right now</a>
+
+<% end %>
+
+Your webdoc team

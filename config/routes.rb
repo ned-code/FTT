@@ -44,7 +44,7 @@ Webdoc::Application.routes.draw do
 
   devise_for :users
 
-  resources :users, :only => [:index, :show, :favorites]
+  resources :users, :only => [:show, :favorites]
 
   get 'user' => 'sessions#show'  
 
@@ -97,7 +97,7 @@ Webdoc::Application.routes.draw do
   end
   
   resources :invitations, :except => [:update]
-
+  resources :registers, :only => [:create]
   # START OLD ROUTES
   # Jammit::Routes.draw(map)
   # map.connect 'proxy/resolve', :controller => 'proxy', :action => 'resolve', :conditions => { :method => :get }

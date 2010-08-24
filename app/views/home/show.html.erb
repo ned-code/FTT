@@ -31,4 +31,20 @@
     <h3>&hellip;or sign up</h3>
     <p>Want to get started creating your own webdocs? Registering takes 30 seconds, and <em>it's free!</em>.  <a href='/users/sign_up<%= params[:invitation].nil? ? "" : "?invitation=#{ params[:invitation]}"%>' style="font-weight: bold; font-style: italic;">Sign&nbsp;up&nbsp;now...</a></p>
   </div>
+  <div id="register">
+    <% if params[:register].nil? %>
+      <%= form_for Register.new do |f| %>
+        <p>
+          Want to know when we are open ? bla bla bla bla
+        </p>
+        <%= f.label :email, 'Email' %>
+        <%= f.text_field :email, :'data-type' => "email", :maxlength => 255, :required => "required", :autocomplete => "on", :autofocus => "on", :placeholder => "you're mail here" %>
+        <%= f.submit 'Register' %>
+      <% end %>
+    <% else %>
+    <p>
+      Thank you for registering !!!
+    </p>
+    <% end %>
+  </div>
 </div>

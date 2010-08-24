@@ -7,8 +7,8 @@
 
 <div class="title_wrap site_wrap wrap horizontal">
   <h1><%= @document.title %></h1>
-  <a class="dropdown_button settings_button button" href="#dropdown" data-for="#doc_settings_dropdown">Settings</a>
-  <ul class="vertical doc_settings_dropdown_index dropdown_index buttons_index index" id="doc_settings_dropdown">
+  <a class="dropdown_button settings_button button" href="#doc_settings_dropdown">Settings</a>
+  <ul class="vertical doc_settings_dropdown_index dropdown_index buttons_index index dropdown" id="doc_settings_dropdown">
     <li><a href="/" class="edit_button button">your profile</a></li
    ><li><a href="/" class="edit_button button">logout</a></li>
   </ul>
@@ -16,80 +16,8 @@
 
 <section class="workspace_wrap site_wrap wrap">
   <div class="editor_wrap wrap" id="editor">
-
-    <!-- webdoc -->
-    <div class="frame_layer layer" style="overflow: hidden;">
-      <div class="pushscroll_layer layer">
-        <div id="webdoc" class="webdoc scroll layer">
-          <div class="center">
-            <div class="center_cell">
-              <div id="board-container" class="center_box">
-              </div>
-            </div>
-            <div id="panel_ghost">
-              <div></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- ui elements -->
-
-    <!--div id="webdoc_x_scrollbar" class="x_scrollbar_container">
-      <div class="x_scrollbar scrollbar"></div>
-    </div>
-
-    <div id="webdoc_y_scrollbar" class="y_scrollbar_container">
-      <div id="scrollbar_y" class="y_scrollbar scrollbar"></div>
-    </div-->
-
-    <div id="webdoc_loading" class="loading loading_icon layer"></div>
-
-    <!-- panels -->
-
-    <div class="sidebar">
-      <section class="sidebar_wrap">
-           <h2>Authors</h2>
-
-
-        <ul class="horizontal author_index index">
-        <% @document.editors.each do |editor| %>
-          <li>
-          <% if editor == current_user %>
-            <%= render :partial => "users/thumb", :locals => { :user => editor } %>
-          <% else %>
-            <%= render :partial => "users/thumb", :locals => { :user => editor, :subscribed => @document.creator.follower?(current_user), :friendship => @document.creator.friend?(current_user)  } %>
-          <% end %>
-          </li>
-        <% end %>
-        </ul>
-      </section>
-
-      <section class="sidebar_wrap">
-         <h2>Currently on this webdoc</h2>
-
-         <ul class="horizontal reader_index index">
-           <li><a href="/" class="user_thumb thumb" style="background-image: url('/images/icon_no_thumb_page_640x480.png');">User Name</a></li
-          ><li><a href="/" class="user_thumb thumb" style="background-image: url('/images/icon_no_thumb_page_640x480.png');">User Name</a></li
-          ><li><a href="/" class="user_thumb thumb" style="background-image: url('/images/icon_no_thumb_page_640x480.png');">User Name</a></li
-          ><li><a href="/" class="user_thumb thumb" style="background-image: url('/images/icon_no_thumb_page_640x480.png');">User Name</a></li
-          ><li><a href="/" class="user_thumb thumb" style="background-image: url('/images/icon_no_thumb_page_640x480.png');">User Name</a></li
-          ><li><a href="/" class="user_thumb thumb" style="background-image: url('/images/icon_no_thumb_page_640x480.png');">User Name</a></li>
-         </ul>
-  </section>
-
-  <section class="sidebar_wrap">
-         <h2>From the same Author</h2>
-         <ul class="vertical thumbs_index index">
-           <% (0..(@more_author_documents.length - 1)).step(1) do |i| %>
-           <li>
-             <%= render 'card', :document => @more_author_documents[i]%>
-           </li>
-           <% end %>
-         </ul>
-      </section>
-    </div>
-
+    <%= render "documents/webdoc" %>
+    <%= render "documents/authors_sidebar" %>
     <%= render "documents/panels/toolbar_panel" %>
     <%= render "documents/panels/controls_panel" %>
     <%= render "documents/inspectors/document_inspector" %>

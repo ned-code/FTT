@@ -88,31 +88,13 @@
     padding-top: 0.2em;
 }
 
-.horizontal_scroll {
-    overflow-x: auto;
-    overflow-y: hidden;
-}
-
-.vertical_scroll {
-    overflow-x: hidden;
-    overflow-y: auto;
-}
-
-.dropdown_index {
-	position: absolute;
-	top: 0;
-	left: 0;
-	display: none;
-	overflow: hidden;
-}
+/* dropdown menus */
 
 .dropdown_index>li {
 	margin-right: 0;
 }
 
 .dropdown_index.active {
-	padding-top:10px;
-	padding-bottom:10px;
 	display: block;
 }
 

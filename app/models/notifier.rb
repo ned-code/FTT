@@ -1,24 +1,13 @@
 class Notifier < ActionMailer::Base
   default :from => APP_CONFIG['mail_from']
   
-  def role_notification(current_user, role, user, document, message)
+  def add_role_notification(current_user, role, user, document)
+    @user = user
+    @current_user = current_user
+    @document = document
     @role = role
-    @user = user
-    @current_user = current_user
-    @document = document
-    @custom_message = message
     recipients  user.email
-    subject     "#{current_user.username} invites you to co-edit webdoc #{document.title}"
-    mail(:to => recipients,
-         :subject => subject)
-  end
-  
-  def no_role_notification(current_user, user, document)
-    @user = user
-    @current_user = current_user
-    @document = document
-    recipients  user.email
-    subject     "No more role on document"
+    subject     "#{current_user.username} invites you to participate to his webdoc #{document.title}"
     mail(:to => recipients,
          :subject => subject)
   end
@@ -73,7 +62,7 @@ class Notifier < ActionMailer::Base
     @user = user
     @friend = friend
     recipients friend.email
-    subject "#{user.username} wants to connect with you"
+    subject "#{user.username} wants to add you to his connections on webdoc"
     mail(:to => recipients,
          :subject => subject)
   end

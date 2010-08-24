@@ -12,7 +12,7 @@ WebDoc.ShapeManager = {
       path: "M0 50 C0 22 22 0 50 0 C75 0 100 22 100 50 C100 78 78 100 50 100 L0 150 L25 100 C0 90 0 50 0 50Z",
       stroke: "black",
       fill: "white",
-      strokeWidth: "1",
+      strokeWidth: "2",
       textTopOffset: "10",
       textLeftOffset: "10",
       textRightOffset: "10",

@@ -1,10 +1,15 @@
+<% him_or_her = @user.gender == 'female' ? 'her' : 'him'%>
+
 Hi <%= @friend.username %>!
+<%= @user.username %> wants to add you to his connections on webdoc.
 
-<%= @user.username %> wants to connect with you.
+You can <a href="http://<%= APP_CONFIG['host']%>/dashboard">accept</a> his request, then it will be very easy
+to share your webdoc with <%= him_or_her %>
+get involved in <%= @user.username %> webdocs
+get <%= him_or_her %> to participate to your webdocs
 
-Follow this link to approve or reject this demand <%= link_to 'Dashboard', documents_url%>.
+Of course if you don't know <%= @user.username %> or don't want to be involved in <%= him_or_her %> webdoc, simply ignore the request.
 
-
-Best regards
+And don't forget to invite your friends to join webdoc!
 
 Your webdoc team

@@ -63,10 +63,6 @@ body.full_view {
   opacity: 1;
 }
 
-.title_inline {
-	display:inline;
-}
-
 .full_view .title_wrap {
   height: 0;
   margin-top: 0;
@@ -387,9 +383,37 @@ body.full_view {
 }
 
 .app_index {
-	position: absolute;
+  position: absolute;
   top: 0.3333em;
-	left: 9em;
+  left: 25%;
+  margin-left: -5.6em;
+}
+
+.comment_index {
+	position: absolute;
+	top: 0.3333em;
+	left: 50%;
+	margin-left: -5em;
+}
+
+.app_index,
+.comment_index {
+  height: 20px;
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+.app_index>li,
+.comment_index>li {
+	top: -4px;
+}
+
+/* better done with a class, perhaps */
+
+.app_index>li:last-child,
+.comment_index>li:last-child {
+	top: 0;
+	margin-left: 1em;
 }
 
 .panel_index {
@@ -403,22 +427,16 @@ body.full_view {
   left: 0.3333em;
 }
 
-.comments_buttons_index {
-	position: absolute;
-	left: 50%;
-	margin-left: -5em;
-}
-
 /* this would be better with a class rather than first-child */
 
-.comment_buttons_index>li:first-child {
+.comment_index>li:first-child {
   display: none;
 }
 
-.admin_role .comments_buttons_index>li:first-child,
-.editor_role .comments_buttons_index>li:first-child,
-.contributor_role .comments_buttons_index>li:first-child,
-.viewer_comment_role .comments_buttons_index>li:first-child {
+.admin_role .comment_index>li:first-child,
+.editor_role .comment_index>li:first-child,
+.contributor_role .comment_index>li:first-child,
+.viewer_comment_role .comment_index>li:first-child {
   display: inline-block;
 }
 
@@ -465,15 +483,21 @@ body.full_view {
 
 /* .button extensions ------------------------- */
 
-.edit_mode .mode_button {
-	/* quick hack! */
-	background: blue;
-}
-
-.view_button {
+.view_button,
+.pages_button,
+.comment_button,
+.dropdown_button,
+.settings_button {
   width: 2em;
   /* hide button text */
   padding-top: 2em;
+}
+
+/* Big, draggable buttons for apps and comments */
+.app_button {
+	width: 28px;
+	height: 28px;
+	padding-top: 28px;
 }
 
 /* Handle transition between normal and edit_mode for buttons
@@ -497,11 +521,6 @@ body.full_view {
 
 .transition .edit_index .dropdown_button {
 	display: block;
-}
-
-.settings_button {
-  color:red;
-  display:inline;
 }
 
 /* .thumb extensions ------------------------- */

@@ -10,7 +10,7 @@ WebDoc.DiscussionView = $.klass({
     this.discussion = discussion;
 
     this.domNode = $("<a/>", {
-    	'class': 'wd_discussion comment_button button',
+    	'class': 'wd_discussion app_button button',
     	href: '#webdoc_discussion',
     	id: this.discussion.uuid(),
     	text: this.discussion.comments.length,

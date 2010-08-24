@@ -112,12 +112,22 @@ class User < ActiveRecord::Base
         Role.create!(:user_id => self.id,
                    :name => role)
       else
-        Role.create!(:user_id => self.id,
-                   :document_id => document.uuid,
-                   :name => role)
+        if has_another_role?(document)
+          @role.update_attribute('name', role)
+        else
+          Role.create!(:user_id => self.id,
+                     :document_id => document.uuid,
+                     :name => role)
+        end
         Document.invalidate_cache(document.uuid)
       end
     end
+  end
+  
+  #look if the user have another role on document an update it
+  def has_another_role?(document)
+    @role = self.roles.where(:document_id => document.uuid).first
+    @role.present?
   end
   
   #TODO manage list
@@ -316,7 +326,10 @@ protected
       rescue => exception
         logger.warn("cannot open file '#{Rails.root}/config/allowed_user_email.yml'. Reason: #{exception.message}")
       end
-      errors.add(:email, :not_authorized_email) unless allowed_users.include? self.email
+      email_domain = self.email.split('@')[1]
+      if !(allowed_users.include?(self.email) || allowed_users.include?(email_domain))
+        errors.add(:email, :not_authorized_email)
+      end
     end
   end
   
