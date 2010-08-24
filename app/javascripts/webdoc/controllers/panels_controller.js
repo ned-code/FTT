@@ -9,18 +9,17 @@ WebDoc.PanelControllerType = {
   DISCUSSIONS: 'discussions',
   SOCIAL: 'social',
   MY_CONTENT: 'my_content',
-  APPS: 'apps',
+  APPS: 'apps',                       
   BROWSE_WEB: 'browse_web',
   PACKAGES: 'packages'
 };
 
 WebDoc.PanelsController = $.klass({
   
-  CURRENT_CLASS: "current",
   ACTIVE_CLASS: "active",
   PANEL_GHOST_SELECTOR: "#panel_ghost",
   
-  _editPanelGroup: {
+  _editRightPanelGroup: {
     item: true,
     page: true,
     document: true,
@@ -31,11 +30,15 @@ WebDoc.PanelsController = $.klass({
     browse_web: true
   },
   
-  _viewPanelGroup: {
+  _viewRightPanelGroup: {
     discussions: true,
     my_content: true,
     apps: true,
     packages: true
+  },
+
+  _bottomPanelGroup: {
+    page_browser: true
   },
   
   initialize: function() {
@@ -66,9 +69,13 @@ WebDoc.PanelsController = $.klass({
     WebDoc.application.webSearchController = webSearchController;
     WebDoc.application.pageBrowserController = pageBrowserController;
     
-    this._currentInspectorType = null;      
+    this._currentRightPanelType = null;
+    this._currentBottomPanelType = null;
+    this._currentRightPanelGroup = this._viewRightPanelGroup;
+    this._currentBottomPanelGroup = this._bottomPanelGroup;
     this._preloadDragDropIcon();
-    
+
+    // ghost panel is used to align webdoc content and inspector when webdoc is in full page.
     this.panelGhostNode = jQuery( this.PANEL_GHOST_SELECTOR );
     this.innerGhostNode = this.panelGhostNode.find('.panel-ghost');
     
@@ -77,30 +84,32 @@ WebDoc.PanelsController = $.klass({
   },
   
   enableEditPanels: function() {
-    this._panelGroup = this._editPanelGroup;
+    this._currentRightPanelGroup = this._editRightPanelGroup;
   },
   
   disableEditPanels: function() {
-    this._panelGroup = this._viewPanelGroup;
-    this.selectInspector( false );
-  },
-  
-  getSelectedInspector: function() {
-    return this._currentInspectorType;  
+    this._currentRightPanelGroup = this._viewRightPanelGroup;
+    if (!this._viewRightPanelGroup[this._currentRightPanelType]) {
+      this.deselectInspector();
+    }        
   },
   
   selectInspector: function( controllerType ) {
     ddd("[PanelsController] select inspector:", controllerType);
-    
-    this._showPanel( controllerType );
-    
-    if ( this._panelGroup[ controllerType ] ) {
-      this._currentInspectorType = controllerType;
+
+    if (this._currentRightPanelGroup[ controllerType ] ) {
+      this._showRightPanel( controllerType );
+      this._currentRightPanelType = controllerType;
+    }
+    else if (this._currentBottomPanelGroup[controllerType]) {
+      this._showBottomPanel(controllerType);
+      this._currentBottomPanelType = controllerType;
     }
   },
   
   deselectInspector: function(  ) {
-    this._showPanel( false );
+    this._showRightPanel( null );
+    this._currentRightPanelType = null;
   },
   
   getInspector: function( controllerType ) {
@@ -116,22 +125,33 @@ WebDoc.PanelsController = $.klass({
     return controller;
   },
   
-  _showPanel: function( controllerType ){
+  _showRightPanel: function( controllerType ){
     ddd('[PanelsController] _showPanel controllerType:', controllerType);
     
     if ( !controllerType ) {
-      if ( this._currentInspectorType ) {
-        this.getInspector( this._currentInspectorType ).domNode.removeTransitionClass( 'active' );
+      if ( this._currentRightPanelType ) {
+        this.getInspector( this._currentRightPanelType ).domNode.removeTransitionClass( 'active' );
         this.panelGhostNode.removeTransitionClass( this.ACTIVE_CLASS );
       }
     }
-    else if ( controllerType !== this._currentInspectorType ) {
+    else if ( controllerType !== this._currentRightPanelType ) {
       this.panelGhostNode.addTransitionClass( this.ACTIVE_CLASS );
 
-      if ( this._currentInspectorType ) {
-        this.getInspector( this._currentInspectorType ).domNode.removeTransitionClass( 'active' );
+      if ( this._currentRightPanelType ) {
+        this.getInspector( this._currentRightPanelType ).domNode.removeTransitionClass( 'active' );
       }
       this.getInspector( controllerType ).domNode.addTransitionClass( 'active' );
+    }
+  },
+
+  _showBottomPanel: function(controllerType) {
+    if ( !controllerType || controllerType !== this._currentBottomPanelType ) {
+      if ( this._currentBottomPanelType ) {
+        this.getInspector( this._currentBottomPanelType ).domNode.removeTransitionClass( 'active' );
+      }
+      if (controllerType) {
+        this.getInspector( controllerType ).domNode.addTransitionClass( 'active' );
+      }
     }
   },
   
@@ -182,7 +202,14 @@ WebDoc.PanelsController = $.klass({
   },
   
   showPagesPanel: function(){
-    this.selectInspector(WebDoc.PanelControllerType.PAGE_BROWSER);
+    // TODO currentlly only page browser exist in bottom panel so we do a toggle
+    if (this._currentBottomPanelType === null) {
+      this.selectInspector( WebDoc.PanelControllerType.PAGE_BROWSER );
+    }
+    else {
+      this._showBottomPanel(null);
+      this._currentBottomPanelType = null;
+    }
   },
   
   //actually display the author panel... it's on bottom of the webdoc

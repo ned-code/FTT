@@ -300,8 +300,6 @@
         page = WebDoc.application.pageEditor.currentDocument.pages[i];
         this._applyBackgroundToPage( page, backgroundColor, backgroundImage, backgroundRepeat, backgroundPosition );
       }
-      var inspectorBeforeReload = WebDoc.application.panelsController.getSelectedInspector();
-      WebDoc.application.panelsController.selectInspector(inspectorBeforeReload);
     },
   
     _applyBackgroundToPage: function(targetPage, backgroundColor, backgroundImage, backgroundRepeat, backgroundPosition) {
