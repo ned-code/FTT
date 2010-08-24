@@ -40,6 +40,9 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
   
   objectChanged: function($super, item, options) {
     $super(item, options);
+    this.shapeUI.shape.data.strokeWidth = this.item.getProperty("strokeWidth");
+    this.shapeUI.shape.data.fill = this.item.getProperty("fill");
+    this.shapeUI.shape.data.stroke = this.item.getProperty("stroke");
   	this.shapeUI.refresh();
   },
 

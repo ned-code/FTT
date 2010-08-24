@@ -12,6 +12,9 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
     this.domNode = $("#item_inspector");    
     this.visible = true;
     
+    // Quick hack - this has been moved from inside individual inspector controllers
+    this.propertiesController = WebDoc.application.propertiesController = new WebDoc.PropertiesInspectorController('#item_inspector', false);
+    
     this._inspectorNodes = {};
     this.initPaneWithController('empty', new WebDoc.InspectorEmptyController());
     this.initPaneWithController('DrawingInspectorGroup', new WebDoc.DrawingInspectorController());    
@@ -19,9 +22,6 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
     this.initPaneWithController('TextboxInspectorGroup', new WebDoc.TextboxController( "#textbox_inspector" ));
     //this.initPaneWithController('HtmlInspectorGroup', new WebDoc.InnerHtmlController( "#html_inspector", true ));
     this.initPaneWithController('HtmlInspectorGroup', new WebDoc.HtmlInspectorController( "#html_inspector" ));
-    
-		// Quick hack - this has been moved from inside individual inspector controllers
-    this.propertiesController = new WebDoc.PropertiesInspectorController('#item_inspector', false);
     
     WebDoc.application.boardController.addSelectionListener(this);
   },
