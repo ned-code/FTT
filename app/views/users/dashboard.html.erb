@@ -10,7 +10,7 @@
     <div class="absolute_column one">
 
 
-    <a id="wb-create-document-button" class="add_button button" href="#tdb">New document</a>
+    <a id="wb-create-document-button" class="add_button button" href="#popup-newwebdoc">New document</a>
 
     <input id="wb-documents-search" class="ui-corner-all" type="text" name="wb-documents-search" placeholder="Search" />
     <h3>Your Webdocs</h3>
@@ -19,7 +19,7 @@
         <ul .filter-bar.bar.index.state-public-hide style="float: right;" >
           <li><a id="wb-document-filter-owned-by-me" class="current state-filter-tab" href="#filter-author" data-webdoc-documents-filter-type="creator"><%= t('.created_by_me') %></a></li
          ><li><a id="wb-document-filter-editor-rights" class="state-filter-tab" href="#filter-editable" data-webdoc-documents-filter-type="editor" ><%= t('.editor_rights') %></a></li
-         ><li><a id="invite_people_link" class="current state-filter-tab" href="#invite_people" data-webdoc-documents-filter-type="creator">Invite People on Webdoc</a></li>
+         ><li><a id="invite_people_link" class="current state-filter-tab" href="#popup-invitations" data-webdoc-documents-filter-type="creator">Invite People on Webdoc</a></li>
       </li>
     </ul>
   <div id="wb-document-list-container">
@@ -37,22 +37,6 @@
   <%= render 'pending_friendships'%>
 
 
-<div>
-  <%= render 'documents/popup_create_webdoc'%>
-
-</div>
-<div class="">
-  <%= render 'documents/popup_collaborate' %>
-</div>
-
-<div class="">
-  <%= render 'documents/popup_share' %>
-</div>
-
-<div class="">
-  <%= render 'users/popup_invitations' %>
-</div>
-
 <% content_for :scripts do %>
   <script>
     WebDoc.DocumentCategoriesManager._documentCategories = WebDoc.ServerManager.createRecords(WebDoc.Category, <%= raw Rails.cache.fetch("categories_json") { Category.all.to_json } %>);
@@ -62,5 +46,23 @@
     });
   </script>
 <% end %>
+
+
 </div>
 </div>
+
+<ul id="popup">
+    <li id="close" class="lb"></li>
+    <li id="popup-share" class="lb">
+  		<%= render 'documents/popup_share' %>
+    </li>
+    <li id="popup-collaborate" class="lb">
+  		<%= render 'documents/popup_collaborate' %>
+    </li>
+     <li id="popup-newwebdoc" class="lb">
+  		<%= render 'documents/popup_create_webdoc'%>
+    </li>
+         <li id="popup-invitations" class="lb">
+  		<%= render 'users/popup_invitations' %>
+    </li>
+</ul>

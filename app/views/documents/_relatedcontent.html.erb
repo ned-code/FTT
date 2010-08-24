@@ -7,7 +7,7 @@
       <ul class="triple_column column of_six vertical thumbs_index index">
         <% (0..(documents.length - 1)).step(2) do |i| %>
         <li>
-          <%= render 'thumb', :document => documents[i]%>
+          <%= render 'documents/thumb', :document => documents[i]%>
         </li>
         <% end %>
       </ul
@@ -15,7 +15,7 @@
       ><ul class="triple_column column of_six vertical thumbs_index index">
         <% (1..(documents.length - 1)).step(2) do |i| %>
         <li>
-          <%= render 'thumb', :document => documents[i]%>
+          <%= render 'documents/thumb', :document => documents[i]%>
         </li>
         <% end %>
       </ul>

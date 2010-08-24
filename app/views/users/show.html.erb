@@ -22,7 +22,7 @@
      <% if user == @user%>
       <%= render 'card', :user => @user %>
     <% else %>
-      <%= render 'card', :user => user, :subscribed => @user.follower?(current_user), :friendship => @user.friend?(current_user)  %>
+      <%= render 'card', :user => @user, :subscribed => @user.follower?(current_user), :friendship => @user.friend?(current_user)  %>
     <% end %>
     </li>
       <% end %>
