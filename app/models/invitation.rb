@@ -27,7 +27,7 @@ class Invitation < ActiveRecord::Base
   # = Class Methods =
   # =================
   
-  def self.generate(user, params)
+  def self.generate(user, params, generate_by_admin=false)
     document_id = params[:document_id]
     document = Document.where(:uuid => document_id).first
     role = params[:role]
@@ -40,7 +40,9 @@ class Invitation < ActiveRecord::Base
         invitation = Invitation.create!(  :document_id => document_id,
                                           :user_id => user_id,
                                           :role => role,
-                                          :status => PENDIG
+                                          :status => PENDIG, 
+                                          :official => generate_by_admin,
+                                          :email => email
                                         )
         Notifier.send_invitation(user,email, message, role, document, invitation.id).deliver
       end
