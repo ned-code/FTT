@@ -252,7 +252,7 @@ body>header {
     #popup .box {
     position: absolute;
     width: 500px;
-    height: 500px;
+    height: auto;
     left: 50%;
     top: 50px;
     border: 10px solid #999;
