@@ -1,0 +1,49 @@
+<!-- create new document popup -->
+<div class="box">
+<form id="create_webdoc_form" action="" title="Create new webdoc">
+  <h3 id="new-document-dialog-header">Create new webdoc</h3>
+  
+  <fieldset>
+    <div class="vertical">
+      <label for="wb-new-document-name">Title</label>
+      <input id="wb-new-document-name" class="ui-corner-all" type="text" name="wb-new-document-name" placeholder="My new webdoc" />
+    </div>
+    <div class="vertical">
+      <label  for="category" >Category</label>
+      <select id="wb-new-document-category"></select>
+    </div>
+    <div class="vertical">
+      <label for="description" >Description</label>
+      <textarea id="wb-new-document-description" class="ui-corner-all" rows="3" name="wb-new-document-description" ></textarea>
+    </div>
+  </fieldset>
+    
+  <fieldset>
+    <legend>Size</legend>
+    
+    <div class="horizontal column of_two">
+      <label for="wb-new-document-size-width">Width</label>
+      <input id="wb-new-document-size-width" type="text" size="6" required="required" data-type="cssvalue" />
+    </div>
+    
+    <div class="horizontal column last_column of_two">
+      <label for="wb-new-document-size-height" >Height</label>
+      <input id="wb-new-document-size-height" type="text" size="6" required="required" data-type="cssvalue" />
+    </div>
+    
+    <div class="horizontal">
+      <ul>
+        <li><a class="set_size" href="#set-classic-size" data-webdoc-size-name="classic">Classic</a></li
+       ><li><a class="set_size" href="#set-iphone-size" data-webdoc-size-name="iphone">iPhone</a></li
+       ><li><a class="set_size" href="#set-ipad-size" data-webdoc-size-name="ipad">iPad</a></li>
+      </ul>
+    </div>
+  </fieldset>
+  
+  <div class="ui-actions">
+    <a href="#cancel" class="cancel">cancel</a>
+    <input type="submit" name="new-document" value="Create" />
+  </div>
+</form>
+            <a href="#close" class="close" title="close window">x</a>
+        </div>

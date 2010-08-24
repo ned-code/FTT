@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+%html( xmlns="http://www.w3.org/1999/xhtml" )
+  %head
+    %meta{ "http-equiv" => "Content-Type", :content => "application/xhtml+xml; charset=utf-8"}
+    %meta{ "http-equiv" => "X-UA-Compatible", :content => "chrome=1"}
+    %title= "webdoc - alpha #{yield(:title)}"
+    = include_stylesheets :common, :media => 'all'
+    = include_stylesheets :application, :media => 'all'
+    = render :partial => "layouts/google_analytics"
+    = csrf_meta_tag
+
+  %body{ :class => controller_name }
+    = render :partial => "layouts/siteheader"
+    = yield
+    = render "layouts/flash", :object => flash
+    
+    = include_javascripts :common
+    = yield :scripts # include view specific scripts after common scripts.
+
+    - current_user_json = current_user.present? ? raw(current_user.as_application_json.to_json.gsub('/script','/sscript')) : {}.to_json
+    :javascript
+      WebDoc.shindig = {};
+      WebDoc.shindig.serverBase = "#{ APP_CONFIG['shindig_server_base'] }";
+      WebDoc.Application.currentUser = new WebDoc.User(#{current_user_json});
+      WebDoc.Application.start();
+      
+    -#= render :partial => "layouts/feedback";

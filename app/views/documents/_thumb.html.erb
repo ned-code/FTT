@@ -1,0 +1,23 @@
+<a class="webdoc_thumb thumb"
+   href="<%= document_path(document)%>"
+   title="<%= document.title %>"
+   style="background-image: <%= document.pages.first.present? ? document.pages.first.thumbnail_url : '' %>;">
+	<%= document.title %>
+</a>
+
+<!-- 
+  title: document.title
+  descritpion: document.description
+  page list: document.pages
+  first page thumbnail: document.pages.first.thumbnail.url
+  document url: document_path(document)
+  create date : document.created_at
+  view count: document.views_count
+  category: document.category
+  
+  creator: document.creator
+           document.creator.username
+  creator url:  '/users/document.creator.uuid'
+  
+
+-->

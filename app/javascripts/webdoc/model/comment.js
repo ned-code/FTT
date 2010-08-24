@@ -52,7 +52,6 @@ WebDoc.Comment = $.klass(WebDoc.Record, {
     return this.data.created_at;
   }
 
-
 });
 
 $.extend(WebDoc.Comment, {

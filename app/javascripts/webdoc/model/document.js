@@ -5,6 +5,7 @@ WebDoc.Document = $.klass(WebDoc.Record, {
   initialize: function($super, json) {
     this.pages = [];
     $super(json);
+    this.isPublic = this.data.is_public;
   },
   
   title: function() {
@@ -29,10 +30,6 @@ WebDoc.Document = $.klass(WebDoc.Record, {
   
   creatorId: function() {
     return this.data.creator_id;
-  },
-  
-  isShared: function() {
-    return this.data.is_public;
   },
   
   setTitle: function(title, skipSave) {
@@ -115,15 +112,37 @@ WebDoc.Document = $.klass(WebDoc.Record, {
     return "theme_" + themeName;
   },
   
-  share: function() {
-    this.data.is_public = true;
-    this.save();
+  share: function(with_comments) {
+    var data;
+    if(with_comments){
+      data = {with_comments: true};
+    }
+    else{
+      data = {with_comments: false};
+    }
+    
+    var url = '/documents/'+ this.uuid() + '/share';
+    WebDoc.ServerManager.request(url,function(data){
+      this.isPublic = true;
+      //Todo, it's better if we can do it with a callback
+      WebDoc.application.shareController.loadAccess(data);
+      
+    }.pBind(this), 'POST', data);
   },
   
   unshare: function() {
-    this.data.is_public = false;
+    var url = '/documents/'+ this.uuid() + '/unshare';
+     WebDoc.ServerManager.request(url,function(data){
+       this.isPublic = false;
+       //Todo, it's better if we can do it with a callback
+       WebDoc.application.shareController.loadAccess(data);
+     }.pBind(this), 'POST',{});
   },
-
+  
+  isShared: function() {
+    return this.isPublic;
+  },
+  
   refresh: function($super, json, onlyMissingValues) {
     $super(json, onlyMissingValues);
     var that = this;
@@ -188,11 +207,9 @@ WebDoc.Document = $.klass(WebDoc.Record, {
   },
   
   createPage: function(pageData) {
-    ddd("create page with data");
-    ddd(pageData);
+    ddd("create page with data", pageData);
     var newPage = new WebDoc.Page(pageData, this);
     this.addPage(newPage, true);
-    ddd("page created");
   },
   
   positionOfPage: function(page) {
@@ -322,7 +339,41 @@ WebDoc.Document = $.klass(WebDoc.Record, {
             "duplicate",
             extraParams
     );
-  }    
+  },
+
+  /**
+   * Get an array with all roles of the document
+   */
+  getRoles: function() {
+    if(this.data && this.data.roles) {
+      return this.data.roles
+    }
+    else {
+      return [];
+    }
+  },
+
+  /**
+   * Return an array with all roles for a user uuid for the document
+   *
+   * @param String the user uuid
+   */
+  getRolesForUserUuid: function(userUuid) {
+    var userRoles = [],
+        allRoles  = this.getRoles();
+
+    if(allRoles.length > 0) {
+      jQuery.each(allRoles, function(index, aRole) {
+        if(aRole.user_id === userUuid) {
+          userRoles.push(aRole.name);
+        }
+      });
+    }
+    
+    return userRoles;
+  }
+
+
 });
 
 $.extend(WebDoc.Document, {

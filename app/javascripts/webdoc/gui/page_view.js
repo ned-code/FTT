@@ -99,14 +99,17 @@ WebDoc.PageView = $.klass({
   },
   
   setLoading: function(state) {
+    var loadingNode = WebDoc.application.boardController.loadingNode;
+    
     this._loading = state;
+    
     if (state) {
       this.itemDomNode.hide();
-      WebDoc.application.boardController.loadingNode.addClass('loading');
+      loadingNode.addTransitionClass('loading');
     }  
     else {
       this.itemDomNode.show();
-      WebDoc.application.boardController.loadingNode.removeClass('loading');
+      loadingNode.removeTransitionClass('loading');
     }
   },
   
@@ -164,6 +167,9 @@ WebDoc.PageView = $.klass({
         break;
       case WebDoc.ITEM_TYPE_APP:
         itemView = new WebDoc.AppView(item, this, afterItem);
+        break;
+      case WebDoc.ITEM_TYPE_TEXTBOX:
+        itemView = new WebDoc.TextboxView(item, this, afterItem);
         break;
       default:
         itemView = new WebDoc.ItemView(item, this, afterItem);
@@ -340,7 +346,7 @@ WebDoc.PageView = $.klass({
       while(l--){
         discussion = discussions[l];
         this.createDiscussionView(discussion);
-        var discussionPanel = WebDoc.application.rightBarController.getInspector(WebDoc.RightBarInspectorType.DISCUSSIONS);
+        var discussionPanel = WebDoc.application.panelsController.getInspector(WebDoc.PanelControllerType.DISCUSSIONS);
         discussionPanel.showCurrentPageDiscussions();
       }
     }.pBind(this));

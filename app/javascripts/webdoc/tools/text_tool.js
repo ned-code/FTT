@@ -6,10 +6,6 @@
 //= require "text_tool/selection"
 //= require "text_tool/text_tool_view"
 
-WebDoc.TEXTBOX_WRAP_CLASS = "textbox_wrap";
-WebDoc.NEW_TEXTBOX_CONTENT = '<div class="item-placeholder"><div class="item-icon"></div>Double-click to start writing</div>';
-
-
 WebDoc.TextTool = $.klass(WebDoc.Tool, {
   initialize: function($super, selector, boardClass, paletteId ) {
     $super( selector, boardClass );

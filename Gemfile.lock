@@ -23,16 +23,6 @@ GIT
       xml-simple
 
 GIT
-  remote: http://github.com/justinfrench/formtastic.git
-  revision: 42b4eb8
-  branch: rails3
-  specs:
-    formtastic (1.0.0)
-      actionpack (>= 2.3.0)
-      activesupport (>= 2.3.0)
-      i18n (>= 0.4.0)
-
-GIT
   remote: http://github.com/mislav/will_paginate.git
   revision: 3615938
   branch: rails3
@@ -41,7 +31,7 @@ GIT
 
 GIT
   remote: http://github.com/plataformatec/devise.git
-  revision: 81c49c6
+  revision: 6754ae7
   branch: master
   specs:
     devise (1.2.0)
@@ -52,7 +42,6 @@ GEM
   remote: http://rubygems.org/
   specs:
     abstract (1.0.0)
-    acl9 (0.12.0)
     actionmailer (3.0.0.rc)
       actionpack (= 3.0.0.rc)
       mail (~> 2.2.5)
@@ -85,6 +74,7 @@ GEM
       activesupport (>= 3.0.0.beta)
     bcrypt-ruby (2.1.2)
     builder (2.1.2)
+    cancan (1.3.2)
     capistrano (2.5.19)
       highline
       net-scp (>= 1.0.0)
@@ -122,9 +112,9 @@ GEM
     google-spreadsheet-ruby (0.1.1)
       hpricot (>= 0.3)
       oauth (>= 0.3.6)
-    haml (3.0.16)
+    haml (3.0.17)
     highline (1.6.1)
-    hirb (0.3.2)
+    hirb (0.3.3)
     hoe (2.6.1)
       rake (>= 0.8.7)
       rubyforge (>= 2.0.4)
@@ -150,7 +140,7 @@ GEM
       gem_plugin (>= 0.2.3)
     multi_json (0.0.4)
     mysql (2.8.1)
-    net-scp (1.0.2)
+    net-scp (1.0.3)
       net-ssh (>= 1.99.1)
     net-sftp (2.0.4)
       net-ssh (>= 2.0.9)
@@ -158,8 +148,8 @@ GEM
     net-ssh-gateway (1.0.1)
       net-ssh (>= 1.99.1)
     nokogiri (1.4.3.1)
-    oauth (0.4.1)
-    oauth2 (0.0.10)
+    oauth (0.4.2)
+    oauth2 (0.0.13)
       faraday (~> 0.4.1)
       multi_json (>= 0.0.4)
     paperclip (2.3.3)
@@ -227,9 +217,9 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  acl9
   annotate
   aws-s3!
+  cancan
   capistrano
   capistrano-ext
   capybara
@@ -238,7 +228,6 @@ DEPENDENCIES
   exception_notification!
   factory_girl
   fastercsv
-  formtastic!
   google-spreadsheet-ruby
   haml
   hirb

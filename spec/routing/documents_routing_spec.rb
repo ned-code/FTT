@@ -9,11 +9,11 @@ describe DocumentsController do
     end
 
     it "recognizes and generates #explore" do
-      { :get => "/documents/explore" }.should route_to(:controller => "documents", :action => "explore")
+      { :get => "explore" }.should route_to(:controller => "documents", :action => "explore")
     end
 
     it "recognizes and generates #featured" do
-      { :get => "/documents/featured" }.should route_to(:controller => "documents", :action => "featured")
+      { :get => "featured" }.should route_to(:controller => "documents", :action => "featured")
     end
 
     it "recognizes and generates #show" do

@@ -1,5 +1,4 @@
 class ThemesController < ApplicationController
-  
   def index
     @themes = Theme.last_version
     theme_json = @themes.map do |theme|

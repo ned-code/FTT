@@ -70,4 +70,37 @@ module ApplicationHelper
     valid_text = valid_text.gsub(/<br.*?>/, '<br />')
     return valid_text
   end
+
+  def meta_title(str)
+    content_for :title, str
+  end
+
+  def css_assets(*args)
+    @css_assets = *args
+  end
+
+  def include_css_assets
+    html = ""
+    if @css_assets
+      for css_asset in @css_assets
+        html += include_stylesheets css_asset, :media => 'all'
+      end
+    end
+    raw(html)
+  end
+
+  def js_assets(*args)
+    @js_assets = *args
+  end
+
+  def include_js_assets
+    html = ""
+    if @js_assets
+      for js_asset in @js_assets
+        html += include_javascripts js_asset
+      end
+    end
+    raw(html)
+  end
+
 end

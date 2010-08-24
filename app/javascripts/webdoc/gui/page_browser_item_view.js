@@ -9,14 +9,13 @@
 
 var defaultClass = 'default',
     screenClass = 'screen layer',
-    numberClass = 'number',
+    numberClass = 'page_number number',
     cancelClass = 'cancel',
     popClass = 'pop';
 
 WebDoc.PageBrowserItemView = $.klass({
   
-  LOADING_ICON_CLASS: 'loading-icon',
-  EDIT_ICON_CLASS: 'edit-icon mode-edit-show',
+  LOADING_ICON_CLASS: 'loading-icon layer',
   THUMB_CLASS: 'thumb',
   DEFAULT_CLASS: 'default',
   

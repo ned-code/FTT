@@ -1,0 +1,68 @@
+<% session_key_name = Rails.application.config.session_options[:key] %>
+
+<% meta_title 'Dashboard' %>
+
+<% css_assets 'dashboard' %>
+<% js_assets 'document_editor' %>
+
+<div class="site_wrap wrap">
+  
+    <div class="absolute_column one">
+
+
+    <a id="wb-create-document-button" class="add_button button" href="#popup-newwebdoc">New document</a>
+
+    <input id="wb-documents-search" class="ui-corner-all" type="text" name="wb-documents-search" placeholder="Search" />
+    <h3>Your Webdocs</h3>
+    <ul class="tabs index">
+      <li>
+        <ul .filter-bar.bar.index.state-public-hide style="float: right;" >
+          <li><a id="wb-document-filter-owned-by-me" class="current state-filter-tab" href="#filter-author" data-webdoc-documents-filter-type="creator"><%= t('.created_by_me') %></a></li
+         ><li><a id="wb-document-filter-editor-rights" class="state-filter-tab" href="#filter-editable" data-webdoc-documents-filter-type="editor" ><%= t('.editor_rights') %></a></li
+         ><li><a id="invite_people_link" class="current state-filter-tab" href="#popup-invitations" data-webdoc-documents-filter-type="creator">Invite People on Webdoc</a></li>
+      </li>
+    </ul>
+  <div id="wb-document-list-container">
+    <div class="loading_icon"></div>
+  </div>
+ 
+     </div>
+   <div class="absolute_column two of_two">
+
+    
+  <div class="state-public-hide" style="text-align: justify;">
+    <p>Create your own new webdoc, or choose a webdoc to view from the list.</p>
+    <p>You can <strong>invite</strong> other people to help you edit your webdocs, and when you're ready to show them to the world, choose <strong>sharing</strong>.</p>
+  </div>
+  <%= render 'pending_friendships'%>
+
+
+<% content_for :scripts do %>
+  <script>
+    WebDoc.DocumentCategoriesManager._documentCategories = WebDoc.ServerManager.createRecords(WebDoc.Category, <%= raw Rails.cache.fetch("categories_json") { Category.all.to_json } %>);
+    WebDoc.Application.main(function() {
+      var editor = new WebDoc.DocumentEditor();
+      editor.start();
+    });
+  </script>
+<% end %>
+
+
+</div>
+</div>
+
+<ul id="popup">
+    <li id="close" class="lb"></li>
+    <li id="popup-share" class="lb">
+  		<%= render 'documents/popup_share' %>
+    </li>
+    <li id="popup-collaborate" class="lb">
+  		<%= render 'documents/popup_collaborate' %>
+    </li>
+     <li id="popup-newwebdoc" class="lb">
+  		<%= render 'documents/popup_create_webdoc'%>
+    </li>
+         <li id="popup-invitations" class="lb">
+  		<%= render 'users/popup_invitations' %>
+    </li>
+</ul>

@@ -1,24 +1,13 @@
 class Notifier < ActionMailer::Base
   default :from => APP_CONFIG['mail_from']
   
-  def role_notification(current_user, role, user, document, message)
+  def add_role_notification(current_user, role, user, document)
+    @user = user
+    @current_user = current_user
+    @document = document
     @role = role
-    @user = user
-    @current_user = current_user
-    @document = document
-    @custom_message = message
     recipients  user.email
-    subject     "#{current_user.username} invites you to co-edit webdoc #{document.title}"
-    mail(:to => recipients,
-         :subject => subject)
-  end
-  
-  def no_role_notification(current_user, user, document)
-    @user = user
-    @current_user = current_user
-    @document = document
-    recipients  user.email
-    subject     "No more role on document"
+    subject     "#{current_user.username} invites you to participate to his webdoc #{document.title}"
     mail(:to => recipients,
          :subject => subject)
   end
@@ -66,6 +55,35 @@ class Notifier < ActionMailer::Base
     subject     "[webdoc #{Rails.env}] Your Daily Report"
     attachments['daily_report.csv'] = File.read(filename)
     mail(:to => recipients,
+         :subject => subject)
+  end
+  
+  def request_friendship(user,friend)
+    @user = user
+    @friend = friend
+    recipients friend.email
+    subject "#{user.username} wants to add you to his connections on webdoc"
+    mail(:to => recipients,
+         :subject => subject)
+  end
+  
+  def accept_friendship(user,friend)
+    @user = user
+    @friend = friend
+    recipients user.email
+    subject "#{friend.username} is now connect with you"
+    mail(:to => recipients,
+         :subject => subject)
+  end
+  
+  def send_invitation(user,email, message, role, document, invitation_id)
+    @user = user
+    @message = message
+    @role = role
+    @document = document
+    @invitation_id = invitation_id
+    subject "#{user.username} invite you on Webdoc"
+    mail(:to => email,
          :subject => subject)
   end
 end

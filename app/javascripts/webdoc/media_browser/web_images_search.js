@@ -12,9 +12,10 @@ WebDoc.WebImagesSearch = $.klass({
     
     // Set callback to the ImagesLibrary
     this.parentController= parentController;
-    this.imageDetailsView = $('#media-browser-web-images-details #image-details');
+    this.imageDetailsView = $('#web-images-details #image-details');
     this.setupDetailsView();
     
+    this.libraryUtils = new LibraryUtils();
     // Observe search submission
     this.searchForm.submit(function(event) {
       event.preventDefault();
@@ -48,14 +49,14 @@ WebDoc.WebImagesSearch = $.klass({
     dt.setData("application/wd-image", $.toJSON({url: imageUrl,id: properties.id, title: properties.title}));
     
     //Drag "feedback"
-    var mediaDragFeedbackEl = this.parentController.buildMediaDragFeedbackElement("image", properties.thumb_url);
+    var mediaDragFeedbackEl = this.libraryUtils.buildMediaDragFeedbackElement("image", properties.thumb_url);
     $(document.body).append(mediaDragFeedbackEl);
     dt.setDragImage( mediaDragFeedbackEl[0], 60, 60 );
   },
 
   setupDetailsView: function(){
     // handle possible actions 
-    $("#media-browser-web-images-details #image-details .actions").click(function(event){
+    $("#web-images-details #image-details .actions").click(function(event){
       event.preventDefault();
 
       var properties = this.detailsViewImg.data("properties"); //properties of the currenlty displayed image are store in this element
@@ -82,7 +83,7 @@ WebDoc.WebImagesSearch = $.klass({
           var imgUrl = this.detailsViewImg.attr("src");
           page.setBackground(page.getBackgroundColor(),"url("+imgUrl+")", "no-repeat", "center center");
           // Jump to page inspector, where you can set how the background image is displayed
-          WebDoc.application.rightBarController.showPageInspector();
+          //WebDoc.application.panelsController.showPageInspector();
           break;
         case 'add_image_to_favorite':
           link.hide();
@@ -93,8 +94,8 @@ WebDoc.WebImagesSearch = $.klass({
           image.data.title = properties.title;
           image.save(function(persitedImage){
             if(persitedImage.data.attachment_file_name){
-              if($('#media-browser-my-favorites').length){
-                WebDoc.application.mediaBrowserController.myContentsController.insertImage(persitedImage.data, persitedImage.uuid(), 'my-favorites-images');
+              if($('#my-favorites').length){
+                WebDoc.application.myContentController.insertImage(persitedImage.data, persitedImage.uuid(), 'my-favorites-images');
               }
               info.text("Done!");
             }
@@ -150,13 +151,13 @@ WebDoc.WebImagesSearch = $.klass({
     this.preloadImage(properties.url);
     
     //setup the favorites links
-    if( $('#media-browser-web-images-details #add_image_to_favorite').length){
-      $('#media-browser-web-images-details #add_image_to_favorite').parent().remove(); 
+    if( $('#web-images-details #add_image_to_favorite').length){
+      $('#web-images-details #add_image_to_favorite').parent().remove(); 
       liDelete = $('<li>').append($("<a href='' id='add_image_to_favorite'>Add to favorites</a>"));
-      $("#media-browser-web-images-details #image-details .actions ul").append(liDelete);
+      $("#web-images-details #image-details .actions ul").append(liDelete);
     }
 
-    $("#media-browser-web-images-details").show();
+    $("#web-images-details").show();
   },
    
   preloadImage: function(imageSrc) {
@@ -190,7 +191,9 @@ WebDoc.ServiceImagesSearch = $.klass({
     
     this.container.find(".service_bar").bind("click", this.toggleResultsSection.pBind(this));
     
-    this.imagesContainer = $('<ul>');
+    this.imagesContainer = jQuery('<ul>', {
+    	'class': 'image_search_index search_index index'
+    });
     this.imagesContainerWrapper = $('<div class="web_result_list">'); // contains the ul (list) and load_more link
     this.imagesContainerWrapper.append(this.imagesContainer);
     this.container.append(this.imagesContainerWrapper);
@@ -223,32 +226,31 @@ WebDoc.ServiceImagesSearch = $.klass({
   buildThumbnail: function(type, url, thumbUrl, name, imageLink, newProperties) {
     name = name.replace(/&#39;/g, "'");
     var properties = { type:type, url:url, thumb_url:thumbUrl, name:name, image_link:imageLink };
-    var domSize = { width:"100%", height:"100%"};
     
     if (newProperties){
       jQuery.extend(properties, { title: newProperties.title });
-      if(newProperties.width && newProperties.height){
-        jQuery.extend(properties, { width:newProperties.width, height:newProperties.height });
-        if(parseInt(properties.width) > parseInt(properties.height)){
-          domSize.width = "auto";
-        }else{
-          domSize.height = "auto"
-        }
-      }
+      
+//      if(newProperties.width && newProperties.height){
+//        jQuery.extend(properties, { width:newProperties.width, height:newProperties.height });
+//        
+//        if(parseInt(properties.width) > parseInt(properties.height)){
+//          domSize.width = "auto";
+//        }else{
+//          domSize.height = "auto"
+//        }
+//      }
     }
-        
-    var thumb = $("<img>").attr({
-      src : thumbUrl,
-      alt : ""
+    
+    var thumb = jQuery('<a/>', {
+      'class': "search_thumb thumb",
+      css: { backgroundImage: 'url('+thumbUrl+')' },
+      title: name
     }).data("properties", properties);
     
     var liWrap = $("<li>").addClass(type);
-    var aWrap = $("<a href=\""+imageLink+"\" title=\""+name+"\"></a>");
-    thumb.width(domSize.width);
-    thumb.height(domSize.height);
-    aWrap.append(thumb);
-    aWrap.append($("<span>").addClass("icon_overlay")); //flickr/google mini icon
-    liWrap.append(aWrap);
+    
+    thumb.append( jQuery( "<span/>", {'class': "icon_overlay"} ) ); //flickr/google mini icon
+    liWrap.append(thumb);
     
     return liWrap;
   }
@@ -266,7 +268,7 @@ WebDoc.FlickrImagesSearch = $.klass(WebDoc.ServiceImagesSearch, {
     this.flickrPhotosSearchBaseUrl = "http://api.flickr.com/services/rest/?method=flickr.photos.search";
     
     //Load More link
-    $("<a>").attr("href","").text("Load more").click(function(event){
+    jQuery("<a/>").attr("href","").text("Load more").click(function(event){
       this.loadMore();
       event.preventDefault();
     }.pBind(this)).appendTo(this.imagesContainerWrapper).wrap("<div class='load_more' style='display:none'>");

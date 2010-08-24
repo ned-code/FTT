@@ -1,65 +1,48 @@
-<div id="text-inspector" style="display:none">
-  <div class="head">
-    <div>
-      <div class="inspector-title">Text</div>
-    </div>
-  </div>      
-  <div>
+<div id="text_inspector">
+  <header>
+  	<h3>Text</h3>
+  </header>
+  
+  <div class="content">
     <div id="text-inspector-content"></div>
-    <form class="content">
-      <hr class="separator"/>
-      <div id="text_properties" class="section">
-        <div class="entry">
-          <label>
-            left              
-            <input id="property_left" type="text" data-type="cssvalue" data-property="left" value="" />
-          </label>
+    <div id="text_code"></div>
+    <form>
+      <div id="text_properties">
+        <div>
+          <label>left</label>
+          <input id="property_left" type="text" data-type="cssvalue" data-property="left" value="" />
         </div>
-        <div class="entry">
-          <label>
-            top              
-            <input id="property_top" type="text" data-type="cssvalue" data-property="top" value="" />
-          </label>
+        <div>
+          <label>top</label>
+          <input id="property_top" type="text" data-type="cssvalue" data-property="top" value="" />
         </div>         
-        <div class="entry">
-          <label>
-            width              
-            <input id="property_width" type="text" data-type="cssvalue" data-property="width" value="" />
-          </label>
+        <div>
+          <label>width</label>
+          <input id="property_width" type="text" data-type="cssvalue" data-property="width" value="" />
         </div>
-        <div class="entry">
-          <label>
-            height              
-            <input id="property_height" type="text" data-type="cssvalue" data-property="height" value="" />
-          </label>
+        <div>
+          <label>height</label>
+          <input id="property_height" type="text" data-type="cssvalue" data-property="height" value="" />
         </div>
-        <div class="entry">
-          <label>
-            background color
+        <div>
+          <label>background color</label>
             <input id="property_background_color" type="text" data-type="csscolor" data-property="backgroundColor" value="" />
             <a href='#remove_background'>Remove Background</a>
-          </label>
         </div>
-        <div class="entry">
-          <label>
-            rotation
-            <input id="property_rotation" type="text" data-type="cssangle" data-property="rotation" value="" />
-          </label>
+        <div>
+          <label>rotation</label>
+          <input id="property_rotation" type="text" data-type="cssangle" data-property="rotation" value="" />
         </div> 
-        <div class="entry">
-          <label>
-            padding              
-            <input id="property_padding" type="text" data-type="cssvalue" data-property="padding" value="" />
-          </label>
+        <div>
+          <label>padding</label>
+          <input id="property_padding" type="text" data-type="cssvalue" data-property="padding" value="" />
         </div> 
-        <div class="entry">
-          <label>
-            border radius              
-            <input id="property_border_radius" type="text" data-type="cssvalue" data-property="borderRadius" value="" />
-            <a href='#remove_border'>Remove Border</a>
-          </label>
+        <div>
+          <label>border radius</label>
+          <input id="property_border_radius" type="text" data-type="cssvalue" data-property="borderRadius" value="" />
+          <a href='#remove_border'>Remove Border</a>
         </div> 
-        <div class="entry">
+        <div>
           <label for="property_overflow">Overflow</label>
           <input name="property_overflow" id="property_overflow_hidden" type="radio" data-property="overflow" value="hidden" />
           <span class="label" for="property_overflow_hidden">clip</span>          
@@ -68,19 +51,16 @@
           <input name="property_overflow" id="property_overflow_visible" type="radio" data-property="overflow" value="visible" />
           <span class="label" for="property_overflow_hidden">show</span>
         </div> 
-        <div class="entry">
-          <label>
-            opacity              
-            <input id="property_opacity" type="range" min="0.00" max="1.00" step="0.01" data-property="opacity" value="1.00" /><span class="readout" id="property_opacity_readout">ui</span>
-          </label>
+        <div>
+          <label>opacity</label>
+          <input id="property_opacity" type="range" min="0.00" max="1.00" step="0.01" data-property="opacity" value="1.00" /><span class="readout" id="property_opacity_readout">ui</span>
         </div> 
         <div class='entry'>
           <a href='#remove_font'>Remove font</a>
         </div>
-        <div class="entry">
-          <label>              
-            <input id="property-fit-to-screen" type="button" value="Fit to webdoc" />
-          </label>
+
+        <div>
+          <input id="property-fit-to-screen" type="button" value="Fit to webdoc" />
         </div>                                                                                                
       </div>
     </form>

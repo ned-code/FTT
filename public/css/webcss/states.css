@@ -1,0 +1,83 @@
+/* state.css
+ * 
+ * Takes care of state classes:
+ *
+ *   .loading      - State of items requested from a server
+ *   .active       - Implies polar (on/off) state
+ *   .current      - Current implies that one out of a number of items is the current one
+ *   .default      - Contains a pre-defined value
+ *   .error        - Used in forms to style children differently when input has errors
+ *   .xxx_state    - Implies multipolar (0/1/2/...) state
+ *   .xxx_view     - Applied to the body to control application views
+ *   .xxx_support  - Applied to the documentElement to flag CSS support
+ * 
+ * State classes must never have style applied directly, they are here to indicate state only.
+ * You can style specific nodes that happen to have state, or children of state nodes (for
+ * instance, showing / hiding a .loading_icon when its parent has .loading), but the state
+ * class (in this case .loading) must not have style applied.
+ */
+
+.loading_icon {
+    display: none;
+    background-position: 50% 50%;
+    background-image: url('../../images/loading-icon-16-white.gif');
+    background-color: transparent;
+    background-repeat: no-repeat;
+    
+    -webkit-transition: opacity 0.16s ease-in;
+       -moz-transition: opacity 0.16s ease-in;
+         -o-transition: opacity 0.16s ease-in;
+            transition: opacity 0.16s ease-in;
+    
+    opacity: 0;
+}
+
+.loading.loading_icon,
+.loading .loading_icon {
+    display: block;
+    opacity: 1;
+}
+
+.transition_support .loading_icon.transition,
+.transition_support .transition .loading_icon {
+  display: block;
+}
+
+/* Transition state stops display: none; from making the element disappear at the beginning
+   of the transition. It can be automatically removed by a global transitionend handler
+   on the body.  For the CSS, .transition must only be heeded in browsers with transition support */
+.transition_support .transition {
+  display: block;
+}
+
+/* utilities */
+
+.hidden {
+  display: none;
+}
+
+.no_transition {
+  -webkit-transition: none;
+  -moz-transition:    none;
+  transition:         none;
+}
+
+/* scroll control */
+/*
+.scroll {
+  overflow: auto;
+}
+
+.x_scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.y_scroll {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.no_scroll {
+  overflow: hidden;
+}*/

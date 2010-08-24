@@ -1,0 +1,78 @@
+.testbuttons {
+	position:absolute;
+	top:107px;
+	left:65px;
+	width:80%
+}
+
+#bglayer {
+	position:absolute:
+	top:0;
+	left:0;
+	width:981px;
+	height: 652px;
+	background-image: url('../images/bg_webdoc.jpg');
+	background-position-x: 0px;
+	background-position-y: 0px;
+}
+
+#test li a {
+	margin:0px;
+	background-color:#fff;
+	background-position: 0 0;  
+	-moz-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+	-webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+	-o-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+	-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+	-webkit-border-radius:3px;
+	-moz-border-radius:3px;
+	-border-radius:3px;
+	background:url('../images/buttons2.png') no-repeat;
+	background-color:#fff;
+	height:25px;
+vertical-align: text-top;
+ }
+
+
+#test li.text a{
+	background-position: 0 3px;  
+}
+#test li.image a{
+	background-position: 0 -18px;
+}
+#test li.draw a{
+	background-position: 0 -38px;
+}
+#test li.html a{
+	background-position: 1px -57px;
+}
+
+#test li a:hover {
+/*	width: 30px;
+	height:30px;
+	
+*/
+	-moz-box-shadow: -1px 5px 6px rgba(0,0,0,0.5);
+	-webkit-box-shadow: -1px 5px 6px rgba(0,0,0,0.5);
+	-box-shadow: -1px 5px 6px rgba(0,0,0,0.5);
+	vertical-align: text-top;
+	-webkit-transform-origin: center top;
+	-webkit-transform: scale(1.1);
+	-moz-transform-origin: center top;
+	-moz-transform: scale(1.1);
+	-o-transform-origin: center top;
+	-o-transform: scale(1.1);
+
+}
+
+#test li.nearby a {
+/*	-webkit-transform-origin: center top;
+	-webkit-transform: scale(1.1);
+		-moz-transform-origin: center top;
+	-moz-transform: scale(1.1);*/
+}
+
+.padding {
+	padding-left:25px;
+	padding-right:10px;
+}

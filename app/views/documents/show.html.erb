@@ -1,32 +1,52 @@
-<!-- webdoc -->
+<% meta_title @document.title %>
 
-<div id="webdoc" class="scroll layer">
-  <div class="center">
-    <div class="center-cell">
-      <div id="board-container" class="center-box">
-      </div>
-      <div id="notification_bar"></div>
-    </div>
-    <div id="right-panel-ghost">
-      <div class="panel-ghost"></div>
-    </div>
+<% css_assets 'editor' %>
+<% js_assets 'editor' %>
+
+<!-- workspace -->
+
+<div class="title_wrap site_wrap wrap horizontal">
+  <h1><%= @document.title %></h1>
+  <a class="dropdown_button settings_button button" href="#doc_settings_dropdown">Settings</a>
+  <ul class="vertical doc_settings_dropdown_index dropdown_index buttons_index index dropdown" id="doc_settings_dropdown">
+    <li><a href="/" class="edit_button button">your profile</a></li
+   ><li><a href="/" class="edit_button button">logout</a></li>
+  </ul>
+</div>
+
+<section class="workspace_wrap site_wrap wrap">
+  <div class="editor_wrap wrap" id="editor">
+    <%= render "documents/webdoc" %>
+    <%= render "documents/authors_sidebar" %>
+    <%= render "documents/panels/toolbar_panel" %>
+    <%= render "documents/panels/controls_panel" %>
+    <%= render "documents/inspectors/document_inspector" %>
+    <%= render "documents/panels/discussions_panel" %>
+    <%= render "documents/panels/my_content_panel" %>
+    <%= render "documents/panels/apps_panel" %>
+    <%= render "documents/panels/packages_panel" %>
+    <%= render "documents/panels/browse_web_panel" %>
+    <%= render "documents/inspectors/document_inspector" %>
+    <%#= render :partial => "documents/panels/social_panel" %>
+    <%= render "documents/inspectors/page_inspector" %>
+    <%= render "documents/panels/pages_panel" %>
+    <%= render "documents/panels/inspector_panel" %>
   </div>
-</div>
+</section>
 
-<!-- webdoc controls -->
+<%= render "relatedcontent", :documents => @related_documents %>
 
-<div id="webdoc_x_scrollbar" class="x_scrollbar_container">
-  <div class="x_scrollbar scrollbar"></div>
-</div>
+<% content_for :scripts do %>
+  <script>
+    WebDoc.WidgetManager.videoWidget = new WebDoc.Widget(<%= raw Rails.cache.fetch("widget_json_video") { Medias::Widget.first(:conditions => {:system_name => 'video'}).to_json } %>);
 
-<div id="webdoc_y_scrollbar" class="y_scrollbar_container">
-  <div id="scrollbar_y" class="y_scrollbar scrollbar"></div>
-</div>
+    new WebDoc.Document(<%= raw Rails.cache.fetch("document_#{@document.uuid}") { @document.as_application_json.to_json.gsub('/script','/sscript') } %>);
 
-<div id="webdoc_loading" class="loading loading-icon layer"></div>
-
-<!-- panels -->
-
-<%= render :partial => "documents/panels/toolbar_panel" %>
-<%= render :partial => "documents/panels/right_panel" %>
-<%= render :partial => "documents/panels/pages_panel" %>
+    WebDoc.DocumentCategoriesManager._documentCategories = WebDoc.ServerManager.createRecords(WebDoc.Category,<%= raw Rails.cache.fetch("categories_json") { Category.all.to_json } %>);
+    WebDoc.ThemeManager._defaultTheme = new WebDoc.Theme(<%= raw Rails.cache.fetch("default_theme_json") { Theme.default.to_json } %>);
+    WebDoc.Application.main(function() {
+      var editor = new WebDoc.PageEditor();
+      editor.load("<%= @document.uuid %>", <%= edit_mode? %>);
+    });
+  </script>
+<% end %>

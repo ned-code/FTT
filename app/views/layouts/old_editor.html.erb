@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<% meta_title @document.title %>
+<% session_key_name = Rails.application.config.session_options[:key] %>
+<% if params[:reader] == 'true'
+    current_class = 'mode-embed'
+  elsif params[:edit] == 'true'
+    current_class = 'mode-edit'
+  else
+    current_class = 'mode-preview'
+  end %>
+<html xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type">
+    <meta content="chrome=1" http-equiv="X-UA-Compatible">
+    
+    <title>webdoc beta - <%= yield :title %></title>
+    <%= include_stylesheets :common, :media => 'all' %>
+    <%= include_stylesheets :editor, :media => 'all' %>
+    <%= render :partial => "layouts/google_analytics" %>    
+  </head>
+  
+  <body class="<%= current_class %>">
+    
+    <!-- site content -->
+    
+    <%= yield %>
+    
+    
+    <%= render "layouts/siteheader" %>
+    <%= render "layouts/flash", :object => flash %>
+    <%= render "layouts/feedback" %>
+    
+    <!-- scripts -->
+    <%= include_javascripts :common %>
+    <%= include_javascripts :page_editor %>
+    <% unless Rails.env.production? %>
+      <%= javascript_include_tag "#{APP_CONFIG['shindig_server_base']}js/core:rpc:pubsub.js?c=1&debug=1" %>
+    <% end %>
+    <%= include_javascripts :apps %>
+    <%= yield :scripts %>
+    <script>
+      WebDoc.authData = {
+        authToken:"<%= protect_against_forgery? ? form_authenticity_token : '' %>",
+        sessionKeyName:"<%= session_key_name %>",
+        cookiesSessionKeyName:"<%= cookies[session_key_name] %>"
+      };
+      WebDoc.dataServer = "<%= APP_CONFIG['data_server'] %>";
+      //WebDoc.shindig = {};
+      //WebDoc.shindig.serverBase = "<%= APP_CONFIG['shindig_server_base'] %>";
+      WebDoc.Application.currentUser = new WebDoc.User(<%= raw current_user.as_application_json.to_json.gsub('/script','/sscript') %>);
+      WebDoc.WidgetManager.videoWidget = new WebDoc.Widget(<%= raw Rails.cache.fetch("widget_json_video") { Medias::Widget.first(:conditions => {:system_name => 'video'}).to_json } %>);
+      WebDoc.WidgetManager.vimeoWidget = new WebDoc.Widget(<%= raw Rails.cache.fetch("widget_json_vimeo") { Medias::Widget.first(:conditions => {:system_name => 'vimeo'}).to_json } %>);
+      WebDoc.WidgetManager.youtubeWidget = new WebDoc.Widget(<%= raw Rails.cache.fetch("widget_json_youtube") { Medias::Widget.first(:conditions => {:system_name => 'youtube'}).to_json } %>);
+      WebDoc.WidgetManager.dailymotionWidget = new WebDoc.Widget(<%= raw Rails.cache.fetch("widget_json_dailymotion") { Medias::Widget.first(:conditions => {:system_name => 'dailymotion'}).to_json } %>); 
+      WebDoc.WidgetManager.metacafeWidget = new WebDoc.Widget(<%= raw Rails.cache.fetch("widget_json_metacafe") { Medias::Widget.first(:conditions => {:system_name => 'metacafe'}).to_json } %>);
+      WebDoc.WidgetManager.vidsGoogleWidget = new WebDoc.Widget(<%= raw Rails.cache.fetch("widget_json_googlevideo") { Medias::Widget.first(:conditions => {:system_name => 'googlevideo'}).to_json } %>);
+      WebDoc.WidgetManager.vidsMyspaceWidget = new WebDoc.Widget(<%= raw Rails.cache.fetch("widget_json_myspacevideo") { Medias::Widget.first(:conditions => {:system_name => 'myspacevideo'}).to_json } %>);      
+      WebDoc.WidgetManager.vidsYahooWidget = new WebDoc.Widget(<%= raw Rails.cache.fetch("widget_json_yahoovideo") { Medias::Widget.first(:conditions => {:system_name => 'yahoovideo'}).to_json } %>);
+      new WebDoc.Document(<%= raw Rails.cache.fetch("document_#{@document.uuid}") { @document.as_application_json.to_json.gsub('/script','/sscript') } %>);
+      WebDoc.DocumentCategoriesManager._documentCategories = WebDoc.ServerManager.createRecords(WebDoc.Category,<%= raw Rails.cache.fetch("categories_json") { Category.all.to_json } %>);
+      WebDoc.ThemeManager._defaultTheme = new WebDoc.Theme(<%= raw Rails.cache.fetch("default_theme_json") { Theme.default.to_json } %>);
+      WebDoc.Application.main(function() {
+        var editor = new WebDoc.PageEditor();
+        editor.load("<%= @document.uuid %>", <%= edit_mode? %>);
+      });      
+      WebDoc.Application.start();
+    </script>
+    <script>
+    jQuery(document).ready(function() {
+  		jQuery('time .ago').cuteTime();
+
+	});
+    </script>
+  </body>
+</html>

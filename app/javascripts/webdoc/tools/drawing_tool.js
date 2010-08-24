@@ -15,79 +15,85 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool, {
     
     this.colorsNode = jQuery("#colors");
     
-    //we don't load anymore the color in the default theme
-    //WebDoc.application.boardController.themeNode.bind( 'load', this.makeThemeColors.pBind(this) );
+    WebDoc.application.inspectorController.propertiesController.domNode
+    .delegate("a[href=#stroke]", "click", jQuery.proxy( this, '_clickColor' ) )
+    .delegate("input#stroke_size", "change", jQuery.proxy( this, '_changeSize' ) );
     
-    jQuery('#draw-inspector').bind("click", jQuery.delegate({
-        '.colors-index a':  function(e) {
-                var link = $( e.target ).closest('a');
-                    color = link.css("color");                
-                
-                ddd('[DrawingTool] Selected colour '+color);
-                
-                jQuery(".state-draw-color").removeClass('current');
-                link.addClass('current');
-                
-                this.penColor = color;
-                $(".draw-color").css({ backgroundColor: color });
-                return false;
-        }
-      }, this)
-    );
     
-    var self = this,
-        port = $('<div/>').addClass('draw-port'),
-        thumb = $('<div/>').addClass('draw-color draw-size'),
-        value = $('.size-slider-value');
+// PLEASE DONT DELETE! I'm going to re-implement this at some point.
     
-    $(".size-slider")
-    .slider({
-      value: 2,
-      min: 1,
-      max: 24,
-      step: 1,
-      start: function(){
-        //cache all instances of draw-size on slide start
-        thumb = $(".draw-size");
-      },
-      slide: function(event, ui) {
-        var handle = $(ui.handle),
-            demival = ui.value/2;
-        
-        value.val(ui.value+'px');
-        self.penSize = ui.value;
-        
-        thumb
-        .css({
-          marginLeft: -demival,
-          marginTop: -demival,
-          WebkitBorderRadius: demival,
-          MozBorderRadius: demival,
-          borderRadius: demival,
-          width: ui.value,
-          height: ui.value
-        })
-      }
-    })
-    .find('.ui-slider-handle')
-    .append(
-      port.append(
-        thumb
-      )
-    )
-    .append(
-      value
-    );
+//    var self = this,
+//        port = $('<div/>').addClass('draw-port'),
+//        thumb = $('<div/>').addClass('draw-color draw-size'),
+//        value = $('.size-slider-value');
     
-    value.val( $(".size-slider").slider("value")+'px' );
+//    $(".size-slider")
+//    .slider({
+//      value: 2,
+//      min: 1,
+//      max: 24,
+//      step: 1,
+//      start: function(){
+//        //cache all instances of draw-size on slide start
+//        thumb = $(".draw-size");
+//      },
+//      slide: function(event, ui) {
+//        var handle = $(ui.handle),
+//            demival = ui.value/2;
+//        
+//        value.val(ui.value+'px');
+//        self.penSize = ui.value;
+//        
+//        thumb
+//        .css({
+//          marginLeft: -demival,
+//          marginTop: -demival,
+//          WebkitBorderRadius: demival,
+//          MozBorderRadius: demival,
+//          borderRadius: demival,
+//          width: ui.value,
+//          height: ui.value
+//        })
+//      }
+//    })
+//    .find('.ui-slider-handle')
+//    .append(
+//      port.append(
+//        thumb
+//      )
+//    )
+//    .append(
+//      value
+//    );
+//    
+//    value.val( $(".size-slider").slider("value")+'px' );
+//    
+//    $("#sizes").bind("click", function(event) {
+//      var link = $(event.target).closest('a')[0];
+//      if (link) {
+//        event.preventDefault();
+//        this.penSize = $(link).attr("href");
+//      }
+//    }.pBind(this));    
+  },
+  
+  _clickColor: function(e) {
+    var link = $( e.currentTarget ).closest('a'),
+        color = link.css("color");
     
-    $("#sizes").bind("click", function(event) {
-      var link = $(event.target).closest('a')[0];
-      if (link) {
-        event.preventDefault();
-        this.penSize = $(link).attr("href");
-      }
-    }.pBind(this));    
+    ddd('[DrawingTool] Selected colour '+color);
+    
+    //jQuery(".state-draw-color").removeClass('current');
+    //link.addClass('current');
+    
+    this.penColor = color;
+    //$(".property").css({ color: color });
+    return false;
+  },
+  
+  _changeSize: function(e) {
+    var value = jQuery( e.target ).val();
+    this.penSize = value+'px';
   },
   
   _themeColorsState: false, // true when in the DOM
@@ -131,7 +137,7 @@ WebDoc.DrawingTool = $.klass(WebDoc.Tool, {
   selectTool: function($super) {
     $super();
     WebDoc.application.boardController.unselectAll();
-    WebDoc.application.rightBarController.showItemInspector();
+    WebDoc.application.panelsController.showItemInspector();
     WebDoc.application.inspectorController.selectInspector('DrawingInspectorGroup');
   },
   

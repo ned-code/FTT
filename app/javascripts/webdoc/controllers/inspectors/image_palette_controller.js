@@ -2,18 +2,29 @@
  * @author Julien Bachmann
  */
 WebDoc.ImagePaletteController = $.klass({
+  
+  changeHandlers: {
+  	placeholder_checkbox: this.changePlaceholder,
+  	preserve_aspect_ratio: this.changePreserveAspectRatio,
+  	restore_original_size: this.restoreOriginalSize,
+  	set_page_size_to_item_size: this.setPageSizeToImageSize
+  },
+  
   initialize: function( ) {
-    this.domNode = $( "#image-inspector" );
+  	var container = $( "#image-inspector" );
+    this.domNode = $( "#image-inspector" ).children();
+    
     this.propertySrc = $("#property_src");
     this.propertySrc.blur(this.updateSrc.pBind(this));
 
-    this.domNode.find("#restore_original_size").click(this.restoreOriginalSize);
+//    this.domNode.find("#restore_original_size").click(this.restoreOriginalSize);
+//    
+//    this.domNode.find("#set_page_size_to_image_size").click(this.setPageSizeToImageSize);
+//
+//    this.domNode.find("#preserve_aspect_ratio").click(this.changePreserveAspectRatio);
+//
+//    this.domNode.find("#placeholder_checkbox").click(this.changePlaceholder);
     
-    this.domNode.find("#set_page_size_to_image_size").click(this.setPageSizeToImageSize);
-
-    this.domNode.find("#preserve_aspect_ratio").click(this.changePreserveAspectRatio);
-
-    this.domNode.find("#placeholder_checkbox").click(this.changePlaceholder);
     this.domNode.delegate("a[href=#remove_border]", 'click', jQuery.proxy( this, 'removeBorder' ));
     
     this.addImageLink = this.domNode.find("a[href=#create_image_link]");
@@ -86,7 +97,7 @@ WebDoc.ImagePaletteController = $.klass({
     });
     
     // image properties
-    this.propertiesController = new WebDoc.PropertiesInspectorController('#image_properties', false);
+    //this.propertiesController = new WebDoc.PropertiesInspectorController('#image_properties', false);
   },
   
   inspectorTitle: function() {
@@ -94,7 +105,10 @@ WebDoc.ImagePaletteController = $.klass({
   },
   
   refresh: function() {
-    this.propertiesController.refresh();
+    // Quick hack
+    WebDoc.application.inspectorController.propertiesController.refresh();
+    //this.propertiesController.refresh();
+    
     if (WebDoc.application.boardController.selection().length) {      
       var selectedItem = WebDoc.application.boardController.selection()[0];
       if (selectedItem.item.data.media_type === WebDoc.ITEM_TYPE_IMAGE) {

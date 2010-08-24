@@ -29,25 +29,14 @@ en:
   add: "Add"
   confirm: "Are you sure?"
   
-  formtastic:
-    actions:
-      login: Login
-      user:
-        create: Sign up
-    labels:
-      user:
-        private: "Private account"
-    hints:
-      user:
-        private: "(I do not want be listed in the members section)"
-        edit:
-          password: "leave blank if you don't want to change it"
-          current_password: "we need your current password to confirm your changes"
-  
   admin:
+    home:
+      index:
+        title: "Admin dashboard"
+
     categories:
       index:
-        title: "Categories Listing"
+        title: "Categories listing"
         add: "Add a category"
         destroy_confirmation: "Are you sure?"
     
@@ -134,53 +123,70 @@ en:
         mode_edit: "Edit Mode"
         mode_preview: "Preview Mode"
         mode_embed: "Embed Mode"
-
-    index:
-      title: "Documents"
-      all_items_by_date: "View your webdocs"
-      created_by_me: "You created"
-      editor_rights: "You can edit"
-      shared_with_me: "Shared with you"
-      public: "View public webdocs"
-      create_new_document: "Create a new webdoc"
-      edit_document: "Webdoc info"
-      document_forms:
-        name: "Name"
-        description: "Description"
-        category: "Category"
-        document_size_title: "Size"
-        creationDate: "Creation date"
-        change_access_dialog:
-          invite_tab: "Invite" 
-          current_editors: "Current editors"
-          add_editors: "Email addresses"
-          add_editors_explanation: "Allow other people to edit this webdoc. They will be given the same editing rights as you have."
-          add_readers: "(Enter emails)"
-          add_editors_message: "Invitation message"
-          add_readers_message: "Your message"
-        share_document_dialog:
-          title: "Share webdoc"
-          explanation: "with the world"
-          share_radio: "On"
-          unshare_radio: "Off"
-          shared_address_label: "Public url"
-          with_friends: "or with some webdoc members"
-        share_document: "Share webdoc"
-        everybody: "Everybody"
-        choose_title: "Choose a title"
-        new_webdoc: "a new webdoc"
-        add_description: "Add a description"
-        document_size:
-          custom: "Custom size:"
-          iPhone: "iPhone (620x480)"
-          classic: "Classic (800x600)"
-          iPad: "iPad (1024x768)"
-          width: "width"
-          height: "height"
+      apps_panel:
+        apps:
+          title: "Apps"
+          my_apps: "My apps"
+          show_details: "Show app details"
+          detail_view:
+            title: "App"
+            add_to_page: "Add to page"
+      my_content_panel:
         buttons:
-          add_access: "Add user"
-      buttons:
-        new_document: "Create a new webdoc"
+          back: "Back"
+        images:
+          add_image: "Add image"
+          uploaded_images: "Uploaded images"
+          facebook_albums: "Facebook albums"
+          buttons:
+            back: "Back"
+            upload: "Upload"
+            cancel_upload: "Cancel upload"
+          services:
+            flickr: "Flickr"
+            google: "Google Images"
+          add_images_view:
+            title: "Add Images"
+            choose_upload_image: "Choose image(s) to upload"
+        videos: 
+          title: "Videos"
+          my_videos: "My videos"
+          web: "Web"
+          web_detail: "Search videos on the web"
+          show_details: "Show video details"
+          services:
+            youtube: "Youtube"
+            vimeo: "Vimeo"
+          detail_view:
+            title: "Video"
+            add_to_page: "Add to page"
+            drag_handle: "drag and drop to add"
+            show_on: "Show video on *"
+            remove_from_my_videos: "Remove from My Videos"
+            delete: "Delete video"
+            add_to_my_videos: "Add to My Videos"
+      browse_web_panel:
+        buttons:
+          back: "Back"
+          search: "Search"
+        images:
+          web: "Web"
+          web_detail: "Find images on the web"
+          show_details: "Show image details"
+          services:
+            flickr: "Flickr"
+            google: "Google Images"
+        videos:
+          web: "Web"
+          web_detail: "Find videos on the web"
+          show_details: "Show video details"
+          services:
+            youtube: "Youtube"
+            vimeo: "Vimeo"
+          detail_view:
+            title: "Video"
+            add_to_page: "Add to page"
+            drag_handle: "drag and drop to add"
         
     show:
       toolbar_panel:
@@ -353,52 +359,7 @@ en:
         back: "Back"
         upload: "Upload"
         cancel_uplad: "Cancel upload"
-        
-  media_browser:
-    home:
-      images: 
-        title: "Images"
-        add_image: "Add Images"
-        my_images: "My images"
-        web: "Web"
-        web_detail: "Find images on the web"
-        show_details: "Show image details"
-        services:
-          flickr: "Flickr"
-          google: "Google Images"
-        add_images_view:
-          title: "Add Images"
-          choose_upload_image: "Choose image(s) to upload"
-        buttons:
-          upload: "Upload"
-          cancel_upload: "Cancel upload"
-      buttons:
-        search: "Search"
-        back: "Back"
-      videos: 
-        title: "Videos"
-        my_videos: "My videos"
-        web: "Web"
-        web_detail: "Find videos on the web"
-        show_details: "Show video details"
-        services:
-          youtube: "Youtube"
-          vimeo: "Vimeo"
-        detail_view:
-          title: "Video"
-          add_to_page: "Add to page"
-          drag_handle: "drag and drop to add"
-          show_on: "Show video on *"
-          remove_from_my_videos: "Remove from My Videos"
-          delete: "Delete video"
-          add_to_my_videos: "Add to My Videos"
-      apps:
-        title: "Apps"
-        my_apps: "My apps"
-        show_details: "Show app details"
-        detail_view:
-          title: "App"
-          add_to_page: "Add to page"
+
   
   datastore:
     index:
@@ -423,18 +384,7 @@ en:
         updated_failed: "An error occured when attempting to update the theme"
       category:
         destroyed_successful: "Category successfully deleted"
-  
-  registrations:
-    new:
-      title: "Sign up"
-      terms_of_service: "I agree to %{link}"
-      terms_of_service_link: "terms of service"
-    edit:
-      title: "Edit account"
-      cancel:
-        title: Cancel my account
-        text: Unhappy?
-        link: Cancel my account
+
   users:
     index:
       title: "Listing users"
@@ -442,9 +392,55 @@ en:
     new:
       title: "Sign up"
       button: "Sign up"
-    edit:
-      title: "Edit profile"
-      button: "Update"
+
+    dashboard:
+      title: "Documents"
+      all_items_by_date: "View your webdocs"
+      created_by_me: "You created"
+      editor_rights: "You can edit"
+      shared_with_me: "Shared with you"
+      public: "View public webdocs"
+      create_new_document: "Create a new webdoc"
+      edit_document: "Webdoc info"
+      document_forms:
+        name: "Name"
+        description: "Description"
+        category: "Category"
+        document_size_title: "Size"
+        creationDate: "Creation date"
+        change_access_dialog:
+          invite_co_authors: 'invite co-authors'
+          invite_tab: "Invite"
+          current_editors: "Current editors"
+          email: "by email"
+          add_editors_explanation: "Allow other people to edit this webdoc. They will be given the same editing rights as you have."
+          add_readers: "(Enter emails)"
+          add_editors_message: "Invitation message"
+          add_readers_message: "Your message"
+          choose_friends: "Choose friends"
+        share_document_dialog:
+          title: "Share webdoc"
+          explanation: "with the world"
+          share_radio: "On"
+          unshare_radio: "Off"
+          shared_address_label: "Public url"
+          with_friends: "or with some webdoc members"
+        share_document: "Share webdoc"
+        everybody: "Everybody"
+        choose_title: "Choose a title"
+        new_webdoc: "a new webdoc"
+        add_description: "Add a description"
+        document_size:
+          custom: "Custom size:"
+          iPhone: "iPhone (620x480)"
+          classic: "Classic (800x600)"
+          iPad: "iPad (1024x768)"
+          width: "width"
+          height: "height"
+        buttons:
+          add_access: "Add user"
+      buttons:
+        new_document: "Create a new webdoc"
   
   label:
     everybody: "Everybody"
@@ -465,6 +461,9 @@ en:
     user_publish_document_success_email:
       subject: "Your document %{document_name} has been published"
   
+  friendships:
+    index:
+      friends: "friends"
   followships:
     index:
       contacts: "contacts"

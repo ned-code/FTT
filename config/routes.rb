@@ -19,12 +19,16 @@ Webdoc::Application.routes.draw do
     
     member do
       post :duplicate
+      post :unshare
+      post :share
     end
     collection do
-      get :explore
-      get :featured
+      get :template
     end
   end
+
+  get '/explore(.:format)' => 'documents#explore'
+  get '/featured(.:format)' => 'documents#featured'
 
   # TODO rails3 always need :only_current_user => true ?
   get    'items/:item_id/datastore_entries/:key' => 'datastore_entries#index'
@@ -40,12 +44,13 @@ Webdoc::Application.routes.draw do
 
   devise_for :users
 
-  resources :users, :except => [:new, :create, :destroy]
+  resources :users, :only => [:show, :favorites]
 
   get 'user' => 'sessions#show'  
 
   namespace :admin do
-    resources :widgets, :path => 'apps', :except => :show
+    get '/' => 'home#index'
+    resources :widgets, :except => :show
     resources :categories, :except => :show
     resource  :test, :only => :show
     resources :themes
@@ -57,8 +62,17 @@ Webdoc::Application.routes.draw do
       delete :unfollow
     end
   end
+  
+  resources :friendships do
+    collection do
+      post :become_friend, :accept, :reject, :block, :cancel_request, :revoke
+      delete :revoke
+    end
+  end
 
   get '/browse' => 'browser#index'
+
+  get '/dashboard' => 'users#dashboard'
 
   # dev controller
   resources :images,     :except => [:new, :edit, :update]
@@ -76,6 +90,14 @@ Webdoc::Application.routes.draw do
 
   resources :app_polls, :only => [:index, :create, :destroy]
 
+  namespace :facebook do
+    resources :albums, :only => [:index] do
+      resources :photos, :only => [:index]
+    end
+  end
+  
+  resources :invitations, :except => [:update]
+  resources :registers, :only => [:create]
   # START OLD ROUTES
   # Jammit::Routes.draw(map)
   # map.connect 'proxy/resolve', :controller => 'proxy', :action => 'resolve', :conditions => { :method => :get }

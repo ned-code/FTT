@@ -1,36 +1,35 @@
 class DocumentsController < ApplicationController
+  
   before_filter :store_url_in_session_if_user_not_logged
   # need to be authenticate for alpha release.
   # need to remove this line and add authenticate_if_nedded and authenticate for index when we want to add again public document
-  before_filter :find_document, :only => [:show, :update, :duplicate, :destroy]
+  before_filter :find_document, :only => [:show, :update, :duplicate, :destroy, :share, :unshare, :template]
   
   #before_filter :authenticate_if_needed, :only => [:show]
   #before_filter :authenticate_user!, :only => [:index]
   after_filter :create_view_count, :only => :show
   
-  access_control do
-    action :show do
-      allow all, :if => :document_is_public?
-      allow :editor, :of => :document
-    end
-    allow logged_in, :to => [:index, :create, :duplicate]
-    allow all, :to => :explore
-    allow all, :to => :featured
-    allow :editor, :of => :document, :to => [:update, :destroy]
-    allow :admin
-  end
+  # access_control do
+  #   action :show do
+  #     allow all, :if => :document_is_public?
+  #     allow :editor, :of => :document
+  #   end
+  #   allow logged_in, :to => [:index, :create, :duplicate]
+  #   allow all, :to => :explore
+  #   allow all, :to => :featured
+  #   allow :editor, :of => :document, :to => [:update, :destroy]
+  #   allow :admin
+  # end
   
   # GET /documents
   def index
+    authorize! :read, Document
     respond_to do |format|
-      format.html do
-        set_return_to
-      end
       format.json do
         per_page = 20
         @documents = Document.not_deleted_with_filter(current_user, params[:document_filter], params[:query], params[:page], per_page)
         render :json => { 
-          :documents => @documents,
+          :documents => @documents.map{ |d| d.as_application_json({ :skip_pages  => true}) },
           :pagination => {
             :per_page => per_page,
             :current_page => @documents.current_page,
@@ -44,7 +43,7 @@ class DocumentsController < ApplicationController
     end
   end
 
-  # GET /documents/explore
+  # GET /explore
   def explore
     respond_to do |format|
       format.html do
@@ -119,11 +118,13 @@ class DocumentsController < ApplicationController
       render :action => :static_page, :layout => 'static', :content_type => 'image/svg+xml' and return
     end
     if @document.present?
+      authorize! :read, @document
+      @related_documents = Document.all(:conditions => { :category_id => @document.category_id}, :limit => 12 )
+      @more_author_documents = current_user.documents
       respond_to do |format|
         format.html do
           set_cache_buster
           @get_return_to = get_return_to 
-          render :layout => 'layouts/editor'      
         end
         format.json do
           logger.debug "return document json."
@@ -140,6 +141,7 @@ class DocumentsController < ApplicationController
   
   # POST /documents
   def create
+    #authorize! :create, Document
     @document = current_user.documents.create_with_uuid(params[:document])
     @@xmpp_notifier.xmpp_create_node(@document.uuid) 
     render :json => @document
@@ -147,6 +149,7 @@ class DocumentsController < ApplicationController
 
   # POST /documents/:id/duplicate
   def duplicate
+    authorize! :read, @document
     @new_document = @document.deep_clone_and_save!(current_user, params[:title])
     render :json => @new_document.to_json(:only => :uuid)
   end
@@ -163,11 +166,37 @@ class DocumentsController < ApplicationController
   
   # DELETE /documents/:id
   def destroy
+    authorize! :destroy, @document
     if @document.present?
       @document.safe_delete!
     end
 
     render :json => {}
+  end
+  
+  def share
+    authorize! :update, @document
+    if params[:with_comments] == 'true' || params[:with_comments] == 1
+      @document.share(true)
+    else
+      @document.share
+    end
+    render :json => @document.to_access_json
+  end
+  
+  def unshare
+    authorize! :update, @document
+    @document.unshare
+    render :json => @document.to_access_json
+  end
+  
+  
+  #this is used to test the rendering of html template
+  def template
+    @document = Document.not_deleted.first
+    
+    #Specifiy the document you want
+    # @document = Document.not_deleted.where(:uuid => 'put an uuid here')
   end
   
   protected

@@ -1,0 +1,30 @@
+<% if !Rails.env.production? %><!-- controls panel --><% end %>
+
+<div class="controls_panel panel">
+  <ul class="horizontal pages_buttons_index buttons_index index">
+    <li><a class="pages_button button" href="#webdoc_prev_page" title="Previous Page">Previous Page</a></li
+   ><li><a class="pages_button button" href="#webdoc_next_page" title="Next Page">Next Page</a></li
+   ><li class="page_details">
+      <span class="webdoc-page-number number">1</span>
+      <span class="webdoc-separator">of</span>
+      <span class="webdoc-page-total">1</span>
+    </li
+   ><li><a class="pages_button button" href="#toggle_pages_panel" title="Toggle Pages Panel">Pages Panel</a></li>
+  </ul>
+  
+    <!--ul class="pages-tools tools thumbs index icons-only" >
+      <li>
+        <img alt="Chat_32" class="wd_discussion_add" src="/images/icons/chat_32.png" />
+      </li>
+    </ul-->
+  
+  <ul class="horizontal comment_index buttons_index index" id="comments_buttons">
+    <li><a class="app_button button" href="#add_discussion" title="Add Comment">Add Comment</a></li
+   ><li>Drag a comment</li
+   ><li><a href="#toggle_comments_panel" title="Toggle Comments Panel">Comments&hellip;</a></li>
+  </ul>
+  
+  <ul class="horizontal view_index index">
+    <li><a class="view_button button" href="#view" title="Full view">Full View</a></li>
+  </ul>
+</div>

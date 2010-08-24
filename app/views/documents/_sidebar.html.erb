@@ -1,0 +1,14 @@
+    <!-- sidebar -->
+    
+    <div class="sidebar">
+      <section class="sidebar_wrap">
+        <h2>Also by this Author</h2>
+        <ul class="vertical thumbs_index index">
+          <% (0..(@more_author_documents.length - 1)).step(1) do |i| %>
+          <li>
+            <%= render 'documents/card', :document => @more_author_documents[i]%>
+          </li>
+          <% end %>
+        </ul>
+      </section>
+    </div>

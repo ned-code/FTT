@@ -37,9 +37,10 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
     WebDoc.application.documentEditor = this;
     WebDoc.application.undoManager = new WebDoc.UndoManager();
     WebDoc.application.accessController = new WebDoc.DocumentCollaborationController();
+    WebDoc.application.invitationsController = new WebDoc.InvitationsController();
     WebDoc.application.shareController = new WebDoc.DocumentShareController();
 
-    infoDialogNode = $("#wb-new-form");
+    infoDialogNode = $("#create_webdoc_form");
     infoDialogHeaderNode = $("#new-document-dialog-header");
     infoDialogTitleNode = $("#wb-new-document-name");
     infoDialogDescriptionNode = $("#wb-new-document-description");
@@ -52,8 +53,7 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
     jQuery.cookie('document_back_url', null, { path: '/' });
   },
 
-  start: function()
-  {
+  start: function() {
     ddd("Start Document editor");
     var that = this;
     WebDoc.Application.initializeSingletons([WebDoc.DocumentCategoriesManager], function() {
@@ -62,7 +62,10 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
         infoDialogCategoryNode.append($('<option>').attr("value", webDocCategory.uuid()).html(webDocCategory.data.name));
       });
 
-      $("#wb-create-document-button").bind("click", this.createDocument.pBind(this));
+      //$("#wb-create-document-button").bind("click", this.createDocument.pBind(this));
+      
+      this.createDocument();
+      
       this.documentListContainerNode
       .addClass( 'loading' )
       .delegate( ".wb-document-info", 'click', this.renameDocument )
@@ -73,7 +76,8 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
 
       $('body')
       .delegate( "a[href='#filter-author']",  'click', this.searchDocuments.pBind(this) )
-      .delegate( "a[href='#filter-editable']",'click', this.searchDocuments.pBind(this) );
+      .delegate( "a[href='#filter-editable']",'click', this.searchDocuments.pBind(this) )
+      .delegate( "a[href='#invite_people']",'click', this.showInvitationsForm.pBind(this) );
       this.queryDomNode.bind('keypress', function(e) {
         var code = (e.keyCode ? e.keyCode : e.which);
         if(code == 13) {
@@ -87,14 +91,17 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
       this.documentListContainerNode
       .append( this.documentList.domNode );
       this._getCurrentUserRolesDocuments();
-      infoDialogNode
-      .remove()
-      .css({ display: '' });
+      
+      //infoDialogNode
+      //.remove()
+      //.css({ display: '' });
+    
     }.pBind(this));
   },
 
   createDocument: function(e) {
-    var that = this;
+    var that = this,
+    		node = infoDialogNode;
 
     infoDialogHeaderNode.html("Create new webdoc");
     infoDialogTitleNode.val("Untitled webdoc");
@@ -105,10 +112,10 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
 
     infoDialogNode.delegate("a.set_size", 'click', this.setSizeByName.pBind(this) );
 
-    infoDialogNode.pop({
-      attachTo: $( e.currentTarget ),
-      initCallback: function(){
-        var node = $(this);
+    //infoDialogNode.pop({
+    //  attachTo: $( e.currentTarget ),
+    //  initCallback: function(){
+    //    var node = $(this);
         node
         .bind('submit', function() {
           if (!that._creatingDoc) {
@@ -127,7 +134,7 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
                 newDoc.setTitle( infoDialogTitleNode.val(), true );
                 newDoc.setDescription( infoDialogDescriptionNode.val(), true);
                 newDoc.setCategory( infoDialogCategoryNode.val(), true);
-
+		
                 newDoc.setSize( { width: infoDialogWidthNode.val(), height: infoDialogHeightNode.val() }, true);
                 that._creatingDoc = true;
                 newDoc.save(function(newObject, status) {
@@ -136,26 +143,26 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
                     node
                     .removeClass('loading')
                     .trigger('close');
-
+		
                     that.documents.push(newDoc);
                     that.filter.addDocument(newDoc);
                     document.location = "/documents/" + newDoc.uuid() + "?edit=true#1";
                   }
                   that._creatingDoc = false;
                 });
-
+		
               },
               fail: function() {}
             });
           }
           return false;
-        })
-        .find("input[type='text']")
-        .eq(0)
-        .focus()
-        .select();
-      }
-    });
+        });
+    //    .find("input[type='text']")
+    //    .eq(0)
+    //    .focus()
+    //    .select();
+    //  }
+    //});
   },
 
   renameDocument: function(e) {
@@ -222,7 +229,7 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
         documentToEdit = data && data.id;
 
     WebDoc.application.accessController.showAccess( e, WebDoc.application.documentEditor.documentWithId(documentToEdit) );
-    e.preventDefault();
+ //   e.preventDefault();
   },
 
   shareDocument: function(e) {
@@ -233,7 +240,7 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
 
     WebDoc.application.shareController.showShare(e, document);
 
-    e.preventDefault();
+   // e.preventDefault();
   },
 
   unshareDocument: function(e) {
@@ -366,6 +373,11 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
         $("#wb-document-filter-owned-by-me").click();
       }.pBind(this)
     });
+  },
+  
+  showInvitationsForm: function(e){
+    //popup form here
+    WebDoc.application.invitationsController.init();
   }
 });
 

@@ -1,0 +1,48 @@
+/* Thumb classes */
+
+.thumb {
+  display: block;
+  overflow: hidden;
+  padding-top: 64px;
+  /* Hide overflowing text. This technique is better
+     than using -ve text-indent because IE7 moves
+     the background image with the text-indent. */
+  height: 0;
+  background-size: 96px 64px;
+  background-position: center center;
+  background-repeat: no-repeat;
+  
+  text-decoration: none;
+  color: inherit;
+
+}
+
+/*.text_thumb {
+  white-space: nowrap;
+  -ms-text-overflow: ellipsis;
+  -o-text-overflow:  ellipsis;
+  text-overflow:     ellipsis;
+}
+
+.left_text_thumb {
+  height: 64px;
+  padding-top: 0;
+  padding-left: 104px;
+  background-position-x: 0;
+}
+
+.right_text_thumb {
+  height: 64px;
+  padding-top: 0;
+  padding-right: 104px;
+  background-position-x: 100%;
+}*/
+
+.logo_thumb {
+  margin-top: 6px;
+  margin-left: 0;
+  width: 112px;
+  padding-top: 24px;
+  background-size: 100% 100%;
+  background-image: url('../../images/thumbs/logo_thumb_white.png');
+}

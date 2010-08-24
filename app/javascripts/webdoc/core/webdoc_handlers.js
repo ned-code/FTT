@@ -1,18 +1,13 @@
- /**
- * @author Stephen Band / Julien Bachmann
- */
+// Global event handlers
 
 WebDoc.handlers = {
 
   initialise: function(){
-    this.panelNode = jQuery('.panel');
     
-    this.addDocumentHandlers( 'click', this._documentHandlers );
-    this.addPanelHandlers( 'click', this._panelHandlers );
-		this.addMediaBrowserHandlers( 'click', this._mediaBrowserHandlers );
+    jQuery(document).delegate('a', 'click', this._makeLinkHandler( this._documentHandlers ) );
+    jQuery('.panel').delegate('a', 'click', this._makeLinkHandler( this._panelHandlers ) );
+    
     this.addCenterCellHandlers();
-
-    jQuery(".wd_discussion_add").bind("dragstart", this._prepareCreateDiscussionDragStart.pBind(this));
     
     // Global form validation
     jQuery(document)
@@ -23,7 +18,8 @@ WebDoc.handlers = {
           e.preventDefault();
         }
       });
-    });
+    })
+    .delegate( 'a[href=#add_discussion]', 'dragstart', this._prepareCreateDiscussionDragStart.pBind(this));
   },
   
   regex: jQuery.regex,
@@ -31,7 +27,7 @@ WebDoc.handlers = {
   _makeLinkHandler: function( obj, context ){
     var regex = this.regex;
     
-    // Curry linkHandler using this scope
+    // Curry link handler using this scope
     return function(e){
       var link = jQuery(this),
           href = link.attr('href'),
@@ -41,29 +37,25 @@ WebDoc.handlers = {
       if ( match && obj[match[1]] ) {
         ddd( '[Handler] call handler "' + match + '"' );
         
+        // Don't let the browser have it
+        e.preventDefault();
+        
         // Call it with link as scope
         obj[match[1]].call( context||this, e );
-        e.preventDefault();
-      }
-      else {
-        ddd( '[Handler] no handler for "' + match + '"' );
       }
     };
   },
   
-  addPanelHandlers: function( eventType, obj, context ){
-    this.panelNode
-    .delegate('a', eventType, this._makeLinkHandler( obj, context ) );
-  },
-
-	addMediaBrowserHandlers: function( eventType, obj, context ){
-    this.panelNode
-    .delegate('a', eventType, this._makeLinkHandler( obj, context ) );
+  addPanelHandlers: function( eventType, obj ){
+  	if ( /click/.exec( eventType ) ) {
+    	jQuery.extend( this._panelHandlers, obj );
+  	}
   },
   
-  addDocumentHandlers: function( eventType, obj, context ){
-    jQuery(document)
-    .delegate('a', eventType, this._makeLinkHandler( obj, context ) );
+  addDocumentHandlers: function( eventType, obj ){
+    if ( /click/.exec( eventType ) ) {
+    	jQuery.extend( this._documentHandlers, obj );
+  	}
   },
 
   addCenterCellHandlers: function(){
@@ -86,30 +78,36 @@ WebDoc.handlers = {
   
   // Editor actions (to be bound to the interface panels)
   _panelHandlers: {
-    'left-panel-toggle':    function(e) { WebDoc.application.pageBrowserController.toggle(); },
-    'right-panel-toggle':   function(e) { WebDoc.application.rightBarController.toggle(); },
+    'view':                        function(e) { WebDoc.application.pageEditor.toggleFullScreen(); },
     
-    'pages-browser':        function(e) { WebDoc.application.pageBrowserController.toggle(); },
-    'media-browser':        function(e) { WebDoc.application.rightBarController.showMediaBrowser(e);}, 
-    'item-inspector':       function(e) { WebDoc.application.rightBarController.showItemInspector(e); },
-    'page-inspector':       function(e) { WebDoc.application.rightBarController.showPageInspector(e); },
-    'document-inspector':   function(e) { WebDoc.application.rightBarController.showDocumentInspector(e); },
-    'social-inspector':     function(e) { WebDoc.application.rightBarController.showSocialPanel(e); },
-    'discussions-panel':    function(e) { WebDoc.application.rightBarController.showDiscussionsPanel(e); },
+    //new ui panel handler, actually the old right bar controller is used
+    'toggle_activity_panel':       function(e){ ddd('no activity yet'); },
+    'toggle_comments_panel':       function(e){ WebDoc.application.panelsController.showDiscussionsPanel(e); },
+    'toggle_inspector_panel':      function(e){ WebDoc.application.panelsController.showItemInspector(e); },
+    'toggle_page_inspector_panel': function(e){ WebDoc.application.panelsController.showPageInspector(e); },
+    'toggle_author_panel':         function(e){ ddd('author panel is useless') },
+    'toggle_document_panel':       function(e){WebDoc.application.panelsController.showDocumentInspector(e); },
+    'toggle_sharing_panel':        function(e){ ddd('no sharing yet') },
+    'toggle_content_panel':        function(e) { WebDoc.application.panelsController.showBrowseWeb(); },
+    'toggle_packages_panel':       function(e) { WebDoc.application.panelsController.showPackages(); },
+    'toggle_apps_panel':           function(e) { WebDoc.application.panelsController.showApps(); },
+    'toggle_my_stuff_panel':       function(e) { WebDoc.application.panelsController.showMyContent(); },
+    'toggle_pages_panel':          function(e) { WebDoc.application.panelsController.showPagesPanel(); },
     
-    'add-page':             function(e) { WebDoc.application.pageEditor.addPage(); },
-    'add-web-page':         function(e) { WebDoc.application.pageEditor.addWebPage();},
-    'copy-page':            function(e) { WebDoc.application.pageEditor.copyPage(); },
-    'remove-page':          function(e) { WebDoc.application.pageEditor.removePage(); },
+    
+    'add_page':             function(e) { WebDoc.application.pageEditor.addPage(); },
+    'copy_page':            function(e) { WebDoc.application.pageEditor.copyPage(); },
+    'remove_page':          function(e) { WebDoc.application.pageEditor.removePage(); },
     
     'zoom-in':              function(e) { WebDoc.application.boardController.zoomIn(); },
     'zoom-out':             function(e) { WebDoc.application.boardController.zoomOut(); },
     'move':                 function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.handTool ); },
     'select':               function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.arrowTool ); },
-    'draw':                 function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.drawingTool ); },
-    'insert-html':          function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.htmlSnipplet ); },
-    'insert-text':          function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.textTool ); },
-    'insert-iframe':        function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.iframeTool ); },
+    'draw_tool':            function(e) { WebDoc.application.boardController.toggleDrawTool(); },
+    'html_tool':            function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.htmlSnipplet ); },
+    'text_tool':            function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.textTool ); },
+    'textbox_tool':         function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.textboxTool ); },
+    'webpage_tool':         function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.iframeTool ); },
     'insert-app':           function(e) { WebDoc.application.boardController.setCurrentTool( WebDoc.application.appTool ); },
     
     'to-back':              function(e) { WebDoc.application.boardController.moveSelectionToBack(); },
@@ -122,20 +120,11 @@ WebDoc.handlers = {
     'browser':              function(e)	{ WebDoc.application.browserController.openBrowser(e); }, 
     'disable-html':         function(e) { WebDoc.application.pageEditor.toggleDebugMode(); },
     
-    'show-thumbs':          function(e) { WebDoc.application.pageBrowserController.showThumbs(e); },
-    'hide-thumbs':          function(e) { WebDoc.application.pageBrowserController.hideThumbs(e); },
-    'toggle-thumbs':        function(e) { WebDoc.application.pageBrowserController.toggleThumbs(e); },
-    
     'mode-toggle':          function(e) { WebDoc.application.boardController.toggleMode(); },
-    'mode-edit':            function(e) { WebDoc.application.boardController.setMode(false); },
-    'mode-preview':         function(e) { WebDoc.application.boardController.setMode(true); },
-    
-    'theme-class':          function(e) {  },
-
+    'edit':                 function(e) { WebDoc.application.boardController.toggleMode(); },
     
     'library-images-myimages': function(e) { 
-      WebDoc.application.rightBarController.showMediaBrowser();
-      WebDoc.application.mediaBrowserController.showMyContent();
+      WebDoc.application.panelsController.showMyContent();
     },
     
     //'themes-chooser':       function(e) { WebDoc.application.themesController.openChooser(e); },
@@ -144,17 +133,9 @@ WebDoc.handlers = {
   
   // Publicly accessible actions (to be bound to document)
   _documentHandlers: {
-    'webdoc-prev-page':     function(e) { WebDoc.application.pageEditor.prevPage(); },
-    'webdoc-next-page':     function(e) { WebDoc.application.pageEditor.nextPage(); },
-    'webdoc-close':         function(e) { WebDoc.application.pageEditor.closeDocument(); }
-  },
-
-  _mediaBrowserHandlers: {
-    'media-browser-home': 	function(e) { WebDoc.application.mediaBrowserController.showHome();}, 
-    'media-browser-web': 	function(e) { WebDoc.application.mediaBrowserController.showWeb();}, 
-    'media-browser-packages': 	function(e) { WebDoc.application.mediaBrowserController.showPackages();}, 
-    'media-browser-apps': 	function(e) { WebDoc.application.mediaBrowserController.showApps();}, 
-    'media-browser-my-content': 	function(e) { WebDoc.application.mediaBrowserController.showMyContent();} 
+    'webdoc_prev_page':     function(e) { WebDoc.application.pageEditor.prevPage(); },
+    'webdoc_next_page':     function(e) { WebDoc.application.pageEditor.nextPage(); },
+    'webdoc_close':         function(e) { WebDoc.application.pageEditor.closeDocument(); }
   },
 
   _prepareCreateDiscussionDragStart: function(event) {

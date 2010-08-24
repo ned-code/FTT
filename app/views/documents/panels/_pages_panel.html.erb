@@ -1,65 +1,22 @@
-<div class="left-panel pages_panel controls_panel panel">
+<% if !Rails.env.production? %><!-- pages panel --><% end %>
+
+<div class="pages_panel panel" id="pages_panel">
+  <header>
+  	<h3>Pages</h3>
+    
+    <ul class="horizontal pageedit_index buttons_index index">
+      <li><a class="pageedit_button button" href="#add_page" title="Add page">Add page</a></li
+     ><li><a class="pageedit_button button" href="#copy_page" title="Copy page">Copy</a></li
+     ><li><a class="pageedit_button button" href="#remove_page" title="Remove page">Remove</a></li>
+    </ul>
+  </header>
   
-  <div class="pages-inspector inspector" id="page_browser">
-    <div class="content" id="page_browser_container">
-      <ul class="page_browser_items pages index hide-thumbs"></ul>
+  <div class="content" id="page_browser">
+    <div id="page_browser_container">
+      <ul class="horizontal pages_index index"></ul>
     </div>
     <div class="x_scrollbar_container">
       <div class="x_scrollbar scrollbar"></div>
     </div>
   </div>
-  
-  <div class="left_toolbar toolbar"></div>
-  
-  <div class="toolbar">
-
-    <ul class="pages-tools tools thumbs index icons-only">
-      <li>
-        <a href="#webdoc-prev-page" title="Previous">Previous</a>
-      </li>
-      <li>
-        <a href="#webdoc-next-page" title="Next">Next</a>
-      </li>
-    </ul>
-    
-    <div class="page_details">
-      <span class="webdoc-page-number number">1</span>
-      <span class="webdoc-separator">of</span>
-      <span class="webdoc-page-total">1</span>
-    </div>
-    
-    <ul class="pages-tools tools thumbs index icons-only">
-      <li class="mode-edit-show">
-        <a href="#add-page" title="Add page">Add page</a>
-      </li><li class="mode-edit-show">
-        <a href="#copy-page" title="Copy page">Copy</a>
-      </li><li class="mode-edit-show">
-        <a href="#remove-page" title="Remove page">Remove</a>
-      </li>
-    </ul>
-
-    <ul class="pages-tools tools thumbs index icons-only" >
-      <li>
-        <img alt="Chat_32" class="wd_discussion_add" src="/images/icons/chat_32.png" />
-      </li>
-    </ul>
-    
-    <!--ul class="horizontal sharing_buttons buttons index">
-      <li>
-        <a href="#" title="">editors</a>
-      </li><li>
-        <a href="#" title="">sharing</a>
-      </li>
-    </ul-->
-    
-    <ul class="mode_buttons buttons mode-tools mode-embed-hide tools thumbs index icons-only">
-      <li>
-        <a class="state-mode" href="#mode-edit" title="Edit mode">Edit Mode</a>
-      </li><li>
-        <a class="state-mode" href="#mode-preview" title="Preview mode">Preview Mode</a>
-      </li>
-    </ul>
-    
-  </div>
-  
 </div>

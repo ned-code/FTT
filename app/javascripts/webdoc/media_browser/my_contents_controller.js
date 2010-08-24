@@ -1,56 +1,111 @@
 WebDoc.MyContentsController = $.klass(WebDoc.Library,{
       
-  initialize: function($super, libraryId) {
-    $super(libraryId);
-    this.imageDetailsView = $('#media-browser-my-images-details #image-details');
-    this.videoDetailsView = $('#media-browser-my-favorites-videos-details #video-details');
+  initialize: function($super) {
+    $super('my-content');
+    this.imageDetailsView = jQuery('#my-images-details #image-details');
+    this.videoDetailsView = jQuery('#my-favorites-videos-details #video-details');
     this.setupImageDetailsView();
-    this.domNode = $('#media-browser-my-content');
-    this.createHandlers(this.domNode, 'click', this._myContentHandlers);
+    this.domNode = jQuery('#my-content');
+    this._setupClickEvent();
+    this.libraryUtils = new LibraryUtils();
     
     this.imagePage = 1;
     this.videosFavoritePage = 1;
     this.imagesFavoritePage = 1;
-    this.myImagesContainer = $('#media-browser-my-images');
+    this.myImagesContainer = $('#my-images');
+    this.myImagesLibraryDomNode = this.myImagesContainer.find('#my_images_library');
     
-    this._loadMyImages();  
+    this.imageLoaded = false;
+  },
+  
+  setup: function(){
+    this._loadMyImages();
     this.imagesUploader = new WebDoc.ImagesUploader('upload_control', this);
     
-    $("#my-images-library").bind("dragstart", this.dragStart.pBind(this));
-    
+    $("#my_images_library").bind("dragstart", this.dragStart.pBind(this));
   },
-
-  _myContentHandlers: {
-    'my-images':  function(e){ WebDoc.application.mediaBrowserController.myContentsController.showMyImages(); },
-    'favorites':  function(e){ WebDoc.application.mediaBrowserController.myContentsController.showFavorites(); },
-    'upload-images': function(e){ WebDoc.application.mediaBrowserController.myContentsController.showUploader(); }
+  
+  isMyImageLoaded: function(){
+    return this.imageLoaded;
+  },
+  
+  _setupClickEvent: function(){
+    jQuery('#image-detail-back, #video_detail_back, #upload_back').click(function(event){
+      event.preventDefault();
+      if(jQuery(event.target).attr('href') == '#my-favorites'){
+        this.showFavorites(); 
+      }
+      else{
+        this.showMyImages();
+      }
+    }.pBind(this));
+    this.domNode.find('#my_images').click(function(event){
+      event.preventDefault();
+      this.showMyImages();
+    }.pBind(this));
+    this.domNode.find('#favorites').click(function(event){
+      event.preventDefault();
+      this.showFavorites(); 
+    }.pBind(this));
+    this.domNode.find('#uploaded_images').click(function(event){
+      event.preventDefault();
+      this.showMyImages();
+    }.pBind(this));
+    this.domNode.find('#facebook_albums').click(function(event){
+      event.preventDefault();
+      this.showFacebookAlbums();
+    }.pBind(this));
+    this.domNode.find('#add_image').click(function(event){
+      event.preventDefault();
+      this.showUploader();
+    }.pBind(this));
+    this.domNode.find('#add_image').click(function(event){
+      event.preventDefault();
+      this.showUploader();
+    }.pBind(this));
   },
   
   showMyImages: function(){
     this._hideAll();
-    $('#media-browser-my-images').show();
+    jQuery('#my-images').show();
+    jQuery('#my_images_library').show();
+    jQuery('#my_facebook_library').hide();
+  },
+
+  showFacebookAlbums: function() {
+    this._hideAll();
+    $('#my-images').show();
+    jQuery('#my_images_library').hide();
+    if(jQuery('#my_facebook_library:empty').length > 0){
+      this._loadFacebookAlbums();
+    }
+    jQuery('#my_facebook_library').show();
+  },
+
+  showFacebookAlbum: function(albumName, albumId) {
+    this._hideAll();
+    jQuery('#my_facebook_album_details').show();
+    this._loadFacebookAlbum(albumName, albumId);
   },
   
   showFavorites: function(){
     this._hideAll();
-    if($('#media-browser-my-favorites').length){
-      $('#media-browser-my-favorites').show();
-    }
-    else{
+    if(!jQuery('#my-favorites').length){
       this._loadMyFavorites();
-      $('#media-browser-my-favorites').show();
     }
+    jQuery('#my-favorites').show();
+
   },
   
   showUploader: function(){
     this._hideAll();
-    $('#media-browser-upload-images').show();
+    $('#upload-images').show();
     this.imagesUploader.loadSWFUpload();
   },
   
   setupImageDetailsView: function(){
     // handle possible actions 
-    $("#media-browser-my-images-details .actions").click(function(event){
+    $("#my-images-details .actions").click(function(event){
       event.preventDefault();
 
       var properties = this.detailsViewImg.data("properties"); //properties of the currenlty displayed image are store in this element
@@ -77,7 +132,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
           var imgUrl = this.detailsViewImg.attr("src");
           page.setBackground(page.getBackgroundColor(),"url("+imgUrl+")", "no-repeat", "center center");
           // Jump to page inspector, where you can set how the background image is displayed
-          WebDoc.application.rightBarController.showPageInspector();
+          //WebDoc.application.panelsController.showPageInspector();
           break;
 
         case "delete_image_action": //delete an uploaded image from My Images
@@ -166,13 +221,13 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     this.preloadImage(properties.url);
     
     //setup the delete link of remove from favorites
-    var removeFavoritesLink = $('#media-browser-my-images-details #remove_image_from_favorites');
-    var deleteImageLink = $('#media-browser-my-images-details #delete_image_action');
+    var removeFavoritesLink = $('#my-images-details #remove_image_from_favorites');
+    var deleteImageLink = $('#my-images-details #delete_image_action');
         
     if(isFavorites){
       if( !removeFavoritesLink.length ){
         liDelete = $('<li>').append($("<a href='' id='remove_image_from_favorites'>Remove from favorites </a>"));
-        $("#media-browser-my-images-details #image-details .actions ul").append(liDelete);
+        $("#my-images-details #image-details .actions ul").append(liDelete);
 
         if( deleteImageLink.length ){
           deleteImageLink.parent().remove();
@@ -182,7 +237,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     else{
       if( !deleteImageLink.length ){
         liDelete = $('<li>').append($("<a href='' id='delete_image_action'>Delete </a>"));
-        $("#media-browser-my-images-details #image-details .actions ul").append(liDelete);
+        $("#my-images-details #image-details .actions ul").append(liDelete);
 
         if( removeFavoritesLink.length ){
           removeFavoritesLink.parent().remove();
@@ -198,7 +253,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
       $('#image-detail-back').attr({href: '#my-images'});
     }
     
-      $('#media-browser-my-images-details').show();
+      $('#my-images-details').show();
   },
 
   setupVideoDetailsView: function(){
@@ -206,7 +261,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     this.videoDetailsView.find('.drag_handle').attr({ draggable: "true" })
     .bind("dragstart", this.prepareVideoDrag.pBind(this));
 
-    $("#media-browser-my-favorites-videos-details #video-details .actions").click(function(event){
+    $("#my-favorites-videos-details #video-details .actions").click(function(event){
       event.preventDefault();
       
       var properties = this.detailsVideoContainer.data("properties"); //properties of the currenlty displayed video are store in this element
@@ -252,7 +307,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     
     // Embed video
     this.detailsVideoContainer.find('object').remove();
-    this.detailsVideoContainer.prepend( WebDoc.application.mediaBrowserController.webSearchController.webVideosSearch.buildEmbeddedVideo(properties));
+    this.detailsVideoContainer.prepend( this.libraryUtils.buildEmbeddedVideo(properties));
     
     // Store the current properties in detailsVideoContainer
     this.detailsVideoContainer.data("properties", properties);
@@ -277,17 +332,19 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     // Actions
     var serviceName = properties.type === "youtube" ? "YouTube" : "Vimeo";
     var showVideoPageEl = $("#show_video_page_action");
-    showVideoPageEl.text(showVideoPageEl.data("originalText").replace("*", serviceName));
+    var showText = showVideoPageEl.text();
+    showText = showText.replace('*', serviceName);
+    showVideoPageEl.text(showText);
 
-    var removeVideoFromFavoritesLink = $('#media-browser-my-favorites-videos-details #remove_video_from_favorites');
+    var removeVideoFromFavoritesLink = $('#my-favorites-videos-details #remove_video_from_favorites');
     if( !removeVideoFromFavoritesLink.length ){
       liDelete = $('<li>').append($("<a href='' id='remove_video_from_favorites'>Remove from favorites</a>"));
-      $("#media-browser-my-favorites-videos-details #video-details .actions ul").append(liDelete);
+      $("#my-favorites-videos-details #video-details .actions ul").append(liDelete);
     }
     
     this._hideAll();
-    $('#media-browser-my-favorites-videos-details').show();
-    $('#media-browser-my-favorites-videos-details #video-details').show();
+    $('#my-favorites-videos-details').show();
+    $('#my-favorites-videos-details #video-details').show();
   },
   
   preloadImage: function(imageSrc) {
@@ -358,7 +415,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     var description = newProperties.description;
     var thumbUrl = newProperties.thumb_url;
     var aspectRatio = newProperties.aspect_ratio;
-    var viewCount = newProperties.viewCount;
+    var viewCount = newProperties.view_count;
     var embedUrl = newProperties.embed_url;
     var embedType = newProperties.embed_type;
     var videoId = newProperties.video_id;
@@ -378,23 +435,22 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
         
      var videosContainer = $('#my-favorites-videos ul');
      videosContainer.prepend(
-        WebDoc.application.mediaBrowserController.webSearchController.webVideosSearch.buildVideoRow(videoType, videoId, videoUrl, thumbUrl, name, duration, viewCount, description, embedUrl, embedType, aspectRatio, isHd, width, height,uuid)
+        this.libraryUtils.buildVideoRow(videoType, videoId, videoUrl, thumbUrl, name, duration, viewCount, description, embedUrl, embedType, aspectRatio, isHd, width, height,uuid)
       );
     
    },
   
-  dragStart: function(event) {      
+  dragStart: function(event) {
     var draggingImg = $(event.target).parent().find('img');
 
     var properties = draggingImg.data("properties");
 
     var dt = event.originalEvent.dataTransfer;
     var imageUrl = properties.default_url ? properties.default_url : properties.url;
-    ddd(properties.media_id);
     dt.setData("application/wd-image", $.toJSON({url:imageUrl,id:properties.id, favorites:properties.favorites, media_id:properties.media_id, title: properties.title }));
     
     // Drag "feedback"
-    var mediaDragFeedbackEl = this.buildMediaDragFeedbackElement("image", properties.thumb_url);
+    var mediaDragFeedbackEl = this.libraryUtils.buildMediaDragFeedbackElement("image", properties.thumb_url);
     $(document.body).append(mediaDragFeedbackEl);
     dt.setDragImage( mediaDragFeedbackEl[0], 60, 60 );
   },
@@ -416,7 +472,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     dt.setData("application/wd-video", $.toJSON(properties));
     
     // Drag "feedback"
-    var mediaDragFeedbackEl = this.buildMediaDragFeedbackElement("video", properties.thumb_url);
+    var mediaDragFeedbackEl = this.libraryUtils.buildMediaDragFeedbackElement("video", properties.thumb_url);
     $(document.body).append(mediaDragFeedbackEl);
     dt.setDragImage( mediaDragFeedbackEl[0], 65, 45 );
   },
@@ -433,15 +489,16 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
   },
   
   _hideAll: function(){
-    $('.my-content-tab').hide();
+    this.domNode.find('.my-content-tab').hide();
     // this.imagesUploader.unloadSWFUpload();
   },
 
   _loadMyImages: function(){
-    var thumbsWrap = this.myImagesContainer.find(".thumbnails");
+    var thumbsWrap = this.myImagesLibraryDomNode;
     this.showSpinner(thumbsWrap);
           
     WebDoc.ServerManager.getRecords(WebDoc.Image, null, function(data) {
+      this.imageLoaded = true;
       if (data.images.length === 0) {
         var noImages = $("<span>").addClass('no_items').text('No Images');
         thumbsWrap.append(noImages);
@@ -480,7 +537,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
       this.hideSpinner(thumbsWrap);
     }.pBind(this), { ajaxParams: { page:this.imagePage, favorites: 0 }});
     
-    $("#my-images-library ul li a").live("click", function (event) {
+    $("#my_images_library ul li a").live("click", function (event) {
       event.preventDefault();
       var properties = $(event.target).parent().find('img').data("properties");
       this.showDetailsView(properties,false);
@@ -501,12 +558,12 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
   },
   
   _clearMyImages: function(){
-    var thumbsWrap = this.myImagesContainer.find(".thumbnails");
+    var thumbsWrap = this.myImagesLibraryDomNode;
     thumbsWrap.empty();
   },
   
   _loadMyFavorites: function(){
-    var container = $("<div id='media-browser-my-favorites' class='my-content-tab'>");
+    var container = $("<div id='my-favorites' class='my-content-tab'>");
     container.append($("<div id='my-favorites-images' class='thumbnails'>"));
     container.append($("<div id='my-favorites-videos' class='thumbnails'>"));
     this.domNode.append(container);
@@ -628,7 +685,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     }.pBind(this));
 
     $("#my-favorites-videos").bind("dragstart", this.prepareRowDrag.pBind(this));
-    this.createHandlers(this.domNode, 'click', {'my-favorites':  function(e){ WebDoc.application.mediaBrowserController.myContentsController.showFavorites(); }});
+    //this.createHandlers(this.domNode, 'click', {'my-favorites':  function(e){ WebDoc.application.mediaBrowserController.myContentsController.showFavorites(); }});
     this.setupVideoDetailsView();
   },
   
@@ -642,5 +699,80 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     this.videosFavoritesContainer.empty();
     this.videosFavoritePage += 1;
     this._loadFavoritesVideos();
+  },
+
+  _loadFacebookAlbums: function() {
+    var fbContainer = jQuery("#my_facebook_library");
+    fbContainer.empty();
+    this.showSpinner(fbContainer);
+
+    WebDoc.ServerManager.request('/facebook/albums.json', function(data) {
+      ddd('[MyContentsController] recieve facebook albums');
+      ddd(data);
+      if (data.albums.length > 0) {
+        var myAlbumsList = $("<ul>");
+        fbContainer.append(myAlbumsList);
+        $.each(data.albums, function(i, fbAlbum){
+          var li = jQuery("<li></li>");
+          var a  = jQuery("<a href='#'>"+fbAlbum.name+" ("+fbAlbum.count+")</a>");
+          a.bind("click", function(event){
+            event.preventDefault();
+            this.showFacebookAlbum(fbAlbum.name, fbAlbum.id);
+          }.pBind(this));
+          li.append(a);
+          myAlbumsList.append(li);
+        }.pBind(this));
+      }
+      else {
+        fbContainer.append(jQuery("<span>").addClass('no_items').text('No albums'));
+      }
+      this.hideSpinner(fbContainer);
+    }.pBind(this), 'GET', { ajaxParams: {} });
+  },
+
+  _loadFacebookAlbum: function(albumName, albumId) {
+    var mainContainer    = this.domNode.find("#my_facebook_album_details"),
+        contentContainer = jQuery("<div/>", {'id': 'my_facebook_album_photos'}),
+        linkBack         = jQuery("<a/>", {'href': '#back'}).text('back');
+
+    linkBack.bind('click', function(event){
+      event.preventDefault();
+      this.showFacebookAlbums();
+    }.pBind(this));
+
+    mainContainer.empty();
+    mainContainer.append(jQuery('<h1/>').text(albumName));
+    mainContainer.append(contentContainer);
+    mainContainer.append(linkBack);
+
+    this.showSpinner(contentContainer);
+
+    WebDoc.ServerManager.request("/facebook/albums/"+albumId+"/photos.json", function(data) {
+      ddd('[MyContentsController] recieve facebook album');
+      ddd(data);
+      if (data.photos.length > 0) {
+        var myPhotosList = $("<ul>");
+        contentContainer.append(myPhotosList);
+        jQuery.each(data.photos, function(i, fbPhoto){
+          var li  = jQuery("<li></li>");
+          var img = jQuery("<img src='"+fbPhoto.picture+"' />");
+          var properties = {
+            url: fbPhoto.source,
+            thumb_url: fbPhoto.picture,
+            type: 'application/wd-image',
+            title: fbPhoto.name
+          };
+          img.data("properties", properties);
+          li.append(img);
+          contentContainer.append(li);
+          li.bind("dragstart", this.dragStart.pBind(this));          
+        }.pBind(this));        
+      }
+      else {
+        contentContainer.append(jQuery("<span>").addClass('no_items').text('No photos'));
+      }
+      this.hideSpinner(contentContainer);
+    }.pBind(this), 'GET', { ajaxParams: {} });
   }
+
 });

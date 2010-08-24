@@ -2,25 +2,27 @@ class PagesController < ApplicationController
   before_filter :find_document, :find_page
   skip_before_filter :authenticate_user!, :only => [:show, :callback_thumbnail]
   before_filter :authenticate_if_needed, :only => [:show, :callback_thumbnail]
-  access_control do
-    actions :index, :show do
-      allow all, :if => :document_is_public?
-    end
-    action :show, :callback_thumbnail do
-      allow all, :if => :has_valid_secure_token?
-    end
-    allow :editor, :of => :document    
-    allow :admin    
-  end
+  # access_control do
+  #   actions :index, :show do
+  #     allow all, :if => :document_is_public?
+  #   end
+  #   action :show, :callback_thumbnail do
+  #     allow all, :if => :has_valid_secure_token?
+  #   end
+  #   allow :editor, :of => :document
+  #   allow :admin
+  # end
   
   # GET /documents/:document_id/pages
   def index
+    authorize! :read, @document
     render :json => @document.pages.not_deleted
   end
   
   # GET /documents/:document_id/pages/:id
   def show
     @page ||= @document.pages.not_deleted.find_by_uuid_or_position!(params[:id])
+    authorize! :read, @document
     respond_to do |format|
       format.html do
         render :layout => "layouts/static_page"
@@ -33,6 +35,7 @@ class PagesController < ApplicationController
   
   # POST /documents/:document_id/pages
   def create
+    authorize! :update, @document
     deep_notify = params[:page][:items_attributes].present?
     @page = @document.pages.new_with_uuid(params[:page])
     @page.save!
@@ -47,6 +50,7 @@ class PagesController < ApplicationController
   def update
     deep_notify = params[:page][:items_attributes].present?
     @page = @document.pages.not_deleted.find_by_uuid(params[:id])
+    authorize! :update, @page
     @page.update_attributes!(params[:page])
     # TODO JBA seems that update atribute does not refresh nested attributes so we need to refresh
     @page.reload
@@ -60,6 +64,7 @@ class PagesController < ApplicationController
   # DELETE /documents/:document_id/pages/:id
   def destroy
     @page = @document.pages.not_deleted.find_by_uuid(params[:id])
+    authorize! :destroy, @page
     if @page.present?
       @page.safe_delete!
       message = { :source => params[:xmpp_client_id], :page =>  { :uuid => @page.uuid }, :action => "delete" }
@@ -84,7 +89,7 @@ private
   end
 
   def find_pseudo_document
-    @pseudo_document = Document.find(params[:document_id], :select => 'documents.uuid, documents.is_public')
+    @pseudo_document = Document.find(params[:document_id], :select => 'documents.uuid')
   end
   
   def authenticate_if_needed

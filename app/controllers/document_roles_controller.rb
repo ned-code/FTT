@@ -8,6 +8,7 @@ class DocumentRolesController < ApplicationController
   
   # POST /documents/:document_id/roles
   def create
+    authorize! :update, @document
     if @document.create_role_for_users(current_user, params[:accesses])
       render :json => @document.to_access_json
     else
@@ -17,6 +18,7 @@ class DocumentRolesController < ApplicationController
   
   # PUT /documents/:document_id/roles
   def update
+    authorize! :update, @document
     if @document.update_accesses(params[:accesses])
       render :json => @document.to_access_json
     else
@@ -26,9 +28,10 @@ class DocumentRolesController < ApplicationController
   
   # DELETE /documents/:document_id/roles
   def destroy
+    authorize! :update, @document
     @document.remove_role(current_user, params[:accesses])
     
-    render :json => {}
+    render :json => @document.to_access_json
   end
 
   private
@@ -38,7 +41,7 @@ class DocumentRolesController < ApplicationController
   end
 
   def find_pseudo_document
-    @pseudo_document = Document.find(params[:document_id], :select => 'documents.uuid, documents.is_public')
+    @pseudo_document = Document.find(params[:document_id], :select => 'documents.uuid')
   end 
   
 end

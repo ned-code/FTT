@@ -1,0 +1,119 @@
+/* app.color.css */
+
+.app_layer {
+  -webkit-border-radius: 6px;
+  -moz-border-radius:    6px;
+  border-radius:         6px;
+  
+  background-image: -webkit-gradient(
+    linear, left bottom, left top, color-stop(0, rgb(230,230,230)), color-stop(1, rgb(255,255,255)) );
+  background-image: -moz-linear-gradient(
+    center bottom, rgb(230,230,230) 0%, rgb(255,255,255) 100% );
+  
+  background-color: #999999;
+  
+  border: none;
+}
+
+h1 {
+  color: rgb(88,146,236);
+}
+
+textarea {
+  border: 1px solid rgb(160, 160, 160);
+
+  -webkit-border-radius: 6px;
+  -moz-border-radius:    6px;
+  border-radius:         6px;
+
+  background-image: -webkit-gradient(
+    linear, left bottom, left top, color-stop(0, rgb(230,230,230)), color-stop(1, rgb(255,255,255)) );
+  background-image: -moz-linear-gradient(
+    center bottom, rgb(230,230,230) 0%, rgb(255,255,255) 100% );
+    
+}
+
+textarea:focus {
+  border: none;
+}
+
+.app_question {
+  color: white;
+  
+  -webkit-border-radius: 6px;
+  -moz-border-radius:    6px;
+  border-radius:         6px;
+  
+  background-color: rgb(47,110,195);
+  
+  background-image: -webkit-gradient(
+    linear, left bottom, left top, color-stop(0, rgb(47,110,195)), color-stop(1, rgb(54,127,223)) );
+  background-image: -moz-linear-gradient(
+    center bottom, rgb(47,110,195) 0%, rgb(54,127,223) 100% );
+}
+
+.app_question .point {
+  background-image: url('../../images/apps/icons.png');
+  background-position: 50% -16px;
+}
+
+.option .grabber_button {
+  background: ;
+}
+
+.arrow {
+	background-image: url('../../images/apps/icons.png');
+}
+
+.up_arrow {
+	background-position: 50% 0;
+}
+
+.down_arrow {
+	background-position: 50% -8px;
+}
+
+.editable_option:hover {
+  -webkit-border-radius: 6px;
+  -moz-border-radius:    6px;
+  border-radius:         6px;
+
+  background-color: rgb(225,225,225);
+}
+
+/* .button extensions */
+
+.button {
+	background-image: url('../../images/apps/icons.png');
+}
+
+.delete_button {
+	background-position: 100% -24px;
+	background-color: transparent;
+}
+
+.add_button {
+	background-position: 100% -46px;
+	background-color: rgb(220,220,220);
+
+  -webkit-border-radius: 6px;
+  -moz-border-radius:    6px;
+  border-radius:         6px;
+}
+
+.submit_button {
+	border: none;
+	
+	display: block;
+	margin: 1em auto;
+	height: 32px;
+	padding-left: 36px;
+	padding-right: 1em;
+	
+	background-position: 0% -72px;
+	background-color: rgb(210,210,210);
+
+  -webkit-border-radius: 16px;
+  -moz-border-radius:    16px;
+  border-radius:         16px;
+}

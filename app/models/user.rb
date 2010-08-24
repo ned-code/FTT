@@ -2,15 +2,12 @@ require 'xmpp_user_synch'
 
 class User < ActiveRecord::Base
   set_primary_key :uuid
-  acts_as_authorization_subject
-
-  # needed for acl9
-  alias_attribute(:id, :uuid)
-
+  alias_attribute(:id, :uuid) # needed for acl9 TODO always needed???
+      
   avatars_path = "uploads/user/avatar/:id/:cw_style:basename.:extension"
   has_attached_file :avatar,
                     :styles => { :thumb=> "128x128#" },
-                    :default_url   => "/images/thumb_icon_no_photo_128x128.png",
+                    :default_url   => "/images/thumbs/default_thumb.png",
                     :storage => S3_CONFIG[:storage].to_sym,
                     :s3_credentials => S3_CONFIG,
                     :bucket => S3_CONFIG[:assets_bucket],
@@ -43,6 +40,7 @@ class User < ActiveRecord::Base
   # =============
 
   validate :must_be_allowed_email, :on => :create
+  after_create :create_default_list
   before_save :check_clear_avatar
   after_create :create_xmpp_user, :notify_administrators
 
@@ -50,9 +48,12 @@ class User < ActiveRecord::Base
   # = Validations =
   # ===============
 
-  validates_presence_of :username, :first_name, :last_name
+  validates_presence_of :username
+  validates_presence_of :first_name
+  validates_presence_of :last_name
   validates_acceptance_of :terms_of_service, :on => :create
   validates_uniqueness_of :uuid
+  validates_uniqueness_of :username
 
   # ================
   # = Associations =
@@ -68,12 +69,84 @@ class User < ActiveRecord::Base
   has_many :datastore_entries
   has_many :discussions
   has_many :comments
+  has_many :roles
   has_many :tokens
 
+  has_many :friendships, :conditions => { :status => Friendship::ACCEPTED }
+  has_many :friends, :through => :friendships
+  
+  has_many :requested_friendships, :conditions => { :status => Friendship::REQUESTED }, :class_name => 'Friendship', :foreign_key => 'user_id'
+  has_many :requested_friends, :through => :requested_friendships, :source => :friend
+  
+  has_many :pending_request_friendships, :conditions => { :status => Friendship::PENDING_REQUEST }, :class_name => 'Friendship', :foreign_key => 'user_id'
+  has_many :pending_request_friends, :through => :pending_request_friendships, :source => :friend
+  
+  has_many :blocked_friendships, :conditions => { :status => Friendship::BLOCKED }, :class_name => 'Friendship', :foreign_key => 'user_id'
+  has_many :blocked_friends, :through => :blocked_friendships, :source => :friend
+  
+  has_many :user_lists, :conditions => { :default => false }
+  has_one :default_list, :class_name => 'UserList', :foreign_key => :user_id, :conditions => { :default => true }
+  
   # ===================
   # = Instance Method =
   # ===================
-
+  
+  #TODO manage list
+  def has_role?(role,document=nil)
+    if document.nil?
+      self.roles.where(:user_id => self.id,
+                 :document_id => nil,
+                 :item_id => nil,
+                 :user_list_id => nil,
+                 :name => role.to_s
+                ).present?
+    else
+      self.roles.where(:name => role, :document_id => document.uuid).present?
+    end
+  end
+  
+  #TODO manage list
+  def has_role!(role, document)
+    if !has_role?(role,document)
+      if document.nil?
+        Role.create!(:user_id => self.id,
+                   :name => role)
+      else
+        if has_another_role?(document)
+          @role.update_attribute('name', role)
+        else
+          Role.create!(:user_id => self.id,
+                     :document_id => document.uuid,
+                     :name => role)
+        end
+        Document.invalidate_cache(document.uuid)
+      end
+    end
+  end
+  
+  #look if the user have another role on document an update it
+  def has_another_role?(document)
+    @role = self.roles.where(:document_id => document.uuid).first
+    @role.present?
+  end
+  
+  #TODO manage list
+  def has_no_role!(role,document)
+    if has_role?(role,document)
+      self.roles.where(:name => role, :document_id => document.uuid).delete_all
+      Document.invalidate_cache(document.uuid)
+    end
+  end
+  
+  def admin?
+    @is_admin ||= Role.where(:user_id => self.id,
+               :document_id => nil,
+               :item_id => nil,
+               :user_list_id => nil,
+               :name => Role::ADMIN
+              ).present?
+  end
+  
   def name
     first_name ? "#{first_name} #{last_name}" : username
   end
@@ -98,6 +171,26 @@ class User < ActiveRecord::Base
       self.has_no_roles_for!(document)
       self.has_role!("reader", document)
     end
+  end
+
+  def friend?(user)
+    friends.include?(user)
+  end
+  
+  def pending_requested_friend?(user)
+    pending_request_friends.include?(user)
+  end
+  
+  def requested_friend?(user)
+    requested_friends.include?(user)
+  end
+  
+  def blocked_friend?(user)
+    blocked_friends.include?(user)
+  end
+  
+  def friends_count
+    friends.length
   end
 
   def follow(user_id)
@@ -133,9 +226,17 @@ class User < ActiveRecord::Base
   end
 
   def as_application_json
-    hash = { 'user' => self.attributes }
-    hash['user']['avatar_thumb_url'] = self.avatar_thumb_url
-    hash
+    { 'user' => { 'id'               => self.uuid,
+                  'uuid'             => self.uuid,
+                  'username'         => self.username,
+                  'last_name'        => self.last_name,
+                  'first_name'       => self.first_name,
+                  'email'            => self.email,
+                  'website'          => self.website,
+                  'gender'           => self.gender,
+                  'bio'              => self.bio,
+                  'avatar_thumb_url' => self.avatar_thumb_url }
+    }
   end
 
   # Need to use this method instead of the original to_json cause user references document and vice versa
@@ -211,6 +312,11 @@ protected
   def check_clear_avatar
     avatar.clear if clear_avatar == 1.to_s
   end
+  
+  #after_save
+  def create_default_list
+    self.user_lists << UserList.create!({:default => true, :user_id => self.id, :name => 'All' })
+  end
 
   def must_be_allowed_email
     if (APP_CONFIG['must_check_user_email'])
@@ -220,15 +326,14 @@ protected
       rescue => exception
         logger.warn("cannot open file '#{Rails.root}/config/allowed_user_email.yml'. Reason: #{exception.message}")
       end
-      errors.add(:email, :not_authorized_email) unless allowed_users.include? self.email
+      email_domain = self.email.split('@')[1]
+      if !(allowed_users.include?(self.email) || allowed_users.include?(email_domain))
+        errors.add(:email, :not_authorized_email)
+      end
     end
   end
   
 end
-
-
-
-
 
 
 

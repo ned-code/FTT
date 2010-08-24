@@ -1,5 +1,4 @@
 class WidgetsController < ApplicationController
-  
   # GET /widgets
   def index
     per_page = 100
@@ -26,8 +25,6 @@ class WidgetsController < ApplicationController
   
   # GET /widgets/:id
   def show
-    p 'widget id '
-    p params[:id]
     @widget = Rails.cache.fetch("widget_#{params[:id]}") { Medias::Widget.where('uuid = :id OR system_name = :id', {:id => params[:id]}).first.to_json }
     respond_to do |format|
       format.json { render :json => @widget }

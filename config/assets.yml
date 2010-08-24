@@ -3,38 +3,71 @@ compress_assets: on
 javascript_compressor: yui
 stylesheets:
   common:
-    - public/stylesheets/reset.css
-    - public/stylesheets/jquery-ui-1.8rc3.custom.css
-    - public/stylesheets/lib/states.css
-    - public/stylesheets/lib/forms.css
-    - public/stylesheets/lib/index.css
-    - public/stylesheets/lib/layer.css
-    - public/stylesheets/lib/column.css
-    - public/stylesheets/lib/card.css
-    - public/stylesheets/style.css
-    - public/stylesheets/style.ui.css
-
-  application:
-    - public/stylesheets/style.application.css
-    - public/stylesheets/style.application.typography.css
-    - public/stylesheets/style.application.color.css
-
-  page_editor:    
-    - public/stylesheets/library.css
-    - public/stylesheets/lib/panel.css
-    - public/stylesheets/lib/protect.css
-    - public/stylesheets/comment.layout.css
-    - public/stylesheets/style.editor.css
-    - public/stylesheets/style.editor.colors.css
-    - public/stylesheets/style.editor.apps.inspector.outer.css
-    - public/stylesheets/style.webdoc.css
-    - public/stylesheets/colorpicker.css
-    - public/stylesheets/toolbar.css
+    - public/css/webcss/reset.css
+    - public/css/webcss/forms.css
+    - public/css/webcss/states.css
+    - public/css/webcss/layout.css
+    - public/css/webcss/wrap.css
+    - public/css/webcss/index.css
+    - public/css/webcss/layer.css
+    - public/css/webcss/layout.css
+    - public/css/webcss/panel.css
+    - public/css/webcss/column.css
+    - public/css/webcss/card.css
+    - public/css/webcss/button.css
+    - public/css/webcss/thumb.css
+    - public/css/webcss/scrollbar.css
+    - public/css/webcss/message.css
     
-    # code highlighting
-    - public/stylesheets/style.codemirror.css
+    - public/css/webdoc/site.layout.css
+    - public/css/webdoc/site.color.css
+    - public/css/webdoc/site.typography.css
+    
+    - public/css/webdoc/flash.css
+    - public/css/jquery-ui/jquery-ui-1.8.css
+  home:
+    - public/css/webdoc/home.layout.css
+    - public/css/webdoc/home.color.css
+  account:
+    - public/css/webdoc/account.layout.css
+    - public/css/webdoc/account.color.css
+  dashboard:
+    - public/css/webdoc/dashboard.layout.css
+    - public/css/webdoc/dashboard.color.css
+  editor:
+    - public/css/webdoc/editor.color.css
+    - public/css/webdoc/editor.layout.css
+    - public/css/webdoc/editor.typography.css
+    
+    - public/css/webdoc/panel.color.css
+    - public/css/webdoc/panel.layout.css
+    - public/css/webdoc/panel.typography.css
+    
+    - public/css/webdoc/webdoc.color.css
+    - public/css/webdoc/webdoc.layout.css
+    - public/css/webdoc/webdoc.typography.css
+    
+    - public/css/webdoc/inspector.color.css
+    - public/css/webdoc/inspector.layout.css
+    - public/css/webdoc/inspector.typography.css
+    
+    - public/css/webdoc/comment.layout.css
+    
+    - public/css/webdoc/item.css
+    - public/css/colorpicker/colorpicker.css
+    - public/css/text-tool/toolbar.css
+    - public/css/codemirror/codemirror.css
+  profile:
+    - public/css/webdoc/profile.layout.css
+    - public/css/webdoc/profile.color.css
+  friends:
+    - public/css/webdoc/friends.layout.css
+    - public/css/webdoc/friends.color.css
+  explore:
+    - public/css/webdoc/explore.layout.css
+    - public/css/webdoc/explore.color.css
   
-#  font_collection:
+#  fonts:
 #    - public/fonts/Aaargh-fontfacekit/stylesheet
 #    - public/fonts/Adler-fontfacekit/stylesheet
 #    - public/fonts/CalligraphyFLF-fontfacekit/stylesheet
@@ -55,49 +88,54 @@ stylesheets:
 #    - public/fonts/SF-Cartoonist-Hand-fontfacekit/stylesheet
 #    - public/fonts/Shardee-fontfacekit/stylesheet
 #    - public/fonts/Underwood-Champion-fontfacekit/stylesheet
-    
-  page_viewer:
-    - public/stylesheets/style.webdoc.css
   
   feedback:
-    - public/stylesheets/zenbox.css
+    - public/css/zenbox/zenbox.css
   
 javascripts:
   common:
-    - public/javascripts/jquery-1.4.2.js
-    - public/javascripts/rails.js
-    - public/javascripts/jquery-json.js
-    - public/javascripts/jquery-string.js
-    - public/javascripts/jquery.form.js
-    - public/javascripts/jquery.extensions.js
-    - public/javascripts/jquery.events.js
-    - public/javascripts/jquery.list.js
-    - public/javascripts/jquery.pop.js
-    - public/javascripts/jquery.truncate.js
-    - public/javascripts/jquery.validator.js
-    - public/javascripts/jquery.flash.js
-    - public/javascripts/jquery.scrollbars.js
-    - public/javascripts/jquery.cookie.js
-    - public/javascripts/klass.js    
+    - public/js/jquery-1.4.2.js
+    - public/js/rails.js
+    - public/js/jquery-json.js
+    - public/js/jquery-string.js
+    - public/js/jquery.form.js
+    - public/js/jquery.extensions.js
+    - public/js/jquery.events.js
+    - public/js/jquery.list.js
+    - public/js/jquery.pop.js
+    - public/js/jquery.truncate.js
+    - public/js/jquery.validator.js
+    - public/js/jquery.flash.js
+    - public/js/jquery.cuteTime.min.js
+    - public/js/jquery.scrollbars.js
+    - public/js/jquery.cookie.js
+    - public/js/klass.js    
     - public/swfupload/swfupload.js
-    - public/javascripts/jquery-swfupload.js
-    - public/javascripts/jquery.hashchange.js
-    - public/javascripts/colorpicker.js
-    - public/javascripts/jquery-ui-1.8.js
+    - public/js/jquery-swfupload.js
+    - public/js/jquery.hashchange.js
+    - public/js/colorpicker.js
+    - public/js/jquery-ui-1.8.2.js
+    - public/js/editor.ui.js
     - app/javascripts/webdoc.js
     - app/javascripts/webdoc/common/*.js
     - app/javascripts/webdoc/model/*.js
+    - app/javascripts/webdoc/card/card.js
+    - public/js/jquery.RotateResizeExtension.js
 
   document_editor:
     - app/javascripts/webdoc/utils/*.js
     - app/javascripts/webdoc/managers/*
+    - app/javascripts/webdoc/controllers/friends_selector_controller.js
+    - app/javascripts/webdoc/controllers/email_invitation_controller.js
     - app/javascripts/webdoc/controllers/document_collaboration_controller.js
     - app/javascripts/webdoc/controllers/document_share_controller.js
+    - app/javascripts/webdoc/controllers/invitations_controller.js
     - app/javascripts/webdoc/gui/document_list.js
     - app/javascripts/webdoc/core/document_editor.js
-  page_editor:
-    - public/javascripts/sylvester.js
-    - public/javascripts/strophe.js
+  editor:
+    - public/js/sylvester.js
+    - public/js/strophe.js
+    - public/js/jquery.svg.js
     
     # code highlighting
     - public/codemirror/js/codemirror.js
@@ -123,6 +161,7 @@ javascripts:
     - app/javascripts/webdoc/gui/page_thumbnail_view.js
     - app/javascripts/webdoc/gui/page_view.js
     - app/javascripts/webdoc/gui/text_view.js
+    - app/javascripts/webdoc/gui/textbox_view.js
     - app/javascripts/webdoc/gui/widget_view.js
     - app/javascripts/webdoc/gui/html_view.js
     - app/javascripts/webdoc/gui/iframe_view.js
@@ -137,9 +176,10 @@ javascripts:
     - app/javascripts/webdoc/tools/iframe_tool.js
     - app/javascripts/webdoc/tools/app_tool.js
     - app/javascripts/webdoc/tools/text_tool.js
+    - app/javascripts/webdoc/tools/textbox_tool.js
     - app/javascripts/webdoc/tools/text_tool/*.js
     - app/javascripts/webdoc/controllers/*.js  
-    - app/javascripts/webdoc/controllers/right_bar_controllers/*.js
+    - app/javascripts/webdoc/controllers/panel_controllers/*.js
     - app/javascripts/webdoc/controllers/inspectors/*.js
     - app/javascripts/webdoc/core/*.js
     
@@ -156,8 +196,6 @@ javascripts:
     - app/javascripts/webdoc/media_browser/web_search_controller.js
     - app/javascripts/webdoc/media_browser/my_contents_controller.js
     - app/javascripts/webdoc/media_browser/media_browser_controller.js
-    
-    - app/javascripts/webdoc/card/card.js
   explore:
     - app/javascripts/webdoc/explore/*.js
   tests:

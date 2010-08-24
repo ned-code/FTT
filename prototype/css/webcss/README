@@ -1,8 +1,0 @@
-Webcss is a light CSS library full of useful classes for creating web interfaces.
-
-Webcss has been, and is, developed in the production of a live webapp.
-It encapsulates the css techniques we use in the construction of our interface, with the aim of making our interface elements quick and easy to modify and extend.
-Webcss is mostly concerned with positioning (which we call 'layout'), and does not provide default colors, borders, backgrounds etc.  It is up to you to extend webcss with colors and whatnot (which we call the 'theme'). 
-It aims to provide only basic support for IE6.
-If you are looking for a library that fully supports pre-CSS3 browsers, this is not your best choice - you should consider blueprint, YUI, or one of the many other great css libraries (from which we borrow!).
-However, you can always help us extend support by forking and committing to the project.

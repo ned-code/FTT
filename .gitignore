@@ -55,5 +55,7 @@ db/schema.rb
 public/local/*
 reports/*.csv
 public/themes/*/*.zip
-.externalToolBuilders/org.eclipse.wst.jsdt.core.javascriptValidator.launch
+.externalToolBuilders/
 lock
+public/js/codemirror
+config/allowed_user_email.yml

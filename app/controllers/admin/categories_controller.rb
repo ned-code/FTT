@@ -2,7 +2,7 @@ class Admin::CategoriesController < Admin::AdminController
   
   # GET /admin/categories
   def index
-    @categories = Category.all
+    @categories = Category.order('categories.name ASC').all
     
     respond_to do |format|
       format.html

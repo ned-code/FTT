@@ -3,6 +3,7 @@ class Devise::SessionsController < ApplicationController
 
   skip_before_filter :verify_authenticity_token, :only => [:create]
   skip_before_filter :http_authenticate, :only => [:create]
+  skip_before_filter :process_invitation
 
   before_filter :require_no_authentication, :only => [ :new, :create ]
   
@@ -36,7 +37,19 @@ class Devise::SessionsController < ApplicationController
       http_authenticate
       resource = warden.authenticate!(:scope => resource_name, :recall => "new")
       set_flash_message :notice, :signed_in
-      sign_in_and_redirect(resource_name, resource)
+      
+      invitation = Invitation.pending.where(:uuid => params[:invitation]).first
+      if invitation.present?
+        sign_in(resource_name, resource)
+        invitation.accept!(current_user)
+        if invitation.document.present?
+          redirect_to document_path(invitation.document)
+        else
+          redirect_to root_path
+        end
+      else
+        sign_in_and_redirect(resource_name, resource)
+      end
     end
 
     # TODO Rails3 

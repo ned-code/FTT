@@ -2,32 +2,37 @@ require Rails.root + 'lib/shindig'
 
 class ItemsController < ApplicationController
   
-  access_control do
-    action :show do
-      allow all, :if => :document_is_public?      
-    end    
-    allow :editor, :of => :pseudo_document
-    allow :admin    
-  end
+  # access_control do
+  #   action :show do
+  #     allow all, :if => :document_is_public?
+  #   end
+  #   allow :editor, :of => :pseudo_document
+  #   allow :admin
+  # end
+
+  before_filter :find_document, :only => [:show, :create]
   
   # GET /documents/:document_id/pages/:page_id/items/:id
   def show
+    authorize! :read, @document
     find_document
     find_page
     @item = @page.items.not_deleted.find_by_uuid(params[:id])
     if @item
       render :layout => false
     else
-      forbidden_access
+      render :file => "#{Rails.public_path}/403.html", :status => 403
     end  
   end
   
   # POST /documents/:document_id/pages/:page_id/items
   def create
+    authorize! :update, @document
     @item = Item.find_deleted_and_restore(params[:item][:uuid])
     if @item.nil?
       @item = Item.new_with_uuid(params[:item])
       @item[:page_id] = params[:page_id]
+      @item[:creator_id] = current_user.uuid
     end
     @item.document_uuid = params[:document_id]
     @item.save!
@@ -41,6 +46,7 @@ class ItemsController < ApplicationController
   # PUT /documents/:document_id/pages/:page_id/items/:id
   def update
     @item = Item.not_deleted.find_by_uuid(params[:id])
+    authorize! :update, @item
     @item.document_uuid = params[:document_id]
     @item.update_attributes!(params[:item])
     item_hash = @item.as_application_json
@@ -53,6 +59,7 @@ class ItemsController < ApplicationController
   # DELETE /documents/:document_id/pages/:page_id/items/:id
   def destroy
     @item = Item.not_deleted.find_by_uuid(params[:id])
+    authorize! :destroy, @item
     @item.document_uuid = params[:document_id]
     @item.safe_delete!
     message = { :source => params[:xmpp_client_id], :item =>  { :page_id => @item[:page_id], :uuid => @item.uuid }, :action => "delete" }
@@ -90,7 +97,7 @@ private
   end
 
   def find_pseudo_document
-    @pseudo_document = Document.find(params[:document_id], :select => 'documents.uuid, documents.is_public')
+    @pseudo_document = Document.find(params[:document_id], :select => 'documents.uuid')
   end
   
 end

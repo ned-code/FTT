@@ -8,11 +8,14 @@ class Category < ActiveRecord::Base
   has_many :documents
 
   attr_accessible :name, :uuid
-
-  scope :have_public_documents, :include => :documents, :conditions => ['documents.is_public = ?', true]
-
+  
+  scope :have_public_documents, lambda {
+    joins(:documents => :roles).where('roles.item_id is ? and roles.user_id is ? and roles.user_list_id is ? and (roles.name = ? or roles.name = ?)',nil,nil,nil,Role::VIEWER_ONLY, Role::VIEWER_COMMENT)
+  }
+  
   def number_of_public_documents
-    Document.count(:conditions => "category_id = '#{uuid}' and is_public = 1")
+    Document.not_deleted.public.
+      where('documents.category_id = ?', self.uuid).count
   end
   
 private

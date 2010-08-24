@@ -59,56 +59,62 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
   
   load: function(documentId, editable) {
     ddd("[PageEditor] load " + documentId);
-    WebDoc.Application.initializeSingletons([WebDoc.ThemeManager, WebDoc.WidgetManager, WebDoc.DocumentCategoriesManager], function() {
-      WebDoc.application.undoManager = new WebDoc.UndoManager();
+    WebDoc.Application.initializeSingletons([WebDoc.ThemeManager, WebDoc.WidgetManager, WebDoc.DocumentCategoriesManager, WebDoc.ShapeManager], function() {
+      var app = WebDoc.application;
+      
+      app.undoManager = new WebDoc.UndoManager();
           
-      WebDoc.application.pasteBoardManager = new WebDoc.PasteboardManager();    
+      app.pasteBoardManager = new WebDoc.PasteboardManager();    
       
       // create all controllers
-      WebDoc.application.svgRenderer = new WebDoc.SvgRenderer();
-      WebDoc.application.boardController = new WebDoc.BoardController(editable, !editable);
-      WebDoc.application.rightBarController = new WebDoc.RightBarController();
-      //WebDoc.application.inspectorController = new WebDoc.InspectorController();
-      WebDoc.application.pageBrowserController = new WebDoc.PageBrowserController();
-      WebDoc.application.toolbarController = new WebDoc.ToolbarController();
-      WebDoc.application.browserController = new WebDoc.BrowserController();
-      WebDoc.application.notificationController = new WebDoc.NotificationController("#notification_bar");
+      app.svgRenderer = new WebDoc.SvgRenderer();
+      app.boardController = new WebDoc.BoardController(editable, !editable);
+      app.panelsController = new WebDoc.PanelsController();
+      app.toolbarController = new WebDoc.ToolbarController();
+      app.browserController = new WebDoc.BrowserController();
+      app.notificationController = new WebDoc.NotificationController();
       
-      WebDoc.application.documentDuplicateController = new WebDoc.DocumentDuplicateController();
-      WebDoc.application.themesController = new WebDoc.ThemesController();
+      app.documentDuplicateController = new WebDoc.DocumentDuplicateController();
+      app.themesController = new WebDoc.ThemesController();
       
       // create all tools
-      WebDoc.application.drawingTool = new WebDoc.DrawingTool( "a[href='#draw']", "draw-tool" );
-      WebDoc.application.arrowTool = new WebDoc.ArrowTool( "a[href='#select']", "select-tool" );
-      WebDoc.application.handTool = new WebDoc.HandTool( "a[href='#move']", "move-tool" );
-      WebDoc.application.textTool = new WebDoc.TextTool( "a[href='#insert-text']", "insert-text-tool" );
-      WebDoc.application.htmlSnipplet = new WebDoc.HtmlTool( "a[href='#insert-html']", "insert-html-tool" );
-      WebDoc.application.iframeTool = new WebDoc.IframeTool( "a[href='#insert-iframe']", "insert-iframe-tool" );
-      WebDoc.application.appTool      = new WebDoc.AppTool( "a[href='#insert-app']", "insert-app" );
-      WebDoc.application.browserTool = new WebDoc.BrowserTool("a[href='#browser']");
+      app.arrowTool = new WebDoc.ArrowTool( "a[href='#select']", "select_tool_mode" );      
+      app.drawingTool = new WebDoc.DrawingTool( "a[href='#draw_tool']", "draw_tool_mode" );
+      app.textTool = new WebDoc.TextTool( "a[href='#text_tool']", "text_tool_mode" );
+      app.textboxTool = new WebDoc.TextboxTool( "a[href='#textbox_tool']", "textbox_tool_mode" );
+      app.htmlSnipplet = new WebDoc.HtmlTool( "a[href='#html_tool']", "html_tool_mode" );
+      app.iframeTool = new WebDoc.IframeTool( "a[href='#webpage_tool']", "iframe_tool_mode" );
+      app.appTool = new WebDoc.AppTool( "a[href='#insert-app']", "app_tool_mode" );
+      app.browserTool = new WebDoc.BrowserTool("a[href='#browser']");
 
-      WebDoc.application.boardController.setCurrentTool(WebDoc.application.arrowTool);
-      WebDoc.application.collaborationManager = new WebDoc.CollaborationManager();
-      WebDoc.application.postMessageManager = new WebDoc.PostMessageManager();      
-      WebDoc.application.collaborationManager.listenXMPPNode(documentId);              
-      WebDoc.ServerManager.getRecords(WebDoc.Document, documentId, function(data)
-      {
+      app.boardController.setCurrentTool(WebDoc.application.arrowTool);
+      app.collaborationManager = new WebDoc.CollaborationManager();
+      app.postMessageManager = new WebDoc.PostMessageManager();
+      app.collaborationManager.listenXMPPNode(documentId);
+      
+      WebDoc.ServerManager.getRecords(WebDoc.Document, documentId, function(data) {
         this.currentDocument = data[0];
         this.currentDocument.addListener(this);
-        WebDoc.application.boardController.applyDocumentTheme();
+        app.boardController.applyDocumentTheme();
         WebDoc.ServerManager.getRecords(WebDoc.User, this.currentDocument.data.creator_id, function(data, status) {
           this._creator = data[0];
           this.loadPageId(this._extractUUIDFromHash(window.location.hash));
-          WebDoc.application.pageBrowserController.setDocument(this.currentDocument); 
+          app.pageBrowserController.setDocument(this.currentDocument);
+          
           ddd("check editablity");
-          if (WebDoc.application.boardController.isEditable() && jQuery("body").hasClass('mode-edit')) {
-            ddd("[PageEditor] call rightBarController.showLib");
-            WebDoc.application.rightBarController.showMediaBrowser();
+          
+          if ( app.boardController.isEditable() && !app.boardController.isInteractionMode() ) {
+            ddd("[PageEditor] call panelsController.showMyContent");
+            app.panelsController.showMyContent();
           }
+
+          // add role name of the current user as class in editor dom node
+          jQuery.each(WebDoc.application.pageEditor.getCurrentUserRolesForCurrentDocument(), function(i, roleName) {
+            app.boardController.editorNode.addClass(roleName+'_role');
+          });
           
-          WebDoc.application.boardController.loadingNode.removeClass('loading');
+          app.boardController.loadingNode.removeTransitionClass('loading');
           
-          //jQuery('#document_loading').remove();
           jQuery('body').trigger('webdocready');   
           if (window._gaq) {
             _gaq.push(['_trackEvent', 'document', 'open', documentId]);
@@ -338,6 +344,22 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
     }
   },
   
+  _fullView: false,
+  
+  toggleFullScreen: function() {
+    
+    var body = jQuery('body');
+    
+    if ( this._fullView ) {
+    	this._fullView = false;
+      body.removeClass('full_view');
+    } 
+    else {
+    	this._fullView = true;
+      body.addClass('full_view');
+    }
+  },
+  
   objectChanged: function(record, options) {
     if (record._isAttributeModified(options, 'theme')) {
       WebDoc.application.boardController.applyDocumentTheme();
@@ -361,13 +383,83 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
   },
   
   _extractUUIDFromHash: function(hash){
-    ddd('_extractUUIDFromHash');
     var uuid = hash.substring(1);
     if(uuid.charAt(0) == '!'){
       uuid = uuid.substring(1);
       ddd(uuid);
     }
     return uuid;
+  },
+
+  /**
+   * Get all roles name in an array of the current user
+   */
+  getCurrentUserRolesForCurrentDocument: function() {
+    if(this._currentUserRolesForCurrentDocument === undefined) {
+      return this._currentUserRolesForCurrentDocument = this.currentDocument.getRolesForUserUuid(WebDoc.Application.getCurrentUser().uuid());
+    }
+    return this._currentUserRolesForCurrentDocument;    
+  },
+
+  /**
+   * Check if the current user have the role specified in the param and return a boolean
+   *
+   * @param roleName String the name of the role, see WebDoc.UserRole to see all role names allowed
+   */
+  isCurrentUserHasRole: function (roleName) {
+    if(jQuery.inArray(roleName, this.getCurrentUserRolesForCurrentDocument()) !== -1) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  },
+
+  /**
+   * Check if the current user have a role in the the array and return a boolean
+   *
+   * @param rolesNameArray Array the array of role names
+   */
+  isCurrentUserHasOneOfRoles: function(rolesNameArray) {
+    for(var i in rolesNameArray) {
+      if(this.isCurrentUserHasRole(rolesNameArray[i])) {
+        return true;
+      }
+    }
+    return false;
+  },
+
+  /**
+   * Check if the current user can comment and return a boolean
+   */
+  isCurrentUserCanComment: function() {
+    if(this.isCurrentUserHasOneOfRoles([ WebDoc.UserRole.ROLE_NAME_EDITOR,
+                                         WebDoc.UserRole.ROLE_NAME_CONTRIBUTOR,
+                                         WebDoc.UserRole.ROLE_NAME_VIEWER_COMMENT,
+                                         WebDoc.UserRole.ROLE_NAME_ADMIN ]) ) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  },
+
+  /**
+   * Check if the current user can edit an item and return a boolean
+   *
+   * @param item the item to check if a contributor have access to edit this item
+   */
+  isCurrentUserCanEditItem: function(item) {
+    if(this.isCurrentUserHasOneOfRoles([ WebDoc.UserRole.ROLE_NAME_EDITOR,
+                                         WebDoc.UserRole.ROLE_NAME_ADMIN ]) ||
+        (this.isCurrentUserHasRole(WebDoc.UserRole.ROLE_NAME_CONTRIBUTOR) &&
+            item && item.data && item.data.creator_id && item.data.creator_id === WebDoc.Application.getCurrentUser().uuid() ) ) {
+      return true;
+    }
+    else {
+      return false;
+    }
   }
+
 });
 

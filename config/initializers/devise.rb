@@ -144,7 +144,7 @@ Devise.setup do |config|
 
   config.oauth :facebook, '102653226459404', '4555b046a46fe59ac1dc70efbf2dbd52',
     :site              => 'https://graph.facebook.com/',
-    :scope             => %w(email offline_access)  
+    :scope             => %w(email offline_access user_photos)  
 
 end
 

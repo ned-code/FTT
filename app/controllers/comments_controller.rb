@@ -4,20 +4,21 @@ class CommentsController < ApplicationController
   before_filter :find_discussion
   before_filter :find_comment, :only => [:destroy]
 
-  access_control do
-    action :create do
-      allow all, :if => :document_is_public?
-      allow :editor, :of => :pseudo_document
-    end
-    action :destroy do
-      allow all, :if => :current_user_is_comment_owner
-      allow :editor, :of => :pseudo_document
-    end
-    allow :admin    
-  end
+  # access_control do
+  #   action :create do
+  #     allow all, :if => :document_is_public?
+  #     allow :editor, :of => :pseudo_document
+  #   end
+  #   action :destroy do
+  #     allow all, :if => :current_user_is_comment_owner
+  #     allow :editor, :of => :pseudo_document
+  #   end
+  #   allow :admin
+  # end
 
   def create
     @comment = current_user.comments.new_with_uuid(params[:comment])
+    authorize! :update, @comment
     respond_to do |format|
       if @discussion.present? && @comment.save
         comment_hash = @comment.as_application_json
@@ -33,6 +34,7 @@ class CommentsController < ApplicationController
 
   def destroy
     @comment.safe_delete!
+    authorize! :destroy, @comment
     message = { :source => params[:xmpp_client_id], :comment =>  { :discussion_id => @comment.discussion.id, :uuid => @comment.uuid }, :action => "delete" }
     @@xmpp_notifier.xmpp_notify(message.to_json, @comment.discussion.page.document_id)
     render :json => {}
@@ -51,7 +53,7 @@ class CommentsController < ApplicationController
   def find_pseudo_document
     @pseudo_document = Document.first(:joins => { :pages => :discussions },
                                       :conditions => ['discussions.uuid = ?', params[:discussion_id]],
-                                      :select => 'documents.uuid, documents.is_public' )
+                                      :select => 'documents.uuid' )
   end
 
   def current_user_is_comment_owner

@@ -1,5 +1,6 @@
 
 WebDoc.ITEM_TYPE_TEXT    = "text";
+WebDoc.ITEM_TYPE_TEXTBOX = "textbox";
 WebDoc.ITEM_TYPE_IMAGE   = "image";
 WebDoc.ITEM_TYPE_DRAWING = "drawing";
 WebDoc.ITEM_TYPE_WIDGET  = "widget";
@@ -349,6 +350,34 @@ WebDoc.Item = $.klass(WebDoc.Record,
     });
   },
   
+  hasShape: function(){
+    if(this.data.shape_id){ return true; }
+    else{ return false; }
+  },
+  
+  setShape: function(shape, skipSave){
+    var that = this;
+    var previousShape = this.getShape();
+
+    WebDoc.application.undoManager.registerUndo(function() {
+      that.setShape( previousShape );
+    });
+    
+    this.data.shape_id = shape.uuid();
+    if (!skipSave) {
+      this.save();
+    }
+  },
+  
+  getShape: function(){
+    if (this.hasShape()){
+      return WebDoc.ShapeManager.getShape(this.data.shape_id); 
+    }
+    else {
+      return WebDoc.ShapeManager.getDefaultShape();
+    }
+  },
+  
   getIsPlaceholder: function() {
     if(this._isPlaceholder === true) {
       return true;
@@ -612,7 +641,7 @@ WebDoc.Item = $.klass(WebDoc.Record,
     }
     
     this.save();
-    this.fireObjectChanged({ modifedAttribute: 'css' });
+    this.fireObjectChanged(this, { modifedAttribute: 'css' });
     WebDoc.application.inspectorController.refresh();
   },
 

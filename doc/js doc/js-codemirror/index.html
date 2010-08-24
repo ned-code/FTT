@@ -66,7 +66,7 @@
     </div>
     
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"></script>
-    <script src="../../public/javascripts/codemirror/codemirror.js" type="text/javascript"></script>
+    <script src="../../public/js/codemirror/codemirror.js" type="text/javascript"></script>
     <!-- DEBUG -->
     <!--script src="js/debug.js" type="text/javascript"></script-->
     <script type="text/javascript">
@@ -76,9 +76,9 @@
         .each(function(){
             var node = jQuery(this),
                 editor = new CodeMirror( document.getElementById('html-editor') , {
-                    path: '../../public/javascripts/codemirror/',
+                    path: '../../public/js/codemirror/',
                     parserfile: ['parsexml.js', 'parsecss.js', 'tokenizejavascript.js', 'parsejavascript.js', 'parsehtmlmixed.js'],
-                    stylesheet: ['../../public/stylesheets/codemirror/xmlcolors.css', '../../public/stylesheets/codemirror/jscolors.css', '../../public/stylesheets/codemirror/csscolors.css'],
+                    stylesheet: ['../../public/css/codemirror/xmlcolors.css', '../../public/css/codemirror/jscolors.css', '../../public/css/codemirror/csscolors.css'],
                     lineNumbers: true,
                     indentUnit: 4
                 });

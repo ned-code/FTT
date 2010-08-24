@@ -1,13 +1,4 @@
 
-//= require <mtools/record>
-//= require <webdoc/model/item>
-//= require <webdoc/gui/item_thumbnail_view>
-
-(function(jQuery, undefined){
-
-var pageThumbClass = "page-thumb",
-    pageThumbSelector = ".page-thumb";
-
 WebDoc.PageThumbnailView = $.klass({
   //PER_CENT_PAGE_WIDTH: 1280,
   //PER_CENT_PAGE_HEIGHT: 720,
@@ -15,7 +6,10 @@ WebDoc.PageThumbnailView = $.klass({
     width: 800,
     height: 800
   },
+  
   initialize: function(page, width, height) {
+    var that = this;
+    
     this.page = page;
     this.width = width;
     this.height = height;
@@ -24,15 +18,17 @@ WebDoc.PageThumbnailView = $.klass({
       'data-webdoc-page': page.uuid()
     });
     this.pageThumbNode = $('<div/>');
-    this.drawingDomNode = $(WebDoc.application.svgRenderer.createSurface());
+    this.drawingDomNode = $( WebDoc.application.svgRenderer.createSurface() );
     this.drawingDomNode.css("zIndex", 1000000);
-    this.pageThumbNode.append(this.drawingDomNode.get(0));
     this.itemDomNode = $('<div>').attr({
       id: "thumb_items",
       'class': "layer"
     });
-    this.pageThumbNode.append(this.itemDomNode.get(0));   
-    var that = this;
+    
+    this.pageThumbNode
+    .append( this.drawingDomNode )
+    .append( this.itemDomNode );   
+    
     this.itemViews = {};
     if (page.items && $.isArray(page.items)) {
       $.each(page.items, function() {
@@ -40,10 +36,10 @@ WebDoc.PageThumbnailView = $.klass({
       });
     }
     
-    page.addListener(this);    
+    page.addListener(this);
     this._initPageCss();
     this._initPageClass();
-    this.domNode.append(this.pageThumbNode);
+    this.domNode.append( this.pageThumbNode );
   },
   
   destroy: function() {
@@ -157,6 +153,7 @@ WebDoc.PageThumbnailView = $.klass({
     
     switch (item.data.media_type) {
       case WebDoc.ITEM_TYPE_TEXT:
+      case WebDoc.ITEM_TYPE_TEXTBOX:
         itemView = new WebDoc.ItemThumbnailView(item, this, afterItem);
         break;
       case WebDoc.ITEM_TYPE_IMAGE:
@@ -191,5 +188,3 @@ WebDoc.PageThumbnailView = $.klass({
     }.pBind(this));
   }
 });
-
-})(jQuery);

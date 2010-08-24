@@ -1,0 +1,144 @@
+/* layer extensions -------------------------- */
+
+.frame_layer {
+  border: 1px solid rgb(220,220,220);
+  -webkit-box-shadow: inset 0 0 4px hsl( 28, 0%, 50% );
+     -moz-box-shadow: inset 0 0 4px hsl( 28, 0%, 50% );
+          box-shadow: inset 0 0 4px hsl( 28, 0%, 50% );
+  background-color: rgb(220, 220, 220);
+}
+
+.full_view .frame_layer {
+	border-left: none;
+	border-right: none;
+}
+
+/* .panel extensions -------------------------- */
+
+.panel {
+	background-color: rgba(100,100,100,0.75);
+}
+
+.tools_panel {
+	background-color: rgba(255,255,255,0.75);
+}
+
+.controls_panel {
+	background-color: rgba(255,255,255,0.75);
+}
+
+.sidebar {
+	background-color: transparent;
+}
+
+/* .index extensions -------------------------- */
+
+.pages_index>li.current {
+  -webkit-box-shadow: 0 0 8px rgba(176, 227, 0, 1);
+     -moz-box-shadow: 0 0 8px rgba(176, 227, 0, 1);
+          box-shadow: 0 0 8px rgba(176, 227, 0, 1);
+}
+
+.app_index,
+.comment_index { background-color: rgb( 100,100,100 ); }
+
+.app_index a,
+.comment_index a { color: white; }
+
+
+/* .button extensions ------------------------- */
+
+.edit_mode .mode_button {
+	background: blue;
+}
+
+/* Buttons in dropdown menus */
+.dropdown_index>li>.button {
+	color:#efefef;
+	background-color: rgba(0,0,0,0);
+}
+
+.dropdown_index>li>.button:hover {
+	background-color: grey;
+}
+
+.button {
+  background-image: url('../../images/buttons_editor.png');
+  /* Move the image out of any buttons that don't have images.
+     It may be a bit safer to apply the image just to the buttons we want,
+     but this'll do for now. */
+  background-position: 128px 128px;
+}
+
+a[href="#toggle_content_panel"] {
+	padding-left: 24px;
+	padding-right: 6px;
+}
+
+a[href="#doc_settings_dropdown"]        { background-position: 50% 0px; }
+a[href="#doc_settings_dropdown"]:hover  { background-position: 50% -32px; }
+a[href="#doc_settings_dropdown"].active { background-position: 50% -64px; }
+a[href="#edit_dropdown"]                { background-position: 50% -96px; }
+a[href="#edit_dropdown"]:hover          { background-position: 50% -128px; }
+a[href="#edit_dropdown"].active         { background-position: 50% -160px; }
+a[href="#toggle_content_panel"]         { background-position: -4px -196px; } /* 192 */
+a[href="#toggle_content_panel"]:hover   { background-position: -4px -228px; } /* 224 */
+a[href="#toggle_content_panel"].active  { background-position: -4px -260px; } /* 256 */
+a[href="#webdoc_prev_page"]             { background-position: 50% -292px; }
+a[href="#webdoc_prev_page"]:hover       { background-position: 50% -324px; }
+a[href="#webdoc_prev_page"].active      { background-position: 50% -356px; }
+a[href="#webdoc_next_page"]             { background-position: 50% -388px; }
+a[href="#webdoc_next_page"]:hover       { background-position: 50% -420px; }
+a[href="#webdoc_next_page"].active      { background-position: 50% -452px; }
+a[href="#toggle_pages_panel"]           { background-position: 50% -484px; }
+a[href="#toggle_pages_panel"]:hover     { background-position: 50% -516px; }
+a[href="#toggle_pages_panel"].active    { background-position: 50% -548px; }
+
+a.view_button                           { background-position: 50% -580px; }
+a.view_button:hover                     { background-position: 50% -612px; }
+a.view_button.active                    { background-position: 50% -644px; }
+.full_view a.view_button                { background-position: 50% -676px; }
+.full_view a.view_button:hover          { background-position: 50% -708px; }
+.full_view a.view_button.active         { background-position: 50% -740px; }
+
+/*a[href="#share"]                      { background-position: 50% -768px; }
+a[href="#share"]:hover                  { background-position: 50% -800px; }
+a[href="#share"].active                 { background-position: 50% -832px; }*/
+a[href="#image_tool"]                   { background-position: 50% -864px; }
+a[href="#image_tool"]:hover             { background-position: 50% -896px; }
+a[href="#image_tool"].active            { background-position: 50% -928px; }
+a[href="#text_tool"]                    { background-position: 50% -960px; }
+a[href="#text_tool"]:hover              { background-position: 50% -992px; }
+a[href="#text_tool"].active             { background-position: 50% -1024px; }
+a[href="#draw_tool"]                    { background-position: 50% -1056px; }
+a[href="#draw_tool"]:hover              { background-position: 50% -1088px; }
+a[href="#draw_tool"].active             { background-position: 50% -1120px; }
+a[href="#html_tool"]                    { background-position: 50% -1152px; }
+a[href="#html_tool"]:hover              { background-position: 50% -1184px; }
+a[href="#html_tool"].active             { background-position: 50% -1216px; }
+a[href="#video_tool"]                   { background-position: 50% -1248px; }
+a[href="#video_tool"]:hover             { background-position: 50% -1280px; }
+a[href="#video_tool"].active            { background-position: 50% -1312px; }
+
+a[href="#add_discussion"]               { background-position: 50% -1348px; }
+a[href="#add_discussion"]:hover         { background-position: 50% -1380px; }
+a[href="#add_discussion"].active        { background-position: 50% -1412px; }
+
+a[href="#add_page"]                     { background-position: 50% -1440px; }
+a[href="#add_page"]:hover               { background-position: 50% -1472px; }
+a[href="#add_page"].active              { background-position: 50% -1504px; }
+a[href="#remove_page"]                  { background-position: 50% -1536px; }
+a[href="#remove_page"]:hover            { background-position: 50% -1568px; }
+a[href="#remove_page"].active           { background-position: 50% -1600px; }
+a[href="#copy_page"]                    { background-position: 50% -1632px; }
+a[href="#copy_page"]:hover              { background-position: 50% -1664px; }
+a[href="#copy_page"].active             { background-position: 50% -1696px; }
+a[href="#back"]                         { background-position: 50% -1728px; }
+a[href="#back"]:hover                   { background-position: 50% -1760px; }
+a[href="#back"].active                  { background-position: 50% -1792px; }
+a[href="#close"]                        { background-position: 50% -1824px; }
+a[href="#close"]:hover                  { background-position: 50% -1856px; }
+a[href="#close"].active                 { background-position: 50% -1888px; }
+
+
+a.button_site { background-image: url("../../images/buttons_site.png"); }

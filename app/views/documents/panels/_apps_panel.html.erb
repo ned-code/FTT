@@ -1,0 +1,45 @@
+<% if !Rails.env.production? %><!-- apps panel --><% end %>
+
+<div class="apps_panel panel" id="media-browser-apps">
+	<header>
+  	<h3>Apps</h3>
+  </header>
+  
+  <div class="content" id="apps-list">
+    <!-- Temporary app list. Limit App names to 10 characters plus ellipsis -->
+    <ul class="horizontal med_thumbs_index apps_index index">
+      <li><a href="#poll" class="med_thumb app_thumb thumb">Poll</a></li
+     ><li><a href="#face" class="med_thumb app_thumb thumb">Google Maps</a></li
+     ><li><a href="#twit" class="med_thumb app_thumb thumb">You Tube</a></li
+     ><li><a href="#sdcd" class="med_thumb app_thumb thumb">App name</a></li
+     ><li><a href="#twit" class="med_thumb app_thumb thumb">App name</a></li
+     ><li><a href="#face" class="med_thumb app_thumb thumb">App name</a></li
+     ><li><a href="#sdcd" class="med_thumb app_thumb thumb">App name</a></li
+     ><li><a href="#flkr" class="med_thumb app_thumb thumb">App name</a></li
+     ><li><a href="#face" class="med_thumb app_thumb thumb">App name</a></li
+     ><li><a href="#goog" class="med_thumb app_thumb thumb">App name</a></li
+     ><li><a href="#face" class="med_thumb app_thumb thumb">App name</a></li
+     ><li><a href="#sdcd" class="med_thumb app_thumb thumb">App name</a></li
+     ><li><a href="#twit" class="med_thumb app_thumb thumb">App name</a></li
+     ><li><a href="#goog" class="med_thumb app_thumb thumb">App name</a></li>
+    </ul>
+  </div>
+  
+  <div class="content hidden" id="app_details">
+    <a href="#apps-list" id="app-details-back" class="back_button button">Back</a>
+    <h4 class="app_title"></h4>
+    <div class='single_app'>
+      <img alt='' />
+      <h5 class='app_version'></h5>
+      <div class='actions'>
+        <ul>
+          <li>
+            <a id='add_app_to_page_action' href=''>
+              <%= t('.apps.detail_view.add_to_page') %>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

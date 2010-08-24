@@ -1,0 +1,9 @@
+#board-container {
+  -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
+     -moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.8); 
+          box-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
+}
+
+#webdoc_loading {
+  background-color: hsla(208, 8%, 60%, 0.7);
+}

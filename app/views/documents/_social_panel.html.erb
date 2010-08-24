@@ -8,9 +8,9 @@
   </div>
   <div class="content">
     <% if @document.creator == current_user %>
-      <%= render :partial => "followships/card", :locals => { :user => @document.creator } %>
+      <%= render :partial => "users/card", :locals => { :user => @document.creator } %>
     <% else %>
-      <%= render :partial => "followships/card", :locals => { :user => @document.creator, :subscribed => @document.creator.follower?(current_user) } %>
+      <%= render :partial => "users/card", :locals => { :user => @document.creator, :subscribed => @document.creator.follower?(current_user), :friendship => @document.creator.friend?(current_user) } %>
     <% end %>
   </div>
 </div>
