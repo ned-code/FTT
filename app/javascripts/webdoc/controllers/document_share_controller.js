@@ -255,7 +255,7 @@ WebDoc.DocumentShareController = $.klass({
     this.shareAllowComments.show();
     this.yourConnectionsList.show();
     this.friendsSelector.loadFriendList([]);
-    this.friendsSelector.cleanFriendsList();
+    this.friendsSelector.clean();
     this.sharedDocUrl.hide();
   },
   

@@ -300,7 +300,8 @@ class Document < ActiveRecord::Base
     friends_list.each do |friend_uuid|
       user = User.where(:uuid => friend_uuid).first
       user.has_role!(role,self)
-      #TODO Notifiy by mail and notifiy inside webdoc
+      Notifier.add_role_notification(current_user, role, user, self).deliver
+      #TODO notifiy inside webdoc
     end
   end
 
