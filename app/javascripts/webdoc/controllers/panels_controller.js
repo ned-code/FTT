@@ -27,7 +27,8 @@ WebDoc.PanelsController = $.klass({
     discussions: true,
     my_content: true,
     apps: true,
-    packages: true
+    packages: true,
+    browse_web: true
   },
   
   _viewPanelGroup: {
@@ -125,15 +126,10 @@ WebDoc.PanelsController = $.klass({
       }
     }
     else if ( controllerType !== this._currentInspectorType ) {
-      if ( this._panelGroup[ controllerType ] ) {
-        if (this._currentInspectorType) {
-          this.getInspector( this._currentInspectorType ).domNode.removeTransitionClass( 'active' );
-        }
-        this.panelGhostNode.addTransitionClass( this.ACTIVE_CLASS );
-        
-        if ( this._currentInspectorType ) {
-          this.getInspector( this._currentInspectorType ).domNode.removeTransitionClass( 'active' );
-        }
+      this.panelGhostNode.addTransitionClass( this.ACTIVE_CLASS );
+
+      if ( this._currentInspectorType ) {
+        this.getInspector( this._currentInspectorType ).domNode.removeTransitionClass( 'active' );
       }
       this.getInspector( controllerType ).domNode.addTransitionClass( 'active' );
     }
