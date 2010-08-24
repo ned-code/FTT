@@ -486,7 +486,8 @@ body.full_view {
 .view_button,
 .pages_button,
 .comment_button,
-.dropdown_button {
+.dropdown_button,
+.settings_button {
   width: 2em;
   /* hide button text */
   padding-top: 2em;
