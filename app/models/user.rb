@@ -71,6 +71,7 @@ class User < ActiveRecord::Base
   has_many :comments
   has_many :roles
   has_many :tokens
+  has_many :invitations
 
   has_many :friendships, :conditions => { :status => Friendship::ACCEPTED }
   has_many :friends, :through => :friendships

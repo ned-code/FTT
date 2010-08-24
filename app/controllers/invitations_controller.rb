@@ -1,7 +1,8 @@
 class InvitationsController < ApplicationController
   before_filter :authenticate_user!, :only => :create
-  def show
-    @invitation = Invitation.find(params[:id])
+  
+  def index
+    @invitations = current_user.invitations
   end
   
   def create
