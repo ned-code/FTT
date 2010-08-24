@@ -477,7 +477,7 @@
 				cssValue:		/^(\-?\d+(?:\.\d+)?)\s?(px|%|em|ex|pt|in|cm|mm|pt|pc)?$/,
 				cssAngle:		/^(\-?\d+(?:\.\d+)?)(deg)?$/,
 				imgFile:		/(?:\.png|\.gif|\.jpeg|\.jpg)/,
-				float:			/^(\-?\d+(?:\.\d+)?)$/
+				'float':		/^(\-?\d+(?:\.\d+)?)$/
 			},
 			
 			urlBlacklist = [
