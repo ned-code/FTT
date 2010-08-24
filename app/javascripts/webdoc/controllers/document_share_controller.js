@@ -12,7 +12,7 @@ WebDoc.DocumentShareController = $.klass({
     this.friendsSelector = new WebDoc.FriendsSelectorController('share_webdoc');
     this.emailInvitationForm = new WebDoc.EmailInvitationController('wd_email_share_form');
     
-    this.ShareDialog = jQuery('#share_webdoc');
+    this.shareDialog = jQuery('#share_webdoc');
     this.ShareForm = jQuery("#wd_share_form");
     this.emailShareForm = jQuery('#wd_email_share_form');
     
@@ -32,7 +32,8 @@ WebDoc.DocumentShareController = $.klass({
     this.yourConnectionsRadio.bind('change', this._connectionsRadioChanged.pBind(this));
     this.ShareForm.bind( 'submit', this._submitForm.pBind(this) );
     this.emailShareForm.bind( 'submit', this._sendInvitations.pBind(this) );
-    this.ShareDialog.delegate("a[href='#delete']", "click", this.deleteAccess.pBind(this));
+    this.shareDialog.delegate("a[href='#delete']", "click", this.deleteAccess.pBind(this));
+    this.shareDialog.find('.cancel').bind('click', this.close.pBind(this));
   },
   
   showShare: function(e, document) {
@@ -46,7 +47,7 @@ WebDoc.DocumentShareController = $.klass({
       type: 'GET',
       dataType: 'json',              
       success: function(data, textStatus) {
-        this.ShareDialog.show();
+        this.shareDialog.show();
         this.emailInvitationForm.init();
         this.loadAccess(data);
       }.pBind(this),
@@ -234,9 +235,10 @@ WebDoc.DocumentShareController = $.klass({
     this.emailInvitationForm.cleanFields();
     this.friendsSelector.clean();
   },
-  
-  _closeDialog: function() {
-    $(this).dialog('close');
+    
+  close: function(e){
+    e.preventDefault();
+    this.shareDialog.hide();
   },
   
   _onlyParticipantsRadioChanged: function(e){

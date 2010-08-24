@@ -22,7 +22,7 @@ WebDoc.DocumentCollaborationController = $.klass({
     this.domNode.delegate("a[href='#delete']", "click", this.deleteAccess.pBind(this));
     jQuery('#collaborate_by_connection_link').bind('click', this.showConnectionsForm.pBind(this) );
     jQuery('#collaborate_by_email_link').bind('click', this.showEmailForm.pBind(this) );
-    
+    this.documentAccessDialog.find('.cancel').bind('click', this.close.pBind(this));
     //this.documentAccessDialog
     //.remove()
     //.css({ display: '' });
@@ -170,5 +170,10 @@ WebDoc.DocumentCollaborationController = $.klass({
   
   url: function(){
     return '/documents/' + this.document.uuid() + '/roles';
-  }
+  },
+  
+  close: function(e){
+    e.preventDefault();
+    this.documentAccessDialog.hide();
+  },
 });
