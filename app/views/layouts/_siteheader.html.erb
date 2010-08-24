@@ -8,9 +8,9 @@
     
     <% if user_signed_in? %>
     <ul class="horizontal nav_index index">
-	<li><%= link_to "You", dashboard_path, { :class => "header_button button #{params[:controller]=='users' ? 'active' : '' }" } %></li
+	<li><%= link_to "You", dashboard_path, { :class => "header_button button#{params[:controller]=='users' ? ' active' : '' }" } %></li
      ><li>
-     <%= link_to "Explore", explore_path, { :class => "header_button butto #{params[:controller]=='documents' && params[:action]=='explore' ? 'active' : '' }" } %></li
+     <%= link_to "Explore", explore_path, { :class => "header_button button#{params[:controller]=='documents' && params[:action]=='explore' ? ' active' : '' }" } %></li
      ></ul>
     <% end %>
     
@@ -22,12 +22,12 @@
           <%= render 'discussions/message' %>
         </ul></li
      >
-     --><li><%= link_to "Friends", friendships_path, { :class => "header_button button #{params[:controller]=='friendships' ? 'active' : '' }" } %></li
+     --><li><%= link_to "Friends", friendships_path, { :class => "header_button button#{params[:controller]=='friendships' ? ' active' : '' }" } %></li
      ><li>
-        <%= link_to "Account", '#account_dropdown', { :class => "header_button button #{params[:controller]=='devise/registrations' ? 'active' : '' }" } %>
-        <ul class="user_index dropdown_index index dropdown" id="account_dropdown">
-          <li><%= link_to "Edit your profile", edit_registration_path(:user), { :class => "user-edit item #{params[:controller]=='users' ? 'users' : '' }" } %></li
-         ><li><%= link_to "Logout", destroy_user_session_path, { :class => "user-logout item" } %></li>
+        <%= link_to "Account", '#account_dropdown', { :class => "header_button button#{params[:controller]=='devise/registrations' ? ' active' : '' }" } %>
+        <ul class="user_dropdown_index dropdown_index index dropdown" id="account_dropdown">
+          <li><%= link_to "Edit your profile", edit_registration_path(:user), { :class => "button" } %></li
+         ><li><%= link_to "Logout", destroy_user_session_path, { :class => "button" } %></li>
         </ul>
       </li>
     </ul>

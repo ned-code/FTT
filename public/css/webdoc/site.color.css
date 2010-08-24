@@ -39,11 +39,57 @@ textarea {
 
 /* .index extensions */
 .dropdown_index {
-	background-color: rgba(0,0,0,0.6);
-	border-radius: 4px;
-	-moz-border-radius: 4px;
-	-webkit-border-radius: 4px;
-	box-shadow: 0px 15px 10px rgba(0, 0, 0, 0.4);
-	-webkit-box-shadow: 0px 15px 10px rgba(0, 0, 0, 0.4);
-	-moz-box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.4);
+  background-color: rgba(0,0,0,0.6);
+  
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  
+  box-shadow: 0px 15px 10px rgba(0, 0, 0, 0.4);
+  -webkit-box-shadow: 0px 15px 10px rgba(0, 0, 0, 0.4);
+  -moz-box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.4);
+}
+
+.dropdown_index>li>.button {
+  color:rgb(239,239,239);
+}
+
+.dropdown_index>li>.button:hover {
+  background-color: grey;
+}
+
+/* .button extensions */
+
+.header_button {
+  background-color: rgb(128,145,152);
+  color: rgb(255,255,255);
+  border-radius:					4px;
+  -moz-border-radius: 		4px;
+  -webkit-border-radius:	4px;
+  text-shadow: 1px 1px 1px rgb(111,126,131);
+}
+
+.header_button:hover,
+.header_button:focus {
+  background-color: #6a7e85;
+  color: #fff;
+}
+
+.header_button.active {
+  color:rgb(87,102,108);
+  background-color: rgb(255,255,255);
+  background-image: -moz-linear-gradient(
+    	center bottom,
+    	rgba(0,0,0,0.1) 0%,
+    	rgba(255,255,255,0.1) 100%
+  );
+  background-image: -webkit-gradient(
+    linear,
+    	left bottom,
+    	left top,
+    	color-stop(0, rgba(0,0,0,0.1)),
+    	color-stop(1, rgba(255,255,255,0.1))
+  );
+  
+  text-shadow: 0px 0px 0px rgb(255,255,255);
 }

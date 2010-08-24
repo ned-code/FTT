@@ -9,9 +9,9 @@ body {
 body.full_view {
   overflow: hidden;
   /* Compensate for header + top toolbar */ 
-  padding-top: 5.6667em;
+  padding-top: 7em;
   /* Compensate for bottom toolbar */
-  padding-bottom: 2.6667em;
+  padding-bottom: 3.5em;
 }
 
 .transition_support body.transition {
@@ -41,18 +41,24 @@ body.full_view {
   max-width: 2400px;
 }
 
+.full_view .dropdown_wrap {
+  width: auto;
+}
+
 .workspace_wrap {
   height: 50%;
   /* must equal editor_wrap min-height */
   min-height: 400px;
-  /* Makes room for Sharing panel */
-  margin-bottom: 96px;
+  /* Makes room for top and bottom panels and document title */
+  margin-top: 8.75em;
+  margin-bottom: 5.25em;
 }
 
 .full_view .workspace_wrap {
   padding-right: 0;
   height: 100%;
   min-height: 0;
+  margin-top: 0;
   margin-bottom: 0;
 }
 
@@ -136,6 +142,7 @@ body.full_view {
 	z-index: 1;
 }
 
+.title_panel,
 .inspector_panel,
 .comments_panel,
 .activity_panel,
@@ -220,17 +227,19 @@ body.full_view {
 /* Panel types */
 
 .sidebar {
-	position: absolute;
-	
+  position: absolute;
   overflow: auto; 
-
+  
   right: -2%;
-  top: -2.6667em;
+  top: -3.5em;
   margin-right: -288px;
   width: 288px;
-  
-  max-height: 1000%;
-  min-height: 20%;
+}
+
+.title_panel {
+  left: 0;
+  top: -7em;
+  height: 1.75em;
 }
 
 .tools_panel {
@@ -265,8 +274,8 @@ body.full_view {
   width: 288px;
   margin-right: -288px;
   right: -2%;
-  top: -2.6667em;
-  bottom: -2.6667em;
+  top: -3.5em;
+  bottom: -3.5em;
 }
 
 .inspector_panel.active,
@@ -320,6 +329,13 @@ body.full_view {
 
 .full_view .usernav_index {
 	right: 6px;
+}
+
+.full_view .user_dropdown_index {
+  /* Makes dropdown menu align right when it's at
+     the edge of the screen. */
+  right: 0;
+  left: auto;
 }
 
 .author_index {
@@ -390,12 +406,8 @@ body.full_view {
 	padding-right: 0.8333em;
 }
 
-.doc_settings_dropdown_index {
-
-}
-.doc_settings_dropdown_index > li {
+.settings_dropdown_index>li {
 	margin-bottom: 0.3333em;
-
 }
 
 .app_index {
@@ -419,8 +431,12 @@ body.full_view {
 
 .app_index>li,
 .comment_index>li {
-	top: -0.25em;
 	line-height: 1.8333em;
+}
+
+.app_index .button,
+.comment_index .button {
+	margin-top: -0.25em;
 }
 
 /* better done with a class, perhaps */
@@ -500,30 +516,50 @@ body.full_view {
 .view_button,
 .pages_button,
 .comment_button,
-.dropdown_button,
-.settings_button {
+.edit_dropdown_button,
+.settings_dropdown_button {
+	/* Styles for icon-only buttons */
   width: 1.8333em;
   height: 1.8333em;
   /* hide button text */
   padding-top: 1.8333em;
 }
 
-.panel_button {
+.mode_button {
+	/* Styles for text-only buttons */
 	height: 1.8333em;
+	padding: 0 0.6667em;
 	line-height: 1.8333em;
 }
 
 /* Big, draggable buttons for apps and comments */
 .app_button {
-	width: 28px;
-	height: 28px;
-	padding-top: 28px;
+  width: 28px;
+  height: 28px;
+  padding-top: 28px;
+  
+  -webkit-transition: -webkit-transform 0.12s ease-out;
+     -moz-transition:    -moz-transform 0.12s ease-out;
+          transition:         transform 0.12s ease-out;
+}
+
+.app_button:hover {
+	/* transform matrix is (a, c, b, d, tx, ty). Rememeber that. It's important. Apparently. */
+  -webkit-transform: matrix(1.08, 0.1, -0.1, 1.08, 0, 0);
+     -moz-transform: matrix(1.08, 0.1, -0.1, 1.08, 0, 0);
+          transform: matrix(1.08, 0.1, -0.1, 1.08, 0, 0);
+}
+
+.content_button {
+	height: 1.8333em;
+	line-height: 1.8333em;
+	padding: 0 0.6667em 0 2em;
 }
 
 /* Handle transition between normal and edit_mode for buttons
    that get shown and hidden */ 
 
-.edit_index .dropdown_button {
+.edit_dropdown_button {
 	display: none;
 	opacity: 0;
   -webkit-transition: opacity 0.18s ease-in;
@@ -531,7 +567,7 @@ body.full_view {
   transition:         opacity 0.18s ease-in;
 }
 
-.edit_mode .edit_index .dropdown_button {
+.edit_mode .edit_dropdown_button {
 	display: block;
 	opacity: 1;
   -webkit-transition: opacity 0.06s ease-out;
@@ -539,7 +575,7 @@ body.full_view {
   transition:         opacity 0.06s ease-out;
 }
 
-.transition .edit_index .dropdown_button {
+.transition .edit_dropdown_button {
 	display: block;
 }
 
