@@ -314,7 +314,7 @@
 
 (function(jQuery, undefined){
 	
-	var debug = debug = (window.console && window.console.log);
+	var debug = (window.console && window.console.log);
 	
 	var cssColors = {
 				transparent: true,
