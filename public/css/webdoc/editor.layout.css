@@ -501,9 +501,15 @@ body.full_view {
 .comment_button,
 .dropdown_button,
 .settings_button {
-  width: 2em;
+  width: 1.8333em;
+  height: 1.8333em;
   /* hide button text */
-  padding-top: 2em;
+  padding-top: 1.8333em;
+}
+
+.panel_button {
+	height: 1.8333em;
+	line-height: 1.8333em;
 }
 
 /* Big, draggable buttons for apps and comments */
