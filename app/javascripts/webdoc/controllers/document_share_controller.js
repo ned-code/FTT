@@ -61,10 +61,10 @@ WebDoc.DocumentShareController = $.klass({
   loadAccess: function(json) {
     this.sharedUsersList.empty();
     //first we look if the document is public
-    if(json.public){
+    if(json['public']){
       this.publicRadio.click();
       this.shareAllowComments.show();
-      this._initAllowCommentsCheckBox(json.public);
+      this._initAllowCommentsCheckBox(json['public']);
       this._showPublicUrl();
       return;
     }
