@@ -235,18 +235,24 @@ body.full_view {
 
 .tools_panel {
   left: 0;
-  top: -2.6667em;
+  top: -3.5em;
   width: 100%;
-  height: 2.6667em;
-  padding: 0.3333em;
+  height: 3.5em;
+  padding: 0.8333em;
+  
+  /* Just for testing */
+  background-color: rgb(235,235,235);
 }
 
 .controls_panel {
   left: 0;
-  bottom: -2.6667em;
+  bottom: -3.5em;
   width: 100%;
-  height: 2.6667em;
-  padding: 0.3333em;
+  height: 3.5em;
+  padding: 0.8333em;
+  
+  /* Just for testing */
+  background-color: rgb(235,235,235);
 }
 
 .inspector_panel,
@@ -361,6 +367,16 @@ body.full_view {
 	left: 0.3333em;
 }
 
+/* fix their vertical positioning */
+.edit_index,
+.app_index,
+.panel_index,
+.pages_buttons_index,
+.comment_index,
+.view_index {
+	top: 0.8333em;
+}
+
 .edit_dropdown_index {
 	top: 2em;
 	margin-top: 0.3333em;
@@ -384,28 +400,26 @@ body.full_view {
 
 .app_index {
   position: absolute;
-  top: 0.3333em;
   left: 25%;
   margin-left: -5.6em;
 }
 
 .comment_index {
 	position: absolute;
-	top: 0.3333em;
 	left: 50%;
 	margin-left: -5em;
 }
 
 .app_index,
 .comment_index {
-  height: 20px;
+  height: 1.8333em;
   padding-left: 1em;
   padding-right: 1em;
 }
 
 .app_index>li,
 .comment_index>li {
-	top: -4px;
+	top: -0.25em;
 }
 
 /* better done with a class, perhaps */
@@ -418,7 +432,6 @@ body.full_view {
 
 .panel_index {
   position: absolute;
-  top: 0.3333em;
   right: 0.3333em;
 }
 
