@@ -7,22 +7,22 @@
     = f.input :favorites
     %p
       = t('.width')
-      = @widget.properties[:width]
+      = @widget.properties['width']
     %p
       = t('.height')
-      = @widget.properties[:height]
+      = @widget.properties['height']
     %p
       = t('.version')
-      = @widget.properties[:version]
+      = @widget.properties['version']
     %p
       = t('.icon_url')
-      = @widget.properties[:icon_url]
+      = @widget.properties['icon_url']
     %p
       = t('.index_url')
-      = @widget.properties[:index_url]
+      = @widget.properties['index_url']
     %p
       = t('.inspector_url')
-      = @widget.properties[:inspector_url]
+      = @widget.properties['inspector_url']
     = f.input :attachment, :as => :file
 
   = f.buttons do
