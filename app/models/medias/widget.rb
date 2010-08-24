@@ -32,12 +32,12 @@ class Medias::Widget < Media
   # ====================
   
   def version
-    properties.present? ? properties[:version] : config_dom.root.attribute("version").to_s
+    properties.present? ? properties['version'] : config_dom.root.attribute("version").to_s
   end
   
-  %[icon_url index_url inspector_url width height].each do |property|
+  %w(icon_url index_url inspector_url width height).each do |property|
     define_method property do
-      properties[property.to_sym]
+      properties[property]
     end
   end
 
@@ -66,11 +66,11 @@ private
       if(attachment_queued_for_write.nil?) #don't update the file if there isn't one
         return true
       end
-      
+
       new_version = config_dom.root.attribute("version").to_s
       if version.present? && new_version.present? && new_version > version
         # set properties version before call attachment_root_url to use the new number of version
-        self.properties[:version] = config_dom.root.attribute("version").to_s
+        self.properties['version'] = config_dom.root.attribute("version").to_s
         self.properties = properties_from_config_dom(config_dom, attachment_root_url)
         self.title = config_dom.root.elements['name'].text
         self.description = config_dom.root.elements['description'].text if config_dom.root.elements['description']
@@ -102,7 +102,7 @@ private
   
   def properties_from_config_dom(config_dom, destination_path)
     properties = {}
-    properties[:version] = config_dom.root.attribute("version").to_s
+    properties['version'] = config_dom.root.attribute("version").to_s
 
     index_url = config_dom.root.elements['content'].attribute("src").to_s
     unless index_url.match(/http:\/\/.*/)
@@ -116,11 +116,11 @@ private
       end
     end
     
-    properties[:width] = config_dom.root.attribute("width").to_s
-    properties[:height] = config_dom.root.attribute("height").to_s
-    properties[:index_url] = index_url
-    properties[:icon_url] = File.join(destination_path, "icon.png")
-    properties[:inspector_url] = inspector_url if (inspector_url)
+    properties['width'] = config_dom.root.attribute("width").to_s
+    properties['height'] = config_dom.root.attribute("height").to_s
+    properties['index_url'] = index_url
+    properties['icon_url'] = File.join(destination_path, "icon.png")
+    properties['inspector_url'] = inspector_url if (inspector_url)
     properties
   end
 
