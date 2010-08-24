@@ -107,9 +107,6 @@ dd                { margin-bottom: 0.625em;}
 /*li,
 dd        { margin-left: 0.625em;}*/
 
-li li             { line-height: 1.4286; margin-bottom: 0; font-size: 0.875em; }
-li li li          { line-height: 1.68; }
-
 ul                { list-style-type: disc; }
 ol                { list-style-type: decimal; }
 

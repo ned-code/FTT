@@ -16,19 +16,20 @@
 /* .panel extensions -------------------------- */
 
 .panel {
-	background-color: rgba(100,100,100,0.75);
+  background-color: rgba(100,100,100,0.75);
 }
 
-.tools_panel {
-	background-color: rgba(255,255,255,0.75);
+.title_panel {
+  background-color: transparent;
 }
 
+.tools_panel,
 .controls_panel {
-	background-color: rgba(255,255,255,0.75);
+  background-color: rgb(238,238,238);
 }
 
 .sidebar {
-	background-color: transparent;
+  background-color: transparent;
 }
 
 /* .index extensions -------------------------- */
@@ -40,10 +41,16 @@
 }
 
 .app_index,
-.comment_index { background-color: rgb( 100,100,100 ); }
+.comment_index {
+	background-color: rgb( 226,226,226 );
+	
+	-webkit-border-radius: 3px;
+	   -moz-border-radius: 3px;
+	        border-radius: 3px;
+}
 
 .app_index a,
-.comment_index a { color: white; }
+.comment_index a { color: rgb(104,114,120); }
 
 
 /* .button extensions ------------------------- */
@@ -52,97 +59,96 @@
 	background: blue;
 }
 
-/* Buttons in dropdown menus */
-.dropdown_index>li>.button {
-	color:#efefef;
-	background-color: rgba(0,0,0,0);
-}
-
-.dropdown_index>li>.button:hover {
-	background-color: grey;
+.mode_button,
+.pages_button,
+.view_button,
+.app_button,
+.content_button,
+.settings_dropdown_button,
+.edit_dropdown_button {
+  background-color: rgb(250,250,250);
+  
+  background-image: url('../../images/buttons_editor.png');
+  
+  -webkit-border-radius: 3px;
+     -moz-border-radius: 3px;
+       -o-border-radius: 3px;
+          border-radius: 3px;
+  
+  /* Move the image out of any buttons that don't have images.
+     It may be a bit safer to apply the image just to the buttons we want,
+     but this'll do for now. */
+  background-position: 128px 128px;
 }
 
 .mode_button,
 .pages_button,
 .view_button,
-.app_button,
-.settings_button {
-
-  background-image: url('../../images/buttons_editor.png');
-  /* Move the image out of any buttons that don't have images.
-     It may be a bit safer to apply the image just to the buttons we want,
-     but this'll do for now. */
-    
-    -webkit-border-radius: 3px;
-    -moz-border-radius:    3px;
-    -o-border-radius:    3px;
-    border-radius:         3px;
-    
-    background-color: rgb(255,255,255);
-    
-    -webkit-box-shadow:rgba(0,0,0,0.5) 0px 1px 3px;
-    -moz-box-shadow:rgba(0,0,0,0.5) 0px 1px 3px;
-    box-shadow:rgba(0,0,0,0.5) 0px 1px 3px;
-    
-    background-position: 128px 128px;
+.content_button,
+.settings_dropdown_button,
+.edit_dropdown_button {
+  -webkit-box-shadow:rgba(0,0,0,0.2) 0 1px 1px;
+     -moz-box-shadow:rgba(0,0,0,0.2) 0 1px 1px;
+       -o-box-shadow:rgba(0,0,0,0.2) 0 1px 1px;
+          box-shadow:rgba(0,0,0,0.2) 0 1px 1px;
 }
 
-
-
-
-a[href="#toggle_content_panel"] {
-	padding-left: 24px;
-	padding-right: 6px;
+.app_button {
+  -webkit-box-shadow:rgba(0,0,0,0.5) 0px 1px 3px;
+     -moz-box-shadow:rgba(0,0,0,0.5) 0px 1px 3px;
+       -o-box-shadow:rgba(0,0,0,0.5) 0px 1px 3px;
+          box-shadow:rgba(0,0,0,0.5) 0px 1px 3px;
 }
 
-a[href="#doc_settings_dropdown"]        { background-position: 50% 0px; }
-a[href="#doc_settings_dropdown"]:hover  { background-position: 50% -32px; }
-a[href="#doc_settings_dropdown"].active { background-position: 50% -64px; }
+a.settings_dropdown_button              { background-position: 50% -5px; }
+a.settings_dropdown_button:hover        { background-position: 50% -37px; }
+a.settings_dropdown_button.active       { background-position: 50% -69px; }
+
 a[href="#edit_dropdown"]                { background-position: 50% -96px; }
 a[href="#edit_dropdown"]:hover          { background-position: 50% -128px; }
 a[href="#edit_dropdown"].active         { background-position: 50% -160px; }
-a[href="#toggle_content_panel"]         { background-position: -4px -196px; } /* 192 */
-a[href="#toggle_content_panel"]:hover   { background-position: -4px -228px; } /* 224 */
-a[href="#toggle_content_panel"].active  { background-position: -4px -260px; } /* 256 */
-a[href="#webdoc_prev_page"]             { background-position: 50% -292px; }
-a[href="#webdoc_prev_page"]:hover       { background-position: 50% -324px; }
-a[href="#webdoc_prev_page"].active      { background-position: 50% -356px; }
-a[href="#webdoc_next_page"]             { background-position: 50% -388px; }
-a[href="#webdoc_next_page"]:hover       { background-position: 50% -420px; }
-a[href="#webdoc_next_page"].active      { background-position: 50% -452px; }
-a[href="#toggle_pages_panel"]           { background-position: 50% -484px; }
-a[href="#toggle_pages_panel"]:hover     { background-position: 50% -516px; }
-a[href="#toggle_pages_panel"].active    { background-position: 50% -548px; }
+a[href="#toggle_content_panel"]         { background-position: -4px -197px; } /* 192 */
+a[href="#toggle_content_panel"]:hover   { background-position: -4px -229px; } /* 224 */
+a[href="#toggle_content_panel"].active  { background-position: -4px -261px; } /* 256 */
+a[href="#webdoc_prev_page"]             { background-position: 50% -293px; }
+a[href="#webdoc_prev_page"]:hover       { background-position: 50% -325px; }
+a[href="#webdoc_prev_page"].active      { background-position: 50% -357px; }
+a[href="#webdoc_next_page"]             { background-position: 50% -389px; }
+a[href="#webdoc_next_page"]:hover       { background-position: 50% -421px; }
+a[href="#webdoc_next_page"].active      { background-position: 50% -453px; }
+a[href="#toggle_pages_panel"]           { background-position: 50% -485px; }
+a[href="#toggle_pages_panel"]:hover     { background-position: 50% -517px; }
+a[href="#toggle_pages_panel"].active    { background-position: 50% -549px; }
 
-a.view_button                           { background-position: 50% -580px; }
-a.view_button:hover                     { background-position: 50% -612px; }
-a.view_button.active                    { background-position: 50% -644px; }
-.full_view a.view_button                { background-position: 50% -676px; }
-.full_view a.view_button:hover          { background-position: 50% -708px; }
-.full_view a.view_button.active         { background-position: 50% -740px; }
+a.view_button                           { background-position: 50% -581px; }
+a.view_button:hover                     { background-position: 50% -613px; }
+a.view_button.active                    { background-position: 50% -645px; }
+.full_view a.view_button                { background-position: 50% -677px; }
+.full_view a.view_button:hover          { background-position: 50% -709px; }
+.full_view a.view_button.active         { background-position: 50% -741px; }
 
 /*a[href="#share"]                      { background-position: 50% -768px; }
 a[href="#share"]:hover                  { background-position: 50% -800px; }
 a[href="#share"].active                 { background-position: 50% -832px; }*/
-a[href="#image_tool"]                   { background-position: 50% -864px; }
-a[href="#image_tool"]:hover             { background-position: 50% -896px; }
-a[href="#image_tool"].active            { background-position: 50% -928px; }
-a[href="#text_tool"]                    { background-position: 50% -960px; }
-a[href="#text_tool"]:hover              { background-position: 50% -992px; }
-a[href="#text_tool"].active             { background-position: 50% -1024px; }
-a[href="#draw_tool"]                    { background-position: 50% -1056px; }
-a[href="#draw_tool"]:hover              { background-position: 50% -1088px; }
-a[href="#draw_tool"].active             { background-position: 50% -1120px; }
-a[href="#html_tool"]                    { background-position: 50% -1152px; }
-a[href="#html_tool"]:hover              { background-position: 50% -1184px; }
-a[href="#html_tool"].active             { background-position: 50% -1216px; }
-a[href="#video_tool"]                   { background-position: 50% -1248px; }
-a[href="#video_tool"]:hover             { background-position: 50% -1280px; }
-a[href="#video_tool"].active            { background-position: 50% -1312px; }
+a[href="#image_tool"]                   { background-position: 50% -866px; }
+a[href="#image_tool"]:hover             { background-position: 50% -898px; }
+a[href="#image_tool"].active            { background-position: 50% -930px; }
+a[href="#text_tool"]                    { background-position: 50% -962px; }
+a[href="#text_tool"]:hover              { background-position: 50% -994px; }
+a[href="#text_tool"].active             { background-position: 50% -1026px; }
+a[href="#draw_tool"]                    { background-position: 50% -1058px; }
+a[href="#draw_tool"]:hover              { background-position: 50% -1090px; }
+a[href="#draw_tool"].active             { background-position: 50% -1122px; }
+a[href="#html_tool"]                    { background-position: 50% -1154px; }
+a[href="#html_tool"]:hover              { background-position: 50% -1186px; }
+a[href="#html_tool"].active             { background-position: 50% -1218px; }
+a[href="#video_tool"]                   { background-position: 50% -1250px; }
+a[href="#video_tool"]:hover             { background-position: 50% -1282px; }
+a[href="#video_tool"].active            { background-position: 50% -1314px; }
 
-a[href="#add_discussion"]               { background-position: 50% -1348px; }
-a[href="#add_discussion"]:hover         { background-position: 50% -1380px; }
-a[href="#add_discussion"].active        { background-position: 50% -1412px; }
+a[href="#add_discussion"]               { background-position: 50% -1345px; }
+a[href="#add_discussion"]:hover         { background-position: 50% -1377px; }
+a[href="#add_discussion"].active        { background-position: 50% -1409px; }
 
 a[href="#add_page"]                     { background-position: 50% -1440px; }
 a[href="#add_page"]:hover               { background-position: 50% -1472px; }
