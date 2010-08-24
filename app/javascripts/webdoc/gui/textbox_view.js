@@ -52,24 +52,24 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
   toggleMode: function(){
     var that = this,
         text;
-    
+        
     if(!WebDoc.application.boardController.isInteractionMode()){
-      // Parse the text for line breaks, and replace with <br/>
-      text = this.editNode.val().replace( /\n/g, '<br/>' );
-      
-      this.viewNode
-      .html( text )
-        //.height(this.editNode.height())
-        //.width(this.editNode.width())
-      .appendTo(this.itemDomNode);
-      
-      this.editNode.remove();
-    }
-    else {
       // Parse the text for <br/>s, replace with line breaks
       text = this.viewNode.html().replace( /<br\/>/g, '\n' );
       this.editNode.appendTo(this.itemDomNode);
     	this.viewNode.remove();
+    }
+    else {
+      // Parse the text for line breaks, and replace with <br/>
+      text = this.editNode.val().replace( /\n/g, '<br/>' );
+      
+      this.viewNode
+        .html( text )
+        //.height(this.editNode.height())
+        //.width(this.editNode.width())
+        .appendTo(this.itemDomNode);
+      
+      this.editNode.remove();
     }
   },
   
@@ -103,12 +103,7 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
         this.itemNode.width()/100,
         this.itemNode.height()/100
       ];
-      
-      this.shapeNode.find("#shape")
-        .attr("stroke", this.shape.getStroke())
-        .attr("stroke-width", this.shape.getStrokeWidth())
-        .attr("fill", this.shape.getFill());
-      
+            
       //  parse the shape and multiply each point by the scale factor
       for(var i=0; i<path.length; i++){
         if(path[i].match(/[a-zA-Z|\-|,| ]/g)){
@@ -123,8 +118,12 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
         }
         currentValue += path[i];
       }
-      // Set the new path
-      this.shapeNode.find("#shape").attr("d", newPath);
+            
+      this.shapeNode.find("#shape")
+        .attr("stroke", this.shape.getStroke())
+        .attr("stroke-width", this.shape.getStrokeWidth())
+        .attr("fill", this.shape.getFill())
+        .attr("d", newPath);
     };
     
     this.draw = function() {
@@ -140,7 +139,7 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
       
       jQuery(svgNode)
         .append(pathNode);
-
+      
       // Remove and recreate the div which contains the shape.
       if(this.shapeNode) this.shapeNode.remove();
       this.shapeNode = jQuery("<div>", {"class":"shape"});
@@ -148,9 +147,8 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
       this.shapeNode
         .prependTo(this.itemNode)
         .append(svgNode);
-        
+      
       this.originalPath = path;
-      this.refresh();
     };
   },
   
@@ -227,5 +225,10 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
   
   _initItemCss: function($super, withAnimate) {
     $super(withAnimate);
+  },
+  
+  viewDidLoad: function($super){
+    $super();
+    this.shapeUI.refresh();
   }
 });
