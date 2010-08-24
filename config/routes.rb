@@ -44,7 +44,7 @@ Webdoc::Application.routes.draw do
 
   devise_for :users
 
-  resources :users, :only => [:index, :show, :favorites]
+  resources :users, :only => [:show, :favorites]
 
   get 'user' => 'sessions#show'  
 
