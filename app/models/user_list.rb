@@ -15,10 +15,15 @@ class UserList < ActiveRecord::Base
   belongs_to :user
   has_many :user_lists_friends, :dependent => :destroy
   has_many :friendships, :through => :user_lists_friends
+  has_many :roles
   
   def users
+    @users ||= self.find_users
+    @users
+  end
+  
+  def find_users
     #TODO: improve the request ! this is ugly now !!!
-    
     users = []
     users_friend_ids = []
     if self.default?

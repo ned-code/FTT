@@ -116,6 +116,7 @@ javascripts:
     - public/js/colorpicker.js
     - public/js/jquery-ui-1.8.2.js
     - public/js/editor.ui.js
+    - public/js/path.js
     - app/javascripts/webdoc.js
     - app/javascripts/webdoc/common/*.js
     - app/javascripts/webdoc/model/*.js
