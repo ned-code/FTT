@@ -6,7 +6,6 @@
 WebDoc.MediaBrowserController = $.klass(WebDoc.RightBarInspectorController, {
   
   MEDIA_BROWSER_SELECTOR: ".media-browser-wrap",
-  MEDIA_BROWSER_BUTTON_SELECTOR: "a[href='#media-browser']",
 
   initialize: function() {
     this.webSearchController = new WebDoc.WebSearchController("media-browser-web");
@@ -29,10 +28,6 @@ WebDoc.MediaBrowserController = $.klass(WebDoc.RightBarInspectorController, {
   	//little hack to be sure that the home page is on the first layer
   	this._hideAll();
   	this.showHome();
-  },
- 
-  buttonSelector: function() {
-  	return this.MEDIA_BROWSER_BUTTON_SELECTOR;  
   },
   
   showHome: function(){

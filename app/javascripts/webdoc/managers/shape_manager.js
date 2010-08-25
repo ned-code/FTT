@@ -9,7 +9,7 @@ WebDoc.ShapeManager = {
   SHAPE_1: new WebDoc.Shape({
     shape: {
       uuid: "s1",
-      path: "M0 50 C0 22 22 0 50 0 C75 0 100 22 100 50 C100 78 78 100 50 100 L0 150 L25 100 C0 90 0 50 0 50Z",
+      path: "M0 50 C0 22 22 0 50 0 C75 0 100 22 100 50 C100 78 78 100 50 100 L10 150 L25 100 C0 90 0 50 0 50Z",
       stroke: "black",
       fill: "white",
       strokeWidth: "2",

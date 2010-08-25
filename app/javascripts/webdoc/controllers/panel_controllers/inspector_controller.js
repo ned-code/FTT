@@ -3,7 +3,6 @@
  */
 
 WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
-  ITEM_INSPECTOR_BUTTON_SELECTOR: "a[href='#item-inspector']",
   
   initialize: function() {
     ddd('[InspectorController] initialize');    
@@ -16,22 +15,20 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
     this.propertiesController = WebDoc.application.propertiesController = new WebDoc.PropertiesInspectorController('#item_inspector', false);
     
     this._inspectorNodes = {};
+    // those 3 controllers are statically loaded here because they are always needed.
+    // Other controllers will be loaded when an item view need it (see ItemView.fullInspectorClass).
     this.initPaneWithController('empty', new WebDoc.InspectorEmptyController());
     this.initPaneWithController('DrawingInspectorGroup', new WebDoc.DrawingInspectorController());    
     this.initPaneWithController('TextInspectorGroup', new WebDoc.TextPaletteController( "#text_inspector" ));
-    this.initPaneWithController('TextboxInspectorGroup', new WebDoc.TextboxController( "#textbox_inspector" ));
+    //this.initPaneWithController('TextboxInspectorGroup', new WebDoc.TextboxController( "#textbox_inspector" ));
     //this.initPaneWithController('HtmlInspectorGroup', new WebDoc.InnerHtmlController( "#html_inspector", true ));
-    this.initPaneWithController('HtmlInspectorGroup', new WebDoc.HtmlInspectorController( "#html_inspector" ));
+    //this.initPaneWithController('HtmlInspectorGroup', new WebDoc.HtmlInspectorController( "#html_inspector" ));
     
     WebDoc.application.boardController.addSelectionListener(this);
   },
 
   getTextInspector: function() {
     return this._inspectorNodes['TextInspectorGroup'];  
-  },
-
-  buttonSelector: function() {
-    return this.ITEM_INSPECTOR_BUTTON_SELECTOR;
   },
   
   selectInspector: function(inspectorId) {
@@ -44,20 +41,30 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
     ddd("[InspectorController] _updateInspector", inspectorId, this._inspectorNodes[inspectorId], typeof this._inspectorNodes[inspectorId]);
     
     if ( typeof this._inspectorNodes[inspectorId] === 'undefined' ) {
-      WebDoc.application.panelsController.deselectInspector();
+      inspectorId = 'empty';
     }
     if (inspectorId !== this.currentInspectorId) {
+      if (this.currentInspectorId) {
+        this._inspectorNodes[this.currentInspectorId].domNode.removeTransitionClass('active');
+      }
       this.currentInspectorId = inspectorId;
       inspector = this._inspectorNodes[inspectorId];
-      
-      this.domNode.html( inspector.domNode );
-      
+      inspector.domNode.addTransitionClass('active');
+//      this.domNode.html( inspector.domNode );
+
       inspector.refresh();
     }
   },
   
   initPaneWithController: function(inspectorGroupName, inspectorController) {
-    this._inspectorNodes[inspectorGroupName] = inspectorController;
+    // cannot register two controller for the same group.
+    if (!this._inspectorNodes[inspectorGroupName]) {
+      this._inspectorNodes[inspectorGroupName] = inspectorController;
+      inspectorController.domNode.removeTransitionClass('active');
+    }
+    else {
+      ddd("[InspectorController.initPaneWithController] group " + inspectorGroupName + "already have an inspector controller");
+    }
   },
   
   refresh: function() {
@@ -82,9 +89,7 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
 
 WebDoc.InspectorEmptyController = $.klass({
   initialize: function() {
-    var container = jQuery("#empty_inspector");
-    this.domNode = container.children();
-  	container.remove();
+    this.domNode = jQuery("#empty_inspector");
   },
   
   refresh: function() {
@@ -94,9 +99,7 @@ WebDoc.InspectorEmptyController = $.klass({
 
 WebDoc.DrawingInspectorController = $.klass({
   initialize: function() {
-    var container = jQuery("#draw-inspector");
-    this.domNode = container.children();
-    container.remove();
+    this.domNode = jQuery("#draw-inspector");
   },
   
   refresh: function() {

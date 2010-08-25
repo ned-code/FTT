@@ -3,9 +3,9 @@
  */
      
 WebDoc.SocialPanelController = jQuery.klass(WebDoc.RightBarInspectorController, {
-  
+
   SOCIAL_PANEL_BUTTON_SELECTOR: "a[href='#social-inspector']",
-  
+
   initialize: function() {
     this.subscribeButton = jQuery('#subscribe-button');
     this.unsubscribeButton = jQuery('#unsubscribe-button');
@@ -16,10 +16,6 @@ WebDoc.SocialPanelController = jQuery.klass(WebDoc.RightBarInspectorController, 
     this.subscribeButton.click(this._subscribeAction.pBind(this));
     this.unsubscribeButton.click(this._unSubscribeAction.pBind(this));
   },
-  
-  buttonSelector: function() {
-    return this.SOCIAL_PANEL_BUTTON_SELECTOR;
-  },  
   
   _subscribeAction: function() {
     ddd("Clicked on subscribe");

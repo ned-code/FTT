@@ -289,7 +289,7 @@ jQuery.extend(WebDoc.InspectorPanesManager, {
         }  
         newManager.allPanesHeightsAdjusted();
       }
-      if (itemView.fullInspectorControllerClass) {
+      if (itemView.fullInspectorControllerClass && itemView.fullInspectorControllerClass()) {
         var constructor = itemView.fullInspectorControllerClass();
         var fullInspectorController = new constructor();
         WebDoc.application.inspectorController.initPaneWithController(inspectorGroupName, fullInspectorController);
