@@ -40,12 +40,25 @@ WebDoc.FriendsSelectorController = $.klass({
   },
 
   _buildFriendsList: function(data){
+    ddd('_buildFriendsList',data);
     var length = data['friends'].length;
     var friendsList = jQuery('<ul/>').attr({'class': 'friends_list'});
     var friendNode, friend;
     var klass = 'choose_friend';
     for(var i=0;i<data['friends'].length;i++){
       friend = data['friends'][i].user;
+      /*
+      Available data:
+      avatar:   friend.avatar_thumb_url
+      bio:      friend.bio
+      email:    friend.email
+      username: friend.username
+      first_name: friend.first_name
+      last_name:  friend.last_name
+      id/uuid:  friend.uuid
+      gender:   friend.gender
+      website: friend.website
+      */
       klass = 'choose_friend';
       if(this.alreadySelectedFriends.length){
         if(jQuery.inArray(friend.uuid, this.alreadySelectedFriends) != -1){
