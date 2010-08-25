@@ -122,7 +122,15 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
         this.itemNode.width()/100,
         this.itemNode.height()/100
       ];
-            
+      
+      // To be continued...
+      /*
+      var pathObject = new Path(path);
+      path.displace(1000, 1000);
+      path.scale(scaleFactors[0], scaleFactor[1]);
+      newPath = pathObject.toPath();
+      */
+      
       //  parse the shape and multiply each point by the scale factor
       for(var i=0; i<path.length; i++){
         if(path[i].match(/[a-zA-Z|\-|,| ]/g)){
