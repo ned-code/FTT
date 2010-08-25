@@ -350,12 +350,32 @@ class Document < ActiveRecord::Base
     self.find_user_roles(user) && self.find_user_roles(user).include?(Role::VIEWER_ONLY)
   end
   
+  # def user_lists_editor?(user)
+  #   self.find_public_roles && self.find_public_roles.include?(Role::EDITOR)
+  # end
+  # 
+  # def user_lists_contributor?(user)
+  #   self.find_public_roles && self.find_public_roles.include?(Role::CONTRIBUTOR)
+  # end
+  # 
+  # def user_lists_comment?(user)
+  #   self.find_public_roles && self.find_public_roles.include?(Role::VIEWER_COMMENT)
+  # end
+  # 
+  # def user_lists_viewer_only?(user)
+  #   self.find_public_roles && self.find_public_roles.include?(Role::VIEWER_ONLY)
+  # end
+  
   def find_public_roles
     @public_roles_names ||= find_roles.select{ |r| r.user_id.blank? && r.user_list_id.blank? }.map{ |r| r.name }
   end
   
   def find_user_roles(user)
     @user_roles_names ||= find_roles.select{ |r| r.user_id.present? && r.user_list_id.blank? }.map{ |r| r.name }
+  end
+  
+  def find_user_lists_roles
+    @user_lists_roles_names ||= find_roles.select{ |r| r.user_id.blank? && r.user_list_id.present?}.map{ |r| r.name }
   end
 
   def find_roles
