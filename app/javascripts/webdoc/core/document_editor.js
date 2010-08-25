@@ -378,7 +378,7 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
   
   closePopup: function(e){
     e.preventDefault();
-    var openPopup = this.popupNode.find('li');
+    var openPopup = this.popupNode.find('li.popup');
     openPopup.addClass('lb');
   }
 });
