@@ -31,7 +31,10 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
     
     this.shapeUI = new this.ShapeUI( this.itemDomNode, this.item );
     this.shapeUI.setShape(this.item.getShape());
-
+    
+    this.viewNode.css(this.getTextNodeCss());
+    this.editNode.css(this.getTextNodeCss());
+      
     this.innerHtmlChanged();
     this.shapeUI.draw();
   },
@@ -40,6 +43,15 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
     $super(item, options);
   	this.shapeUI.refresh();
   	this.resizeTextArea();
+  },
+  
+  getTextNodeCss: function(){
+    return {
+      left:this.shapeUI.shape.getTextLeftOffset()+"%",
+      top:this.shapeUI.shape.getTextTopOffset()+"%",
+      width:(100-this.shapeUI.shape.getTextLeftOffset()*2)+"%",
+      height:(100-this.shapeUI.shape.getTextTopOffset()*2)+"%"
+    };
   },
 
   // we redefined this method so that shape is redraw during the resize. Otherwise redraw is done at the end of resize

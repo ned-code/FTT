@@ -13,10 +13,10 @@ WebDoc.ShapeManager = {
       stroke: "black",
       fill: "white",
       strokeWidth: "2",
-      textTopOffset: "10",
-      textLeftOffset: "10",
-      textRightOffset: "10",
-      textBottomOffset: "10"
+      textTopOffset: "20",
+      textLeftOffset: "20",
+      textRightOffset: "20",
+      textBottomOffset: "20"
     }
   }),
 
