@@ -160,20 +160,6 @@ class User < ActiveRecord::Base
     self.mutual_follower?(user)
   end
 
-  def has_only_editor_role!(document, message = nil)
-    if !self.has_role?("editor", document)
-      self.has_no_roles_for!(document)
-      self.has_role!("editor", document)
-    end
-  end
-
-  def has_only_reader_role!(document, message = nil)
-    if !self.has_role?("reader", document)
-      self.has_no_roles_for!(document)
-      self.has_role!("reader", document)
-    end
-  end
-
   def friend?(user)
     friends.include?(user)
   end
