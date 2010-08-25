@@ -80,7 +80,7 @@ LibraryUtils = $.klass({
   buildVideoRow: function(type, videoId, url, thumbUrl, name, duration, viewCount, description, embedUrl, embedType, aspectRatio, isHd, width, height, uuid) {
       var properties = { 
         type: type,
-        video_id: videoId,
+        video_id: url,
         url: url,
         thumb_url: thumbUrl,
         name: name,
