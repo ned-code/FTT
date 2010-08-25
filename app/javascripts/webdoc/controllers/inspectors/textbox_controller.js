@@ -4,11 +4,8 @@
 
 WebDoc.TextboxController = $.klass({
   initialize: function( selector ) {
-    var container = jQuery( selector );
-    this.domNode = container.children();
+    this.domNode = jQuery( selector? selector : '#textbox_inspector' );
     this.panelNode = WebDoc.application.propertiesController.domNode;
-    
-    container.remove();
     
     this.panelNode
     .delegate("input", "change", jQuery.proxy(this, "changeProperty"))

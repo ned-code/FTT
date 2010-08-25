@@ -83,7 +83,12 @@ WebDoc.ItemView = $.klass({
   inspectorGroupName: function() {
     return "ItemInspectorGroup"  
   },
-  
+
+  // subclasses must re-implement this method and return the controller that will controller the right inspector of this kind of item.
+  fullInspectorControllerClass: function() {
+    return null;  
+  },
+
   _initItemClass: function() {
     this.itemDomNode.attr("class", this.ITEMCLASSES);
     this.itemDomNode.addClass(this.item.getClass());

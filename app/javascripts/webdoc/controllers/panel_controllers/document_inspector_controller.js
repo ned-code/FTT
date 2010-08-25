@@ -9,11 +9,10 @@ var inpsector,
     documentTitleField,
     documentDescriptionField,
     documentCategoryField,
-	documentFeaturedField,
+	  documentFeaturedField,
     currentDocument;
     
 WebDoc.DocumentInspectorController = jQuery.klass(WebDoc.RightBarInspectorController, {
-  DOCUMENT_INSPECTOR_BUTTON_SELECTOR: "a[href='#document-inspector']",  
   
   initialize: function() {
     this.domNode = inspector = jQuery('#document-inspector');
@@ -42,10 +41,6 @@ WebDoc.DocumentInspectorController = jQuery.klass(WebDoc.RightBarInspectorContro
     
     this._loadDocumentCategories();
     this._updateFields();
-  },
-  
-  buttonSelector: function() {
-    return this.DOCUMENT_INSPECTOR_BUTTON_SELECTOR;  
   },
   
   _updateFields: function() {

@@ -59,7 +59,11 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
   	$super(size);
   	this.shapeUI.refresh();
   },
-  
+
+  fullInspectorControllerClass: function() {
+    return WebDoc.TextboxController;
+  },  
+
   toggleMode: function(){
     var that = this,
         text;
