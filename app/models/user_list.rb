@@ -18,8 +18,12 @@ class UserList < ActiveRecord::Base
   has_many :roles
   
   def users
+    @users ||= self.find_users
+    @users
+  end
+  
+  def find_users
     #TODO: improve the request ! this is ugly now !!!
-    
     users = []
     users_friend_ids = []
     if self.default?
