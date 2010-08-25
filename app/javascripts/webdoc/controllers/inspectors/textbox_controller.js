@@ -33,7 +33,6 @@ WebDoc.TextboxController = $.klass({
         item.setProperty("strokeWidth", value);
         item.save();
         
-        ddd(property + ": " + value);
         self.refresh();
       },
       fail: function(value, message){
@@ -72,10 +71,10 @@ WebDoc.TextboxController = $.klass({
   },
   
   refresh: function() {
-    // Quick hack
-    WebDoc.application.inspectorController.propertiesController.refresh();
-    //this.propertiesController.refresh();
-    
     var selectedItem = WebDoc.application.boardController.selection()[0];
+    
+    WebDoc.application.inspectorController.propertiesController.refresh();    
+    
+    this.domNode.find("#property_svg_stroke_width").val(selectedItem.item.getProperty("strokeWidth"));
   }
 });
