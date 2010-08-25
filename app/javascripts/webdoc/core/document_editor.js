@@ -48,6 +48,8 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
     infoDialogWidthNode = $("#wb-new-document-size-width");
     infoDialogHeightNode = $("#wb-new-document-size-height");
     infoDialogSubmitNode = infoDialogNode.find("input[type='submit']");
+    
+    this.popupSendInvitations = jQuery('#popup_invitations');
 
     // reset document back url (used to close a document)
     jQuery.cookie('document_back_url', null, { path: '/' });
@@ -376,7 +378,10 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
   },
   
   showInvitationsForm: function(e){
+    ddd('showInvitationsForm');
     //popup form here
+    e.preventDefault();
+    this.popupSendInvitations.show();
     WebDoc.application.invitationsController.init();
   }
 });
