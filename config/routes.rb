@@ -55,6 +55,7 @@ Webdoc::Application.routes.draw do
     resource  :test, :only => :show
     resources :themes
     resources :invitations, :only => [:index, :create, :destroy, :new]
+    resources :users, :only => [:index]
   end
 
   resources :followships do
