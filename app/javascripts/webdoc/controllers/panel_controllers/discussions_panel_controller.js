@@ -4,8 +4,6 @@
 
 WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorController, {
 
-  DISCUSSIONS_PANEL_BUTTON_SELECTOR: "a[href='#discussions-panel']",
-
   initialize: function() {
 
     this._currentPage = null;
@@ -21,10 +19,6 @@ WebDoc.DiscussionsPanelController = jQuery.klass(WebDoc.RightBarInspectorControl
     this.currentPageChanged();
     
     this.is_display = false;
-  },
-
-  buttonSelector: function() {
-    return this.DISCUSSIONS_PANEL_BUTTON_SELECTOR;
   },
 
   showCurrentPageDiscussions: function() {

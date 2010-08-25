@@ -25,7 +25,11 @@ WebDoc.HtmlView = $.klass(WebDoc.ItemView, {
   inspectorControllersClasses: function() {
     return [/*WebDoc.HtmlPropertiesInspectorController*/];
   },
-    
+
+  fullInspectorControllerClass: function() {
+    return WebDoc.HtmlInspectorController;
+  },
+
   createDomNode: function($super) {
     var widgetNode = $super();   
     if (this.item.data.data.tag == "iframe" && !WebDoc.application.disableHtml) {

@@ -5,7 +5,6 @@
 (function(jQuery, undefined){
   
   WebDoc.PageInspectorController = jQuery.klass(WebDoc.RightBarInspectorController, {
-    PAGE_INSPECTOR_BUTTON_SELECTOR: "a[href='#page-inspector']",
     SUPPORTED_IMAGE_EXTENSIONS: ["jpg","jpeg","png","gif"],
     
     initialize: function() { 
@@ -81,11 +80,6 @@
       var footHeight = this.domNode.find('.foot>div').height();
       this.domNode
       .css({bottom: footHeight});
-    },
-    
-    // used by inspector controller
-    buttonSelector: function() {
-      return this.PAGE_INSPECTOR_BUTTON_SELECTOR;  
     },
     
     currentPageChanged: function() {

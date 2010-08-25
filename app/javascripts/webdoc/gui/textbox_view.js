@@ -24,26 +24,34 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
   },
   
   initialize: function($super, item, pageView, afterItem) {
-    
-    this.editNode = jQuery('<textarea/>', { "class": "text" });
-    this.viewNode = jQuery('<div/>', { "class": "text" });
-    //this.txtDummy = jQuery('<div/>', { css: { display: 'none'} });
+    this.editNode = jQuery('<textarea/>', {"class": "text edit"}); // Displayed in Edit Mode
+    this.viewNode = jQuery('<div/>', {"class": "text view"}); // Displayed in View Mode
     
     $super(item, pageView, afterItem);
     
-    this.shapeUI = new this.ShapeUI( this.itemDomNode );
+    this.shapeUI = new this.ShapeUI( this.itemDomNode, this.item );
     this.shapeUI.setShape(this.item.getShape());
-
+    
+    this.viewNode.css(this.getTextNodeCss());
+    this.editNode.css(this.getTextNodeCss());
+      
     this.innerHtmlChanged();
     this.shapeUI.draw();
   },
   
   objectChanged: function($super, item, options) {
     $super(item, options);
-    this.shapeUI.shape.data.strokeWidth = this.item.getProperty("strokeWidth");
-    this.shapeUI.shape.data.fill = this.item.getProperty("fill");
-    this.shapeUI.shape.data.stroke = this.item.getProperty("stroke");
   	this.shapeUI.refresh();
+  	this.resizeTextArea();
+  },
+  
+  getTextNodeCss: function(){
+    return {
+      left:this.shapeUI.shape.getTextLeftOffset()+"%",
+      top:this.shapeUI.shape.getTextTopOffset()+"%",
+      width:(100-this.shapeUI.shape.getTextLeftOffset()*2)+"%",
+      height:(100-this.shapeUI.shape.getTextTopOffset()*2)+"%"
+    };
   },
 
   // we redefined this method so that shape is redraw during the resize. Otherwise redraw is done at the end of resize
@@ -51,15 +59,22 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
   	$super(size);
   	this.shapeUI.refresh();
   },
-  
+
+  fullInspectorControllerClass: function() {
+    return WebDoc.TextboxController;
+  },  
+
   toggleMode: function(){
     var that = this,
         text;
         
-    if(!WebDoc.application.boardController.isInteractionMode()){
+    if(WebDoc.application.boardController.isInteractionMode()){
       // Parse the text for <br/>s, replace with line breaks
       text = this.viewNode.html().replace( /<br\/>/g, '\n' );
-      this.editNode.appendTo(this.itemDomNode);
+      this.editNode
+        .appendTo(this.itemDomNode)
+        .bind("keyup", jQuery.proxy(this, "resizeTextArea"));
+        
     	this.viewNode.remove();
     }
     else {
@@ -68,27 +83,28 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
       
       this.viewNode
         .html( text )
-        //.height(this.editNode.height())
-        //.width(this.editNode.width())
         .appendTo(this.itemDomNode);
       
       this.editNode.remove();
     }
   },
-  
-  resizeTextArea: function(){
-    this.txtDummy.css({
-      width:this.editNode.width(),
-      height:"auto"});
-    this.txtDummy.text(this.editNode.val());
-    this.editNode.height(this.txtDummy.height());
-            
-    /*this.item.resizeTo({
-      width:this.item.width(),
-      height:this.editNode.height() + this.editNode.position().top*2});*/
+
+  resizeTextArea:function(){
+    var txtDummy = jQuery('<div/>');
+    txtDummy
+      .css({
+        position:"absolute",
+        display:"none",
+        width:this.editNode.width(),
+        height:"auto"
+      })
+      .appendTo(this.itemDomNode);
+    txtDummy.text(this.editNode.val());
+    this.editNode.height(txtDummy.height());
+    txtDummy.remove();
   },
   
-  ShapeUI:function(itemNode){
+  ShapeUI:function(itemNode, item){
     this.itemNode = itemNode;
     this.shapeNode = null;
     this.originalPath = null;
@@ -106,7 +122,15 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
         this.itemNode.width()/100,
         this.itemNode.height()/100
       ];
-            
+      
+      // To be continued...
+      /*
+      var pathObject = new Path(path);
+      path.displace(1000, 1000);
+      path.scale(scaleFactors[0], scaleFactor[1]);
+      newPath = pathObject.toPath();
+      */
+      
       //  parse the shape and multiply each point by the scale factor
       for(var i=0; i<path.length; i++){
         if(path[i].match(/[a-zA-Z|\-|,| ]/g)){
@@ -122,11 +146,15 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
         currentValue += path[i];
       }
             
+      // Update the svg node      
       this.shapeNode.find("#shape")
-        .attr("stroke", this.shape.getStroke())
-        .attr("stroke-width", this.shape.getStrokeWidth())
-        .attr("fill", this.shape.getFill())
-        .attr("d", newPath);
+        .attr("stroke", 
+          item.getProperty("stroke")?item.getProperty("stroke"):this.shape.getStroke())
+        .attr("stroke-width", 
+          item.getProperty("strokeWidth")?item.getProperty("strokeWidth"):this.shape.getStrokeWidth())
+        .attr("fill", 
+          item.getProperty("fill")?item.getProperty("fill"):this.shape.getFill())
+        .attr("d", newPath);        
     };
     
     this.draw = function() {
@@ -180,8 +208,6 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
       if (this.item.getInnerHtml() && !jQuery.string(this.item.getInnerHtml()).empty()) {
         this.innerHtmlChanged();
       }
-      
-      //this.select();
     }
   },
   

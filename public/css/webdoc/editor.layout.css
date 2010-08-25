@@ -288,6 +288,14 @@ body.full_view {
 
 }
 
+.item_inspector {
+    display: none;
+}
+
+.item_inspector.active{
+    display: block;
+}
+
 .full_view .inspector_panel,
 .full_view .comments_panel,
 .full_view .mystuff_panel,
