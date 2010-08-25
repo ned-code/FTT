@@ -12,7 +12,7 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
     this.visible = true;
     
     // Quick hack - this has been moved from inside individual inspector controllers
-    this.propertiesController = WebDoc.application.propertiesController = new WebDoc.PropertiesInspectorController('#item_inspector', false);
+    this.propertiesController = WebDoc.application.propertiesController = new WebDoc.PropertiesInspectorController('#item_inspector', false, this);
     
     this._inspectorNodes = {};
     // those 3 controllers are statically loaded here because they are always needed.
@@ -34,13 +34,22 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
   selectInspector: function(inspectorId) {
     this._updateInspector(inspectorId);
   },
-  
+
+  getCurrentInspectorController: function() {
+    if (this.currentInspectorId) {
+      return this._inspectorNodes[this.currentInspectorId];
+    }
+    else {
+      return null;
+    }
+  },
+
   _updateInspector: function(inspectorId) {
     var inspector;
     
     ddd("[InspectorController] _updateInspector", inspectorId, this._inspectorNodes[inspectorId], typeof this._inspectorNodes[inspectorId]);
     
-    if ( typeof this._inspectorNodes[inspectorId] === 'undefined' ) {
+    if ( !this._inspectorNodes[inspectorId] ) {
       inspectorId = 'empty';
     }
     if (inspectorId !== this.currentInspectorId) {
