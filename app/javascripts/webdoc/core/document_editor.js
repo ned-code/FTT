@@ -49,7 +49,8 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
     infoDialogHeightNode = $("#wb-new-document-size-height");
     infoDialogSubmitNode = infoDialogNode.find("input[type='submit']");
     
-    this.popupSendInvitations = jQuery('#popup_invitations');
+    this.popupNode= jQuery('#popup');
+    this.popupSendInvitationsNode = this.popupNode.find('#popup_invitations');
 
     // reset document back url (used to close a document)
     jQuery.cookie('document_back_url', null, { path: '/' });
@@ -86,7 +87,9 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
           this.searchDocuments();
         }
       }.pBind(this));
-
+      
+      this.popupNode.delegate("a[href=#close]", 'click', this.closePopup.pBind(this));
+      
       this.filter = new WebDoc.DocumentDateFilter();
 
       this.documentList = new WebDoc.DocumentList("wb-document-list", this.filter);
@@ -379,10 +382,18 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
   
   showInvitationsForm: function(e){
     ddd('showInvitationsForm');
-    //popup form here
     e.preventDefault();
-    this.popupSendInvitations.show();
     WebDoc.application.invitationsController.init();
+    this.popupSendInvitationsNode.removeClass('lb');
+    this.popupSendInvitationsNode.addClass('bo');
+  },
+  
+  closePopup: function(e){
+    ddd('close popup');
+    e.preventDefault();
+    var openPopup = this.popupNode.find('.bo');
+    openPopup.removeClass('bo');
+    openPopup.addClass('lb');
   }
 });
 
