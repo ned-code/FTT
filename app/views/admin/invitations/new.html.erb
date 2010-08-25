@@ -7,11 +7,25 @@
   </div>
   <div>
     <%= label_tag 'emails[]', 'Emails :'%>
-    <%= text_field_tag 'invitation[email][]'%>
+    <div id="emails_list">
+      <%= email_field_tag 'invitation[emails][]','' ,'data-type' => 'email'%>
+    </div>
   </div>
+  <a href='' id='add_email'>add_email</a>
   <div>
     <%= f.submit 'Invite !' %>
   </div>
 <% end %>
 
 <%= link_to t('back'), admin_invitations_path %>
+
+<% content_for :scripts do %>
+  <%= include_javascripts :forms %>
+  <script>
+    jQuery('#add_email').bind('click', function(e){
+      e.preventDefault();
+      var emailInput = '<input type="email" value="" name="invitation[emails][]" id="invitation_email_" data-type="email"/>'
+      jQuery('#emails_list').append(emailInput);
+    });
+  </script>
+<% end %>

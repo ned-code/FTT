@@ -9,8 +9,7 @@ class Admin::InvitationsController < Admin::AdminController
   end
   
   def create
-    p params
-    #Invitation.generate(current_user, params[:invitations],true)
+    Invitation.generate(current_user, params[:invitation],true)
     redirect_to admin_invitations_path
   end
   
