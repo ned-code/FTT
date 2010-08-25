@@ -3,26 +3,19 @@
  */
 WebDoc.ImagePaletteController = $.klass({
   
-  changeHandlers: {
-  	placeholder_checkbox: this.changePlaceholder,
-  	preserve_aspect_ratio: this.changePreserveAspectRatio,
-  	restore_original_size: this.restoreOriginalSize,
-  	set_page_size_to_item_size: this.setPageSizeToImageSize
-  },
-  
   initialize: function( ) {
     this.domNode = $( "#image-inspector" );
     
     this.propertySrc = $("#property_src");
     this.propertySrc.blur(this.updateSrc.pBind(this));
 
-//    this.domNode.find("#restore_original_size").click(this.restoreOriginalSize);
-//    
-//    this.domNode.find("#set_page_size_to_image_size").click(this.setPageSizeToImageSize);
-//
-//    this.domNode.find("#preserve_aspect_ratio").click(this.changePreserveAspectRatio);
-//
-//    this.domNode.find("#placeholder_checkbox").click(this.changePlaceholder);
+    this.domNode.find("#restore_original_size").click(this.restoreOriginalSize);
+
+    this.domNode.find("#set_page_size_to_image_size").click(this.setPageSizeToImageSize);
+
+    this.domNode.find("#preserve_aspect_ratio").click(this.changePreserveAspectRatio);
+
+    this.domNode.find("#placeholder_checkbox").click(this.changePlaceholder);
     
     this.domNode.delegate("a[href=#remove_border]", 'click', jQuery.proxy( this, 'removeBorder' ));
     
