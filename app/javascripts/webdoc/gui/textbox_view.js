@@ -51,7 +51,11 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
   	$super(size);
   	this.shapeUI.refresh();
   },
-  
+
+  fullInspectorControllerClass: function() {
+    return WebDoc.TextboxController;
+  },  
+
   toggleMode: function(){
     var that = this,
         text;
@@ -122,11 +126,12 @@ WebDoc.TextboxView = $.klass(WebDoc.ItemView, {
         currentValue += path[i];
       }
             
-      this.shapeNode.find("#shape")
-        .attr("stroke", this.shape.getStroke())
-        .attr("stroke-width", this.shape.getStrokeWidth())
-        .attr("fill", this.shape.getFill())
-        .attr("d", newPath);
+      this.shapeNode.find("#shape").attr({
+        stroke: this.shape.getStroke(),
+        strokeWidth: this.shape.getStrokeWidth(),
+        fill: this.shape.getFill(),
+        d: newPath
+      });
     };
     
     this.draw = function() {

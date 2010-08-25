@@ -3,19 +3,18 @@
  */
 WebDoc.TextPaletteController = jQuery.klass({
   initialize: function(id){
-    var container = jQuery(id);
     
     // Use the contents and throw the container away.
     // Ugly? Yes, but until we find a better way...
-    this.domNode = container.children();
+    this.domNode = jQuery(id);
     
     this.initGUI("#text-inspector-content");
     
     // Quick hack
     //this.propertiesController = new WebDoc.PropertiesInspectorController('#text_properties', true);
-  	
-  	container.remove();
-  },       
+  },
+
+  
   initGUI: function(container){
     var thobj = this;
     var containerObj = jQuery(container);
@@ -94,7 +93,7 @@ WebDoc.TextPaletteController = jQuery.klass({
     
     containerObj.html(toolbarContent);
     
-    this.htmlInspector = new WebDoc.InnerHtmlController("#text_code");
+//    this.htmlInspector = new WebDoc.InnerHtmlController("#text_code");
     jQuery('#toolbar_panel a').addClass('ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only');
     jQuery('#toolbar_panel_button_foreColor').addClass('ui-corner-left').removeClass('ui-corner-all').css('margin-right', '-1px');
     jQuery('#toolbar_panel_button_foreColor_arrow').addClass('ui-corner-right').removeClass('ui-corner-all');
@@ -572,7 +571,7 @@ WebDoc.TextPaletteController = jQuery.klass({
   refreshInnerHtml: function(){
     WebDoc.application.textTool.delegate.editorExec('styleRefresher');
     if (this.htmlEdit) {
-      this.htmlInspector.refresh();
+//      this.htmlInspector.refresh();
     }
   }
 });
