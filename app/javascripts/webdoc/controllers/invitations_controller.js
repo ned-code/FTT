@@ -18,9 +18,8 @@ WebDoc.InvitationsController = $.klass({
   },
   
   sendInvitationsByEmail: function(e) {
-    ddd('submit !!!');
     e.preventDefault();
-    var invitations = { invitations : {
+    var invitations = { invitation : {
                             emails : this.emailInvitationForm.getEmailsList(),
                             message : this.emailInvitationForm.getMessage()
                            }

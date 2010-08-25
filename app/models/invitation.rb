@@ -28,6 +28,7 @@ class Invitation < ActiveRecord::Base
   # =================
   
   def self.generate(user, params, generate_by_admin=false)
+    p params
     document_id = params[:document_id]
     document = Document.where(:uuid => document_id).first
     role = params[:role]
