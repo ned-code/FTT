@@ -27,7 +27,7 @@
 </section>
 
 <%= render "relatedcontent", :documents => @related_documents %>
-
+<%= render 'shared/popup' %>
 <% content_for :scripts do %>
   <script>
     WebDoc.WidgetManager.videoWidget = new WebDoc.Widget(<%= raw Rails.cache.fetch("widget_json_video") { Medias::Widget.first(:conditions => {:system_name => 'video'}).to_json } %>);
@@ -39,6 +39,10 @@
     WebDoc.Application.main(function() {
       var editor = new WebDoc.PageEditor();
       editor.load("<%= @document.uuid %>", <%= edit_mode? %>);
+      
+       var editor2 = new WebDoc.DocumentEditor();
+      editor2.start();
     });
   </script>
 <% end %>
+

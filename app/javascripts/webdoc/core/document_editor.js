@@ -112,8 +112,8 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
     infoDialogHeaderNode.html("Create new webdoc");
     infoDialogTitleNode.val("Untitled webdoc");
     infoDialogDescriptionNode.val("");
-    infoDialogWidthNode.val("800px");
-    infoDialogHeightNode.val("600px");
+    infoDialogWidthNode.val("600px");
+    infoDialogHeightNode.val("400px");
     infoDialogSubmitNode.val("Create");
 
     infoDialogNode.delegate("a.set_size", 'click', this.setSizeByName.pBind(this) );
@@ -330,16 +330,23 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
     ddd('set size for '+name);
     var size = undefined;
     switch(name){
-      case "iphone":
-        size = { width: "620", height: "480"};
+      case "6000x400":
+        size = { width: "6000", height: "400"};
         break;
-      case "ipad":
-        size = { width: "1024", height: "768"};
+      case "400x6000":
+        size = { width: "400", height: "6000"};
         break;
-      case "classic":
+      case "600x400":
       default:
-        size = { width: "800", height: "600"};
+        size = { width: "600", height: "400"};
     }
+    var allSizeNode = jQuery(".set_size");
+    allSizeNode.each(function() {
+    	jQuery(this).removeClass('selected_friend');
+    });
+    var friendNode = jQuery(e.target);
+      friendNode.addClass('selected_friend');
+
     infoDialogWidthNode.val(size.width+"px");
     infoDialogHeightNode.val(size.height+"px");
   },
@@ -371,6 +378,7 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
   },
   
   showInvitationsForm: function(e){
+  alert("test");
     e.preventDefault();
     WebDoc.application.invitationsController.init();
     this.popupSendInvitationsNode.removeClass('lb');

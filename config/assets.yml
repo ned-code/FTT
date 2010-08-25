@@ -195,6 +195,14 @@ javascripts:
     - app/javascripts/webdoc/media_browser/web_search_controller.js
     - app/javascripts/webdoc/media_browser/my_contents_controller.js
     - app/javascripts/webdoc/media_browser/media_browser_controller.js
+    
+    - app/javascripts/webdoc/controllers/friends_selector_controller.js
+    - app/javascripts/webdoc/controllers/email_invitation_controller.js
+    - app/javascripts/webdoc/controllers/document_collaboration_controller.js
+    - app/javascripts/webdoc/controllers/document_share_controller.js
+    - app/javascripts/webdoc/controllers/invitations_controller.js
+    - app/javascripts/webdoc/gui/document_list.js
+    - app/javascripts/webdoc/core/document_editor.js
   explore:
     - app/javascripts/webdoc/explore/*.js
   tests:
