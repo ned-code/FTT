@@ -1,5 +1,5 @@
 development:
-  host: dev1.webdoc.com  
+  host: dev1.webdoc.com
   synch_openfire_users: false
   mail_from: dev@local
   notify_administrator_onuser_creation: true
@@ -7,14 +7,26 @@ development:
   shindig_server_base: http://localhost:8080/gadgets/
   shindig_secure_token_key: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
   shindig_container: default
-  
+  facebook:
+    app_id: 129086070471066
+    app_secret: 9071c34cd12133e57f8e3dcc8fb6e0ec
+
 test:
   host: dev1.webdoc.com
   synch_openfire_users: false
+  facebook:
+    app_id: 129086070471066
+    app_secret: 9071c34cd12133e57f8e3dcc8fb6e0ec
 
 staging:
   host: st-wd.webdoc.com
+  facebook:
+    app_id: 148113541880046
+    app_secret: secret
 
 production:
   host: alpha.webdoc.com
   data_server: http://scala.webdoc.com
+  facebook:
+    app_id: 113345305387225
+    app_secret: secret

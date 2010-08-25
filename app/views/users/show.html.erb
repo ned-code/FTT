@@ -8,7 +8,7 @@
 <div class="title_wrap site_wrap wrap">
   <h1><%= @user.first_name %> <%= @user.last_name %></h1>
   <div class="column of_two" id="user_card">
-    <% if current_user == @user%>
+    <% if current_user == @user %>
       <%= render 'card', :user => @user %>
     <% else %>
       <%= render 'card', :user => @user, :subscribed => @user.follower?(current_user), :friendship => @user.friend?(current_user)  %>
@@ -19,10 +19,10 @@
     <ul class='horizontal index friends_index friend_list'>
       <% for user in @user.friends do %>
         <li>
-     <% if user == @user%>
-      <%= render 'card', :user => @user %>
+     <% if current_user == user %>
+      <%= render 'card', :user => user %>
     <% else %>
-      <%= render 'card', :user => @user, :subscribed => @user.follower?(current_user), :friendship => @user.friend?(current_user)  %>
+      <%= render 'card', :user => user, :subscribed => user.follower?(current_user), :friendship => user.friend?(current_user)  %>
     <% end %>
     </li>
       <% end %>

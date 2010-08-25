@@ -28,23 +28,25 @@ class Invitation < ActiveRecord::Base
   # =================
   
   def self.generate(user, params, generate_by_admin=false)
+    p params
     document_id = params[:document_id]
     document = Document.where(:uuid => document_id).first
     role = params[:role]
     user_id = user.id
     message = params[:message]
     emails = params[:emails]
-    
-    emails.each do |email|
-      if !email.blank?
-        invitation = Invitation.create!(  :document_id => document_id,
-                                          :user_id => user_id,
-                                          :role => role,
-                                          :status => PENDIG, 
-                                          :official => generate_by_admin,
-                                          :email => email
-                                        )
-        Notifier.send_invitation(user,email, message, role, document, invitation.id).deliver
+    if emails.present?
+      emails.each do |email|
+        if !email.blank?
+          invitation = Invitation.create!(  :document_id => document_id,
+                                            :user_id => user_id,
+                                            :role => role,
+                                            :status => PENDIG, 
+                                            :official => generate_by_admin,
+                                            :email => email
+                                          )
+          Notifier.send_invitation(user,email, message, role, document, invitation.id).deliver
+        end
       end
     end
   end

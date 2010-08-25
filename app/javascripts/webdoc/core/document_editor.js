@@ -48,6 +48,11 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
     infoDialogWidthNode = $("#wb-new-document-size-width");
     infoDialogHeightNode = $("#wb-new-document-size-height");
     infoDialogSubmitNode = infoDialogNode.find("input[type='submit']");
+    
+    this.popupNode= jQuery('#popup');
+    this.popupSendInvitationsNode = this.popupNode.find('#popup_invitations');
+    this.popupShareNode = this.popupNode.find('#popup_share');
+    this.popupCollaborateNode = this.popupNode.find('#popup_collaborate');
 
     // reset document back url (used to close a document)
     jQuery.cookie('document_back_url', null, { path: '/' });
@@ -70,9 +75,8 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
       .addClass( 'loading' )
       .delegate( ".wb-document-info", 'click', this.renameDocument )
       .delegate( ".wb-document-delete", 'click', this.deleteDocument )
-      .delegate( ".wb-document-collaborate", 'click', this.changeDocumentAccess )
-      .delegate( ".wb-document-share", 'click', this.shareDocument )
-      .delegate( ".wb-document-unshare", 'click', this.unshareDocument );
+      .delegate( ".wb-document-collaborate", 'click', this.changeDocumentAccess.pBind(this) )
+      .delegate( ".wb-document-share", 'click', this.shareDocument.pBind(this) );
 
       $('body')
       .delegate( "a[href='#filter-author']",  'click', this.searchDocuments.pBind(this) )
@@ -84,7 +88,9 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
           this.searchDocuments();
         }
       }.pBind(this));
-
+      
+      this.popupNode.delegate("a[href=#close]", 'click', this.closePopup.pBind(this));
+      
       this.filter = new WebDoc.DocumentDateFilter();
 
       this.documentList = new WebDoc.DocumentList("wb-document-list", this.filter);
@@ -225,32 +231,21 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
 
   changeDocumentAccess: function(e) {
     ddd("change access");
-    var data = $(this).data("webdoc"),
+    var data = jQuery(e.target).data("webdoc"),
         documentToEdit = data && data.id;
 
     WebDoc.application.accessController.showAccess( e, WebDoc.application.documentEditor.documentWithId(documentToEdit) );
- //   e.preventDefault();
+    this.popupCollaborateNode.removeClass('lb');
+    e.preventDefault();
   },
 
   shareDocument: function(e) {
     ddd("must publish document");
-    var data = $(this).data('webdoc'),
+    var data = jQuery(e.target).data('webdoc'),
         documentIdToPublish = data && data.id,
         document = WebDoc.application.documentEditor.documentWithId(documentIdToPublish);
-
     WebDoc.application.shareController.showShare(e, document);
-
-   // e.preventDefault();
-  },
-
-  unshareDocument: function(e) {
-    ddd("must unshare document");
-    var data = $(this).data('webdoc'),
-        documentIdToPublish = data && data.id,
-        document = WebDoc.application.documentEditor.documentWithId(documentIdToPublish);
-
-    WebDoc.application.shareController.showShare(e, document);
-
+    this.popupShareNode.removeClass('lb');
     e.preventDefault();
   },
 
@@ -376,8 +371,15 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
   },
   
   showInvitationsForm: function(e){
-    //popup form here
+    e.preventDefault();
     WebDoc.application.invitationsController.init();
+    this.popupSendInvitationsNode.removeClass('lb');
+  },
+  
+  closePopup: function(e){
+    e.preventDefault();
+    var openPopup = this.popupNode.find('li.popup');
+    openPopup.addClass('lb');
   }
 });
 

@@ -34,15 +34,29 @@
     -webkit-mask-image:url(shapes/0c.svg);*/
 }
 
+.textbox_item textarea{
+  -moz-border-radius:none;
+  -moz-box-shadow:none;
+  -webkit-border-radius:none;
+  -webkit-box-shadow:none;
+  box-shadow:none;
+  border-radius:none;
+}
+
+.textbox_item .text .view{
+  overflow:visible;
+}
+
 .textbox_item .text {
   position:absolute;
   left:20%;
   top:20%;
   width:60%;
   height:60%;
-  overflow: hidden;
+  overflow:hidden;
   padding: 0;
   background: transparent;
+  border:none;
   
   /* Inherit styles, because they are set on the parent */
   color: inherit;
