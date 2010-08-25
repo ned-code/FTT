@@ -148,7 +148,7 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
       }
       else {   
         appsList = $("<ul/>", {
-          'class': 'apps-index thumbs index'
+          'class': 'horizontal med_thumbs_index apps_index index'
         });
         
         for (var i = 0; i < data.widgets.length; i++) {
@@ -207,7 +207,7 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
           href: "#"+widget.data.system_name,
           css: { backgroundImage: "url('" + properties.icon_url + "')" },
           title: widget.data.title + " ["+properties.version+"]"
-        }),
+        }).addClass('med_thumb app_thumb thumb'),
         title = $("<span/>", { 'class': "title" }),
         version = $("<span/>", { 'class': "version" }),
         li = $("<li/>");
