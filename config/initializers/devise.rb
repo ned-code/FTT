@@ -142,7 +142,7 @@ Devise.setup do |config|
   # end
 
 
-  config.oauth :facebook, '102653226459404', '4555b046a46fe59ac1dc70efbf2dbd52',
+  config.oauth :facebook, APP_CONFIG['facebook']['app_id'], APP_CONFIG['facebook']['app_secret'],
     :site              => 'https://graph.facebook.com/',
     :scope             => %w(email offline_access)  
 

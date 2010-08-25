@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.0.0.rc'
+gem 'rails', '3.0.0.rc2'
 gem 'haml'
 gem 'i18n'
 gem 'mime-types', :require => 'mime/types'
@@ -16,7 +16,7 @@ gem 'oauth2'
 gem 'will_paginate', :branch => 'rails3', :git => 'http://github.com/mislav/will_paginate.git'
 gem 'uuidtools' # for has_uuid plugin
 gem 'uuid'
-gem "mysql"
+gem "mysql2"
 gem 'rack-debug'
 gem 'nokogiri'
 gem 'acl9'
