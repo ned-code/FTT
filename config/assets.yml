@@ -174,25 +174,25 @@ javascripts:
     - app/javascripts/webdoc/tools/text_tool.js
     - app/javascripts/webdoc/tools/textbox_tool.js
     - app/javascripts/webdoc/tools/text_tool/*.js
-    - app/javascripts/webdoc/controllers/*.js  
+    - app/javascripts/webdoc/controllers/*.js
+
+    - app/javascripts/webdoc/controllers/panel_controllers/content_panels/library.js
+    - app/javascripts/webdoc/controllers/panel_controllers/content_panels/apps_library.js
+    - app/javascripts/webdoc/controllers/panel_controllers/content_panels/images_uploader.js
+    - app/javascripts/webdoc/controllers/panel_controllers/content_panels/sha1.js
+    - app/javascripts/webdoc/controllers/panel_controllers/content_panels/web_images_search.js
+    - app/javascripts/webdoc/controllers/panel_controllers/content_panels/web_videos_search.js
+    - app/javascripts/webdoc/controllers/panel_controllers/content_panels/images_uploader.js
+    - app/javascripts/webdoc/controllers/panel_controllers/content_panels/theme_elements_library.js
+    - app/javascripts/webdoc/controllers/panel_controllers/content_panels/packages_library.js
+    - app/javascripts/webdoc/controllers/panel_controllers/content_panels/web_browser.js
+    - app/javascripts/webdoc/controllers/panel_controllers/content_panels/web_search_controller.js
+    - app/javascripts/webdoc/controllers/panel_controllers/content_panels/my_contents_controller.js
+
     - app/javascripts/webdoc/controllers/panel_controllers/*.js
     - app/javascripts/webdoc/controllers/inspectors/*.js
     - app/javascripts/webdoc/core/*.js
-    
-    - app/javascripts/webdoc/media_browser/library.js
-    - app/javascripts/webdoc/media_browser/apps_library.js
-    - app/javascripts/webdoc/media_browser/images_uploader.js
-    - app/javascripts/webdoc/media_browser/sha1.js
-    - app/javascripts/webdoc/media_browser/web_images_search.js
-    - app/javascripts/webdoc/media_browser/web_videos_search.js
-    - app/javascripts/webdoc/media_browser/images_uploader.js
-    - app/javascripts/webdoc/media_browser/theme_elements_library.js
-    - app/javascripts/webdoc/media_browser/packages_library.js
-    - app/javascripts/webdoc/media_browser/web_browser.js
-    - app/javascripts/webdoc/media_browser/web_search_controller.js
-    - app/javascripts/webdoc/media_browser/my_contents_controller.js
-    - app/javascripts/webdoc/media_browser/media_browser_controller.js
-    
+   
     - app/javascripts/webdoc/controllers/friends_selector_controller.js
     - app/javascripts/webdoc/controllers/email_invitation_controller.js
     - app/javascripts/webdoc/controllers/document_collaboration_controller.js
@@ -200,6 +200,7 @@ javascripts:
     - app/javascripts/webdoc/controllers/invitations_controller.js
     - app/javascripts/webdoc/gui/document_list.js
     - app/javascripts/webdoc/core/document_editor.js
+ 
   explore:
     - app/javascripts/webdoc/explore/*.js
   tests:
