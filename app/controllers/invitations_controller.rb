@@ -1,6 +1,5 @@
 class InvitationsController < ApplicationController
   before_filter :authenticate_user!, :except => :show
-  skip_before_filter :process_invitation
   
   def index
     @invitations = current_user.invitations

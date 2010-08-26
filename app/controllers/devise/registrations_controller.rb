@@ -1,7 +1,7 @@
 class Devise::RegistrationsController < ApplicationController
   prepend_before_filter :require_no_authentication, :only => [ :new, :create, :cancel ]
   prepend_before_filter :authenticate_scope!, :only => [:edit, :update, :destroy]
-  skip_before_filter :process_invitation
+
   include Devise::Controllers::InternalHelpers
 
   # GET /resource/sign_up
@@ -16,14 +16,18 @@ class Devise::RegistrationsController < ApplicationController
     
     if resource.save
       set_flash_message :notice, :signed_up
-      invitation = Invitation.pending.where(:uuid => params[:invitation]).first
-      if invitation.present?
-        sign_in(resource_name, resource)
-        invitation.accept!(current_user)
-        if invitation.document.present?
-          redirect_to document_path(invitation.document)
+      if session[:invitation_id].present?
+        invitation = Invitation.pending.where(:uuid => session[:invitation_id]).first
+        if invitation.present?
+          sign_in(resource_name, resource)
+          invitation.accept!(current_user)
+          if invitation.document.present?
+            redirect_to document_path(invitation.document)
+          else
+            redirect_to root_path
+          end
         else
-          redirect_to root_path
+          sign_in_and_redirect(resource_name, resource)
         end
       else
         sign_in_and_redirect(resource_name, resource)
