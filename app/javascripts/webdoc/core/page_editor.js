@@ -531,8 +531,10 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
     editedDocument.save(function(persitedDoc){
       node
         .removeClass('loading');
-         //.trigger({type: 'close'});
       //Update dom here !!
+      	
+      	 	this.titleNode= jQuery('#editor header h1');
+      		this.titleNode.replaceWith("<h1>"+infoDialogTitleNode.val()+"</h1>");
     });
       
       return false;
