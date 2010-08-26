@@ -47,4 +47,9 @@ class UserList < ActiveRecord::Base
     return if default #prevent to destroy the default list
     super
   end
+  
+  #Return all lists where a user is member (not owner)
+  def self.find_friends_list_by_user(user)
+    UserList.joins(:friendships => :user_lists_friends).where('friendships.friend_id = ?', user.uuid)
+  end
 end

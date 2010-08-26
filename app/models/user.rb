@@ -85,6 +85,7 @@ class User < ActiveRecord::Base
   has_many :blocked_friendships, :conditions => { :status => Friendship::BLOCKED }, :class_name => 'Friendship', :foreign_key => 'user_id'
   has_many :blocked_friends, :through => :blocked_friendships, :source => :friend
   
+  #Relations for the lists that belongs to the user !
   has_many :user_lists, :conditions => { :default => false }
   has_one :default_list, :class_name => 'UserList', :foreign_key => :user_id, :conditions => { :default => true }
   
@@ -178,6 +179,10 @@ class User < ActiveRecord::Base
   
   def friends_count
     friends.length
+  end
+  
+  def friends_user_lists
+    UserList.find_friends_list_by_user(self)
   end
 
   def follow(user_id)

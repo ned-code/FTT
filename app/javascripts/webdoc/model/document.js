@@ -32,6 +32,10 @@ WebDoc.Document = $.klass(WebDoc.Record, {
     return this.data.creator_id;
   },
   
+  viewsCount: function () {
+  	return this.data.views_count;
+  },
+  
   setTitle: function(title, skipSave) {
     this.data.title = title;
     if(!skipSave && !skipSave === true) {
