@@ -33,7 +33,7 @@ class InvitationsController < ApplicationController
   def destroy
     @invitation = Invitation.where( :uuid => params[:id]).first
     @invitation.destroy
-    flash[:notice] = 'Invitation removed'    
+    flash[:notice] = 'Invitation removed'
     redirect_to invitations_path
   end
 end

@@ -24,7 +24,7 @@ WebDoc.AppsMessagingController = $.klass({
       if (registerInspectorPanes) {
         var appId = registerInspectorPanes[1];
         var panes = registerInspectorPanes[2].split(":");
-        var app = WebDoc.appsContainer.getApp(appId);
+        var app = WebDoc.appsContainerDomNode.getApp(appId);
         if (app) app.createInspectorPanes(panes);
       }
       
@@ -50,7 +50,7 @@ WebDoc.AppsMessagingController = $.klass({
         var appId = adjustAppHeight[1];
         var height = adjustAppHeight[2];
         
-        var app = WebDoc.appsContainer.getApp(appId);
+        var app = WebDoc.appsContainerDomNode.getApp(appId);
         if (app) app.appView.adjustHeight(height);
       }
       
@@ -63,7 +63,7 @@ WebDoc.AppsMessagingController = $.klass({
         var paneId = adjustPaneHeight[2];
         var height = parseInt(adjustPaneHeight[3],10);
         
-        var app = WebDoc.appsContainer.getApp(appId);
+        var app = WebDoc.appsContainerDomNode.getApp(appId);
         if (app) app.appView.inspectorPanesManager.adjustAppPaneHeight(paneId, height);
       }
     }
@@ -84,13 +84,13 @@ WebDoc.AppsMessagingController = $.klass({
     // Tell all the apps the WebDoc mode (Edit/Preview) has changed
     // mode=true => Edit, false => Preview
     var message = "wd-edit-mode:"+mode;
-    $.each(WebDoc.appsContainer.apps, function(k, v) {
+    $.each(WebDoc.appsContainerDomNode.apps, function(k, v) {
       this.sendCall(v, message);
     }.pBind(this));
   },
   
   sendCall: function(appOrAppId, message) {
-    var app = (typeof appOrAppId == "object") ? appOrAppId : WebDoc.appsContainer.getApp(appOrAppId);
+    var app = (typeof appOrAppId == "object") ? appOrAppId : WebDoc.appsContainerDomNode.getApp(appOrAppId);
     var appFrameId = app.getIframeId();
     $("#"+appFrameId)[0].contentWindow.postMessage(message, "*");
   }

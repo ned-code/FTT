@@ -161,13 +161,19 @@ WebDoc.DocumentShareController = $.klass({
         role = 'viewer_comment';
       }
       
-      var friendsList = this.friendsSelector.getFriendsSelected();
-      if(friendsList.length == 0){
-        //TODO notify the user that there no user selected
-        return;
+      if(this.friendsSelector.getList() === true){
+        this._createListsRights(role);
       }
-      ddd('friendsList',friendsList);
-      this._createFriendsRights(friendsList,role);
+      else{
+        var friendsList = this.friendsSelector.getFriendsSelected();
+        if(friendsList.length == 0){
+          //TODO notify the user that there no user selected
+          return;
+        }
+        ddd('friendsList',friendsList);
+        this._createFriendsRights(friendsList,role);
+      }
+      
     }
     else if(this.publicRadio.attr('checked')){
       if(this._getAllowCommentsCheckBoxValue()){
@@ -183,6 +189,17 @@ WebDoc.DocumentShareController = $.klass({
       ddd('no radio button checked !');
       return;
     }
+  },
+  
+  _createListsRights: function(role){
+    var access_content = { role : role,
+                           list : true
+                         };
+    var url = '/documents/' + this.document.uuid() + '/roles';
+    var jSONData = { accesses : access_content };
+    WebDoc.ServerManager.request(url,function(data){
+      this.loadAccess(data);
+    }.pBind(this), 'POST', jSONData);
   },
   
   _createFriendsRights: function(friendsList, role_type){

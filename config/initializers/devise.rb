@@ -164,21 +164,6 @@ module Devise
       end
     end
   end
-  module Controllers
-    module InternalHelpers
-      def require_no_authentication
-        if warden.authenticated?(resource_name)
-          resource = warden.user(resource_name)
-          if params[:invitation] && params[:app_id].blank?
-            redirect_url = "#{after_sign_in_path_for(resource)}?invitation=#{params[:invitation]}"
-            redirect_to redirect_url
-          else
-            redirect_to after_sign_in_path_for(resource)
-          end
-        end
-      end
-    end
-  end
 end
 
 class Warden::SessionSerializer

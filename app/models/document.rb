@@ -93,6 +93,16 @@ class Document < ActiveRecord::Base
         current_user.roles.all(:select => 'document_id', :conditions => { :name => document_filter } ).each do |role|
           documents_ids << role.document_id if role.document_id
         end
+        
+        #TODO Improve perfomance of the following
+        list_ids = []
+        #Retrieve douments share by list
+        current_user.friends_user_lists.each do |list|
+          list_ids << list
+        end
+        Role.where('user_list_id in (?)', list_ids).select(:document_id).all.each do |role|
+          documents_ids << role.document_id
+        end
         # Must remove owned documents
         owner_ids = []
         current_user.documents.each do |doc|
@@ -290,7 +300,19 @@ class Document < ActiveRecord::Base
     end
     result
   end
-
+  
+  def create_role_for_list(current_user, accesses = {})
+    role = accesses[:role]
+    if Role::PUBLIC_ROLES.include?(role)
+      #if we give public right to a single user, it means that the document is no more public anymore
+      self.unshare # already invalidate_cache in this method
+    else
+      self.invalidate_cache
+    end
+    #Remplace this with a has_role! method in user_ésit model
+    Role.create!(:name => role, :user_list_id => current_user.default_list.uuid, :document_id => self.uuid)
+  end
+  
   def create_role_for_users(current_user, accesses = {})
     role = accesses[:role]
     if Role::PUBLIC_ROLES.include?(role)

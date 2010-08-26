@@ -9,7 +9,10 @@ class DocumentRolesController < ApplicationController
   # POST /documents/:document_id/roles
   def create
     authorize! :update, @document
-    if @document.create_role_for_users(current_user, params[:accesses])
+    if params[:accesses]['list'] == 'true'
+      @document.create_role_for_list(current_user, params[:accesses])
+      render :json => @document.to_access_json
+    elsif @document.create_role_for_users(current_user, params[:accesses])
       render :json => @document.to_access_json
     else
       render :status => :error

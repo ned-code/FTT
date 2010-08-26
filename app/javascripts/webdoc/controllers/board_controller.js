@@ -4,7 +4,7 @@
 WebDoc.BoardController = jQuery.klass({
   
   // Constructor     
-  initialize: function(editable, autoFit) {
+  initialize: function(editable, autoFit, isInteraction) {
   	this.editorNode = jQuery('#editor');
     this.boardCageNode = jQuery("#webdoc");
     this.boardContainerNode = jQuery("#board-container");
@@ -12,7 +12,11 @@ WebDoc.BoardController = jQuery.klass({
     this.themeNode = jQuery('<link id="theme" rel="stylesheet" type="text/css" />'); 
     jQuery('head').append(this.themeNode);
     this.loadingNode = jQuery("#webdoc_loading");
-    
+
+    // in non editable mode we are alway in interaction mode
+    if (!editable) {
+      isInteraction = true;
+    }
     this._editable = editable;
     this._autoFit = autoFit;
     this._currentZoom = 1; 
@@ -23,7 +27,7 @@ WebDoc.BoardController = jQuery.klass({
     this._currentPageListeners = [];
     this._currentPage = null;
     this._currentPageView = null;
-    this._isInteraction = false;
+    this._isInteraction = isInteraction;
     this._isMovingSelection = false;
     this.previousThemeClass = undefined;
     this.currentThemeClass = undefined;
@@ -118,7 +122,7 @@ WebDoc.BoardController = jQuery.klass({
       }
     }
     this.zoom(defaultZoom);
-    this.setMode( this.isInteractionMode );
+    this.setMode( this._isInteraction );
     this.currentPageView().domNode
     .bind("dragenter", this, WebDoc.DrageAndDropController.dragEnter)
     .bind("dragover", this, WebDoc.DrageAndDropController.dragOver)
@@ -191,7 +195,7 @@ WebDoc.BoardController = jQuery.klass({
 //      }
 //    });
 
-    if (WebDoc.appsContainer) {
+    if (WebDoc.appsContainerDomNode) {
       WebDoc.appsMessagingController.notifyModeChanged(!state);
     }
     // TODO for FF .5 we put svg backward because pointer event is not implemented
