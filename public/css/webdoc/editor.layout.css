@@ -318,6 +318,10 @@ body.full_view {
   margin-right: 0;
 }
 
+#text-inspector-content {
+  height: 400px;
+}
+
 .pages_panel {
   left: 0;
   bottom: 0;
