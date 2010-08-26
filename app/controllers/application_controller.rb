@@ -38,7 +38,7 @@ protected
   end
 
   def http_authenticate
-    if !['65.49.79.67', '86.57.245.87'].include?(request.remote_ip) && Rails.env != 'test'
+    if !['65.49.79.67', '86.57.245.87'].include?(request.remote_ip) && Rails.env != 'test' && !(controller_name == 'sessions' && action_name == 'create')
       authenticate_or_request_with_http_basic do |username, password|
         username == "wduser" && password == "wdalpha001"
       end
