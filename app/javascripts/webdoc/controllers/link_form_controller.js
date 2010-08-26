@@ -10,6 +10,7 @@ WebDoc.LinkFormController = $.klass({
     this._form = null;
     this._label = null;
     this._link = null;
+   	this.popupNode= jQuery('#popup');
   },
 
   showDialog: function(e, oldLink, callback) {
@@ -31,20 +32,21 @@ WebDoc.LinkFormController = $.klass({
       this._refreshTypeFromRadio();
     }
     
-    this.domNode.show();
+   this.domNode.removeTransitionClass('lb');
     
     var that = this;
-    this.domNode.pop({
-      attachTo: $(e.currentTarget),
-      initCallback: function(){
+   // this.domNode.pop({
+    //  attachTo: $(e.currentTarget),
+     // initCallback: function(){
+     
         that._link.focus();
         that._form.bind('submit', function(){
           that.domNode.hide();
           callback.call(that, that._link.val());
           return false;
         });
-	    }
-    });
+	   // }
+    //});
   },
 
   _createDialog: function(e) {
@@ -60,7 +62,9 @@ WebDoc.LinkFormController = $.klass({
     this._radioMail   = $('<input/>', { type: 'radio', 'data-webdoc-link-type': 'mail', name: 'radio_link' });
     this._radioWebdoc = $('<input/>', { type: 'radio', 'data-webdoc-link-type': 'webdoc', name: 'radio_link' });
     this._form       = $('<form/>');
-    this.domNode     = $('<div/>', { style: 'width: 200px;' })
+    this._popWrap		= $('<div/>', {"class":"box"});
+    this.domNode     = $('<li/>', {"class":"lb popup" })
+    			.append(this._popWrap
             .append(this._form
               .append(this._label)
               .append(this._link)
@@ -78,8 +82,10 @@ WebDoc.LinkFormController = $.klass({
                 .append(cancel)
                 .append(button)
               )
-            );
-
+            )
+           );
+		this.popupNode.append(this.domNode);
+		ddd("ZZZZZZAAAAAAAAAHHHHHHHHHHHHH");
   },
 
 

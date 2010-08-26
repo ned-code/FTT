@@ -66,7 +66,7 @@ WebDoc.FriendsSelectorController = $.klass({
         }
       }
       
-      var friendCard = '<div class="card friendselector" style="background-image: url(\''+friend.avatar_thumb_url+'\');"><h4 class="card-name card-name-avoid-button">'+friend.first_name+'<br />'+friend.last_name+'</h4></div>';
+      var friendCard = '<div class="card friendselector" style="background-image: url(\''+friend.avatar_thumb_url+'\');">'+friend.first_name+'<br />'+friend.last_name+'</div>';
     	
       friendNode = jQuery('<li/>')
         .html(friendCard)

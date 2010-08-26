@@ -137,6 +137,7 @@ body {
 .friends_selector_index >li {
 	width:12em;
 	margin-bottom: 1em;
+	margin-left:0.2em;
 }
 /* .button extensions */
 
@@ -238,7 +239,7 @@ body {
     left: 50%;
     top: 50px;
     border: 10px solid #999;
-    margin-left: -230px;
+    margin-left:-250px;
     background-color: #fff;
     padding: 20px;
      z-index:4;

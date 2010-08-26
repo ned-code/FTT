@@ -54,6 +54,7 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
     this.popupShareNode = this.popupNode.find('#popup_share');
     this.popupCollaborateNode = this.popupNode.find('#popup_collaborate');
     this.popupCreateEditNode = this.popupNode.find('#popup_createeditwebdoc');
+    
 
     // reset document back url (used to close a document)
     jQuery.cookie('document_back_url', null, { path: '/' });

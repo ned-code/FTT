@@ -1,10 +1,18 @@
 /*@stephen, I don't know where to put it !!!*/
-.selected_friend{
-  background-color: #0a0;
-}
+
 .choose_friend {
 	border: 1px dotted black;
+
 }
 .choose_friend:hover {
-	border: 1px solid green;
+	border: 1px solid #919CA0;
+}
+
+.selected_friend{
+  background-color: #919CA0;
+  color:rgb(255,255,255);
+  -moz-border-radius:		5px;
+	-webkit-border-radius: 	5px;
+	border-radius: 			5px;
+	border:1px transparent solid;
 }
