@@ -2,9 +2,16 @@
 
 .frame_layer {
   border: 1px solid rgb(220,220,220);
+  
+  -webkit-border-radius: 0.3333em;
+     -moz-border-radius: 0.3333em;
+       -o-border-radius: 0.3333em;
+          border-radius: 0.3333em;
+  
   -webkit-box-shadow: inset 0 0 4px hsl( 28, 0%, 50% );
      -moz-box-shadow: inset 0 0 4px hsl( 28, 0%, 50% );
           box-shadow: inset 0 0 4px hsl( 28, 0%, 50% );
+  
   background-color: rgb(220, 220, 220);
 }
 
@@ -25,6 +32,7 @@
 
 .tools_panel,
 .controls_panel {
+  /* Just for testing */
   background-color: rgb(238,238,238);
 }
 
