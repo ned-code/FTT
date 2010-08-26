@@ -81,7 +81,7 @@ WebDoc.DocumentCollaborationController = $.klass({
     var friendslist = [];
     var user;
     for (var i = 0; i < this.access.length; i++) {
-      user = this.access[i][0];
+      user = this.access[i];
       if (user.role === "editor" || user.role === "contributor" ) {
         friendslist.push(user.uuid);
         this.createAccessItem(user);
