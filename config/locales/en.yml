@@ -123,70 +123,72 @@ en:
         mode_edit: "Edit Mode"
         mode_preview: "Preview Mode"
         mode_embed: "Embed Mode"
-      apps_panel:
-        apps:
-          title: "Apps"
-          my_apps: "My apps"
-          show_details: "Show app details"
-          detail_view:
-            title: "App"
-            add_to_page: "Add to page"
-      my_content_panel:
-        buttons:
-          back: "Back"
-        images:
-          add_image: "Add image"
-          uploaded_images: "Uploaded images"
-          facebook_albums: "Facebook albums"
+        
+      content_panes:
+        apps_panel:
+          apps:
+            title: "Apps"
+            my_apps: "My apps"
+            show_details: "Show app details"
+            detail_view:
+              title: "App"
+              add_to_page: "Add to page"
+        yourstuff_pane:
           buttons:
             back: "Back"
-            upload: "Upload"
-            cancel_upload: "Cancel upload"
-          services:
-            flickr: "Flickr"
-            google: "Google Images"
-          add_images_view:
-            title: "Add Images"
-            choose_upload_image: "Choose image(s) to upload"
-        videos: 
-          title: "Videos"
-          my_videos: "My videos"
-          web: "Web"
-          web_detail: "Search videos on the web"
-          show_details: "Show video details"
-          services:
-            youtube: "Youtube"
-            vimeo: "Vimeo"
-          detail_view:
-            title: "Video"
-            add_to_page: "Add to page"
-            drag_handle: "drag and drop to add"
-            show_on: "Show video on *"
-            remove_from_my_videos: "Remove from My Videos"
-            delete: "Delete video"
-            add_to_my_videos: "Add to My Videos"
-      browse_web_panel:
-        buttons:
-          back: "Back"
-          search: "Search"
-        images:
-          web: "Web"
-          web_detail: "Find images on the web"
-          show_details: "Show image details"
-          services:
-            flickr: "Flickr"
-            google: "Google Images"
-        videos:
-          web: "Web"
-          web_detail: "Find videos on the web"
-          show_details: "Show video details"
-          services:
-            youtube: "Youtube"
-            vimeo: "Vimeo"
-          detail_view:
-            title: "Video"
-            add_to_page: "Add to page"
-            drag_handle: "drag and drop to add"
+          images:
+            add_image: "Add image"
+            uploaded_images: "Uploaded images"
+            facebook_albums: "Facebook albums"
+            buttons:
+              back: "Back"
+              upload: "Upload"
+              cancel_upload: "Cancel upload"
+            services:
+              flickr: "Flickr"
+              google: "Google Images"
+            add_images_view:
+              title: "Add Images"
+              choose_upload_image: "Choose image(s) to upload"
+          videos:
+            title: "Videos"
+            my_videos: "My videos"
+            web: "Web"
+            web_detail: "Search videos on the web"
+            show_details: "Show video details"
+            services:
+              youtube: "Youtube"
+              vimeo: "Vimeo"
+            detail_view:
+              title: "Video"
+              add_to_page: "Add to page"
+              drag_handle: "drag and drop to add"
+              show_on: "Show video on *"
+              remove_from_my_videos: "Remove from My Videos"
+              delete: "Delete video"
+              add_to_my_videos: "Add to My Videos"
+        browseweb_pane:
+          buttons:
+            back: "Back"
+            search: "Search"
+          images:
+            web: "Web"
+            web_detail: "Find images on the web"
+            show_details: "Show image details"
+            services:
+              flickr: "Flickr"
+              google: "Google Images"
+          videos:
+            web: "Web"
+            web_detail: "Find videos on the web"
+            show_details: "Show video details"
+            services:
+              youtube: "Youtube"
+              vimeo: "Vimeo"
+            detail_view:
+              title: "Video"
+              add_to_page: "Add to page"
+              drag_handle: "drag and drop to add"
         
     show:
       toolbar_panel:
@@ -346,7 +348,9 @@ en:
         close: "Close"
         upload: "Upload"
         cancel_uplad: "Cancel upload"
-        
+
+    social_panel:
+      title: "Social panel"
   
   images:
     index:
