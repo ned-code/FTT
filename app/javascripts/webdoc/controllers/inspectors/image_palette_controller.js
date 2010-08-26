@@ -230,7 +230,7 @@ WebDoc.ImagePaletteController = $.klass({
         image.data.favorites = 1;
         image.save(function(event){
           if($('#media-browser-my-favorites').length){
-            WebDoc.application.mediaBrowserController.myContentsController.insertImage(event.data, event.data.uuid, 'my-favorites-images');
+            WebDoc.application.contentPanelController.myContentsController.insertImage(event.data, event.data.uuid, 'my-favorites-images');
           }
           this.selectedItem.data.media_id = event.data.uuid;
           this.selectedItem.data.data.src = event.data.properties.url;

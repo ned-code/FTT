@@ -937,7 +937,19 @@ WebDoc.BoardController = jQuery.klass({
             this.moveSelection("down", e.shiftKey?"big" : "small");
           }
           e.preventDefault();          
-          break;                       
+          break;
+        case 70:
+          if (!this._isInteraction && this._selection.length > 0) {
+            this.moveSelectionToFront();
+          }
+          e.preventDefault();
+          break;
+        case 66:
+          if (!this._isInteraction && this._selection.length > 0) {
+            this.moveSelectionToBack();
+          }
+          e.preventDefault();
+          break;
       }      
     }
     else {
