@@ -1,6 +1,9 @@
 /* .panel classes */
 
-.panel>header h3 {
+
+/* .inspector panes */
+
+.inspector>header h3 {
   color: white;
   background: rgba(0,0,0,0.4);
 }
@@ -8,7 +11,6 @@
 /* .thumb classes */
 
 .app_thumb {
-  
   -webkit-border-radius: 6px;
   -moz-border-radius:    6px;
   border-radius:         6px;
