@@ -74,8 +74,8 @@ WebDoc.DocumentShareController = $.klass({
     this.access = json.access;
     var friends_access = [];
     for (var i = 0; i < this.access.length; i++) {
-      if(this.access[i][0].role == 'viewer_comment' || this.access[i][0].role == 'viewer_only'){
-        var userInfos = this.access[i][0];
+      if(this.access[i].role == 'viewer_comment' || this.access[i].role == 'viewer_only'){
+        var userInfos = this.access[i];
         if(!isShared){
           isShared = true;
           //we consider that all the user have the same role !!

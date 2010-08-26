@@ -31,7 +31,8 @@ WebDoc.WidgetInspectorController = $.klass({
         else if (widgetPaletteContent[0].contentWindow.initialize) {
           widgetPaletteContent[0].contentWindow.initialize();
         }
-      }                      
+      }
+      this._newInspectorLoading = false;
     }.pBind(this));
     
     // Quick hack
@@ -57,9 +58,10 @@ WebDoc.WidgetInspectorController = $.klass({
     if (widgetContent.attr("src") != selectedItem.item.getInspectorUrl()) {
       this.domNode.addTransitionClass('loading');
       widgetContent[0].contentDocument.write("");
+      this._newInspectorLoading = true;
       widgetContent.attr("src", selectedItem.item.getInspectorUrl());
     }      
-    else {
+    else if (!this._newInspectorLoading){
       if (widgetContent[0].contentWindow && widgetContent[0].contentWindow.widget && widgetContent[0].contentWindow.widget._onLoad) {
         var widgetObject = widgetContent[0].contentWindow.widget;
         widgetObject.lang = "en";
