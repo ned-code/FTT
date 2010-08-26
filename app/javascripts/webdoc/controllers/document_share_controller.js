@@ -86,10 +86,28 @@ WebDoc.DocumentShareController = $.klass({
       }
     }
     
+    //we also look if it's share with a list
+    //UserList access
+    this.listAccess = json.list_access;
+    var lists = [];
+    var list;
+    for(var i = 0; i < this.listAccess.length; i++){
+      list = this.listAccess[i];
+      if (list.role === "viewer_comment" || list.role === "viewer_only" ) {
+        if(!isShared){
+          isShared = true;
+          //we consider that all the user have the same role !!
+          this._initAllowCommentsCheckBox(list.role);
+        }
+        lists.push(list);
+      }
+    }
+        
     if(isShared){
       this.yourConnectionsRadio.click();
       this.shareAllowComments.show();
       this.friendsSelector.loadFriendList(friends_access);
+      this.createListAccessItems(lists);
       this.yourConnectionsList.show();
     }
     else{
@@ -97,6 +115,20 @@ WebDoc.DocumentShareController = $.klass({
       this.onlyParticipantsRadio.click();
       this.shareAllowComments.hide();
     }
+  },
+  
+  createListAccessItems: function(lists){
+    var accessEntry, deleteItem;
+    for(var i=0; i< lists.length; i++){
+      accessEntry = jQuery("<li>")
+        .data('uuid', lists[i].uuid)
+        .data('role', lists[i].role)
+        .addClass("list_access")
+        .html(lists[i].name + " | " + lists[i].role);
+      deleteItem = $('<a/>', {'class': "delete", href: "#delete", title: "delete editor"}).html("Delete");
+      accessEntry.append(deleteItem);    
+      this.sharedUsersList.append(accessEntry);
+    }    
   },
   
   _createAccessItem: function(userInfos) {
