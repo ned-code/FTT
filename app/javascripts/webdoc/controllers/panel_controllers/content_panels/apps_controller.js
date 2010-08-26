@@ -8,37 +8,35 @@
 
 
 WebDoc.AppsController = $.klass(WebDoc.Library, {
+
+  APPS_ID: "apps-list",
+
   initialize: function($super, domNodeId) {
     $super(domNodeId);
-    
-    this.detailsView = $('#app_details');
-    this._setupMyApps();
-    this._setupDetailsView();
+
+    this.domNode = jQuery('#'+domNodeId);
+    this.detailsView = this.domNode.find('#app_details');
+    this.appsContainerDomNode = this.domNode.find('#'+this.APPS_ID);
+    this.detailsViewImg = this.detailsView.find('.single_app img');
     this.appsPage = 1;
+
+    this.appsContainerDomNode
+      .find(".thumbnails")
+      .delegate("a", "dragstart", this._prepareThumbDrag.pBind(this));
+
+    this._setupDetailsView();
     
     // Observe thumbnails clicks with event delegation
-    $("#media-browser-apps").delegate(".thumbnails li a", "click", function (e) {
+    this.domNode.delegate(".thumbnails li a", "click", function (e) {
       var widgetData = $( e.currentTarget ).data("widget");
-      this.showDetailsView( widgetData, false );
+      this.showDetailsView( widgetData );
       e.preventDefault();
     }.pBind(this));
     
     this._loadMyApps();	
   },
-
-  _setupMyApps: function() {
-    this.myAppsId = "apps-list";
-    this.myAppsContainer = $('#'+this.myAppsId);
-    
-    // Setup app thumbnails drag n' drop
-    this.myAppsContainer
-    .find(".thumbnails")
-    .delegate("a", "dragstart", this._prepareThumbDrag.pBind(this));
-  },
   
   _setupDetailsView: function() {
-    this.detailsViewImg = this.detailsView.find('.single_app img');
-    
     // Setup drag n' drop
     this.detailsView.find('.single_app')
     .attr({ draggable: "true" })
@@ -67,15 +65,14 @@ WebDoc.AppsController = $.klass(WebDoc.Library, {
           break;
       }
     }.pBind(this));
-    
   },
   
   showList: function(){
     this._hideAll();
-    $('#apps-list').show();
+    this.appsContainerDomNode.show();
   },
   
-  showDetailsView: function(widgetData, backHome) {
+  showDetailsView: function(widgetData) {
     
     var properties = widgetData.properties;
     // View title
@@ -106,21 +103,10 @@ WebDoc.AppsController = $.klass(WebDoc.Library, {
     var descEl = this.detailsView.find('.app_description');
     descEl.text(desc);
     
-    //setup back button
-    this.setupBackButton(backHome);
-    
     this._hideAll();
     this.detailsView.show();
   },
-  
-  setupBackButton: function(backHome){
-    if(backHome){
-      $('#media-browser-app-details-back').attr({href: '#media-browser-home'});
-    }
-    else{
-      $('#media-browser-app-details-back').attr({href: '#apps-list'});
-    }
-  },
+
 
   _prepareThumbDrag: function(e) {
     var thumb = $( e.currentTarget );
@@ -134,7 +120,7 @@ WebDoc.AppsController = $.klass(WebDoc.Library, {
   },
   
   _loadMyApps: function(pageIncrement) {
-    var appsThumbWrap = this.myAppsContainer.find(".thumbnails");
+    var appsThumbWrap = this.appsContainerDomNode.find(".thumbnails");
     
     appsThumbWrap.html('');
     this.showSpinner(appsThumbWrap);
@@ -189,13 +175,13 @@ WebDoc.AppsController = $.klass(WebDoc.Library, {
   },
   
   _nextPage: function(){
-    this.myAppsContainer.find(".thumbnails").empty();
+    this.appsContainerDomNode.find(".thumbnails").empty();
     this.appsPage += 1;
     this._loadMyApps();
   },
   
   _previousPage: function(){
-    this.myAppsContainer.find(".thumbnails").empty();
+    this.appsContainerDomNode.find(".thumbnails").empty();
     this.appsPage -= 1;
     this._loadMyApps();
   },

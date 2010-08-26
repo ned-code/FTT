@@ -191,7 +191,7 @@ WebDoc.BoardController = jQuery.klass({
 //      }
 //    });
 
-    if (WebDoc.appsContainer) {
+    if (WebDoc.appsContainerDomNode) {
       WebDoc.appsMessagingController.notifyModeChanged(!state);
     }
     // TODO for FF .5 we put svg backward because pointer event is not implemented

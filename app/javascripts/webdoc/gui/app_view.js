@@ -40,7 +40,7 @@ WebDoc.AppView = $.klass(WebDoc.ItemView, {
       this.removeAppAndPanes();
       
       this._getSecureToken(function(token) {
-        this.app = WebDoc.appsContainer.createApp({
+        this.app = WebDoc.appsContainerDomNode.createApp({
           specUrl:     this.item.getAppUrl(),
           appDomId:    this.appDomId(),
           secureToken: token,
@@ -88,7 +88,7 @@ WebDoc.AppView = $.klass(WebDoc.ItemView, {
   removeAppAndPanes: function() {
     if (this.app) {
       this.inspectorPanesManager.destroy();    
-      WebDoc.appsContainer.removeApp(this.app);
+      WebDoc.appsContainerDomNode.removeApp(this.app);
       this.app = null;
     }
   },

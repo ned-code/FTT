@@ -178,7 +178,7 @@ javascripts:
     - app/javascripts/webdoc/controllers/*.js
 
     - app/javascripts/webdoc/controllers/panel_controllers/content_panels/library.js
-    - app/javascripts/webdoc/controllers/panel_controllers/content_panels/apps_library.js
+    - app/javascripts/webdoc/controllers/panel_controllers/content_panels/apps_controller.js
     - app/javascripts/webdoc/controllers/panel_controllers/content_panels/images_uploader.js
     - app/javascripts/webdoc/controllers/panel_controllers/content_panels/sha1.js
     - app/javascripts/webdoc/controllers/panel_controllers/content_panels/web_images_search.js

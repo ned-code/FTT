@@ -70,7 +70,7 @@ WebDoc.ContentPanelController = $.klass(WebDoc.RightBarInspectorController, {
   /**
    * Hide all pane in the content panel
    */
-  _hideAllPane: function(){
+  hideAllPane: function(){
      this.allPanesDomNode.removeTransitionClass('active');
   },
 
@@ -79,8 +79,8 @@ WebDoc.ContentPanelController = $.klass(WebDoc.RightBarInspectorController, {
    * 
    * @param paneDomNode the dom node of the pane
    */
-  _showPane: function(paneDomNode){
-    this._hideAllPane();
+  showPane: function(paneDomNode){
+    this.hideAllPane();
     paneDomNode.addTransitionClass('active');
   },
 
@@ -88,21 +88,21 @@ WebDoc.ContentPanelController = $.klass(WebDoc.RightBarInspectorController, {
    * Show the browse web pane (to search photos and video on the Web)
    */
   showBrowsewebPane: function() {
-    this._showPane(this.browsewebPaneDomNode);
+    this.showPane(this.browsewebPaneDomNode);
   },
 
   /**
    * Show the collections pane
    */
   showCollectionsPane: function() {
-    this._showPane(this.collectionsPaneDomNode);
+    this.showPane(this.collectionsPaneDomNode);
   },
 
   /**
    * Show all applications
    */
   showAppsPane: function() {
-    this._showPane(this.appsPaneDomNode);
+    this.showPane(this.appsPaneDomNode);
   },
 
   /**
@@ -112,7 +112,7 @@ WebDoc.ContentPanelController = $.klass(WebDoc.RightBarInspectorController, {
     if(this.yourstuffController === undefined){
       this.yourstuffController = new WebDoc.YourstuffController(this.YOURSTUFF_PANE_ID, this);
     }
-    this._showPane(this.yourstuffPaneDomNode);
+    this.showPane(this.yourstuffPaneDomNode);
   }
   
 });
