@@ -3,13 +3,13 @@
  * Modified by David Matthey
  * Modified by Stephen
  * Modified by jonathan
+ * Modified by noe
 **/
 
-//= require <webdoc/model/widget>
 
-WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
-  initialize: function($super) {
-    $super('media-browser-apps');
+WebDoc.AppsController = $.klass(WebDoc.Library, {
+  initialize: function($super, domNodeId) {
+    $super(domNodeId);
     
     this.detailsView = $('#app_details');
     this._setupMyApps();
@@ -226,7 +226,7 @@ WebDoc.AppsLibrary = $.klass(WebDoc.Library, {
   },
 
   _dragStart: function(event, widgetData) {
-    ddd('[AppsLibrary] _dragStart');
+    ddd('[AppsController] _dragStart');
     var dt = event.originalEvent.dataTransfer;
     dt.setData('application/wd-widget', $.toJSON(widgetData));
 

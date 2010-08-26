@@ -31,15 +31,9 @@ WebDoc.ContentPanelController = $.klass(WebDoc.RightBarInspectorController, {
 
     this.domNode = jQuery(this.CONTENT_PANEL_SELECTOR);
 
-    this.webSearchController = new WebDoc.WebSearchController(this.BROWSEWEB_PANE_ID);
-    this.packagesLibrary = new WebDoc.PackagesLibrary(this.COLLECTIONS_PANE_ID);
-		this.appsLibrary = new WebDoc.AppsLibrary(this.APPS_PANE_ID);
-
-    // TODO don't work??
-		// just to preload the icon (so that it'll be immediately available at the first drag)
-		// jQuery(document.body).append(this.webSearchController.buildMediaDragFeedbackElement("video", ""));
-		// jQuery(document.body).append(this.webSearchController.buildMediaDragFeedbackElement("image", ""));
-		// jQuery(document.body).append(this.webSearchController.buildMediaDragFeedbackElement("apps", ""));
+    this.BrowsewebController   = new WebDoc.BrowsewebController(this.BROWSEWEB_PANE_ID);
+    this.collectionsController = new WebDoc.PackagesController(this.COLLECTIONS_PANE_ID);
+		this.appsController        = new WebDoc.AppsController(this.APPS_PANE_ID);
 
     this.browsewebPaneDomNode   = this.domNode.find('#'+this.BROWSEWEB_PANE_ID);
     this.collectionsPaneDomNode = this.domNode.find('#'+this.COLLECTIONS_PANE_ID);
@@ -80,6 +74,11 @@ WebDoc.ContentPanelController = $.klass(WebDoc.RightBarInspectorController, {
      this.allPanesDomNode.removeTransitionClass('active');
   },
 
+  /**
+   * Show a pane in the content panel
+   * 
+   * @param paneDomNode the dom node of the pane
+   */
   _showPane: function(paneDomNode){
     this._hideAllPane();
     paneDomNode.addTransitionClass('active');
@@ -104,24 +103,14 @@ WebDoc.ContentPanelController = $.klass(WebDoc.RightBarInspectorController, {
    */
   showAppsPane: function() {
     this._showPane(this.appsPaneDomNode);
-    // if($('#media-browser-app-details-back').attr('href') == '#media-browser-home'){
-  	// 	this.appsLibrary.setupBackButton(false);
-  	// 	this.appsLibrary.showList();
-  	// }
   },
-  //
-  // showAppDetails: function(widgetData){
-  //   this._hideAll();
-  //   this.showApps();
-  //   this.appsLibrary.showDetailsView( widgetData, true );
-  // }
 
   /**
    * Show the user's stuff
    */
   showYourstuffPane: function() {
-    if(!WebDoc.application.contentPanelController.myContentsController){
-      WebDoc.application.contentPanelController.myContentsController = new WebDoc.MyContentsController(this.YOURSTUFF_PANE_ID, this);
+    if(this.yourstuffController === undefined){
+      this.yourstuffController = new WebDoc.YourstuffController(this.YOURSTUFF_PANE_ID, this);
     }
     this._showPane(this.yourstuffPaneDomNode);
   }

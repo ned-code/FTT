@@ -1,8 +1,9 @@
 /**
- * @author Jonathan, noe
+ * @author Jonathan
+ * Modified by noe
  */
 
-WebDoc.MyContentsController = $.klass(WebDoc.Library,{
+WebDoc.YourstuffController = $.klass(WebDoc.Library,{
       
   initialize: function($super) {
     $super('my-content');
@@ -711,7 +712,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     this.showSpinner(fbContainer);
 
     WebDoc.ServerManager.request('/facebook/albums.json', function(data) {
-      ddd('[MyContentsController] recieve facebook albums');
+      ddd('[YourstuffController] recieve facebook albums');
       ddd(data);
       if (data.albums.length > 0) {
         var myAlbumsList = $("<ul>");
@@ -752,7 +753,7 @@ WebDoc.MyContentsController = $.klass(WebDoc.Library,{
     this.showSpinner(contentContainer);
 
     WebDoc.ServerManager.request("/facebook/albums/"+albumId+"/photos.json", function(data) {
-      ddd('[MyContentsController] recieve facebook album');
+      ddd('[YourstuffController] recieve facebook album');
       ddd(data);
       if (data.photos.length > 0) {
         var myPhotosList = $("<ul>");
