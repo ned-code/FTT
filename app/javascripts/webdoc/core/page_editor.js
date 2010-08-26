@@ -497,7 +497,7 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
     }
   },
   
-    renameDocument: function(e) {  
+  renameDocument: function(e) {
     var editedDocument = this.currentDocument,
         previousName = editedDocument.title(),
         previousDescription = editedDocument.description(),
