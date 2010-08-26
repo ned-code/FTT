@@ -148,7 +148,7 @@ WebDoc.DocumentList = $.klass({
           html: $.string().escapeHTML(document.title())
         });
         
-        documentInfos = '<ul class="index horizontal card_stats"><li class="views">'+data.views_count+'</li></ul>';
+        documentInfos = '<ul class="index horizontal card_stats"><li class="views">'+data.total_number_of_comments+'</li></ul>';
         
         /* thumb: document.pages.first.thumbnail.url */
       
