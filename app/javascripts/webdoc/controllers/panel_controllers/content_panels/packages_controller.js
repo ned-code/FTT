@@ -1,10 +1,11 @@
 /**
  * @author Jonathan
+ * Modified by noe
 **/
 
-WebDoc.PackagesLibrary = $.klass(WebDoc.Library, {
-  initialize: function($super) {
-    $super('media-browser-packages');
+WebDoc.PackagesController = $.klass(WebDoc.Library, {
+  initialize: function($super, domNodeId) {
+    $super(domNodeId);
     this._loadPackages();
     this.detailsView = jQuery('#package-details');
     this.detailIframe = this.detailsView.find('iframe');

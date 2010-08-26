@@ -31,15 +31,9 @@ WebDoc.ContentPanelController = $.klass(WebDoc.RightBarInspectorController, {
 
     this.domNode = jQuery(this.CONTENT_PANEL_SELECTOR);
 
-    this.webSearchController = new WebDoc.WebSearchController(this.BROWSEWEB_PANE_ID);
-    this.packagesLibrary = new WebDoc.PackagesLibrary(this.COLLECTIONS_PANE_ID);
-		this.appsLibrary = new WebDoc.AppsLibrary(this.APPS_PANE_ID);
-
-    // TODO don't work??
-		// just to preload the icon (so that it'll be immediately available at the first drag)
-		// jQuery(document.body).append(this.webSearchController.buildMediaDragFeedbackElement("video", ""));
-		// jQuery(document.body).append(this.webSearchController.buildMediaDragFeedbackElement("image", ""));
-		// jQuery(document.body).append(this.webSearchController.buildMediaDragFeedbackElement("apps", ""));
+    this.BrowsewebController   = new WebDoc.BrowsewebController(this.BROWSEWEB_PANE_ID);
+    this.collectionsController = new WebDoc.PackagesController(this.COLLECTIONS_PANE_ID);
+		this.appsController        = new WebDoc.AppsController(this.APPS_PANE_ID);
 
     this.browsewebPaneDomNode   = this.domNode.find('#'+this.BROWSEWEB_PANE_ID);
     this.collectionsPaneDomNode = this.domNode.find('#'+this.COLLECTIONS_PANE_ID);
@@ -76,12 +70,17 @@ WebDoc.ContentPanelController = $.klass(WebDoc.RightBarInspectorController, {
   /**
    * Hide all pane in the content panel
    */
-  _hideAllPane: function(){
+  hideAllPane: function(){
      this.allPanesDomNode.removeTransitionClass('active');
   },
 
-  _showPane: function(paneDomNode){
-    this._hideAllPane();
+  /**
+   * Show a pane in the content panel
+   * 
+   * @param paneDomNode the dom node of the pane
+   */
+  showPane: function(paneDomNode){
+    this.hideAllPane();
     paneDomNode.addTransitionClass('active');
   },
 
@@ -89,41 +88,31 @@ WebDoc.ContentPanelController = $.klass(WebDoc.RightBarInspectorController, {
    * Show the browse web pane (to search photos and video on the Web)
    */
   showBrowsewebPane: function() {
-    this._showPane(this.browsewebPaneDomNode);
+    this.showPane(this.browsewebPaneDomNode);
   },
 
   /**
    * Show the collections pane
    */
   showCollectionsPane: function() {
-    this._showPane(this.collectionsPaneDomNode);
+    this.showPane(this.collectionsPaneDomNode);
   },
 
   /**
    * Show all applications
    */
   showAppsPane: function() {
-    this._showPane(this.appsPaneDomNode);
-    // if($('#media-browser-app-details-back').attr('href') == '#media-browser-home'){
-  	// 	this.appsLibrary.setupBackButton(false);
-  	// 	this.appsLibrary.showList();
-  	// }
+    this.showPane(this.appsPaneDomNode);
   },
-  //
-  // showAppDetails: function(widgetData){
-  //   this._hideAll();
-  //   this.showApps();
-  //   this.appsLibrary.showDetailsView( widgetData, true );
-  // }
 
   /**
    * Show the user's stuff
    */
   showYourstuffPane: function() {
-    if(!WebDoc.application.contentPanelController.myContentsController){
-      WebDoc.application.contentPanelController.myContentsController = new WebDoc.MyContentsController(this.YOURSTUFF_PANE_ID, this);
+    if(this.yourstuffController === undefined){
+      this.yourstuffController = new WebDoc.YourstuffController(this.YOURSTUFF_PANE_ID, this);
     }
-    this._showPane(this.yourstuffPaneDomNode);
+    this.showPane(this.yourstuffPaneDomNode);
   }
   
 });

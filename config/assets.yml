@@ -178,16 +178,16 @@ javascripts:
     - app/javascripts/webdoc/controllers/*.js
 
     - app/javascripts/webdoc/controllers/panel_controllers/content_panels/library.js
-    - app/javascripts/webdoc/controllers/panel_controllers/content_panels/apps_library.js
+    - app/javascripts/webdoc/controllers/panel_controllers/content_panels/apps_controller.js
     - app/javascripts/webdoc/controllers/panel_controllers/content_panels/images_uploader.js
     - app/javascripts/webdoc/controllers/panel_controllers/content_panels/sha1.js
     - app/javascripts/webdoc/controllers/panel_controllers/content_panels/web_images_search.js
     - app/javascripts/webdoc/controllers/panel_controllers/content_panels/web_videos_search.js
     - app/javascripts/webdoc/controllers/panel_controllers/content_panels/images_uploader.js
-    - app/javascripts/webdoc/controllers/panel_controllers/content_panels/packages_library.js
+    - app/javascripts/webdoc/controllers/panel_controllers/content_panels/packages_controller.js
     - app/javascripts/webdoc/controllers/panel_controllers/content_panels/web_browser.js
-    - app/javascripts/webdoc/controllers/panel_controllers/content_panels/web_search_controller.js
-    - app/javascripts/webdoc/controllers/panel_controllers/content_panels/my_contents_controller.js
+    - app/javascripts/webdoc/controllers/panel_controllers/content_panels/browseweb_controller.js
+    - app/javascripts/webdoc/controllers/panel_controllers/content_panels/yourstuff_controller.js
 
     - app/javascripts/webdoc/controllers/panel_controllers/*.js
     - app/javascripts/webdoc/controllers/inspectors/*.js

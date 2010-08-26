@@ -13,7 +13,7 @@ WebDoc.AppService = $.klass({
   },
   
   setHeight: function(height) {
-    if (height > WebDoc.appsContainer.maxheight_) height = WebDoc.appsContainer.maxheight_;
+    if (height > WebDoc.appsContainerDomNode.maxheight_) height = WebDoc.appsContainerDomNode.maxheight_;
     var element = $("#"+this.f);
     if (element) element.height(height);
   },
@@ -110,12 +110,12 @@ WebDoc.OpenSocialApp = $.klass({
     return this.serverBase + 'ifr?' +
         'container=' + this.CONTAINER +
         '&mid=' +  this.id +
-        '&nocache=' + WebDoc.appsContainer.nocache_ +
-        '&country=' + WebDoc.appsContainer.country_ +
-        '&lang=' + WebDoc.appsContainer.language_ +
+        '&nocache=' + WebDoc.appsContainerDomNode.nocache_ +
+        '&country=' + WebDoc.appsContainerDomNode.country_ +
+        '&lang=' + WebDoc.appsContainerDomNode.language_ +
         '&view=' + this.view +
         (this.specVersion ? '&v=' + this.specVersion : '') +
-        (WebDoc.appsContainer.parentUrl_ ? '&parent=' + encodeURIComponent(WebDoc.appsContainer.parentUrl_) : '') +
+        (WebDoc.appsContainerDomNode.parentUrl_ ? '&parent=' + encodeURIComponent(WebDoc.appsContainerDomNode.parentUrl_) : '') +
         (this.debug ? '&debug=1' : '') +
         (this.secureToken ? '&st=' + this.secureToken : '') +
         '&url=' + encodeURIComponent(this.specUrl) +
@@ -329,5 +329,5 @@ WebDoc.AppsContainer = $.klass({
   }
 });
 
-WebDoc.appsContainer = new WebDoc.AppsContainer();
+WebDoc.appsContainerDomNode = new WebDoc.AppsContainer();
 WebDoc.appsMessagingController = new WebDoc.AppsMessagingController();

@@ -3,6 +3,8 @@ class Devise::SessionsController < ApplicationController
   prepend_before_filter :require_no_authentication, :only => [ :new, :create ]
   include Devise::Controllers::InternalHelpers
 
+  skip_before_filter :verify_authenticity_token
+
   # GET /resource/sign_in
   def new
     # Devise::FLASH_MESSAGES.each do |message|
