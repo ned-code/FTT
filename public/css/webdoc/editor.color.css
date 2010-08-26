@@ -2,9 +2,16 @@
 
 .frame_layer {
   border: 1px solid rgb(220,220,220);
+  
+  -webkit-border-radius: 0.3333em;
+     -moz-border-radius: 0.3333em;
+       -o-border-radius: 0.3333em;
+          border-radius: 0.3333em;
+  
   -webkit-box-shadow: inset 0 0 4px hsl( 28, 0%, 50% );
      -moz-box-shadow: inset 0 0 4px hsl( 28, 0%, 50% );
           box-shadow: inset 0 0 4px hsl( 28, 0%, 50% );
+  
   background-color: rgb(220, 220, 220);
 }
 
@@ -25,6 +32,7 @@
 
 .tools_panel,
 .controls_panel {
+  /* Just for testing */
   background-color: rgb(238,238,238);
 }
 
@@ -69,11 +77,13 @@
   background-color: rgb(250,250,250);
   
   background-image: url('../../images/buttons_editor.png');
+  background-image: url('../../images/buttons_editor.png'), -moz-linear-gradient(top, rgb(255,255,255), rgb(235,235,235));
+  background-image: url('../../images/buttons_editor.png'), -webkit-gradient(linear, left top, left bottom, from(rgb(255,255,255)), to(rgb(235,235,235)));
   
-  -webkit-border-radius: 3px;
-     -moz-border-radius: 3px;
-       -o-border-radius: 3px;
-          border-radius: 3px;
+  -webkit-border-radius: 0.25em;
+     -moz-border-radius: 0.25em;
+       -o-border-radius: 0.25em;
+          border-radius: 0.25em;
   
   /* Move the image out of any buttons that don't have images.
      It may be a bit safer to apply the image just to the buttons we want,
@@ -100,71 +110,71 @@
           box-shadow:rgba(0,0,0,0.5) 0px 1px 3px;
 }
 
-a.settings_dropdown_button              { background-position: 50% -5px; }
-a.settings_dropdown_button:hover        { background-position: 50% -37px; }
-a.settings_dropdown_button.active       { background-position: 50% -69px; }
+a.settings_dropdown_button              { background-position: 50% -5px, 0 0; }
+a.settings_dropdown_button:hover        { background-position: 50% -37px, 0 0; }
+a.settings_dropdown_button.active       { background-position: 50% -69px, 0 0; }
 
-a[href="#edit_dropdown"]                { background-position: 50% -96px; }
-a[href="#edit_dropdown"]:hover          { background-position: 50% -128px; }
-a[href="#edit_dropdown"].active         { background-position: 50% -160px; }
-a[href="#toggle_content_panel"]         { background-position: -4px -197px; } /* 192 */
-a[href="#toggle_content_panel"]:hover   { background-position: -4px -229px; } /* 224 */
-a[href="#toggle_content_panel"].active  { background-position: -4px -261px; } /* 256 */
-a[href="#webdoc_prev_page"]             { background-position: 50% -293px; }
-a[href="#webdoc_prev_page"]:hover       { background-position: 50% -325px; }
-a[href="#webdoc_prev_page"].active      { background-position: 50% -357px; }
-a[href="#webdoc_next_page"]             { background-position: 50% -389px; }
-a[href="#webdoc_next_page"]:hover       { background-position: 50% -421px; }
-a[href="#webdoc_next_page"].active      { background-position: 50% -453px; }
-a[href="#toggle_pages_panel"]           { background-position: 50% -485px; }
-a[href="#toggle_pages_panel"]:hover     { background-position: 50% -517px; }
-a[href="#toggle_pages_panel"].active    { background-position: 50% -549px; }
+a[href="#edit_dropdown"]                { background-position: 50% -96px, 0 0; }
+a[href="#edit_dropdown"]:hover          { background-position: 50% -128px, 0 0; }
+a[href="#edit_dropdown"].active         { background-position: 50% -160px, 0 0; }
+a[href="#toggle_content_panel"]         { background-position: -4px -197px, 0 0; } /* 192 */
+a[href="#toggle_content_panel"]:hover   { background-position: -4px -229px, 0 0; } /* 224 */
+a[href="#toggle_content_panel"].active  { background-position: -4px -261px, 0 0; } /* 256 */
+a[href="#webdoc_prev_page"]             { background-position: 50% -293px, 0 0; }
+a[href="#webdoc_prev_page"]:hover       { background-position: 50% -325px, 0 0; }
+a[href="#webdoc_prev_page"].active      { background-position: 50% -357px, 0 0; }
+a[href="#webdoc_next_page"]             { background-position: 50% -389px, 0 0; }
+a[href="#webdoc_next_page"]:hover       { background-position: 50% -421px, 0 0; }
+a[href="#webdoc_next_page"].active      { background-position: 50% -453px, 0 0; }
+a[href="#toggle_pages_panel"]           { background-position: 50% -485px, 0 0; }
+a[href="#toggle_pages_panel"]:hover     { background-position: 50% -517px, 0 0; }
+a[href="#toggle_pages_panel"].active    { background-position: 50% -549px, 0 0; }
 
-a.view_button                           { background-position: 50% -581px; }
-a.view_button:hover                     { background-position: 50% -613px; }
-a.view_button.active                    { background-position: 50% -645px; }
-.full_view a.view_button                { background-position: 50% -677px; }
-.full_view a.view_button:hover          { background-position: 50% -709px; }
-.full_view a.view_button.active         { background-position: 50% -741px; }
+a.view_button                           { background-position: 50% -581px, 0 0; }
+a.view_button:hover                     { background-position: 50% -613px, 0 0; }
+a.view_button.active                    { background-position: 50% -645px, 0 0; }
+.full_view a.view_button                { background-position: 50% -677px, 0 0; }
+.full_view a.view_button:hover          { background-position: 50% -709px, 0 0; }
+.full_view a.view_button.active         { background-position: 50% -741px, 0 0; }
 
-/*a[href="#share"]                      { background-position: 50% -768px; }
-a[href="#share"]:hover                  { background-position: 50% -800px; }
-a[href="#share"].active                 { background-position: 50% -832px; }*/
-a[href="#image_tool"]                   { background-position: 50% -866px; }
-a[href="#image_tool"]:hover             { background-position: 50% -898px; }
-a[href="#image_tool"].active            { background-position: 50% -930px; }
-a[href="#text_tool"]                    { background-position: 50% -962px; }
-a[href="#text_tool"]:hover              { background-position: 50% -994px; }
-a[href="#text_tool"].active             { background-position: 50% -1026px; }
-a[href="#draw_tool"]                    { background-position: 50% -1058px; }
-a[href="#draw_tool"]:hover              { background-position: 50% -1090px; }
-a[href="#draw_tool"].active             { background-position: 50% -1122px; }
-a[href="#html_tool"]                    { background-position: 50% -1154px; }
-a[href="#html_tool"]:hover              { background-position: 50% -1186px; }
-a[href="#html_tool"].active             { background-position: 50% -1218px; }
-a[href="#video_tool"]                   { background-position: 50% -1250px; }
-a[href="#video_tool"]:hover             { background-position: 50% -1282px; }
-a[href="#video_tool"].active            { background-position: 50% -1314px; }
+/*a[href="#share"]                      { background-position: 50% -768px, 0 0; }
+a[href="#share"]:hover                  { background-position: 50% -800px, 0 0; }
+a[href="#share"].active                 { background-position: 50% -832px, 0 0; }*/
+a[href="#image_tool"]                   { background-position: 50% -866px, 0 0; }
+a[href="#image_tool"]:hover             { background-position: 50% -898px, 0 0; }
+a[href="#image_tool"].active            { background-position: 50% -930px, 0 0; }
+a[href="#text_tool"]                    { background-position: 50% -962px, 0 0; }
+a[href="#text_tool"]:hover              { background-position: 50% -994px, 0 0; }
+a[href="#text_tool"].active             { background-position: 50% -1026px, 0 0; }
+a[href="#draw_tool"]                    { background-position: 50% -1058px, 0 0; }
+a[href="#draw_tool"]:hover              { background-position: 50% -1090px, 0 0; }
+a[href="#draw_tool"].active             { background-position: 50% -1122px, 0 0; }
+a[href="#html_tool"]                    { background-position: 50% -1154px, 0 0; }
+a[href="#html_tool"]:hover              { background-position: 50% -1186px, 0 0; }
+a[href="#html_tool"].active             { background-position: 50% -1218px, 0 0; }
+a[href="#video_tool"]                   { background-position: 50% -1250px, 0 0; }
+a[href="#video_tool"]:hover             { background-position: 50% -1282px, 0 0; }
+a[href="#video_tool"].active            { background-position: 50% -1314px, 0 0; }
 
-a[href="#add_discussion"]               { background-position: 50% -1345px; }
-a[href="#add_discussion"]:hover         { background-position: 50% -1377px; }
-a[href="#add_discussion"].active        { background-position: 50% -1409px; }
+a[href="#add_discussion"]               { background-position: 50% -1345px, 0 0; }
+a[href="#add_discussion"]:hover         { background-position: 50% -1377px, 0 0; }
+a[href="#add_discussion"].active        { background-position: 50% -1409px, 0 0; }
 
-a[href="#add_page"]                     { background-position: 50% -1440px; }
-a[href="#add_page"]:hover               { background-position: 50% -1472px; }
-a[href="#add_page"].active              { background-position: 50% -1504px; }
-a[href="#remove_page"]                  { background-position: 50% -1536px; }
-a[href="#remove_page"]:hover            { background-position: 50% -1568px; }
-a[href="#remove_page"].active           { background-position: 50% -1600px; }
-a[href="#copy_page"]                    { background-position: 50% -1632px; }
-a[href="#copy_page"]:hover              { background-position: 50% -1664px; }
-a[href="#copy_page"].active             { background-position: 50% -1696px; }
-a[href="#back"]                         { background-position: 50% -1728px; }
-a[href="#back"]:hover                   { background-position: 50% -1760px; }
-a[href="#back"].active                  { background-position: 50% -1792px; }
-a[href="#close"]                        { background-position: 50% -1824px; }
-a[href="#close"]:hover                  { background-position: 50% -1856px; }
-a[href="#close"].active                 { background-position: 50% -1888px; }
+a[href="#add_page"]                     { background-position: 50% -1440px, 0 0; }
+a[href="#add_page"]:hover               { background-position: 50% -1472px, 0 0; }
+a[href="#add_page"].active              { background-position: 50% -1504px, 0 0; }
+a[href="#remove_page"]                  { background-position: 50% -1536px, 0 0; }
+a[href="#remove_page"]:hover            { background-position: 50% -1568px, 0 0; }
+a[href="#remove_page"].active           { background-position: 50% -1600px, 0 0; }
+a[href="#copy_page"]                    { background-position: 50% -1632px, 0 0; }
+a[href="#copy_page"]:hover              { background-position: 50% -1664px, 0 0; }
+a[href="#copy_page"].active             { background-position: 50% -1696px, 0 0; }
+a[href="#back"]                         { background-position: 50% -1728px, 0 0; }
+a[href="#back"]:hover                   { background-position: 50% -1760px, 0 0; }
+a[href="#back"].active                  { background-position: 50% -1792px, 0 0; }
+a[href="#close"]                        { background-position: 50% -1824px, 0 0; }
+a[href="#close"]:hover                  { background-position: 50% -1856px, 0 0; }
+a[href="#close"].active                 { background-position: 50% -1888px, 0 0; }
 
 
 a.button_site { background-image: url("../../images/buttons_site.png"); }

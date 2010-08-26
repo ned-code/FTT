@@ -166,7 +166,7 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
           }
           return false;
         });
-        this.popupCreateEditNode.removeClass('lb');
+        this.popupCreateEditNode.removeTransitionClass('lb');
     		e.preventDefault();
     //    .find("input[type='text']")
     //    .eq(0)
@@ -209,7 +209,7 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
     infoDialogHeightNode.val(previousHeight);
     infoDialogSubmitNode.val("Update");
 
-	this.popupCreateEditNode.removeClass('lb');
+	this.popupCreateEditNode.removeTransitionClass('lb');
     e.preventDefault();
     
    			node = infoDialogNode;
@@ -219,7 +219,7 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
 
             ddd("edit doc with title " + $("#wb-edit-document-name").val());
             
-   					infoDialogNode.closest("li").addClass('lb');
+   					infoDialogNode.closest("li").addTransitionClass('lb');
             that.editedDocument.setTitle( infoDialogTitleNode.val(), true );
             that.editedDocument.setDescription( infoDialogDescriptionNode.val(), true );
             that.editedDocument.setCategory( infoDialogCategoryNode.val(), true );
@@ -245,7 +245,7 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
         documentToEdit = data && data.id;
 
     WebDoc.application.accessController.showAccess( e, WebDoc.application.documentEditor.documentWithId(documentToEdit) );
-    this.popupCollaborateNode.removeClass('lb');
+    this.popupCollaborateNode.removeTransitionClass('lb');
     e.preventDefault();
   },
 
@@ -255,7 +255,7 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
         documentIdToPublish = data && data.id,
         document = WebDoc.application.documentEditor.documentWithId(documentIdToPublish);
     WebDoc.application.shareController.showShare(e, document);
-    this.popupShareNode.removeClass('lb');
+    this.popupShareNode.removeTransitionClass('lb');
     e.preventDefault();
   },
 
@@ -391,7 +391,7 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
   showInvitationsForm: function(e){
     e.preventDefault();
     WebDoc.application.invitationsController.init();
-    this.popupSendInvitationsNode.removeClass('lb');
+    this.popupSendInvitationsNode.removeTransitionClass('lb');
   },
   
   closePopup: function(e){

@@ -31,6 +31,7 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
     if (this.item.data.data.tag == "iframe" && !WebDoc.application.disableHtml) {
       this.domNode.addClass('loading');
       this.itemLayerDomNode.show();
+      this._widgetIsLoading = true;
       widgetNode.bind('load', function() {
         ddd("widget loaded");
         this.initWidget();
@@ -80,6 +81,7 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
 
   initWidget: function() {
     this.domNode.removeClass('loading');
+    this._widgetIsLoading = false;
     if (this._editable) {
       this.itemLayerDomNode.show();
     }
@@ -118,7 +120,7 @@ WebDoc.WidgetView = $.klass(WebDoc.ItemView, {
 
   getWidgetApiObject: function() {
     var result = null;
-    if (this.itemDomNode.get(0).contentWindow) {
+    if (!this._widgetIsLoading && this.itemDomNode.get(0).contentWindow) {
       if (this.itemDomNode.get(0).contentWindow.widget) {
         result = this.itemDomNode.get(0).contentWindow.widget;
       }

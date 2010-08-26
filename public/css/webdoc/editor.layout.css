@@ -9,9 +9,9 @@ body {
 body.full_view {
   overflow: hidden;
   /* Compensate for header + top toolbar */ 
-  padding-top: 7em;
+  padding-top: 6.6666em;
   /* Compensate for bottom toolbar */
-  padding-bottom: 3.5em;
+  padding-bottom: 3.3333em;
 }
 
 .transition_support body.transition {
@@ -49,9 +49,10 @@ body.full_view {
   height: 50%;
   /* must equal editor_wrap min-height */
   min-height: 400px;
-  /* Makes room for top and bottom panels and document title */
-  margin-top: 8.75em;
-  margin-bottom: 5.25em;
+  /* Makes room for tools_panel and title_panel: 3.3333 + 5 */
+  margin-top: 8.3333em;
+  /* Makes room for controls_panel and sharing_panel, plus space at the bottom: 3.333 + 0 + 2 */
+  margin-bottom: 5.3333em;
 }
 
 .full_view .workspace_wrap {
@@ -224,37 +225,31 @@ body.full_view {
   overflow: auto; 
   
   right: -2%;
-  top: -3.5em;
+  top: -3.3333em;
   margin-right: -288px;
   width: 288px;
 }
 
 .title_panel {
   left: 0;
-  top: -7em;
-  height: 1.75em;
+  top: -6.75em;
+  height: 1.8333em;
 }
 
 .tools_panel {
   left: 0;
-  top: -3.5em;
   width: 100%;
-  height: 3.5em;
-  padding: 0.8333em;
-  
-  /* Just for testing */
-  background-color: rgb(235,235,235);
+  top: -3.3333em;
+  height: 3.3333em;
+  padding: 0.75em;
 }
 
 .controls_panel {
   left: 0;
-  bottom: -3.5em;
   width: 100%;
-  height: 3.5em;
-  padding: 0.8333em;
-  
-  /* Just for testing */
-  background-color: rgb(235,235,235);
+  bottom: -3.3333em;
+  height: 3.3333em;
+  padding: 0.75em;
 }
 
 .inspector_panel,
@@ -264,8 +259,8 @@ body.full_view {
   width: 288px;
   margin-right: -288px;
   right: -2%;
-  top: -3.5em;
-  bottom: -3.5em;
+  top: -3.3333em;
+  bottom: -3.3333em;
 }
 
 .inspector_panel.active,
@@ -375,7 +370,7 @@ body.full_view {
 .pages_buttons_index,
 .comment_index,
 .view_index {
-	top: 0.8333em;
+	top: 0.75em;
 }
 
 .edit_dropdown_index {
