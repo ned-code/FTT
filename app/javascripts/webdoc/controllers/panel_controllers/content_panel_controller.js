@@ -80,56 +80,50 @@ WebDoc.ContentPanelController = $.klass(WebDoc.RightBarInspectorController, {
      this.allPanesDomNode.removeTransitionClass('active');
   },
 
+  _showPane: function(paneDomNode){
+    this._hideAllPane();
+    paneDomNode.addTransitionClass('active');
+  },
+
   /**
    * Show the browse web pane (to search photos and video on the Web)
    */
   showBrowsewebPane: function() {
-    this._hideAllPane();
-    this.browsewebPaneDomNode.addTransitionClass('active');
+    this._showPane(this.browsewebPaneDomNode);
   },
 
   /**
    * Show the collections pane
    */
   showCollectionsPane: function() {
-    this._hideAllPane();
-    this.collectionsPaneDomNode.addTransitionClass('active');
+    this._showPane(this.collectionsPaneDomNode);
   },
 
   /**
    * Show all applications
    */
   showAppsPane: function() {
-    this._hideAllPane();
-    this.appsPaneDomNode.addTransitionClass('active');
+    this._showPane(this.appsPaneDomNode);
     // if($('#media-browser-app-details-back').attr('href') == '#media-browser-home'){
   	// 	this.appsLibrary.setupBackButton(false);
   	// 	this.appsLibrary.showList();
   	// }
   },
-
-  /**
-   * Show the user's stuff
-   */
-  showYourstuffPane: function() {
-    this._hideAllPane();
-    this.yourstuffPaneDomNode.addTransitionClass('active');
-  }
-  
-  // showMyContent: function(){
-  //   if(WebDoc.application.contentPanelController.myContentsController){
-  //     this.showTab('#media-browser-my-content');
-  //   }
-  //   else{
-  //     WebDoc.application.contentPanelController.myContentsController = new WebDoc.MyContentsController('media-browser-my-content', this);
-  //     this.showTab('#media-browser-my-content');
-  //   }
-  // },
   //
   // showAppDetails: function(widgetData){
   //   this._hideAll();
   //   this.showApps();
   //   this.appsLibrary.showDetailsView( widgetData, true );
   // }
+
+  /**
+   * Show the user's stuff
+   */
+  showYourstuffPane: function() {
+    if(!WebDoc.application.contentPanelController.myContentsController){
+      WebDoc.application.contentPanelController.myContentsController = new WebDoc.MyContentsController(this.YOURSTUFF_PANE_ID, this);
+    }
+    this._showPane(this.yourstuffPaneDomNode);
+  }
   
 });
