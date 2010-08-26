@@ -45,12 +45,14 @@ body {
 /* .wrap extensions */
 
 .site_wrap {
-  /* width: 88%;
-  min-width: 720px;
+  width: 88%;
+  /*min-width: 720px;
   max-width: 1440px; */
   
-  /* Because they made a dumb-ass decision to fix the width. */
-  width: 980px;
+  /* Because they made a dumb-ass decision to fix the width. Keep the
+     code above, so we can put it back when they're not looking. */
+  min-width: 980px;
+  max-width: 980px;
 }
 
 /* .index extensions */
