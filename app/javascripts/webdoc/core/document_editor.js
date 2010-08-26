@@ -53,6 +53,7 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
     this.popupSendInvitationsNode = this.popupNode.find('#popup_invitations');
     this.popupShareNode = this.popupNode.find('#popup_share');
     this.popupCollaborateNode = this.popupNode.find('#popup_collaborate');
+    this.popupCreateEditNode = this.popupNode.find('#popup_createeditwebdoc');
 
     // reset document back url (used to close a document)
     jQuery.cookie('document_back_url', null, { path: '/' });
@@ -69,11 +70,11 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
 
       //$("#wb-create-document-button").bind("click", this.createDocument.pBind(this));
       
-      this.createDocument();
+      //this.createDocument();
       
       this.documentListContainerNode
       .addClass( 'loading' )
-      .delegate( ".wb-document-info", 'click', this.renameDocument )
+      .delegate( ".wb-document-info", 'click', this.renameDocument.pBind(this) )
       .delegate( ".wb-document-delete", 'click', this.deleteDocument )
       .delegate( ".wb-document-collaborate", 'click', this.changeDocumentAccess.pBind(this) )
       .delegate( ".wb-document-share", 'click', this.shareDocument.pBind(this) );
@@ -81,7 +82,9 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
       $('body')
       .delegate( "a[href='#filter-author']",  'click', this.searchDocuments.pBind(this) )
       .delegate( "a[href='#filter-editable']",'click', this.searchDocuments.pBind(this) )
-      .delegate( "a[href='#invite_people']",'click', this.showInvitationsForm.pBind(this) );
+      .delegate( "a[href='#invite_people']",'click', this.showInvitationsForm.pBind(this) )
+      .delegate( "a[href='#popup_newwebdoc']",'click', this.createDocument.pBind(this) );
+
       this.queryDomNode.bind('keypress', function(e) {
         var code = (e.keyCode ? e.keyCode : e.which);
         if(code == 13) {
@@ -112,8 +115,8 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
     infoDialogHeaderNode.html("Create new webdoc");
     infoDialogTitleNode.val("Untitled webdoc");
     infoDialogDescriptionNode.val("");
-    infoDialogWidthNode.val("800px");
-    infoDialogHeightNode.val("600px");
+    infoDialogWidthNode.val("600px");
+    infoDialogHeightNode.val("400px");
     infoDialogSubmitNode.val("Create");
 
     infoDialogNode.delegate("a.set_size", 'click', this.setSizeByName.pBind(this) );
@@ -163,6 +166,8 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
           }
           return false;
         });
+        this.popupCreateEditNode.removeClass('lb');
+    		e.preventDefault();
     //    .find("input[type='text']")
     //    .eq(0)
     //    .focus()
@@ -172,8 +177,18 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
   },
 
   renameDocument: function(e) {
+  /*	var data = jQuery(e.target).data("webdoc"),
+        documentToEdit = data && data.id;
+        editedDocument = that.documentWithId(documentIdToRename),
+        previousName = editedDocument.title(),
+        previousDescription = editedDocument.description(),
+        previousCategory = editedDocument.category(),
+        previousWidth = editedDocument.size().width,
+        previousHeight = editedDocument.size().height;
+        */
+        
     var that = WebDoc.application.documentEditor,
-        data = $(this).closest('.document-item').data("webdoc"),
+        data = jQuery(e.target).data("webdoc"),
         documentIdToRename = data && data.id,
         editedDocument = that.documentWithId(documentIdToRename),
         previousName = editedDocument.title(),
@@ -194,16 +209,17 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
     infoDialogHeightNode.val(previousHeight);
     infoDialogSubmitNode.val("Update");
 
-    infoDialogNode.pop({
-      attachTo: $( e.currentTarget ),
-      initCallback: function(){
-        var node = $(this);
+	this.popupCreateEditNode.removeClass('lb');
+    e.preventDefault();
+    
+   			node = infoDialogNode;
         node
         .bind('submit', function() {
             node.addClass('loading');
 
             ddd("edit doc with title " + $("#wb-edit-document-name").val());
-            $(this).dialog('close');
+            
+   					infoDialogNode.closest("li").addClass('lb');
             that.editedDocument.setTitle( infoDialogTitleNode.val(), true );
             that.editedDocument.setDescription( infoDialogDescriptionNode.val(), true );
             that.editedDocument.setCategory( infoDialogCategoryNode.val(), true );
@@ -218,15 +234,9 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
             });
 
             return false;
-        })
-        .find("input[type='text']")
-        .eq(0)
-        .focus()
-        .select();
-      }
-    });
+        });
+    
 
-    e.preventDefault();
   },
 
   changeDocumentAccess: function(e) {
@@ -330,18 +340,26 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
     ddd('set size for '+name);
     var size = undefined;
     switch(name){
-      case "iphone":
-        size = { width: "620", height: "480"};
+      case "6000x400":
+        size = { width: "6000", height: "400"};
         break;
-      case "ipad":
-        size = { width: "1024", height: "768"};
+      case "400x6000":
+        size = { width: "400", height: "6000"};
         break;
-      case "classic":
+      case "600x400":
       default:
-        size = { width: "800", height: "600"};
+        size = { width: "600", height: "400"};
     }
+    var allSizeNode = jQuery(".set_size");
+    allSizeNode.each(function() {
+    	jQuery(this).removeClass('selected_friend');
+    });
+    var friendNode = jQuery(e.target);
+      friendNode.addClass('selected_friend');
+
     infoDialogWidthNode.val(size.width+"px");
     infoDialogHeightNode.val(size.height+"px");
+     e.preventDefault();
   },
 
   currentUserDocumentsEditor: function() {
@@ -377,9 +395,9 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
   },
   
   closePopup: function(e){
-    e.preventDefault();
     var openPopup = this.popupNode.find('li.popup');
     openPopup.addClass('lb');
+    e.preventDefault();
   }
 });
 

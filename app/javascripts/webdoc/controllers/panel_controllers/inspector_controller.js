@@ -57,11 +57,17 @@ WebDoc.InspectorController = $.klass(WebDoc.RightBarInspectorController, {
         this._inspectorNodes[this.currentInspectorId].domNode.removeTransitionClass('active');
       }
       this.currentInspectorId = inspectorId;
-      inspector = this._inspectorNodes[inspectorId];
-      inspector.domNode.addTransitionClass('active');
-//      this.domNode.html( inspector.domNode );
+      if (this.currentInspectorId === 'empty') {
+        this.domNode.css('display', 'none');
+      }
+      else {
+        this.domNode.css('display', '');
+        inspector = this._inspectorNodes[inspectorId];
+        inspector.domNode.addTransitionClass('active');
+  //      this.domNode.html( inspector.domNode );
 
-      inspector.refresh();
+        inspector.refresh();
+      }
     }
   },
   

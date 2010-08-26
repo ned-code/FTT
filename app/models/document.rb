@@ -209,6 +209,11 @@ class Document < ActiveRecord::Base
     self.uuid
   end
 
+  def total_number_of_comments
+    # TODO implement this
+    rand(1000)
+  end
+
   def as_application_json(options={})
     options = { :skip_pages => false, :skip_roles => false }.merge(options)
 

@@ -8,34 +8,20 @@
       <label for="wb-new-document-name">Title</label>
       <input id="wb-new-document-name" class="ui-corner-all" type="text" name="wb-new-document-name" placeholder="My new webdoc" />
     </div>
-    <div class="vertical">
-      <label  for="category" >Category</label>
-      <select id="wb-new-document-category"></select>
-    </div>
-    <div class="vertical">
-      <label for="description" >Description</label>
-      <textarea id="wb-new-document-description" class="ui-corner-all" rows="3" name="wb-new-document-description" ></textarea>
-    </div>
   </fieldset>
     
   <fieldset>
     <legend>Size</legend>
     
-    <div class="horizontal column of_two">
-      <label for="wb-new-document-size-width">Width</label>
-      <input id="wb-new-document-size-width" type="text" size="6" required="required" data-type="cssvalue" />
-    </div>
+      <input id="wb-new-document-size-width" type="hidden" size="6" required="required" data-type="cssvalue" />
     
-    <div class="horizontal column last_column of_two">
-      <label for="wb-new-document-size-height" >Height</label>
-      <input id="wb-new-document-size-height" type="text" size="6" required="required" data-type="cssvalue" />
-    </div>
+      <input id="wb-new-document-size-height" type="hidden" size="6" required="required" data-type="cssvalue" />
     
     <div class="horizontal">
-      <ul>
-        <li><a class="set_size" href="#set-classic-size" data-webdoc-size-name="classic">Classic</a></li
-       ><li><a class="set_size" href="#set-iphone-size" data-webdoc-size-name="iphone">iPhone</a></li
-       ><li><a class="set_size" href="#set-ipad-size" data-webdoc-size-name="ipad">iPad</a></li>
+      <ul class="index vertical">
+        <li><a class="set_size" href="#600_400" data-webdoc-size-name="600x400">600 x 400 px</a></li
+       ><li><a class="set_size" href="#6000_400" data-webdoc-size-name="6000x400">6000 x 400 px</a></li
+       ><li><a class="set_size" href="#400_6000" data-webdoc-size-name="400x6000">400 x 6000 px</a></li>
       </ul>
     </div>
   </fieldset>

@@ -196,7 +196,15 @@ javascripts:
     - app/javascripts/webdoc/controllers/panel_controllers/*.js
     - app/javascripts/webdoc/controllers/inspectors/*.js
     - app/javascripts/webdoc/core/*.js
-    
+   
+    - app/javascripts/webdoc/controllers/friends_selector_controller.js
+    - app/javascripts/webdoc/controllers/email_invitation_controller.js
+    - app/javascripts/webdoc/controllers/document_collaboration_controller.js
+    - app/javascripts/webdoc/controllers/document_share_controller.js
+    - app/javascripts/webdoc/controllers/invitations_controller.js
+    - app/javascripts/webdoc/gui/document_list.js
+    - app/javascripts/webdoc/core/document_editor.js
+ 
   explore:
     - app/javascripts/webdoc/explore/*.js
   tests:
