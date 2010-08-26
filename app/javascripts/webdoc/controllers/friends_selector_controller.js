@@ -10,7 +10,7 @@ WebDoc.FriendsSelectorController = $.klass({
   },
   
   selectFriend: function(e){
-    var friendNode = jQuery(e.target);
+    var friendNode = jQuery(e.target).closest('li');
     if(friendNode.hasClass('selected_friend')){
       friendNode.removeClass('selected_friend');
     }
@@ -42,7 +42,7 @@ WebDoc.FriendsSelectorController = $.klass({
   _buildFriendsList: function(data){
     ddd('_buildFriendsList',data);
     var length = data['friends'].length;
-    var friendsList = jQuery('<ul/>').attr({'class': 'friends_list'});
+    var friendsList = jQuery('<ul/>').attr({'class': 'horizontal index friends_selector_index friends_list'});
     var friendNode, friend;
     var klass = 'choose_friend';
     for(var i=0;i<data['friends'].length;i++){
@@ -66,13 +66,16 @@ WebDoc.FriendsSelectorController = $.klass({
         }
       }
       
+      var friendCard = '<div class="card friendselector" style="background-image: url(\''+friend.avatar_thumb_url+'\');"><h4 class="card-name card-name-avoid-button">'+friend.first_name+'<br />'+friend.last_name+'</h4></div>';
+    	
       friendNode = jQuery('<li/>')
-        .text(friend.username)
+        .html(friendCard)
         .attr({
           'class': klass
         })
         .data('uuid', friend.uuid);
         
+
           
       friendNode.append('<input type="hidden" value=0 name="friend['+friend.uuid+']"/>');
       friendsList.append(friendNode);

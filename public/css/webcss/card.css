@@ -96,6 +96,17 @@ padding-left:110px;
 	left:110px;
 }
 
+.card.friendselector {
+    height: 50px;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    -webkit-background-size:  50px auto;
+    -moz-background-size:     50px auto;
+    background-size:          50px auto;
+    padding: 0px 9px 9px 57px;
+    position: relative;
+}
+
 /* hcard microformat (for reference)
    http://microformats.org/wiki/hcard
 */
