@@ -183,7 +183,6 @@ javascripts:
     - app/javascripts/webdoc/controllers/panel_controllers/content_panels/web_images_search.js
     - app/javascripts/webdoc/controllers/panel_controllers/content_panels/web_videos_search.js
     - app/javascripts/webdoc/controllers/panel_controllers/content_panels/images_uploader.js
-    - app/javascripts/webdoc/controllers/panel_controllers/content_panels/theme_elements_library.js
     - app/javascripts/webdoc/controllers/panel_controllers/content_panels/packages_library.js
     - app/javascripts/webdoc/controllers/panel_controllers/content_panels/web_browser.js
     - app/javascripts/webdoc/controllers/panel_controllers/content_panels/web_search_controller.js
