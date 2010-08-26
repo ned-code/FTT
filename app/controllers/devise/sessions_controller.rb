@@ -1,12 +1,8 @@
 class Devise::SessionsController < ApplicationController
+  
+  prepend_before_filter :require_no_authentication, :only => [ :new, :create ]
   include Devise::Controllers::InternalHelpers
 
-  skip_before_filter :verify_authenticity_token, :only => [:create]
-  skip_before_filter :http_authenticate, :only => [:create]
-  skip_before_filter :process_invitation
-
-  before_filter :require_no_authentication, :only => [ :new, :create ]
-  
   # GET /resource/sign_in
   def new
     # Devise::FLASH_MESSAGES.each do |message|
@@ -37,15 +33,18 @@ class Devise::SessionsController < ApplicationController
       http_authenticate
       resource = warden.authenticate!(:scope => resource_name, :recall => "new")
       set_flash_message :notice, :signed_in
-      
-      invitation = Invitation.pending.where(:uuid => params[:invitation]).first
-      if invitation.present?
-        sign_in(resource_name, resource)
-        invitation.accept!(current_user)
-        if invitation.document.present?
-          redirect_to document_path(invitation.document)
+      if session[:invitation_id].present?
+        invitation = Invitation.pending.where(:uuid => session[:invitation_id]).first
+        if invitation.present?
+          sign_in(resource_name, resource)
+          invitation.accept!(current_user)
+          if invitation.document.present?
+            redirect_to document_path(invitation.document)
+          else
+            redirect_to root_path
+          end
         else
-          redirect_to root_path
+          sign_in_and_redirect(resource_name, resource)
         end
       else
         sign_in_and_redirect(resource_name, resource)

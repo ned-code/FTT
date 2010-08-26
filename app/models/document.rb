@@ -272,14 +272,11 @@ class Document < ActiveRecord::Base
     result = { :access => [], :list_access => [], :failed => [] }
     all_document_access.each do |role|
       if role.user_id.present?
-        p 'acces by user'
         user = role.user
         is_creator = (self.creator && self.creator.uuid == role.user.uuid)? true : false
         user_infos = {:uuid => user.uuid, :username => user.username, :email => user.email, :role => role.name, :creator => is_creator}
         result[:access] << user_infos
       elsif role.user_list_id.present?
-        p "to_access_json user list"
-        p role.user_list.users
         user_list = role.user_list
         result[:list_access] << {:uuid => user_list.uuid, :name => user_list.name, :role => role.name}
       elsif role.user_id.blank? && role.user_list_id.blank?
@@ -291,7 +288,6 @@ class Document < ActiveRecord::Base
         result[:failed] << email
       end
     end
-    p result
     result
   end
 

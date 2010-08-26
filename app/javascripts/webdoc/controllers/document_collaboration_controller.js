@@ -77,6 +77,8 @@ WebDoc.DocumentCollaborationController = $.klass({
   
   loadAccess: function(json) {
     this.domNode.empty();
+    
+    //User acces
     this.access = json.access;
     var friendslist = [];
     var user;
@@ -88,11 +90,38 @@ WebDoc.DocumentCollaborationController = $.klass({
       }
     }
     
+    //UserList access
+    this.listAccess = json.list_access;
+    var lists = [];
+    var list;
+    for(var i = 0; i < this.listAccess.length; i++){
+      list = this.listAccess[i];
+      if (list.role === "editor" || list.role === "contributor" ) {
+        lists.push(list);
+      }
+    }
+    
+    this.createListAccessItems(lists);
     this.friendsSelector.loadFriendList(friendslist);
   },
   
+  
+  createListAccessItems: function(lists){
+    var accessEntry, deleteItem;
+    for(var i=0; i< lists.length; i++){
+      accessEntry = jQuery("<li>")
+        .data('uuid', lists[i].uuid)
+        .data('role', lists[i].role)
+        .addClass("list_access")
+        .html(lists[i].name + " | " + lists[i].role);
+      deleteItem = $('<a/>', {'class': "delete", href: "#delete", title: "delete editor"}).html("Delete");
+      accessEntry.append(deleteItem);    
+      this.domNode.append(accessEntry);
+    }    
+  },
+  
   createAccessItem: function(userInfos) {
-      var accessEntry = $("<li>")
+      var accessEntry = jQuery("<li>")
         .data('uuid', userInfos.uuid)
         .data('role', userInfos.role)
         .addClass("user_access")

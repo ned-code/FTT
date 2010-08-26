@@ -45,7 +45,7 @@ class Invitation < ActiveRecord::Base
                                             :official => generate_by_admin,
                                             :email => email
                                           )
-          Notifier.send_invitation(user,email, message, role, document, invitation.id).deliver
+          Notifier.send_invitation(user,email, message, role, document, invitation).deliver
         end
       end
     end
@@ -56,6 +56,7 @@ class Invitation < ActiveRecord::Base
   # ====================
   
   def accept!(friend)
+    p "accept! invitation"
     self.update_attribute(:status, ACCEPTED)
     if !user.friend?(friend)
       begin

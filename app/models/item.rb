@@ -111,30 +111,6 @@ class Item < ActiveRecord::Base
     need_update_thumbnail
     refresh_cache
   end
-  
-  def user_editor?(user)
-    self.find_user_roles(user).include? Role::EDITOR
-  end
-  
-  def user_contributor?(user)
-    self.find_user_roles(user).include? Role::CONTRIBUTOR
-  end
-  
-  def public_editor?
-    self.find_public_roles.include? Role::EDITOR
-  end
-  
-  def public_contributor?
-    self.find_public_roles.include? Role::CONTRIBUTOR
-  end
-  
-  def find_public_roles
-    @public_roles_names ||= Role.where(:item_id => self.id, :user_id => nil, :user_list_id => nil).select('roles.name').map{|r| r.name}
-  end
-  
-  def find_user_roles(user)
-    @user_roles_names ||= Role.where(:item_id => self.id, :user_id => user.id, :user_list_id => nil).select('roles.name').map{|r| r.name}
-  end
 
   private
 

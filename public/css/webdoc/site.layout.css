@@ -134,7 +134,10 @@ body {
 	width:25em;
 	margin-bottom: 1em;
 }
-
+.friends_selector_index >li {
+	width:12em;
+	margin-bottom: 1em;
+}
 /* .button extensions */
 
 .header_button {
