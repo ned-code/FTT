@@ -685,8 +685,8 @@ WebDoc.BoardController = jQuery.klass({
       }
     newItem = new WebDoc.Item(null, WebDoc.application.pageEditor.currentPage);
     if (videoWidget.data.properties.width) {
-      width = parseFloat(videoWidget.data.properties.width);
-      height = parseFloat(videoWidget.data.properties.height);
+      width = 310;
+      height = 200;
     }
     if(!position) { position = this.getBoardCenterPoint();}
     x = position.x - (width / 2);
