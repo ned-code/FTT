@@ -33,11 +33,11 @@
     WebDoc.DocumentCategoriesManager._documentCategories = WebDoc.ServerManager.createRecords(WebDoc.Category,<%= raw Rails.cache.fetch("categories_json") { Category.all.to_json } %>);
     WebDoc.ThemeManager._defaultTheme = new WebDoc.Theme(<%= raw Rails.cache.fetch("default_theme_json") { Theme.default.to_json } %>);
     WebDoc.Application.main(function() {
+      //var editor2 = new WebDoc.DocumentEditor();
+      //editor2.start();
+      
       var editor = new WebDoc.PageEditor();
       editor.load("<%= @document.uuid %>", <%= edit_mode? %>);
-      
-       var editor2 = new WebDoc.DocumentEditor();
-      editor2.start();
     });
   </script>
 <% end %>

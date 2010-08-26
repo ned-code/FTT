@@ -1,5 +1,5 @@
 /**
- * PageEditor is the main application for page viewing and editing. The root method is load(documentId) that will load the first page of document documentId.
+ * PageEditor is the main application for page viewing and editing. The root method is load(documentId) this will load the first page of document documentId.
  * 
  * @author Julien Bachmann
 **/
@@ -7,10 +7,20 @@
 // application singleton.
 WebDoc.application = {};
 
+  var infoDialogNode,
+    infoDialogHeaderNode,
+    infoDialogTitleNode,
+    infoDialogDescriptionNode,
+    infoDialogCategoryNode,
+    infoDialogWidthNode,
+    infoDialogHeightNode,
+    infoDialogSubmitNode;
+    
 WebDoc.PageEditor = $.klass(WebDoc.Application,{
 
   currentDocument: null,
   currentPage: null,
+ 
   
   initialize: function($super) {
     $super();
@@ -55,6 +65,25 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
     });
     
     $(window).bind("hashchange", this._urlHashChanged.pBind(this));
+    
+    WebDoc.application.accessController = new WebDoc.DocumentCollaborationController();
+    WebDoc.application.invitationsController = new WebDoc.InvitationsController();
+    WebDoc.application.shareController = new WebDoc.DocumentShareController();
+    
+    infoDialogNode = $("#create_webdoc_form");
+    infoDialogHeaderNode = $("#new-document-dialog-header");
+    infoDialogTitleNode = $("#wb-new-document-name");
+    infoDialogDescriptionNode = $("#wb-new-document-description");
+    infoDialogCategoryNode = $("#wb-new-document-category");
+    infoDialogWidthNode = $("#wb-new-document-size-width");
+    infoDialogHeightNode = $("#wb-new-document-size-height");
+    infoDialogSubmitNode = infoDialogNode.find("input[type='submit']");
+    
+    this.popupNode= jQuery('#popup');
+    this.popupSendInvitationsNode = this.popupNode.find('#popup_invitations');
+    this.popupShareNode = this.popupNode.find('#popup_share');
+    this.popupCollaborateNode = this.popupNode.find('#popup_collaborate');
+    this.popupCreateEditNode = this.popupNode.find('#popup_createeditwebdoc');
   },
   
   load: function(documentId, editable) {
@@ -125,6 +154,13 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
       WebDoc.closeUrl = jQuery.cookie('document_back_url') ? jQuery.cookie('document_back_url') : null;
       jQuery.cookie('document_back_url', null, { path: '/' });
     }.pBind(this));
+    
+      $('body')
+      .delegate( "a[href='#popup_properties']",'click', this.renameDocument.pBind(this) )
+      .delegate( "a[href='#popup_share']",'click', this.shareDocument.pBind(this) )
+      .delegate( "a[href='#popup_collaborate']",'click', this.changeDocumentAccess.pBind(this) ) ;
+      
+      this.popupNode.delegate("a[href=#close]", 'click', this.closePopup.pBind(this));
   },
 
   _createLinkHandler: function( obj ){
@@ -136,7 +172,7 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
       
       ddd( '[page_editor.linkHandler] Event handler ref: "' + match + '"' );
       
-      // If the href contains a hashRef that matches a handler
+      // If the href contains a hashRef this matches a handler
       if ( match && obj[match[1]] ) {
           // Call it with current scope
           try {
@@ -459,6 +495,99 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
     else {
       return false;
     }
+  },
+  
+  renameDocument: function(e) {
+    var editedDocument = this.currentDocument,
+        previousName = editedDocument.title(),
+        previousDescription = editedDocument.description(),
+        previousCategory = editedDocument.category(),
+        previousWidth = editedDocument.size().width,
+        previousHeight = editedDocument.size().height;
+    
+    infoDialogNode.delegate("a.set_size", 'click', this.setSizeByName.pBind(this) );
+    
+    infoDialogHeaderNode.html("Edit webdoc info");
+    infoDialogTitleNode.val( previousName );
+    infoDialogDescriptionNode.val( previousDescription );
+    infoDialogCategoryNode.val( previousCategory );
+    infoDialogWidthNode.val(previousWidth);
+    infoDialogHeightNode.val(previousHeight);
+    infoDialogSubmitNode.val("Update");
+
+    this.popupCreateEditNode.removeTransitionClass('lb');
+    e.preventDefault();
+    node = infoDialogNode;
+    node
+    .bind('submit', function() {
+      node.addClass('loading');
+    infoDialogNode.closest("li").addTransitionClass('lb');
+    editedDocument.setTitle( infoDialogTitleNode.val(), true );
+    ddd("New Title"+infoDialogTitleNode.val());
+    editedDocument.setDescription( infoDialogDescriptionNode.val(), true );
+    editedDocument.setCategory( infoDialogCategoryNode.val(), true );
+    editedDocument.setSize( {width:  infoDialogWidthNode.val(), height: infoDialogHeightNode.val()}, true );
+      
+    editedDocument.save(function(persitedDoc){
+      node
+        .removeClass('loading');
+         //.trigger({type: 'close'});
+      //Update dom here !!
+    });
+      
+      return false;
+    });
+  },
+
+  changeDocumentAccess: function(e) {
+    WebDoc.application.accessController.showAccess( e, this.currentDocument );
+    this.popupCollaborateNode.removeTransitionClass('lb');
+    e.preventDefault();
+  },
+
+  shareDocument: function(e) {
+    WebDoc.application.shareController.showShare(e, this.currentDocument);
+    this.popupShareNode.removeTransitionClass('lb');
+    e.preventDefault();
+  },
+  
+    showInvitationsForm: function(e){
+    e.preventDefault();
+    WebDoc.application.invitationsController.init();
+    this.popupSendInvitationsNode.removeTransitionClass('lb');
+  },
+  
+  closePopup: function(e){
+    var openPopup = this.popupNode.find('li.popup');
+    openPopup.addTransitionClass('lb');
+    e.preventDefault();
+  },
+  
+  setSizeByName: function(e) {
+    var name = e.target.attributes['data-webdoc-size-name'].value;
+    ddd('set size for '+name);
+    var size = undefined;
+    switch(name){
+      case "6000x400":
+        size = { width: "6000", height: "400"};
+        break;
+      case "400x6000":
+        size = { width: "400", height: "6000"};
+        break;
+      case "600x400":
+      default:
+        size = { width: "600", height: "400"};
+    }
+    var allSizeNode = jQuery(".set_size");
+    allSizeNode.each(function() {
+    	jQuery(this).removeClass('selected_friend');
+    });
+    var friendNode = jQuery(e.target);
+      friendNode.addClass('selected_friend');
+
+    infoDialogWidthNode.val(size.width+"px");
+    infoDialogHeightNode.val(size.height+"px");
+     e.preventDefault();
   }
 
 });
