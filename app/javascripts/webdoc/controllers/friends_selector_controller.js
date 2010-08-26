@@ -38,11 +38,15 @@ WebDoc.FriendsSelectorController = $.klass({
     
     return friendsList;
   },
+  
+  getList: function(){
+    return this.selectListNode.attr('checked');
+  },
 
   _buildFriendsList: function(data){
     ddd('_buildFriendsList',data);
     var length = data['friends'].length;
-    var friendsList = jQuery('<ul/>').attr({'class': 'horizontal index friends_selector_index friends_list'});
+    this.friendsList = jQuery('<ul/>').attr({'class': 'horizontal index friends_selector_index friends_list'});
     var friendNode, friend;
     var klass = 'choose_friend';
     for(var i=0;i<data['friends'].length;i++){
@@ -75,18 +79,22 @@ WebDoc.FriendsSelectorController = $.klass({
         })
         .data('uuid', friend.uuid);
         
-
           
       friendNode.append('<input type="hidden" value=0 name="friend['+friend.uuid+']"/>');
-      friendsList.append(friendNode);
+      this.friendsList.append(friendNode);
     }
     
     var selectAllLink = jQuery('<a/>', {href: '', 'class' : 'select_all_friends', })
       .html('Select All friends');
-    
+      
+    this.selectListNode = jQuery('<input/>',{type: 'checkbox', 'class' :'share_list', name: 'share_list'});
+    var selectListLabelNode = jQuery('<label/>', {'for' : 'share_list'}).html('Share with all present and future friends');
+
     this.friendsListNode.append(selectAllLink);
-    ddd(selectAllLink);
-    this.friendsListNode.append(friendsList);
+    this.friendsListNode.append(selectListLabelNode);
+    this.friendsListNode.append(this.selectListNode);
+    this.friendsListNode.append(this.friendsList);
+    this.selectListNode.bind('change', this.shareListClicked.pBind(this));
     this.domNode.find('.select_all_friends').bind('click', this.selectAllFriends.pBind(this));
     this.domNode.find('.choose_friend').bind('click', this.selectFriend.pBind(this));
     this.domNode.show();
@@ -107,6 +115,18 @@ WebDoc.FriendsSelectorController = $.klass({
           ddd("error", textStatus);
         }
       });
+    }
+  },
+  
+  shareListClicked: function(e){
+    e.preventDefault();
+    ddd('shareListClicked');
+    var value = this.selectListNode.attr('checked');
+    if(value === false){
+      this.friendsList.show();
+    }
+    else{
+      this.friendsList.hide();
     }
   }
   

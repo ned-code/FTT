@@ -182,7 +182,7 @@ class User < ActiveRecord::Base
   end
   
   def friends_user_lists
-    UserList.find_friends_list_by_user(self)
+    @friends_user_lists ||= UserList.find_friends_list_by_user(self)
   end
 
   def follow(user_id)
