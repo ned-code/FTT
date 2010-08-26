@@ -86,7 +86,7 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
     this.popupCreateEditNode = this.popupNode.find('#popup_createeditwebdoc');
   },
   
-  load: function(documentId, editable) {
+  load: function(documentId, editable, isInteraction) {
     ddd("[PageEditor] load " + documentId);
     WebDoc.Application.initializeSingletons([WebDoc.ThemeManager, WebDoc.WidgetManager, WebDoc.DocumentCategoriesManager, WebDoc.ShapeManager], function() {
       var app = WebDoc.application;
@@ -97,7 +97,7 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
       
       // create all controllers
       app.svgRenderer = new WebDoc.SvgRenderer();
-      app.boardController = new WebDoc.BoardController(editable, !editable);
+      app.boardController = new WebDoc.BoardController(editable, !editable, isInteraction);
       app.panelsController = new WebDoc.PanelsController();
       app.toolbarController = new WebDoc.ToolbarController();
       app.browserController = new WebDoc.BrowserController();

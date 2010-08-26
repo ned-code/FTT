@@ -10,5 +10,9 @@ module DocumentsHelper
       @document.user_contributor?(current_user) ||
       current_user.has_role?('admin'))
   end
+
+  def interaction_mode?
+    controller.params[:edit] != 'true'    
+  end
   
 end
