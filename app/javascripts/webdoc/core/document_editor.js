@@ -378,7 +378,6 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
   },
   
   showInvitationsForm: function(e){
-  alert("test");
     e.preventDefault();
     WebDoc.application.invitationsController.init();
     this.popupSendInvitationsNode.removeClass('lb');
