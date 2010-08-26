@@ -37,7 +37,7 @@
       //editor2.start();
       
       var editor = new WebDoc.PageEditor();
-      editor.load("<%= @document.uuid %>", <%= edit_mode? %>);
+      editor.load("<%= @document.uuid %>", <%= edit_mode? %>, <%= interaction_mode? %>);
     });
   </script>
 <% end %>
