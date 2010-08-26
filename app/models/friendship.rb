@@ -88,13 +88,11 @@ class Friendship < ActiveRecord::Base
     Friendship.where(:user_id => self.friend_id, :friend_id => self.user_id).first
   end
   
+  #Remove the roles associated with the friendships.
   def remove_asociated_roles
-    self.user_lists_friends.each do |list|
-      Role.where(:user_id => self.friend_id, :user_list_id => list.id).delete_all
-    end
-    self.mirror.user_lists_friends.each do |list|
-      Role.where(:user_id => self.mirror.friend_id, :user_list_id => list.id).delete_all
-    end
+    #.delete_all will be more efficient, but it does'nt make the join !
+    Role.joins(:document).where('documents.creator_id = ?', self.user_id).where('user_id = ?',self.friend_id).destroy_all
+    Role.joins(:document).where('documents.creator_id = ?', self.friend_id).where('user_id = ?',self.user_id).destroy_all
   end
   
 private

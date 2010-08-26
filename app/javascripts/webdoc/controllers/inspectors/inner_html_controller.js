@@ -17,6 +17,8 @@ WebDoc.InnerHtmlController = $.klass({
       path: '/codemirror/js/',
       parserfile: ['parsexml.js', 'parsecss.js', 'tokenizejavascript.js', 'parsejavascript.js', 'parsehtmlmixed.js'],
       stylesheet: '/css/codemirror/codemirror.css',
+      // disable line number because it freeze
+      // TODO need to fix that
       lineNumbers: false,
       indentUnit: 2,
       height: '100%',
@@ -42,8 +44,10 @@ WebDoc.InnerHtmlController = $.klass({
       var html = item.getInnerHtml();
 
       // Fill the editor
-
-      this._editor.setCode( html || '' );
+      // check that editor has been initialized
+      if (this._editor.editor) {
+        this._editor.setCode( html || '' );
+      }
 
       try {
         this._editor.reindent();
@@ -51,9 +55,6 @@ WebDoc.InnerHtmlController = $.klass({
       catch (exception) {
         ddd("cannot indent HTML");
       }
-    }
-    else {
-      this._editor.setCode( '' );
     }
      
   },

@@ -1,3 +1,7 @@
+/**
+ * @author Jonathan, noe
+ */
+
 WebDoc.MyContentsController = $.klass(WebDoc.Library,{
       
   initialize: function($super) {

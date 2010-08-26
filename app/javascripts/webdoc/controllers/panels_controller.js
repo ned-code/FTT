@@ -2,16 +2,12 @@
 
 // define all panel types
 WebDoc.PanelControllerType = {
-  ITEM: 'item',
-  PAGE: 'page',
-  PAGE_BROWSER: 'page_browser',
-  DOCUMENT: 'document',
-  DISCUSSIONS: 'discussions',
-  SOCIAL: 'social',
-  MY_CONTENT: 'my_content',
-  APPS: 'apps',                       
-  BROWSE_WEB: 'browse_web',
-  PACKAGES: 'packages'
+  ITEM: 'item'
+, PAGE: 'page'
+, PAGE_BROWSER: 'page_browser'
+, DOCUMENT: 'document'
+, DISCUSSIONS: 'discussions'
+, CONTENT: 'content'
 };
 
 WebDoc.PanelsController = $.klass({
@@ -20,21 +16,16 @@ WebDoc.PanelsController = $.klass({
   PANEL_GHOST_SELECTOR: "#panel_ghost",
   
   _editRightPanelGroup: {
-    item: true,
-    page: true,
-    document: true,
-    discussions: true,
-    my_content: true,
-    apps: true,
-    packages: true,
-    browse_web: true
+    item: true
+  , page: true
+  , document: true
+  , discussions: true
+  , content: true
   },
-  
+
   _viewRightPanelGroup: {
-    discussions: true,
-    my_content: true,
-    apps: true,
-    packages: true
+    discussions: true
+  , content: true
   },
 
   _bottomPanelGroup: {
@@ -44,29 +35,24 @@ WebDoc.PanelsController = $.klass({
   initialize: function() {
 
     this._controllers = {};
+    
     this._panelControllersClass = {
-      item: WebDoc.InspectorController,
-      page: WebDoc.PageInspectorController,
-      document: WebDoc.DocumentInspectorController,
-      discussions: WebDoc.DiscussionsPanelController,
-      social: WebDoc.SocialPanelController,
-      my_content: WebDoc.MyContentsController,
-      apps: WebDoc.AppsLibrary,
-      browse_web: WebDoc.WebSearchController,
-      packages: WebDoc.PackagesLibrary,
-      page_browser: WebDoc.PageBrowserController
+      item: WebDoc.InspectorController
+    , page: WebDoc.PageInspectorController
+    , document: WebDoc.DocumentInspectorController
+    , discussions: WebDoc.DiscussionsPanelController
+    , content: WebDoc.ContentPanelController
+    , page_browser: WebDoc.PageBrowserController
     };
 
     // Some of these are lazily loaded, and some are not -
     // pageInspector does not work if you try loading it now.
     var itemInspector = this.getInspector(WebDoc.PanelControllerType.ITEM);
-    var myContentController = this.getInspector(WebDoc.PanelControllerType.MY_CONTENT);
-    var webSearchController = this.getInspector(WebDoc.PanelControllerType.BROWSE_WEB);
+    var contentPanelController = this.getInspector(WebDoc.PanelControllerType.CONTENT);
     var pageBrowserController = this.getInspector(WebDoc.PanelControllerType.PAGE_BROWSER);
 
     WebDoc.application.inspectorController = itemInspector;
-    WebDoc.application.myContentController = myContentController;
-    WebDoc.application.webSearchController = webSearchController;
+    WebDoc.application.contentPanelController = contentPanelController;
     WebDoc.application.pageBrowserController = pageBrowserController;
     
     this._currentRightPanelType = null;
@@ -129,6 +115,7 @@ WebDoc.PanelsController = $.klass({
     ddd('[PanelsController] _showPanel controllerType:', controllerType);
     
     if ( !controllerType ) {
+      ddd(1);
       if ( this._currentRightPanelType ) {
         this.getInspector( this._currentRightPanelType ).domNode.removeTransitionClass( 'active' );
         this.panelGhostNode.removeTransitionClass( this.ACTIVE_CLASS );
@@ -167,22 +154,22 @@ WebDoc.PanelsController = $.klass({
   },
   
   showMyContent: function(){
-    this.selectInspector(WebDoc.PanelControllerType.MY_CONTENT);
-    if(!this._controllers[WebDoc.PanelControllerType.MY_CONTENT].isMyImageLoaded()){
-      this._controllers[WebDoc.PanelControllerType.MY_CONTENT].setup();
+    this.selectInspector(WebDoc.PanelControllerType.CONTENT);
+    if(!this._controllers[WebDoc.PanelControllerType.CONTENT].isMyImageLoaded()){
+      this._controllers[WebDoc.PanelControllerType.CONTENT].setup();
     }
   },
   
   showApps: function(){
-    this.selectInspector(WebDoc.PanelControllerType.APPS);
+    this.selectInspector(WebDoc.PanelControllerType.CONTENT);
   },
   
   showPackages: function(){
-    this.selectInspector(WebDoc.PanelControllerType.PACKAGES);
+    this.selectInspector(WebDoc.PanelControllerType.CONTENT);
   },
   
   showBrowseWeb: function(){
-    this.selectInspector(WebDoc.PanelControllerType.BROWSE_WEB);
+    this.selectInspector(WebDoc.PanelControllerType.CONTENT);
   },
   
   showPageInspector: function() {
@@ -211,23 +198,6 @@ WebDoc.PanelsController = $.klass({
       this._currentBottomPanelType = null;
     }
   },
-  
-  //actually display the author panel... it's on bottom of the webdoc
-  // showSocialPanel: function() {
-  //   ddd("[PanelsController] showSocialPanel");
-  //   this.selectInspector(WebDoc.PanelControllerType.SOCIAL);
-  //   var panel = jQuery('.sharing_panel');
-  //   
-  //   if(panel.hasClass(this.ACTIVE_CLASS)){
-  //     panel.removeClass(this.ACTIVE_CLASS);
-  //     jQuery('#social-inspector').hide();
-  //   }
-  //   else{
-  //     panel.addClass(this.ACTIVE_CLASS);
-  //     jQuery('#social-inspector').show();
-  //   }
-  //   //this.show();
-  // },
   
   _changePanelContent: function(inspector) {
     ddd('[PanelsController] _changePanelContent(inspector)' + inspector);

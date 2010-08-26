@@ -209,6 +209,11 @@ class Document < ActiveRecord::Base
     self.uuid
   end
 
+  def total_number_of_comments
+    # TODO implement this
+    rand(1000)
+  end
+
   def as_application_json(options={})
     options = { :skip_pages => false, :skip_roles => false }.merge(options)
 
@@ -264,15 +269,20 @@ class Document < ActiveRecord::Base
   
   def to_access_json
     all_document_access = self.roles
-    result = { :access => [], :failed => [] }
-    #TODO: Manage list
+    result = { :access => [], :list_access => [], :failed => [] }
     all_document_access.each do |role|
-      if role.user_id
+      if role.user_id.present?
+        p 'acces by user'
         user = role.user
         is_creator = (self.creator && self.creator.uuid == role.user.uuid)? true : false
-        user_infos = [:uuid => user.uuid, :username => user.username, :email => user.email, :role => role.name, :creator => is_creator]
+        user_infos = {:uuid => user.uuid, :username => user.username, :email => user.email, :role => role.name, :creator => is_creator}
         result[:access] << user_infos
-      else
+      elsif role.user_list_id.present?
+        p "to_access_json user list"
+        p role.user_list.users
+        user_list = role.user_list
+        result[:list_access] << {:uuid => user_list.uuid, :name => user_list.name, :role => role.name}
+      elsif role.user_id.blank? && role.user_list_id.blank?
         result[:public] = role.name
       end
     end
@@ -281,6 +291,7 @@ class Document < ActiveRecord::Base
         result[:failed] << email
       end
     end
+    p result
     result
   end
 
@@ -335,33 +346,52 @@ class Document < ActiveRecord::Base
   end
   
   def user_editor?(user)
-    p "user_editor"
-    p find_user_lists_roles
     if self.find_user_roles(user) && self.find_user_roles(user).include?(Role::EDITOR)
       return true
-    else
-      #here we look if the user is a member of a list that can access as editor
-      #TODO this is not optimized
-      if self.find_user_lists_roles && self.find_user_lists_roles.first.key?('editor')
-        user_list = UserList.where(:uuid => self.find_user_lists_roles.first['editor']).first
-        return user_list.member?(user)
+    else    
+      if self.find_user_lists_roles.present? && self.user_lists_roles_as_hash[Role::EDITOR].present?
+        #We make the intersection between the lists where the user is member and the lists where the doc is assigned
+        return (user.friends_user_lists.map{ |ul| ul.uuid } & self.user_lists_roles_as_hash[Role::EDITOR]).length > 0
       else
         return false
       end
-      
     end
   end
   
   def user_contributor?(user)
-    self.find_user_roles(user) && self.find_user_roles(user).include?(Role::CONTRIBUTOR)
+    if self.find_user_roles(user) && self.find_user_roles(user).include?(Role::CONTRIBUTOR)
+      return true
+    else    
+      if self.find_user_lists_roles.present? && self.user_lists_roles_as_hash[Role::CONTRIBUTOR].present?
+        return (user.friends_user_lists.map{ |ul| ul.uuid } & self.user_lists_roles_as_hash[Role::CONTRIBUTOR]).length > 0
+      else
+        return false
+      end
+    end
   end
   
   def user_viewer_comment?(user)
-    self.find_user_roles(user) && self.find_user_roles(user).include?(Role::VIEWER_COMMENT)
+    if self.find_user_roles(user) && self.find_user_roles(user).include?(Role::VIEWER_COMMENT)
+      return true
+    else    
+      if self.find_user_lists_roles.present? && self.user_lists_roles_as_hash[Role::VIEWER_COMMENT].present?
+        return (user.friends_user_lists.map{ |ul| ul.uuid } & self.user_lists_roles_as_hash[Role::VIEWER_COMMENT]).length > 0
+      else
+        return false
+      end
+    end
   end
   
   def user_viewer_only?(user)
-    self.find_user_roles(user) && self.find_user_roles(user).include?(Role::VIEWER_ONLY)
+    if self.find_user_roles(user) && self.find_user_roles(user).include?(Role::VIEWER_ONLY)
+      return true
+    else    
+      if self.find_user_lists_roles.present? && self.user_lists_roles_as_hash[Role::VIEWER_ONLY].present?
+        return (user.friends_user_lists.map{ |ul| ul.uuid } & self.user_lists_roles_as_hash[Role::VIEWER_ONLY]).length > 0
+      else
+        return false
+      end
+    end
   end
 
   def find_public_roles
@@ -373,7 +403,19 @@ class Document < ActiveRecord::Base
   end
   
   def find_user_lists_roles
-    @user_lists_roles_names ||= find_roles.select{ |r| r.user_id.blank? && r.user_list_id.present?}.map{ |r| { r.name => r.user_list_id} }
+    @user_lists_roles ||= find_roles.select{ |r| r.user_id.blank? && r.user_list_id.present?}
+  end
+  
+  def user_lists_roles_as_hash
+    user_lists_roles_names_hash = {  Role::EDITOR => [],
+                                Role::CONTRIBUTOR => [],
+                                Role::VIEWER_COMMENT => [],
+                                Role::VIEWER_ONLY => []
+                                }
+    self.find_user_lists_roles.each do |r|
+      user_lists_roles_names_hash[r.name] << r.user_list_id
+    end
+    user_lists_roles_names_hash
   end
 
   def find_roles

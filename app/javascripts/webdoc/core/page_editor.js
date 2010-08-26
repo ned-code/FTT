@@ -534,7 +534,7 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
            //     node
            //     .removeClass('loading')
            //     .trigger({type: 'close'});
-
+					//
                 //this.filter.refreshDocument(persitedDoc);
            // });
 						    e.preventDefault();

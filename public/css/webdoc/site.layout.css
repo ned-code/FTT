@@ -6,33 +6,33 @@ html, body {
 
 body {
   /* Top padding makes room for the top logo bar */
-  padding-top: 3.5em;
+  padding-top: 3.3333em;
   /* Set as position parent */
   position: relative;
 }
 
 /* manage layers */
 
-.site_wrap { z-index: 1; }
-.workspace_wrap {z-index:2;}
-#flash 		 { z-index: 4; }
-body>header { z-index:3;}
+.site_wrap      { z-index: 1; }
+.workspace_wrap { z-index: 2; }
+.header_panel   { z-index: 3; }
+#flash          { z-index: 4; }
 
 /* The site header */
-body>header {
-  position: absolute;
+.header_panel {
   top: 0; left: 0; right: 0;
-  height: 3.5em;
+  /* Must be matched with padding-top on the body */
+  height: 3.3333em;
 }
 
 .logo_thumb {
   position: absolute;
-  top: 0;
+  top: 0.7em;
   left: 0;
-  width: 112px;
+  width: 107px;
   padding-top: 42px;
   background-size: 107px 25px;
-  background-position: 0 0.8333em;
+  background-position: 0 0;
   background-image: url('../../images/thumbs/logo_thumb_white.png');
 }
 
@@ -45,16 +45,19 @@ body>header {
 /* .wrap extensions */
 
 .site_wrap {
-  width: 88%;
+  /* width: 88%;
   min-width: 720px;
-  max-width: 1440px;
+  max-width: 1440px; */
+  
+  /* Because they made a dumb-ass decision to fix the width. */
+  width: 980px;
 }
 
 /* .index extensions */
 
 .nav_index {
   position: absolute;
-  top: 0.8333em;
+  top: 0.75em;
   left: 180px;
 }
 
@@ -64,7 +67,7 @@ body>header {
 
 .usernav_index {
   position: absolute;
-  top: 0.8333em;
+  top: 0.75em;
   right: 0;
 }
 
