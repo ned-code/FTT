@@ -3,11 +3,11 @@
  */
 
 WebDoc.PropertiesInspectorController = $.klass({
-  initialize: function( selector, showBgColors ) {
+  initialize: function( selector, showBgColors, rootInspectorController ) {
     ddd('[Properties Inspector Controller] initialize on', selector);
     var domNode = jQuery(selector);
     this.domNode = domNode;
-    
+    this._inspectorController = rootInspectorController;
     domNode
     .delegate("input", 'change', jQuery.proxy( this, 'changeProperty' ))
     .delegate("a[href=#property]", 'click', jQuery.proxy( this, 'clickProperty' ))
@@ -151,7 +151,7 @@ WebDoc.PropertiesInspectorController = $.klass({
       css = selectedItem.css();
       
       for ( key in this.fieldSelectors ) {
-        field = jQuery( this.fieldSelectors[key] );
+        field =  this._inspectorController.getCurrentInspectorController().domNode.find( this.fieldSelectors[key] );
         
         // If this field has a property translator then it
         // processes the CSS and is responsible for updating the field...
@@ -396,42 +396,6 @@ WebDoc.PropertiesInspectorController = $.klass({
     }
     item.changeCss(jQuery.extend({ transform: '' }, size, position));
     e.preventDefault();
-  }
-});
-
-WebDoc.ImagePropertiesInspectorController = $.klass(WebDoc.PropertiesInspectorController, {
-  initialize: function($super, selector) {
-    $super("#image-property-inspector");
-  },
-  _makeThemeBackgrounds: function() {
-  }  
-});
-
-WebDoc.TextPropertiesInspectorController = $.klass(WebDoc.PropertiesInspectorController, {
-  initialize: function($super, selector) {
-    $super("#text-property-inspector");
-  }
-});
-
-WebDoc.WidgetPropertiesInspectorController = $.klass(WebDoc.PropertiesInspectorController, {
-  initialize: function($super, selector) {
-    $super("#widget-property-inspector");
-  },
-  _makeThemeBackgrounds: function() {
-  }  
-});
-
-WebDoc.IFramePropertiesInspectorController = $.klass(WebDoc.PropertiesInspectorController, {
-  initialize: function($super, selector) {
-    $super("#iframe-property-inspector");
-  },
-  _makeThemeBackgrounds: function() {
-  } 
-});
-
-WebDoc.HtmlPropertiesInspectorController = $.klass(WebDoc.PropertiesInspectorController, {
-  initialize: function($super, selector) {
-    $super("#html-property-inspector");
   }
 });
 

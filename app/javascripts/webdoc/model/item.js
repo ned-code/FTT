@@ -37,6 +37,9 @@ WebDoc.Item = $.klass(WebDoc.Record,
     if (!this.data.preferences || this.data.preferences == 'null') {
       this.data.preferences = {};
     }
+    if (!this.data.properties || this.data.properties == 'null') {
+      this.data.properties = {};
+    }
   },
   
   getPage: function() {

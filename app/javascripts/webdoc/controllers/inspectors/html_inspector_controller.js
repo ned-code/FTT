@@ -2,7 +2,7 @@
 
 WebDoc.HtmlInspectorController = $.klass({
   initialize: function( selector ) {
-    var domNode = jQuery( selector );
+    var domNode = jQuery( selector? selector : '#html_inspector' );
     
     ddd('[HtmlInspectorController] initialize on', selector);
     

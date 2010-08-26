@@ -1,68 +1,178 @@
-<div id="text_inspector">
+<div id="text_inspector" class="item_inspector">
   <header>
   	<h3>Text</h3>
   </header>
-  
   <div class="content">
-    <div id="text-inspector-content"></div>
-    <div id="text_code"></div>
-    <form>
-      <div id="text_properties">
-        <div>
+    <div id="text-inspector-content">
+      <div id="toolbar_panel" style="height:100px" class="ui-widget">
+        <div id="hiliteColorpickerContainer" style="padding:0px;position:absolute;z-index: 150000;top:50px;display:none;">
+            <div id="colorpickerHolder1"></div>
+        </div>
+        <div id="foreColorpickerContainer" style="padding:0px;position:absolute;z-index: 150000;top:50px;display:none;">
+            <div id="colorpickerHolder2"></div>
+        </div>
+        <div id="toolbar_selectbox_container">
+            <select style="width:125px" id="toolbar_panel_button_format"></select>
+            <select style="width:90px" id="toolbar_panel_button_fontName"></select>
+            <select style="width:35px" id="toolbar_panel_button_fontSize"></select>
+        </div>
+        <div id="toolbar_panel_fontSize_slider_container">
+            <div id="toolbar_panel_fontSize_label">Font Size</div>
+            <div id="toolbar_panel_fontSize_slider"></div>
+        </div>
+        
+        <div style="clear: both;"></div>
+        <div id="toolbar_buttons_container">
+            <a href="javascript:void(0);" title="Decrease font size" id="toolbar_panel_button_decreasefontsize" onclick="WebDoc.application.textTool.delegate.editorExec(\decreasefontsize\);"></a>
+            <div class="icon_decreasefontsize"></div>
+            <a href="javascript:void(0);" title="Increase font size" id="toolbar_panel_button_increasefontsize" onclick="WebDoc.application.textTool.delegate.editorExec(\increasefontsize\);"></a>
+            <div class="icon_increasefontsize"></div>
+            <a href="javascript:void(0);" title="Bold" id="toolbar_panel_button_bold" onclick="WebDoc.application.textTool.delegate.editorExec(\bold\);"></a>
+            <div class="icon_bold"></div>
+            <a href="javascript:void(0);" title="Italic" id="toolbar_panel_button_italic" onclick="WebDoc.application.textTool.delegate.editorExec(\italic\);"></a>
+            <div class="icon_italic"></div>
+            <a href="javascript:void(0);" title="Underline" id="toolbar_panel_button_underline" onclick="WebDoc.application.textTool.delegate.editorExec(\underline\);"></a>
+            <div class="icon_underline"></div>
+            <a href="javascript:void(0);" title="Foreground font color" id="toolbar_panel_button_foreColor" onclick="WebDoc.application.textTool.delegate.editorExec(\foreColor\,this.firstChild.style.backgroundColor);"></a>
+            <div class="icon_foreColor"></div>
+            <a href="javascript:void(0);" id="toolbar_panel_button_foreColor_arrow"></a>
+            <div class="icon_color_arrow"></div>
+            <a href="javascript:void(0);" title="Background font color" id="toolbar_panel_button_hiliteColor" onclick="WebDoc.application.textTool.delegate.editorExec(\hiliteColor\,this.firstChild.style.backgroundColor);"></a>
+            <div class="icon_hiliteColor"></div>
+            <a href="javascript:void(0);" title="" id="toolbar_panel_button_hiliteColor_arrow"></a>
+            <div class="icon_color_arrow"></div>
+            <a href="javascript:void(0);" title="Create link" id="toolbar_panel_button_createlink"></a>
+            <div class="icon_createLink"></div>
+            <form id="toolbar_panel_createlink_block" class="ui-menu ui-widget-content ui-corner-all" onsubmit="return false;">
+                <div>
+                    <label id="toolbar_panel_button_createlink_text_label">Text</label>
+                    <input type="text" id="toolbar_panel_button_createlink_text" size="55" maxlength="2024" class="ui-corner-all" />
+                </div>
+                <div>
+                    <label id="toolbar_panel_button_createlink_link_label">Link</label>
+                    <input type="text" id="toolbar_panel_button_createlink_link" size="55" maxlength="2024" class="ui-corner-all" value="http://" />
+                </div>
+                <div>
+                    <label>Type</label>
+                    <input type="radio" name="toolbar_panel_button_createlink_type" id="toolbar_panel_button_createlink_type_web" checked="checked" />
+                    <label class="inline_label">Web</label>
+                    <input type="radio" name="toolbar_panel_button_createlink_type" id="toolbar_panel_button_createlink_type_mail" />
+                    <label class="inline_label">E-mail</label>
+                    <input type="radio" name="toolbar_panel_button_createlink_type" id="toolbar_panel_button_createlink_type_webdoc" />
+                    <label class="inline_label">WebDoc</label>
+                    <button id="toolbar_panel_button_createlink_cancel" class="ui-button ui-widget ui-state-default ui-corner-all" style="width:55px">Cancel</button>
+                    <button id="toolbar_panel_button_createlink_ok" class="ui-button ui-widget ui-state-default ui-corner-all" style="width:35px">Ok</button>
+                </div>
+            </form>
+            <a href="javascript:void(0);" title="Clear link" id="toolbar_panel_button_clearlink" onclick="WebDoc.application.textTool.delegate.editorExec(\clearLink\);"></a>
+            <div class="icon_clearLink"></div>
+            <a href="javascript:void(0);" title="Superscript" id="toolbar_panel_button_superScript" onclick="WebDoc.application.textTool.delegate.editorExec(\superScript\);"></a>
+            <div class="icon_superScript"></div>
+            <a href="javascript:void(0);" title="Subscript" id="toolbar_panel_button_subScript" onclick="WebDoc.application.textTool.delegate.editorExec(\subScript\);"></a>
+            <div class="icon_subScript"></div>
+            <div id="toolbar_buttons_container"></div>
+            <a href="javascript:void(0);" title="Insert Ordered List" id="toolbar_panel_button_insertOrderedList" onclick="WebDoc.application.textTool.delegate.editorExec(\insertOrderedList\);"></a>
+            <div class="icon_insertOrderedList"></div>
+            <a href="javascript:void(0);" title="Insert Unordered List" id="toolbar_panel_button_insertUnorderedList" onclick="WebDoc.application.textTool.delegate.editorExec(\insertUnorderedList\);"></a>
+            <div class="icon_insertUnorderedList"></div>
+            <a href="javascript:void(0);" title="Indent" id="toolbar_panel_button_indent" onclick="WebDoc.application.textTool.delegate.editorExec(\indent\);"></a>
+            <div class="icon_indent"></div>
+            <a href="javascript:void(0);" title="Unindent" id="toolbar_panel_button_outdent" onclick="WebDoc.application.textTool.delegate.editorExec(\outdent\);"></a>
+            <div class="icon_outdent"></div>
+            <a href="javascript:void(0);" title="Align Left" id="toolbar_panel_button_justifyLeft" onclick="WebDoc.application.textTool.delegate.editorExec(\justifyLeft\);"></a>
+            <div class="icon_justifyLeft"></div>
+            <a href="javascript:void(0);" title="Align Center" id="toolbar_panel_button_justifyCenter" onclick="WebDoc.application.textTool.delegate.editorExec(\justifyCenter\);"></a>
+            <div class="icon_justifyCenter"></div>
+            <a href="javascript:void(0);" title="Align Right" id="toolbar_panel_button_justifyRight" onclick="WebDoc.application.textTool.delegate.editorExec(\justifyRight\);"></a>
+            <div class="icon_justifyRight"></div>
+            <a href="javascript:void(0);" title="Align Full" id="toolbar_panel_button_justifyFull" onclick="WebDoc.application.textTool.delegate.editorExec(\justifyFull\);"></a>
+            <div class="icon_justifyFull"></div>
+            <a href="javascript:void(0);" title="Vertical align" id="toolbar_panel_button_valign"></a>
+            <div class="icon_valignTop"></div>
+            <div class="icon_valign_arrow"></div>
+            <div id="toolbar_panel_valign_block" class="ui-menu ui-widget-content ui-corner-all">
+                <a href="javascript:void(0);" title="Vertical align Top" id="toolbar_panel_button_valignTop"></a>
+                <div class="icon_valignTop"></div>
+                <a href="javascript:void(0);" title="Vertical align Middle" id="toolbar_panel_button_valignMiddle"></a>
+                <div class="icon_valignMiddle"></div>
+                <a href="javascript:void(0);" title="Vertical align Bottom" id="toolbar_panel_button_valignBottom"></a>
+                <div class="icon_valignBottom"></div>
+            </div>
+            <a href="javascript:void(0);" title="Remove Format" id="toolbar_panel_button_removeFormat" onclick="WebDoc.application.textTool.delegate.editorExec(\removeformat\);"></a>
+            <div class="icon_removeFormat"></div>
+            <a href="javascript:void(0);" title="Edit HTML" id="toolbar_panel_button_editHTML"></a>
+            <div class="icon_editHTML"></div>
+        </div>
+        <div style="clear: both;"></div>
+      </div>
+      <div style="position:relative;height:100%;">
+        <div id="choose-edit-method" class="ui-widget content">
+            <!--div>
+            <button id="toolbar_panel_inline_edit">Inline edit</button>
+            <button id="toolbar_panel_html_edit">HTML edit</button>
+            </div-->
+            <div class="content" id="html-editor"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="text_code"></div>
+  <form>
+    <div id="text_properties">
+      <div>
           <label>left</label>
           <input id="property_left" type="text" data-type="cssvalue" data-property="left" value="" />
-        </div>
-        <div>
+      </div>
+      <div>
           <label>top</label>
           <input id="property_top" type="text" data-type="cssvalue" data-property="top" value="" />
-        </div>         
-        <div>
+      </div>
+      <div>
           <label>width</label>
           <input id="property_width" type="text" data-type="cssvalue" data-property="width" value="" />
-        </div>
-        <div>
+      </div>
+      <div>
           <label>height</label>
           <input id="property_height" type="text" data-type="cssvalue" data-property="height" value="" />
-        </div>
-        <div>
+      </div>
+      <div>
           <label>background color</label>
-            <input id="property_background_color" type="text" data-type="csscolor" data-property="backgroundColor" value="" />
-            <a href='#remove_background'>Remove Background</a>
-        </div>
-        <div>
+          <input id="property_background_color" type="text" data-type="csscolor" data-property="backgroundColor" value="" />
+          <a href="#remove_background">Remove Background</a>
+      </div>
+      <div>
           <label>rotation</label>
           <input id="property_rotation" type="text" data-type="cssangle" data-property="rotation" value="" />
-        </div> 
-        <div>
+      </div>
+      <div>
           <label>padding</label>
           <input id="property_padding" type="text" data-type="cssvalue" data-property="padding" value="" />
-        </div> 
-        <div>
+      </div>
+      <div>
           <label>border radius</label>
           <input id="property_border_radius" type="text" data-type="cssvalue" data-property="borderRadius" value="" />
-          <a href='#remove_border'>Remove Border</a>
-        </div> 
-        <div>
+          <a href="#remove_border">Remove Border</a>
+      </div>
+      <div>
           <label for="property_overflow">Overflow</label>
           <input name="property_overflow" id="property_overflow_hidden" type="radio" data-property="overflow" value="hidden" />
-          <span class="label" for="property_overflow_hidden">clip</span>          
+          <span class="label" for="property_overflow_hidden">clip</span>
           <input name="property_overflow" id="property_overflow_auto" type="radio" data-property="overflow" value="auto" />
-          <span class="label" for="property_overflow_hidden">scroll</span>          
+          <span class="label" for="property_overflow_hidden">scroll</span>
           <input name="property_overflow" id="property_overflow_visible" type="radio" data-property="overflow" value="visible" />
           <span class="label" for="property_overflow_hidden">show</span>
-        </div> 
-        <div>
-          <label>opacity</label>
-          <input id="property_opacity" type="range" min="0.00" max="1.00" step="0.01" data-property="opacity" value="1.00" /><span class="readout" id="property_opacity_readout">ui</span>
-        </div> 
-        <div class='entry'>
-          <a href='#remove_font'>Remove font</a>
-        </div>
-
-        <div>
-          <input id="property-fit-to-screen" type="button" value="Fit to webdoc" />
-        </div>                                                                                                
       </div>
-    </form>
-  </div>
+      <div>
+          <label>opacity</label>
+          <input id="property_opacity" type="range" min="0.00" max="1.00" step="0.01" data-property="opacity" value="1.00" />
+          <span class="readout" id="property_opacity_readout">ui</span>
+      </div>
+      <div class="entry">
+          <a href="#remove_font">Remove font</a>
+      </div>
+      <div>
+          <input id="property-fit-to-screen" type="button" value="Fit to webdoc" />
+      </div>
+    </div>
+  </form>
 </div>

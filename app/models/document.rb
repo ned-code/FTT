@@ -335,7 +335,21 @@ class Document < ActiveRecord::Base
   end
   
   def user_editor?(user)
-    self.find_user_roles(user) && self.find_user_roles(user).include?(Role::EDITOR)
+    p "user_editor"
+    p find_user_lists_roles
+    if self.find_user_roles(user) && self.find_user_roles(user).include?(Role::EDITOR)
+      return true
+    else
+      #here we look if the user is a member of a list that can access as editor
+      #TODO this is not optimized
+      if self.find_user_lists_roles && self.find_user_lists_roles.first.key?('editor')
+        user_list = UserList.where(:uuid => self.find_user_lists_roles.first['editor']).first
+        return user_list.member?(user)
+      else
+        return false
+      end
+      
+    end
   end
   
   def user_contributor?(user)
@@ -349,13 +363,17 @@ class Document < ActiveRecord::Base
   def user_viewer_only?(user)
     self.find_user_roles(user) && self.find_user_roles(user).include?(Role::VIEWER_ONLY)
   end
-  
+
   def find_public_roles
     @public_roles_names ||= find_roles.select{ |r| r.user_id.blank? && r.user_list_id.blank? }.map{ |r| r.name }
   end
   
   def find_user_roles(user)
     @user_roles_names ||= find_roles.select{ |r| r.user_id.present? && r.user_list_id.blank? }.map{ |r| r.name }
+  end
+  
+  def find_user_lists_roles
+    @user_lists_roles_names ||= find_roles.select{ |r| r.user_id.blank? && r.user_list_id.present?}.map{ |r| { r.name => r.user_list_id} }
   end
 
   def find_roles
