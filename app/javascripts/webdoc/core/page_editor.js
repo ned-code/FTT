@@ -515,33 +515,28 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
     infoDialogHeightNode.val(previousHeight);
     infoDialogSubmitNode.val("Update");
 
-	this.popupCreateEditNode.removeTransitionClass('lb');
+    this.popupCreateEditNode.removeTransitionClass('lb');
     e.preventDefault();
-    
-   			node = infoDialogNode;
-        node
-        .bind('submit', function() {
-            node.addClass('loading');
-            
-   					infoDialogNode.closest("li").addTransitionClass('lb');
-           	editedDocument.setTitle( infoDialogTitleNode.val(), true );
-           	ddd("New Title"+infoDialogTitleNode.val());
-            editedDocument.setDescription( infoDialogDescriptionNode.val(), true );
-            editedDocument.setCategory( infoDialogCategoryNode.val(), true );
-            editedDocument.setSize( {width:  infoDialogWidthNode.val(), height: infoDialogHeightNode.val()}, true );
-            
-         //   this.editedDocument.save(function(persitedDoc){
-           //     node
-           //     .removeClass('loading')
-           //     .trigger({type: 'close'});
-					//
-                //this.filter.refreshDocument(persitedDoc);
-           // });
-						    e.preventDefault();
-            return false;
-        });
-    
-
+    node = infoDialogNode;
+    node
+    .bind('submit', function() {
+      node.addClass('loading');
+    infoDialogNode.closest("li").addTransitionClass('lb');
+    editedDocument.setTitle( infoDialogTitleNode.val(), true );
+    ddd("New Title"+infoDialogTitleNode.val());
+    editedDocument.setDescription( infoDialogDescriptionNode.val(), true );
+    editedDocument.setCategory( infoDialogCategoryNode.val(), true );
+    editedDocument.setSize( {width:  infoDialogWidthNode.val(), height: infoDialogHeightNode.val()}, true );
+      
+    editedDocument.save(function(persitedDoc){
+      node
+        .removeClass('loading');
+         //.trigger({type: 'close'});
+      //Update dom here !!
+    });
+      
+      return false;
+    });
   },
 
   changeDocumentAccess: function(e) {
