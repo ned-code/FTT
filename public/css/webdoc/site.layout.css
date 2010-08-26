@@ -45,9 +45,12 @@ body {
 /* .wrap extensions */
 
 .site_wrap {
-  width: 88%;
+  /* width: 88%;
   min-width: 720px;
-  max-width: 1440px;
+  max-width: 1440px; */
+  
+  /* Because they made a dumb-ass decision to fix the width. */
+  width: 980px;
 }
 
 /* .index extensions */
