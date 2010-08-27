@@ -243,19 +243,22 @@ WebDoc.ItemView = $.klass({
     if (!this.isSelected()) {
       ddd("ItemView: select item " + this.item.uuid());
       this.domNode.addClass("item_selected");
-      this._initDragAndResize();      
+      this._initDragAndResize();
+      this._initRotate();  
       if (lastSelectedObjectMouseDownEvent) {
         this.domNode.trigger(lastSelectedObjectMouseDownEvent);
       }      
     }
-    this.inspectorPanesManager.itemDidSelect(this);    
+    this.inspectorPanesManager.itemDidSelect(this);
+     
   },
   
   unSelect: function() {
     this.domNode.removeClass("item_selected");
     this.domNode.draggable( 'destroy' );
     this.domNode.resizable( 'destroy' );
-    this.inspectorPanesManager.itemDidUnselect(this);    
+    this.inspectorPanesManager.itemDidUnselect(this);   
+    this.domNode.rotatableDestroy(); 
   },
   
   canEdit: function() {
@@ -311,6 +314,18 @@ WebDoc.ItemView = $.klass({
     this._editable = editable;  
   },
   
+  _initRotate: function() {
+  	this.domNode.rotatable({
+    	startAngle:this.item.data.data.css.transform,
+    	callBack: function(valueRotation) {
+    		var newRotation = valueRotation;
+    		this.item.rotateTo(newRotation)
+			this.item.save();
+		}.pBind(this)
+
+    });    
+  },
+  
   _initDragAndResize: function() {
     this.domNode.draggable({
       containment: "parent",
@@ -358,7 +373,7 @@ WebDoc.ItemView = $.klass({
         WebDoc.application.arrowTool.enableHilight();
       }.pBind(this)
     }).resizable({
-      handles: 's, e, se',
+      handles: 'all',
       start: function(e, ui) {
         this.pageView.eventCatcherNode.show();
         this.inspectorPanesManager.itemViewWillMove(this);
@@ -373,14 +388,9 @@ WebDoc.ItemView = $.klass({
         var mappedPoint = WebDoc.application.boardController.mapToPageCoordinate(e);
         var newWidth = ui.originalSize.width + (mappedPoint.x - this.resizeOrigin.x);
         var newHeight = ui.originalSize.height + (mappedPoint.y - this.resizeOrigin.y);
-        if(e.shiftKey || this.item.data.data.preserve_aspect_ratio === "true"){
-          ui.size.width = Math.round(this.aspectRatio*newHeight);
-        }
-        else {
-          ui.size.width = newWidth;
-        }
-        ui.size.height =newHeight;
-
+        if (typeof(this.item.data.data.css.transform) != "undefined" && this.item.data.data.css.transform != "rotate(0deg)") {
+      		ui.size.transform = this.item.data.data.css.transform;
+      	}
         this._resizeTo(ui.size);
       }.pBind(this)        ,
       stop: function(e, ui) {
@@ -390,6 +400,13 @@ WebDoc.ItemView = $.klass({
         this.item.resizeTo(newSize);
         this.item.save();
       }.pBind(this)
+    }).resizeWithRatio({
+    	startAngle:this.item.data.data.css.transform,
+    	callBack: function(height,width) {
+    		var newSize = { width: width + "px", height: height + "px"};
+        	this.item.resizeTo(newSize);
+			     this.item.save();
+		}.pBind(this)
     });    
   },
   
@@ -405,9 +422,12 @@ WebDoc.ItemView = $.klass({
   _resizeTo: function(size) {    
     this.item.data.data.css.width = size.width + "px";
     this.item.data.data.css.height = size.height + "px";
+    this.item.data.data.css.transform = size.transform;
     this.domNode.css({
       width: this.item.data.data.css.width,
-      height: this.item.data.data.css.height
+      height: this.item.data.data.css.height,
+      "-moz-transform":this.item.data.data.css.transform,
+      "-webkit-transform":this.item.data.data.css.transform
     });
     
   },

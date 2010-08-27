@@ -132,6 +132,7 @@ javascripts:
     - public/js/sylvester.js
     - public/js/strophe.js
     - public/js/jquery.svg.js
+    - public/js/jquery.rotateByDrag.js
     
     # code highlighting
     - public/codemirror/js/codemirror.js

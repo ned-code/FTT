@@ -161,6 +161,8 @@ WebDoc.PageEditor = $.klass(WebDoc.Application,{
       .delegate( "a[href='#popup_collaborate']",'click', this.changeDocumentAccess.pBind(this) ) ;
       
       this.popupNode.delegate("a[href=#close]", 'click', this.closePopup.pBind(this));
+      this.popupNode.delegate("a[href=#cancel]", 'click', this.closePopup.pBind(this));
+
   },
 
   _createLinkHandler: function( obj ){

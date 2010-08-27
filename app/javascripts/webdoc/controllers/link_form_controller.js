@@ -1,5 +1,6 @@
 /**
  * @author noe
+ * @edit manu
  */
 
 WebDoc.LinkFormController = $.klass({
@@ -33,20 +34,14 @@ WebDoc.LinkFormController = $.klass({
     }
     
    this.domNode.removeTransitionClass('lb');
-    
+    e.preventDefault();
     var that = this;
-   // this.domNode.pop({
-    //  attachTo: $(e.currentTarget),
-     // initCallback: function(){
-     
         that._link.focus();
         that._form.bind('submit', function(){
           that.domNode.hide();
           callback.call(that, that._link.val());
           return false;
         });
-	   // }
-    //});
   },
 
   _createDialog: function(e) {
@@ -85,7 +80,6 @@ WebDoc.LinkFormController = $.klass({
             )
            );
 		this.popupNode.append(this.domNode);
-		ddd("ZZZZZZAAAAAAAAAHHHHHHHHHHHHH");
   },
 
 

@@ -605,6 +605,13 @@ WebDoc.Item = $.klass(WebDoc.Record,
     WebDoc.application.inspectorController.refresh();
   },
   
+  rotateTo: function(newRotation) {
+  	this.data.data.css.transform = newRotation;
+  	this.fireObjectChanged({ modifedAttribute: 'css' });
+    WebDoc.application.inspectorController.refresh();
+  	
+  },
+  
   changeThemeBgClass: function( currentClass ) {
     var regex = /theme_background_[0-9]+/,
         data = this.data.data;
