@@ -140,10 +140,10 @@ WebDoc.BoardController = jQuery.klass({
     this._currentPageView.domNode.css("display", "");
     pageView.viewDidLoad();
     if (documentSizeType === WebDoc.HORIZONTAL_SIZE || documentSizeType === WebDoc.VERTICAL_SIZE ) {
-      jQuery('#editor').addClass('singlepage');
+      jQuery('#editor').addClass('singlepage_mode');
     }
     else {
-      jQuery('#editor').removeClass('singlepage');      
+      jQuery('#editor').removeClass('singlepage_mode');      
     }
   },
   

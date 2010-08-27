@@ -78,7 +78,7 @@ body.full_view {
 }
 
 .editor_wrap {
-  width: 98%;
+  width: 98.555%;
   height: 100%;
   /* must equal workspace_wrap */
   min-height: 400px;
@@ -185,16 +185,6 @@ body.full_view {
   opacity: 0;
 }
 
-.content_panel .pane {
-  display: none;
-  opacity: 0;
-}
-
-.content_panel .pane.active {
-  display: block;
-  opacity: 1;
-}
-
 .inspector_panel.active,
 .comments_panel.active,
 .content_panel.active,
@@ -224,7 +214,7 @@ body.full_view {
   position: absolute;
   overflow: auto; 
   
-  right: -2%;
+  right: -1.455%;
   top: -3.3333em;
   margin-right: -288px;
   width: 288px;
@@ -435,6 +425,10 @@ body.full_view {
 .pages_buttons_index {
   position: absolute;
   left: 0.3333em;
+}
+
+.singlepage_mode .pages_buttons_index {
+	display: none;
 }
 
 /* this would be better with a class rather than first-child */

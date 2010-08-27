@@ -1,5 +1,26 @@
-/* .panel classes */
+/* .panel extensions -------------------------- */
 
+.tools_panel,
+.controls_panel {
+  /* Just for testing */
+  background-color: rgb(238,238,238);
+}
+
+.inspector_panel,
+.content_panel,
+.comments_panel {
+  -webkit-border-radius: 0.3333em;
+     -moz-border-radius: 0.3333em;
+       -o-border-radius: 0.3333em;
+          border-radius: 0.3333em;
+  
+  background-color: rgba(63,63,63,0.92);
+  color: white;
+}
+
+
+
+/* .pane of the content panel */
 
 /* .inspector panes */
 

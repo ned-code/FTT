@@ -61,9 +61,8 @@
 	// from canvg ( http://code.google.com/p/canvg/ )
 	// TODO: Error handling...
 	
-	function svgToPath( obj ){
+	function svgDataToPath( d ){
 			var path = Object.create(pathPrototype),
-					d = obj.getAttribute('d'),
 					l, i, k, n, m, arr;
     	
     	// TODO: floating points, convert to real lexer based on http://www.w3.org/TR/SVG11/paths.html#PathDataBNF
@@ -389,8 +388,14 @@
 		// [TODO] this is unfinished and untested
 		
 		toSVG: function(){
-			var pathNode = document.createElement('path'),
-					array = [],
+			var pathNode = document.createElement('path');
+			
+			pathNode.setAttribute( 'd', this.toSVGData() );
+			return pathNode;
+		},
+		
+		toSVGData: function(){
+			var array = [],
 					i = -1,
 					l = this.length;
 			
@@ -398,9 +403,8 @@
 				array.push( svgTypeMap[ this[i].type ] + this[i].data.join(' ') );
 			}
 			
-			pathNode.setAttribute( 'd', array.join(' ') );
-			return pathNode;
-		},
+			return array.join(' ');
+		}
 	}
 	
 	// Path() takes an object that defines a path, or a JSON string
@@ -414,12 +418,12 @@
 		// If the path is an svg path DOM element, translate it to
 		// a path obj.
 		if ( obj.nodeType && obj.nodeType === 1 ) {
-			return svgToPath( obj );
+			return svgDataToPath( obj.getAttribute('d') );
 		}
 		
-		// If it's a string, try and parse it as JSON
+		// If it's a string, let's assume we're trying to parse SVG data
 		if ( typeof obj === 'string' ) {
-			obj = JSON.parse(obj);
+			return svgDataToPath( obj );
 		}
 		
 		path = Object.create(pathPrototype),
