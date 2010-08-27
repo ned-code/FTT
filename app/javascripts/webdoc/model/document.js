@@ -3,7 +3,7 @@
 
 
 /**
- * 4 different size type are available
+ * 4 different size type are available 
  * FREE_SIZE = document pages can have any size
  * FIX_SIZE = document can contain  multiple pages and all pages have the same fixed size: 630/420
  * HORIZONTAL_SIZE = document has only one page with size x/420
