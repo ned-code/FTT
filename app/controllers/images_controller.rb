@@ -6,7 +6,11 @@ class ImagesController < ApplicationController
   # GET /images
   def index
     per_page = 100
-    @images = current_user.images.paginate(:page => params[:page], :per_page => per_page, :conditions => { :favorites => params[:favorites] })
+
+    image_request = current_user.images
+    image_request = image_request.where(:favorites => params[:favorites]) if params[:favorites].present?
+    @images = image_request.paginate(:page => params[:page], :per_page => per_page)
+
     respond_to do |format|
       format.json { render :json => { 
         :images => @images,

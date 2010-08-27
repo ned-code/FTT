@@ -145,7 +145,7 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
                 newDoc.setDescription( infoDialogDescriptionNode.val(), true);
                 newDoc.setCategory( infoDialogCategoryNode.val(), true);
 		
-                newDoc.setSize( { width: infoDialogWidthNode.val(), height: infoDialogHeightNode.val() }, true);
+                newDoc.setSize( infoDialogNode.data('size'), true);
                 that._creatingDoc = true;
                 newDoc.save(function(newObject, status) {
                   if (status == "OK")
@@ -341,15 +341,15 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
     ddd('set size for '+name);
     var size = undefined;
     switch(name){
-      case "6000x400":
-        size = { width: "6000", height: "400"};
+      case "horizontal":
+        size = { width: "630", height: "420", type: WebDoc.HORIZONTAL_SIZE};
         break;
-      case "400x6000":
-        size = { width: "400", height: "6000"};
+      case "vertical":
+        size = { width: "630", height: "420", type: WebDoc.VERTICAL_SIZE};
         break;
-      case "600x400":
+      case "multi_space":
       default:
-        size = { width: "600", height: "400"};
+        size = { width: "630", height: "420", type: WebDoc.FIX_SIZE};
     }
     var allSizeNode = jQuery(".set_size");
     allSizeNode.each(function() {
@@ -360,6 +360,7 @@ WebDoc.DocumentEditor = $.klass(WebDoc.Application,
 
     infoDialogWidthNode.val(size.width+"px");
     infoDialogHeightNode.val(size.height+"px");
+    infoDialogNode.data('size', size);
      e.preventDefault();
   },
 
