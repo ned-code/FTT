@@ -30,7 +30,7 @@ body {
   top: 0.7em;
   left: 0;
   width: 107px;
-  padding-top: 42px;
+  padding-top: 25px;
   background-size: 107px 25px;
   background-position: 0 0;
   background-image: url('../../images/thumbs/logo_thumb_white.png');
@@ -274,3 +274,5 @@ body {
     #popup #close {
     background-color: transparent;
     z-index: -1;}
+   
+

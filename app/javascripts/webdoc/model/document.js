@@ -35,6 +35,9 @@ WebDoc.Document = $.klass(WebDoc.Record, {
   viewsCount: function () {
   	return this.data.views_count;
   },
+  commentsCount: function () {
+  	return this.data.total_number_of_comments;
+  },
   
   setTitle: function(title, skipSave) {
     this.data.title = title;
