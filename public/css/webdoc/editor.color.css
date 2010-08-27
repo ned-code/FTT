@@ -20,23 +20,6 @@
 	border-right: none;
 }
 
-/* .panel extensions -------------------------- */
-
-.tools_panel,
-.controls_panel {
-  /* Just for testing */
-  background-color: rgb(238,238,238);
-}
-
-.inspector_panel,
-.content_panel {
-  background-color: rgba(100,100,100,0.75);
-}
-
-.sidebar {
-  background-color: transparent;
-}
-
 /* .index extensions -------------------------- */
 
 .pages_index>li.current {

@@ -1,16 +1,16 @@
-<div class="panel content_panel" id="content_panel">
+<!-- content panel -->
+<div class="panel content_panel active" id="content_panel">
   <header>
-  	<ul>
-      <li><a href="#show_browseweb_pane">Web</a></li>
-      <li><a href="#show_collections_pane">Collections</a></li>
-      <li><a href="#show_apps_pane">Apps</a></li>
-      <li><a href="#show_yourstuff_pane">Your stuff</a></li>
-  	</ul>
+    <ul class="horizontal tabs_index index">
+      <li><a class="tab_button button" href="#show_browseweb_pane">Web</a></li>
+      <li><a class="tab_button button" href="#show_collections_pane">Collections</a></li>
+      <li><a class="tab_button button" href="#show_apps_pane">Apps</a></li>
+      <li><a class="tab_button button" href="#show_yourstuff_pane">Your stuff</a></li>
+    </ul>
   </header>
-
+  
   <%= render "documents/panels/content_panes/browseweb_pane" %>  
   <%= render "documents/panels/content_panes/collections_pane" %>
   <%= render "documents/panels/content_panes/apps_pane" %>
   <%= render "documents/panels/content_panes/yourstuff_pane" %>
-
 </div>
