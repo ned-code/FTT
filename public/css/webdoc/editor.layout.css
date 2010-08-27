@@ -427,7 +427,7 @@ body.full_view {
   left: 0.3333em;
 }
 
-.singlepage .pages_buttons_index {
+.singlepage_mode .pages_buttons_index {
 	display: none;
 }
 
