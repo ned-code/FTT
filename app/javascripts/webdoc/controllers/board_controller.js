@@ -90,6 +90,7 @@ WebDoc.BoardController = jQuery.klass({
     }
     var pageView = new WebDoc.PageView(page, this.boardContainerNode, !this.isInteractionMode),
         board = pageView.domNode,
+        documentSizeType = page.document.size().type,
         defaultZoom = 1;
     
     board.unbind();
@@ -137,7 +138,13 @@ WebDoc.BoardController = jQuery.klass({
      
     jQuery(".webdoc-page-total").html(WebDoc.application.pageEditor.currentDocument.pages.length);
     this._currentPageView.domNode.css("display", "");
-    pageView.viewDidLoad();    
+    pageView.viewDidLoad();
+    if (documentSizeType === WebDoc.HORIZONTAL_SIZE || documentSizeType === WebDoc.VERTICAL_SIZE ) {
+      jQuery('#editor').addClass('singlepage');
+    }
+    else {
+      jQuery('#editor').removeClass('singlepage');      
+    }
   },
   
   isInteractionMode: function() {
@@ -1107,26 +1114,48 @@ WebDoc.BoardController = jQuery.klass({
 
   _initResizable: function() {
     ddd('[page view] init resize');
-    this.boardContainerNode.resizable({
-      handles: 's, e, se',
-      start: function(e, ui) {
-        ddd('[page view] resize start');
-        this.setCurrentTool( WebDoc.application.arrowTool );
-        this.oldSize = { width: this._currentPage.width(), height: this._currentPage.height() };
-      }.pBind(this),
-      resize: function(e, ui) {
-        this._currentPage.setSize({
-          height: Math.round(this.mapToPageCoordinate(e).y)+'px',
-          width: Math.round(this.mapToPageCoordinate(e).x)+'px'
-        }, false);
-      }.pBind(this),
-      stop: function(e, ui) {
-        this._currentPage.setSize({
-          height: Math.round(ui.element[0].clientHeight*1/this._currentZoom)+'px',
-          width: Math.round(ui.element[0].clientWidth*1/this._currentZoom)+'px'
-        }, true, this.oldSize);
-      }.pBind(this)
-    });
+    var handle = 's, e, se';
+    var moveWidth = true;
+    var moveHeight = true;
+    switch (this._currentPage.document.size().type) {
+      case WebDoc.FIX_SIZE:
+        handle = '';
+        moveHeight = false;
+        moveWidth = false;    
+        break;
+      case WebDoc.HORIZONTAL_SIZE:
+        handle = 'e';
+        moveHeight = false;
+        break;
+      case WebDoc.VERTICAL_SIZE:
+        handle = 's';
+        moveWidth = false;
+        break;
+      default:
+       handle = 's, e, se';
+    }
+    if (handle !== '') {
+      this.boardContainerNode.resizable({
+        handles: handle,
+        start: function(e, ui) {
+          ddd('[page view] resize start');
+          this.setCurrentTool( WebDoc.application.arrowTool );
+          this.oldSize = { width: this._currentPage.width(), height: this._currentPage.height() };
+        }.pBind(this),
+        resize: function(e, ui) {
+//          var newSize = {};
+//          if (moveWidth) { newSize.width = Math.round(this.mapToPageCoordinate(e).x)+'px';}
+//          if (moveHeight) { newSize.height = Math.round(this.mapToPageCoordinate(e).y)+'px'; }
+//          this._currentPage.setSize(newSize, false);
+        }.pBind(this),
+        stop: function(e, ui) {
+          this._currentPage.setSize({
+            height: Math.round(ui.element[0].clientHeight*1/this._currentZoom)+'px',
+            width: Math.round(ui.element[0].clientWidth*1/this._currentZoom)+'px'
+          }, true, this.oldSize);
+        }.pBind(this)
+      });
+    }
   },
 
   // ***********
