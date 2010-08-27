@@ -7,10 +7,13 @@ WebDoc.YourstuffController = $.klass(WebDoc.Library,{
       
   initialize: function($super) {
     $super('my-content');
+
+    
+
     this.imageDetailsView = jQuery('#my-images-details #image-details');
     this.videoDetailsView = jQuery('#my-favorites-videos-details #video-details');
     this.setupImageDetailsView();
-    this.domNode = jQuery('#my-content');
+    this.domNode = jQuery('#yourstuff_pane');
     this._setupClickEvent();
     this.libraryUtils = new LibraryUtils();
     
@@ -21,6 +24,8 @@ WebDoc.YourstuffController = $.klass(WebDoc.Library,{
     this.myImagesLibraryDomNode = this.myImagesContainer.find('#my_images_library');
     
     this.imageLoaded = false;
+
+    this.setup();
   },
   
   setup: function(){

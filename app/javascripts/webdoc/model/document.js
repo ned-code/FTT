@@ -1,7 +1,21 @@
 
 //= require <mtools/record>
 
+
+/**
+ * 4 different size type are available
+ * FREE_SIZE = document pages can have any size
+ * FIX_SIZE = document can contain  multiple pages and all pages have the same fixed size: 630/420
+ * HORIZONTAL_SIZE = document has only one page with size x/420
+ * VERTICAL_SIZE = document has only one page with size 640/x
+ */
+WebDoc.FREE_SIZE = '';
+WebDoc.FIX_SIZE = "F";
+WebDoc.HORIZONTAL_SIZE = "H";
+WebDoc.VERTICAL_SIZE = "V";
+
 WebDoc.Document = $.klass(WebDoc.Record, {
+
   initialize: function($super, json) {
     this.pages = [];
     $super(json);
@@ -22,6 +36,10 @@ WebDoc.Document = $.klass(WebDoc.Record, {
   
   featured: function() {
     return this.data.featured;
+  },
+
+  sizeType: function() {
+    return this.data.size.type;
   },
 
   size: function() {
@@ -70,7 +88,7 @@ WebDoc.Document = $.klass(WebDoc.Record, {
       this.save();
     }
   },
-  
+
   setSize: function(size, skipSave) {
     this.data.size = size;
     if(!(skipSave && skipSave === true)) {
