@@ -8,7 +8,7 @@ class ImagesController < ApplicationController
     per_page = 100
 
     image_request = current_user.images
-    image_request.where(:favorites => params[:favorites]) if params[:favorites].present?
+    image_request = image_request.where(:favorites => params[:favorites]) if params[:favorites].present?
     @images = image_request.paginate(:page => params[:page], :per_page => per_page)
 
     respond_to do |format|
