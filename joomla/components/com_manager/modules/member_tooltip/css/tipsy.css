@@ -1,0 +1,120 @@
+.tipsy { 
+	padding: 5px; 
+	font-size: 10px; 
+	position: absolute; 
+	z-index: 100000; 
+	width:410px;
+}
+.tipsy-inner { 
+	background-color: white; 
+	border: 5px solid #b97a57;
+	width: 370px;
+	height: 150px;
+	text-align: center; 
+}
+
+.tipsy-inner { 
+	border-radius: 3px; 
+	-moz-border-radius:3px; 
+	-webkit-border-radius:3px; 
+}
+
+.tipsy-inner-header {
+	height: 30px;
+	background-color: #969c92;
+	color: white;
+	font-size: 21px;
+	line-height: 30px;
+}
+
+.tipsy-inner-body {
+	color:#717171;
+	font-family:tahoma;
+	font-size:12px;
+	font-weight:bolder;
+}
+
+.tipsy-inner-body td {
+	width:300px;
+	text-align: left;
+}
+
+.tipsy-inner-body .tipsy-inner-body-img {
+	width: 100px;
+	height: 100px;
+}
+
+.tipsy-inner-body .tipsy-inner-body-data {
+	padding-top:15px;
+}
+
+.tipsy-inner-body .tipsy-inner-body-data div {
+	margin: 5px;
+}
+
+.tipsy-inner-body .tipsy-inner-body-expand {
+	cursor:pointer;
+	background: url('images/tipsy-expand.gif') no-repeat;
+	margin-left:80px;
+	padding:3px 0 0 25px;
+	text-align:center;
+	width:30px;
+	height:21px;
+}
+
+.tipsy-arrow { 
+	position: absolute; 
+	background: url('images/tipsy-big.gif') no-repeat; 
+	width: 68px; 
+	height: 11px; 
+}
+
+.tipsy-n .tipsy-arrow { 
+	top: 0; 
+	left: 50%; 
+	margin-left: -4px; 
+}
+.tipsy-nw .tipsy-arrow { 
+	top: 0; 
+	left: 10px; 
+}
+.tipsy-ne .tipsy-arrow { 
+	top: 0; 
+	right: 10px; 
+}
+.tipsy-s .tipsy-arrow { 
+	bottom: 0; 
+	left: 50%; 
+	margin-left: -4px; 
+	background-position: bottom left;
+}
+.tipsy-sw .tipsy-arrow { 
+	bottom: 0; 
+	left: 10px; 
+	background-position: bottom left;
+}
+.tipsy-se .tipsy-arrow { 
+	bottom: 0; 
+	right: 10px; 
+	background-position: bottom left; 
+}
+.tipsy-e .tipsy-arrow { 
+	top: 50%; 
+	margin-top: -5px; 
+	right: 0; 
+	width: 40px; 
+	height: 11px; 
+	background-position: top right;
+}
+
+.tipsy-w .tipsy-arrow { 
+	top: 50%; 
+	margin-top: -5px; 
+	left: 0; 
+	width: 40px; 
+	height: 11px; 
+}
+
+.tipsy-w .tipsy-inner {
+	margin-left:30px;
+}

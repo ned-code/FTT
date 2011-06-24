@@ -1,0 +1,21 @@
+.profile_main{
+    border: 10px solid #6581EF;
+    width: 95%;
+    height:300px;
+}
+.profile_image{
+    width:128px;
+    height:128px;
+    border: 1px solid #6581EF;
+}
+
+
+.profile_male {height:16px;
+	width:14px;
+	background:url("../imgs/male-icon.gif") no-repeat scroll 0 0 transparent;
+}
+
+.profile_female {height:16px;
+	width:14px;
+	background:url("../imgs/female-icon.gif") no-repeat scroll 0 0 transparent;
+}

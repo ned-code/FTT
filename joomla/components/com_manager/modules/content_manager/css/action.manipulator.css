@@ -1,0 +1,50 @@
+.aManipulator {
+	width: 100px;
+	height: 50px;
+}
+	    	
+.aManipulatorImg {
+	width: 23px;
+	height: 23px;
+	cursor:pointer;
+}
+	    	
+.aManipulatorLock {
+	background: url('../imgs/icons.gif') no-repeat -24px 0px;
+}
+	    	
+.aManipulatorLock:hover {
+	background-position: -24px -23px;
+}
+    	
+.aManipulatorUnLock {
+	background: url('../imgs/icons.gif') no-repeat -1px 0px;
+}
+	    	
+.aManipulatorUnLock:hover {
+	background-position: -1px -23px;
+}
+	    	
+.aManipulatorUp {
+	background: url('../imgs/icons.gif') no-repeat -66px 0px;
+}
+	    	
+.aManipulatorUp:hover {
+	background-position: -66px -23px;
+}
+	    	
+.aManipulatorDown {
+	background: url('../imgs/icons.gif') no-repeat -47px 0px;
+}
+	    	
+.aManipulatorDown:hover {
+	background-position: -47px -23px;
+}
+	    	
+.aManipulatorClose {
+	background: url('../imgs/icons.gif') no-repeat -92px 0px;
+}
+	    	
+.aManipulatorClose:hover {
+	background-position: -92px -23px;
+}

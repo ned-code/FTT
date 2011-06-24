@@ -1,0 +1,170 @@
+
+.profile_overlay{
+    background-color : rgb(0, 0, 0);
+  
+    z-index:1000;
+    position:absolute;
+    top:0;
+    left: 0;
+    filter:alpha(opacity=60);
+  /* CSS3 standard */
+  opacity:0.8;
+}
+
+
+.start_editing_layout{
+    position: absolute;
+    top: 6px;
+    left:170px;
+    z-index:2;
+    width:120px;
+}
+.start_editing_popup{
+    position: relative;
+   
+    /*left:30%;*/
+  
+  
+}
+
+.edit_button{
+	/*background:url("../imgs/edit.png") no-repeat scroll 0 0 transparent;*/
+        width: 16px;
+        height: 16px;
+        /*margin-top: 24px;*/
+        /*font-size: 24px;*/
+        cursor: pointer;
+        
+}
+
+.edit_button2{
+	/*background:url("../imgs/edit.png") no-repeat scroll 0 0 transparent;*/
+        width: 24px;
+        height: 24px;
+        /*margin-top: 24px;*/
+        /*font-size: 24px;*/
+        cursor: pointer;
+        
+}
+
+
+.lock_button{
+    text-align:right;
+    width:24px;
+    height:24px;
+    display:inline-block;
+    margin-right: 0px;
+    z-index: 900;
+    font-size: 24px;
+    cursor:pointer;
+    background:url("../imgs/icons.gif") no-repeat scroll -24px 0 transparent;
+}
+.lock_button_unlocked{
+    text-align:right;
+    width:24px;
+    height:24px;
+    z-index: 900;
+    display:inline-block;
+    margin-right: 0px;
+    font-size: 24px;
+    cursor:pointer;
+    background:url("../imgs/icons.gif") no-repeat scroll 0 0 transparent;
+}
+.tablabel {
+    color:#FFFFFF;
+    font-family:Arial;
+    font-size:24px;
+    font-weight:bold;
+    left:20px;
+    overflow:hidden;
+    padding-top:8px;
+    position:absolute;
+    text-align:left;
+    top:0;
+    
+    width:250px;
+}
+.link-span { color:blue;  cursor:pointer; }
+.profile_property_title{
+    display:inline-block;
+    width:90px;
+    text-align: left;
+    margin-top: 0px;
+}
+.profile_property_value{
+    display:inline-block;
+    vertical-align: top;
+    text-align: left;
+    width:310px;
+   /* overflow: hidden;*/
+    margin-top: 0px;
+}
+.profile_main{
+  /*  border: 10px solid #6581EF;*/
+    height:92%;
+    /*width:92%;*/
+    width: 96%;
+    overflow: auto;
+    
+}
+.profile_media{
+    border: 10px solid rgb(101,129,239);/*#6581EF;*/
+    width: 80%;
+    height:100%;
+    
+}
+.profile_image_male{
+    background:url("imgs/icons.png") no-repeat scroll  transparent;
+}
+.profile_image_female{
+    background:url("imgs/icons.png") no-repeat scroll 100% 0 transparent;
+}
+.profile_image{
+    width:100px;
+    height:100px;
+   
+    cursor: pointer;
+  /*  border: 1px solid #6581EF;*/
+   display:inline-block;
+    
+}
+.profile_paragraph{
+   
+    font-weight: bold;
+}
+.family_female_member{
+   /* font-weight: bold;*/
+    color:rgb(204,0,255);
+}
+.family_male_member{
+  /*  font-weight: bold;*/
+    color:rgb(0,0,255);
+}
+.family_male_icon {
+    
+    background:url("../imgs/male.gif") no-repeat scroll 0 0 transparent;
+    width: 16px;
+    height: 16px;
+       
+}
+
+.family_female_icon {
+  
+    background:url("../imgs/female.gif") no-repeat scroll 0 0 transparent;
+    width: 16px;
+    height: 16px;
+     
+}
+
+
+
+
+.profile_male {height:16px;
+	width:14px;
+	background:url("../imgs/male-icon.gif") no-repeat scroll 0 0 transparent;
+}
+
+.profile_female {height:16px;
+	width:14px;
+	background:url("../imgs/female-icon.gif") no-repeat scroll 0 0 transparent;
+}

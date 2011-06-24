@@ -1,0 +1,82 @@
+.jmb-register {}
+
+.jmb-register div {
+	text-align:left !important;
+}
+
+.jmb-register-header {
+	font-size: 22px;
+	font-weight: bold;
+}
+
+.jmb-regiser-body {
+	margin: 10px;
+}
+
+.jmb-register-friends {
+	margin: 10px;
+	border: 1px solid Gray;
+	margin: 10px;
+	width: 350px;
+	min-height: 150px;
+}
+
+.jmb-register-friends-item {
+	margin:5px;
+	cursor:pointer;
+}
+
+.jmb-register-friends-item:hover {
+	background: gray;
+}
+
+.jmb-register-friends-item span {
+	font-weight: bold;
+	margin-left: 10px;
+	position: relative;
+	top: -23px;	
+}
+
+.jmb-register-button {
+	background-color: #5B74A8;
+	border-color: #29447E #29447E #1A356E;
+	border-style: solid;
+	border-width: 1px;
+	color: white;
+	cursor: pointer;
+	font-size: 12px;
+	font-weight: bold;
+	line-height: normal;
+	margin: 10px;
+	padding: 2px 6px;
+	text-decoration: none;
+}
+
+.jmb-register-button:hover {
+	background: none repeat scroll 0 0 #5F8D34;
+}
+
+.jmb-register-edit-item {
+	background: url("add.gif") no-repeat scroll 0 0 transparent;
+	height: 19px;
+	line-height: 18px;
+	padding-left: 21px;
+	text-align: left !important;
+	cursor:pointer;
+	margin:3px;
+}
+
+.jmb-register-edit-box {
+	margin:10px;
+}
+
+.jmb-register-edit-box-item {
+	background: url("add.gif") no-repeat scroll 0 0 transparent;
+	color: #29447E;
+	cursor: pointer;
+	height: 19px;
+	line-height: 19px;
+	padding-left: 21px;
+	text-align: left !important;
+	margin:1px;
+}

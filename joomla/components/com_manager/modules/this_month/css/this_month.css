@@ -1,0 +1,111 @@
+.ThisMonthBox {
+	font-size: 12px !important;
+	font-family: Helvetica,Arial,sans-serif !important;
+	border: 1px solid gray;
+	background: white;
+	margin: 5px;	
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-user-select:none;
+	-moz-user-select:none;
+	border-radius: 10px;
+	behavior: url(border-radius.htc);
+}
+
+.tm-header {
+	color:white;
+	background: gray;
+	font-size:18px;
+	height:30px;
+	line-height:30px;
+	padding: 0px;
+	text-align:center !important; 
+	margin-left: 0px;
+	margin-top: 10px;
+	
+}
+
+.tm-header-container {
+	float: left;
+}
+
+
+.tm-header-split {
+	float: right;
+	margin: 5px;
+}
+
+.tm-header-split-select {
+	font-size: 12px !important;	
+	font-family: Tahoma,Arial,sans-serif !important;
+}
+
+.tm-header-title {	
+	text-align: center !important;
+	width: 110px;
+}
+
+.tm-header-prew {
+	background: url('../imgs/header.gif') no-repeat 8px 0; 
+	width:16px;
+	cursor:pointer;
+}
+
+.tm-header-next {
+	background: url('../imgs/header.gif') no-repeat -23px 0; 
+	width:16px;
+	cursor:pointer;
+}
+
+
+.tm-body {
+	overflow:auto;
+}
+
+.tm-conteiner {
+	margin: 10px
+}
+
+.tm-box {
+	float: left;
+	margin-left:3px;
+}
+
+.tm-row{
+	height: 17px;
+}
+
+.tm-row-mar {
+	height: 30px;
+}
+
+.tm-sex {
+	height:16px;
+	width:14px;
+}
+
+.tm-sex-M {
+	background:url("../imgs/sex.jpg") no-repeat scroll 0 0 transparent;
+}
+
+.tm-sex-F {
+	background:url("../imgs/sex.jpg") no-repeat scroll 0 -16px transparent;
+}
+
+.tm-family-start {
+	width: 37px;
+	height: 16px;
+	background:url("../imgs/family_o.jpg") no-repeat scroll 0 0 transparent;
+}
+
+.tm-family-end {
+	width: 6px;
+	height: 16px;
+	background:url("../imgs/family_c.jpg") no-repeat scroll 0 0 transparent;
+}
+
+.tm-person {
+	margin-left: 5px;
+	margin-right: 5px;
+	cursor:pointer;
+}

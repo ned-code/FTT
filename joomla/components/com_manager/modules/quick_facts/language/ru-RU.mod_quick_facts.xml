@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<language_pack>
+	<install>
+		<dir>ru-RU</dir>
+	</install>
+	<option>
+		<param>HEADER</param>
+		<value>Факты</value>
+	</option>
+	<option>
+		<param>NUMBER_OF_FAMILY_MEMBERS</param>
+		<value>Количество семей</value>
+	</option>
+	<option>
+		<param>NUMBER_OF_INDIVIDUALS_MEMBERS</param>
+		<value>Количество пользователей</value>
+	</option>
+	<option>
+		<param>YONGEST_MEMBER</param>
+		<value>Самый молодой</value>
+	</option>
+	<option>
+		<param>OLDEST_LIVING_MEMBER</param>
+		<value>Самый пожилой</value>
+	</option>
+	<option>
+		<param>EARLIEST_DOCUMENTED_ANCESTOR</param>
+		<value>Самый ранее упомянутый в документах</value>
+	</option>
+</language_pack>

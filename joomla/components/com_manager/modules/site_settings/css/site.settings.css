@@ -1,0 +1,88 @@
+.site-settings-box {
+	height:398px;
+	overflow:auto;
+}
+
+.site-settings-body{
+	margin: 10px;
+}
+
+
+.site-settings-body td {
+	vertical-align: top;
+}
+
+.site-settings-label {
+	width: 100px;
+	text-align: center;	
+	color: #256187;
+	font-family: Tahoma;
+	font-size: inherit;
+	font-weight: bold;
+}
+
+.site-settings-textarea textarea {
+	width: 300px;
+	height: 150px;
+	border: 1px solid #A4BED4;
+	color: #000000;
+	font-family: Tahoma;
+	font-size: inherit;
+}
+
+.site-settings-input input {
+	width: 300px;
+	border: 1px solid #A4BED4;
+	color: #000000;
+	font-family: Tahoma;
+	font-size: inherit;
+}
+
+
+.site-settings-select {
+	float:left;
+}
+
+.site-settings-select select {
+	font-family: Tahoma;
+	font-size: 12px;
+	height: 24px;
+	text-align: center;
+	width: 200px;
+	padding: 3px;
+	border: 1px solid #63A4FF;
+}
+
+.site-settings-delete {
+	cursor:pointer;
+	float:left;
+	background: url("../img/icons.gif") no-repeat scroll -91px 0 transparent;
+	height: 24px;
+	width: 24px;
+	margin-left: 3px;
+}
+
+.site-settings-modules {
+	height: 260px;
+	overflow:auto;
+}
+
+.site-settings-modules-label {
+	border: 1px dotted #256184;
+	color: #256187;
+	font-family: Tahoma;
+	font-size: 12px;
+	height: 24px;
+	padding: 5px 0 0 5px;
+	text-align: left;
+	width: 265px;
+}
+
+.site-settings-modules-delete {
+	cursor:pointer;
+	float:left;
+	background: url("../img/icons.gif") no-repeat scroll -91px 0 transparent;
+	height: 24px;
+	width: 24px;
+	margin-left: 3px;
+}
