@@ -7,6 +7,7 @@ function JMBProfile(){
 	this.savedObject = null;
 	
 	//global objects
+	this.json = {};
 	this.imgPath = null;
 	this.month3 = {'01':'Jan', '02':'Feb', '03':'Mar', '04':'Apr', '05':'May', '06':'Jun', '07':'Jul', '08':'Aug', '09':'Sep', '10':'Oct', '11':'Nov', '12':'Dec'};
 	this.months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
@@ -57,6 +58,8 @@ function JMBProfile(){
 		self.cleaner();
 		jQuery('ul.jmbtabs li').unbind('click.myProfileEvents');		
 	});
+	
+	_PROFILE = this;
 }
 
 JMBProfile.prototype = {
@@ -109,6 +112,8 @@ JMBProfile.prototype = {
 			//open: function(event, ui) { jQuery(".ui-dialog-titlebar-close").hide(); },
 			beforeClose: function(event, ui){
 				self._modal(false);
+				self.profile.menuActiveItem = null;
+				if(typeof(self.json.beforeClose) == 'function') self.json.beforeClose();
 			}
 		}
 		jQuery.extend(pDefault, params);
@@ -146,6 +151,15 @@ JMBProfile.prototype = {
 		else if(f==''&&m!=''&&l==''){
 			return f;
 		}
+	},
+	_getFullPlace:function(location){
+		if(!location) return;
+		var places = location.Hierarchy;
+		var loc = '';
+		jQuery(places).each(function(i,e){
+			loc  += e.Name+' ';
+		});
+		return loc;
 	},
 	_getEventDate:function(event){
 		var self = this;
@@ -204,7 +218,7 @@ JMBProfile.prototype = {
 		fId = obj.indiv.FacebookId;
 		av = obj.avatar;
 		defImg = (obj.indiv.Gender=="F")?'male.gif':'female.gif';
-		var defImgPath = self.imgPath+"/components/com_manager/modules/families/css/"+defImg;
+		var defImgPath = self.imgPath+"/components/com_manager/modules/profile/image/"+defImg;
 		return '<img class="jmb-families-avatar" height="'+y+'px" width="'+x+'px" src="'+defImgPath+'">';
 	},
 	_getPhoto:function(obj, x,y){
@@ -223,13 +237,13 @@ JMBProfile.prototype = {
 		else if(fId != '0'){
 			return '<img height="'+y+'px" width="'+x+'px" src="http://graph.facebook.com/'+fId+'/picture">';
 		}
-		var defImgPath = self.imgPath+"/components/com_manager/modules/families/css/"+defImg;
+		var defImgPath = self.imgPath+"/components/com_manager/modules/profile/image/"+defImg;
 		return '<img class="jmb-families-avatar" height="'+y+'px" width="'+x+'px" src="'+defImgPath+'">';
 	},
 	_getAvatar2:function(x, y, type){
 		var self = this;
 		defImg =(type=="M")?'male.gif':'female.gif';
-		var defImgPath = self.imgPath+"/components/com_manager/modules/families/css/"+defImg;
+		var defImgPath = self.imgPath+"/components/com_manager/modules/profile/image/"+defImg;
 		return '<img class="jmb-families-avatar" height="'+y+'px" width="'+x+'px" src="'+defImgPath+'">';
 	},
 	_photos:function(p){
@@ -309,7 +323,7 @@ JMBProfile.prototype = {
 		var html = '<table>';
 			html += '<tr>';
 				html += '<td><span>Type:</span></td>';
-				html += '<td style="text-align: left;"><select name="m_type"><option>Marriage</option></select></td>';
+				html += '<td style="text-align: left;"><select name="m_type"><option value="MARR">Marriage</option></select></td>';
 			html += '</tr>';
 			html += '<tr>';
 				html += '<td><span>Date:</span></td>';
@@ -423,20 +437,40 @@ JMBProfile.prototype = {
 			jQuery(target).find('select[name="b_day"] option[value="'+self._convertDateNumeric(object.indiv.Birth.Day)+'"]').attr('selected', 'selected');
 			jQuery(target).find('select[name="b_month"] option[value="'+self._convertDateNumeric(object.indiv.Birth.Month)+'"]').attr('selected', 'selected');
 			jQuery(target).find('input[name="b_year"]').val(object.indiv.Birth.Year);
-			jQuery(target).find('input[name="b_town"]').val(object.indiv.Birth.Place.Hierarchy[2].Name);
-			jQuery(target).find('input[name="b_state"]').val(object.indiv.Birth.Place.Hierarchy[1].Name);
-			jQuery(target).find('input[name="b_country"]').val(object.indiv.Birth.Place.Hierarchy[0].Name);
+			var place = object.indiv.Birth.Place
+			if(place.Hierarchy[2]) jQuery(target).find('input[name="b_town"]').val(place.Hierarchy[2].Name);
+			if(place.Hierarchy[1]) jQuery(target).find('input[name="b_state"]').val(place.Hierarchy[1].Name);
+			if(place.Hierarchy[0]) jQuery(target).find('input[name="b_country"]').val(place.Hierarchy[0].Name);
 		}
 		if(object.Death){
 			jQuery(target).find('select[name="living"] option[value="false"]').attr('selected', 'selected');
 			jQuery(target).find('select[name="living"] option[value="false"]').change();
-			jQuery(target).find('select[name="d_day"] option[value="'+self._convertDateNumeric(object.indiv.Birth.Day)+'"]').attr('selected', 'selected');
-			jQuery(target).find('select[name="d_month"] option[value="'+self._convertDateNumeric(object.indiv.Birth.Month)+'"]').attr('selected', 'selected');
-			jQuery(target).find('input[name="d_year"]').val(object.indiv.Birth.Year);
-			jQuery(target).find('input[name="d_town"]').val(object.indiv.Birth.Place.Hierarchy[2].Name);
-			jQuery(target).find('input[name="d_state"]').val(object.indiv.Birth.Place.Hierarchy[1].Name);
-			jQuery(target).find('input[name="d_country"]').val(object.indiv.Birth.Place.Hierarchy[0].Name);
+			jQuery(target).find('select[name="d_day"] option[value="'+self._convertDateNumeric(object.indiv.Death.Day)+'"]').attr('selected', 'selected');
+			jQuery(target).find('select[name="d_month"] option[value="'+self._convertDateNumeric(object.indiv.Death.Month)+'"]').attr('selected', 'selected');
+			jQuery(target).find('input[name="d_year"]').val(object.indiv.Death.Year);
+			var place = object.indiv.Death.Place;
+			if(place.Hierarchy[2]) jQuery(target).find('input[name="d_town"]').val(place.Hierarchy[2].Name);
+			if(place.Hierarchy[1]) jQuery(target).find('input[name="d_state"]').val(place.Hierarchy[1].Name);
+			if(place.Hierarchy[0]) jQuery(target).find('input[name="d_country"]').val(place.Hierarchy[0].Name);
 		}
+	},
+	_setUnionData:function(target, object){
+		var self = this;
+		jQuery(object.event).each(function(i,event){
+			if(!event.Type) return;
+			if(event.Type == 'MARR'){
+				jQuery(target).find('select[name="m_day"] option[value="'+self._convertDateNumeric(event.Day)+'"]').attr('selected', 'selected');
+				jQuery(target).find('select[name="m_month"] option[value="'+self._convertDateNumeric(event.Month)+'"]').attr('selected', 'selected');
+				jQuery(target).find('input[name="m_year"]').val(event.Year);
+				jQuery(target).find('input[name="m_town"]').val(event.Place.Hierarchy[2].Name);
+				jQuery(target).find('input[name="m_state"]').val(event.Place.Hierarchy[1].Name);
+				jQuery(target).find('input[name="m_country"]').val(event.Place.Hierarchy[0].Name);
+			} else if(event.Type == 'DIV'){
+				jQuery(target).find('input[name="deceased"]').attr('checked', 'checked');
+				jQuery(target).find('input[name="s_year"]').val(event.Year);
+			}
+			
+		});
 	},
 	_addPSC:function(p, type){
 		var self = this;

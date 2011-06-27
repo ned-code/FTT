@@ -27,8 +27,9 @@ function JMBProfileTooltip(parent){
 			cssStyles: {
 				fontFamily: '"lucida grande",tahoma,verdana,arial,sans-serif', 
 				fontSize: '11px'
-			}
-		}
+			},
+			offsetParent:document.body
+		},
 	};
 	this.defaultTooltipParams = {
 		settings:{
@@ -46,7 +47,8 @@ function JMBProfileTooltip(parent){
 			cssStyles: {
 				fontFamily: '"lucida grande",tahoma,verdana,arial,sans-serif', 
 				fontSize: '11px'
-			}
+			},
+			offsetParent:document.body
 		}
 	};
 	this.btActive = null;
@@ -182,11 +184,11 @@ JMBProfileTooltip.prototype = {
 							display:'block',
 							buttons:[{
 									title:'<font color="red">Delete '+name+'</font> but <font color="green">keep descendants</font>.',
-									click:function(e){}
+									click:function(e){ self._deleteUser(p, 'deleteAndKeep', function(){ jQuery(e.htmlObject).remove(); jQuery(e.modalWindow).remove(); }); }
 								},
 								{
 									title:'<font color="red">Delete '+name+'</font> and also <font color="red">delete all descendants</font>.',
-									click:function(e){}
+									click:function(e){ self._deleteUser(p, 'deleteAll', function(){ jQuery(e.htmlObject).remove(); jQuery(e.modalWindow).remove(); }); }
 								}]
 						});
 						
@@ -199,6 +201,7 @@ JMBProfileTooltip.prototype = {
 		}
 	},
 	cleaner:function(){
+		//delete sub items
 		var self = this;
 		var s = self.storage;
 		for(var i=s.length;i>=0;i--){
@@ -206,6 +209,12 @@ JMBProfileTooltip.prototype = {
 			delete s[i];
 		}
 		s.length = 0;
+		//delete active tooltip
+		this.hideTooltip();
+	},
+	hideTooltip:function(){
+		jQuery(this.btActive).btOff();
+		this.btActive = null;
 	},
 	_eventClick:function(p, buttons){
 		var self = this;
@@ -312,5 +321,7 @@ JMBProfileTooltip.prototype = {
 		else if(p.eventType == 'mouseenter'){
 			self._eventMouseEnter(p, buttons);
 		}
+		
+		self.parent.json = p;
 	}
 }

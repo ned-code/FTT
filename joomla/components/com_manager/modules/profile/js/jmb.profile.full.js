@@ -122,8 +122,8 @@ JMBProfileFull.prototype = {
 		self.parent._setData(htmlObject, self.json.data);
 		
 		//ajaxForm
-		var args = 'indiv;'+self.json.data.indiv.Id;
-		self.parent._ajaxForm(jQuery(htmlObject).find('form'), 'save', args, 
+		var args = ''+self.json.data.indiv.Id;
+		self.parent._ajaxForm(jQuery(htmlObject).find('form'), 'updateIndiv', args, 
 		function(res){
  			if(!self.parent._valid(htmlObject, 'date', {prefix:'b_'})){
  				alert('Incorrect Birth date.');
@@ -151,43 +151,80 @@ JMBProfileFull.prototype = {
 		jQuery(htmlObject).find('.jmb-dialog-form-gender input[value="'+self.json.data.indiv.Gender+'"]').attr('checked', true);
 		jQuery(self.parent.dWindow).find('div.jmb-dialog-profile-content').append(htmlObject);
 	},
-	_personUnionInfoHTML:function(){
+	_personUnionInfoHTML:function(object){
+		var self = this;
 		var html = '<div class="jmb-dialog-profile-content-unions-person-info">';
-			html += '<div class="jmb-dialog-profile-content-unions-person-info-name">FIRSTNAME LASTNAME</div>';
-			html += '<div class="jmb-dialog-profile-content-unions-person-info-birthdate">BIRTHDATE</div>';
-			html += '<div class="jmb-dialog-profile-content-unions-person-info-birthplace">BIRTHPLACE</div>';
+			html += '<div class="jmb-dialog-profile-content-unions-person-info-name">'+self.parent._getFullName(object)+'</div>';
+			if(object.Birth){
+				html += '<div class="jmb-dialog-profile-content-unions-person-info-birthdate">'+self.parent._getEventDate(object.Birth)+'</div>';
+				html += '<div class="jmb-dialog-profile-content-unions-person-info-birthplace">'+self.parent._getFullPlace(object.Birth.Place)+'</div>';
+			}
 		html += '</div>';
 		return html;
 	},
-	_unionsHTML:function(){
+	_unionLinkImages:function(data, spouse){
 		var self = this;
-		var html = '<div class="jmb-dialog-profile-content-unions">';
-			html += '<div class="jmb-dialog-profile-content-unions-header">';
-				html += '<span style="float:left;">Union 1</span>';
-				html += '<span style="float:right;"><input type="submit" value="Save"></span>';
-			html += '</div>';
-			html += '<div class="jmb-dialog-profile-content-unions-body">';
-				html +='<form>';
+		var html = '<div class="jmb-dialog-profile-content-unions-image">';
+			html += '<table>';
+				html += '<tr>';
+					html += '<td><div>'+self.parent._getAvatar(data,60,66)+'</div></td>';
+					html += '<td><div>'+self.parent._getAvatar(spouse,60,66)+'</div></td>';
+				html += '</tr>';
+			html += '</table>';
+		html += '</div>';
+		return html;
+	},
+	_unionHTML:function(index, data, spouse){
+		var self = this;
+		var html = '<div id="jmb-union-'+index+'" class="jmb-dialog-profile-content-union" spouse_id="'+spouse.id+'">';
+			html +='<form id="jmb-profile-addpsc-'+index+'" method="post" target="iframe-profile">';
+				html += '<div class="jmb-dialog-profile-content-unions-header">';
+					html += '<span style="float:left;">Union '+(index+1)+'</span>';
+					html += '<span style="float:right;"><input type="submit" value="Save"></span>';
+				html += '</div>';
+				html += '<div class="jmb-dialog-profile-content-unions-body">';
 					html += '<table>';
 						html += '<tr>';
-							html += '<td valign="top">'+self._personUnionInfoHTML()+'</td>';
-							html += '<td valign="top"><div class="jmb-dialog-profile-content-unions-image male">&nbsp;</div></td>';
-							html += '<td valign="top">'+self._personUnionInfoHTML()+'</td>';
+							html += '<td valign="top">'+self._personUnionInfoHTML(data.indiv)+'</td>';
+							html += '<td valign="top">'+self._unionLinkImages(data,spouse)+'</td>';
+							html += '<td valign="top">'+self._personUnionInfoHTML(spouse.indiv)+'</td>';
 						html += '</tr>';
 						html += '<tr>';
 							html += '<td valign="top" colspan="3"><div class="jmb-dialog-profile-content-unions-part">'+self.parent._formUnionEventFields()+'</div></td>';
 						html += '</tr>';
 					html += '</table>';
-				html += '</form>';
-			html += '</div>';
+				html += '</div>';
+			html += '</form>';
+		html += '</div>';
+		return html;
+	},
+	_unionsHTML:function(){
+		var self = this;
+		var data = self.json.data;
+		var html = '<div class="jmb-dialog-profile-content-unions">';
+			jQuery(self.json.data.spouses).each(function(i, spouse){
+				if(!spouse.id) return;
+				html += self._unionHTML(i, data, spouse);
+			});	
 		html += '</div>';
 		return html;
 	},
 	_unions:function(){
 		var self = this;
+		var data = self.json.data;
 		var html = self._unionsHTML();
 		html += '<div class="jmb-dialog-profile-content-unions-add"><input type="button" value="Add another union"></div>';
 		var htmlObject = jQuery(html);
+		//set data
+		jQuery(data.spouses).each(function(i, spouse){
+			var target =  jQuery(htmlObject).find('#jmb-union-'+i);
+			self.parent._setUnionData(target, spouse);
+			var args = data.indiv.Id+';'+spouse.id;
+			self.parent._ajaxForm(jQuery(htmlObject).find('form#jmb-profile-addpsc-'+i), 'updateUnion', args, 
+			function(res){
+			}, function(json){
+			});
+		});	
 		jQuery(self.parent.dWindow).find('div.jmb-dialog-profile-content').append(htmlObject);
 	},
 	render:function(p){
@@ -218,5 +255,6 @@ JMBProfileFull.prototype = {
 			border:"none"
 		});
 		jQuery(self.parent.dWindow).append(self.parent.dContent.object);
+		jQuery(self.parent.dContent.object).find('div#profile-basic').click();
 	}
 }

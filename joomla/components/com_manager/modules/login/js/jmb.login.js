@@ -1,4 +1,5 @@
 function Login(obj){
+	obj = jQuery('#'+obj);
 	jQuery(obj).html("<fb:login-button>Connect with Facebook</fb:login-button>");
 	FB.init({
 		appId: "184962764872486", 

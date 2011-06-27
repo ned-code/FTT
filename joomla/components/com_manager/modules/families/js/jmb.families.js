@@ -234,7 +234,14 @@ Families.prototype = {
 				data: self.json.individs[jQuery(e).attr('id').split('-')[0]],
 				imgPath:self.json.path,
 				fmbUser:self.json.fmbUser,
-				eventType:'click'
+				eventType:'click',
+				beforeClose:function(){
+					self._ajax('getFamilies', 'mother', function(res){
+						var json = jQuery.parseJSON(res.responseText);
+						self.json = json;
+						self.render(obj);
+					});
+				}
 			});
 		});
 	},

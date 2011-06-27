@@ -32,7 +32,6 @@
 	border-right: 2px solid gray;
 	font-family: tahoma;
 	font-weight: bold;
-	height: 400px;
 }
 .jmb-dialog-profile-menu-item-parent{
 	background: none repeat scroll 0 0 #2D2D2D;
@@ -120,6 +119,9 @@
 	padding: 10px;
 	width: 500px;
 }
+.jmb-dialog-profile-content-union{
+	margin-top:10px;
+}
 .jmb-dialog-profile-content-unions form {
 	background: none repeat scroll 0 0 #F1E4B0;
 	border: 1px solid #473E1B;
@@ -147,6 +149,7 @@
 }
 .jmb-dialog-profile-content-unions-header{
 	height: 30px;
+	margin-top:5px;
 }
 .jmb-dialog-profile-content-unions-header span{
 	margin-left:10px;
@@ -154,7 +157,6 @@
 	font-size:14px;
 	font-family:Tahoma;
 	font-weight:bold;
-	color:white;
 }
 .jmb-dialog-profile-content-unions-header input{
 	border: 2px solid black !important;
@@ -180,18 +182,21 @@
 .jmb-dialog-profile-content-unions-person-info-name{}
 .jmb-dialog-profile-content-unions-person-info-birthdate{}
 .jmb-dialog-profile-content-unions-person-info-birthplace{}
+
 .jmb-dialog-profile-content-unions-image{
-	height: 66px;
+	margin-left: -10px;
+}
+.jmb-dialog-profile-content-unions-image table{
 	margin: 0;
 	padding: 0;
-	width: 150px;
 }
-.jmb-dialog-profile-content-unions-image.male{
-	background: url("../image/unionMF.gif") no-repeat scroll 0 0 transparent;
+.jmb-dialog-profile-content-unions-image div{
+	border: 3px solid #F8A13B;
+	border-radius: 3px 3px 3px 3px;
+	margin-left: 10px;
 }
-.jmb-dialog-profile-content-unions-image.female{
-	background: url("../image/unionMF.gif") no-repeat scroll 0 0 transparent;
-}
+
+
 .jmb-dialog-profile-content-unions-add{}
 .jmb-dialog-profile-content-unions-add input{
 	border: 1px solid #000000;
