@@ -15,6 +15,7 @@ function DescendantTreeProfile(parent){
 	this.modal = this.createModal();
 	this.renderType = null;
 	this.editDiv = null;
+	this.profile = new JMBProfile();
 	
 	jQuery('.jmb_header_fam_line').find('span').each(function(index,element){
 		if(jQuery(element).hasClass('active')) self.renderType = jQuery(element).attr('type');
@@ -48,7 +49,7 @@ DescendantTreeProfile.prototype = {
 				html += '<div class="jmb-dtp-body-info">';
 					html += '<table>';
 						html += '<tr>';
-						html += '<td><div class="jmb-dtp-body-info-avatar"><div class="jmb-profile-avatar">&nbsp;</div><div class="jmb-dtp-body-edit-button">&nbsp;</div></div></td>';
+						html += '<td><div class="jmb-dtp-body-info-avatar"><div class="jmb-profile-avatar">&nbsp;</div><div id="edit-button" class="jmb-dtp-body-edit-button">&nbsp;</div></div></td>';
 							html += '<td>';
 								html += '<div class="jmb-dtp-body-info-born">&nbsp;</div>';
 								html += '<div class="jmb-dtp-body-info-died">&nbsp;</div>';
@@ -103,7 +104,7 @@ DescendantTreeProfile.prototype = {
 		*/
 		jQuery(obj).find(".jmb-dtp-footer-mail-button").click(function(){
 			if(self.json){
-				if(self.json.ind.FacebookId == '0') {
+				if(self.json.indiv.FacebookId == '0') {
 					alert('email request send.');
 				}
 			}
@@ -177,7 +178,7 @@ DescendantTreeProfile.prototype = {
 		return '&nbsp;';
 	},
 	getAvatar:function(json){
-		var fId = json.ind.FacebookId;
+		var fId = json.indiv.FacebookId;
 		var av = json.avatar;
 		if(av != null && av.FilePath != null){
 			return '<img height="80px" width="72px" src="'+av.FilePath+'">';
@@ -209,7 +210,7 @@ DescendantTreeProfile.prototype = {
 			//var json = eval('('+response.responseText+')');
 			var json = jQuery.parseJSON(response.responseText);
 			var obj = self.body;
-			var ind = json.ind;
+			var ind = json.indiv;
 			self.setColors(json.colors);
 			jQuery(obj).find('.jmb-dtp-header-name').html(ind.FirstName+' '+ind.LastName);
 			//jQuery(obj).find('.jmb-dtp-body-media').html(self.getMedia(ind));
@@ -236,6 +237,7 @@ DescendantTreeProfile.prototype = {
 			});
 			*/
 			//edit profile
+			/*
 			var button = jQuery(obj).find(".jmb-dtp-body-edit-button");
 			var editDiv = self._editPerson(button, json);
 			self.editDiv = editDiv;
@@ -252,7 +254,7 @@ DescendantTreeProfile.prototype = {
 				trigger: 'none',
 				closeWhenOthersOpen: true,
 				offsetParent: document.body,
-				contentSelector: "jQuery('#"+json.ind.Id+"-content')",
+				contentSelector: "jQuery('#"+json.indiv.Id+"-content')",
 				cssStyles: {
 					fontFamily: '"lucida grande",tahoma,verdana,arial,sans-serif', 
 					fontSize: '11px'
@@ -261,25 +263,17 @@ DescendantTreeProfile.prototype = {
 			jQuery(button).click(function(){
 				jQuery(this).btOn();
 			})
-			
+			*/
+			var button = jQuery(obj).find(".jmb-dtp-body-edit-button");
+			self.profile.tooltip.render({
+				target: button,
+				type: 'tooltip',
+				data: json,
+				imgPath:json.path,
+				eventType:'click'
+			});
 			self.setModal(false);
 			self.json = json;
 		})
-	},
-	_editPerson:function(button, obj){
-		var html = "<div id='"+obj.ind.Id+"-content' class='jmb-descendants-edit-container'>";
-			html += "<div class='jmb-descendants-edit-profile'><span>Edit this Profile</span></div>";
-			html += "<div class='jmb-descendants-edit-fieldset'><fieldset>";
-				html += "<legend>Add:</legend>"
-				html += "<div class='jmb-descendants-edit-parent'><span>Parent</span></div>";
-				html += "<div class='jmb-descendants-edit-spouse'><span>Spouse</span></div>";
-				html += "<div class='jmb-descendants-edit-bs'><span>Brother or Sister</span></div>";
-				html += "<div class='jmb-descendants-edit-child'><span>Child</span></div>";
-			html += "</fieldset></div>";
-			html += "<div class='jmb-descendants-edit-send'><table><tr><td rowspan='2'><div class='jmb-descendants-edit-send-img'>&nbsp;</div></td><td><span>Laurinda is not registred.</span></td></tr><td><span>Send Laurinda an invations.</span></td><tr></tr></table></div>";
-			html += "<div class='jmb-descendants-edit-options'><fieldset><legend><span>More Options</span></legend><div class='jmb-descendants-edit-options-delete' style='display:none;'><span>Delete this Person</span></div></fieldset></div>";
-			html += "<a class='jmb-descendants-edit-close' href='javascript:void(jQuery(\".jmb-dtp-body-edit-button\").btOff());'>&nbsp;</a>";
-		html += "</div>";
-		return jQuery(html);
-	},	
+	}
 }
