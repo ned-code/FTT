@@ -245,6 +245,7 @@ class DescendantTree {
 	/**
 	*
 	*/
+	/*
 	public function getPersonInfoJSON($id){
 		$ind = $this->host->gedcom->individuals->get($id);
 		$type = ($ind->Gender == "M")?"HUSB":"WIFE";
@@ -256,6 +257,26 @@ class DescendantTree {
 		$photos = $this->host->gedcom->media->getMediaByGedId($ind->Id);
 		$avatar = $this->host->gedcom->media->getAvatarImage($ind->Id);
 		return json_encode(array('ind'=>$ind,'colors'=>$colors,'fam'=>$fam,'notes'=>$notes,'sources'=>$sources,'photos'=>$photos,'avatar'=>$avatar));
+	}
+	*/
+	public function getPersonInfoJSON($id){
+		$indiv = $this->host->gedcom->individuals->get($id);
+		$parents = $this->host->gedcom->individuals->getParents($id);
+		$children = $this->host->gedcom->individuals->getChilds($id);
+		$families = $this->host->gedcom->families->getPersonFamilies($id);
+		$spouses = array();	
+		foreach($families as $family){
+			$famevent = $this->host->gedcom->events->getFamilyEvents($family->Id);
+			$childs = $this->host->gedcom->families->getFamilyChildrenIds($family->Id);
+			$spouses[] = array('id'=>$family->Spouse->Id,'indiv'=>$family->Spouse,'children'=>$childs,'event'=>$famevent);
+		}
+		$notes = $this->host->gedcom->notes->getLinkedNotes($id);
+		$sources = $this->host->gedcom->sources->getLinkedSources($id);
+		$photos = $this->host->gedcom->media->getMediaByGedId($id);
+		$avatar = $this->host->gedcom->media->getAvatarImage($id);
+		$colors = $this->getColors();
+		$path = JURI::root(true);
+		return json_encode(array('indiv'=>$indiv,'parents'=>$parents,'spouses'=>$spouses,'children'=>$children,'notes'=>$notes,'sources'=>$sources,'photo'=>$photos,'avatar'=>$avatar,'colors'=>$colors,'path'=>$path));
 	}
 		
 	/**
