@@ -27,8 +27,7 @@ function JMBProfileTooltip(parent){
 			cssStyles: {
 				fontFamily: '"lucida grande",tahoma,verdana,arial,sans-serif', 
 				fontSize: '11px'
-			},
-			offsetParent:document.body
+			}
 		},
 	};
 	this.defaultTooltipParams = {
@@ -47,8 +46,7 @@ function JMBProfileTooltip(parent){
 			cssStyles: {
 				fontFamily: '"lucida grande",tahoma,verdana,arial,sans-serif', 
 				fontSize: '11px'
-			},
-			offsetParent:document.body
+			}
 		}
 	};
 	this.btActive = null;
@@ -310,6 +308,7 @@ JMBProfileTooltip.prototype = {
 		}
 		self.storage[self.storage.length++] = container;
 		p.settings.contentSelector = "jQuery('#"+jQuery(p.target).attr('id')+"-content')";
+		if(p.parent) p.settings.offsetParent = p.parent;
 		
 		jQuery(document.body).append(container);
 		jQuery(container).hide();

@@ -29,7 +29,7 @@ function DescendantTreeProfile(parent){
 			}	
 		});
 	});
-
+	_DESCEDANTS_TREE = this;
 }
 
 DescendantTreeProfile.prototype = {
@@ -270,7 +270,8 @@ DescendantTreeProfile.prototype = {
 				type: 'tooltip',
 				data: json,
 				imgPath:json.path,
-				eventType:'click'
+				eventType:'click',
+				parent:document.body
 			});
 			self.setModal(false);
 			self.json = json;
