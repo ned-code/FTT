@@ -321,9 +321,12 @@ class JMBProfile {
 		$this->host->gedcom->individuals->update($ind);
 		//events
 		$this->updateEvent($ind->Birth, 'b_');
-		if(isset($_POST['living']) && $_POST['living'] == 'false'){
+		if(isset($_POST['living']) && $_POST['living'] == 'false' && $ind->Death){
 			$this->updateEvent($ind->Death, 'd_');
 		}
+		if(isset($_POST['living']) && $_POST['living'] == 'false' && !$ind->Death){
+			$ind->Death = $this->_createEvent($ind->Id, 'DEAT', 'd_');
+		}	
 		return json_encode(array('i'=>$ind));
 	}
 	

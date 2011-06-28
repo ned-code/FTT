@@ -1,3 +1,4 @@
+/*
 .ThisMonthBox {
 	font-size: 12px !important;
 	font-family: Helvetica,Arial,sans-serif !important;
@@ -47,7 +48,7 @@
 
 .tm-header-prew {
 	background: url('../imgs/header.gif') no-repeat 8px 0; 
-	width:16px;
+7	width:16px;
 	cursor:pointer;
 }
 
@@ -109,3 +110,91 @@
 	margin-right: 5px;
 	cursor:pointer;
 }
+*/
+.jmb-this-month{
+	border: 1px solid #999999;
+	margin: 10px;
+}
+.jmb-this-month-header{
+	background: none repeat scroll 0 0 #DEEDAA;
+	border-top: 1px solid #5B6B6B;
+	height: 22px;
+	padding: 5px;
+}
+.jmb-this-month-header span {
+	font-family: Tahoma;
+	font-size: 12px;	
+	font-weight: bold;
+	margin-left: 30px;
+}
+.jmb-this-month-header select {
+	border: 1px solid #999999;
+	font-family: Tahoma;
+	font-size: 10px;
+	padding: 3px;
+}
+.jmb-this-month-header select option {
+	width: 70px;
+}
+.jmb-this-month-body{
+	border-top: 1px solid #999999;
+	padding: 10px;
+}
+.jmb-this-month-view{
+	font-family: Tahoma;
+	font-size: 12px;
+	font-weight: bold;
+}
+.jmb-this-month-content{
+	font-family: Tahoma;
+	font-size: 11px;
+	margin: 3px 3px 10px 10px;
+}
+.jmb-this-month-content .date{
+	margin: 0;
+	padding: 0;
+	width: 15px;
+}
+.jmb-this-month-content .person{
+
+}
+.jmb-this-month-content .img-male{
+	background: url("../imgs/sex.jpg") repeat scroll 0 0 transparent;
+	height: 14px;
+	margin-right: 5px;
+	width: 14px;
+}
+.jmb-this-month-content .img-female{
+	background: url("../imgs/sex.jpg") repeat scroll 0 16px transparent;
+	height: 14px;
+	margin-right: 5px;
+	width: 14px;
+}
+.jmb-this-month-content .anniversaries-start{
+	background: url("../imgs/family_o.jpg") repeat scroll 0 0 transparent;
+	height: 16px;
+    	margin-right: 3px;
+    	width: 37px;
+}
+.jmb-this-month-content .anniversaries-end{
+	background: url("../imgs/family_c.jpg") repeat scroll 0 0 transparent;
+	height: 16px;
+    	margin-left: 3px;
+    	width: 6px;
+}
+.jmb-this-month-content .person font{
+	cursor:pointer;
+}
+.jmb-this-month-content .message{
+	font-family: Tahoma;
+	font-size: 11px;
+	font-weight: bold;
+}
+
+.jmb-this-month-content .message font{
+	cursor:pointer;
+}
+
+#jmb-this-month-birth{}
+#jmb-this-month-death{}
+#jmb-this-month-marr{}

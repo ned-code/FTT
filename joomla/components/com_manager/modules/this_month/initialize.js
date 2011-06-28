@@ -1,1 +1,1 @@
-{"container":"this_month","object":"ThisMonth"}
+{"container":"this_month","object":"JMBThisMonth"}
