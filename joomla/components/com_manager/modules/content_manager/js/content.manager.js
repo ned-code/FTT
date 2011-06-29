@@ -1,9 +1,11 @@
-function ContentManager(){
+function ContentManager(obj){
+	obj = jQuery('#'+obj);
 	//vars
         var div;
 
 	// create parent div
 	var parent_div = document.createElement('div');	
+	jQuery(obj).append(parent_div);
 
 	//create div element
 	div = document.createElement('div');
@@ -30,8 +32,8 @@ function ContentManager(){
 			});
 		}
 	});
-	jQuery(document.body).append(jQuery('<iframe id="iframe" style="display:none;" name="iframe:content_manager">'))
-	return parent_div;
+	jQuery(document.body).append(jQuery('<iframe id="iframe" style="display:none;" name="iframe:content_manager">'));
+	_CONTENT_MANAGER = this;
 }
 
 ContentManager.prototype = {
@@ -120,30 +122,6 @@ ContentManager.prototype = {
 		jQuery(this.tr[rowId][0]).css('padding', '0 0 0 10px');
 		jQuery(this.tr[rowId][0]).html(rowId)
 	},
-	_setIcon:function(rowId){
-		var self = this;
-		var table = this._createTable(2, 1);
-		this._ajax('getIcon',this.tr[rowId].index,function(req){
-			jQuery(table.rows[1].cells[0]).html('<div class="cmIconF cmIconUpload">&nbsp;</div><div class="cmIconF cmIconDelete">&nbsp;</div>');
-			if(req.responseText == '0'){
-				jQuery(table.rows[0].cells[0]).html('<div class="cmIcon">&nbsp;</div>');
-				jQuery(table.rows[1].cells[0]).find('div[class="cmIconF cmIconDelete"]').css('display','none');
-			}
-			else{
-				jQuery(table.rows[0].cells[0]).html('<div class="cmIcon" style="background:url('+req.responseText+') no-repeat;">&nbsp;</div>');
-				jQuery(table.rows[1].cells[0]).find('div[class="cmIconF cmIconUpload"]').css('display','none');
-			}
-			jQuery(table.rows[1].cells[0]).find('.cmIconUpload').click(function(){
-				self._uploadIcon(table, rowId);
-			});
-			jQuery(table.rows[1].cells[0]).find('.cmIconDelete').click(function(){
-				self._deleteIcon(table, rowId);
-			});
-			
-			jQuery(self.tr[rowId][1]).html(table);
-		});
-		this.iconTable = table;
-	},
 	_setName:function(rowId, name){
 		if(!name){ name = 'no title'; }
 		var self = this;
@@ -163,7 +141,7 @@ ContentManager.prototype = {
 		if(!layoutType){ layoutType = 'double'; }
 		var self = this;
 		var div = this._div(rowId, 3);		
- 		new LayoutManipulator(this, rowId, layoutType);
+ 		//new LayoutManipulator(this, rowId, layoutType);
 	},
 	_setWCST:function(rowId, select){
 		var td = this.tr[rowId][4];
@@ -191,41 +169,6 @@ ContentManager.prototype = {
 		jQuery(this.tr[rowId][cellId]).append(div);
 		return div;		
 	},
-	_getIcon:function(table, rowId){
-		this._ajax('getIcon', this.tr[rowId].index,function(req){
-			jQuery(table.rows[0].cells[0]).find('div').css('background', 'url('+req.responseText+') no-repeat');
-		});
-	},
-	_uploadIcon:function(table, rowId){
-		var self = this;
-		var div = jQuery('<div style="margin:10px;"><form id="uploadIcon" enctype="multipart/form-data" target="iframe:content_manager" action="index.php?option=com_manager&amp;task=callMethod&amp;module=content_manager&amp;class=ContentManager&amp;method=uploadIcon&amp;args='+this.tr[rowId].index+'" method="POST"><input name="userfile" type="file">&nbsp;<input type="submit" value="upload"></form></div>');
-		jQuery(div).dialog({
-			autoOpen: false,
-			title: 'Icon Upload',
-			width: 320,
-			height: 100,
-			resizable: false,
-			position: 'center',
-			modal:true,
-			close:function(){
-				jQuery(table.rows[1].cells[0]).find('div[class="cmIconF cmIconUpload"]').css('display', 'none');	
-				jQuery(table.rows[1].cells[0]).find('div[class="cmIconF cmIconDelete"]').css('display', 'block');
-				self._getIcon(table, rowId);
-			}
-		});
-		jQuery(div).find('#uploadIcon').ajaxForm(function() { 
-			jQuery(div).dialog('close'); 
-		}); 
-		
-		jQuery(div).dialog('open');
-	},
-	_deleteIcon:function(table, rowId){
-		this._ajax('deleteIcon', this.tr[rowId].index, function(){
-			jQuery(table.rows[0].cells[0]).find('div').css('background', 'none');	
-			jQuery(table.rows[1].cells[0]).find('div[class="cmIconF cmIconDelete"]').css('display', 'none');
-			jQuery(table.rows[1].cells[0]).find('div[class="cmIconF cmIconUpload"]').css('display', 'block');	
-		})
-	},
 	addRow:function(params){
 		if(!params) params = {};
 		var self = this;
@@ -240,7 +183,6 @@ ContentManager.prototype = {
 		//set params
 		this._setIndex(i, params.index);
 		this._setPageN(i);
-		this._setIcon(i);
 		this._setName(i, params.name);
 		this._setLayoutType(i, params.layoutType);
 		this._setWCST(i, params.select);

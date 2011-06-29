@@ -85,6 +85,9 @@ MyBranchesManager.prototype = {
      getLayoutUrl:function(type){
         return storage.url+'tpl/'+type+'.tpl';
     },
+    getComManagerXMLTree:function(){
+       return 'index.php?option=com_manager&task=getXml&f=tree';
+    }, 
     renderPage:function(div, obj){
         for(var i = 1; i <= obj.tdLength; i++){
             for(var j = 0; j < obj[i-1].divLength; j++){

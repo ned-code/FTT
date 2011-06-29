@@ -44,7 +44,7 @@ dhtmlxEvent(window,"load",function(){
         div.setAttribute("id", "container");
         div.style.height = '100%';
         dhxLayout.cells("b").attachObject(div);
-        manager.includeModuleFiles(div, id, "container");
+        manager.includeModuleFiles(id, "container");
         }
     );
        

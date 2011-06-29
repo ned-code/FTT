@@ -72,18 +72,6 @@ class ContentManager {
 	/**
 	*
 	*/
-	function getIcon($id){
-		ob_clean();
-		$path = str_replace('\\', '/', JPATH_ROOT.'/components/com_manager/icons/'.$id.'.jpg');
-		if(file_exists($path)){
-			return JURI::root().'components/com_manager/icons/'.$id.'.jpg';
-		}
-		return '0';
-	}
-	
-	/**
-	*
-	*/
 	function getIcons($args){
 		ob_clean();
 		$args = explode(';', $args);

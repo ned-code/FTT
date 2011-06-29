@@ -76,9 +76,9 @@ $css_code = 'html, body {
 
 $document->addStyleDeclaration($css_code);
 
-$document->addScript('components/com_manager/js/MyBranchesManager.js');
-$document->addScript('components/com_manager/js/host.js');
-$document->addScript('components/com_manager/js/core.js');
+$document->addScript('components/com_manager/js/MyBranchesManager.js?111');
+$document->addScript('components/com_manager/js/host.js?111');
+$document->addScript('components/com_manager/js/core.js?111');
 
 # Create the controller
 
@@ -103,5 +103,6 @@ JHTML::_('behavior.mootools');
 
 $document = &JFactory::getDocument();
 $document->addScript( 'components/com_manager/js/jquery.min.js' );
+$document->addScript('components/com_manager/js/jquery-ui.min.js');
 $document->addCustomTag( '<script type="text/javascript">jQuery.noConflict();</script>' );
 ?>

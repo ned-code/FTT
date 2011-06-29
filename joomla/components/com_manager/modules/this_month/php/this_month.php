@@ -418,6 +418,10 @@ class JMBThisMonth {
 			'sort'=>'true',
 			'type'=>'1',
 			'year'=>'1900'
+		),
+		'opt'=>array(
+			'month'=>null,
+			'date'=>null
 		)
 	);
 	
@@ -454,7 +458,7 @@ class JMBThisMonth {
 				break;
 				
 				case "with_after_input":
-					$this->settings['split_event']['year'] = $p[$i]['value'];
+					$this->settings['split_event']['year'] = (int)$p[$i]['value'];
 				break;
                 	}
                 }
@@ -559,17 +563,17 @@ class JMBThisMonth {
 	
 	/**
 	* @return array with all events sorted by motn of event
-	* @var $months numeric of month event
+	* @var $month numeric of month event
 	* @var $individs array link of all user
 	* @var $descendants array link of descedants(user sort by month of event)
 	* @var $type string sortet individual by type event(BIRT,DEAT,MARR)
 	*/
-	protected function _getArrayEventRecords(&$individs, &$descendants, $type, $months){
+	protected function _getArrayEventRecords(&$individs, &$descendants, $type, $month){
 		$result = array();
 		foreach($individs as $id => $individ){
 			switch($type){
 				case "BIRT":
-					if($individ['indiv']->Birth && $individ['indiv']->Birth->Month == (int)$months){
+					if($individ['indiv']->Birth && $individ['indiv']->Birth->Month == (int)$month){
 						$death = ($individ['indiv']->Death)?true:false;
 						$result[$id] = array('event'=>$individ['indiv']->Birth, 'death'=>$death);
 						$descendants[$id] = $individ;
@@ -578,14 +582,9 @@ class JMBThisMonth {
 				
 				case "MARR":
 					foreach($individ['spouses'] as $spouse){
-						/*if($spouse['event'] && $spouse['event']->Month == (int)$months){
-							$result[$id] = array('sircar'=>$individ['indiv']->Id, 'spouse'=>$spouse['id'], 'event'=>$spouse->Evenet);
-							$descendants[$id] = $individ;
-							$descendants[$spouse['id']] = $individs[$spouse['id']];
-						}*/
 						if($spouse['event']){
 							foreach($spouse['event'] as $event){
-								if((int)$event->Month == (int)$months && $event->Type == 'MARR'){
+								if((int)$event->Month == (int)$month && $event->Type == 'MARR'){
 									if(!$result[$event->IndKey]){
 										$result[$event->IndKey] = array('sircar'=>$individ['indiv']->Id, 'spouse'=>$spouse['id'], 'event'=>$event);
 										$descendants[$id] = $individ;
@@ -603,7 +602,7 @@ class JMBThisMonth {
 				break;
 				
 				case "DEAT":
-					if($individ['indiv']->Death && $individ['indiv']->Death->Month == (int)$months){
+					if($individ['indiv']->Death && $individ['indiv']->Death->Month == (int)$month){
 						$result[$id] = array('event'=>$individ['indiv']->Death);
 						$descendants[$id] = $individ;
 					}
@@ -615,14 +614,14 @@ class JMBThisMonth {
 	
 	/**
 	* @return array with all events
-	* @var $months numeric of month event
+	* @var $month numeric of month event
 	* @var $individs array link of all user(not null)
 	* @var $descendants array link of descedants(user sort by month of event)
 	*/
-	protected function _getEvents($months, &$individs, &$descendants){
-		$births = $this->_getArrayEventRecords(&$individs, &$descendants, 'BIRT', $months);
-		$unions = $this->_getArrayEventRecords(&$individs, &$descendants, 'MARR', $months);
-		$deaths = $this->_getArrayEventRecords(&$individs, &$descendants, 'DEAT', $months);
+	protected function _getEvents($month, &$individs, &$descendants){
+		$births = $this->_getArrayEventRecords(&$individs, &$descendants, 'BIRT', $month);
+		$unions = $this->_getArrayEventRecords(&$individs, &$descendants, 'MARR', $month);
+		$deaths = $this->_getArrayEventRecords(&$individs, &$descendants, 'DEAT', $month);
 		return array('b'=>$births,'u'=>$unions,'d'=>$deaths);
 	}
 	
@@ -666,15 +665,31 @@ class JMBThisMonth {
 	}
 	
 	/**
+	* @return earleast event date
+	* @var $events
+	*/
+	protected function getEarleastDate($events){
+		$result = 9999;
+		foreach($events as $element){
+			foreach($element as $u){
+				if($u['event']->Year < $result){
+					$result = $u['event']->Year;
+				}
+			}
+		}
+		return (int)$result;
+	}
+	
+	/**
 	* get json data about all user(with sort)
-	* @var $months numeric of month
+	* @var $month numeric of month
 	* @var $sort get of how sort people(after,before or all)
 	* @return array json data
 	*/
 	public function load($args){
 		//vars
 		$args = explode(';', $args);
-		$months = $args[0];
+		$month = $args[0];
 		$sort = $args[1];
 		//user info and global settings
 		$fmbUser = $this->_getUserInfo($_SESSION['jmb']['gid']);
@@ -686,13 +701,14 @@ class JMBThisMonth {
 		$individs = array();
 		$descendants = array();
 		$this->_getIndividsArray($firstParent, &$individs);
-		$events = $this->_getEvents($months, &$individs, &$descendants);
-		$not_sort_events = $events;
+		$events = $this->_getEvents($month, &$individs, &$descendants);
+		$this->settings['opt']['date'] = $this->getEarleastDate($events);
 		if($this->settings['split_event']['sort'] == 'true'){
 			if($sort != 'false'){ $this->_setSortTypeParams($sort); }
 			$this->_sort(&$events);
 		}
-		return json_encode(array('fmbUser'=>$fmbUser,'colors'=>$colors,'path'=>$path,'events'=>$events,'descedants'=>$descendants));
+		$this->settings['opt']['month'] = $month;
+		return json_encode(array('fmbUser'=>$fmbUser,'colors'=>$colors,'path'=>$path,'events'=>$events,'descedants'=>$descendants,'settings'=>$this->settings));
 	}
 	
 }
