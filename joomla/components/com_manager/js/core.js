@@ -131,6 +131,12 @@ core.loadTabs = function(pages){
 			});	
 			
 			jQuery("ul.jmbtabs li:first").click(); //click first
+			
+			//facebook module "like"
+			var likeDiv = jQuery('<div id="fb-like" class="jmb-fb-like"></div>');
+			var likeIframe = '<iframe src="http://www.facebook.com/plugins/like.php?app_id=182833885106027&amp;href=http%3A%2F%2Fthors.ru%2Fj16&amp;send=false&amp;layout=button_count&amp;width=90&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font=tahoma&amp;height=21&amp;locale=en_US" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:90px; height:21px;" allowTransparency="true"></iframe>';
+			jQuery(div).append(likeDiv);
+			jQuery(likeDiv).append(likeIframe);
     		}
     	});
     });

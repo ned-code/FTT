@@ -37,7 +37,7 @@ ul.jmbtabs li a:hover {
 	background: #ccc;
 }
 html ul.jmbtabs li.active, html ul.jmbtabs li.active a:hover  { /*--Makes sure that the active tab does not listen to the hover properties--*/
-	background: #fff;
+	background: #f5fae6;
 	border-bottom: 1px solid #fff; /*--Makes the active tab look like it's connected with its content--*/
 }
 
@@ -52,4 +52,10 @@ html ul.jmbtabs li.active, html ul.jmbtabs li.active a:hover  { /*--Makes sure t
 .tab_content {
 	/*padding: 20px;*/
 	font-size: 1.2em;
+	background: #f5fae6;
+}
+.jmb-fb-like{
+	position: absolute;
+   	right: 0px;
+   	top: 30px;
 }

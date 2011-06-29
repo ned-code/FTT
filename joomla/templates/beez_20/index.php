@@ -33,6 +33,13 @@ $templateparams     = $app->getTemplate(true)->params;
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->language; ?>" lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>" >
         <head>
                 <jdoc:include type="head" />
+                <meta property="og:title" content="FamilyTree-Top" />
+        	<meta property="og:type" content="website" />
+        	<meta property="og:url" content="http://thors.ru/j16" />
+        	<meta property="og:image" content="" />
+        	<meta property="og:site_name" content="thors.ru/j16" />
+        	<meta property="fb:app_id" content="184962764872486" />
+        	<meta property="fb:admins" content="100001614066938"/>
                 <link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/system/css/system.css?111" type="text/css" />
                 <link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/beez_20/css/jmb.css?111" type="text/css"/>
                 <link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/beez_20/css/position.css?111" type="text/css" media="screen,projection" />
