@@ -1,4 +1,1 @@
-var jmbRegister = document.getElementById('jmb_register');
-if(jmbRegister){
-	new JMBRegister(jmbRegister);
-}
+{"container":"jmb_register","object":"JMBRegister"}

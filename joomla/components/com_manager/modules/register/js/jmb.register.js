@@ -1,4 +1,5 @@
 function JMBRegister(obj){
+	obj = jQuery('#'+obj);
 	var self = this;
 	FB.init({
 		appId: storage.fb.appId, 

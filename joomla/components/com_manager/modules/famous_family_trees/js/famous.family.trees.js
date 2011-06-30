@@ -1,4 +1,5 @@
 function FamousFamilyTrees(obj){
+	obj = jQuery('#'+obj);
 	html = "<div>";
 		html += "<div class='jmb-famous-family-tree-header'>Famous Family Trees</div>";
 		html += "<div class='jmb-famous-family-tree-body'>";

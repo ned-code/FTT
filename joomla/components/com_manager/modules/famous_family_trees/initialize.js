@@ -1,4 +1,1 @@
-var famousFamilyTrees = document.getElementById('jmb_famous_family_trees');
-if(famousFamilyTrees){
-	new FamousFamilyTrees(famousFamilyTrees);
-}
+{"container":"jmb_famous_family_trees","object":"FamousFamilyTrees"}

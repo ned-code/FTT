@@ -1,6 +1,6 @@
 function JMBTreeCreator(obj){
 	var self = this;
-	
+	obj = jQuery('#'+obj);
 	html = "<div>";
 		html += "<div class='jmb-tree-creator-header'>Welcome to Family Tree Top</div>";
 		html += "<div class='jmb-tree-creator-fieldset'><fieldset><legend>What is Family TreeTop?</legend></fieldset></div>";
