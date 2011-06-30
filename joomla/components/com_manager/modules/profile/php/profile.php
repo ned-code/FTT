@@ -13,6 +13,28 @@ class JMBProfile {
 	/**
 	*
 	*/
+	protected function _getUserInfo($id){
+		$indiv = $this->host->gedcom->individuals->get($id);
+		$parents = $this->host->gedcom->individuals->getParents($id);
+		$children = $this->host->gedcom->individuals->getChilds($id);
+		$families = $this->host->gedcom->families->getPersonFamilies($id);
+		$spouses = array();	
+		foreach($families as $family){
+			$famevent = $this->host->gedcom->events->getFamilyEvents($family->Id);
+			$childs = $this->host->gedcom->families->getFamilyChildrenIds($family->Id);
+			$spouses[] = array('id'=>$family->Spouse->Id,'indiv'=>$family->Spouse,'children'=>$childs,'event'=>$famevent);
+		}
+		$notes = $this->host->gedcom->notes->getLinkedNotes($id);
+		$sources = $this->host->gedcom->sources->getLinkedSources($id);
+		$photos = $this->host->gedcom->media->getMediaByGedId($id);
+		$avatar = $this->host->gedcom->media->getAvatarImage($id);
+
+		return array('indiv'=>$indiv,'parents'=>$parents,'spouses'=>$spouses,'children'=>$children,'notes'=>$notes,'sources'=>$sources,'photo'=>$photos,'avatar'=>$avatar);
+	}
+	
+	/**
+	*
+	*/
 	public function _uploadPhoto($gedId){
 		if($_FILES['photo']['size'] == 0) return;
 		$result = $this->host->gedcom->media->save($gedId, $_FILES["photo"]["tmp_name"], $_FILES["photo"]["name"]);
@@ -58,9 +80,11 @@ class JMBProfile {
 		$event = new Events();
 		$event->Id = $this->host->gedcom->events->getNewId();
 		$event->Type = $type;
-		$event->Day = (isset($_POST[$prefix.'day']))?$_POST[$prefix.'day']:'';
-		$event->Month = (isset($_POST[$prefix.'month']))?$_POST[$prefix.'month']:'';
-		$event->Year = (isset($_POST[$prefix.'year']))?$_POST[$prefix.'year']:'';
+		if(!isset($_POST[$prefix.'option'])){
+			$event->Day = (isset($_POST[$prefix.'day']))?$_POST[$prefix.'day']:'';
+			$event->Month = (isset($_POST[$prefix.'month']))?$_POST[$prefix.'month']:'';
+			$event->Year = (isset($_POST[$prefix.'year']))?$_POST[$prefix.'year']:'';
+		}
 		$event->Place = $this->_createLocation($event->Id, $type, $prefix);
 		$event->IndKey = $id;
 		if($save){ $this->host->gedcom->events->save($event); }
@@ -264,7 +288,9 @@ class JMBProfile {
 				$this->host->gedcom->families->save($fam);
 			}
 		}
-		return json_encode(array('fam_id'=>$fam_id,'i'=>$ind,'p'=>$photos, 'f'=>$fam));
+		
+		$data = $this->_getUserInfo($ownerId);
+		return json_encode(array('data'=>$data,'spouse'=>array('indiv'=>$ind)));
 	}
 	
 	/**
@@ -298,9 +324,11 @@ class JMBProfile {
 	*
 	*/
 	protected function updateEvent($event, $prefix){
-		$event->Day = (isset($_POST[$prefix.'day']))?$_POST[$prefix.'day']:'';
-		$event->Month = (isset($_POST[$prefix.'month']))?$_POST[$prefix.'month']:'';
-		$event->Year = (isset($_POST[$prefix.'year']))?$_POST[$prefix.'year']:'';
+		if(!isset($_POST[$prefix.'option'])){
+			$event->Day = (isset($_POST[$prefix.'day']))?$_POST[$prefix.'day']:'';
+			$event->Month = (isset($_POST[$prefix.'month']))?$_POST[$prefix.'month']:'';
+			$event->Year = (isset($_POST[$prefix.'year']))?$_POST[$prefix.'year']:'';
+		}
 		$places = array($_POST[$prefix.'country'],$_POST[$prefix.'state'],$_POST[$prefix.'town']);
 		$event->Place->Hierarchy[0]->Name = $places[0];
 		$event->Place->Hierarchy[1]->Name = $places[1];

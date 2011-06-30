@@ -194,7 +194,9 @@ JMBProfileTooltip.prototype = {
 				});
 			break;		
 			case "switch":
-				
+				jQuery(tooltip).find('.jmb-profile-mini-switch').click(function(){
+					self.parent.profile.render(p);
+				});
 			break;
 		}
 	},

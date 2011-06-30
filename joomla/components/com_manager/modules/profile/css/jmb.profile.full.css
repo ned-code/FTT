@@ -107,7 +107,10 @@
 	width:210px;
 }
 .jmb-dialog-profile-content-basic-body table select{
+	border: 1px solid #999999;
 	margin: 3px;
+	padding: 1px;
+	width: 80px;
 }
 /* Unions */
 .jmb-dialog-profile-content-unions{
@@ -145,7 +148,10 @@
 	margin: 3px;
 }
 .jmb-dialog-profile-content-unions  table select {
+	border: 1px solid #999999;
 	margin: 3px;
+	padding: 1px;
+	width: 80px;
 }
 .jmb-dialog-profile-content-unions-header{
 	height: 30px;
@@ -206,4 +212,13 @@
 	font-size: 12px;
 	font-weight: bold;
 	padding: 5px;	
+}
+
+.jmb-dialog-profile-content-union.add table input[type="text"]{
+	border: 1px solid gray;
+	font-family: tahoma;
+	font-size: 12px;
+	height: 16px;
+	margin: 3px;
+	width: 170px;
 }

@@ -2,6 +2,7 @@ function JMBProfileFull(parent){
 	this.parent = parent;
 	this.json = null;
 	this.menuActiveItem = null;
+	this.spouseIndex = 0;
 	
 	this.menu = {
 		"profile":{
@@ -209,6 +210,91 @@ JMBProfileFull.prototype = {
 		html += '</div>';
 		return html;
 	},
+	_unionCancelButton:function(object){
+		var self = this;
+		jQuery(object).find('.jmb-dialog-profile-content-unions-header input[value="Cancel"]').click(function(){
+			jQuery(object).remove();
+			self.spouseIndex--;
+		})
+	},
+	_unionAdd:function(input, object){
+		var self = this;
+		var html = '<div id="jmb-union-'+self.spouseIndex+'" class="jmb-dialog-profile-content-union add" spouse_id="null">';
+			html += '<form id="jmb:profile:addspouse" method="post" target="iframe-profile">';
+			html += '<div class="jmb-dialog-profile-content-unions-header">';
+				html += '<span style="float:left;">Union '+self.spouseIndex+'</span>';
+				html += '<span style="float:right;"><input type="submit" value="Save"></span>';
+				html += '<span style="float:right;"><input type="button" value="Cancel"></span>';
+			html += '</div>';
+			html += '<table>';
+				html += '<tr>';
+					html += '<td valign="top">';
+						html += '<div class="jmb-dialog-photo">'+self.parent._getSpouseAvatar(self.json.data, 135, 150)+'</div>';
+						html += '<div class="jmb-dialog-photo-button">';
+							html += '<span class="jmb-dialog-photo-button-wrapper">';
+								html += '<input type="file" name="photo" id="photo" />';
+								html += '<span class="jmb-dialog-photo-button2">Upload Photo</span>';
+								html += '<div class="jmb-dialog-photo-context"></div>';
+							html += '</span>';
+						html += '</div>';
+					html += '</td>';
+					html += '<td valign="top">';
+						html += self.parent._formBasicFields();
+					html += '</td>';
+				html += '</tr>';
+				html += '<tr>';
+					html += '<td colspan="2">';
+						html += self.parent._formUnionEventFields();
+					html += '</td>';
+				html += '</tr>';
+			html += '</table>';
+			html += '</form>';
+		html += '</div>';
+		var htmlObject = jQuery(html);
+		var gender = (self.json.data.indiv.Gender=="M")?"F":"M";
+		jQuery(htmlObject).find('.jmb-dialog-form-gender input[value="'+gender+'"]').attr('checked','checked');
+		jQuery(htmlObject).find('.jmb-dialog-button-submit').remove();
+		jQuery(htmlObject).find('input[placeholder="Year"]').css('width', '80px');
+		self.parent._buttonUploadPhoto(htmlObject);
+		self.parent._buttonLiving(htmlObject, function(){
+			jQuery(htmlObject).find('input[placeholder="Year"]').css('width', '80px');
+		});
+		self.parent._buttonsGender(htmlObject);
+		self._unionCancelButton(htmlObject);
+		
+		var args = self.json.data.indiv.Id+';'+self.json.data.indiv.Gender;
+		self.parent._ajaxForm(jQuery(htmlObject).find('form'), 'addSpouse', args, 
+		function(res){
+ 			if(!self.parent._valid(htmlObject, 'date', {prefix:'b_'})){
+ 				alert('Incorrect Birth date.');
+ 				return false;
+ 			}
+ 			if(!self.parent._valid(htmlObject, 'date', {prefix:'d_'})){
+ 				alert('Incorrect Death date.');
+ 				return false;
+ 			}
+ 			if(!self.parent._valid(htmlObject, 'date', {prefix:'m_'})){
+ 				alert('Incorrect Marrige date.');
+ 				return false;
+ 			}
+ 			if(!self.parent._valid(htmlObject, 'firstName', {})){
+ 				alert('Not set "First name".')
+ 				return false;
+ 			}
+ 			if(!self.parent._valid(htmlObject, 'photo', {})){
+ 				alert('Incorrect image(try to use .jpg,.gif,.png).');
+ 				return false;
+ 			}
+ 			return true;
+		}, function(json){
+			jQuery(htmlObject).remove();
+			var html = self._unionHTML(self.spouseIndex, json.data, json.spouse);
+			self.json.data = json.data;
+			jQuery(object[0]).append(html);
+		});	
+		jQuery(object[0]).append(htmlObject);
+		self.spouseIndex++;
+	},
 	_unions:function(){
 		var self = this;
 		var data = self.json.data;
@@ -216,6 +302,7 @@ JMBProfileFull.prototype = {
 		html += '<div class="jmb-dialog-profile-content-unions-add"><input type="button" value="Add another union"></div>';
 		var htmlObject = jQuery(html);
 		//set data
+		self.spouseIndex = jQuery(data.spouses).length+1;
 		jQuery(data.spouses).each(function(i, spouse){
 			var target =  jQuery(htmlObject).find('#jmb-union-'+i);
 			self.parent._setUnionData(target, spouse);
@@ -225,6 +312,10 @@ JMBProfileFull.prototype = {
 			}, function(json){
 			});
 		});	
+		var input = jQuery(htmlObject[1]).find('input');
+		jQuery(input).click(function(){
+			self._unionAdd(this, htmlObject);
+		});
 		jQuery(self.parent.dWindow).find('div.jmb-dialog-profile-content').append(htmlObject);
 	},
 	render:function(p){

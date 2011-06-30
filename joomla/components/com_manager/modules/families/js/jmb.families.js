@@ -96,6 +96,10 @@ Families.prototype = {
 			html += '</div>';
 			if(obj.spouses[0] != null || arrow == 'right') html += '<div class="jmb-families-arrow-'+arrow+'">&nbsp</div>';
 			html += '<div id="'+person.Id+'-edit" class="jmb-families-edit-button parent">&nbsp;</div>';
+			if(obj.indiv.FacebookId != '0'){
+				var imgPath = self.json.path+"/components/com_manager/modules/families/css/facebook_icon.png"
+				html += '<div class="jmb-families-fb-icon parent"><a href="http://www.facebook.com/profile.php?id='+obj.indiv.FacebookId+'"><img src="'+imgPath+'" width="18px" height="18px"></a></div>'
+			}
 		html += '</div>';
 		return jQuery(html);
 	},
@@ -113,6 +117,10 @@ Families.prototype = {
 				html += '<div class="jmb-families-parent-date">'+date+'</div>';
 			html += '</div>';
 			html += '<div id="'+person.Id+'-edit" class="jmb-families-edit-button parent">&nbsp;</div>';
+			if(obj.indiv.FacebookId != '0'){
+				var imgPath = self.json.path+"/components/com_manager/modules/families/css/facebook_icon.png"
+				html += '<div class="jmb-families-fb-icon parent"><a href="http://www.facebook.com/profile.php?id='+obj.indiv.FacebookId+'"><img src="'+imgPath+'" width="18px" height="18px"></a></div>'
+			}
 		html += '</div>';
 		return jQuery(html);
 	},
@@ -125,7 +133,7 @@ Families.prototype = {
 			html += '</div>';
 			html += '<div><div class="jmb-families-child-name">'+self._getName(person)+'</div><div class="jmb-families-child-date">'+self._getDate(person)+'</div></div>';
 			
-			if(jQuery(obj.children).length != 0){
+			if(jQuery(obj.spouses).length != 0){
 				var buttonChild = (k!=1)?'jmb-families-button childs active small':'jmb-families-button childs active';
 				html += '<div id="'+person.Id+'" class="'+buttonChild+'">&nbsp;</div>'; 
 			} else {
@@ -136,6 +144,10 @@ Families.prototype = {
 			var editButtonClass = (k!=1)?'jmb-families-edit-button child small':'jmb-families-edit-button child';
 			html += '<div class="'+arrowClass+'">&nbsp</div>';
 			html += '<div id="'+person.Id+'-edit" class="'+editButtonClass+'">&nbsp;</div>';
+			if(obj.indiv.FacebookId != '0'){
+				var imgPath = self.json.path+"/components/com_manager/modules/families/css/facebook_icon.png"
+				html += '<div class="jmb-families-fb-icon child"><a href="http://www.facebook.com/profile.php?id='+obj.indiv.FacebookId+'"><img src="'+imgPath+'" width="18px" height="18px"></a></div>'
+			}
 		return jQuery(html);
 	},
 	_createDivInfo:function(obj){

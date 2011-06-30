@@ -502,7 +502,7 @@ class JMBThisMonth {
 		foreach($families as $family){
 			$famevent = $this->host->gedcom->events->getFamilyEvents($family->Id);
 			$childs = $this->host->gedcom->families->getFamilyChildrenIds($family->Id);
-			$spouses[] = array('id'=>$family->Spouse->Id,'children'=>$childs,'event'=>$famevent);
+			$spouses[] = array('id'=>$family->Spouse->Id,'indiv'=>$family->Spouse,'children'=>$childs,'event'=>$famevent);
 		}
 		$notes = $this->host->gedcom->notes->getLinkedNotes($id);
 		$sources = $this->host->gedcom->sources->getLinkedSources($id);

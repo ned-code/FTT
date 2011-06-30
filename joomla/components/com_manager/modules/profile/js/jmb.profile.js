@@ -257,7 +257,7 @@ JMBProfile.prototype = {
 		return html;
 	},
 	_selectDays:function(){
-		var html = '';
+		var html = '<option selected value="0">Day</option>';
 		for(var i=1;i<=31;i++){
 			html += '<option value="'+i+'">'+i+'</option>';
 		}
@@ -265,7 +265,7 @@ JMBProfile.prototype = {
 	},
 	_selectMonths:function(){
 		var self = this;
-		var html = '';
+		var html = '<option selected value="0">Month</option>';
 		var months = self.months;
 		for(var i=0;i<months.length;i++){
 			html += '<option value="'+(i+1)+'">'+months[i]+'</option>';
@@ -277,7 +277,7 @@ JMBProfile.prototype = {
 		var name = (t=='b_')?'Birth':'Death';
 		var html = '<tr>';
 			html += '<td valign="top" style="width:100px;text-align:right;padding-top:5px;"><span>'+name+'day:</span></td>';
-			html += '<td style="text-align: left;"><select name="'+t+'day">'+self._selectDays()+'</select><select name="'+t+'month">'+self._selectMonths()+'</select><input name="'+t+'year" type="text" style="width:40px;" maxlength="4" placeholder="Year"></td>';
+			html += '<td style="text-align: left;"><select name="'+t+'day">'+self._selectDays()+'</select><select name="'+t+'month">'+self._selectMonths()+'</select><input name="'+t+'year" type="text" style="width:40px;" maxlength="4" placeholder="Year"><input name="'+t+'option" type="checkbox"> Unknown</td>';
 		html += '</tr>';
 		html += '<tr>';
 			html += '<td valign="top" style="width:100px;text-align:right;padding-top:5px;"><span>'+name+'place:</span></td>';
@@ -327,7 +327,7 @@ JMBProfile.prototype = {
 			html += '</tr>';
 			html += '<tr>';
 				html += '<td><span>Date:</span></td>';
-				html += '<td style="text-align: left;"><select name="m_day">'+self._selectDays()+'</select><select name="m_month">'+self._selectMonths()+'</select><input placeholder="Year" name="m_year" type="text" maxlength="4" style="width:50px;"></td>';
+				html += '<td style="text-align: left;"><select name="m_day">'+self._selectDays()+'</select><select name="m_month">'+self._selectMonths()+'</select><input placeholder="Year" name="m_year" type="text" maxlength="4" style="width:50px;"><input name="m_option" type="checkbox"> Unknown</td>';
 			html += '</tr>';
 			html += '<tr>';
 				html += '<td><span>Place:</span></td>';
@@ -343,7 +343,8 @@ JMBProfile.prototype = {
 	_valid:function(obj, i, p){
 		switch(i){
 			case "date":
-				if(jQuery(obj).find('select[name="'+p.prefix+'day"]').length==0) return true;
+				if(jQuery(obj).find('select[name="'+p.prefix+'day"] ').length==0) return true;
+				if(jQuery(obj).find('input[name="'+p.prefix+'option"]').attr('checked')) return true;
 				var day = jQuery(obj).find('select[name="'+p.prefix+'day"] option:selected').val();
 				var month = jQuery(obj).find('select[name="'+p.prefix+'month"] option:selected').val();
 				var year = jQuery(obj).find('input[name="'+p.prefix+'year"]').val();
@@ -380,20 +381,22 @@ JMBProfile.prototype = {
 			if(!self.saved){
 				if(confirm('You did not save your changes. Do you wish to cancel?')){
 					jQuery(self.dWindow).dialog("close");
-					self._modal(false)
+					self._modal(false);
 				}
 			}
+			if(typeof(callback)!='undefined') callback();
 		});
 	},
-	_buttonUploadPhoto:function(obj){
+	_buttonUploadPhoto:function(obj, callback){
 		var self = this;
 		jQuery(obj).find('div.jmb-dialog-photo-button input#photo').bind('change focus click', function(){
 			var object = jQuery(this);
 			var valArray = jQuery(object).val().split('\\');
 			jQuery('div.jmb-dialog-photo-context').html(valArray[0]);
+			if(typeof(callback)!='undefined') callback();
 		});
 	},
-	_buttonLiving:function(obj){
+	_buttonLiving:function(obj, callback){
 		var self = this;
 		jQuery(obj).find('select[name="living"]').change(function(){
 			var v = jQuery(this).val();
@@ -408,19 +411,22 @@ JMBProfile.prototype = {
 				self.living = false;
 				self.deathObject = jQuery(self._getEventPart('d_'));
 				jQuery(table[0]).append(self.deathObject);
-				jQuery('.jmb-dialog-container').scrollTop(jQuery('.jmb-dialog-content').height());
 			}
+			if(typeof(callback)!='undefined') callback();
 		});
 	},
-	_buttonsGender:function(obj){
+	_buttonsGender:function(obj, callback){
+		var self = this;
 		jQuery(obj).find('.jmb-dialog-form-gender input').click(function(){
 			var gender = (jQuery(this).attr('value')=="M")?"M":"F";	
 			jQuery(obj).find('.jmb-dialog-photo').html(self._getAvatar2(135, 150, gender));
+			if(typeof(callback)!='undefined') callback();
 		});
 		jQuery(obj).find('.jmb-dialog-form-gender span').click(function(){
 			var type = jQuery(this).attr('type');
 			jQuery(obj).find('.jmb-dialog-form-gender input[value="'+type+'"]').attr('checked', true);
 			jQuery(obj).find('.jmb-dialog-photo').html(self._getAvatar2(135, 150, type));
+			if(typeof(callback)!='undefined') callback();
 		});
 	},
 	_convertDateNumeric:function(d){
@@ -619,7 +625,7 @@ JMBProfile.prototype = {
  				return false;
  			}
  			if(!self._valid(self.dContent.object, 'date', {prefix:'m_'})){
- 				alert('Incorrect Death date.');
+ 				alert('Incorrect Marrige date.');
  				return false;
  			}
  			if(!self._valid(self.dContent.object, 'firstName', {})){

@@ -59,7 +59,6 @@ DescendantTreeProfile.prototype = {
 					html += '</table>';
 				html += '</div>';	
 				html += '<div class="jmb-dtp-body-space">&nbsp;</div>'
-				/*html += '<div class="jmb-dtp-body-edit-button">Edit this Profile</div>';*/
 				html += '<div class="jmb-dtp-body-media">';
 					html += '<ul id="mycarousel" class="jcarousel-skin-tango">';
 						html += '<li><div id="1" class="jmb-dtp-body-media-item">&nbsp;</div></li>';
@@ -94,14 +93,7 @@ DescendantTreeProfile.prototype = {
 		jQuery(obj).find('#mycarousel').jcarousel({
 			wrap: 'circular'
 		});
-		
-		/*
-		jQuery(obj).find(".jmb-dtp-body-edit-button").click(function(){
-			if(self.json){
-				self.parent.profileEdit.render();
-			}
-		});
-		*/
+
 		jQuery(obj).find(".jmb-dtp-footer-mail-button").click(function(){
 			if(self.json){
 				if(self.json.indiv.FacebookId == '0') {
@@ -178,6 +170,7 @@ DescendantTreeProfile.prototype = {
 		return '&nbsp;';
 	},
 	getAvatar:function(json){
+		/*
 		var fId = json.indiv.FacebookId;
 		var av = json.avatar;
 		if(av != null && av.FilePath != null){
@@ -187,6 +180,17 @@ DescendantTreeProfile.prototype = {
 			return '<img height="80px" width="72px" src="http://graph.facebook.com/'+fId+'/picture">';
 		}
 		return '&nbsp;';
+		*/
+		var fId = json.indiv.FacebookId;
+		var avatar = json.avatar;
+		if(avatar != null && avatar.FilePath != null){
+			return '<img width="72px" height="80px" src="'+avatar.FilePath+'">';
+		} else if(fId != '0'){
+			return '<img width="72px" height="80px" src="http://graph.facebook.com/'+fId+'/picture">';
+		} else {
+			var imgName = (json.indiv.Gender=="M")?'male.gif':'female.gif';
+			return '<img width="72px" height="80px" src="'+json.path+'/components/com_manager/modules/descendant_tree/imgs/'+imgName+'">';;
+		}
 	},
 	setColors:function(colors){
 		this.colors.male = colors['M'];
@@ -207,7 +211,6 @@ DescendantTreeProfile.prototype = {
 		this.setModal(true);
 		jQuery(self.editDiv).remove();
 		this._ajax('getPersonInfoJSON', id, function(response){
-			//var json = eval('('+response.responseText+')');
 			var json = jQuery.parseJSON(response.responseText);
 			var obj = self.body;
 			var ind = json.indiv;
@@ -219,51 +222,7 @@ DescendantTreeProfile.prototype = {
 			jQuery(obj).find('.jmb-dtp-body-info-relation').html(self.getRelation(ind));
 			jQuery(obj).find('.jmb-dtp-footer-info').html(self.getInfo(ind));
 			jQuery(obj).find('.jmb-profile-avatar').html(self.getAvatar(json));
-			
-			/*
-			var button = jQuery(obj).find(".jmb-dtp-body-edit-button");
-			self.parent.profileEdit.load({
-				button:button,
-				json:json,
-				xOffset: -190, 
-				yOffset: 5
-			}, function(e){
-				var dhxTree, renderType;
-				dhxTree = self.parent.dhxTree;
-				dhxTree.deleteChildItems('0');
-				dhxTree.deleteItem('0');
-				renderType = jQuery('#jmb_header_fam_line span.active').attr('type');
-				self.parent.loadTree(dhxTree, renderType);
-			});
-			*/
-			//edit profile
-			/*
-			var button = jQuery(obj).find(".jmb-dtp-body-edit-button");
-			var editDiv = self._editPerson(button, json);
-			self.editDiv = editDiv;
-			jQuery(self.parent.obj).find('.jmb-dtp-container').append(editDiv);
-			jQuery(editDiv).hide();
-			jQuery(button).bt({
-				positions: ['right'],
-				fill: '#F7F7F7', 
-				strokeStyle: '#B7B7B7', 
-				spikeLength: 40, 
-				spikeGirth: 10, 
-				padding: 8, 
-				cornerRadius: 0, 
-				trigger: 'none',
-				closeWhenOthersOpen: true,
-				offsetParent: document.body,
-				contentSelector: "jQuery('#"+json.indiv.Id+"-content')",
-				cssStyles: {
-					fontFamily: '"lucida grande",tahoma,verdana,arial,sans-serif', 
-					fontSize: '11px'
-				}
-			});
-			jQuery(button).click(function(){
-				jQuery(this).btOn();
-			})
-			*/
+			//edit profile button
 			var button = jQuery(obj).find(".jmb-dtp-body-edit-button");
 			self.profile.tooltip.render({
 				target: button,
