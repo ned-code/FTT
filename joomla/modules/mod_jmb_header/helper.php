@@ -75,7 +75,7 @@ class modJMBHeaderHelper
 	/**
 	*
 	*/
-	protected function getURL(&$facebook, &$session){
+	protected function getURL($facebook, $session){
 		$db =& JFactory::getDBO();
 		if(!$session){
 			$sql = "SELECT * FROM #__mb_categories WHERE name='login'";
@@ -151,7 +151,7 @@ class modJMBHeaderHelper
 		# get session
 		$session = $facebook->getSession();
 		# get redirect url
-		$url = self::getURL(&$facebook, &$session);
+		$url = self::getURL($facebook, $session);
 		# redirect
 		self::redirect($url);
 		return array('facebook' =>$facebook, 'session'=>$session);

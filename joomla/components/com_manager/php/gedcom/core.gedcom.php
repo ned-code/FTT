@@ -63,7 +63,7 @@
 
            // copy($_FILES["browse"]["tmp_name"],"tmp/".$_FILES["browse"]["name"]);
 
-            $parser = new GedcomParser(&$this);
+            $parser = new GedcomParser($this);
             if($ext == 'ged'||$ext == 'txt'){
                  $parser->Import($tempname,$filename);
                  

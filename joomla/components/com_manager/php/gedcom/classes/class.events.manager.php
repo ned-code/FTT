@@ -340,7 +340,7 @@ require_once('class.family.php');
         }
         public function getDescendantsEvents($id,  $lite=true){
             $array = array();
-            $this->core->individuals->getDescendants(&$array, $id);
+            $this->core->individuals->getDescendants($array, $id);
             $result = array();
             $index = 0;
             foreach($array as $k => $v){

@@ -539,24 +539,24 @@ class JMBThisMonth {
 		//Fill the array of families
 		foreach($families as $family){
 			if(!array_key_exists($family->Spouse->Id, $individs)){
-				$this->_getIndividsArray($family->Spouse->Id, &$individs);
+				$this->_getIndividsArray($family->Spouse->Id, $individs);
 			}
 		}
 
 		//Fill the array of children
 		foreach($children as $child){
 			if(!array_key_exists($child['id'], $individs)){
-				$this->_getIndividsArray($child['id'], &$individs);
+				$this->_getIndividsArray($child['id'], $individs);
 			}
 		}		
 		
 		//Fill the array of parents
 		if($parents != null){
 			if($parents['fatherID'] != null && !array_key_exists($parents['fatherID'], $individs)){
-				$this->_getIndividsArray($parents['fatherID'], &$individs);
+				$this->_getIndividsArray($parents['fatherID'], $individs);
 			}
 			if($parents['motherID'] != null && !array_key_exists($parents['motherID'], $individs)){
-				$this->_getIndividsArray($parents['motherID'], &$individs);
+				$this->_getIndividsArray($parents['motherID'], $individs);
 			}
 		}
 	}
@@ -619,9 +619,9 @@ class JMBThisMonth {
 	* @var $descendants array link of descedants(user sort by month of event)
 	*/
 	protected function _getEvents($month, &$individs, &$descendants){
-		$births = $this->_getArrayEventRecords(&$individs, &$descendants, 'BIRT', $month);
-		$unions = $this->_getArrayEventRecords(&$individs, &$descendants, 'MARR', $month);
-		$deaths = $this->_getArrayEventRecords(&$individs, &$descendants, 'DEAT', $month);
+		$births = $this->_getArrayEventRecords($individs, $descendants, 'BIRT', $month);
+		$unions = $this->_getArrayEventRecords($individs, $descendants, 'MARR', $month);
+		$deaths = $this->_getArrayEventRecords($individs, $descendants, 'DEAT', $month);
 		return array('b'=>$births,'u'=>$unions,'d'=>$deaths);
 	}
 	
@@ -700,12 +700,12 @@ class JMBThisMonth {
 		//get first parent descedants and sort array		
 		$individs = array();
 		$descendants = array();
-		$this->_getIndividsArray($firstParent, &$individs);
-		$events = $this->_getEvents($month, &$individs, &$descendants);
+		$this->_getIndividsArray($firstParent, $individs);
+		$events = $this->_getEvents($month, $individs, $descendants);
 		$this->settings['opt']['date'] = $this->getEarleastDate($events);
 		if($this->settings['split_event']['sort'] == 'true'){
 			if($sort != 'false'){ $this->_setSortTypeParams($sort); }
-			$this->_sort(&$events);
+			$this->_sort($events);
 		}
 		$this->settings['opt']['month'] = $month;
 		return json_encode(array('fmbUser'=>$fmbUser,'colors'=>$colors,'path'=>$path,'events'=>$events,'descedants'=>$descendants,'settings'=>$this->settings));

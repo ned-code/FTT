@@ -13,7 +13,7 @@ class Host {
 	*/
 	function __construct($type){		
             $this->modulesPath = JPATH_ROOT."/components/com_manager/modules/";
-            $this->gedcom = new Gedcom(&$this);
+            $this->gedcom = new Gedcom($this);
 	}
 	
 	/**

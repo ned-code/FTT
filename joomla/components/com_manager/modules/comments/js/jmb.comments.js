@@ -1,6 +1,6 @@
 function JMBComments(obj){
 	obj = jQuery('#'+obj);
-	var div = '<fb:comments href="thors.ru" num_posts="2" width="350"></fb:comments>';
+	var div = '<fb:comments num_posts="2" width="350"></fb:comments>';
 	jQuery(obj).append(div);
 	
 	FB.init({

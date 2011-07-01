@@ -267,9 +267,8 @@ class IndividualsList{
         function getDescendants(&$array, $id){
             $childs = $this->core->individuals->getChilds($id);
             foreach($childs as $child){
-                $array[] = $child;
-                $this->getDescendants(&$array, $child['id']);
-
+            	$array[] = $child;
+                $this->getDescendants($array, $child['id']);
             }
         }
         

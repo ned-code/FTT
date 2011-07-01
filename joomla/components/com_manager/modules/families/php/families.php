@@ -39,7 +39,7 @@ class Families {
 		$colors = $this->getColors();
 		$path = JURI::root(true);
 		$individs = array();
-		$this->_getIndividsArray($id, &$individs);
+		$this->_getIndividsArray($id, $individs);
 		return json_encode(array('fmbUser'=>$fmbUser,'firstParent'=>$firstParentId,'individs'=>$individs,'colors'=>$colors,'path'=>$path));
 	}
 	
@@ -83,24 +83,24 @@ class Families {
 		//Fill the array of families
 		foreach($families as $family){
 			if(!array_key_exists($family->Spouse->Id, $individs)){
-				$this->_getIndividsArray($family->Spouse->Id, &$individs);
+				$this->_getIndividsArray($family->Spouse->Id, $individs);
 			}
 		}
 
 		//Fill the array of children
 		foreach($children as $child){
 			if(!array_key_exists($child['id'], $individs)){
-				$this->_getIndividsArray($child['id'], &$individs);
+				$this->_getIndividsArray($child['id'], $individs);
 			}
 		}		
 		
 		//Fill the array of parents
 		if($parents != null){
 			if($parents['fatherID'] != null && !array_key_exists($parents['fatherID'], $individs)){
-				$this->_getIndividsArray($parents['fatherID'], &$individs);
+				$this->_getIndividsArray($parents['fatherID'], $individs);
 			}
 			if($parents['motherID'] != null && !array_key_exists($parents['motherID'], $individs)){
-				$this->_getIndividsArray($parents['motherID'], &$individs);
+				$this->_getIndividsArray($parents['motherID'], $individs);
 			}
 		}
 	}
