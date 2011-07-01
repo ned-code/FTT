@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<install type="component" version="1.5.14" method="upgrade">
+  <name>content_manager</name>
+  <title>Content Manager</title>
+  <description>system module</description>
+  <files>
+	<javascript>
+		<file>js/open.content.manager.js</file>
+		<file>js/layout.manipulator.js</file>
+		<file>js/content.manager.js</file>
+		<file>js/consctruct.js</file>
+		<file>js/action.manipulator.js</file>
+	</javascript>
+	<css>
+		<file>css/open.content.manager.css</file>
+		<file>css/layout.manipulator.css</file>
+		<file>css/content.manager.css</file>
+		<file>css/action.manipulator.css</file>
+	</css>
+ </files>
+
+
+</install>

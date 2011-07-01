@@ -1,0 +1,40 @@
+.qf-box {
+	font-size: 12px !important;
+	font-family: Helvetica,Arial,sans-serif !important;
+	border: 1px solid gray;
+	background: white;
+	margin: 5px;	
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-user-select:none;
+	-moz-user-select:none;
+	border-radius: 10px;
+	behavior: url(border-radius.htc);
+	height:120px;
+}
+
+.qf-header{
+	color:white;
+	background: gray;
+	font-size:18px;
+	line-height:30px;
+	text-align:center !important;
+	width: 121px;
+	height: 30px;
+}
+
+.qf-header{
+	position:relative;
+	top: 45px;
+	left: -30px;
+	-webkit-transform: rotate(270deg);
+	-moz-transform: rotate(270deg);
+	-o-transform: rotate(270deg);
+	transform: rotate(270deg);
+	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+}
+.qf-body {
+	position:relative;
+	top: -10px;
+	left: 60px;
+}

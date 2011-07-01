@@ -1,0 +1,3 @@
+function doClick(){
+	alert('click!');
+}

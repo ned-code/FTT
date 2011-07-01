@@ -1,0 +1,1 @@
+{"container":"delete_all","object":"JmbDelete"}

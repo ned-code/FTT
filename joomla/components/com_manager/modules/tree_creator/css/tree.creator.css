@@ -1,0 +1,36 @@
+.jmb-tree-creator-header{
+	font-size: 16px;
+	font-weight: bold;
+	margin: 5px;
+	text-align: center;
+}
+
+.jmb-tree-creator-fieldset fieldset{
+	border: 1px dotted #BABABA;
+	height: 100px;
+	margin-top: 100px;
+}
+
+.jmb-tree-creator-button{
+	-moz-border-radius: 10px 10px 10px 10px;
+	background: none repeat scroll 0 0 #3A43FF;
+	color: white;
+	cursor: pointer;
+	height: 45px;
+	line-height: 40px;
+	margin-left: 70px;
+	text-align: center;
+	width: 210px;
+}
+
+.jmb-tree-creator-buttons {
+	margin: 10px;
+}
+
+.jmb-tree-creator-buttons span{
+	border: 1px solid #3A43FF;
+	cursor: pointer;
+	margin: 3px;
+	padding: 3px;
+}
+

@@ -1,0 +1,224 @@
+/** EDIT\VIEW BUTTONS */
+.jmb-dialog-interface-button {
+	color: #909293;
+	font-family: tahoma;
+	font-size: 14px;
+	position: absolute;
+	right: 50px;
+	top: 8px;
+}
+.jmb-dialog-interface-button div {
+	background: none repeat scroll 0 0 #DDDEDE;
+	border: 1px solid #EFEFEF;
+	border-radius: 3px 3px 3px 3px;
+	cursor: pointer;
+	display: inline-block;
+	margin-left: 5px;
+	padding: 3px;
+	width: 60px;
+}
+.jmb-dialog-interface-button div.active {
+	background: none repeat scroll 0 0 #F8A13B;
+	border: 1px solid #FFB45C;
+	color: white;
+}
+
+.jmb-dialog-interface-button span {
+
+}
+
+/** MAIN */
+.jmb-dialog-profile-menu-container{
+	border-right: 2px solid gray;
+	font-family: tahoma;
+	font-weight: bold;
+}
+.jmb-dialog-profile-menu-item-parent{
+	background: none repeat scroll 0 0 #2D2D2D;
+	color: white;
+	font-size: 16px;
+	margin: 5px;
+	height: 24px;
+	line-height: 24px;
+	cursor: pointer;
+	text-align:center
+}
+.jmb-dialog-profile-menu-item-child{
+	background: none repeat scroll 0 0 #8D8D8D;
+	font-size: 14px;
+	height: 24px;
+	margin: 5px;
+	line-height: 24px;
+	cursor: pointer;
+	text-align:left;
+}
+.jmb-dialog-profile-menu-item-child:hover{
+	background: none no-repeat scroll 0 0 #aaaaaa;
+}
+.jmb-dialog-profile-menu-item-child.active {
+	background: none no-repeat scroll 0 0 yellow;
+}
+.jmb-dialog-profile-menu-item-child span{
+	margin-left:20px;
+}
+.jmb-dialog-profile-content{
+	
+}
+/* Basic */
+.jmb-dialog-profile-content-basic {
+	background: none repeat scroll 0 0 #9A7423;
+	border-radius: 5px 5px 5px 5px;
+	font-family: Tahoma;	
+	font-size: 12px;
+	margin: 10px;
+	padding: 10px;
+}
+.jmb-dialog-profile-content-basic-body{
+	font-family: Tahoma !important;
+	font-size: 12px !important;
+	background: none repeat scroll 0 0 #F1E4B0;
+	border: 1px solid #473E1B;
+	border-radius: 5px 5px 5px 5px;
+	margin-top: 30px;
+	padding-bottom: 10px;
+}
+
+.jmb-dialog-profile-content-basic-body table {
+	margin-top: 20px;
+}
+.jmb-dialog-profile-content-basic-body table span{
+	font-weight:bold;
+}
+.jmb-dialog-profile-content-basic-body table input[type="text"]{
+	border: 1px solid gray;
+	font-family: tahoma;
+	font-size: 12px;
+	height: 16px;
+	margin: 3px;
+	width: 210px;
+}
+.jmb-dialog-profile-content-basic-body table input[type="text"][name="town"]{
+	width:101px;
+}
+.jmb-dialog-profile-content-basic-body table input[type="text"][name="state"]{
+	width:101px;
+}
+.jmb-dialog-profile-content-basic-body table input[type="text"][name="country"]{
+	width:210px;
+}
+.jmb-dialog-profile-content-basic-body table select{
+	border: 1px solid #999999;
+	margin: 3px;
+	padding: 1px;
+	width: 80px;
+}
+/* Unions */
+.jmb-dialog-profile-content-unions{
+	background: none repeat scroll 0 0 #9A7423;
+	border-radius: 5px 5px 5px 5px;
+	font-family: Tahoma;	
+	font-size: 12px;
+	margin: 10px;
+	padding: 10px;
+	width: 500px;
+}
+.jmb-dialog-profile-content-union{
+	margin-top:10px;
+}
+.jmb-dialog-profile-content-unions form {
+	background: none repeat scroll 0 0 #F1E4B0;
+	border: 1px solid #473E1B;
+	border-radius: 5px 5px 5px 5px;
+	margin-left: 5px;
+	margin-right: 5px;
+	padding-left: 10px;
+}
+.jmb-dialog-profile-content-unions  table {
+	 margin-bottom: 10px;
+	 margin-top: 10px;
+}
+.jmb-dialog-profile-content-unions  table span{
+	font-weight:bold;
+}
+.jmb-dialog-profile-content-unions  table input[type="text"] {
+	border: 1px solid gray;
+	font-family: tahoma;
+	font-size: 12px;
+	height: 16px;
+	margin: 3px;
+}
+.jmb-dialog-profile-content-unions  table select {
+	border: 1px solid #999999;
+	margin: 3px;
+	padding: 1px;
+	width: 80px;
+}
+.jmb-dialog-profile-content-unions-header{
+	height: 30px;
+	margin-top:5px;
+}
+.jmb-dialog-profile-content-unions-header span{
+	margin-left:10px;
+	margin-right:10px;
+	font-size:14px;
+	font-family:Tahoma;
+	font-weight:bold;
+}
+.jmb-dialog-profile-content-unions-header input{
+	border: 2px solid black !important;
+	border-radius: 5px 5px 5px 5px;
+	font-family: Tahoma;
+	font-size: 14px;
+	font-weight: bold;
+	margin: 3px;
+	width: 65px !important;
+	cursor:pointer;
+}
+.jmb-dialog-profile-content-unions-body{
+	margin: 5px;
+}
+.jmb-dialog-profile-content-unions-part{}
+.jmb-dialog-profile-content-unions-person-info{
+	font-size: 12px;
+	font-weight: bold;
+	margin: 5px;
+	padding: 3px;
+	text-align: left;
+}
+.jmb-dialog-profile-content-unions-person-info-name{}
+.jmb-dialog-profile-content-unions-person-info-birthdate{}
+.jmb-dialog-profile-content-unions-person-info-birthplace{}
+
+.jmb-dialog-profile-content-unions-image{
+	margin-left: -10px;
+}
+.jmb-dialog-profile-content-unions-image table{
+	margin: 0;
+	padding: 0;
+}
+.jmb-dialog-profile-content-unions-image div{
+	border: 3px solid #F8A13B;
+	border-radius: 3px 3px 3px 3px;
+	margin-left: 10px;
+}
+
+
+.jmb-dialog-profile-content-unions-add{}
+.jmb-dialog-profile-content-unions-add input{
+	border: 1px solid #000000;
+	border-radius: 5px 5px 5px 5px;
+	cursor: pointer;
+	font-family: Tahoma;
+	font-size: 12px;
+	font-weight: bold;
+	padding: 5px;	
+}
+
+.jmb-dialog-profile-content-union.add table input[type="text"]{
+	border: 1px solid gray;
+	font-family: tahoma;
+	font-size: 12px;
+	height: 16px;
+	margin: 3px;
+	width: 170px;
+}

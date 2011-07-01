@@ -1,0 +1,200 @@
+.jmb-profile-tooltip-container{
+	margin-left: 10px;
+	margin-right: 10px;
+	color:#2945c0;
+}
+.jmb-profile-tooltip-container fieldset{
+	margin:0;
+	padding:0;
+}
+.jmb-profile-tooltip-button-edit{
+	background: url("../image/profile.gif") no-repeat scroll 0 0 transparent;
+	cursor:pointer;
+	margin-top:10px;
+}
+.jmb-profile-tooltip-button-edit span {
+	margin-left: 20px;
+}
+.jmb-profile-tooltip-fieldset{
+	margin-top: 10px;
+}
+.jmb-profile-tooltip-fieldset legend{
+	color: black;
+}
+.jmb-profile-tooltip-fieldset div{
+	background: url("../image/add.gif") no-repeat scroll 0 0 transparent;
+	cursor:pointer;
+	height: 14px;
+   	margin: 3px;
+}
+.jmb-profile-tooltip-fieldset div span{
+	margin-left: 20px;
+}
+.jmb-profile-tooltip-parent{}
+.jmb-profile-tooltip-spouse{}
+.jmb-profile-tooltip-bs{}
+.jmb-profile-tooltip-child{}
+
+.jmb-profile-tooltip-send{
+	cursor:pointer;
+	margin-top:10px;
+}
+.jmb-profile-tooltip-send tr{
+	margin-top: 5px;
+}
+.jmb-profile-tooltip-send-img{
+	background: url("../image/email.jpg") no-repeat scroll 0 0 transparent;
+	height: 14px;
+	margin: 3px;
+	width: 14px;
+}
+.jmb-profile-tooltip-options{
+	height:40px;
+	margin-top:10px;
+	margin-left: 3px;
+}
+.jmb-profile-tooltip-options span[type="title"]{
+	background: url("../image/gear.jpg") no-repeat scroll 0 0 transparent;
+	padding-left:20px;
+	cursor:pointer;
+}
+.jmb-profile-tooltip-options table{
+	margin-left:15px;
+	
+}
+.jmb-profile-tooltip-options-delete {
+	height:14px;
+	margin-top: 5px;
+}
+.jmb-profile-tooltip-options-delete span[type="delete"]{
+	background: url("../image/remove.gif") no-repeat scroll 0 0 transparent;
+	padding-left:20px;
+	padding-bottom: 1px;
+	cursor:pointer;
+}
+
+.jmb-profile-tooltip-close {
+	cursor:pointer;
+	position: absolute;
+	top: 5px;
+	right: 5px;
+}
+
+.jmb-profile-tooltip-close a {
+	text-decoration:none;
+}
+
+.jmb-profile-tooltip-close a div {
+	background: url("../image/close.gif") no-repeat scroll 0 0 transparent;
+	height: 12px;
+	width: 12px;
+}
+
+.jmb-profile-mini-container{
+	background: none repeat scroll 0 0 #F1E4B0;
+	padding: 5px;
+	width:400px;
+	height:200px;
+	margin:5px;
+}
+.jmb-profile-mini-switch{
+	color: Navy;
+	cursor: pointer;
+    	font-weight: bold;
+    	position: absolute;
+    	right: 10px;
+    	top: 10px;
+}
+.jmb-profile-mini-info {
+	border-bottom: 2px solid gray;
+	height: 110px;
+}
+.jmb-profile-mini-info table {
+	height:100px;
+	width:100%;
+	margin-top: 5px;
+}
+.jmb-profile-mini-photo{
+	width: 100px;
+}
+.jmb-profile-mini-photo div{
+	border: 2px solid #000000;
+	height: 90px;
+	margin-left: 5px;
+	width: 81px;
+}
+
+.jmb-profile-mini-info-body{
+	font-family: Tahoma;
+	font-size: 12px;
+    	font-weight: bold;
+}
+.jmb-profile-mini-info-body div {
+	margin: 5px;
+}
+.jmb-profile-mini-info-body span {
+	color:gray;
+}
+.jmb-profile-mini-images{
+	width:400px;
+	height:92px;
+	overflow-x: auto;
+	overflow-y: hidden;
+}
+
+.jmb-profile-mini-images ul {
+	margin: 0 !important; 
+	padding: 3px 0 0 !important;
+}
+.jmb-profile-mini-images li{
+	display: inline !important;
+}
+.jmb-profile-mini-images img {
+	border: 1px solid #000000;
+	cursor: pointer;
+	margin-left: 3px;
+}
+
+/** 
+CONFIRM
+*/
+.jmb-confirm{
+	background: none repeat scroll 0 0 #F1E4B0;
+	border: 1px solid #000000;
+	border-radius: 5px 5px 5px 5px;
+	font-family: Tahoma;
+	font-size: 12px;
+	position: absolute;
+	width: 320px;
+}
+.jmb-confirm-header{
+	font-weight: bold;
+	margin: 5px;
+	padding: 3px;
+}
+.jmb-confirm-body{
+	margin: 10px 5px;
+	padding: 3px;
+}
+.jmb-confirm-button{
+	background: none repeat scroll 0 0 white;
+	border: 1px solid gray;
+    	border-radius: 5px 5px 5px 5px;
+    	cursor: pointer;
+    	font-size: 11px;
+    	margin: 3px;
+    	padding: 3px;
+}
+.jmb-confirm-button:hover{
+	background: none repeat scroll 0 0 #C3C3C3;
+}
+
+.jmb-confirm-close{
+	background: url("../image/confirm-close.png") no-repeat scroll 0 0 transparent;
+	cursor: pointer;
+	height: 42px;
+	position: absolute;
+	right: -21px;
+	top: -21px;
+	width: 42px;
+}

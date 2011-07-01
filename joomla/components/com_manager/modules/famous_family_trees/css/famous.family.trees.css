@@ -1,0 +1,23 @@
+.jmb-famous-family-tree-header{
+	font-size: 16px;
+	font-weight: bold;
+	margin: 5px;
+	text-align: center;
+}
+
+.jmb-famous-family-tree-body{
+
+}
+
+.jmb-famous-family-tree-body div{
+	border: 1px solid #BABABA;
+	cursor: pointer;
+	font-size: 14px;
+	height: 50px;
+	margin: 10px;
+	text-align: center;
+}
+
+.jmb-famous-family-tree-body div:hover{
+	background: #BABABA;
+}

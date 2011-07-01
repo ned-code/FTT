@@ -1,0 +1,18 @@
+DROP TABLE IF EXISTS `#__mb_content`;
+DROP TABLE IF EXISTS `#__mb_dates`;
+DROP TABLE IF EXISTS `#__mb_families`;
+DROP TABLE IF EXISTS `#__mb_individuals`;
+DROP TABLE IF EXISTS `#__mb_link`;
+DROP TABLE IF EXISTS `#__mb_media`;
+DROP TABLE IF EXISTS `#__mb_media_mapping`;
+DROP TABLE IF EXISTS `#__mb_modules`;
+DROP TABLE IF EXISTS `#__mb_modulesgrid`;
+DROP TABLE IF EXISTS `#__mb_name`;
+DROP TABLE IF EXISTS `#__mb_other`;
+DROP TABLE IF EXISTS `#__mb_pathinfo`;
+DROP TABLE IF EXISTS `#__mb_placelinks`;
+DROP TABLE IF EXISTS `#__mb_places`;
+DROP TABLE IF EXISTS `#__mb_settings`;
+DROP TABLE IF EXISTS `#__mb_sources`;
+DROP TABLE IF EXISTS `#__mb_system_settings`;
+DELETE FROM `#__extensions` WHERE `name` = 'JMBPlugin';
