@@ -11,12 +11,17 @@ function Families(obj){
 	this.viewFlag = false;
 	this.profile = new JMBProfile();
 	
-	this._ajax('getFamilies', 'mother', function(res){
+	var params =  (jQuery(storage.header.activeButton).text()=='My Father')?'father':'mother';
+	this._ajax('getFamilies', params, function(res){
 		var json = jQuery.parseJSON(res.responseText);
 		self.json = json;
 		var obj = json.individs[json.firstParent];
 		self.render(obj);
 	});
+	
+	storage.tabs.click = function(object){
+		self.profile.cleaner();
+	}
 }
 Families.prototype = {
 	_ajax:function(func, params, callback){

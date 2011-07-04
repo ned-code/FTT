@@ -145,13 +145,11 @@ function JMBThisMonth(obj){
 	self.load(this._getThisMonth(), 'false', function(json){
 		self.render(json);
 	});
-	jQuery('ul.jmbtabs li').each(function(i,e){
-		jQuery(e).click(function(){
-			if(!jQuery(this).hasClass('active')){
-				self.profile.tooltip.cleaner();
-			}
-		})
-	})
+	storage.tabs.click = function(object){
+		if(!jQuery(this).hasClass('active')){
+			self.profile.tooltip.cleaner();
+		}
+	}
 }
 
 JMBThisMonth.prototype = {

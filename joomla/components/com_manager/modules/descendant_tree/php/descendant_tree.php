@@ -66,7 +66,7 @@ class DescendantTree {
 		 	  		$xml .= "]]></itemtext>"; 
 		 	  	  }
 		 	  		foreach($childs as $child){
-		 	  			$this->getNextNode(&$xml, $child['id']);
+		 	  			$this->getNextNode($xml, $child['id']);
 		 	  		}
 		 	  	$xml .= "</item>";
 		 	 }
@@ -78,7 +78,7 @@ class DescendantTree {
 	*/
 	protected function getTreeItems(&$xml, $index, $render_type){
 		$firstParent = $this->host->gedcom->individuals->getFirstParent($index, $render_type, true);
-		$xml .= $this->getNextNode(&$xml, $firstParent);
+		$xml .= $this->getNextNode($xml, $firstParent);
 	}
 	
 	/**
@@ -235,7 +235,7 @@ class DescendantTree {
 		header("Content-type: text/xml");
 		$xml .='<?xml version="1.0" encoding="utf-8"?>';
 		$xml .= '<tree id="0">';		
-			$xml .= $this->getTreeItems(&$xml, $index, $render_type);
+			$xml .= $this->getTreeItems($xml, $index, $render_type);
 		$xml .= '</tree>';
 		return $xml;
 		

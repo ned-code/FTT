@@ -17,19 +17,13 @@ function DescendantTreeProfile(parent){
 	this.editDiv = null;
 	this.profile = new JMBProfile();
 	
-	jQuery('.jmb_header_fam_line').find('span').each(function(index,element){
-		if(jQuery(element).hasClass('active')) self.renderType = jQuery(element).attr('type');
-		jQuery(element).bind('click', function(){
-			if(!jQuery(this).attr('type') != self.renderType){
-				var dhxTree = self.parent.dhxTree;
-				dhxTree.deleteChildItems('0');
-				dhxTree.deleteItem('0');
-				self.parent.loadTree(dhxTree, jQuery(this).attr('type'))
-				self.renderType = jQuery(this).attr('type');
-			}	
-		});
-	});
-	_DESCEDANTS_TREE = this;
+	storage.header.click = function(object){
+		var dhxTree = self.parent.dhxTree;
+		dhxTree.deleteChildItems('0');
+		dhxTree.deleteItem('0');
+		self.parent.loadTree(dhxTree, jQuery(storage.header.activeButton).text());
+		self.profile.tooltip.cleaner();
+	}
 }
 
 DescendantTreeProfile.prototype = {
