@@ -8,6 +8,17 @@
  */
 // No direct access.
 defined('_JEXEC') or die;
+//functions
+function checkLocation(){
+	$r = $_SERVER["HTTP_REFERER"];
+	if($r!=null){
+		$pUrl = parse_url($r);
+		if($pUrl['host']=='apps.facebook.com'){
+			return true;
+		}
+	} 
+	return false; 
+}
 
 // facebook params
 $fb_app_id = '100001614066938';
@@ -19,8 +30,15 @@ $og_url = 'http://www.pav.dev-cop.com';
 $og_img = '';
 $og_site_name = 'FamilyTree-Top';
 
+$url_fb = 'http://apps.facebook.com/fmybranches/';
+$url_fmb = 'http://www.pav.dev-cop.com';
 
+// joomla params
 $app                = JFactory::getApplication();
+
+//custom params
+$inIFrame = checkLocation();
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->language; ?>" lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>" >
@@ -44,21 +62,26 @@ $app                = JFactory::getApplication();
                 <script type="text/javascript" src="<?php echo $this->baseurl ?>/templates/fmb/javascript/fmb.js"></script>
 	</head>
 	<body>
-		<div class="content">
+		<div class="content" style="<?php if($inIFrame): ?>max-width:760px;<?php else: ?>max-width:1020px;<?php endif; ?>">
 			<div class="header">
 				<jdoc:include type="modules" name="header" />
 			</div>
 			<div class="main">
 				<table>
 					<tr>
-						<td><div id="fb-root"></div><jdoc:include type="component" /></td>
-						<td><jdoc:include type="modules" name="right" /></td>
+						<td valign="top" style="width:760px;"><div id="fb-root"></div><jdoc:include type="component" /></td>
+						<?php if(!$inIFrame): ?>
+							<td valign="top"><font color="red"><b>A</b></font><jdoc:include type="modules" name="right" /></td>
+						<?php endif; ?>
 					</tr>
 				</table>
 			</div>
-			<div class="footer">
-				<jdoc:include type="modules" name="footer" />
-			</div>
+			<?php if(!$inIFrame): ?>
+				<div class="footer">
+					<font color="red"><b>B</b></font>
+					<jdoc:include type="modules" name="footer" />
+				</div>
+			<?php endif; ?>
 		</div>
 	</body>
 </html>

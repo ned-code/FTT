@@ -1,3 +1,4 @@
+//globl object storage
 storage = {};
 storage.url = "components/com_manager/";
 storage.session = id;
@@ -6,6 +7,12 @@ storage.fb.appId = "184962764872486";
 storage.fb.status = true;
 storage.fb.cookie = true;
 storage.fb.xfbml = true;
+storage.header = {};
+storage.header.activeButton = null;
+storage.header.click = function(object){ return false; };
+storage.tabs = {};
+storage.tabs.activeTab = null;
+storage.tabs.click = function(object){ return false; };
 
 var date = new Date();
 var id =  Math.floor(date.getTime() /1000);
@@ -127,6 +134,8 @@ core.loadTabs = function(pages){
 						jQuery(divs).fadeIn(); //Fade in the active ID content
 					});
 				});
+				storage.tabs.activeTab = this;
+				storage.tabs.click(this);	
 				return false;
 			});	
 			

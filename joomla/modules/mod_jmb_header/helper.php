@@ -30,22 +30,6 @@ class modJMBHeaderHelper
 	/**
 	*
 	*/
-	public function getLogin($fid){
-		$db =& JFactory::getDBO();
-		$sql = "SELECT t_id FROM #__mb_family_tree WHERE f_id='".$fid."' AND type='OWNER'";
-		$db->setQuery($sql);
-		$result = $db->loadAssocList();
-		if(sizeof($result)>0){ 
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-	
-	/**
-	*
-	*/
 	protected function getCurrentURL(){
 		$view = (isset($_REQUEST['view']))?$_REQUEST['view']:'';
 		$ids = (isset($_REQUEST['id']))?$_REQUEST['id']:'';
@@ -131,7 +115,7 @@ class modJMBHeaderHelper
 		if($url === $currentURL){ return 0; }
 		header("Location: ".$url);
 	}
-
+	
 	/*
 	* PUBLIC FUNCTIONS
 	*/
@@ -157,6 +141,42 @@ class modJMBHeaderHelper
 		return array('facebook' =>$facebook, 'session'=>$session);
 	}
 
+	/**
+	*
+	*/
+	public function getLogin($fid){
+		$db =& JFactory::getDBO();
+		$sql = "SELECT t_id FROM #__mb_family_tree WHERE f_id='".$fid."' AND type='OWNER'";
+		$db->setQuery($sql);
+		$result = $db->loadAssocList();
+		if(sizeof($result)>0){ 
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 	
+	/**
+	*
+	*/
+	public function checkLocation(){
+		$r = $_SERVER["HTTP_REFERER"];
+		if($r!=null){
+			$pUrl = parse_url($r);
+			if($pUrl['host']=='apps.facebook.com'){
+				return true;
+			}
+		} 
+		return false; 
+	}
+	
+	/**
+	*
+	*/
+	public function getAvatar($user_profile){
+		$id = $user_profile['id'];
+		return "http://graph.facebook.com/".$id."/picture";
+	}
 	
 }
