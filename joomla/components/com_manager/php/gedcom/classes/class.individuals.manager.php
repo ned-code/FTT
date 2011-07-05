@@ -375,7 +375,6 @@ class IndividualsList{
         
         /**
         *
-        *
         */
         function getFirstParent($id, $line=false, $first=false){
         	$parents = $this->getParents($id);
@@ -398,7 +397,7 @@ class IndividualsList{
         */
         function getParents($id){
             $db =& JFactory::getDBO();
-
+            /*
             $req = "SELECT father.n_id AS fatherID, father.n_givn AS fatherG, father.n_surname AS fatherS, mother.n_id AS motherID, mother.n_givn AS motherG, mother.n_surname AS motherS, #__mb_link.l_from as familyId, #__mb_dates.d_day as marriageDay, #__mb_dates.d_mon as marriageMonth, #__mb_dates.d_year as marriageYear
                         FROM #__mb_link
                         LEFT JOIN #__mb_link AS fatherlink ON #__mb_link.l_from = fatherlink.l_from
@@ -410,6 +409,17 @@ class IndividualsList{
                         LEFT JOIN #__mb_dates ON (#__mb_dates.d_gid = #__mb_link.l_from AND #__mb_dates.d_fact='MARR')
                         WHERE #__mb_link.l_type = 'CHIL'
                         AND #__mb_link.l_to =  '".$id."'";
+                        */
+            $req = "SELECT	family.f_id AS familyId,
+            			family.f_husb AS fatherID, 
+            			family.f_wife AS motherID,
+            			date.d_day AS marriageDay,
+            			date.d_mon AS marriageMonth,
+            			date.d_year AS marriageYear
+            	FROM jos_mb_link
+            	LEFT JOIN jos_mb_families AS family ON jos_mb_link.l_from = family.f_id
+            	LEFT JOIN jos_mb_dates AS date ON ( family.f_id = date.d_gid AND date.d_fact = 'MARR' )
+            	WHERE jos_mb_link.l_to = '".$id."' AND jos_mb_link.l_type = 'CHIL'";
             $db->setQuery($req);
          
            $rows = $db->loadAssocList();

@@ -337,19 +337,29 @@ require_once 'class.data.php';
         */
         function getPersonsFamilies($id, $lite=false){
                 $db =& JFactory::getDBO();
-                $req = 'SELECT #__mb_families.f_id AS family_id, #__mb_dates.d_day AS
-                    day, #__mb_dates.d_mon AS
-                    month, #__mb_dates.d_year AS year, #__mb_dates.d_fact AS
-                    type , husband.n_id AS husband_id, husband.n_givn AS husband_givenname, husband.n_surname AS husband_surname, wife.n_id AS wife_id, wife.n_givn AS wife_givenname, wife.n_surname AS wife_surname
-                    FROM #__mb_families
+                /*
+                $req = 'SELECT	#__mb_families.f_id AS family_id,
+                		#__mb_dates.d_day AS day,
+                		#__mb_dates.d_mon AS month,
+                		#__mb_dates.d_year AS year,
+                		#__mb_dates.d_fact AS type ,
+                		husband.n_id AS husband_id,
+                		husband.n_givn AS husband_givenname,
+                		husband.n_surname AS husband_surname,
+                		wife.n_id AS wife_id,
+                		wife.n_givn AS wife_givenname,
+                		wife.n_surname AS wife_surname
+                	FROM #__mb_families
+                	LEFT JOIN #__mb_dates ON #__mb_families.f_id = #__mb_dates.d_gid
+                	LEFT JOIN #__mb_name AS husband ON husband.n_id = #__mb_families.f_husb
+                	LEFT JOIN #__mb_name AS wife ON wife.n_id = #__mb_families.f_wife
 
-
-
-                   LEFT JOIN #__mb_dates ON #__mb_families.f_id = #__mb_dates.d_gid
-                   LEFT JOIN #__mb_name AS husband ON husband.n_id = #__mb_families.f_husb
-                    LEFT JOIN #__mb_name AS wife ON wife.n_id = #__mb_families.f_wife
-
-                    WHERE #__mb_families.f_husb = "'.$id.'" OR #__mb_families.f_wife = "'.$id.'"';
+                	WHERE #__mb_families.f_husb = "'.$id.'" OR #__mb_families.f_wife = "'.$id.'"
+                	GROUP BY jos_mb_families.f_id';
+                */
+                $req = 'SELECT #__mb_families.f_id AS family_id, #__mb_families.f_husb AS husband_id, #__mb_families.f_wife AS wife_id FROM #__mb_families
+                	WHERE #__mb_families.f_husb = "'.$id.'" OR #__mb_families.f_wife = "'.$id.'"
+                	GROUP BY #__mb_families.f_id';
                 $db->setQuery($req);
 
                 $rows = $db->loadAssocList();

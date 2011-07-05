@@ -71,17 +71,12 @@ $inIFrame = checkLocation();
 					<tr>
 						<td valign="top" style="width:760px;"><div id="fb-root"></div><jdoc:include type="component" /></td>
 						<?php if(!$inIFrame): ?>
-							<td valign="top"><font color="red"><b>A</b></font><jdoc:include type="modules" name="right" /></td>
+							<td valign="top"><jdoc:include type="modules" name="right" /></td>
 						<?php endif; ?>
 					</tr>
 				</table>
 			</div>
-			<?php if($inIFrame): ?>
-				<div class="footer">
-					<font color="red"><b>B</b></font>
-					<jdoc:include type="modules" name="footer" />
-				</div>
-			<?php endif; ?>
+			<?php if($inIFrame): ?><div class="footer"><jdoc:include type="modules" name="footer" /></div><?php endif; ?>
 		</div>
 	</body>
 </html>
