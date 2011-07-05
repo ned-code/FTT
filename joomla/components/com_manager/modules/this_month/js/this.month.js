@@ -145,11 +145,11 @@ function JMBThisMonth(obj){
 	self.load(this._getThisMonth(), 'false', function(json){
 		self.render(json);
 	});
-	storage.tabs.click = function(object){
-		if(!jQuery(this).hasClass('active')){
-			self.profile.tooltip.cleaner();
-		}
-	}
+	
+	storage.addEvent(storage.tabs.clickPull, function(object){
+		self.profile.cleaner();
+		storage.tabs.cleaner();
+	});
 }
 
 JMBThisMonth.prototype = {
@@ -333,6 +333,7 @@ JMBThisMonth.prototype = {
 		//events
 		jQuery(table).find('.jmb-this-month-content .person font').each(function(i,e){
 			jQuery(e).click(function(){
+				self.profile.tooltip.cleaner();
 				self.profile.tooltip.render({
 					target:jQuery(e).parent(),
 					type:'mini',

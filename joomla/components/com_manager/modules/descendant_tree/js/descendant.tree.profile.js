@@ -16,14 +16,7 @@ function DescendantTreeProfile(parent){
 	this.renderType = null;
 	this.editDiv = null;
 	this.profile = new JMBProfile();
-	
-	storage.header.click = function(object){
-		var dhxTree = self.parent.dhxTree;
-		dhxTree.deleteChildItems('0');
-		dhxTree.deleteItem('0');
-		self.parent.loadTree(dhxTree, jQuery(storage.header.activeButton).text());
-		self.profile.tooltip.cleaner();
-	}
+	this._headerEvent();
 }
 
 DescendantTreeProfile.prototype = {
@@ -31,6 +24,21 @@ DescendantTreeProfile.prototype = {
 		host.callMethod("descendant_tree", "DescendantTree", func, params, function(res){
 				callback(res);
 		})
+	},
+	_headerEvent:function(){
+		var self = this;
+		storage.addEvent(storage.header.clickPull, function(object){
+			var dhxTree = self.parent.dhxTree;
+			dhxTree.deleteChildItems('0');
+			dhxTree.deleteItem('0');
+			self.parent.loadTree(dhxTree, jQuery(storage.header.activeButton).text());
+			self.profile.tooltip.cleaner();
+		})
+		//when click tabs;
+		storage.addEvent(storage.tabs.clickPull, function(object){
+			self.profile.cleaner();
+			storage.tabs.cleaner();
+		});
 	},
 	createDiv:function(parent){
 		var self = this;
@@ -164,17 +172,6 @@ DescendantTreeProfile.prototype = {
 		return '&nbsp;';
 	},
 	getAvatar:function(json){
-		/*
-		var fId = json.indiv.FacebookId;
-		var av = json.avatar;
-		if(av != null && av.FilePath != null){
-			return '<img height="80px" width="72px" src="'+av.FilePath+'">';
-		}
-		else if(fId != '0'){
-			return '<img height="80px" width="72px" src="http://graph.facebook.com/'+fId+'/picture">';
-		}
-		return '&nbsp;';
-		*/
 		var fId = json.indiv.FacebookId;
 		var avatar = json.avatar;
 		if(avatar != null && avatar.FilePath != null){
@@ -218,6 +215,7 @@ DescendantTreeProfile.prototype = {
 			jQuery(obj).find('.jmb-profile-avatar').html(self.getAvatar(json));
 			//edit profile button
 			var button = jQuery(obj).find(".jmb-dtp-body-edit-button");
+			self.profile.tooltip.cleaner();
 			self.profile.tooltip.render({
 				target: button,
 				type: 'tooltip',

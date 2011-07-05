@@ -76,7 +76,7 @@ $inIFrame = checkLocation();
 					</tr>
 				</table>
 			</div>
-			<?php if(!$inIFrame): ?>
+			<?php if($inIFrame): ?>
 				<div class="footer">
 					<font color="red"><b>B</b></font>
 					<jdoc:include type="modules" name="footer" />

@@ -1,5 +1,28 @@
 //globl object storage
 storage = {};
+//function
+storage.addEvent = function(pull, func){
+	pull[pull.length] = {};
+	pull[pull.length].click = func;
+	pull.length++;
+}
+storage.createPull = function(o){
+	o.clickPull = {}
+	o.clickPull.length = 0;
+	o.click = function(object){ 
+		for(var i=0;i<o.clickPull.length;i++){
+			o.clickPull[i].click(object);
+		}
+	}	
+}
+storage.clearPull = function(o){
+	for(var i=0;i<o.clickPull.length;i++){
+		delete o.clickPull[i];
+	}	
+	o.clickPull.length = 0;
+}
+
+//global varning
 storage.url = "components/com_manager/";
 storage.session = id;
 storage.fb = {};
@@ -7,13 +30,21 @@ storage.fb.appId = "184962764872486";
 storage.fb.status = true;
 storage.fb.cookie = true;
 storage.fb.xfbml = true;
+//header
 storage.header = {};
 storage.header.activeButton = null;
-storage.header.click = function(object){ return false; };
+storage.createPull(storage.header);
+//tabs
 storage.tabs = {};
 storage.tabs.activeTab = null;
-storage.tabs.click = function(object){ return false; };
+storage.createPull(storage.tabs);
+storage.tabs.cleaner = function(){
+	storage.clearPull(storage.tabs);
+	storage.clearPull(storage.header);
+}
 
+
+//core object
 var date = new Date();
 var id =  Math.floor(date.getTime() /1000);
 var core = {};
@@ -35,7 +66,6 @@ core.loadPage = function(div, id, layout, callback){
                 complete : function (req, err) {
                     var string = jQuery.trim(req.responseText);
                     if(string != ""){
-                       //var obj = eval( '(' + string + ')' );
                        	var obj = jQuery.parseJSON(string)
                         var manager = new MyBranchesManager();
                         manager.renderPage(div, obj);

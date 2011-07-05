@@ -47,7 +47,7 @@ class Families {
 		$indiv = $this->host->gedcom->individuals->get($id);
 		$parents = $this->host->gedcom->individuals->getParents($id);
 		$children = $this->host->gedcom->individuals->getChilds($id);
-		$families = $this->host->gedcom->families->getPersonFamilies($id);
+		$families = $this->host->gedcom->families->getPersonsFamilies($id, true);
 		$spouses = array();	
 		foreach($families as $family){
 			$famevent = $this->host->gedcom->events->getFamilyEvents($family->Id);

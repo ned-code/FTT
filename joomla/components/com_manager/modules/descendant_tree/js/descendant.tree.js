@@ -41,14 +41,12 @@ function DescendantTree(obj){
                 	}
                 });
 		jQuery('div[name="descendant-node"]').each(function(index, element){
-			var flag = jQuery(element).attr('user');
-			if(flag == 'true'){
-				self.click(element);
-			}
 			jQuery(element).click(function(){
 				self.click(element);
 			});
 		});
+		var user = jQuery('[name="descendant-node"][user="true"]');
+		jQuery(user[0]).click();
 	});
 }
 

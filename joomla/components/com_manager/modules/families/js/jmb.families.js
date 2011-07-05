@@ -19,9 +19,10 @@ function Families(obj){
 		self.render(obj);
 	});
 	
-	storage.tabs.click = function(object){
+	storage.addEvent(storage.tabs.clickPull, function(object){
 		self.profile.cleaner();
-	}
+		storage.tabs.cleaner();
+	});
 }
 Families.prototype = {
 	_ajax:function(func, params, callback){
