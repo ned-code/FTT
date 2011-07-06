@@ -1,29 +1,15 @@
 /**
 * FMB STYLESHEET - MAIN
 */ 
-@font-face {
-	font-family: 'Calibri';
-	src: url('fonts/calibri.eot?') format('eot'),
-	     url('fonts/calibri.woff') format('woff'), 
-	     url('fonts/calibri.ttf') format('truetype'),
-	     url('fonts/calibri.svg#svgFontName') format('svg');
-	font-weight: normal;
-	font-style: normal;
-}
-
 * {
     margin: 0;
     padding: 0;
 }
-
-
-
-
 .content {
 	background: none repeat scroll 0 0 #FFFFFF;
 	border: 0 solid;
 	color: #333333;
-	font-family: Tahoma;
+	font-family: Calibri,Tahoma;
 	font-size: 12px;
 	margin: 0 auto;
 	max-width: 760px;
@@ -41,21 +27,16 @@
 */
 .jmb_header_body {	
 	background: none repeat scroll 0 0 #5F8D34;
-	font-family: Tahoma;
-	font-size: 12px;
 	margin-top: 20px;
 	position: relative;
 }
 .jmb_header_logo {
 	background: url("../images/tree.gif") no-repeat scroll 0 0 transparent;
 	color: white;
-	font-weight: bold;
+	font-size: 20px;
 	height: 26px;
-	margin-left: 10px;
-	margin-right: 10px;
-	margin-top: 5px;
+	margin: 5px 10px;
 	padding-left: 35px;
-	padding-top: 5px;
 }
 .jmb_header_expand{
 	margin-top: 5px;
@@ -67,7 +48,7 @@
 	left: 40%;
 	position: absolute;
 	text-align: center;
-	top: 12px;
+	top: 9px;
 }
 .jmb_header_fam_line span{
 	background: none repeat scroll 0 0 white;
@@ -79,13 +60,10 @@
 	padding: 5px;
 }
 .jmb_line_title{
-	background: none repeat scroll 0 0 transparent;
-	border: medium none;
 	color: white;
-	font-family: Tahoma;
-	font-size: 12px;
+	font-size: 16px;
 	font-weight: bold;
-	margin-right: 5px;
+	margin-right: 10px;
 }
 .jmb_line_left{
 	-moz-border-radius-bottomleft: 10px;

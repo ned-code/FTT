@@ -63,7 +63,7 @@
 	border:2px solid #000;
 }
 .jmb-families-parent-name{
-	font-family: Tahoma;
+	font-family: Calibri,Tahoma;
 	font-size: 10px;
 	font-weight: bold;
 	height: 20px;
@@ -72,7 +72,7 @@
 	width: 112px;
 }
 .jmb-families-parent-date{
-	font-family: tahoma;
+	font-family: Calibri,Tahoma;
 	font-size: 12px;
 	height: 20px;
 	line-height: 20px;
@@ -80,7 +80,7 @@
 	width: 112px;
 }
 .jmb-families-child-name{
-	font-family: tahoma;
+	font-family: Calibri,Tahoma;
 	font-size: 10px;
 	font-weight: bold;
 	height: 20px;
@@ -89,7 +89,7 @@
 	/*width: 84px;*/
 }
 .jmb-families-child-date{
-	font-family: tahoma;
+	font-family: Calibri,Tahoma;
 	font-size: 10px;
 	height: 10px;
 	line-height: 8px;

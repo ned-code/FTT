@@ -125,7 +125,7 @@
 }
 
 .jmb-profile-mini-info-body{
-	font-family: Tahoma;
+	font-family: Calibri,Tahoma;
 	font-size: 12px;
     	font-weight: bold;
 }
@@ -162,7 +162,7 @@ CONFIRM
 	background: none repeat scroll 0 0 #F1E4B0;
 	border: 1px solid #000000;
 	border-radius: 5px 5px 5px 5px;
-	font-family: Tahoma;
+	font-family: Calibri,Tahoma;
 	font-size: 12px;
 	position: absolute;
 	width: 320px;
