@@ -53,13 +53,6 @@ function JMBProfile(){
 		var iframe = '<iframe id="iframe-profile" name="#iframe-profile" style="display:none;position:absolute;left:-1000px;width:1px;height:1px">';
 		jQuery(document.body).append(iframe);
 	}
-	
-	jQuery('ul.jmbtabs li').bind('click.myProfileEvents',function(){
-		self.cleaner();
-		jQuery('ul.jmbtabs li').unbind('click.myProfileEvents');		
-	});
-	
-	_PROFILE = this;
 }
 
 JMBProfile.prototype = {

@@ -250,15 +250,16 @@
 	
 }
 .jmb-families-fb-icon{
+	cursor: pointer;
 	height: 18px;
    	position: relative;
    	width: 18px;
 }
 .jmb-families-fb-icon.parent{
-	left: 93px;
-	top: -78px;
+	left: 94px;
+	top: -75px;
 }
 .jmb-families-fb-icon.child{
 	left: 58px;
-	top: -120px;
+	top: -118px;
 }

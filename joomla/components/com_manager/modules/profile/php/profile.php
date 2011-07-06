@@ -17,7 +17,7 @@ class JMBProfile {
 		$indiv = $this->host->gedcom->individuals->get($id);
 		$parents = $this->host->gedcom->individuals->getParents($id);
 		$children = $this->host->gedcom->individuals->getChilds($id);
-		$families = $this->host->gedcom->families->getPersonFamilies($id);
+		$families = $this->host->gedcom->families->getPersonsFamilies($id);
 		$spouses = array();	
 		foreach($families as $family){
 			$famevent = $this->host->gedcom->events->getFamilyEvents($family->Id);
@@ -136,7 +136,7 @@ class JMBProfile {
 	*/
 	protected function _addParent($id){
 		$ind = $this->_createIndiv();
-		$this->_addIndivEvents(&$ind);
+		$this->_addIndivEvents($ind);
  		
 		$photos = $this->_uploadPhoto($ind->Id);
  		$fam_id = $this->host->gedcom->individuals->getFamilyId($id, 'CHIL');
@@ -168,7 +168,7 @@ class JMBProfile {
 		} 
 		
 		$ind = $this->_createIndiv();
-		$this->_addIndivEvents(&$ind);
+		$this->_addIndivEvents($ind);
 		
  		$photos = $this->_uploadPhoto($ind->Id);
  		$this->host->gedcom->families->addChild($fam_id, $ind->Id);
@@ -180,7 +180,7 @@ class JMBProfile {
 	*/
 	protected function _addBS($id){
 		$ind = $this->_createIndiv();
-		$this->_addIndivEvents(&$ind);
+		$this->_addIndivEvents($ind);
 		
 		$photos = $this->_uploadPhoto($ind->Id);
 		$user = $this->host->gedcom->individuals->get($id);
@@ -238,8 +238,8 @@ class JMBProfile {
 	*/
 	protected function _addSpouseFamily($gender, $user, $ind){
 		$fam = $this->_createFamily();
-		$this->_addSpouse(&$fam, $gender, $user, $ind);
-		$this->_addSpouseEvents(&$fam);
+		$this->_addSpouse($fam, $gender, $user, $ind);
+		$this->_addSpouseEvents($fam);
 		return $fam;
 	}
 	
@@ -265,7 +265,7 @@ class JMBProfile {
 		$_POST['gender'] = ($gender=='M')?'F':'M';
 		
 		$ind = $this->_createIndiv();
-		$this->_addIndivEvents(&$ind);
+		$this->_addIndivEvents($ind);
 		
 		$fam_id = $this->host->gedcom->individuals->getFamilyId($ownerId, $type);
 		$user = $this->host->gedcom->individuals->get($ownerId);
@@ -273,15 +273,15 @@ class JMBProfile {
 		
 		if(!$fam_id){
 			$fam = $this->_createFamily();
-			$this->_addSpouse(&$fam, $gender, $user, $ind);
-			$this->_addSpouseEvents(&$fam);
+			$this->_addSpouse($fam, $gender, $user, $ind);
+			$this->_addSpouseEvents($fam);
 			$this->host->gedcom->families->save($fam);
 			
 		} else {
 			$fam = $this->host->gedcom->families->get($fam_id);
 			if($fam->Spouse==null&&$gender="M"||$fam->Sircar==null&&$gender=="F"){
-				$this->_addSpouse(&$fam, $gender, $user, $ind);
-				$this->_addSpouseEvents(&$fam);
+				$this->_addSpouse($fam, $gender, $user, $ind);
+				$this->_addSpouseEvents($fam);
 				$this->host->gedcom->families->update($fam);
 			} else {
 				$fam = $this->_addSpouseFamily($gender, $user, $ind);
@@ -396,6 +396,39 @@ class JMBProfile {
 			$this->_createEvent($fam_id, 'MARR', 'm_');
 		}
 		return json_encode(array('f'=>$families,'e'=>$fam_events));
+	}
+	
+	/**
+	*
+	*/
+	protected function getColors(){
+		$color = array();
+		$p = $this->host->getSiteSettings('color');
+		for($i=0;$i<sizeof($p);$i++){
+                    switch($p[$i]['name']){	
+                            case "female":
+                                    $color['F'] = $p[$i]['value'];
+                            break;
+                            
+                            case "male":
+                                    $color['M'] = $p[$i]['value'];
+                            break;
+                            
+                            case "location":
+                                    $color['L'] = $p[$i]['value'];
+                            break;
+                    }
+                }
+                return $color;
+	}
+	
+	/**
+	*
+	*/
+	public function getUserInfo(){
+		$data = $this->_getUserInfo($_SESSION['jmb']['gid']);
+		$path = JURI::root(true); 
+		return json_encode(array('data'=>$data,'path'=>$path));
 	}
 }
 

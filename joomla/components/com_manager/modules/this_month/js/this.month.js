@@ -148,7 +148,6 @@ function JMBThisMonth(obj){
 	
 	storage.addEvent(storage.tabs.clickPull, function(object){
 		self.profile.cleaner();
-		storage.tabs.cleaner();
 	});
 }
 

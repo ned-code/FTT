@@ -37,7 +37,6 @@ DescendantTreeProfile.prototype = {
 		//when click tabs;
 		storage.addEvent(storage.tabs.clickPull, function(object){
 			self.profile.cleaner();
-			storage.tabs.cleaner();
 		});
 	},
 	createDiv:function(parent){
@@ -45,13 +44,12 @@ DescendantTreeProfile.prototype = {
 		var html = '<div id="jmb-dtp-container" class="jmb-dtp-container">';
 			html += '<div class="jmb-dtp-header">';
 				html += '<div class="jmb-dtp-header-name">&nbsp;</div>';
-				html += '<div class="jmb-dtp-header-vector">&nbsp;</div>';
 			html += '</div>';
 			html += '<div class="jmb-dtp-body">';	
 				html += '<div class="jmb-dtp-body-info">';
 					html += '<table>';
 						html += '<tr>';
-						html += '<td><div class="jmb-dtp-body-info-avatar"><div class="jmb-profile-avatar">&nbsp;</div><div id="edit-button" class="jmb-dtp-body-edit-button">&nbsp;</div></div></td>';
+						html += '<td><div class="jmb-profile-avatar"><div class="jmb-dtp-facebook-icon">&nbsp;</div><div id="edit-button" class="jmb-dtp-body-edit-button">&nbsp;</div></div></td>';
 							html += '<td>';
 								html += '<div class="jmb-dtp-body-info-born">&nbsp;</div>';
 								html += '<div class="jmb-dtp-body-info-died">&nbsp;</div>';
@@ -62,13 +60,6 @@ DescendantTreeProfile.prototype = {
 				html += '</div>';	
 				html += '<div class="jmb-dtp-body-space">&nbsp;</div>'
 				html += '<div class="jmb-dtp-body-media">';
-					html += '<ul id="mycarousel" class="jcarousel-skin-tango">';
-						html += '<li><div id="1" class="jmb-dtp-body-media-item">&nbsp;</div></li>';
-						html += '<li><div id="2" class="jmb-dtp-body-media-item">&nbsp;</div></li>';
-						html += '<li><div id="3" class="jmb-dtp-body-media-item">&nbsp;</div></li>';
-						html += '<li><div id="4" class="jmb-dtp-body-media-item">&nbsp;</div></li>';
-						html += '<li><div id="5" class="jmb-dtp-body-media-item">&nbsp;</div></li>';
-					html += '</ul>';
 				html += '</div>';
 			html +='</div>';
 			html += '<div class="jmb-dtp-footer">';
@@ -90,11 +81,6 @@ DescendantTreeProfile.prototype = {
 		
 		var height = jQuery(obj).parent().height();
 		jQuery(obj).height(height);
-		
-
-		jQuery(obj).find('#mycarousel').jcarousel({
-			wrap: 'circular'
-		});
 
 		jQuery(obj).find(".jmb-dtp-footer-mail-button").click(function(){
 			if(self.json){
@@ -182,6 +168,7 @@ DescendantTreeProfile.prototype = {
 			var imgName = (json.indiv.Gender=="M")?'male.gif':'female.gif';
 			return '<img width="72px" height="80px" src="'+json.path+'/components/com_manager/modules/descendant_tree/imgs/'+imgName+'">';;
 		}
+		
 	},
 	setColors:function(colors){
 		this.colors.male = colors['M'];
@@ -212,7 +199,7 @@ DescendantTreeProfile.prototype = {
 			jQuery(obj).find('.jmb-dtp-body-info-died').html(self.getDied(ind));
 			jQuery(obj).find('.jmb-dtp-body-info-relation').html(self.getRelation(ind));
 			jQuery(obj).find('.jmb-dtp-footer-info').html(self.getInfo(ind));
-			jQuery(obj).find('.jmb-profile-avatar').html(self.getAvatar(json));
+			//jQuery(obj).find('.jmb-profile-avatar').html(self.getAvatar(json));
 			//edit profile button
 			var button = jQuery(obj).find(".jmb-dtp-body-edit-button");
 			self.profile.tooltip.cleaner();

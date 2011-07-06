@@ -47,8 +47,8 @@ JHtml::_('behavior.keepalive');
 				<div class="jmb_header_settings">	
 					<?php if($inIFrame): ?>
 						<div class ="embedded">
-							<div>My Family</div>
-							<div>My Profile</div>
+							<div class="myfamily">My Family</div>
+							<div id="<?php echo $user_profile['id']; ?>" class="myprofile">My Profile</div>
 						</div>
 					<?php else: ?>
 						<div class="expanded">
@@ -57,9 +57,9 @@ JHtml::_('behavior.keepalive');
 									<td>
 										<div class="name"><?php echo $user_profile['name']; ?></div>
 										<div class="menu">
-											<span id="<?php echo $user_profile['id']; ?>">myProfile</span>
-											<span>myFamily</span>
-											<span>Logout</span>
+											<span id="<?php echo $user_profile['id']; ?>" class="myprofile">My Profile</span>
+											<span class="myfamily">myFamily</span>
+											<span class="logout">Logout</span>
 										</div>
 									</td>
 									<td>

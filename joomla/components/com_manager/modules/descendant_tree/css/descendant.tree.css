@@ -49,18 +49,13 @@
 .jmb-dtp-body-info div{
 	text-align:left !important;
 }
-.jmb-dtp-body-info-avatar {
+.jmb-profile-avatar{
 	background-color: #C3C3C3;
 	border: 1px solid #000000;
 	height: 80px;
 	margin: 10px;
+	position: relative;
 	width: 72px;
-}
-.jmb-profile-avatar{
-	height: 80px;
-	width: 72px;
-	margin:0;
-	padding:0;
 }
 .jmb-dtp-body-space{
 	background-color: white;
@@ -69,19 +64,20 @@
 	margin: 10px;
 }
 .jmb-dtp-body-edit-button{
-	background: url("../imgs/edit2.jpg") no-repeat scroll 0 0 transparent;
-	background-color: #3B5998;
-	border: none;
+	background: url("../imgs/edit2.jpg") no-repeat scroll 0 0 #3B5998;
+	border: medium none;
 	color: white;
 	cursor: pointer;
 	font-size: 27px;
 	font-weight: bolder;
 	height: 18px;
+	left: 82px;
 	line-height: 17px;
-	position: absolute;	
+	position: absolute;
+	top: 46px;
 	width: 18px;
-	top:45px;
-	left:79px;
+}
+.jmb-dtp-facebook-icon {
 }
 .jmb-dtp-footer{
 	background-color: white;

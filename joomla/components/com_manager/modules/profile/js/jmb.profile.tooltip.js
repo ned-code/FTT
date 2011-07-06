@@ -65,23 +65,23 @@ JMBProfileTooltip.prototype = {
 				html += "<div class='jmb-profile-tooltip-bs'><span>Brother or Sister</span></div>";
 				html += "<div class='jmb-profile-tooltip-child'><span>Child</span></div>";
 			html += "</fieldset></div>";
+			html += "<div class='jmb-profile-tooltip-options'><span type='title'>More Options</span><table style='display:none;'><tr><td><div class='jmb-profile-tooltip-options-delete'><span type='delete'>Delete this Person</span></div></td></tr></table></div>";
 			if(p.data.indiv.FacebookId == '0'){
-				var fullName = self.parent._getFullName(p.data.indiv);
+				var name = (p.data.indiv.Nick!='')?p.data.indiv.Nick:p.data.indiv.FirstName;
 				html += "<div class='jmb-profile-tooltip-send'>";
 					html += "<table>";
 						html += "<tr>";
 							html += "<td rowspan='2'>";
 								html += "<div class='jmb-profile-tooltip-send-img'>&nbsp;</div>";
 							html += "</td>";
-							html += "<td><span> "+fullName+" is not registred.</span></td>";
+							html += "<td><span> "+name+" is not registred.</span></td>";
 						html += "</tr>";
 						html += "<tr>";
-							html +="<td><span>Send "+fullName+" an invations.</span></td>";
+							html +="<td><span>Send "+name+" an invations.</span></td>";
 						html += "</tr>";
 					html += "</table>";
 				html += "</div>";
 			}
-			html += "<div class='jmb-profile-tooltip-options'><span type='title'>More Options</span><table style='display:none;'><tr><td><div class='jmb-profile-tooltip-options-delete'><span type='delete'>Delete this Person</span></div></td></tr></table></div>";
 			html += "<div class='jmb-profile-tooltip-close'><a href='javascript:void(jQuery(\"#"+id+"\").btOff());'><div>&nbsp;</div></a></div>";
 		html += "</div>";
 		var divObj = jQuery(html);
@@ -204,10 +204,10 @@ JMBProfileTooltip.prototype = {
 		//delete sub items
 		var self = this;
 		var s = self.storage;
-		for(var i=s.length;i>=0;i--){
-			jQuery(s[i]).remove();
-			delete s[i];
-		}
+		jQuery(s).each(function(i,e){
+			jQuery(e).remove();
+			delete e;
+		})
 		s.length = 0;
 		//delete active tooltip
 		this.hideTooltip();
@@ -308,7 +308,8 @@ JMBProfileTooltip.prototype = {
 			jQuery.extend(p, this.defaultMiniProfileParams);
 			container = this._miniProfileContainer(p);		
 		}
-		self.storage[self.storage.length++] = container;
+		var l = self.storage.length++;
+		self.storage[l] = container;
 		p.settings.contentSelector = "jQuery('#"+jQuery(p.target).attr('id')+"-content')";
 		if(p.parent) p.settings.offsetParent = p.parent;
 		

@@ -21,8 +21,7 @@ function Families(obj){
 	
 	storage.addEvent(storage.tabs.clickPull, function(object){
 		self.profile.cleaner();
-		storage.tabs.cleaner();
-	});
+	})
 }
 Families.prototype = {
 	_ajax:function(func, params, callback){
@@ -103,8 +102,8 @@ Families.prototype = {
 			if(obj.spouses[0] != null || arrow == 'right') html += '<div class="jmb-families-arrow-'+arrow+'">&nbsp</div>';
 			html += '<div id="'+person.Id+'-edit" class="jmb-families-edit-button parent">&nbsp;</div>';
 			if(obj.indiv.FacebookId != '0'){
-				var imgPath = self.json.path+"/components/com_manager/modules/families/css/facebook_icon.png"
-				html += '<div class="jmb-families-fb-icon parent"><a href="http://www.facebook.com/profile.php?id='+obj.indiv.FacebookId+'"><img src="'+imgPath+'" width="18px" height="18px"></a></div>'
+				var imgPath = self.json.path+"/components/com_manager/modules/families/css/facebook_icon.png";
+				html += '<div class="jmb-families-fb-icon parent" id="'+obj.indiv.FacebookId+'"><img src="'+imgPath+'" width="14x" height="14px"></div>';
 			}
 		html += '</div>';
 		return jQuery(html);
@@ -125,7 +124,7 @@ Families.prototype = {
 			html += '<div id="'+person.Id+'-edit" class="jmb-families-edit-button parent">&nbsp;</div>';
 			if(obj.indiv.FacebookId != '0'){
 				var imgPath = self.json.path+"/components/com_manager/modules/families/css/facebook_icon.png"
-				html += '<div class="jmb-families-fb-icon parent"><a href="http://www.facebook.com/profile.php?id='+obj.indiv.FacebookId+'"><img src="'+imgPath+'" width="18px" height="18px"></a></div>'
+				html += '<div class="jmb-families-fb-icon parent" id="'+obj.indiv.FacebookId+'"><img src="'+imgPath+'" width="14px" height="14px"></div>'
 			}
 		html += '</div>';
 		return jQuery(html);
@@ -151,8 +150,8 @@ Families.prototype = {
 			html += '<div class="'+arrowClass+'">&nbsp</div>';
 			html += '<div id="'+person.Id+'-edit" class="'+editButtonClass+'">&nbsp;</div>';
 			if(obj.indiv.FacebookId != '0'){
-				var imgPath = self.json.path+"/components/com_manager/modules/families/css/facebook_icon.png"
-				html += '<div class="jmb-families-fb-icon child"><a href="http://www.facebook.com/profile.php?id='+obj.indiv.FacebookId+'"><img src="'+imgPath+'" width="18px" height="18px"></a></div>'
+				var imgPath = self.json.path+"/components/com_manager/modules/families/css/facebook_icon.png";
+				html += '<div class="jmb-families-fb-icon child" id="'+obj.indiv.FacebookId+'"><img src="'+imgPath+'" width="14px" height="14px"></div>';
 			}
 		return jQuery(html);
 	},
@@ -260,6 +259,13 @@ Families.prototype = {
 						self.render(obj);
 					});
 				}
+			});
+		});
+		//when we click in facebook icon
+		jQuery(div).find('.jmb-families-fb-icon').each(function(i,e){
+			jQuery(e).click(function(){
+				var id = jQuery(e).attr('id');
+				window.open('http://www.facebook.com/profile.php?id='+id,'new','width=320,height=240,toolbar=1')
 			});
 		});
 	},

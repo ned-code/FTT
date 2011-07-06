@@ -4,6 +4,7 @@
 	color:#2945c0;
 }
 .jmb-profile-tooltip-container fieldset{
+	border: medium none;
 	margin:0;
 	padding:0;
 }
@@ -36,8 +37,14 @@
 .jmb-profile-tooltip-child{}
 
 .jmb-profile-tooltip-send{
-	cursor:pointer;
-	margin-top:10px;
+	background: none repeat scroll 0 0 #F5FAE6;
+	border-top: 1px solid #999999;
+	cursor: pointer;
+	left: -18px;
+	padding-left: 16px;
+	padding-top: 5px;
+	position: relative;
+	width: 200px;
 }
 .jmb-profile-tooltip-send tr{
 	margin-top: 5px;
