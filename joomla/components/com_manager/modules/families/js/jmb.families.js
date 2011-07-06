@@ -94,17 +94,17 @@ Families.prototype = {
 			}
 			html += '<div id="'+person.Id+'-view" type="imgContainer" class="jmb-families-parent-img">'+this._getAvatar(obj, 'parent', 1);
 				html += '<div class="jmb-families-img-view parent" style="display:none;">&nbsp;</div>';
+				html += '<div id="'+person.Id+'-edit" class="jmb-families-edit-button parent">&nbsp;</div>';
+				if(obj.indiv.FacebookId != '0'){
+					var imgPath = self.json.path+"/components/com_manager/modules/families/css/facebook_icon.png";
+					html += '<div class="jmb-families-fb-icon parent" id="'+obj.indiv.FacebookId+'"><img src="'+imgPath+'" width="14x" height="14px"></div>';
+				}
 			html += '</div>';
 			html += '<div>';
 				html += '<div class="jmb-families-parent-name">'+name+'</div>';
 				html += '<div class="jmb-families-parent-date">'+date+'</div>';
 			html += '</div>';
 			if(obj.spouses[0] != null || arrow == 'right') html += '<div class="jmb-families-arrow-'+arrow+'">&nbsp</div>';
-			html += '<div id="'+person.Id+'-edit" class="jmb-families-edit-button parent">&nbsp;</div>';
-			if(obj.indiv.FacebookId != '0'){
-				var imgPath = self.json.path+"/components/com_manager/modules/families/css/facebook_icon.png";
-				html += '<div class="jmb-families-fb-icon parent" id="'+obj.indiv.FacebookId+'"><img src="'+imgPath+'" width="14x" height="14px"></div>';
-			}
 		html += '</div>';
 		return jQuery(html);
 	},
@@ -116,16 +116,16 @@ Families.prototype = {
 		var html = '<div class="jmb-families-spouse-div">';
 			html += '<div id="'+person.Id+'-view" type="imgContainer" class="jmb-families-parent-img">'+this._getAvatar(obj, 'parent', 1);
 				html += '<div class="jmb-families-img-view parent" style="display:none;">&nbsp;</div>';
+				html += '<div id="'+person.Id+'-edit" class="jmb-families-edit-button parent">&nbsp;</div>';
+				if(obj.indiv.FacebookId != '0'){
+					var imgPath = self.json.path+"/components/com_manager/modules/families/css/facebook_icon.png"
+					html += '<div class="jmb-families-fb-icon parent" id="'+obj.indiv.FacebookId+'"><img src="'+imgPath+'" width="14px" height="14px"></div>'
+				}
 			html += '</div>';
 			html += '<div>';
 				html += '<div class="jmb-families-parent-name">'+name+'</div>';
 				html += '<div class="jmb-families-parent-date">'+date+'</div>';
 			html += '</div>';
-			html += '<div id="'+person.Id+'-edit" class="jmb-families-edit-button parent">&nbsp;</div>';
-			if(obj.indiv.FacebookId != '0'){
-				var imgPath = self.json.path+"/components/com_manager/modules/families/css/facebook_icon.png"
-				html += '<div class="jmb-families-fb-icon parent" id="'+obj.indiv.FacebookId+'"><img src="'+imgPath+'" width="14px" height="14px"></div>'
-			}
 		html += '</div>';
 		return jQuery(html);
 	},
@@ -135,9 +135,14 @@ Families.prototype = {
 		var html = '<div childId="'+person.Id+'" class="jmb-families-child" style="height:'+Math.round(170*k)+'px;">';
 			html += '<div id="'+person.Id+'-view" type="imgContainer" class="jmb-families-child-img">'+this._getAvatar(obj, 'child', k);
 				html += '<div class="jmb-families-img-view child" style="display:none;">&nbsp;</div>';
+				var editButtonClass = (k!=1)?'jmb-families-edit-button child small':'jmb-families-edit-button child';
+				html += '<div id="'+person.Id+'-edit" class="'+editButtonClass+'">&nbsp;</div>';
+				if(obj.indiv.FacebookId != '0'){
+					var imgPath = self.json.path+"/components/com_manager/modules/families/css/facebook_icon.png";
+					html += '<div class="jmb-families-fb-icon child" id="'+obj.indiv.FacebookId+'"><img src="'+imgPath+'" width="14px" height="14px"></div>';
+				}
 			html += '</div>';
 			html += '<div><div class="jmb-families-child-name">'+self._getName(person)+'</div><div class="jmb-families-child-date">'+self._getDate(person)+'</div></div>';
-			
 			if(jQuery(obj.spouses).length != 0){
 				var buttonChild = (k!=1)?'jmb-families-button childs active small':'jmb-families-button childs active';
 				html += '<div id="'+person.Id+'" class="'+buttonChild+'">&nbsp;</div>'; 
@@ -146,13 +151,7 @@ Families.prototype = {
 				html += '<div id="null" class="'+buttonChild+'">&nbsp;</div>'; 
 			}
 			var arrowClass = (k!=1)?'jmb-families-arrow-'+arrow+' small':'jmb-families-arrow-'+arrow;
-			var editButtonClass = (k!=1)?'jmb-families-edit-button child small':'jmb-families-edit-button child';
 			html += '<div class="'+arrowClass+'">&nbsp</div>';
-			html += '<div id="'+person.Id+'-edit" class="'+editButtonClass+'">&nbsp;</div>';
-			if(obj.indiv.FacebookId != '0'){
-				var imgPath = self.json.path+"/components/com_manager/modules/families/css/facebook_icon.png";
-				html += '<div class="jmb-families-fb-icon child" id="'+obj.indiv.FacebookId+'"><img src="'+imgPath+'" width="14px" height="14px"></div>';
-			}
 		return jQuery(html);
 	},
 	_createDivInfo:function(obj){
@@ -222,14 +221,11 @@ Families.prototype = {
 		jQuery(div).find('div[type="imgContainer"]').each(function(i,e){
 			jQuery(e)
 			.mouseenter(function(){
-				var parent = jQuery(this).hasClass('.jmb-families-parent-img');
-				var pos = jQuery(this).position();
-				var top = jQuery(this).height()+pos.top-33-((parent)?10:0);
-				var left = jQuery(this).width()+pos.left-35-((parent)?10:0);
-				jQuery(e).find('.jmb-families-img-view').css("top", top+"px").css("left", left+"px").show();
+				jQuery(e).find('.jmb-families-img-view').show();
 			})
 			.mouseleave(function(){
-				jQuery(e).find('.jmb-families-img-view').css("top", "0px").css("left", "0px").hide();
+				//jQuery(e).find('.jmb-families-img-view').css("top", "0px").css("left", "0px").hide();
+				jQuery(e).find('.jmb-families-img-view').hide();
 			});
 		})
 		//when we click to view button
@@ -240,7 +236,8 @@ Families.prototype = {
 				data: self.json.individs[jQuery(e).parent().attr('id').split('-')[0]],
 				imgPath:self.json.path,
 				fmbUser:self.json.fmbUser,
-				eventType:'click'
+				eventType:'click',
+				parent:document.body,
 			});	
 		})
 		//when we click to edit button
