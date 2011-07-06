@@ -49,7 +49,7 @@ DescendantTreeProfile.prototype = {
 				html += '<div class="jmb-dtp-body-info">';
 					html += '<table>';
 						html += '<tr>';
-						html += '<td><div class="jmb-profile-avatar"><div class="jmb-dtp-facebook-icon">&nbsp;</div><div id="edit-button" class="jmb-dtp-body-edit-button">&nbsp;</div></div></td>';
+						html += '<td><div class="jmb-profile-avatar"><div class="jmb-dtp-facebook-icon" style="display:none">&nbsp;</div><div id="edit-button" class="jmb-dtp-body-edit-button">&nbsp;</div></div></td>';
 							html += '<td>';
 								html += '<div class="jmb-dtp-body-info-born">&nbsp;</div>';
 								html += '<div class="jmb-dtp-body-info-died">&nbsp;</div>';
@@ -157,18 +157,27 @@ DescendantTreeProfile.prototype = {
 	getRelation:function(json){
 		return '&nbsp;';
 	},
-	getAvatar:function(json){
+	setAvatar:function(obj, json){
+		var imgObject = jQuery(obj).find('img');
+		if(jQuery(imgObject).length>0) jQuery(imgObject).remove();
+		jQuery(obj).find('.jmb-dtp-facebook-icon').removeAttr('id').hide().html('&nbsp;');
+		
 		var fId = json.indiv.FacebookId;
 		var avatar = json.avatar;
+		var img;
 		if(avatar != null && avatar.FilePath != null){
-			return '<img width="72px" height="80px" src="'+avatar.FilePath+'">';
+			img = '<img width="72px" height="80px" src="'+avatar.FilePath+'">';
 		} else if(fId != '0'){
-			return '<img width="72px" height="80px" src="http://graph.facebook.com/'+fId+'/picture">';
+			img = '<img width="72px" height="80px" src="http://graph.facebook.com/'+fId+'/picture">';
 		} else {
 			var imgName = (json.indiv.Gender=="M")?'male.gif':'female.gif';
-			return '<img width="72px" height="80px" src="'+json.path+'/components/com_manager/modules/descendant_tree/imgs/'+imgName+'">';;
+			img = '<img width="72px" height="80px" src="'+json.path+'/components/com_manager/modules/descendant_tree/imgs/'+imgName+'">';;
 		}
-		
+		if(fId != '0'){
+			var imgPath = json.path+"/components/com_manager/modules/families/css/facebook_icon.png"; 
+			var f_div = jQuery(obj).find('.jmb-dtp-facebook-icon').attr('id', fId).html('<img src="'+imgPath+'" width="14x" height="14px">').show();
+		}
+		var div = jQuery(obj).find('.jmb-profile-avatar').append(img);
 	},
 	setColors:function(colors){
 		this.colors.male = colors['M'];
@@ -199,7 +208,13 @@ DescendantTreeProfile.prototype = {
 			jQuery(obj).find('.jmb-dtp-body-info-died').html(self.getDied(ind));
 			jQuery(obj).find('.jmb-dtp-body-info-relation').html(self.getRelation(ind));
 			jQuery(obj).find('.jmb-dtp-footer-info').html(self.getInfo(ind));
-			//jQuery(obj).find('.jmb-profile-avatar').html(self.getAvatar(json));
+			self.setAvatar(obj, json)
+			//when we click in facebook icon
+			jQuery(obj).find('.jmb-dtp-facebook-icon').click(function(){
+				var id = jQuery(this).attr('id');
+				window.open('http://www.facebook.com/profile.php?id='+id,'new','width=320,height=240,toolbar=1')
+			});
+			
 			//edit profile button
 			var button = jQuery(obj).find(".jmb-dtp-body-edit-button");
 			self.profile.tooltip.cleaner();

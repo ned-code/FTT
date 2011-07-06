@@ -71,13 +71,19 @@
 	font-size: 27px;
 	font-weight: bolder;
 	height: 18px;
-	left: 82px;
+	left: 55px;
 	line-height: 17px;
 	position: absolute;
-	top: 46px;
+	top: -1px;
 	width: 18px;
 }
 .jmb-dtp-facebook-icon {
+	cursor: pointer;
+	height: 14px;
+	left: 58px;
+	position: absolute;
+	top: 66px;
+	width: 14px;
 }
 .jmb-dtp-footer{
 	background-color: white;
