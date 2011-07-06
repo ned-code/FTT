@@ -1,10 +1,23 @@
 /**
 * FMB STYLESHEET - MAIN
 */ 
+@font-face {
+	font-family: 'Calibri';
+	src: url('fonts/calibri.eot?') format('eot'),
+	     url('fonts/calibri.woff') format('woff'), 
+	     url('fonts/calibri.ttf') format('truetype'),
+	     url('fonts/calibri.svg#svgFontName') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
 * {
     margin: 0;
     padding: 0;
 }
+
+
+
 
 .content {
 	background: none repeat scroll 0 0 #FFFFFF;
