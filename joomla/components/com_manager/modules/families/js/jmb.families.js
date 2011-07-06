@@ -231,13 +231,13 @@ Families.prototype = {
 		//when we click to view button
 		jQuery(div).find('div.jmb-families-img-view').each(function(i,e){
 			self.profile.tooltip.render({
-				target: jQuery(e).parent(),
+				target: jQuery(e),
 				type: 'mini',
 				data: self.json.individs[jQuery(e).parent().attr('id').split('-')[0]],
 				imgPath:self.json.path,
 				fmbUser:self.json.fmbUser,
 				eventType:'click',
-				parent:document.body,
+				parent:document.body
 			});	
 		})
 		//when we click to edit button
@@ -249,6 +249,7 @@ Families.prototype = {
 				imgPath:self.json.path,
 				fmbUser:self.json.fmbUser,
 				eventType:'click',
+				parent:document.body,
 				beforeClose:function(){
 					self._ajax('getFamilies', 'mother', function(res){
 						var json = jQuery.parseJSON(res.responseText);

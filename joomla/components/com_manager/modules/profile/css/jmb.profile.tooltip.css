@@ -38,13 +38,15 @@
 
 .jmb-profile-tooltip-send{
 	background: none repeat scroll 0 0 #F5FAE6;
+	border-left: 1px solid #999999;
+	border-right: 1px solid #999999;
 	border-top: 1px solid #999999;
 	cursor: pointer;
 	left: -18px;
 	padding-left: 16px;
 	padding-top: 5px;
 	position: relative;
-	width: 200px;
+	width: 199px;
 }
 .jmb-profile-tooltip-send tr{
 	margin-top: 5px;
