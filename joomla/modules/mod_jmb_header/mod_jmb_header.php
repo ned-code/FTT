@@ -9,6 +9,7 @@
 
 // no direct access
 defined('_JEXEC') or die;
+defined('_JEXEC') or die;
 define("JMB_FACEBOOK_APPID", "184962764872486");
 define("JMB_FACEBOOK_SECRET", "6b69574c9ddd50ce2661b3053cd4dc02");
 define("JMB_FACEBOOK_COOKIE",  true);
@@ -21,13 +22,21 @@ require_once dirname(__FILE__).DS.'helper.php';
 require_once dirname(__FILE__).DS.'src'.DS.'facebook.php';
 
 $document = &JFactory::getDocument();
+
 $document->addScript(JUri::root(true).'/modules/mod_jmb_header/js/mod.jmb.header.js?111' );
 
 $fb = modJMBHeaderHelper::FBEngine();
 $user_id = $fb['facebook']->getUser();
 $session = $fb['session'];
+$user_profile = $fb['facebook']->api('/me');
+$avatar = modJMBHeaderHelper::getAvatar($user_profile);
 
+$inIFrame = modJMBHeaderHelper::checkLocation();
 $in_system = modJMBHeaderHelper::getLogin($user_id);
+
+$aHref = ($inIFrame)?'http://www.pav.dev-cop.com':'http://apps.facebook.com/fmybranches/';
+$imgName = ($inIFrame)?'to_facebook.gif':'to_fmb.gif';
+$baseUrl = JURI::base();
 
 $params->def('greeting', 1);
 

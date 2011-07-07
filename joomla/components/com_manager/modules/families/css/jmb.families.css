@@ -1,12 +1,14 @@
 .jmb-families-body{}
 .jmb-families-header{}
 .jmb-families-sircar{
-	height:260px;
+	height: 260px;
+	position: relative;
 }
 .jmb-families-event{}
 .jmb-families-spouse{
-	height:260px;
+	height: 260px;
 	margin-left: 38px;
+	position: relative;
 }
 .jmb-families-spouse-div{
 	margin-bottom: 7px;
@@ -18,10 +20,9 @@
 }
 .jmb-families-child{
 	display: inline-block;
-	/*height: 170px;*/
 	margin-left: 3px;
 	margin-top: 28px;
-	/*width: 76px;*/
+	position: relative;
 }
 .jmb-families-button {
 	height: 24px;
@@ -53,17 +54,18 @@
 	margin-top: 1px;
 }
 .jmb-families-parent-img{
-	width:108px;
-	height:120px;
-	border:2px solid #000;
+	border: 2px solid #000000;
+	height: 120px;
+	position: relative;
+	width: 108px;
 }
 .jmb-families-child-img{
-	/*width:72px;
-	height:80px;*/
 	border:2px solid #000;
+	border: 2px solid #000000;
+	position: relative;
 }
 .jmb-families-parent-name{
-	font-family: Tahoma;
+	font-family: Calibri,Tahoma;
 	font-size: 10px;
 	font-weight: bold;
 	height: 20px;
@@ -72,7 +74,7 @@
 	width: 112px;
 }
 .jmb-families-parent-date{
-	font-family: tahoma;
+	font-family: Calibri,Tahoma;
 	font-size: 12px;
 	height: 20px;
 	line-height: 20px;
@@ -80,7 +82,7 @@
 	width: 112px;
 }
 .jmb-families-child-name{
-	font-family: tahoma;
+	font-family: Calibri,Tahoma;
 	font-size: 10px;
 	font-weight: bold;
 	height: 20px;
@@ -89,7 +91,7 @@
 	/*width: 84px;*/
 }
 .jmb-families-child-date{
-	font-family: tahoma;
+	font-family: Calibri,Tahoma;
 	font-size: 10px;
 	height: 10px;
 	line-height: 8px;
@@ -99,30 +101,30 @@
 .jmb-families-arrow-up {
 	background: url("arrow.gif") no-repeat scroll 0 0 transparent;
 	height: 28px;
-	left: 50%;
-	position: relative;
-	top: -168px;
+	left: 39px;
+	position: absolute;
+	top: -26px;
 	width: 1px;
 }
 .jmb-families-arrow-up.small{
 	height: 25px;
-	left: 52%;
-	top:-176px;
+	left: 36px;
+	top: -25px;
 }
 .jmb-families-arrow-left {
 	background: url("arrow.gif") no-repeat scroll 0 -27px transparent;
 	height: 1px;
 	left: 112px;
-	position: relative;
-	top: -85px;
+	position: absolute;
+	top: 120px;
 	width: 38px;
 }
 .jmb-families-arrow-right {
 	background: url("arrow.gif") no-repeat scroll 0 -27px transparent;
 	height: 1px;
 	left: -38px;
-	position: relative;
-	top: -85px;
+	position: absolute;
+	top: 120px;
 	width: 38px;
 }
 .jmb-families-edit-button {
@@ -139,20 +141,19 @@
 	width: 18px;
 }
 .jmb-families-edit-button.parent {
-	left: 94px;
-	top: -165px;
-	position: relative;
+	left: 92px;
+	position: absolute;
+	top: -2px;
 }
 .jmb-families-edit-button.child{
-	left: 58px;
-	position: relative;
-	top: -168px;
+	left: 56px;
+	position: absolute;
+	top: -2px;
 }
 .jmb-families-edit-button.child.small{
-	left: 50px;
-	top: -198px;
+	left: 49px;
+	top: -2px;
 }
-
 .jmb-families-edit-container{
 	margin-bottom: 10px;
 	margin-left: 10px;
@@ -244,21 +245,24 @@
 	position: absolute;
 }
 .jmb-families-img-view.parent{
-	
+	left: 65px;
+	top: 80px;
 }
 .jmb-families-img-view.child{
-	
+	left: 35px;
+	top: 45px;
 }
 .jmb-families-fb-icon{
-	height: 18px;
-   	position: relative;
-   	width: 18px;
+	cursor: pointer;
+	height: 14px;
+	position: absolute;
+	width: 14px;
 }
 .jmb-families-fb-icon.parent{
-	left: 93px;
-	top: -78px;
+	left: 94px;
+	top: 106px;
 }
 .jmb-families-fb-icon.child{
 	left: 58px;
-	top: -120px;
+	top: 66px;
 }

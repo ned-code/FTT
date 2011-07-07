@@ -321,6 +321,7 @@ JMBProfileFull.prototype = {
 	render:function(p){
 		var self = this;
 		self.json = p;
+		if(!self.parent.imgPath) self.parent.imgPath = p.imgPath;
 		self.parent._dialog({
 			title:self.parent._getFullName(self.json.data.indiv),
 			height: 450,

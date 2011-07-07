@@ -16,20 +16,7 @@ function DescendantTreeProfile(parent){
 	this.renderType = null;
 	this.editDiv = null;
 	this.profile = new JMBProfile();
-	
-	jQuery('.jmb_header_fam_line').find('span').each(function(index,element){
-		if(jQuery(element).hasClass('active')) self.renderType = jQuery(element).attr('type');
-		jQuery(element).bind('click', function(){
-			if(!jQuery(this).attr('type') != self.renderType){
-				var dhxTree = self.parent.dhxTree;
-				dhxTree.deleteChildItems('0');
-				dhxTree.deleteItem('0');
-				self.parent.loadTree(dhxTree, jQuery(this).attr('type'))
-				self.renderType = jQuery(this).attr('type');
-			}	
-		});
-	});
-	_DESCEDANTS_TREE = this;
+	this._headerEvent();
 }
 
 DescendantTreeProfile.prototype = {
@@ -38,18 +25,31 @@ DescendantTreeProfile.prototype = {
 				callback(res);
 		})
 	},
+	_headerEvent:function(){
+		var self = this;
+		storage.addEvent(storage.header.clickPull, function(object){
+			var dhxTree = self.parent.dhxTree;
+			dhxTree.deleteChildItems('0');
+			dhxTree.deleteItem('0');
+			self.parent.loadTree(dhxTree, jQuery(storage.header.activeButton).text());
+			self.profile.tooltip.cleaner();
+		})
+		//when click tabs;
+		storage.addEvent(storage.tabs.clickPull, function(object){
+			self.profile.cleaner();
+		});
+	},
 	createDiv:function(parent){
 		var self = this;
 		var html = '<div id="jmb-dtp-container" class="jmb-dtp-container">';
 			html += '<div class="jmb-dtp-header">';
 				html += '<div class="jmb-dtp-header-name">&nbsp;</div>';
-				html += '<div class="jmb-dtp-header-vector">&nbsp;</div>';
 			html += '</div>';
 			html += '<div class="jmb-dtp-body">';	
 				html += '<div class="jmb-dtp-body-info">';
 					html += '<table>';
 						html += '<tr>';
-						html += '<td><div class="jmb-dtp-body-info-avatar"><div class="jmb-profile-avatar">&nbsp;</div><div id="edit-button" class="jmb-dtp-body-edit-button">&nbsp;</div></div></td>';
+						html += '<td><div class="jmb-profile-avatar"><div class="jmb-dtp-facebook-icon" style="display:none">&nbsp;</div><div id="edit-button" class="jmb-dtp-body-edit-button">&nbsp;</div></div></td>';
 							html += '<td>';
 								html += '<div class="jmb-dtp-body-info-born">&nbsp;</div>';
 								html += '<div class="jmb-dtp-body-info-died">&nbsp;</div>';
@@ -60,13 +60,6 @@ DescendantTreeProfile.prototype = {
 				html += '</div>';	
 				html += '<div class="jmb-dtp-body-space">&nbsp;</div>'
 				html += '<div class="jmb-dtp-body-media">';
-					html += '<ul id="mycarousel" class="jcarousel-skin-tango">';
-						html += '<li><div id="1" class="jmb-dtp-body-media-item">&nbsp;</div></li>';
-						html += '<li><div id="2" class="jmb-dtp-body-media-item">&nbsp;</div></li>';
-						html += '<li><div id="3" class="jmb-dtp-body-media-item">&nbsp;</div></li>';
-						html += '<li><div id="4" class="jmb-dtp-body-media-item">&nbsp;</div></li>';
-						html += '<li><div id="5" class="jmb-dtp-body-media-item">&nbsp;</div></li>';
-					html += '</ul>';
 				html += '</div>';
 			html +='</div>';
 			html += '<div class="jmb-dtp-footer">';
@@ -88,11 +81,6 @@ DescendantTreeProfile.prototype = {
 		
 		var height = jQuery(obj).parent().height();
 		jQuery(obj).height(height);
-		
-
-		jQuery(obj).find('#mycarousel').jcarousel({
-			wrap: 'circular'
-		});
 
 		jQuery(obj).find(".jmb-dtp-footer-mail-button").click(function(){
 			if(self.json){
@@ -169,28 +157,27 @@ DescendantTreeProfile.prototype = {
 	getRelation:function(json){
 		return '&nbsp;';
 	},
-	getAvatar:function(json){
-		/*
-		var fId = json.indiv.FacebookId;
-		var av = json.avatar;
-		if(av != null && av.FilePath != null){
-			return '<img height="80px" width="72px" src="'+av.FilePath+'">';
-		}
-		else if(fId != '0'){
-			return '<img height="80px" width="72px" src="http://graph.facebook.com/'+fId+'/picture">';
-		}
-		return '&nbsp;';
-		*/
+	setAvatar:function(obj, json){
+		var imgObject = jQuery(obj).find('img');
+		if(jQuery(imgObject).length>0) jQuery(imgObject).remove();
+		jQuery(obj).find('.jmb-dtp-facebook-icon').removeAttr('id').hide().html('&nbsp;');
+		
 		var fId = json.indiv.FacebookId;
 		var avatar = json.avatar;
+		var img;
 		if(avatar != null && avatar.FilePath != null){
-			return '<img width="72px" height="80px" src="'+avatar.FilePath+'">';
+			img = '<img width="72px" height="80px" src="'+avatar.FilePath+'">';
 		} else if(fId != '0'){
-			return '<img width="72px" height="80px" src="http://graph.facebook.com/'+fId+'/picture">';
+			img = '<img width="72px" height="80px" src="http://graph.facebook.com/'+fId+'/picture">';
 		} else {
 			var imgName = (json.indiv.Gender=="M")?'male.gif':'female.gif';
-			return '<img width="72px" height="80px" src="'+json.path+'/components/com_manager/modules/descendant_tree/imgs/'+imgName+'">';;
+			img = '<img width="72px" height="80px" src="'+json.path+'/components/com_manager/modules/descendant_tree/imgs/'+imgName+'">';;
 		}
+		if(fId != '0'){
+			var imgPath = json.path+"/components/com_manager/modules/families/css/facebook_icon.png"; 
+			var f_div = jQuery(obj).find('.jmb-dtp-facebook-icon').attr('id', fId).html('<img src="'+imgPath+'" width="14x" height="14px">').show();
+		}
+		var div = jQuery(obj).find('.jmb-profile-avatar').append(img);
 	},
 	setColors:function(colors){
 		this.colors.male = colors['M'];
@@ -221,9 +208,16 @@ DescendantTreeProfile.prototype = {
 			jQuery(obj).find('.jmb-dtp-body-info-died').html(self.getDied(ind));
 			jQuery(obj).find('.jmb-dtp-body-info-relation').html(self.getRelation(ind));
 			jQuery(obj).find('.jmb-dtp-footer-info').html(self.getInfo(ind));
-			jQuery(obj).find('.jmb-profile-avatar').html(self.getAvatar(json));
+			self.setAvatar(obj, json)
+			//when we click in facebook icon
+			jQuery(obj).find('.jmb-dtp-facebook-icon').click(function(){
+				var id = jQuery(this).attr('id');
+				window.open('http://www.facebook.com/profile.php?id='+id,'new','width=320,height=240,toolbar=1')
+			});
+			
 			//edit profile button
 			var button = jQuery(obj).find(".jmb-dtp-body-edit-button");
+			self.profile.tooltip.cleaner();
 			self.profile.tooltip.render({
 				target: button,
 				type: 'tooltip',

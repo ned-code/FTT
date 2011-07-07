@@ -31,14 +31,8 @@ function DescendantTree(obj){
 	this.profile = new DescendantTreeProfile(this);
 	//this.profileEdit = new DescendantTreeProfileEdit(this);
 	this.obj = obj;
-	
-	
-	jQuery('.jmb_header_fam_line').find('span').each(function(i,e){
-		if(jQuery(e).hasClass('active')){
-			self.loadTree(dhxTree, jQuery(e).attr('type'));	
-		}
-	})
-	
+
+	self.loadTree(dhxTree, jQuery(storage.header.activeButton).text());		
 	dhxTree.attachEvent("onXLE", function(tree,id){
 		var items = this.getAllSubItems(0).split(',');
                 jQuery(items).each(function(i,e){
@@ -47,14 +41,12 @@ function DescendantTree(obj){
                 	}
                 });
 		jQuery('div[name="descendant-node"]').each(function(index, element){
-			var flag = jQuery(element).attr('user');
-			if(flag == 'true'){
-				self.click(element);
-			}
 			jQuery(element).click(function(){
 				self.click(element);
 			});
 		});
+		var user = jQuery('[name="descendant-node"][user="true"]');
+		jQuery(user[0]).click();
 	});
 }
 
@@ -65,6 +57,7 @@ DescendantTree.prototype = {
 		})
 	},
 	loadTree:function(dhxTree, render){
+		render = (render=='My Father')?'father':'mother';
 		this._ajax('getTree', render, function(res){
 			dhxTree.loadXMLString(res.responseText);
 			dhxTree.openAllItems(0);
