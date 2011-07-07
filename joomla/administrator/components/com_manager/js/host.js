@@ -66,5 +66,23 @@ Host.prototype = {
         getHelpWindow:function(name){
         	var url = storage.url+'help/'+name+'.html';
         	window.open(url, name, 'width=300,height=200,left=100,top=100,toolbar=0,location=0,direction=0,menubar=0,scrollbars=0,resizable=0,status=0,fullscreen=0');
+        },
+        stringBuffer:function(){
+            	return (function(){
+        		var string = Array();
+        		return {
+        			_:function(str){
+        				string.push(str);
+        				return this;
+        			},
+        			clear:function(){
+        				string = Array();
+        				return this;
+        			},
+        			result:function(){
+        				return string.join("");
+        			}
+        		}
+        	}).call(this);	
         }
 }
