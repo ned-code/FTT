@@ -30,21 +30,22 @@ Families.prototype = {
 		})
 	},
 	_createDiv:function(){
-		var html = '<div class="jmb-families-body">';
-			html += '<table>';
-				html += '<tr>';
-					html += '<td style="width:170px;"><div style="width:150px;" class="jmb-families-header">&nbsp;</div></td>';
-					html += '<td style="width:150px;"><div class="jmb-families-sircar">&nbsp;</div></td>';
-					html += '<td style="width:90px;"><div class="jmb-families-event">&nbsp;</div></td>';
-					html += '<td style="width:150px;"><div class="jmb-families-spouse">&nbsp;</div></td>';
-					html += '<td style="width:170px;"><div class="jmb-families-spouse-container">&nbsp;</div></td>';
-				html += '</tr>';
-				html += '<tr>';
-					html += '<td colspan="5" align="center"><div class="jmb-families-childs-container">&nbsp;</div></td>';
-				html += '</tr>';
-			html += '</table>';
-		html += '</div>';
-		return jQuery(html);
+		var sb = host.stringBuffer();
+		sb._('<div class="jmb-families-body">');
+			sb._('<table>');
+				sb._('<tr>');
+					sb._('<td style="width:170px;"><div style="width:150px;" class="jmb-families-header">&nbsp;</div></td>');
+					sb._('<td style="width:150px;"><div class="jmb-families-sircar">&nbsp;</div></td>');
+					sb._('<td style="width:90px;"><div class="jmb-families-event">&nbsp;</div></td>');
+					sb._('<td style="width:150px;"><div class="jmb-families-spouse">&nbsp;</div></td>');
+					sb._('<td style="width:170px;"><div class="jmb-families-spouse-container">&nbsp;</div></td>');
+				sb._('</tr>');
+				sb._('<tr>');
+					sb._('<td colspan="5" align="center"><div class="jmb-families-childs-container">&nbsp;</div></td>');
+				sb._('</tr>');
+			sb._('</table>');
+		sb._('</div>');
+		return jQuery(sb.result());
 	},
 	_getYear:function(data){
 		if(data){
@@ -67,103 +68,108 @@ Families.prototype = {
 		return (obj.Nick!='')?obj.Nick:obj.FirstName;
 	},
 	_getAvatar:function(obj, type, k){
+		var sb = host.stringBuffer();
 		var x,y,fId,av,defImg;
 		fId = obj.indiv.FacebookId;
 		av = obj.avatar;
 		defImg = (obj.indiv.Gender=="M")?'male.gif':'female.gif';
 		if(type=="parent"){ x=Math.round(108*k);y=Math.round(120*k); } else if(type=="child"){ x=Math.round(72*k);y=Math.round(80*k); }
  		if(av != null && av.FilePath != null){
-			return '<img height="'+y+'px" width="'+x+'px" src="'+av.FilePath+'">';
+			return sb.clear()._('<img height="')._(y)._('px" width="')._(x)._('px" src="')._(av.FilePath)._('">').result();
 		}
 		else if(fId != '0'){
-			return '<img height="'+y+'px" width="'+x+'px" src="http://graph.facebook.com/'+fId+'/picture">';
+			return sb.clear()._('<img height="')._(y).('px" width="')._(x)._('px" src="http://graph.facebook.com/')._(fId)._('/picture">').result();
 		}
-		var defImgPath = this.json.path+"/components/com_manager/modules/families/css/"+defImg;
-		return '<img class="jmb-families-avatar" height="'+y+'px" width="'+x+'px" src="'+defImgPath+'">';
+		var defImgPath = sb.clear()._(this.json.path)._("/components/com_manager/modules/families/css/")._(defImg).result();
+		return sb.clear()._('<img class="jmb-families-avatar" height="')._(y)._('px" width="')._(x)._('px" src="')._(defImgPath)._('">').result()
 	},
 	_createDivParent:function(obj, arrow, k){
 		var person = obj.indiv;
 		var self = this;
 		var name = self._getLongName(person);
 		var date = self._getDate(person);
-		var html = '<div>';
+		var sb = host.stringBuffer();
+		sb._('<div>');
 			if(obj.parents != null && (obj.parents.fatherID != null || obj.parents.motherID != null)){
-				html += '<div  id="'+person.Id+'" class="jmb-families-button parent active">&nbsp;</div>';
+				sb._('<div  id="')._(person.Id)._('" class="jmb-families-button parent active">&nbsp;</div>');
 			} else {
-				html += '<div  id="null" class="jmb-families-button parent">&nbsp;</div>';
+				sb._('<div  id="null" class="jmb-families-button parent">&nbsp;</div>');
 			}
-			html += '<div id="'+person.Id+'-view" type="imgContainer" class="jmb-families-parent-img">'+this._getAvatar(obj, 'parent', 1);
-				html += '<div class="jmb-families-img-view parent" style="display:none;">&nbsp;</div>';
-				html += '<div id="'+person.Id+'-edit" class="jmb-families-edit-button parent">&nbsp;</div>';
+			sb._('<div id="')._(person.Id)._('-view" type="imgContainer" class="jmb-families-parent-img">')._(this._getAvatar(obj, 'parent', 1));
+				sb._('<div class="jmb-families-img-view parent" style="display:none;">&nbsp;</div>');
+				sb._('<div id="')._(person.Id)._('-edit" class="jmb-families-edit-button parent">&nbsp;</div>');
 				if(obj.indiv.FacebookId != '0'){
 					var imgPath = self.json.path+"/components/com_manager/modules/families/css/facebook_icon.png";
-					html += '<div class="jmb-families-fb-icon parent" id="'+obj.indiv.FacebookId+'"><img src="'+imgPath+'" width="14x" height="14px"></div>';
+					sb._('<div class="jmb-families-fb-icon parent" id="')._(obj.indiv.FacebookId)._('"><img src="')._(imgPath)._('" width="14x" height="14px"></div>');
 				}
-			html += '</div>';
-			html += '<div>';
-				html += '<div class="jmb-families-parent-name">'+name+'</div>';
-				html += '<div class="jmb-families-parent-date">'+date+'</div>';
-			html += '</div>';
-			if(obj.spouses[0] != null || arrow == 'right') html += '<div class="jmb-families-arrow-'+arrow+'">&nbsp</div>';
-		html += '</div>';
-		return jQuery(html);
+			sb._('</div>');
+			sb._('<div>');
+				sb._('<div class="jmb-families-parent-name">')._(name)._('</div>');
+				sb._('<div class="jmb-families-parent-date">')._(date)._('</div>');
+			sb._('</div>');
+			if(obj.spouses[0] != null || arrow == 'right') sb._('<div class="jmb-families-arrow-')._(arrow)._('">&nbsp</div>');
+		sb._('</div>');
+		return jQuery(sb.result());
 	},
 	_createSpouse:function(obj){
 		var person = obj.indiv;
 		var self = this;
+		var sb = host.stringBuffer();
 		var name = self._getLongName(person);
 		var date = self._getDate(person);
-		var html = '<div class="jmb-families-spouse-div">';
-			html += '<div id="'+person.Id+'-view" type="imgContainer" class="jmb-families-parent-img">'+this._getAvatar(obj, 'parent', 1);
-				html += '<div class="jmb-families-img-view parent" style="display:none;">&nbsp;</div>';
-				html += '<div id="'+person.Id+'-edit" class="jmb-families-edit-button parent">&nbsp;</div>';
+		sb._('<div class="jmb-families-spouse-div">');
+			sb._('<div id="')._(person.Id)._('-view" type="imgContainer" class="jmb-families-parent-img">')._(this._getAvatar(obj, 'parent', 1));
+				sb._('<div class="jmb-families-img-view parent" style="display:none;">&nbsp;</div>');
+				sb._('<div id="')._(person.Id)._('-edit" class="jmb-families-edit-button parent">&nbsp;</div>');
 				if(obj.indiv.FacebookId != '0'){
-					var imgPath = self.json.path+"/components/com_manager/modules/families/css/facebook_icon.png"
-					html += '<div class="jmb-families-fb-icon parent" id="'+obj.indiv.FacebookId+'"><img src="'+imgPath+'" width="14px" height="14px"></div>'
+					var imgPath = self.json.path+"/components/com_manager/modules/families/css/facebook_icon.png";
+					sb._('<div class="jmb-families-fb-icon parent" id="')._(obj.indiv.FacebookId)._('"><img src="')._(imgPath)._('" width="14px" height="14px"></div>');
 				}
-			html += '</div>';
-			html += '<div>';
-				html += '<div class="jmb-families-parent-name">'+name+'</div>';
-				html += '<div class="jmb-families-parent-date">'+date+'</div>';
-			html += '</div>';
-		html += '</div>';
-		return jQuery(html);
+			sb._('</div>');
+			sb._('<div>');
+				sb._('<div class="jmb-families-parent-name">')._(name)._('</div>');
+				sb._('<div class="jmb-families-parent-date">')._(date)._('</div>');
+			sb._('</div>');
+		sb._('</div>');
+		return jQuery(sb.result());
 	},
 	_createDivChild:function(obj, arrow, k){
 		var person = obj.indiv
 		var self = this;
-		var html = '<div childId="'+person.Id+'" class="jmb-families-child" style="height:'+Math.round(170*k)+'px;">';
-			html += '<div id="'+person.Id+'-view" type="imgContainer" class="jmb-families-child-img">'+this._getAvatar(obj, 'child', k);
-				html += '<div class="jmb-families-img-view child" style="display:none;">&nbsp;</div>';
+		var sb = host.stringBuffer();
+		sb._('<div childId="')._(person.Id)._('" class="jmb-families-child" style="height:')._(Math.round(170*k))._('px;">');
+			sb._('<div id="')._(person.Id)._('-view" type="imgContainer" class="jmb-families-child-img">')._(this._getAvatar(obj, 'child', k));
+				sb._('<div class="jmb-families-img-view child" style="display:none;">&nbsp;</div>');	
 				var editButtonClass = (k!=1)?'jmb-families-edit-button child small':'jmb-families-edit-button child';
-				html += '<div id="'+person.Id+'-edit" class="'+editButtonClass+'">&nbsp;</div>';
+				sb._('<div id="')._(person.Id)._('-edit" class="')._(editButtonClass)._('">&nbsp;</div>');
 				if(obj.indiv.FacebookId != '0'){
 					var imgPath = self.json.path+"/components/com_manager/modules/families/css/facebook_icon.png";
-					html += '<div class="jmb-families-fb-icon child" id="'+obj.indiv.FacebookId+'"><img src="'+imgPath+'" width="14px" height="14px"></div>';
+					sb._('<div class="jmb-families-fb-icon child" id="')._(obj.indiv.FacebookId)._('"><img src="')._(imgPath)._('" width="14px" height="14px"></div>');
 				}
-			html += '</div>';
-			html += '<div><div class="jmb-families-child-name">'+self._getName(person)+'</div><div class="jmb-families-child-date">'+self._getDate(person)+'</div></div>';
+			sb._('</div>')
+			sb._('<div><div class="jmb-families-child-name">')._(self._getName(person))._('</div><div class="jmb-families-child-date">')._(self._getDate(person))._('</div></div>');
 			if(jQuery(obj.spouses).length != 0){
 				var buttonChild = (k!=1)?'jmb-families-button childs active small':'jmb-families-button childs active';
-				html += '<div id="'+person.Id+'" class="'+buttonChild+'">&nbsp;</div>'; 
+				sb._('<div id="')._(person.Id)._('" class="')._(buttonChild)._('">&nbsp;</div>');
 			} else {
 				var buttonChild = (k!=1)?'jmb-families-button childs small':'jmb-families-button childs';
-				html += '<div id="null" class="'+buttonChild+'">&nbsp;</div>'; 
+				sb._('<div id="null" class="')._(buttonChild)._('">&nbsp;</div>');
 			}
 			var arrowClass = (k!=1)?'jmb-families-arrow-'+arrow+' small':'jmb-families-arrow-'+arrow;
-			html += '<div class="'+arrowClass+'">&nbsp</div>';
-		return jQuery(html);
+			sb._('<div class="')._(arrowClass)._('">&nbsp</div>');
+		return jQuery(sb.result());
 	},
 	_createDivInfo:function(obj){
 		if(!obj) return;
 		var self = this;
+		var sb = host.stringBuffer();
 		var year = (obj.Year)?obj.Year:'';
 		var place = (obj.Place.Hierarchy != null)?obj.Place.Hierarchy[0].Name:'';
-		var html = '<div>';
-			html += '<div>'+year+'</div>';
-			html += '<div>'+place+'</div>';
-		html += '</div>';
-		return jQuery(html);
+		sb._('<div>');
+			sb._('<div>')._(year)._('</div>');
+			sb._('<div>')._(place)._('</div>');
+		sb._('</div>');
+		return jQuery(sb.result());
 	},
 	render:function(obj){
 		var self = this;
