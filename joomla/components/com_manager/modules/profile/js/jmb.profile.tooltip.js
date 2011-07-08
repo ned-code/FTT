@@ -316,7 +316,7 @@ JMBProfileTooltip.prototype = {
 		}
 		var l = self.storage.length++;
 		self.storage[l] = container;
-		p.settings.contentSelector = "jQuery('#"+jQuery(p.target).attr('id')+"-content')";
+		p.settings.contentSelector = "jQuery('#"+p.id+"-content')";
 		if(p.parent) p.settings.offsetParent = p.parent;
 		
 		jQuery(document.body).append(container);
