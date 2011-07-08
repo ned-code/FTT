@@ -66,7 +66,7 @@ DescendantTreeProfile.prototype = {
 				sb._('<table>');
 					sb._('<tr>');
 						sb._('<td>');
-							sb._('<div class="jmb-dtp-footer-mail-button">&nbsp;</div>);
+							sb._('<div class="jmb-dtp-footer-mail-button">&nbsp;</div>');
 						sb._('</td>');
 						sb._('<td>');
 							sb._('<div class="jmb-dtp-footer-info">&nbsp;</div>');

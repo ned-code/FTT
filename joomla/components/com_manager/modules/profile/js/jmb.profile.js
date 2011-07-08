@@ -137,7 +137,7 @@ JMBProfile.prototype = {
 			return sb._(f)._(' ')._(m)._(' ')._(l).result();
 		}
 		else if(f!=''&&m==''&&l!=''){
-			return sb._(f)._(' ')._(l);
+			return sb._(f)._(' ')._(l).result();
 		}
 		else if(f==''&&m==''&&l!=''){
 			return l;
@@ -177,6 +177,9 @@ JMBProfile.prototype = {
 		}
 		else if(d!=''&&m!=''&&y==''){
 			return sb._(d)._(' ')._(m).result();
+		}
+		else {
+			return 'unknown';
 		}
 	},
 	_getRelation_:function(id, data, ret){

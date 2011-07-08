@@ -71,6 +71,10 @@ JMBProfileFull.prototype = {
 			case "unions":
 				self._unions();
 			break;
+		
+			case "events":
+				self._events();
+			break;
 		}
 	},
 	_setMenu:function(object){
@@ -326,6 +330,62 @@ JMBProfileFull.prototype = {
 		jQuery(input).click(function(){
 			self._unionAdd(this, htmlObject);
 		});
+		jQuery(self.parent.dWindow).find('div.jmb-dialog-profile-content').append(htmlObject);
+	},
+	_events:function(){
+		var self = this;
+		var data = self.json.data;
+		var sb = host.stringBuffer();
+			sb._('<div class="jmb-dialog-profile-content-events">');
+				sb._('<div class="header"><div class="button"><span>Edit existing event</span></div><div class="button active"><span>Create new Event</span></div></div>');
+				sb._('<div class="body">');
+					sb._('<div class="header">');
+						sb._('<div class="title">Event</div>');
+						sb._('<div class="buttons">');
+							sb._('<input type="button" value="Save">');
+							sb._('<input type="button" value="Delete">');
+							sb._('<input type="button" value="Cancel">');
+						sb._('</div>');
+					sb._('</div>');
+					sb._('<div class="content">');
+						sb._('<table>');
+							sb._('<tr>');
+								sb._('<td><div class="title">Duration</div></td>');
+								sb._('<td valign="top">');
+									sb._('<div><input type="radio"><span>Single Day Event</span></div>');
+									sb._('<div><input type="radio"><span>Prolonged Event</span></div>');
+								sb._('</td>');
+							sb._('</tr>');
+							sb._('<tr>');
+								sb._('<td><div class="title">Type</div></td>');
+								sb._('<td><select><option>Graduation</option></select></td>');
+							sb._('</tr>');
+							sb._('<tr>');
+								sb._('<td><div class="title">Date</div></td>');
+								sb._('<td><select><option>Day</option></select><select><option>Month</option></select><input type="text" maxlength="4"></td>');
+							sb._('</tr>');
+							sb._('<tr>');
+								sb._('<td><div class="title">Place</div></td>');
+								sb._('<td><input type="text"></td>')
+							sb._('</tr>');
+							sb._('<tr>');
+								sb._('<td><div class="title">Location</div></td>');
+								sb._('<td><input type="text"><input type="text"><input type="text"></td>');
+							sb._('</tr>');
+						sb._('</table>');
+					sb._('</div>');
+				sb._('</div>');
+				sb._('<div class="list">');
+					sb._('<div>1900 - Born in Toronto,Ontario Canada</div>');
+					sb._('<div>1901 - Moves to Braga,Portugal</div>');
+					sb._('<div>1902 - Graduates from Central Commerce High School</div>');
+					sb._('<div class="active">1903 - Graduates from UT university</div>');
+					sb._('<div>1999 - Marries Jane Fonda</div>');
+				sb._('</div>');
+			sb._('</div>');
+		var html = sb.result();
+		var htmlObject = jQuery(html);
+		
 		jQuery(self.parent.dWindow).find('div.jmb-dialog-profile-content').append(htmlObject);
 	},
 	render:function(p){
