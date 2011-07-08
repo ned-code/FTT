@@ -219,6 +219,7 @@ DescendantTreeProfile.prototype = {
 			self.profile.tooltip.cleaner();
 			self.profile.tooltip.render({
 				target: button,
+				id:jQuery(button).attr('id'),
 				type: 'tooltip',
 				data: json,
 				imgPath:json.path,

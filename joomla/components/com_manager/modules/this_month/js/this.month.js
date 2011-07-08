@@ -99,9 +99,9 @@ JMBThisMonth.prototype = {
 		} else if(date > sort_date && sort_type == '-1'){
 			return sb._('<option selected value="-1">Before ')._(sort_date)._('</option><option value="0">All Years</option>').result();
 		} else if(date > sort_date && sort_type == '0'){
-			return sb._('<option selected value="0">All Years</option>');
+			return sb._('<option selected value="0">All Years</option>').result();
 		} else if(date > sort_date && sort_type == '1'){
-			return sb._('<option value="0">All Years</option>');
+			return sb._('<option value="0">All Years</option>').result();
 		}
 	},
 	_setHEAD:function(json){
@@ -216,6 +216,7 @@ JMBThisMonth.prototype = {
 				self.profile.tooltip.cleaner();
 				self.profile.tooltip.render({
 					target:jQuery(e).parent(),
+					id:jQuery(e).parent().attr('id'),
 					type:'mini',
 					data:json.descedants[jQuery(e).parent().attr('id')],
 					imgPath:json.path,

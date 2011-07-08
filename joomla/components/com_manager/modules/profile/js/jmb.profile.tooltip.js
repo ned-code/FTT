@@ -56,7 +56,7 @@ JMBProfileTooltip.prototype = {
 	_tooltipContainer:function(p){
 		var self = this;
 		var sb = host.stringBuffer();
-		var id = jQuery(p.target).attr('id');
+		var id = p.id;
 		sb._("<div id='")._(id)._("-content' class='jmb-profile-tooltip-container'>");
 			sb._("<div class='jmb-profile-tooltip-button-edit'><span>Edit this Profile</span></div>");
 			sb._("<div class='jmb-profile-tooltip-fieldset'><fieldset>");
@@ -90,7 +90,7 @@ JMBProfileTooltip.prototype = {
 		return divObj;
 	},
 	_miniProfileContainer:function(p){
-		var id = jQuery(p.target).attr('id');
+		var id = p.id;
 		var self = this;
 		var sb = host.stringBuffer();
 		sb._('<div id="')._(id)._('-content" class="jmb-profile-mini-container">');

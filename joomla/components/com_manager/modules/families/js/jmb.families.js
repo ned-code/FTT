@@ -237,7 +237,8 @@ Families.prototype = {
 		//when we click to view button
 		jQuery(div).find('div.jmb-families-img-view').each(function(i,e){
 			self.profile.tooltip.render({
-				target: jQuery(e),
+				target: e,
+				id: jQuery(e).parent().attr('id'),
 				type: 'mini',
 				data: self.json.individs[jQuery(e).parent().attr('id').split('-')[0]],
 				imgPath:self.json.path,
@@ -250,6 +251,7 @@ Families.prototype = {
 		jQuery(div).find('.jmb-families-edit-button').each(function(i,e){
 			self.profile.tooltip.render({
 				target: e,
+				id:jQuery(e).attr('id'),
 				type: 'tooltip',
 				data: self.json.individs[jQuery(e).attr('id').split('-')[0]],
 				imgPath:self.json.path,
