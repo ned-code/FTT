@@ -75,10 +75,11 @@ Families.prototype = {
 		defImg = (obj.indiv.Gender=="M")?'male.gif':'female.gif';
 		if(type=="parent"){ x=Math.round(108*k);y=Math.round(120*k); } else if(type=="child"){ x=Math.round(72*k);y=Math.round(80*k); }
  		if(av != null && av.FilePath != null){
-			return sb.clear()._('<img height="')._(y)._('px" width="')._(x)._('px" src="')._(av.FilePath)._('">').result();
+			//return sb.clear()._('<img height="')._(y)._('px" width="')._(x)._('px" src="')._(av.FilePath)._('">').result();
+			return sb.clear()._('<img class="jmb-families-avatar" height="')._(y)._('px" width="')._(x)._('px" src="index.php?option=com_manager&task=getResizeImage&id=')._(av.Id)._('">').result();
 		}
 		else if(fId != '0'){
-			return sb.clear()._('<img height="')._(y).('px" width="')._(x)._('px" src="http://graph.facebook.com/')._(fId)._('/picture">').result();
+			return sb.clear()._('<img class="jmb-families-avatar" height="')._(y)._('px" width="')._(x)._('px" src="http://graph.facebook.com/')._(fId)._('/picture">').result();
 		}
 		var defImgPath = sb.clear()._(this.json.path)._("/components/com_manager/modules/families/css/")._(defImg).result();
 		return sb.clear()._('<img class="jmb-families-avatar" height="')._(y)._('px" width="')._(x)._('px" src="')._(defImgPath)._('">').result()
@@ -96,7 +97,6 @@ Families.prototype = {
 				sb._('<div  id="null" class="jmb-families-button parent">&nbsp;</div>');
 			}
 			sb._('<div id="')._(person.Id)._('-view" type="imgContainer" class="jmb-families-parent-img">')._(this._getAvatar(obj, 'parent', 1));
-				sb._('<div class="jmb-families-img-view parent" style="display:none;">&nbsp;</div>');
 				sb._('<div id="')._(person.Id)._('-edit" class="jmb-families-edit-button parent">&nbsp;</div>');
 				if(obj.indiv.FacebookId != '0'){
 					var imgPath = self.json.path+"/components/com_manager/modules/families/css/facebook_icon.png";
@@ -119,7 +119,6 @@ Families.prototype = {
 		var date = self._getDate(person);
 		sb._('<div class="jmb-families-spouse-div">');
 			sb._('<div id="')._(person.Id)._('-view" type="imgContainer" class="jmb-families-parent-img">')._(this._getAvatar(obj, 'parent', 1));
-				sb._('<div class="jmb-families-img-view parent" style="display:none;">&nbsp;</div>');
 				sb._('<div id="')._(person.Id)._('-edit" class="jmb-families-edit-button parent">&nbsp;</div>');
 				if(obj.indiv.FacebookId != '0'){
 					var imgPath = self.json.path+"/components/com_manager/modules/families/css/facebook_icon.png";
@@ -138,8 +137,7 @@ Families.prototype = {
 		var self = this;
 		var sb = host.stringBuffer();
 		sb._('<div childId="')._(person.Id)._('" class="jmb-families-child" style="height:')._(Math.round(170*k))._('px;">');
-			sb._('<div id="')._(person.Id)._('-view" type="imgContainer" class="jmb-families-child-img">')._(this._getAvatar(obj, 'child', k));
-				sb._('<div class="jmb-families-img-view child" style="display:none;">&nbsp;</div>');	
+			sb._('<div id="')._(person.Id)._('-view" type="imgContainer" class="jmb-families-child-img">')._(this._getAvatar(obj, 'child', k));	
 				var editButtonClass = (k!=1)?'jmb-families-edit-button child small':'jmb-families-edit-button child';
 				sb._('<div id="')._(person.Id)._('-edit" class="')._(editButtonClass)._('">&nbsp;</div>');
 				if(obj.indiv.FacebookId != '0'){
@@ -223,19 +221,8 @@ Families.prototype = {
 				self.click(id, type);
 			});
 		});
-		//view profile
-		jQuery(div).find('div[type="imgContainer"]').each(function(i,e){
-			jQuery(e)
-			.mouseenter(function(){
-				jQuery(e).find('.jmb-families-img-view').show();
-			})
-			.mouseleave(function(){
-				//jQuery(e).find('.jmb-families-img-view').css("top", "0px").css("left", "0px").hide();
-				jQuery(e).find('.jmb-families-img-view').hide();
-			});
-		})
-		//when we click to view button
-		jQuery(div).find('div.jmb-families-img-view').each(function(i,e){
+		//when we click in avatar
+		jQuery(div).find('.jmb-families-avatar').each(function(i,e){
 			self.profile.tooltip.render({
 				target: e,
 				id: jQuery(e).parent().attr('id'),

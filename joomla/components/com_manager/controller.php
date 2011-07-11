@@ -167,7 +167,7 @@ class JMBController extends JController
 	*
 	*/
 	function savePage(){
-		$page_id = JRequest::getVar('page_id');
+		$page_id = 
 		$json = JRequest::getVar('json');
 		$db =& JFactory::getDBO();
 		$sql = "SELECT uid FROM #__mb_modulesgrid WHERE page_id ='".$page_id."'";
@@ -186,6 +186,87 @@ class JMBController extends JController
 		die;
 	}
         
+	/**
+        *
+        */
+        function getResizeImage(){
+        	ob_clean();
+        	$id = JRequest::getVar('id');
+        	//var
+        	$defaultWidth = 135;
+        	$defaultHeight = 150;
+        	$host = new Host('joomla');
+
+        	//file        	
+        	$f = $host->gedcom->media->get($id);	
+        	$filePath = substr(JURI::base(), 0, -1).$f->FilePath;
+
+        	switch($f->Type){
+        		case "jpg":
+        			$src = imagecreatefromjpeg($filePath); 
+        		break;
+        		
+        		case "gif":
+        			$src = imagecreatefromgif($filePath); 
+        		break;
+        		
+        		case "png":
+        			$src = imagecreatefrompng($filePath); 
+        		break;
+        	}
+
+        	$srcWidth = imagesx($src); 
+        	$srcHeight = imagesy($src);
+
+        	//get ratio
+        	if($srcWidth>$defaultWidth&&$srcHeight>$defaultHeight){
+        		$ratio = ($srcWidth>$srcHeight)?$srcWidth/$defaultWidth:$srcHeight/$defaultHeight;
+        	} else if($srcWidth>$defaultWidth){
+        		$ratio = $srcWidth/$defaultWidth;
+        	} else if($srcHeight>$defaultHeight){
+        		$ratio = $srcHeight/$defaultHeight;
+        	} else {
+        		$ratio = ($srcWidth<$srcHeight)?$srcHeight/$defaultHeight:$srcWidth/$defaultWidth;
+        	} 
+
+        	//create new image
+        	$width = round($srcWidth/$ratio);
+        	$height = round($srcHeight/$ratio);
+        	
+        	$img = imagecreatetruecolor($width,$height);
+        	imagecopyresampled($img, $src, 0, 0, 0, 0, $width, $height, $srcWidth, $srcHeight);
+        	
+        	$im = imagecreatetruecolor($defaultWidth,$defaultHeight);
+        	$black = imagecolorallocate($im, 0, 0, 0);
+        	$white = imagecolorallocate($im, 255, 255, 255);
+        	imagefill($im, 0, 0, $white);
+        	$destX = ($width<$defaultWidth)?($defaultWidth-$width)/2:0;
+        	$destY = ($height<$defaultHeight)?($defaultHeight-$height)/2:0;
+        	imagecopy($im, $img, $destX, $destY, 0, 0, $width, $height);
+        	if($f->Type == 'gif' || $f->Type == 'png'){
+        		imagecolortransparent($im, $black);
+        	}
+        	header("Content-type: image/".$f->Type); 
+        	switch($f->Type){
+        		case "jpg":
+        			imagejpeg($im); 
+        		break;
+        		
+        		case "gif":
+        			imagegif($im); 
+        		break;
+        		
+        		case "png":
+        			imagepng($im); 
+        		break;
+        	}
+        	imagedestroy($im);
+        	imagedestroy($img); 
+        	imagedestroy($src); 
+        	die();
+        }
+	
+	
         /**
         *
         */

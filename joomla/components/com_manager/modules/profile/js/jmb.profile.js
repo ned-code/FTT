@@ -223,7 +223,8 @@ JMBProfile.prototype = {
 	_getPhoto:function(obj, x,y){
 		var self = this;
 		var sb = host.stringBuffer();
-		return sb._('<img class="jmb-families-avatar" height="')._(y)._('px" width="')._(x)._('px" src="')._(obj.p[0].FilePath)._('">').result();
+		//return sb._('<img class="jmb-families-avatar" height="')._(y)._('px" width="')._(x)._('px" src="')._(obj.p[0].FilePath)._('">').result();
+		return sb._('<img class="jmb-families-avatar" height="')._(y)._('px" width="')._(x)._('px" src="index.php?option=com_manager&task=getResizeImage&id=')._(obj.p[0].Id)._('">').result();
 	},
 	_getAvatar:function(obj, x, y){
 		var self = this;
@@ -233,7 +234,8 @@ JMBProfile.prototype = {
 		av = obj.avatar;
 		defImg = (obj.indiv.Gender=="M")?'male.gif':'female.gif';
 		if(av != null && av.FilePath != null){
-			return sb.clear()._('<img height="')._(y)._('px" width="')._(x)._('px" src="')._(av.FilePath)._('">').result();
+			//return sb.clear()._('<img height="')._(y)._('px" width="')._(x)._('px" src="')._(av.FilePath)._('">').result();
+			return sb._('<img class="jmb-families-avatar" height="')._(y)._('px" width="')._(x)._('px" src="index.php?option=com_manager&task=getResizeImage&id=')._(av.Id)._('">').result();
 		}
 		else if(fId != '0'){
 			return sb.clear()._('<img height="')._(y)._('px" width="')._(x)._('px" src="http://graph.facebook.com/')._(fId)._('/picture">').result();
@@ -254,7 +256,8 @@ JMBProfile.prototype = {
 		var length = jQuery(p).length;
 		sb._('<ul style="width:')._(64*length)._('px;">');
 			jQuery(p).each(function(i,e){
-				sb._('<li><img height="65px" width="59" src="')._(e.FilePath)._('"></li>');
+				//sb._('<li><img height="65px" width="59" src="')._(e.FilePath)._('"></li>');
+				sb._('<li><img height="65px" width="59" src="index.php?option=com_manager&task=getResizeImage&id=')._(e.Id)._('"></li>');
 			});
 		sb._('</ul>')
 		return sb.result();
@@ -498,7 +501,7 @@ JMBProfile.prototype = {
 		});		
 		sb._('<div class="jmb-dialog-content"><form id="jmb:profile:addpsc" method="post" target="iframe-profile">');
 			sb._('<table style="width:100%;"><tr>');
-				sb._('<td valign="top" style="width:160px;">');
+				sb._('<td valign="top">');
 					sb._('<div class="jmb-dialog-photo">')._(self._getAvatar2(135, 150, "M"))._('</div>');
 					sb._('<div class="jmb-dialog-photo-button">');
 						sb._('<span class="jmb-dialog-photo-button-wrapper">');
@@ -568,7 +571,7 @@ JMBProfile.prototype = {
 			sb._('<div>');
 				sb._('<table>');
 					sb._('<tr>');
-						sb._('<td valign="top" style="width:160px;">');
+						sb._('<td valign="top">');
 							sb._('<div class="jmb-dialog-union-spouse">');
 								sb._('<div class="jmb-dialog-union-photo"><div>')._(self._getAvatar(p.data, 135, 150))._('</div></div>');
 								sb._('<div class="jmb-dialog-union-photo-know">Know As ')._(self._getKnowAs(p.data.indiv))._('</div>');
@@ -581,7 +584,7 @@ JMBProfile.prototype = {
 								sb._('<div class="jmb-dialog-union-profile-header">Profile Basics</div>');
 								sb._('<div class="jmb-dialog-union-profile-content">');
 									sb._('<table style="width:100%;"><tr>')
-										sb._('<td valign="top" style="width:160px;">');
+										sb._('<td valign="top">');
 											sb._('<div class="jmb-dialog-union-photo"><div>')._(self._getSpouseAvatar(p.data, 135, 150))._('</div></div>');
 											sb._('<div class="jmb-dialog-photo-button">');
 												sb._('<span class="jmb-dialog-photo-button-wrapper">');
