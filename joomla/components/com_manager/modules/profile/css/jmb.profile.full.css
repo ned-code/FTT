@@ -63,7 +63,7 @@
 	margin-left:20px;
 }
 .jmb-dialog-profile-content{
-	
+	position:relative;
 }
 /* Basic */
 .jmb-dialog-profile-content-basic {
@@ -233,6 +233,7 @@
 }
 .jmb-dialog-profile-content-events .header div.button{
 	display: inline-block;
+	background:url("../image/calendar.gif") no-repeat;
 }
 .jmb-dialog-profile-content-events .header div.button span{
 	cursor: pointer;
@@ -255,7 +256,7 @@
 	text-align: center;
 }
 .jmb-dialog-profile-content-events .body .header .title{
-	margin-left: -20px;
+	margin-left: -70px;
 }
 .jmb-dialog-profile-content-events .body .header .buttons{
 	position: absolute;
@@ -276,7 +277,30 @@
 	margin: 10px;
 }
 .jmb-dialog-profile-content-events .body .content .title {
-	
+	width: 60px;
+	text-align: right;
+	font-weight: bold
+}
+.jmb-dialog-profile-content-events .body .content .text {
+	margin: 3px;
+}
+.jmb-dialog-profile-content-events .body .content .text input[type="radio"] {
+	position: relative;
+	top: 3px;
+}
+.jmb-dialog-profile-content-events .body .content .text input{
+	border: 1px solid #999;
+	margin-left: 3px;
+}
+.jmb-dialog-profile-content-events .body .content .text input[type="text"] {
+	width: 100px;
+}
+.jmb-dialog-profile-content-events .body .content .text input[name="year"] {
+	width:60px;
+}
+.jmb-dialog-profile-content-events .body .content .text select{
+	border: 1px solid #999;
+	padding: 3px;
 }
 .jmb-dialog-profile-content-events .list{
 	margin-top: 10px;
@@ -285,6 +309,7 @@
 	cursor: pointer;
 	font-family: Calibri,Tahoma;
 	font-size: 16px;
+	border: 1px solid white;
 }
 .jmb-dialog-profile-content-events .list div.active{
 	background: none repeat scroll 0 0 yellow;

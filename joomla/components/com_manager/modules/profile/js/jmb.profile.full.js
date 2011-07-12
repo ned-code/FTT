@@ -2,6 +2,7 @@ function JMBProfileFull(parent){
 	this.parent = parent;
 	this.json = null;
 	this.menuActiveItem = null;
+	this.menuEventsActiveItem = null
 	this.spouseIndex = 0;
 	
 	this.menu = {
@@ -56,7 +57,7 @@ JMBProfileFull.prototype = {
 		var sb = host.stringBuffer();
 		sb._('<div>');
 			sb._('<table>');
-				sb._('<tr> <td valign="top" style="width:150px;">')._(self._menu())._('</td> <td valign="top"><div class="jmb-dialog-profile-content"></div></td></tr>');
+				sb._('<tr> <td valign="top" style="width:150px;">')._(self._menu())._('</td><td valign="top"><div class="jmb-dialog-profile-content"></div></td></tr>');
 			sb._('</table>');
 		sb._('</div>');
 		return sb.result();
@@ -324,6 +325,10 @@ JMBProfileFull.prototype = {
 			self.parent._ajaxForm(jQuery(htmlObject).find('form#jmb-profile-addpsc-'+i), 'updateUnion', args, 
 			function(res){
 			}, function(json){
+				delete spouse.event;
+				spouse.event = new Array();
+				(json.marriage)?spouse.event[spouse.event.length++]=json.marriage:null;
+				(json.divorce)?spouse.event[spouse.event.length++]=json.divorce:null;
 			});
 		});	
 		var input = jQuery(htmlObject[1]).find('input');
@@ -350,27 +355,29 @@ JMBProfileFull.prototype = {
 					sb._('<div class="content">');
 						sb._('<table>');
 							sb._('<tr>');
-								sb._('<td><div class="title">Duration</div></td>');
+								sb._('<td><div class="title">Duration:</div></td>');
 								sb._('<td valign="top">');
-									sb._('<div><input type="radio"><span>Single Day Event</span></div>');
-									sb._('<div><input type="radio"><span>Prolonged Event</span></div>');
+									sb._('<div class="text">');
+										sb._('<div><input name="duration" value="single" type="radio"><span>Single Day Event</span></div>');
+										sb._('<div><input name="duration" value="prolonger" type="radio"><span>Prolonged Event</span></div>');
+									sb._('</div>');
 								sb._('</td>');
 							sb._('</tr>');
 							sb._('<tr>');
-								sb._('<td><div class="title">Type</div></td>');
-								sb._('<td><select><option>Graduation</option></select></td>');
+								sb._('<td><div class="title">Type:</div></td>');
+								sb._('<td><div class="text"><select><option>Graduation</option></select></div></td>');
 							sb._('</tr>');
 							sb._('<tr>');
-								sb._('<td><div class="title">Date</div></td>');
-								sb._('<td><select><option>Day</option></select><select><option>Month</option></select><input type="text" maxlength="4"></td>');
+								sb._('<td><div class="title">Date:</div></td>');
+								sb._('<td><div class="text"><select>')._(self.parent._selectDays())._('</select><select>')._(self.parent._selectMonths())._('</select><input name="year" placeholder="Year" type="text" maxlength="4"></div></td>');
 							sb._('</tr>');
 							sb._('<tr>');
-								sb._('<td><div class="title">Place</div></td>');
-								sb._('<td><input type="text"></td>')
+								sb._('<td><div class="title">Place:</div></td>');
+								sb._('<td><div class="text"><input name="place" placeholder="Place" type="text"></div></td>')
 							sb._('</tr>');
 							sb._('<tr>');
-								sb._('<td><div class="title">Location</div></td>');
-								sb._('<td><input type="text"><input type="text"><input type="text"></td>');
+								sb._('<td><div class="title">Location:</div></td>');
+								sb._('<td><div class="text"><input name="town" placeholder="Town\City" type="text"><input name="state" placeholder="Prov\State" type="text"><input name="country" placeholder="Country" type="text"></div></td>');
 							sb._('</tr>');
 						sb._('</table>');
 					sb._('</div>');
@@ -379,13 +386,21 @@ JMBProfileFull.prototype = {
 					sb._('<div>1900 - Born in Toronto,Ontario Canada</div>');
 					sb._('<div>1901 - Moves to Braga,Portugal</div>');
 					sb._('<div>1902 - Graduates from Central Commerce High School</div>');
-					sb._('<div class="active">1903 - Graduates from UT university</div>');
+					sb._('<div>1903 - Graduates from UT university</div>');
 					sb._('<div>1999 - Marries Jane Fonda</div>');
 				sb._('</div>');
 			sb._('</div>');
 		var html = sb.result();
 		var htmlObject = jQuery(html);
-		
+		jQuery(htmlObject).find('input[name="duration"][value="single"]').attr('checked', 'checked');
+		jQuery(htmlObject).find('div.list div').each(function(i,e){
+			jQuery(e).click(function(){
+				if(self.menuEventsActiveItem) jQuery(self.menuEventsActiveItem).removeClass('active');
+				jQuery(e).addClass('active');				
+				self.menuEventsActiveItem = this;
+			});
+		});
+		jQuery(htmlObject).find('div.buttons input[type="button"]').each(function(){})
 		jQuery(self.parent.dWindow).find('div.jmb-dialog-profile-content').append(htmlObject);
 	},
 	render:function(p){
@@ -397,19 +412,29 @@ JMBProfileFull.prototype = {
 			height: 450,
 		});
 		//set button edt\view
-		var buttons = jQuery('<div class="jmb-dialog-interface-button"><div type="button" class="active"><span>Edit</span></div><div type="button"><span>View</span></div></div>');
+		var buttons = jQuery('<div class="jmb-dialog-interface-button"><div type="button" value="edit" class="active"><span>Edit</span></div><div value="view" type="button"><span>View</span></div></div>');
 		jQuery(self.parent.dWindow).parent().find('.ui-dialog-titlebar').append(buttons);
+				
+		var html = self._edit(); 
+		self.parent.dContent.object = jQuery(html);
+		self.parent.dContent.flag = true;
+		
 		jQuery(buttons).find('div[type="button"]').each(function(i,e){
 			jQuery(e).click(function(){
 				if(jQuery(this).hasClass('active')) return false;
 				jQuery(buttons).find('.active').removeClass('active');
 				jQuery(e).addClass('active');
+				switch(jQuery(e).attr('value')){
+					case "edit":
+						
+					break;
+					
+					case "view":
+						
+					break;
+				}
 			});
 		});
-		
-		var html = self._edit(); 
-		self.parent.dContent.object = jQuery(html);
-		self.parent.dContent.flag = true;
 		
 		self._setMenu(self.parent.dContent.object);
 		jQuery('.jmb-dialog-container').css({
