@@ -30,6 +30,22 @@ storage.fb.appId = "184962764872486";
 storage.fb.status = true;
 storage.fb.cookie = true;
 storage.fb.xfbml = true;
+//ajax request
+storage.request = {};
+storage.request.length = 0;
+storage.request.add = function(object){
+	var r = storage.request;
+	r[r.length] = object;
+	r.length++;
+}
+storage.request.cleaner = function(){
+	var r = storage.request;
+	for(var i=0;i<r.length;i++){
+		r[i].abort();
+		delete r[i];
+	}
+	r.length = 0;
+}
 //header
 storage.header = {};
 storage.header.activeButton = null;
@@ -41,6 +57,7 @@ storage.createPull(storage.tabs);
 storage.tabs.cleaner = function(){
 	storage.clearPull(storage.tabs);
 	storage.clearPull(storage.header);
+	storage.request.cleaner();
 }
 
 

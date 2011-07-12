@@ -5,15 +5,17 @@ function Host(){
 Host.prototype = {
         callMethod:function(module, classname, method, args, callback){
             var url = 'index.php?option=com_manager&task=callMethod';
-			jQuery.ajax({
-				url: url,
-				type: "POST",
-				data: 'module='+module+'&class='+classname+'&method='+method+'&args='+args,
-				dataType: "html",
-				complete : function (req, err) {
-					callback(req);
-				}
-			});
+            var xnr = jQuery.ajax({
+            	url: url,
+		type: "POST",
+		data: 'module='+module+'&class='+classname+'&method='+method+'&args='+args,
+		dataType: "html",
+		complete : function (req, err) {
+			callback(req);
+		}
+	    });
+	    if(storage&&storage.request) storage.request.add(xnr);
+	    return xnr;
 	},
         getModuleParametersStructure:function(module, callback){
             var url = 'index.php?option=com_manager&task=callHostMethod';

@@ -249,6 +249,7 @@ Families.prototype = {
 					self._ajax('getFamilies', 'mother', function(res){
 						var json = jQuery.parseJSON(res.responseText);
 						self.json = json;
+						self.profile.tooltip.cleaner();
 						self.render(obj);
 					});
 				}
