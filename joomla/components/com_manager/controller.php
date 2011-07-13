@@ -167,7 +167,7 @@ class JMBController extends JController
 	*
 	*/
 	function savePage(){
-		$page_id = JRequest::getVar('page_id');
+		$page_id = 
 		$json = JRequest::getVar('json');
 		$db =& JFactory::getDBO();
 		$sql = "SELECT uid FROM #__mb_modulesgrid WHERE page_id ='".$page_id."'";
@@ -240,8 +240,10 @@ class JMBController extends JController
         	$black = imagecolorallocate($im, 0, 0, 0);
         	$white = imagecolorallocate($im, 255, 255, 255);
         	imagefill($im, 0, 0, $white);
+        	
         	$destX = ($width<$defaultWidth)?($defaultWidth-$width)/2:0;
         	$destY = ($height<$defaultHeight)?($defaultHeight-$height)/2:0;
+        	
         	imagecopy($im, $img, $destX, $destY, 0, 0, $width, $height);
         	if($f->Type == 'gif' || $f->Type == 'png'){
         		imagecolortransparent($im, $black);

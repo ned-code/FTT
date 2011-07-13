@@ -223,8 +223,7 @@ JMBProfile.prototype = {
 	_getPhoto:function(obj, x,y){
 		var self = this;
 		var sb = host.stringBuffer();
-		//return sb._('<img class="jmb-families-avatar" height="')._(y)._('px" width="')._(x)._('px" src="')._(obj.p[0].FilePath)._('">').result();
-		return sb._('<img class="jmb-families-avatar" height="')._(y)._('px" width="')._(x)._('px" src="index.php?option=com_manager&task=getResizeImage&id=')._(obj.p[0].Id)._('">').result();
+		return sb._('<img class="jmb-families-avatar" height="')._(y)._('px" width="')._(x)._('px" src="index.php?option=com_manager&task=getResizeImage&id=')._(obj.photo)._('">').result();
 	},
 	_getAvatar:function(obj, x, y){
 		var self = this;
@@ -402,7 +401,7 @@ JMBProfile.prototype = {
 		jQuery(obj).find('div.jmb-dialog-photo-button input#photo').bind('change focus click', function(){
 			var object = jQuery(this);
 			var valArray = jQuery(object).val().split('\\');
-			jQuery('div.jmb-dialog-photo-context').html(valArray[0]);
+			jQuery('div.jmb-dialog-photo-context').html(valArray[2]);
 			if(typeof(callback)!='undefined') callback();
 		});
 	},
@@ -552,9 +551,7 @@ JMBProfile.prototype = {
  			}
  			return true;
 		}, function(json){
-			if(json.p){
-				jQuery(self.dContent.object).find('.jmb-dialog-photo').html(self._getPhoto(json, 135, 150));
-			}
+			if(json.photo) jQuery(self.dContent.object).find('.jmb-dialog-union-photo').html(self._getPhoto(json, 135, 150));
 		});	
 		//append
 		jQuery(self.dContent.object).find('.jmb-dialog-form-gender input[value="M"]').attr('checked', true);
@@ -653,9 +650,7 @@ JMBProfile.prototype = {
  			}
  			return true;
 		}, function(json){
-			if(json.p){
-				jQuery(self.dContent.object).find('.jmb-dialog-photo').html(self._getPhoto(json, 135, 150));
-			}
+			if(json.photo) jQuery(self.dContent.object).find('.jmb-dialog-photo').html(self._getPhoto(json, 135, 150));
 		});	
 		
 		jQuery(this.dWindow).append(this.dContent.object);

@@ -270,6 +270,7 @@ JMBProfileTooltip.prototype = {
 			sb._('<div class="jmb-confirm-close">&nbsp;</div>');
 		sb._('<div>')
 		
+		var html = sb.result();
 		var htmlObject = jQuery(html);
 		//set buttons;
 		jQuery(settings.buttons).each(function(i,e){

@@ -36,11 +36,13 @@ class JMBProfile {
 	*
 	*/
 	public function _uploadPhoto($gedId){
-		if($_FILES['photo']['size'] == 0) return;
+		if($_FILES['photo']['size'] == 0) return false;
 		$result = $this->host->gedcom->media->save($gedId, $_FILES["photo"]["tmp_name"], $_FILES["photo"]["name"]);
-		$photos = $this->host->gedcom->media->getMediaByGedId($gedId, '');
-		$this->host->gedcom->media->setAvatarImage($gedId, $photos[0]->Id);
-		return $photos;
+		if($result) {
+			$this->host->gedcom->media->setAvatarImage($gedId, $result);
+			return $result;
+		}
+		return false;
         }
 	
 	/**
@@ -138,7 +140,7 @@ class JMBProfile {
 		$ind = $this->_createIndiv();
 		$this->_addIndivEvents($ind);
  		
-		$photos = $this->_uploadPhoto($ind->Id);
+		$photo = $this->_uploadPhoto($ind->Id);
  		$fam_id = $this->host->gedcom->individuals->getFamilyId($id, 'CHIL');
 		if(!$fam_id){
 			$fam = $this->_createFamily();
@@ -151,7 +153,7 @@ class JMBProfile {
 			$this->_addParent_($ind, $fam, $_POST['gender']);
 			$this->host->gedcom->families->update($fam);
 		}
-		return array('i'=>$ind,'f'=>$fam,'p'=>$photos);
+		return array('i'=>$ind,'f'=>$fam,'photo'=>$photo);
 	}
 	
 	/**
@@ -170,9 +172,9 @@ class JMBProfile {
 		$ind = $this->_createIndiv();
 		$this->_addIndivEvents($ind);
 		
- 		$photos = $this->_uploadPhoto($ind->Id);
+ 		$photo = $this->_uploadPhoto($ind->Id);
  		$this->host->gedcom->families->addChild($fam_id, $ind->Id);
- 		return array('fam_id'=>$fam_id,'i'=>$ind,'p'=>$photos);
+ 		return array('fam_id'=>$fam_id,'i'=>$ind,'photo'=>$photo);
 	}	
 	
 	/**
@@ -182,7 +184,7 @@ class JMBProfile {
 		$ind = $this->_createIndiv();
 		$this->_addIndivEvents($ind);
 		
-		$photos = $this->_uploadPhoto($ind->Id);
+		$photo = $this->_uploadPhoto($ind->Id);
 		$user = $this->host->gedcom->individuals->get($id);
 		$parents = $this->host->gedcom->individuals->getParents($id);
 		if(!$parents){
@@ -194,7 +196,7 @@ class JMBProfile {
 			$fam_id = $parents['familyId'];
 		}
  		$this->host->gedcom->families->addChild($fam_id, $ind->Id);
- 		return array('fam_id'=>$fam_id,'i'=>$ind,'p'=>$photos);
+ 		return array('fam_id'=>$fam_id,'i'=>$ind,'photo'=>$photo);
 	}
 	
 	/**
@@ -269,7 +271,7 @@ class JMBProfile {
 		
 		$fam_id = $this->host->gedcom->individuals->getFamilyId($ownerId, $type);
 		$user = $this->host->gedcom->individuals->get($ownerId);
-		$photos = $this->_uploadPhoto($ind->Id);
+		$photo = $this->_uploadPhoto($ind->Id);
 		
 		if(!$fam_id){
 			$fam = $this->_createFamily();
@@ -290,7 +292,7 @@ class JMBProfile {
 		}
 		
 		$data = $this->_getUserInfo($ownerId);
-		return json_encode(array('data'=>$data,'spouse'=>array('indiv'=>$ind)));
+		return json_encode(array('data'=>$data,'spouse'=>array('indiv'=>$ind),'photo'=>$photo));
 	}
 	
 	/**
@@ -348,15 +350,21 @@ class JMBProfile {
 		$ind->Gender = (isset($_POST['gender']))?$_POST['gender']:'';
 		$ind->Nick = (isset($_POST['know_as']))?$_POST['know_as']:'';
 		$this->host->gedcom->individuals->update($ind);
+		//photo
+		$photo = $this->_uploadPhoto($ind->Id);
 		//events
-		$this->updateEvent($ind->Birth, 'b_');
+		$ind->Birth = $this->updateEvent($ind->Birth, 'b_');
 		if(isset($_POST['living']) && $_POST['living'] == 'false' && $ind->Death){
-			$this->updateEvent($ind->Death, 'd_');
+			$ind->Death = $this->updateEvent($ind->Death, 'd_');
 		}
 		if(isset($_POST['living']) && $_POST['living'] == 'false' && !$ind->Death){
 			$ind->Death = $this->_createEvent($ind->Id, 'DEAT', 'd_');
-		}	
-		return json_encode(array('i'=>$ind));
+		}
+		if(isset($_POST['living']) && $_POST['living'] == 'true'&&$ind->Death){
+			$this->host->gedcom->events->delete($ind->Death->Id);
+			$ind->Death = null;
+		}
+		return json_encode(array('ind'=>$ind,'photo'=>$photo));
 	}
 	
 	/**

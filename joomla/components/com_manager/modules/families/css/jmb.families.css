@@ -53,7 +53,7 @@
 	margin-left: 24px;
 	margin-top: 1px;
 }
-img.jmb-families-avatar{
+img.jmb-families-avatar.view{
 	cursor: url("magnify.gif"), pointer;
 }
 .jmb-families-parent-img{

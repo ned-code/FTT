@@ -153,7 +153,8 @@ JMBProfileFull.prototype = {
  			}
  			return true;
 		}, function(json){
-			
+			self.json.data.indiv = json.ind;
+			if(json.photo) jQuery(htmlObject).find('.jmb-dialog-photo').html(self.parent._getPhoto(json, 135, 150));
 		});
 		
 		jQuery(htmlObject).find('.jmb-dialog-form-gender input[value="'+self.json.data.indiv.Gender+'"]').attr('checked', true);
