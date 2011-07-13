@@ -29,9 +29,7 @@ function JMBProfile(){
 		top: "0px",
 		left: "0px",
 		width: jQuery(window).width()+"px",
-		height: jQuery(window).height()+"px",
-		background: "#000000",
-		opacity: "0.7",
+		height: jQuery(window).height()+"px"
 	});
 	jQuery(this.modalObject).css('z-index', '1000');
 	jQuery(this.modalObject).hide();
@@ -62,8 +60,10 @@ JMBProfile.prototype = {
 		});
 	},
 	_ajaxForm:function(obj, method, args, beforeSubmit, success){
+		var sb = host.stringBuffer();
+		var url = sb._('index.php?option=com_manager&task=callMethod&module=profile&class=JMBProfile&method=')._(method)._('&args=')._(args).result();
 		jQuery(obj).ajaxForm({
-			url:"index.php?option=com_manager&task=callMethod&module=profile&class=JMBProfile&method="+method+"&args="+args,
+			url:url,
 			dataType:"json",
 			target:"#iframe-profile",
 			beforeSubmit:function(){
@@ -128,15 +128,16 @@ JMBProfile.prototype = {
 		return indiv.Nick;
 	},
 	_getFullName:function(ind){
+		var sb = host.stringBuffer();
 		var f,l,m, result;
 		f = ind.FirstName;
 		m = ind.MiddleName;
 		l = ind.LastName;
 		if(f!=''&&m!=''&&l!=''){
-			return f+" "+m+" "+l;
+			return sb._(f)._(' ')._(m)._(' ')._(l).result();
 		}
 		else if(f!=''&&m==''&&l!=''){
-			return f+" "+l;
+			return sb._(f)._(' ')._(l).result();
 		}
 		else if(f==''&&m==''&&l!=''){
 			return l;
@@ -147,22 +148,23 @@ JMBProfile.prototype = {
 	},
 	_getFullPlace:function(location){
 		if(!location) return;
+		var sb = host.stringBuffer();
 		var places = location.Hierarchy;
-		var loc = '';
 		jQuery(places).each(function(i,e){
-			loc  += e.Name+' ';
+			sb._(e.Name)._(' ');
 		});
-		return loc;
+		return sb.result();
 	},
 	_getEventDate:function(event){
 		var self = this;
 		if(!event) return;
+		var sb = host.stringBuffer();
 		var d,m,y;
 		d = event.Day;
 		m = (event.Month!='')?self.month3[event.Month]:'';
 		y = event.Year;
 		if(d!=''&&m!=''&&y!=''){
-			return d+' '+m+' '+y;
+			return sb._(d)._(' ')._(m)._(' ')._(y).result();
 		}
 		else if(d!=''&&m==''&&y!=''){
 			return y;
@@ -171,10 +173,13 @@ JMBProfile.prototype = {
 			return y;
 		}
 		else if(d==''&&m!=''&&y!=''){
-			return m+' '+y;
+			return sb._(m)._(' ')._(y).result();
 		}
 		else if(d!=''&&m!=''&&y==''){
-			return d+' '+m;
+			return sb._(d)._(' ')._(m).result();
+		}
+		else {
+			return 'unknown';
 		}
 	},
 	_getRelation_:function(id, data, ret){
@@ -207,131 +212,142 @@ JMBProfile.prototype = {
 	},
 	_getSpouseAvatar:function(obj, x, y){
 		var self = this;
+		var sb = host.stringBuffer();
 		var fId,av,defImg;
 		fId = obj.indiv.FacebookId;
 		av = obj.avatar;
 		defImg = (obj.indiv.Gender=="F")?'male.gif':'female.gif';
-		var defImgPath = self.imgPath+"/components/com_manager/modules/profile/image/"+defImg;
-		return '<img class="jmb-families-avatar" height="'+y+'px" width="'+x+'px" src="'+defImgPath+'">';
+		var defImgPath = sb._(self.imgPath)._('/components/com_manager/modules/profile/image/')._(defImg).result();
+		return sb.clear()._('<img class="jmb-families-avatar" height="')._(y)._('px" width="')._(x)._('px" src="')._(defImgPath)._('">').result()
 	},
 	_getPhoto:function(obj, x,y){
 		var self = this;
-		return '<img class="jmb-families-avatar" height="'+y+'px" width="'+x+'px" src="'+obj.p[0].FilePath+'">';
+		var sb = host.stringBuffer();
+		return sb._('<img class="jmb-families-avatar" height="')._(y)._('px" width="')._(x)._('px" src="index.php?option=com_manager&task=getResizeImage&id=')._(obj.photo)._('">').result();
 	},
 	_getAvatar:function(obj, x, y){
 		var self = this;
+		var sb = host.stringBuffer();
 		var fId,av,defImg;
 		fId = obj.indiv.FacebookId;
 		av = obj.avatar;
 		defImg = (obj.indiv.Gender=="M")?'male.gif':'female.gif';
 		if(av != null && av.FilePath != null){
-			return '<img height="'+y+'px" width="'+x+'px" src="'+av.FilePath+'">';
+			//return sb.clear()._('<img height="')._(y)._('px" width="')._(x)._('px" src="')._(av.FilePath)._('">').result();
+			return sb._('<img class="jmb-families-avatar" height="')._(y)._('px" width="')._(x)._('px" src="index.php?option=com_manager&task=getResizeImage&id=')._(av.Id)._('">').result();
 		}
 		else if(fId != '0'){
-			return '<img height="'+y+'px" width="'+x+'px" src="http://graph.facebook.com/'+fId+'/picture">';
+			return sb.clear()._('<img height="')._(y)._('px" width="')._(x)._('px" src="http://graph.facebook.com/')._(fId)._('/picture">').result();
 		}
-		var defImgPath = self.imgPath+"/components/com_manager/modules/profile/image/"+defImg;
-		return '<img class="jmb-families-avatar" height="'+y+'px" width="'+x+'px" src="'+defImgPath+'">';
+		var defImgPath = sb.clear()._(self.imgPath)._('/components/com_manager/modules/profile/image/')._(defImg).result();
+		return sb.clear()._('<img class="jmb-families-avatar" height="')._(y)._('px" width="')._(x)._('px" src="')._(defImgPath)._('">').result();
 	},
 	_getAvatar2:function(x, y, type){
 		var self = this;
+		var sb = host.stringBuffer();
 		defImg =(type=="M")?'male.gif':'female.gif';
-		var defImgPath = self.imgPath+"/components/com_manager/modules/profile/image/"+defImg;
-		return '<img class="jmb-families-avatar" height="'+y+'px" width="'+x+'px" src="'+defImgPath+'">';
+		defImgPath = sb._(self.imgPath)._("/components/com_manager/modules/profile/image/")._(defImg).result();
+		return  sb.clear()._('<img class="jmb-families-avatar" height="')._(y)._('px" width="')._(x)._('px" src="')._(defImgPath)._('">').result();
 	},
 	_photos:function(p){
 		var self = this;
+		var sb = host.stringBuffer();
 		var length = jQuery(p).length;
-		var html = '<ul style="width:'+(64*length)+'px;">';
+		sb._('<ul style="width:')._(64*length)._('px;">');
 			jQuery(p).each(function(i,e){
-				html += '<li><img height="65px" width="59" src="'+e.FilePath+'"></li>';
+				//sb._('<li><img height="65px" width="59" src="')._(e.FilePath)._('"></li>');
+				sb._('<li><img height="65px" width="59" src="index.php?option=com_manager&task=getResizeImage&id=')._(e.Id)._('"></li>');
 			});
-		html += '</ul>';
-		return html;
+		sb._('</ul>')
+		return sb.result();
 	},
 	_selectDays:function(){
-		var html = '<option selected value="0">Day</option>';
+		var sb = host.stringBuffer();
+		sb._('<option selected value="0">Day</option>');
 		for(var i=1;i<=31;i++){
-			html += '<option value="'+i+'">'+i+'</option>';
+			sb._('<option value="')._(i)._('">')._(i)._('</option>');
 		}
-		return html;
+		return sb.result();
 	},
 	_selectMonths:function(){
 		var self = this;
-		var html = '<option selected value="0">Month</option>';
+		var sb = host.stringBuffer();
+		sb._('<option selected value="0">Month</option>');
 		var months = self.months;
 		for(var i=0;i<months.length;i++){
-			html += '<option value="'+(i+1)+'">'+months[i]+'</option>';
+			sb._('<option value="')._(i+1)._('">')._(months[i])._('</option>');
 		}
-		return html;
+		return sb.result();
 	},
 	_getEventPart:function(t){
 		var self = this;
 		var name = (t=='b_')?'Birth':'Death';
-		var html = '<tr>';
-			html += '<td valign="top" style="width:100px;text-align:right;padding-top:5px;"><span>'+name+'day:</span></td>';
-			html += '<td style="text-align: left;"><select name="'+t+'day">'+self._selectDays()+'</select><select name="'+t+'month">'+self._selectMonths()+'</select><input name="'+t+'year" type="text" style="width:40px;" maxlength="4" placeholder="Year"><input name="'+t+'option" type="checkbox"> Unknown</td>';
-		html += '</tr>';
-		html += '<tr>';
-			html += '<td valign="top" style="width:100px;text-align:right;padding-top:5px;"><span>'+name+'place:</span></td>';
-			html += '<td style="text-align: left;"><input name="'+t+'town" type="text" placeholder="Town/City"><input name="'+t+'state" type="text" placeholder="Prov/State"><input name="'+t+'country" type="text" placeholder="Country"></td>';
-		html += '</tr>';
-		return html;
+		var sb = host.stringBuffer();
+		sb._('<tr>');
+			sb._('<td valign="top" style="width:100px;text-align:right;padding-top:5px;"><span>')._(name)._('day:</span></td>');
+			sb._('<td style="text-align: left;"><select name="')._(t)._('day">')._(self._selectDays())._('</select><select name="')._(t)._('month">')._(self._selectMonths())._('</select><input name="')._(t)._('year" type="text" style="width:40px;" maxlength="4" placeholder="Year"><input name="')._(t)._('option" type="checkbox"> Unknown</td>');
+		sb._('</tr>');
+		sb._('<tr>');
+			sb._('<td valign="top" style="width:100px;text-align:right;padding-top:5px;"><span>')._(name)._('place:</span></td>');
+			sb._('<td style="text-align: left;"><input name="')._(t)._('town" type="text" placeholder="Town/City"><input name="')._(t)._('state" type="text" placeholder="Prov/State"><input name="')._('country" type="text" placeholder="Country"></td>')
+		sb._('</tr>');
+		return sb.result();
 	},
 	_formBasicFields:function(){
 		var self = this;
-		var html = '';
-			html += '<table id="basic_fields">';
-				html += '<tr>';
-					html += '<td style="width:100px;text-align:right;"><font color="#ff0000">*</font><span>First name:</span></td>';
-					html += '<td style="text-align: left;"><input name="first_name" type="text"></td>';
-				html += '</tr>';
-				html += '<tr>';
-					html += '<td style="width:100px;text-align:right;"><span>Middle names:</span></td>';
-					html += '<td style="text-align: left;"><input name="middle_name" type="text"></td>';
-				html += '</tr>';
-				html += '<tr>';
-					html += '<td style="width:100px;text-align:right;"><span>Last name:</span></td>';
-					html += '<td style="text-align: left;"><input name="last_name" type="text"></td>';
-				html += '</tr>';
-				html += '<tr>';
-					html += '<td style="width:100px;text-align:right;padding-top:5px;"><span>Know as:</span></td>';
-					html += '<td style="text-align: left;"><input name="know_as" type="text"></td>';
-				html += '</tr>';
-				html += '<tr style="height:30px;">';
-					html += '<td style="width:100px;text-align:right;padding-top:5px;"><font color="#ff0000">*</font><span>Gender:</span></td>';
-					html += '<td class="jmb-dialog-form-gender" style="text-align: left;">&nbsp;<span type="M">Male</span>:<input name="gender" value="M" type="radio" style="position:relative; top:3px;">&nbsp;<span type="F">Female</span>:<input name="gender" value="F" type="radio" style="position:relative; top:3px;"></td>';
-				html += '</tr>';
-				html += self._getEventPart('b_');
-				html += '<tr>';
-					html += '<td style="width:100px;text-align:right;"><font color="#ff0000">*</font><span>Living:</span></td>';
-					html += '<td style="text-align: left;"><select name="living"><option selected value="true">Yes</option><option value="false">No</option></select></td>';
-				html += '</tr>';
-			html += '</table>';
-			html += '<div class="jmb-dialog-button-submit"><input type="submit" value="Save"><input type="button" value="Cancel"></div>'
-		return html;
+		var sb = host.stringBuffer();
+		sb._('<table id="basic_fields">');
+			sb._('<tr>');
+				sb._('<td style="width:100px;text-align:right;"><font color="#ff0000">*</font><span>First name:</span></td>');
+				sb._('<td style="text-align: left;"><input name="first_name" type="text"></td>');
+			sb._('</tr>');
+			sb._('<tr>');
+				sb._('<td style="width:100px;text-align:right;"><span>Middle names:</span></td>');
+				sb._('<td style="text-align: left;"><input name="middle_name" type="text"></td>');
+			sb._('</tr>');
+			sb._('<tr>');
+				sb._('<td style="width:100px;text-align:right;"><span>Last name:</span></td>');
+				sb._('<td style="text-align: left;"><input name="last_name" type="text"></td>');
+			sb._('</tr>');
+			sb._('<tr>');
+				sb._('<td style="width:100px;text-align:right;padding-top:5px;"><span>Know as:</span></td>');
+				sb._('<td style="text-align: left;"><input name="know_as" type="text"></td>');
+			sb._('</tr>');
+			sb._('<tr>');
+				sb._('<td style="width:100px;text-align:right;padding-top:5px;"><font color="#ff0000">*</font><span>Gender:</span></td>');
+				sb._('<td class="jmb-dialog-form-gender" style="text-align: left;">&nbsp;<span type="M">Male</span>:<input name="gender" value="M" type="radio" style="position:relative; top:3px;">&nbsp;<span type="F">Female</span>:<input name="gender" value="F" type="radio" style="position:relative; top:3px;"></td>');
+			sb._('</tr>');
+			sb._(self._getEventPart('b_'));
+			sb._('<tr>');
+				sb._('<td style="width:100px;text-align:right;"><font color="#ff0000">*</font><span>Living:</span></td>');
+				sb._('<td style="text-align: left;"><select name="living"><option selected value="true">Yes</option><option value="false">No</option></select></td>');
+			sb._('</tr>');
+		sb._('</table>');
+		sb._('<div class="jmb-dialog-button-submit"><input type="submit" value="Save"><input type="button" value="Cancel"></div>');
+		return sb.result();
 	},
 	_formUnionEventFields:function(){
 		var self = this;
-		var html = '<table>';
-			html += '<tr>';
-				html += '<td><span>Type:</span></td>';
-				html += '<td style="text-align: left;"><select name="m_type"><option value="MARR">Marriage</option></select></td>';
-			html += '</tr>';
-			html += '<tr>';
-				html += '<td><span>Date:</span></td>';
-				html += '<td style="text-align: left;"><select name="m_day">'+self._selectDays()+'</select><select name="m_month">'+self._selectMonths()+'</select><input placeholder="Year" name="m_year" type="text" maxlength="4" style="width:50px;"><input name="m_option" type="checkbox"> Unknown</td>';
-			html += '</tr>';
-			html += '<tr>';
-				html += '<td><span>Place:</span></td>';
-				html += '<td style="text-align: left;"><input placeholder="Town/City" name="m_town" style="width:100px;" type="text"><input style="width:100px;" placeholder="Prov/State" name="m_state" type="text"><input style="width:100px;" placeholder="Country" name="m_country" type="text"></td>';
-			html += '</tr>';
-			html += '<tr>';
-				html += '<td></td>';
-				html += '<td style="text-align: left;"><input name="deceased" type="checkbox" style="position:relative; top:3px;">&nbsp;Divorced/Separated&nbsp;<input placeholder="Year" name="s_year" type="text" style="width:40px;" maxlength="4"></td></td>';
-			html += '</tr>';
-			html += '</table>';
-		return html;
+		var sb = host.stringBuffer();
+		sb._('<table>');
+			sb._('<tr>');
+				sb._('<td><span>Type:</span></td>');
+				sb._('<td style="text-align: left;"><select name="m_type"><option value="MARR">Marriage</option></select></td>');
+			sb._('</tr>');
+			sb._('<tr>');
+				sb._('<td><span>Date:</span></td>');
+				sb._('<td style="text-align: left;"><select name="m_day">')._(self._selectDays())._('</select><select name="m_month">')._(self._selectMonths())._('</select><input placeholder="Year" name="m_year" type="text" maxlength="4" style="width:50px;"><input name="m_option" type="checkbox"> Unknown</td>')
+			sb._('</tr>');
+			sb._('<tr>');
+				sb._('<td><span>Place:</span></td>');
+				sb._('<td style="text-align: left;"><input placeholder="Town/City" name="m_town" style="width:100px;" type="text"><input style="width:100px;" placeholder="Prov/State" name="m_state" type="text"><input style="width:100px;" placeholder="Country" name="m_country" type="text"></td>');
+			sb._('</tr>');
+			sb._('<tr>');
+				sb._('<td></td>');
+				sb._('<td style="text-align: left;"><input name="deceased" type="checkbox" style="position:relative; top:3px;">&nbsp;Divorced/Separated&nbsp;<input placeholder="Year" name="s_year" type="text" style="width:40px;" maxlength="4"></td></td>');
+			sb._('</tr>');
+		sb._('</table>');
+		return sb.result();
 	},
 	_valid:function(obj, i, p){
 		switch(i){
@@ -385,7 +401,7 @@ JMBProfile.prototype = {
 		jQuery(obj).find('div.jmb-dialog-photo-button input#photo').bind('change focus click', function(){
 			var object = jQuery(this);
 			var valArray = jQuery(object).val().split('\\');
-			jQuery('div.jmb-dialog-photo-context').html(valArray[0]);
+			jQuery('div.jmb-dialog-photo-context').html(valArray[2]);
 			if(typeof(callback)!='undefined') callback();
 		});
 	},
@@ -473,6 +489,7 @@ JMBProfile.prototype = {
 	},
 	_addPSC:function(p, type){
 		var self = this;
+		var sb = host.stringBuffer();
 		var title;
 		if(type=="parent") title = "Parent";
 		else if(type=="bs") title = "Brother or Sister";
@@ -480,25 +497,26 @@ JMBProfile.prototype = {
 		self._dialog({
 			title:'Add '+title,
 			height: 360
-		});
-		var html = '<div class="jmb-dialog-content"><form id="jmb:profile:addpsc" method="post" target="iframe-profile">';
-			html += '<table style="width:100%;"><tr>';
-				html += '<td valign="top" style="width:160px;">';
-					html += '<div class="jmb-dialog-photo">'+self._getAvatar2(135, 150, "M")+'</div>';
-					html += '<div class="jmb-dialog-photo-button">';
-						html += '<span class="jmb-dialog-photo-button-wrapper">';
-							html += '<input type="file" name="photo" id="photo" />';
-							html += '<span class="jmb-dialog-photo-button2">Upload Photo</span>';
-							html += '<div class="jmb-dialog-photo-context"></div>';
-						html += '</span>';
-					html += '</div>';
-				html += '</td>';
-				html += '<td valign="top">';
-					html += self._formBasicFields();
-				html += '</td>'
-			html += '</tr></table>';
-			html += '<div class="jmb-dialog-button-switch">Switch to full profile</div>';
-		html += '</form></div>';
+		});		
+		sb._('<div class="jmb-dialog-content"><form id="jmb:profile:addpsc" method="post" target="iframe-profile">');
+			sb._('<table style="width:100%;"><tr>');
+				sb._('<td valign="top">');
+					sb._('<div class="jmb-dialog-photo">')._(self._getAvatar2(135, 150, "M"))._('</div>');
+					sb._('<div class="jmb-dialog-photo-button">');
+						sb._('<span class="jmb-dialog-photo-button-wrapper">');
+							sb._('<input type="file" name="photo" id="photo" />');
+							sb._('<span class="jmb-dialog-photo-button2">Upload Photo</span>');
+							sb._('<div class="jmb-dialog-photo-context"></div>');
+						sb._('</span>');
+					sb._('</div>');
+				sb._('</td>');
+				sb._('<td valign="top">');
+					sb._(self._formBasicFields());
+				sb._('</td>');
+			sb._('</tr></table>');
+			sb._('<div class="jmb-dialog-button-switch">Switch to full profile</div>');
+		sb._('</form></div>');
+		var html = sb.result();
 		self.dContent.object = jQuery(html);
 		self.dContent.flag = true;
 		jQuery('.jmb-dialog-container').css({
@@ -533,9 +551,7 @@ JMBProfile.prototype = {
  			}
  			return true;
 		}, function(json){
-			if(json.p){
-				jQuery(self.dContent.object).find('.jmb-dialog-photo').html(self._getPhoto(json, 135, 150));
-			}
+			if(json.photo) jQuery(self.dContent.object).find('.jmb-dialog-union-photo').html(self._getPhoto(json, 135, 150));
 		});	
 		//append
 		jQuery(self.dContent.object).find('.jmb-dialog-form-gender input[value="M"]').attr('checked', true);
@@ -543,57 +559,60 @@ JMBProfile.prototype = {
 	},
 	_addSpouse:function(p){
 		var self = this;
+		var sb = host.stringBuffer();
 		self._dialog({
 			title:'Add Spouse',
 			height:640
 		});
-		var html = '<div class="jmb-dialog-union-content"><form id="jmb:profile:addspouse" method="post" target="iframe-profile">';
-			html += '<div>';
-				html += '<table>';
-					html += '<tr>';
-						html += '<td valign="top" style="width:160px;">';
-							html += '<div class="jmb-dialog-union-spouse">';
-								html += '<div class="jmb-dialog-union-photo"><div>'+self._getAvatar(p.data, 135, 150)+'</div></div>';
-								html += '<div class="jmb-dialog-union-photo-know">Know As '+self._getKnowAs(p.data.indiv)+'</div>';
-								html += '<div class="jmb-dialog-union-photo-year">Year '+self._getYear(p.data.indiv)+'</div>';
-							html += '</div>';
-						html += '</td>';
-						html += '<td valign="top">';
-							html += '<div class="jmb-dialog-union-profile">';
-								html += '<div class="jmb-dialog-union-profile-header">Profile Basics</div>';
-								html += '<div class="jmb-dialog-union-profile-content">';
-									html += '<table style="width:100%;"><tr>';
-										html += '<td valign="top" style="width:160px;">';
-											html += '<div class="jmb-dialog-union-photo"><div>'+self._getSpouseAvatar(p.data, 135, 150)+'</div></div>';
-											html += '<div class="jmb-dialog-photo-button">';
-												html += '<span class="jmb-dialog-photo-button-wrapper">';
-													html += '<input type="file" name="photo" id="photo" />';
-													html += '<span class="jmb-dialog-photo-button2">Upload Photo</span>';
-													html += '<div class="jmb-dialog-photo-context"></div>';
-												html += '</span>';
-											html +='</div>';
-										html += '</td>';
-										html += '<td valign="top">';
-											html += self._formBasicFields();
-										html += '</td>'
-									html += '</tr></table>';
-								html += '</div>';
-							html += '</div>';
-						html += '</td>';
-					html += '</tr>';
-					html += '<tr><td></td>';
-						html += '<td valign="top">';
-							html += '<div class="jmb-dialog-union-event">';
-								html += '<div class="jmb-dialog-union-event-header">Union</div>';
-								html += '<div class="jmb-dialog-union-event-content">';
-									html += self._formUnionEventFields();
-								html += '</div>'
-							html += '</div>';
-						html += '</td>';
-					html += '</tr>';
-				html += '</table>';
-			html += '</div>'
-		html += '</form></div>';
+		sb._('<div class="jmb-dialog-union-content"><form id="jmb:profile:addspouse" method="post" target="iframe-profile">');
+			sb._('<div>');
+				sb._('<table>');
+					sb._('<tr>');
+						sb._('<td valign="top">');
+							sb._('<div class="jmb-dialog-union-spouse">');
+								sb._('<div class="jmb-dialog-union-photo"><div>')._(self._getAvatar(p.data, 135, 150))._('</div></div>');
+								sb._('<div class="jmb-dialog-union-photo-know">Know As ')._(self._getKnowAs(p.data.indiv))._('</div>');
+								sb._('<div class="jmb-dialog-union-photo-year">Year ')._(self._getYear(p.data.indiv))._('</div>');
+							sb._('</div>');
+						sb._('</td>');
+						sb._('<td valign="top">');
+							sb._('<div class="jmb-dialog-union-profile">');
+							sb._('<div class="jmb-dialog-union-profile">');
+								sb._('<div class="jmb-dialog-union-profile-header">Profile Basics</div>');
+								sb._('<div class="jmb-dialog-union-profile-content">');
+									sb._('<table style="width:100%;"><tr>')
+										sb._('<td valign="top">');
+											sb._('<div class="jmb-dialog-union-photo"><div>')._(self._getSpouseAvatar(p.data, 135, 150))._('</div></div>');
+											sb._('<div class="jmb-dialog-photo-button">');
+												sb._('<span class="jmb-dialog-photo-button-wrapper">');
+													sb._('<input type="file" name="photo" id="photo" />');
+													sb._('<span class="jmb-dialog-photo-button2">Upload Photo</span>');
+													sb._('<div class="jmb-dialog-photo-context"></div>');
+												sb._('</span>');
+											sb._('</div>');
+										sb._('</td>');
+										sb._('<td valign="top">');
+											sb._(self._formBasicFields());
+										sb._('</td>');
+									sb._('</tr></table>');
+								sb._('</div>');
+							sb._('</div>')
+						sb._('</td>');
+					sb._('</tr>');
+					sb._('<tr><td></td>');
+						sb._('<td valign="top">');
+							sb._('<div class="jmb-dialog-union-event">');
+								sb._('<div class="jmb-dialog-union-event-header">Union</div>');
+								sb._('<div class="jmb-dialog-union-event-content">');
+									sb._(self._formUnionEventFields());
+								sb._('</div>');
+							sb._('</div>');
+						sb._('</td>');
+					sb._('</tr>');
+				sb._('</table>');
+			sb._('</div>');
+		sb._('</form></div>');	
+		var html = sb.result();
 		self.dContent.object = jQuery(html);
 		self.dContent.flag = true;
 		jQuery('.jmb-dialog-container').css({
@@ -631,9 +650,7 @@ JMBProfile.prototype = {
  			}
  			return true;
 		}, function(json){
-			if(json.p){
-				jQuery(self.dContent.object).find('.jmb-dialog-photo').html(self._getPhoto(json, 135, 150));
-			}
+			if(json.photo) jQuery(self.dContent.object).find('.jmb-dialog-photo').html(self._getPhoto(json, 135, 150));
 		});	
 		
 		jQuery(this.dWindow).append(this.dContent.object);

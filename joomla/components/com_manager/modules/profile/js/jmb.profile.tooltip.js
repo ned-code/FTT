@@ -55,60 +55,64 @@ function JMBProfileTooltip(parent){
 JMBProfileTooltip.prototype = {
 	_tooltipContainer:function(p){
 		var self = this;
-		var id = jQuery(p.target).attr('id');
-		var html = "<div id='"+id+"-content' class='jmb-profile-tooltip-container'>";
-			html += "<div class='jmb-profile-tooltip-button-edit'><span>Edit this Profile</span></div>";
-			html += "<div class='jmb-profile-tooltip-fieldset'><fieldset>";
-				html += "<legend>Add:</legend>"
-				html += "<div class='jmb-profile-tooltip-parent'><span>Parent</span></div>";
-				html += "<div class='jmb-profile-tooltip-spouse'><span>Spouse</span></div>";
-				html += "<div class='jmb-profile-tooltip-bs'><span>Brother or Sister</span></div>";
-				html += "<div class='jmb-profile-tooltip-child'><span>Child</span></div>";
-			html += "</fieldset></div>";
-			html += "<div class='jmb-profile-tooltip-options'><span type='title'>More Options</span><table style='display:none;'><tr><td><div class='jmb-profile-tooltip-options-delete'><span type='delete'>Delete this Person</span></div></td></tr></table></div>";
+		var sb = host.stringBuffer();
+		var id = p.id;
+		sb._("<div id='")._(id)._("-content' class='jmb-profile-tooltip-container'>");
+			sb._("<div class='jmb-profile-tooltip-button-edit'><span>Edit this Profile</span></div>");
+			sb._("<div class='jmb-profile-tooltip-fieldset'><fieldset>");
+				sb._("<legend>Add:</legend>");
+				sb._("<div class='jmb-profile-tooltip-parent'><span>Parent</span></div>");
+				sb._("<div class='jmb-profile-tooltip-spouse'><span>Spouse</span></div>");
+				sb._("<div class='jmb-profile-tooltip-bs'><span>Brother or Sister</span></div>");
+				sb._("<div class='jmb-profile-tooltip-child'><span>Child</span></div>");
+			sb._('</fieldset></div>');
+			sb._("<div class='jmb-profile-tooltip-options'><span type='title'>More Options</span><table style='display:none;'><tr><td><div class='jmb-profile-tooltip-options-delete'><span type='delete'>Delete this Person</span></div></td></tr></table></div>")
 			if(p.data.indiv.FacebookId == '0'){
 				var name = (p.data.indiv.Nick!='')?p.data.indiv.Nick:p.data.indiv.FirstName;
-				html += "<div class='jmb-profile-tooltip-send'>";
-					html += "<table>";
-						html += "<tr>";
-							html += "<td rowspan='2'>";
-								html += "<div class='jmb-profile-tooltip-send-img'>&nbsp;</div>";
-							html += "</td>";
-							html += "<td><span> "+name+" is not registred.</span></td>";
-						html += "</tr>";
-						html += "<tr>";
-							html +="<td><span>Send "+name+" an invations.</span></td>";
-						html += "</tr>";
-					html += "</table>";
-				html += "</div>";
+				sb._("<div class='jmb-profile-tooltip-send'>");
+					sb._('<table>');
+						sb._('<tr>');
+							sb._('<td rowspan="2">');
+								sb._("<div class='jmb-profile-tooltip-send-img'>&nbsp;</div>");
+							sb._('</td>');
+							sb._('<td><span> ')._(name)._(' is not registred.</span></td>');
+						sb._('</tr>');
+						sb._('<tr>');
+							sb._("<td><span>Send ")._(name)._(" an invations.</span></td>");
+						sb._('</tr>');
+					sb._('</table>');
+				sb._('</div>');
 			}
-			html += "<div class='jmb-profile-tooltip-close'><a href='javascript:void(jQuery(\"#"+id+"\").btOff());'><div>&nbsp;</div></a></div>";
-		html += "</div>";
+			sb._("<div class='jmb-profile-tooltip-close'><a href='javascript:void(jQuery(\"#")._(id)._("\").btOff());'><div>&nbsp;</div></a></div>");
+		sb._('</div>');
+		var html = sb.result();
 		var divObj = jQuery(html);
 		return divObj;
 	},
 	_miniProfileContainer:function(p){
-		var id = jQuery(p.target).attr('id');
+		var id = p.id;
 		var self = this;
-		var html = '<div id="'+id+'-content" class="jmb-profile-mini-container">';
-			html += '<div class="jmb-profile-mini-info">';
-				html += '<table>';
-					html += '<tr>';
-						html += '<td class="jmb-profile-mini-photo"><div>'+self.parent._getAvatar(p.data,81,90)+'</div></td>';
-						html += '<td class="jmb-profile-mini-info-body">';
-							html += '<div><span>Name:</span> '+self.parent._getFullName(p.data.indiv)+'</div>';
-							html += '<div><span>Born:</span> '+self.parent._getEventDate(p.data.indiv.Birth)+'</div>';
+		var sb = host.stringBuffer();
+		sb._('<div id="')._(id)._('-content" class="jmb-profile-mini-container">');
+			sb._('<div class="jmb-profile-mini-info">');
+				sb._('<table>');
+					sb._('<tr>');
+						sb._('<td class="jmb-profile-mini-photo"><div>')._(self.parent._getAvatar(p.data,81,90))._('</div></td>');
+						sb._('<td class="jmb-profile-mini-info-body">');
+							sb._('<div><span>Name:</span> ')._(self.parent._getFullName(p.data.indiv))._('</div>');
+							sb._('<div><span>Born:</span> ')._(self.parent._getEventDate(p.data.indiv.Birth))._('</div>');
 							var relation = self.parent._getRelation(p);
-							if(relation != 0) html += '<div><span>Relation to you:</span> '+relation+'</div>';
-						html += '</td>';
-					html += '</tr>';
-				html += '</table>';
-				html += '<div class="jmb-profile-mini-switch"><span>Switch to Full Profile</span></div>'
-			html += '</div>';
-			html += '<div class="jmb-profile-mini-images">';
-				html += self.parent._photos(p.data.photo);
-			html += '</div>';
-		html += '</div>'
+							if(relation != 0) sb._('<div><span>Relation to you:</span> ')._(relation)._('</div>');
+						sb._('</td>');
+					sb._('</tr>');
+				sb._('</table>');
+				sb._('<div class="jmb-profile-mini-switch"><span>Switch to Full Profile</span></div>');
+			sb._('</div>');
+			sb._('<div class="jmb-profile-mini-images">');
+				sb._(self.parent._photos(p.data.photo));
+			sb._('</div>');
+		sb._('</div>');
+		var html = sb.result();
 		var htmlObject = jQuery(html);
 		return htmlObject;
 	},
@@ -247,6 +251,7 @@ JMBProfileTooltip.prototype = {
 		var wHeight = jQuery(document.body).height();
 		var wWidth = jQuery(document.body).width();
 		var confirm = {};
+		var sb = host.stringBuffer();
 		
 		//set functions;
 		var modalWindow = jQuery('<div style="width:'+wWidth+'px;height:'+wHeight+'px;position:absolute;z-index:4999;background:#000;opacity:0.7;top:0px;left:0px;">&nbsp;</div>');
@@ -259,11 +264,13 @@ JMBProfileTooltip.prototype = {
 		}
 		
 		//create html&htmlObject;
-		var html = '<div class="jmb-confirm">';
-			html += '<div class="jmb-confirm-header">'+message+'</div>';
-			html += '<div class="jmb-confirm-body"></div>';
-			html += '<div class="jmb-confirm-close">&nbsp;</div>';
-		html += '<div>';
+		sb._('<div class="jmb-confirm">');
+			sb._('<div class="jmb-confirm-header">')._(message)._('</div>');
+			sb._('<div class="jmb-confirm-body"></div>');
+			sb._('<div class="jmb-confirm-close">&nbsp;</div>');
+		sb._('<div>')
+		
+		var html = sb.result();
 		var htmlObject = jQuery(html);
 		//set buttons;
 		jQuery(settings.buttons).each(function(i,e){
@@ -310,7 +317,7 @@ JMBProfileTooltip.prototype = {
 		}
 		var l = self.storage.length++;
 		self.storage[l] = container;
-		p.settings.contentSelector = "jQuery('#"+jQuery(p.target).attr('id')+"-content')";
+		p.settings.contentSelector = "jQuery('#"+p.id+"-content')";
 		if(p.parent) p.settings.offsetParent = p.parent;
 		
 		jQuery(document.body).append(container);

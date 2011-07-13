@@ -63,15 +63,19 @@ class Host {
         *
         */
         function getAbsoluteRootPath(){
+        	/*
             $path = $_SERVER['DOCUMENT_ROOT'] . $this->getRootDirectory();
             return $path;
+            */
+            return JPATH_BASE;
         }
         
         /**
         *
         */
         function getRootDirectory(){
-            $allPath = realpath($this->modulesPath."../../../");
+            /*
+        	$allPath = realpath($this->modulesPath."../../../");
            
             $allPath = explode("/", $allPath);
    
@@ -80,7 +84,8 @@ class Host {
             }
 
             return "/" .$allPath[count($allPath) -1 ];
-
+            */
+            return JURI::base(true);
         }
         
         /**

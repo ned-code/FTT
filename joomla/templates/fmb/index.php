@@ -8,6 +8,7 @@
  */
 // No direct access.
 defined('_JEXEC') or die;
+
 //functions
 function checkLocation(){
 	$r = $_SERVER["HTTP_REFERER"];
@@ -71,7 +72,7 @@ $inIFrame = checkLocation();
 					<tr>
 						<td valign="top" style="width:760px;"><div id="fb-root"></div><jdoc:include type="component" /></td>
 						<?php if(!$inIFrame): ?>
-							<td valign="top"><jdoc:include type="modules" name="right" /></td>
+							<td valign="top"><div class="right"><jdoc:include type="modules" name="right" /></div></td>
 						<?php endif; ?>
 					</tr>
 				</table>

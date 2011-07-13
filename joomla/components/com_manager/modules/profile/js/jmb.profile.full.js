@@ -2,6 +2,7 @@ function JMBProfileFull(parent){
 	this.parent = parent;
 	this.json = null;
 	this.menuActiveItem = null;
+	this.menuEventsActiveItem = null
 	this.spouseIndex = 0;
 	
 	this.menu = {
@@ -28,36 +29,38 @@ JMBProfileFull.prototype = {
 	},
 	_menuItemParse:function(item, parent){
 		var self = this;
-		var html = '';
+		var sb = host.stringBuffer();
 		for(var key in item){
 			if(typeof(item[key])=='object'){
-				html += self._menuItemParse(item[key], key);
+				sb._(self._menuItemParse(item[key], key));
 			}
 			else{
 				if(key == 'name'){
-					html += '<div id="'+parent+'-'+key+'" class="jmb-dialog-profile-menu-item-parent"><span>'+item.name+'</span></div>';
+					sb._('<div id="')._(parent)._('-')._(key)._('" class="jmb-dialog-profile-menu-item-parent"><span>')._(item.name)._('</span></div>');
 				}else{
-					html += '<div id="'+parent+'-'+key+'" class="jmb-dialog-profile-menu-item-child"><span>'+item[key]+'</span></div>';
+					sb._('<div id="')._(parent)._('-')._(key)._('" class="jmb-dialog-profile-menu-item-child"><span>')._(item[key])._('</span></div>');
 				}
 			}
 		}
-		return html;	
+		return sb.result();	
 	},
 	_menu:function(){
 		var self = this;
-		var html = '<div class="jmb-dialog-profile-menu-container">';
-			html += self._menuItemParse(self.menu);
-		html += '</div>';
-		return html;
+		var sb = host.stringBuffer();
+		sb._('<div class="jmb-dialog-profile-menu-container">');
+			sb._(self._menuItemParse(self.menu));
+		sb._('</div>');	
+		return sb.result();
 	},
 	_edit:function(p){
 		var self = this;
-		var html = '<div>';
-			html += '<table>';
-				html += '<tr> <td valign="top" style="width:150px;">'+self._menu()+'</td> <td valign="top"><div class="jmb-dialog-profile-content"></div></td> </tr>';
-			html += '</table>'
-		html += '</div>';
-		return html;
+		var sb = host.stringBuffer();
+		sb._('<div>');
+			sb._('<table>');
+				sb._('<tr> <td valign="top" style="width:150px;">')._(self._menu())._('</td><td valign="top"><div class="jmb-dialog-profile-content"></div></td></tr>');
+			sb._('</table>');
+		sb._('</div>');
+		return sb.result();
 	},
 	_setMenuItem:function(parent, name){
 		var self = this;
@@ -68,6 +71,10 @@ JMBProfileFull.prototype = {
 			
 			case "unions":
 				self._unions();
+			break;
+		
+			case "events":
+				self._events();
 			break;
 		}
 	},
@@ -92,26 +99,28 @@ JMBProfileFull.prototype = {
 	},
 	_basic:function(){
 		var self = this;
-		var object = self.json.data
-		var html = '<div class="jmb-dialog-profile-content-basic"><form id="jmb:fullprofile:basic" method="post" target="iframe-profile">';
-			html += '<div class="jmb-dialog-profile-content-basic-body">';
-				html += '<table style="width:100%;"><tr>';
-					html += '<td valign="top" style="width:160px;">';
-						html += '<div class="jmb-dialog-photo">'+self.parent._getAvatar(object, 135, 150)+'</div>';
-						html += '<div class="jmb-dialog-photo-button">';
-							html += '<span class="jmb-dialog-photo-button-wrapper">';
-								html += '<input type="file" name="photo" id="photo" />';
-								html += '<span class="jmb-dialog-photo-button2">Upload Photo</span>';
-								html += '<div class="jmb-dialog-photo-context"></div>';
-							html += '</span>';
-						html += '</div>';
-					html += '</td>';
-					html += '<td valign="top">';
-						html += self.parent._formBasicFields();
-					html += '</td>'
-				html += '</tr></table>';
-			html += '</div>'
-		html += '</form></div>';
+		var object = self.json.data;
+		var sb = host.stringBuffer();
+		sb._('<div class="jmb-dialog-profile-content-basic"><form id="jmb:fullprofile:basic" method="post" target="iframe-profile">');
+			sb._('<div class="jmb-dialog-profile-content-basic-body">');
+				sb._('<table style="width:100%;"><tr>');
+					sb._('<td valign="top" style="width:160px;">')
+						sb._('<div class="jmb-dialog-photo">')._(self.parent._getAvatar(object, 135, 150))._('</div>');
+						sb._('<div class="jmb-dialog-photo-button">');
+							sb._('<span class="jmb-dialog-photo-button-wrapper">');
+								sb._('<input type="file" name="photo" id="photo">');
+								sb._('<span class="jmb-dialog-photo-button2">Upload Photo</span>');
+								sb._('<div class="jmb-dialog-photo-context"></div>');
+							sb._('</span>');
+						sb._('</div>');
+					sb._('</td>');
+					sb._('<td valign="top">');
+						sb._(self.parent._formBasicFields());
+					sb._('</td>');
+				sb._('</tr></table>');
+			sb._('</div>');
+		sb._('</form></div>')
+		var html = sb.result();
 		var htmlObject = jQuery(html);
 		//set events
 		self.parent._buttonUploadPhoto(htmlObject);
@@ -144,9 +153,8 @@ JMBProfileFull.prototype = {
  			}
  			return true;
 		}, function(json){
-			if(json.p){
-				jQuery(htmlObject).find('.jmb-dialog-photo').html(self._getPhoto(json, 135, 150));
-			}
+			self.json.data.indiv = json.ind;
+			if(json.photo) jQuery(htmlObject).find('.jmb-dialog-photo').html(self.parent._getPhoto(json, 135, 150));
 		});
 		
 		jQuery(htmlObject).find('.jmb-dialog-form-gender input[value="'+self.json.data.indiv.Gender+'"]').attr('checked', true);
@@ -154,61 +162,65 @@ JMBProfileFull.prototype = {
 	},
 	_personUnionInfoHTML:function(object){
 		var self = this;
-		var html = '<div class="jmb-dialog-profile-content-unions-person-info">';
-			html += '<div class="jmb-dialog-profile-content-unions-person-info-name">'+self.parent._getFullName(object)+'</div>';
+		var sb = host.stringBuffer();
+		sb._('<div class="jmb-dialog-profile-content-unions-person-info">');
+			sb._('<div class="jmb-dialog-profile-content-unions-person-info-name">')._(self.parent._getFullName(object))._('</div>');
 			if(object.Birth){
-				html += '<div class="jmb-dialog-profile-content-unions-person-info-birthdate">'+self.parent._getEventDate(object.Birth)+'</div>';
-				html += '<div class="jmb-dialog-profile-content-unions-person-info-birthplace">'+self.parent._getFullPlace(object.Birth.Place)+'</div>';
+				sb._('<div class="jmb-dialog-profile-content-unions-person-info-birthdate">')._(self.parent._getEventDate(object.Birth))._('</div>');
+				sb._('<div class="jmb-dialog-profile-content-unions-person-info-birthplace">')._(self.parent._getFullPlace(object.Birth.Place))._('</div>');
 			}
-		html += '</div>';
-		return html;
+		sb._('</div>');
+		return sb.result();
 	},
 	_unionLinkImages:function(data, spouse){
 		var self = this;
-		var html = '<div class="jmb-dialog-profile-content-unions-image">';
-			html += '<table>';
-				html += '<tr>';
-					html += '<td><div>'+self.parent._getAvatar(data,60,66)+'</div></td>';
-					html += '<td><div>'+self.parent._getAvatar(spouse,60,66)+'</div></td>';
-				html += '</tr>';
-			html += '</table>';
-		html += '</div>';
-		return html;
+		var sb = host.stringBuffer();
+		sb._('<div class="jmb-dialog-profile-content-unions-image">');
+			sb._('<table>');
+				sb._('<tr>');
+					sb._('<td><div>')._(self.parent._getAvatar(data,60,66))._('</div></td>');
+					sb._('<td><div>')._(self.parent._getAvatar(spouse,60,66))._('</div></td>');
+				sb._('</tr>');
+			sb._('</table>');
+		sb._('</div>');
+		return sb.result();
 	},
 	_unionHTML:function(index, data, spouse){
 		var self = this;
-		var html = '<div id="jmb-union-'+index+'" class="jmb-dialog-profile-content-union" spouse_id="'+spouse.id+'">';
-			html +='<form id="jmb-profile-addpsc-'+index+'" method="post" target="iframe-profile">';
-				html += '<div class="jmb-dialog-profile-content-unions-header">';
-					html += '<span style="float:left;">Union '+(index+1)+'</span>';
-					html += '<span style="float:right;"><input type="submit" value="Save"></span>';
-				html += '</div>';
-				html += '<div class="jmb-dialog-profile-content-unions-body">';
-					html += '<table>';
-						html += '<tr>';
-							html += '<td valign="top">'+self._personUnionInfoHTML(data.indiv)+'</td>';
-							html += '<td valign="top">'+self._unionLinkImages(data,spouse)+'</td>';
-							html += '<td valign="top">'+self._personUnionInfoHTML(spouse.indiv)+'</td>';
-						html += '</tr>';
-						html += '<tr>';
-							html += '<td valign="top" colspan="3"><div class="jmb-dialog-profile-content-unions-part">'+self.parent._formUnionEventFields()+'</div></td>';
-						html += '</tr>';
-					html += '</table>';
-				html += '</div>';
-			html += '</form>';
-		html += '</div>';
-		return html;
+		var sb = host.stringBuffer();
+		sb._('<div id="jmb-union-')._(index)._('" class="jmb-dialog-profile-content-union" spouse_id="')._(spouse.id)._('">');
+			sb._('<form id="jmb-profile-addpsc-')._(index)._('" method="post" target="iframe-profile">');
+				sb._('<div class="jmb-dialog-profile-content-unions-header">');
+					sb._('<span style="float:left;">Union ')._(index+1)._('</span>');
+					sb._('<span style="float:right;"><input type="submit" value="Save"></span>');
+				sb._('</div>');
+				sb._('<div class="jmb-dialog-profile-content-unions-body">');
+					sb._('<table>');
+						sb._('<tr>');
+							sb._('<td valign="top">')._(self._personUnionInfoHTML(data.indiv))._('</td>');
+							sb._('<td valign="top">')._(self._unionLinkImages(data,spouse))._('</td>');
+							sb._('<td valign="top">')._(self._personUnionInfoHTML(spouse.indiv))._('</td>');
+						sb._('</tr>');
+						sb._('<tr>');
+							sb._('<td valign="top" colspan="3"><div class="jmb-dialog-profile-content-unions-part">')._(self.parent._formUnionEventFields())._('</div></td>');
+						sb._('</tr>');
+					sb._('</table>');
+				sb._('</div>');
+			sb._('</form>');
+		sb._('</div>');
+		return sb.result();
 	},
 	_unionsHTML:function(){
 		var self = this;
+		var sb = host.stringBuffer();
 		var data = self.json.data;
-		var html = '<div class="jmb-dialog-profile-content-unions">';
+		sb._('<div class="jmb-dialog-profile-content-unions">');
 			jQuery(self.json.data.spouses).each(function(i, spouse){
 				if(!spouse.id) return;
-				html += self._unionHTML(i, data, spouse);
+				sb._(self._unionHTML(i, data, spouse))
 			});	
-		html += '</div>';
-		return html;
+		sb._('</div>');
+		return sb.result();
 	},
 	_unionCancelButton:function(object){
 		var self = this;
@@ -219,37 +231,39 @@ JMBProfileFull.prototype = {
 	},
 	_unionAdd:function(input, object){
 		var self = this;
-		var html = '<div id="jmb-union-'+self.spouseIndex+'" class="jmb-dialog-profile-content-union add" spouse_id="null">';
-			html += '<form id="jmb:profile:addspouse" method="post" target="iframe-profile">';
-			html += '<div class="jmb-dialog-profile-content-unions-header">';
-				html += '<span style="float:left;">Union '+self.spouseIndex+'</span>';
-				html += '<span style="float:right;"><input type="submit" value="Save"></span>';
-				html += '<span style="float:right;"><input type="button" value="Cancel"></span>';
-			html += '</div>';
-			html += '<table>';
-				html += '<tr>';
-					html += '<td valign="top">';
-						html += '<div class="jmb-dialog-photo">'+self.parent._getSpouseAvatar(self.json.data, 135, 150)+'</div>';
-						html += '<div class="jmb-dialog-photo-button">';
-							html += '<span class="jmb-dialog-photo-button-wrapper">';
-								html += '<input type="file" name="photo" id="photo" />';
-								html += '<span class="jmb-dialog-photo-button2">Upload Photo</span>';
-								html += '<div class="jmb-dialog-photo-context"></div>';
-							html += '</span>';
-						html += '</div>';
-					html += '</td>';
-					html += '<td valign="top">';
-						html += self.parent._formBasicFields();
-					html += '</td>';
-				html += '</tr>';
-				html += '<tr>';
-					html += '<td colspan="2">';
-						html += self.parent._formUnionEventFields();
-					html += '</td>';
-				html += '</tr>';
-			html += '</table>';
-			html += '</form>';
-		html += '</div>';
+		var sb = host.stringBuffer();
+		sb._('<div id="jmb-union-')._(self.spouseIndex)._('" class="jmb-dialog-profile-content-union add" spouse_id="null">');
+			sb._('<form id="jmb:profile:addspouse" method="post" target="iframe-profile">');
+			sb._('<div class="jmb-dialog-profile-content-unions-header">');
+				sb._('<span style="float:left;">Union ')._(self.spouseIndex)._('</span>');
+				sb._('<span style="float:right;"><input type="submit" value="Save"></span>');
+				sb._('<span style="float:right;"><input type="button" value="Cancel"></span>');
+			sb._('</div>');
+			sb._('<table>');
+				sb._('<tr>');
+					sb._('<td valign="top">');
+						sb._('<div class="jmb-dialog-photo">')._(self.parent._getSpouseAvatar(self.json.data, 135, 150))._('</div>');
+						sb._('<div class="jmb-dialog-photo-button">');
+							sb._('<span class="jmb-dialog-photo-button-wrapper">');
+								sb._('<input type="file" name="photo" id="photo">');
+								sb._('<span class="jmb-dialog-photo-button2">Upload Photo</span>');
+								sb._('<div class="jmb-dialog-photo-context"></div>');
+							sb._('</span>');
+						sb._('</div>');
+					sb._('</td>');
+					sb._('<td valign="top">');
+						sb._(self.parent._formBasicFields());
+					sb._('</td>');
+				sb._('</tr>');
+				sb._('<tr>');
+					sb._('<td colspan="2">');
+						sb._(self.parent._formUnionEventFields());
+					sb._('</td>');
+				sb._('</tr>');
+			sb._('</table>');
+			sb._('</form>');
+		sb._('</div>');
+		var html = sb.result();
 		var htmlObject = jQuery(html);
 		var gender = (self.json.data.indiv.Gender=="M")?"F":"M";
 		jQuery(htmlObject).find('.jmb-dialog-form-gender input[value="'+gender+'"]').attr('checked','checked');
@@ -310,12 +324,82 @@ JMBProfileFull.prototype = {
 			self.parent._ajaxForm(jQuery(htmlObject).find('form#jmb-profile-addpsc-'+i), 'updateUnion', args, 
 			function(res){
 			}, function(json){
+				delete spouse.event;
+				spouse.event = new Array();
+				(json.marriage)?spouse.event[spouse.event.length++]=json.marriage:null;
+				(json.divorce)?spouse.event[spouse.event.length++]=json.divorce:null;
 			});
 		});	
 		var input = jQuery(htmlObject[1]).find('input');
 		jQuery(input).click(function(){
 			self._unionAdd(this, htmlObject);
 		});
+		jQuery(self.parent.dWindow).find('div.jmb-dialog-profile-content').append(htmlObject);
+	},
+	_events:function(){
+		var self = this;
+		var data = self.json.data;
+		var sb = host.stringBuffer();
+			sb._('<div class="jmb-dialog-profile-content-events">');
+				sb._('<div class="header"><div class="button"><span>Edit existing event</span></div><div class="button active"><span>Create new Event</span></div></div>');
+				sb._('<div class="body">');
+					sb._('<div class="header">');
+						sb._('<div class="title">Event</div>');
+						sb._('<div class="buttons">');
+							sb._('<input type="button" value="Save">');
+							sb._('<input type="button" value="Delete">');
+							sb._('<input type="button" value="Cancel">');
+						sb._('</div>');
+					sb._('</div>');
+					sb._('<div class="content">');
+						sb._('<table>');
+							sb._('<tr>');
+								sb._('<td><div class="title">Duration:</div></td>');
+								sb._('<td valign="top">');
+									sb._('<div class="text">');
+										sb._('<div><input name="duration" value="single" type="radio"><span>Single Day Event</span></div>');
+										sb._('<div><input name="duration" value="prolonger" type="radio"><span>Prolonged Event</span></div>');
+									sb._('</div>');
+								sb._('</td>');
+							sb._('</tr>');
+							sb._('<tr>');
+								sb._('<td><div class="title">Type:</div></td>');
+								sb._('<td><div class="text"><select><option>Graduation</option></select></div></td>');
+							sb._('</tr>');
+							sb._('<tr>');
+								sb._('<td><div class="title">Date:</div></td>');
+								sb._('<td><div class="text"><select>')._(self.parent._selectDays())._('</select><select>')._(self.parent._selectMonths())._('</select><input name="year" placeholder="Year" type="text" maxlength="4"></div></td>');
+							sb._('</tr>');
+							sb._('<tr>');
+								sb._('<td><div class="title">Place:</div></td>');
+								sb._('<td><div class="text"><input name="place" placeholder="Place" type="text"></div></td>')
+							sb._('</tr>');
+							sb._('<tr>');
+								sb._('<td><div class="title">Location:</div></td>');
+								sb._('<td><div class="text"><input name="town" placeholder="Town\City" type="text"><input name="state" placeholder="Prov\State" type="text"><input name="country" placeholder="Country" type="text"></div></td>');
+							sb._('</tr>');
+						sb._('</table>');
+					sb._('</div>');
+				sb._('</div>');
+				sb._('<div class="list">');
+					sb._('<div>1900 - Born in Toronto,Ontario Canada</div>');
+					sb._('<div>1901 - Moves to Braga,Portugal</div>');
+					sb._('<div>1902 - Graduates from Central Commerce High School</div>');
+					sb._('<div>1903 - Graduates from UT university</div>');
+					sb._('<div>1999 - Marries Jane Fonda</div>');
+				sb._('</div>');
+			sb._('</div>');
+		var html = sb.result();
+		var htmlObject = jQuery(html);
+		jQuery(htmlObject).find('input[name="duration"][value="single"]').attr('checked', 'checked');
+		jQuery(htmlObject).find('div.list div').each(function(i,e){
+			jQuery(e).click(function(){
+				if(self.menuEventsActiveItem) jQuery(self.menuEventsActiveItem).removeClass('active');
+				jQuery(e).addClass('active');				
+				self.menuEventsActiveItem = this;
+			});
+		});
+		jQuery(htmlObject).find('div.buttons input[type="button"]').each(function(){})
 		jQuery(self.parent.dWindow).find('div.jmb-dialog-profile-content').append(htmlObject);
 	},
 	render:function(p){
@@ -327,19 +411,29 @@ JMBProfileFull.prototype = {
 			height: 450,
 		});
 		//set button edt\view
-		var buttons = jQuery('<div class="jmb-dialog-interface-button"><div type="button" class="active"><span>Edit</span></div><div type="button"><span>View</span></div></div>');
+		var buttons = jQuery('<div class="jmb-dialog-interface-button"><div type="button" value="edit" class="active"><span>Edit</span></div><div value="view" type="button"><span>View</span></div></div>');
 		jQuery(self.parent.dWindow).parent().find('.ui-dialog-titlebar').append(buttons);
+				
+		var html = self._edit(); 
+		self.parent.dContent.object = jQuery(html);
+		self.parent.dContent.flag = true;
+		
 		jQuery(buttons).find('div[type="button"]').each(function(i,e){
 			jQuery(e).click(function(){
 				if(jQuery(this).hasClass('active')) return false;
 				jQuery(buttons).find('.active').removeClass('active');
 				jQuery(e).addClass('active');
+				switch(jQuery(e).attr('value')){
+					case "edit":
+						
+					break;
+					
+					case "view":
+						
+					break;
+				}
 			});
 		});
-		
-		var html = self._edit(); 
-		self.parent.dContent.object = jQuery(html);
-		self.parent.dContent.flag = true;
 		
 		self._setMenu(self.parent.dContent.object);
 		jQuery('.jmb-dialog-container').css({

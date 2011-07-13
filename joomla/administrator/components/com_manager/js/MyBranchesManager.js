@@ -21,17 +21,20 @@ MyBranchesManager.prototype = {
     }, 
     appendModule:function( id,  container_id){
     	var self = this;
-        jQuery.ajax({
+        var xnr = jQuery.ajax({
           url: 'index.php?option=com_manager&task=getModule&f=module&id='+id,
             type: "GET",
             dataType: "html",
-            complete : function (req, err) {            
+            complete : function (req, err) {   
+            	if(!document.getElementById(container_id)) return;
                 document.getElementById(container_id).innerHTML = req.responseText;
                 jQuery.getJSON('index.php?option=com_manager&task=moduleScript&f=init&id='+id, function(data){
                 	self.call(data);
                 });
             }
         });
+        if(storage&&storage.request) storage.request.add(xnr);
+        return xnr;
     },
     /*
      * @desc: if module is loading for the first time includes its files, calls appendModule method
@@ -49,7 +52,7 @@ MyBranchesManager.prototype = {
             var mod = {};
             mod.id = id;
            host.loadedModules.push(mod);
-            jQuery.ajax({
+           var xnr = jQuery.ajax({
                 url: 'index.php?option=com_manager&task=getXML&f=append&id='+id,
                 type: "GET",
                 contentType: "xml",
@@ -80,6 +83,7 @@ MyBranchesManager.prototype = {
                    self.appendModule(id, container_id);
                 }
             });
+            if(storage&&storage.request) storage.request.add(xnr);  
         }
     }, 
      getLayoutUrl:function(type){
@@ -100,7 +104,7 @@ MyBranchesManager.prototype = {
         }
     },
     callMethod:function(moduleName, methodName, args, callback){
-          jQuery.ajax({
+          var xnr = jQuery.ajax({
             url: 'components/com_manager/php/getModules.php',
             type: "POST",
             data:{module:moduleName, method:methodName, arguments:args},
@@ -109,5 +113,7 @@ MyBranchesManager.prototype = {
                 callback();
             }
           });
+          if(storage&&storage.request) storage.request.add(xnr);
+          return xnr;
     }
 }

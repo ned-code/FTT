@@ -137,13 +137,16 @@ require_once 'class.data.php';
             
         }
         function getMediaPath(){
-            $jspath = $this->core->core->getRootDirectory()."/components/com_manager/media";
+            $jspath = JURI::base(true)."/components/com_manager/media";
             return $jspath;
         }
         function save($foreignkey, $filepath, $name){
-            if(is_file($filepath)){    
+            if(is_file($filepath)){   
+            	$extension = explode('.', $name);
+                $extension = $extension[count($extension)-1];
+            	    
                 $db =& JFactory::getDBO();
-                $req = 'INSERT INTO #__mb_media (`m_id`, `m_type`, `m_name`,`m_date`, `m_circa`,`m_description`, `m_photographer`,`m_source`) VALUES ( "","000","'.$name.'","", "0", "", "", "")';
+                $req = 'INSERT INTO #__mb_media (`m_id`, `m_type`, `m_name`,`m_date`, `m_circa`,`m_description`, `m_photographer`,`m_source`) VALUES ( "","'.$extension.'","'.$name.'","", "0", "", "", "")';
                 $db->setQuery($req);
                 $db->query();
 
@@ -152,14 +155,11 @@ require_once 'class.data.php';
                 $rows = $db->loadAssocList();
                 $id = $rows[0]['LAST_INSERT_ID()'];
 
-                $extension = explode('.', $name);
-                $extension = $extension[count($extension)-1];
-          
                 $path = $this->core->core->getAbsoluteRootPath().DS."components".DS."com_manager".DS."media".DS;
                 if(!is_dir($this->core->core->getAbsoluteRootPath().DS."components".DS."com_manager".DS."media"))
                         mkdir($this->core->core->getAbsoluteRootPath().DS."components".DS."com_manager".DS."media");
-
-                if(  copy($filepath, $path.$id.'.'.$extension)){
+                
+                if(copy($filepath, $path.$id.'.'.$extension)){
                     $jspath = $this->getMediaPath();
                     $req = 'UPDATE #__mb_media SET m_file="'.$jspath.'/'.$id.'.'.$extension.'" WHERE m_id="'.$id.'"';
 
@@ -169,7 +169,7 @@ require_once 'class.data.php';
 
                   
                     $this->link($id, $foreignkey);
-                    return true;
+                    return $id;
                 }
                 else{
                     $req = 'DELETE FROM #__mb_media WHERE m_id="'.$id.'"';

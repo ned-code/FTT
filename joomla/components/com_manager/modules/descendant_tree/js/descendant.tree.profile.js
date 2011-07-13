@@ -41,42 +41,41 @@ DescendantTreeProfile.prototype = {
 	},
 	createDiv:function(parent){
 		var self = this;
-		var html = '<div id="jmb-dtp-container" class="jmb-dtp-container">';
-			html += '<div class="jmb-dtp-header">';
-				html += '<div class="jmb-dtp-header-name">&nbsp;</div>';
-			html += '</div>';
-			html += '<div class="jmb-dtp-body">';	
-				html += '<div class="jmb-dtp-body-info">';
-					html += '<table>';
-						html += '<tr>';
-						html += '<td><div class="jmb-profile-avatar"><div class="jmb-dtp-facebook-icon" style="display:none">&nbsp;</div><div id="edit-button" class="jmb-dtp-body-edit-button">&nbsp;</div></div></td>';
-							html += '<td>';
-								html += '<div class="jmb-dtp-body-info-born">&nbsp;</div>';
-								html += '<div class="jmb-dtp-body-info-died">&nbsp;</div>';
-								html += '<div class="jmb-dtp-body-info-relation">&nbsp;</div>';
-							html += '</td>';
-						html += '</tr>';
-					html += '</table>';
-				html += '</div>';	
-				html += '<div class="jmb-dtp-body-space">&nbsp;</div>'
-				html += '<div class="jmb-dtp-body-media">';
-				html += '</div>';
-			html +='</div>';
-			html += '<div class="jmb-dtp-footer">';
-				html += '<table>';
-					html += '<tr>';
-						html += '<td>';
-							html += '<div class="jmb-dtp-footer-mail-button">&nbsp;</div>';
-						html += '</td>';
-						html += '<td>';
-							html += '<div class="jmb-dtp-footer-info">&nbsp;</div>';
-						html += '</td>';
-					html += '</tr>';
-				html += '</table>';
-			html += '</div>';
-		html += '</div>';
-		
-		var obj = jQuery(html);
+		var sb = host.stringBuffer();
+		sb._('<div id="jmb-dtp-container" class="jmb-dtp-container">');
+			sb._('<div class="jmb-dtp-header">');
+				sb._('<div class="jmb-dtp-header-name">&nbsp;</div>');
+			sb._('</div>');
+			sb._('<div class="jmb-dtp-body">');
+				sb._('<div class="jmb-dtp-body-info">');
+					sb._('<table>');
+						sb._('<tr>');
+							sb._('<td><div class="jmb-profile-avatar"><div class="jmb-dtp-facebook-icon" style="display:none">&nbsp;</div><div id="edit-button" class="jmb-dtp-body-edit-button">&nbsp;</div></div></td>');
+							sb._('<td>');
+								sb._('<div class="jmb-dtp-body-info-born">&nbsp;</div>');
+								sb._('<div class="jmb-dtp-body-info-died">&nbsp;</div>');
+								sb._('<div class="jmb-dtp-body-info-relation">&nbsp;</div>');
+							sb._('</td>');
+						sb._('</tr>');
+					sb._('</table>');
+				sb._('</div>');
+				sb._('<div class="jmb-dtp-body-space">&nbsp;</div>');
+				sb._('<div class="jmb-dtp-body-media">&nbsp;</div>');
+			sb._('</div>');
+			sb._('<div class="jmb-dtp-footer">');
+				sb._('<table>');
+					sb._('<tr>');
+						sb._('<td>');
+							sb._('<div class="jmb-dtp-footer-mail-button">&nbsp;</div>');
+						sb._('</td>');
+						sb._('<td>');
+							sb._('<div class="jmb-dtp-footer-info">&nbsp;</div>');
+						sb._('</td>');
+					sb._('</tr>');
+				sb._('</table>');
+			sb._('</div>');
+		sb._('</div>');	
+		var obj = jQuery(sb.result());
 		parent.dhxLayout.cells("b").attachObject(obj[0]);
 		
 		var height = jQuery(obj).parent().height();
@@ -220,6 +219,7 @@ DescendantTreeProfile.prototype = {
 			self.profile.tooltip.cleaner();
 			self.profile.tooltip.render({
 				target: button,
+				id:jQuery(button).attr('id'),
 				type: 'tooltip',
 				data: json,
 				imgPath:json.path,
