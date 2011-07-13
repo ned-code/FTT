@@ -167,7 +167,7 @@ class JMBController extends JController
 	*
 	*/
 	function savePage(){
-		$page_id = 
+		$page_id = JRequest::getVar('page_id');
 		$json = JRequest::getVar('json');
 		$db =& JFactory::getDBO();
 		$sql = "SELECT uid FROM #__mb_modulesgrid WHERE page_id ='".$page_id."'";
