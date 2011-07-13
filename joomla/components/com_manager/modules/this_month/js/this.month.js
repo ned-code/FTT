@@ -122,6 +122,7 @@ JMBThisMonth.prototype = {
 					var gender = (json.descedants[key].indiv.Gender=='M')?'male':'female';
 					var color = json.colors[json.descedants[key].indiv.Gender];
 					var append = sb._('<tr><td><div class="date">')._(b[key].event.Day)._('</div></td><td><div class="img-')._(gender)._('">&nbsp;</div></td><td><div id="')._(key)._('" class="person ')._(gender)._('"><font color="')._(color)._('">')._(self._getFullName(json, key))._('</font> (turns ')._(self._getTurns(b[key].event))._(')</div></td></tr>').result();
+					sb.clear();
 					jQuery(view).append(append);
 				} 
 			}

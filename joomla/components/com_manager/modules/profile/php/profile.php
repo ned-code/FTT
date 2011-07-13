@@ -416,7 +416,7 @@ class JMBProfile {
 	public function getUserInfo(){
 		$data = $this->_getUserInfo($_SESSION['jmb']['gid']);
 		$path = JURI::root(true); 
-		return json_encode(array('data'=>$data,'path'=>$path,'base'=>$base));
+		return json_encode(array('data'=>$data,'path'=>$path));
 	}
 }
 
