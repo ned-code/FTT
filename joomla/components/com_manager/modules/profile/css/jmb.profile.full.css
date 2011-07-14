@@ -225,93 +225,142 @@
 	width: 170px;
 }
 /* EVENTS */
-.jmb-dialog-profile-content-events {
-	margin: 10px 40px;
-}
-.jmb-dialog-profile-content-events .header{
-	margin:10px;
-}
-.jmb-dialog-profile-content-events .header div.button{
-	display: inline-block;
-	background:url("../image/calendar.gif") no-repeat;
-}
-.jmb-dialog-profile-content-events .header div.button span{
-	cursor: pointer;
-	font-family: Calibri,Tahoma;
+.jmb-dialog-events-content {
+	font-family: calibri, tahoma;
 	font-size: 12px;
-	font-weight: bold;
-	margin-left: 30px;
+	width: 450px;
+	margin-top: 10px;
+	margin-left: 40px;
 }
-.jmb-dialog-profile-content-events .header div.button.active span{
-	color: blue;
-}
-.jmb-dialog-profile-content-events .body{
-	border: 2px solid blue;
-}
-.jmb-dialog-profile-content-events .body .header{
-	border-bottom: 2px solid blue;
-	margin: 0;
-	padding: 5px;
+.jmb-dialog-events-header {
 	position: relative;
 	text-align: center;
+	height: 30px;
+	font-size: 14px;
+	font-weight: bold;
 }
-.jmb-dialog-profile-content-events .body .header .title{
-	margin-left: -70px;
+.jmb-dialog-events-header div {
+	display: inline-block;
 }
-.jmb-dialog-profile-content-events .body .header .buttons{
-	position: absolute;
-	right: 5px;
-	top: 5px;
+.jmb-dialog-events-header div.active {
+	color: #3B5997;
 }
-.jmb-dialog-profile-content-events .body .header .buttons input[type="button"]{
-	border: 1px solid #000000;
-	border-radius: 3px 3px 3px 3px;
+.jmb-dialog-events-header div span {
 	cursor: pointer;
+}
+.jmb-dialog-events-edit {
+	position: relative;
+}
+.jmb-dialog-events-edit-buttons {
+	position: absolute;
+	top: 6px;
+	right: 5px;
+}
+.jmb-dialog-events-edit-buttons input {
+	border: 1px solid #999;
+	border-radius: 2px;
+	width: 50px;
+	font-size: 12px;
 	font-family: calibri,tahoma;
+	margin-left: 3px;
+	cursor: pointer;
+}
+.jmb-dialog-events-edit-header {
+	border: 2px solid #3B5997;
+	border-top-left-radius: 3px 3px;
+	border-top-right-radius: 3px 3px;
+	text-align: center;
+	height: 20px;
+	font-size: 14px;
+	font-weight: bold;
+	padding-top: 5px;
+}
+.jmb-dialog-events-edit-body {
+	border: 2px solid #3B5997;
+	margin-top: -2px;
+	border-bottom-right-radius: 3px 3px;
+	border-bottom-left-radius: 3px 3px;
+}
+.jmb-dialog-events-edit-body div.title {
+	width: 70px;
+	text-align: left;
+	font-weight: bold;
+	margin-left: 3px;
+}
+.jmb-dialog-events-edit-body div.radio span {
+	cursor:pointer;
+}
+.jmb-dialog-events-edit-body select {
+	border: 1px solid #999;
+	padding: 3px;
+	font-family: calibri, tahoma;
 	font-size: 12px;
 	margin: 3px;
-	width: 60px;
 }
-.jmb-dialog-profile-content-events .body .content{}
-.jmb-dialog-profile-content-events .body .content table{
-	margin: 10px;
-}
-.jmb-dialog-profile-content-events .body .content .title {
-	width: 60px;
-	text-align: right;
-	font-weight: bold
-}
-.jmb-dialog-profile-content-events .body .content .text {
+.jmb-dialog-events-edit-body input{
 	margin: 3px;
+	border: 1px solid #999;
 }
-.jmb-dialog-profile-content-events .body .content .text input[type="radio"] {
+.jmb-dialog-events-edit-body input[type="text"] {
+	width: 100px;
+}
+.jmb-dialog-events-edit-body input[type="radio"] {
 	position: relative;
 	top: 3px;
 }
-.jmb-dialog-profile-content-events .body .content .text input{
-	border: 1px solid #999;
-	margin-left: 3px;
+.jmb-dialog-events-edit-body input[type="text"][name="place"] {
+	width: 118px;
 }
-.jmb-dialog-profile-content-events .body .content .text input[type="text"] {
-	width: 100px;
+.jmb-dialog-events-edit-body input[type="text"][name="year"] {
+	width: 50px;
 }
-.jmb-dialog-profile-content-events .body .content .text input[name="year"] {
-	width:60px;
+.jmb-dialog-events-list{
+	position:relative;
 }
-.jmb-dialog-profile-content-events .body .content .text select{
-	border: 1px solid #999;
+.jmb-dialog-events-list ul {
+	list-style: none;
+}
+.jmb-dialog-events-list li div{
+	display: inline-block;
+	cursor:default;
 	padding: 3px;
-}
-.jmb-dialog-profile-content-events .list{
-	margin-top: 10px;
-}
-.jmb-dialog-profile-content-events .list div{
-	cursor: pointer;
-	font-family: Calibri,Tahoma;
-	font-size: 16px;
+	border-radius: 2px;
 	border: 1px solid white;
 }
-.jmb-dialog-profile-content-events .list div.active{
-	background: none repeat scroll 0 0 yellow;
-	border: 1px solid yellowGreen;
+.jmb-dialog-events-list li.active div{
+	cursor: pointer;
 }
+.jmb-dialog-events-list li div#edit.button {
+	width: 30px;
+	text-align: center;
+	color: #FFF;
+}
+.jmb-dialog-events-list li.active div#edit.button {
+	background: #F8A13B;
+	color: white;
+	font-weight: bold;
+	border-radius: 4px;
+}
+.jmb-dialog-events-list li.active div#edit.button:hover {
+	background: #b6772d;
+}
+.jmb-dialog-events-list li div#delete.button {
+	width: 14px;
+	height: 14px;
+}
+.jmb-dialog-events-list li.active div#delete.button {
+	background: url('../image/delete.png') no-repeat 3px 3px;
+}
+.jmb-dialog-events-list li .text{
+	cursor:pointer;
+}
+.jmb-dialog-events-list li.active .text{
+	border: 1px solid #3B5997;
+	background: #FFF200;
+}
+
+
+
+
+
+

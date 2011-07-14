@@ -21,6 +21,21 @@ function JMBProfileFull(parent){
 			"other":"Other"
 		}
 	};
+	this.singleDayEvents = [
+		{name:'graduation',title:'Graduation'},
+		{name:'immigration',title:'Immigration'},
+		{name:'hired',title:'Hired'},
+		{name:'award',title:'Award'},
+		{name:'moved',title:'Moved Location'}
+	];
+	this.prolongedEvents = [
+		{name:'occupation',title:'Occupation'},
+		{name:'travel',title:'Travel'},
+		{name:'lived',title:'Lived abroad'},
+		{name:'elementary_school',title:'Attended Elementary School'},
+		{name:'secondary_school',title:'Attended Secondary School'},
+		{name:'post-secondaty_school',title:'Attended Post-Secondary School'},
+	]
 }
 
 JMBProfileFull.prototype = {
@@ -336,70 +351,131 @@ JMBProfileFull.prototype = {
 		});
 		jQuery(self.parent.dWindow).find('div.jmb-dialog-profile-content').append(htmlObject);
 	},
-	_events:function(){
+	_eventsBlockHeader:function(){
 		var self = this;
-		var data = self.json.data;
 		var sb = host.stringBuffer();
-			sb._('<div class="jmb-dialog-profile-content-events">');
-				sb._('<div class="header"><div class="button"><span>Edit existing event</span></div><div class="button active"><span>Create new Event</span></div></div>');
-				sb._('<div class="body">');
-					sb._('<div class="header">');
-						sb._('<div class="title">Event</div>');
-						sb._('<div class="buttons">');
-							sb._('<input type="button" value="Save">');
-							sb._('<input type="button" value="Delete">');
-							sb._('<input type="button" value="Cancel">');
-						sb._('</div>');
-					sb._('</div>');
-					sb._('<div class="content">');
-						sb._('<table>');
-							sb._('<tr>');
-								sb._('<td><div class="title">Duration:</div></td>');
-								sb._('<td valign="top">');
-									sb._('<div class="text">');
-										sb._('<div><input name="duration" value="single" type="radio"><span>Single Day Event</span></div>');
-										sb._('<div><input name="duration" value="prolonger" type="radio"><span>Prolonged Event</span></div>');
-									sb._('</div>');
-								sb._('</td>');
-							sb._('</tr>');
-							sb._('<tr>');
-								sb._('<td><div class="title">Type:</div></td>');
-								sb._('<td><div class="text"><select><option>Graduation</option></select></div></td>');
-							sb._('</tr>');
-							sb._('<tr>');
-								sb._('<td><div class="title">Date:</div></td>');
-								sb._('<td><div class="text"><select>')._(self.parent._selectDays())._('</select><select>')._(self.parent._selectMonths())._('</select><input name="year" placeholder="Year" type="text" maxlength="4"></div></td>');
-							sb._('</tr>');
-							sb._('<tr>');
-								sb._('<td><div class="title">Place:</div></td>');
-								sb._('<td><div class="text"><input name="place" placeholder="Place" type="text"></div></td>')
-							sb._('</tr>');
-							sb._('<tr>');
-								sb._('<td><div class="title">Location:</div></td>');
-								sb._('<td><div class="text"><input name="town" placeholder="Town\City" type="text"><input name="state" placeholder="Prov\State" type="text"><input name="country" placeholder="Country" type="text"></div></td>');
-							sb._('</tr>');
-						sb._('</table>');
-					sb._('</div>');
-				sb._('</div>');
-				sb._('<div class="list">');
-					sb._('<div>1900 - Born in Toronto,Ontario Canada</div>');
-					sb._('<div>1901 - Moves to Braga,Portugal</div>');
-					sb._('<div>1902 - Graduates from Central Commerce High School</div>');
-					sb._('<div>1903 - Graduates from UT university</div>');
-					sb._('<div>1999 - Marries Jane Fonda</div>');
-				sb._('</div>');
-			sb._('</div>');
-		var html = sb.result();
-		var htmlObject = jQuery(html);
-		jQuery(htmlObject).find('input[name="duration"][value="single"]').attr('checked', 'checked');
-		jQuery(htmlObject).find('div.list div').each(function(i,e){
+		sb._('<div class="jmb-dialog-events-header">Select event to edit  or <div class="active"><span>Create new Event.</span></div></div>');
+		return sb.result();
+	},
+	_eventsBlockEdit:function(){
+		var self = this;
+		var sb = host.stringBuffer();
+		sb._('<div class="jmb-dialog-events-edit" style="display:none;">');
+			sb._('<form>');
+				sb._('<div class="jmb-dialog-events-edit-buttons"><input type="submit" value="Save"><input type="button" value="Delete"><input type="button" value="Close"></div>');
+				sb._('<div class="jmb-dialog-events-edit-header">Event</div>')
+				sb._('<div class="jmb-dialog-events-edit-body">');
+					sb._('<table>');
+						sb._('<tr><td valign="top"><div class="title"><span>Duration:</span></div></td><td><div class="radio"><input name="duration" type="radio" value="single"><span id="single">Single Day Event</span></div><div class="radio"><input name="duration" type="radio" value="prolonged"><span id="prolonged">Prolonged Event</span></div></td></tr>');
+						sb._('<tr><td><div class="title"><span>Type:<span></div></td><td><select name="type"></select></td></tr>');
+						sb._('<tr><td><div class="title"><span>Date:<span></div></td><td><select name="day">')._(self.parent._selectDays())._('</select><select name="month">')._(self.parent._selectMonths())._('</select><input maxlength="4" type="text" placeholder="Year" name="year"></td></tr>');
+						sb._('<tr><td><div class="title"><span>Place:<span></div></td><td><input name="place" placeholder="Place" type="text"></td></tr>');
+						sb._('<tr><td><div class="title"><span>Location:<span></div></td><td><input name="city" type="text" placeholder="Town/City"><input name="state" type="text" placeholder="Prov/State"><input name="country" type="text" placeholder="Country"></td></tr>');
+					sb._('</table>');
+				sb._('</div>')
+		sb._('</div>');
+		return sb.result();
+	},
+	_eventsBlockList:function(){
+		var self = this;
+		var sb = host.stringBuffer();
+		sb._('<div class="jmb-dialog-events-list">');
+			sb._('<ul>');
+				sb._('<li id="0"><div id="edit" class="button"><span>Edit</span></div><div id="delete" class="button">&nbsp;</div><div id="switch" class="text">1997 - Graduates from UT university.</div></li>');
+				sb._('<li id="0" class="active"><div id="edit" class="button"><span>Edit</span></div><div id="delete" class="button">&nbsp;</div><div id="switch" class="text">1997 - Graduates from UT university.</div></li>');
+				sb._('<li id="0"><div id="edit" class="button"><span>Edit</span></div><div id="delete" class="button">&nbsp;</div><div id="switch" class="text">1997 - Graduates from UT university.</div></li>');
+			sb._('</ul>');
+		sb._('</div>');
+		return sb.result();
+	},
+	_eventsSetDefaultEditBlock:function(htmlObject){
+		jQuery(htmlObject).find('div.radio span#single').click();
+		jQuery(htmlObject).find('select[name="day"] option:selected').attr('selected', '');
+		jQuery(htmlObject).find('select[name="day"] option[value="0"]').attr('selected', 'selected');
+		jQuery(htmlObject).find('select[name="month"] option:selected').attr('selected', '');
+		jQuery(htmlObject).find('select[name="month"] option[value="0"]').attr('selected', 'selected');
+		jQuery(htmlObject).find('input[name="year"]').val('');
+		jQuery(htmlObject).find('input[name="place"]').val('');
+		jQuery(htmlObject).find('input[name="city"]').val('');
+		jQuery(htmlObject).find('input[name="state"]').val('');
+		jQuery(htmlObject).find('input[name="country"]').val('');
+	},
+	_eventsHeaderEvents:function(htmlObject){
+		jQuery(htmlObject).find('.jmb-dialog-events-header span').click(function(){
+			jQuery(htmlObject).find('.jmb-dialog-events-list').hide();
+			jQuery(htmlObject).find('.jmb-dialog-events-edit').show();
+		});
+	},
+	_eventsEditEvents:function(htmlObject){	
+		var self = this;
+		var sb = host.stringBuffer();
+		jQuery(htmlObject).find('.jmb-dialog-events-edit-buttons input').each(function(i,e){
 			jQuery(e).click(function(){
-				if(self.menuEventsActiveItem) jQuery(self.menuEventsActiveItem).removeClass('active');
-				jQuery(e).addClass('active');				
-				self.menuEventsActiveItem = this;
+				switch(jQuery(this).val()){
+					case "Save":
+						
+					break;
+					
+					case "Delete":
+						
+					break;
+					
+					case "Close":
+						jQuery(htmlObject).find('.jmb-dialog-events-list').show();
+						jQuery(htmlObject).find('.jmb-dialog-events-edit').hide();
+					break;
+				}
 			});
 		});
-		jQuery(htmlObject).find('div.buttons input[type="button"]').each(function(){})
+		jQuery(htmlObject).find('div.radio span').click(function(){
+			jQuery(this).parent().find('input').click();
+		});
+		jQuery(htmlObject).find('div.radio input').click(function(){
+			jQuery(htmlObject).find('select[name="type"] option').remove();
+			var types = (jQuery(this).val()=='single')?self.singleDayEvents:self.prolongedEvents;
+			jQuery(types).each(function(i,e){
+				sb.clear()._('<option value="')._(e.name)._('">')._(e.title)._('</option>');
+				jQuery(htmlObject).find('select[name="type"]').append(sb.result())
+			});
+		});
+	},
+	_eventsListEvents:function(htmlObject){
+		jQuery(htmlObject).find('div.jmb-dialog-events-list ul li div').each(function(i,e){
+			jQuery(e).click(function(){
+				switch(jQuery(this).attr('id')){
+					case "edit":
+						if(!jQuery(this).parent().hasClass('active')) return;
+						jQuery(htmlObject).find('.jmb-dialog-events-list').hide();
+						jQuery(htmlObject).find('.jmb-dialog-events-edit').show();
+					break;
+					
+					case "delete":
+						if(!jQuery(this).parent().hasClass('active')) return;
+					break;
+					
+					case "switch":
+						if(jQuery(this).parent().hasClass('active')) return;
+						jQuery('div.jmb-dialog-events-list ul li').removeClass('active');
+						jQuery(this).parent().addClass('active');
+					break;
+				}
+			});
+		});
+	},
+	_events:function(){
+		var self = this;
+		var sb = host.stringBuffer();
+		sb._('<div class="jmb-dialog-events-content">');
+			sb._(self._eventsBlockHeader());
+			sb._(self._eventsBlockEdit());
+			sb._(self._eventsBlockList());
+		sb._('</div>');
+		var html = sb.result();
+		var htmlObject = jQuery(html);
+		self._eventsHeaderEvents(htmlObject);
+		self._eventsEditEvents(htmlObject);
+		self._eventsListEvents(htmlObject);
+		self._eventsSetDefaultEditBlock(htmlObject);	
 		jQuery(self.parent.dWindow).find('div.jmb-dialog-profile-content').append(htmlObject);
 	},
 	render:function(p){
