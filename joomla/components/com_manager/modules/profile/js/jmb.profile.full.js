@@ -361,14 +361,16 @@ JMBProfileFull.prototype = {
 		var self = this;
 		var sb = host.stringBuffer();
 		sb._('<div class="jmb-dialog-events-edit" style="display:none;">');
-			sb._('<form>');
+			sb._('<form id="jmb:profile:events" method="post" target="iframe-profile">');
 				sb._('<div class="jmb-dialog-events-edit-buttons"><input type="submit" value="Save"><input type="button" value="Delete"><input type="button" value="Close"></div>');
 				sb._('<div class="jmb-dialog-events-edit-header">Event</div>')
 				sb._('<div class="jmb-dialog-events-edit-body">');
 					sb._('<table>');
-						sb._('<tr><td valign="top"><div class="title"><span>Duration:</span></div></td><td><div class="radio"><input name="duration" type="radio" value="single"><span id="single">Single Day Event</span></div><div class="radio"><input name="duration" type="radio" value="prolonged"><span id="prolonged">Prolonged Event</span></div></td></tr>');
+						sb._('<tr><td valign="top"><div style="margin-top:5px;" class="title"><span>Duration:</span></div></td><td><div class="radio"><input name="duration" type="radio" value="single"><span id="single">Single Day Event</span></div><div class="radio"><input name="duration" type="radio" value="prolonged"><span id="prolonged">Prolonged Event</span></div></td></tr>');
 						sb._('<tr><td><div class="title"><span>Type:<span></div></td><td><select name="type"></select></td></tr>');
-						sb._('<tr><td><div class="title"><span>Date:<span></div></td><td><select name="day">')._(self.parent._selectDays())._('</select><select name="month">')._(self.parent._selectMonths())._('</select><input maxlength="4" type="text" placeholder="Year" name="year"></td></tr>');
+						sb._('<tr id="date"><td><div class="title"><span>Date:<span></div></td><td><select name="day">')._(self.parent._selectDays())._('</select><select name="month">')._(self.parent._selectMonths())._('</select><input maxlength="4" type="text" placeholder="Year" name="year"></td></tr>');
+						sb._('<tr id="start_date"><td><div class="title"><span>Start Date:<span></div></td><td><select name="start_day">')._(self.parent._selectDays())._('</select><select name="start_month">')._(self.parent._selectMonths())._('</select><input maxlength="4" type="text" placeholder="Year" name="start_year"></td></tr>');
+						sb._('<tr id="end_date"><td><div class="title"><span>End Date:<span></div></td><td><select name="end_day">')._(self.parent._selectDays())._('</select><select name="end_month">')._(self.parent._selectMonths())._('</select><input maxlength="4" type="text" placeholder="Year" name="end_year"></td></tr>');
 						sb._('<tr><td><div class="title"><span>Place:<span></div></td><td><input name="place" placeholder="Place" type="text"></td></tr>');
 						sb._('<tr><td><div class="title"><span>Location:<span></div></td><td><input name="city" type="text" placeholder="Town/City"><input name="state" type="text" placeholder="Prov/State"><input name="country" type="text" placeholder="Country"></td></tr>');
 					sb._('</table>');
@@ -412,12 +414,8 @@ JMBProfileFull.prototype = {
 		jQuery(htmlObject).find('.jmb-dialog-events-edit-buttons input').each(function(i,e){
 			jQuery(e).click(function(){
 				switch(jQuery(this).val()){
-					case "Save":
-						
-					break;
-					
 					case "Delete":
-						
+						alert('Delete Event');
 					break;
 					
 					case "Close":
@@ -432,7 +430,17 @@ JMBProfileFull.prototype = {
 		});
 		jQuery(htmlObject).find('div.radio input').click(function(){
 			jQuery(htmlObject).find('select[name="type"] option').remove();
-			var types = (jQuery(this).val()=='single')?self.singleDayEvents:self.prolongedEvents;
+			var type = jQuery(this).val();
+			jQuery(htmlObject).find('tr#date').hide();
+			jQuery(htmlObject).find('tr#start_date').hide();
+			jQuery(htmlObject).find('tr#end_date').hide();
+			if(type=='single'){
+				jQuery(htmlObject).find('tr#date').show();
+			} else {
+				jQuery(htmlObject).find('tr#start_date').show();
+				jQuery(htmlObject).find('tr#end_date').show();
+			}
+			var types = (type=='single')?self.singleDayEvents:self.prolongedEvents;
 			jQuery(types).each(function(i,e){
 				sb.clear()._('<option value="')._(e.name)._('">')._(e.title)._('</option>');
 				jQuery(htmlObject).find('select[name="type"]').append(sb.result())
@@ -472,10 +480,13 @@ JMBProfileFull.prototype = {
 		sb._('</div>');
 		var html = sb.result();
 		var htmlObject = jQuery(html);
+		//events
 		self._eventsHeaderEvents(htmlObject);
 		self._eventsEditEvents(htmlObject);
 		self._eventsListEvents(htmlObject);
-		self._eventsSetDefaultEditBlock(htmlObject);	
+		self._eventsSetDefaultEditBlock(htmlObject);
+		//ajax
+		self.parent._ajaxForm(jQuery(htmlObject).find('form'), 'updateEvent', '0', function(res){}, function(json){});	
 		jQuery(self.parent.dWindow).find('div.jmb-dialog-profile-content').append(htmlObject);
 	},
 	render:function(p){

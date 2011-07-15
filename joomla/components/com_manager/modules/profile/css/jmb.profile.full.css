@@ -254,7 +254,7 @@
 .jmb-dialog-events-edit-buttons {
 	position: absolute;
 	top: 6px;
-	right: 5px;
+	right: 10px;
 }
 .jmb-dialog-events-edit-buttons input {
 	border: 1px solid #999;
@@ -280,6 +280,12 @@
 	margin-top: -2px;
 	border-bottom-right-radius: 3px 3px;
 	border-bottom-left-radius: 3px 3px;
+}
+.jmb-dialog-events-edit-body table {
+	width: 410px;
+	margin-left: 18px;
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
 .jmb-dialog-events-edit-body div.title {
 	width: 70px;
@@ -311,7 +317,7 @@
 .jmb-dialog-events-edit-body input[type="text"][name="place"] {
 	width: 118px;
 }
-.jmb-dialog-events-edit-body input[type="text"][name="year"] {
+.jmb-dialog-events-edit-body input[type="text"][name="year"],.jmb-dialog-events-edit-body input[type="text"][name="start_year"],.jmb-dialog-events-edit-body input[type="text"][name="end_year"] {
 	width: 50px;
 }
 .jmb-dialog-events-list{

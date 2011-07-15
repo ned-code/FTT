@@ -13,6 +13,30 @@ class JMBProfile {
 	/**
 	*
 	*/
+	protected function getColors(){
+		$color = array();
+		$p = $this->host->getSiteSettings('color');
+		for($i=0;$i<sizeof($p);$i++){
+                    switch($p[$i]['name']){	
+                            case "female":
+                                    $color['F'] = $p[$i]['value'];
+                            break;
+                            
+                            case "male":
+                                    $color['M'] = $p[$i]['value'];
+                            break;
+                            
+                            case "location":
+                                    $color['L'] = $p[$i]['value'];
+                            break;
+                    }
+                }
+                return $color;
+	}
+	
+	/**
+	*
+	*/
 	protected function _getUserInfo($id){
 		$indiv = $this->host->gedcom->individuals->get($id);
 		$parents = $this->host->gedcom->individuals->getParents($id);
@@ -35,7 +59,7 @@ class JMBProfile {
 	/**
 	*
 	*/
-	public function _uploadPhoto($gedId){
+	protected function _uploadPhoto($gedId){
 		if($_FILES['photo']['size'] == 0) return false;
 		$result = $this->host->gedcom->media->save($gedId, $_FILES["photo"]["tmp_name"], $_FILES["photo"]["name"]);
 		if($result) {
@@ -202,29 +226,6 @@ class JMBProfile {
 	/**
 	*
 	*/
-	public function addPSC($args){
-		$args = explode(';', $args);
-		$type = $args[0];
-		$ownerId = $args[1];
-		switch($type){
-			case "parent":
-				$result = $this->_addParent($ownerId);
-			break;
-			
-			case "bs":
-				$result = $this->_addBS($ownerId);
-			break;
-			
-			case "child":
-				$result = $this->_addChild($ownerId);
-			break;
-		}
-		return json_encode($result);	
-	}
-	
-	/**
-	*
-	*/
 	protected function _addSpouse(&$fam, $gender, $user, $ind){
 		if($gender=="M"){
 			$fam->Sircar = $user;
@@ -255,7 +256,47 @@ class JMBProfile {
 		}
 		
 	}
-		
+	
+	/**
+	*
+	*/
+	protected function _updateEvent($event, $prefix){
+		if(!isset($_POST[$prefix.'option'])){
+			$event->Day = (isset($_POST[$prefix.'day']))?$_POST[$prefix.'day']:'';
+			$event->Month = (isset($_POST[$prefix.'month']))?$_POST[$prefix.'month']:'';
+			$event->Year = (isset($_POST[$prefix.'year']))?$_POST[$prefix.'year']:'';
+		}
+		$places = array($_POST[$prefix.'country'],$_POST[$prefix.'state'],$_POST[$prefix.'town']);
+		$event->Place->Hierarchy[0]->Name = $places[0];
+		$event->Place->Hierarchy[1]->Name = $places[1];
+		$event->Place->Hierarchy[2]->Name = $places[2];
+		$this->host->gedcom->events->update($event);
+		return $event;
+	}
+	
+	/**
+	*
+	*/
+	public function addPSC($args){
+		$args = explode(';', $args);
+		$type = $args[0];
+		$ownerId = $args[1];
+		switch($type){
+			case "parent":
+				$result = $this->_addParent($ownerId);
+			break;
+			
+			case "bs":
+				$result = $this->_addBS($ownerId);
+			break;
+			
+			case "child":
+				$result = $this->_addChild($ownerId);
+			break;
+		}
+		return json_encode($result);	
+	}
+	
 	/**
 	*
 	*/
@@ -322,22 +363,7 @@ class JMBProfile {
 		}
 	}
 	
-	/**
-	*
-	*/
-	protected function updateEvent($event, $prefix){
-		if(!isset($_POST[$prefix.'option'])){
-			$event->Day = (isset($_POST[$prefix.'day']))?$_POST[$prefix.'day']:'';
-			$event->Month = (isset($_POST[$prefix.'month']))?$_POST[$prefix.'month']:'';
-			$event->Year = (isset($_POST[$prefix.'year']))?$_POST[$prefix.'year']:'';
-		}
-		$places = array($_POST[$prefix.'country'],$_POST[$prefix.'state'],$_POST[$prefix.'town']);
-		$event->Place->Hierarchy[0]->Name = $places[0];
-		$event->Place->Hierarchy[1]->Name = $places[1];
-		$event->Place->Hierarchy[2]->Name = $places[2];
-		$this->host->gedcom->events->update($event);
-		return $event;
-	}
+
 	
 	/**
 	*
@@ -353,9 +379,9 @@ class JMBProfile {
 		//photo
 		$photo = $this->_uploadPhoto($ind->Id);
 		//events
-		$ind->Birth = $this->updateEvent($ind->Birth, 'b_');
+		$ind->Birth = $this->_updateEvent($ind->Birth, 'b_');
 		if(isset($_POST['living']) && $_POST['living'] == 'false' && $ind->Death){
-			$ind->Death = $this->updateEvent($ind->Death, 'd_');
+			$ind->Death = $this->_updateEvent($ind->Death, 'd_');
 		}
 		if(isset($_POST['living']) && $_POST['living'] == 'false' && !$ind->Death){
 			$ind->Death = $this->_createEvent($ind->Id, 'DEAT', 'd_');
@@ -381,7 +407,7 @@ class JMBProfile {
 				$marriage = $family->Marriage;
 			}
 		}
-		$marriage = ($marriage)?$this->updateEvent($marriage, 'm_'):$this->_createEvent($fam_id, 'MARR', 'm_');
+		$marriage = ($marriage)?$this->_updateEvent($marriage, 'm_'):$this->_createEvent($fam_id, 'MARR', 'm_');
 		if($divorce&&isset($_POST['deceased'])){
 			$divorce->Year = $_POST['s_year'];
 			$this->host->gedcom->events->update($divorce);
@@ -397,25 +423,9 @@ class JMBProfile {
 	/**
 	*
 	*/
-	protected function getColors(){
-		$color = array();
-		$p = $this->host->getSiteSettings('color');
-		for($i=0;$i<sizeof($p);$i++){
-                    switch($p[$i]['name']){	
-                            case "female":
-                                    $color['F'] = $p[$i]['value'];
-                            break;
-                            
-                            case "male":
-                                    $color['M'] = $p[$i]['value'];
-                            break;
-                            
-                            case "location":
-                                    $color['L'] = $p[$i]['value'];
-                            break;
-                    }
-                }
-                return $color;
+	public function updateEvent($args){
+		$eventId = $args;
+		return json_encode(array('eventId'=>$eventId));
 	}
 	
 	/**
