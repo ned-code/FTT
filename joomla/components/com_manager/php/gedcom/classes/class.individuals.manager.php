@@ -16,6 +16,7 @@ class IndividualsList{
         *
         */
         public function get($id, $lite=false){
+        	if($id==null){ return null; }
         	$sqlString = "SELECT indivs.id, indivs.fid, indivs.sex, names.first_name,names.middle_name,names.last_name,names.nick
         		FROM #__mb_individuals as indivs
         		LEFT JOIN #__mb_names as names ON indivs.id = names.gid
@@ -31,7 +32,7 @@ class IndividualsList{
 		$pers->FirstName = $rows[0]['first_name'];
 		$pers->MiddleName = $rows[0]['middle_name'];
 		$pers->LastName = $rows[0]['last_name'];
-		$pers->Nick = $rows[0]['id'];
+		$pers->Nick = $rows[0]['nick'];
 		
 		if(!$lite){
 			$pers->Events = $this->core->events->getPersonEvents($pers->Id);
@@ -47,18 +48,20 @@ class IndividualsList{
         *
         */
         public function save($pers){
+        	if($pers==null){ return false; }
         	//insert to individuals table;
         	$sqlString = 'INSERT INTO #__mb_individuals (`id`, `fid`, `sex`) VALUES (NULL,?,?)'; 
-        	$sql = $this->core->sql($sqlStrig, $pers->FacebookId, $pers->Gender);
+        	$sql = $this->core->sql($sqlString, $pers->FacebookId, $pers->Gender);
         	$this->db->setQuery($sql);    
         	$this->db->query(); 
         	$id = $this->db->insertid();
         	//get params and insert to names table;
         	$givn = (($pers->FirstName!='')?$pers->FirstName:'').' '.(($pers->MiddleName!='')?$pers->MiddleName:'');
         	$sqlString = 'INSERT INTO #__mb_names (`gid`, `first_name`, `middle_name`, `last_name`, `prefix`, `givn`, `nick`, `surn_prefix`, `surname`, `suffix`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-        	$sql = $this->core->sql($sqlString, $id, $pers->FirstName, $pers->MiddleName, $pers->LastName, $pers->Prefix, $givn, $pers->Nick, $pers->SurnamePrefix, $pers->LastName, $pers->Suffix)
+        	$sql = $this->core->sql($sqlString, $id, $pers->FirstName, $pers->MiddleName, $pers->LastName, $pers->Prefix, $givn, $pers->Nick, $pers->SurnamePrefix, $pers->LastName, $pers->Suffix);
         	$this->db->setQuery($sql);    
         	$this->db->query();
+        	return $id;
         }
         
         /**
@@ -85,14 +88,14 @@ class IndividualsList{
         *
         */
         public function delete($id){
-        	if($id==NULL){ return false; }
-        	$sql = $this->core->sql('DELETE FROM #__mb_individuals WHERE id=?', $id)
+        	if($id==NULL){ return null; }
+        	$sql = $this->core->sql('DELETE FROM #__mb_individuals WHERE id=?', $id);
         	$this->db->setQuery($sql);    
         	$this->db->query();
         }
 
         public function getParents($id){
-        	if($id==null) { return false; }
+        	if($id==null) { return null; }
         	$sqlString = "SELECT families.id as familyId, families.husb as fatherID, families.wife as motherID FROM #__mb_childrens as childrens
         		LEFT JOIN #__mb_families as families ON childrens.fid = families.id
         		WHERE childrens.gid=?";
@@ -102,7 +105,7 @@ class IndividualsList{
         	return $rows[0];
         }
         public function getChilds($id){
-        	if($id==null){return false;}
+        	if($id==null){return null;}
         	$sqlString = "SELECT childrens.gid as gid, childrens.fid as fid, indivs.sex as sex, names.first_name as first_name, names.middle_name as middle_name, names.last_name as last_name   
         		FROM #__mb_families AS families
         		LEFT JOIN #__mb_childrens AS childrens ON childrens.fid = families.id
@@ -114,16 +117,17 @@ class IndividualsList{
         	$rows = $this->db->loadAssocList();
         	return $rows;
         }
-        public function getFamilyId($id, $type){
-        	if($id==null){ return false; }
-        	if($type="FAMS"||$type="FAMC"){ $sql = $this->core->sql('SELECT fid FROM #__mb_childrens WHERE gid=?', $id); }
-        	else{ $sql = $this->core->sql('SELECT id FROM #__mb_families WHERE husb =? OR wife =?', $id, $id); }
+        public function getFamilyId($id, $type='FAMC'){
+        	if($id==null){ return null; }
+        	if($type=='FAMS'){ $sql = $this->core->sql('SELECT id as familyId FROM #__mb_families WHERE husb =? OR wife =?', $id, $id); } 
+        	elseif($type=='FAMC'){ $sql = $this->core->sql('SELECT fid FROM #__mb_childrens WHERE gid=?', $id); }
+        	else{ return null; } 
         	$this->db->setQuery($sql);         
         	$rows = $this->db->loadAssocList();
-        	return ($type="FAMS"||$type="FAMC")?$rows[0]['fid']:$rows[0]['id'];
+        	return ($type=='FAMC'&&$rows!=null)?$rows[0]['fid']:$rows;
         }
         public function getIdbyFId($fId){
-        	if($fId==null){ return false; }
+        	if($fId==null){ return null; }
         	$sql = $this->core->sql('SELECT id FROM #__mb_individuals WHERE fid=?', $fId);
         	$this->db->setQuery($sql);         
         	$rows = $this->db->loadAssocList();

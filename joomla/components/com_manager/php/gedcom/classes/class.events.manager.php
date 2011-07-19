@@ -8,8 +8,8 @@ class EventsList{
         	 $this->db = & JFactory::getDBO();
         }
         public function get($id){
-        	if($id==null){ return false; }        	
-        	$sqlString = "SELECT #__mb_events.id as event_id, #__mb_events.name as name, #__mb_events.type as type, #__mb_events.caus as caus, #__mb_events.res_agency as res_agency,#__mb_dates.type as date_type,
+        	if($id==null){ return null; }        	
+        	$sqlString = "SELECT #__mb_events.id as event_id,#__mb_events.individuals_id as individuals_id, #__mb_events.families_id as families_id, #__mb_events.name as name, #__mb_events.type as type, #__mb_events.caus as caus, #__mb_events.res_agency as res_agency,#__mb_dates.type as date_type,
         			#__mb_dates.f_day as f_day,#__mb_dates.f_month as f_month, #__mb_dates.f_year as f_year, #__mb_dates.t_day as t_day, #__mb_dates.t_month as t_month, 
         			#__mb_dates.t_year as t_year FROM #__mb_events 
         		LEFT JOIN #__mb_dates ON #__mb_events.id = #__mb_dates.events_id
@@ -20,7 +20,28 @@ class EventsList{
         	$event = $this->setEventData($rows[0]);
 		return $event;
         }
-        public function save($event){
+        public function save($event, $type='IND'){
+        	if($event==null||($event->IndKey!=null&&$event->FamKey!=null)){ return false; }
+        	return false;
+        }
+        public function update($event, $type='IND'){
+        	if($event==null||($event->IndKey!=null&&$event->FamKey!=null)){ return false; }
+        	$sqlString = "UPDATE #__mb_events SET `type`=?,`name`=?,`caus`=?,`res_agency`=?,";
+        	$sqlString .= ($type=="IND")?"`individuals_id`=?,":"`families_id`=?,";
+        	$sqlString .= "`change`=NOW()  WHERE id=?";
+        	$key = ($type=="IND")?$event->IndKey:$event->FamKey;
+        	$sql = $this->core->sql($sqlString, $event->Type, $event->Name, $event->Caus, $event->ResAgency, $key,$event->Id);
+        	$this->db->setQuery($sql);    
+        	$this->db->query();
+        	$sqlString = "UPDATE #__mb_dates SET `type`=?,`f_day`=?,`f_month`=?,`f_year`=?,`t_day`=?,`t_month`=?,`t_year`=?,`change`=NOW() WHERE events_id=?";
+        	$sql = $this->core->sql($sqlString, $event->DateType, $event->From->Day, $event->From->Month, $event->From->Year, $event->To->Day, $event->To->Month, $event->To->Year, $event->Id);
+        	$this->db->setQuery($sql);    
+        	$this->db->query();
+        	$this->core->locations->update($event->Id, $event->Place);
+        	return true;
+        }
+        
+        /*public function save($event){
         	if($event==null){ return false; }
         	if($event->IndKey!=null&&$event->FamKey!=null){ return false; }
         	$sqlString = "INSERT INTO #__mb_events (`id`, `individuals_id`, `families_id`, `type`, `name`, `caus`, `res_agency`) VALUES (NULL, ?, ?, ?, ?, ?, ?)";
@@ -33,24 +54,26 @@ class EventsList{
         	$this->db->setQuery($sql);    
         	$this->db->query();
         	$this->$this->core->locations->save($lastId, $event->Place);
-        	return $lastId
+        	return $lastId;
         }
         public function update($event){
         	if($event==null){return false;}
         	if($event->IndKey!=null&&$event->FamKey!=null){ return false; }
         	$sqlString = "UPDATE #__mb_events SET `individuals_id`=?,`families_id`=?,`type`=?,`name`=?,`caus`=?,`res_agency`=?,`change`=NOW()  WHERE id=?";
         	$sql = $this->core->sql($sqlString, $event->IndKey, $event->FamKey, $event->Type, $event->Name, $event->Caus, $event->ResAgency, $event->Id);
+        	echo $sql;
         	$this->db->setQuery($sql);    
         	$this->db->query();
         	$sqlString = "UPDATE #__mb_dates SET `type`=?,`f_day`=?,`f_month`=?,`f_year`=?,`t_day`=?,`t_month`=?,`t_year`=?,`change`=NOW() WHERE events_id=?";
         	$sql = $this->core->sql($sqlString, $event->DateType, $event->From->Day, $event->From->Month, $event->From->Year, $event->To->Day, $event->To->Month, $event->To->Year, $event->Id);
+        	echo $sql;
         	$this->db->setQuery($sql);    
         	$this->db->query();
-        	$this->$this->core->locations->update($event->Id, $event->Place);
-        }
+        	$this->core->locations->update($event->Id, $event->Place);
+        }*/
         public function delete($id){
         	if($id==null){ return false; }
-        	$sql = $this->core->sql('DELETE FROM #__mb_events WHERE id=?', $id)
+        	$sql = $this->core->sql('DELETE FROM #__mb_events WHERE id=?', $id);
         	$this->db->setQuery($sql);    
         	$this->db->query();
         }
@@ -72,19 +95,19 @@ class EventsList{
 		$event->ResAgency = $row['res_agency']; 
 		$event->Notes = NULL;
 		$event->Sources = NULL;
-		$event->Place = $this->core->locations->getPlaceByEventId($rows[0]['event_id']);
+		$event->Place = $this->core->locations->getPlaceByEventId($row[0]['event_id']);
 		$event->IndKey = (isset($row['individuals_id']))?$row['individuals_id']:null;
 		$event->FamKey = (isset($row['families_id']))?$row['families_id']:null;
 		return $event;
         }
         public function getPersonEvents($indKey){
-        	if($indKey==null){ return false; }   
+        	if($indKey==null){ return null; }   
         	$sqlString = "SELECT #__mb_events.id as event_id,#__mb_events.individuals_id as individuals_id, #__mb_events.type as type, #__mb_events.caus as caus, #__mb_events.res_agency as res_agency,#__mb_dates.type as date_type,
         			#__mb_dates.f_day as f_day,#__mb_dates.f_month as f_month, #__mb_dates.f_year as f_year, #__mb_dates.t_day as t_day, #__mb_dates.t_month as t_month, 
         			#__mb_dates.t_year as t_year FROM #__mb_events 
         		LEFT JOIN #__mb_dates ON #__mb_events.id = #__mb_dates.events_id
         		WHERE `individuals_id`=?";
-        	$sql = $this->core->sql($sqlString, $indKey)
+        	$sql = $this->core->sql($sqlString, $indKey);
         	$this->db->setQuery($sql);         
         	$rows = $this->db->loadAssocList();
         	$events = array();
@@ -94,7 +117,7 @@ class EventsList{
         	return $events;
         }
         public function getPersonEventsByType($indKey, $type){
-        	if($indKey==null||$type==null){ return false; } 
+        	if($indKey==null||$type==null){ return null; } 
         	$sqlString = "SELECT #__mb_events.id as event_id,#__mb_events.individuals_id as individuals_id, #__mb_events.type as type, #__mb_events.caus as caus, #__mb_events.res_agency as res_agency,#__mb_dates.type as date_type,
         			#__mb_dates.f_day as f_day,#__mb_dates.f_month as f_month, #__mb_dates.f_year as f_year, #__mb_dates.t_day as t_day, #__mb_dates.t_month as t_month, 
         			#__mb_dates.t_year as t_year FROM #__mb_events 
@@ -110,13 +133,13 @@ class EventsList{
         	return $events;
         }
         public function getFamilyEvents($famKey){
-        	if($famKey==null){ return false; } 
+        	if($famKey==null){ return null; } 
         	$sqlString = "SELECT #__mb_events.id as event_id,#__mb_events.families_id as families_id, #__mb_events.type as type, #__mb_events.caus as caus, #__mb_events.res_agency as res_agency,#__mb_dates.type as date_type,
         			#__mb_dates.f_day as f_day,#__mb_dates.f_month as f_month, #__mb_dates.f_year as f_year, #__mb_dates.t_day as t_day, #__mb_dates.t_month as t_month, 
         			#__mb_dates.t_year as t_year FROM #__mb_events 
         		LEFT JOIN #__mb_dates ON #__mb_events.id = #__mb_dates.events_id
         		WHERE #__mb_events.families_id=?";
-        	$sql = $this->core->sql($sqlString, $famKey)
+        	$sql = $this->core->sql($sqlString, $famKey);
         	$this->db->setQuery($sql);         
         	$rows = $this->db->loadAssocList();
         	$events = array();

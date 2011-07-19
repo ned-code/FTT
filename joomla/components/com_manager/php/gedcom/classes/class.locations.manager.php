@@ -9,7 +9,7 @@ class LocationsList{
         }
         
         public function get($id, $lite=false){
-        	if($id==null){ return false; }        	
+        	if($id==null){ return null; }        	
         	$sql = $this->core->sql('SELECT place_id, place_name FROM #__mb_places WHERE place_id = ?', $id);
         	$this->db->setQuery($sql);         
         	$rows = $this->db->loadAssocList();
@@ -25,8 +25,6 @@ class LocationsList{
         public function save($id, $place){
         	if($place==null) { return false; }
         	$sql = $this->core->sql('INSERT INTO #__mb_places (`place_id`, `events_id`, `name`) VALUES (NULL, ?, ?)', $id, $place->Name);
-        	echo $sql;
-        	die();
         	$this->db->setQuery($sql);    
         	$this->db->query();
         	$lastId = $this->db->insertid();
@@ -47,7 +45,7 @@ class LocationsList{
         	$this->db->query();
         }
         public function getPlaceByEventId($id, $lite=false){
-        	if($id==null){ return false; }        	
+        	if($id==null){ return null; }        	
         	$sql = $this->core->sql('SELECT place_id, place_name FROM #__mb_places WHERE events_id =?', $id);
         	$this->db->setQuery($sql);         
         	$rows = $this->db->loadAssocList();
@@ -61,7 +59,7 @@ class LocationsList{
         }
         
         public function getLocations($place){
-        	if($place==null) { return false; }
+        	if($place==null) { return null; }
         	$sql = $this->core->sql('SELECT name, cont, adr1, adr2, city, state, country, post, phones FROM #__mb_locations WHERE place_id =?', $place->Id);
         	$this->db->setQuery($sql);         
         	$rows = $this->db->loadAssocList();
@@ -81,6 +79,7 @@ class LocationsList{
         	return $place->Locations;
         }
         public function saveLocations($id, $place){
+        	if($id==null||$place==null){ return false; }
         	foreach($place->Locations as $loc){
         		$phones = (is_array($loc->Phones))?implode(',', $loc->Phones):NULL;
         		$sql = $this->core->sql('INSERT INTO #__mb_locations (`place_id`, `name`, `cont`, `adr1`, `adr2`, `city`, `state`, `post`, `country`, `phones`) VALUES(?,?,?,?,?,?,?,?,?,?)', $id, $loc->Name, $loc->Cont, $loc->Adr1, $loc->Adr2, $loc->City, $loc->State, $loc->Post, $loc->Country, $phones);
@@ -89,6 +88,7 @@ class LocationsList{
         	}
         }
         public function updateLocations($place){
+        	if($place==null){ return false; }
         	foreach($place->Locations as $loc){
         		$phones = (is_array($loc->Phones))?implode(',', $loc->Phones):NULL;
         		$sql = $this->core->sql('UPDATE #__mb_locations SET `name`=?, `cont`=?,`adr1`=?,`adr2`=?,`city`=?,`state`=?,`post`=?,`country`=?,`phones`=?,`change`= NOW() WHERE place_id=?', $loc->Name, $loc->Cont, $loc->Adr1, $loc->Adr2, $loc->City, $loc->State, $loc->Post, $loc->Country, $phones, $place->Id);

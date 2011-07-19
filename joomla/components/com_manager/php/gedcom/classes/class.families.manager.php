@@ -8,16 +8,14 @@ class FamiliesList{
 		$this->db = & JFactory::getDBO();
         }
         public function get($id, $lite=false){
-        	if($id==NULL) { return false; }
+        	if($id==NULL) { return null; }
         	$sql = $this->core->sql('SELECT id,husb,wife FROM #__mb_families WHERE id=?',$id);
         	$this->db->setQuery($sql);         
         	$rows = $this->db->loadAssocList();
-        	
         	if($rows == null) { return false; }
                 return $this->setData($rows[0], $lite);
         }
         public function save($family){
-        	if($family->Id==NULL) { return false; }
         	if(($family->Sircar != null && $family->Sircar->Id)||($family->Spouse != null && $family->Spouse->Id)){
         		$id1 = ($family->Sircar != null && $family->Sircar->Id) ? $family->Sircar->Id : '';
         		$id2 = ($family->Spouse != null && $family->Spouse->Id) ? $family->Spouse->Id : '';
@@ -31,10 +29,11 @@ class FamiliesList{
 			    $wife = NULL;
 			}
                 }
-		$sqlString = "INSERT INTO #__mb_families (`id`,`husb`,`wife`,`type`) VALUES (?,?,?,?)";   
-		$sql = $this->core->sql($sqlString, $family->Id, $husb, $wife, $family->Type);
+		$sqlString = "INSERT INTO #__mb_families (`id`,`husb`,`wife`,`type`) VALUES (NULL,?,?,?)";   
+		$sql = $this->core->sql($sqlString, $husb, $wife, $family->Type);
 		$this->db->setQuery($sql);    
         	$this->db->query();
+        	return $this->db->insertid();
         }
         public function update($family){
         	if($family->Id==NULL) { return false; }
@@ -51,21 +50,23 @@ class FamiliesList{
 			    $wife = NULL;
 			}
                 }
-		$sqlString = "UPDATE #__mb_families SET `husb`=?,`wife`=?,`change`=NOW() WHERE `id`=?";
-		$sql = $this->core->sql($sqlString, $husb, $wife, $family->id);
+		$sqlString = "UPDATE #__mb_families SET `husb`=?,`wife`=?,`type`=?,`change`=NOW() WHERE `id`=?";
+		$sql = $this->core->sql($sqlString, $husb, $wife,$family->Type,$family->Id);
 		$this->db->setQuery($sql);    
         	$this->db->query();
+        	return true;
         }
         public function delete($id){
         	if($id==NULL){ return false; }
-        	$sql = $this->core->sql('DELETE FROM #__mb_families WHERE id=?',$id)
+        	$sql = $this->core->sql('DELETE FROM #__mb_families WHERE id=?',$id);
         	$this->db->setQuery($sql);    
         	$this->db->query();
+        	return true;
         }
         public function setData($row, $lite){
-        	$sircar = $this->core->individuals->get($rows['husb'], $lite);
-        	$spouse = $this->core->individuals->get($rows['wife'], $lite);
-        	$events = $this->core->events->getFamilyEvents($rows['id']);
+        	$sircar = $this->core->individuals->get($row['husb'], $lite);
+        	$spouse = $this->core->individuals->get($row['wife'], $lite);
+        	$events = (!$lite)?$this->core->events->getFamilyEvents($row['id']):null;
         	$marriage = null;
                 $divorce = null;
                 if($events != null){
@@ -77,7 +78,7 @@ class FamiliesList{
                     }
                 }
                 $family = new Family();
-                $family->Id = $rows['id'];
+                $family->Id = $row['id'];
                 $family->Sircar = $sircar;
                 $family->Spouse = $spouse;
                 $family->Marriage = $marriage;
@@ -93,7 +94,7 @@ class FamiliesList{
         	$this->db->query();
         }
         public function getPersonsFamilies($indKey){
-        	if($indKey==null){ return false; }
+        	if($indKey==null){ return null; }
         	$sql = $this->core->sql('SELECT id, husb, wife, type FROM #__mb_families WHERE husb=? OR wife=?', $indKey, $indKey);
         	$this->db->setQuery($sql);         
         	$rows = $this->db->loadAssocList();
@@ -105,7 +106,7 @@ class FamiliesList{
         	
         }
         public function getFamilyChildrenIds($fId){
-        	if($fId==null) { return false; }
+        	if($fId==null) { return null; }
         	$sql = $this->core->sql('SELECT gid FROM #__mb_childrens WHERE fid=?', $fId);
         	$this->db->setQuery($sql);         
         	$rows = $this->db->loadAssocList();

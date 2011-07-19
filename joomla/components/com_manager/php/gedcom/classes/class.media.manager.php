@@ -108,11 +108,13 @@ class MediaList{
                   $media[] = $med;                 
             }
             return $media;         
-        }    
+        }
+        
         function getMediaPath(){
             $jspath = JURI::base(true)."/components/com_manager/media";
             return $jspath;
-        }      
+        }
+        
         function save($foreignkey, $filepath, $name){
             if(is_file($filepath)){   
             	$extension = explode('.', $name);
@@ -135,10 +137,12 @@ class MediaList{
                 if(copy($filepath, $path.$id.'.'.$extension)){
                     $jspath = $this->getMediaPath();
                     $req = 'UPDATE #__mb_medias SET path="'.$jspath.'/'.$id.'.'.$extension.'" WHERE id="'.$id.'"';
-                                   
+                
+                   
                     $db->setQuery($req);
                     $db->query();
-                 
+
+                  
                     $this->link($id, $foreignkey);
                     return $id;
                 }
@@ -158,7 +162,8 @@ class MediaList{
             $req = 'UPDATE #__mb_medias SET form="'.$media->Form.'", title="'.$media->Title.'", path="'.$media->Path.'" WHERE id="'.$media->Id.'"';
             //var_dump($req);
             $db->setQuery($req);
-            $db->query();            
+            $db->query();
+            
            // $this->core->tags->clearRecordsRelations($media->Id);
 //          
 //
@@ -202,6 +207,7 @@ class MediaList{
             }            
             $this->clearLinks($id);
             //$this->core->tags->clearRecordsRelations($id);
+
         }
 //        function getNewId(){
 //          
