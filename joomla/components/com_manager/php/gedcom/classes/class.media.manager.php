@@ -31,7 +31,7 @@ class MediaList{
             $db->setQuery($req);
          
             $rows = $db->loadAssocList();
-            
+           
             if($rows == 0)
                 return null;
                        
@@ -78,21 +78,21 @@ class MediaList{
 //        }
         function clearLinks($mediaId){
              $db =& JFactory::getDBO();
-             $req = 'DELETE FROM #__mb_media_link WHERE `mid`='.$mediaId;
+             $req = $this->core->sql('DELETE FROM #__mb_media_link WHERE `mid`=?',$mediaId);
              $db->setQuery($req);
              $db->query();
         }
         function link($mediaId, $foreignKey){
              $db =& JFactory::getDBO();
-             $req = 'INSERT INTO #__mb_media_link (`gid`, `mid`) VALUES ("'.$foreignKey.'","'.$mediaId.'")';
+             $req = $this->core->sql('INSERT INTO #__mb_media_link (`gid`, `mid`) VALUES (?,?)',$foreignKey,$mediaId);
              $db->setQuery($req);
-            // var_dump($req);
+           
              $db->query();
         }
         function getMediaByGedId($gedid){
             $db =& JFactory::getDBO();
            
-            $req = 'SELECT #__mb_medias.* FROM `#__mb_media_link` LEFT JOIN #__mb_medias ON #__mb_media_link.mid=#__mb_medias.id WHERE #__mb_media_link.gid ='.$gedid;
+            $req =$this->core->sql('SELECT #__mb_medias.* FROM `#__mb_media_link` LEFT JOIN #__mb_medias ON #__mb_media_link.mid=#__mb_medias.id WHERE #__mb_media_link.gid =?',$gedid);
        
             $db->setQuery($req);
 
@@ -101,6 +101,7 @@ class MediaList{
                 return array();
             $media = array();
             foreach($rows as $row){                
+                  $med = new Media();
                   $med->Id = $row['id'];
                   $med->Form = $row['form'];
                   $med->Title = $row['title'];
@@ -119,14 +120,11 @@ class MediaList{
                 $extension = $extension[count($extension)-1];
                  
                 $db =& JFactory::getDBO();
-                $req = 'INSERT INTO #__mb_medias (`form`, `title`) VALUES ("'.$extension.'","'.$name.'")';
+                $req =$this->core->sql('INSERT INTO #__mb_medias (`form`, `title`) VALUES (?,?)',$extension,$name);
                 $db->setQuery($req);
                 $db->query();
 
-                $req = 'select LAST_INSERT_ID()';
-                $db->setQuery($req);
-                $rows = $db->loadAssocList();
-                $id = $rows[0]['LAST_INSERT_ID()'];
+                $id = $this->db->insertid();
                 
             	  $path = $this->core->core->getAbsoluteRootPath().DS."components".DS."com_manager".DS."media".DS;
                 if(!is_dir($this->core->core->getAbsoluteRootPath().DS."components".DS."com_manager".DS."media"))
@@ -134,7 +132,7 @@ class MediaList{
                 
                 if(copy($filepath, $path.$id.'.'.$extension)){
                     $jspath = $this->getMediaPath();
-                    $req = 'UPDATE #__mb_medias SET path="'.$jspath.'/'.$id.'.'.$extension.'" WHERE id="'.$id.'"';
+                    $req = $this->core->sql( 'UPDATE #__mb_medias SET path=? WHERE id=?', $jspath.'/'.$id.'.'.$extension, $id);
                                    
                     $db->setQuery($req);
                     $db->query();
@@ -143,7 +141,7 @@ class MediaList{
                     return $id;
                 }
                 else{
-                    $req = 'DELETE FROM #__mb_medias WHERE id="'.$id.'"';
+                    $req =$this->core->sql('DELETE FROM #__mb_medias WHERE id=?', $id);
                     $db->setQuery($req);
                     $db->query();
                     return false;
@@ -155,8 +153,8 @@ class MediaList{
         function update($media){
             
             $db =& JFactory::getDBO();
-            $req = 'UPDATE #__mb_medias SET form="'.$media->Form.'", title="'.$media->Title.'", path="'.$media->Path.'" WHERE id="'.$media->Id.'"';
-            //var_dump($req);
+            $req =$this->core->sql('UPDATE #__mb_medias SET form=?, title=?, path=? WHERE id=?', $media->Form, $media->Title, $media->Path, $media->Id);
+
             $db->setQuery($req);
             $db->query();            
            // $this->core->tags->clearRecordsRelations($media->Id);
@@ -182,13 +180,13 @@ class MediaList{
         }
         function delete($id){
             $db =& JFactory::getDBO();
-            $req = 'SELECT #__mb_medias.title, path FROM #__mb_medias WHERE id ="'.$id.'"';
+            $req =$this->core->sql('SELECT #__mb_medias.title, path FROM #__mb_medias WHERE id =?', $id);
             $db->setQuery($req);
            
             $rows = $db->loadAssocList();
             $extension = explode('.', $rows[0]['title']);
                 $extension = $extension[count($extension)-1];
-            $req = 'DELETE FROM #__mb_medias WHERE id="'.$id.'"';
+            $req =$this->core->sql('DELETE FROM #__mb_medias WHERE id=?', $id);
                     $db->setQuery($req);
                     $db->query();
                 
