@@ -1,22 +1,143 @@
 <?php
 class IndividualsList{
-        public $id;
-        public $core;
-        
-        function  __construct($core) {
-            require_once 'class.individual.php';
-          
-            $this->table="#__mb_indiv";
-            $this->key="indkey";
-            $this->core=$core;
+	protected $db;
+	protected $core;
+	
+	/**
+	*
+	*/
+	function  __construct($core) {
+		require_once 'class.individual.php';
+		$this->core=$core;
+		$this->db = & JFactory::getDBO();
         }
-       
+        
         /**
-        * return informations about individuals by id.
-        * @var $id number 
-        * @var $lite boolean
-        * @return object individual
+        *
         */
+        public function get($id, $lite=false){
+        	$sql = "SELECT indivs.id, indivs.fid, indivs.sex, names.first_name,names.middle_name,names.last_name,names.nick
+        		FROM #__mb_individuals as indivs
+        		LEFT JOIN #__mb_names as names ON indivs.id = names.gid
+        		WHERE indivs.id='".$id."'";
+        	$this->db->setQuery($sql);         
+        	$rows = $this->db->loadAssocList();
+        	
+        	$pers = new Individual(); 
+        	$pers->Id = $rows[0]['id'];
+		$pers->FacebookId = $rows[0]['fid'];
+		$pers->Gender = $rows[0]['sex'];
+		$pers->FirstName = $rows[0]['first_name'];
+		$pers->MiddleName = $rows[0]['middle_name'];
+		$pers->LastName = $rows[0]['last_name'];
+		$pers->Nick = $rows[0]['id'];
+		
+		if(!$lite){
+			$pers->Events = $this->core->events->getPersonEvents($pers->Id);
+			foreach($pers->Events as $event){
+				$pers->Birth = ($event->Type=='BIRT')?$event:null;
+				$pers->Death = ($event->Type=='DEAT')?$event:null;
+			}
+		}
+		return $pers;
+        }
+        
+        /**
+        *
+        */
+        public function save($pers){
+        	//insert to individuals table;
+        	$sql = 'INSERT INTO #__mb_individuals (`id`, `fid`, `sex`) VALUES (NULL,"'.$pers->FacebookId.'", "'.$pers->Gender.'")'; 
+        	$this->db->setQuery($sql);    
+        	$this->db->query(); 
+        	$id = $this->db->insertid();
+        	//get params and insert to names table;
+        	$givn = (($pers->FirstName!='')?$pers->FirstName:'').' '.(($pers->MiddleName!='')?$pers->MiddleName:'');
+        	$sql = 'INSERT INTO #__mb_names (`gid`, `first_name`, `middle_name`, `last_name`, `prefix`, `givn`, `nick`, `surn_prefix`, `surname`, `suffix`) 
+        		VALUES ("'.$id.'", "'.$pers->FirstName.'", "'.$pers->MiddleName.'", "'.$pers->LastName.'", "", "'.$givn.'", "'.$pers->Nick.'", "", "'.$pers->LastName.'", "")';
+        	$this->db->setQuery($sql);    
+        	$this->db->query();
+        }
+        
+        /**
+        *
+        */
+        public function update($pers){
+        	if($pers->Id){
+        		//update to individuals table;
+        		$sql = "UPDATE #__mb_individuals SET `sex`='".$pers->Gender."',`change`=NOW() WHERE `id`='".$pers->Id."'";
+        		$this->db->setQuery($sql);    
+        		$this->db->query();
+        		//update to names table;
+        		$givn = (($pers->FirstName!='')?$pers->FirstName:'').' '.(($pers->MiddleName!='')?$pers->MiddleName:'');
+        		$sql = "UPDATE #__mb_names SET `first_name`='".$pers->FirstName."', `middle_name`='".$pers->MiddleName."',`last_name`='".$pers->LastName."',`givn`='".$givn."',`nick`='".$pers->Nick."',`surname`='".$pers->LastName."',`change`= NOW() WHERE `gid`='".$pers->Id."'";        		
+        		$this->db->setQuery($sql);    
+        		$this->db->query();
+        		return $pers;        		
+        	}       
+        	return false;
+        }
+        
+        /**
+        *
+        */
+        public function delete($id){
+        	if($id==NULL){ return false; }
+        	$sql = "DELETE FROM #__mb_individuals WHERE id='".$id."'";
+        	$this->db->setQuery($sql);    
+        	$this->db->query();
+        }
+
+        public function getParents($id){
+        	if($id==null) { return false; }
+        	$sql = "SELECT families.id as familyId, families.husb as fatherID, families.wife as motherID FROM #__mb_childrens as childrens
+        		LEFT JOIN #__mb_families as families ON childrens.fid = families.id
+        		WHERE childrens.gid='".$id."'";
+        	$this->db->setQuery($sql);         
+        	$rows = $this->db->loadAssocList();
+        	return $rows[0];
+        };
+        public function getChilds($id){
+        	if($id==null){return false;}
+        	$sql = "SELECT childrens.gid as gid, childrens.fid as fid, indivs.sex as sex, names.first_name as first_name, names.middle_name as middle_name, names.last_name as last_name   
+        		FROM #__mb_families AS families
+        		LEFT JOIN #__mb_childrens AS childrens ON childrens.fid = families.id
+        		LEFT JOIN #__mb_individuals AS indivs ON indivs.id = childrens.gid
+        		LEFT JOIN #__mb_names AS names ON names.gid = childrens.gid
+        		WHERE families.husb ='".$id."' OR families.wife ='".$id."'";
+        	$this->db->setQuery($sql);         
+        	$rows = $this->db->loadAssocList();
+        	return $rows;
+        };
+        public function getFamilyId($id, $type){
+        	if($id==null){ return false; }
+        	if($type="FAMS"||$type="FAMC"){ $sql = "SELECT fid FROM #__mb_childrens WHERE gid='".$id."'"; }
+        	else{ $sql = "SELECT id FROM #__mb_families WHERE husb ='".$id."' OR wife ='".$id."'"; }
+        	$this->db->setQuery($sql);         
+        	$rows = $this->db->loadAssocList();
+        	return ($type="FAMS"||$type="FAMC")?$rows[0]['fid']:$rows[0]['id'];
+        };
+        public function getIdbyFId($fId){
+        	if($fId==null){ return false; }
+        	$sql = "SELECT id FROM #__mb_individuals WHERE fid='".$fId."'";
+        	$this->db->setQuery($sql);         
+        	$rows = $this->db->loadAssocList();
+        	return $rows[0]['id'];
+        };
+        function getFirstParent($id, $line=false, $first=false){
+        	$parents = $this->getParents($id);
+        	if($first){
+        		$parent = ($line == 'father')? $parents['fatherID'] : $parents['motherID'] ;  	
+        	}
+        	else {
+        		$parent = $parents['fatherID'];
+        	}
+        	if(!$parent){
+        		return $id;
+        	}
+        	return $this->getFirstParent($parent);
+        }
+        /*
         function get($id, $lite=false){
             $db =& JFactory::getDBO();
             $req = 'SELECT distinct #__mb_individuals . * , birth.d_day AS b_day, birth.d_mon AS b_mon, birth.d_year AS b_year, 
@@ -47,11 +168,6 @@ class IndividualsList{
             return $pers;         
 
         }
-
-        /**
-        * create new individual row in tables #__mb_individuals, #__mb_name
-        * @var $ind object individuals
-        */
         function save($ind){
              $db =& JFactory::getDBO();
              $req = 'INSERT INTO #__mb_individuals (`i_id`, `i_fid`,`i_file`,`i_rin`,`i_sex`,`i_occupation`) VALUES ("'.$ind->Id.'", "'.$ind->FacebookId.'", "","","'.$ind->Gender.'","'.$ind->Occupation.'")';
@@ -65,14 +181,6 @@ class IndividualsList{
              $db->setQuery($req);
              $db->query();
         }
-
-        /**
-        * get individuals object by name
-        * @var $firstName string
-        * @var $lastName string
-        * @var $lite boolean
-        * @return object individual
-        */
         function getByName($firstName, $lastName, $lite=false){
             $db =& JFactory::getDBO();
             $req = 'SELECT distinct #__mb_individuals . * ,
@@ -94,12 +202,6 @@ class IndividualsList{
 
             return $pers;
         }
-        
-        /**
-        * return gedcom id by facebook id
-        * @var $fid string facebook id
-        * @return int gedcom id
-        */
         function getIdbyFId($fid){
         	$db =& JFactory::getDBO();
         	$req = 'SELECT i_id FROM #__mb_individuals WHERE i_fid='.$fid;
@@ -108,10 +210,6 @@ class IndividualsList{
         	if($rows == null){ return false; }
         	return $rows[0]['i_id'];
         }
-        
-        /**
-        * @return string new id from #__mb_individuals table (gedcom id)
-        */
         function getNewId(){
             $db =& JFactory::getDBO();
             $req = 'SELECT SUBSTRING(i_id,2) as id FROM #__mb_individuals ORDER BY id+0 DESC';
@@ -127,11 +225,6 @@ class IndividualsList{
             return $newid;
 
         }
-        
-        /**
-        * update information about individual
-        * @var $person object individual
-        */
         public function update($person){
            if($person->Id){
 
@@ -149,11 +242,6 @@ class IndividualsList{
                 $db->query();
             }
         }
-       
-        /**
-        * delete info about individual by id
-        * @var $id integer
-        */
         public function delete($id){
             if($id){
             	$ind = $this->get($id);
@@ -186,11 +274,6 @@ class IndividualsList{
                 $db->query();
             }
         }
-        
-        /**
-        * get all ids from #__mb_individuals table
-        * @return array
-        */
         function getAllIds(){
             $db =& JFactory::getDBO();
             $req = 'SELECT #__mb_individuals.i_id as id FROM #__mb_individuals';
@@ -201,11 +284,6 @@ class IndividualsList{
                 return array();
             return $rows;
         }
-        
-        /**
-        * return string in format gedcom(about individual)
-        * @return string
-        */
         function getGedcomString($id){
             $individual = $this->core->individuals->get($id, true);
             $str = '';
@@ -257,13 +335,6 @@ class IndividualsList{
             }
             return $str;
         }
-     
-
-        /**
-         * @desc:get array of specified person's decsendants ids
-         *
-         * @param slink<array>, <string> id
-         */
         function getDescendants(&$array, $id){
             $childs = $this->core->individuals->getChilds($id);
             foreach($childs as $child){
@@ -271,10 +342,6 @@ class IndividualsList{
                 $this->getDescendants($array, $child['id']);
             }
         }
-        
-        /**
-        * 
-        */
         function getOccupationFromArray($gedArray){
             $count = count($gedArray);
             $result = '';
@@ -300,11 +367,6 @@ class IndividualsList{
             return $result;
 
         }
-        
-        /**
-        * @var $gedString string
-        * @return array
-        */
         function splitGedcomString($gedString){
             $matches = array();
             preg_match_all('/([0-9] [A-Z]{3,4}.*)/', $gedString, $matches);
@@ -319,11 +381,6 @@ class IndividualsList{
             }
             return $processedArray;
         }
-        
-        /**
-        * @var $gedArray array
-        * @return array
-        */
         function mergeGedcomArray($gedArray){
             $count = count($gedArray);
             for($i=0; $i<$count; $i++){
@@ -333,12 +390,6 @@ class IndividualsList{
             
             return $gedArray;
         }
-     
-        /**
-        * return assoc array by gedcom fam id
-        * @var $family_id int
-        * @return array
-        */
         function getFamilysChilds($family_id){
             $db =& JFactory::getDBO();
             $req = 'SELECT #__mb_link.l_to as id FROM #__mb_link where l_type="CHIL" and l_from="'.$family_id.'"';
@@ -348,13 +399,6 @@ class IndividualsList{
 
             return $rows;
         }
-        
-        /**
-        * return siblings by individual id
-        * @var $id integer
-        * @var $lite boolean
-        * @return array
-        */
         function getSiblings($id, $lite=false){
             $db =& JFactory::getDBO();
                 $req = "SELECT siblings.l_to AS id
@@ -372,10 +416,6 @@ class IndividualsList{
            }
            return $siblings;
         }
-        
-        /**
-        *
-        */
         function getFirstParent($id, $line=false, $first=false){
         	$parents = $this->getParents($id);
         	if($first){
@@ -389,27 +429,8 @@ class IndividualsList{
         	}
         	return $this->getFirstParent($parent);
         }
-        
-        /**
-        * return parent individual by id
-        * @var $id int
-        * @return array
-        */
         function getParents($id){
             $db =& JFactory::getDBO();
-            /*
-            $req = "SELECT father.n_id AS fatherID, father.n_givn AS fatherG, father.n_surname AS fatherS, mother.n_id AS motherID, mother.n_givn AS motherG, mother.n_surname AS motherS, #__mb_link.l_from as familyId, #__mb_dates.d_day as marriageDay, #__mb_dates.d_mon as marriageMonth, #__mb_dates.d_year as marriageYear
-                        FROM #__mb_link
-                        LEFT JOIN #__mb_link AS fatherlink ON #__mb_link.l_from = fatherlink.l_from
-                        AND fatherlink.l_type = 'HUSB'
-                        LEFT JOIN #__mb_name AS father ON fatherlink.l_to = father.n_id
-                        LEFT JOIN #__mb_link AS motherlink ON #__mb_link.l_from = motherlink.l_from
-                        AND motherlink.l_type = 'WIFE'
-                        LEFT JOIN #__mb_name AS mother ON motherlink.l_to = mother.n_id
-                        LEFT JOIN #__mb_dates ON (#__mb_dates.d_gid = #__mb_link.l_from AND #__mb_dates.d_fact='MARR')
-                        WHERE #__mb_link.l_type = 'CHIL'
-                        AND #__mb_link.l_to =  '".$id."'";
-                        */
             $req = "SELECT	family.f_id AS familyId,
             			family.f_husb AS fatherID, 
             			family.f_wife AS motherID,
@@ -425,14 +446,6 @@ class IndividualsList{
            $rows = $db->loadAssocList();
            return $rows[0];
         }
-        
-        /**
-        * return FAM ID
-        * @var $id string
-        * @var $type string type of family link
-        * @var $st string sql 
-        * @return object Family
-        */
         function getFamilyId($id, $type){
         	$db =& JFactory::getDBO();
         	if($type == 'FAMS' || $type == 'FAMC'){
@@ -446,13 +459,6 @@ class IndividualsList{
         	$rows = $db->loadAssocList();
         	return ($type == 'FAMS' || $type == 'FAMC') ? $rows[0]['l_to'] : $rows[0]['l_from'];
         }
-        
-        
-        /**
-        * return childs individual by id
-        * @var $id int
-        * @return array
-        */
         function getChilds($id){
             $db =& JFactory::getDBO();
             $db->setQuery("SELECT #__mb_name.n_id as id, #__mb_individuals.i_sex as sex, REPLACE( REPLACE(#__mb_name.n_full, '@N.N.', '') , '@P.N.', '') as name,
@@ -468,13 +474,6 @@ class IndividualsList{
            $rows = $db->loadAssocList();
            return $rows;
         }
-        
-        /**
-        * returns number of individuals in db
-        * @var $filter string
-        * @var $living string
-        * @return 
-        */
         function count($filter=null, $living=null){
             $db =& JFactory::getDBO();
 
@@ -501,11 +500,6 @@ class IndividualsList{
 
              return $rows[0]['COUNT(*)'];
         }
-        
-        /**
-        * return youngest living member
-        * @return array
-        */
         function youngestLivingMember(){
             $db =& JFactory::getDBO();   
             $date_time_array = getdate( time() );
@@ -527,10 +521,6 @@ class IndividualsList{
 
             return $rows[0];
         }
-        
-        /**
-        * @return array
-        */
         function oldestLivingMember(){
             $db =& JFactory::getDBO();
 
@@ -554,10 +544,6 @@ class IndividualsList{
 
             return $rows[0];
         }
-        
-        /**
-        * @return array
-        */
         function yearliestAncestor(){
             $db =& JFactory::getDBO();
             $start = $pageNum*$perPage;
@@ -585,17 +571,6 @@ class IndividualsList{
 
             return $rows;
         }
-        
-        /**
-        * gets array of persons
-        * @var $pageNum int
-        * @var $perPage int : number of records per page
-        * @var $id : to get specified record
-        * @var $filter
-        * @var $sort string : sort parameter('age', 'name', 'living', 'id', etc.)
-        * @var $order string : sorting order(ASC or DESC)
-        * @return array
-        */
         function allFormated($pageNum=0, $perPage=50, $id=null, $filter=null, $sort=null, $order=null){
             $db =& JFactory::getDBO();
             $start = $pageNum*$perPage;
@@ -645,7 +620,6 @@ class IndividualsList{
 
             return $rows;
         }
-
-
-    }
+*/
+}
 ?>

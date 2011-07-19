@@ -1,41 +1,134 @@
 <?php
-require_once 'class.data.php';
-    class FamiliesList extends DataType{
-        public $core;
+class FamiliesList{
+	public $core;
 
-        /*
-         * parser duplicates some of family info - husband and wife ids
-         * is stored in #__mb_link and #__mb_families either, children ids stored only in #__mb_link
-         * for now it remains so and some functions may use different sources of spouses ids
-         *
-         */
+	function  __construct($core) {
+		require_once 'class.family.php';
+		$this->core = $core;
+		$this->db = & JFactory::getDBO();
+        }
+        public function get($id, $lite=false){
+        	if($id==NULL) { return false; }
+        	$sql = "SELECT id,husb,wife FROM #__mb_families WHERE id='".$id."'";
+        	$this->db->setQuery($sql);         
+        	$rows = $this->db->loadAssocList();
+        	
+        	if($rows == null) { return false; }
+                return $this->setData($rows[0], $lite);
+        }
+        public function save($family){
+        	if($family->Id==NULL) { return false; }
+        	if(($family->Sircar != null && $family->Sircar->Id)||($family->Spouse != null && $family->Spouse->Id)){
+        		$id1 = ($family->Sircar != null && $family->Sircar->Id) ? $family->Sircar->Id : '';
+        		$id2 = ($family->Spouse != null && $family->Spouse->Id) ? $family->Spouse->Id : '';
+
+			if($family->Sircar != null){
+				if($family->Sircar->Gender == 'M'){ $husb = $id1; $wife = $id2;}else{$husb = $id2; $wife = $id1;}
+			}elseif($family->Spouse != null){
+				if($family->Spouse->Gender == 'F'){ $husb = $id1; $wife = $id2;}else{$husb = $id2; $wife = $id1;}
+			}else{
+			    $husb = NULL;
+			    $wife = NULL;
+			}
+                }
+		$sql = "INSERT INTO #__mb_families (`id`,`husb`,`wife`,`type`) VALUES ('".$family->Id."','".$husb."','".$wife."','".$family->Type."')";   
+		$this->db->setQuery($sql);    
+        	$this->db->query();
+        }
+        public function update($family){
+        	if($family->Id==NULL) { return false; }
+        	if(($family->Sircar != null && $family->Sircar->Id)||($family->Spouse != null && $family->Spouse->Id)){
+        		$id1 = ($family->Sircar != null && $family->Sircar->Id) ? $family->Sircar->Id : '';
+        		$id2 = ($family->Spouse != null && $family->Spouse->Id) ? $family->Spouse->Id : '';
+
+			if($family->Sircar != null){
+				if($family->Sircar->Gender == 'M'){ $husb = $id1; $wife = $id2;}else{$husb = $id2; $wife = $id1;}
+			}elseif($family->Spouse != null){
+				if($family->Spouse->Gender == 'F'){ $husb = $id1; $wife = $id2;}else{$husb = $id2; $wife = $id1;}
+			}else{
+			    $husb = NULL;
+			    $wife = NULL;
+			}
+                }
+		$sql = "UPDATE #__mb_families SET `husb`='".$husb."',`wife`='".$wife."',`change`=NOW() WHERE `id`='".$family->Id."'";
+		$this->db->setQuery($sql);    
+        	$this->db->query();
+        }
+        public function delete($id){
+        	if($id==NULL){ return false; }
+        	$sql = "DELETE FROM #__mb_families WHERE id='".$id."'";
+        	$this->db->setQuery($sql);    
+        	$this->db->query();
+        }
+        public function setData($row, $lite){
+        	$sircar = $this->core->individuals->get($rows['husb'], $lite);
+        	$spouse = $this->core->individuals->get($rows['wife'], $lite);
+        	$events = $this->core->events->getFamilyEvents($rows['id']);
+        	$marriage = null;
+                $divorce = null;
+                if($events != null){
+                    foreach($events as $event){
+                        if($event->Type=="MARR")
+                             $marriage = $event;
+                        if($event->Type=="DIV")
+                             $divorce = $event;
+                    }
+                }
+                $family = new Family();
+                $family->Id = $rows['id'];
+                $family->Sircar = $sircar;
+                $family->Spouse = $spouse;
+                $family->Marriage = $marriage;
+                $family->Divorce = $divorce;
+                $family->Events = $events;
+                return $family;
+        }
+        public function addChild($fId, $id, $fRel=null, $mRel=null){
+        	if($fId==null||$id==null) { return false; }
+        	$sql = "INSERT INTO #__mb_childrens (`fid`, `gid`, `frel`, `mrel`) VALUES ('".$fId."', '".$id."', NULL, NULL);"
+		$this->db->setQuery($sql);    
+        	$this->db->query();
+        }
+        public function getPersonsFamilies($indKey){
+        	if($indKey==null){ return false; }
+        	$sql = "SELECT id, husb, wife, type FROM #__mb_families WHERE husb='".$indKey."' OR wife='".$indKey."'";
+        	$this->db->setQuery($sql);         
+        	$rows = $this->db->loadAssocList();
+        	$families = array();
+        	foreach($rows as $row){        		
+        		$families[] = $this->setData($row, false);
+        	}
+        	return $families;
+        	
+        }
+        public function getFamilyChildrenIds($fId){
+        	if($fId==null) { return false; }
+        	$sql = "SELECT gid FROM #__mb_childrens WHERE fid='".$fId."'";
+        	$this->db->setQuery($sql);         
+        	$rows = $this->db->loadAssocList();
+        	if($rows!=null){
+        		return $rows;
+        	} else{ 
+        		return array();
+        	}
+        }
+
+	/*
         function  __construct($core) {
             $this->core = $core;
         }
-        
-        /**
-        *
-        */
         function count(){
             $db =& JFactory::getDBO();
             $db->setQuery('SELECT COUNT(*) FROM `#__mb_families`');
             $rows = $db->loadAssocList();
             return $rows[0]['COUNT(*)'];
         }
-        
-        /**
-        *
-        */
         function totalChildren(){
             $db =& JFactory::getDBO();
             $db->setQuery('SELECT COUNT(*) FROM `#__mb_link` WHERE l_type="CHIL"');
             $rows = $db->loadAssocList();
             return $rows[0]['COUNT(*)'];
         }
-        
-        /**
-        *
-        */
         function delete($family){
             $db =& JFactory::getDBO();
             $req = 'DELETE FROM #__mb_families where f_id ="'.$family->Id.'"';
@@ -46,17 +139,12 @@ require_once 'class.data.php';
             $db->setQuery($req);
             $db->query();
         }
-        
         function addChild($famId, $childId){
         	$db =& JFactory::getDBO();
         	$sql = "INSERT INTO `#__mb_link` (`l_file` ,`l_from` ,`l_type` ,`l_to`)VALUES ('', '".$famId."', 'CHIL', '".$childId."'), ('', '".$childId."', 'FAMC', '".$famId."')";
 		$db->setQuery($sql);
 		$db->query();
         }
-        
-        /**
-        *
-        */
         function save($family){
             $db =& JFactory::getDBO();
             if(($family->Sircar != null && $family->Sircar->Id)||($family->Spouse != null && $family->Spouse->Id)){
@@ -88,10 +176,6 @@ require_once 'class.data.php';
                 $db->query();
             } 
         }
-        
-        /**
-        *
-        */
         function update($family){
         	$db =& JFactory::getDBO();
 		    if(($family->Sircar != null && $family->Sircar->Id)||($family->Spouse != null && $family->Spouse->Id)){
@@ -138,10 +222,6 @@ require_once 'class.data.php';
 			 $db->query();
 		}
         }
-        
-        /**
-        *
-        */
         function getAllIds(){
             $db =& JFactory::getDBO();
             $req = 'SELECT #__mb_families.f_id as id FROM #__mb_families';
@@ -152,10 +232,6 @@ require_once 'class.data.php';
                 return array();
             return $rows;
         }
-        
-        /**
-        *
-        */
         function getGedcomString($fam_id){
             $family = $this->get($fam_id, true);
             $str = '';
@@ -181,10 +257,6 @@ require_once 'class.data.php';
 
             return $str;
         }
-        
-        /**
-        *
-        */
         function get($id, $lite=false){
                 $db =& JFactory::getDBO();
                 $req = 'SELECT #__mb_families.f_id AS family_id, #__mb_dates.d_day AS
@@ -221,10 +293,6 @@ require_once 'class.data.php';
 
                 return $family;
         }
-        
-        /**
-        *
-        */
         function getNewId(){
             $db =& JFactory::getDBO();
             $req = 'SELECT MAX(SUBSTRING(f_id,2)+0) as id FROM #__mb_families';
@@ -239,10 +307,6 @@ require_once 'class.data.php';
             return $newid;
 
         }
-        
-        /**
-        *
-        */
         function getFamilyChildrenIds($famId){
             $db =& JFactory::getDBO();
             $req = 'SELECT distinct l_to as id FROM #__mb_link
@@ -256,10 +320,6 @@ require_once 'class.data.php';
             else
                 return array();
         }
-        
-        /**
-        *
-        */
         function getPersonsChildFamilies($id, $lite=false){
             $db =& JFactory::getDBO();
             $req = 'SELECT #__mb_families.f_id AS family_id, #__mb_dates.d_day AS
@@ -306,10 +366,6 @@ require_once 'class.data.php';
             }
             return array();
         }
-        
-        /**
-        *
-        */
         function getPersonFamilies($id){
         	$db =& JFactory::getDBO();
         	$req = 'SELECT * FROM #__mb_families WHERE f_husb = "'.$id.'" OR f_wife = "'.$id.'"';
@@ -331,13 +387,9 @@ require_once 'class.data.php';
         	}
         	return array();
         }
-        
-        /**
-        *
-        */
         function getPersonsFamilies($id, $lite=false){
                 $db =& JFactory::getDBO();
-                /*
+
                 $req = 'SELECT	#__mb_families.f_id AS family_id,
                 		#__mb_dates.d_day AS day,
                 		#__mb_dates.d_mon AS month,
@@ -356,7 +408,7 @@ require_once 'class.data.php';
 
                 	WHERE #__mb_families.f_husb = "'.$id.'" OR #__mb_families.f_wife = "'.$id.'"
                 	GROUP BY jos_mb_families.f_id';
-                */
+
                 $req = 'SELECT #__mb_families.f_id AS family_id, #__mb_families.f_husb AS husband_id, #__mb_families.f_wife AS wife_id FROM #__mb_families
                 	WHERE #__mb_families.f_husb = "'.$id.'" OR #__mb_families.f_wife = "'.$id.'"
                 	GROUP BY #__mb_families.f_id';
@@ -397,10 +449,6 @@ require_once 'class.data.php';
                 return array();
                 
         }
-        
-        /**
-        *
-        */
         function getBySpouseId($id){
             $db =& JFactory::getDBO();
             $db->setQuery('SELECT distinct #__mb_individuals . * , birth.d_day AS b_day, birth.d_mon AS b_mon, birth.d_year AS b_year,
@@ -416,10 +464,6 @@ require_once 'class.data.php';
             $rows = $db->loadAssocList();
             return $rows[0];
         }
-        
-        /**
-        *
-        */
         function maxChildren(){
             $db =& JFactory::getDBO();
             $db->setQuery('SELECT sum( 1 ) AS counter, l_from
@@ -444,10 +488,6 @@ require_once 'class.data.php';
             $rows[0]['counter'] = $count;
             return $rows[0];
         }
-        
-        /**
-        *
-        */
         function averageChildren(){
             $db =& JFactory::getDBO();
             $db->setQuery('SELECT count(*) as count FROM #__mb_families');
@@ -461,4 +501,5 @@ require_once 'class.data.php';
             return $child_count/$fam_count;
         }
     }
+    */
 ?>

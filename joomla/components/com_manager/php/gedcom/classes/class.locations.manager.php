@@ -1,8 +1,100 @@
 <?php
-require_once 'class.data.php';
-    class LocationsList extends DataType{
-         public $core;
-         function form(&$a,&$b) {
+class LocationsList{
+	public $core;
+        
+	function  __construct($core) {
+             $this->core = $core;
+             $this->db = & JFactory::getDBO();
+        }
+        
+        public function get($id, $lite=false){
+        	if($id==null){ return false; }        	
+        	$sql = "SELECT place_id, place_name FROM #__mb_places WHERE place_id ='".$id."'";
+        	$this->db->setQuery($sql);         
+        	$rows = $this->db->loadAssocList();
+        	$place = new Place()
+        	$place->Id = $rows[0]['place_id'];
+        	$place->Name = $rows[0]['place_name'];
+        	if(!$lite){
+        		$place->Locations = $this->getLocations($place);
+        	}
+        	return $place;
+        }
+        
+        public function save($id, $place){
+        	if($place==null) { return false; }
+        	$sql = "INSERT INTO #__mb_places (`place_id`, `event_id`, `name`) VALUES (NULL, '".$id."', '".$place->Name."')";
+        	$this->db->setQuery($sql);    
+        	$this->db->query();
+        	$this->saveLocations($place);
+        }
+        public function update($id, $place){
+        	if($place==null) { return false; }
+        	$sql = "UPDATE #__mb_places SET `events_id`='".$id."', `name`='".$place->Name."', `change`=NOW() WHERE `place_id`='".$place->Id."'";
+        	$this->db->setQuery($sql);    
+        	$this->db->query();
+        	$this->updateLocations($place);
+        }
+        public function detele($id){
+        	if($id==null){ return false; }
+        	$sql = "DELETE FROM #__mb_places WHERE place_id='".$id."'";
+        	$this->db->setQuery($sql);    
+        	$this->db->query();
+        }
+        public function getPlaceByEventId($id, $lite=false){
+        	if($id==null){ return false; }        	
+        	$sql = "SELECT place_id, place_name FROM #__mb_places WHERE events_id ='".$id."'";
+        	$this->db->setQuery($sql);         
+        	$rows = $this->db->loadAssocList();
+        	$place = new Place()
+        	$place->Id = $rows[0]['place_id'];
+        	$place->Name = $rows[0]['place_name'];
+        	if(!$lite){
+        		$place->Locations = $this->getLocations($place);
+        	}
+        	return $place;
+        }
+        
+        public function getLocations($place){
+        	if($place==null) { return false }
+        	$sql = "SELECT name, cont, adr1, adr2, city, state, country, post, phones FROM #__mb_locations WHERE place_id = '".$place->Id."'";
+        	$this->db->setQuery($sql);         
+        	$rows = $this->db->loadAssocList();
+        	foreach ($rows as $row){
+        		$location = new Location();
+        		$location->Name = $row['name'];
+			$location->Cont = explode(',', $row['cont']);
+			$location->Adr1 = $row['adr1'];
+			$location->Adr2 = $row['adr2'];
+			$location->City = $row['city'];
+			$location->State = $row['state'];
+			$location->Post = $row['post'];
+			$location->Country = $row['country'];
+			$location->Phones = explode(',', $rows['phones']);
+        		$place->Locations[] = $location;
+        	}
+        	return $place->Locations;
+        }
+        public function saveLocations($place){
+        	foreach($place->Locations as $loc){
+        		$phones = implode(',', $loc->Phones);
+        		$sql = "INSERT INTO #__mb_locations (`place_id`, `name`, `cont`, `adr1`, `adr2`, `city`, `state`, `post`, `country`, `phones`)
+        			VALUES ('".$place->Id."', '".$loc->Name."', '".$loc->Cont."', '".$loc->Adr1."', '".$loc->Adr2."', '".$loc->City."', '".$loc->State."', '".$loc->Post."', '".$loc->Country."', '".$phones."')";
+        		$this->db->setQuery($sql);         
+        		$this->db->query();
+        	}
+        }
+        public function updateLocations($place){
+        	foreach($place->Locations as $loc){
+        		$phones = implode(',', $loc->Phones);
+        		$sql = "UPDATE #__mb_locations SET `name`='".$loc->Name."', `cont`='".$loc->Cont."',`adr1`='".$loc->Adr1."',`adr2`='".$loc->Adr2."',`city`='".$loc->City."',`state`='".$loc->State."',`post`='".$loc->Post."',`country`='".$loc->Country."',`phones`='".$phones."',`change`= NOW() WHERE place_id='".$place->Id."'";
+        		$this->db->setQuery($sql);         
+        		$this->db->query();
+        	}
+        }
+	
+	/*
+	function form(&$a,&$b) {
                 if ($a['level'] == $b['level']) {
                         return 0;
                     }
@@ -85,11 +177,11 @@ require_once 'class.data.php';
                     for($i=0; $i<count($location->Hierarchy);$i++){
                          if($location->Hierarchy[$i]->Id  !=''&&$location->Hierarchy[$i]->Id !='0'){
 
-                        /* check if place name has benn actually changed,
+                check if place name has benn actually changed,
                          * check is there a multiple events are linked to current place, if so appending modified place as new location
                          * else just renaming it,  change subplaces parent ids for correct hierarchy
                          *
-                         */
+
 
                             $db->setQuery('SELECT * from #__mb_places WHERE p_id="'.$location->Hierarchy[$i]->Id.'"');
                             $rows = $db->loadAssocList();
@@ -194,6 +286,7 @@ require_once 'class.data.php';
 
         }
          //public function get()
-       
-    }
+       */
+
+}
 ?>
