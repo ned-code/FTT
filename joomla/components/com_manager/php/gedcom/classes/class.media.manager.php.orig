@@ -134,9 +134,14 @@ class MediaList{
                 
                 if(copy($filepath, $path.$id.'.'.$extension)){
                     $jspath = $this->getMediaPath();
-                    $req = $this->core->sql( 'UPDATE #__mb_medias SET path=? WHERE id=?', $jspath.'/'.$id.'.'.$extension, $id);
+<<<<<<< HEAD
+                    $req = 'UPDATE #__mb_medias SET path="'.$jspath.'/'.$id.'.'.$extension.'" WHERE id="'.$id.'"';
                 
                    
+=======
+                    $req = $this->core->sql( 'UPDATE #__mb_medias SET path=? WHERE id=?', $jspath.'/'.$id.'.'.$extension, $id);
+                                   
+>>>>>>> b580d456b529042e62a144e2cf0361858750e8a7
                     $db->setQuery($req);
                     $db->query();
 
