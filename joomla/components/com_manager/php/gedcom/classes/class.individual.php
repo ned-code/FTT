@@ -13,18 +13,29 @@ class Individual{
 	public $Events;
 	public $Birth;
 	public $Death;
-
-	public function __construct($id=null, $fname="", $mname="", $lname="", $suffix="", $sex=null, $occupation='', $events=null, $birth=null, $death=null, $fid=null){
+	//for parser
+	public $Prefix;
+	public $GivenName;
+	public $SurnamePrefix;
+	public $Surname;
+	public $Suffix;
+	
+	public function __construct(){
 		$this->Id = null;
 		$this->FacebookId = null;
 		$this->Gender = null;
-		$this->FirstName = '';
-		$this->MiddleName = '';
-		$this->LastName = '';
-		$this->Nick = '';
+		$this->FirstName = null;
+		$this->MiddleName = null;
+		$this->LastName = null;
+		$this->Nick = null;
 		$this->Events = null;
 		$this->Birth = null;
 		$this->Death = null;
+		$this->Prefix = null;
+		$this->GivenName = null;
+		$this->SurnamePrefix = null;
+		$this->Surname = null;
+		$this->Suffix = null;
        }
 }
 ?>

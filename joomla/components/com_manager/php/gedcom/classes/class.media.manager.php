@@ -1,17 +1,14 @@
 <?php
-require_once 'class.data.php';
-    class MediaList extends DataType{
-        
+class MediaList{
         public $core;
-
         function  __construct($core) {
             require_once 'class.media.php';
             $this->core=$core;
-            
+            $this->db = & JFactory::getDBO();
         }
         function getAvatarImage($id){
             $db =& JFactory::getDBO();
-            $req = 'SELECT * FROM #__mb_media_link WHERE type="AVAT" AND gid="'.$id.'" LIMIT 1';
+            $req = $this->core->sql('SELECT * FROM #__mb_media_link WHERE type="AVAT" AND gid=? LIMIT 1', $id);
             $db->setQuery($req);
 
             $rows = $db->loadAssocList();
@@ -21,20 +18,16 @@ require_once 'class.data.php';
         }
         function setAvatarImage($persId, $imgId){
             $db =& JFactory::getDBO();
-            $req = 'DELETE FROM #__mb_media_link WHERE type="AVAT" AND gid="'.$persId.'" LIMIT 1';
-            var_dump($req);
+            $req = $this->core->sql('DELETE FROM #__mb_media_link WHERE type="AVAT" AND gid=? LIMIT 1', $persId);
             $db->setQuery($req);
             $db->query();
-            $req = 'INSERT INTO #__mb_media_link (`gid`, `type`, `mid`) VALUES ("'.$persId.'", "AVAT", "'.$imgId.'")';
-            var_dump($req);
+            $req = $this->core->sql('INSERT INTO #__mb_media_link (`gid`, `type`, `mid`) VALUES (?, "AVAT", ?)', $persId, $imgId);
             $db->setQuery($req);
             $db->query();
         }
         function get($id){
             $db =& JFactory::getDBO();
-            
-            $req = 'SELECT * FROM #__mb_medias WHERE id="'.$id.'" LIMIT 1';
-            
+            $req = $this->core->sql('SELECT * FROM #__mb_medias WHERE id=? LIMIT 1', $id);
             $db->setQuery($req);
          
             $rows = $db->loadAssocList();

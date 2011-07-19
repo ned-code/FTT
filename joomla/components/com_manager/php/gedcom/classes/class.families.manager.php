@@ -9,7 +9,7 @@ class FamiliesList{
         }
         public function get($id, $lite=false){
         	if($id==NULL) { return false; }
-        	$sql = "SELECT id,husb,wife FROM #__mb_families WHERE id='".$id."'";
+        	$sql = $this->core->sql('SELECT id,husb,wife FROM #__mb_families WHERE id=?',$id);
         	$this->db->setQuery($sql);         
         	$rows = $this->db->loadAssocList();
         	
@@ -31,7 +31,8 @@ class FamiliesList{
 			    $wife = NULL;
 			}
                 }
-		$sql = "INSERT INTO #__mb_families (`id`,`husb`,`wife`,`type`) VALUES ('".$family->Id."','".$husb."','".$wife."','".$family->Type."')";   
+		$sqlString = "INSERT INTO #__mb_families (`id`,`husb`,`wife`,`type`) VALUES (?,?,?,?)";   
+		$sql = $this->core->sql($sqlString, $family->Id, $husb, $wife, $family->Type);
 		$this->db->setQuery($sql);    
         	$this->db->query();
         }
@@ -50,13 +51,14 @@ class FamiliesList{
 			    $wife = NULL;
 			}
                 }
-		$sql = "UPDATE #__mb_families SET `husb`='".$husb."',`wife`='".$wife."',`change`=NOW() WHERE `id`='".$family->Id."'";
+		$sqlString = "UPDATE #__mb_families SET `husb`=?,`wife`=?,`change`=NOW() WHERE `id`=?";
+		$sql = $this->core->sql($sqlString, $husb, $wife, $family->id);
 		$this->db->setQuery($sql);    
         	$this->db->query();
         }
         public function delete($id){
         	if($id==NULL){ return false; }
-        	$sql = "DELETE FROM #__mb_families WHERE id='".$id."'";
+        	$sql = $this->core->sql('DELETE FROM #__mb_families WHERE id=?',$id)
         	$this->db->setQuery($sql);    
         	$this->db->query();
         }
@@ -85,13 +87,14 @@ class FamiliesList{
         }
         public function addChild($fId, $id, $fRel=null, $mRel=null){
         	if($fId==null||$id==null) { return false; }
-        	$sql = "INSERT INTO #__mb_childrens (`fid`, `gid`, `frel`, `mrel`) VALUES ('".$fId."', '".$id."', NULL, NULL);"
+        	$sqlString = "INSERT INTO #__mb_childrens (`fid`, `gid`, `frel`, `mrel`) VALUES (?,?,?,?)";
+        	$sql = $this->core->sql($sqlString, $fId, $id, $fRel, $mRel);
 		$this->db->setQuery($sql);    
         	$this->db->query();
         }
         public function getPersonsFamilies($indKey){
         	if($indKey==null){ return false; }
-        	$sql = "SELECT id, husb, wife, type FROM #__mb_families WHERE husb='".$indKey."' OR wife='".$indKey."'";
+        	$sql = $this->core->sql('SELECT id, husb, wife, type FROM #__mb_families WHERE husb=? OR wife=?', $indKey, $indKey);
         	$this->db->setQuery($sql);         
         	$rows = $this->db->loadAssocList();
         	$families = array();
@@ -103,7 +106,7 @@ class FamiliesList{
         }
         public function getFamilyChildrenIds($fId){
         	if($fId==null) { return false; }
-        	$sql = "SELECT gid FROM #__mb_childrens WHERE fid='".$fId."'";
+        	$sql = $this->core->sql('SELECT gid FROM #__mb_childrens WHERE fid=?', $fId);
         	$this->db->setQuery($sql);         
         	$rows = $this->db->loadAssocList();
         	if($rows!=null){
@@ -500,6 +503,7 @@ class FamiliesList{
             $child_count = $rows[0]['COUNT(*)'];
             return $child_count/$fam_count;
         }
+        */
     }
-    */
+    
 ?>

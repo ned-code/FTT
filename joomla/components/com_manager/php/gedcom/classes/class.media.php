@@ -1,6 +1,5 @@
 <?php
-require_once 'class.data.php';
-    class Media{
+class Media{
         public $Id;
         public $Form;
         public $Title;
