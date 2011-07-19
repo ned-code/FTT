@@ -1,6 +1,0 @@
-- if params[:fullHTML] && @item.inner_html !=~ /<html>(.|\n)*<\/html>/mi
-  %html
-    %head
-    %body= raw @item.inner_html
-- else
-  = raw @item.inner_html

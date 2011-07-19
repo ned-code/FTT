@@ -1,3 +1,0 @@
-- localize views.
-- use js FW to use rails localization on client side (http://github.com/fnando/i18n-js/tree/master)
-- undo/redo disable button until action is finished (ajax call returned)
