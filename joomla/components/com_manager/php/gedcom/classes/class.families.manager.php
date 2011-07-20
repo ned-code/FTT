@@ -29,8 +29,12 @@ class FamiliesList{
 			    $wife = NULL;
 			}
                 }
-		$sqlString = "INSERT INTO #__mb_families (`id`,`husb`,`wife`,`type`) VALUES (NULL,?,?,?)";   
+		$sqlString = "INSERT INTO #__mb_families (`id`, `husb`, `wife`,`type`) VALUES (NULL,";
+		$sqlString .= ($husb==null)?"NULL,":"?,";
+		$sqlString .= ($wife==null)?"NULL,":"?,";
+		$sqlString .= "?)";
 		$sql = $this->core->sql($sqlString, $husb, $wife, $family->Type);
+		echo $sql;
 		$this->db->setQuery($sql);    
         	$this->db->query();
         	return $this->db->insertid();

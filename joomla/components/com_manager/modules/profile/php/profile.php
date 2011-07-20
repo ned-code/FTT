@@ -9,141 +9,79 @@ class JMBProfile {
 		$this->db =& JFactory::getDBO();
 		$this->host = new Host('Joomla');
 	}
-	
-	/**
-	*
+	/*
+	*  General Functions. 
 	*/
-	protected function getColors(){
-		$color = array();
-		$p = $this->host->getSiteSettings('color');
-		for($i=0;$i<sizeof($p);$i++){
-                    switch($p[$i]['name']){	
-                            case "female":
-                                    $color['F'] = $p[$i]['value'];
-                            break;
-                            
-                            case "male":
-                                    $color['M'] = $p[$i]['value'];
-                            break;
-                            
-                            case "location":
-                                    $color['L'] = $p[$i]['value'];
-                            break;
-                    }
-                }
-                return $color;
-	}
-	
-	/**
-	*
-	*/
-	protected function _getUserInfo($id){
-		$indiv = $this->host->gedcom->individuals->get($id);
-		$parents = $this->host->gedcom->individuals->getParents($id);
-		$children = $this->host->gedcom->individuals->getChilds($id);
-		$families = $this->host->gedcom->families->getPersonsFamilies($id);
-		$spouses = array();	
-		foreach($families as $family){
-			$famevent = $this->host->gedcom->events->getFamilyEvents($family->Id);
-			$childs = $this->host->gedcom->families->getFamilyChildrenIds($family->Id);
-			$spouses[] = array('id'=>$family->Spouse->Id,'indiv'=>$family->Spouse,'children'=>$childs,'event'=>$famevent);
-		}
-		$notes = $this->host->gedcom->notes->getLinkedNotes($id);
-		$sources = $this->host->gedcom->sources->getLinkedSources($id);
-		$photos = $this->host->gedcom->media->getMediaByGedId($id);
-		$avatar = $this->host->gedcom->media->getAvatarImage($id);
-
-		return array('indiv'=>$indiv,'parents'=>$parents,'spouses'=>$spouses,'children'=>$children,'notes'=>$notes,'sources'=>$sources,'photo'=>$photos,'avatar'=>$avatar);
-	}
-	
-	/**
-	*
-	*/
-	protected function _uploadPhoto($gedId){
-		if($_FILES['photo']['size'] == 0) return false;
-		$result = $this->host->gedcom->media->save($gedId, $_FILES["photo"]["tmp_name"], $_FILES["photo"]["name"]);
-		if($result) {
-			$this->host->gedcom->media->setAvatarImage($gedId, $result);
-			return $result;
-		}
-		return false;
-        }
-	
-	/**
-	*
-	*/
+	// create family object.
 	protected function _createFamily(){
 		$fam = new Family();
-		$fam->Id = $this->host->gedcom->families->getNewId();
 		return $fam;
 	}
-	
-	/**
-	*
-	*/
-	protected function _createLocation($id, $type, $prefix, $save=true){
-		if(!isset($_POST[$prefix.'country'])&&!isset($_POST[$prefix.'state'])&&!isset($_POST[$prefix.'town'])){
-			return null;
-		}
-		$places = array($_POST[$prefix.'country'],$_POST[$prefix.'state'],$_POST[$prefix.'town']);
-		$loc = new Location();
-		$parent_id = 0;
-		foreach($places as $key => $place){
-			$place = trim($place);
-			$place=preg_replace('/\\\"/', "", $place);
-			$place=preg_replace("/[\><]/", "", $place);
-			$loc->Hierarchy[] = new Place('', $place, $key, '');
-			$parent_id = $p_id;
-		}		
-		if($save){ $this->host->gedcom->locations->save($loc);  }
-		return $loc;
-	}
-	
-	/**
-	*
-	*/
-	protected function _createEvent($id, $type, $prefix, $save=true){
-		$event = new Events();
-		$event->Id = $this->host->gedcom->events->getNewId();
-		$event->Type = $type;
-		if(!isset($_POST[$prefix.'option'])){
-			$event->Day = (isset($_POST[$prefix.'day']))?$_POST[$prefix.'day']:'';
-			$event->Month = (isset($_POST[$prefix.'month']))?$_POST[$prefix.'month']:'';
-			$event->Year = (isset($_POST[$prefix.'year']))?$_POST[$prefix.'year']:'';
-		}
-		$event->Place = $this->_createLocation($event->Id, $type, $prefix);
-		$event->IndKey = $id;
-		if($save){ $this->host->gedcom->events->save($event); }
-		return $event;
-	}
-	
-	/**
-	*
-	*/
-	protected function _addIndivEvents(&$ind){
-		$ind->Birth = $this->_createEvent($ind->Id, 'BIRT', 'b_');
-		if($_POST['living']=='false') { 
- 			$ind->Death = $this->_createEvent($ind->Id, 'DEAT', 'd_');
- 		}
-	}
-		
-	/**
-	*
-	*/
+	// create individual object.
 	protected function _createIndiv($save=true){
 		$ind = new Individual();
-		$ind->Id = $this->host->gedcom->individuals->getNewId();
 		$ind->FacebookId = 0;
 		$ind->FirstName = (isset($_POST['first_name']))?$_POST['first_name']:''; 
 		$ind->MiddleName = (isset($_POST['middle_name']))?$_POST['middle_name']:'';
 		$ind->LastName = (isset($_POST['last_name']))?$_POST['last_name']:'';
 		$ind->Gender = (isset($_POST['gender']))?$_POST['gender']:'';
 		$ind->Nick = (isset($_POST['know_as']))?$_POST['know_as']:'';
-		if($save){ $this->host->gedcom->individuals->save($ind); }
+		if($save){ $ind->Id = $this->host->gedcom->individuals->save($ind); }
 		return $ind;
 	}
-	
-	protected function _addParent_($ind, $fam, $gender){
+	// create event object.
+	protected function _createEvent($eventType, $id, $name, $type, $prefix, $dateType, $save=true){
+		$e = new Events();
+		$e->Name = $name;
+		$e->Type = $type;
+		$e->DateType = $dateType;
+		switch($e->DateType){
+			case "AFT":
+			case "BEF":
+			case "EVO":
+				$this->_setEventDate($e->From, 'f'.$prefix);
+			break;
+			case "BET":
+				$this->_setEventDate($e->From, 'f'.$prefix);
+				$this->_setEventDate($e->To, 't'.$prefix);
+			break;
+		}
+		if($eventType=='IND'){ $e->IndKey = $id; } else { $e->FamKey = $id; }
+		$e->Place = $this->_createLocation($e, $prefix);
+		if($save){ $this->host->gedcom->events->save($e); }
+		return $e;
+	}
+	protected function _setEventDate(&$object, $prefix){
+		if(isset($_POST[$prefix.'option'])) return false;
+		$object->Day = (isset($_POST[$prefix.'day']))?$_POST[$prefix.'day']:'';
+		$object->Month = (isset($_POST[$prefix.'month']))?$_POST[$prefix.'month']:'';
+		$object->Year = (isset($_POST[$prefix.'year']))?$_POST[$prefix.'year']:'';
+	}
+	//create place and location address.
+	protected function _createLocation(&$event, $prefix, $name=false){
+		/*
+		if(empty($_POST[$prefix.'town'])&&empty($_POST[$prefix.'state'])&&empty($_POST[$prefix.'country'])){ return false; }
+		$city = (empty($_POST[$prefix.'town']))?$_POST[$prefix.'town']:null;
+		$state = (empty($_POST[$prefix.'state']))?$_POST[$prefix.'town']:null;
+		$country = (empty($_POST[$prefix.'country']))?$_POST[$prefix.'town']:null;
+		$address = array($city,$state,$country);
+		$location = new Location();
+		$location->City = $address[0];
+		$location->State = $address[1];
+		$location->Country = $address[2]
+		$event->Place->Name = ($name)?$name:implode(',',$address);
+		$event->Place->Locations[] = $location; 
+		*/
+	}
+	//add birth and death event to individual object.
+	protected function _addIndivEvents(&$ind){
+ 		$ind->Birth = $this->_createEvent('IND', $ind->Id, 'Birthday', 'BIRT', 'b_', 'EVO');
+		if($_POST['living']=='false') { 
+ 			$ind->Death = $this->_createEvent('IND', $ind->Id, 'Birthday', 'DEAT', 'b_', 'EVO');
+ 		}
+	}
+	//add individual to family (sort by sircar\spouse)
+	protected function _addParent_($ind, &$fam, $gender){
 		if($gender=="M"){ 
 			if($fam->Sircar){
 				$this->host->gedcom->individuals->delete($fam->Sircar->Id);
@@ -156,20 +94,31 @@ class JMBProfile {
 			$fam->Spouse = $ind; 
 		}
 	}
+	// photo upload and set to avatar.
+	protected function _uploadPhoto($gedId){
+		if($_FILES['photo']['size'] == 0) return false;
+		$result = $this->host->gedcom->media->save($gedId, $_FILES["photo"]["tmp_name"], $_FILES["photo"]["name"]);
+		if($result) {
+			$this->host->gedcom->media->setAvatarImage($gedId, $result);
+			return $result;
+		}
+		return false;
+        }
 	
-	/**
-	*
+	/*
+	* Protected Functions.
 	*/
+	//add parent record.
 	protected function _addParent($id){
 		$ind = $this->_createIndiv();
 		$this->_addIndivEvents($ind);
  		
 		$photo = $this->_uploadPhoto($ind->Id);
- 		$fam_id = $this->host->gedcom->individuals->getFamilyId($id, 'CHIL');
+ 		$fam_id = $this->host->gedcom->individuals->getFamilyId($id, 'FAMC');
 		if(!$fam_id){
 			$fam = $this->_createFamily();
 			$this->_addParent_($ind, $fam, $_POST['gender']);
-			$this->host->gedcom->families->save($fam);
+			$fam->Id = $this->host->gedcom->families->save($fam);
 			$this->host->gedcom->families->addChild($fam->Id, $id);
 		
 		} else {
@@ -180,9 +129,33 @@ class JMBProfile {
 		return array('i'=>$ind,'f'=>$fam,'photo'=>$photo);
 	}
 	
-	/**
-	*
+	/*
+	* Public Functions.
 	*/
+	public function addPSC($args){
+		$args = explode(';', $args);
+		$type = $args[0];
+		$ownerId = $args[1];
+		switch($type){
+			case "parent":
+				$result = $this->_addParent($ownerId);
+			break;
+			
+			case "bs":
+				//$result = $this->_addBS($ownerId);
+			break;
+			
+			case "child":
+				//$result = $this->_addChild($ownerId);
+			break;
+		}
+		return json_encode($result);	
+	}
+
+
+
+	
+	/*
 	protected function _addChild($id){
 		$user = $this->host->gedcom->individuals->get($id);
 		$fam_id = $this->host->gedcom->individuals->getFamilyId($id, 'FAMS');
@@ -200,10 +173,8 @@ class JMBProfile {
  		$this->host->gedcom->families->addChild($fam_id, $ind->Id);
  		return array('fam_id'=>$fam_id,'i'=>$ind,'photo'=>$photo);
 	}	
-	
-	/**
-	*
 	*/
+	/*
 	protected function _addBS($id){
 		$ind = $this->_createIndiv();
 		$this->_addIndivEvents($ind);
@@ -222,10 +193,8 @@ class JMBProfile {
  		$this->host->gedcom->families->addChild($fam_id, $ind->Id);
  		return array('fam_id'=>$fam_id,'i'=>$ind,'photo'=>$photo);
 	}
-	
-	/**
-	*
 	*/
+	/*
 	protected function _addSpouse(&$fam, $gender, $user, $ind){
 		if($gender=="M"){
 			$fam->Sircar = $user;
@@ -235,20 +204,16 @@ class JMBProfile {
 			$fam->Spouse = $user;
 		}
 	}
-	
-	/**
-	*
 	*/
+	/*
 	protected function _addSpouseFamily($gender, $user, $ind){
 		$fam = $this->_createFamily();
 		$this->_addSpouse($fam, $gender, $user, $ind);
 		$this->_addSpouseEvents($fam);
 		return $fam;
 	}
-	
-	/**
-	*
 	*/
+	/*
 	protected function _addSpouseEvents(&$fam){
 		$fam->Marriage = $this->_createEvent($fam->Id, 'MARR', 'm_');
 		if($_POST['deceased']=='on'){
@@ -256,10 +221,8 @@ class JMBProfile {
 		}
 		
 	}
-	
-	/**
-	*
 	*/
+	/*
 	protected function _updateEvent($event, $prefix){
 		if(!isset($_POST[$prefix.'option'])){
 			$event->Day = (isset($_POST[$prefix.'day']))?$_POST[$prefix.'day']:'';
@@ -273,33 +236,11 @@ class JMBProfile {
 		$this->host->gedcom->events->update($event);
 		return $event;
 	}
-	
-	/**
-	*
 	*/
-	public function addPSC($args){
-		$args = explode(';', $args);
-		$type = $args[0];
-		$ownerId = $args[1];
-		switch($type){
-			case "parent":
-				$result = $this->_addParent($ownerId);
-			break;
-			
-			case "bs":
-				$result = $this->_addBS($ownerId);
-			break;
-			
-			case "child":
-				$result = $this->_addChild($ownerId);
-			break;
-		}
-		return json_encode($result);	
-	}
+	/*
 	
-	/**
-	*
 	*/
+	/*
 	public function addSpouse($args){
 		$args = explode(';', $args);
 		$ownerId = $args[0];
@@ -332,13 +273,11 @@ class JMBProfile {
 			}
 		}
 		
-		$data = $this->_getUserInfo($ownerId);
+		$data = $this->host->getUserInfo($ownerId);
 		return json_encode(array('data'=>$data,'spouse'=>array('indiv'=>$ind),'photo'=>$photo));
 	}
-	
-	/**
-	*
 	*/
+	/*
 	public function delete($args){
 		$args = explode(';', $args);
 		switch($args[1]){
@@ -362,12 +301,8 @@ class JMBProfile {
 			break;
 		}
 	}
-	
-
-	
-	/**
-	*
 	*/
+	/*
 	public function updateIndiv($id){
 		$ind = $this->host->gedcom->individuals->get($id);
 		$ind->FirstName = (isset($_POST['first_name']))?$_POST['first_name']:''; 
@@ -392,10 +327,8 @@ class JMBProfile {
 		}
 		return json_encode(array('ind'=>$ind,'photo'=>$photo));
 	}
-	
-	/**
-	*
 	*/
+	/*
 	public function updateUnion($args){
 		$args = explode(';', $args);
 		$families = $this->host->gedcom->families->getPersonsFamilies($args[0]);
@@ -419,23 +352,20 @@ class JMBProfile {
 		}
 		return json_encode(array('marriage'=>$marriage,'divorce'=>$divorce));
 	}
-	
-	/**
-	*
 	*/
+	/*
 	public function updateEvent($args){
 		$eventId = $args;
 		return json_encode(array('eventId'=>$eventId));
 	}
-	
-	/**
-	*
 	*/
+	/*
 	public function getUserInfo(){
-		$data = $this->_getUserInfo($_SESSION['jmb']['gid']);
+		$data = $this->host->getUserInfo($_SESSION['jmb']['gid']);
 		$path = JURI::root(true); 
 		return json_encode(array('data'=>$data,'path'=>$path));
 	}
+	*/
 }
 
 ?>

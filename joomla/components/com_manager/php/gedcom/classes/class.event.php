@@ -31,9 +31,6 @@ class Events {
 		$this->Name = NULL;
 		$this->Type = NULL;
 		$this->DateType = NULL;
-		$this->Day = NULL;
-		$this->Month = NULL;
-		$this->Year = NULL;
 		$this->From = new EventDate();
 		$this->To = new EventDate();
 		$this->Caus = NULL;

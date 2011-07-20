@@ -280,18 +280,26 @@ JMBProfile.prototype = {
 		}
 		return sb.result();
 	},
-	_getEventPart:function(t){
+	_getEventPart:function(prefix, type){
+		if(type!='EVO'&&type!='AFT'&&type!='BEF'&&type!='BET') return false;
 		var self = this;
-		var name = (t=='b_')?'Birth':'Death';
+		var name = (prefix=='b_')?'Birth':'Death';
 		var sb = host.stringBuffer();
 		sb._('<tr>');
 			sb._('<td valign="top" style="width:100px;text-align:right;padding-top:5px;"><span>')._(name)._('day:</span></td>');
-			sb._('<td style="text-align: left;"><select name="')._(t)._('day">')._(self._selectDays())._('</select><select name="')._(t)._('month">')._(self._selectMonths())._('</select><input name="')._(t)._('year" type="text" style="width:40px;" maxlength="4" placeholder="Year"><input name="')._(t)._('option" type="checkbox"> Unknown</td>');
+			sb._('<td style="text-align: left;"><select name="f')._(prefix)._('day">')._(self._selectDays())._('</select><select name="f')._(prefix)._('month">')._(self._selectMonths())._('</select><input name="f')._(prefix)._('year" type="text" style="width:40px;" maxlength="4" placeholder="Year"><input name="f')._(prefix)._('option" type="checkbox"> Unknown</td>');
 		sb._('</tr>');
+		if(type=='BET'){
+			sb._('<tr>');
+				sb._('<td valign="top" style="width:100px;text-align:right;padding-top:5px;"><span>')._(name)._('day:</span></td>');
+				sb._('<td style="text-align: left;"><select name="t')._(prefix)._('day">')._(self._selectDays())._('</select><select name="t')._(prefix)._('month">')._(self._selectMonths())._('</select><input name="t')._(prefix)._('year" type="text" style="width:40px;" maxlength="4" placeholder="Year"><input name="t')._(prefix)._('option" type="checkbox"> Unknown</td>');
+			sb._('</tr>');
+		}
 		sb._('<tr>');
 			sb._('<td valign="top" style="width:100px;text-align:right;padding-top:5px;"><span>')._(name)._('place:</span></td>');
-			sb._('<td style="text-align: left;"><input name="')._(t)._('town" type="text" placeholder="Town/City"><input name="')._(t)._('state" type="text" placeholder="Prov/State"><input name="')._('country" type="text" placeholder="Country"></td>')
+			sb._('<td style="text-align: left;"><input name="')._(prefix)._('town" type="text" placeholder="Town/City"><input name="')._(prefix)._('state" type="text" placeholder="Prov/State"><input name="')._(prefix)._('country" type="text" placeholder="Country"></td>')
 		sb._('</tr>');
+		
 		return sb.result();
 	},
 	_formBasicFields:function(){
@@ -318,7 +326,7 @@ JMBProfile.prototype = {
 				sb._('<td style="width:100px;text-align:right;padding-top:5px;"><font color="#ff0000">*</font><span>Gender:</span></td>');
 				sb._('<td class="jmb-dialog-form-gender" style="text-align: left;">&nbsp;<span type="M">Male</span>:<input name="gender" value="M" type="radio" style="position:relative; top:3px;">&nbsp;<span type="F">Female</span>:<input name="gender" value="F" type="radio" style="position:relative; top:3px;"></td>');
 			sb._('</tr>');
-			sb._(self._getEventPart('b_'));
+			sb._(self._getEventPart('b_','EVO'));
 			sb._('<tr>');
 				sb._('<td style="width:100px;text-align:right;"><font color="#ff0000">*</font><span>Living:</span></td>');
 				sb._('<td style="text-align: left;"><select name="living"><option selected value="true">Yes</option><option value="false">No</option></select></td>');
@@ -419,7 +427,7 @@ JMBProfile.prototype = {
 				}
 			} else {
 				self.living = false;
-				self.deathObject = jQuery(self._getEventPart('d_'));
+				self.deathObject = jQuery(self._getEventPart('d_','EVO'));
 				jQuery(table[0]).append(self.deathObject);
 			}
 			if(typeof(callback)!='undefined') callback();
