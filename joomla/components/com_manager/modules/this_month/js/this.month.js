@@ -53,7 +53,7 @@ JMBThisMonth.prototype = {
 		}
 	},
 	_getTurns:function(event){
-		var year = event.Year;
+		var year = event.From.Year;
 		var n_year = (new Date()).getFullYear()
 		return (n_year-year);
 	},
@@ -121,7 +121,7 @@ JMBThisMonth.prototype = {
 				if(!b[key].death && typeof(key) != 'undefined' ){
 					var gender = (json.descedants[key].indiv.Gender=='M')?'male':'female';
 					var color = json.colors[json.descedants[key].indiv.Gender];
-					var append = sb._('<tr><td><div class="date">')._(b[key].event.Day)._('</div></td><td><div class="img-')._(gender)._('">&nbsp;</div></td><td><div id="')._(key)._('" class="person ')._(gender)._('"><font color="')._(color)._('">')._(self._getFullName(json, key))._('</font> (turns ')._(self._getTurns(b[key].event))._(')</div></td></tr>').result();
+					var append = sb._('<tr><td><div class="date">')._(b[key].event.From.Day)._('</div></td><td><div class="img-')._(gender)._('">&nbsp;</div></td><td><div id="')._(key)._('" class="person ')._(gender)._('"><font color="')._(color)._('">')._(self._getFullName(json, key))._('</font> (turns ')._(self._getTurns(b[key].event))._(')</div></td></tr>').result();
 					sb.clear();
 					jQuery(view).append(append);
 				} 
@@ -141,7 +141,7 @@ JMBThisMonth.prototype = {
 				if(typeof(key) != 'undefined' ){
 					var gender = (json.descedants[key].indiv.Gender=='M')?'male':'female';
 					var color = json.colors[json.descedants[key].indiv.Gender];
-					var append = sb._('<tr><td><div class="date">')._(d[key].event.Day)._('</div></td><td><div class="img-')._(gender)._('">&nbsp;</div></td><td><div id="')._(key)._('" class="person"><font color="')._(color)._('">')._(self._getFullName(json, key))._('</font> (turns ')._(self._getTurns(json.descedants[key].indiv.Birth))._(')</div></td></tr>').result();
+					var append = sb._('<tr><td><div class="date">')._(d[key].event.From.Day)._('</div></td><td><div class="img-')._(gender)._('">&nbsp;</div></td><td><div id="')._(key)._('" class="person"><font color="')._(color)._('">')._(self._getFullName(json, key))._('</font> (turns ')._(self._getTurns(json.descedants[key].indiv.Birth))._(')</div></td></tr>').result();
 					sb.clear();
 					jQuery(view).append(append);
 				} 
@@ -169,7 +169,7 @@ JMBThisMonth.prototype = {
 						color:json.colors[json.descedants[u[key].spouse].indiv.Gender],
 						name:self._getFullName(json, u[key].spouse)
 					}
-					var append = sb._('<tr><td><div class="date">')._(u[key].event.Day)._('</div></td><td><div class="anniversaries-start">&nbsp</div></td><td><div id="')._(sircar.id)._('" class="person"><font color="')._(sircar.color)._('">')._(sircar.name)._('</font></div><div id="')._(spouse.id)._('" class="person"><font color="')._(spouse.color)._('">')._(spouse.name)._('</font></div></td><td><div class="anniversaries-end">&nbsp;</div></td><td><div>(')._(self._getTurns(u[key].event))._(' years ago)</div></td></tr>').result();
+					var append = sb._('<tr><td><div class="date">')._(u[key].event.From.Day)._('</div></td><td><div class="anniversaries-start">&nbsp</div></td><td><div id="')._(sircar.id)._('" class="person"><font color="')._(sircar.color)._('">')._(sircar.name)._('</font></div><div id="')._(spouse.id)._('" class="person"><font color="')._(spouse.color)._('">')._(spouse.name)._('</font></div></td><td><div class="anniversaries-end">&nbsp;</div></td><td><div>(')._(self._getTurns(u[key].event))._(' years ago)</div></td></tr>').result();
 					sb.clear();
 					jQuery(view).append(append);
 				}

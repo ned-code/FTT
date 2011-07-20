@@ -111,7 +111,7 @@ DescendantTreeProfile.prototype = {
 		}
 	},
 	getDate:function(ev){
-		var year  = (ev.Year)?ev.Year:false;
+		var year  = (ev&&ev.From.Year)?ev.From.Year:false;
 		if(year){
 			return year;
 		}
@@ -127,20 +127,20 @@ DescendantTreeProfile.prototype = {
 	},
 	getBorn:function(json){
 		if(json.Birth){
-			var b = json.Birth;
-			var place = this.getPlace(b.Place.Hierarchy);
+			var b = json.Birth[0];
+			//var place = this.getPlace(b.Place.Hierarchy);
 			var st = '<b>Born</b>: '+this.getDate(b);
-			st += (place)?' in <span style="color:#'+this.colors.location+'">'+place.Name+'</span>.':'';
+			//st += (place)?' in <span style="color:#'+this.colors.location+'">'+place.Name+'</span>.':'';
 			return st;	
 		}
 		return '&nbsp;'; 
 	},
 	getDied:function(json){
 		if(json.Death){
-			var d = json.Death;
-			var place = this.getPlace(d.Place.Hierarchy);
+			var d = json.Death[0];
+			//var place = this.getPlace(d.Place.Hierarchy);
 			var st = '<b>Died</b>: '+this.getDate(d);
-			st += (place)?' in <span style="color:#'+this.colors.location+'">'+place.Name+'</span>.':'';
+			//st += (place)?' in <span style="color:#'+this.colors.location+'">'+place.Name+'</span>.':'';
 			return st;	
 		}
 		return '&nbsp;';

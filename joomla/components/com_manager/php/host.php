@@ -262,13 +262,12 @@ class Host {
 			if($family->Spouse == null) continue;
 			$famevent = $this->gedcom->events->getFamilyEvents($family->Id);
 			$childs = $this->gedcom->families->getFamilyChildrenIds($family->Id);
-			$spouses[$family->Spouse->Id] = array('id'=>$family->Spouse->Id,'indiv'=>$family->Spouse,'children'=>$childs,'event'=>$famevent);
+			$spouses[] = array('id'=>$family->Spouse->Id,'indiv'=>$family->Spouse,'children'=>$childs,'event'=>$famevent);
 		}
 		$notes = NULL;
 		$sources = NULL;
 		$photos = $this->gedcom->media->getMediaByGedId($indKey);
 		$avatar = $this->gedcom->media->getAvatarImage($indKey);
-
 		return array('indiv'=>$indiv,'parents'=>$parents,'families'=>$families,'spouses'=>$spouses,'children'=>$children,'notes'=>$notes,'sources'=>$sources,'photo'=>$photos,'avatar'=>$avatar);
 	}
 	

@@ -181,8 +181,8 @@ JMBProfileFull.prototype = {
 		sb._('<div class="jmb-dialog-profile-content-unions-person-info">');
 			sb._('<div class="jmb-dialog-profile-content-unions-person-info-name">')._(self.parent._getFullName(object))._('</div>');
 			if(object.Birth){
-				sb._('<div class="jmb-dialog-profile-content-unions-person-info-birthdate">')._(self.parent._getEventDate(object.Birth))._('</div>');
-				sb._('<div class="jmb-dialog-profile-content-unions-person-info-birthplace">')._(self.parent._getFullPlace(object.Birth.Place))._('</div>');
+				sb._('<div class="jmb-dialog-profile-content-unions-person-info-birthdate">')._(self.parent._getEventDate(object.Birth[0]))._('</div>');
+				sb._('<div class="jmb-dialog-profile-content-unions-person-info-birthplace">')._(self.parent._getFullPlace(object.Birth[0].Place))._('</div>');
 			}
 		sb._('</div>');
 		return sb.result();

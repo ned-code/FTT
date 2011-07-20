@@ -66,7 +66,7 @@ class DescendantTree {
 		 	  		$xml .= "]]></itemtext>"; 
 		 	  	  }
 		 	  	  foreach($childs as $child){
-		 	  		$this->getNextNode($xml, $child['id']);
+		 	  		$this->getNextNode($xml, $child['gid']);
 		 	  	  }
 		 	  	$xml .= "</item>";
 		 	 }
@@ -140,24 +140,11 @@ class DescendantTree {
 	/**
 	*
 	*/
-	public function getPersonInfoJSON($id){
-		$indiv = $this->host->gedcom->individuals->get($id);
-		$parents = $this->host->gedcom->individuals->getParents($id);
-		$children = $this->host->gedcom->individuals->getChilds($id);
-		$families = $this->host->gedcom->families->getPersonsFamilies($id, true);
-		$spouses = array();	
-		foreach($families as $family){
-			$famevent = $this->host->gedcom->events->getFamilyEvents($family->Id);
-			$childs = $this->host->gedcom->families->getFamilyChildrenIds($family->Id);
-			$spouses[] = array('id'=>$family->Spouse->Id,'indiv'=>$family->Spouse,'children'=>$childs,'event'=>$famevent);
-		}
-		$notes = $this->host->gedcom->notes->getLinkedNotes($id);
-		$sources = $this->host->gedcom->sources->getLinkedSources($id);
-		$photos = $this->host->gedcom->media->getMediaByGedId($id);
-		$avatar = $this->host->gedcom->media->getAvatarImage($id);
+	public function getPersonInfoJSON($indKey){
+		$i = $this->host->getUserInfo($indKey);
 		$colors = $this->getColors();
 		$path = JURI::root(true);
-		return json_encode(array('indiv'=>$indiv,'parents'=>$parents,'spouses'=>$spouses,'children'=>$children,'notes'=>$notes,'sources'=>$sources,'photo'=>$photos,'avatar'=>$avatar,'colors'=>$colors,'path'=>$path));
+		return json_encode(array_merge($i, array('colors'=>$colors,'path'=>$path)));
 	}
 }
 ?>

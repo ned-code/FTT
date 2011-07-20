@@ -9,7 +9,7 @@ function JMBProfile(){
 	//global objects
 	this.json = {};
 	this.imgPath = null;
-	this.month3 = {'01':'Jan', '02':'Feb', '03':'Mar', '04':'Apr', '05':'May', '06':'Jun', '07':'Jul', '08':'Aug', '09':'Sep', '10':'Oct', '11':'Nov', '12':'Dec'};
+	this.month3 = {'1':'Jan', '2':'Feb', '3':'Mar', '4':'Apr', '5':'May', '6':'Jun', '7':'Jul', '8':'Aug', '9':'Sep', '10':'Oct', '11':'Nov', '12':'Dec'};
 	this.months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 	
 	//dialog objects window container and content conteiner
@@ -121,7 +121,7 @@ JMBProfile.prototype = {
 		jQuery(self.dWindow).parent().css('top', '10px');
 	},
 	_getYear:function(indiv){
-		if(indiv.Birth){ return indiv.Birth.Year; }
+		if(indiv.Birth){ return indiv.Birth[0].From.Year; }
 		return '';
 	},
 	_getKnowAs:function(indiv){
@@ -146,6 +146,7 @@ JMBProfile.prototype = {
 			return f;
 		}
 	},
+	//NEED TO EDIT!!!!!!
 	_getFullPlace:function(location){
 		if(!location) return;
 		var sb = host.stringBuffer();
@@ -160,9 +161,9 @@ JMBProfile.prototype = {
 		if(!event) return;
 		var sb = host.stringBuffer();
 		var d,m,y;
-		d = event.Day;
-		m = (event.Month!='')?self.month3[event.Month]:'';
-		y = event.Year;
+		d = event.From.Day;
+		m = (event.From.Month!='')?self.month3[event.From.Month]:'';
+		y = event.From.Year;
 		if(d!=''&&m!=''&&y!=''){
 			return sb._(d)._(' ')._(m)._(' ')._(y).result();
 		}
@@ -441,6 +442,7 @@ JMBProfile.prototype = {
 	_convertDateNumeric:function(d){
 		return (d[0]=='0')?d[1]:d;
 	},
+	//NEED TO EDIT!!!!!!!
 	_setData:function(target, object){
 		var self = this;
 		jQuery(target).find('input[name="first_name"]').val(object.indiv.FirstName);
@@ -449,40 +451,41 @@ JMBProfile.prototype = {
 		jQuery(target).find('input[name="know_as"]').val(object.indiv.Nick);
 		jQuery(target).find('.jmb-dialog-form-gender input[value="'+object.indiv.Gender+'"]').attr('checked', true);
 		if(object.indiv.Birth){
-			jQuery(target).find('select[name="b_day"] option[value="'+self._convertDateNumeric(object.indiv.Birth.Day)+'"]').attr('selected', 'selected');
-			jQuery(target).find('select[name="b_month"] option[value="'+self._convertDateNumeric(object.indiv.Birth.Month)+'"]').attr('selected', 'selected');
-			jQuery(target).find('input[name="b_year"]').val(object.indiv.Birth.Year);
-			var place = object.indiv.Birth.Place
-			if(place.Hierarchy[2]) jQuery(target).find('input[name="b_town"]').val(place.Hierarchy[2].Name);
-			if(place.Hierarchy[1]) jQuery(target).find('input[name="b_state"]').val(place.Hierarchy[1].Name);
-			if(place.Hierarchy[0]) jQuery(target).find('input[name="b_country"]').val(place.Hierarchy[0].Name);
+			jQuery(target).find('select[name="b_day"] option[value="'+self._convertDateNumeric(object.indiv.Birth[0].From.Day)+'"]').attr('selected', 'selected');
+			jQuery(target).find('select[name="b_month"] option[value="'+self._convertDateNumeric(object.indiv.Birth[0].From.Month)+'"]').attr('selected', 'selected');
+			jQuery(target).find('input[name="b_year"]').val(object.indiv.Birth[0].From.Year);
+			//var place = object.indiv.Birth.Place
+			//if(place.Hierarchy[2]) jQuery(target).find('input[name="b_town"]').val(place.Hierarchy[2].Name);
+			//if(place.Hierarchy[1]) jQuery(target).find('input[name="b_state"]').val(place.Hierarchy[1].Name);
+			//if(place.Hierarchy[0]) jQuery(target).find('input[name="b_country"]').val(place.Hierarchy[0].Name);
 		}
 		if(object.Death){
 			jQuery(target).find('select[name="living"] option[value="false"]').attr('selected', 'selected');
 			jQuery(target).find('select[name="living"] option[value="false"]').change();
-			jQuery(target).find('select[name="d_day"] option[value="'+self._convertDateNumeric(object.indiv.Death.Day)+'"]').attr('selected', 'selected');
-			jQuery(target).find('select[name="d_month"] option[value="'+self._convertDateNumeric(object.indiv.Death.Month)+'"]').attr('selected', 'selected');
-			jQuery(target).find('input[name="d_year"]').val(object.indiv.Death.Year);
-			var place = object.indiv.Death.Place;
-			if(place.Hierarchy[2]) jQuery(target).find('input[name="d_town"]').val(place.Hierarchy[2].Name);
-			if(place.Hierarchy[1]) jQuery(target).find('input[name="d_state"]').val(place.Hierarchy[1].Name);
-			if(place.Hierarchy[0]) jQuery(target).find('input[name="d_country"]').val(place.Hierarchy[0].Name);
+			jQuery(target).find('select[name="d_day"] option[value="'+self._convertDateNumeric(object.indiv.Death[0].From.Day)+'"]').attr('selected', 'selected');
+			jQuery(target).find('select[name="d_month"] option[value="'+self._convertDateNumeric(object.indiv.Death[0].From.Month)+'"]').attr('selected', 'selected');
+			jQuery(target).find('input[name="d_year"]').val(object.indiv.Death[0].From.Year);
+			//var place = object.indiv.Death.Place;
+			//if(place.Hierarchy[2]) jQuery(target).find('input[name="d_town"]').val(place.Hierarchy[2].Name);
+			//if(place.Hierarchy[1]) jQuery(target).find('input[name="d_state"]').val(place.Hierarchy[1].Name);
+			//if(place.Hierarchy[0]) jQuery(target).find('input[name="d_country"]').val(place.Hierarchy[0].Name);
 		}
 	},
+	//NEED TO EDIT!!!!!!
 	_setUnionData:function(target, object){
 		var self = this;
 		jQuery(object.event).each(function(i,event){
 			if(!event.Type) return;
 			if(event.Type == 'MARR'){
-				jQuery(target).find('select[name="m_day"] option[value="'+self._convertDateNumeric(event.Day)+'"]').attr('selected', 'selected');
-				jQuery(target).find('select[name="m_month"] option[value="'+self._convertDateNumeric(event.Month)+'"]').attr('selected', 'selected');
-				jQuery(target).find('input[name="m_year"]').val(event.Year);
-				jQuery(target).find('input[name="m_town"]').val(event.Place.Hierarchy[2].Name);
-				jQuery(target).find('input[name="m_state"]').val(event.Place.Hierarchy[1].Name);
-				jQuery(target).find('input[name="m_country"]').val(event.Place.Hierarchy[0].Name);
+				jQuery(target).find('select[name="m_day"] option[value="'+self._convertDateNumeric(event.From.Day)+'"]').attr('selected', 'selected');
+				jQuery(target).find('select[name="m_month"] option[value="'+self._convertDateNumeric(event.From.Month)+'"]').attr('selected', 'selected');
+				jQuery(target).find('input[name="m_year"]').val(event.From.Year);
+				//jQuery(target).find('input[name="m_town"]').val(event.Place.Hierarchy[2].Name);
+				//jQuery(target).find('input[name="m_state"]').val(event.Place.Hierarchy[1].Name);
+				//jQuery(target).find('input[name="m_country"]').val(event.Place.Hierarchy[0].Name);
 			} else if(event.Type == 'DIV'){
 				jQuery(target).find('input[name="deceased"]').attr('checked', 'checked');
-				jQuery(target).find('input[name="s_year"]').val(event.Year);
+				jQuery(target).find('input[name="s_year"]').val(event.From.Year);
 			}
 			
 		});

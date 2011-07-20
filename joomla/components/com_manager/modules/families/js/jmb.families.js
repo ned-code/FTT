@@ -47,25 +47,28 @@ Families.prototype = {
 		sb._('</div>');
 		return jQuery(sb.result());
 	},
+	_isEmpty:function(v){
+		return (v==null||v.length==0)?true:false;
+	},
 	_getYear:function(data){
 		if(data){
-			return data.Year;
+			return data.From.Year;
 		}
 		return false;
 	},
 	_getDate:function(obj){
 		var self = this;
-		var birth = self._getYear(obj.Birth);
+		var birth = self._getYear(obj.Birth[0]);
 		birth = (birth)?birth:'';
-		var death = self._getYear(obj.Death);
+		var death = self._getYear(obj.Death[0]);
 		death = (death)?'-'+death:'';
 		return birth+death;		
 	},
 	_getLongName:function(obj){
-		return (obj.Nick=='')?obj.FirstName+' '+obj.LastName:obj.Nick+' '+obj.LastName;
+		return (this._isEmpty(obj.Nick))?obj.FirstName+' '+obj.LastName:obj.Nick+' '+obj.LastName;
 	},
 	_getName:function(obj){
-		return (obj.Nick!='')?obj.Nick:obj.FirstName;
+		return (this._isEmpty(obj.Nick))?obj.FirstName:obj.Nick;
 	},
 	_getAvatar:function(obj, type, k){
 		var sb = host.stringBuffer();
@@ -162,10 +165,10 @@ Families.prototype = {
 		var self = this;
 		var sb = host.stringBuffer();
 		var year = (obj.Year)?obj.Year:'';
-		var place = (obj.Place.Hierarchy != null)?obj.Place.Hierarchy[0].Name:'';
+		//var place = (obj.Place.Hierarchy != null)?obj.Place.Hierarchy[0].Name:'';
 		sb._('<div>');
 			sb._('<div>')._(year)._('</div>');
-			sb._('<div>')._(place)._('</div>');
+			//sb._('<div>')._(place)._('</div>');
 		sb._('</div>');
 		return jQuery(sb.result());
 	},
@@ -184,17 +187,17 @@ Families.prototype = {
 		
 		if(obj.spouses){
 			//info space
-			var infoDiv = self._createDivInfo(obj.spouses[0].FamEvents);
+			var infoDiv = self._createDivInfo(obj.spouses[0].event);
 			jQuery(div).find('.jmb-families-event').append(infoDiv);
 			
 			//spouse space
 			jQuery(obj.spouses).each(function(i,e){
-				if(!obj.spouses[i].id) return;
+				if(!e.id) return;
 				if(i == 0) { 
-					var spouseDiv = self._createDivParent(self.json.individs[obj.spouses[0].id], 'right', 1); 
+					var spouseDiv = self._createDivParent(self.json.individs[e.id], 'right', 1); 
 					jQuery(div).find('.jmb-families-spouse').append(spouseDiv);
 				} else {
-					var spouses = self._createSpouse(self.json.individs[obj.spouses[i].id]);
+					var spouses = self._createSpouse(self.json.individs[e.id]);
 					jQuery(div).find('.jmb-families-spouse-container').append(spouses);
 				}
 			});
@@ -206,7 +209,7 @@ Families.prototype = {
 		var count = (childLength >10 && childLength <20)? Math.round(childLength/2) :10;
 		jQuery(div).find('.jmb-families-childs-container').append(childsTable);
 		jQuery(obj.children).each(function(index, element){
-			var childDiv = self._createDivChild(self.json.individs[element.id], 'up', (childLength<10||(childLength>10&&childLength<20))?1:0.9);
+			var childDiv = self._createDivChild(self.json.individs[element.gid], 'up', (childLength<10||(childLength>10&&childLength<20))?1:0.9);
 			jQuery(childsTable[0].rows[(index<count)?0:1].cells[0]).append(childDiv);
 			//self.effectChild(childDiv, index+1);			
 		});

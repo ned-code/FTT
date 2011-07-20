@@ -100,7 +100,7 @@ JMBProfileTooltip.prototype = {
 						sb._('<td class="jmb-profile-mini-photo"><div>')._(self.parent._getAvatar(p.data,81,90))._('</div></td>');
 						sb._('<td class="jmb-profile-mini-info-body">');
 							sb._('<div><span>Name:</span> ')._(self.parent._getFullName(p.data.indiv))._('</div>');
-							sb._('<div><span>Born:</span> ')._(self.parent._getEventDate(p.data.indiv.Birth))._('</div>');
+							sb._('<div><span>Born:</span> ')._(self.parent._getEventDate(p.data.indiv.Birth[0]))._('</div>');
 							var relation = self.parent._getRelation(p);
 							if(relation != 0) sb._('<div><span>Relation to you:</span> ')._(relation)._('</div>');
 						sb._('</td>');
