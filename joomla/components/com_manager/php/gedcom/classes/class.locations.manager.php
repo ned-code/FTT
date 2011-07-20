@@ -46,12 +46,12 @@ class LocationsList{
         }
         public function getPlaceByEventId($id, $lite=false){
         	if($id==null){ return null; }        	
-        	$sql = $this->core->sql('SELECT place_id, place_name FROM #__mb_places WHERE events_id =?', $id);
-        	$this->db->setQuery($sql);         
+        	$sql = $this->core->sql('SELECT place_id, name FROM #__mb_places WHERE events_id =?', $id);
+        	$this->db->setQuery($sql);   
         	$rows = $this->db->loadAssocList();
         	$place = new Place();
         	$place->Id = $rows[0]['place_id'];
-        	$place->Name = $rows[0]['place_name'];
+        	$place->Name = $rows[0]['name'];
         	if(!$lite){
         		$place->Locations = $this->getLocations($place);
         	}
