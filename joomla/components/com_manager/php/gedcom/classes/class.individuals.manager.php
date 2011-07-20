@@ -35,11 +35,8 @@ class IndividualsList{
 		$pers->Nick = $rows[0]['nick'];
 		
 		if(!$lite){
-			$pers->Events = $this->core->events->getPersonEvents($pers->Id);
-			foreach($pers->Events as $event){
-				$pers->Birth = ($event->Type=='BIRT')?$event:null;
-				$pers->Death = ($event->Type=='DEAT')?$event:null;
-			}
+			$pers->Birth = $this->core->events->getPersonEventsByType($pers->Id,'BIRT');
+			$pers->Death = $this->core->events->getPersonEventsByType($pers->Id,'DEAT');
 		}
 		return $pers;
         }
@@ -102,7 +99,7 @@ class IndividualsList{
         	$sql = $this->core->sql($sqlString, $id);
         	$this->db->setQuery($sql);         
         	$rows = $this->db->loadAssocList();
-        	return $rows[0];
+        	return ($rows==null)?null:$rows[0];
         }
         public function getChilds($id){
         	if($id==null){return null;}
@@ -113,7 +110,7 @@ class IndividualsList{
         		LEFT JOIN #__mb_names AS names ON names.gid = childrens.gid
         		WHERE families.husb =? OR families.wife =?";
         	$sql = $this->core->sql($sqlString, $id, $id);
-        	$this->db->setQuery($sql);         
+        	$this->db->setQuery($sql); 
         	$rows = $this->db->loadAssocList();
         	return $rows;
         }

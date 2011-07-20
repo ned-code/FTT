@@ -53,7 +53,7 @@ class JMBController extends JController
         	header('Content-Type: text/html');
         	$id = JRequest::getVar('id');
         	$task = JRequest::getVar('f');
-        	$manager = new moduleManager($res);
+        	$manager = new moduleManager();
         	if($task == 'module'){
         		$module = $manager->getModule($id);
         		echo $module->render(true);
@@ -69,7 +69,7 @@ class JMBController extends JController
         	header('Content-type: text/javascript');
         	$id = JRequest::getVar('id');
         	$task = JRequest::getVar('f');
-        	$manager = new moduleManager($res);
+        	$manager = new moduleManager();
         	if($task=='append'){
         		$module = $manager->getModule($id);
         		echo $manager->appendModule($module);
@@ -88,7 +88,7 @@ class JMBController extends JController
         	ob_clean();
         	header('Content-Type: text/xml');
         	$task = JRequest::getVar('f');
-        	$manager = new moduleManager($res);
+        	$manager = new moduleManager();
         	if(isset($task)){
         		if($task=='modules'){
         			echo $manager->getUserModules();
@@ -118,7 +118,7 @@ class JMBController extends JController
         	ob_clean();
         	header('Content-Type: text/xml');
         	$task = JRequest::getVar('f');     	
-        	$manager = new moduleManager($res);
+        	$manager = new moduleManager();
         	if($task =='tree')
         		echo $manager->getModulesXmlTree();
         	else if($task =='module'){

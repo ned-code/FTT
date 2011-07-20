@@ -93,14 +93,14 @@ class FamiliesList{
 		$this->db->setQuery($sql);    
         	$this->db->query();
         }
-        public function getPersonsFamilies($indKey){
+        public function getPersonsFamilies($indKey, $lite){
         	if($indKey==null){ return null; }
         	$sql = $this->core->sql('SELECT id, husb, wife, type FROM #__mb_families WHERE husb=? OR wife=?', $indKey, $indKey);
         	$this->db->setQuery($sql);         
         	$rows = $this->db->loadAssocList();
         	$families = array();
         	foreach($rows as $row){        		
-        		$families[] = $this->setData($row, false);
+        		$families[] = $this->setData($row, $lite);
         	}
         	return $families;
         	

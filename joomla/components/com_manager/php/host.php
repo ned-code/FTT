@@ -247,6 +247,66 @@ class Host {
                
         }
 
+        /**
+	* get all user info
+	* @var $id gedcom individual id
+	* @return array all info about individ
+	*/
+	public function getUserInfo($indKey){
+		$indiv = $this->gedcom->individuals->get($indKey);
+		$parents = $this->gedcom->individuals->getParents($indKey);
+		$children = $this->gedcom->individuals->getChilds($indKey);
+		$families = $this->gedcom->families->getPersonsFamilies($indKey, true);
+		$spouses = array();	
+		foreach($families as $family){
+			if($family->Spouse == null) continue;
+			$famevent = $this->gedcom->events->getFamilyEvents($family->Id);
+			$childs = $this->gedcom->families->getFamilyChildrenIds($family->Id);
+			$spouses[$family->Spouse->Id] = array('id'=>$family->Spouse->Id,'indiv'=>$family->Spouse,'children'=>$childs,'event'=>$famevent);
+		}
+		$notes = NULL;
+		$sources = NULL;
+		$photos = $this->gedcom->media->getMediaByGedId($indKey);
+		$avatar = $this->gedcom->media->getAvatarImage($indKey);
+
+		return array('indiv'=>$indiv,'parents'=>$parents,'families'=>$families,'spouses'=>$spouses,'children'=>$children,'notes'=>$notes,'sources'=>$sources,'photo'=>$photos,'avatar'=>$avatar);
+	}
+	
+	/**
+	* @return array all invdividuals links with first parent
+	* @var $id gedcom user id
+	* @var &$individs array link of array
+	*/
+	public function getIndividsArray($indKey, &$individs){
+		if($indKey==NULL){ return false; }
+		$individ = $this->getUserInfo($indKey);
+		$individs[$indKey] = $individ;
+		
+		//Fill the array of families
+		foreach($individ['families'] as $family){
+			if(!array_key_exists($family->Spouse->Id, $individs)){
+				$this->getIndividsArray($family->Spouse->Id, $individs);
+			}
+		}
+
+		//Fill the array of children
+		foreach($individ['children'] as $child){
+			if(!array_key_exists($child['gid'], $individs)){
+				$this->getIndividsArray($child['gid'], $individs);
+			}
+		}		
+		
+		//Fill the array of parents
+		if($individ['parents'] != null){
+			if($parents['fatherID'] != null && !array_key_exists($individ['parents']['fatherID'], $individs)){
+				$this->getIndividsArray($individ['parents']['fatherID'], $individs);
+			}
+			if($parents['motherID'] != null && !array_key_exists($individ['parents']['motherID'], $individs)){
+				$this->getIndividsArray($individ['parents']['motherID'], $individs);
+			}
+		}
+	}
+        
 
 }
 
