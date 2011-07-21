@@ -116,12 +116,13 @@ class IndividualsList{
         }
         public function getFamilyId($id, $type='FAMC'){
         	if($id==null){ return null; }
-        	if($type=='FAMS'){ $sql = $this->core->sql('SELECT id as familyId FROM #__mb_families WHERE husb =? OR wife =?', $id, $id); } 
+        	if($type=='FAMS'){ $sql = $this->core->sql('SELECT id as fid FROM #__mb_families WHERE husb =? OR wife =?', $id, $id); } 
         	elseif($type=='FAMC'){ $sql = $this->core->sql('SELECT fid FROM #__mb_childrens WHERE gid=?', $id); }
         	else{ return null; } 
         	$this->db->setQuery($sql);         
         	$rows = $this->db->loadAssocList();
-        	return ($type=='FAMC'&&$rows!=null)?$rows[0]['fid']:$rows;
+        	if($rows==null) { return null; }
+        	return $rows[0]['fid'];
         }
         public function getIdbyFId($fId){
         	if($fId==null){ return null; }

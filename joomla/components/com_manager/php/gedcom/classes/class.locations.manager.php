@@ -49,6 +49,7 @@ class LocationsList{
         	$sql = $this->core->sql('SELECT place_id, name FROM #__mb_places WHERE events_id =?', $id);
         	$this->db->setQuery($sql);   
         	$rows = $this->db->loadAssocList();
+        	if($rows=null) { return null; }
         	$place = new Place();
         	$place->Id = $rows[0]['place_id'];
         	$place->Name = $rows[0]['name'];

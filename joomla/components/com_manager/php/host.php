@@ -268,6 +268,7 @@ class Host {
 		$sources = NULL;
 		$photos = $this->gedcom->media->getMediaByGedId($indKey);
 		$avatar = $this->gedcom->media->getAvatarImage($indKey);
+
 		return array('indiv'=>$indiv,'parents'=>$parents,'families'=>$families,'spouses'=>$spouses,'children'=>$children,'notes'=>$notes,'sources'=>$sources,'photo'=>$photos,'avatar'=>$avatar);
 	}
 	
@@ -283,6 +284,7 @@ class Host {
 		
 		//Fill the array of families
 		foreach($individ['families'] as $family){
+			if($family->Spouse == null) continue;
 			if(!array_key_exists($family->Spouse->Id, $individs)){
 				$this->getIndividsArray($family->Spouse->Id, $individs);
 			}
@@ -297,10 +299,10 @@ class Host {
 		
 		//Fill the array of parents
 		if($individ['parents'] != null){
-			if($parents['fatherID'] != null && !array_key_exists($individ['parents']['fatherID'], $individs)){
+			if($individ['parents']['fatherID'] != null && !array_key_exists($individ['parents']['fatherID'], $individs)){
 				$this->getIndividsArray($individ['parents']['fatherID'], $individs);
 			}
-			if($parents['motherID'] != null && !array_key_exists($individ['parents']['motherID'], $individs)){
+			if($individ['parents']['motherID'] != null && !array_key_exists($individ['parents']['motherID'], $individs)){
 				$this->getIndividsArray($individ['parents']['motherID'], $individs);
 			}
 		}

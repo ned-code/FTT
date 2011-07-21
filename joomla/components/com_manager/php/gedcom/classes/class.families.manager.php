@@ -13,7 +13,7 @@ class FamiliesList{
         	$this->db->setQuery($sql);         
         	$rows = $this->db->loadAssocList();
         	if($rows == null) { return false; }
-                return $this->setData($rows[0], $lite);
+                return $this->setData($id ,$rows[0], $lite);
         }
         public function save($family){
         	if(($family->Sircar != null && $family->Sircar->Id)||($family->Spouse != null && $family->Spouse->Id)){
@@ -29,12 +29,8 @@ class FamiliesList{
 			    $wife = NULL;
 			}
                 }
-		$sqlString = "INSERT INTO #__mb_families (`id`, `husb`, `wife`,`type`) VALUES (NULL,";
-		$sqlString .= ($husb==null)?"NULL,":"?,";
-		$sqlString .= ($wife==null)?"NULL,":"?,";
-		$sqlString .= "?)";
+		$sqlString = "INSERT INTO #__mb_families (`id`, `husb`, `wife`,`type`) VALUES (NULL, ?, ?, ?)";
 		$sql = $this->core->sql($sqlString, $husb, $wife, $family->Type);
-		echo $sql;
 		$this->db->setQuery($sql);    
         	$this->db->query();
         	return $this->db->insertid();
@@ -67,9 +63,13 @@ class FamiliesList{
         	$this->db->query();
         	return true;
         }
-        public function setData($row, $lite){
-        	$sircar = $this->core->individuals->get($row['husb'], $lite);
-        	$spouse = $this->core->individuals->get($row['wife'], $lite);
+        public function setData($id, $row, $lite){
+        	$sircar = $this->core->individuals->get($id, $lite);
+        	if($id == $row['husb']){
+        		$spouse = $this->core->individuals->get($row['wife'], $lite);
+        	} else {
+        		$spouse = $this->core->individuals->get($row['husb'], $lite);
+        	}
         	$events = (!$lite)?$this->core->events->getFamilyEvents($row['id']):null;
         	$marriage = null;
                 $divorce = null;
@@ -104,7 +104,7 @@ class FamiliesList{
         	$rows = $this->db->loadAssocList();
         	$families = array();
         	foreach($rows as $row){        		
-        		$families[] = $this->setData($row, $lite);
+        		$families[] = $this->setData($indKey, $row, $lite);
         	}
         	return $families;
         	

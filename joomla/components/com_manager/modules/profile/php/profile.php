@@ -58,26 +58,25 @@ class JMBProfile {
 		$object->Year = (isset($_POST[$prefix.'year']))?$_POST[$prefix.'year']:'';
 	}
 	//create place and location address.
-	protected function _createLocation(&$event, $prefix, $name=false){
-		/*
-		if(empty($_POST[$prefix.'town'])&&empty($_POST[$prefix.'state'])&&empty($_POST[$prefix.'country'])){ return false; }
-		$city = (empty($_POST[$prefix.'town']))?$_POST[$prefix.'town']:null;
-		$state = (empty($_POST[$prefix.'state']))?$_POST[$prefix.'town']:null;
-		$country = (empty($_POST[$prefix.'country']))?$_POST[$prefix.'town']:null;
+	protected function _createLocation($event, $prefix, $name=false){
+		if(empty($_POST[$prefix.'town'])&&empty($_POST[$prefix.'state'])&&empty($_POST[$prefix.'country'])){ return null; }
+		$city = (!empty($_POST[$prefix.'town']))?$_POST[$prefix.'town']:null;
+		$state = (!empty($_POST[$prefix.'state']))?$_POST[$prefix.'state']:null;
+		$country = (!empty($_POST[$prefix.'country']))?$_POST[$prefix.'country']:null;
 		$address = array($city,$state,$country);
 		$location = new Location();
 		$location->City = $address[0];
 		$location->State = $address[1];
-		$location->Country = $address[2]
-		$event->Place->Name = ($name)?$name:implode(',',$address);
+		$location->Country = $address[2];
+		$event->Place->Name = ($name)?$name:$this->_getPlaceName($address);
 		$event->Place->Locations[] = $location; 
-		*/
+		return $event->Place;
 	}
 	//add birth and death event to individual object.
 	protected function _addIndivEvents(&$ind){
- 		$ind->Birth = $this->_createEvent('IND', $ind->Id, 'Birthday', 'BIRT', 'b_', 'EVO');
+ 		$ind->Birth[0] = $this->_createEvent('IND', $ind->Id, 'Birthday', 'BIRT', 'b_', 'EVO');
 		if($_POST['living']=='false') { 
- 			$ind->Death = $this->_createEvent('IND', $ind->Id, 'Birthday', 'DEAT', 'b_', 'EVO');
+ 			$ind->Death[0] = $this->_createEvent('IND', $ind->Id, 'Birthday', 'DEAT', 'b_', 'EVO');
  		}
 	}
 	//add individual to family (sort by sircar\spouse)
@@ -104,6 +103,14 @@ class JMBProfile {
 		}
 		return false;
         }
+        // get place name 
+        protected function _getPlaceName($places){    	
+        	$placeName = '';
+        	foreach($places as $place){
+        		$placeName .= ($place!=null)?$place.',':'';
+        	}
+        	return substr($placeName, 0, -1);
+        }
 	
 	/*
 	* Protected Functions.
@@ -128,6 +135,44 @@ class JMBProfile {
 		}
 		return array('i'=>$ind,'f'=>$fam,'photo'=>$photo);
 	}
+	//add brother or sister record.
+	protected function _addBS($id){
+		$ind = $this->_createIndiv();
+		$this->_addIndivEvents($ind);
+		
+		$photo = $this->_uploadPhoto($ind->Id);
+		$user = $this->host->gedcom->individuals->get($id);
+		$parents = $this->host->gedcom->individuals->getParents($id);
+		if(!$parents){
+			$fam = $this->_createFamily();
+			$this->host->gedcom->families->save($fam);
+			$fam_id = $fam->Id;
+			$this->host->gedcom->families->addChild($fam_id, $ind->Id);
+		} else {
+			$fam_id = $parents['familyId'];
+		}
+ 		$this->host->gedcom->families->addChild($fam_id, $ind->Id);
+ 		return array('fam_id'=>$fam_id,'i'=>$ind,'photo'=>$photo);
+	}
+	
+	//add children record.
+	protected function _addChild($id){
+		$user = $this->host->gedcom->individuals->get($id);
+		$fam_id = $this->host->gedcom->individuals->getFamilyId($id, 'FAMS');
+		if(!$fam_id){
+			$fam = $this->_createFamily();
+			$this->_addParent_($user, $fam, $user->Gender);
+			$this->host->gedcom->families->save($fam);
+			$fam_id = $fam->Id;
+		} 
+		
+		$ind = $this->_createIndiv();
+		$this->_addIndivEvents($ind);
+		
+ 		$photo = $this->_uploadPhoto($ind->Id);
+ 		$this->host->gedcom->families->addChild($fam_id, $ind->Id);
+ 		return array('fam_id'=>$fam_id,'i'=>$ind,'photo'=>$photo);
+	}	
 	
 	/*
 	* Public Functions.
@@ -142,11 +187,11 @@ class JMBProfile {
 			break;
 			
 			case "bs":
-				//$result = $this->_addBS($ownerId);
+				$result = $this->_addBS($ownerId);
 			break;
 			
 			case "child":
-				//$result = $this->_addChild($ownerId);
+				$result = $this->_addChild($ownerId);
 			break;
 		}
 		return json_encode($result);	

@@ -185,7 +185,7 @@ Families.prototype = {
 		var sircarDiv = self._createDivParent(obj, 'left', 1);
 		jQuery(div).find('.jmb-families-sircar').append(sircarDiv);
 		
-		if(obj.spouses){
+		if(obj.spouses&&jQuery(obj.spouses).length!=0){
 			//info space
 			var infoDiv = self._createDivInfo(obj.spouses[0].event);
 			jQuery(div).find('.jmb-families-event').append(infoDiv);
