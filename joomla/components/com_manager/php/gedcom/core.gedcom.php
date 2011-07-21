@@ -6,7 +6,7 @@ class Gedcom{
         public $media;
         public $core;
         public function __construct(&$core){
-        	$gedcomPath = JPATH_BASE.DS.'components'.DS.'com_manager'.DS.'php'.DS.'gedcom'.DS.'classes';
+        	$gedcomPath = __DIR__.DS.'classes';
         	require_once $gedcomPath.DS.'class.individuals.manager.php';
         	require_once $gedcomPath.DS.'class.events.manager.php';
         	require_once $gedcomPath.DS.'class.families.manager.php';

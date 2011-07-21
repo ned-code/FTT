@@ -22,11 +22,8 @@ class EventsList{
         }
         public function save($event, $type='IND'){
         	if($event==null||($event->IndKey!=null&&$event->FamKey!=null)){ return false; }
-        	$sqlString = "INSERT INTO #__mb_events (`id`, `type`, `name`, `caus`, `res_agency`,";
-        	$sqlString .= ($type=="IND")?"`individuals_id`)":"`families_id`)";
-        	$sqlString .= "VALUES (NULL, ?, ?, ?, ?, ?)";
-        	$key = ($type=="IND")?$event->IndKey:$event->FamKey;
-        	$sql = $this->core->sql($sqlString, $event->Type, $event->Name, $event->Caus, $event->ResAgency, $key);
+        	$sqlString = "INSERT INTO #__mb_events (`id`, `type`, `name`, `caus`, `res_agency`,`individuals_id`,`families_id`) VALUES (NULL,?,?,?,?,?,?)";
+        	$sql = $this->core->sql($sqlString, $event->Type, $event->Name, $event->Caus, $event->ResAgency, $event->IndKey, $event->FamKey);
         	$this->db->setQuery($sql);    
         	$this->db->query();
         	$lastId = $this->db->insertid();
@@ -40,18 +37,19 @@ class EventsList{
         }
         public function update($event, $type='IND'){
         	if($event==null||($event->IndKey!=null&&$event->FamKey!=null)){ return false; }
-        	$sqlString = "UPDATE #__mb_events SET `type`=?,`name`=?,`caus`=?,`res_agency`=?,";
-        	$sqlString .= ($type=="IND")?"`individuals_id`=?,":"`families_id`=?,";
-        	$sqlString .= "`change`=NOW()  WHERE id=?";
-        	$key = ($type=="IND")?$event->IndKey:$event->FamKey;
-        	$sql = $this->core->sql($sqlString, $event->Type, $event->Name, $event->Caus, $event->ResAgency, $key, $event->Id);
+        	$sqlString = "UPDATE #__mb_events SET `type`=?,`name`=?,`caus`=?,`res_agency`=?,`individuals_id`=?,`families_id`=?,`change`=NOW()  WHERE id=?";
+        	$sql = $this->core->sql($sqlString, $event->Type, $event->Name, $event->Caus, $event->ResAgency, $event->IndKey, $event->FamKey, $event->Id);
         	$this->db->setQuery($sql);    
         	$this->db->query();
         	$sqlString = "UPDATE #__mb_dates SET `type`=?,`f_day`=?,`f_month`=?,`f_year`=?,`t_day`=?,`t_month`=?,`t_year`=?,`change`=NOW() WHERE events_id=?";
         	$sql = $this->core->sql($sqlString, $event->DateType, $event->From->Day, $event->From->Month, $event->From->Year, $event->To->Day, $event->To->Month, $event->To->Year, $event->Id);
         	$this->db->setQuery($sql);    
         	$this->db->query();
-        	$this->core->locations->update($event->Id, $event->Place);
+        	if(empty($event->Place->Id)){
+        		$this->core->locations->save($event->Id, $event->Place);
+        	} else {
+        		$this->core->locations->update($event->Id, $event->Place);
+        	}
         	return true;
         }
         public function delete($id){

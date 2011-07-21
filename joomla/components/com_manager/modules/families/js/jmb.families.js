@@ -209,6 +209,7 @@ Families.prototype = {
 		var count = (childLength >10 && childLength <20)? Math.round(childLength/2) :10;
 		jQuery(div).find('.jmb-families-childs-container').append(childsTable);
 		jQuery(obj.children).each(function(index, element){
+			if(element.gid==null) return;
 			var childDiv = self._createDivChild(self.json.individs[element.gid], 'up', (childLength<10||(childLength>10&&childLength<20))?1:0.9);
 			jQuery(childsTable[0].rows[(index<count)?0:1].cells[0]).append(childDiv);
 			//self.effectChild(childDiv, index+1);			

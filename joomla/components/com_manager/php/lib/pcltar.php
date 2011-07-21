@@ -58,8 +58,9 @@ if (!defined("PCL_TAR"))
   $g_pcltar_version = "1.3.1";
 
   // ----- Extract extension type (.php3/.php/...)
-  $g_pcltar_extension = substr(strrchr(basename($PATH_TRANSLATED), '.'), 1);
-
+  //$g_pcltar_extension = substr(strrchr(basename($PATH_TRANSLATED), '.'), 1);
+  $g_pcltar_extension = null;
+  
   // ----- Include other libraries
   // This library should be called by each script before the include of PhpZip
   // Library in order to limit the potential 'lib' directory path problem.

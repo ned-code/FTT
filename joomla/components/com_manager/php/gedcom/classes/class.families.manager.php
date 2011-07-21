@@ -97,7 +97,7 @@ class FamiliesList{
 		$this->db->setQuery($sql);    
         	$this->db->query();
         }
-        public function getPersonsFamilies($indKey, $lite){
+        public function getPersonsFamilies($indKey, $lite=false){
         	if($indKey==null){ return null; }
         	$sql = $this->core->sql('SELECT id, husb, wife, type FROM #__mb_families WHERE husb=? OR wife=?', $indKey, $indKey);
         	$this->db->setQuery($sql);         

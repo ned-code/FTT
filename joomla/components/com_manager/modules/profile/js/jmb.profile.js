@@ -121,7 +121,7 @@ JMBProfile.prototype = {
 		jQuery(self.dWindow).parent().css('top', '10px');
 	},
 	_getYear:function(indiv){
-		if(indiv.Birth){ return indiv.Birth[0].From.Year; }
+		if(indiv.Birth&&indiv.Birth[0]){ return indiv.Birth[0].From.Year; }
 		return '';
 	},
 	_getKnowAs:function(indiv){
@@ -345,7 +345,7 @@ JMBProfile.prototype = {
 			sb._('</tr>');
 			sb._('<tr>');
 				sb._('<td><span>Date:</span></td>');
-				sb._('<td style="text-align: left;"><select name="m_day">')._(self._selectDays())._('</select><select name="m_month">')._(self._selectMonths())._('</select><input placeholder="Year" name="m_year" type="text" maxlength="4" style="width:50px;"><input name="m_option" type="checkbox"> Unknown</td>')
+				sb._('<td style="text-align: left;"><select name="fm_day">')._(self._selectDays())._('</select><select name="fm_month">')._(self._selectMonths())._('</select><input placeholder="Year" name="fm_year" type="text" maxlength="4" style="width:50px;"><input name="m_option" type="checkbox"> Unknown</td>')
 			sb._('</tr>');
 			sb._('<tr>');
 				sb._('<td><span>Place:</span></td>');
@@ -353,7 +353,7 @@ JMBProfile.prototype = {
 			sb._('</tr>');
 			sb._('<tr>');
 				sb._('<td></td>');
-				sb._('<td style="text-align: left;"><input name="deceased" type="checkbox" style="position:relative; top:3px;">&nbsp;Divorced/Separated&nbsp;<input placeholder="Year" name="s_year" type="text" style="width:40px;" maxlength="4"></td></td>');
+				sb._('<td style="text-align: left;"><input name="deceased" type="checkbox" style="position:relative; top:3px;">&nbsp;Divorced/Separated&nbsp;<input placeholder="Year" name="fs_year" type="text" style="width:40px;" maxlength="4"></td></td>');
 			sb._('</tr>');
 		sb._('</table>');
 		return sb.result();
@@ -447,10 +447,6 @@ JMBProfile.prototype = {
 			if(typeof(callback)!='undefined') callback();
 		});
 	},
-	_convertDateNumeric:function(d){
-		return (d[0]=='0')?d[1]:d;
-	},
-	//NEED TO EDIT!!!!!!!
 	_setData:function(target, object){
 		var self = this;
 		jQuery(target).find('input[name="first_name"]').val(object.indiv.FirstName);
@@ -458,42 +454,47 @@ JMBProfile.prototype = {
 		jQuery(target).find('input[name="last_name"]').val(object.indiv.LastName);
 		jQuery(target).find('input[name="know_as"]').val(object.indiv.Nick);
 		jQuery(target).find('.jmb-dialog-form-gender input[value="'+object.indiv.Gender+'"]').attr('checked', true);
-		if(object.indiv.Birth){
-			jQuery(target).find('select[name="b_day"] option[value="'+self._convertDateNumeric(object.indiv.Birth[0].From.Day)+'"]').attr('selected', 'selected');
-			jQuery(target).find('select[name="b_month"] option[value="'+self._convertDateNumeric(object.indiv.Birth[0].From.Month)+'"]').attr('selected', 'selected');
-			jQuery(target).find('input[name="b_year"]').val(object.indiv.Birth[0].From.Year);
-			//var place = object.indiv.Birth.Place
-			//if(place.Hierarchy[2]) jQuery(target).find('input[name="b_town"]').val(place.Hierarchy[2].Name);
-			//if(place.Hierarchy[1]) jQuery(target).find('input[name="b_state"]').val(place.Hierarchy[1].Name);
-			//if(place.Hierarchy[0]) jQuery(target).find('input[name="b_country"]').val(place.Hierarchy[0].Name);
+		if(jQuery(object.Birth).length!=0){
+			jQuery(target).find('select[name="fb_day"] option[value="'+object.indiv.Birth[0].From.Day+'"]').attr('selected', 'selected');
+			jQuery(target).find('select[name="fb_month"] option[value="'+object.indiv.Birth[0].From.Month+'"]').attr('selected', 'selected');
+			jQuery(target).find('input[name="fb_year"]').val(object.indiv.Birth[0].From.Year);
+			var place = object.indiv.Birth.Place
+			if(place&&place.Locations[0]){
+				jQuery(target).find('input[name="b_town"]').val(place.Locations[0].City);
+				jQuery(target).find('input[name="b_state"]').val(place.Locations[0].State);
+				jQuery(target).find('input[name="b_country"]').val(place.Locations[0].Country);
+			}
 		}
-		if(object.Death){
+		if(jQuery(object.Death).length!=0){
 			jQuery(target).find('select[name="living"] option[value="false"]').attr('selected', 'selected');
 			jQuery(target).find('select[name="living"] option[value="false"]').change();
-			jQuery(target).find('select[name="d_day"] option[value="'+self._convertDateNumeric(object.indiv.Death[0].From.Day)+'"]').attr('selected', 'selected');
-			jQuery(target).find('select[name="d_month"] option[value="'+self._convertDateNumeric(object.indiv.Death[0].From.Month)+'"]').attr('selected', 'selected');
-			jQuery(target).find('input[name="d_year"]').val(object.indiv.Death[0].From.Year);
-			//var place = object.indiv.Death.Place;
-			//if(place.Hierarchy[2]) jQuery(target).find('input[name="d_town"]').val(place.Hierarchy[2].Name);
-			//if(place.Hierarchy[1]) jQuery(target).find('input[name="d_state"]').val(place.Hierarchy[1].Name);
-			//if(place.Hierarchy[0]) jQuery(target).find('input[name="d_country"]').val(place.Hierarchy[0].Name);
+			jQuery(target).find('select[name="fd_day"] option[value="'+object.indiv.Death[0].From.Day+'"]').attr('selected', 'selected');
+			jQuery(target).find('select[name="fd_month"] option[value="'+object.indiv.Death[0].From.Month+'"]').attr('selected', 'selected');
+			jQuery(target).find('input[name="fd_year"]').val(object.indiv.Death[0].From.Year);
+			var place = object.indiv.Birth.Place
+			if(place&&place.Locations[0]){
+				jQuery(target).find('input[name="d_town"]').val(place.Locations[0].City);
+				jQuery(target).find('input[name="d_state"]').val(place.Locations[0].State);
+				jQuery(target).find('input[name="d_country"]').val(place.Locations[0].Country);
+			}
 		}
 	},
-	//NEED TO EDIT!!!!!!
 	_setUnionData:function(target, object){
 		var self = this;
 		jQuery(object.event).each(function(i,event){
 			if(!event.Type) return;
 			if(event.Type == 'MARR'){
-				jQuery(target).find('select[name="m_day"] option[value="'+self._convertDateNumeric(event.From.Day)+'"]').attr('selected', 'selected');
-				jQuery(target).find('select[name="m_month"] option[value="'+self._convertDateNumeric(event.From.Month)+'"]').attr('selected', 'selected');
-				jQuery(target).find('input[name="m_year"]').val(event.From.Year);
-				//jQuery(target).find('input[name="m_town"]').val(event.Place.Hierarchy[2].Name);
-				//jQuery(target).find('input[name="m_state"]').val(event.Place.Hierarchy[1].Name);
-				//jQuery(target).find('input[name="m_country"]').val(event.Place.Hierarchy[0].Name);
+				jQuery(target).find('select[name="fm_day"] option[value="'+event.From.Day+'"]').attr('selected', 'selected');
+				jQuery(target).find('select[name="fm_month"] option[value="'+event.From.Month+'"]').attr('selected', 'selected');
+				jQuery(target).find('input[name="fm_year"]').val(event.From.Year);
+				if(event.Place&&jQuery(event.Place.Locations).length!=0){
+					jQuery(target).find('input[name="m_town"]').val(event.Place.Locations[0].City);
+					jQuery(target).find('input[name="m_state"]').val(event.Place.Locations[0].State);
+					jQuery(target).find('input[name="m_country"]').val(event.Place.Locations[0].Country);
+				}
 			} else if(event.Type == 'DIV'){
 				jQuery(target).find('input[name="deceased"]').attr('checked', 'checked');
-				jQuery(target).find('input[name="s_year"]').val(event.From.Year);
+				jQuery(target).find('input[name="fs_year"]').val(event.From.Year);
 			}
 			
 		});
