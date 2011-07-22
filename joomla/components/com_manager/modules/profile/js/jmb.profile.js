@@ -1,7 +1,6 @@
 function JMBProfile(){
 	var self = this;
 	//form flags
-	this.living = true;
 	this.deathObject = null;
 	this.saved = false;
 	this.savedObject = null;
@@ -280,81 +279,226 @@ JMBProfile.prototype = {
 		}
 		return sb.result();
 	},
-	_getEventPart:function(prefix, type){
-		if(type!='EVO'&&type!='AFT'&&type!='BEF'&&type!='BET') return false;
-		var self = this;
-		var name = (prefix=='b_')?'Birth':'Death';
-		var sb = host.stringBuffer();
-		sb._('<tr>');
-			sb._('<td valign="top" style="width:100px;text-align:right;padding-top:5px;"><span>')._(name)._('day:</span></td>');
-			sb._('<td style="text-align: left;"><select name="f')._(prefix)._('day">')._(self._selectDays())._('</select><select name="f')._(prefix)._('month">')._(self._selectMonths())._('</select><input name="f')._(prefix)._('year" type="text" style="width:40px;" maxlength="4" placeholder="Year"><input name="f')._(prefix)._('option" type="checkbox"> Unknown</td>');
-		sb._('</tr>');
-		if(type=='BET'){
-			sb._('<tr>');
-				sb._('<td valign="top" style="width:100px;text-align:right;padding-top:5px;"><span>')._(name)._('day:</span></td>');
-				sb._('<td style="text-align: left;"><select name="t')._(prefix)._('day">')._(self._selectDays())._('</select><select name="t')._(prefix)._('month">')._(self._selectMonths())._('</select><input name="t')._(prefix)._('year" type="text" style="width:40px;" maxlength="4" placeholder="Year"><input name="t')._(prefix)._('option" type="checkbox"> Unknown</td>');
-			sb._('</tr>');
+	_form:function(sb){
+		var parent = this;
+		return {
+			firstName:{
+				title:'<font color="#ff0000">*</font><span>First name:</span>',
+				text:'<input name="first_name" type="text">'
+			},
+			middleName:{
+				title:'<span>Middle names:</span>',
+				text:'<input name="middle_name" type="text">'
+			},
+			lastName:{
+				title:'<span>Last name:</span>',
+				text:'<input name="last_name" type="text">'
+			},
+			knowAs:{
+				title:'<span>Know as:</span>',
+				text:'<input name="know_as" type="text">'
+			},
+			gender:{
+				title:'<font color="#ff0000">*</font><span>Gender:</span>',
+				text:'<select name="gender"><option selected value="M">Male</option><option value="F">Female</option></select>'
+			},
+			living:{
+				title:'<font color="#ff0000">*</font><span>Living:</span>',
+				text:'<select name="living"><option selected value="true">Yes</option><option value="false">No</option></select>'
+			},
+			adopted:{
+				title:'<span>Adopted:</span>',
+				text:'<select name="adopted"><option value="true">Yes</option><option selected  value="false">No</option></select>'
+			},
+			union:{
+				title:'<span>Type:</span>',
+				text:'<select name="m_type"><option value="MARR">Marriage</option></select>'
+			},
+			divorce:{
+				title:'',
+				text:'<input name="deceased" type="checkbox" style="position:relative; top:3px;">&nbsp;Divorced/Separated&nbsp;<input placeholder="Year" name="fs_year" type="text" style="width:40px;" maxlength="4">'
+			},
+			date:{
+				title:function(args){
+					sb._('<span>')._(args.name)._('</span>');
+				},
+				text:function(args){
+					sb._('<select name="')._(args.type)._(args.prefix)._('day">')._(parent._selectDays())._('</select>');
+					sb._('<select name="')._(args.type)._(args.prefix)._('month">')._(parent._selectMonths())._('</select>');
+					sb._('<input name="')._(args.type)._(args.prefix)._('year" type="text" style="width:40px;" maxlength="4" placeholder="Year">');
+					sb._('<input name="')._(args.type)._(args.prefix)._('option" type="checkbox"> Unknown');
+				}
+			},
+			location:{
+				title:function(args){
+					sb._('<span>')._(args.name)._('</span>');
+				},
+				text:function(args){
+					if(!args.style) args.style = '';
+					sb._('<input name="')._(args.prefix)._('town" style="')._(args.style)._('" type="text" placeholder="Town/City">');
+					sb._('<input name="')._(args.prefix)._('state" style="')._(args.style)._('" type="text" placeholder="Prov/State">')
+					sb._('<input name="')._(args.prefix)._('country" style="')._(args.style)._('" type="text" placeholder="Country">')
+				}
+			},
+			tr:function(style,attr){
+				sb._('<tr ')._(attr)._('style="')._(style)._('">');
+				return this;
+			},
+			td:function(name,type, settings){
+				var def = {style:'',attr:'',func:false,args:null};
+				jQuery.extend(def, settings);
+				sb._('<td ')._(def.attr)._('style="')._(def.style)._('">');
+				if(def.func==true)
+					this[name][type](def.args);
+				else
+					sb._(this[name][type]);
+				sb._('</td>');
+				return this;
+			},
+			end:function(){
+				sb._('</tr>');
+			}
 		}
-		sb._('<tr>');
-			sb._('<td valign="top" style="width:100px;text-align:right;padding-top:5px;"><span>')._(name)._('place:</span></td>');
-			sb._('<td style="text-align: left;"><input name="')._(prefix)._('town" type="text" placeholder="Town/City"><input name="')._(prefix)._('state" type="text" placeholder="Prov/State"><input name="')._(prefix)._('country" type="text" placeholder="Country"></td>')
-		sb._('</tr>');
-		
-		return sb.result();
+	},
+	_formAvatar:function(sb, object, width, height){
+		var self = this;
+		sb._('<div class="jmb-dialog-photo">')._(self._getAvatar(object, width, height))._('</div>');
+		sb._('<div class="jmb-dialog-photo-button">');
+			sb._('<span class="jmb-dialog-photo-button-wrapper">');
+				sb._('<input type="file" name="photo" id="photo">');
+				sb._('<span class="jmb-dialog-photo-button2">Upload Photo</span>');
+				sb._('<div class="jmb-dialog-photo-context"></div>');
+			sb._('</span>');
+		sb._('</div>');
 	},
 	_formBasicFields:function(){
 		var self = this;
 		var sb = host.stringBuffer();
+		var field = self._form(sb);
 		sb._('<table id="basic_fields">');
-			sb._('<tr>');
-				sb._('<td style="width:100px;text-align:right;"><font color="#ff0000">*</font><span>First name:</span></td>');
-				sb._('<td style="text-align: left;"><input name="first_name" type="text"></td>');
-			sb._('</tr>');
-			sb._('<tr>');
-				sb._('<td style="width:100px;text-align:right;"><span>Middle names:</span></td>');
-				sb._('<td style="text-align: left;"><input name="middle_name" type="text"></td>');
-			sb._('</tr>');
-			sb._('<tr>');
-				sb._('<td style="width:100px;text-align:right;"><span>Last name:</span></td>');
-				sb._('<td style="text-align: left;"><input name="last_name" type="text"></td>');
-			sb._('</tr>');
-			sb._('<tr>');
-				sb._('<td style="width:100px;text-align:right;padding-top:5px;"><span>Know as:</span></td>');
-				sb._('<td style="text-align: left;"><input name="know_as" type="text"></td>');
-			sb._('</tr>');
-			sb._('<tr>');
-				sb._('<td style="width:100px;text-align:right;padding-top:5px;"><font color="#ff0000">*</font><span>Gender:</span></td>');
-				sb._('<td class="jmb-dialog-form-gender" style="text-align: left;">&nbsp;<span type="M">Male</span>:<input name="gender" value="M" type="radio" style="position:relative; top:3px;">&nbsp;<span type="F">Female</span>:<input name="gender" value="F" type="radio" style="position:relative; top:3px;"></td>');
-			sb._('</tr>');
-			sb._(self._getEventPart('b_','EVO'));
-			sb._('<tr>');
-				sb._('<td style="width:100px;text-align:right;"><font color="#ff0000">*</font><span>Living:</span></td>');
-				sb._('<td style="text-align: left;"><select name="living"><option selected value="true">Yes</option><option value="false">No</option></select></td>');
-			sb._('</tr>');
+			field.tr()
+				field.td('firstName', 'title', {style:'width:100px;text-align:right;'});
+				field.td('firstName', 'text', {style:'text-align:left;'});
+			field.end();
+			field.tr()
+				field.td('middleName', 'title', {style:'width:100px;text-align:right;'});
+				field.td('middleName', 'text', {style:'text-align:left;'});
+			field.end();
+			field.tr()
+				field.td('lastName', 'title', {style:'width:100px;text-align:right;'});
+				field.td('lastName', 'text', {style:'text-align:left;'});
+			field.end();
+			field.tr()
+				field.td('knowAs', 'title', {style:'width:100px;text-align:right;'});
+				field.td('knowAs', 'text', {style:'text-align:left;'});
+			field.end();
+			field.tr()
+				field.td('gender', 'title', {style:'width:100px;text-align:right;'});
+				field.td('gender', 'text', {style:'text-align:left;'});
+			field.end();
+			field.tr();
+				field.td('date', 'title', {style:'width:100px;text-align:right;', func:true, args:{name:'Born:'}});
+				field.td('date', 'text', {func:true, args:{type:'f', prefix:'b_'}});
+			field.end();
+			field.tr();
+				field.td('location', 'title', {style:'width:100px;text-align:right;', func:true, args:{name:'In:'}});
+				field.td('location', 'text', {func:true, args:{prefix:'b_', style:'width:100px;'}});
+			field.end();
+			field.tr()
+				field.td('living', 'title', {style:'width:100px;text-align:right;'});
+				field.td('living', 'text', {style:'text-align:left;'});
+			field.end();
+			field.tr('display:none;', 'id="date-died"');
+				field.td('date', 'title', {style:'width:100px;text-align:right;', func:true, args:{name:'Died:'}});
+				field.td('date', 'text', {func:true, args:{type:'f', prefix:'d_'}});
+			field.end();
+			field.tr('display:none;', 'id="location-died"');
+				field.td('location', 'title', {style:'width:100px;text-align:right;', func:true, args:{name:'In:'}});
+				field.td('location', 'text', {func:true, args:{prefix:'d_', style:'width:100px;'}});
+			field.end();
 		sb._('</table>');
 		sb._('<div class="jmb-dialog-button-submit"><input type="submit" value="Save"><input type="button" value="Cancel"></div>');
+		return sb.result();
+	},
+	_formBasicFieldsInfo:function(){
+		var self = this;
+		var sb = host.stringBuffer();
+		var field = self._form(sb);
+		sb._('<table id="basic_fields">');
+			field.tr()
+				field.td('gender', 'title', {style:'width:100px;text-align:right;'});
+				field.td('gender', 'text');
+				field.td('living', 'title');
+				field.td('living', 'text');
+			field.end();
+			field.tr()
+				field.td('firstName', 'title', {style:'width:100px;text-align:right;'});
+				field.td('firstName', 'text', {attr:'colspan="3"'});
+			field.end();
+			field.tr()
+				field.td('middleName', 'title', {style:'width:100px;text-align:right;'});
+				field.td('middleName', 'text', {attr:'colspan="3"'});
+			field.end();
+			field.tr()
+				field.td('lastName', 'title', {style:'width:100px;text-align:right;'});
+				field.td('lastName', 'text', {attr:'colspan="3"'});
+			field.end();
+			field.tr()
+				field.td('knowAs', 'title', {style:'width:100px;text-align:right;'});
+				field.td('knowAs', 'text', {attr:'colspan="3"'});
+			field.end();
+			field.tr()
+				field.td('adopted', 'title', {style:'width:100px;text-align:right;'});
+				field.td('adopted', 'text', {attr:'colspan="3"'});
+			field.end();
+		sb._('</table>');
+		return sb.result();
+	},
+	_formBasicFieldsEventDate:function(){
+		var self = this;
+		var sb = host.stringBuffer();
+		var field = self._form(sb);
+		sb._('<table id="date_fields">');
+			field.tr();
+				field.td('date', 'title', {style:'width:100px;text-align:right;', func:true, args:{name:'Born:'}});
+				field.td('date', 'text', {func:true, args:{type:'f', prefix:'b_'}});
+			field.end();
+			field.tr();
+				field.td('location', 'title', {style:'width:100px;text-align:right;', func:true, args:{name:'In:'}});
+				field.td('location', 'text', {func:true, args:{prefix:'b_', style:'width:100px;'}});
+			field.end();
+			field.tr('display:none;', 'id="date-died"');
+				field.td('date', 'title', {style:'width:100px;text-align:right;', func:true, args:{name:'Died:'}});
+				field.td('date', 'text', {func:true, args:{type:'f', prefix:'d_'}});
+			field.end();
+			field.tr('display:none;', 'id="location-died"');
+				field.td('location', 'title', {style:'width:100px;text-align:right;', func:true, args:{name:'In:'}});
+				field.td('location', 'text', {func:true, args:{prefix:'d_', style:'width:100px;'}});
+			field.end();
+		sb._('</table>');
 		return sb.result();
 	},
 	_formUnionEventFields:function(){
 		var self = this;
 		var sb = host.stringBuffer();
-		sb._('<table>');
-			sb._('<tr>');
-				sb._('<td><span>Type:</span></td>');
-				sb._('<td style="text-align: left;"><select name="m_type"><option value="MARR">Marriage</option></select></td>');
-			sb._('</tr>');
-			sb._('<tr>');
-				sb._('<td><span>Date:</span></td>');
-				sb._('<td style="text-align: left;"><select name="fm_day">')._(self._selectDays())._('</select><select name="fm_month">')._(self._selectMonths())._('</select><input placeholder="Year" name="fm_year" type="text" maxlength="4" style="width:50px;"><input name="m_option" type="checkbox"> Unknown</td>')
-			sb._('</tr>');
-			sb._('<tr>');
-				sb._('<td><span>Place:</span></td>');
-				sb._('<td style="text-align: left;"><input placeholder="Town/City" name="m_town" style="width:100px;" type="text"><input style="width:100px;" placeholder="Prov/State" name="m_state" type="text"><input style="width:100px;" placeholder="Country" name="m_country" type="text"></td>');
-			sb._('</tr>');
-			sb._('<tr>');
-				sb._('<td></td>');
-				sb._('<td style="text-align: left;"><input name="deceased" type="checkbox" style="position:relative; top:3px;">&nbsp;Divorced/Separated&nbsp;<input placeholder="Year" name="fs_year" type="text" style="width:40px;" maxlength="4"></td></td>');
-			sb._('</tr>');
+		var field = self._form(sb);
+		sb._('<table>');		
+			field.tr();
+				field.td('union', 'title');
+				field.td('union', 'text');
+			field.end();
+			field.tr();
+				field.td('date', 'title', {func:true, args:{name:'Date:'}});
+				field.td('date', 'text', {func:true, args:{type:'f', prefix:'m_'}});
+			field.end();
+			field.tr();
+				field.td('location', 'title', {func:true, args:{name:'Place:'}});
+				field.td('location', 'text', {style:'text-align: left;', func:true, args:{prefix:'b_', style:'width:100px;'}});
+			field.end();
+			field.tr();
+				field.td('divorce', 'title');
+				field.td('divorce', 'text');
+			field.end();
 		sb._('</table>');
 		return sb.result();
 	},
@@ -418,32 +562,22 @@ JMBProfile.prototype = {
 		var self = this;
 		jQuery(obj).find('select[name="living"]').change(function(){
 			var v = jQuery(this).val();
-			var table = jQuery(obj).find('table#basic_fields');
-			if(v=='true'){
-				if(!self.living){
-					self.living = true;
-					jQuery(self.deathObject).remove();
-					self.deathObject = null;
-				}
-			} else {
-				self.living = false;
-				self.deathObject = jQuery(self._getEventPart('d_','EVO'));
-				jQuery(table[0]).append(self.deathObject);
+			var placeTr = jQuery(obj).find('tr#location-died');
+			var dateTr = jQuery(obj).find('tr#date-died');
+			jQuery(dateTr).hide();
+			jQuery(placeTr).hide();
+			if(v=='false'){
+				jQuery(dateTr).show();
+				jQuery(placeTr).show();
 			}
 			if(typeof(callback)!='undefined') callback();
 		});
 	},
 	_buttonsGender:function(obj, callback){
 		var self = this;
-		jQuery(obj).find('.jmb-dialog-form-gender input').click(function(){
-			var gender = (jQuery(this).attr('value')=="M")?"M":"F";	
-			jQuery(obj).find('.jmb-dialog-photo').html(self._getAvatar2(135, 150, gender));
-			if(typeof(callback)!='undefined') callback();
-		});
-		jQuery(obj).find('.jmb-dialog-form-gender span').click(function(){
-			var type = jQuery(this).attr('type');
-			jQuery(obj).find('.jmb-dialog-form-gender input[value="'+type+'"]').attr('checked', true);
-			jQuery(obj).find('.jmb-dialog-photo').html(self._getAvatar2(135, 150, type));
+		jQuery(obj).find('select[name="gender"]').change(function(){
+			var value = jQuery(this).val();
+			jQuery(obj).find('.jmb-dialog-photo').html(self._getAvatar2(135, 150, value));
 			if(typeof(callback)!='undefined') callback();
 		});
 	},

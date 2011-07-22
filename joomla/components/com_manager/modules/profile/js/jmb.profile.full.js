@@ -116,25 +116,25 @@ JMBProfileFull.prototype = {
 		var self = this;
 		var object = self.json.data;
 		var sb = host.stringBuffer();
+		var field = self.parent._form(sb);
 		sb._('<div class="jmb-dialog-profile-content-basic"><form id="jmb:fullprofile:basic" method="post" target="iframe-profile">');
+			sb._('<div class="jmb-dialog-button-submit"><input type="submit" value="Save"><input type="button" value="Cancel"></div>');
 			sb._('<div class="jmb-dialog-profile-content-basic-body">');
-				sb._('<table style="width:100%;"><tr>');
-					sb._('<td valign="top" style="width:160px;">')
-						sb._('<div class="jmb-dialog-photo">')._(self.parent._getAvatar(object, 135, 150))._('</div>');
-						sb._('<div class="jmb-dialog-photo-button">');
-							sb._('<span class="jmb-dialog-photo-button-wrapper">');
-								sb._('<input type="file" name="photo" id="photo">');
-								sb._('<span class="jmb-dialog-photo-button2">Upload Photo</span>');
-								sb._('<div class="jmb-dialog-photo-context"></div>');
-							sb._('</span>');
-						sb._('</div>');
-					sb._('</td>');
-					sb._('<td valign="top">');
-						sb._(self.parent._formBasicFields());
-					sb._('</td>');
-				sb._('</tr></table>');
+				sb._('<table style="width:100%;">');
+					sb._('<tr>');
+						sb._('<td>')._(self.parent._formAvatar(sb, object, 135, 150))._('<td>');
+						sb._('<td valing="top">');
+							sb._(self.parent._formBasicFieldsInfo());
+						sb._('</td>');
+					sb._('</tr>');
+					sb._('<tr>');
+						sb._('<td colspan="4">');
+							sb._(self.parent._formBasicFieldsEventDate());
+						sb._('</td>');
+					sb._('</tr>');
+				sb._('</table>');
 			sb._('</div>');
-		sb._('</form></div>')
+		sb._('</form></div>');
 		var html = sb.result();
 		var htmlObject = jQuery(html);
 		//set events
@@ -187,37 +187,46 @@ JMBProfileFull.prototype = {
 		sb._('</div>');
 		return sb.result();
 	},
-	_unionLinkImages:function(data, spouse){
-		var self = this;
-		var sb = host.stringBuffer();
-		sb._('<div class="jmb-dialog-profile-content-unions-image">');
-			sb._('<table>');
-				sb._('<tr>');
-					sb._('<td><div>')._(self.parent._getAvatar(data,60,66))._('</div></td>');
-					sb._('<td><div>')._(self.parent._getAvatar(spouse,60,66))._('</div></td>');
-				sb._('</tr>');
-			sb._('</table>');
-		sb._('</div>');
-		return sb.result();
-	},
 	_unionHTML:function(index, data, spouse){
 		var self = this;
-		var sb = host.stringBuffer();
+		var sb = host.stringBuffer();	
+		var indivBirth = (data.indiv.Birth)?data.indiv.Birth[0]:false;
+		var indivPlace = (indivBirth)?indivBirth.Place:false;
+		var spouseBirth = (spouse.indiv.Birth)?spouse.indiv.Birth[0]:false;
+		var spousePlace = (spouseBirth)?indivBirth.Place:false;
+		
 		sb._('<div id="jmb-union-')._(index)._('" class="jmb-dialog-profile-content-union" spouse_id="')._(spouse.id)._('">');
 			sb._('<form id="jmb-profile-addpsc-')._(index)._('" method="post" target="iframe-profile">');
 				sb._('<div class="jmb-dialog-profile-content-unions-header">');
-					sb._('<span style="float:left;">Union ')._(index+1)._('</span>');
-					sb._('<span style="float:right;"><input type="submit" value="Save"></span>');
+					sb._('<div id="title">Union ')._(index+1)._('</div>');
+					sb._('<div id="button"><input type="submit" value="Save"></div>');
 				sb._('</div>');
 				sb._('<div class="jmb-dialog-profile-content-unions-body">');
 					sb._('<table>');
 						sb._('<tr>');
-							sb._('<td valign="top">')._(self._personUnionInfoHTML(data.indiv))._('</td>');
-							sb._('<td valign="top">')._(self._unionLinkImages(data,spouse))._('</td>');
-							sb._('<td valign="top">')._(self._personUnionInfoHTML(spouse.indiv))._('</td>');
+							sb._('<td>');
+								sb._('<div style="margin-left: 30px;">');
+									sb._('<div class="jmb-dialog-profile-content-unions-person"><table><tr>');
+										sb._('<td><div style="border-right:none;" class="info">')
+											sb._('<div class="name">')._(self.parent._getFullName(data.indiv))._('</div>');
+											sb._('<div class="date">')._(self.parent._getEventDate(indivBirth))._('</div>');
+											sb._('<div class="location">')._(self.parent._getFullPlace(indivPlace))._('</div>');
+										sb._('</div></td>');
+										sb._('<td><div class="avatar">')._(self.parent._getAvatar(data,72,80))._('</div></td>');
+									sb._('</tr></table></div>');
+									sb._('<div style="margin-left: 10px;" class="jmb-dialog-profile-content-unions-person"><table><tr>');
+										sb._('<td><div class="avatar">')._(self.parent._getAvatar(spouse,72,80))._('</td></div>');
+										sb._('<td><div style="border-left:none;" class="info">')
+											sb._('<div class="name">')._(self.parent._getFullName(spouse.indiv))._('</div>');
+											sb._('<div class="date">')._(self.parent._getEventDate(spouseBirth))._('</div>');
+											sb._('<div class="location">')._(self.parent._getFullPlace(spousePlace))._('</div>');
+										sb._('</div></td>');
+									sb._('</tr></table></div>');
+								sb._('</div>');
+							sb._('</td>');
 						sb._('</tr>');
 						sb._('<tr>');
-							sb._('<td valign="top" colspan="3"><div class="jmb-dialog-profile-content-unions-part">')._(self.parent._formUnionEventFields())._('</div></td>');
+							sb._('<td valign="top"><div class="jmb-dialog-profile-content-unions-part">')._(self.parent._formUnionEventFields())._('</div></td>');
 						sb._('</tr>');
 					sb._('</table>');
 				sb._('</div>');
@@ -249,12 +258,13 @@ JMBProfileFull.prototype = {
 		var sb = host.stringBuffer();
 		sb._('<div id="jmb-union-')._(self.spouseIndex)._('" class="jmb-dialog-profile-content-union add" spouse_id="null">');
 			sb._('<form id="jmb:profile:addspouse" method="post" target="iframe-profile">');
-			sb._('<div class="jmb-dialog-profile-content-unions-header">');
-				sb._('<span style="float:left;">Union ')._(self.spouseIndex)._('</span>');
-				sb._('<span style="float:right;"><input type="submit" value="Save"></span>');
-				sb._('<span style="float:right;"><input type="button" value="Cancel"></span>');
-			sb._('</div>');
-			sb._('<table>');
+				sb._('<div class="jmb-dialog-profile-content-unions-header">');
+					sb._('<div class="jmb-dialog-profile-content-unions-header">');
+						sb._('<div id="title">Union ')._(self.spouseIndex)._('</div>');
+						sb._('<div id="button"><input type="submit" value="Save"><input type="button" value="Cancel"></div>');
+					sb._('</div>');
+				sb._('</div>');
+			sb._('<table id="container">');
 				sb._('<tr>');
 					sb._('<td valign="top">');
 						sb._('<div class="jmb-dialog-photo">')._(self.parent._getSpouseAvatar(self.json.data, 135, 150))._('</div>');
