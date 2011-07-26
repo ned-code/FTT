@@ -162,10 +162,6 @@ JMBProfileFull.prototype = {
  				alert('Not set "First name".')
  				return false;
  			}
- 			if(!self.parent._valid(htmlObject, 'photo', {})){
- 				alert('Incorrect image(try to use .jpg,.gif,.png).');
- 				return false;
- 			}
  			return true;
 		}, function(json){
 			self.json.data.indiv = json.ind;
@@ -318,10 +314,6 @@ JMBProfileFull.prototype = {
  			}
  			if(!self.parent._valid(htmlObject, 'firstName', {})){
  				alert('Not set "First name".')
- 				return false;
- 			}
- 			if(!self.parent._valid(htmlObject, 'photo', {})){
- 				alert('Incorrect image(try to use .jpg,.gif,.png).');
  				return false;
  			}
  			return true;

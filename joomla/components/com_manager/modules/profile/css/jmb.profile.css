@@ -1,3 +1,17 @@
+/* UI - DIALOG */
+.ui-widget-header {
+	background: none;
+	border:none;
+}
+
+.ui-widget-content{
+	background: #7F7F7F;
+}
+
+.ui-dialog-title{
+	color:white;
+}
+
 /* ADD PARENT,CHILD,BROTHER,SISTER */
 .jmb-dialog-container {
 	/*background: #9a7423 !important;*/
@@ -59,6 +73,7 @@
 	cursor:pointer;
 }
 .jmb-dialog-photo{
+	 background: white;
 	border: 2px solid #000000;
 	border-radius: 3px 3px 3px 3px;
 	height: 150px;

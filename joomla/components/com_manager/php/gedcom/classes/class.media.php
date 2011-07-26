@@ -1,9 +1,9 @@
 <?php
 class Media{
         public $Id;
-        public $Form;
+        public $Type;
         public $Title;
-        public $Path;        
+        public $FilePath;        
         function  __construct() {
             $this->Id = null;
             $this->Form = null;

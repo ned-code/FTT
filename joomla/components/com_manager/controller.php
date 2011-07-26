@@ -185,6 +185,40 @@ class JMBController extends JController
 		}
 		die;
 	}
+	
+	protected function getImageByMime($mime, $filePath){
+		switch($mime){
+        		case "jpg":
+        			$img = imagecreatefromjpeg($filePath); 
+        			
+        		break;
+        		
+        		case "gif":
+        			$img = imagecreatefromgif($filePath); 
+        		break;
+        		
+        		case "png":
+        			$img = imagecreatefrompng($filePath); 
+        		break;
+        	}
+        	return $img;
+	}
+	
+	protected function Image($img, $type, $tmpFile=null){
+		switch($type){
+        		case "jpg":
+        			imagejpeg($img, $tmpFile); 
+        		break;
+        		
+        		case "gif":
+        			imagegif($img, $tmpFile); 
+        		break;
+        		
+        		case "png":
+        			imagepng($img, $tmpFile); 
+        		break;
+        	}
+	}
         
 	/**
         *
@@ -192,29 +226,37 @@ class JMBController extends JController
         function getResizeImage(){
         	ob_clean();
         	$id = JRequest::getVar('id');
+        	$fid = JRequest::getVar('fid');
+        	$uid = ($id)?$id:$fid;
+        	$defaultWidth = JRequest::getVar('w');
+        	$defaultHeight = JRequest::getVar('h');
+        	//id.chechsum.w.h.png        	
+        	
         	//var
-        	$defaultWidth = 135;
-        	$defaultHeight = 150;
         	$host = new Host('joomla');
-
+        	$path = JPATH_ROOT."/components/com_manager/media/tmp/";
+        	
         	//file        	
-        	$f = $host->gedcom->media->get($id);	
-        	$filePath = substr(JURI::base(), 0, -1).$f->FilePath;
-
-        	switch($f->Type){
-        		case "jpg":
-        			$src = imagecreatefromjpeg($filePath); 
-        		break;
-        		
-        		case "gif":
-        			$src = imagecreatefromgif($filePath); 
-        		break;
-        		
-        		case "png":
-        			$src = imagecreatefrompng($filePath); 
-        		break;
+        	if($id){
+        		$f = $host->gedcom->media->get($id);	
+        		$filePath = substr(JURI::base(), 0, -1).$f->FilePath;
+        	} else {
+        		$filePath = 'http://graph.facebook.com/'.$fid.'/picture';
         	}
-
+        	$size = getimagesize($filePath);
+        	$type = explode('/', $size['mime']);
+        	$hash = hash_file('md5', $filePath);
+        	$tmpFile = $path.$uid.'.'.$hash.'.'.$defaultWidth.'.'.$defaultHeight.'.'.$type[1];
+        	
+        	if(file_exists($tmpFile)){
+        		$img = $this->getImageByMime($type[1], $tmpFile);
+        		header("Content-type: image/".$type[1]);
+        		$this->Image($img, $type[1]);
+        		imagedestroy($img);
+        		die;
+        	}
+        	
+        	$src = $this->getImageByMime($type[1], $filePath);
         	$srcWidth = imagesx($src); 
         	$srcHeight = imagesy($src);
 
@@ -235,35 +277,10 @@ class JMBController extends JController
         	
         	$img = imagecreatetruecolor($width,$height);
         	imagecopyresampled($img, $src, 0, 0, 0, 0, $width, $height, $srcWidth, $srcHeight);
-        	
-        	$im = imagecreatetruecolor($defaultWidth,$defaultHeight);
-        	$black = imagecolorallocate($im, 0, 0, 0);
-        	$white = imagecolorallocate($im, 255, 255, 255);
-        	imagefill($im, 0, 0, $white);
-        	
-        	$destX = ($width<$defaultWidth)?($defaultWidth-$width)/2:0;
-        	$destY = ($height<$defaultHeight)?($defaultHeight-$height)/2:0;
-        	
-        	imagecopy($im, $img, $destX, $destY, 0, 0, $width, $height);
-        	if($f->Type == 'gif' || $f->Type == 'png'){
-        		imagecolortransparent($im, $black);
-        	}
-        	header("Content-type: image/".$f->Type); 
-        	switch($f->Type){
-        		case "jpg":
-        			imagejpeg($im); 
-        		break;
-        		
-        		case "gif":
-        			imagegif($im); 
-        		break;
-        		
-        		case "png":
-        			imagepng($im); 
-        		break;
-        	}
-        	imagedestroy($im);
-        	imagedestroy($img); 
+        	header("Content-type: image/".$type[1]); 
+        	$this->Image($img, $type[1], $tmpFile);
+        	$this->Image($img, $type[1]);
+        	imagedestroy($img);
         	imagedestroy($src); 
         	die();
         }

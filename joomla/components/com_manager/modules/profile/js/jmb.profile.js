@@ -101,6 +101,7 @@ JMBProfile.prototype = {
 			draggable: false,
 			position: "top",
 			closeOnEscape: false,
+			modal:true,
 			//open: function(event, ui) { jQuery(".ui-dialog-titlebar-close").hide(); },
 			beforeClose: function(event, ui){
 				self._modal(false);
@@ -218,12 +219,13 @@ JMBProfile.prototype = {
 		av = obj.avatar;
 		defImg = (obj.indiv.Gender=="F")?'male.gif':'female.gif';
 		var defImgPath = sb._(self.imgPath)._('/components/com_manager/modules/profile/image/')._(defImg).result();
-		return sb.clear()._('<img class="jmb-families-avatar" height="')._(y)._('px" width="')._(x)._('px" src="')._(defImgPath)._('">').result()
+		return sb.clear()._('<img height="')._(y)._('px" width="')._(x)._('px" src="')._(defImgPath)._('">').result()
 	},
 	_getPhoto:function(obj, x,y){
 		var self = this;
 		var sb = host.stringBuffer();
-		return sb._('<img class="jmb-families-avatar" height="')._(y)._('px" width="')._(x)._('px" src="index.php?option=com_manager&task=getResizeImage&id=')._(obj.photo)._('">').result();
+		//return sb._('<img class="jmb-families-avatar" height="')._(y)._('px" width="')._(x)._('px" src="index.php?option=com_manager&task=getResizeImage&id=')._(obj.photo)._('">').result();
+		return sb.clear()._('<img src="index.php?option=com_manager&task=getResizeImage&id=')._(obj.photo)._('&w=')._(x)._('&h=')._(y)._('">').result();
 	},
 	_getAvatar:function(obj, x, y){
 		var self = this;
@@ -234,20 +236,23 @@ JMBProfile.prototype = {
 		defImg = (obj.indiv.Gender=="M")?'male.gif':'female.gif';
 		if(av != null && av.FilePath != null){
 			//return sb.clear()._('<img height="')._(y)._('px" width="')._(x)._('px" src="')._(av.FilePath)._('">').result();
-			return sb._('<img class="jmb-families-avatar" height="')._(y)._('px" width="')._(x)._('px" src="index.php?option=com_manager&task=getResizeImage&id=')._(av.Id)._('">').result();
+			//return sb._('<img class="jmb-families-avatar" height="')._(y)._('px" width="')._(x)._('px" src="index.php?option=com_manager&task=getResizeImage&id=')._(av.Id)._('">').result();
+			return sb.clear()._('<img src="index.php?option=com_manager&task=getResizeImage&id=')._(av.Id)._('&w=')._(x)._('&h=')._(y)._('">').result();
 		}
 		else if(fId != '0'){
-			return sb.clear()._('<img height="')._(y)._('px" width="')._(x)._('px" src="http://graph.facebook.com/')._(fId)._('/picture">').result();
+			//return sb.clear()._('<img height="')._(y)._('px" width="')._(x)._('px" src="http://graph.facebook.com/')._(fId)._('/picture">').result();
+			//return sb._('<img class="jmb-families-avatar" height="')._(y)._('px" width="')._(x)._('px" src="index.php?option=com_manager&task=getResizeImage&fid=')._(fId)._('">').result();
+			return sb.clear()._('<img src="index.php?option=com_manager&task=getResizeImage&fid=')._(fId)._('&w=')._(x)._('&h=')._(y)._('">').result();
 		}
 		var defImgPath = sb.clear()._(self.imgPath)._('/components/com_manager/modules/profile/image/')._(defImg).result();
-		return sb.clear()._('<img class="jmb-families-avatar" height="')._(y)._('px" width="')._(x)._('px" src="')._(defImgPath)._('">').result();
+		return sb.clear()._('<img height="')._(y)._('px" width="')._(x)._('px" src="')._(defImgPath)._('">').result();
 	},
 	_getAvatar2:function(x, y, type){
 		var self = this;
 		var sb = host.stringBuffer();
 		defImg =(type=="M")?'male.gif':'female.gif';
 		defImgPath = sb._(self.imgPath)._("/components/com_manager/modules/profile/image/")._(defImg).result();
-		return  sb.clear()._('<img class="jmb-families-avatar" height="')._(y)._('px" width="')._(x)._('px" src="')._(defImgPath)._('">').result();
+		return  sb.clear()._('<img height="')._(y)._('px" width="')._(x)._('px" src="')._(defImgPath)._('">').result();
 	},
 	_photos:function(p){
 		var self = this;
@@ -256,7 +261,8 @@ JMBProfile.prototype = {
 		sb._('<ul style="width:')._(64*length)._('px;">');
 			jQuery(p).each(function(i,e){
 				//sb._('<li><img height="65px" width="59" src="')._(e.FilePath)._('"></li>');
-				sb._('<li><img height="65px" width="59" src="index.php?option=com_manager&task=getResizeImage&id=')._(e.Id)._('"></li>');
+				//sb._('<li><img height="65px" width="59" src="index.php?option=com_manager&task=getResizeImage&id=')._(e.Id)._('"></li>');
+				sb._('<li><img src="index.php?option=com_manager&task=getResizeImage&fid=')._(e.Id)._('&w=59&h=65"></li>').result();
 			});
 		sb._('</ul>')
 		return sb.result();
@@ -524,17 +530,6 @@ JMBProfile.prototype = {
 				}
 				return true;
 			break;
-			
-			case "photo":
-				var photo = jQuery(obj).find('div.jmb-dialog-photo-button input#photo').val().split('.');
-				if(photo[1]){
-					if(photo[1]=='jpg'||photo[1]=='gif'||photo[1]=='jpeg'||photo[1]=='png'){}
-					else{
-						return false;
-					}
-				}	
-				return true;
-			break;
 		}
 	},
 	_buttonCancel:function(obj){
@@ -691,10 +686,6 @@ JMBProfile.prototype = {
  				alert('Not set "First name".')
  				return false;
  			}
- 			if(!self._valid(self.dContent.object, 'photo', {})){
- 				alert('Incorrect image(try to use .jpg,.gif,.png).');
- 				return false;
- 			}
  			return true;
 		}, function(json){
 			if(json.photo) jQuery(self.dContent.object).find('.jmb-dialog-union-photo').html(self._getPhoto(json, 135, 150));
@@ -788,10 +779,6 @@ JMBProfile.prototype = {
  			}
  			if(!self._valid(self.dContent.object, 'firstName', {})){
  				alert('Not set "First name".')
- 				return false;
- 			}
- 			if(!self._valid(self.dContent.object, 'photo', {})){
- 				alert('Incorrect image(try to use .jpg,.gif,.png).');
  				return false;
  			}
  			return true;

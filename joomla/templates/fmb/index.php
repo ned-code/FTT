@@ -11,7 +11,7 @@ defined('_JEXEC') or die;
 
 //functions
 function checkLocation(){
-	$r = $_SERVER["HTTP_REFERER"];
+	$r = isset($_SERVER["HTTP_REFERER"])?$_SERVER["HTTP_REFERER"]:null;
 	if($r!=null){
 		$pUrl = parse_url($r);
 		if($pUrl['host']=='apps.facebook.com'){

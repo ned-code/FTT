@@ -37,9 +37,9 @@ class MediaList{
                        
             $media = new Media;
             $media->Id = $id;
-            $media->Form = $rows[0]['form'];
+            $media->Type = $rows[0]['form'];
             $media->Title = $rows[0]['title'];
-            $media->Path = $rows[0]['path'];
+            $media->FilePath = $rows[0]['path'];
          
             return $media;
         }
@@ -103,9 +103,9 @@ class MediaList{
             foreach($rows as $row){                
                   $med = new Media();
                   $med->Id = $row['id'];
-                  $med->Form = $row['form'];
+                  $med->Type = $row['form'];
                   $med->Title = $row['title'];
-                  $med->Path = $row['path'];
+                  $med->FilePath = $row['path'];
                   $media[] = $med;                 
             }
             return $media;         
