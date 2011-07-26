@@ -284,8 +284,7 @@ class Host {
 		
 		//Fill the array of families
 		foreach($individ['families'] as $family){
-			if($family->Spouse == null) continue;
-			if(!array_key_exists($family->Spouse->Id, $individs)){
+			if($family->Spouse!=null&&!array_key_exists($family->Spouse->Id, $individs)){
 				$this->getIndividsArray($family->Spouse->Id, $individs);
 			}
 		}

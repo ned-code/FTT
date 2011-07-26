@@ -189,6 +189,7 @@ class JMBController extends JController
 	protected function getImageByMime($mime, $filePath){
 		switch($mime){
         		case "jpg":
+        		case "jpeg":
         			$img = imagecreatefromjpeg($filePath); 
         			
         		break;
@@ -207,6 +208,7 @@ class JMBController extends JController
 	protected function Image($img, $type, $tmpFile=null){
 		switch($type){
         		case "jpg":
+        		case "jpeg":
         			imagejpeg($img, $tmpFile); 
         		break;
         		
@@ -262,7 +264,7 @@ class JMBController extends JController
 
         	//get ratio
         	if($srcWidth>$defaultWidth&&$srcHeight>$defaultHeight){
-        		$ratio = ($srcWidth>$srcHeight)?$srcWidth/$defaultWidth:$srcHeight/$defaultHeight;
+        		$ratio = ($srcWidth>=$srcHeight)?$srcWidth/$defaultWidth:$srcHeight/$defaultHeight;
         	} else if($srcWidth>$defaultWidth){
         		$ratio = $srcWidth/$defaultWidth;
         	} else if($srcHeight>$defaultHeight){

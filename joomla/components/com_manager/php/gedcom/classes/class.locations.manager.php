@@ -74,7 +74,7 @@ class LocationsList{
 			$location->State = $row['state'];
 			$location->Post = $row['post'];
 			$location->Country = $row['country'];
-			$location->Phones = explode(',', $rows['phones']);
+			$location->Phones = explode(',', $row['phones']);
         		$place->Locations[] = $location;
         	}
         	return $place->Locations;

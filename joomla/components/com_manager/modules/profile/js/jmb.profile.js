@@ -262,7 +262,7 @@ JMBProfile.prototype = {
 			jQuery(p).each(function(i,e){
 				//sb._('<li><img height="65px" width="59" src="')._(e.FilePath)._('"></li>');
 				//sb._('<li><img height="65px" width="59" src="index.php?option=com_manager&task=getResizeImage&id=')._(e.Id)._('"></li>');
-				sb._('<li><img src="index.php?option=com_manager&task=getResizeImage&fid=')._(e.Id)._('&w=59&h=65"></li>').result();
+				sb._('<li><img src="index.php?option=com_manager&task=getResizeImage&id=')._(e.Id)._('&w=59&h=65"></li>').result();
 			});
 		sb._('</ul>')
 		return sb.result();

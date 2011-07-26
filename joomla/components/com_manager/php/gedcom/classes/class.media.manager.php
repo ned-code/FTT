@@ -18,10 +18,10 @@ class MediaList{
         }
         function setAvatarImage($persId, $imgId){
             $db =& JFactory::getDBO();
-            $req = $this->core->sql('DELETE FROM #__mb_media_link WHERE type="AVAT" AND gid=? LIMIT 1', $persId);
+            $req = $this->core->sql("DELETE FROM #__mb_media_link WHERE type='AVAT' AND gid=? LIMIT 1", $persId);
             $db->setQuery($req);
             $db->query();
-            $req = $this->core->sql('INSERT INTO #__mb_media_link (`gid`, `type`, `mid`) VALUES (?, "AVAT", ?)', $persId, $imgId);
+            $req = $this->core->sql("INSERT INTO #__mb_media_link (`gid` ,`mid` ,`type`) VALUES (?,?,'AVAT')", $persId, $imgId);
             $db->setQuery($req);
             $db->query();
         }
@@ -84,7 +84,7 @@ class MediaList{
         }
         function link($mediaId, $foreignKey){
              $db =& JFactory::getDBO();
-             $req = $this->core->sql('INSERT INTO #__mb_media_link (`gid`, `mid`) VALUES (?,?)',$foreignKey,$mediaId);
+             $req = $this->core->sql("INSERT INTO #__mb_media_link (`gid`, `mid`, `type`) VALUES (?,?, 'IMAG')",$foreignKey,$mediaId);
              $db->setQuery($req);
            
              $db->query();
