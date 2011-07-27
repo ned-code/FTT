@@ -254,6 +254,7 @@ class Host {
 	*/
 	public function getUserInfo($indKey){
 		$indiv = $this->gedcom->individuals->get($indKey);
+		$events = $this->gedcom->events->getAllEventsByIndKey($indKey);
 		$parents = $this->gedcom->individuals->getParents($indKey);
 		$children = $this->gedcom->individuals->getChilds($indKey);
 		$families = $this->gedcom->families->getPersonsFamilies($indKey, true);
@@ -269,7 +270,7 @@ class Host {
 		$photos = $this->gedcom->media->getMediaByGedId($indKey);
 		$avatar = $this->gedcom->media->getAvatarImage($indKey);
 
-		return array('indiv'=>$indiv,'parents'=>$parents,'families'=>$families,'spouses'=>$spouses,'children'=>$children,'notes'=>$notes,'sources'=>$sources,'photo'=>$photos,'avatar'=>$avatar);
+		return array('indiv'=>$indiv,'events'=>$events,'parents'=>$parents,'families'=>$families,'spouses'=>$spouses,'children'=>$children,'notes'=>$notes,'sources'=>$sources,'photo'=>$photos,'avatar'=>$avatar);
 	}
 	
 	/**

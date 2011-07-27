@@ -127,7 +127,23 @@ class EventsList{
         	}
         	return $events;
         }    
-        
+        public function getAllEventsByIndKey($indKey){
+        	if($indKey==null){ return null; }
+        	$sqlString = "SELECT events.id as event_id,events.individuals_id as individuals_id, events.families_id as families_id, events.type as type, events.name as name, events.caus as caus, events.res_agency as res_agency,dates .type as date_type,dates .f_day as f_day,dates .f_month as f_month, dates .f_year as f_year, dates .t_day as t_day, dates .t_month as t_month, 
+        	dates .t_year as t_year 
+        	FROM jos_mb_events as events
+        	LEFT JOIN jos_mb_dates as dates ON events.id = dates.events_id
+        	LEFT JOIN jos_mb_families as families ON events.families_id = families.id
+        	WHERE events.individuals_id= ? OR families.husb = ? OR families.wife = ?";
+        	$sql = $this->core->sql($sqlString, $indKey, $indKey, $indKey);
+        	$this->db->setQuery($sql);         
+        	$rows = $this->db->loadAssocList();
+        	$events = array();
+        	foreach($rows as $row){
+        		$events[] = $this->setEventData($row);
+        	}
+        	return $events;
+        }
         /*
          function  __construct($core) {
             require_once 'class.event.php';

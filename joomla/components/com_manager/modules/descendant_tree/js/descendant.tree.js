@@ -47,6 +47,8 @@ function DescendantTree(obj){
 		});
 		var user = jQuery('[name="descendant-node"][user="true"]');
 		jQuery(user[0]).click();
+		var x = jQuery(user[0]).offset().top -100;
+		jQuery('div.containerTableStyle').animate({scrollTop: x}, 500);
 	});
 }
 
