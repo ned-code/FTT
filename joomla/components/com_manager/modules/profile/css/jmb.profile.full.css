@@ -41,7 +41,6 @@
 	margin: 5px;
 	height: 24px;
 	line-height: 24px;
-	cursor: pointer;
 	text-align:center
 }
 .jmb-dialog-profile-menu-item-child{
@@ -367,9 +366,47 @@
 	border: 1px solid #3B5997;
 	background: #FFF200;
 }
-
-
-
+/* VPROFILE */
+.jmb-dialog-view-profile {
+	width: 510px;
+	background: none repeat scroll 0 0 #9A7423;
+	border-radius: 3px 3px 3px 3px;
+    	font-family: Calibri,Tahoma;
+    	font-size: 12px;
+    	font-weight: normal;
+    	margin: 10px;
+    	padding: 5px;
+}
+.jmb-dialog-view-profile-content{
+	background: none repeat scroll 0 0 #F1E4B0;
+	border: 1px solid #473E1B;
+    	border-radius: 5px 5px 5px 5px;
+}
+.jmb-dialog-view-profile-content div.title{
+	text-align: right;
+	width: 70px;
+}
+.jmb-dialog-view-profile-content div.title span {
+	color:gray;
+	font-weight: bold;
+}
+.jmb-dialog-view-profile-content div.text span {
+	margin-left: 10px;
+	font-weight: bold;
+}
+.jmb-dialog-view-profile-content div.list {
+	margin-bottom: 10px;
+	margin-left: 40px;
+}
+.jmb-dialog-view-profile-content div.list-header {
+	color: gray;
+	font-weight: bold;
+}
+.jmb-dialog-view-profile-content div.list-item {
+	font-weight:bold;
+	color: #3B5997;
+	margin-left: 15px;
+}
 
 
 

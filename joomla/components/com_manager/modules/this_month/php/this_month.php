@@ -195,8 +195,8 @@ class JMBThisMonth {
 		$result = 9999;
 		foreach($events as $element){
 			foreach($element as $u){
-				if($u['event']->Year < $result){
-					$result = $u['event']->Year;
+				if($u['event']->From&&$u['event']->From->Year < $result){
+					$result = $u['event']->From->Year;
 				}
 			}
 		}

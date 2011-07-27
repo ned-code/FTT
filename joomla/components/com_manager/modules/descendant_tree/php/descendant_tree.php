@@ -129,7 +129,7 @@ class DescendantTree {
                 }
                 $this->color = $color;
 		header("Content-type: text/xml");
-		$xml .='<?xml version="1.0" encoding="utf-8"?>';
+		$xml ='<?xml version="1.0" encoding="utf-8"?>';
 		$xml .= '<tree id="0">';		
 			$xml .= $this->getTreeItems($xml, $index, $render_type);
 		$xml .= '</tree>';

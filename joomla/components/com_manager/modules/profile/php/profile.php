@@ -56,6 +56,8 @@ class JMBProfile {
 		$object->Day = (isset($_POST[$prefix.'day']))?$_POST[$prefix.'day']:'';
 		$object->Month = (isset($_POST[$prefix.'month']))?$_POST[$prefix.'month']:'';
 		$object->Year = (isset($_POST[$prefix.'year']))?$_POST[$prefix.'year']:'';
+		$object->Day = ($object->Day==0)?null:$object->Day;
+		$object->Month = ($object->Month==0)?null:$object->Month;
 	}
 	//create place and location address.
 	protected function _createLocation($event, $prefix, $name=false){

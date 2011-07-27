@@ -17,30 +17,6 @@ function JMBProfile(){
 		flag:false,
 		object:null
 	};
-	jQuery(this.dWindow).hide();
-	jQuery(document.body).append(this.dWindow);
-	
-	//modal object
-	this.modalActive = false;
-	this.modalObject = jQuery('<div id="jmb:modal" class="jmb-modal-container">');
-	jQuery(this.modalObject).css({
-		position: "absolute",
-		top: "0px",
-		left: "0px",
-		width: jQuery(window).width()+"px",
-		height: jQuery(window).height()+"px"
-	});
-	jQuery(this.modalObject).css('z-index', '1000');
-	jQuery(this.modalObject).hide();
-	jQuery(document.body).append(this.modalObject);
-	jQuery(window).resize(function(){
-		if(self.modalActive){
-			jQuery(self.modalObject).css({
-				width: jQuery(window).width()+"px",
-				height: jQuery(window).height()+"px"
-			});
-		}
-	});
 	
 	//sub objects
 	this.tooltip = new JMBProfileTooltip(this);
@@ -104,13 +80,15 @@ JMBProfile.prototype = {
 			modal:true,
 			//open: function(event, ui) { jQuery(".ui-dialog-titlebar-close").hide(); },
 			beforeClose: function(event, ui){
-				self._modal(false);
 				self.profile.menuActiveItem = null;
 				if(typeof(self.json.beforeClose) == 'function') self.json.beforeClose();
+			},
+			close:function(){
+				jQuery(this).dialog("destroy");
+				jQuery(this).remove();
 			}
 		}
 		jQuery.extend(pDefault, params);
-		self._modal(true);
 		if(self.dContent.flag){ 
 			jQuery(self.dContent.object).remove();
 			self.dContent.object = null;
@@ -146,15 +124,9 @@ JMBProfile.prototype = {
 			return f;
 		}
 	},
-	//NEED TO EDIT!!!!!!
-	_getFullPlace:function(location){
-		if(!location) return;
-		var sb = host.stringBuffer();
-		var places = location.Hierarchy;
-		jQuery(places).each(function(i,e){
-			sb._(e.Name)._(' ');
-		});
-		return sb.result();
+	_getFullPlace:function(place){
+		if(!place) return;
+		return place.Name;	
 	},
 	_getEventDate:function(event){
 		var self = this;
@@ -187,10 +159,11 @@ JMBProfile.prototype = {
 		for(var a in data){
 			if(data[a].id==id) return ret;
 		}
-		return 0;
+		return false;
 	},
 	_getRelation:function(obj){
 		var self = this;
+		if(!obj.fmbUser) return 'is you.';
 		var id = obj.fmbUser.indiv.Id;
 		//parent;
 		if(obj.data.parents){
@@ -209,7 +182,7 @@ JMBProfile.prototype = {
 		if(parent != 0){
 			return parent;
 		}
-		return 0;
+		return false;
 	},
 	_getSpouseAvatar:function(obj, x, y){
 		var self = this;
@@ -583,24 +556,24 @@ JMBProfile.prototype = {
 		jQuery(target).find('input[name="last_name"]').val(object.indiv.LastName);
 		jQuery(target).find('input[name="know_as"]').val(object.indiv.Nick);
 		jQuery(target).find('.jmb-dialog-form-gender input[value="'+object.indiv.Gender+'"]').attr('checked', true);
-		if(jQuery(object.Birth).length!=0){
+		if(jQuery(object.indiv.Birth).length!=0){
 			jQuery(target).find('select[name="fb_day"] option[value="'+object.indiv.Birth[0].From.Day+'"]').attr('selected', 'selected');
 			jQuery(target).find('select[name="fb_month"] option[value="'+object.indiv.Birth[0].From.Month+'"]').attr('selected', 'selected');
 			jQuery(target).find('input[name="fb_year"]').val(object.indiv.Birth[0].From.Year);
-			var place = object.indiv.Birth.Place
+			var place = object.indiv.Birth[0].Place
 			if(place&&place.Locations[0]){
 				jQuery(target).find('input[name="b_town"]').val(place.Locations[0].City);
 				jQuery(target).find('input[name="b_state"]').val(place.Locations[0].State);
 				jQuery(target).find('input[name="b_country"]').val(place.Locations[0].Country);
 			}
 		}
-		if(jQuery(object.Death).length!=0){
+		if(jQuery(object.indiv.Death).length!=0){
 			jQuery(target).find('select[name="living"] option[value="false"]').attr('selected', 'selected');
 			jQuery(target).find('select[name="living"] option[value="false"]').change();
 			jQuery(target).find('select[name="fd_day"] option[value="'+object.indiv.Death[0].From.Day+'"]').attr('selected', 'selected');
 			jQuery(target).find('select[name="fd_month"] option[value="'+object.indiv.Death[0].From.Month+'"]').attr('selected', 'selected');
 			jQuery(target).find('input[name="fd_year"]').val(object.indiv.Death[0].From.Year);
-			var place = object.indiv.Birth.Place
+			var place = object.indiv.Birth[0].Place
 			if(place&&place.Locations[0]){
 				jQuery(target).find('input[name="d_town"]').val(place.Locations[0].City);
 				jQuery(target).find('input[name="d_state"]').val(place.Locations[0].State);
@@ -714,7 +687,6 @@ JMBProfile.prototype = {
 						sb._('</td>');
 						sb._('<td valign="top">');
 							sb._('<div class="jmb-dialog-union-profile">');
-							sb._('<div class="jmb-dialog-union-profile">');
 								sb._('<div class="jmb-dialog-union-profile-header">Profile Basics</div>');
 								sb._('<div class="jmb-dialog-union-profile-content">');
 									sb._('<table style="width:100%;"><tr>')
@@ -752,10 +724,6 @@ JMBProfile.prototype = {
 		var html = sb.result();
 		self.dContent.object = jQuery(html);
 		self.dContent.flag = true;
-		jQuery('.jmb-dialog-container').css({
-			background:"#7e7e7e",
-			border:"1px solid #545454"
-		})
 		//hide gender fields
 		jQuery(self.dContent.object).find('.jmb-dialog-form-gender').parent().remove();
 		self._buttonCancel(self.dContent.object);
