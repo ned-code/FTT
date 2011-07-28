@@ -319,7 +319,7 @@
 .jmb-dialog-events-edit-body input[type="text"][name="place"] {
 	width: 118px;
 }
-.jmb-dialog-events-edit-body input[type="text"][name="year"],.jmb-dialog-events-edit-body input[type="text"][name="start_year"],.jmb-dialog-events-edit-body input[type="text"][name="end_year"] {
+.jmb-dialog-events-edit-body input[type="text"][name="f_year"],input[type="text"][name="t_year"] {
 	width: 50px;
 }
 .jmb-dialog-events-list{
@@ -335,13 +335,16 @@
 	border-radius: 2px;
 	border: 1px solid white;
 }
-.jmb-dialog-events-list li.active div{
+.jmb-dialog-events-list li.active div#edit.button,div#delete.button{
 	cursor: pointer;
 }
 .jmb-dialog-events-list li div#edit.button {
 	width: 30px;
 	text-align: center;
 	color: #FFF;
+}
+.jmb-dialog-events-list li div#readonly.button {
+	width: 52px;
 }
 .jmb-dialog-events-list li.active div#edit.button {
 	background: #F8A13B;

@@ -98,6 +98,24 @@ JMBProfile.prototype = {
 		jQuery(self.dWindow).dialog(pDefault);
 		jQuery(self.dWindow).parent().css('top', '10px');
 	},
+	_getEventLine:function(event){
+		var self = this;
+		var name, from, to, place, sb;
+		from = event.From.Year;
+		to = event.To.Year;
+		name = event.Name;
+		place = self._getFullPlace(event.Place)
+		sb = host.stringBuffer();
+		if(from!=null&&to!=null){
+			sb._(from)._(':')._(to);
+		} else if(from!=null&&to==null){
+			sb._(from);
+		} else if(from==null&&to!=null){
+			sb._(to);
+		} 
+		sb._(' - ')._(name)._(' from ')._(place);
+		return sb.result();
+	},
 	_getYear:function(indiv){
 		if(indiv.Birth&&indiv.Birth[0]){ return indiv.Birth[0].From.Year; }
 		return '';
@@ -197,7 +215,6 @@ JMBProfile.prototype = {
 	_getPhoto:function(obj, x,y){
 		var self = this;
 		var sb = host.stringBuffer();
-		//return sb._('<img class="jmb-families-avatar" height="')._(y)._('px" width="')._(x)._('px" src="index.php?option=com_manager&task=getResizeImage&id=')._(obj.photo)._('">').result();
 		return sb.clear()._('<img src="index.php?option=com_manager&task=getResizeImage&id=')._(obj.photo)._('&w=')._(x)._('&h=')._(y)._('">').result();
 	},
 	_getAvatar:function(obj, x, y){
@@ -208,13 +225,9 @@ JMBProfile.prototype = {
 		av = obj.avatar;
 		defImg = (obj.indiv.Gender=="M")?'male.gif':'female.gif';
 		if(av != null && av.FilePath != null){
-			//return sb.clear()._('<img height="')._(y)._('px" width="')._(x)._('px" src="')._(av.FilePath)._('">').result();
-			//return sb._('<img class="jmb-families-avatar" height="')._(y)._('px" width="')._(x)._('px" src="index.php?option=com_manager&task=getResizeImage&id=')._(av.Id)._('">').result();
 			return sb.clear()._('<img src="index.php?option=com_manager&task=getResizeImage&id=')._(av.Id)._('&w=')._(x)._('&h=')._(y)._('">').result();
 		}
 		else if(fId != '0'){
-			//return sb.clear()._('<img height="')._(y)._('px" width="')._(x)._('px" src="http://graph.facebook.com/')._(fId)._('/picture">').result();
-			//return sb._('<img class="jmb-families-avatar" height="')._(y)._('px" width="')._(x)._('px" src="index.php?option=com_manager&task=getResizeImage&fid=')._(fId)._('">').result();
 			return sb.clear()._('<img src="index.php?option=com_manager&task=getResizeImage&fid=')._(fId)._('&w=')._(x)._('&h=')._(y)._('">').result();
 		}
 		var defImgPath = sb.clear()._(self.imgPath)._('/components/com_manager/modules/profile/image/')._(defImg).result();
@@ -233,8 +246,6 @@ JMBProfile.prototype = {
 		var length = jQuery(p).length;
 		sb._('<ul style="width:')._(64*length)._('px;">');
 			jQuery(p).each(function(i,e){
-				//sb._('<li><img height="65px" width="59" src="')._(e.FilePath)._('"></li>');
-				//sb._('<li><img height="65px" width="59" src="index.php?option=com_manager&task=getResizeImage&id=')._(e.Id)._('"></li>');
 				sb._('<li><img src="index.php?option=com_manager&task=getResizeImage&id=')._(e.Id)._('&w=59&h=65"></li>').result();
 			});
 		sb._('</ul>')
@@ -472,7 +483,7 @@ JMBProfile.prototype = {
 			field.end();
 			field.tr();
 				field.td('location', 'title', {func:true, args:{name:'Place:'}});
-				field.td('location', 'text', {style:'text-align: left;', func:true, args:{prefix:'b_', style:'width:100px;'}});
+				field.td('location', 'text', {style:'text-align: left;', func:true, args:{prefix:'m_', style:'width:100px;'}});
 			field.end();
 			field.tr();
 				field.td('divorce', 'title');

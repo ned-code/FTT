@@ -5,6 +5,8 @@ function JMBProfileFull(parent){
 	this.menuActiveItem = null;
 	this.menuEventsActiveItem = null
 	this.spouseIndex = 0;
+	this.eventObject = null;
+	this.binds = [];
 
 	this.menu = {
 		"edit":{
@@ -273,6 +275,11 @@ JMBProfileFull.prototype = {
 				spouse.event = new Array();
 				(json.marriage)?spouse.event[spouse.event.length++]=json.marriage:null;
 				(json.divorce)?spouse.event[spouse.event.length++]=json.divorce:null;
+				jQuery(data.events).each(function(i,e){
+					if(e.Type=='MARR'&&json.marriage){
+						data.events.splice(i,1, json.marriage);
+					}
+				});
 			});
 		});	
 		var input = jQuery(htmlObject[1]).find('input');
@@ -280,6 +287,24 @@ JMBProfileFull.prototype = {
 			self._unionAdd(this, htmlObject);
 		});
 		jQuery(self.parent.dWindow).find('div.jmb-dialog-profile-content').append(htmlObject);
+	},
+	_eventsDeleteFromJson:function(id){
+		var self = this;
+		var events = self.json.data.events;
+		jQuery(events).each(function(i,e){
+			if(e.Id==id) delete events.splice(i, 1);
+		})
+	},
+	_eventsDeleteObject:function(htmlObject, object, event_id){
+		var self = this;
+		if(confirm('Are you sure you want to delete this event?')){
+			self.parent._ajax('deleteEvent', event_id, function(res){
+				var response = jQuery.parseJSON(res.responseText);
+				if(response.error) { alert(response.error); return; }
+				jQuery(object).parent().remove();
+				self._eventsDeleteFromJson(event_id);
+			});
+		}
 	},
 	_eventsBlockHeader:function(){
 		var self = this;
@@ -296,13 +321,12 @@ JMBProfileFull.prototype = {
 				sb._('<div class="jmb-dialog-events-edit-header">Event</div>')
 				sb._('<div class="jmb-dialog-events-edit-body">');
 					sb._('<table>');
-						sb._('<tr><td valign="top"><div style="margin-top:5px;" class="title"><span>Duration:</span></div></td><td><div class="radio"><input name="duration" type="radio" value="single"><span id="single">Single Day Event</span></div><div class="radio"><input name="duration" type="radio" value="prolonged"><span id="prolonged">Prolonged Event</span></div></td></tr>');
+						sb._('<tr><td valign="top"><div style="margin-top:5px;" class="title"><span>Duration:</span></div></td><td><div class="radio"><input name="duration" type="radio" value="EVO"><span id="single">Single Day Event</span></div><div class="radio"><input name="duration" type="radio" value="BET"><span id="prolonged">Prolonged Event</span></div></td></tr>');
 						sb._('<tr><td><div class="title"><span>Type:<span></div></td><td><select name="type"></select></td></tr>');
-						sb._('<tr id="date"><td><div class="title"><span>Date:<span></div></td><td><select name="day">')._(self.parent._selectDays())._('</select><select name="month">')._(self.parent._selectMonths())._('</select><input maxlength="4" type="text" placeholder="Year" name="year"></td></tr>');
-						sb._('<tr id="start_date"><td><div class="title"><span>Start Date:<span></div></td><td><select name="start_day">')._(self.parent._selectDays())._('</select><select name="start_month">')._(self.parent._selectMonths())._('</select><input maxlength="4" type="text" placeholder="Year" name="start_year"></td></tr>');
-						sb._('<tr id="end_date"><td><div class="title"><span>End Date:<span></div></td><td><select name="end_day">')._(self.parent._selectDays())._('</select><select name="end_month">')._(self.parent._selectMonths())._('</select><input maxlength="4" type="text" placeholder="Year" name="end_year"></td></tr>');
-						sb._('<tr><td><div class="title"><span>Place:<span></div></td><td><input name="place" placeholder="Place" type="text"></td></tr>');
-						sb._('<tr><td><div class="title"><span>Location:<span></div></td><td><input name="city" type="text" placeholder="Town/City"><input name="state" type="text" placeholder="Prov/State"><input name="country" type="text" placeholder="Country"></td></tr>');
+						sb._('<tr id="date"><td><div class="title"><span>Date:<span></div></td><td><select name="f_day">')._(self.parent._selectDays())._('</select><select name="f_month">')._(self.parent._selectMonths())._('</select><input maxlength="4" type="text" placeholder="Year" name="f_year"><input name="f_option" type="checkbox"> Unknown</td></tr>');
+						sb._('<tr id="end_date"><td><div class="title"><span>End Date:<span></div></td><td><select name="t_day">')._(self.parent._selectDays())._('</select><select name="t_month">')._(self.parent._selectMonths())._('</select><input maxlength="4" type="text" placeholder="Year" name="t_year"><input name="t_option" type="checkbox"> Unknown</td></tr>');
+						sb._('<tr><td><div class="title"><span>Place:<span></div></td><td><input name="_place" placeholder="Place" type="text"></td></tr>');
+						sb._('<tr><td><div class="title"><span>Location:<span></div></td><td><input name="_town" type="text" placeholder="Town/City"><input name="_state" type="text" placeholder="Prov/State"><input name="_country" type="text" placeholder="Country"></td></tr>');
 					sb._('</table>');
 				sb._('</div>')
 		sb._('</div>');
@@ -311,31 +335,79 @@ JMBProfileFull.prototype = {
 	_eventsBlockList:function(){
 		var self = this;
 		var sb = host.stringBuffer();
+		var data = self.json.data;
 		sb._('<div class="jmb-dialog-events-list">');
 			sb._('<ul>');
-				sb._('<li id="0"><div id="edit" class="button"><span>Edit</span></div><div id="delete" class="button">&nbsp;</div><div id="switch" class="text">1997 - Graduates from UT university.</div></li>');
-				sb._('<li id="0" class="active"><div id="edit" class="button"><span>Edit</span></div><div id="delete" class="button">&nbsp;</div><div id="switch" class="text">1997 - Graduates from UT university.</div></li>');
-				sb._('<li id="0"><div id="edit" class="button"><span>Edit</span></div><div id="delete" class="button">&nbsp;</div><div id="switch" class="text">1997 - Graduates from UT university.</div></li>');
+				jQuery(data.events).each(function(i,e){
+					if(e.FamKey!=null||e.Type=='BIRT'||e.Type=='DEAT'){
+						sb._('<li><div id="readonly" class="button">&nbsp;</div><div id="switch" class="text">')._(self.parent._getEventLine(e))._('</div></li>');
+					} else {
+						sb._('<li id="')._(i)._('"><div id="edit" class="button"><span>Edit</span></div><div id="delete" class="button">&nbsp;</div><div id="switch" class="text">')._(self.parent._getEventLine(e))._('</div></li>');
+					}	
+				});	
 			sb._('</ul>');
 		sb._('</div>');
 		return sb.result();
 	},
 	_eventsSetDefaultEditBlock:function(htmlObject){
 		jQuery(htmlObject).find('div.radio span#single').click();
-		jQuery(htmlObject).find('select[name="day"] option:selected').attr('selected', '');
-		jQuery(htmlObject).find('select[name="day"] option[value="0"]').attr('selected', 'selected');
-		jQuery(htmlObject).find('select[name="month"] option:selected').attr('selected', '');
-		jQuery(htmlObject).find('select[name="month"] option[value="0"]').attr('selected', 'selected');
-		jQuery(htmlObject).find('input[name="year"]').val('');
-		jQuery(htmlObject).find('input[name="place"]').val('');
-		jQuery(htmlObject).find('input[name="city"]').val('');
-		jQuery(htmlObject).find('input[name="state"]').val('');
-		jQuery(htmlObject).find('input[name="country"]').val('');
+		jQuery(htmlObject).find('input[type="button"][value="Delete"]').show();
+		jQuery(htmlObject).find('select[name="type"] option:first-child').attr('selected', 'selected');
+		jQuery(htmlObject).find('select[name="f_day"] option[value="0"]').attr('selected', 'selected');
+		jQuery(htmlObject).find('select[name="f_month"] option[value="0"]').attr('selected', 'selected');
+		jQuery(htmlObject).find('input[name="f_year"]').val('');
+		jQuery(htmlObject).find('input[name="f_option"]').attr('checked', 'checked');
+		jQuery(htmlObject).find('select[name="t_day"] option[value="0"]').attr('selected', 'selected');
+		jQuery(htmlObject).find('select[name="t_month"] option[value="0"]').attr('selected', 'selected');
+		jQuery(htmlObject).find('input[name="t_year"]').val('');
+		jQuery(htmlObject).find('input[name="t_option"]').attr('checked', 'checked');
+		jQuery(htmlObject).find('input[name="_place"]').val('');
+		jQuery(htmlObject).find('input[name="_town"]').val('');
+		jQuery(htmlObject).find('input[name="_state"]').val('');
+		jQuery(htmlObject).find('input[name="_country"]').val('');
+	},
+	_eventsSetEditBlock:function(htmlObject, index){
+		var self = this;
+		var event = self.json.data.events[index];
+		var fromChecked = (event.From.Day==null&&event.From.Month==null&&event.From.Year==null)?'checked':'';
+		var toChecked = (event.To.Day==null&&event.To.Month==null&&event.To.Year==null)?'checked':'';
+		jQuery(htmlObject).find('input[value="'+event.DateType+'"]').click();
+		jQuery(htmlObject).find('input[type="button"][value="Delete"]').show();
+		jQuery(htmlObject).find('select[name="type"] option[value="'+event.Name.toLowerCase()+'"]').attr('selected', 'selected');
+		jQuery(htmlObject).find('select[name="f_day"] option[value="'+((event.From.Day!=null)?event.From.Day:'0')+'"]').attr('selected', 'selected');
+		jQuery(htmlObject).find('select[name="f_month"] option[value="'+((event.From.Month!=null)?event.From.Month:'0')+'"]').attr('selected', 'selected');
+		jQuery(htmlObject).find('input[name="f_year"]').val((event.From.Year!=null)?event.From.Year:'');
+		jQuery(htmlObject).find('input[name="f_option"]').attr('checked', fromChecked);
+		jQuery(htmlObject).find('select[name="t_day"] option[value="'+((event.To.Day!=null)?event.To.Day:'0')+'"]').attr('selected', 'selected');
+		jQuery(htmlObject).find('select[name="t_month"] option[value="'+((event.To.Month!=null)?event.To.Month:'0')+'"]').attr('selected', 'selected');
+		jQuery(htmlObject).find('input[name="t_year"]').val((event.To.Year!=null)?event.To.Year:'');
+		jQuery(htmlObject).find('input[name="t_option"]').attr('checked', toChecked);
+		jQuery(htmlObject).find('input[name="_place"]').val((event.Place)?event.Place.Name:'');
+		jQuery(htmlObject).find('input[name="_town"]').val((event.Place.Locations.length!=0&&event.Place.Locations[0].City!=null)?event.Place.Locations[0].City:'');
+		jQuery(htmlObject).find('input[name="_state"]').val((event.Place.Locations.length!=0&&event.Place.Locations[0].State!=null)?event.Place.Locations[0].State:'');
+		jQuery(htmlObject).find('input[name="_country"]').val((event.Place.Locations.length!=0&&event.Place.Locations[0].Country!=null)?event.Place.Locations[0].Country:'');
 	},
 	_eventsHeaderEvents:function(htmlObject){
+		var self = this;
 		jQuery(htmlObject).find('.jmb-dialog-events-header span').click(function(){
 			jQuery(htmlObject).find('.jmb-dialog-events-list').hide();
+			self._eventsSetDefaultEditBlock(htmlObject);
+			jQuery(htmlObject).find('input[type="button"][value="Delete"]').hide();
 			jQuery(htmlObject).find('.jmb-dialog-events-edit').show();
+			self.parent._ajaxForm(jQuery(htmlObject).find('form'), 'createEvent', self.json.data.indiv.Id, function(res){}, function(json){
+				var sb, e, li, liDivs;
+				sb = host.stringBuffer();
+				e = json.event;
+				self.json.data.events.push(e);
+				sb._('<li id="')._(self.json.data.events.length-1)._('"><div id="edit" class="button"><span>Edit</span></div><div id="delete" class="button">&nbsp;</div><div id="switch" class="text">')._(self.parent._getEventLine(e))._('</div></li>');
+				li = jQuery(sb.result());
+				jQuery(htmlObject).find('.jmb-dialog-events-list ul').append(li);
+				liDivs = jQuery(li).find('div').each(function(i,e){
+					jQuery(e).click(function(){
+						self._eventsListLiDivSetEvent(htmlObject, this);
+					});
+				});	
+			});
 		});
 	},
 	_eventsEditEvents:function(htmlObject){	
@@ -345,12 +417,14 @@ JMBProfileFull.prototype = {
 			jQuery(e).click(function(){
 				switch(jQuery(this).val()){
 					case "Delete":
-						alert('Delete Event');
-					break;
-					
+						var object = self.eventObject;
+						var index = jQuery(object).parent().attr('id');
+						var event_id = self.json.data.events[index].Id;
+						self._eventsDeleteObject(htmlObject, object, event_id);
 					case "Close":
-						jQuery(htmlObject).find('.jmb-dialog-events-list').show();
 						jQuery(htmlObject).find('.jmb-dialog-events-edit').hide();
+						jQuery(htmlObject).find('.jmb-dialog-events-list').show();
+						self._eventsSetDefaultEditBlock(htmlObject);
 					break;
 				}
 			});
@@ -362,41 +436,56 @@ JMBProfileFull.prototype = {
 			jQuery(htmlObject).find('select[name="type"] option').remove();
 			var type = jQuery(this).val();
 			jQuery(htmlObject).find('tr#date').hide();
-			jQuery(htmlObject).find('tr#start_date').hide();
 			jQuery(htmlObject).find('tr#end_date').hide();
-			if(type=='single'){
+			if(type=='EVO'){
 				jQuery(htmlObject).find('tr#date').show();
 			} else {
-				jQuery(htmlObject).find('tr#start_date').show();
+				jQuery(htmlObject).find('tr#date').show();
 				jQuery(htmlObject).find('tr#end_date').show();
 			}
-			var types = (type=='single')?self.singleDayEvents:self.prolongedEvents;
+			var types = (type=='EVO')?self.singleDayEvents:self.prolongedEvents;
 			jQuery(types).each(function(i,e){
 				sb.clear()._('<option value="')._(e.name)._('">')._(e.title)._('</option>');
 				jQuery(htmlObject).find('select[name="type"]').append(sb.result())
 			});
 		});
 	},
+	_eventsListLiDivSetEvent:function(htmlObject, object){
+		var self = this;
+		self.binds.push(object);
+		var index = jQuery(object).parent().attr('id');
+		var event_id = (index)?self.json.data.events[index].Id:null;
+		switch(jQuery(object).attr('id')){
+			case "edit":
+				if(!jQuery(object).parent().hasClass('active')) return;
+				jQuery(htmlObject).find('.jmb-dialog-events-list').hide();
+				jQuery(htmlObject).find('.jmb-dialog-events-edit').show();
+				self._eventsSetEditBlock(htmlObject, index);
+				self.eventObject = object;
+				self.parent._ajaxForm(jQuery(htmlObject).find('form'), 'updateEvent', event_id, function(res){}, function(json){
+					self.json.data.events[index] = json.event;
+					var swithText = self.parent._getEventLine(json.event)
+					jQuery(htmlObject).find('li#'+index+' div.text').html(swithText);
+				});
+			break;
+			
+			case "delete":
+				if(!jQuery(object).parent().hasClass('active')) return;
+				self._eventsDeleteObject(htmlObject, object, event_id);
+			break;
+					
+			case "switch":
+				if(jQuery(object).parent().hasClass('active')) return;
+				jQuery('div.jmb-dialog-events-list ul li').removeClass('active');
+				jQuery(object).parent().addClass('active');
+			break;
+		}
+	},
 	_eventsListEvents:function(htmlObject){
+		var self = this;
 		jQuery(htmlObject).find('div.jmb-dialog-events-list ul li div').each(function(i,e){
 			jQuery(e).click(function(){
-				switch(jQuery(this).attr('id')){
-					case "edit":
-						if(!jQuery(this).parent().hasClass('active')) return;
-						jQuery(htmlObject).find('.jmb-dialog-events-list').hide();
-						jQuery(htmlObject).find('.jmb-dialog-events-edit').show();
-					break;
-					
-					case "delete":
-						if(!jQuery(this).parent().hasClass('active')) return;
-					break;
-					
-					case "switch":
-						if(jQuery(this).parent().hasClass('active')) return;
-						jQuery('div.jmb-dialog-events-list ul li').removeClass('active');
-						jQuery(this).parent().addClass('active');
-					break;
-				}
+				self._eventsListLiDivSetEvent(htmlObject, this);
 			});
 		});
 	},
@@ -415,8 +504,7 @@ JMBProfileFull.prototype = {
 		self._eventsEditEvents(htmlObject);
 		self._eventsListEvents(htmlObject);
 		self._eventsSetDefaultEditBlock(htmlObject);
-		//ajax
-		self.parent._ajaxForm(jQuery(htmlObject).find('form'), 'updateEvent', '0', function(res){}, function(json){});	
+		//ajax	
 		jQuery(self.parent.dWindow).find('div.jmb-dialog-profile-content').append(htmlObject);
 	},
 	_vprofile:function(){

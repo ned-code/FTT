@@ -47,8 +47,9 @@ class JMBProfile {
 			break;
 		}
 		if($eventType=='IND'){ $e->IndKey = $id; } else { $e->FamKey = $id; }
-		$e->Place = $this->_createLocation($e, $prefix);
-		if($save){ $this->host->gedcom->events->save($e, $eventType); }
+		$name = isset($_POST[$prefix.'place'])?$_POST[$prefix.'place']:false;
+		$e->Place = $this->_createLocation($e, $prefix, $name);
+		if($save){ $e->Id = $this->host->gedcom->events->save($e, $eventType); }
 		return $e;
 	}
 	protected function _setEventDate(&$object, $prefix){
@@ -90,7 +91,8 @@ class JMBProfile {
 				$this->_setEventDate($event->To, 't'.$prefix);
 			break;
 		}
-		$event->Place = $this->_updateLocation($event->Place, $prefix);
+		$name = isset($_POST[$prefix.'place'])?$_POST[$prefix.'place']:false;
+		$event->Place = $this->_updateLocation($event->Place, $prefix, $name);
 		if($update) { $this->host->gedcom->events->update($event, $eventType); }
 		return $event;
 	}
@@ -302,6 +304,25 @@ class JMBProfile {
 	/**
 	*
 	*/
+	public function createEvent($indKey){
+		$type = isset($_POST['type'])?ucfirst(strtolower($_POST['type'])):null;
+		$duration = isset($_POST['duration'])?$_POST['duration']:null;
+		$event = $this->_createEvent('IND',$indKey,$type, 'EVEN', '_', $duration); 
+		return json_encode(array('event'=>$event));
+	}
+	/**
+	*
+	*/
+	public function updateEvent($eventId){
+		$type = isset($_POST['type'])?ucfirst(strtolower($_POST['type'])):null;
+		$duration = isset($_POST['duration'])?$_POST['duration']:null;
+		$event = $this->host->gedcom->events->get($eventId);
+		$this->_updateEvent('IND', $event, $type, 'EVEN', '_', $duration);
+		return json_encode(array('event'=>$event));
+	}
+	/**
+	*
+	*/
 	public function updateIndiv($id){
 		$ind = $this->host->gedcom->individuals->get($id);
 		$ind->FirstName = (isset($_POST['first_name']))?$_POST['first_name']:''; 
@@ -367,6 +388,14 @@ class JMBProfile {
 		$data = $this->host->getUserInfo($_SESSION['jmb']['gid']);
 		$path = JURI::root(true); 
 		return json_encode(array('data'=>$data,'path'=>$path));
+	}
+	/**
+	*
+	*/
+	public function deleteEvent($eventId){
+		if($eventId==null) { return json_encode(array('error'=>'event id not exist.')); }
+		$this->host->gedcom->events->delete($eventId);
+		return json_encode(array('success'=>'event delete.'));
 	}
 	/**
 	*
