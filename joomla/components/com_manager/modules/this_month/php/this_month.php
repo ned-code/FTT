@@ -97,7 +97,7 @@ class JMBThisMonth {
 			switch($type){
 				case "BIRT":
 					if($individ['indiv']->Birth&& $individ['indiv']->Birth[0] && $individ['indiv']->Birth[0]->From->Month == (int)$month){
-						$death = ($individ['indiv']->Death[0])?true:false;
+						$death = ($individ['indiv']->Death&&$individ['indiv']->Death[0])?true:false;
 						$result[$id] = array('event'=>$individ['indiv']->Birth[0], 'death'=>$death);
 						$descendants[$id] = $individ;
 					}

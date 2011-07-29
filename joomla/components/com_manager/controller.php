@@ -191,7 +191,6 @@ class JMBController extends JController
         		case "jpg":
         		case "jpeg":
         			$img = imagecreatefromjpeg($filePath); 
-        			
         		break;
         		
         		case "gif":
@@ -226,13 +225,11 @@ class JMBController extends JController
         *
         */
         function getResizeImage(){
-        	ob_clean();
         	$id = JRequest::getVar('id');
         	$fid = JRequest::getVar('fid');
         	$uid = ($id)?$id:$fid;
         	$defaultWidth = JRequest::getVar('w');
         	$defaultHeight = JRequest::getVar('h');
-        	//id.chechsum.w.h.png        	
         	
         	//var
         	$host = new Host('joomla');
@@ -252,6 +249,7 @@ class JMBController extends JController
         	
         	if(file_exists($tmpFile)){
         		$img = $this->getImageByMime($type[1], $tmpFile);
+        		ob_clean();
         		header("Content-type: image/".$type[1]);
         		$this->Image($img, $type[1]);
         		imagedestroy($img);
@@ -279,6 +277,8 @@ class JMBController extends JController
         	
         	$img = imagecreatetruecolor($width,$height);
         	imagecopyresampled($img, $src, 0, 0, 0, 0, $width, $height, $srcWidth, $srcHeight);
+        	
+        	ob_clean();
         	header("Content-type: image/".$type[1]); 
         	$this->Image($img, $type[1], $tmpFile);
         	$this->Image($img, $type[1]);

@@ -1,0 +1,31 @@
+.jmb-ancestors-jit{
+	width:750px;
+	height:600px;
+	margin:auto;
+	overflow:hidden;
+	position:relative;
+}
+.jit-node-item{
+	border: 1px solid #999999;
+	height: 80px;
+	width: 209px;
+	background:#999;
+}
+.jit-node-item table{
+	margin-left: -3px;
+	margin-top: -3px;
+}
+.jit-node-item .photo{
+	border: 1px solid #999999;
+	height: 80px;
+	width: 72px;
+}
+.jit-node-item .data{
+	font-family: Calibri,Tahoma;
+	font-size: 12px;
+	
+}
+.jit-node-item .data div{}
+.jit-node-item .data .name{}
+.jit-node-item .data .birth{}
+.jit-node-item .data .deat{}
