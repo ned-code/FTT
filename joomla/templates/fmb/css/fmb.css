@@ -18,15 +18,11 @@
 .header {}
 .main {}
 .right {
-	border: 1px solid #999999;
-	border-radius: 2px 2px 2px 2px;
-	margin-left: 15px;
-	margin-top: 46px;
-	padding-bottom: 10px;
-	padding-left: 30px;
-	padding-top: 10px;
+	padding-top: 46px;
 }
-.footer {}
+.footer {
+	padding-left: 17px;
+}
 
 #container {
 	position:relative;

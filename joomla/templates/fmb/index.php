@@ -63,14 +63,14 @@ $inIFrame = checkLocation();
                 <script type="text/javascript" src="<?php echo $this->baseurl ?>/templates/fmb/javascript/fmb.js"></script>
 	</head>
 	<body>
-		<div class="content" style="<?php if($inIFrame): ?>max-width:760px;<?php else: ?>max-width:1020px;<?php endif; ?>">
+		<div class="content" style="<?php if($inIFrame): ?>max-width:760px;<?php else: ?>max-width:980px;<?php endif; ?>">
 			<div class="header">
 				<jdoc:include type="modules" name="header" />
 			</div>
 			<div class="main">
 				<table>
 					<tr>
-						<td valign="top" style="width:760px;"><div id="fb-root"></div><jdoc:include type="component" /></td>
+						<td valign="top" style="<?php if($inIFrame): ?>width:760px;<?php else: ?>width:820px;<?php endif; ?>"><div id="fb-root"></div><jdoc:include type="component" /></td>
 						<?php if(!$inIFrame): ?>
 							<td valign="top"><div class="right"><jdoc:include type="modules" name="right" /></div></td>
 						<?php endif; ?>
