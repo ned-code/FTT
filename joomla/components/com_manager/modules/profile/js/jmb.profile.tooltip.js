@@ -166,7 +166,7 @@ JMBProfileTooltip.prototype = {
 					var children = p.data.children;
 					var name = self.parent._getFullName(p.data.indiv);
 					if(jQuery(children).length == 0){
-						var message = 'You are about to delete '+name+' from your family tree. Are you sure you want to do this?';
+						var message = ['You are about to delete ',name,' from your family tree. Are you sure you want to do this?'].join('');
 						self.confirm(message, {
 							object:this,
 							display:'inline',
@@ -185,11 +185,11 @@ JMBProfileTooltip.prototype = {
 							object:this,
 							display:'block',
 							buttons:[{
-									title:'<font color="red">Delete '+name+'</font> but <font color="green">keep descendants</font>.',
+									title:['<font color="red">Delete ',name,'</font> but <font color="green">keep descendants</font>.'].join(''),
 									click:function(e){ self._deleteUser(p, 'deleteAndKeep', function(){ jQuery(e.htmlObject).remove(); jQuery(e.modalWindow).remove(); }); }
 								},
 								{
-									title:'<font color="red">Delete '+name+'</font> and also <font color="red">delete all descendants</font>.',
+									title:['<font color="red">Delete ',name,'</font> and also <font color="red">delete all descendants</font>.'].join(''),
 									click:function(e){ self._deleteUser(p, 'deleteAll', function(){ jQuery(e.htmlObject).remove(); jQuery(e.modalWindow).remove(); }); }
 								}]
 						});
@@ -229,20 +229,11 @@ JMBProfileTooltip.prototype = {
 				self._clickTooltip(p, e);
 			});
 		});
-	},
-	_eventMouseEnter:function(p, buttons){
-		var self = this;
-		jQuery(p.target).mouseenter(function(){
-			jQuery(p.target).btOn();
-			self.btActive = p.target;
-			jQuery(buttons).each(function(i,e){
-				self._clickTooltip(p, e);
-			});
-		});
+		
 	},
 	_deleteUser:function(p, type, callback){
 		var self = this;
-		var args = p.data.indiv.Id+';'+type;
+		var args = [p.data.indiv.Id, type].join(';');
 		self.parent._ajax('delete', args, function(){
 			callback();
 		});
@@ -254,10 +245,9 @@ JMBProfileTooltip.prototype = {
 		var sb = host.stringBuffer();
 		
 		//set functions;
-		var modalWindow = jQuery('<div style="width:'+wWidth+'px;height:'+wHeight+'px;position:absolute;z-index:4999;background:#000;opacity:0.7;top:0px;left:0px;">&nbsp;</div>');
-		
+		var modalWindow = jQuery(['<div style="width:',wWidth,'px;height:',wHeight,'px;position:absolute;z-index:4999;background:#000;opacity:0.7;top:0px;left:0px;">&nbsp;</div>'].join(''));
 		var createDivButton = function(value){
-			return jQuery('<div class="jmb-confirm-button">'+value+'</div>')
+			return jQuery(['<div class="jmb-confirm-button">',value,'</div>'].join(''))
 		}
 		var modal = function(flag){
 			return (flag)?jQuery(document.body).append(modalWindow):jQuery(modalWindow).remove();
@@ -317,7 +307,7 @@ JMBProfileTooltip.prototype = {
 		}
 		var l = self.storage.length++;
 		self.storage[l] = container;
-		p.settings.contentSelector = "jQuery('#"+p.id+"-content')";
+		p.settings.contentSelector = ["jQuery('#", p.id, "-content')"].join('');
 		if(p.parent) p.settings.offsetParent = p.parent;
 		
 		jQuery(document.body).append(container);
@@ -326,11 +316,7 @@ JMBProfileTooltip.prototype = {
 		jQuery(p.target).bt(p.settings);
 		if(p.eventType == 'click'){
 			self._eventClick(p, buttons);
-		}
-		else if(p.eventType == 'mouseenter'){
-			self._eventMouseEnter(p, buttons);
-		}
-		
+		}		
 		self.parent.json = p;
 	}
 }

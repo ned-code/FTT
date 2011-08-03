@@ -104,7 +104,7 @@ JMBProfile.prototype = {
 		from = event.From.Year;
 		to = event.To.Year;
 		name = event.Name;
-		place = self._getFullPlace(event.Place)
+		place = self._getFullPlace(event.Place);
 		sb = host.stringBuffer();
 		if(from!=null&&to!=null){
 			sb._(from)._(':')._(to);
@@ -114,7 +114,7 @@ JMBProfile.prototype = {
 			sb._(to);
 		} 
 		sb._(' - ')._(name)._(' from ')._(place);
-		return sb.result();
+		return sb.result();				
 	},
 	_getYear:function(indiv){
 		if(indiv.Birth&&indiv.Birth[0]){ return indiv.Birth[0].From.Year; }
@@ -124,16 +124,14 @@ JMBProfile.prototype = {
 		return indiv.Nick;
 	},
 	_getFullName:function(ind){
-		var sb = host.stringBuffer();
-		var f,l,m, result;
-		f = ind.FirstName;
-		m = ind.MiddleName;
-		l = ind.LastName;
+		var f = ind.FirstName,
+			m = ind.MiddleName;
+			l = ind.LastName;
 		if(f!=''&&m!=''&&l!=''){
-			return sb._(f)._(' ')._(m)._(' ')._(l).result();
+			return [f,m,l].join(' ');
 		}
 		else if(f!=''&&m==''&&l!=''){
-			return sb._(f)._(' ')._(l).result();
+			return [f,l].join(' ');
 		}
 		else if(f==''&&m==''&&l!=''){
 			return l;
@@ -147,15 +145,12 @@ JMBProfile.prototype = {
 		return place.Name;	
 	},
 	_getEventDate:function(event){
-		var self = this;
 		if(!event) return;
-		var sb = host.stringBuffer();
-		var d,m,y;
-		d = event.From.Day;
-		m = (event.From.Month!='')?self.month3[event.From.Month]:'';
-		y = event.From.Year;
+		var d = event.From.Day,
+			m = (event.From.Month!=null)?this.month3[event.From.Month]:'',
+			y = event.From.Year;
 		if(d!=''&&m!=''&&y!=''){
-			return sb._(d)._(' ')._(m)._(' ')._(y).result();
+			return [d,m,y].join(' ');
 		}
 		else if(d!=''&&m==''&&y!=''){
 			return y;
@@ -164,10 +159,10 @@ JMBProfile.prototype = {
 			return y;
 		}
 		else if(d==''&&m!=''&&y!=''){
-			return sb._(m)._(' ')._(y).result();
+			return [m,y].join(' ');
 		}
 		else if(d!=''&&m!=''&&y==''){
-			return sb._(d)._(' ')._(m).result();
+			return [d,m].join(' ');
 		}
 		else {
 			return 'unknown';
@@ -203,42 +198,36 @@ JMBProfile.prototype = {
 		return false;
 	},
 	_getSpouseAvatar:function(obj, x, y){
-		var self = this;
-		var sb = host.stringBuffer();
-		var fId,av,defImg;
-		fId = obj.indiv.FacebookId;
-		av = obj.avatar;
-		defImg = (obj.indiv.Gender=="F")?'male.gif':'female.gif';
-		var defImgPath = sb._(self.imgPath)._('/components/com_manager/modules/profile/image/')._(defImg).result();
-		return sb.clear()._('<img height="')._(y)._('px" width="')._(x)._('px" src="')._(defImgPath)._('">').result()
+		var self = this,
+			fId = obj.indiv.FacebookId,
+			av = obj.avatar,
+			defImg = (obj.indiv.Gender=="F")?'male.gif':'female.gif';
+		var defImgPath = [self.imgPath,'/components/com_manager/modules/profile/image/',defImg].join('');
+		return ['<img height="',y,'px" width="',x,'px" src="',defImgPath,'">'].join('');
 	},
 	_getPhoto:function(obj, x,y){
-		var self = this;
-		var sb = host.stringBuffer();
-		return sb.clear()._('<img src="index.php?option=com_manager&task=getResizeImage&id=')._(obj.photo)._('&w=')._(x)._('&h=')._(y)._('">').result();
+		return ['<img src="index.php?option=com_manager&task=getResizeImage&id=',obj.photo,'&w=',x,'&h=',y,'">'].join('');
 	},
 	_getAvatar:function(obj, x, y){
+		if(!obj) return '';
 		var self = this;
-		var sb = host.stringBuffer();
-		var fId,av,defImg;
-		fId = obj.indiv.FacebookId;
-		av = obj.avatar;
-		defImg = (obj.indiv.Gender=="M")?'male.gif':'female.gif';
-		if(av != null && av.FilePath != null){
-			return sb.clear()._('<img src="index.php?option=com_manager&task=getResizeImage&id=')._(av.Id)._('&w=')._(x)._('&h=')._(y)._('">').result();
+		var fId = obj.indiv.FacebookId,
+			av = obj.avatar,		
+			defImg=(obj.indiv.Gender=="M")?'male.gif':'female.gif';	
+		if(av!= null&&av.FilePath != null){
+			return ['<img src="index.php?option=com_manager&task=getResizeImage&id=',av.Id,'&w=',x,'&h=',y,'">'].join('');
 		}
 		else if(fId != '0'){
-			return sb.clear()._('<img src="index.php?option=com_manager&task=getResizeImage&fid=')._(fId)._('&w=')._(x)._('&h=')._(y)._('">').result();
+			return ['<img src="index.php?option=com_manager&task=getResizeImage&fid=',fId,'&w=',x,'&h=',y,'">'].join('');
 		}
-		var defImgPath = sb.clear()._(self.imgPath)._('/components/com_manager/modules/profile/image/')._(defImg).result();
-		return sb.clear()._('<img height="')._(y)._('px" width="')._(x)._('px" src="')._(defImgPath)._('">').result();
+		var defImgPath = [self.imgPath,'/components/com_manager/modules/profile/image/',defImg].join('');
+		return ['<img height="',y,'px" width="',x,'px" src="',defImgPath,'">'].join('');
 	},
 	_getAvatar2:function(x, y, type){
-		var self = this;
-		var sb = host.stringBuffer();
-		defImg =(type=="M")?'male.gif':'female.gif';
-		defImgPath = sb._(self.imgPath)._("/components/com_manager/modules/profile/image/")._(defImg).result();
-		return  sb.clear()._('<img height="')._(y)._('px" width="')._(x)._('px" src="')._(defImgPath)._('">').result();
+		var self = this,
+			defImg =(type=="M")?'male.gif':'female.gif',
+			defImgPath = [self.imgPath,"/components/com_manager/modules/profile/image/",defImg].join('');
+		return ['<img height="',y,'px" width="',x,'px" src="',defImgPath,'">'].join('');
 	},
 	_photos:function(p){
 		var self = this;

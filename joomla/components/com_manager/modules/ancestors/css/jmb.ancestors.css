@@ -17,10 +17,14 @@
 	margin-top: -3px;
 }
 .jit-node-item .photo{
-	border: 1px solid #000;
-	background:white;
+	background: none repeat scroll 0 0 white;
+	border: 1px solid #000000;
 	height: 80px;
+	position: relative;
 	width: 72px;
+}
+.jit-node-item .photo img {
+	cursor: url("../images/magnify.png"), pointer;
 }
 .jit-node-item .data{
 	font-family: Calibri,Tahoma;
@@ -34,7 +38,7 @@
 	background:white;
 }
 .jit-node-item .data.female{
-	 background: antiqueWhite;
+	background: antiqueWhite;
 }
 .jit-node-item .data div{
 	font-weight: bold;
@@ -62,4 +66,21 @@
 	position: absolute;
 	right: -20px;
 	top: 30px;
+}
+.jit-edit-button {
+	background: url("../images/edit2.jpg") no-repeat scroll 0 0 transparent;
+	cursor: pointer;
+	height: 18px;
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 18px;
+}
+.jit-facebook-icon {
+	cursor: pointer;
+	height: 18px;
+    	position: absolute;
+    	right: 0;
+    	top: 62px;
+    	width: 18px;
 }

@@ -507,6 +507,20 @@ JMBProfileFull.prototype = {
 		//ajax	
 		jQuery(self.parent.dWindow).find('div.jmb-dialog-profile-content').append(htmlObject);
 	},
+	_getTimeLine:function(object){
+		var self = this,
+			sb = host.stringBuffer(),
+			events = object.events;
+		events.sort(function(a, b) { 
+			return a.From.Year - b.From.Year;
+		});
+		sb._('<ul>');
+			jQuery(events).each(function(i, event){
+				sb._('<li>')._(self.parent._getEventLine(event))._('</li>');
+			});
+		sb._('</ul>');		
+		return sb.result();
+	},
 	_vprofile:function(){
 		var self = this;
 		var sb = host.stringBuffer();
@@ -547,7 +561,7 @@ JMBProfileFull.prototype = {
 					sb._('<td colspan="2">');
 						sb._('<div class="list">');
 							sb._('<div class="list-header"><span>Time line:</span></div>');
-							//sb._('<div class="list-item"><span>1960 - Born in Toronto,Ontario Canada</span></div>');
+								sb._(self._getTimeLine(object));
 						sb._('</div>')
 					sb._('</td>');
 				sb._('</tr>');

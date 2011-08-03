@@ -3,6 +3,7 @@ function JMBAncestors(obj){
 	var cont = jQuery('<div id="jit" class="jmb-ancestors-jit"></div>');
 	jQuery(obj).append(cont);
 
+	this.profile = new JMBProfile();
 	this.json = null;
 	this.response = null;
 	this.ancestors = null;
@@ -18,9 +19,13 @@ function JMBAncestors(obj){
 		self.objects = req.objects;
 		self.json = req.json;
 		self.imgPath = req.path;
+		self.fmbUser = req.fmbUser;
 		self.st = self.load(self.json);
 	});
-	_A = this;
+	
+	storage.addEvent(storage.tabs.clickPull, function(object){
+		self.profile.cleaner();
+	})
 }
 
 JMBAncestors.prototype = {
@@ -28,6 +33,9 @@ JMBAncestors.prototype = {
 		host.callMethod("ancestors", "JMBAncestors", func, params, function(res){
 				callback(res);
 		})
+	},
+	_id:function(id){
+		return id.substr(1, id.length);
 	},
 	_getDataIndividual:function(id){
 		return this.ancestors[id.substr(1, id.length)];
@@ -72,6 +80,18 @@ JMBAncestors.prototype = {
 		var defImgPath = [self.imgPath, '/components/com_manager/modules/ancestors/images/', defImg].join("");
 		return ['<img height="80px" width="72px" src="', defImgPath, '">'].join("");
 	},
+	_getEdit:function(id){
+		var data = this._getDataIndividual(id);
+		return ['<div id="',data.indiv.Id,'-edit" class="jit-edit-button">&nbsp;</div>'].join("");
+	},
+	_getFacebook:function(id){
+		var data = this._getDataIndividual(id);
+		if(data.indiv.FacebookId!='0'){
+			var imgPath = [self.imgPath,'/components/com_manager/modules/families/css/facebook.gif'].join('');
+			return ['<div class="jit-facebook-icon" id="',data.indiv.FacebookId,'"><img src="',imgPath,'" width="18x" height="18px"></div>'].join('')
+		}
+		return '';
+	},
 	_createNode:function(label, node){
 		if(!node.data.flag) return ''; 
 		var self = this;
@@ -81,7 +101,12 @@ JMBAncestors.prototype = {
 		sb._('<div class="jit-node-item">');			
 			sb._('<table>');
 				sb._('<tr>');
-					sb._('<td><div class="photo">')._(self._getAvatar(node.id))._('</div></td>');
+					sb._('<td>');
+						sb._('<div id="')._(self._id(node.id))._('-view" class="photo">')._(self._getAvatar(node.id));
+							sb._(self._getEdit(node.id));
+							sb._(self._getFacebook(node.id));
+						sb._('</div>');
+					sb._('</td>');
 					sb._('<td valign="top"><div class="data')._((gender=='M')?' male':' female')._('">')
 						sb._('<div class="name">')._(self._getName(node.id))._('</div>');
 						if(birth = self._getEventString(node.id, 'Birth')){
@@ -110,6 +135,43 @@ JMBAncestors.prototype = {
 			this.render(tree);
 		}
 	},
+	_onClickEditButon:function(label,node){
+		if(!node.data.flag) return;
+		var self = this,
+			data = this._getDataIndividual(node.id),
+			object = jQuery(label).find('.jit-edit-button'),
+			id = jQuery(object).attr('id');
+		self.profile.tooltip.render({
+			target: object,
+			id: id,
+			type: 'tooltip',
+			data: data,
+			imgPath:self.imgPath,
+			fmbUser:self.fmbUser,
+			eventType:'click',
+			parent:document.body,
+			beforeClose:function(){
+				console.log('[profile] closed');
+			}
+		});
+	},
+	_onClickToPhoto:function(label, node){
+		if(!node.data.flag) return;
+		var self = this,
+			data = this._getDataIndividual(node.id),
+			object = jQuery(label).find('div.photo'),
+			id = jQuery(object).attr('id');
+		self.profile.tooltip.render({
+			target: object,
+			id: id,
+			type: 'mini',
+			data: data,
+			imgPath:self.imgPath,
+			fmbUser:self.fmbUser,
+			eventType:'click',
+			parent:document.body
+		});
+	},
 	load:function(json){
 		var self = this;
 		//Create a new ST instance
@@ -122,27 +184,34 @@ JMBAncestors.prototype = {
 			duration: 800,
 			transition: $jit.Trans.Quart.easeInOut,
 			Node: {
-			    height: 80,
-			    width: 210,
-			    type: 'rectangle',
-			    color:'#999',  
-			    lineWidth: 2,  
-			    align:"center",  
-			    overridable: true
+				height: 80,
+				width: 210,
+				type: 'rectangle',
+				color:'#999',  
+				lineWidth: 2,  
+				align:"center",  
+				overridable: true
 			},
 			Edge: {
-			    type: 'bezier',
-			    lineWidth: 2,  
-			    color:'#999',  
-			    overridable: true
+				type: 'bezier',
+				lineWidth: 2,  
+				color:'#999',  
+				overridable: true
 			},
 			onCreateLabel: function(label, node){
 				//console.log(node);
-			    label.id = node.id;            
-			    label.innerHTML = self._createNode(label, node);
-			    jQuery(label).find('.jit-node-arrow').click(function(){
-			    	self._onClick(label, node);
-			    });
+				label.id = node.id;            
+				label.innerHTML = self._createNode(label, node);
+				//self._onClickToPhoto(label, node);
+				self._onClickEditButon(label,node);
+				jQuery(label).find('.jit-node-arrow').click(function(){
+					self._onClick(label, node);
+				});
+				jQuery(label).find('.jit-facebook-icon').click(function(){
+					var id = jQuery(this).attr('id');
+					var url = ['http://www.facebook.com/profile.php?id=',id].join('');
+					window.open(url,'new','width=320,height=240,toolbar=1');
+				});
 			}
 		});
 		//load json data
@@ -154,6 +223,7 @@ JMBAncestors.prototype = {
 		return st;
 	}, 
 	render:function(json){
+		this.profile.cleaner();
 		var st = this.st;
 		//load json data
 		st.loadJSON(json);
