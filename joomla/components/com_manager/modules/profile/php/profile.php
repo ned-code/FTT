@@ -191,7 +191,6 @@ class JMBProfile {
 		} else {
 			$fam = $this->host->gedcom->families->get($fam_id);
 			$this->_addParent_($ind, $fam, $_POST['gender']);
-			
 			$this->host->gedcom->families->update($fam);
 		}
 		return array('i'=>$ind,'f'=>$fam,'photo'=>$photo);

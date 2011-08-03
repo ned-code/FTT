@@ -128,6 +128,7 @@ class DescendantTree {
                     }
                 }
                 $this->color = $color;
+                ob_clean();
 		header("Content-type: text/xml");
 		$xml ='<?xml version="1.0" encoding="utf-8"?>';
 		$xml .= '<tree id="0">';		

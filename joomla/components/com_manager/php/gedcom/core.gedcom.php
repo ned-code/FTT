@@ -29,7 +29,7 @@ class Gedcom{
         	foreach ($args as $i=>$v) {
         		if (!$i) continue;
         		if (is_int($v)) continue;
-        		$args[$i] = "'".mysql_escape_string($v)."'";
+        		$args[$i] =($args[$i]==null)?"NULL":"'".mysql_escape_string($v)."'";
         	}
         	for ($i=$c=count($args)-1; $i<$c+20; $i++){ 
         		$args[$i+1] = "UNKNOWN_PLACEHOLDER_$i";

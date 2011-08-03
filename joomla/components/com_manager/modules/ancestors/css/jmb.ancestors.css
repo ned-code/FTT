@@ -6,26 +6,60 @@
 	position:relative;
 }
 .jit-node-item{
-	border: 1px solid #999999;
+	background: none repeat scroll 0 0 #999999;
+	border: 1px solid #000000;
 	height: 80px;
+	position: relative;
 	width: 209px;
-	background:#999;
 }
 .jit-node-item table{
 	margin-left: -3px;
 	margin-top: -3px;
 }
 .jit-node-item .photo{
-	border: 1px solid #999999;
+	border: 1px solid #000;
+	background:white;
 	height: 80px;
 	width: 72px;
 }
 .jit-node-item .data{
 	font-family: Calibri,Tahoma;
 	font-size: 12px;
-	
+	height: 80px;
+	margin-left: -2px;
+	margin-top: 1px;
+	width: 136px;
 }
-.jit-node-item .data div{}
-.jit-node-item .data .name{}
-.jit-node-item .data .birth{}
-.jit-node-item .data .deat{}
+.jit-node-item .data.male{
+	background:white;
+}
+.jit-node-item .data.female{
+	 background: antiqueWhite;
+}
+.jit-node-item .data div{
+	font-weight: bold;
+	height: 20px;
+    	margin-left: 3px;
+    	padding-top: 5px;
+    	text-align: left;
+}
+.jit-node-arrow{
+	border: medium none;
+	cursor: pointer;
+	height: 16px;
+	margin: 0;
+	padding: 0;
+	width: 16px;
+}
+.jit-node-arrow.left {
+	background: url("../images/vector-left.gif") repeat scroll 0 0 transparent;
+	left: -20px;
+    	position: absolute;
+    	top: 30px;
+}
+.jit-node-arrow.right {
+	background: url("../images/vector-right.gif") repeat scroll 0 0 transparent;
+	position: absolute;
+	right: -20px;
+	top: 30px;
+}

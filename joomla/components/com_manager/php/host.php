@@ -6,8 +6,7 @@ class Host {
 	*
 	*/
 	public $gedcom;
-
-        public $modulesPath = "../modules/";
+        public $modulesPath;
 	/**
 	*
 	*/
@@ -48,9 +47,13 @@ class Host {
          * @return <type>
          *
          */
-        function callMethod($modulename,$classname, $method, $arguments){	
+        function callMethod($modulename,$classname, $method, $arguments){
             $args = explode("|", $arguments);
-            require_once $this->modulesPath.$modulename."/php/".$modulename.".php";
+            $modulePath = $this->modulesPath.$modulename."/php/".$modulename.".php";
+            if(!file_exists($modulePath)){
+            	    return;
+            }           
+            require_once($modulePath);
             if($classname != null){
                 $obj = new $classname;
 
