@@ -222,12 +222,14 @@ JMBProfileTooltip.prototype = {
 	},
 	_eventClick:function(p, buttons){
 		var self = this;
-		jQuery(p.target).click(function(){
+		console.log(p.target);
+		jQuery(p.target).click(function(e){
 			jQuery(p.target).btOn();
 			self.btActive = p.target;
 			jQuery(buttons).each(function(i,e){
 				self._clickTooltip(p, e);
 			});
+			return false;
 		});
 		
 	},

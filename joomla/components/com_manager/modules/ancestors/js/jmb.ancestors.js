@@ -202,7 +202,7 @@ JMBAncestors.prototype = {
 				//console.log(node);
 				label.id = node.id;            
 				label.innerHTML = self._createNode(label, node);
-				//self._onClickToPhoto(label, node);
+				self._onClickToPhoto(label, node);
 				self._onClickEditButon(label,node);
 				jQuery(label).find('.jit-node-arrow').click(function(){
 					self._onClick(label, node);

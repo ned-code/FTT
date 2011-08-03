@@ -168,13 +168,8 @@ JMBProfile.prototype = {
 			return 'unknown';
 		}
 	},
-	_getRelation_:function(id, data, ret){
-		for(var a in data){
-			if(data[a].id==id) return ret;
-		}
-		return false;
-	},
 	_getRelation:function(obj){
+		console.time('_getRaltaion');
 		var self = this;
 		if(!obj.fmbUser) return 'is you.';
 		var id = obj.fmbUser.indiv.Id;
@@ -186,15 +181,18 @@ JMBProfile.prototype = {
 			}
 		}
 		//spouse;
-		var spouse = self._getRelation_(id, obj.data.spouses, 'Spouse')
-		if(spouse != 0){
-			return spouse;
+		var i;
+		for(i=0;i<obj.data.spouses.length;i++){
+			if(obj.data.spouses[i].id==id){
+				return 'Spouses'
+			}
 		}
-		//child;
-		var parent = self._getRelation_(id, obj.data.children, 'Parent')
-		if(parent != 0){
-			return parent;
+		for(i=0;i<obj.data.children.length;i++){
+			if(obj.data.children[i].gid==id){
+				return 'Parent';
+			}
 		}
+		console.timeEnd('_getRelation');
 		return false;
 	},
 	_getSpouseAvatar:function(obj, x, y){
