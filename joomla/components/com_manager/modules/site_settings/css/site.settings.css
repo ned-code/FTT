@@ -1,88 +1,77 @@
-.site-settings-box {
-	height:398px;
-	overflow:auto;
+.site-settings-box{
+	color: #000000;
+	font-family: Calibri,Tahoma;
+	font-size: 12px;
+	font-weight: normal;
+}
+.settings-progressbar{
+	background: url("../img/progressbar.gif") no-repeat scroll 50% 50% transparent;
+	left: 0;
+	position: absolute;
+	top: 0;
+}
+.site-settings-container{}
+.settings-tabs{
+	background: none repeat scroll 0 0 #DEE8F1;
+	border: 1px solid #A4BED4;
+	height: 30px;
+}
+.settings-tabs ul{
+	margin: 0;
+	padding: 0;
+}
+.settings-tabs ul li{
+	background: none repeat scroll 0 0 #BFDCF5;
+	display: inline-block;
+}
+.settings-tabs ul li div.item{
+	border: 1px solid #A4BED4;
+    	cursor: pointer;
+    	height: 22px;
+    	padding-top: 6px;
+    	text-align: center;
+    	width: 100px;
+}
+.settings-tabs ul li:hover{
+	background: none repeat scroll 0 0 #6b92b3;
+}
+.settings-tabs ul li.active{
+	background: none repeat scroll 0 0 #8AAFCE;
+	color: white;
+}
+.settings-content{
+	position: relative;
 }
 
-.site-settings-body{
+.settings-content:first-child td{
+	width:30%;
+}
+.settings-content div.languages li,div.modules li{
+	cursor: pointer;
+	padding: 3px;
+}
+.settings-content div.languages li.active,div.modules li.active{
+	background: none repeat scroll 0 0 yellow;
+}
+.settings-content div.modules li.translated {
+	color:black;
+}
+.settings-content div.modules li.no-translation {
+	color:gray;
+	cursor:normal;
+}
+.settings-content div.buttons {
+	margin-left: 30px;
+	margin-top: 15px;
+}
+.settings-content div.buttons div {
 	margin: 10px;
 }
-
-
-.site-settings-body td {
-	vertical-align: top;
-}
-
-.site-settings-label {
-	width: 100px;
-	text-align: center;	
-	color: #256187;
-	font-family: Tahoma;
-	font-size: inherit;
-	font-weight: bold;
-}
-
-.site-settings-textarea textarea {
-	width: 300px;
-	height: 150px;
-	border: 1px solid #A4BED4;
-	color: #000000;
-	font-family: Tahoma;
-	font-size: inherit;
-}
-
-.site-settings-input input {
-	width: 300px;
-	border: 1px solid #A4BED4;
-	color: #000000;
-	font-family: Tahoma;
-	font-size: inherit;
-}
-
-
-.site-settings-select {
-	float:left;
-}
-
-.site-settings-select select {
-	font-family: Tahoma;
-	font-size: 12px;
-	height: 24px;
-	text-align: center;
-	width: 200px;
-	padding: 3px;
-	border: 1px solid #63A4FF;
-}
-
-.site-settings-delete {
-	cursor:pointer;
-	float:left;
-	background: url("../img/icons.gif") no-repeat scroll -91px 0 transparent;
-	height: 24px;
-	width: 24px;
+.settings-content div.buttons input[type="submit"],input[type="button"] {
+	background: none repeat scroll 0 0 white;
+	border: 1px solid #999999;
+	border-radius: 3px 3px 3px 3px;
+	cursor: pointer;
 	margin-left: 3px;
-}
-
-.site-settings-modules {
-	height: 260px;
-	overflow:auto;
-}
-
-.site-settings-modules-label {
-	border: 1px dotted #256184;
-	color: #256187;
-	font-family: Tahoma;
-	font-size: 12px;
-	height: 24px;
-	padding: 5px 0 0 5px;
-	text-align: left;
-	width: 265px;
-}
-
-.site-settings-modules-delete {
-	cursor:pointer;
-	float:left;
-	background: url("../img/icons.gif") no-repeat scroll -91px 0 transparent;
-	height: 24px;
-	width: 24px;
-	margin-left: 3px;
+	width: 70px;
 }

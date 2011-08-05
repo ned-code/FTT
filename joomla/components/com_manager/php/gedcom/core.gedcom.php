@@ -7,19 +7,31 @@ class Gedcom{
         public $core;
         public function __construct(&$core){
         	$gedcomPath = JPATH_BASE.DS.'components'.DS.'com_manager'.DS.'php'.DS.'gedcom'.DS.'classes';
-        	require_once $gedcomPath.DS.'class.individuals.manager.php';
-        	require_once $gedcomPath.DS.'class.events.manager.php';
-        	require_once $gedcomPath.DS.'class.families.manager.php';
-        	require_once $gedcomPath.DS.'class.locations.manager.php';
-        	require_once $gedcomPath.DS.'class.media.manager.php';
-            require_once $gedcomPath.DS.'class.conflicts.manager.php';
+        	if(file_exists($gedcomPath.DS.'class.individuals.manager.php')){
+        		require_once $gedcomPath.DS.'class.individuals.manager.php';
+        		$this->individuals = new IndividualsList($this);
+        	}
+        	if(file_exists($gedcomPath.DS.'class.events.manager.php')){
+        		require_once $gedcomPath.DS.'class.events.manager.php';
+        		$this->events = new EventsList($this);
+        	}
+        	if(file_exists($gedcomPath.DS.'class.families.manager.php')){
+        		require_once $gedcomPath.DS.'class.families.manager.php';
+        		$this->families = new FamiliesList($this);
+        	}
+        	if(file_exists($gedcomPath.DS.'class.locations.manager.php')){
+        		require_once $gedcomPath.DS.'class.locations.manager.php';
+        		$this->locations = new LocationsList($this);
+        	}
+        	if(file_exists($gedcomPath.DS.'class.media.manager.php')){
+        		require_once $gedcomPath.DS.'class.media.manager.php';
+        		$this->media = new MediaList($this);
+        	}
+        	if(file_exists($gedcomPath.DS.'class.conflicts.manager.php')){
+        		require_once $gedcomPath.DS.'class.conflicts.manager.php';
+        		 $this->conflicts = new ConflictsList($this);
+        	}
         	$this->core = $core;
-        	$this->families = new FamiliesList($this);
-        	$this->individuals = new IndividualsList($this);
-        	$this->locations = new LocationsList($this);
-        	$this->events = new EventsList($this);
-        	$this->media = new MediaList($this);
-            $this->conflicts = new ConflictsList($this);
         }  
         public function sql(){
         	$args = func_get_args();

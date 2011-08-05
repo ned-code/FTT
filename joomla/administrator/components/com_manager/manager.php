@@ -24,23 +24,6 @@ $document->addScript('components/com_manager/codebase/dhtmlxtree.js');
 $document->addScript('components/com_manager/codebase/dhtmlxform.js');
 $document->addScript('components/com_manager/codebase/dhtmlxtabbar.js');
 
-/*
-$document->addScript('../components/com_manager/modules/member_profile/js/profile.js?111');
-$document->addStyleSheet('../components/com_manager/modules/member_profile/css/profile.css?111');
-$document->addScript('../components/com_manager/modules/member_profile/js/profile.media.js?111');
-$document->addScript('../components/com_manager/modules/member_profile/js/profile.edit.confirm.js?111');
-
-$document->addStyleSheet('../components/com_manager/modules/member_profile/css/profile.media.css?111');
-$document->addScript('../components/com_manager/modules/member_profile/js/edit.profile.js?111');
-$document->addStyleSheet('../components/com_manager/modules/member_profile/css/edit.profile.css?111');
-
-$document->addScript('../components/com_manager/modules/member_profile/js/profile.media.manager.js?111');
-$document->addStyleSheet('../components/com_manager/modules/member_profile/css/profile.media.manager.css?111');
-
-//$document->addScript('../components/com_manager/modules/member_profile/js/jquery.lightbox-0.5.pack.js?111');
-$document->addStyleSheet('../components/com_manager/modules/member_profile/css/jquery.lightbox-0.5.css');
-*/
-
 $css_code = 'html, body {
 	    	width: 100%;
 	        height: 100%;
@@ -102,7 +85,8 @@ $user = & JFactory::getUser();
 JHTML::_('behavior.mootools');
 
 $document = &JFactory::getDocument();
-$document->addScript( 'components/com_manager/js/jquery.min.js' );
+$document->addScript('components/com_manager/js/jquery.min.js');
 $document->addScript('components/com_manager/js/jquery-ui.min.js');
+$document->addScript('components/com_manager/js/jquery.form.js');
 $document->addCustomTag( '<script type="text/javascript">jQuery.noConflict();</script>' );
 ?>
