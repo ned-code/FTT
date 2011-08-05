@@ -1,3 +1,0 @@
-function doClick(){
-	alert('click!');
-}
