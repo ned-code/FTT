@@ -6,7 +6,6 @@ function JMBThisMonth(obj){
 	this.content = { table:null, birth:null, death:null, marr:null };
 	
 	//objects
-	this.months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 	this.table = jQuery('<table width="100%"><tr><td><div class="jmb-this-month-header"></div></td></tr><tr><td><div class="jmb-this-month-body"></div></td></tr></table>');
 	this.profile = new JMBProfile();
 	
@@ -40,10 +39,10 @@ JMBThisMonth.prototype = {
 		m = user.MiddleName;
 		l = user.LastName;
 		if(f!=''&&m!=''&&l!=''){
-			return f+" "+m+" "+l;
+			return [f,m,l].join(' ');
 		}
 		else if(f!=''&&m==''&&l!=''){
-			return f+" "+l;
+			return [f,l].join(' ')
 		}
 		else if(f==''&&m==''&&l!=''){
 			return l;
@@ -64,15 +63,16 @@ JMBThisMonth.prototype = {
 		return jQuery('<table><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table>');
 	},
 	_createEventTableView:function(id, title){
-		return jQuery('<div id="'+id+'"><div class="jmb-this-month-view">'+title+'</div><div class="jmb-this-month-content"><table></table></div></div>');
+		return jQuery(['<div id="',id,'"><div class="jmb-this-month-view">',title,'</div><div class="jmb-this-month-content"><table></table></div></div>'].join(''));
 	},
 	_createBody:function(){
 		var self = this;
 		var c = self.content;
+		var types = self.json.language.event_type
 		c.table = self._createTableView();
-		c.birth = self._createEventTableView('jmb-this-month-birth', 'Birthdays:');
-		c.death = self._createEventTableView('jmb-this-month-death', 'We remember:');
-		c.marr = self._createEventTableView('jmb-this-month-marr', 'Anniversaries:');
+		c.birth = self._createEventTableView('jmb-this-month-birth', types.birthday+':');
+		c.death = self._createEventTableView('jmb-this-month-death', types.we_remember+':');
+		c.marr = self._createEventTableView('jmb-this-month-marr', types.anniversaries+':');
 		jQuery(c.table[0].rows[0].cells[0]).append(c.birth);
 		jQuery(c.table[0].rows[2].cells[0]).append(c.death);
 		jQuery(c.table[0].rows[1].cells[0]).append(c.marr);
@@ -80,8 +80,9 @@ JMBThisMonth.prototype = {
 	},
 	_createMonthsSelect:function(json){
 		var sb = host.stringBuffer();
+		var months = this.json.language.months;
 		for(var i=0;i<12;i++){
-			sb._('<option ')._((i==json.settings.opt.month-1)?'selected':'')._(' value="')._(i+1)._('">')._(this.months[i])._('</option>')
+			sb._('<option ')._((i==json.settings.opt.month-1)?'selected':'')._(' value="')._(i+1)._('">')._(months[i])._('</option>')
 		}
 		return sb.result();
 	},
@@ -90,18 +91,19 @@ JMBThisMonth.prototype = {
 		var sb = host.stringBuffer();
 		var sort_date = json.settings.split_event.year;
 		var sort_type = json.settings.split_event.type;
+		var sort_lang = json.language.sort;
 		if(date < sort_date && sort_type == '-1'){
-			return sb._('<option value="1">After ')._(sort_date)._('</option><option selected value="-1">Before ')._(sort_date)._('</option><option value="0">All Years</option>').result();
+			return sb._('<option value="1">')._(sort_lang.after)._(' ')._(sort_date)._('</option><option selected value="-1">')._(sort_lang.before)._(' ')._(sort_date)._('</option><option value="0">')._(sort_lang.all)._(' ')._('</option>').result();
 		} else if(date < sort_date && sort_type == '0'){
-			return sb._('<option value="1">After ')._(sort_date)._('</option><option value="-1">Before ')._(sort_date)._('</option><option selected value="0">All Years</option>').result();
+			return sb._('<option value="1">')._(sort_lang.after)._(' ')._(sort_date)._('</option><option value="-1">')._(sort_lang.before)._(' ')._(sort_date)._('</option><option selected value="0">')._(sort_lang.all)._(' ')._('</option>').result();
 		} else if(date < sort_date && sort_type == '1'){
-			return sb._('<option selected value="1">After ')._(sort_date)._('</option><option value="-1">Before ')._(sort_date)._('</option><option value="0">All Years</option>').result();
+			return sb._('<option selected value="1">')._(sort_lang.after)._(' ')._(sort_date)._('</option><option value="-1">Before ')._(sort_date)._('</option><option value="0">')._(sort_lang.all)._(' ')._('</option>').result();
 		} else if(date > sort_date && sort_type == '-1'){
-			return sb._('<option selected value="-1">Before ')._(sort_date)._('</option><option value="0">All Years</option>').result();
+			return sb._('<option selected value="-1">')._(sort_lang.before)._(' ')._(sort_date)._('</option><option value="0">')._(sort_lang.all)._(' ')._('</option>').result();
 		} else if(date > sort_date && sort_type == '0'){
-			return sb._('<option selected value="0">All Years</option>').result();
+			return sb._('<option selected value="0">')._(sort_lang.all)._(' ')._('</option>').result();
 		} else if(date > sort_date && sort_type == '1'){
-			return sb._('<option value="0">All Years</option>').result();
+			return sb._('<option value="0">')._(sort_lang.all)._(' ')._('</option>').result();
 		}
 	},
 	_setHEAD:function(json){
@@ -127,7 +129,8 @@ JMBThisMonth.prototype = {
 				} 
 			}
 		} else {
-			self._setMessage(view, 'howToDo.html','#jmb-this-month-birth', '<div class="message">There are currently no "birthdays" associated with this month. <font color="#b6bad9">How do i add some?</font></div>');
+			var howdo = self.json.language.howdo.replace('%%',self.json.language.event_type.birthday+' ').split('.');	
+			self._setMessage(view, 'howToDo.html','#jmb-this-month-birth', ['<div class="message">',howdo[0],'<font color="#b6bad9">',howdo[1],'</font></div>'].join(''));
 		}
 	},
 	_setDEATH:function(table, json){
@@ -147,7 +150,8 @@ JMBThisMonth.prototype = {
 				} 
 			}
 		} else {
-			self._setMessage(view, 'howToDo.html','#jmb-this-month-death', '<div class="message">There are currently no "we remember" associated with this month. <font color="#b6bad9">How do i add some?</font></div>');
+			var howdo = self.json.language.howdo.replace('%%',self.json.language.event_type.we_remember+' ').split('.');	
+			self._setMessage(view, 'howToDo.html','#jmb-this-month-death', ['<div class="message">',howdo[0],'<font color="#b6bad9">',howdo[1],'</font></div>'].join(''));
 		}
 	},
 	_setMARR:function(table, json){
@@ -175,7 +179,8 @@ JMBThisMonth.prototype = {
 				}
 			}
 		} else {
-			self._setMessage(view, 'howToDo.html','#jmb-this-month-marr', '<div class="message">There are currently no "anniversaries" associated with this month. <font color="#b6bad9">How do i add some?</font></div>');
+			var howdo = self.json.language.howdo.replace('%%',self.json.language.event_type.anniversaries+' ').split('.');	
+			self._setMessage(view, 'howToDo.html','#jmb-this-month-marr', ['<div class="message">',howdo[0],'<font color="#b6bad9">',howdo[1],'</font></div>'].join(''));
 		}
 	},
 	_setMessage:function(view, hCode, target, message){
@@ -187,9 +192,11 @@ JMBThisMonth.prototype = {
 		})
 	},
 	load:function(month, sort, callback){
-		var settings = month+';'+sort;
+		var self = this;
+		var settings = [month,sort].join(';');
 		this._ajax("load", settings, function(req){
 			var json = jQuery.parseJSON(req.responseText);
+			self.json = json;
 			callback(json);
 		});
 	},

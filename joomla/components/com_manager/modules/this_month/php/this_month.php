@@ -204,6 +204,36 @@ class JMBThisMonth {
 	}
 	
 	/**
+	*
+	*/
+	protected function getLanguage(){
+		$header = JTEXT::_('COM_MANAGER_THISMONTH_HEADER');
+		$howdo = JTEXT::_('COM_MANAGER_THISMONTH_HOWDO');
+		$event_type = array();
+		$event_type['birthday'] = JTEXT::_('COM_MANAGER_THISMONTH_BIRTHDAYS');
+		$event_type['anniversaries'] = JTEXT::_('COM_MANAGER_THISMONTH_ANNIVERSARIES');
+		$event_type['we_remember'] = JTEXT::_('COM_MANAGER_THISMONTH_REMEMBER');
+		$sort= array();
+		$sort['after'] = JTEXT::_('COM_MANAGER_THISMONTH_AFTER');
+		$sort['before'] = JTEXT::_('COM_MANAGER_THISMONTH_BEFORE');
+		$sort['all'] = JTEXT::_('COM_MANAGER_THISMONTH_ALLYEARS');
+		$months = array();
+		$months[] = JTEXT::_('COM_MANAGER_THISMONTH_JANUARY');
+		$months[] = JTEXT::_('COM_MANAGER_THISMONTH_FEBRUARY');
+		$months[] = JTEXT::_('COM_MANAGER_THISMONTH_MARCH');
+		$months[] = JTEXT::_('COM_MANAGER_THISMONTH_APRIL');
+		$months[] = JTEXT::_('COM_MANAGER_THISMONTH_MAY');
+		$months[] = JTEXT::_('COM_MANAGER_THISMONTH_JUNE');
+		$months[] = JTEXT::_('COM_MANAGER_THISMONTH_JULY');
+		$months[] = JTEXT::_('COM_MANAGER_THISMONTH_AUGUST');
+		$months[] = JTEXT::_('COM_MANAGER_THISMONTH_SEPTEMBER');
+		$months[] = JTEXT::_('COM_MANAGER_THISMONTH_OCTOBER');
+		$months[] = JTEXT::_('COM_MANAGER_THISMONTH_NOVEMBER');
+		$months[] = JTEXT::_('COM_MANAGER_THISMONTH_DECEMBER');
+		return array('header'=>$header,'howdo'=>$howdo,'event_type'=>$event_type,'sort'=>$sort,'months'=>$months);
+	}
+	
+	/**
 	* get json data about all user(with sort)
 	* @var $month numeric of month
 	* @var $sort get of how sort people(after,before or all)
@@ -231,7 +261,8 @@ class JMBThisMonth {
 			$this->_sort($events);
 		}
 		$this->settings['opt']['month'] = $month;
-		return json_encode(array('fmbUser'=>$fmbUser,'colors'=>$colors,'path'=>$path,'events'=>$events,'descedants'=>$descendants,'settings'=>$this->settings));
+		$language = $this->getLanguage();		
+		return json_encode(array('fmbUser'=>$fmbUser,'colors'=>$colors,'path'=>$path,'events'=>$events,'descedants'=>$descendants,'language'=>$language,'settings'=>$this->settings));
 	}
 	
 }
