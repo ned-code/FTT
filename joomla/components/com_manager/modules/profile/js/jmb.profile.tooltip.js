@@ -123,31 +123,37 @@ JMBProfileTooltip.prototype = {
 			case "edit":
 				jQuery(tooltip).find('.jmb-profile-tooltip-button-edit').click(function(){
 					self.parent.profile.render(p);
+					return false;
 				});
 			break;
 			case "parent":
 				jQuery(tooltip).find('.jmb-profile-tooltip-parent').click(function(){
 					self.parent._addPSC(p, type);
+					return false;
 				});
 			break;
 			case "spouse":
 				jQuery(tooltip).find('.jmb-profile-tooltip-spouse').click(function(){
 					self.parent._addSpouse(p);
+					return false;
 				});
 			break;
 			case "bs":
 				jQuery(tooltip).find('.jmb-profile-tooltip-bs').click(function(){
 					self.parent._addPSC(p, type);
+					return false;
 				});
 			break;
 			case "child":
 				jQuery(tooltip).find('.jmb-profile-tooltip-child').click(function(){
 					self.parent._addPSC(p, type);
+					return false;
 				});
 			break;
 			case "send":
 				jQuery(tooltip).find('.jmb-profile-tooltip-send').click(function(){
-					alert('send request');
+					self.parent._sendRequest(p);
+					return false;
 				});
 			break;
 			case "options":
@@ -159,6 +165,7 @@ JMBProfileTooltip.prototype = {
 					else {
 						jQuery(table).css('display', 'none');
 					}
+					return false;
 				});
 			break;
 			case "delete":
@@ -195,11 +202,13 @@ JMBProfileTooltip.prototype = {
 						});
 						
 					}
+					return false;
 				});
 			break;		
 			case "switch":
 				jQuery(tooltip).find('.jmb-profile-mini-switch').click(function(){
 					self.parent.profile.render(p);
+					return false;
 				});
 			break;
 		}
@@ -222,7 +231,6 @@ JMBProfileTooltip.prototype = {
 	},
 	_eventClick:function(p, buttons){
 		var self = this;
-		console.log(p.target);
 		jQuery(p.target).click(function(e){
 			jQuery(p.target).btOn();
 			self.btActive = p.target;

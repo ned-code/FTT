@@ -295,6 +295,14 @@ JMBProfile.prototype = {
 				title:'',
 				text:'<input name="deceased" type="checkbox" style="position:relative; top:3px;">&nbsp;Divorced/Separated&nbsp;<input placeholder="Year" name="fs_year" type="text" style="width:40px;" maxlength="4">'
 			},
+			facebookId:{
+				title:'<span>Facebook ID:</span>',
+				text:'<input name="facebook_id" type="text">',
+			},
+			email:{
+				title:'<span>Email:</span>',
+				text:'<input name="email" type="text">'
+			},
 			date:{
 				title:function(args){
 					sb._('<span>')._(args.name)._('</span>');
@@ -318,7 +326,7 @@ JMBProfile.prototype = {
 				}
 			},
 			tr:function(style,attr){
-				sb._('<tr ')._(attr)._('style="')._(style)._('">');
+				sb._('<tr ')._(attr||'')._('style="')._(style||'')._('">');
 				return this;
 			},
 			td:function(name,type, settings){
@@ -753,5 +761,41 @@ JMBProfile.prototype = {
 		});	
 		
 		jQuery(this.dWindow).append(this.dContent.object);
+	},
+	_sendRequest:function(p){
+		var self = this;
+		console.log(p);
+		var sb = host.stringBuffer();
+		var field = self._form(sb);	
+		sb._('<div class="jmb-request-container"><form id="jmb:profile:invation" method="post" target="iframe-profile">');
+			sb._('<div style="position:relative;">')
+				sb._('<div class="header">Send Invation</div>');
+				sb._('<table>');
+					field.tr()
+						field.td('facebookId', 'title', {attr:'class="title"'});
+						field.td('facebookId', 'text', {attr:'class="text"'});
+					field.end();
+					field.tr()
+						field.td('email', 'title',{attr:'class="title"'});
+						field.td('email', 'text',{attr:'class="text"'});
+					field.end();
+				sb._('</table>');
+				sb._('<div><input type="submit" value="Send"></div>');
+				sb._('<div class="close">&nbsp;</div>')
+			sb._('</div>');
+		sb._('</form></div>');
+		var html = sb.result();
+		var htmlObject = jQuery(html);
+		var offset = jQuery(p.target).position();
+		jQuery(htmlObject).css('position', 'absolute');
+		jQuery(htmlObject).css('top', '40%');
+		jQuery(htmlObject).css('left', '50%');
+		jQuery(htmlObject).draggable();
+		jQuery(htmlObject).find('div.close').click(function(){
+			jQuery(htmlObject).remove();
+			return false;
+		});
+		self._ajaxForm(jQuery(htmlObject).find('form'), 'invite', null,function(res){}, function(json){});	
+		jQuery(document.body).append(htmlObject);
 	}
 }

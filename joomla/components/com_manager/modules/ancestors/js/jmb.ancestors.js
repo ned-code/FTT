@@ -206,11 +206,13 @@ JMBAncestors.prototype = {
 				self._onClickEditButon(label,node);
 				jQuery(label).find('.jit-node-arrow').click(function(){
 					self._onClick(label, node);
+					return false;
 				});
 				jQuery(label).find('.jit-facebook-icon').click(function(){
 					var id = jQuery(this).attr('id');
 					var url = ['http://www.facebook.com/profile.php?id=',id].join('');
 					window.open(url,'new','width=320,height=240,toolbar=1');
+					return false;
 				});
 			}
 		});

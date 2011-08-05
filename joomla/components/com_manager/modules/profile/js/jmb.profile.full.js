@@ -513,7 +513,7 @@ JMBProfileFull.prototype = {
 			events = object.events;
 		events.sort(function(a, b) { 
 			return a.From.Year - b.From.Year;
-		});
+		})
 		sb._('<ul>');
 			jQuery(events).each(function(i, event){
 				sb._('<li>')._(self.parent._getEventLine(event))._('</li>');

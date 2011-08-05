@@ -422,6 +422,12 @@ class JMBProfile {
 			break;
 		}
 	}
+	/**
+	*
+	*/
+	public function invite($args){
+		
+	}
 }
 
 ?>

@@ -248,3 +248,44 @@
 	border-radius: 5px 5px 5px 5px;
 	position: absolute;
 }
+/** SEND REQUEST */
+.jmb-request-container {
+	background: none repeat scroll 0 0 white;
+	border: 1px solid #999999;
+	border-radius: 5px 5px 5px 5px;
+	font-family: Calibri,Tahoma;
+	font-size: 12px;
+	font-weight: normal;
+	padding: 10px;
+	width: 235px;
+}
+.jmb-request-container .close{
+	background: url("../image/close.gif") no-repeat scroll 0 0 transparent;
+	cursor: pointer;
+	height: 12px;
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 12px;
+}
+.jmb-request-container .header{
+	color: activecaption;
+	font-size: 16px;
+    	font-weight: bold;
+}
+.jmb-request-container .title{
+	font-weight: bold;
+	padding-right: 10px;
+    	text-align: right;
+    	width: 70px;
+}
+.jmb-request-container .text input{
+	border: 1px solid #999999;
+}
+.jmb-request-container input[type="submit"]{
+	border: 1px solid #999999;
+	border-radius: 3px 3px 3px 3px;
+    	margin-left: 10px;
+    	width: 50px;
+    	cursor:pointer;
+}
