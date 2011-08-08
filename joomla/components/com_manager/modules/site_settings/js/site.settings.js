@@ -7,6 +7,10 @@ function SiteSettings(obj){
 	this.activeTab = null;
 	this.activeLang = null;
 	this.activeMod = null;
+	this.langJSON = null;
+	this.modJSON = null;
+	this.titleNum = 0;
+	this.valueNum = 0;
 	
 	//set vars
 	this.offsetParent = jQuery('#'+obj);	
@@ -32,13 +36,15 @@ SiteSettings.prototype = {
 			getLanguages:function(func){
 				self.ajax('getLanguages',args,function(res){
 					var json = jQuery.parseJSON(res.responseText);
+					self.langJSON = json;
 					self[func](json);
 				});
 			},
 			getModules:function(func){
 				self.ajax('getModules',args,function(res){
 					var json = jQuery.parseJSON(res.responseText);
-					self[func](json);
+					self.modJSON = json;
+					self[func](json, args);
 				});
 			}
 		}
@@ -51,9 +57,11 @@ SiteSettings.prototype = {
 				callback(req);
 		})
 	},
-	ajaxForm:function(obj, method, args,beforeSubmit, success){
+	ajaxForm:function(obj, method, args,beforeSubmit, callback){
+		var self = this;
 		var sb = host.stringBuffer();
-		var url = sb._('index.php?option=com_manager&task=callMethod&module=profile&class=JMBProfile&method=')._(method)._('&args=')._(args).result();
+		var url = sb._('index.php?option=com_manager&task=callMethod&module=site_settings&class=SiteSettings&method=')._(method)._('&args=')._(args).result();
+		self.modal(true);
 		jQuery(obj).ajaxForm({
 			url:url,
 			dataType:"json",
@@ -62,7 +70,8 @@ SiteSettings.prototype = {
 				return beforeSubmit();	
 			},
 			success:function(data){
-				success(data);
+				self.modal(false);
+				callback(data);
 			}
 		});
 	}, 
@@ -79,29 +88,101 @@ SiteSettings.prototype = {
 		jQuery(o).addClass('active');
 		this[e] = o;
 	},
-	translated:function(object){
+	getNormalName:function(object, key){
 		var self = this;
+		var modName = jQuery(object).attr('name');
+		modName = (modName.split('_').length==2)?modName.split('_').join('').toUpperCase():modName.toUpperCase();
+		var keyName = 'COM_MANAGER_'+modName+'_';
+		return key.replace(keyName, '').toLowerCase();
+	},
+	setFormButton:function(object){
+		jQuery(object).find('input[name="index"]').click(function(){
+			jQuery(this).parent().parent().find('div.remove').hide();
+			jQuery(this).parent().find('div.remove').show();
+		});
+		jQuery(object).find('div.remove').click(function(){
+			jQuery(this).parent().remove();
+		});
+	},
+	translated:function(object, p){
+		var self = this;
+		var sb = host.stringBuffer();
 		var buttonsRow = jQuery(this.rows).find('div.buttons');
-		var form = jQuery('<form id="language" method="post" target="iframe-settings"><div><input id="new" type="submit" value="New"><input id="update" type="submit" value="Update"><input id="delete" type="submit" value="Delete"></div><div><input id="upload" name="upload" type="file"></div></form>');
+		sb._('<form id="language" method="post" target="iframe-settings"><div><input id="update" type="submit" value="Update"><input id="delete" type="submit" value="Delete"></div><div><input id="upload" name="upload" type="file"></div>');
+			sb._('<div class="values">');
+				var langPack = self.modJSON.parse[jQuery(object).attr('name')];
+				for(var key in langPack){
+					var index = self.getNormalName(object, key);
+					sb._('<div class="value"><input name="index" type="radio"><input name="title')._(++self.titleNum)._('" value="')._(index)._('" type="text" style="width: 75px;"><span>=</span><input name="value')._(++self.valueNum)._('" value="')._(langPack[key])._('" type="text"><div style="display:none;" class="remove">&nbsp;</div></div>');
+				}
+				sb._('<div class="valueAdd"><input type="button" value="Add"></div>');
+			sb._('</div>')
+		sb._('</form>');
+		var form = jQuery(sb.result());
 		jQuery(buttonsRow).html('');
 		jQuery(buttonsRow).append(form);
-		jQuery(form).find('input').click(function(){
+		jQuery(form).find('input#update,input#delete').click(function(){
 			var id = jQuery(this).attr('id');
-			if(id=='upload') return false;
-			var args = [id,jQuery(object).attr('id')].join(';');
-			self.ajaxForm(form, 'setLanguage', args, function(){}, function(){})
-		})
+			var name = jQuery(object).attr('name');
+			var args = [id,p,name].join(';');
+			self.ajaxForm(form, 'setLanguage', args, function(){}, function(data){
+				if(data){
+					if(id=='delete'){
+						jQuery(object).removeClass('translated').addClass('no-translation'); 
+						self.noTranslation(object, p);
+						jQuery(object).click();
+						delete self.modJSON.parse[name];
+					} else {
+						self.modJSON.parse[name] = data.upload_ini[name];
+					}
+				} else {
+					alert('incorrect language file for this module was not added');
+				}
+			});
+		});
+		jQuery(form).find('input[type="button"]').click(function(){
+			var item = jQuery(sb.clear()._('<div class="value"><input name="index" type="radio"><input name="title')._(++self.titleNum)._('" value="" type="text" style="width: 75px;"><span>=</span><input name="value')._(++self.valueNum)._('" value="" type="text"><div style="display:none;" class="remove">&nbsp;</div></div>').result());
+			self.setFormButton(item);
+			jQuery(form).find('div.values').append(item);
+			jQuery(item).insertBefore(jQuery(this).parent());
+			
+		});
+		self.setFormButton(form);
 	},
-	noTranslation:function(object){
+	noTranslation:function(object, p){
 		var self = this;
 		var buttonsRow = jQuery(this.rows).find('div.buttons');
-		var form = jQuery('<form id="language" method="post" target="iframe-settings"><div><input id="new" type="submit" value="New"></div><div><input id="upload" name="upload" type="file"></div></form>');
+		var sb = host.stringBuffer();
+		sb._('<form id="language" method="post" target="iframe-settings"><div><input id="new" type="submit" value="New"></div><div><input id="upload" name="upload" type="file"></div>');
+			sb._('<div class="values">');
+				sb._('<div class="valueAdd"><input type="button" value="Add"></div>');
+			sb._('</div>');
+		sb._('</form>');
+		var form = jQuery(sb.result());
 		jQuery(buttonsRow).html('');
 		jQuery(buttonsRow).append(form);
-		var args = ['new',jQuery(object).attr('id')].join(';');
-		self.ajaxForm(form, 'setLanguage', args, function(){}, function(){})
+		var args = ['new',p,jQuery(object).attr('name')].join(';');
+		jQuery(form).find('input#new').click(function(){
+			self.ajaxForm(form, 'setLanguage', args, function(){}, function(data){
+				if(data){ 
+					jQuery(object).removeClass('no-translation').addClass('translated'); 
+					self.translated(object, p);
+					jQuery(object).click();
+				} else {
+					alert('incorrect language file for this module was not added');
+				}
+			});
+		});
+		jQuery(form).find('input[type="button"]').click(function(){
+			var item = jQuery(sb.clear()._('<div class="value"><input name="index" type="radio"><input name="title')._(++self.titleNum)._('" value="" type="text" style="width: 75px;"><span>=</span><input name="value')._(++self.valueNum)._('" value="" type="text"><div style="display:none;" class="remove">&nbsp;</div></div>').result());
+			self.setFormButton(item);
+			jQuery(form).find('div.values').append(item);
+			jQuery(item).insertBefore(jQuery(this).parent());
+			
+		});
+		self.setFormButton(form);
 	},
-	createModulesList:function(json){
+	createModulesList:function(json, args){
 		var self = this;
 		var sb = host.stringBuffer();
 		var moduleRow = jQuery(this.rows).find('div.modules');
@@ -109,7 +190,7 @@ SiteSettings.prototype = {
 		sb._('<ul>');
 			for(var key in json.modules){
 				var module = json.modules[key];
-				sb._('<li id="')._(module.id||'null')._('" name="')._(module.name||'null')._('" class="')._((key in json.parse)?'translated':'no-translation')._('" >')._(module.title||'unknown')._('</li>');
+				sb._('<li id="')._(module.id||'null')._('" name="')._(module.name||'null')._('" class="')._((key in json.parse)?'translated':'no-translation')._('" >')._(module.name||'unknown')._('</li>');
 			}
 		sb._('</ul>');
 		var object = jQuery(sb.result());
@@ -117,10 +198,10 @@ SiteSettings.prototype = {
 			if(jQuery(this).hasClass('active')) return false;
 			self.active(this,'activeMod');
 			if(jQuery(this).hasClass('translated')){
-				self.translated(this)
+				self.translated(this, args)
 			}
 			if(jQuery(this).hasClass('no-translation')){
-				self.noTranslation(this)
+				self.noTranslation(this, args)
 			}
 			return false;
 		})

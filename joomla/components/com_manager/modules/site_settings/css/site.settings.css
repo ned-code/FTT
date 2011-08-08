@@ -75,3 +75,31 @@
 	margin-left: 3px;
 	width: 70px;
 }
+
+.settings-content div.values {
+	border: 1px solid #A4BED4;
+	max-height: 280px;
+	overflow: auto;
+} 
+.settings-content div.value {
+	position:relative;
+}
+.settings-content div.value span{
+	margin-left: 3px;
+	margin-right: 3px;
+}
+.settings-content div.value input[type="radio"]{
+	position: relative;
+	top: 3px;
+	cursor:pointer;
+}
+.settings-content div.value div.remove{
+	background: url("../img/remove.gif") no-repeat scroll 0 0 transparent;
+	cursor: pointer;
+	height: 14px;
+	position: absolute;
+	right: -6px;
+	top: -6px;
+	width: 14px;
+}
+.settings-content div.valueAdd {}

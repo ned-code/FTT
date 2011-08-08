@@ -109,7 +109,7 @@ JMBThisMonth.prototype = {
 	_setHEAD:function(json){
 		var header = jQuery(this.table).find('.jmb-this-month-header');
 		var sb = host.stringBuffer();
-		sb._('<span>Special Days in</span>: <select name="months">')._(this._createMonthsSelect(json))._('</select> <select name="sort">')._(this._createSortSelect(json))._('</select>');
+		sb._('<span>')._(json.language.header)._('</span>: <select name="months">')._(this._createMonthsSelect(json))._('</select> <select name="sort">')._(this._createSortSelect(json))._('</select>');
 		jQuery(header).append(sb.result());
 	},
 	_setBIRTH:function(table, json){
