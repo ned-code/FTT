@@ -1,5 +1,6 @@
 <?php
 require_once('gedcom/core.gedcom.php');
+require_once('gramps/core.gramps.php');
 //class
 class Host {
 	/**
@@ -7,12 +8,14 @@ class Host {
 	*/
 	public $gedcom;
         public $modulesPath;
+    public $gramps;    
 	/**
 	*
 	*/
 	function __construct($type){		
             $this->modulesPath = JPATH_ROOT."/components/com_manager/modules/";
             $this->gedcom = new Gedcom($this);
+            $this->gramps = new Gramps($this);
 	}
 	
 	/**
