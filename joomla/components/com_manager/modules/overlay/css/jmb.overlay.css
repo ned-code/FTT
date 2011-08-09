@@ -1,0 +1,32 @@
+.jmb-overlay{
+	background: none repeat scroll 0 0 #FFFFFF;
+	border: 5px solid #999999;
+	border-radius: 5px 5px 5px 5px;
+	position: absolute;
+	z-index: 2002;
+}
+.jmb-overlay-modal{
+	z-index:2001;
+	background: none repeat scroll 0 0 #000000;
+	cursor: pointer;
+	left: 0;
+	opacity: 0.75;
+	position: absolute;
+	top: 0;
+}
+.jmb-overlay-container{
+	position: relative;
+}
+.jmb-overlay-close{
+	background: url("../images/confirm-close.png") no-repeat scroll 0 0 transparent;
+	cursor: pointer;
+    	height: 42px;
+    	position: absolute;
+    	right: -25px;
+    	top: -25px;
+    	width: 42px;
+}
+.jmb-overlay-header {}
+.jmb-overlay-body {
+	overflow:auto;
+}

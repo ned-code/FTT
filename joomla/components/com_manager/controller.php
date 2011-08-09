@@ -240,7 +240,7 @@ class JMBController extends JController
         		$f = $host->gedcom->media->get($id);	
         		$filePath = substr(JURI::base(), 0, -1).$f->FilePath;
         	} else {
-        		$filePath = 'http://graph.facebook.com/'.$fid.'/picture';
+        		$filePath = 'http://graph.facebook.com/'.$fid.'/picture?type=large';
         	}
         	$size = getimagesize($filePath);
         	$type = explode('/', $size['mime']);
