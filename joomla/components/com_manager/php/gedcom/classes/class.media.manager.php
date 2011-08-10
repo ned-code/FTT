@@ -27,7 +27,7 @@ class MediaList{
         }
         function get($id){
             $db =& JFactory::getDBO();
-            $req = $this->core->sql('SELECT * FROM #__mb_medias WHERE id=? LIMIT 1', $id);
+            $req = $this->core->sql("SELECT * FROM #__mb_medias WHERE id=? LIMIT 1", $id);
             $db->setQuery($req);
          
             $rows = $db->loadAssocList();
@@ -84,7 +84,7 @@ class MediaList{
         }
         function link($mediaId, $foreignKey){
              $db =& JFactory::getDBO();
-             $req = $this->core->sql("INSERT INTO #__mb_media_link (`gid`, `mid`, `type`) VALUES (?,?, 'IMAG')",$foreignKey,$mediaId);
+             $req = $this->core->sql("INSERT INTO #__mb_media_link (`gid`, `mid`, `type`) VALUES (?,?,'IMAG')",$foreignKey,$mediaId);
              $db->setQuery($req);
            
              $db->query();
@@ -92,7 +92,7 @@ class MediaList{
         function getMediaByGedId($gedid){
             $db =& JFactory::getDBO();
            
-            $req =$this->core->sql('SELECT #__mb_medias.* FROM `#__mb_media_link` LEFT JOIN #__mb_medias ON #__mb_media_link.mid=#__mb_medias.id WHERE #__mb_media_link.gid =?',$gedid);
+            $req =$this->core->sql("SELECT #__mb_medias.* FROM `#__mb_media_link` LEFT JOIN #__mb_medias ON #__mb_media_link.mid=#__mb_medias.id WHERE #__mb_media_link.gid =? AND #__mb_media_link.type='IMAG'",$gedid);
        
             $db->setQuery($req);
 

@@ -6,9 +6,9 @@ class Media{
         public $FilePath;        
         function  __construct() {
             $this->Id = null;
-            $this->Form = null;
+            $this->Type = null;
             $this->Title = null;
-            $this->Path = null;            
+            $this->FilePath = null;            
         }
  
     }

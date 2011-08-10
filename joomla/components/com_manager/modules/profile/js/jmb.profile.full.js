@@ -7,31 +7,20 @@ function JMBProfileFull(parent){
 	this.spouseIndex = 0;
 	this.eventObject = null;
 	this.binds = [];
-
+	
 	this.menu = {
 		"edit":{
-			"profile":{
-				"basic":"Basic Details",
-				"unions":"Unions",
-				"events":"Events",
-				"sources":"Sources",
-				"notes":"Notes"
-			},
-			"media":{
-				"self":"Self",
-				"family":"Family",
-				"other":"Other"
-			}
+			"basic":"Basic Details",
+			"unions":"Unions",
+			"events":"Events",
+			"photos":"Photos"
 		},
 		"view":{
-			"profile":{ "vprofile":"Profile" },
-			"media":{
-				"vself":"Self",
-				"vfamily":"Family",
-				"vother":"Other"
-			}
+			"vprofile":"Profile",
+			"vphotos":"Photos"
 		}
 	}
+	
 	
 	this.singleDayEvents = [
 		{name:'graduation',title:'Graduation'},
@@ -507,6 +496,62 @@ JMBProfileFull.prototype = {
 		//ajax	
 		jQuery(self.parent.dWindow).find('div.jmb-dialog-profile-content').append(htmlObject);
 	},
+	_photosClick:function(object, htmlObject, data){
+		jQuery(htmlObject).find('div.list-item').removeClass('active');
+		jQuery(object).addClass('active');
+		jQuery(htmlObject).find('input#set,input#unset').hide();
+		var id = jQuery(object).parent().attr('id');
+		var inputId = (id==data.avatar.Id)?'unset':'set';
+		jQuery('input#'+inputId).show();
+	},
+	_photos:function(){
+		var self = this;
+		var data = self.json.data;
+		var sb = host.stringBuffer();
+			sb._('<div class="jmb-dialog-photos-content">');
+				sb._('<div class="buttons"><form id="jmb:profile:photos" method="post" target="iframe-profile"><input name="upload" type="file"><input type="submit" value="Send"></form><div class="switch-avatar"><input id="set" type="button" value="Set Avatar" style="display:none;" ><input id="unset" type="button" value="Unset Avatar" style="display:none;"></div></div>');
+				sb._('<div class="list">');
+					sb._('<ul>');
+						jQuery(data.photo).each(function(i,e){
+							sb._('<li id="')._(e.Id)._('">') 
+								sb._('<div class="list-item">');
+									sb._('<div class="header"><span>')._('120.04KB')._('</span><div class="delete">&nbsp;</div></div>');
+									sb._('<div class="item">')._(self.parent._getImage(e, 100,100))._('</div>');
+								sb._('</div>');
+							sb._('</li>');
+						});
+					sb._('</ul>');
+				sb._('</div>');
+			sb._('</div>');
+		var htmlObject = jQuery(sb.result());
+		jQuery(htmlObject).find('div.delete').click(function(){
+			var li = jQuery(this).parent().parent().parent()
+			var id = jQuery(li).attr('id');
+			if(id == data.avatar.Id&&!confirm('This image is the avatar you sure you want to remove it?')){
+				return false;
+			}
+			self.parent._ajax('deletePhoto', id, function(res){
+				jQuery(li).remove();
+			})
+		});
+		jQuery(htmlObject).find('div.list-item').click(function(){
+			self._photosClick(this, htmlObject, data);
+		});
+		self.parent._ajaxForm(jQuery(htmlObject).find('form'), 'uploadPhoto', data.indiv.Id, function(res){}, function(json){
+			sb.clear()._('<li id="')._(json.Id)._('">') 
+				sb._('<div class="list-item">');
+					sb._('<div class="header"><span>')._('120.04KB')._('</span><div class="delete">&nbsp;</div></div>');
+					sb._('<div class="item">')._(self.parent._getImage(json, 100,100))._('</div>');
+				sb._('</div>');
+			sb._('</li>');
+			var li = jQuery(sb.result());
+			jQuery(htmlObject).find('ul').append(li);
+			jQuery(li).find('div.list-item').click(function(){
+				self._photosClick(this, htmlObject, data);
+			});
+		});
+		jQuery(self.parent.dWindow).find('div.jmb-dialog-profile-content').append(htmlObject);
+	},
 	_getTimeLine:function(object){
 		var self = this,
 			sb = host.stringBuffer(),
@@ -580,12 +625,9 @@ JMBProfileFull.prototype = {
 		var sb = host.stringBuffer();
 		var divMenu = jQuery(object).find('.jmb-dialog-profile-menu-container');
 		for(var key in self.menu[type]){
-			sb._('<div id="')._(key)._('" class="jmb-dialog-profile-menu-item-parent"><span>')._(self._firstCharToUpper(key))._('</span></div>');
-			for(var name in self.menu[type][key]){
-				sb._('<div id="')._(name)._('" class="jmb-dialog-profile-menu-item-child"><span>')._(self.menu[type][key][name])._('</span></div>');
-			}
-		}	
-		jQuery(self.activeMenu).find('div.jmb-dialog-profile-menu-item-child').unbind();
+			sb._('<div id="')._(key)._('" class="jmb-dialog-profile-menu-item-parent"><span>')._(self.menu[type][key])._('</span></div>');
+		}
+		jQuery(self.activeMenu).find('div.jmb-dialog-profile-menu-item-parent').unbind();
 		jQuery(self.activeMenu).remove();
 		var html = sb.result();
 		var htmlObject = jQuery(html);
@@ -599,6 +641,7 @@ JMBProfileFull.prototype = {
 			case "basic": self._basic(); break;
 			case "unions": self._unions(); break;
 			case "events": self._events(); break;
+			case "photos": self._photos(); break;
 			case "vprofile": self._vprofile(); break;
 		}
 	},
@@ -606,7 +649,7 @@ JMBProfileFull.prototype = {
 		var self = this;
 		var object = self.parent.dContent.object;
 		var menu = self._menu(object, type);
-		jQuery(menu).find('div.jmb-dialog-profile-menu-item-child').click(function(){
+		jQuery(menu).find('div.jmb-dialog-profile-menu-item-parent').click(function(){
 			if(jQuery(this).hasClass('active')) return;
 			if(self.menuActiveItem) jQuery(self.menuActiveItem).removeClass('active');
 			var id = jQuery(this).attr('id');
@@ -649,7 +692,7 @@ JMBProfileFull.prototype = {
 			border:"none"
 		});
 		//set button edt\view
-		var buttons = jQuery('<div class="jmb-dialog-interface-button"><div type="button" value="edit" class="active"><span>Edit</span></div><div value="view" type="button"><span>View</span></div></div>');
+		var buttons = jQuery('<div class="jmb-dialog-interface-button"><div type="button" value="edit"><span>Edit</span></div><div value="view" type="button" class="active"><span>View</span></div></div>');
 		jQuery(self.parent.dWindow).parent().find('.ui-dialog-titlebar').append(buttons);	
 		
 		var html = self._container();
@@ -664,7 +707,7 @@ JMBProfileFull.prototype = {
 					case "view": self._mode("view"); break;
 				}
 		});
-		self._mode("edit");
+		self._mode("view");
 		
 	}
 }

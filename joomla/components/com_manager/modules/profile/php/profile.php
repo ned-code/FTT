@@ -425,8 +425,20 @@ class JMBProfile {
 	/**
 	*
 	*/
-	public function invite($args){
-		
+	public function uploadPhoto($gedId){
+		if($_FILES['upload']['size'] == 0) return false;
+		$result = $this->host->gedcom->media->save($gedId, $_FILES["upload"]["tmp_name"], $_FILES["upload"]["name"]);
+		if($result){
+			return json_encode(array('Id'=>$result));
+		}
+		return false;
+	}
+	
+	/**
+	*
+	*/
+	public function deletePhoto($id){
+		$this->host->gedcom->media->delete($id);
 	}
 }
 

@@ -152,7 +152,7 @@ JMBProfileTooltip.prototype = {
 			break;
 			case "send":
 				jQuery(tooltip).find('.jmb-profile-tooltip-send').click(function(){
-					self.parent._sendRequest(p);
+					alert('this feature has not been implemented yet');
 					return false;
 				});
 			break;

@@ -7,7 +7,6 @@
 }
 .jmb-overlay-modal{
 	z-index:2001;
-	background: none repeat scroll 0 0 #000000;
 	cursor: pointer;
 	left: 0;
 	opacity: 0.75;

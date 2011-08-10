@@ -35,31 +35,20 @@
 	font-weight: bold;
 }
 .jmb-dialog-profile-menu-item-parent{
-	background: none repeat scroll 0 0 #2D2D2D;
-	color: white;
-	font-size: 16px;
-	margin: 5px;
-	height: 24px;
-	line-height: 24px;
-	text-align:center
-}
-.jmb-dialog-profile-menu-item-child{
-	background: none repeat scroll 0 0 #8D8D8D;
+	background: none repeat scroll 0 0 #7F7F7F;
+	color: #000;
 	font-size: 14px;
-	height: 24px;
 	margin: 5px;
+	height: 24px;
 	line-height: 24px;
-	cursor: pointer;
-	text-align:left;
+	text-align:center;
+	cursor:pointer;
 }
-.jmb-dialog-profile-menu-item-child:hover{
-	background: none no-repeat scroll 0 0 #aaaaaa;
+.jmb-dialog-profile-menu-item-parent.active{
+	background: #bebebe !important;
 }
-.jmb-dialog-profile-menu-item-child.active {
-	background: none no-repeat scroll 0 0 yellow;
-}
-.jmb-dialog-profile-menu-item-child span{
-	margin-left:20px;
+.jmb-dialog-profile-menu-item-parent:hover{
+	background: #a0a0a0;
 }
 .jmb-dialog-profile-content{
 	position:relative;
@@ -369,6 +358,67 @@
 	border: 1px solid #3B5997;
 	background: #FFF200;
 }
+/* PHOTOS */
+.jmb-dialog-photos-content{
+	font-family: Calibri,Tahoma,sans-serif;
+	font-size: 12px;
+	font-weight: normal;
+	margin: 5px;
+}
+.jmb-dialog-photos-content .buttons {
+	position:relative;
+}
+.jmb-dialog-photos-content .buttons .switch-avatar{
+	left: 245px;
+	position: absolute;
+	top: 1px;
+}
+.jmb-dialog-photos-content .buttons input[type="submit"]{
+	cursor: pointer;
+	height: 22px;
+	margin-left: 3px;
+	width: 50px;
+}
+.jmb-dialog-photos-content .list{
+	margin: 10px;
+}
+.jmb-dialog-photos-content .list ul li{
+	display: inline-block;
+	margin-left: 3px;
+}
+.jmb-dialog-photos-content .list .list-item{
+	border:1px solid white;
+	background: none repeat scroll 0 0 #E9E9E9;
+	height: 125px;
+	width: 110px;
+}
+.jmb-dialog-photos-content .list .list-item.active{
+	border:1px solid black;
+}
+.jmb-dialog-photos-content .list .list-item .header{
+	height: 20px;
+	line-height: 20px;
+	position: relative;
+	text-align: center;
+}
+.jmb-dialog-photos-content .list .list-item .header span{
+	color: #77807D;
+	font-weight: bold;
+}
+.jmb-dialog-photos-content .list .list-item .header .delete{
+	background: url("../image/delete.png") no-repeat scroll 0 0 transparent;
+	cursor: pointer;
+	height: 14px;
+	position: absolute;
+	right: 1px;
+	top: 3px;
+	width: 14px;
+}
+.jmb-dialog-photos-content .list .list-item .item{
+	text-align: center;
+	cursor:pointer;
+}
+
 /* VPROFILE */
 .jmb-dialog-view-profile {
 	width: 510px;

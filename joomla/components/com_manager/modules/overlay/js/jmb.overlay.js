@@ -66,17 +66,17 @@ JMBOverlay.prototype = {
 		var top, left;
 		switch(settings.align){
 			case "left":
-				top = size[1]/2-settings.height/2;
+				top = 100;
 				left = 100;
 			break;
 			
 			case "center":
-				top = size[1]/2-settings.height/2;
+				top = 100;
 				left = size[0]/2-settings.width/2;
 			break;
 			
 			case "right":
-				top = size[1]/2-settings.height/2;
+				top = 100;
 				left = size[0]-100-settings.width;
 			break;
 		}
