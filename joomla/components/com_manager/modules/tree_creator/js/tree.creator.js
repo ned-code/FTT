@@ -1,19 +1,10 @@
 function JMBTreeCreator(obj){
-	var self = this;
-	obj = jQuery('#'+obj);
-	html = "<div>";
-		html += "<div class='jmb-tree-creator-header'>Welcome to Family Tree Top</div>";
-		html += "<div class='jmb-tree-creator-fieldset'><fieldset><legend>What is Family TreeTop?</legend></fieldset></div>";
-		html += "<div class='jmb-tree-creator-button'>Create your own Family Tree</div>";
-		html += "<div class='jmb-tree-creator-buttons'>";
-			html += "<span>Help and FAQs</span>";
-			html += "<span>Contact Us</span>";
-		html += "</div>";
-	html += "</div>";
-	jQuery(obj).html(html);
-	jQuery(obj).find(".jmb-tree-creator-button").click(function(){
-		self.createOwnFamilyTree();
-	})
+	this.html = null;
+	
+	this.obj = jQuery(['#',obj].join(''));
+	
+	this.create();
+	this.buttons();
 }
 
 JMBTreeCreator.prototype = {
@@ -22,8 +13,50 @@ JMBTreeCreator.prototype = {
 				callback(req);
 		})
 	},
-	createOwnFamilyTree:function(){
-		location.href = "index.php?option=com_manager&view=single&id=5&jmb_type=register";
+	createTree:function(){
+		alert('createTree');
+	},
+	createTreeWithGedcom:function(){
+		jQuery()
+	},
+	buttons:function(){
+		var self = this;
+		jQuery(this.html).find('div.button').click(function(){
+			var id = jQuery(this).attr('id');
+			switch(id){
+				case "tree": self.createTree(); break;
+				case "gedcom": self.createTreeWithGedcom(); break;
+			}
+			return false;
+		});
+	},
+	create:function(){
+		var self = this;
+		var sb = host.stringBuffer();
+		sb._('<div class="jmb-tree-creator-body">')
+			sb._('<table>');
+				sb._('<tr>');
+					sb._('<td>')
+						sb._('<div class="tree">');
+							sb._('<div id="tree" class="button">Create Tree</div>');
+							sb._('<fieldset><legend>Tree</legend>Creating a genealogy tree is easy with Family Tree Top.</fieldset>');
+						sb._('</div>');
+					sb._('</td>');
+					sb._('<td>');
+						sb._('<div class="gedcom">');
+							sb._('<div id="gedcom" class="button">Create Tree With Gedcom</div>');
+							sb._('<fieldset><legend>Gedcom</legend>Creating a genealogy tree is easy with Family Tree Top.</fieldset>');
+						sb._('</div>');
+					sb._('</td>');
+				sb._('</tr>');
+			sb._('</table>');
+			sb._('<div class="upload">');
+				sb._('<div class="form"><form id="jmb:profile:addspouse" method="post" target="iframe-profile"><input type="file" name="upload"><input type="submit" value="Send"></form></div>');
+				sb._('<div class="result"></div>')
+			sb._('</div>');
+		sb._('</div>');
+		this.html = jQuery(sb.result());
+		jQuery(this.obj).append(this.html);
 	}
 }
 

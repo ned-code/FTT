@@ -1,36 +1,31 @@
-.jmb-tree-creator-header{
-	font-size: 16px;
+.jmb-tree-creator-body{
+	font-family: Calibri,Tahoma,sans-serif;
+	font-size: 12px;
+	font-weight: normal;
+	margin: 20px auto;
+	max-width: 650px;
+}
+.jmb-tree-creator-body fieldset{
+	margin-top: 10px;
+	padding: 5px;
+}
+.jmb-tree-creator-body legend{
 	font-weight: bold;
-	margin: 5px;
-	text-align: center;
 }
-
-.jmb-tree-creator-fieldset fieldset{
-	border: 1px dotted #BABABA;
-	height: 100px;
-	margin-top: 100px;
-}
-
-.jmb-tree-creator-button{
-	-moz-border-radius: 10px 10px 10px 10px;
-	background: none repeat scroll 0 0 #3A43FF;
-	color: white;
+.jmb-tree-creator-body .button{
+	background: none repeat scroll 0 0 #F1E4B0;
+	border: 2px solid #999999;
+	border-radius: 3px 3px 3px 3px;
 	cursor: pointer;
-	height: 45px;
-	line-height: 40px;
-	margin-left: 70px;
-	text-align: center;
-	width: 210px;
+	font-weight: bold;
+	height: 30px;
+	line-height: 30px;
+	margin-left: 65px;
+	width: 170px;
 }
-
-.jmb-tree-creator-buttons {
-	margin: 10px;
+.jmb-tree-creator-body .button:hover{
+	background: #b5ab83;
 }
-
-.jmb-tree-creator-buttons span{
-	border: 1px solid #3A43FF;
-	cursor: pointer;
-	margin: 3px;
-	padding: 3px;
-}
-
+.jmb-tree-creator-body .upload{}
+.jmb-tree-creator-body .upload .form{}
+.jmb-tree-creator-body .upload .result{}

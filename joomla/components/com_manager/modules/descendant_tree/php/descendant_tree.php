@@ -43,11 +43,11 @@ class DescendantTree {
 		 	 foreach($families as $family){
 		 	 	 $childs = $this->host->gedcom->families->getFamilyChildrenIds($family->Id);
 		 	 	 $img = ($family->Sircar->Gender == "M")? "male-family.png" : "fem-family.png" ;
-		 	 	 $color_sircar = '#'.(($family->Sircar->Gender=='M')?$this->color['M']:$this->color['F']);
-		 	 	 $color_spouse = '#'.(($family->Spouse->Gender=='M')?$this->color['M']:$this->color['F']);
-		 	 	 $sircarFlag = ($family->Sircar->Id == $_SESSION['jmb']['gid'])?$user:"";
-		 	 	 $spouseFlag = ($family->Spouse->Id == $_SESSION['jmb']['gid'])?$user:"";
-		 	 	 if($family->Spouse->Id != null){
+		 	 	 $color_sircar = '#'.(($family->Sircar&&$family->Sircar->Gender=='M')?$this->color['M']:$this->color['F']);
+		 	 	 $color_spouse = '#'.(($family->Spouse&&$family->Spouse->Gender=='M')?$this->color['M']:$this->color['F']);
+		 	 	 $sircarFlag = ($family->Sircar&&$family->Sircar->Id == $_SESSION['jmb']['gid'])?$user:"";
+		 	 	 $spouseFlag = ($family->Spouse&&$family->Spouse->Id == $_SESSION['jmb']['gid'])?$user:"";
+		 	 	 if($family->Spouse&&$family->Spouse->Id != null){
 		 	 	 	 $xml .= "<item id='".$family->Id."' im0='".$img."'  im1='".$img."'  im2='".$img."'>";
 						$xml .= "<itemtext><![CDATA[";
 							$xml .= "<table style='display:inline-block;'>";

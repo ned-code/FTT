@@ -108,7 +108,7 @@ class JMBThisMonth {
 						if($spouse['event']){
 							foreach($spouse['event'] as $event){
 								if((int)$event->From->Month == (int)$month && $event->Type == 'MARR'){
-									if(!$result[$event->FamKey]){
+									if(!array_key_exists($event->FamKey, $result)){
 										$result[$event->FamKey] = array('sircar'=>$individ['indiv']->Id, 'spouse'=>$spouse['id'], 'event'=>$event);
 										$descendants[$id] = $individ;
 										$descendants[$spouse['id']] = $individs[$spouse['id']];
