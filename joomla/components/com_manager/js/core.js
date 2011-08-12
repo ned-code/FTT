@@ -66,6 +66,7 @@ var date = new Date();
 var id =  Math.floor(date.getTime() /1000);
 var core = {};
 storage.core = core;
+core.modalWindow = jQuery('<div class="jmb-core-overlay">&nbsp;</div>')
 
 core.loadPage = function(div, id, layout, callback){
     var manager = new MyBranchesManager();
@@ -122,6 +123,12 @@ core.load = function(pages){
 	    });
 	});		
 }
+core.modal = function(arg){
+	var div = jQuery('div.tab_container');
+	var overlay = this.modalWindow;
+	jQuery(overlay).css('width',jQuery(div).width()+'px').css('height',jQuery(div).height()+'px');
+	return (arg)?jQuery(div).append(overlay):jQuery(overlay).remove();
+}
 
 core.loadTabs = function(pages){
     var self = this; 
@@ -169,6 +176,7 @@ core.loadTabs = function(pages){
 			
 			//On Click Event
 			jQuery("ul.jmbtabs li").click(function() {
+				self.modal(true);
 				jQuery("ul.jmbtabs li").removeClass("active"); //Remove any "active" class
 				jQuery(this).addClass("active"); //Add "active" class to selected tab
 				jQuery(".tab_content").hide(); //Hide all tab content
@@ -179,6 +187,7 @@ core.loadTabs = function(pages){
 				jQuery(divs).fadeOut(1000, function(){
 					self.loadPage(divs, id, layout, function(){
 						jQuery(divs).fadeIn(); //Fade in the active ID content
+						self.modal(false);
 					});
 				});
 				storage.tabs.activeTab = this;

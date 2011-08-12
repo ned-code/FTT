@@ -59,3 +59,15 @@ html ul.jmbtabs li.active, html ul.jmbtabs li.active a:hover  { /*--Makes sure t
    	right: 0px;
    	top: 20px;
 }
+#jmbtab{
+	position:relative;
+	height:400px;
+	overflow:auto;
+}
+.jmb-core-overlay {
+	background: url("progressbar.gif") no-repeat scroll 50% 50% white;
+	left: 0;
+	opacity: 0.6;
+	position: absolute;
+	top: 47px;
+}

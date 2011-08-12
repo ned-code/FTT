@@ -67,7 +67,7 @@ class IndividualsList{
         public function update($pers){
         	if($pers->Id){
         		//update to individuals table;
-        		$sql = $this->core->sql('UPDATE #__mb_individuals SET `sex`=?,`change`=NOW() WHERE `id`=?', $pers->Gender, $pers->Id);
+        		$sql = $this->core->sql('UPDATE #__mb_individuals SET `sex`=?,`fid`=?, `change`=NOW() WHERE `id`=?', $pers->Gender,$pers->FacebookId,$pers->Id);
         		$this->db->setQuery($sql);    
         		$this->db->query();
         		//update to names table;

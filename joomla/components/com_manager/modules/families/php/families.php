@@ -40,7 +40,7 @@ class Families {
 		$path = JURI::root(true);
 		$individs = array();
 		$this->host->getIndividsArray($id, $individs);
-		return json_encode(array('fmbUser'=>$fmbUser,'firstParent'=>$firstParentId,'individs'=>$individs,'colors'=>$colors,'path'=>$path));
+		return json_encode(array('debug'=>array('fid'=>$_SESSION['jmb']['fid'],'id'=>$id),'fmbUser'=>$fmbUser,'firstParent'=>$firstParentId,'individs'=>$individs,'colors'=>$colors,'path'=>$path));
 	}
 }
 ?>

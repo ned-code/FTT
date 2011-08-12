@@ -1,5 +1,5 @@
 function MyBranchesManager(){
-
+	this.inc = 0;
 	return this;
 }
 
@@ -100,7 +100,6 @@ MyBranchesManager.prototype = {
                 jQuery('#page_layout_content_'+i).append(div);
                 this.includeModuleFiles(obj[i-1][j].id, "mod_"+i+"_"+j);
             }
-
         }
     },
     callMethod:function(moduleName, methodName, args, callback){
