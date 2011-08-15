@@ -69,11 +69,11 @@ class modJMBHeaderHelper
 		}
 		else{
 			$fid = $facebook->getUser();
+			$_SESSION['jmb']['fid'] = $fid;
 			$sql = "SELECT t_id, g_id FROM #__mb_family_tree WHERE f_id=".$fid;
 			$db->setQuery($sql);
 			$s_array = $db->loadAssocList();
 			if(sizeof($s_array) > 0){
-				$_SESSION['jmb']['fid'] = $fid;
 				$_SESSION['jmb']['gid'] = $s_array[0]['g_id'];
 				$sql = "SELECT * FROM #__mb_categories WHERE name='body'";
 				$db->setQuery($sql);

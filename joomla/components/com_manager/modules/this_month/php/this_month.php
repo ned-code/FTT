@@ -243,7 +243,7 @@ class JMBThisMonth {
 		//vars
 		$args = explode(';', $args);
 		$month = $args[0];
-		$sort = $args[1];
+		$sort = ($args[1]!="")?$args[1]:'false';
 		//user info and global settings
 		$fmbUser = $this->host->getUserInfo($_SESSION['jmb']['gid']);
 		$colors = $this->_getColors();

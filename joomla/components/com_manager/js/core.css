@@ -27,7 +27,7 @@ ul.jmbtabs li a {
 	display: block;
 	font-size: 1.2em;
 	padding: 0 20px;
-	border: 1px solid #fff; /*--Gives the bevel look with a 1px white border inside the list item--*/
+	border: 1px solid #F5FAE6; /*--Gives the bevel look with a 1px white border inside the list item--*/
 	outline: none;
 }
 ul.jmbtabs li a:hover {
@@ -38,7 +38,7 @@ ul.jmbtabs li a:hover {
 }
 html ul.jmbtabs li.active, html ul.jmbtabs li.active a:hover  { /*--Makes sure that the active tab does not listen to the hover properties--*/
 	background: #f5fae6;
-	border-bottom: 1px solid #fff; /*--Makes the active tab look like it's connected with its content--*/
+	border-bottom: 1px solid #F5FAE6; /*--Makes the active tab look like it's connected with its content--*/
 }
 
 .tab_container {
@@ -61,7 +61,7 @@ html ul.jmbtabs li.active, html ul.jmbtabs li.active a:hover  { /*--Makes sure t
 }
 #jmbtab{
 	position:relative;
-	height:400px;
+	min-height:400px;
 	overflow:auto;
 }
 .jmb-core-overlay {
