@@ -1,4 +1,13 @@
 .jmb-families-body{}
+.jmb-families-body .home{
+	background: url("icon-home.png") no-repeat scroll 0 0 transparent;
+	cursor: pointer;
+	height: 16px;
+	position: absolute;
+	right: 5px;
+	top: 5px;
+	width: 16px;
+}
 .jmb-families-header{}
 .jmb-families-sircar{
 	height: 260px;
@@ -71,11 +80,10 @@ img.jmb-families-avatar.view{
 }
 .jmb-families-parent-name{
 	font-family: Calibri,Tahoma;
-	font-size: 10px;
-	font-weight: bold;
+	font-size: 12px;
 	height: 20px;
-	text-align: center;
 	line-height: 20px;
+	text-align: center;
 	width: 112px;
 }
 .jmb-families-parent-date{
@@ -88,20 +96,17 @@ img.jmb-families-avatar.view{
 }
 .jmb-families-child-name{
 	font-family: Calibri,Tahoma;
-	font-size: 10px;
-	font-weight: bold;
+	font-size: 12px;
 	height: 20px;
 	line-height: 20px;
 	text-align: center;
-	/*width: 84px;*/
 }
 .jmb-families-child-date{
 	font-family: Calibri,Tahoma;
-	font-size: 10px;
-	height: 10px;
-	line-height: 8px;
+	font-size: 12px;
+	height: 20px;
+	line-height: 20px;
 	text-align: center;
-	/*width: 84px;*/
 }
 .jmb-families-arrow-up {
 	background: url("arrow.gif") no-repeat scroll 0 0 transparent;

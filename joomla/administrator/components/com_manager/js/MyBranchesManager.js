@@ -1,5 +1,4 @@
 function MyBranchesManager(){
-	this.inc = 0;
 	return this;
 }
 

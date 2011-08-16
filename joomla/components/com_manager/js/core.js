@@ -53,7 +53,15 @@ storage.createPull(storage.header);
 //tabs
 storage.tabs = {};
 storage.tabs.activeTab = null;
-storage.createPull(storage.tabs);
+//storage.createPull(storage.tabs);
+storage.tabs.clickPull = {};
+storage.tabs.clickPull.length = 0;
+storage.tabs.click = function(){ 
+	for(var i=0;i<storage.tabs.clickPull.length;i++){
+		storage.tabs.clickPull[i].click();
+	}
+	storage.tabs.cleaner();
+}	
 storage.tabs.cleaner = function(){
 	storage.clearPull(storage.tabs);
 	storage.clearPull(storage.header);
@@ -172,10 +180,11 @@ core.loadTabs = function(pages){
     			
     			//When page loads...
 			jQuery(".tab_content").hide(); //Hide all content
-			jQuery("ul.jmbtabs li:first").addClass("active").show(); //Activate first tab
+			//jQuery("ul.jmbtabs li:first").addClass("active").show(); //Activate first tab
 			
 			//On Click Event
 			jQuery("ul.jmbtabs li").click(function() {
+				if(jQuery(this).hasClass('active')) return false;
 				self.modal(true);
 				jQuery("ul.jmbtabs li").removeClass("active"); //Remove any "active" class
 				jQuery(this).addClass("active"); //Add "active" class to selected tab

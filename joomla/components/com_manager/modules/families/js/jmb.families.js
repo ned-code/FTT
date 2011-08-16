@@ -44,6 +44,7 @@ Families.prototype = {
 					sb._('<td colspan="5" align="center"><div class="jmb-families-childs-container">&nbsp;</div></td>');
 				sb._('</tr>');
 			sb._('</table>');
+			sb._('<div class="home">&nbsp;</div>');
 		sb._('</div>');
 		return jQuery(sb.result());
 	},
@@ -142,7 +143,7 @@ Families.prototype = {
 		var self = this;
 		var sb = host.stringBuffer();
 		sb._('<div childId="')._(person.Id)._('" class="jmb-families-child" style="height:')._(Math.round(170*k))._('px;">');
-			sb._('<div id="')._(person.Id)._('-view" type="imgContainer" class="jmb-families-child-img">')._(this._getAvatar(obj, 'child', k));	
+			sb._('<div id="')._(person.Id)._('-view" type="imgContainer" style="height:')._(Math.round(80*k))._('px;" class="jmb-families-child-img">')._(this._getAvatar(obj, 'child', k));	
 				var editButtonClass = (k!=1)?'jmb-families-edit-button child small':'jmb-families-edit-button child';
 				sb._('<div id="')._(person.Id)._('-edit" class="')._(editButtonClass)._('">&nbsp;</div>');
 				if(obj.indiv.FacebookId != '0'){
@@ -150,8 +151,14 @@ Families.prototype = {
 					sb._('<div class="jmb-families-fb-icon child" id="')._(obj.indiv.FacebookId)._('"><img src="')._(imgPath)._('" width="18px" height="18px"></div>');
 				}
 			sb._('</div>')
-			sb._('<div><div class="jmb-families-child-name">')._(self._getName(person))._('</div><div class="jmb-families-child-date">')._(self._getDate(person))._('</div></div>');
-			if(jQuery(obj.spouses).length != 0){
+			sb._('<div>');
+				sb._('<div class="jmb-families-child-name">')._(self._getName(person))._('</div>');
+				var date = self._getDate(person);
+				if(date.length!=0) sb._('<div class="jmb-families-child-date">')._(self._getDate(person))._('</div>');
+			sb._('</div>');
+			
+			
+			if(jQuery(obj.spouses).length != 0||jQuery(obj.children).length != 0){
 				var buttonChild = (k!=1)?'jmb-families-button childs active small':'jmb-families-button childs active';
 				sb._('<div id="')._(person.Id)._('" class="')._(buttonChild)._('">&nbsp;</div>');
 			} else {
@@ -188,6 +195,11 @@ Families.prototype = {
 		self.div = div;
 		
 		jQuery(self.parent).append(div);
+		
+		jQuery(self.parent).find('div.home').click(function(){
+			var obj = self.json.individs[self.json.firstParent];
+			self.render(obj);
+		})
 		
 		//sircar space
 		var sircarDiv = self._createDivParent(obj, 'left', 1);
