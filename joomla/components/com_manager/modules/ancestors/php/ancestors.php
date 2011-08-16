@@ -33,6 +33,7 @@ class JMBAncestors {
 		$jit->id = $id;
 		$jit->name = $id;
 		$jit->data['flag'] = false;
+		
 		$prew->data['next'] = $jit->id;
 		$prew->children[] = $jit;
 		$mass[$jit->id] = $jit;
