@@ -39,7 +39,7 @@ class Families {
 		$colors = $this->getColors();
 		$path = JURI::root(true);
 		$individs = array();
-		$this->host->getIndividsArray($id, $individs);
+		$this->host->getIndividsArray($id, $individs, $id);
 		return json_encode(array('debug'=>array('fid'=>$_SESSION['jmb']['fid'],'id'=>$id),'fmbUser'=>$fmbUser,'firstParent'=>$firstParentId,'individs'=>$individs,'colors'=>$colors,'path'=>$path));
 	}
 }

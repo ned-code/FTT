@@ -102,7 +102,7 @@ JMBProfileTooltip.prototype = {
 							sb._('<div><span>Name:</span> ')._(self.parent._getFullName(p.data.indiv))._('</div>');
 							sb._('<div><span>Born:</span> ')._(self.parent._getEventDate(p.data.indiv.Birth[0]))._('</div>');
 							var relation = self.parent._getRelation(p);
-							if(relation != 0) sb._('<div><span>Relation to you:</span> ')._(relation)._('</div>');
+							if(relation != 0) sb._('<div><span>Relation:</span> ')._(relation)._('</div>');
 						sb._('</td>');
 					sb._('</tr>');
 				sb._('</table>');

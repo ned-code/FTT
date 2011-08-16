@@ -2,6 +2,8 @@
 class JMBProfile {
 	protected $db;
 	protected $host;
+	protected $relation;
+	
 	/**
 	*
 	*/
@@ -439,7 +441,7 @@ class JMBProfile {
 	*/
 	public function deletePhoto($id){
 		$this->host->gedcom->media->delete($id);
-	}
+	}	
 }
 
 ?>

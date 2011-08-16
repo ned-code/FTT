@@ -258,8 +258,9 @@ class Host {
 	* @var $id gedcom individual id
 	* @return array all info about individ
 	*/
-	public function getUserInfo($indKey){
+	public function getUserInfo($indKey, $indRel = false){
 		$indiv = $this->gedcom->individuals->get($indKey);
+		if($indRel) $indiv->Relation = $this->gedcom->individuals->relation->get_relation($indKey, $indRel);
 		$events = $this->gedcom->events->getAllEventsByIndKey($indKey);
 		$parents = $this->gedcom->individuals->getParents($indKey);
 		$children = $this->gedcom->individuals->getChilds($indKey);
@@ -284,32 +285,32 @@ class Host {
 	* @var $id gedcom user id
 	* @var &$individs array link of array
 	*/
-	public function getIndividsArray($indKey, &$individs){
+	public function getIndividsArray($indKey, &$individs, $indRel = false){
 		if($indKey==NULL){ return false; }
-		$individ = $this->getUserInfo($indKey);
+		$individ = $this->getUserInfo($indKey, $indRel);
 		$individs[$indKey] = $individ;
 		
 		//Fill the array of families
 		foreach($individ['families'] as $family){
 			if($family->Spouse!=null&&!array_key_exists($family->Spouse->Id, $individs)){
-				$this->getIndividsArray($family->Spouse->Id, $individs);
+				$this->getIndividsArray($family->Spouse->Id, $individs, $indRel);
 			}
 		}
 
 		//Fill the array of children
 		foreach($individ['children'] as $child){
 			if(!array_key_exists($child['gid'], $individs)){
-				$this->getIndividsArray($child['gid'], $individs);
+				$this->getIndividsArray($child['gid'], $individs, $indRel);
 			}
 		}		
 		
 		//Fill the array of parents
 		if($individ['parents'] != null){
 			if($individ['parents']['fatherID'] != null && !array_key_exists($individ['parents']['fatherID'], $individs)){
-				$this->getIndividsArray($individ['parents']['fatherID'], $individs);
+				$this->getIndividsArray($individ['parents']['fatherID'], $individs, $indRel);
 			}
 			if($individ['parents']['motherID'] != null && !array_key_exists($individ['parents']['motherID'], $individs)){
-				$this->getIndividsArray($individ['parents']['motherID'], $individs);
+				$this->getIndividsArray($individ['parents']['motherID'], $individs, $indRel);
 			}
 		}
 	}

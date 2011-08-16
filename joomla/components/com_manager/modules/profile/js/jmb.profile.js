@@ -169,7 +169,7 @@ JMBProfile.prototype = {
 		}
 	},
 	_getRelation:function(obj){
-		console.time('_getRaltaion');
+		/*
 		var self = this;
 		if(!obj.fmbUser) return 'is you.';
 		var id = obj.fmbUser.indiv.Id;
@@ -192,8 +192,9 @@ JMBProfile.prototype = {
 				return 'Parent';
 			}
 		}
-		console.timeEnd('_getRelation');
 		return false;
+		*/
+		return obj.data.indiv.Relation;
 	},
 	_getSpouseAvatar:function(obj, x, y){
 		var self = this,

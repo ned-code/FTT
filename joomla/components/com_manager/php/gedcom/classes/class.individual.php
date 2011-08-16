@@ -19,6 +19,7 @@ class Individual{
 	public $SurnamePrefix;
 	public $Surname;
 	public $Suffix;
+	public $Relation;
 	
 	public function __construct(){
 		$this->Id = null;
@@ -36,6 +37,7 @@ class Individual{
 		$this->SurnamePrefix = null;
 		$this->Surname = null;
 		$this->Suffix = null;
+		$this->Relation = null;
        }
 }
 ?>
