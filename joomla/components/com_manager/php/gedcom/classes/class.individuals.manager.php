@@ -98,6 +98,16 @@ class JMBRelation {
 		if($a_id == $b_id){
 			return 'self';
 		}
+		
+		$spouses = $this->core->individuals->getSpouses($a_id);
+		if($spouses!=null){
+			foreach($spouses as $spouse){
+				if($spouse==$b_id){
+					return 'spouse';
+				}
+			}
+		}
+		
 		$lca = $this->lowest_common_ancestor($a_id, $b_id);
 		if (!$lca) {
 			return false;
@@ -285,7 +295,7 @@ class IndividualsList{
         	$rows = $this->db->loadAssocList();
         	return $rows[0]['id'];
         }
-        function getFirstParent($id, $line=false, $first=false){
+        public function getFirstParent($id, $line=false, $first=false){
         	$parents = $this->getParents($id);
         	if($first){
         		$parent = ($line == 'father')? $parents['fatherID'] : $parents['motherID'] ;  	
@@ -297,6 +307,20 @@ class IndividualsList{
         		return $id;
         	}
         	return $this->getFirstParent($parent);
+        }
+        public function getSpouses($id){
+        	if($id==null){ return null; }
+        	$sql = $this->core->sql('SELECT wife,husb FROM #__mb_families WHERE husb =? OR wife =?', $id, $id);
+        	$this->db->setQuery($sql);         
+        	$rows = $this->db->loadAssocList();
+        	if($rows!=null){
+        		$spouses = array();
+        		foreach($rows as $row){
+        			$spouses[] = ($row['husb']==$id)?$row['wife']:$row['husb'];
+        		}
+        		return $spouses;
+        	}
+        	return null;
         }
         /*
         function get($id, $lite=false){

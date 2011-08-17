@@ -60,13 +60,14 @@ class JMBAncestors {
 			($father)?$this->getAncestor($father, $jit, &$ancestors, &$mass):$this->nullAncestor($jit, &$mass);
 			($mother)?$this->getAncestor($mother, $jit, &$ancestors, &$mass):$this->nullAncestor($jit, &$mass);
 		}
-		$ancestors[$ind->Id] = $this->host->getUserInfo($ind->Id);
+		$ancestors[$ind->Id] = $this->host->getUserInfo($ind->Id, $this->ownerId);
 		$mass[$jit->id] = $jit;
 		return $jit;
 	}
 	
 	public function get(){
 		$ownerId = $_SESSION['jmb']['gid'];
+		$this->ownerId = $ownerId;
 		$fmbUser = $this->host->getUserInfo($ownerId);
 		$path = JURI::root(true); 
 		$ancestors = array();

@@ -207,8 +207,7 @@ class JMBProfile {
 		$parents = $this->host->gedcom->individuals->getParents($id);
 		if(!$parents){
 			$fam = $this->_createFamily();
-			$this->host->gedcom->families->save($fam);
-			$fam_id = $fam->Id;
+			$fam_id = $this->host->gedcom->families->save($fam);
 			$this->host->gedcom->families->addChild($fam_id, $ind->Id);
 		} else {
 			$fam_id = $parents['familyId'];
@@ -224,14 +223,11 @@ class JMBProfile {
 		if(!$fam_id){
 			$fam = $this->_createFamily();
 			$this->_addParent_($user, $fam, $user->Gender);
-			$this->host->gedcom->families->save($fam);
-			$fam_id = $fam->Id;
+			$fam_id = $this->host->gedcom->families->save($fam);
 		} 
-		
 		$ind = $this->_createIndiv();
 		$this->_addIndivEvents($ind);
-		
- 		$photo = $this->_uploadPhoto($ind->Id);
+		$photo = $this->_uploadPhoto($ind->Id);
  		$this->host->gedcom->families->addChild($fam_id, $ind->Id);
  		return array('fam_id'=>$fam_id,'i'=>$ind,'photo'=>$photo);
 	}	
@@ -272,10 +268,15 @@ class JMBProfile {
 		$_POST['gender'] = ($gender=='M')?'F':'M';
 		$ind = $this->_createIndiv();
 		$this->_addIndivEvents($ind);	
-		$fam_id = $this->host->gedcom->individuals->getFamilyId($ownerId, 'FAMS');
+		//$fam_id = $this->host->gedcom->individuals->getFamilyId($ownerId, 'FAMS');
 		$user = $this->host->gedcom->individuals->get($ownerId);
 		$photo = $this->_uploadPhoto($ind->Id);
 		
+		$fam = $this->_createFamily();
+		$this->_addSpouse($fam, $gender, $user, $ind);
+		$this->host->gedcom->families->save($fam);
+		$this->_addSpouseEvents($fam);
+		/*
 		if(!$fam_id){
 			$fam = $this->_createFamily();
 			$this->_addSpouse($fam, $gender, $user, $ind);
@@ -298,7 +299,7 @@ class JMBProfile {
 			}	
 			$this->host->gedcom->families->update($fam);			
 		}
-		
+		*/
 		$data = $this->host->getUserInfo($ownerId);
 		return json_encode(array('data'=>$data,'spouse'=>array('indiv'=>$ind),'photo'=>$photo));
 	}

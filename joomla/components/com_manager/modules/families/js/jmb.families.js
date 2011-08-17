@@ -143,7 +143,7 @@ Families.prototype = {
 		var self = this;
 		var sb = host.stringBuffer();
 		sb._('<div childId="')._(person.Id)._('" class="jmb-families-child" style="height:')._(Math.round(170*k))._('px;">');
-			sb._('<div id="')._(person.Id)._('-view" type="imgContainer" style="height:')._(Math.round(80*k))._('px;" class="jmb-families-child-img">')._(this._getAvatar(obj, 'child', k));	
+		sb._('<div id="')._(person.Id)._('-view" type="imgContainer" style="height:')._(Math.round(80*k))._('px;width:')._(Math.round(72*k))._('px;" class="jmb-families-child-img">')._(this._getAvatar(obj, 'child', k));	
 				var editButtonClass = (k!=1)?'jmb-families-edit-button child small':'jmb-families-edit-button child';
 				sb._('<div id="')._(person.Id)._('-edit" class="')._(editButtonClass)._('">&nbsp;</div>');
 				if(obj.indiv.FacebookId != '0'){
@@ -180,7 +180,7 @@ Families.prototype = {
 		if(!event) return '';
 		var year = (event.From.Year)?event.From.Year:'';
 		var place = event.Place;
-		var location = place.Locations[0];
+		var location = (place)?place.Locations[0]:{ Country:'' };
 		sb._('<div>');
 			sb._('<div>')._(year)._('</div>');
 			sb._('<div>')._(location.Country)._('</div>');
