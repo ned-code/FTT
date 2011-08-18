@@ -96,20 +96,27 @@ class JMBThisMonth {
 		foreach($individs as $id => $individ){
 			switch($type){
 				case "BIRT":
-					if($individ['indiv']->Birth&& $individ['indiv']->Birth[0] && $individ['indiv']->Birth[0]->From->Month == (int)$month){
-						$death = ($individ['indiv']->Death&&$individ['indiv']->Death[0])?true:false;
-						$result[$id] = array('event'=>$individ['indiv']->Birth[0], 'death'=>$death);
+					if($individ->Birth&& $individ->Birth[0] && $individ->Birth[0]->From->Month == (int)$month){
+						$death = ($individ->Death&&$individ->Death[0])?true:false;
+						$result[$id] = array('event'=>$individ->Birth[0], 'death'=>$death);
 						$descendants[$id] = $individ;
 					}
 				break;
 				
 				case "MARR":
-					foreach($individ['spouses'] as $spouse){
+					$families = $this->host->gedcom->families->getPersonsFamilies($id, true);					
+					$spouses = array();
+					foreach($families as $family){
+						if($family->Spouse == null) continue;
+						$famevent = $this->host->gedcom->events->getFamilyEvents($family->Id);
+						$spouses[] = array('id'=>$family->Spouse->Id,'indiv'=>$family->Spouse,'event'=>$famevent);
+					}
+					foreach($spouses as $spouse){
 						if($spouse['event']){
 							foreach($spouse['event'] as $event){
 								if((int)$event->From->Month == (int)$month && $event->Type == 'MARR'){
 									if(!array_key_exists($event->FamKey, $result)){
-										$result[$event->FamKey] = array('sircar'=>$individ['indiv']->Id, 'spouse'=>$spouse['id'], 'event'=>$event);
+										$result[$event->FamKey] = array('sircar'=>$individ->Id, 'spouse'=>$spouse['id'], 'event'=>$event);
 										$descendants[$id] = $individ;
 										$descendants[$spouse['id']] = $individs[$spouse['id']];
 									}
@@ -125,8 +132,8 @@ class JMBThisMonth {
 				break;
 				
 				case "DEAT":
-					if($individ['indiv']->Death && $individ['indiv']->Death[0] && $individ['indiv']->Death[0]->From->Month == (int)$month){
-						$result[$id] = array('event'=>$individ['indiv']->Death[0]);
+					if($individ->Death && $individ->Death[0] && $individ->Death[0]->From->Month == (int)$month){
+						$result[$id] = array('event'=>$individ->Death[0]);
 						$descendants[$id] = $individ;
 					}
 				break;
@@ -240,28 +247,34 @@ class JMBThisMonth {
 	* @return array json data
 	*/
 	public function load($args){
+		$fid = $_SESSION['jmb']['fid'];
+		$treeId = $this->host->gedcom->individuals->getTreeIdbyFid($fid);
+		$relatives = $this->host->gedcom->individuals->getRelatives($treeId);
+		
 		//vars
 		$args = explode(';', $args);
 		$month = $args[0];
 		$sort = ($args[1]!="")?$args[1]:'false';
+		
 		//user info and global settings
 		$fmbUser = $this->host->getUserInfo($_SESSION['jmb']['gid']);
 		$colors = $this->_getColors();
 		$path = JURI::root(true);
-		//get first paret of user
-		$firstParent = $this->host->gedcom->individuals->getFirstParent($_SESSION['jmb']['gid'], 'father', true);
+		$language = $this->getLanguage();
+
 		//get first parent descedants and sort array		
 		$individs = array();
 		$descendants = array();
-		$this->host->getIndividsArray($firstParent, $individs);
+		
+		$this->host->getUserRelatives($relatives, $individs);
 		$events = $this->_getEvents($month, $individs, $descendants);
+		
 		$this->settings['opt']['date'] = $this->getEarleastDate($events);
 		if($this->settings['split_event']['sort'] == 'true'){
 			if($sort != 'false'){ $this->_setSortTypeParams($sort); }
 			$this->_sort($events);
 		}
 		$this->settings['opt']['month'] = $month;
-		$language = $this->getLanguage();		
 		return json_encode(array('fmbUser'=>$fmbUser,'colors'=>$colors,'path'=>$path,'events'=>$events,'descedants'=>$descendants,'language'=>$language,'settings'=>$this->settings));
 	}
 	

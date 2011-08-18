@@ -1,5 +1,6 @@
 <?php
 class Individual{
+	public $TreeId;
 	//individuals
 	public $Id;
 	public $FacebookId;
@@ -38,6 +39,7 @@ class Individual{
 		$this->Surname = null;
 		$this->Suffix = null;
 		$this->Relation = null;
+		$this->TreeId = null;
        }
 }
 ?>

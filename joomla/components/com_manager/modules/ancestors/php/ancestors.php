@@ -66,6 +66,7 @@ class JMBAncestors {
 	}
 	
 	public function get(){
+		return;
 		$ownerId = $_SESSION['jmb']['gid'];
 		$this->ownerId = $ownerId;
 		$fmbUser = $this->host->getUserInfo($ownerId);

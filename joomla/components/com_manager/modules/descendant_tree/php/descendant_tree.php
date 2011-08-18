@@ -109,6 +109,7 @@ class DescendantTree {
 	*
 	*/
 	public function getTree($render_type){
+		return;
 		$index = $this->host->gedcom->individuals->getIdbyFId($_SESSION['jmb']['fid']);
 		$color = array();
 		$p = $this->host->getSiteSettings('color');

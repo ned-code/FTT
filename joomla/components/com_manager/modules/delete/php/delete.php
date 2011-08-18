@@ -7,14 +7,15 @@ class JMBDelete {
 		$this->db = & JFactory::getDBO();
 	}
 	
-	public function clear($data){
-		foreach($data['individs'] as $indiv){
-			if(!empty($indiv))$this->host->gedcom->individuals->delete($indiv);
+	public function clear($treeId, $individuals, $families){
+		foreach($individuals as $ind){
+			if(!empty($ind))$this->host->gedcom->individuals->delete($ind['individuals_id']);
 		}
-		foreach($data['families'] as $family){
-			if(!empty($family))$this->host->gedcom->families->delete($family);
+		foreach($families as $fam){
+			if(!empty($fam))$this->host->gedcom->families->delete($fam);
 		}
-		$sql = $this->host->gedcom->sql("DELETE FROM #__mb_family_tree WHERE f_id=?", $_SESSION['jmb']['fid']);
+		
+		$sql = $this->host->gedcom->sql("DELETE FROM #__mb_tree WHERE id=?", $treeId);
 		$this->db->setQuery($sql);
 		$this->db->query();
 	}
@@ -35,12 +36,19 @@ class JMBDelete {
 		return array('individs'=>$individs,'families'=>$families);
 	}
 	
+	protected function getFamilies($rows){
+		$families = array();
+		foreach($rows as $row){
+			$families[] = $this->host->gedcom->individuals->getFamilyId($row['individuals_id'], 'FAMS');
+		}
+		return $families;		
+	}
+	
 	public function delete(){
-		$indKey = $this->host->gedcom->individuals->getIdbyFId($_SESSION['jmb']['fid']);
-		$individs = array();
-		$this->host->getIndividsArray($indKey, $individs);
-		$data = $this->parse($individs);
-		$this->clear($data);
+		$treeId = $this->host->gedcom->individuals->getTreeIdbyFid($_SESSION['jmb']['fid']);
+		$relatives = $this->host->gedcom->individuals->getRelatives($treeId);
+		$families = $this->getFamilies($relatives);
+		$this->clear($treeId, $relatives,$families);
 	}
 
 }

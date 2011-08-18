@@ -28,7 +28,7 @@ class EventsList{
         	$this->db->query();
         	$lastId = $this->db->insertid();
         	$sqlString = "INSERT INTO #__mb_dates (`events_id`, `type`, `f_day`, `f_month`, `f_year`, `t_day`, `t_month`, `t_year`) VALUES (?,?,?,?,?,?,?,?)";
-        	$sql = $this->core->sql($sqlString, $lastId, $event->DateType, $event->From->Day, $event->From->Month, $event->From->Year, $event->To->Day, $event->To->Month, $event->To->Year);
+        	$sql = $this->core->sql($sqlString, $lastId, $event->DateType, ($event->From!=null)?$event->From->Day:$event->From, ($event->From!=null)?$event->From->Month:$event->From, ($event->From!=null)?$event->From->Year:$event->From, ($event->To!=null)?$event->To->Day:$event->To, ($event->To!=null)?$event->To->Month:$event->To, ($event->To!=null)?$event->To->Year:$event->To);
         	$this->db->setQuery($sql);    
         	$this->db->query();
         	$this->core->locations->save($lastId, $event->Place);

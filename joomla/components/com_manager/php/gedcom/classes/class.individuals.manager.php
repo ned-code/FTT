@@ -222,6 +222,10 @@ class IndividualsList{
         	$sql = $this->core->sql($sqlString, $id, $pers->FirstName, $pers->MiddleName, $pers->LastName, $pers->Prefix, $givn, $pers->Nick, $pers->SurnamePrefix, $pers->LastName, $pers->Suffix);
         	$this->db->setQuery($sql);    
         	$this->db->query();
+        	//insert in tree        	
+        	$sql = $this->core->sql("INSERT INTO #__mb_tree_links (`individuals_id`,`tree_id`,`type`) VALUES (?,?,'MEMBER')",$id, $pers->TreeId);
+        	$this->db->setQuery($sql);    
+        	$this->db->query();
         	return $id;
         }
         
@@ -253,6 +257,9 @@ class IndividualsList{
         	$sql = $this->core->sql('DELETE FROM #__mb_individuals WHERE id=?', $id);
         	$this->db->setQuery($sql);    
         	$this->db->query();
+        	$sql = $this->core->sql('DELETE FROM #__mb_tree_links WHERE individuals_id=?', $id);
+        	$this->db->setQuery($sql);    
+        	$this->db->query();
         }
 
         public function getParents($id){
@@ -278,6 +285,15 @@ class IndividualsList{
         	$rows = $this->db->loadAssocList();
         	return $rows;
         }
+        public function getChildsId($id){
+        	if($id==null){return null;}
+        	$sqlString = "SELECT child.gid as id FROM #__mb_families AS family
+        			LEFT JOIN #__mb_childrens AS child ON child.fid = family.id
+        			WHERE family.husb =? OR family.wife =?";
+        	$sql = $this->core->sql($sqlString, $id, $id);
+        	$this->db->setQuery($sql); 
+        	return $this->db->loadAssocList();
+        }
         public function getFamilyId($id, $type='FAMC'){
         	if($id==null){ return null; }
         	if($type=='FAMS'){ $sql = $this->core->sql('SELECT id as fid FROM #__mb_families WHERE husb =? OR wife =?', $id, $id); } 
@@ -291,6 +307,13 @@ class IndividualsList{
         public function getIdbyFId($fId){
         	if($fId==null){ return null; }
         	$sql = $this->core->sql('SELECT id FROM #__mb_individuals WHERE fid=?', $fId);
+        	$this->db->setQuery($sql);         
+        	$rows = $this->db->loadAssocList();
+        	return $rows[0]['id'];
+        }
+        public function getTreeIdbyFid($fId){
+        	if($fId==null){ return null; }
+        	$sql = $this->core->sql('SELECT link.tree_id as id FROM #__mb_individuals as ind LEFT JOIN #__mb_tree_links as link ON ind.id = link.individuals_id  WHERE ind.fid=?', $fId);
         	$this->db->setQuery($sql);         
         	$rows = $this->db->loadAssocList();
         	return $rows[0]['id'];
@@ -321,6 +344,16 @@ class IndividualsList{
         		return $spouses;
         	}
         	return null;
+        }
+        public function getRelatives($treeId, $all=false){
+        	if($all){
+        		$sql = $this->core->sql("SELECT individuals_id FROM #__mb_tree_links WHERE tree_id=? AND type=?",$treeId, $all);
+        	} else {
+        		$sql = $this->core->sql("SELECT individuals_id FROM #__mb_tree_links WHERE tree_id=?",$treeId);
+        	}
+        	$this->db->setQuery($sql);         
+        	$rows = $this->db->loadAssocList();
+        	return $rows;
         }
         /*
         function get($id, $lite=false){

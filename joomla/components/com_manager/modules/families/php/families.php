@@ -33,6 +33,7 @@ class Families {
 	}
 	
 	public function getFamilies($render_type){
+		return;
 		$id = $this->host->gedcom->individuals->getIdbyFId($_SESSION['jmb']['fid']);
 		$fmbUser = $this->host->getUserInfo($id);
 		$firstParentId = $this->host->gedcom->individuals->getFirstParent($id, $render_type, true);

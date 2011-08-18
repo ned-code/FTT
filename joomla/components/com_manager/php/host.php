@@ -314,6 +314,31 @@ class Host {
 			}
 		}
 	}
+	
+	/**
+	*
+	*/
+	public function getUserData($indKey){
+	}
+	
+	/**
+	*
+	*/
+	public function getUsersData($individs, &$result){
+
+	}
+	
+	/**
+	*
+	*/
+	public function getUserRelatives($individs, &$result){
+		foreach($individs as $indiv){
+			$indKey = $indiv['individuals_id'];
+			//$ind = $this->gedcom->individuals->get($indiv['individuals_id']);
+			//$result[$ind->Id] = $ind;
+			$result[$indKey] = $this->getUserInfo($indKey);
+		}
+	}
         
 
 }

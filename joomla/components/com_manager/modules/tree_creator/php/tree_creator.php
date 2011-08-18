@@ -52,35 +52,68 @@ class TreeCreator {
 	}
 	
 	public function cancel(){
-		$sql = $this->host->gedcom->sql("SELECT value FROM #__mb_variables WHERE belongs=?",$_SESSION['jmb']['fid']);
+		$fid =$_SESSION['jmb']['fid'];
+		$sql = $this->host->gedcom->sql("SELECT value FROM #__mb_variables WHERE belongs=?",$fid);
 		$this->db->setQuery($sql);
 		$rows = $this->db->loadAssocList();
 		if($rows!=null){
 			$this->delete($rows[0]['value']);
 		}
 	}
-	public function send($indKey){
-		$ind = $this->host->gedcom->individuals->get($indKey, true);
-		$ind->FacebookId = $_SESSION['jmb']['fid'];
-		$this->host->gedcom->individuals->update($ind);
-		$sql = $this->host->gedcom->sql("INSERT INTO #__mb_family_tree (`t_id` ,`f_id` ,`g_id` ,`type`)VALUES (NULL , ?, ?, 'OWNER')",$_SESSION['jmb']['fid'],$indKey);
+	
+	public function addOwnerLink($treeId, $indKey){
+		$sql = $this->host->gedcom->sql("DELETE FROM #__mb_tree_links WHERE individuals_id=?",$indKey);
 		$this->db->setQuery($sql);
 		$this->db->query();
+		$sql = $this->host->gedcom->sql("INSERT INTO #__mb_tree_links (`individuals_id` ,`tree_id`, `type`)VALUES (?, ?, 'OWNER')", $indKey, $treeId);
+		$this->db->setQuery($sql);
+		$this->db->query();		
+	}
+	
+	public function send($indKey){
+		$fid = $_SESSION['jmb']['fid'];
+		$ind = $this->host->gedcom->individuals->get($indKey, true);
+		$ind->FacebookId = $fid;
+		$this->host->gedcom->individuals->update($ind);
+		
+		$sql = $this->host->gedcom->sql("INSERT INTO #__mb_tree (`id` ,`name`)VALUES (NULL, ?)",$ind->FirstName.' '.$ind->LastName.' Tree');
+		$this->db->setQuery($sql);
+		$this->db->query();
+		$id = $this->db->insertid();
+		
+		$sql = "SELECT value FROM #__mb_variables WHERE belongs='".$fid."'";
+		$this->db->setQuery($sql);
+		$rows = $this->db->loadAssocList();
+		$value = explode(';', $rows[0]['value']);
+		$individs = explode(',', $value[0]);
+		foreach($individs as $indiv){
+			if(!empty($indiv)){
+				$sql = $this->host->gedcom->sql("INSERT INTO #__mb_tree_links (`individuals_id` ,`tree_id`, `type`)VALUES (?, ?, 'MEMBER')", $indiv, $id);
+				$this->db->setQuery($sql);
+				$this->db->query();
+			}
+		}	
+		
+		$this->addOwnerLink($id, $ind->Id);
+		
 		$sql = $this->host->gedcom->sql("DELETE FROM #__mb_variables WHERE belongs=?",$_SESSION['jmb']['fid']);
 		$this->db->setQuery($sql);
 		$this->db->query();
 	}
 	public function create(){
 		$user = json_decode(file_get_contents('https://graph.facebook.com/'.$_SESSION['jmb']['fid']));
+		$sql = $this->host->gedcom->sql("INSERT INTO #__mb_tree (`id` ,`name`)VALUES (NULL, ?)",$user->first_name.' '.$user->last_name.' Tree');
+		$this->db->setQuery($sql);
+		$this->db->query();
+		$id = $this->db->insertid();
 		$ind = new Individual();
 		$ind->FacebookId = $user->id;
 		$ind->FirstName = $user->first_name;
 		$ind->LastName =  $user->last_name;
+		$ind->TreeId = $id;
 		$ind->Gender = strtoupper($user->gender);
-		$ind->Id = $this->host->gedcom->individuals->save($ind); 	
-		$sql = $this->host->gedcom->sql("INSERT INTO #__mb_family_tree (`t_id` ,`f_id` ,`g_id` ,`type`)VALUES (NULL , ?, ?, 'OWNER')",$user->id,$ind->Id );
-		$this->db->setQuery($sql);
-		$this->db->query();
+		$ind->Id = $this->host->gedcom->individuals->save($ind); 		
+		$this->addOwnerLink($id, $ind->Id);
 	}
 }
 ?>
