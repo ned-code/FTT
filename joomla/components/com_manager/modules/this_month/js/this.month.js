@@ -4,6 +4,7 @@ function JMBThisMonth(obj){
 	this.obj = obj;
 	this.json = null;
 	this.content = { table:null, birth:null, death:null, marr:null };
+	this.b_count = 0;
 	
 	//objects
 	this.table = jQuery('<table cellpadding="0" cellspacing="0" width="100%"><tr><td><div class="jmb-this-month-header"></div></td></tr><tr><td><div class="jmb-this-month-body"></div></td></tr></table>');
@@ -21,8 +22,6 @@ function JMBThisMonth(obj){
 	storage.addEvent(storage.tabs.clickPull, function(object){
 		self.profile.cleaner();
 	});
-	
-	_A = this;
 }
 
 JMBThisMonth.prototype = {
@@ -54,9 +53,18 @@ JMBThisMonth.prototype = {
 		}
 	},
 	_getTurns:function(event){
+		if(!event) return '';
 		var year = event.From.Year;
 		var n_year = (new Date()).getFullYear()
 		return (n_year-year);
+	},
+	_getMarrEvent:function(data){
+		for(var i=0;i<data.events.length;i++){
+			if(data.events[i].Type=='MARR'){
+				return data.events[i];
+			}
+		}
+		return false;
 	},
 	_cn:function(n){
 		return (n[0]='0')?n[1]:n;
@@ -122,14 +130,22 @@ JMBThisMonth.prototype = {
 		var events = json.events;
 		if(events.b){
 			var b = events.b;
-			for(var key in b){
-				if(!b[key].death && typeof(key) != 'undefined' ){
-					var gender = (json.descedants[key].indiv.Gender=='M')?'male':'female';
-					var color = json.colors[json.descedants[key].indiv.Gender];
-					var append = sb._('<tr><td><div class="date">')._(b[key].event.From.Day)._('</div></td><td><div class="img-')._(gender)._('">&nbsp;</div></td><td><div id="')._(key)._('" class="person ')._(gender)._('"><font color="')._(color)._('">')._(self._getFullName(json, key))._('</font> (turns ')._(self._getTurns(b[key].event))._(')</div></td></tr>').result();
-					sb.clear();
-					jQuery(view).append(append);
-				} 
+			jQuery(b).each(function(i,e){	
+				var data, key, birth, gender, color, append;
+				key = e.gid;	
+				data = json.descedants[key];
+				if(data.indiv.Death.length!=0) return;
+				self.b_count++;
+				birth = data.indiv.Birth[0];
+				gender = (data.indiv.Gender=='M')?'male':'female';
+				color = json.colors[data.indiv.Gender];
+				append = sb._('<tr><td><div class="date">')._((birth.From.Day!=null)?birth.From.Day:'')._('</div></td><td><div class="img-')._(gender)._('">&nbsp;</div></td><td><div id="')._(key)._('" class="person ')._(gender)._('"><font color="')._(color)._('">')._(self._getFullName(json, key))._('</font> (turns ')._(self._getTurns(birth))._(')</div></td></tr>').result();
+				sb.clear();
+				jQuery(view).append(append);
+			});
+			if(self.b_count==0){
+				var howdo = self.json.language.howdo.replace('%%',self.json.language.event_type.birthday+' ').split('.');	
+				self._setMessage(view, 'howToDo.html','#jmb-this-month-birth', ['<div class="message">',howdo[0],'<font color="#b6bad9">',howdo[1],'</font></div>'].join(''));
 			}
 		} else {
 			var howdo = self.json.language.howdo.replace('%%',self.json.language.event_type.birthday+' ').split('.');	
@@ -143,15 +159,18 @@ JMBThisMonth.prototype = {
 		var sb = host.stringBuffer();
 		if(events.d){
 			var d = events.d;
-			for(var key in d){
-				if(typeof(key) != 'undefined' ){
-					var gender = (json.descedants[key].indiv.Gender=='M')?'male':'female';
-					var color = json.colors[json.descedants[key].indiv.Gender];
-					var append = sb._('<tr><td><div class="date">')._(d[key].event.From.Day)._('</div></td><td><div class="img-')._(gender)._('">&nbsp;</div></td><td><div id="')._(key)._('" class="person"><font color="')._(color)._('">')._(self._getFullName(json, key))._('</font> (turns ')._(self._getTurns(json.descedants[key].indiv.Birth))._(')</div></td></tr>').result();
-					sb.clear();
-					jQuery(view).append(append);
-				} 
-			}
+			jQuery(d).each(function(i,e){
+				var data, key, death, gender, color, append;
+				key = e.gid;
+				data = json.descedants[key];
+				death = data.indiv.Death[0];
+				gender = (data.indiv.Gender=='M')?'male':'female';
+				color = json.colors[data.indiv.Gender];
+				append = sb._('<tr><td><div class="date">')._((death.From.Day!=null)?death.From.Day:'')._('</div></td><td><div class="img-')._(gender)._('">&nbsp;</div></td><td><div id="')._(key)._('" class="person"><font color="')._(color)._('">')._(self._getFullName(json, key))._('</font> (turns ')._(self._getTurns(data.indiv.Birth[0]))._(')</div></td></tr>').result();
+				sb.clear();
+				jQuery(view).append(append);
+			});
+			
 		} else {
 			var howdo = self.json.language.howdo.replace('%%',self.json.language.event_type.we_remember+' ').split('.');	
 			self._setMessage(view, 'howToDo.html','#jmb-this-month-death', ['<div class="message">',howdo[0],'<font color="#b6bad9">',howdo[1],'</font></div>'].join(''));
@@ -162,25 +181,25 @@ JMBThisMonth.prototype = {
 		var view = jQuery('.jmb-this-month-body').find('#jmb-this-month-marr table');
 		var events = json.events;
 		var sb = host.stringBuffer();
-		if(events.u){
-			var u = events.u;
-			for(var key in u){
-				if(typeof(key)!='undefined'){
-					var sircar = {
-						id:u[key].sircar,
-						color:json.colors[json.descedants[u[key].sircar].indiv.Gender],
-						name:self._getFullName(json, u[key].sircar)
-					}
-					var spouse = {
-						id:u[key].spouse,
-						color:json.colors[json.descedants[u[key].spouse].indiv.Gender],
-						name:self._getFullName(json, u[key].spouse)
-					}
-					var append = sb._('<tr><td><div class="date">')._(u[key].event.From.Day)._('</div></td><td><div class="anniversaries-start">&nbsp</div></td><td><div id="')._(sircar.id)._('" class="person"><font color="')._(sircar.color)._('">')._(sircar.name)._('</font></div><div id="')._(spouse.id)._('" class="person"><font color="')._(spouse.color)._('">')._(spouse.name)._('</font></div></td><td><div class="anniversaries-end">&nbsp;</div></td><td><div>(')._(self._getTurns(u[key].event))._(' years ago)</div></td></tr>').result();
-					sb.clear();
-					jQuery(view).append(append);
+		if(events.m){
+			var m = events.m;
+			jQuery(m).each(function(i,e){
+				var key, sircar, spouse, event, append;
+				sircar = {
+					id:e.husb,
+					color:json.colors[json.descedants[e.husb].indiv.Gender],
+					name:self._getFullName(json, e.husb)
 				}
-			}
+				spouse = {
+					id:e.wife,
+					color:json.colors[json.descedants[e.wife].indiv.Gender],
+					name:self._getFullName(json, e.wife)
+				}	
+				event = self._getMarrEvent((e.husb!=null)?json.descedants[e.husb]:json.descedants[e.wife]);
+				append = sb._('<tr><td><div class="date">')._((event&&event.From&&event.From.Day)?event.From.Day:'')._('</div></td><td><div class="anniversaries-start">&nbsp</div></td><td><div id="')._(sircar.id)._('" class="person"><font color="')._(sircar.color)._('">')._(sircar.name)._('</font></div><div id="')._(spouse.id)._('" class="person"><font color="')._(spouse.color)._('">')._(spouse.name)._('</font></div></td><td><div class="anniversaries-end">&nbsp;</div></td><td><div>(')._(self._getTurns(event))._(' years ago)</div></td></tr>').result();
+				sb.clear();
+				jQuery(view).append(append);
+			});
 		} else {
 			var howdo = self.json.language.howdo.replace('%%',self.json.language.event_type.anniversaries+' ').split('.');	
 			self._setMessage(view, 'howToDo.html','#jmb-this-month-marr', ['<div class="message">',howdo[0],'<font color="#b6bad9">',howdo[1],'</font></div>'].join(''));
@@ -215,6 +234,7 @@ JMBThisMonth.prototype = {
 	},
 	reload:function(){
 		var self = this;
+		self.profile.cleaner();
 		var header = jQuery(self.table).find('.jmb-this-month-header');
 		var month = jQuery(header).find('select[name="months"]').val();
 		var sort = jQuery(header).find('select[name="sort"]').val();
@@ -230,7 +250,7 @@ JMBThisMonth.prototype = {
 		jQuery(self.table).find('.jmb-this-month-body').append(table);
 		//set documents
 		self._setHEAD(json);
-		if(json.settings.opt.date!=9999){
+		if(json.events.b.length!=0&&json.events.m.length!=0&&json.events.m.length!=0){
 			if(json.settings.event.birthdays == 'true') self._setBIRTH(table, json);
 			if(json.settings.event.deaths == 'true') self._setDEATH(table, json);
 			if(json.settings.event.anniversaries == 'true') self._setMARR(table,  json);

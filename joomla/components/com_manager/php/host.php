@@ -259,6 +259,7 @@ class Host {
 	* @return array all info about individ
 	*/
 	public function getUserInfo($indKey, $indRel = false){
+		if($indKey==null){ return null; }
 		$indiv = $this->gedcom->individuals->get($indKey);
 		if($indRel) $indiv->Relation = $this->gedcom->individuals->relation->get_relation($indKey, $indRel);
 		$events = $this->gedcom->events->getAllEventsByIndKey($indKey);
@@ -313,33 +314,7 @@ class Host {
 				$this->getIndividsArray($individ['parents']['motherID'], $individs, $indRel);
 			}
 		}
-	}
-	
-	/**
-	*
-	*/
-	public function getUserData($indKey){
-	}
-	
-	/**
-	*
-	*/
-	public function getUsersData($individs, &$result){
-
-	}
-	
-	/**
-	*
-	*/
-	public function getUserRelatives($individs, &$result){
-		foreach($individs as $indiv){
-			$indKey = $indiv['individuals_id'];
-			//$ind = $this->gedcom->individuals->get($indiv['individuals_id']);
-			//$result[$ind->Id] = $ind;
-			$result[$indKey] = $this->getUserInfo($indKey);
-		}
-	}
-        
+	}        
 
 }
 

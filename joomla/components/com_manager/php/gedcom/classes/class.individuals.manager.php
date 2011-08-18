@@ -355,6 +355,25 @@ class IndividualsList{
         	$rows = $this->db->loadAssocList();
         	return $rows;
         }
+        public function getByEvent($treeId, $type, $month, $sort=false){
+        	$sqlString = "SELECT ind.id as gid
+        			FROM #__mb_individuals as ind 
+        			LEFT JOIN #__mb_tree_links as tree_links ON ind.id = tree_links.individuals_id
+        			LEFT JOIN #__mb_events as event ON ind.id = event.individuals_id
+        			LEFT JOIN #__mb_dates as date ON event.id = date.events_id
+        			WHERE tree_links.tree_id = ?";	
+        	$sqlString .= " AND event.type=?";
+        	$sqlString .= " AND date.f_month=?";
+        	if($sort&&$sort[0]!=0){
+        		$sqlString .= ($sort[0]>0)?" AND date.f_year >= ?":" AND date.f_year < ?";
+        		$sql = $this->core->sql($sqlString, $treeId, $type, $month, $sort[1]);
+        	} else {
+        		$sql = $this->core->sql($sqlString, $treeId, $type, $month);
+        	}
+        	$this->db->setQuery($sql);         
+        	$rows = $this->db->loadAssocList();
+        	return $rows;
+        }
         /*
         function get($id, $lite=false){
             $db =& JFactory::getDBO();

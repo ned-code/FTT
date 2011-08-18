@@ -120,7 +120,27 @@ class FamiliesList{
         		return array();
         	}
         }
-
+        public function getByEvent($treeId, $type, $month, $sort=false){
+        	$sqlString = "SELECT family.id, family.husb, family.wife 
+				FROM #__mb_families AS family
+				LEFT JOIN #__mb_tree_links AS tree_links ON family.husb = tree_links.individuals_id OR family.wife = tree_links.individuals_id
+				LEFT JOIN #__mb_events AS event ON family.id = event.families_id
+				LEFT JOIN #__mb_dates AS date ON event.id = date.events_id
+				WHERE tree_links.tree_id =?";
+        	$sqlString .= "AND event.type=?";
+        	$sqlString .= "AND date.f_month=?";
+        	if($sort[0]!='false'){
+        		$sqlString .= ((int)$sort[0]<0)?"AND date.f_year < ?":"AND date.f_year > ?";
+        		$sqlString .= " GROUP BY family.id";
+        		$sql = $this->core->sql($sqlString, $treeId, $type, $month, $sort[1]);
+        	} else {
+        		$sqlString .= " GROUP BY family.id";
+        		$sql = $this->core->sql($sqlString, $treeId, $type, $month);
+        	}
+        	$this->db->setQuery($sql);         
+        	$rows = $this->db->loadAssocList();
+        	return $rows;
+        }
 	/*
         function  __construct($core) {
             $this->core = $core;
