@@ -7,6 +7,7 @@ function JMBAncestors(obj){
 	jQuery(obj).append(home_button);
 
 	this.profile = new JMBProfile();
+	this.first = null;
 	this.json = null;
 	this.response = null;
 	this.ancestors = null;
@@ -14,29 +15,29 @@ function JMBAncestors(obj){
 	this.imgPath = null;
 	this.st = null;
 	this.index = 0;
-	
 	var self = this;
 	this._ajax('get', null, function(res){
 		var req = jQuery.parseJSON(res.responseText);
 		self.response = req;
-		self.ancestors = req.ancestors;
-		self.objects = req.objects;
 		self.json = req.json;
 		self.imgPath = req.path;
 		self.fmbUser = req.fmbUser;
+		self.ancestors = req.ancestors;
+		self.objects = req.objects;
+		self.first = req.json.id;
 		self.send(self.json);
 	});
 	jQuery(home_button).click(function(){
 		if(self.json==null||!self.st) return false;
-		var tree = self._parse(self.json);		
-		self.index = 0;
-		self.render(tree);
+		self.render(self.json);
 		return false;
 	})
 	
 	storage.addEvent(storage.tabs.clickPull, function(object){
 		self.profile.cleaner();
 	})
+	
+	_A = this;
 }
 
 JMBAncestors.prototype = {
@@ -103,6 +104,20 @@ JMBAncestors.prototype = {
 		}
 		return '';
 	},
+	_getObject:function(object, node){
+		var self = this;
+		for(var key in object){
+			if(key=='id'&&object[key]==node.id){ 
+				return object;
+			} else if (key=='children'&&object[key].length!=0) {
+				for(var i=0;i<object[key].length;i++){
+					var obj = this._getObject(object[key][i], node);
+					if(obj!=null) return obj;
+				}
+			}
+		}
+		return null;
+	},
 	_createNode:function(label, node){
 		if(!node.data.flag) return '<div class="jit-node-item-question">&nbsp;</div>'; 
 		var self = this;
@@ -138,49 +153,26 @@ JMBAncestors.prototype = {
 		sb._('</div>');
 		return sb.result();
 	},
-	_parseNull:function(){
-		var sb = host.stringBuffer();
-		var object = {};
-		object.id = sb._('__')._(this.index).result();
-		object.name = sb.clear()._('__name_')._(this.index);
-		object.data = { flag:false };
-		object.children = [];
-		this.index++;
-		return object;
-	},
-	_parseIndivid:function(json){
-		if(!json) return this._parseNull();
-		var object = {};
-		object.id = json.id;
-		object.name = json.name;
-		object.data = json.data;
-		object.children = [];
-		this.index++;
-		return object;
-	},
-	_parseChildren:function(json, level){
-		if(level==2) return [];
-		var ch1, ch2, p1, p2;
-		ch1 = (json.children&&json.children.length>0)?json.children[0]:false;
-		ch2 = (json.children&&json.children.length>1)?json.children[1]:false;	
-		p1 = this._parseIndivid(ch1);
-		p1.children = this._parseChildren(ch1, 1+level);
-		p2 = this._parseIndivid(ch2);
-		p2.children = this._parseChildren(ch2, 1+level);
-		return [p1, p2];
-	},
-	_parse:function(json){
-		var object = this._parseIndivid(json);
-		object.children = this._parseChildren(json, 0);			
-		return object;
-	},
 	_onClick:function(label, node){
+		var self = this;
 		var prew = (this.objects[node.data.prew])?this.objects[node.data.prew].data.prew:node.data.prew;
 		var clickItemId = (node._depth==0)?prew:node.id;
 		if(clickItemId){
-			var tree = this._parse($jit.json.getSubtree(this.json, clickItemId));
-			this.index=0;
-			this.render(tree);
+			var obj = this._getObject(self.json, node);
+			if(obj.children.length!=0){
+			 	var tree = $jit.json.getSubtree(this.json, clickItemId);
+				this.render(tree);
+			} else {
+				this._ajax('get', clickItemId.substr(1), function(res){
+					var req = jQuery.parseJSON(res.responseText);
+					obj.children = req.json.children;
+					self.ancestors = jQuery.extend(self.ancestors, req.ancestors);
+					self.objects = jQuery.extend(self.objects, req.objects);
+					console.log(self.json);
+					var tree = $jit.json.getSubtree(self.json, clickItemId);
+					self.render(tree);
+				});
+			}
 		}
 	},
 	_onClickEditButon:function(label,node){
@@ -222,7 +214,6 @@ JMBAncestors.prototype = {
 	},
 	send:function(json){
 		var self = this;
-		console.log(typeof($jit));
 		if(typeof($jit) === 'undefined'){
 			setTimeout(function(){ 
 				self.send(json);

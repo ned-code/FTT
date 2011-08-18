@@ -13,9 +13,14 @@ class JitObject{
 }
 
 
-class JMBAncestors {
+class JMBAncestors {	
 	protected $host;
+	protected $ownerId;
+	protected $json;
 	protected $index = 0;
+	protected $ancestors = array();
+	protected $objects = array();
+
 	
 	public function __construct(){
 		$this->host = new Host('Joomla');
@@ -27,55 +32,62 @@ class JMBAncestors {
 		return $ind;
 	}
 	
-	protected function nullAncestor(&$prew, &$mass){
-		$id = '_'.$this->index++;
-		$jit = new JitObject();
-		$jit->id = $id;
-		$jit->name = $id;
-		$jit->data['flag'] = false;
-		
-		$prew->data['next'] = $jit->id;
-		$prew->children[] = $jit;
-		$mass[$jit->id] = $jit;
-	}
-
-	protected function getAncestor($ind, &$prew, &$ancestors, &$mass){
-		$jit = new JitObject();		
-		$jit->id = ':'.$ind->Id;
-		$jit->name = $ind->FirstName.'_'.$ind->LastName;
-		
-		$jit->data['flag'] = true;
-		$jit->data['gender'] = $ind->Gender;
-		$jit->data['prew'] = ($prew)?$prew->id:false;
-		
-		if($prew){
-			$prew->data['next'] = $jit->id;
-			$prew->children[] = $jit;
-		}
-		
-		$parents = $this->host->gedcom->individuals->getParents($ind->Id);
-		if($parents['fatherID']!=null||$parents['motherID']!=null){
-			$father = $this->check($parents['fatherID']);
-			$mother = $this->check($parents['motherID']);
-			($father)?$this->getAncestor($father, $jit, &$ancestors, &$mass):$this->nullAncestor($jit, &$mass);
-			($mother)?$this->getAncestor($mother, $jit, &$ancestors, &$mass):$this->nullAncestor($jit, &$mass);
-		}
-		$ancestors[$ind->Id] = $this->host->getUserInfo($ind->Id, $this->ownerId);
-		$mass[$jit->id] = $jit;
-		return $jit;
+	protected function setNullAncestor(){
+		$ancestor = new JitObject();
+		$ancestor->id = '_'.$this->index++;
+		$ancestor->name = '';
+		$ancestor->data['flag'] = false;
+		$ancestor->children = array();
+		return $ancestor;
 	}
 	
-	public function get(){
-		return;
-		$ownerId = $_SESSION['jmb']['gid'];
-		$this->ownerId = $ownerId;
-		$fmbUser = $this->host->getUserInfo($ownerId);
-		$path = JURI::root(true); 
-		$ancestors = array();
-		$mass = array();
-		$object = false;
-		$json = $this->getAncestor($fmbUser['indiv'], $object, $ancestors, $mass);
-		return json_encode(array('json'=>$json,'objects'=>$mass, 'ancestors'=>$ancestors,'fmbUser'=>$fmbUser,'path'=>$path));
+	protected function setAncestor($ind, $prew){
+		$ancestor = new JitObject();
+		$ancestor->id = ':'.$ind->Id;
+		$ancestor->name = $ind->FirstName.'_'.$ind->LastName;
+		$ancestor->data['flag'] = true;
+		$ancestor->data['gender'] = $ind->Gender;
+		$ancestor->data['prew'] = ($prew)?$prew->id:false;
+		$ancestor->children = array();
+		return $ancestor;
 	}
+	
+	protected function setNullBranch($object, $level){
+		if($level==3){ return; }
+		$ancestor = $this->setNullAncestor();
+		$object->children[] = $ancestor;
+		$this->setNullBranch($ancestor, $level + 1);
+		$this->setNullBranch($ancestor, $level + 1);	
+	}
+	
+	protected function setAncestors($ind, $prew=false, $level=0){
+		if($level==3){ return; }
+		$ancestor = ($ind!=null)?$this->setAncestor($ind, $prew):$this->setNullAncestor();
+		$parents = $this->host->gedcom->individuals->getParents($ind->Id);
+		$father = $this->check($parents['fatherID']);
+		($father)?$this->setAncestors($father, $ancestor, $level + 1):$this->setNullBranch($ancestor, $level + 1);
+		$mother = $this->check($parents['motherID']);
+		($mother)?$this->setAncestors($mother, $ancestor, $level + 1):$this->setNullBranch($ancestor, $level + 1);	
+		if($father||$mother){
+			$ancestor->data['next'] = ($prew)?':'.$ind->Id:false;
+		}
+		if(!array_key_exists($ind->Id, $this->ancestors)){
+			$this->ancestors[$ind->Id] = $this->host->getUserInfo($ind->Id, $this->ownerId);
+			$this->objects[$ancestor->id] = $ancestor;
+		}
+		($prew)?$prew->children[] = $ancestor:$this->json = $ancestor;	
+	}
+	
+	public function get($indKey){
+		$this->ownerId  = $_SESSION['jmb']['gid'];
+		$fmbUser = $this->host->getUserInfo($this->ownerId);
+		$user = ($indKey=='null')?$fmbUser['indiv']:$this->host->gedcom->individuals->get($indKey);
+		$path = JURI::root(true); 
+		$this->setAncestors($user);
+		return json_encode(array('json'=>$this->json, 'ancestors'=>$this->ancestors,'objects'=>$this->objects,'fmbUser'=>$fmbUser,'path'=>$path));
+	}
+	
+	
+	
 }
 ?>
