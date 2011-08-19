@@ -21,7 +21,7 @@ function DescendantTreeProfile(parent){
 
 DescendantTreeProfile.prototype = {
 	_ajax:function(func, params, callback){
-		host.callMethod("descendant_tree", "DescendantTree", func, params, function(res){
+		host.callMethod("descendant_tree", "JMBDescendantTree", func, params, function(res){
 				callback(res);
 		})
 	},

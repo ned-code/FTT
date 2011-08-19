@@ -1,4 +1,4 @@
-function DescendantTree(obj){
+function JMBDescendantTree(obj){
 	var self = this;
 	obj = jQuery("#"+obj);
 	var dhxLayout;
@@ -52,9 +52,9 @@ function DescendantTree(obj){
 	});
 }
 
-DescendantTree.prototype = {
+JMBDescendantTree.prototype = {
 	_ajax:function(func, params, callback){
-		host.callMethod("descendant_tree", "DescendantTree", func, params, function(res){
+		host.callMethod("descendant_tree", "JMBDescendantTree", func, params, function(res){
 				callback(res);
 		})
 	},

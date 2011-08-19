@@ -1,1 +1,1 @@
-{"container":"jmb_families","object":"Families"}
+{"container":"jmb_families","object":"JMBFamilies"}

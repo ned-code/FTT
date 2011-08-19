@@ -265,7 +265,7 @@ class Host {
 		$events = $this->gedcom->events->getAllEventsByIndKey($indKey);
 		$parents = $this->gedcom->individuals->getParents($indKey);
 		$children = $this->gedcom->individuals->getChilds($indKey);
-		$families = $this->gedcom->families->getPersonsFamilies($indKey, true);
+		$families = $this->gedcom->families->getPersonFamilies($indKey, true);
 		$spouses = array();	
 		foreach($families as $family){
 			if($family->Spouse == null) continue;
