@@ -132,9 +132,11 @@ class FamiliesList{
         	if($sort[0]!='false'){
         		$sqlString .= ((int)$sort[0]<0)?"AND date.f_year < ?":"AND date.f_year > ?";
         		$sqlString .= " GROUP BY family.id";
+        		$sqlString .= ' ORDER BY  date.f_day ASC';
         		$sql = $this->core->sql($sqlString, $treeId, $type, $month, $sort[1]);
         	} else {
         		$sqlString .= " GROUP BY family.id";
+        		$sqlString .= ' ORDER BY  date.f_day ASC';
         		$sql = $this->core->sql($sqlString, $treeId, $type, $month);
         	}
         	$this->db->setQuery($sql);         
