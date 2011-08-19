@@ -289,7 +289,7 @@ class IndividualsList{
         	if($id==null){return null;}
         	$sqlString = "SELECT child.gid as id FROM #__mb_families AS family
         			LEFT JOIN #__mb_childrens AS child ON child.fid = family.id
-        			WHERE family.husb =? OR family.wife =?";
+        			WHERE (family.husb =? OR family.wife =?) AND child.gid!='NULL'";
         	$sql = $this->core->sql($sqlString, $id, $id);
         	$this->db->setQuery($sql); 
         	return $this->db->loadAssocList();
