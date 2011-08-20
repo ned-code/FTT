@@ -100,11 +100,12 @@
 }
 
 .jmb-profile-mini-container{
+}
+.jmb-profile-content{
 	background: none repeat scroll 0 0 #F1E4B0;
-	padding: 5px;
-	width:400px;
-	height:200px;
-	margin:5px;
+	margin: 5px;
+	position: relative;
+	width: 395px;
 }
 .jmb-profile-mini-switch{
 	color: Navy;
@@ -145,12 +146,13 @@
 	color:gray;
 }
 .jmb-profile-mini-images{
-	width:400px;
-	height:92px;
+	background: none repeat scroll 0 0 white;
 	overflow-x: auto;
 	overflow-y: hidden;
+	padding-bottom: 5px;
+	padding-left: 3px;
+	padding-top: 3px;
 }
-
 .jmb-profile-mini-images ul {
 	margin: 0 !important; 
 	padding: 3px 0 0 !important;
@@ -162,6 +164,23 @@
 	border: 1px solid #000000;
 	cursor: pointer;
 	margin-left: 3px;
+}
+.jmb-profile-mini-send {
+	background: none repeat scroll 0 0 white;
+	margin-bottom: 5px;
+    	margin-left: 5px;
+    	margin-right: 5px;
+    	padding: 10px;
+}
+.jmb-profile-mini-send div.email {
+	background: url("../image/email.png") no-repeat scroll 0 0 transparent;
+	cursor: pointer;
+	height: 31px;		
+	margin-left: 30px;
+	width: 31px;
+}
+.jmb-profile-mini-send span {
+	margin-left: 5px;
 }
 
 /** 

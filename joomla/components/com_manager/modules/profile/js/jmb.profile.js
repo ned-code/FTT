@@ -169,31 +169,6 @@ JMBProfile.prototype = {
 		}
 	},
 	_getRelation:function(obj){
-		/*
-		var self = this;
-		if(!obj.fmbUser) return 'is you.';
-		var id = obj.fmbUser.indiv.Id;
-		//parent;
-		if(obj.data.parents){
-			var p = obj.data.parents;
-			if(p.fatherID==id||p.motherID==id){
-				return 'Child';
-			}
-		}
-		//spouse;
-		var i;
-		for(i=0;i<obj.data.spouses.length;i++){
-			if(obj.data.spouses[i].id==id){
-				return 'Spouses'
-			}
-		}
-		for(i=0;i<obj.data.children.length;i++){
-			if(obj.data.children[i].gid==id){
-				return 'Parent';
-			}
-		}
-		return false;
-		*/
 		return obj.data.indiv.Relation;
 	},
 	_getSpouseAvatar:function(obj, x, y){
@@ -235,9 +210,9 @@ JMBProfile.prototype = {
 		var self = this;
 		var sb = host.stringBuffer();
 		var length = jQuery(p).length;
-		sb._('<ul style="width:')._(64*length)._('px;">');
+		sb._('<ul style="width:')._(55*length)._('px;">');
 			jQuery(p).each(function(i,e){
-				sb._('<li><img src="index.php?option=com_manager&task=getResizeImage&id=')._(e.Id)._('&w=59&h=65"></li>').result();
+				sb._('<li><img src="index.php?option=com_manager&task=getResizeImage&id=')._(e.Id)._('&w=50&h=50"></li>');
 			});
 		sb._('</ul>')
 		return sb.result();

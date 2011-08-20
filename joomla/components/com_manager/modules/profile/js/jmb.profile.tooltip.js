@@ -23,7 +23,7 @@ function JMBProfileTooltip(parent){
 			textzIndex:       999,
 			boxzIndex:        998,
 			wrapperzIndex:    997,
-			width:420,
+			width:405,
 			cssStyles: {
 				fontFamily: '"lucida grande",tahoma,verdana,arial,sans-serif', 
 				fontSize: '11px'
@@ -94,23 +94,41 @@ JMBProfileTooltip.prototype = {
 		var self = this;
 		var sb = host.stringBuffer();
 		sb._('<div id="')._(id)._('-content" class="jmb-profile-mini-container">');
-			sb._('<div class="jmb-profile-mini-info">');
-				sb._('<table>');
-					sb._('<tr>');
-						sb._('<td class="jmb-profile-mini-photo"><div>')._(self.parent._getAvatar(p.data,81,90))._('</div></td>');
-						sb._('<td class="jmb-profile-mini-info-body">');
-							sb._('<div><span>Name:</span> ')._(self.parent._getFullName(p.data.indiv))._('</div>');
-							sb._('<div><span>Born:</span> ')._(self.parent._getEventDate(p.data.indiv.Birth[0]))._('</div>');
-							var relation = self.parent._getRelation(p);
-							if(relation != 0) sb._('<div><span>Relation:</span> ')._(relation)._('</div>');
-						sb._('</td>');
-					sb._('</tr>');
-				sb._('</table>');
-				sb._('<div class="jmb-profile-mini-switch"><span>Switch to Full Profile</span></div>');
+			sb._('<div class="jmb-profile-content">');
+				sb._('<div class="jmb-profile-mini-info">');
+					sb._('<table>');
+						sb._('<tr>');
+							sb._('<td class="jmb-profile-mini-photo"><div>')._(self.parent._getAvatar(p.data,81,90))._('</div></td>');
+							sb._('<td class="jmb-profile-mini-info-body">');
+								sb._('<div><span>Name:</span> ')._(self.parent._getFullName(p.data.indiv))._('</div>');
+								sb._('<div><span>Born:</span> ')._(self.parent._getEventDate(p.data.indiv.Birth[0]))._('</div>');
+								var relation = self.parent._getRelation(p);
+								if(relation != 0) sb._('<div><span>Relation:</span> ')._(relation)._('</div>');
+							sb._('</td>');
+						sb._('</tr>');
+					sb._('</table>');
+					sb._('<div class="jmb-profile-mini-switch"><span>Switch to Full Profile</span></div>');
+				sb._('</div>');
+				if(p.data.photo.length!=0){
+					sb._('<div class="jmb-profile-mini-images">');
+						sb._(self.parent._photos(p.data.photo));
+					sb._('</div>');
+				}
 			sb._('</div>');
-			sb._('<div class="jmb-profile-mini-images">');
-				sb._(self.parent._photos(p.data.photo));
-			sb._('</div>');
+			if(p.data.indiv.FacebookId=='0'){
+				var name = p.data.indiv.FirstName;
+				sb._('<div class="jmb-profile-mini-send">');
+					sb._('<table>');			
+						sb._('<tr>');
+							sb._('<td><div class="email">&nbsp;</div></td>');
+							sb._('<td>');
+								sb._('<div><span>')._(name)._(' is not registred.</span></div>');
+								sb._('<div><span>Click here to send ')._(name)._(' an email invitation.</span></div>');
+							sb._('</td>');
+						sb._('</tr>');
+					sb._('</table>');
+				sb._('</div>')
+			}
 		sb._('</div>');
 		var html = sb.result();
 		var htmlObject = jQuery(html);
@@ -208,6 +226,12 @@ JMBProfileTooltip.prototype = {
 			case "switch":
 				jQuery(tooltip).find('.jmb-profile-mini-switch').click(function(){
 					self.parent.profile.render(p);
+					return false;
+				});
+			break;
+			case "mini-send":
+				jQuery(tooltip).find('.jmb-profile-mini-send').find('div.email').click(function(){
+					alert('this feature has not been implemented yet');
 					return false;
 				});
 			break;
@@ -311,7 +335,7 @@ JMBProfileTooltip.prototype = {
 			container = this._tooltipContainer(p);
 		}
 		else if(p.type == 'mini'){
-			buttons = ["switch"];
+			buttons = ["switch","mini-send"];
 			jQuery.extend(p, this.defaultMiniProfileParams);
 			container = this._miniProfileContainer(p);		
 		}
