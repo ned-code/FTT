@@ -1,3 +1,9 @@
+#descendant_tree {
+	margin:10px;
+	height:400px;
+	position:relative;
+}
+
 .containerTableStyle  {
 	text-align: left !important;
 }
@@ -11,11 +17,6 @@
 }
 .jmb-dtp-header{
 	height: 30px;
-}
-.jmb-dtp-header-name{
-	color: white;
-	font-size: 18px;
-	font-weight: bold;
 }
 .jmb-dtp-header-vector{
 	background: url("../imgs/vector.png") no-repeat scroll 0 0 transparent;
@@ -31,37 +32,32 @@
 	background-color: #EFE4B0;
 	padding:1px;
 }
-.jmb-dtp-body-media{
-	height: 90px;
-	padding: 10px;
-	 overflow: hidden;
-}
-.jmb-dtp-body-media-item {
-	background-color: #C3C3C3;
-	border: 1px solid #000000;
-	cursor: pointer;
-	height: 65px;
-	width: 65px;
-}
-.jmb-dtp-body-info{
-	margin-left: 10px;
+.jmb-dtp-body-info {
+	border-bottom: 2px solid #999999;
+	font-family: Calibri,Tahoma,sans-serif;
+	font-size: 14px;
+	font-weight: bold;
+	margin: 5px;
+	position: relative;
 }
 .jmb-dtp-body-info div{
 	text-align:left !important;
 }
-.jmb-profile-avatar{
+.jmb-dtp-body-info-switch{
+	color: blue;
+	cursor: pointer;
+    	font-size: 12px;
+    	position: absolute;
+    	right: 2px;
+    	top: 2px;
+}
+.jmb-dtp-body-info-avatar{
 	background-color: #C3C3C3;
 	border: 1px solid #000000;
 	height: 80px;
 	margin: 10px;
 	position: relative;
 	width: 72px;
-}
-.jmb-dtp-body-space{
-	background-color: white;
-	border: 1px solid #C3C3C3;
-	height: 120px;
-	margin: 10px;
 }
 .jmb-dtp-body-edit-button{
 	background: url("../imgs/edit2.jpg") no-repeat scroll 0 0 #3B5998;
@@ -85,27 +81,44 @@
 	top: 66px;
 	width: 14px;
 }
-.jmb-dtp-footer{
-	background-color: white;
-	height: 100px;
-	margin-top: 2px;
+.jmb-dtp-body-info span.title {
+	color:gray;
 }
-.jmb-dtp-footer div{
-	text-align:left !important;
-	color: #3b5998;
-	font-size: 12px;
+.jmb-dtp-body-space{
+	 margin-left: 17px;
+	 text-align: left !important;
+}
+.jmb-dtp-body-media {
+	margin-top: 10px;
+	overflow:auto;
+	width:395px;
+}
+.jmb-dtp-body-media ul.media-list {
+	background: white;
+	margin-left: -5px;
+	margin-top: -10px;
+	padding-top: 5px;
+}
+.jmb-dtp-body-media li.media-item {
+	display: inline-block;
+	margin-left: 5px;
 }
 .jmb-dtp-footer table{
-	margin-left: 20px;
-	margin-top: 25px;
+	background: white;
+	margin-top: 3px;
+	width:100%;
 }
-.jmb-dtp-footer-mail-button{
+.jmb-dtp-footer div.email{
 	background: url("../imgs/email.png") no-repeat scroll 0 0 transparent;
 	cursor: pointer;
 	height: 31px;
-	margin: 3px;
+	margin: 5px 5px 5px 30px;
 	width: 31px;
 }
+.jmb-dtp-footer div {
+	text-align: left !important;
+}
+.jmb-dtp-footer span {}
 .jmb-dtp-modal {
 	background: url("../imgs/progressbar.gif") no-repeat scroll 50% 50% #ffffff;
 	opacity: 0.5;

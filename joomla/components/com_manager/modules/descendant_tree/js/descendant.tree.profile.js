@@ -43,52 +43,34 @@ DescendantTreeProfile.prototype = {
 		var self = this;
 		var sb = host.stringBuffer();
 		sb._('<div id="jmb-dtp-container" class="jmb-dtp-container">');
-			sb._('<div class="jmb-dtp-header">');
-				sb._('<div class="jmb-dtp-header-name">&nbsp;</div>');
-			sb._('</div>');
 			sb._('<div class="jmb-dtp-body">');
 				sb._('<div class="jmb-dtp-body-info">');
 					sb._('<table>');
 						sb._('<tr>');
-							sb._('<td><div class="jmb-profile-avatar"><div class="jmb-dtp-facebook-icon" style="display:none">&nbsp;</div><div id="edit-button" class="jmb-dtp-body-edit-button">&nbsp;</div></div></td>');
+							sb._('<td><div class="jmb-dtp-body-info-avatar"><div class="jmb-dtp-facebook-icon" style="display:none">&nbsp;</div><div id="edit-button" class="jmb-dtp-body-edit-button">&nbsp;</div></div></td>');
 							sb._('<td>');
-								sb._('<div class="jmb-dtp-body-info-born">&nbsp;</div>');
-								sb._('<div class="jmb-dtp-body-info-died">&nbsp;</div>');
-								sb._('<div class="jmb-dtp-body-info-relation">&nbsp;</div>');
+								sb._('<div class="jmb-dtp-body-info-name"><span class="title">Name:</span>&nbsp;<span class="text"></span></div>');
+								sb._('<div class="jmb-dtp-body-info-born"><span class="title">Born:</span>&nbsp;<span class="text"></span></div>');
+								sb._('<div class="jmb-dtp-body-info-birthplace"><span class="title">Birthplace:</span>&nbsp;<span class="text"></span></div>');
+								sb._('<div class="jmb-dtp-body-info-relation"><span class="title">Relation:</span>&nbsp;<span class="text"></span></div>');
 							sb._('</td>');
 						sb._('</tr>');
 					sb._('</table>');
+					sb._('<div style="display:none;" class="jmb-dtp-body-info-switch">Switch to Full Profile</div>');
 				sb._('</div>');
 				sb._('<div class="jmb-dtp-body-space">&nbsp;</div>');
 				sb._('<div class="jmb-dtp-body-media">&nbsp;</div>');
 			sb._('</div>');
-			sb._('<div class="jmb-dtp-footer">');
-				sb._('<table>');
-					sb._('<tr>');
-						sb._('<td>');
-							sb._('<div class="jmb-dtp-footer-mail-button">&nbsp;</div>');
-						sb._('</td>');
-						sb._('<td>');
-							sb._('<div class="jmb-dtp-footer-info">&nbsp;</div>');
-						sb._('</td>');
-					sb._('</tr>');
-				sb._('</table>');
-			sb._('</div>');
+			sb._('<div class="jmb-dtp-footer"></div>');
 		sb._('</div>');	
 		var obj = jQuery(sb.result());
-		parent.dhxLayout.cells("b").attachObject(obj[0]);
-		
-		var height = jQuery(obj).parent().height();
-		jQuery(obj).height(height);
-
-		jQuery(obj).find(".jmb-dtp-footer-mail-button").click(function(){
-			if(self.json){
-				if(self.json.indiv.FacebookId == '0') {
-					alert('email request send.');
-				}
-			}
-		})
-		 
+		jQuery(obj).find('.jmb-dtp-body-info-switch').click(function(){
+			self.profile.profile.render({
+				data: self.json,
+				imgPath:self.json.path,
+			}); 
+		});
+		parent.dhxLayout.cells("b").attachObject(obj[0]);		 
 		return obj;
 	},
 	createModal:function(){
@@ -110,73 +92,63 @@ DescendantTreeProfile.prototype = {
 			jQuery(this.modal).hide();
 		}
 	},
-	getDate:function(ev){
-		var year  = (ev&&ev.From.Year)?ev.From.Year:false;
-		if(year){
-			return year;
+	getName:function(ind){
+		return [(ind.Nick!=null)?ind.Nick:ind.FirstName,(ind.LastName!=null)?ind.LastName:''].join(' ');
+	},
+	setName:function(obj, json){
+		jQuery(obj).find('.jmb-dtp-body-info-name').find('span.text').html(this.getName(json.indiv));
+	},
+	getBirthdate:function(ind){
+		var event = (ind.Birth.length>0)?ind.Birth[0]:false;
+		if(!event) return event;
+		return [(event.From.Day!=null)?event.From.Day:'',(event.From.Month!=null)?this.months[event.From.Month]:'',(event.From.Year!=null)?event.From.Year:''].join(' ');
+	},
+	setBirthdate:function(obj, json){
+		jQuery(obj).find('.jmb-dtp-body-info-born').find('span.text').html(this.getBirthdate(json.indiv));
+	},
+	getBirthplace:function(ind){
+		var event, place;
+		event = (ind.Birth.length>0)?ind.Birth[0]:false;
+		if(!event) return event;
+		place = (event.Place!=null)?event.Place:false;
+		if(!place) return place;
+		return place.Name;
+	},
+	setBirthplace:function(obj, json){
+		jQuery(obj).find('.jmb-dtp-body-info-birthplace').find('span.text').html(this.getBirthplace(json.indiv));
+	},
+	getRelation:function(ind){
+		return (ind.Relation!=null)?ind.Relation:false;
+	},
+	setRelation:function(obj, json){
+		jQuery(obj).find('.jmb-dtp-body-info-relation').find('span.text').html(this.getRelation(json.indiv));
+	},
+	getAvatar:function(obj, x, y){
+		if(!obj) return '';
+		var self = this;
+		var fId = obj.indiv.FacebookId,
+			av = obj.avatar,		
+			defImg=(obj.indiv.Gender=="M")?'male.gif':'female.gif';	
+		if(av!= null&&av.FilePath != null){
+			return ['<img src="index.php?option=com_manager&task=getResizeImage&id=',av.Id,'&w=',x,'&h=',y,'">'].join('');
 		}
-		else{
-			return 'unknown';
+		else if(fId != '0'){
+			return ['<img src="index.php?option=com_manager&task=getResizeImage&fid=',fId,'&w=',x,'&h=',y,'">'].join('');
 		}
-	},
-	getPlace:function(obj){
-		return (obj[0]!=null)?obj[0]:'';
-	},
-	getMedia:function(json){
-		return '&nbsp;';
-	},
-	getBorn:function(json){
-		if(json.Birth){
-			var b = json.Birth[0];
-			//var place = this.getPlace(b.Place.Hierarchy);
-			var st = '<b>Born</b>: '+this.getDate(b);
-			//st += (place)?' in <span style="color:#'+this.colors.location+'">'+place.Name+'</span>.':'';
-			return st;	
-		}
-		return '&nbsp;'; 
-	},
-	getDied:function(json){
-		if(json.Death){
-			var d = json.Death[0];
-			//var place = this.getPlace(d.Place.Hierarchy);
-			var st = '<b>Died</b>: '+this.getDate(d);
-			//st += (place)?' in <span style="color:#'+this.colors.location+'">'+place.Name+'</span>.':'';
-			return st;	
-		}
-		return '&nbsp;';
-	},
-	getInfo:function(json){
-		if(json.FacebookId == 0){
-			var st = json.FirstName+' is not registered.<br>';
-			st += 'Click here to send '+json.FirstName+'an email invitation.';
-			return st; 
-		}
-		return '&nbsp;';
-	},
-	getRelation:function(json){
-		return '&nbsp;';
+		var defImgPath = [obj.path,'/components/com_manager/modules/profile/image/',defImg].join('');
+		return ['<img height="',y,'px" width="',x,'px" src="',defImgPath,'">'].join('');
 	},
 	setAvatar:function(obj, json){
 		var imgObject = jQuery(obj).find('img');
 		if(jQuery(imgObject).length>0) jQuery(imgObject).remove();
 		jQuery(obj).find('.jmb-dtp-facebook-icon').removeAttr('id').hide().html('&nbsp;');
+		if(json.indiv.FacebookId!='0'){
+			var image = ['<img src="',json.path,'/components/com_manager/modules/families/css/facebook_icon.png" width="14x" height="14px">'].join('');
+			jQuery(obj).find('.jmb-dtp-facebook-icon').attr('id', json.indiv.FacebookId).html(image).show();;
+		}
+		var avatar = this.getAvatar(json, 72, 80);
+		jQuery(obj).find('.jmb-dtp-body-info-avatar').append(avatar);
 		
-		var fId = json.indiv.FacebookId;
-		var avatar = json.avatar;
-		var img;
-		if(avatar != null && avatar.FilePath != null){
-			img = '<img width="72px" height="80px" src="'+avatar.FilePath+'">';
-		} else if(fId != '0'){
-			img = '<img width="72px" height="80px" src="http://graph.facebook.com/'+fId+'/picture">';
-		} else {
-			var imgName = (json.indiv.Gender=="M")?'male.gif':'female.gif';
-			img = '<img width="72px" height="80px" src="'+json.path+'/components/com_manager/modules/descendant_tree/imgs/'+imgName+'">';;
-		}
-		if(fId != '0'){
-			var imgPath = json.path+"/components/com_manager/modules/families/css/facebook_icon.png"; 
-			var f_div = jQuery(obj).find('.jmb-dtp-facebook-icon').attr('id', fId).html('<img src="'+imgPath+'" width="14x" height="14px">').show();
-		}
-		var div = jQuery(obj).find('.jmb-profile-avatar').append(img);
 	},
 	setColors:function(colors){
 		this.colors.male = colors['M'];
@@ -184,13 +156,60 @@ DescendantTreeProfile.prototype = {
 		this.colors.location = colors['L'];
 	},
 	clear:function(){
-		var obj = self.body;
-		jQuery(obj).find('.jmb-dtp-header-name').html('&nbsp;');
-		//jQuery(obj).find('.jmb-dtp-body-media').html('');
-		jQuery(obj).find('.jmb-dtp-body-info-born').html('&nbsp;');
-		jQuery(obj).find('.jmb-dtp-body-info-died').html('&nbsp;');
-		jQuery(obj).find('.jmb-dtp-body-info-relation').html('&nbsp;');
-		jQuery(obj).find('.jmb-dtp-footer-info').html('&nbsp;');
+	},
+	setBodyInfo:function(obj, json){
+		this.setAvatar(obj, json);
+		this.setName(obj, json);	
+		this.setBirthdate(obj, json);
+		this.setBirthplace(obj, json);
+		this.setRelation(obj, json);
+	},
+	setBodySpace:function(obj, json){
+		var text = [json.indiv.FirstName,'is your', this.getRelation(json.indiv)].join(' ');
+		jQuery(obj).find('.jmb-dtp-body-space').html(text);
+	},
+	getPhoto:function(obj, x,y){
+		return ['<img src="index.php?option=com_manager&task=getResizeImage&id=',obj.Id,'&w=',x,'&h=',y,'">'].join('');
+	},
+	setBodyMedia:function(obj, json){
+		var ul = jQuery(obj).find('.jmb-dtp-body-media').find('ul');
+		if(ul.length>0) jQuery(ul).remove();
+		if(json.photo.length==0) return;
+		var self = this, sb = host.stringBuffer();
+		sb._('<ul class="media-list">');
+			jQuery(json.photo).each(function(i,photo){
+				sb._('<li class="media-item">')._(self.getPhoto(photo, 50, 50))._('</li>');
+			});
+		sb._('</ul>');
+		var html = jQuery(sb.result());
+		jQuery(obj).find('.jmb-dtp-body-media').append(html);
+	},
+	setSendMail:function(obj, json){
+		var table = jQuery(obj).find('.jmb-dtp-footer').find('table');
+		if(table.length!=0) jQuery(table).remove();
+		if(json.indiv.FacebookId!='0') return;
+		var self = this, sb = host.stringBuffer(), name = json.indiv.FirstName;
+		sb._('<table>');			
+			sb._('<tr>');
+				sb._('<td><div class="email">&nbsp;</div></td>');
+				sb._('<td>');
+					sb._('<div><span>')._(name)._(' is not registred.</span></div>');
+					sb._('<div><span>Click here to send ')._(name)._(' an email invitation.</span></div>');
+				sb._('</td>');
+			sb._('</tr>');
+			
+		sb._('</table>');
+		var html = jQuery(sb.result());
+		jQuery(html).find('.email').click(function(){
+			alert('Send email invitation.');
+		})
+		jQuery(obj).find('.jmb-dtp-footer').append(html);
+	},
+	set:function(obj, json){
+		this.setBodyInfo(obj, json);
+		this.setBodySpace(obj, json);
+		this.setBodyMedia(obj, json);
+		this.setSendMail(obj, json);
 	},
 	render:function(id){
 		var self = this;
@@ -199,15 +218,9 @@ DescendantTreeProfile.prototype = {
 		this._ajax('getPersonInfoJSON', id, function(response){
 			var json = jQuery.parseJSON(response.responseText);
 			var obj = self.body;
-			var ind = json.indiv;
+			jQuery(obj).find('.jmb-dtp-body-info-switch').show();
 			self.setColors(json.colors);
-			jQuery(obj).find('.jmb-dtp-header-name').html(ind.FirstName+' '+ind.LastName);
-			//jQuery(obj).find('.jmb-dtp-body-media').html(self.getMedia(ind));
-			jQuery(obj).find('.jmb-dtp-body-info-born').html(self.getBorn(ind));
-			jQuery(obj).find('.jmb-dtp-body-info-died').html(self.getDied(ind));
-			jQuery(obj).find('.jmb-dtp-body-info-relation').html(self.getRelation(ind));
-			jQuery(obj).find('.jmb-dtp-footer-info').html(self.getInfo(ind));
-			self.setAvatar(obj, json)
+			self.set(obj, json);
 			//when we click in facebook icon
 			jQuery(obj).find('.jmb-dtp-facebook-icon').click(function(){
 				var id = jQuery(this).attr('id');

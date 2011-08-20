@@ -4,17 +4,12 @@ function JMBDescendantTree(obj){
 	var dhxLayout;
 	var dhxTree;
 	var selectDiv;
-
-	// set css style
-	jQuery(obj).css('height', '500px');
-	jQuery(obj).css('width', '100%');
-	jQuery(obj).css('position', 'relative');
 	
 	// set main dhxmlx Layout
 	dhxLayout = new dhtmlXLayoutObject("descendant_tree", "2U");
 	dhxLayout.cells("a").hideHeader();
 	dhxLayout.cells("b").hideHeader();
-	dhxLayout.cells("a").setWidth(350);
+	dhxLayout.cells("a").setWidth(380);
 	dhxLayout.cells("a").fixSize(true);
 	
 	// set layout in left side[layout.cells('a')]
