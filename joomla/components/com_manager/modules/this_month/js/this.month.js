@@ -250,13 +250,16 @@ JMBThisMonth.prototype = {
 		jQuery(self.table).find('.jmb-this-month-body').append(table);
 		//set documents
 		self._setHEAD(json);
-		if(json.events.b.length!=0&&json.events.m.length!=0&&json.events.m.length!=0){
+		if(json.events.b.length!=0||json.events.m.length!=0||json.events.m.length!=0){
 			if(json.settings.event.birthdays == 'true') self._setBIRTH(table, json);
 			if(json.settings.event.deaths == 'true') self._setDEATH(table, json);
 			if(json.settings.event.anniversaries == 'true') self._setMARR(table,  json);
 		} else {
 			self._setNull(table);
 		}
+		
+		
+		
 		//events
 		jQuery(table).find('.jmb-this-month-content .person font').each(function(i,e){
 			jQuery(e).click(function(){
