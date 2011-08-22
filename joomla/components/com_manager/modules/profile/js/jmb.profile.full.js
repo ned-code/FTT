@@ -617,6 +617,15 @@ JMBProfileFull.prototype = {
 		var htmlObject = jQuery(html);
 		jQuery(self.parent.dWindow).find('div.jmb-dialog-profile-content').append(htmlObject);
 	},
+	_vphotos:function(){
+		var self = this;
+		var data = self.json.data;
+		var sb = host.stringBuffer();
+			sb._(self.parent.media.render(data.photo));
+		var htmlObject = jQuery(sb.result());
+		self.parent.media.init(htmlObject);
+		jQuery(self.parent.dWindow).find('div.jmb-dialog-profile-content').append(htmlObject);
+	},
 	_firstCharToUpper:function(string){
 		return string.charAt(0).toUpperCase() + string.slice(1);
 	},
@@ -643,6 +652,7 @@ JMBProfileFull.prototype = {
 			case "events": self._events(); break;
 			case "photos": self._photos(); break;
 			case "vprofile": self._vprofile(); break;
+			case "vphotos": self._vphotos(); break;
 		}
 	},
 	_mode:function(type){

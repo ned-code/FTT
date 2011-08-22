@@ -53,8 +53,10 @@ $document->addScript('components/com_manager/modules/overlay/js/jmb.overlay.js?1
 $document->addStyleSheet('components/com_manager/modules/profile/css/jmb.profile.css?111');
 $document->addStyleSheet('components/com_manager/modules/profile/css/jmb.profile.full.css?111');
 $document->addStyleSheet('components/com_manager/modules/profile/css/jmb.profile.tooltip.css?111');
+$document->addStyleSheet('components/com_manager/modules/profile/css/prettyPhoto.css?111');
 $document->addScript('components/com_manager/modules/profile/js/excanvas.js?111');
 $document->addScript('components/com_manager/modules/profile/js/jquery.bt.js?111');
+$document->addScript('components/com_manager/modules/profile/js/jquery.prettyPhoto.js?111');
 $document->addScript('components/com_manager/modules/profile/js/jmb.profile.js?111');
 $document->addScript('components/com_manager/modules/profile/js/jmb.profile.full.js?111');
 $document->addScript('components/com_manager/modules/profile/js/jmb.profile.tooltip.js?111');
