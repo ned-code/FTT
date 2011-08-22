@@ -155,7 +155,7 @@ class JMBRelation {
 		}
 		
 		$cous_ord = min($a_level, $b_level) - 1;
-		$cous_gen = abs($a_level, $b_level);
+		$cous_gen = abs($a_level - $b_level);
 		return $this->ordinal_suffix($cous_ord).' cousin '.$this->format_plural($cous_gen, 'time', 'times').' removed';
 		
 	}
