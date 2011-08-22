@@ -42,7 +42,8 @@ function JMBDescendantTree(obj){
 		});
 		var user = jQuery('[name="descendant-node"][user="true"]');
 		jQuery(user[0]).click();
-		var x = jQuery(user[0]).offset().top -100;
+		var x = jQuery(user[0]).offset().top - 130;
+		console.log(x);
 		jQuery('div.containerTableStyle').animate({scrollTop: x}, 500);
 	});
 }
