@@ -98,30 +98,50 @@ JMBProfile.prototype = {
 		jQuery(self.dWindow).dialog(pDefault);
 		jQuery(self.dWindow).parent().css('top', '10px');
 	},
-	_getEventLine:function(event){
-		var self = this;
-		var name, from, to, place, sb;
-		from = event.From.Year;
-		to = event.To.Year;
-		name = event.Name;
-		place = self._getFullPlace(event.Place);
-		sb = host.stringBuffer();
-		if(from!=null&&to!=null){
-			sb._(from)._(':')._(to);
-		} else if(from!=null&&to==null){
-			sb._(from);
-		} else if(from==null&&to!=null){
-			sb._(to);
-		} 
-		sb._(' - ')._(name)._(' from ')._(place);
-		return sb.result();				
+	_getPassedAwayAge:function(year){
+		return (new Date()).getFullYear() - year;
+	},
+	_getSpouseNameByEventId:function(data, event){
+		var self = this, spouses = data.spouses, id = event.Id;
+		for(var i=0;i<spouses.length;i++){
+			if(id == spouses[i].event[0].Id){
+				return self._getName(spouses[i].indiv);
+			}
+		}
+	},
+	_getEventLine:function(data, event){		
+		var self = this, sb = host.stringBuffer();
+		var from = (event.From&&event.From.Year!=null)?event.From.Year:false;
+		var to = (event.To&&event.To.Year!=null)?event.To.Year:false;
+		var place = self._getFullPlace(event.Place);
+		switch(event.Type){
+			case "CHRI":			
+				return sb._((from)?from:'')._((from)?': ':'')._('Christening')._((place)?' in ':'')._((place)?place:'').result();
+			break;
+			case "BIRT":			
+				return sb._((from)?from:'')._((from)?': ':'')._('Born')._((place)?' in ':'')._((place)?place:'').result();
+			break;
+			case "DEAT":
+				return sb._((from)?from:'')._((from)?': ':'')._('Passed away')._((from)?' as age ':'')._((from)?self._getPassedAwayAge(from):'').result();
+			break;
+			case "MARR":
+				var name = (event.Name.length!=0)?event.Name.toLowerCase():'marriage';
+				return sb._((from)?from:'')._((from)?': ':'')._('Entered into ')._(name)._(' with ')._(self._getSpouseNameByEventId(data, event)).result();
+			break;
+			default:
+				return sb._((from)?from:'')._((from)?'-':'')._((to)?to:'')._((to)?': ':'')._(event.Name)._((place)?' from ':'')._((place)?place:'').result();
+			break;
+		}		
 	},
 	_getYear:function(indiv){
 		if(indiv.Birth&&indiv.Birth[0]){ return indiv.Birth[0].From.Year; }
 		return '';
 	},
 	_getKnowAs:function(indiv){
-		return indiv.Nick;
+		return (indiv.Nick!=null)?indiv.Nick:indiv.FirstName;
+	},
+	_getName:function(ind){
+		return [(ind.Nick!=null)?ind.Nick:ind.FirstName,(ind.LastName)?ind.LastName:''].join(' ');
 	},
 	_getFullName:function(ind){
 		var f = ind.FirstName,
@@ -141,8 +161,8 @@ JMBProfile.prototype = {
 		}
 	},
 	_getFullPlace:function(place){
-		if(!place) return;
-		return place.Name;	
+		if(!place) return false;
+		return place.Name.split(',').join(', ');	
 	},
 	_getEventDate:function(event){
 		if(!event) return;
@@ -169,7 +189,8 @@ JMBProfile.prototype = {
 		}
 	},
 	_getRelation:function(obj){
-		return obj.data.indiv.Relation;
+		var rel = obj.data.indiv.Relation;
+		return (rel!=null)?rel:'';
 	},
 	_getSpouseAvatar:function(obj, x, y){
 		var self = this,

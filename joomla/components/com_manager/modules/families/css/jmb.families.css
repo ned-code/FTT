@@ -1,3 +1,6 @@
+.jmb-families-container {
+	position:relative;
+}
 .jmb-families-body{}
 .jmb-families-body .home{
 	background: url("icon-home.png") no-repeat scroll 0 0 transparent;

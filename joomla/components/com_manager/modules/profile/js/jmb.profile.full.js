@@ -329,9 +329,9 @@ JMBProfileFull.prototype = {
 			sb._('<ul>');
 				jQuery(data.events).each(function(i,e){
 					if(e.FamKey!=null||e.Type=='BIRT'||e.Type=='DEAT'){
-						sb._('<li><div id="readonly" class="button">&nbsp;</div><div id="switch" class="text">')._(self.parent._getEventLine(e))._('</div></li>');
+						sb._('<li><div id="readonly" class="button">&nbsp;</div><div id="switch" class="text">')._(self.parent._getEventLine(data, e))._('</div></li>');
 					} else {
-						sb._('<li id="')._(i)._('"><div id="edit" class="button"><span>Edit</span></div><div id="delete" class="button">&nbsp;</div><div id="switch" class="text">')._(self.parent._getEventLine(e))._('</div></li>');
+						sb._('<li id="')._(i)._('"><div id="edit" class="button"><span>Edit</span></div><div id="delete" class="button">&nbsp;</div><div id="switch" class="text">')._(self.parent._getEventLine(data, e))._('</div></li>');
 					}	
 				});	
 			sb._('</ul>');
@@ -388,7 +388,7 @@ JMBProfileFull.prototype = {
 				sb = host.stringBuffer();
 				e = json.event;
 				self.json.data.events.push(e);
-				sb._('<li id="')._(self.json.data.events.length-1)._('"><div id="edit" class="button"><span>Edit</span></div><div id="delete" class="button">&nbsp;</div><div id="switch" class="text">')._(self.parent._getEventLine(e))._('</div></li>');
+				sb._('<li id="')._(self.json.data.events.length-1)._('"><div id="edit" class="button"><span>Edit</span></div><div id="delete" class="button">&nbsp;</div><div id="switch" class="text">')._(self.parent._getEventLine(data, e))._('</div></li>');
 				li = jQuery(sb.result());
 				jQuery(htmlObject).find('.jmb-dialog-events-list ul').append(li);
 				liDivs = jQuery(li).find('div').each(function(i,e){
@@ -453,7 +453,7 @@ JMBProfileFull.prototype = {
 				self.eventObject = object;
 				self.parent._ajaxForm(jQuery(htmlObject).find('form'), 'updateEvent', event_id, function(res){}, function(json){
 					self.json.data.events[index] = json.event;
-					var swithText = self.parent._getEventLine(json.event)
+					var swithText = self.parent._getEventLine(self.json.data, json.event)
 					jQuery(htmlObject).find('li#'+index+' div.text').html(swithText);
 				});
 			break;
@@ -527,7 +527,7 @@ JMBProfileFull.prototype = {
 		jQuery(htmlObject).find('div.delete').click(function(){
 			var li = jQuery(this).parent().parent().parent()
 			var id = jQuery(li).attr('id');
-			if(id == data.avatar.Id&&!confirm('This image is the avatar you sure you want to remove it?')){
+			if(data.avatar&&id == data.avatar.Id&&!confirm('This image is the avatar you sure you want to remove it?')){
 				return false;
 			}
 			self.parent._ajax('deletePhoto', id, function(res){
@@ -535,7 +535,7 @@ JMBProfileFull.prototype = {
 			})
 		});
 		jQuery(htmlObject).find('div.list-item').click(function(){
-			self._photosClick(this, htmlObject, data);
+			//self._photosClick(this, htmlObject, data);
 		});
 		self.parent._ajaxForm(jQuery(htmlObject).find('form'), 'uploadPhoto', data.indiv.Id, function(res){}, function(json){
 			sb.clear()._('<li id="')._(json.Id)._('">') 
@@ -561,7 +561,7 @@ JMBProfileFull.prototype = {
 		})
 		sb._('<ul>');
 			jQuery(events).each(function(i, event){
-				sb._('<li>')._(self.parent._getEventLine(event))._('</li>');
+				sb._('<li>')._(self.parent._getEventLine(object, event))._('</li>');
 			});
 		sb._('</ul>');		
 		return sb.result();
@@ -592,8 +592,8 @@ JMBProfileFull.prototype = {
 							sb._('</tr>');
 							sb._('<tr>');
 								sb._('<td><div class="title"><span>Birthplace:</span></div></td>');
-								var birthplace = (birth)?birth.Place:false;
-								sb._('<td><div id="birthplace" class="text"><span>')._(self.parent._getFullPlace(birthplace))._('</span></div></td>');
+								var birthplace = (birth)?self.parent._getFullPlace(birth.Place):'';								
+								sb._('<td><div id="birthplace" class="text"><span>')._((birthplace)?birthplace:'')._('</span></div></td>');
 							sb._('</tr>');
 							sb._('<tr>');
 								sb._('<td><div class="title"><span>Relation:</span></div></td>');
