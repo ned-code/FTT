@@ -170,7 +170,13 @@ JMBProfileTooltip.prototype = {
 			break;
 			case "send":
 				jQuery(tooltip).find('.jmb-profile-tooltip-send').click(function(){
-					alert('this feature has not been implemented yet');
+					self.parent.invitation.render(p);
+					return false;
+				});
+			break;
+			case "mini-send":
+				jQuery(tooltip).find('.jmb-profile-mini-send').find('div.email').click(function(){
+					self.parent.invitation.render(p);
 					return false;
 				});
 			break;
@@ -226,12 +232,6 @@ JMBProfileTooltip.prototype = {
 			case "switch":
 				jQuery(tooltip).find('.jmb-profile-mini-switch').click(function(){
 					self.parent.profile.render(p);
-					return false;
-				});
-			break;
-			case "mini-send":
-				jQuery(tooltip).find('.jmb-profile-mini-send').find('div.email').click(function(){
-					alert('this feature has not been implemented yet');
 					return false;
 				});
 			break;

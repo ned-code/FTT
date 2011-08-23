@@ -286,64 +286,96 @@ class JMBController extends JController
         	imagedestroy($src); 
         	die();
         }
-	
-	
-        /**
-        *
-        */
-        /*
-	* OLD FUNCTION NOT USE
-        function getPageLayout(){
-            $str = "<script>
-                function loadPage(panel, id, layout){
-                    var manager = new MyBranchesManager();
-                    var path = manager.getLayoutUrl(layout);
-                    $.ajax({
-                        url: path,
-                        type: \"GET\",
-                        dataType: \"html\",
-                        complete : function (req, err) {
-
-                        $(panel).html(req.responseText);
-                        $.ajax({
-                            url: 'index.php?option=com_manager&task=loadPage&page_id='+id,
-                            type: \"GET\",
-                            dataType: \"html\",
-                            complete : function (req, err) {
-                                var string = jQuery.trim(req.responseText);
-                                if(string != \"\"){
-                                    var obj = eval( '(' + string + ')' );
-                                    var manager = new MyBranchesManager();
-                                    manager.renderPage(obj);
-                                }
-                            }
-                        });
-                    }
-                });
-            }";
-            return $str;
+        
+        protected function get_categories($type){
+        	$db =& JFactory::getDBO();
+        	switch($type){
+        		case "login":
+        			$sql = "SELECT p_id as id FROM #__mb_categories WHERE name='login'";
+        		break;
+        	
+        		case "first":
+        			$sql = "SELECT p_id as id FROM #__mb_categories WHERE name='first'";
+        		break;
+        	
+        		case "invitation":
+        			$sql = "SELECT p_id as id FROM #__mb_categories WHERE name='invitation'";
+        		break;	
+        	}
+        	$db->setQuery($sql);
+        	$rows = $db->loadAssocList();
+        	return $rows[0]['id'];
         }
         
-	
-	function gedcom(){
-		$db =& JFactory::getDBO();
-		switch(JRequest::getVar('f')){
-			case 'getUserInfo':
-				$sql = "SELECT * FROM #__mb_indiv WHERE indkey ='".JRequest::getVar('id')."'";
-				$db->setQuery($sql);
-				$rows = $db->loadAssocList();
-				echo $rows[0]['indkey'].'-'.$rows[0]['surname'].'-'.urldecode($rows[0]['givenname']).'-'.$rows[0]['sex'];
-			break;
+        protected function check_user_in_system($fid){
+        	$db =& JFactory::getDBO();
+        	$sql = "SELECT link.individuals_id as gid, link.tree_id as tid, link.type FROM #__mb_tree_links as link LEFT JOIN #__mb_individuals as ind ON ind.id = link.individuals_id WHERE ind.fid='".$fid."'";
+        	$db->setQuery($sql);
+        	$rows = $db->loadAssocList();
+        	return $rows[0];
+        }
+        
+        protected function invite($fid, $token, $redirect=true){
+        	$args = explode(',', base64_decode($token));
+        	$sql = "UPDATE #__mb_tree_links SET `type`='USER' WHERE individuals_id ='".$args[0]."' AND tree_id='".$args[1]."'";
+        	$db->setQuery($sql);
+        	$db->query();
+        	$sql = "UPDATE #__mb_individuals SET `fid`='".$fid."' WHERE id='".$args[0]."'";
+        	$db->setQuery($sql);
+        	$db->query();
+        	if(isset($_SESSION['jmb']['invitation'])){
+        		unset($_SESSION['jmb']['invitation']);
+        	}
+        	if($redirect){
+        		header('Location:'.JURI::base().'index.php');
+        	}
+        	exit;
+        }
+        
+        public function jmb($fb){
+        	$db =& JFactory::getDBO();
+        	$task = JRequest::getCmd('task');
+        	$option = JRequest::getCmd('option');
+        	$view = JRequest::getCmd('view');
+        	$id = JRequest::getCmd('id');
+        	if($option!='com_manager') exit(); 
+        	$fid = $fb->getUser();
 
-			case 'parser':
-                            $host = new Host(null);
-                            $host->gedcom->Import($_FILES['gedcom']['tmp_name']);
-			break;
-		}
-
-		die;
-	}
-	*/
+        	$invitation_page_id = $this->get_categories('invitation');
+        	if($view=='single'&&$id==$invitation_page_id&&!$task){
+        		$token = JRequest::getCmd('token');
+        		if($fid==null){
+        			$_SESSION['jmb']['invitation'] = $token;
+        			header('Location:'.JURI::base().'index.php/login');
+        		} else {
+        			$this->invite($fid, $token);
+        		}
+        	}
+        	
+        	if($fid==null){
+        		$login_page_id = $this->get_categories('login');
+        		if($view!='single'&&$id!=$login_page_id&&!$task){
+        			header('Location:'.JURI::base().'index.php/login');
+        		}
+        	} else {
+        		if(isset($_SESSION['jmb']['invitation'])){
+        			$this->invite($fid, $_SESSION['jmb']['invitation'], false);
+        		}
+        		$_SESSION['jmb']['fid'] = $fid;
+        		$link = $this->check_user_in_system($fid);
+        		if($task) return;        		
+        		if($link==null){
+        			$cat_id = $this->get_categories('first');
+        			if($view!='single'&&$id!=$cat_id&&!$task){
+        				header('Location:'.JURI::base().'index.php/first-page');
+        			}
+        		} else {
+        			$_SESSION['jmb']['gid'] = $link['gid'];
+        			$_SESSION['jmb']['tid'] = $link['tid'];
+        			$_SESSION['jmb']['permission'] = $link['type'];
+        		}
+        	}        	
+        }
 }
 ?>
 

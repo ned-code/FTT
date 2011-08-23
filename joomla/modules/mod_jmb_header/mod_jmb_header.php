@@ -9,29 +9,22 @@
  
 // no direct access
 defined('_JEXEC') or die;
-define("JMB_FACEBOOK_APPID", "184962764872486");
-define("JMB_FACEBOOK_SECRET", "6b69574c9ddd50ce2661b3053cd4dc02");
-define("JMB_FACEBOOK_COOKIE",  true);
-$_SESSION['jmb']['facebook_appid'] = JMB_FACEBOOK_APPID;
-$_SESSION['jmb']['facebook_secret'] = JMB_FACEBOOK_SECRET;
-$_SESSION['jmb']['facebook_cookie'] = JMB_FACEBOOK_COOKIE;
 
 // Include the syndicate functions only once
 require_once dirname(__FILE__).DS.'helper.php';
-require_once dirname(__FILE__).DS.'src'.DS.'facebook.php';
 
 $document = &JFactory::getDocument();
 
 $document->addScript(JUri::root(true).'/modules/mod_jmb_header/js/mod.jmb.header.js?111' );
 
-$fb = modJMBHeaderHelper::FBEngine();
-$user_id = $fb['facebook']->getUser();
-$session = $fb['session'];
-$user_profile = $fb['facebook']->api('/me');
-$avatar = modJMBHeaderHelper::getAvatar($user_profile);
+//$facebook = $_SESSION['jmb']['facebook'];
+//$session = $_SESSION['jmb']['facebook_session'];
+//$user_id = $facebook->getUser();
+//$user_profile = $facebook->api('/me');
 
+//$avatar = modJMBHeaderHelper::getAvatar($user_profile);
 $inIFrame = modJMBHeaderHelper::checkLocation();
-$in_system = modJMBHeaderHelper::getLogin($user_id);
+//$in_system = modJMBHeaderHelper::getLogin($user_id);
 
 $aHref = ($inIFrame)?Juri::base():'http://apps.facebook.com/fmybranches/';
 $imgName = ($inIFrame)?'to_facebook.gif':'to_fmb.gif';

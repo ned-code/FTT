@@ -10,10 +10,6 @@ function JMBOverlay(){
 	}
 	this.overlay = jQuery('<div class="jmb-overlay"><div class="jmb-overlay-container"><div class="jmb-overlay-header"></div><div class="jmb-overlay-body"></div><div class="jmb-overlay-close">&nbsp;</div></div></div>');
 	this.modal = jQuery('<div class="jmb-overlay-modal">&nbsp;</div>');
-	
-	var self = this;
-	jQuery(this.overlay).find('.jmb-overlay-close').click(function(){ self.close(); });
-	jQuery(this.modal).click(function(){ self.close(); })
 }
 
 JMBOverlay.prototype = {
@@ -27,7 +23,7 @@ JMBOverlay.prototype = {
 	},
 	_body:function(settings){
 		if(!settings.object) return false;
-		jQuery(this.overlay).find('.jmb-overlay-body').css('max-width', settings.width+'px').css('max-height', ((!settings.title)?settings.height:settings.height-settings.headerHeight)+'px').append(settings.object);
+		jQuery(this.overlay).find('.jmb-overlay-body').css('max-width', settings.width+'px').css('max-height', ((!settings.title)?settings.height:settings.height-settings.headerHeight)+'px').html('').append(settings.object);
 	},
 	getSize:function(){
 		var width, height;
@@ -42,11 +38,13 @@ JMBOverlay.prototype = {
 		jQuery(this.overlay).find('.jmb-overlay-header').show();
 	},
 	show:function(e){
-		var size = this.getSize();
+		var self = this,size = this.getSize();
 		jQuery(this.modal).css('width',size[0]+'px');
 		jQuery(this.modal).css('height',size[1]+'px');
 		jQuery(document.body).append(this.modal);
 		jQuery(this.overlay).show();
+		jQuery(this.overlay).find('.jmb-overlay-close').click(function(){ self.close(); });
+		jQuery(this.modal).click(function(){ self.close(); })
 	},
 	hide:function(){
 		jQuery(this.modal).remove();

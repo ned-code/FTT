@@ -443,6 +443,53 @@ class JMBProfile {
 	public function deletePhoto($id){
 		$this->host->gedcom->media->delete($id);
 	}	
+
+	/**
+	*
+	*/
+	public function sendInvitation($args){
+		$args = explode(';', $args);
+		$ownerId = $args[0];
+		$recId = $args[1];
+		$fmbUser = $this->host->getUserInfo($ownerId, $recId); 
+		$recUser = $this->host->getUserInfo($recId, $ownerId);
+		$tree_id = $_SESSION['jmb']['tid'];
+		$facebook_id = $_SESSION['jmb']['fid'];
+		$token = base64_encode($recId.','.$tree_id);
+
+		#senders e-mail adress
+		$email = 'fantomhp@gmail.com';
+		//$email = $_POST['email']; //senders e-mail adress 
+		
+		#recipient 
+		$recipient = "fantomhp@gmail.com"; 
+		
+		#subject
+		$subject = "Family Treetop invitation.";  
+		
+		#optional headerfields 
+		$headers = 'Content-type: text/html; charset="utf-8"\r\n';
+		$headers .= 'To: '.$recUser['indiv']->FirstName.' <'.$email.'>'."\r\n";
+		$headers .= "From: ". $fmbUser['indiv']->FirstName . " <" . $recipient . ">\r\n";
+		
+		#mail body 
+		$mail_body = '<html><head>Family Treetop invitation.</head><body>';
+		$mail_body .= "Dear ".$recUser['indiv']->FirstName.",<br>"; 
+		$mail_body .= "Your ".$fmbUser['indiv']->Relation.", ".$fmbUser['indiv']->FirstName." ".$fmbUser['indiv']->LastName.", has invited you to join your family tree on Facebook.<br>";
+		$mail_body .= "This tree is a private space on that can only be seen by your family members.<br><br>";
+		
+		$mail_body .= "<a href='http://50.19.222.126/index.php/invitation?token=".$token."'>Click here to accept the invitation</a> (you must have a facebook account).<br>";
+		$mail_body .= "<a href='http://www.facebook.com/profile.php?id=".$facebook_id."'>Click here to send ".$fmbUser['indiv']->FirstName." a message</a>.<br><br>";
+		
+		$mail_body .= "This is automated message from Family Treetop. Please do not respond to this email. Click <a href='http://apps.facebook.com/fmybranches/'>here</a> to find out more about Family Treetop.";
+		$mail_body .= '</body></html>';
+		
+		if (mail($recipient, $subject, $mail_body, $headers)) {
+			return json_encode(array('message'=>'Message successfully sent!','fmbUser'=>$fmbUser,'recUser'=>$recUser));
+		} else {
+			return json_encode(array('message'=>'Message delivery failed...'));
+		}
+	}
 }
 
 ?>

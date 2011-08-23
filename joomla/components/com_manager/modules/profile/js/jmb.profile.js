@@ -22,6 +22,7 @@ function JMBProfile(){
 	this.tooltip = new JMBProfileTooltip(this);
 	this.profile = new JMBProfileFull(this);
 	this.media =  new JMBMediaManager(this);
+	this.invitation =  new JMBEmailInvitation(this);
 
 	if(jQuery("#iframe-profile").length==0){
 		var iframe = '<iframe id="iframe-profile" name="#iframe-profile" style="display:none;position:absolute;left:-1000px;width:1px;height:1px">';
@@ -764,7 +765,8 @@ JMBProfile.prototype = {
 	}
 }
 
-function JMBMediaManager(){
+function JMBMediaManager(object){
+	this.parent = object;
 }
 JMBMediaManager.prototype = {
 	getImage:function(image){
@@ -794,3 +796,61 @@ JMBMediaManager.prototype = {
 		});
 	}	
 }
+function JMBEmailInvitation(object){
+	this.parent = object;
+	this.overlay = new JMBOverlay();
+}
+
+JMBEmailInvitation.prototype = {
+	createDiv:function(json){
+		var self = this, sb = host.stringBuffer(), data = json.data;
+		sb._('<div class="jmb-dialog-invition"><form id="jmb:send-invitation" method="post" target="iframe-profile">');
+			sb._('<div class="jmb-dialog-invition-header">Send Invitation</div>');
+			sb._('<div class="jmb-profile-mini-info">');
+				sb._('<table>');
+					sb._('<tr>');
+						sb._('<td class="jmb-profile-mini-photo"><div>')._(self.parent._getAvatar(data,81,90))._('</div></td>');
+						sb._('<td class="jmb-profile-mini-info-body">');
+							sb._('<div><span>Name:</span> ')._(self.parent._getFullName(data.indiv))._('</div>');
+							sb._('<div><span>Born:</span> ')._(self.parent._getEventDate(data.indiv.Birth[0]))._('</div>');
+							var relation = self.parent._getRelation(json);
+							if(relation != 0) sb._('<div><span>Relation:</span> ')._(relation)._('</div>');
+						sb._('</td>');
+					sb._('</tr>');
+				sb._('</table>');
+			sb._('</div>');
+			sb._('<div class="jmb-dialog-invition-fields">');
+				sb._('<table>');
+					sb._('<tr><td><span class="title">Selec from Facebook friends:</span></td><td><input name="facebook_name" DISABLED placeholder="Temporarily unavailable"></td></tr>');
+					sb._('<tr><td></td><td><div style="text-align:center;">or</div></td></tr>');
+					sb._('<tr><td><span class="title">Send Email:</span></td><td><input name="email" placeholder="Enter Email address"></td></tr>');
+				sb._('</table>');
+			sb._('</div>');
+			sb._('<div class="jmb-dialog-invition-send"><input type="submit" value="send"></div>');
+		sb._('</form></div>');
+		return jQuery(sb.result());
+	},
+	render:function(json){
+		var self = this;
+		var div = this.createDiv(json);
+		var form = jQuery(div).find('form');
+		this.send(form, json);
+		this.overlay.render({object:div, width:450, height:255});
+		this.overlay.show();
+	},
+	send:function(form, p){
+		var self = this;
+		var args = [p.fmbUser.indiv.Id,p.data.indiv.Id].join(';');
+		self.parent._ajaxForm(form, 'sendInvitation', args, function(){
+			var email = jQuery(form).find('input[name="email"]').val();
+			var re = /^([a-zA-Z0-9])(([a-zA-Z0-9])*([\._\+-])*([a-zA-Z0-9]))*@(([a-zA-Z0-9\-])+(\.))+([a-zA-Z]{2,4})+$/;
+			var result = re.test(email);
+			if(!result) alert('email not valid.')
+			return result;
+		}, function(json){
+			alert(json.message);
+			self.overlay.hide();
+		});	
+	}
+}
+
