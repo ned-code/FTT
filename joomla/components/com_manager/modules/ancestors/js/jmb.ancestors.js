@@ -82,7 +82,7 @@ JMBAncestors.prototype = {
 		var fId, av, defImg;
 		fId = data.indiv.FacebookId;
 		av = data.avatar;
-		defImg = (data.indiv.Gender=="M")?'male.gif':'female.gif';
+		defImg = (data.indiv.Gender=="M")?'male.png':'female.png';
 		if(av != null && av.FilePath != null){
 			return ['<img src="index.php?option=com_manager&task=getResizeImage&id=',av.Id, '&w=72&h=80">'].join("");
 		}
@@ -168,7 +168,6 @@ JMBAncestors.prototype = {
 					obj.children = req.json.children;
 					self.ancestors = jQuery.extend(self.ancestors, req.ancestors);
 					self.objects = jQuery.extend(self.objects, req.objects);
-					console.log(self.json);
 					var tree = $jit.json.getSubtree(self.json, clickItemId);
 					self.render(tree);
 				});
