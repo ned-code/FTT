@@ -54,11 +54,6 @@ html ul.jmbtabs li.active, html ul.jmbtabs li.active a:hover  { /*--Makes sure t
 	font-size: 1.2em;
 	background: #f5fae6;
 }
-.jmb-fb-like{
-	position: absolute;
-   	right: 0px;
-   	top: 20px;
-}
 #jmbtab{
 	min-height:400px;
 }
