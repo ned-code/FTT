@@ -36,15 +36,14 @@
 	position: relative;
 }
 .jmb_header_logo {
-	background: url("../images/tree.gif") no-repeat scroll 0 0 transparent;
+	background: url("../images/ftt-temp-logo.png") no-repeat scroll 0 0 transparent;
 	color: white;
 	font-size: 20px;
-	height: 26px;
-	margin: 5px 10px;
-	padding-left: 35px;
+	height: 45px;
+	width: 190px;
 }
 .jmb_header_expand{
-	margin-top: 5px;
+	margin-top: 10px;
 	position: absolute;	
 	right: 10px;
 	top: 0;

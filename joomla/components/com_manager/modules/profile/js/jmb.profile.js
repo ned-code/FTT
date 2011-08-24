@@ -198,7 +198,7 @@ JMBProfile.prototype = {
 		var self = this,
 			fId = obj.indiv.FacebookId,
 			av = obj.avatar,
-			defImg = (obj.indiv.Gender=="F")?'male.gif':'female.gif';
+			defImg = (obj.indiv.Gender=="F")?'male.png':'female.png';
 		var defImgPath = [self.imgPath,'/components/com_manager/modules/profile/image/',defImg].join('');
 		return ['<img height="',y,'px" width="',x,'px" src="',defImgPath,'">'].join('');
 	},
@@ -213,7 +213,7 @@ JMBProfile.prototype = {
 		var self = this;
 		var fId = obj.indiv.FacebookId,
 			av = obj.avatar,		
-			defImg=(obj.indiv.Gender=="M")?'male.gif':'female.gif';	
+			defImg=(obj.indiv.Gender=="M")?'male.png':'female.png';	
 		if(av!= null&&av.FilePath != null){
 			return ['<img src="index.php?option=com_manager&task=getResizeImage&id=',av.Id,'&w=',x,'&h=',y,'">'].join('');
 		}
@@ -225,7 +225,7 @@ JMBProfile.prototype = {
 	},
 	_getAvatar2:function(x, y, type){
 		var self = this,
-			defImg =(type=="M")?'male.gif':'female.gif',
+			defImg =(type=="M")?'male.png':'female.png',
 			defImgPath = [self.imgPath,"/components/com_manager/modules/profile/image/",defImg].join('');
 		return ['<img height="',y,'px" width="',x,'px" src="',defImgPath,'">'].join('');
 	},

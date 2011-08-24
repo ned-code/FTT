@@ -59,7 +59,7 @@ class JMBDescendantTree {
 	
 	protected function solo(&$xml, $id){
 		$ind = $this->host->gedcom->individuals->get($id);
-		$img = ($ind->Gender == "M") ? 'male.gif' : 'female.gif';
+		$img = ($ind->Gender == "M") ? 'male.png' : 'female.png';
 		$color = '#';
 		$color .= (($ind->Gender=='M')?$this->color['M']:$this->color['F']);
 		$flag = ($ind->Id == $this->ownerId)?$this->user:""; 

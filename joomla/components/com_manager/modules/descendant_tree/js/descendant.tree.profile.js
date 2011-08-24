@@ -128,14 +128,14 @@ DescendantTreeProfile.prototype = {
 		var self = this;
 		var fId = obj.indiv.FacebookId,
 			av = obj.avatar,		
-			defImg=(obj.indiv.Gender=="M")?'male.gif':'female.gif';	
+			defImg=(obj.indiv.Gender=="M")?'male.png':'female.png';	
 		if(av!= null&&av.FilePath != null){
 			return ['<img src="index.php?option=com_manager&task=getResizeImage&id=',av.Id,'&w=',x,'&h=',y,'">'].join('');
 		}
 		else if(fId != '0'){
 			return ['<img src="index.php?option=com_manager&task=getResizeImage&fid=',fId,'&w=',x,'&h=',y,'">'].join('');
 		}
-		var defImgPath = [obj.path,'/components/com_manager/modules/profile/image/',defImg].join('');
+		var defImgPath = [obj.path,'/components/com_manager/modules/descendant_tree/imgs/',defImg].join('');
 		return ['<img height="',y,'px" width="',x,'px" src="',defImgPath,'">'].join('');
 	},
 	setAvatar:function(obj, json){
@@ -156,6 +156,36 @@ DescendantTreeProfile.prototype = {
 		var html = '<div class="jmb-dtp-body-edit-button" id="edit-button" bt-xtitle="" title="">&nbsp;</div>';
 		jQuery(obj).find('.jmb-dtp-body-info-avatar').append(html);
 	},
+	permission:function(json){
+		var self = this, permission = json.fmbUser.indiv.Permission, relation = json.indiv.Relation;
+		if(permission=='USER'){
+			switch(relation){
+				case 'self':
+				case 'spouse':
+				case 'father':
+				case 'mother':
+				case 'son':
+				case 'daughter':
+				case 'brother':
+				case 'sister':
+					return true;
+				break;
+				
+				default: return false;	
+			}
+		}
+		return true;
+	},
+	setSwitchButton:function(obj, json){
+		var switchButton = jQuery(obj).find('.jmb-dtp-body-info-switch');
+		
+		var permission = this.permission(json);
+		if(permission){
+			jQuery(switchButton).show();
+		} else {
+			jQuery(switchButton).hide();
+		}
+	},
 	setColors:function(colors){
 		this.colors.male = colors['M'];
 		this.colors.female = colors['F'];
@@ -165,6 +195,7 @@ DescendantTreeProfile.prototype = {
 	},
 	setBodyInfo:function(obj, json){
 		this.setEditButton(obj, json);
+		this.setSwitchButton(obj, json);
 		this.setAvatar(obj, json);
 		this.setName(obj, json);	
 		this.setBirthdate(obj, json);
@@ -195,6 +226,7 @@ DescendantTreeProfile.prototype = {
 		var table = jQuery(obj).find('.jmb-dtp-footer').find('table');
 		if(table.length!=0) jQuery(table).remove();
 		if(json.indiv.FacebookId!='0') return;
+		if(!this.permission(json)) return;
 		var self = this, sb = host.stringBuffer(), name = json.indiv.FirstName;
 		sb._('<table>');			
 			sb._('<tr>');

@@ -40,6 +40,10 @@ $app                = JFactory::getApplication();
 //custom params
 $inIFrame = checkLocation();
 
+$aHref = ($inIFrame)?Juri::base():'http://apps.facebook.com/fmybranches/';
+$imgName = ($inIFrame)?'to_facebook.gif':'to_fmb.gif';
+$baseUrl = JURI::base();
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->language; ?>" lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>" >
@@ -65,7 +69,62 @@ $inIFrame = checkLocation();
 	<body>
 		<div class="content" style="<?php if($inIFrame): ?>max-width:760px;<?php else: ?>max-width:980px;<?php endif; ?>">
 			<div class="header">
-				<jdoc:include type="modules" name="header" />
+				<!-- <1111jdoc:include type="modules" name="header" /> -->
+				<div class="jmb_header_body">
+					<table>
+						<tr>
+							<!-- Title -->
+							<td><div class="jmb_header_logo">&nbsp;</div></td>
+							<?php if(false): ?>
+							<!-- Family Line -->
+							<td>
+								<div class="jmb_header_fam_line">
+									<font class="jmb_line_title">Family Line:</font>
+									<span id="father" class="jmb_line_left active">My Mother</span>
+									<span id="mother" class="jmb_line_right">My Father</span>
+								</div>
+							</td>
+							<!-- Profile Line -->
+							<td>
+								<div class="jmb_header_settings">	
+									<?php if(false): ?>
+										<div class ="embedded">
+											<div class="myfamily">My Family</div>
+											<div id="<?php echo $user_profile['id']; ?>" class="myprofile">My Profile</div>
+										</div>
+									<?php else: ?>
+										<div class="expanded">
+											<table>
+												<tr>
+													<td>
+														<div class="name"><?php echo $user_profile['name']; ?></div>
+														<div class="menu">
+															<span id="<?php echo $user_profile['id']; ?>" class="myprofile">My Profile</span>
+															<span class="myfamily">myFamily</span>
+															<span class="logout">Logout</span>
+														</div>
+													</td>
+													<td>
+														<div class="avatar"><img src="<?php echo $avatar; ?>" width="50px" height="45px"></div>
+													</td>
+												</tr>
+											</table>
+										</div>
+									<?php endif; ?>
+								</div>
+							</td>
+							<?php endif; ?>
+							<!-- Expand Button -->
+							<td>
+								<div class="jmb_header_expand">
+									<a href="<?php echo $aHref; ?>" target="_top">
+										<img src="<?php echo $baseUrl; ?>templates/fmb/images/<?php echo $imgName; ?>?111" width="32px" height="32px">
+									</a>
+								</div>
+							</td>
+						</tr>
+					</table>
+				</div>
 			</div>
 			<div class="main">
 				<table>

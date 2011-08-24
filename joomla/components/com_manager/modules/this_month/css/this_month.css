@@ -45,25 +45,25 @@
 
 }
 .jmb-this-month-content .img-male{
-	background: url("../imgs/sex.jpg") repeat scroll 0 0 transparent;
+	background: url("../imgs/male.png") repeat scroll 0 0 transparent;
 	height: 14px;
 	margin-right: 5px;
 	width: 14px;
 }
 .jmb-this-month-content .img-female{
-	background: url("../imgs/sex.jpg") repeat scroll 0 16px transparent;
+	background: url("../imgs/female.png") repeat scroll 0 0 transparent;
 	height: 14px;
 	margin-right: 5px;
 	width: 14px;
 }
 .jmb-this-month-content .anniversaries-start{
-	background: url("../imgs/family_o.jpg") repeat scroll 0 0 transparent;
+	background: url("../imgs/family_o.png") repeat scroll 0 0 transparent;
 	height: 16px;
     	margin-right: 3px;
     	width: 37px;
 }
 .jmb-this-month-content .anniversaries-end{
-	background: url("../imgs/family_c.jpg") repeat scroll 0 0 transparent;
+	background: url("../imgs/family_c.png") repeat scroll 0 0 transparent;
 	height: 16px;
     	margin-left: 3px;
     	width: 6px;
