@@ -86,15 +86,12 @@ JMBFamilies.prototype = {
 		var x,y,fId,av,defImg;
 		fId = obj.indiv.FacebookId;
 		av = obj.avatar;
-		defImg = (obj.indiv.Gender=="M")?'male.gif':'female.gif';
+		defImg = (obj.indiv.Gender=="M")?'male.png':'female.png';
 		if(type=="parent"){ x=Math.round(108*k);y=Math.round(120*k); } else if(type=="child"){ x=Math.round(72*k);y=Math.round(80*k); }
  		if(av != null && av.FilePath != null){
-			//return sb.clear()._('<img height="')._(y)._('px" width="')._(x)._('px" src="')._(av.FilePath)._('">').result();
-			//return sb.clear()._('<img class="jmb-families-avatar view" height="')._(y)._('px" width="')._(x)._('px" src="index.php?option=com_manager&task=getResizeImage&id=')._(av.Id)._('">').result();
 			return sb.clear()._('<img class="jmb-families-avatar view" src="index.php?option=com_manager&task=getResizeImage&id=')._(av.Id)._('&w=')._(x)._('&h=')._(y)._('">').result();
 		}
 		else if(fId != '0'){
-			//return sb.clear()._('<img class="jmb-families-avatar view" height="')._(y)._('px" width="')._(x)._('px" src="http://graph.facebook.com/')._(fId)._('/picture">').result();
 			return sb.clear()._('<img class="jmb-families-avatar view" src="index.php?option=com_manager&task=getResizeImage&fid=')._(fId)._('&w=')._(x)._('&h=')._(y)._('">').result();
 		}
 		var defImgPath = sb.clear()._(this.json.path)._("/components/com_manager/modules/families/css/")._(defImg).result();
