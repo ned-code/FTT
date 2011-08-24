@@ -455,11 +455,16 @@ class JMBProfile {
 		$recUser = $this->host->getUserInfo($recId, $ownerId);
 		$tree_id = $_SESSION['jmb']['tid'];
 		$facebook_id = $_SESSION['jmb']['fid'];
-		$token = base64_encode($recId.','.$tree_id);
 
 		#senders e-mail adress
-		$email = 'fantomhp@gmail.com';
-		//$email = $_POST['email']; //senders e-mail adress 
+		$email = (isset($_POST['email']))?$_POST['email']:false; //senders e-mail adress 
+		if(!$email) return;
+		
+		$value = $recId.','.$tree_id;	
+		$token = md5($value);
+		$sql = "INSERT INTO #__mb_variables (`id`,`belongs`,`value`) VALUES (NULL,'".$token."','".$value."')";		
+		$this->db->setQuery($sql);
+        	$this->db->query();
 		
 		#recipient 
 		$recipient = "fantomhp@gmail.com"; 

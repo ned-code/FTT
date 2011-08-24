@@ -316,11 +316,19 @@ class JMBController extends JController
         }
         
         protected function invite($fid, $token, $redirect=true){
-        	$args = explode(',', base64_decode($token));
+        	$db =& JFactory::getDBO();
+        	$sql = "SELECT value FROM #__mb_variables WHERE belongs='".$token."'";
+        	$db->setQuery($sql);
+        	$rows = $db->loadAssocList();
+        	if($rows==null) header('Location:index.php');
+        	$args = explode(',', $rows[0]['value']);
         	$sql = "UPDATE #__mb_tree_links SET `type`='USER' WHERE individuals_id ='".$args[0]."' AND tree_id='".$args[1]."'";
         	$db->setQuery($sql);
         	$db->query();
         	$sql = "UPDATE #__mb_individuals SET `fid`='".$fid."' WHERE id='".$args[0]."'";
+        	$db->setQuery($sql);
+        	$db->query();
+        	$sql = "DELETE FROM #__mb_variables WHERE belongs='".$token."'";
         	$db->setQuery($sql);
         	$db->query();
         	if(isset($_SESSION['jmb']['invitation'])){
@@ -333,7 +341,6 @@ class JMBController extends JController
         }
         
         public function jmb($fb){
-        	$db =& JFactory::getDBO();
         	$task = JRequest::getCmd('task');
         	$option = JRequest::getCmd('option');
         	$view = JRequest::getCmd('view');
