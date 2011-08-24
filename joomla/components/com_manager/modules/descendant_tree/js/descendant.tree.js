@@ -46,6 +46,7 @@ function JMBDescendantTree(obj){
 		console.log(x);
 		jQuery('div.containerTableStyle').animate({scrollTop: x}, 500);
 	});
+	
 }
 
 JMBDescendantTree.prototype = {

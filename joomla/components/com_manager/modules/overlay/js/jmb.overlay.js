@@ -81,7 +81,8 @@ JMBOverlay.prototype = {
 		this.offset({top:top,left:left});
 	},
 	render:function(settings){
-		set = this._extend(this.settings, settings);
+		if(!settings) settings = {};
+		var set = this._extend( this.settings, settings);
 		jQuery(this.overlay)
 		.css('width', set.width+'px')
 		.css('height', set.height+'px')

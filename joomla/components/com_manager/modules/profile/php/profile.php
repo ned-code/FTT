@@ -467,7 +467,8 @@ class JMBProfile {
         	$this->db->query();
 		
 		#recipient 
-		$recipient = "fantomhp@gmail.com"; 
+		$recipient = "fantome@xbsoftware.com"; 
+		//$recipient = "fantomhp@gmail.com";
 		
 		#subject
 		$subject = "Family Treetop invitation.";  
@@ -489,8 +490,8 @@ class JMBProfile {
 		$mail_body .= "This is automated message from Family Treetop. Please do not respond to this email. Click <a href='http://apps.facebook.com/fmybranches/'>here</a> to find out more about Family Treetop.";
 		$mail_body .= '</body></html>';
 		
-		if (mail($recipient, $subject, $mail_body, $headers)) {
-			return json_encode(array('message'=>'Message successfully sent!','fmbUser'=>$fmbUser,'recUser'=>$recUser));
+		if(mail($email, $subject, $mail_body, $headers)) {
+			return json_encode(array('message'=>'Message successfully sent!'));
 		} else {
 			return json_encode(array('message'=>'Message delivery failed...'));
 		}

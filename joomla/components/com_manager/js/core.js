@@ -50,6 +50,27 @@ storage.request.cleaner = function(){
 storage.header = {};
 storage.header.activeButton = null;
 storage.createPull(storage.header);
+storage.header.set = function(){
+	jQuery(document).ready(function(){
+		var profile = new JMBProfile();
+		var family_line = jQuery('.jmb_header_fam_line');
+		var family_line_span = jQuery(family_line).find('span');
+		jQuery(family_line_span).click(function(){
+			jQuery(family_line_span).removeClass('active');
+			jQuery(this).addClass('active');
+			storage.header.activeButton = this;
+			storage.header.click();
+		});
+		var settings = jQuery('.jmb_header_settings');
+		jQuery(settings).find('span.myprofile').click(function(){
+			profile._ajax('getUserInfo', jQuery(this).attr('id'), function(res){
+				var json = jQuery.parseJSON(res.responseText);
+				profile.profile.render(json);		
+			});
+		});
+	});
+}
+storage.header.set();
 //tabs
 storage.tabs = {};
 storage.tabs.activeTab = null;
@@ -108,6 +129,7 @@ core.load = function(pages){
 	jQuery(document).ready(function() {
 	    host = new Host();
 	    var manager = new MyBranchesManager();
+	    
 	    jQuery.ajax({
 		//url: (manager.getPageListUrl()+'&pages='+pages),
 		url: 'index.php?option=com_manager&task=getXML&f=pages&pages='+pages,
@@ -209,3 +231,4 @@ core.loadTabs = function(pages){
     	});
     });
 }
+

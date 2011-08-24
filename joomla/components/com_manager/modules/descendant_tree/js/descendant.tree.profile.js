@@ -226,7 +226,6 @@ DescendantTreeProfile.prototype = {
 		var table = jQuery(obj).find('.jmb-dtp-footer').find('table');
 		if(table.length!=0) jQuery(table).remove();
 		if(json.indiv.FacebookId!='0') return;
-		if(!this.permission(json)) return;
 		var self = this, sb = host.stringBuffer(), name = json.indiv.FirstName;
 		sb._('<table>');			
 			sb._('<tr>');
@@ -240,7 +239,11 @@ DescendantTreeProfile.prototype = {
 		sb._('</table>');
 		var html = jQuery(sb.result());
 		jQuery(html).find('.email').click(function(){
-			alert('Send email invitation.');
+			var p = {
+				fmbUser:json.fmbUser,
+				data:json
+			}	
+			self.profile.invitation.render(p);
 		})
 		jQuery(obj).find('.jmb-dtp-footer').append(html);
 	},

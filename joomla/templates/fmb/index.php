@@ -44,6 +44,9 @@ $aHref = ($inIFrame)?Juri::base():'http://apps.facebook.com/fmybranches/';
 $imgName = ($inIFrame)?'to_facebook.gif':'to_fmb.gif';
 $baseUrl = JURI::base();
 
+$facebook = new Facebook(array('appId'=>JMB_FACEBOOK_APPID,'secret'=>JMB_FACEBOOK_SECRET,'cookie'=>JMB_FACEBOOK_COOKIE));
+$user = $facebook->api('/me');
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->language; ?>" lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>" >
@@ -75,7 +78,7 @@ $baseUrl = JURI::base();
 						<tr>
 							<!-- Title -->
 							<td><div class="jmb_header_logo">&nbsp;</div></td>
-							<?php if(false): ?>
+							<?php if(isset($_SESSION['jmb']['tid'])): ?>
 							<!-- Family Line -->
 							<td>
 								<div class="jmb_header_fam_line">
@@ -87,7 +90,7 @@ $baseUrl = JURI::base();
 							<!-- Profile Line -->
 							<td>
 								<div class="jmb_header_settings">	
-									<?php if(false): ?>
+									<?php if($inIFrame): ?>
 										<div class ="embedded">
 											<div class="myfamily">My Family</div>
 											<div id="<?php echo $user_profile['id']; ?>" class="myprofile">My Profile</div>
@@ -97,15 +100,15 @@ $baseUrl = JURI::base();
 											<table>
 												<tr>
 													<td>
-														<div class="name"><?php echo $user_profile['name']; ?></div>
+														<div class="name"><?php echo $user['name']; ?></div>
 														<div class="menu">
-															<span id="<?php echo $user_profile['id']; ?>" class="myprofile">My Profile</span>
-															<span class="myfamily">myFamily</span>
+															<span id="<?php echo $user['id']; ?>" class="myprofile">My Profile</span>
+															<span class="myfamily">My Family</span>
 															<span class="logout">Logout</span>
 														</div>
 													</td>
 													<td>
-														<div class="avatar"><img src="<?php echo $avatar; ?>" width="50px" height="45px"></div>
+														<div class="avatar"><img src="<?php echo 'index.php?option=com_manager&task=getResizeImage&fid='.$user['id'].'&w=50&h=50'; ?>"></div>
 													</td>
 												</tr>
 											</table>

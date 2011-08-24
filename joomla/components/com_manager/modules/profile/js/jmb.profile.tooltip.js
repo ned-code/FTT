@@ -115,7 +115,7 @@ JMBProfileTooltip.prototype = {
 					sb._('</div>');
 				}
 			sb._('</div>');
-			if(p.data.indiv.FacebookId=='0'&&self.permission(p)){
+			if(p.data.indiv.FacebookId=='0'){
 				var name = p.data.indiv.FirstName;
 				sb._('<div class="jmb-profile-mini-send">');
 					sb._('<table>');			
@@ -169,14 +169,12 @@ JMBProfileTooltip.prototype = {
 				});
 			break;
 			case "send":
-				if(!self.permission(p)) return;
 				jQuery(tooltip).find('.jmb-profile-tooltip-send').click(function(){
 					self.parent.invitation.render(p);
 					return false;
 				});
 			break;
 			case "mini-send":
-				if(!self.permission(p)) return;
 				jQuery(tooltip).find('.jmb-profile-mini-send').find('div.email').click(function(){
 					self.parent.invitation.render(p);
 					return false;
