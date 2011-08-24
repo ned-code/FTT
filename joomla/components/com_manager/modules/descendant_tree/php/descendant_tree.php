@@ -182,10 +182,11 @@ class JMBDescendantTree {
 	}
 	
 	public function getPersonInfoJSON($indKey){
+		$fmbUser = $this->host->getUserInfo($_SESSION['jmb']['gid']);
 		$i = $this->host->getUserInfo($indKey, $this->ownerId);
 		$colors = $this->color;
 		$path = JURI::root(true);
-		return json_encode(array_merge($i, array('colors'=>$colors,'path'=>$path)));
+		return json_encode(array_merge($i, array('colors'=>$colors,'path'=>$path,'fmbUser'=>$fmbUser)));
 	}
 }
 ?>

@@ -107,7 +107,7 @@ JMBProfileTooltip.prototype = {
 							sb._('</td>');
 						sb._('</tr>');
 					sb._('</table>');
-					sb._('<div class="jmb-profile-mini-switch"><span>Switch to Full Profile</span></div>');
+					if(self.permission(p)) sb._('<div class="jmb-profile-mini-switch"><span>Switch to Full Profile</span></div>');
 				sb._('</div>');
 				if(p.data.photo.length!=0){
 					sb._('<div class="jmb-profile-mini-images">');
@@ -115,7 +115,7 @@ JMBProfileTooltip.prototype = {
 					sb._('</div>');
 				}
 			sb._('</div>');
-			if(p.data.indiv.FacebookId=='0'){
+			if(p.data.indiv.FacebookId=='0'&&self.permission(p)){
 				var name = p.data.indiv.FirstName;
 				sb._('<div class="jmb-profile-mini-send">');
 					sb._('<table>');			
@@ -169,12 +169,14 @@ JMBProfileTooltip.prototype = {
 				});
 			break;
 			case "send":
+				if(!self.permission(p)) return;
 				jQuery(tooltip).find('.jmb-profile-tooltip-send').click(function(){
 					self.parent.invitation.render(p);
 					return false;
 				});
 			break;
 			case "mini-send":
+				if(!self.permission(p)) return;
 				jQuery(tooltip).find('.jmb-profile-mini-send').find('div.email').click(function(){
 					self.parent.invitation.render(p);
 					return false;
@@ -230,6 +232,7 @@ JMBProfileTooltip.prototype = {
 				});
 			break;		
 			case "switch":
+				if(!self.permission(p)) return;
 				jQuery(tooltip).find('.jmb-profile-mini-switch').click(function(){
 					self.parent.profile.render(p);
 					return false;
@@ -324,12 +327,36 @@ JMBProfileTooltip.prototype = {
 		modal(true);
 		jQuery(document.body).append(htmlObject);	
 	},
+	permission:function(p){
+		var self = this, permission = p.fmbUser.indiv.Permission, relation = p.data.indiv.Relation;
+		if(permission=='USER'){
+			switch(relation){
+				case 'self':
+				case 'spouse':
+				case 'father':
+				case 'mother':
+				case 'son':
+				case 'daughter':
+				case 'brother':
+				case 'sister':
+					return true;
+				break;
+				
+				default: return false;	
+			}
+		}
+		return true;
+	},
+	hide:function(p){
+		jQuery(p.target).hide();
+	},
 	render:function(p){
 		var buttons, container;
 		var self = this;
 		if(!p) return;
 		if(!self.parent.imgPath) self.parent.imgPath = p.imgPath;
 		if(p.type == 'tooltip'){
+			if(!this.permission(p)) return this.hide(p);
 			buttons = ["edit","parent","spouse","bs","child","send","options","delete"];
 			jQuery.extend(p, this.defaultTooltipParams);
 			container = this._tooltipContainer(p);

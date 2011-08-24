@@ -20,7 +20,9 @@ class Individual{
 	public $SurnamePrefix;
 	public $Surname;
 	public $Suffix;
+	
 	public $Relation;
+	public $Permission;
 	
 	public function __construct(){
 		$this->Id = null;
@@ -40,6 +42,7 @@ class Individual{
 		$this->Suffix = null;
 		$this->Relation = null;
 		$this->TreeId = null;
+		$this->Permission = null;
        }
 }
 ?>

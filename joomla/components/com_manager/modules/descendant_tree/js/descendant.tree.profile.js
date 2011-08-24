@@ -150,6 +150,12 @@ DescendantTreeProfile.prototype = {
 		jQuery(obj).find('.jmb-dtp-body-info-avatar').append(avatar);
 		
 	},
+	setEditButton:function(obj, json){
+		var editButton = jQuery(obj).find('#edit-button');
+		if(jQuery(editButton).length>0) jQuery(editButton).remove();
+		var html = '<div class="jmb-dtp-body-edit-button" id="edit-button" bt-xtitle="" title="">&nbsp;</div>';
+		jQuery(obj).find('.jmb-dtp-body-info-avatar').append(html);
+	},
 	setColors:function(colors){
 		this.colors.male = colors['M'];
 		this.colors.female = colors['F'];
@@ -158,6 +164,7 @@ DescendantTreeProfile.prototype = {
 	clear:function(){
 	},
 	setBodyInfo:function(obj, json){
+		this.setEditButton(obj, json);
 		this.setAvatar(obj, json);
 		this.setName(obj, json);	
 		this.setBirthdate(obj, json);
@@ -226,12 +233,12 @@ DescendantTreeProfile.prototype = {
 				var id = jQuery(this).attr('id');
 				window.open('http://www.facebook.com/profile.php?id='+id,'new','width=320,height=240,toolbar=1')
 			});
-			
 			//edit profile button
 			var button = jQuery(obj).find(".jmb-dtp-body-edit-button");
 			self.profile.tooltip.cleaner();
 			self.profile.tooltip.render({
 				target: button,
+				fmbUser:json.fmbUser,
 				id:jQuery(button).attr('id'),
 				type: 'tooltip',
 				data: json,

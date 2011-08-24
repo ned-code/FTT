@@ -181,9 +181,10 @@ class IndividualsList{
         */
         public function get($id, $lite=false){
         	if($id==null){ return null; }
-        	$sqlString = "SELECT indivs.id, indivs.fid, indivs.sex, names.first_name,names.middle_name,names.last_name,names.nick
+        	$sqlString = "SELECT indivs.id, indivs.fid, indivs.sex, names.first_name,names.middle_name,names.last_name,names.nick,link.tree_id,link.type as permission
         		FROM #__mb_individuals as indivs
         		LEFT JOIN #__mb_names as names ON indivs.id = names.gid
+        		LEFT JOIN #__mb_tree_links as link ON indivs.id = link.individuals_id
         		WHERE indivs.id=?";
         	$sql = $this->core->sql($sqlString, $id);
         	$this->db->setQuery($sql);         
@@ -197,6 +198,8 @@ class IndividualsList{
 		$pers->MiddleName = $rows[0]['middle_name'];
 		$pers->LastName = $rows[0]['last_name'];
 		$pers->Nick = $rows[0]['nick'];
+		$pers->TreeId = $rows[0]['tree_id'];
+		$pers->Permission = $rows[0]['permission'];
 		
 		if(!$lite){
 			$pers->Birth = $this->core->events->getPersonEventsByType($pers->Id,'BIRT');
