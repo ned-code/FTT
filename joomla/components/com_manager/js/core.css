@@ -44,10 +44,10 @@ html ul.jmbtabs li.active, html ul.jmbtabs li.active a:hover  { /*--Makes sure t
 .tab_container {
 	border: 1px solid #999;
 	border-top: none;
-	overflow: hidden;
 	clear: both;
 	float: left; width: 100%;
 	background: #fff;
+	position: relative;
 }
 .tab_content {
 	/*padding: 20px;*/
@@ -63,4 +63,16 @@ html ul.jmbtabs li.active, html ul.jmbtabs li.active a:hover  { /*--Makes sure t
 	opacity: 0.6;
 	position: absolute;
 	top: 47px;
+}
+
+div.buttons {
+	bottom: -20px;
+	position: absolute;
+    	right: 10px;
+}
+div.buttons span {
+	color: blue;
+	cursor: pointer;
+    	font-size: 14px;
+    	font-weight: bold;
 }

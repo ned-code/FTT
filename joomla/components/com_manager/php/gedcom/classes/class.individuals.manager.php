@@ -348,9 +348,9 @@ class IndividualsList{
         	}
         	return null;
         }
-        public function getRelatives($treeId, $all=false){
-        	if($all){
-        		$sql = $this->core->sql("SELECT individuals_id FROM #__mb_tree_links WHERE tree_id=? AND type=?",$treeId, $all);
+        public function getRelatives($treeId, $type=false){
+        	if($type){
+        		$sql = $this->core->sql("SELECT individuals_id FROM #__mb_tree_links WHERE tree_id=? AND type=?",$treeId, $type);
         	} else {
         		$sql = $this->core->sql("SELECT individuals_id FROM #__mb_tree_links WHERE tree_id=?",$treeId);
         	}

@@ -100,14 +100,14 @@ JMBProfileTooltip.prototype = {
 						sb._('<tr>');
 							sb._('<td class="jmb-profile-mini-photo"><div>')._(self.parent._getAvatar(p.data,81,90))._('</div></td>');
 							sb._('<td class="jmb-profile-mini-info-body">');
-								sb._('<div><span>Name:</span> ')._(self.parent._getFullName(p.data.indiv))._('</div>');
-								sb._('<div><span>Born:</span> ')._(self.parent._getEventDate(p.data.indiv.Birth[0]))._('</div>');
+								sb._('<div><span>Name:</span> <span class="text">')._(self.parent._getFullName(p.data.indiv))._('</span></div>');
+								sb._('<div><span>Born:</span> <span class="text">')._(self.parent._getEventDate(p.data.indiv.Birth[0]))._('</span></div>');
 								var relation = self.parent._getRelation(p);
-								if(relation != 0) sb._('<div><span>Relation:</span> ')._(relation)._('</div>');
+								if(relation != 0) sb._('<div><span>Relation:</span> <span class="text">')._(relation)._('</span></div>');
 							sb._('</td>');
 						sb._('</tr>');
 					sb._('</table>');
-					if(self.permission(p)) sb._('<div class="jmb-profile-mini-switch"><span>Switch to Full Profile</span></div>');
+					if(self.permission(p)) sb._('<div class="jmb-profile-mini-switch"><span>View Full Profile</span></div>');
 				sb._('</div>');
 				if(p.data.photo.length!=0){
 					sb._('<div class="jmb-profile-mini-images">');
@@ -115,7 +115,7 @@ JMBProfileTooltip.prototype = {
 					sb._('</div>');
 				}
 			sb._('</div>');
-			if(p.data.indiv.FacebookId=='0'){
+			if(p.data.indiv.FacebookId=='0'&&this.validToInvitation(p.data)){
 				var name = p.data.indiv.FirstName;
 				sb._('<div class="jmb-profile-mini-send">');
 					sb._('<table>');			
@@ -123,7 +123,7 @@ JMBProfileTooltip.prototype = {
 							sb._('<td><div class="email">&nbsp;</div></td>');
 							sb._('<td>');
 								sb._('<div><span>')._(name)._(' is not registred.</span></div>');
-								sb._('<div><span>Click here to send ')._(name)._(' an email invitation.</span></div>');
+								sb._('<div><span class="send" style="color:blue;cursor:pointer">Click here to send ')._(name)._(' an email invitation.</span></div>');
 							sb._('</td>');
 						sb._('</tr>');
 					sb._('</table>');
@@ -133,6 +133,15 @@ JMBProfileTooltip.prototype = {
 		var html = sb.result();
 		var htmlObject = jQuery(html);
 		return htmlObject;
+	},
+	validToInvitation:function(json){
+		var self = this, death = (json.indiv.Death.length>0)?json.indiv.Death[0]:false, birth = (json.indiv.Birth.length>0)?json.indiv.Birth[0]:false, date = new Date();
+		if(birth&&birth.From!=null&&birth.From.Year){
+			var year = date.getFullYear() - birth.From.Year;
+			if(year > 100) return false;
+		}
+		if(death) return false;
+		return true;
 	},
 	_clickTooltip:function(p, type){
 		var self = this;
@@ -175,7 +184,7 @@ JMBProfileTooltip.prototype = {
 				});
 			break;
 			case "mini-send":
-				jQuery(tooltip).find('.jmb-profile-mini-send').find('div.email').click(function(){
+				jQuery(tooltip).find('.jmb-profile-mini-send').find('span.send').click(function(){
 					self.parent.invitation.render(p);
 					return false;
 				});

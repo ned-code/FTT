@@ -1,9 +1,6 @@
-function JMBDelete(obj){
-	this.obj = jQuery('#'+obj);
-	var div = jQuery('<div class="button">Delete my families tree</div>');	
-	jQuery(this.obj).append(div);
+function JMBDelete(button){
 	var self = this;
-	jQuery(div).click(function(){
+	jQuery(button).click(function(){
 		if(!confirm('You sure you want to remove your tree?')) return false;
 		storage.core.modal(true);
 		self._ajax('delete', null, function(){
@@ -18,7 +15,7 @@ JMBDelete.prototype = {
 		host.callMethod("delete", "JMBDelete", func, params, function(req){
 				callback(req);
 		})
-	}
+	}	
 }
 
 

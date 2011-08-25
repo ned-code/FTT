@@ -49,6 +49,7 @@ storage.request.cleaner = function(){
 //header
 storage.header = {};
 storage.header.activeButton = null;
+storage.header.block = false;
 storage.createPull(storage.header);
 storage.header.set = function(){
 	jQuery(document).ready(function(){
@@ -56,10 +57,12 @@ storage.header.set = function(){
 		var family_line = jQuery('.jmb_header_fam_line');
 		var family_line_span = jQuery(family_line).find('span');
 		jQuery(family_line_span).click(function(){
+			if(storage.header.block) return false;
 			jQuery(family_line_span).removeClass('active');
 			jQuery(this).addClass('active');
 			storage.header.activeButton = this;
 			storage.header.click();
+			return false;
 		});
 		var settings = jQuery('.jmb_header_settings');
 		jQuery(settings).find('span.myprofile').click(function(){
@@ -89,6 +92,11 @@ storage.tabs.cleaner = function(){
 	storage.request.cleaner();
 }
 
+storage.deleteButton = {};
+storage.deleteButton.init = function(container){
+	var d_button = jQuery(container).find('div#delete');
+	var d_object = new JMBDelete(d_button);
+}
 
 //core object
 var date = new Date();
@@ -129,7 +137,6 @@ core.load = function(pages){
 	jQuery(document).ready(function() {
 	    host = new Host();
 	    var manager = new MyBranchesManager();
-	    
 	    jQuery.ajax({
 		//url: (manager.getPageListUrl()+'&pages='+pages),
 		url: 'index.php?option=com_manager&task=getXML&f=pages&pages='+pages,
@@ -197,8 +204,11 @@ core.loadTabs = function(pages){
     				count++;
     			}
     			
-    			divs = jQuery('<div id="jmbtab" class="tab_content">&nbsp;</div>');	
+    			var divs = jQuery('<div id="jmbtab" class="tab_content">&nbsp;</div>');	
     			jQuery(div).append(divs);
+    			
+    			var buttons = jQuery('<div class="buttons"><div id="delete"><span> - Delete Tree</span></div></div>');
+    			jQuery('.tab_container').append(buttons);
     			
     			//When page loads...
 			jQuery(".tab_content").hide(); //Hide all content
@@ -227,6 +237,7 @@ core.loadTabs = function(pages){
 			});	
 			
 			jQuery("ul.jmbtabs li:first").click(); //click first
+			storage.deleteButton.init(buttons);
     		}
     	});
     });

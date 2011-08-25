@@ -26,8 +26,13 @@ function JMBDescendantTree(obj){
 	this.profile = new DescendantTreeProfile(this);
 	//this.profileEdit = new DescendantTreeProfileEdit(this);
 	this.obj = obj;
+	
+	jQuery('.jmb_header_fam_line').show();
+	jQuery('.jmb_header_fam_line').find('span').removeClass('active');
+	jQuery('.jmb_header_fam_line').find('span#mother').addClass('active');
+	storage.header.block = false;
 
-	self.loadTree(dhxTree, jQuery(storage.header.activeButton).text());		
+	self.loadTree(dhxTree, 'mother');		
 	dhxTree.attachEvent("onXLE", function(tree,id){
 		var items = this.getAllSubItems(0).split(',');
                 jQuery(items).each(function(i,e){
@@ -42,10 +47,10 @@ function JMBDescendantTree(obj){
 		});
 		var user = jQuery('[name="descendant-node"][user="true"]');
 		jQuery(user[0]).click();
-		var x = jQuery(user[0]).offset().top - 130;
-		console.log(x);
-		jQuery('div.containerTableStyle').animate({scrollTop: x}, 500);
+		var x = jQuery(user[0]).offset().top - 300;
+		jQuery('div.containerTableStyle').animate({scrollTop: x}, 250);
 	});
+	
 	
 }
 

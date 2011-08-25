@@ -59,6 +59,10 @@ $document->addScript('administrator/components/com_manager/js/host.js?111');
 $document->addStyleSheet('components/com_manager/modules/overlay/css/jmb.overlay.css?111');
 $document->addScript('components/com_manager/modules/overlay/js/jmb.overlay.js?111');
 
+//jmb delete tree button
+$document->addStyleSheet('components/com_manager/modules/delete/css/jmb.delete.css?111');
+$document->addScript('components/com_manager/modules/delete/js/jmb.delete.js?111');
+
 //profile editor[mini, full, tooltip]
 $document->addStyleSheet('components/com_manager/modules/profile/css/jmb.profile.css?111');
 $document->addStyleSheet('components/com_manager/modules/profile/css/jmb.profile.full.css?111');

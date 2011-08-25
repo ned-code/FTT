@@ -108,7 +108,7 @@ JMBProfileFull.prototype = {
 		var indivBirth = (data.indiv.Birth)?data.indiv.Birth[0]:false;
 		var indivPlace = (indivBirth)?indivBirth.Place:false;
 		var spouseBirth = (spouse.indiv.Birth)?spouse.indiv.Birth[0]:false;
-		var spousePlace = (spouseBirth)?indivBirth.Place:false;
+		var spousePlace = (spouseBirth)?spouseBirth.Place:false;
 		
 		sb._('<div id="jmb-union-')._(index)._('" class="jmb-dialog-profile-content-union" spouse_id="')._(spouse.id)._('">');
 			sb._('<form id="jmb-profile-addpsc-')._(index)._('" method="post" target="iframe-profile">');
@@ -372,9 +372,9 @@ JMBProfileFull.prototype = {
 		jQuery(htmlObject).find('input[name="t_year"]').val((event.To.Year!=null)?event.To.Year:'');
 		jQuery(htmlObject).find('input[name="t_option"]').attr('checked', toChecked);
 		jQuery(htmlObject).find('input[name="_place"]').val((event.Place)?event.Place.Name:'');
-		jQuery(htmlObject).find('input[name="_town"]').val((event.Place.Locations.length!=0&&event.Place.Locations[0].City!=null)?event.Place.Locations[0].City:'');
-		jQuery(htmlObject).find('input[name="_state"]').val((event.Place.Locations.length!=0&&event.Place.Locations[0].State!=null)?event.Place.Locations[0].State:'');
-		jQuery(htmlObject).find('input[name="_country"]').val((event.Place.Locations.length!=0&&event.Place.Locations[0].Country!=null)?event.Place.Locations[0].Country:'');
+		jQuery(htmlObject).find('input[name="_town"]').val((event.Place&&event.Place.Locations.length!=0&&event.Place.Locations[0].City!=null)?event.Place.Locations[0].City:'');
+		jQuery(htmlObject).find('input[name="_state"]').val((event.Place&&event.Place.Locations.length!=0&&event.Place.Locations[0].State!=null)?event.Place.Locations[0].State:'');
+		jQuery(htmlObject).find('input[name="_country"]').val((event.Place&&event.Place.Locations.length!=0&&event.Place.Locations[0].Country!=null)?event.Place.Locations[0].Country:'');
 	},
 	_eventsHeaderEvents:function(htmlObject){
 		var self = this;
@@ -388,7 +388,7 @@ JMBProfileFull.prototype = {
 				sb = host.stringBuffer();
 				e = json.event;
 				self.json.data.events.push(e);
-				sb._('<li id="')._(self.json.data.events.length-1)._('"><div id="edit" class="button"><span>Edit</span></div><div id="delete" class="button">&nbsp;</div><div id="switch" class="text">')._(self.parent._getEventLine(data, e))._('</div></li>');
+				sb._('<li id="')._(self.json.data.events.length-1)._('"><div id="edit" class="button"><span>Edit</span></div><div id="delete" class="button">&nbsp;</div><div id="switch" class="text">')._(self.parent._getEventLine(self.json.data, e))._('</div></li>');
 				li = jQuery(sb.result());
 				jQuery(htmlObject).find('.jmb-dialog-events-list ul').append(li);
 				liDivs = jQuery(li).find('div').each(function(i,e){
@@ -588,7 +588,7 @@ JMBProfileFull.prototype = {
 							sb._('<tr>');
 								sb._('<td><div class="title"><span>Birthday:</span></div></td>');
 								var birth = (object.indiv.Birth)?object.indiv.Birth[0]:false;
-								sb._('<td><div id="birthday" class="text"><span>')._(self.parent._getEventDate(birth))._('</span></div></td>');
+								sb._('<td><div id="birthday" class="text"><span>')._((birth)?self.parent._getEventDate(birth):'')._('</span></div></td>');
 							sb._('</tr>');
 							sb._('<tr>');
 								sb._('<td><div class="title"><span>Birthplace:</span></div></td>');

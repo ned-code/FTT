@@ -42,18 +42,21 @@ class JMBDescendantTree {
 	
 	protected function getFirstParent($r_type){
 		$parents = $this->host->gedcom->individuals->getParents($this->ownerId);
-		$parentKey = ($r_type=='father')?$parents['fatherID']:$parents['motherID'];
-		if($parentKey!=null){
-			$grandParents = $this->host->gedcom->individuals->getParents($parentKey);
-			$grandParentKey = ($grandParents['fatherID']!=null)?$grandParents['fatherID']:$grandParents['motherID'];
-			if($grandParentKey!=null){
-				return $grandParentKey;
-			} else {
-				return $parentKey;
-			}
+		if(!empty($parents)){
+			$parentKey = ($r_type=='father')?$parents['fatherID']:$parents['motherID'];
+			if(!empty($parentKey)){
+				$grandParents = $this->host->gedcom->individuals->getParents($parentKey);
+				$grandParentKey = ($grandParents['fatherID']!=null)?$grandParents['fatherID']:$grandParents['motherID'];
+				if($grandParentKey!=null){
+					return $grandParentKey;
+				} else {
+					return $parentKey;
+				}
+			} 
+			return $this->ownerId;
 			
 		} else {
-			return $indKey;
+			return $this->ownerId;
 		}
 	}
 	
@@ -131,7 +134,7 @@ class JMBDescendantTree {
 		 	 $xml .= "</table>";
 		 	 $xml .= "]]></itemtext>";
 		 } else {
-		 	 $img = ($family->Sircar->Gender == "M")?'male.gif' : 'female.gif';
+		 	 $img = ($family->Sircar->Gender == "M")?'male.png' : 'female.png';
 		 	 $xml .= "<item id='";
 		 	 	$xml .= $family->Sircar->Id;
 		 	 	$xml .= "' im0='";
@@ -161,7 +164,7 @@ class JMBDescendantTree {
 
 	protected function node(&$xml, $indKey){
 		 $families = $this->host->gedcom->families->getPersonFamilies($indKey);
-		 if(sizeof($families)==0){
+		 if(empty($families)){
 		 	 $this->solo($xml, $indKey);
 		 } elseif(sizeof($families)>0){
 		 	 foreach($families as $family){

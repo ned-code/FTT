@@ -113,10 +113,10 @@
     	font-weight: bold;
     	position: absolute;
     	right: 10px;
-    	top: 10px;
+    	top: 3px;
 }
 .jmb-profile-mini-info {
-	border-bottom: 2px solid gray;
+	border-bottom: 2px solid #5F8D34;
 	height: 110px;
 }
 .jmb-profile-mini-info table {
@@ -145,8 +145,12 @@
 .jmb-profile-mini-info-body span {
 	color:gray;
 }
+.jmb-profile-mini-info-body span.text {
+	color:black;
+	font-size:14px;
+}
 .jmb-profile-mini-images{
-	background: none repeat scroll 0 0 white;
+	background: none repeat scroll 0 0 #F1E4B0;
 	overflow-x: auto;
 	overflow-y: hidden;
 	padding-bottom: 5px;

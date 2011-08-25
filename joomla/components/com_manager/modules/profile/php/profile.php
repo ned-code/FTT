@@ -23,6 +23,7 @@ class JMBProfile {
 	protected function _createIndiv($save=true){
 		$ind = new Individual();
 		$ind->FacebookId = 0;
+		$ind->TreeId = $_SESSION['jmb']['tid'];
 		$ind->FirstName = (isset($_POST['first_name']))?$_POST['first_name']:''; 
 		$ind->MiddleName = (isset($_POST['middle_name']))?$_POST['middle_name']:'';
 		$ind->LastName = (isset($_POST['last_name']))?$_POST['last_name']:'';
@@ -358,7 +359,7 @@ class JMBProfile {
 	*/
 	public function updateUnion($args){
 		$args = explode(';', $args);
-		$families = $this->host->gedcom->families->getPersonsFamilies($args[0]);
+		$families = $this->host->gedcom->families->getPersonFamilies($args[0]);
 		$fam_id = null;
 		foreach($families as $family){
 			if($family->Spouse->Id == $args[1]){

@@ -67,7 +67,9 @@ class TreeCreator {
 		$this->db->query();
 		$sql = $this->host->gedcom->sql("INSERT INTO #__mb_tree_links (`individuals_id` ,`tree_id`, `type`)VALUES (?, ?, 'OWNER')", $indKey, $treeId);
 		$this->db->setQuery($sql);
-		$this->db->query();		
+		$this->db->query();
+		$_SESSION['jmb']['tid'] = $treeId;
+		$_SESSION['jmb']['gid'] = $indKey;		
 	}
 	
 	public function send($indKey){

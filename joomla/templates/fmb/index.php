@@ -27,12 +27,12 @@ $fb_admin_id = '184962764872486';
 
 $og_title = 'FamilyTree-Top';
 $og_type = 'website';
-$og_url = 'http://www.pav.dev-cop.com';
+$og_url = 'http://www.familytreetop.com/';
 $og_img = '';
 $og_site_name = 'FamilyTree-Top';
 
 $url_fb = 'http://apps.facebook.com/fmybranches/';
-$url_fmb = 'http://www.pav.dev-cop.com';
+$url_fmb = 'http://www.familytreetop.com/';
 
 // joomla params
 $app                = JFactory::getApplication();
@@ -83,36 +83,38 @@ $user = $facebook->api('/me');
 							<td>
 								<div class="jmb_header_fam_line">
 									<font class="jmb_line_title">Family Line:</font>
-									<span id="father" class="jmb_line_left active">My Mother</span>
-									<span id="mother" class="jmb_line_right">My Father</span>
+									<span id="mother" class="jmb_line_left active">My Mother</span>
+									<span id="father" class="jmb_line_right">My Father</span>
 								</div>
 							</td>
 							<!-- Profile Line -->
 							<td>
 								<div class="jmb_header_settings">	
-									<?php if($inIFrame): ?>
-										<div class ="embedded">
-											<div class="myfamily">My Family</div>
-											<div id="<?php echo $user_profile['id']; ?>" class="myprofile">My Profile</div>
-										</div>
-									<?php else: ?>
-										<div class="expanded">
-											<table>
-												<tr>
-													<td>
-														<div class="name"><?php echo $user['name']; ?></div>
-														<div class="menu">
-															<span id="<?php echo $user['id']; ?>" class="myprofile">My Profile</span>
-															<span class="myfamily">My Family</span>
-															<span class="logout">Logout</span>
-														</div>
-													</td>
-													<td>
-														<div class="avatar"><img src="<?php echo 'index.php?option=com_manager&task=getResizeImage&fid='.$user['id'].'&w=50&h=50'; ?>"></div>
-													</td>
-												</tr>
-											</table>
-										</div>
+									<?php if($_SESSION['jmb']['tid']): ?>
+										<?php if($inIFrame): ?>
+											<div class ="embedded">
+												<div class="myfamily">My Family</div>
+												<div id="<?php echo $user_profile['id']; ?>" class="myprofile">My Profile</div>
+											</div>
+										<?php else: ?>
+											<div class="expanded">
+												<table>
+													<tr>
+														<td>
+															<div class="name"><?php echo $user['name']; ?></div>
+															<div class="menu">
+																<span id="<?php echo $user['id']; ?>" class="myprofile">My Profile</span>
+																<span class="myfamily">My Family</span>
+																<span class="logout">Logout</span>
+															</div>
+														</td>
+														<td>
+															<div class="avatar"><img src="<?php echo 'index.php?option=com_manager&task=getResizeImage&fid='.$user['id'].'&w=50&h=50'; ?>"></div>
+														</td>
+													</tr>
+												</table>
+											</div>
+										<?php endif; ?>
 									<?php endif; ?>
 								</div>
 							</td>
@@ -132,7 +134,10 @@ $user = $facebook->api('/me');
 			<div class="main">
 				<table>
 					<tr>
-						<td valign="top" style="<?php if($inIFrame): ?>width:760px;<?php else: ?>width:820px;<?php endif; ?>"><div id="fb-root"></div><jdoc:include type="component" /></td>
+						<td valign="top" style="<?php if($inIFrame): ?>width:760px;<?php else: ?>width:820px;<?php endif; ?>">
+							<div id="fb-root"></div>
+							<jdoc:include type="component" />
+						</td>
 						<?php if(!$inIFrame): ?>
 							<td valign="top"><div class="right"><jdoc:include type="modules" name="right" /></div></td>
 						<?php endif; ?>

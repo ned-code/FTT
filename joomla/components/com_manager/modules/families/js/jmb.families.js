@@ -30,8 +30,8 @@ function JMBFamilies(obj){
 	storage.addEvent(storage.tabs.clickPull, function(object){
 		self.profile.cleaner();
 	})
-	
-	_A = this;
+
+	jQuery('.jmb_header_fam_line').hide();
 }
 JMBFamilies.prototype = {
 	_ajax:function(func, params, callback){
@@ -76,6 +76,7 @@ JMBFamilies.prototype = {
 		return birth+death;		
 	},
 	_getLongName:function(obj){
+		if(!obj) return '';
 		return (this._isEmpty(obj.Nick))?obj.FirstName+' '+obj.LastName:obj.Nick+' '+obj.LastName;
 	},
 	_getName:function(obj){
@@ -102,6 +103,7 @@ JMBFamilies.prototype = {
 		self = this;
 		data = self.individs[indKey];
 		person = self.individs[indKey].indiv;
+		if(!person) return;
 		name = self._getLongName(person);
 		date = self._getDate(person);
 		sb = host.stringBuffer();
@@ -126,18 +128,21 @@ JMBFamilies.prototype = {
 		sb._('</div>');
 		return jQuery(sb.result());
 	},
-	_createSpouse:function(obj){
-		var person = obj.indiv;
-		var self = this;
-		var sb = host.stringBuffer();
-		var name = self._getLongName(person);
-		var date = self._getDate(person);
+	_createSpouse:function(indKey){
+		var self,data, person, name, date, sb, imgPath;
+		self = this;
+		data = self.individs[indKey];
+		person = self.individs[indKey].indiv;
+		if(!person) return;
+		name = self._getLongName(person);
+		date = self._getDate(person);
+		sb = host.stringBuffer();
 		sb._('<div class="jmb-families-spouse-div">');
-			sb._('<div id="')._(person.Id)._('-view" type="imgContainer" class="jmb-families-parent-img">')._(this._getAvatar(obj, 'parent', 1));
+			sb._('<div id="')._(person.Id)._('-view" type="imgContainer" class="jmb-families-parent-img">')._(this._getAvatar(data, 'parent', 1));
 				sb._('<div id="')._(person.Id)._('-edit" class="jmb-families-edit-button parent">&nbsp;</div>');
-				if(obj.indiv.FacebookId != '0'){
+				if(person.FacebookId != '0'){
 					var imgPath = self.json.path+"/components/com_manager/modules/families/css/facebook.gif";
-					sb._('<div class="jmb-families-fb-icon parent" id="')._(obj.indiv.FacebookId)._('"><img src="')._(imgPath)._('" width="18px" height="18px"></div>');
+					sb._('<div class="jmb-families-fb-icon parent" id="')._(person.FacebookId)._('"><img src="')._(imgPath)._('" width="18px" height="18px"></div>');
 				}
 			sb._('</div>');
 			sb._('<div>');
@@ -219,20 +224,22 @@ JMBFamilies.prototype = {
 		if(obj.spouses&&jQuery(obj.spouses).length!=0){
 			var data = self.individs[obj.indKey];
 			//info space
-			var infoDiv = self._createDivInfo(data.spouses[0].event);
-			jQuery(div).find('.jmb-families-event').append(infoDiv);
-			
-			//spouse space
-			jQuery(obj.spouses).each(function(i,e){
-				if(!e) return;
-				if(i == 0) { 
-					var spouseDiv = self._createDivParent(e, 'right', 1); 
-					jQuery(div).find('.jmb-families-spouse').append(spouseDiv);
-				} else {
-					var spouses = self._createSpouse(e);
-					jQuery(div).find('.jmb-families-spouse-container').append(spouses);
-				}
-			});
+			if(data.spouses.length>0){
+				var infoDiv = self._createDivInfo(data.spouses[0].event);
+				jQuery(div).find('.jmb-families-event').append(infoDiv);
+				
+				//spouse space
+				jQuery(obj.spouses).each(function(i,e){
+					if(!e) return;
+					if(i == 0) { 
+						var spouseDiv = self._createDivParent(e, 'right', 1); 
+						jQuery(div).find('.jmb-families-spouse').append(spouseDiv);
+					} else {
+						var spouses = self._createSpouse(e);
+						jQuery(div).find('.jmb-families-spouse-container').append(spouses);
+					}
+				});
+			}
 		}
 
 		
@@ -283,9 +290,9 @@ JMBFamilies.prototype = {
 				eventType:'click',
 				parent:document.body,
 				beforeClose:function(){
-					self._ajax('getFamilies', 'mother', function(res){
+					return;
+					self._ajax('getFamiliesObject', jQuery(e).attr('id').split('-')[0], function(res){
 						var json = jQuery.parseJSON(res.responseText);
-						self.json = json;
 						self.profile.tooltip.cleaner();
 						self.render(obj);
 					});
@@ -303,7 +310,7 @@ JMBFamilies.prototype = {
 	getParentId:function(id){
 		var params =(jQuery(storage.header.activeButton).text()=='My Father')?'fatherID':'motherID';	
 		var sub = (params=='father')?'motherID':'fatherID';
-		return (this.individs[id].parents[params]!=null)?this.individs[id].parents[params]:this.individs.parents[sub];
+		return (this.individs[id].parents[params]!=null)?this.individs[id].parents[params]:this.individs[id].parents[sub];
 	},
 	click:function(id, type){
 		var indKey = (type)?this.getParentId(id):id;

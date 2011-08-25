@@ -81,7 +81,7 @@ JMBProfile.prototype = {
 			closeOnEscape: false,
 			modal:true,
 			//open: function(event, ui) { jQuery(".ui-dialog-titlebar-close").hide(); },
-			beforeClose: function(event, ui){
+			beforeClose: function(){ 
 				self.profile.menuActiveItem = null;
 				if(typeof(self.json.beforeClose) == 'function') self.json.beforeClose();
 			},
@@ -100,8 +100,16 @@ JMBProfile.prototype = {
 		jQuery(self.dWindow).dialog(pDefault);
 		jQuery(self.dWindow).parent().css('top', '10px');
 	},
-	_getPassedAwayAge:function(year){
-		return (new Date()).getFullYear() - year;
+	_getPassedAwayAge:function(data){
+		var self = this, 
+		birth = (data.indiv.Birth.length>0)?data.indiv.Birth[0]:false,
+		death = (data.indiv.Death.length>0)?data.indiv.Death[0]:false,
+		b_year = (birth&&birth.From!=null&&birth.From.Year!=null)?birth.From.Year:false, 
+		d_year = (death&&death.From!=null&&death.From.Year!=null)?death.From.Year:false;
+		if(b_year&&d_year){
+			return d_year - b_year;
+		}
+		return '';
 	},
 	_getSpouseNameByEventId:function(data, event){
 		var self = this, spouses = data.spouses, id = event.Id;
@@ -124,7 +132,7 @@ JMBProfile.prototype = {
 				return sb._((from)?from:'')._((from)?': ':'')._('Born')._((place)?' in ':'')._((place)?place:'').result();
 			break;
 			case "DEAT":
-				return sb._((from)?from:'')._((from)?': ':'')._('Passed away')._((from)?' as age ':'')._((from)?self._getPassedAwayAge(from):'').result();
+				return sb._((from)?from:'')._((from)?': ':'')._('Passed away')._((from)?' as age ':'')._((from)?self._getPassedAwayAge(data):'').result();
 			break;
 			case "MARR":
 				var name = (event.Name.length!=0)?event.Name.toLowerCase():'marriage';

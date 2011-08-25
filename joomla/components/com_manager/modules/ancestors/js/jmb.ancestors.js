@@ -37,7 +37,7 @@ function JMBAncestors(obj){
 		self.profile.cleaner();
 	})
 	
-	_A = this;
+	jQuery('.jmb_header_fam_line').hide();
 }
 
 JMBAncestors.prototype = {
@@ -59,7 +59,8 @@ JMBAncestors.prototype = {
 		if(f.length==0){
 			return l;
 		}
-		return [f,l].join(' '); 
+		var name = [f,l].join(' '); 
+		return (name.length>20)?[name.substr(0,18),'...'].join(''):name; 
 	},
 	_getEventString:function(id, type){
 		var data = this._getDataIndividual(id);
@@ -76,6 +77,10 @@ JMBAncestors.prototype = {
 			}
 			return false;
 		}
+	},
+	_getRelationString:function(id){
+		var data = this._getDataIndividual(id);
+		return (data.indiv.Relation!=null)?data.indiv.Relation:'';
 	},
 	_getAvatar:function(id){
 		var data = this._getDataIndividual(id);
@@ -123,7 +128,7 @@ JMBAncestors.prototype = {
 		var self = this;
 		var sb = host.stringBuffer();
 		var gender = node.data.gender;
-		var birth, death;
+		var birth, death, relation;
 		sb._('<div class="jit-node-item">');			
 			sb._('<table>');
 				sb._('<tr>');
@@ -140,6 +145,9 @@ JMBAncestors.prototype = {
 						} 
 						if(death = self._getEventString(node.id, 'Death')){
 							sb._('<div class="deat">D: ')._(death)._('</div>');
+						}
+						if(relation = self._getRelationString(node.id)){
+							sb._('<div class="relation">')._(relation)._('</div>');
 						}
 					sb._('</div></td>')
 				sb._('</tr>')

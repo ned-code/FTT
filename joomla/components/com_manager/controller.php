@@ -371,11 +371,13 @@ class JMBController extends JController
         		$_SESSION['jmb']['fid'] = $fid;
         		$link = $this->check_user_in_system($fid);
         		if($task) return;        		
-        		if($link==null){
+        		if(empty($link)){
         			$cat_id = $this->get_categories('first');
         			if($view!='single'&&$id!=$cat_id&&!$task){
         				header('Location:'.JURI::base().'index.php/first-page');
         			}
+        		} else if($view!='multi'){ 
+        			header('Location:'.JURI::base().'index.php');
         		} else {
         			$_SESSION['jmb']['gid'] = $link['gid'];
         			$_SESSION['jmb']['tid'] = $link['tid'];

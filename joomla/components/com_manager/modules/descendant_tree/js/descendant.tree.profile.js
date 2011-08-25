@@ -222,23 +222,32 @@ DescendantTreeProfile.prototype = {
 		var html = jQuery(sb.result());
 		jQuery(obj).find('.jmb-dtp-body-media').append(html);
 	},
+	validToInvitation:function(json){
+		var self = this, death = (json.indiv.Death.length>0)?json.indiv.Death[0]:false, birth = (json.indiv.Birth.length>0)?json.indiv.Birth[0]:false, date = new Date();
+		if(birth&&birth.From!=null&&birth.From.Year){
+			var year = date.getFullYear() - birth.From.Year;
+			if(year > 100) return false;
+		}
+		if(death) return false;
+		return true;
+	},
 	setSendMail:function(obj, json){
 		var table = jQuery(obj).find('.jmb-dtp-footer').find('table');
 		if(table.length!=0) jQuery(table).remove();
-		if(json.indiv.FacebookId!='0') return;
+		if(json.indiv.FacebookId!='0'||!this.validToInvitation(json)) return;
 		var self = this, sb = host.stringBuffer(), name = json.indiv.FirstName;
 		sb._('<table>');			
 			sb._('<tr>');
 				sb._('<td><div class="email">&nbsp;</div></td>');
 				sb._('<td>');
 					sb._('<div><span>')._(name)._(' is not registred.</span></div>');
-					sb._('<div><span>Click here to send ')._(name)._(' an email invitation.</span></div>');
+					sb._('<div><span class="send" style="color:blue;cursor:pointer">Click here to send ')._(name)._(' an email invitation.</span></div>');
 				sb._('</td>');
 			sb._('</tr>');
 			
 		sb._('</table>');
 		var html = jQuery(sb.result());
-		jQuery(html).find('.email').click(function(){
+		jQuery(html).find('span.send').click(function(){
 			var p = {
 				fmbUser:json.fmbUser,
 				data:json
