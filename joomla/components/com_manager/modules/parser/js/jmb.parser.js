@@ -8,16 +8,55 @@ function JMBParser(obj){
     this.Id;
     this.n=0;
 	var dhxTree;
-	var selectDiv;
-    
+
+
+
+    var self = this;
     storage.addEvent(storage.tabs.clickPull, function(object){
         self.cleaner();
     })
-    // set css style
-	jQuery(obj).css('height', '500px');
-	jQuery(obj).css('width', '100%');
-	jQuery(obj).css('position', 'relative');
-   	dhxLayout = new dhtmlXLayoutObject("jmb_parser", "3U");
+    var dialog=this.create_struct();
+  
+ self.open(dialog);
+    
+}
+
+JMBParser.prototype = {
+	_ajax:function(func, params, callback){
+  		host.callMethod("parser", "JMBParser", func, params, function(res){
+    			callback(res);
+  		})
+ 	},
+   _ajaxForm:function(obj, method, args, beforeSubmit, success){
+		var sb = host.stringBuffer();
+		var url = sb._('index.php?option=com_manager&task=callMethod&module=parser&class=JMBParser&method=')._(method)._('&args=')._(args).result();
+        jQuery(obj).ajaxForm({
+			url:url,
+			dataType:"json",
+			target: true,  //"#iframe-parser",
+			beforeSubmit:function(){
+				return beforeSubmit();	
+			},
+			success:function(data){
+				success(data);
+			}
+		});
+	},
+    open: function(object) {      
+      jQuery(object).dialog('open');  
+    },
+    create_struct: function(object) {
+         // set css style
+    var self=this;     
+	var object = jQuery('<div>',{
+	   id: 'parser'     
+	}).appendTo('body') ;
+    var wid=parseInt(jQuery('.tab_container').css('width'))-37;
+    jQuery(object).css('height', '500px');
+	jQuery(object).css('width', wid);
+	jQuery(object).css('position', 'relative');
+    dhxLayout = new dhtmlXLayoutObject('parser', "3U");
+
 	dhxLayout.cells("a").setText('FMB');
 	dhxLayout.cells("b").setText('GEDCOM');
 	dhxLayout.cells("a").setWidth(400);
@@ -31,23 +70,23 @@ function JMBParser(obj){
 	dhxTree.setSkin('dhx_skyblue');
 	dhxTree.setImagePath("components/com_manager/codebase/imgs/csh_bluebooks_custom/");
 
-	var self = this;
-	this.dhxLayout  = dhxLayout;
-	this.dhxTree = dhxTree;
+	
+	self.dhxLayout  = dhxLayout;
+	self.dhxTree = dhxTree;
 	//this.selectDiv = selectDiv;
    // var obj = jQuery('<div class="demo"></div>');
 	//dhxLayout.cells("c").attachObject(obj[0]);
-   jQuery('<div>',{
-    id:'log',
-    class: 'selected',
-    width: '350px',
-    heigth: '300px'
-   }).insertBefore('.content');
-   jQuery('#log').append('Log of merge process</br>');
+  // jQuery('<div>',{
+//    id:'log',
+//    class: 'selected',
+//    width: '350px',
+//    heigth: '300px'
+//   }).insertBefore('.content');
+//   jQuery('#log').append('Log of merge process</br>');
    // jQuery(obj).append(sb.result());
 //	if(jQuery('div.jmb_header_settings').find('span#100000634347185').length==0) return;
     //self.getId(function(res){self.Id=res;});
-    self.Id=2475;
+    self.Id=2490;
     self.loadTree(dhxTree,self.Id); //jQuery(storage.header.activeButton).text());	
  //   self.loadTree(dhxTreeGedcom,13);
     //dhxTree.attachEvent("onXLE", function(tree,id){
@@ -67,7 +106,7 @@ function JMBParser(obj){
                       dhxTreeGedcom.setIconSize("16","16");
                       dhxTreeGedcom.setSkin('dhx_skyblue');
 	                  dhxTreeGedcom.setImagePath("components/com_manager/codebase/imgs/csh_bluebooks_custom/");
-                      self.loadTree(dhxTreeGedcom,2488);
+                      self.loadTree(dhxTreeGedcom,2501);
                       
    // var form = jQuery('<form id="loadForm" enctype="multipart/form-data"> <input type="file" name="gedcom_file"/> <input type="submit" value="Submit" /> </form> ');  
 //    dhxLayout.cells("b").attachObject(form[0]);  
@@ -123,9 +162,9 @@ function JMBParser(obj){
     var fam = null;
     var fam2= null;
     this.table = null;
-    this.getPersonFamily(2475, function(json){
+    this.getPersonFamily(self.Id, function(json){
        fam = jQuery.parseJSON(json);   
-       self.getPersonFamily(2488, function(json){
+       self.getPersonFamily(2501, function(json){
             fam2 = jQuery.parseJSON(json);  
             var obj = jQuery('<div class="demo"></div>');
             self.dhxLayout.cells("c").attachObject(obj[0]);
@@ -148,36 +187,23 @@ function JMBParser(obj){
 //    this.getIndConf(2,function(json){
 //        var conf = jQuery.parseJSON(json);
 //        alert(json);
-//    })
-    
-}
-
-JMBParser.prototype = {
-	_ajax:function(func, params, callback){
-  		host.callMethod("parser", "JMBParser", func, params, function(res){
-    			callback(res);
-  		})
- 	},
-   _ajaxForm:function(obj, method, args, beforeSubmit, success){
-		var sb = host.stringBuffer();
-		var url = sb._('index.php?option=com_manager&task=callMethod&module=parser&class=JMBParser&method=')._(method)._('&args=')._(args).result();
-        jQuery(obj).ajaxForm({
-			url:url,
-			dataType:"json",
-			target: true,  //"#iframe-parser",
-			beforeSubmit:function(){
-				return beforeSubmit();	
-			},
-			success:function(data){
-				success(data);
-			}
-		});
-	},
+//    }) 
+       jQuery(object).dialog({
+            autoOpen : false,
+            title: 'Parser',
+            height: 500 ,
+            width: wid+17,
+            resizable: false,
+            position: 'top' 
+      }); 
+    return object;
+    },
     log:function(text){
         jQuery('#log').append(text+'</br>');
     },
     cleaner: function(){
       jQuery('#log').remove();  
+      jQuery('#parser').remove();
     },
     getId:function(callback){
         args=0;
@@ -242,7 +268,8 @@ JMBParser.prototype = {
                 changeSet.prop = prop;
                 changeSet.value = firstProp;  
                 changeUndoList.sets.push(changeSet);
-                changeSet2.method = 'set';
+                if (critical) {changeSet2.method = 'set';}
+                else {changeSet2.method = 'conflict';}                
                 changeSet2.prop = prop;
                 changeSet2.value = secondProp;  
                 changeSet2.critical = critical;
@@ -266,7 +293,7 @@ JMBParser.prototype = {
         compare_prop(place1.Locations[0].Adr1, place2.Locations[0].Adr1, prop + 'Adr1');
         compare_prop(place1.Locations[0].Adr2, place2.Locations[0].Adr2, prop + 'Adr2');
         compare_prop(place1.Locations[0].City, place2.Locations[0].City, prop + 'City');
-        compare_prop(place1.Locations[0].Contry, place2.Locations[0].Contry, prop + 'Contry');
+        compare_prop(place1.Locations[0].Contry, place2.Locations[0].Contry, prop + 'Country');
         compare_prop(place1.Locations[0].Name, place2.Locations[0].Name, prop + 'LocationName');
         compare_prop(place1.Locations[0].Post, place2.Locations[0].Post, prop + 'Post');
         compare_prop(place1.Locations[0].State, place2.Locations[0].State, prop + 'State');                                
@@ -282,10 +309,10 @@ JMBParser.prototype = {
         if ((ev1!=undefined)&&(ev2!=undefined)){
             compare_prop(ev1.Caus, ev2.Caus, prop+ 'Caus');        
             compare_prop(ev1.Type, ev2.Type, prop+ 'Type');        
-            console.log(ev1.Type);
+            
             compare_prop(ev1.ResAgency, ev2.ResAgency, prop+ 'ResAgency');
             if (ev1.Type=='BIRT') {critical = true;} 
-            compare_prop(ev1.DateType, ev2.DateType, prop+ 'Caus',critical);
+            compare_prop(ev1.DateType, ev2.DateType, prop+ 'DateType',critical);
             compare_dates(ev1.From, ev2.From, prop + 'From.',critical);     
             compare_dates(ev1.To, ev2.To, prop + 'To.',critical);           
             compare_places(ev1.Place, ev2.Place, prop + 'Place.');
@@ -298,11 +325,11 @@ JMBParser.prototype = {
       
       compare_prop(firstPerson.FirstName, secondPerson.FirstName,'FirstName',true);
       compare_prop(firstPerson.Gender, secondPerson.Gender,'Gender');
-      compare_prop(firstPerson.LastName, secondPerson.LastName,'LastName');
+      compare_prop(firstPerson.LastName, secondPerson.LastName,'LastName',true);
       compare_prop(firstPerson.Nick, secondPerson.Nick,'Nick');
       compare_prop(firstPerson.MiddleName, secondPerson.MiddleName,'MiddleName');
       compare_prop(firstPerson.Prefix, secondPerson.Prefix,'Prefix');
-      compare_prop(firstPerson.Suffix, secondPerson.Suffix,'Sufix');
+      compare_prop(firstPerson.Suffix, secondPerson.Suffix,'Suffix');
       compare_prop(firstPerson.SurnamePrefix, secondPerson.SurnamePrefix,'SurnamePrefix');
       compare_events(firstPerson.Birth[0], secondPerson.Birth[0],'Birth.');  
       compare_events(firstPerson.Death[0], secondPerson.Death[0],'Death.'); 
@@ -320,7 +347,14 @@ JMBParser.prototype = {
             changeRedoList.sets.push(changeSet);
             } 
     }
-    
+        var changeSet = new Object();  
+         
+        changeSet.method = 'merge';    
+        changeSet.personId = jQuery('#fmb').find('td').eq(0).attr('indkey');
+       //changeSet.personId = jQuery('#ged').find('td').eq(0).attr('indkey');
+        changeSet.FmbId = firstPerson.Id;  
+        changeSet.GedId = secondPerson.Id;
+        changeRedoList.sets.push(changeSet); 
      //compare_events(firstPerson.Death[0], secondPerson.Death[0],'Death'); 
      // alert(JSON.stringify(firstPerson));
       var i = -1; 
@@ -331,24 +365,41 @@ JMBParser.prototype = {
                     jQuery( "#dialog:ui-dialog" ).dialog( "destroy" );
                     jQuery('#dialog_form').remove();
                     self.create_dialog(changeRedoList.sets[i], function (val){ 
-                    //поменять changeset на выбранный пользователем  
-                    self.log('CRITICAL DATA USER CHECK:'+ val);
-                    show();
+                    //поменять changeset на выбранный пользователем
+                        if (val==changeRedoList.sets[i].value) {
+                            changeRedoList.sets[i].value=changeRedoList.sets[i].value2;
+                            changeRedoList.sets[i].value2=val;
+                            changeRedoList.sets[i].method='undo';
+                            var id= changeRedoList.id;
+                            switch (changeRedoList.sets[i].prop) {
+                                case 'FirstName': {
+                                     firstPerson.FirstName = val; 
+                                    break;}
+                                case 'LastName': {
+                                     firstPerson.LastName = val; 
+                                    break;}
+                            }
+                            var name = firstPerson.FirstName+' '+ firstPerson.LastName;
+                            jQuery("div [id="+id+"]").text(name);                            
+                            jQuery("#fmb").find("tr [indkey='"+id+"']").text(name);  
+                        }
+                        self.log('CRITICAL DATA USER CHECK:'+ val);
+                        show();
                 });
               } else {
                  show();
               }
           }else {
-            callback();
+            self.saveConflicts( JSON.stringify(changeRedoList) , function(json){
+             alert(json);
+             callback();
+            })          
           }
       }
       
       show();
       
-      //self.saveConflicts( JSON.stringify(changeRedoList) , function(json){
-//             alert(json);                  
-    
-//         })
+      
       
     },
 	saveConflicts:function(arg, callback){
@@ -507,8 +558,8 @@ JMBParser.prototype = {
       var table_ged = jQuery('#ged').find('table')[0];
       var self =this;
       jQuery('<div>',{
-        id: 'merge_now',
-        class: 'merge_button'
+        id: 'merge_now'//,
+        //class: 'merge_button'
       }).insertAfter('.merge_tables_container');     
       jQuery('<input>',{
         type : 'button',
@@ -555,20 +606,21 @@ JMBParser.prototype = {
       });
       //merge later button
       jQuery('<div>',{
-        id: 'merge_later',
-        class: 'merge_button'
+        id: 'merge_later'//,
+       //class: 'merge_button'
       }).insertAfter('#merge_now');     
       jQuery('<input>',{
         type : 'button',
         value : 'Skip and merge this family later'
       }).appendTo('#merge_later');
       jQuery('#merge_later').bind('click',function(){
-        alert('merge_later');
+        var id =2490;
+        console.log(jQuery('#fmb'));  
       });
       // do not merge button
       jQuery('<div>',{
-        id: 'merge_not',
-        class: 'merge_button'
+        id: 'merge_not'//,
+      //  class: 'merge_button'
       }).insertAfter('#merge_later');     
       jQuery('<input>',{
         type : 'button',
@@ -580,8 +632,8 @@ JMBParser.prototype = {
       });
       // stop merge button
       jQuery('<div>',{
-        id: 'merge_stop',
-        class: 'merge_button'
+        id: 'merge_stop'//,
+        //class: 'merge_button'
       }).insertAfter('#merge_not');     
       jQuery('<input>',{
         type : 'button',
@@ -603,7 +655,7 @@ JMBParser.prototype = {
        }).appendTo('body');
       
        jQuery('<p>',{
-        class: 'popup_text',
+        //class: 'popup_text',
         text: 'Please check one value('+cs.prop+'):'
        }).appendTo('#dialog_form');
        
@@ -634,7 +686,7 @@ JMBParser.prototype = {
 //        type :'text'
 //       }).insertAfter('#new_value');
        
-       console.log(jQuery('#dialog_form'));
+       
        jQuery("#dialog_form").dialog({
 	  
          modal:true,
