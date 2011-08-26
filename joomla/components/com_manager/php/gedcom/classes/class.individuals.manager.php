@@ -181,7 +181,7 @@ class IndividualsList{
         */
         public function get($id, $lite=false){
         	if($id==null){ return null; }
-        	$sqlString = "SELECT indivs.id, indivs.fid, indivs.sex, names.first_name,names.middle_name,names.last_name,names.nick,link.tree_id,link.type as permission
+        	$sqlString = "SELECT indivs.id as id, indivs.fid as fid, indivs.sex as sex, names.first_name as first_name,names.middle_name as middle_name,names.last_name as last_name,names.nick as nick,link.tree_id as tree_id,link.type as permission
         		FROM #__mb_individuals as indivs
         		LEFT JOIN #__mb_names as names ON indivs.id = names.gid
         		LEFT JOIN #__mb_tree_links as link ON indivs.id = link.individuals_id
@@ -189,6 +189,7 @@ class IndividualsList{
         	$sql = $this->core->sql($sqlString, $id);
         	$this->db->setQuery($sql);         
         	$rows = $this->db->loadAssocList();
+        	if($rows==null) return null;
         	
         	$pers = new Individual(); 
         	$pers->Id = $rows[0]['id'];
@@ -236,7 +237,7 @@ class IndividualsList{
         *
         */
         public function update($pers){
-        	if($pers->Id){
+        	if($pers&&$pers->Id){
         		//update to individuals table;
         		$sql = $this->core->sql('UPDATE #__mb_individuals SET `sex`=?,`fid`=?, `change`=NOW() WHERE `id`=?', $pers->Gender,$pers->FacebookId,$pers->Id);
         		$this->db->setQuery($sql);    

@@ -37,7 +37,7 @@
 .jmb-profile-tooltip-child{}
 
 .jmb-profile-tooltip-send{
-	background: none repeat scroll 0 0 #F5FAE6;
+	background: none repeat scroll 0 0 #F1E4B0;
 	border-left: 1px solid #999999;
 	border-right: 1px solid #999999;
 	border-top: 1px solid #999999;
@@ -45,8 +45,11 @@
 	left: -18px;
 	padding-left: 16px;
 	padding-top: 5px;
+	padding-bottom: 5px;
 	position: relative;
 	width: 199px;
+	position:relative;
+	top:8px;
 }
 .jmb-profile-tooltip-send tr{
 	margin-top: 5px;

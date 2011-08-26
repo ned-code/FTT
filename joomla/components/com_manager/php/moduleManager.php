@@ -169,7 +169,7 @@ class moduleManager{
      	     	     $res[$i]['id'] = $s_array[$i]['id'];
      	     	     $res[$i]['name'] = $s_array[$i]['name'];
      	     	     $res[$i]['title'] = htmlspecialchars($s_array[$i]['title']);
-     	     	     $res[$i]['description'] = htmlspecialchars($s_array[$i]['discription']);
+     	     	     $res[$i]['description'] = htmlspecialchars($s_array[$i]['description']);
      	     	     $res[$i]['category'] = $s_array[$i]['category'];
      	     	     $res[$i]['is_system'] = $s_array[$i]['is_system'];
      	     }

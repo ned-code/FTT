@@ -328,7 +328,8 @@ class JMBProfile {
 	*/
 	public function updateIndiv($id){
 		$ind = $this->host->gedcom->individuals->get($id);
-		$ind->FirstName = (isset($_POST['first_name']))?$_POST['first_name']:''; 
+		if($ind==null) return;
+ 		$ind->FirstName = (isset($_POST['first_name']))?$_POST['first_name']:''; 
 		$ind->MiddleName = (isset($_POST['middle_name']))?$_POST['middle_name']:'';
 		$ind->LastName = (isset($_POST['last_name']))?$_POST['last_name']:'';
 		$ind->Gender = (isset($_POST['gender']))?$_POST['gender']:'';
@@ -449,6 +450,7 @@ class JMBProfile {
 	*
 	*/
 	public function sendInvitation($args){
+		require_once("Mail.php");
 		$args = explode(';', $args);
 		$ownerId = $args[0];
 		$recId = $args[1];
@@ -458,8 +460,8 @@ class JMBProfile {
 		$facebook_id = $_SESSION['jmb']['fid'];
 
 		#senders e-mail adress
-		$email = (isset($_POST['email']))?$_POST['email']:false; //senders e-mail adress 
-		if(!$email) return;
+		$to = (isset($_POST['email']))?'<'.$_POST['email'].'>':false; //senders e-mail adress 
+		if(!$to) return;
 		
 		$value = $recId.','.$tree_id;	
 		$token = md5($value);
@@ -467,17 +469,16 @@ class JMBProfile {
 		$this->db->setQuery($sql);
         	$this->db->query();
 		
-		#recipient 
-		$recipient = "fantome@xbsoftware.com"; 
-		//$recipient = "fantomhp@gmail.com";
+		#recipient  
+		$from = "<familytreetop@gmail.com>";
 		
 		#subject
 		$subject = "Family Treetop invitation.";  
 		
-		#optional headerfields 
-		$headers = 'Content-type: text/html; charset="utf-8"\r\n';
-		$headers .= 'To: '.$recUser['indiv']->FirstName.' <'.$email.'>'."\r\n";
-		$headers .= "From: ". $fmbUser['indiv']->FirstName . " <" . $recipient . ">\r\n";
+		$host = "ssl://smtp.gmail.com";
+		$port = "465";
+		$username = "familytreetop@gmail.com";
+		$password = "3d#@technology";
 		
 		#mail body 
 		$mail_body = '<html><head>Family Treetop invitation.</head><body>';
@@ -491,10 +492,17 @@ class JMBProfile {
 		$mail_body .= "This is automated message from Family Treetop. Please do not respond to this email. Click <a href='http://apps.facebook.com/fmybranches/'>here</a> to find out more about Family Treetop.";
 		$mail_body .= '</body></html>';
 		
-		if(mail($email, $subject, $mail_body, $headers)) {
-			return json_encode(array('message'=>'Message successfully sent!'));
-		} else {
+		$headers = array ("MIME-Version"=> '1.0', "Content-type" => "text/html; charset=iso-8859-1",'From' => $from,'To' => $to,'Subject' => $subject);
+        
+		$smtp = Mail::factory('smtp',array ('host' => $host,'port' => $port,'auth' => true,'username' => $username,'password' => $password));
+
+		$mail = $smtp->send($to, $headers, $mail_body);
+
+		if (PEAR::isError($mail)) {
 			return json_encode(array('message'=>'Message delivery failed...'));
+			
+		} else {
+			return json_encode(array('message'=>'Message successfully sent!'));
 		}
 	}
 }

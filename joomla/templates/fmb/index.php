@@ -45,7 +45,8 @@ $imgName = ($inIFrame)?'to_facebook.gif':'to_fmb.gif';
 $baseUrl = JURI::base();
 
 $facebook = new Facebook(array('appId'=>JMB_FACEBOOK_APPID,'secret'=>JMB_FACEBOOK_SECRET,'cookie'=>JMB_FACEBOOK_COOKIE));
-$user = $facebook->api('/me');
+$session = $facebook->getSession();
+$user = ($session)?$facebook->api('/me'):false;
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -78,7 +79,7 @@ $user = $facebook->api('/me');
 						<tr>
 							<!-- Title -->
 							<td><div class="jmb_header_logo">&nbsp;</div></td>
-							<?php if(isset($_SESSION['jmb']['tid'])): ?>
+							<?php if($user): ?>
 							<!-- Family Line -->
 							<td>
 								<div class="jmb_header_fam_line">
@@ -90,11 +91,11 @@ $user = $facebook->api('/me');
 							<!-- Profile Line -->
 							<td>
 								<div class="jmb_header_settings">	
-									<?php if($_SESSION['jmb']['tid']): ?>
+									<?php if(false): ?>
 										<?php if($inIFrame): ?>
 											<div class ="embedded">
 												<div class="myfamily">My Family</div>
-												<div id="<?php echo $user_profile['id']; ?>" class="myprofile">My Profile</div>
+												<div id="<?php echo $user['id']; ?>" class="myprofile">My Profile</div>
 											</div>
 										<?php else: ?>
 											<div class="expanded">

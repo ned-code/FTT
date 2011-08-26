@@ -94,7 +94,6 @@ class FamiliesList{
         	if($fId==null||$id==null) { return false; }
         	$sqlString = "INSERT INTO #__mb_childrens (`fid`, `gid`, `frel`, `mrel`) VALUES (?,?,?,?)";
         	$sql = $this->core->sql($sqlString, $fId, $id, $fRel, $mRel);
-        	echo $sql;
 		$this->db->setQuery($sql);    
         	$this->db->query();
         }

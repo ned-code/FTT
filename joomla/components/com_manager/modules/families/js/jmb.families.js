@@ -42,7 +42,7 @@ JMBFamilies.prototype = {
 	_createDiv:function(){
 		var sb = host.stringBuffer();
 		sb._('<div class="jmb-families-body">');
-			sb._('<table>');
+			sb._('<table width="100%">');
 				sb._('<tr>');
 					sb._('<td style="width:170px;"><div style="width:150px;" class="jmb-families-header">&nbsp;</div></td>');
 					sb._('<td style="width:150px;"><div class="jmb-families-sircar">&nbsp;</div></td>');
@@ -172,8 +172,6 @@ JMBFamilies.prototype = {
 				date = self._getDate(person);
 				if(date.length!=0) sb._('<div class="jmb-families-child-date">')._(self._getDate(person))._('</div>');
 			sb._('</div>');
-			
-			
 			if(jQuery(obj.spouses).length != 0||jQuery(obj.children).length != 0){
 				buttonChild = (k!=1)?'jmb-families-button childs active small':'jmb-families-button childs active';
 				sb._('<div id="')._(person.Id)._('" class="')._(buttonChild)._('">&nbsp;</div>');
@@ -183,6 +181,7 @@ JMBFamilies.prototype = {
 			}
 			arrowClass = (k!=1)?'jmb-families-arrow-'+arrow+' small':'jmb-families-arrow-'+arrow;
 			sb._('<div class="')._(arrowClass)._('">&nbsp</div>');
+			if(date.length==0) sb._('<div>&nbsp;</div>');
 		return jQuery(sb.result());
 	},
 	_createDivInfo:function(obj){

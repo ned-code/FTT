@@ -15,6 +15,7 @@ require_once(JPATH_COMPONENT.DS.'php'.DS.'facebook.php');
 $facebook = new Facebook(array('appId'=>JMB_FACEBOOK_APPID,'secret'=>JMB_FACEBOOK_SECRET,'cookie'=>JMB_FACEBOOK_COOKIE));
 $session = $facebook->getSession();
 
+
 # include JS and CSS 
 $document =& JFactory::getDocument();
 

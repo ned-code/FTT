@@ -68,7 +68,7 @@ JMBProfileTooltip.prototype = {
 			sb._('</fieldset></div>');
 			sb._("<div class='jmb-profile-tooltip-options'><span type='title'>More Options</span><table style='display:none;'><tr><td><div class='jmb-profile-tooltip-options-delete'><span type='delete'>Delete this Person</span></div></td></tr></table></div>")
 			if(p.data.indiv.FacebookId == '0'){
-				var name = (p.data.indiv.Nick!='')?p.data.indiv.Nick:p.data.indiv.FirstName;
+				var name = (p.data.indiv.Nick!=null)?p.data.indiv.Nick:p.data.indiv.FirstName;				
 				sb._("<div class='jmb-profile-tooltip-send'>");
 					sb._('<table>');
 						sb._('<tr>');
