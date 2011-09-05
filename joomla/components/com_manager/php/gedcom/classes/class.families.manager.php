@@ -13,7 +13,7 @@ class FamiliesList{
         	$this->db->setQuery($sql);         
         	$rows = $this->db->loadAssocList();
         	if($rows == null) { return false; }
-                return $this->setData($id ,$rows[0], $lite);
+                return $this->setData($rows[0]['husb'] ,$rows[0], $lite);
         }
         public function save($family){
         	if(($family->Sircar != null && $family->Sircar->Id)||($family->Spouse != null && $family->Spouse->Id)){
