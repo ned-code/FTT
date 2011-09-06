@@ -346,12 +346,13 @@ class JMBController extends JController
         	$view = JRequest::getCmd('view');
         	$id = JRequest::getCmd('id');
         	if($option!='com_manager') exit(); 
-        	$fid = $fb->getUser();
+        	$session = $fb->getSession();
+        	$fid = ($session)?$fb->getUser():null;
 
         	$invitation_page_id = $this->get_categories('invitation');
         	if($view=='single'&&$id==$invitation_page_id&&!$task){
         		$token = JRequest::getCmd('token');
-        		if($fid==null){
+        		if(!$session){
         			$_SESSION['jmb']['invitation'] = $token;
         			header('Location:'.JURI::base().'index.php/login');
         		} else {
@@ -359,21 +360,21 @@ class JMBController extends JController
         		}
         	}
         	
-        	if($fid==null){
+        	if(!$session){
         		$login_page_id = $this->get_categories('login');
-        		if($view!='single'&&$id!=$login_page_id&&!$task){
+        		if($id!=$login_page_id&&!$task){
         			header('Location:'.JURI::base().'index.php/login');
         		}
         	} else {
         		if(isset($_SESSION['jmb']['invitation'])){
-        			$this->invite($fid, $_SESSION['jmb']['invitation'], false);
+        			$this->invite($fid, $_SESSION['jmb']['invitation']);
         		}
         		$_SESSION['jmb']['fid'] = $fid;
         		$link = $this->check_user_in_system($fid);
         		if($task) return;        		
         		if(empty($link)){
         			$cat_id = $this->get_categories('first');
-        			if($view!='single'&&$id!=$cat_id&&!$task){
+        			if($id!=$cat_id&&!$task){
         				header('Location:'.JURI::base().'index.php/first-page');
         			}
         		} else if($view!='multi'){ 
@@ -384,6 +385,12 @@ class JMBController extends JController
         			$_SESSION['jmb']['permission'] = $link['type'];
         		}
         	}        	
+        }
+        
+        public function timeout(){
+        	ob_clean();
+        	echo isset($_SESSION['jmb']);
+        	exit();
         }
 }
 ?>

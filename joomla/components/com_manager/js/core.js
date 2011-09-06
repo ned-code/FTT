@@ -169,6 +169,19 @@ storage.deleteButton.init = function(container){
 	var d_object = new JMBDelete(d_button);
 }
 
+storage.timeout = function(){
+	setInterval(function(){
+		jQuery.ajax({
+			url: 'index.php?option=com_manager&task=timeout',
+			type: "POST",
+			dataType: "json",
+			complete : function (req, err) {}
+		});
+	}, 60000)
+
+}
+storage.timeout();
+
 //core object
 var date = new Date();
 var id =  Math.floor(date.getTime() /1000);
