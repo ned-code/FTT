@@ -105,18 +105,25 @@ storage.header.famLine = (function(){
 			jQuery(this.buttons).removeClass('enabled').removeClass('disabled');
 			jQuery(this.buttons).each(function(i, e){
 				switch(r){
-					case "mother": (jQuery(e).hasClass('jmb_header_fam_line_mother'))?jQuery(e).addClass('enabled'):jQuery(e).addClass('disabled'); break;
-					case "father": (jQuery(e).hasClass('jmb_header_fam_line_father'))?jQuery(e).addClass('enabled'):jQuery(e).addClass('disabled'); break;
+					case "mother":
+					case "father":
+						(jQuery(e).hasClass('jmb_header_fam_line_mother')||jQuery(e).hasClass('jmb_header_fam_line_father'))?jQuery(e).addClass('enabled'):jQuery(e).addClass('disabled');
+					break;
 					case "both": jQuery(e).addClass('enabled'); break;
 				}
 			});
-			if(!block) { jQuery(this.buttons).click(function(){ 
-				if(jQuery(this).hasClass('disabled')) return false;
-				self.click(this); 
-				return false;
-			});
+			if(!block) { 
 			} else {
 				jQuery(this.buttons).removeClass('enabled').addClass('disabled');
+			}
+			jQuery(this.buttons).unbind();
+			if(r!='both'){ 
+				jQuery(this.buttons).click(function(){ 
+					if(jQuery(this).hasClass('disabled')) return false;
+					self.click(this); 
+					storage.header.click();
+					return false;
+				});
 			}
 			this.click(jQuery('#'+r));
 		},
@@ -131,7 +138,7 @@ storage.header.famLine = (function(){
 	}
 }).call(storage.header.famLine)
 storage.header.famLine.init('.jmb_header_fam_line_container', function(){
-	this.mode('both', true);
+	this.mode('both');
 });
 
 

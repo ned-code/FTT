@@ -27,11 +27,9 @@ function JMBDescendantTree(obj){
 	//this.profileEdit = new DescendantTreeProfileEdit(this);
 	this.obj = obj;
 	
-	jQuery('.jmb_header_fam_line').show();
-	jQuery('.jmb_header_fam_line').find('span').removeClass('active');
-	jQuery('.jmb_header_fam_line').find('span#mother').addClass('active');
-	storage.header.block = false;
-
+	storage.header.famLine.show();
+	storage.header.famLine.mode('mother');
+	
 	self.loadTree(dhxTree, 'mother');		
 	dhxTree.attachEvent("onXLE", function(tree,id){
 		var items = this.getAllSubItems(0).split(',');

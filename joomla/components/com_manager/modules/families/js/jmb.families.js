@@ -31,7 +31,7 @@ function JMBFamilies(obj){
 		self.profile.cleaner();
 	})
 
-	jQuery('.jmb_header_fam_line').hide();
+	storage.header.famLine.hide();
 }
 JMBFamilies.prototype = {
 	_ajax:function(func, params, callback){

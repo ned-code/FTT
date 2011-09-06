@@ -23,9 +23,8 @@ function JMBThisMonth(obj){
 		self.profile.cleaner();
 	});
 	
-	jQuery('.jmb_header_fam_line').show();
-	jQuery('.jmb_header_fam_line').find('span').addClass('active');
-	storage.header.block = true;	
+	storage.header.famLine.show();
+	storage.header.famLine.mode('both');	
 }
 
 JMBThisMonth.prototype = {

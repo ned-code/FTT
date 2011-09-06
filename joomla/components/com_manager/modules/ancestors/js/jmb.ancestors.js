@@ -37,7 +37,7 @@ function JMBAncestors(obj){
 		self.profile.cleaner();
 	})
 	
-	jQuery('.jmb_header_fam_line').hide();
+	storage.header.famLine.hide();
 }
 
 JMBAncestors.prototype = {
