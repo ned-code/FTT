@@ -132,6 +132,7 @@ JMBProfileTooltip.prototype = {
 		sb._('</div>');
 		var html = sb.result();
 		var htmlObject = jQuery(html);
+		self.parent.media.init(htmlObject);
 		return htmlObject;
 	},
 	validToInvitation:function(json){

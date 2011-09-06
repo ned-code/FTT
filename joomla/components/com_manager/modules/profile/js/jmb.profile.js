@@ -212,7 +212,7 @@ JMBProfile.prototype = {
 	},
 	_getImage:function(obj,x,y){
 		return ['<img src="index.php?option=com_manager&task=getResizeImage&id=',obj.Id,'&w=',x,'&h=',y,'">'].join('');
-	},
+	},	
 	_getPhoto:function(obj, x,y){
 		return ['<img src="index.php?option=com_manager&task=getResizeImage&id=',obj.photo,'&w=',x,'&h=',y,'">'].join('');
 	},
@@ -243,7 +243,7 @@ JMBProfile.prototype = {
 		var length = jQuery(p).length;
 		sb._('<ul style="width:')._(55*length)._('px;">');
 			jQuery(p).each(function(i,e){
-				sb._('<li><img src="index.php?option=com_manager&task=getResizeImage&id=')._(e.Id)._('&w=50&h=50"></li>');
+				sb._('<li><a href="')._(e.FilePath)._('" rel="prettyPhoto[pp_gal]" title=""><img src="index.php?option=com_manager&task=getResizeImage&id=')._(e.Id)._('&w=50&h=50')._('" alt="" /></a></li>')
 			});
 		sb._('</ul>')
 		return sb.result();

@@ -486,7 +486,7 @@ class JMBProfile {
 		$mail_body .= "Your ".$fmbUser['indiv']->Relation.", ".$fmbUser['indiv']->FirstName." ".$fmbUser['indiv']->LastName.", has invited you to join your family tree on Facebook.<br>";
 		$mail_body .= "This tree is a private space on that can only be seen by your family members.<br><br>";
 		
-		$mail_body .= "<a href='http://50.19.222.126/index.php/invitation?token=".$token."'>Click here to accept the invitation</a> (you must have a facebook account).<br>";
+		$mail_body .= "<a href='http://www.familytreetop.com/index.php/invitation?token=".$token."'>Click here to accept the invitation</a> (you must have a facebook account).<br>";
 		$mail_body .= "<a href='http://www.facebook.com/profile.php?id=".$facebook_id."'>Click here to send ".$fmbUser['indiv']->FirstName." a message</a>.<br><br>";
 		
 		$mail_body .= "This is automated message from Family Treetop. Please do not respond to this email. Click <a href='http://apps.facebook.com/fmybranches/'>here</a> to find out more about Family Treetop.";

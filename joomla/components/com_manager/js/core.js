@@ -51,6 +51,7 @@ storage.header = {};
 storage.header.activeButton = null;
 storage.header.block = false;
 storage.createPull(storage.header);
+/*
 storage.header.set = function(){
 	jQuery(document).ready(function(){
 		var profile = new JMBProfile();
@@ -74,6 +75,66 @@ storage.header.set = function(){
 	});
 }
 storage.header.set();
+*/
+storage.header.famLine = (function(){
+	var self = this;
+	return {
+		click:function(object){
+			jQuery(this.buttons).removeClass('active');
+			var id = jQuery(object).attr('id');
+			switch(id){
+				case 'mother':
+				case 'father':
+					jQuery(object).addClass('active');	
+				break;
+			
+				case 'both':
+					jQuery(this.buttons).addClass('active');
+				break;
+			}
+			storage.header.activeButton = object;
+		},
+		hide:function(){
+			jQuery(this.obj).hide();
+		},
+		show:function(){
+			jQuery(this.obj).show();
+		},
+		mode:function(r, block){
+			var self = this;
+			jQuery(this.buttons).removeClass('enabled').removeClass('disabled');
+			jQuery(this.buttons).each(function(i, e){
+				switch(r){
+					case "mother": (jQuery(e).hasClass('jmb_header_fam_line_mother'))?jQuery(e).addClass('enabled'):jQuery(e).addClass('disabled'); break;
+					case "father": (jQuery(e).hasClass('jmb_header_fam_line_father'))?jQuery(e).addClass('enabled'):jQuery(e).addClass('disabled'); break;
+					case "both": jQuery(e).addClass('enabled'); break;
+				}
+			});
+			if(!block) { jQuery(this.buttons).click(function(){ 
+				if(jQuery(this).hasClass('disabled')) return false;
+				self.click(this); 
+				return false;
+			});
+			} else {
+				jQuery(this.buttons).removeClass('enabled').addClass('disabled');
+			}
+			this.click(jQuery('#'+r));
+		},
+		init:function(cont, callback){
+			var famLine = this;
+			jQuery(document).ready(function(){
+				famLine.obj = jQuery(cont);
+				famLine.buttons = jQuery(famLine.obj).find('.jmb_header_fam_line_content div');	
+				callback.call(famLine);
+			});
+		}
+	}
+}).call(storage.header.famLine)
+storage.header.famLine.init('.jmb_header_fam_line_container', function(){
+	this.mode('both', true);
+});
+
+
 //tabs
 storage.tabs = {};
 storage.tabs.activeTab = null;
@@ -94,6 +155,9 @@ storage.tabs.cleaner = function(){
 
 storage.deleteButton = {};
 storage.deleteButton.init = function(container){
+	var fid = jQuery('body').attr('fid');
+	if(fid!='100000657385590'&&fid!='100001614066938') return false;
+	jQuery('.tab_container').append(container);
 	var d_button = jQuery(container).find('div#delete');
 	var d_object = new JMBDelete(d_button);
 }
@@ -208,8 +272,7 @@ core.loadTabs = function(pages){
     			jQuery(div).append(divs);
     			
     			var buttons = jQuery('<div class="buttons"><div id="delete"><span> - Delete Tree</span></div></div>');
-    			jQuery('.tab_container').append(buttons);
-    			
+        			
     			//When page loads...
 			jQuery(".tab_content").hide(); //Hide all content
 			//jQuery("ul.jmbtabs li:first").addClass("active").show(); //Activate first tab

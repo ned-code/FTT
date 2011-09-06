@@ -209,6 +209,10 @@ DescendantTreeProfile.prototype = {
 	getPhoto:function(obj, x,y){
 		return ['<img src="index.php?option=com_manager&task=getResizeImage&id=',obj.Id,'&w=',x,'&h=',y,'">'].join('');
 	},
+	getImage:function(image, x, y){
+		var sb = host.stringBuffer();
+		return sb._('<a href="')._(image.FilePath)._('" rel="prettyPhoto[pp_gal]" title=""><img src="index.php?option=com_manager&task=getResizeImage&id=')._(image.Id)._('&w=')._(x)._('&h=')._(y)._('" alt="" /></a>').result();
+	},
 	setBodyMedia:function(obj, json){
 		var ul = jQuery(obj).find('.jmb-dtp-body-media').find('ul');
 		if(ul.length>0) jQuery(ul).remove();
@@ -216,10 +220,11 @@ DescendantTreeProfile.prototype = {
 		var self = this, sb = host.stringBuffer();
 		sb._('<ul class="media-list">');
 			jQuery(json.photo).each(function(i,photo){
-				sb._('<li class="media-item">')._(self.getPhoto(photo, 50, 50))._('</li>');
+				sb._('<li class="media-item">')._(self.getImage(photo, 50, 50))._('</li>');
 			});
 		sb._('</ul>');
 		var html = jQuery(sb.result());
+		self.profile.media.init(html);
 		jQuery(obj).find('.jmb-dtp-body-media').append(html);
 	},
 	validToInvitation:function(json){

@@ -70,7 +70,7 @@ $user = ($session)?$facebook->api('/me'):false;
                 <!-- fmb template script -->
                 <script type="text/javascript" src="<?php echo $this->baseurl ?>/templates/fmb/javascript/fmb.js"></script>
 	</head>
-	<body>
+	<body fid="<?php echo ($user)?$user['id']:'' ?>">
 		<div class="content" style="<?php if($inIFrame): ?>max-width:760px;<?php else: ?>max-width:980px;<?php endif; ?>">
 			<div class="header">
 				<!-- <1111jdoc:include type="modules" name="header" /> -->
@@ -81,11 +81,23 @@ $user = ($session)?$facebook->api('/me'):false;
 							<td><div class="jmb_header_logo">&nbsp;</div></td>
 							<?php if($user): ?>
 							<!-- Family Line -->
+							<!--
 							<td>
 								<div class="jmb_header_fam_line">
 									<font class="jmb_line_title">Family Line:</font>
 									<span id="mother" class="jmb_line_left active">My Mother</span>
 									<span id="father" class="jmb_line_right">My Father</span>
+								</div>
+							</td>
+							-->
+							<td>
+								<div class="jmb_header_fam_line_container">
+									<div class="jmb_header_fam_line_title"><span>Family Line:</span></div>
+									<div class="jmb_header_fam_line_content">
+										<div id="mother" class="jmb_header_fam_line_mother enabled active"><span>My Mother</span></div>
+										<div id="father" class="jmb_header_fam_line_father disabled"><span>My Father</span></div>
+										<div id="both" class="jmb_header_fam_line_both disabled"><span>both</span></div>
+									</div>
 								</div>
 							</td>
 							<!-- Profile Line -->
