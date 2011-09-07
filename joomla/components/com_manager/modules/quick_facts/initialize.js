@@ -1,4 +1,1 @@
-var quickFacts = document.getElementById('quick_facts');
-if(quickFacts){
-	new QuickFacts(quickFacts);
-}
+{"container":"jmb_quick_facts","object":"JMBQuickFacts"}

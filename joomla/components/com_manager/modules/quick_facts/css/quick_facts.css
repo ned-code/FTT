@@ -1,40 +1,40 @@
-.qf-box {
-	font-size: 12px !important;
-	font-family: Helvetica,Arial,sans-serif !important;
-	border: 1px solid gray;
-	background: white;
-	margin: 5px;	
-	-webkit-border-radius: 10px;
-	-moz-border-radius: 10px;
-	-webkit-user-select:none;
-	-moz-user-select:none;
-	border-radius: 10px;
-	behavior: url(border-radius.htc);
-	height:120px;
+.jmb_quick_facts_container {
+	font-family: Calibri,Tahoma,sans-serif;
+	font-size: 12px;
+	font-weight: normal;
+	margin: 10px;
+	position: relative;
 }
-
-.qf-header{
-	color:white;
-	background: gray;
-	font-size:18px;
-	line-height:30px;
-	text-align:center !important;
-	width: 121px;
-	height: 30px;
+.jmb_qf_header {
+	background: none repeat scroll 0 0 #DEEDAA;
+	border: 1px solid #999999;
+	height: 22px;
+	padding: 5px;
 }
-
-.qf-header{
-	position:relative;
-	top: 45px;
-	left: -30px;
-	-webkit-transform: rotate(270deg);
-	-moz-transform: rotate(270deg);
-	-o-transform: rotate(270deg);
-	transform: rotate(270deg);
-	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+.jmb_qf_header  span{
+	font-size: 18px;
+	left: 40%;
+    	position: absolute;
+    	top: 5px;
 }
-.qf-body {
-	position:relative;
-	top: -10px;
-	left: 60px;
+.jmb_qf_content {
+	background: none repeat scroll 0 0 white;
+	border: 1px solid #999999;
+	margin-top: -1px;
+	padding: 5px;
+}
+.jmb_qf_item {
+	margin-top: 3px;
+}
+.jmb_qf_title {
+	font-weight: bold;
+}
+.jmb_qf_text {
+	margin-left: 5px;
+}
+.jmb_qf_button {
+	color: blue;
+	cursor: pointer;
+    	position: absolute;
+    	right: 0;
 }
