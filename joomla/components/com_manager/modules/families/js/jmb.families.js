@@ -172,7 +172,7 @@ JMBFamilies.prototype = {
 				date = self._getDate(person);
 				if(date.length!=0) sb._('<div class="jmb-families-child-date">')._(self._getDate(person))._('</div>');
 			sb._('</div>');
-			if(jQuery(obj.spouses).length != 0||jQuery(obj.children).length != 0){
+			if((jQuery(obj.spouses).length != 0&&obj.spouses[0]!=null)||jQuery(obj.children).length != 0){
 				buttonChild = (k!=1)?'jmb-families-button childs active small':'jmb-families-button childs active';
 				sb._('<div id="')._(person.Id)._('" class="')._(buttonChild)._('">&nbsp;</div>');
 			} else {
@@ -201,6 +201,20 @@ JMBFamilies.prototype = {
 			sb._('<div>')._(location.Country)._('</div>');
 		sb._('</div>');
 		return jQuery(sb.result());
+	},
+	sortChildrens:function(childrens){
+		var self = this;
+		var get_year = function(object){
+			var indiv = (object&&object.indiv!=null)?object.indiv:false;
+			var event = (indiv&&indiv.Birth.length!=0&&indiv.Birth[0]!=null)?indiv.Birth[0]:false;
+			return (event&&event.From!=null&&event.From.Year!=null)?event.From.Year:false; 
+		}
+		childrens.sort(function(a,b){		
+			var a_year = get_year(self.individs[a.indKey]);
+			var b_year = get_year(self.individs[b.indKey]);
+			return (a_year&&b_year)?a_year-b_year:0;
+		})
+		return childrens;
 	},
 	render:function(obj){
 		var self = this;
@@ -248,7 +262,7 @@ JMBFamilies.prototype = {
 		var childsTable = jQuery('<table align="center" width="100%"><tr><td></td></tr><tr><td></td></tr></table>');
 		var count = (childLength >10 && childLength <20)? Math.round(childLength/2) :10;
 		jQuery(div).find('.jmb-families-childs-container').append(childsTable);
-		jQuery(obj.childrens).each(function(index, element){
+		jQuery(this.sortChildrens(obj.childrens)).each(function(index, element){
 			if(element.indKey==null) return;
 			var childDiv = self._createDivChild(element, 'up', (childLength<10||(childLength>10&&childLength<20))?1:0.9);
 			jQuery(childsTable[0].rows[(index<count)?0:1].cells[0]).append(childDiv);

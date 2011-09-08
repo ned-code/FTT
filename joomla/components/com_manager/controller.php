@@ -261,6 +261,7 @@ class JMBController extends JController
         	$srcHeight = imagesy($src);
 
         	//get ratio
+        	/*
         	if($srcWidth>$defaultWidth&&$srcHeight>$defaultHeight){
         		$ratio = ($srcWidth>=$srcHeight)?$srcWidth/$defaultWidth:$srcHeight/$defaultHeight;
         	} else if($srcWidth>$defaultWidth){
@@ -269,14 +270,32 @@ class JMBController extends JController
         		$ratio = $srcHeight/$defaultHeight;
         	} else {
         		$ratio = ($srcWidth<$srcHeight)?$srcHeight/$defaultHeight:$srcWidth/$defaultWidth;
-        	} 
-
+        	}
+        	*/
+        	
+        	if($srcWidth>$defaultWidth&&$srcHeight>$defaultHeight){
+        		$ratio = ($srcWidth>=$srcHeight)?$srcHeight/$defaultHeight:$srcWidth/$defaultWidth;
+        	} else if($srcWidth>$defaultWidth){
+        		$ratio = $srcHeight/$defaultHeight;
+        	} else if($srcHeight>$defaultHeight){
+        		$ratio = $srcWidth/$defaultWidth;
+        	} else {
+        		$ratio = ($srcWidth<$srcHeight)?$srcWidth/$defaultWidth:$srcHeight/$defaultHeight;
+        	}
+        	
+        	
         	//create new image
         	$width = round($srcWidth/$ratio);
         	$height = round($srcHeight/$ratio);
         	
-        	$img = imagecreatetruecolor($width,$height);
-        	imagecopyresampled($img, $src, 0, 0, 0, 0, $width, $height, $srcWidth, $srcHeight);
+        	//$img = imagecreatetruecolor($width,$height);
+        	//imagecopyresampled($img, $src, 0, 0, 0, 0, $width, $height, $srcWidth, $srcHeight);
+        	
+        	$src_x = ($width>$defaultWidth)?round(($width-$defaultWidth)/2):0;
+        	$src_y = ($height>$defaultHeight)?round(($height-$defaultHeight)/2):0;
+
+        	$img = imagecreatetruecolor($defaultWidth,$defaultHeight);
+        	imagecopyresampled($img, $src, 0, 0, $src_x, $src_y, $width, $height, $srcWidth, $srcHeight);
         	
         	ob_clean();
         	header("Content-type: image/".$type[1]); 

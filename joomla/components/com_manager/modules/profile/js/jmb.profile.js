@@ -572,6 +572,7 @@ JMBProfile.prototype = {
 		jQuery(target).find('input[name="last_name"]').val(object.indiv.LastName);
 		jQuery(target).find('input[name="know_as"]').val(object.indiv.Nick);
 		jQuery(target).find('.jmb-dialog-form-gender input[value="'+object.indiv.Gender+'"]').attr('checked', true);
+		jQuery(target).find('select[name="gender"]').find('option[value="'+object.indiv.Gender+'"]').attr('selected', 'selected');		
 		if(jQuery(object.indiv.Birth).length!=0){
 			jQuery(target).find('select[name="fb_day"] option[value="'+object.indiv.Birth[0].From.Day+'"]').attr('selected', 'selected');
 			jQuery(target).find('select[name="fb_month"] option[value="'+object.indiv.Birth[0].From.Month+'"]').attr('selected', 'selected');
