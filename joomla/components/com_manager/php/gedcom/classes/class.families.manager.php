@@ -97,6 +97,14 @@ class FamiliesList{
 		$this->db->setQuery($sql);    
         	$this->db->query();
         }
+        public function deleteChild($id){
+           if ($id==null) {return false;}
+           $pers=$this->core->individuals->get($id);
+           $sql=$this->core->sql("DELETE FROM #__mb_childrens WHERE `gid`=?",$id);
+           $this->db->setQuery($sql);    
+       	   $this->db->query();
+           $this->core->individuals->delete($id);    
+        }
         public function getPersonFamilies($indKey, $lite=false){
         	if($indKey==null){ return null; }
         	$sql = $this->core->sql('SELECT id, husb, wife, type FROM #__mb_families WHERE husb=? OR wife=?', $indKey, $indKey);
