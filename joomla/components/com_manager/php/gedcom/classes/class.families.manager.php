@@ -97,6 +97,14 @@ class FamiliesList{
 		$this->db->setQuery($sql);    
         	$this->db->query();
         }
+        public function deleteChild($id){
+           if ($id==null) {return false;}
+           $pers=$this->core->individuals->get($id);
+           $sql=$this->core->sql("DELETE FROM #__mb_childrens WHERE `gid`=?",$id);
+           $this->db->setQuery($sql);    
+       	   $this->db->query();
+           $this->core->individuals->delete($id);    
+        }
         public function getPersonFamilies($indKey, $lite=false){
         	if($indKey==null){ return null; }
         	$sql = $this->core->sql('SELECT id, husb, wife, type FROM #__mb_families WHERE husb=? OR wife=?', $indKey, $indKey);
@@ -111,7 +119,12 @@ class FamiliesList{
         }
         public function getFamilyChildrenIds($fId){
         	if($fId==null) { return null; }
-        	$sql = $this->core->sql('SELECT gid FROM #__mb_childrens WHERE fid=?', $fId);
+        	$sqlString = "SELECT childrens.gid FROM #__mb_childrens as childrens
+        		LEFT JOIN #__mb_events as events ON events.individuals_id = childrens.gid AND events.type = 'BIRT'
+        		LEFT JOIN #__mb_dates as dates ON dates.events_id = events.id
+        		WHERE fid=?
+        		ORDER BY  dates.f_year ASC";
+        	$sql = $this->core->sql($sqlString, $fId);
         	$this->db->setQuery($sql);         
         	$rows = $this->db->loadAssocList();
         	if($rows!=null){

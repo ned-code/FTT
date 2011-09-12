@@ -76,6 +76,10 @@ $document->addScript('components/com_manager/modules/profile/js/jmb.profile.js?1
 $document->addScript('components/com_manager/modules/profile/js/jmb.profile.full.js?111');
 $document->addScript('components/com_manager/modules/profile/js/jmb.profile.tooltip.js?111');
 
+//login\profile in header (login\logout)
+$document->addStyleSheet('components/com_manager/modules/login/css/jmb.login.css?111');
+$document->addScript('components/com_manager/modules/login/js/jmb.login.js?111');
+
 # Create the controller
 $controller = new JMBController( );
 

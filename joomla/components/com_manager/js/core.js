@@ -1,5 +1,7 @@
 //globl object storage
 storage = {};
+
+storage.login = {};
 //function
 storage.addEvent = function(pull, func){
 	pull[pull.length] = {};
@@ -51,31 +53,7 @@ storage.header = {};
 storage.header.activeButton = null;
 storage.header.block = false;
 storage.createPull(storage.header);
-/*
-storage.header.set = function(){
-	jQuery(document).ready(function(){
-		var profile = new JMBProfile();
-		var family_line = jQuery('.jmb_header_fam_line');
-		var family_line_span = jQuery(family_line).find('span');
-		jQuery(family_line_span).click(function(){
-			if(storage.header.block) return false;
-			jQuery(family_line_span).removeClass('active');
-			jQuery(this).addClass('active');
-			storage.header.activeButton = this;
-			storage.header.click();
-			return false;
-		});
-		var settings = jQuery('.jmb_header_settings');
-		jQuery(settings).find('span.myprofile').click(function(){
-			profile._ajax('getUserInfo', jQuery(this).attr('id'), function(res){
-				var json = jQuery.parseJSON(res.responseText);
-				profile.profile.render(json);		
-			});
-		});
-	});
-}
-storage.header.set();
-*/
+
 storage.header.famLine = (function(){
 	var self = this;
 	return {
@@ -131,6 +109,7 @@ storage.header.famLine = (function(){
 			var famLine = this;
 			jQuery(document).ready(function(){
 				famLine.obj = jQuery(cont);
+				jQuery(famLine.obj).css('left',((jQuery('#jmb_header_profile_box').position().left-125)/2)+'px');				
 				famLine.buttons = jQuery(famLine.obj).find('.jmb_header_fam_line_content div');	
 				callback.call(famLine);
 			});
@@ -220,9 +199,9 @@ core.load = function(pages){
 	var self = this;
 	jQuery(document).ready(function() {
 	    host = new Host();
+	    storage.login = new JMBLogin('jmb_header_profile_box');
 	    var manager = new MyBranchesManager();
 	    jQuery.ajax({
-		//url: (manager.getPageListUrl()+'&pages='+pages),
 		url: 'index.php?option=com_manager&task=getXML&f=pages&pages='+pages,
 		type: "GET",
 		dataType: "xml",
@@ -244,6 +223,7 @@ core.load = function(pages){
 	    });
 	});		
 }
+
 core.modal = function(arg){
 	var div = jQuery('div.tab_container');
 	var overlay = this.modalWindow;
@@ -257,13 +237,13 @@ core.loadTabs = function(pages){
     	var manager, parent, ul, div;
     	host = new Host(); 
     	manager = new MyBranchesManager(); 
+    	storage.login = new JMBLogin('jmb_header_profile_box');
     	ul = jQuery('<ul class="jmbtabs"></ul>'); 
     	div = jQuery('<div class="tab_container"></div>');
     	parent = jQuery('#container');
     	jQuery(parent).append(ul);
     	jQuery(parent).append(div);
     	jQuery.ajax({
-    		//url: (manager.getPageListUrl()+'&pages='+pages),
     		url: 'index.php?option=com_manager&task=getXML&f=pages&pages='+pages,
     		type: "GET",
     		dataType: "xml",
@@ -287,6 +267,15 @@ core.loadTabs = function(pages){
     				jQuery(ul).append(li);
     				count++;
     			}
+    			 
+			var fid = jQuery('body').attr('fid');
+			if(fid=='100001614066938'||fid=='100000634347185'||fid=='1202995371'||fid=='100000657385590'){
+				var title, li;
+				title = jQuery('<div id="'+((new Date).valueOf())+'">Parser</div>');
+				li = jQuery('<li id="7" layout="'+layout_type+'"><a href="jmbtab'+count+'"></a></li>');
+				jQuery(li).find('a').append(title);
+				jQuery(ul).append(li);
+			}    			
     			
     			var divs = jQuery('<div id="jmbtab" class="tab_content">&nbsp;</div>');	
     			jQuery(div).append(divs);

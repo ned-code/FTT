@@ -1,25 +1,94 @@
-function Login(obj){
+function JMBLogin(obj){
 	obj = jQuery('#'+obj);
-	
-	var login_div = jQuery('<div class="jmb-login-content"><div class="title"><span>Login to access your family tree</span></div><div class="button"><fb:login-button>Connect with Facebook</fb:login-button></div></div>');
-	jQuery(obj).append(login_div);
-	
-	FB.init({
-		appId: "184962764872486", 
-		status:true, 
-		cookie:true, 
-		xfbml:true
-	});
 
+	this.dialog_div = jQuery('<div></div>');
+	
+	var box = jQuery('<div class="body"><div class="title">&nbsp;</div><div class="content">&nbsp;</div><div class="avatar"></div></div>');
+	jQuery(obj).append(box);
+	
+	var parent = this;
+	var get_avatar = function(id){
+		return ['<img src="index.php?option=com_manager&task=getResizeImage&fid=',id,'&w=50&h=50">'].join('');
+	}
+	
+	parent.init();
+	FB.getLoginStatus(function(response) {
+		if (response.session!=null) {
+			FB.api('/me', function(me) {
+				jQuery(box).find('.title').html(me.name);
+				var buttons = jQuery('<ul class="buttons"><li><span id="profile">Profile</span></li><li><span id="settings">Settings</span></li><li><span id="logout">Logout</span></li></ul>');
+				jQuery(buttons).find('span').click(function(){
+					parent[jQuery(this).attr('id')](me)
+				});
+				jQuery(box).find('.content').css('width', '130px').append(buttons);
+				jQuery(box).find('.avatar').append(get_avatar(me.id));
+			});		
+		} else {
+			jQuery(box).find('.title').html('<span>Login to access your family tree</span>');
+			jQuery(box).find('.content').css('width', '180px').html('<fb:login-button>Connect with Facebook</fb:login-button>');
+			jQuery(box).find('.avatar').hide();	
+			parent.init();
+		}
+	});
+	
 	FB.Event.subscribe('auth.login', function(response) {
 		window.location.reload();
 	});
         FB.Event.subscribe('auth.logout', function(response) {
         	window.location.reload();
         });
+
 }
 
-Login.prototype = {
+JMBLogin.prototype = {
+	ajax:function(func, params, callback){
+		host.callMethod("login", "JMBLogin", func, params, function(res){
+				callback(res);
+		})
+	},
+	init:function(){
+		FB.init({
+			appId: storage.fb.appId, 
+			status:storage.fb.status, 
+			cookie:storage.fb.cookie, 
+			xfbml:storage.fb.xfbml
+		});
+	},
+	profile:function(me){
+		var pr = new JMBProfile();
+		this.ajax('get', me.id, function(res){
+			var response = jQuery.parseJSON(res.responseText);
+			var json = {
+				data: response.fmbUser,
+				fmbUser:response.fmbUser,
+				imgPath:response.imgPath
+			}
+			pr.profile.render(json);
+		});
+	},
+	settings:function(){
+		var settings = {
+			close:function(){
+				jQuery(this).dialog("destroy");
+				jQuery(this).remove();
+			},
+			width:700,
+			height:500,
+			resizable: false,
+			draggable: false,
+			position: "top",
+			closeOnEscape: false,
+			modal:true
+		}
+		jQuery(this.dialog_div).dialog("destroy");
+		jQuery(this.dialog_div).dialog(settings);
+		jQuery(this.dialog_div).parent().css('top', '10px');
+	},
+	logout:function(){
+		FB.logout(function(response) {
+			window.location.reload();
+  		});
+	}
 }
 
 

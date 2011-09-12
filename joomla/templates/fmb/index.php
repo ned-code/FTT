@@ -81,15 +81,6 @@ $user = ($session)?$facebook->api('/me'):false;
 							<td><div class="jmb_header_logo">&nbsp;</div></td>
 							<?php if($user): ?>
 							<!-- Family Line -->
-							<!--
-							<td>
-								<div class="jmb_header_fam_line">
-									<font class="jmb_line_title">Family Line:</font>
-									<span id="mother" class="jmb_line_left active">My Mother</span>
-									<span id="father" class="jmb_line_right">My Father</span>
-								</div>
-							</td>
-							-->
 							<td>
 								<div class="jmb_header_fam_line_container">
 									<div class="jmb_header_fam_line_title"><span>Family Line:</span></div>
@@ -100,38 +91,9 @@ $user = ($session)?$facebook->api('/me'):false;
 									</div>
 								</div>
 							</td>
-							<!-- Profile Line -->
-							<td>
-								<div class="jmb_header_settings">	
-									<?php if(false): ?>
-										<?php if($inIFrame): ?>
-											<div class ="embedded">
-												<div class="myfamily">My Family</div>
-												<div id="<?php echo $user['id']; ?>" class="myprofile">My Profile</div>
-											</div>
-										<?php else: ?>
-											<div class="expanded">
-												<table>
-													<tr>
-														<td>
-															<div class="name"><?php echo $user['name']; ?></div>
-															<div class="menu">
-																<span id="<?php echo $user['id']; ?>" class="myprofile">My Profile</span>
-																<span class="myfamily">My Family</span>
-																<span class="logout">Logout</span>
-															</div>
-														</td>
-														<td>
-															<div class="avatar"><img src="<?php echo 'index.php?option=com_manager&task=getResizeImage&fid='.$user['id'].'&w=50&h=50'; ?>"></div>
-														</td>
-													</tr>
-												</table>
-											</div>
-										<?php endif; ?>
-									<?php endif; ?>
-								</div>
-							</td>
 							<?php endif; ?>
+							<!-- Profile Line -->
+							<td><div id="jmb_header_profile_box" class="jmb_header_profile_box">&nbsp;</div></td>
 							<!-- Expand Button -->
 							<td>
 								<div class="jmb_header_expand">

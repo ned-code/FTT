@@ -98,9 +98,8 @@
 .jmb_header_fam_line_container {
 	font-family: Calibri,Tahoma,sans-serif;
 	font-size: 12px;
-	left: 38%;
 	position: absolute;
-	top: 24%;
+	top:13px;
 }
 .jmb_header_fam_line_container div{
 	display: inline-block;
