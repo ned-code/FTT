@@ -1,0 +1,44 @@
+.jmb-rv-container {
+	font-family: Calibri,Tahoma,sans-serif;
+	font-size: 12px;
+	font-weight: normal;
+	margin: 10px 10px 20px;
+	position: relative;
+}
+.jmb-rv-header {
+	background: none repeat scroll 0 0 #DEEDAA;
+	border: 1px solid #999999;
+	height: 22px;
+	padding: 5px;
+}
+.jmb-rv-header span {
+	font-size: 18px;
+	left: 40%;
+    	position: absolute;
+    	top: 5px;
+}
+.jmb-rv-content {
+	background: none repeat scroll 0 0 white;
+	border: 1px solid #999999;
+    	margin-top: -1px;
+}
+.jmb-rv-content ul {
+	margin: 10px;
+}
+.jmb-rv-content ul li{
+	display: inline-block;
+}
+.jmb-rv-content ul li div.avatar{
+	 border: 1px solid white;
+	 cursor: pointer;
+	 height: 32px;
+	 margin-left: 3px;
+	 margin-top: 5px;
+	 width: 32px;
+}
+.jmb-rv-button {
+	color: blue;
+	cursor: pointer;
+    	position: absolute;
+    	right: 0;
+}

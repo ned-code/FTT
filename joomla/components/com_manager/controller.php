@@ -359,6 +359,14 @@ class JMBController extends JController
         	exit;
         }
         
+        protected function update_login_time ($gid){
+        	$db =& JFactory::getDBO();
+        	$mysqldate = date('Y-m-d H:i:s');
+        	$sql = "UPDATE #__mb_individuals as ind SET last_login='".$mysqldate."' WHERE ind.id ='".$gid."'";
+        	$db->setQuery($sql);
+        	$db->query();
+        }
+        
         public function jmb($fb){
         	$task = JRequest::getCmd('task');
         	$option = JRequest::getCmd('option');
@@ -402,6 +410,7 @@ class JMBController extends JController
         			$_SESSION['jmb']['gid'] = $link['gid'];
         			$_SESSION['jmb']['tid'] = $link['tid'];
         			$_SESSION['jmb']['permission'] = $link['type'];
+        			$this->update_login_time($link['gid']);
         		}
         	}        	
         }
