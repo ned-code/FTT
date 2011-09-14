@@ -344,7 +344,7 @@ class JMBController extends JController
         	$sql = "UPDATE #__mb_tree_links SET `type`='USER' WHERE individuals_id ='".$args[0]."' AND tree_id='".$args[1]."'";
         	$db->setQuery($sql);
         	$db->query();
-        	$sql = "UPDATE #__mb_individuals SET `fid`='".$fid."' WHERE id='".$args[0]."'";
+        	$sql = "UPDATE #__mb_individuals SET `fid`='".$fid."',`registered` = NOW() WHERE id='".$args[0]."'";
         	$db->setQuery($sql);
         	$db->query();
         	$sql = "DELETE FROM #__mb_variables WHERE belongs='".$token."'";

@@ -109,6 +109,7 @@ class JMBRegister {
 		$ind->Gender = $this->getGedGender($info['gender']);
 		if($save){
 			$ind->Id = $this->host->gedcom->individuals->save($ind);
+			$this->host->gedcom->individuals->setRegisteredTime($ind->Id);
 		}
 		return $ind;
 	}

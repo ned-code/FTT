@@ -1,5 +1,6 @@
 function JMBRecentVisitors(obj){
 	obj = jQuery('#'+obj);
+	
 	var content = jQuery('<div class="jmb-rv-header"><span>Recent Visitors</span></div><div class="jmb-rv-content"></div><div class="jmb-rv-button"><span>Show all...</span></div>');
 	var sb = host.stringBuffer();
 	
@@ -36,9 +37,27 @@ function JMBRecentVisitors(obj){
 		var time = get_difference(time, object);
 		var fallback = st._('<div>')._(name)._('</div>')._('<div>')._(time)._('</div>').result();
 		jQuery(container).tipsy({
-			gravity: 's',
+			gravity: 'sw',
 			html: true,
 			fallback: fallback
+		});
+	}
+	
+	var init_visitors = function(ul, json, count){
+		var st = host.stringBuffer();
+		for(var i=0;i<count;i++){
+			var li = jQuery(st.clear()._('<li><div class="avatar">')._(get_avatar(json.response[i]))._('</div></li>').result());
+			jQuery(ul).append(li);
+			init_tipty_tooltip(json.time, json.response[i],li);
+		}
+	}
+	
+	var init_button = function(json){
+		jQuery(content[2]).click(function(){
+			jQuery(content[1]).html('');
+			var ul = jQuery('<ul></ul>');
+			init_visitors(ul, json, json.response.length);
+			jQuery(content[1]).append(ul);	
 		});
 	}
 	
@@ -47,12 +66,8 @@ function JMBRecentVisitors(obj){
 		var json = jQuery.parseJSON(res.responseText);
 		var count = (json.response.length<=15)?json.response.length:15;
 		var ul = jQuery('<ul></ul>');
-		var st = host.stringBuffer();
-		for(var i=0;i<count;i++){
-			var li = jQuery(st.clear()._('<li><div class="avatar">')._(get_avatar(json.response[i]))._('</div></li>').result());
-			jQuery(ul).append(li);
-			init_tipty_tooltip(json.time, json.response[i],li);
-		}
+		init_visitors(ul, json, count);
+		init_button(json);
 		jQuery(content[1]).append(ul);	
 		jQuery(obj).append(content);
 	});	

@@ -1,0 +1,42 @@
+.jmb-latest-updates-container {
+	font-family: Calibri,Tahoma,sans-serif;
+	font-size: 12px;
+    	font-weight: normal;
+    	margin: 10px 10px 20px;
+    	position: relative;
+}
+.jmb-lu-header {
+	background: none repeat scroll 0 0 #DEEDAA;
+	border: 1px solid #999999;
+    	height: 22px;
+    	padding: 5px;
+}
+.jmb-lu-header span {
+	font-size: 18px;
+	left: 35%;
+	position: absolute;
+	top: 5px;
+}
+.jmb-lu-content {
+	background: none repeat scroll 0 0 white;
+	border: 1px solid #999999;
+    	margin-top: -1px;
+    	padding: 5px;
+}
+.jmb-lu-content ul {}
+.jmb-lu-content ul li {
+	display: block;
+}
+.jmb-lu-content ul li div{}
+.jmb-lu-content ul li div span.title {
+	font-weight: bold;
+}
+.jmb-lu-content ul li div span.text {
+	margin-left:5px;
+}
+.jmb-lu-button {
+	color: blue;
+	cursor: pointer;
+    	position: absolute;
+    	right: 0;
+}
