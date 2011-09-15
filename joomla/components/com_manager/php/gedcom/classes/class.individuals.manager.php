@@ -261,9 +261,6 @@ class IndividualsList{
         	$sql = $this->core->sql('DELETE FROM #__mb_individuals WHERE id=?', $id);
         	$this->db->setQuery($sql);    
         	$this->db->query();
-        	$sql = $this->core->sql('DELETE FROM #__mb_tree_links WHERE individuals_id=?', $id);
-        	$this->db->setQuery($sql);    
-        	$this->db->query();
         }
 
         public function getParents($id){
