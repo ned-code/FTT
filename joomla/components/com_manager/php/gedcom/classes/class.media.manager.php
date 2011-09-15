@@ -208,21 +208,6 @@ class MediaList{
 
         }
         
-        public function getNewPhoto($treeId){
-        	 $db =& JFactory::getDBO();
-        	 $sqlString = "SELECT ind.id as id 
-        			FROM #__mb_medias as medias
-				LEFT JOIN #__mb_media_link as media_link ON media_link.mid = medias.id
-				LEFT JOIN #__mb_individuals as ind ON ind.id = media_link.gid
-				LEFT JOIN #__mb_tree_links as tree_links ON tree_links.individuals_id = ind.id
-				WHERE tree_links.tree_id = ?
-				ORDER BY medias.change DESC
-				LIMIT 1";
-		$sql = $this->core->sql($sqlString, $treeId);
-		$db->setQuery($sql);
-		$rows = $db->loadAssocList();
-		return 0 + $rows[0]['id'];
-        }
 //        function getNewId(){
 //          
 //

@@ -315,6 +315,14 @@ class Host {
 			}
 		}
 	}        
+	
+	public function getLatestUpdates($treeId){
+		$db =& JFactory::getDBO();
+		$sql = $this->gedcom->sql("SELECT * FROM #__mb_updates WHERE tree_id = ?", $treeId);
+		$db->setQuery($sql);
+		return $db->loadAssocList();
+		
+	}
 
 }
 

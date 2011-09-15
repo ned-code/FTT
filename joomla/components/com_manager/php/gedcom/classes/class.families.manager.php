@@ -119,7 +119,7 @@ class FamiliesList{
         }
         public function getFamilyChildrenIds($fId){
         	if($fId==null) { return null; }
-        	$sqlString = "SELECT childrens.gid FROM #__mb_childrens as childrens
+        	$sqlString = "SELECT DISTINCT childrens.gid FROM #__mb_childrens as childrens
         		LEFT JOIN #__mb_events as events ON events.individuals_id = childrens.gid AND events.type = 'BIRT'
         		LEFT JOIN #__mb_dates as dates ON dates.events_id = events.id
         		WHERE fid=?

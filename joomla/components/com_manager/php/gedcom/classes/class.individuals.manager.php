@@ -447,44 +447,6 @@ class IndividualsList{
         	return $rows;
         }
         
-        public function setProfileChange($id){
-        	$sqlString = "UPDATE #__mb_individuals SET  profile_change =  NOW() WHERE  id =?";
-        	$sql = $this->core->sql($sqlString, $id);
-        	$this->db->setQuery($sql);
-        	$this->db->query();
-        }
-                
-        public function getLastProfileChange($treeId){
-        	$sqlString = "SELECT ind.id as id FROM #__mb_individuals as ind
-				LEFT JOIN #__mb_tree_links as link ON link.individuals_id = ind.id
-				WHERE link.tree_id = ?
-				ORDER BY ind.profile_change DESC
-				LIMIT 1";
-		$sql = $this->core->sql($sqlString, $treeId);
-        	$this->db->setQuery($sql);
-        	$rows = $this->db->loadAssocList();
-        	return 0 + $rows[0]['id'];
-        }
-        
-        public function setRegisteredTime($id){
-        	$sqlString = "UPDATE #__mb_individuals SET  registered =  NOW() WHERE  id =?";
-        	$sql = $this->core->sql($sqlString, $id);
-        	$this->db->setQuery($sql);
-        	$this->db->query();
-        }
-      
-        public function getLastRegisterUser($treeId){
-        	$sqlString = "SELECT ind.id as id FROM #__mb_individuals as ind
-        			LEFT JOIN #__mb_tree_links as link ON link.individuals_id = ind.id
-        			WHERE link.tree_id = ?
-        			ORDER BY ind.registered DESC
-        			LIMIT 1";
-        	$sql = $this->core->sql($sqlString, $treeId);
-        	$this->db->setQuery($sql);
-        	$rows = $this->db->loadAssocList();
-        	return 0 + $rows[0]['id'];
-        }
-        
         /*
         function get($id, $lite=false){
             $db =& JFactory::getDBO();

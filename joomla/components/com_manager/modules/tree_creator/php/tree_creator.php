@@ -72,6 +72,17 @@ class TreeCreator {
 		$_SESSION['jmb']['gid'] = $indKey;		
 	}
 	
+	public function createLogs($tree_id){
+		$sql = "INSERT INTO #__mb_updates (`type`,`tree_id`) VALUES 
+		('new_photo', ".$tree_id."),
+		('just_registered', ".$tree_id."),
+		('profile_change', ".$tree_id."),
+		('family_member_added', ".$tree_id."),
+		('family_member_deleted', ".$tree_id.")";
+		$this->db->setQuery($sql);
+		$this->db->query();
+	}
+	
 	public function send($indKey){
 		$fid = $_SESSION['jmb']['fid'];
 		$ind = $this->host->gedcom->individuals->get($indKey, true);
@@ -82,7 +93,8 @@ class TreeCreator {
 		$this->db->setQuery($sql);
 		$this->db->query();
 		$id = $this->db->insertid();
-		
+		$this->createLogs($id);
+
 		$sql = "SELECT value FROM #__mb_variables WHERE belongs='".$fid."'";
 		$this->db->setQuery($sql);
 		$rows = $this->db->loadAssocList();
@@ -108,6 +120,7 @@ class TreeCreator {
 		$this->db->setQuery($sql);
 		$this->db->query();
 		$id = $this->db->insertid();
+		$this->createLogs($id);
 		$ind = new Individual();
 		$ind->FacebookId = $user->id;
 		$ind->FirstName = $user->first_name;

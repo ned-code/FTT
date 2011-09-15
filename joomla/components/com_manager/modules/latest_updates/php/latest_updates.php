@@ -32,11 +32,28 @@ class JMBLatestUpdates {
 		ob_clean();
 		$treeId = $_SESSION['jmb']['tid'];
 		$ownerId = $_SESSION['jmb']['gid'];
-		$new_photo = $this->host->getUserInfo($this->host->gedcom->media->getNewPhoto($treeId), $ownerId);
-		$profile_changes = $this->host->getUserInfo($this->host->gedcom->individuals->getLastProfileChange($treeId), $ownerId);
-		$just_registered = $this->host->getUserInfo($this->host->gedcom->individuals->getLastRegisterUser($treeId), $ownerId);
-		$colors = $this->getColors();
-		return json_encode(array('colors'=>$colors,'new_photo'=>$new_photo,'profile_changes'=>$profile_changes,'just_registered'=>$just_registered));
+		$colors = $this->getColors();	
+		$updates = $this->host->getLatestUpdates($treeId);
+		foreach($updates as $upd){
+			switch($upd['type']){
+				case 'new_photo':
+					$new_photo = $this->host->getUserInfo($upd['individuals_id'], $ownerId);
+				break;
+				case 'just_registered':
+					$just_registered = $this->host->getUserInfo($upd['individuals_id'], $ownerId);
+				break;
+				case 'profile_change':
+					$profile_change = $this->host->getUserInfo($upd['individuals_id'], $ownerId);
+				break;
+				case 'family_member_added':
+					$family_member_added = $this->host->getUserInfo($upd['individuals_id'], $ownerId);
+				break;
+				case 'family_member_deleted':
+					$family_member_deleted = $upd['description'];
+				break;
+			}
+		}
+		return json_encode(array('colors'=>$colors, 'new_photo'=>$new_photo,'just_registered'=>$just_registered, 'profile_change'=>$profile_change, 'family_member_added'=>$family_member_added, 'family_member_deleted'=>$family_member_deleted));
 	}
 }
 ?>
