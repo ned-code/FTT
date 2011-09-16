@@ -156,6 +156,7 @@ class FamiliesList{
         	$rows = $this->db->loadAssocList();
         	return $rows;
         }
+               
 	/*
         function  __construct($core) {
             $this->core = $core;

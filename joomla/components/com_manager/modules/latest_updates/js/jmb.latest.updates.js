@@ -45,7 +45,7 @@ function JMBLatestUpdates(obj){
 		jQuery(ul).find('#just_registered').find('span.text').html(get_string(json, 'just_registered'));
 		jQuery(ul).find('#profile_change').find('span.text').html(get_string(json, 'profile_change'));
 		jQuery(ul).find('#family_member_added').find('span.text').html(get_string(json, 'family_member_added'));
-		jQuery(ul).find('#family_member_deleted').find('span.text').html(json.family_member_deleted);
+		jQuery(ul).find('#family_member_deleted').find('span.text').html(json.family_member_deleted.split(',').join(' '));
 	})
 }
 
