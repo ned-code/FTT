@@ -31,7 +31,7 @@ DescendantTreeProfile.prototype = {
 			var dhxTree = self.parent.dhxTree;
 			dhxTree.deleteChildItems('0');
 			dhxTree.deleteItem('0');
-			self.parent.loadTree(dhxTree, jQuery(storage.header.activeButton).text());
+			self.parent.loadTree(dhxTree, jQuery(storage.header.activeButton).attr('id'));
 			self.profile.tooltip.cleaner();
 		})
 		//when click tabs;

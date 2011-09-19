@@ -26,18 +26,12 @@ function JMBDescendantTree(obj){
 	this.profile = new DescendantTreeProfile(this);
 	//this.profileEdit = new DescendantTreeProfileEdit(this);
 	this.obj = obj;
-	this.mode = {
-		'grandparents':false,
-		'grandfather_parents':false,
-		'grandmother_parents':false
-	}
-	
-	this._ajax('getDescendantsCount', 'mother', function(res){
-		var json = jQuery.parseJSON(res.responseText);
-		var node_select_previous = jQuery('<div class="jmb-descendats-tree-node-select">&nbsp;</div>');
-		jQuery(dhxTree.allTree).append(node_select_previous);
-		self.showDescedantOf(node_select_previous, json);		
-	});
+	this.firstParent = null;
+	this.selection = null;
+
+	var node_select_previous = jQuery('<div class="jmb-descendats-tree-node-select">&nbsp;</div>');
+	jQuery(dhxTree.allTree).append(node_select_previous);
+	self.showDescedantOf(node_select_previous);
 	
 	storage.header.famLine.show();
 	storage.header.famLine.mode('mother');
@@ -69,8 +63,21 @@ JMBDescendantTree.prototype = {
 		})
 	},
 	loadTree:function(dhxTree, render){
-		render = (render=='My Father')?'father':'mother';
+		var parent = this;
+		render = (render=='father')?'father':'mother';
 		this._ajax('getTree', render, function(res){
+			var json = jQuery.parseJSON(res.responseText);
+			dhxTree.loadXMLString(json.xml);
+			dhxTree.openAllItems(0);
+			parent.selection = json.selection;
+			jQuery(parent.selection_html).find('#grandparents input').attr('checked', 'checked');
+		});
+	},
+	loadTreeById:function(id){
+		var dhxTree = this.dhxTree;
+		dhxTree.deleteChildItems('0');
+		dhxTree.deleteItem('0');
+		this._ajax('getTreeById', id, function(res){
 			dhxTree.loadXMLString(res.responseText);
 			dhxTree.openAllItems(0);
 		});
@@ -87,33 +94,35 @@ JMBDescendantTree.prototype = {
 		var id = jQuery(obj).attr('id');
 		profile.render(id);	
 	},
-	showDescedantOf:function(obj, json){
-		if(!json.response) return;
+	showDescedantOf:function(obj){
 		var parent = this;
 		var sb = host.stringBuffer();
 		var container = jQuery('<div class="jmb-descendants-tree-show-container"></div>');
 		sb._('<table>');
 			sb._('<tr>');
 				sb._('<td></td>');
-				sb._('<td><div id="grandmother" class="title"><span>Grandmother</span></div></td>');
-				sb._('<td><div class="content"><div class="button"><input type="checkbox"></div><div class="text"><div class="header"><span>Great Grandparents</span></div><div id="gmother_count" class="count"><span>Descedants</span></div></div></div></td>');
+				sb._('<td><div class="title"><span>Grandmother</span></div></td>');
+				sb._('<td><div id="grandmother_parents" class="content"><div class="button"><input type="checkbox"></div><div class="text"><div class="header"><span>Great Grandparents</span></div><div class="count"><span>&nbsp;</span></div></div></div></td>');
 			sb._('</tr>');
 			sb._('<tr>');
 				sb._('<td><div id="parent" class="title"><span></span></div></td>');
-				sb._('<td><div class="content"><div class="button"><input type="checkbox"></div><div class="text"><div class="header"><span>Grandparents</span></div><div id="parent_count" class="count"><span>Descedants</span></div></div></div></td>');
+				sb._('<td><div id="grandparents" class="content"><div class="button"><input type="checkbox"></div><div class="text"><div class="header"><span>Grandparents</span></div><div class="count"><span>&nbsp;</span></div></div></div></td>');
 				sb._('<td></td>');
 			sb._('</tr>');
 			sb._('<tr>');
 				sb._('<td></td>');
-				sb._('<td><div id="grandfather" class="title"><span>Grandfather</span></div></td></td>');
-				sb._('<td><div class="content"><div class="button"><input type="checkbox"></div><div class="text"><div class="header"><span>Great Grandparents</span></div><div id="gfather_count" class="count"><span>Descedants</span></div></div></div></td>');
+				sb._('<td><div class="title"><span>Grandfather</span></div></td></td>');
+				sb._('<td><div id="grandfather_parents"  class="content"><div class="button"><input type="checkbox"></div><div class="text"><div class="header"><span>Great Grandparents</span></div><div class="count"><span>&nbsp;</span></div></div></div></td>');
 			sb._('</tr>');
 		sb._('</table>');
 		sb._('<div class="jmb-dt-show-header"><span>Show descendants of:</span></div>');
 		sb._('<div class="jmb-dt-show-close">&nbsp;</div>');
 		var html = jQuery(sb.result());
 		var overlay = jQuery('<div class="jmb-dt-show-overlay">&nbsp;</div>');
+		parent.selection_html = html[0];
+		
 		jQuery(obj).click(function(){
+			if(!parent.selection.response) return;
 			//set width,height to overlay div
 			var height = jQuery(obj).parent().height();
 			var width = jQuery(obj).parent().width();
@@ -122,30 +131,45 @@ JMBDescendantTree.prototype = {
 			jQuery(container).append(html);
 			jQuery(obj).parent().append(overlay);
 			jQuery(obj).parent().append(container);
-			//set side
-			var r_type = jQuery(storage.header.activeButton).attr('id');
-			jQuery(html[0]).find('div#parent span').html(r_type[0].toUpperCase()+r_type.substr(1));		
-			
-			var set_descendants = function(count, sep){
-				var object = jQuery(html[0]).find(sep);
-				jQuery(object).parent().parent().show();
-				if(count){
-					jQuery(object).html(count+' Descedants');
-				} else {
-					jQuery(object).parent().parent().hide();
-				}
-			}
-			
-			var response = json.response;
-			jQuery(html[0]).find('div#parent_count span').html(response.grandparents+' Descedants');
-			set_descendants(response.grandmother_parents, 'div#gmother_count span');
-			set_descendants(response.grandfather_parents, 'div#gfather_count span');
-			
+			//close button
 			jQuery(html[2]).click(function(){
 				jQuery(html[2]).unbind();
 				jQuery(container).remove();
 				jQuery(overlay).remove();
+				jQuery(html[0]).find('input').unbind();
+				parent.loadTreeById(parent.firstParent);
 			});
+			
+			var p = jQuery(storage.header.activeButton).attr('id');
+			p = p[0].toUpperCase() + p.substr(1);
+			jQuery(html[0]).find('#parent span').html(p);
+			
+			var set_count = function(object, json){
+				if(!json){
+					jQuery(object).find('input').attr('disabled', true);
+					jQuery(object).find('div.count span').html('&nbsp;');
+					return;
+				} 
+				jQuery(object).find('div.count span').html([json.count,' Descendants'].join(' '));
+			}
+			
+			var res = parent.selection.response;
+			jQuery(html[0]).find('input').attr('disabled', false);
+			set_count(jQuery(html[0]).find('#grandparents'), res.grandparents);
+			set_count(jQuery(html[0]).find('#grandfather_parents'), res.greatgrandparents.father);
+			set_count(jQuery(html[0]).find('#grandmother_parents'), res.greatgrandparents.mother);
+			
+			jQuery(html[0]).find('input').click(function(){
+				jQuery(html[0]).find('input').attr('checked', false);
+				var id = jQuery(this).parent().parent().attr('id');
+				jQuery(this).attr('checked', true);
+				switch(id){
+					case "grandparents": parent.firstParent = res.grandparents.id; break;
+					case "grandfather_parents": parent.firstParent = res.greatgrandparents.father.id; break;
+					case "grandmother_parents": parent.firstParent = res.greatgrandparents.mother.id; break;
+				}
+			});
+			
 		});
 	}
 }
