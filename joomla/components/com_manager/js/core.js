@@ -109,7 +109,6 @@ storage.header.famLine = (function(){
 			var famLine = this;
 			jQuery(document).ready(function(){
 				famLine.obj = jQuery(cont);
-				jQuery(famLine.obj).css('left',((jQuery('#jmb_header_profile_box').position().left-125)/2)+'px');				
 				famLine.buttons = jQuery(famLine.obj).find('.jmb_header_fam_line_content div');	
 				callback.call(famLine);
 			});

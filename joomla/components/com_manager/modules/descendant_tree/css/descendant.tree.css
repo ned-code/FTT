@@ -91,7 +91,7 @@
 .jmb-dtp-body-media {
 	margin-top: 10px;
 	overflow:auto;
-	width:395px;
+	/*width:395px;*/
 }
 .jmb-dtp-body-media ul.media-list {
 	background: white;

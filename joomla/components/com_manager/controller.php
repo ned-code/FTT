@@ -296,7 +296,7 @@ class JMBController extends JController
 
         	$img = imagecreatetruecolor($defaultWidth,$defaultHeight);
         	imagecopyresampled($img, $src, 0, 0, $src_x, $src_y, $width, $height, $srcWidth, $srcHeight);
-        	
+
         	ob_clean();
         	header("Content-type: image/".$type[1]); 
         	$this->Image($img, $type[1], $tmpFile);

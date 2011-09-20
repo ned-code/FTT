@@ -1,6 +1,12 @@
 function JMBLogin(obj){
 	obj = jQuery('#'+obj);
 
+	if(window!=window.top){
+		jQuery(obj).hide();
+		return false;
+	}
+	
+	
 	this.dialog_div = jQuery('<div></div>');
 	
 	var box = jQuery('<div class="body"><div class="title">&nbsp;</div><div class="content">&nbsp;</div><div class="avatar"></div></div>');
@@ -11,23 +17,26 @@ function JMBLogin(obj){
 		return ['<img src="index.php?option=com_manager&task=getResizeImage&fid=',id,'&w=50&h=50">'].join('');
 	}
 	
-	parent.init();
 	FB.getLoginStatus(function(response) {
-		if (response.session!=null) {
-			FB.api('/me', function(me) {
-				jQuery(box).find('.title').html(me.name);
-				var buttons = jQuery('<ul class="buttons"><li><span id="profile">Profile</span></li><li><span id="settings">Settings</span></li><li><span id="logout">Logout</span></li></ul>');
-				jQuery(buttons).find('span').click(function(){
-					parent[jQuery(this).attr('id')](me)
-				});
-				jQuery(box).find('.content').css('width', '130px').append(buttons);
-				jQuery(box).find('.avatar').append(get_avatar(me.id));
-			});		
-		} else {
-			jQuery(box).find('.title').html('<span>Login to access your family tree</span>');
-			jQuery(box).find('.content').css('width', '180px').html('<fb:login-button>Connect with Facebook</fb:login-button>');
-			jQuery(box).find('.avatar').hide();	
-			parent.init();
+		switch(response.status){
+			case 'connected':
+				FB.api('/me', function(me) {
+					jQuery(box).find('.title').html(me.name);
+					var buttons = jQuery('<ul class="buttons"><li><span id="profile">Profile</span></li><li><span id="settings">Settings</span></li><li><span id="logout">Logout</span></li></ul>');
+					jQuery(buttons).find('span').click(function(){
+						parent[jQuery(this).attr('id')](me)
+					});
+					jQuery(box).find('.content').css('width', '130px').append(buttons);
+					jQuery(box).find('.avatar').html(get_avatar(me.id));
+				});	
+			break;
+			
+			case 'unknown':
+				jQuery(box).find('.title').html('<span>Login to access your family tree</span>');
+				jQuery(box).find('.content').css('width', '180px').html('<fb:login-button>Connect with Facebook</fb:login-button>');
+				jQuery(box).find('.avatar').hide();
+				parent.init();
+			break;
 		}
 	});
 	

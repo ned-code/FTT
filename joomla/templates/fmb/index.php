@@ -121,5 +121,14 @@ $user = ($session)?$facebook->api('/me'):false;
 			</div>
 			<?php if($inIFrame): ?><div class="footer"><jdoc:include type="modules" name="footer" /></div><?php endif; ?>
 		</div>
+		<script>
+			FB.init({
+				appId:"184962764872486", 
+				status:true, 
+				cookie:true, 
+				xfbml:true,
+				oauth: true
+			});
+		</script>
 	</body>
 </html>

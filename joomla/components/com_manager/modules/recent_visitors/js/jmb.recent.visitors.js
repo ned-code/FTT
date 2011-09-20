@@ -7,7 +7,7 @@ function JMBRecentVisitors(obj){
 	var get_avatar = function(object){
 		if(!object) return '';
 		if(object.avatar!=null){
-			return ['<img src="index.php?option=com_manager&task=getResizeImage&id=',object.id,'&w=32&h=32">'].join(''); 
+			return ['<img src="index.php?option=com_manager&task=getResizeImage&id=',object.avatar,'&w=32&h=32">'].join(''); 
 		} else {
 			return ['<img src="index.php?option=com_manager&task=getResizeImage&fid=',object.fid,'&w=32&h=32">'].join(''); 
 			
