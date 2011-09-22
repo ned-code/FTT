@@ -78,6 +78,7 @@ storage.header.famLine = (function(){
 		show:function(){
 			jQuery(this.obj).show();
 		},
+		/*
 		mode:function(r, block){
 			var self = this;
 			jQuery(this.buttons).removeClass('enabled').removeClass('disabled');
@@ -104,6 +105,42 @@ storage.header.famLine = (function(){
 				});
 			}
 			this.click(jQuery('#'+r));
+		},
+		*/
+		mode:function(settings){
+			//set function
+			var self = this;
+			var set_class = function(set, cl){
+				if(set[cl]){
+					if(set[cl]=='all'){
+						jQuery(self.buttons).addClass(cl);
+					} else {
+						jQuery(set[cl]).each(function(i,e){
+							jQuery(self.buttons).parent().find('#'+e).addClass(cl)
+						});
+					}
+				}
+			}
+			
+			//set params
+			if(!settings) settings = {};
+			var config = jQuery.extend({enabled:'all', active:'all'}, settings);
+			
+			jQuery(this.buttons).removeClass('enabled').removeClass('disabled');
+			
+			set_class(config, 'enabled');//set class 'enabled'
+			set_class(config, 'active')//set class 'active'
+			
+			//set click events handlaer
+			jQuery(this.buttons).unbind().parent().find('.enabled').click(function(){
+				if(jQuery(this).hasClass('disabled')) return false;
+				self.click(this); 
+				storage.header.click();
+				return false;
+			});
+			
+			var click = (config.active&&config.active=='all')?'both':config.active;
+			jQuery(this.buttons).parent().find('#'+click).click();			
 		},
 		init:function(cont, callback){
 			var famLine = this;

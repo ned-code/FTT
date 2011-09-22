@@ -31,6 +31,7 @@
 }
 .jmb_qf_text {
 	margin-left: 5px;
+	cursor:pointer;
 }
 .jmb_qf_button {
 	color: blue;

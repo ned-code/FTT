@@ -9,6 +9,7 @@ function JMBLatestUpdates(obj){
 	];
 	
 	var html = jQuery('<div class="jmb-lu-header"><span>Latest Updates</span></div><div class="jmb-lu-content"></div><div class="jmb-lu-button"><span>Show All...</span></div>');
+	var profile =  new JMBProfile();
 	
 	var get_content = function(items){
 		var st = host.stringBuffer();
@@ -39,6 +40,18 @@ function JMBLatestUpdates(obj){
 		return ['<font style="color:#', json.colors[object.indiv.Gender],';">',name,'</font>'].join('');
 	}
 
+	var setMiniProfile = function(object, json, name){
+		profile.tooltip.render({
+			target:object,
+			id:json[name].indiv.Id+'-lu',
+			type:'mini',
+			data:json[name],
+			imgPath:json.path,
+			fmbUser:json.fmbUser,
+			eventType:'click'
+		});
+	}
+	
 	this.ajax('get', null, function(res){
 		var json = jQuery.parseJSON(res.responseText);
 		jQuery(ul).find('#new_photo').find('span.text').html(get_string(json, 'new_photo'));
@@ -46,6 +59,10 @@ function JMBLatestUpdates(obj){
 		jQuery(ul).find('#profile_change').find('span.text').html(get_string(json, 'profile_change'));
 		jQuery(ul).find('#family_member_added').find('span.text').html(get_string(json, 'family_member_added'));
 		jQuery(ul).find('#family_member_deleted').find('span.text').html(json.family_member_deleted.split(',').join(' '));
+		setMiniProfile(jQuery(ul).find('#new_photo').find('span.text'), json, 'new_photo');
+		setMiniProfile(jQuery(ul).find('#just_registered').find('span.text'), json, 'just_registered');
+		setMiniProfile(jQuery(ul).find('#profile_change').find('span.text'), json, 'profile_change');
+		setMiniProfile(jQuery(ul).find('#family_member_added').find('span.text'), json, 'family_member_added');
 	})
 }
 

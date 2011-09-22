@@ -24,7 +24,7 @@ function JMBThisMonth(obj){
 	});
 	
 	storage.header.famLine.show();
-	storage.header.famLine.mode('both');	
+	storage.header.famLine.mode();	
 }
 
 JMBThisMonth.prototype = {

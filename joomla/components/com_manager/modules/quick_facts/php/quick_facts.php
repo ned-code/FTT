@@ -38,7 +38,8 @@ class JMBQuickFacts {
 		$earliest = $this->host->getUserInfo($this->host->gedcom->individuals->getIdEarliestMember($treeId), $ownerId);
 		$colors = $this->getColors();
 		$fmbUser = $this->host->getUserInfo($_SESSION['jmb']['gid']);
-		return json_encode(array('count'=>$count,'living'=>$living,'youngest'=>$youngest,'oldest'=>$oldest,'earliest'=>$earliest,'colors'=>$colors,'fmbUser'=>$fmbUser));		
+		$path = JURI::root(true);
+		return json_encode(array('count'=>$count,'living'=>$living,'youngest'=>$youngest,'oldest'=>$oldest,'earliest'=>$earliest,'colors'=>$colors,'fmbUser'=>$fmbUser,'path'=>$path));		
 	}
 }
 ?>

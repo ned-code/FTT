@@ -13,6 +13,7 @@ function JMBQuickFacts(obj){
 	sb._('<div class="jmb_qf_button"><span>Show more stats...</span></div>');;
 	var html = sb.result();
 	var htmlObject = jQuery(html);
+	var profile =  new JMBProfile();
 	
 	jQuery(obj).append(htmlObject);
 	var getTurn = function(indiv){
@@ -54,12 +55,26 @@ function JMBQuickFacts(obj){
 		st._('<font style="color:#')._(json.colors[json.earliest.indiv.Gender])._(';">')._(getFullName(json.earliest.indiv))._('</font> ( ')._(getTurn(json.earliest.indiv))._(' years )');	
 		return st.result();
 	}
+	var setMiniProfile = function(object, json, name){
+		profile.tooltip.render({
+			target:object,
+			id:json[name].indiv.Id+'-qf',
+			type:'mini',
+			data:json[name],
+			imgPath:json.path,
+			fmbUser:json.fmbUser,
+			eventType:'click'
+		});
+	}
 	this._ajax('get', null, function(res){
 		var json = jQuery.parseJSON(res.responseText);
 		jQuery(htmlObject).find('div#number_family_members').find('span.jmb_qf_text').html(getNumberFamilyString(json));		
 		jQuery(htmlObject).find('div#youngest_living_member').find('span.jmb_qf_text').html(getYoungestMemberString(json));
 		jQuery(htmlObject).find('div#oldest_living_member').find('span.jmb_qf_text').html(getOldestMemberString(json));
 		jQuery(htmlObject).find('div#earliest_document').find('span.jmb_qf_text').html(getEarliestDocumentString(json));
+		setMiniProfile(jQuery(htmlObject).find('div#youngest_living_member').find('span.jmb_qf_text'), json, 'youngest');
+		setMiniProfile(jQuery(htmlObject).find('div#oldest_living_member').find('span.jmb_qf_text'), json, 'oldest');
+		setMiniProfile(jQuery(htmlObject).find('div#earliest_document').find('span.jmb_qf_text'), json, 'earliest');
 	})
 }
 

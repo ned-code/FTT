@@ -33,6 +33,7 @@
 }
 .jmb-lu-content ul li div span.text {
 	margin-left:5px;
+	cursor:pointer;
 }
 .jmb-lu-button {
 	color: blue;

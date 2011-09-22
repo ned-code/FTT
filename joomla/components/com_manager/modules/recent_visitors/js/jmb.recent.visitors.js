@@ -3,6 +3,7 @@ function JMBRecentVisitors(obj){
 	
 	var content = jQuery('<div class="jmb-rv-header"><span>Recent Visitors</span></div><div class="jmb-rv-content"></div><div class="jmb-rv-button"><span>Show all...</span></div>');
 	var sb = host.stringBuffer();
+	var profile =  new JMBProfile();
 	
 	var get_avatar = function(object){
 		if(!object) return '';
@@ -46,7 +47,7 @@ function JMBRecentVisitors(obj){
 	var init_visitors = function(ul, json, count){
 		var st = host.stringBuffer();
 		for(var i=0;i<count;i++){
-			var li = jQuery(st.clear()._('<li><div class="avatar">')._(get_avatar(json.response[i]))._('</div></li>').result());
+			var li = jQuery(st.clear()._('<li id="')._(json.response[i].id)._('" ><div class="avatar">')._(get_avatar(json.response[i]))._('</div></li>').result());
 			jQuery(ul).append(li);
 			init_tipty_tooltip(json.time, json.response[i],li);
 		}
@@ -61,12 +62,31 @@ function JMBRecentVisitors(obj){
 		});
 	}
 	
+	var init_mini_profile = function(ul,json){
+		var li = jQuery(ul).find('li');
+		jQuery(li).each(function(i,e){
+			var id = jQuery(e).attr('id');
+			var div = jQuery(e).find('div.avatar');
+			profile.tooltip.cleaner();
+			profile.tooltip.render({
+				target:div,
+				id:id+'-rv',
+				type:'mini',
+				data:json.objects[id],
+				imgPath:json.path,
+				fmbUser:json.fmbUser,
+				eventType:'click'
+			});	
+		});
+	}
+	
 	var parent = this;
 	parent.ajax('get_recent_visitors', null, function(res){
 		var json = jQuery.parseJSON(res.responseText);
 		var count = (json.response.length<=15)?json.response.length:15;
 		var ul = jQuery('<ul></ul>');
 		init_visitors(ul, json, count);
+		init_mini_profile(ul, json);
 		init_button(json);
 		jQuery(content[1]).append(ul);	
 		jQuery(obj).append(content);

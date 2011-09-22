@@ -53,7 +53,9 @@ class JMBLatestUpdates {
 				break;
 			}
 		}
-		return json_encode(array('colors'=>$colors, 'new_photo'=>$new_photo,'just_registered'=>$just_registered, 'profile_change'=>$profile_change, 'family_member_added'=>$family_member_added, 'family_member_deleted'=>$family_member_deleted));
+		$path = JURI::root(true);
+		$fmbUser = $this->host->getUserInfo($_SESSION['jmb']['gid']);
+		return json_encode(array('colors'=>$colors,'path'=>$path,'fmbUser'=>$fmbUser, 'new_photo'=>$new_photo,'just_registered'=>$just_registered, 'profile_change'=>$profile_change, 'family_member_added'=>$family_member_added, 'family_member_deleted'=>$family_member_deleted));
 	}
 }
 ?>

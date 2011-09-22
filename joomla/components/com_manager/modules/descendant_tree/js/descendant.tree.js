@@ -34,7 +34,7 @@ function JMBDescendantTree(obj){
 	self.showDescedantOf(node_select_previous);
 	
 	storage.header.famLine.show();
-	storage.header.famLine.mode('mother');
+	storage.header.famLine.mode({enabled:['mother','father'], active:'mother'});
 	
 	self.loadTree(dhxTree, 'mother');		
 	dhxTree.attachEvent("onXLE", function(tree,id){
