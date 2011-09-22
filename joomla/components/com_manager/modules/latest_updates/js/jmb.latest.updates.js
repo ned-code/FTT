@@ -41,6 +41,7 @@ function JMBLatestUpdates(obj){
 	}
 
 	var setMiniProfile = function(object, json, name){
+		if(json[name]==null) return;
 		profile.tooltip.render({
 			target:object,
 			id:json[name].indiv.Id+'-lu',

@@ -24,7 +24,13 @@ function JMBFamilies(obj){
 			self.ownerId = key;
 			break;
 		}
-		self.render(json.objects[self.ownerId]);
+		var obj = json.objects[self.ownerId]; 
+		if(obj.childrens.length==0&&obj.spouses&&obj.spouses[0]==null&&json.individs[obj.indKey].parents!=null){
+			self.click(self.ownerId, true);
+			return;
+		} else {
+			self.render(json.objects[self.ownerId]);
+		}
 	});
 	
 	storage.addEvent(storage.tabs.clickPull, function(object){

@@ -123,7 +123,7 @@ class FamiliesList{
         		LEFT JOIN #__mb_events as events ON events.individuals_id = childrens.gid AND events.type = 'BIRT'
         		LEFT JOIN #__mb_dates as dates ON dates.events_id = events.id
         		WHERE fid=?
-        		ORDER BY  dates.f_year ASC";
+        		ORDER BY  dates.f_year DESC";
         	$sql = $this->core->sql($sqlString, $fId);
         	$this->db->setQuery($sql);         
         	$rows = $this->db->loadAssocList();
@@ -156,7 +156,6 @@ class FamiliesList{
         	$rows = $this->db->loadAssocList();
         	return $rows;
         }
-               
 	/*
         function  __construct($core) {
             $this->core = $core;
