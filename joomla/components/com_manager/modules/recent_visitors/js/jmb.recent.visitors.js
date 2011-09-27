@@ -93,12 +93,16 @@ function JMBRecentVisitors(obj){
 			jQuery(obj).append(content);
 		});
 	}
-	storage.addEvent(storage.header.clickPull, function(object){
-		profile.tooltip.cleaner();
-		jQuery(content[1]).html('');
+	
+	var init = function(){
 		render();
-	});
-	render();
+		storage.addEvent(storage.header.clickPull, function(object){
+			profile.tooltip.cleaner();
+			jQuery(content[1]).html('');
+			render();
+		});
+	}	
+	init();
 }
 
 JMBRecentVisitors.prototype = {

@@ -17,11 +17,16 @@ function JMBThisMonth(obj){
 	var self = this;
 	self.load(this._getThisMonth(), 'false', function(json){
 		self.render(json);
+		storage.addEvent(storage.header.clickPull, function(object){
+			self.reload();
+		});
 	});
 	
 	storage.addEvent(storage.tabs.clickPull, function(object){
 		self.profile.cleaner();
 	});
+	
+	
 	
 	storage.header.famLine.show();
 	storage.header.famLine.mode();	
@@ -228,7 +233,8 @@ JMBThisMonth.prototype = {
 	},
 	load:function(month, sort, callback){
 		var self = this;
-		var settings = [month,sort].join(';');
+		var render = jQuery(storage.header.activeButton).attr('id');
+		var settings = ['{"month":"',month,'","sort":"',sort,'","render":"',render,'"}'].join('');
 		this._ajax("load", settings, function(req){
 			var json = jQuery.parseJSON(req.responseText);
 			self.json = json;
@@ -260,9 +266,7 @@ JMBThisMonth.prototype = {
 		} else {
 			self._setNull(table);
 		}
-		
-		
-		
+
 		//events
 		jQuery(table).find('.jmb-this-month-content .person font').each(function(i,e){
 			jQuery(e).click(function(){
