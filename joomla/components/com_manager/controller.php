@@ -372,7 +372,10 @@ class JMBController extends JController
         	$option = JRequest::getCmd('option');
         	$view = JRequest::getCmd('view');
         	$id = JRequest::getCmd('id');
+        	$host = new Host('joomla');
+        	
         	if($option!='com_manager') exit(); 
+        	
         	$session = $fb->getSession();
         	$fid = ($session)?$fb->getUser():null;
 
@@ -411,6 +414,7 @@ class JMBController extends JController
         			$_SESSION['jmb']['tid'] = $link['tid'];
         			$_SESSION['jmb']['permission'] = $link['type'];
         			$this->update_login_time($link['gid']);
+        			$host->cashFamilyLine();
         		}
         	}        	
         }

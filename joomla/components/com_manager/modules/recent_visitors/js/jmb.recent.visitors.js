@@ -81,17 +81,24 @@ function JMBRecentVisitors(obj){
 	}
 	
 	var parent = this;
-	parent.ajax('get_recent_visitors', null, function(res){
-		var json = jQuery.parseJSON(res.responseText);
-		var count = (json.response.length<=15)?json.response.length:15;
-		var ul = jQuery('<ul></ul>');
-		init_visitors(ul, json, count);
-		init_mini_profile(ul, json);
-		init_button(json);
-		jQuery(content[1]).append(ul);	
-		jQuery(obj).append(content);
-	});	
-
+	var render = function(){
+		parent.ajax('get_recent_visitors', jQuery(storage.header.activeButton).attr('id'), function(res){
+			var json = jQuery.parseJSON(res.responseText);
+			var count = (json.response.length<=15)?json.response.length:15;
+			var ul = jQuery('<ul></ul>');
+			init_visitors(ul, json, count);
+			init_mini_profile(ul, json);
+			init_button(json);
+			jQuery(content[1]).append(ul);	
+			jQuery(obj).append(content);
+		});
+	}
+	storage.addEvent(storage.header.clickPull, function(object){
+		profile.tooltip.cleaner();
+		jQuery(content[1]).html('');
+		render();
+	});
+	render();
 }
 
 JMBRecentVisitors.prototype = {

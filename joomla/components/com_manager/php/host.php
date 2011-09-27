@@ -8,7 +8,7 @@ class Host {
 	*/
 	public $gedcom;
         public $modulesPath;
-    public $gramps;    
+        public $gramps;    
 	/**
 	*
 	*/
@@ -69,10 +69,6 @@ class Host {
         *
         */
         function getAbsoluteRootPath(){
-        	/*
-            $path = $_SERVER['DOCUMENT_ROOT'] . $this->getRootDirectory();
-            return $path;
-            */
             return JPATH_BASE;
         }
         
@@ -80,17 +76,6 @@ class Host {
         *
         */
         function getRootDirectory(){
-            /*
-        	$allPath = realpath($this->modulesPath."../../../");
-           
-            $allPath = explode("/", $allPath);
-   
-            if(count($allPath) == 1){
-                $allPath = explode("\\", $allPath[0]);
-            }
-
-            return "/" .$allPath[count($allPath) -1 ];
-            */
             return JURI::base(true);
         }
         
@@ -286,6 +271,7 @@ class Host {
 	* @var $id gedcom user id
 	* @var &$individs array link of array
 	*/
+	/*
 	public function getIndividsArray($indKey, &$individs, $indRel = false){
 		if($indKey==NULL){ return false; }
 		$individ = $this->getUserInfo($indKey, $indRel);
@@ -315,6 +301,7 @@ class Host {
 			}
 		}
 	}        
+	*/
 	
 	public function getLatestUpdates($treeId){
 		$db =& JFactory::getDBO();
@@ -323,7 +310,99 @@ class Host {
 		return $db->loadAssocList();
 		
 	}
+	
+	public function getDescendants($indKey, &$descendants, &$ignore){
+		if(array_key_exists($indKey, $descendants)) return false;
+		foreach($ignore as $i){
+			if($i!=null&&$i==$indKey){
+				return false;
+			}
+		}
+		$descendants[$indKey] = true;
+		$parents = $this->gedcom->individuals->getParents($indKey);
+		if($parents!=null){
+			if($parents['motherID']!=null){
+				$this->getDescendants($parents['motherID'], $descendants, $ignore);
+			}
+			if($parents['fatherID']!=null){
+				$this->getDescendants($parents['fatherID'], $descendants, $ignore);
+			}
+		}
+		
+		$families = $this->gedcom->families->getPersonFamilies($indKey, true);
+		if(sizeof($families)>0){
+			foreach($families as $family){
+				if($family->Spouse!=null&&$family->Spouse->Id!=null){
+					$this->getDescendants($family->Spouse->Id, $descendants, $ignore);
+				}
+				$childs = $this->gedcom->families->getFamilyChildrenIds($family->Id);
+				foreach($childs as $child){
+					$this->getDescendants($child['gid'], $descendants, $ignore);
+				}
+			}
+		}
+		
+	}
 
+	public function getFamilyLineType($indKey){
+		//session vars
+		$treeId = $_SESSION['jmb']['tid'];
+		$ownerId = $_SESSION['jmb']['gid'];
+		$facebookId = $_SESSION['jmb']['fid'];
+		
+		if($indKey == $ownerId){
+			return 'both';
+		} 
+		
+		$owner_parents = $this->gedcom->individuals->getParents($ownerId);
+		if($owner_parents==null){
+			return 'both';
+		}
+		
+		$mother = ($owner_parents['motherID']!=null)?$owner_parents['motherID']:null;
+		$father = ($owner_parents['fatherID']!=null)?$owner_parents['fatherID']:null;
+		
+		if($indKey==$mother) return 'mother';
+		if($indKey == $father) return 'father';
+		
+		if($mother!=null){
+			$mother_desc = array();
+			$ignore = array($father,$ownerId);
+			$this->getDescendants($mother, &$mother_desc, $ignore);
+			if(array_key_exists($indKey, $mother_desc)){
+				return 'mother';
+			}
+		}
+		
+		if($father!=null){
+			$father_desc = array();
+			$ignore = array($mother,$ownerId);
+			$this->getDescendants($father, &$father_desc, $ignore);
+			if(array_key_exists($indKey, $father_desc)){
+				return 'father';
+			}
+		}
+		return 'both';
+	}
+	
+	public function cashFamilyLine(){
+		$ownerId = $_SESSION['jmb']['gid'];
+		$treeId = $_SESSION['jmb']['tid'];
+		$db =& JFactory::getDBO();		
+		$sql = $this->gedcom->sql('SELECT `to` as individuals_id FROM #__mb_family_line WHERE tid =?', $treeId);
+		$db->setQuery($sql);
+		$cashed_relatives = $db->loadAssocList();
+		$relatives = $this->gedcom->individuals->getRelatives($treeId);
+		$to_cash = ($cashed_relatives==null)?$relatives:array_diff_assoc($relatives,$cashed_relatives);
+		if(empty($to_cash)) return null;
+		foreach($to_cash as $to){
+			$type = $this->getFamilyLineType($to['individuals_id']);
+			$sql = $this->gedcom->sql('INSERT INTO #__mb_family_line (`id`,`tid`,`from`,`to`,`type`) VALUES (NULL,?,?,?,?)',$treeId,$ownerId,$to['individuals_id'],$type[0]);
+			$db->setQuery($sql);
+			$db->query();
+		}
+	}
+	
 }
 
 ?>

@@ -46,6 +46,7 @@ class Gedcom{
         	for ($i=$c=count($args)-1; $i<$c+20; $i++){ 
         		$args[$i+1] = "UNKNOWN_PLACEHOLDER_$i";
         	}
+        	
         	return call_user_func_array("sprintf", $args);
         }
 }
