@@ -66,16 +66,39 @@ function JMBQuickFacts(obj){
 			eventType:'click'
 		});
 	}
-	this._ajax('get', null, function(res){
-		var json = jQuery.parseJSON(res.responseText);
-		jQuery(htmlObject).find('div#number_family_members').find('span.jmb_qf_text').html(getNumberFamilyString(json));		
-		jQuery(htmlObject).find('div#youngest_living_member').find('span.jmb_qf_text').html(getYoungestMemberString(json));
-		jQuery(htmlObject).find('div#oldest_living_member').find('span.jmb_qf_text').html(getOldestMemberString(json));
-		jQuery(htmlObject).find('div#earliest_document').find('span.jmb_qf_text').html(getEarliestDocumentString(json));
-		setMiniProfile(jQuery(htmlObject).find('div#youngest_living_member').find('span.jmb_qf_text'), json, 'youngest');
-		setMiniProfile(jQuery(htmlObject).find('div#oldest_living_member').find('span.jmb_qf_text'), json, 'oldest');
-		setMiniProfile(jQuery(htmlObject).find('div#earliest_document').find('span.jmb_qf_text'), json, 'earliest');
-	})
+	
+	var clean = function(){
+		jQuery(htmlObject).find('div#number_family_members').find('span.jmb_qf_text').html('');		
+		jQuery(htmlObject).find('div#youngest_living_member').find('span.jmb_qf_text').html('');
+		jQuery(htmlObject).find('div#oldest_living_member').find('span.jmb_qf_text').html('');
+		jQuery(htmlObject).find('div#earliest_document').find('span.jmb_qf_text').html('');
+	}
+	
+	
+	var parent = this;
+	var load = function(){
+		var id = jQuery(storage.header.activeButton).attr('id');
+		parent._ajax('get', id, function(res){
+			var json = jQuery.parseJSON(res.responseText);
+			jQuery(htmlObject).find('div#number_family_members').find('span.jmb_qf_text').html(getNumberFamilyString(json));		
+			jQuery(htmlObject).find('div#youngest_living_member').find('span.jmb_qf_text').html(getYoungestMemberString(json));
+			jQuery(htmlObject).find('div#oldest_living_member').find('span.jmb_qf_text').html(getOldestMemberString(json));
+			jQuery(htmlObject).find('div#earliest_document').find('span.jmb_qf_text').html(getEarliestDocumentString(json));
+			setMiniProfile(jQuery(htmlObject).find('div#youngest_living_member').find('span.jmb_qf_text'), json, 'youngest');
+			setMiniProfile(jQuery(htmlObject).find('div#oldest_living_member').find('span.jmb_qf_text'), json, 'oldest');
+			setMiniProfile(jQuery(htmlObject).find('div#earliest_document').find('span.jmb_qf_text'), json, 'earliest');
+		})
+	}
+	
+	var init = function(){
+		load();
+		storage.addEvent(storage.header.clickPull, function(object){
+			clean(); load();
+		});
+	}
+
+	init();	
+	
 }
 
 JMBQuickFacts.prototype = {
