@@ -109,6 +109,7 @@ class TreeCreator {
 		}	
 		
 		$this->addOwnerLink($id, $ind->Id);
+		$this->host->createCashFamilyLine($id,$ind->Id);
 		
 		$sql = $this->host->gedcom->sql("DELETE FROM #__mb_variables WHERE belongs=?",$_SESSION['jmb']['fid']);
 		$this->db->setQuery($sql);

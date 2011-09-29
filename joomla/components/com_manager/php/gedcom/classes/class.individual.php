@@ -23,6 +23,7 @@ class Individual{
 	
 	public $Relation;
 	public $Permission;
+	public $FamLine;
 	
 	public function __construct(){
 		$this->Id = null;
@@ -43,6 +44,7 @@ class Individual{
 		$this->Relation = null;
 		$this->TreeId = null;
 		$this->Permission = null;
+		$this->FamLine = null;
        }
 }
 ?>

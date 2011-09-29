@@ -195,7 +195,7 @@ class JMBProfile {
 			$fam = $this->host->gedcom->families->get($fam_id);
 			$this->_addParent_($ind, $fam, $_POST['gender']);
 			$this->host->gedcom->families->update($fam);
-		}
+		}				
 		return array('i'=>$ind,'f'=>$fam,'photo'=>$photo);
 	}
 	//add brother or sister record.
@@ -243,20 +243,24 @@ class JMBProfile {
 	public function addPSC($args){
 		$args = explode(';', $args);
 		$type = $args[0];
-		$ownerId = $args[1];
+		$indKey = $args[1];
 		switch($type){
 			case "parent":
-				$result = $this->_addParent($ownerId);
+				$result = $this->_addParent($indKey);				
 			break;
 			
 			case "bs":
-				$result = $this->_addBS($ownerId);
+				$result = $this->_addBS($indKey);
 			break;
 			
 			case "child":
-				$result = $this->_addChild($ownerId);
+				$result = $this->_addChild($indKey);
 			break;
 		}
+		$owner_id = $_SESSION['jmb']['gid'];
+		$tree_id = $_SESSION['jmb']['tid'];
+		$type = $this->host->gedcom->individuals->getMemberFamLine($tree_id, $owner_id, $indKey);
+		$this->host->gedcom->individuals->setMemberFamLine($tree_id, $owner_id, $result['i']->Id, $type[0]['type']);
 		return json_encode($result);	
 	}
 	/**
@@ -264,44 +268,25 @@ class JMBProfile {
 	*/
 	public function addSpouse($args){
 		$args = explode(';', $args);
-		$ownerId = $args[0];
+		$indKey = $args[0];
 		$gender = $args[1];
 		$_POST['gender'] = ($gender=='M')?'F':'M';
 		$ind = $this->_createIndiv();
 		$this->_addIndivEvents($ind);	
 		//$fam_id = $this->host->gedcom->individuals->getFamilyId($ownerId, 'FAMS');
-		$user = $this->host->gedcom->individuals->get($ownerId);
+		$user = $this->host->gedcom->individuals->get($indKey);
 		$photo = $this->_uploadPhoto($ind->Id);
 		
 		$fam = $this->_createFamily();
 		$this->_addSpouse($fam, $gender, $user, $ind);
 		$this->host->gedcom->families->save($fam);
 		$this->_addSpouseEvents($fam);
-		/*
-		if(!$fam_id){
-			$fam = $this->_createFamily();
-			$this->_addSpouse($fam, $gender, $user, $ind);
-			$this->host->gedcom->families->save($fam);
-			$this->_addSpouseEvents($fam);		
-		} else {
-			$fam = $this->host->gedcom->families->get($fam_id);
-			$this->_addSpouse($fam, $gender, $user, $ind);
-			if($fam->Marriage==null){ 
-				$fam->Marriage = $this->_createEvent('FAM',$fam->Id,'Marriage', 'MARR', 'm_', 'EVO'); 
-			} else {
-				$fam->Marriage = $this->_createEvent('FAM',$fam->Id,'Marriage', 'MARR', 'm_', 'EVO', false);
-				$this->host->gedcom->events->update($family->Marriage);
-			}
-			if($fam->Divorce==null&&$_POST['deceased']=='on'){ 
-				$fam->Divorce = $this->_createEvent('FAM',$fam->Id,'Divorce', 'DIV', 's_', 'EVO');
-			} elseif($_POST['deceased']=='on'){
-				$fam->Divorce = $this->_createEvent('FAM',$fam->Id,'Divorce', 'DIV', 's_', 'EVO', false);
-				$this->host->gedcom->events->update($family->Divorce);
-			}	
-			$this->host->gedcom->families->update($fam);			
-		}
-		*/
-		$data = $this->host->getUserInfo($ownerId);
+		$data = $this->host->getUserInfo($indKey);
+		
+		$owner_id = $_SESSION['jmb']['gid'];
+		$tree_id = $_SESSION['jmb']['tid'];
+		$type = $this->host->gedcom->individuals->getMemberFamLine($tree_id, $owner_id, $indKey);
+		$this->host->gedcom->individuals->setMemberFamLine($tree_id, $owner_id, $ind->Id, $type[0]['type']);
 		return json_encode(array('data'=>$data,'spouse'=>array('indiv'=>$ind),'photo'=>$photo));
 	}
 	/**

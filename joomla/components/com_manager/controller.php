@@ -335,6 +335,7 @@ class JMBController extends JController
         }
         
         protected function invite($fid, $token, $redirect=true){
+        	$host = new Host('joomla');
         	$db =& JFactory::getDBO();
         	$sql = "SELECT value FROM #__mb_variables WHERE belongs='".$token."'";
         	$db->setQuery($sql);
@@ -353,6 +354,7 @@ class JMBController extends JController
         	if(isset($_SESSION['jmb']['invitation'])){
         		unset($_SESSION['jmb']['invitation']);
         	}
+        	$host->createCashFamilyLine($args[1],$args[0]);
         	if($redirect){
         		header('Location:'.JURI::base().'index.php');
         	}
@@ -414,7 +416,7 @@ class JMBController extends JController
         			$_SESSION['jmb']['tid'] = $link['tid'];
         			$_SESSION['jmb']['permission'] = $link['type'];
         			$this->update_login_time($link['gid']);
-        			$host->cashFamilyLine();
+        			$host->checkCashFamilyLine($link['tid'], $link['gid']);
         		}
         	}        	
         }

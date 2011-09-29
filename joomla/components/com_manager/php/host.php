@@ -311,98 +311,185 @@ class Host {
 		
 	}
 	
-	public function getDescendants($indKey, &$descendants, &$ignore){
-		if(array_key_exists($indKey, $descendants)) return false;
-		foreach($ignore as $i){
-			if($i!=null&&$i==$indKey){
-				return false;
-			}
+	// cash family line
+	protected function convert($array, $index){
+		$result = array();
+		foreach($array as $el){
+			$result[$el[$index]][] = $el;
 		}
-		$descendants[$indKey] = true;
-		$parents = $this->gedcom->individuals->getParents($indKey);
-		if($parents!=null){
-			if($parents['motherID']!=null){
-				$this->getDescendants($parents['motherID'], $descendants, $ignore);
-			}
-			if($parents['fatherID']!=null){
-				$this->getDescendants($parents['fatherID'], $descendants, $ignore);
-			}
-		}
-		
-		$families = $this->gedcom->families->getPersonFamilies($indKey, true);
-		if(sizeof($families)>0){
-			foreach($families as $family){
-				if($family->Spouse!=null&&$family->Spouse->Id!=null){
-					$this->getDescendants($family->Spouse->Id, $descendants, $ignore);
-				}
-				$childs = $this->gedcom->families->getFamilyChildrenIds($family->Id);
-				foreach($childs as $child){
-					$this->getDescendants($child['gid'], $descendants, $ignore);
-				}
-			}
-		}
-		
+		return $result;
 	}
+	
+	protected function getParents($indKey, $childs_assoc_id, $families){
+		if(!isset($childs_assoc_id[$indKey])) return null;
+		$family_id = $childs_assoc_id[$indKey][0]['fid'];
+		return (isset($families[$family_id]))?$families[$family_id][0]:null;
+	}
+	
+	protected function getChildsByIndKey($indKey, $childs_assoc_id, $childs_assoc_fid){
+		if(!isset($childs_assoc_id[$indKey])) return null;
+		$family_id = $childs_assoc_id[$indKey][0]['fid'];
+		return (isset($childs_assoc_fid[$family_id]))?$childs_assoc_fid[$family_id]:null;
+	}
+	
+	protected function getChildsByFamKey($family_id, $childs_assoc_fid){
+		if(!isset($childs_assoc_fid[$family_id])) return null;
+		return $childs_assoc_fid[$family_id];
+	}
+		
+	protected function setParentFamLine($indKey, $type, &$line, &$childs_assoc_id, &$families){
+		$line[$indKey]['key']= $indKey;
+		$line[$indKey]['type'][] = $type;
+		
+		$parents = $this->getParents($indKey, $childs_assoc_id, $families);
+		if($parents==null) return;
+		$father = ($parents['husb']!=null)?$parents['husb']:false;
+		$mother = ($parents['wife']!=null)?$parents['wife']:false;
+		if($father){
+			$this->setParentFamLine($father, $type, $line, $childs_assoc_id, $families);
+		}
+		if($mother){
+			$this->setParentFamLine($mother, $type, $line, $childs_assoc_id, $families);
+		}
+	}
+	
+	protected function setChildFamLine($indKey, $type, &$line, &$childs_assoc_id, &$childs_assoc_fid, &$families, &$conflicts){
+		$childs = $this->getChildsByIndKey($indKey, $childs_assoc_id, $childs_assoc_fid);
+		if($childs==null) return;
+		foreach($childs as $child){
+			$parents = $this->getParents($indKey, $childs_assoc_id, $families);
+			$father = ($parents['husb']!=null)?$parents['husb']:false;
+			$mother = ($parents['wife']!=null)?$parents['wife']:false;
+			if(isset($line[$father])&&isset($line[$mother])){
+				$f_types = $line[$father]['type'];
+				$m_types = $line[$mother]['type'];
+				$types = array_merge($f_types, $m_types);
+			} else if(isset($line[$father])){
+				$types = $line[$father]['type'];
+				$conflicts[$mother]['key'] = $mother;
+			} else if(isset($line[$mother])){
+				$types = $line[$mother]['type'];
+				$conflicts[$father]['key'] = $father;
+			} else {
+				$conflicts[$father]['key'] = $father;
+				$conflicts[$mother]['key'] = $mother;
+				break;
+				
+			}
+			$line[$child['gid']]['key']= $child['gid'];
+			foreach($types as $t){
+				$line[$child['gid']]['type'][] = $t;
+			}
+		}
+	}
+	
+	protected function insertsToFamLine($treeId, $ownerId, $objects){
+		$db =& JFactory::getDBO();
+		$sql = "INSERT INTO #__mb_family_line (`tid`, `from`, `to`, `type`) VALUES ";
+		foreach($objects as $obj){
+			$types = array_keys(array_count_values($obj['type']));
+			foreach($types as $type){
+				$sql .= "('".$treeId."','".$ownerId."','".$obj['key']."','".$type."'),";
+			}
+		}
+		$db->setQuery(substr($sql,0,-1));
+		$db->query();
+	}
+	
+	public function createCashFamilyLine($treeId, $ownerId){
+		//get data		
+		$families = $this->convert($this->gedcom->families->getFamilies($treeId), 'id');
+		$childs = $this->gedcom->families->getChilds($treeId);
 
-	public function getFamilyLineType($indKey){
-		//session vars
-		$treeId = $_SESSION['jmb']['tid'];
-		$ownerId = $_SESSION['jmb']['gid'];
-		$facebookId = $_SESSION['jmb']['fid'];
+		$childs_assoc_id = $this->convert($childs, 'gid');
+		$childs_assoc_fid = $this->convert($childs, 'fid');
 		
-		if($indKey == $ownerId){
-			return 'both';
-		} 
-		
-		$owner_parents = $this->gedcom->individuals->getParents($ownerId);
-		if($owner_parents==null){
-			return 'both';
-		}
-		
-		$mother = ($owner_parents['motherID']!=null)?$owner_parents['motherID']:null;
-		$father = ($owner_parents['fatherID']!=null)?$owner_parents['fatherID']:null;
-		
-		if($indKey==$mother) return 'mother';
-		if($indKey == $father) return 'father';
-		
-		if($mother!=null){
-			$mother_desc = array();
-			$ignore = array($father,$ownerId);
-			$this->getDescendants($mother, &$mother_desc, $ignore);
-			if(array_key_exists($indKey, $mother_desc)){
-				return 'mother';
-			}
-		}
-		
-		if($father!=null){
-			$father_desc = array();
-			$ignore = array($mother,$ownerId);
-			$this->getDescendants($father, &$father_desc, $ignore);
-			if(array_key_exists($indKey, $father_desc)){
-				return 'father';
-			}
-		}
-		return 'both';
-	}
+		//parsse data
+		$line = array();
+		$conflicts = array();
 	
-	public function cashFamilyLine(){
-		$ownerId = $_SESSION['jmb']['gid'];
-		$treeId = $_SESSION['jmb']['tid'];
-		$db =& JFactory::getDBO();		
-		$sql = $this->gedcom->sql('SELECT `to` as individuals_id FROM #__mb_family_line WHERE tid =?', $treeId);
-		$db->setQuery($sql);
-		$cashed_relatives = $db->loadAssocList();
-		$relatives = $this->gedcom->individuals->getRelatives($treeId);
-		$to_cash = ($cashed_relatives==null)?$relatives:array_diff_assoc($relatives,$cashed_relatives);
-		if(empty($to_cash)) return null;
-		foreach($to_cash as $to){
-			$type = $this->getFamilyLineType($to['individuals_id']);
-			$sql = $this->gedcom->sql('INSERT INTO #__mb_family_line (`id`,`tid`,`from`,`to`,`type`) VALUES (NULL,?,?,?,?)',$treeId,$ownerId,$to['individuals_id'],$type[0]);
-			$db->setQuery($sql);
-			$db->query();
+		$owner_parents = $this->getParents($ownerId, $childs_assoc_id, $families);
+		$father = ($owner_parents['husb']!=null)?$owner_parents['husb']:false;
+		$mother = ($owner_parents['wife']!=null)?$owner_parents['wife']:false;
+		
+		if($father){
+			$this->setParentFamLine($father, 'f', $line, $childs_assoc_id, $families);
+		}
+		if($mother){
+			$this->setParentFamLine($mother, 'm', $line, $childs_assoc_id, $families);
+		}
+		
+		foreach($line as $indiv){
+			$this->setChildFamLine($indiv['key'], $indiv['type'], $line, $childs_assoc_id, $childs_assoc_fid, $families, $conflicts);
+		}
+		
+		//insert to db
+		$result = array_chunk($line, 50, true);
+		foreach($result as $res){
+			$this->insertsToFamLine($treeId, $ownerId, $res);
 		}
 	}
 	
+	public function getFamLine($indivs, $childs_assoc_id, $families, $members){
+		$objects = array();
+		$types = array();
+		foreach($indivs as $indiv){
+			$parents = $this->getParents($indiv, $childs_assoc_id, $families);
+			$father = ($parents['husb']!=null)?$parents['husb']:false;
+			$mother = ($parents['wife']!=null)?$parents['wife']:false;
+			if($father){
+				if(isset($members[$father])){
+					$types[] = $members[$father];
+				}
+				$objects[] = $father;
+			}
+			if($mother){
+				if(isset($members[$mother])){
+					$types[] = $members[$mother];
+				}
+				$objects[] = $mother;
+			}
+		}
+		if(empty($objects)){ return false; }
+		if(!empty($types)){ 
+			$result = array();
+			foreach($types as $type){
+				foreach($type as $t){
+					$result[] = $t['type'];
+				}
+			}
+			return $result;
+		}
+		return $this->getFamLine($objects,$childs_assoc_id, $families, $members);
+	}
+	
+	public function checkCashFamilyLine($treeId, $ownerId){
+		//get not cashed users
+		$relatives = $this->convert($this->gedcom->individuals->getRelatives($treeId), 'individuals_id');
+		$members = $this->convert($this->gedcom->individuals->getMembersByFamLine($treeId, $ownerId), 'individuals_id');
+		$diff = array_diff_assoc($relatives, $members);
+		
+		//get data
+		$families = $this->convert($this->gedcom->families->getFamilies($treeId), 'id');
+		$childs = $this->gedcom->families->getChilds($treeId);
+		$childs_assoc_id = $this->convert($childs, 'gid');
+		
+		$objects = array();
+		foreach($diff as $user){
+			$indKey = $user[0]['individuals_id'];
+			$type = $this->getFamLine(array($indKey), $childs_assoc_id, $families, $members);
+			if($type){
+				$objects[$indKey] = array('key'=>$indKey,'type'=>$type);
+			}
+		}
+		
+		//insert to db
+		$result = array_chunk($objects, 25, true);
+		foreach($result as $res){
+			$this->insertsToFamLine($treeId, $ownerId, $res);
+		}
+		
+	}
 }
 
 ?>

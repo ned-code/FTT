@@ -208,7 +208,7 @@ class IndividualsList{
 		}
 		return $pers;
         }
-        
+                
         /**
         *
         */
@@ -515,8 +515,26 @@ class IndividualsList{
         	return $rows;
         }
 
-        public function getMembersByFamLine($treeId, $ownerId, $renderType){
-        	$sql = $this->core->sql("SELECT `to` as individuals_id FROM #__mb_family_line WHERE `from` = ? AND `tid` = ? AND `type`=?", $ownerId, $treeId, $renderType);
+        public function getMemberFamLine($treeId, $ownerId, $indKey){
+        	$sql = $this->core->sql("SELECT type FROM #__mb_family_line WHERE `tid`=? AND `from`=? AND `to`=?",$treeId, $ownerId, $indKey);
+        	$this->db->setQuery($sql);
+        	$rows = $this->db->loadAssocList();
+        	return $rows;
+        }
+        
+        public function setMemberFamLine($treeId, $ownerId, $indKey, $type){
+		$sqlString = "INSERT INTO #__mb_family_line (`tid`, `from`, `to`, `type`) VALUES (?,?,?,?)";
+		$sql = $this->core->sql($sqlString, $treeId, $ownerId, $indKey, $type);
+		$this->db->setQuery($sql);
+		$this->db->query();
+        }
+        
+        public function getMembersByFamLine($treeId, $ownerId, $renderType=false){
+        	if($renderType){
+        		$sql = $this->core->sql("SELECT `to` as individuals_id FROM #__mb_family_line WHERE `from` = ? AND `tid` = ? AND `type`=?", $ownerId, $treeId, $renderType);
+        	} else {
+        		$sql = $this->core->sql("SELECT `to` as individuals_id, type FROM #__mb_family_line WHERE `from` = ? AND `tid` = ?", $ownerId, $treeId);
+        	}
         	$this->db->setQuery($sql);
         	$rows = $this->db->loadAssocList();
         	return $rows;

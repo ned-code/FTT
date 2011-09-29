@@ -91,18 +91,19 @@ function JMBRecentVisitors(obj){
 			init_button(json);
 			jQuery(content[1]).append(ul);	
 			jQuery(obj).append(content);
+			headerHandler();
 		});
 	}
 	
-	var init = function(){
-		render();
+	var headerHandler = function(){
 		storage.addEvent(storage.header.clickPull, function(object){
 			profile.tooltip.cleaner();
 			jQuery(content[1]).html('');
 			render();
 		});
 	}	
-	init();
+
+	render();
 }
 
 JMBRecentVisitors.prototype = {
