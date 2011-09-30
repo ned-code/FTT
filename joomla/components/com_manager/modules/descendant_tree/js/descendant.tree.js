@@ -34,7 +34,13 @@ function JMBDescendantTree(obj){
 	self.showDescedantOf(node_select_previous);
 	
 	storage.header.famLine.show();
-	storage.header.famLine.mode({enabled:['mother','father'], active:'mother'});
+	storage.header.famLine.mode({
+		enabled:['mother','father'], 
+		active:'mother',
+		event:function(){
+			self.profile._headerEvent();
+		}
+	});
 	
 	self.loadTree(dhxTree, 'mother');		
 	dhxTree.attachEvent("onXLE", function(tree,id){
@@ -53,6 +59,7 @@ function JMBDescendantTree(obj){
 		jQuery(user[0]).click();
 		var x = jQuery(user[0]).offset().top - 300;
 		jQuery('div.containerTableStyle').animate({scrollTop: x}, 250);
+		
 	});	
 }
 

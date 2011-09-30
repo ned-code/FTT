@@ -140,7 +140,8 @@ storage.header.famLine = (function(){
 			});
 			
 			var click = (config.active&&config.active=='all')?'both':config.active;
-			jQuery(this.buttons).parent().find('#'+click).click();			
+			jQuery(this.buttons).parent().find('#'+click).click();		
+			if(config.event) config.event();
 		},
 		init:function(cont, callback){
 			var famLine = this;

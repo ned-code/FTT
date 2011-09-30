@@ -16,7 +16,6 @@ function DescendantTreeProfile(parent){
 	this.renderType = null;
 	this.editDiv = null;
 	this.profile = new JMBProfile();
-	this._headerEvent();
 }
 
 DescendantTreeProfile.prototype = {

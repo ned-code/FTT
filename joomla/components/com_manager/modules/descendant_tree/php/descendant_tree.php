@@ -172,16 +172,48 @@ class JMBDescendantTree {
 		 	 }
 		 }
 	}
+		
+	protected function getDefaultKey($parentTree, $r_type){
+		$father = $parentTree['parents']['father'];
+		$mother = $parentTree['parents']['mother'];
+		$node = ($r_type=='father')?$father:$mother;
+		if($node){
+			$gfather = ($node['parents']['father'])?$node['parents']['father']:false;
+			$gmother = ($node['parents']['mother'])?$node['parents']['mother']:false;
+			if($gfather||$gmother){
+				$gfather_count = ($gfather)?$gfather['descendants']:0;
+				$gmother_count = ($gmother)?$gmother['descendants']:0;
+				$grandparent = ($gfather>$gmother)?$gfather:$gmother;
+				$grandparent_count = $grandparent['descendants'];
+				
+				$greatgrandparents = $grandparent['parents'];
+				$greatgrandfather = ($greatgrandparents['father'])?$greatgrandparents['father']:false;
+				$greatgrandmother = ($greatgrandparents['mother'])?$greatgrandparents['mother']:false;
+				if($greatgrandfather||$greatgrandmother){
+					$greatgrandfather_count = ($greatgrandfather)?$greatgrandfather['descendants']:0;
+					$greatgrandmother_count = ($greatgrandmother)?$greatgrandmother['descendants']:0;
+					$greatgrandparent = ($greatgrandfather_count>$greatgrandmother_count)?$greatgrandfather:$greatgrandmother;
+					$greatgrandparent_count = $greatgrandparent['descendants'];
+					$diff = $greatgrandparent_count - $grandparent_count;
+					return ($diff>3)?$greatgrandparent['key']:$grandparent['key'];
+				}
+				return $grandparent['key'];
+			}
+			return ($node['key']);
+		}
+		return $parentTree['key'];
+	}
 	
 	public function getTree($r_type){
-		$key = $this->getFirstParent($r_type);
+		$parentTree = $this->getDescendantsCount($r_type);
+		$key = $this->getDefaultKey($parentTree, $r_type);
 		ob_clean();
 		$xml ='<?xml version="1.0" encoding="utf-8"?>';
 		$xml .= '<tree id="0">';
 			$xml .=  $this->node($xml, $key);
 		$xml .= '</tree>';
-		$selection = $this->getDescendantsCount($r_type);
-		return json_encode(array('xml'=>$xml,'selection'=>$selection));		
+		
+		return json_encode(array('xml'=>$xml,'tree'=>$parentTree, 'key'=>$key_));		
 	}
 	
 	public function getTreeById($id){
@@ -194,55 +226,21 @@ class JMBDescendantTree {
 		return $xml;
 	}
 	
-	protected function _getCount_($indKey, &$count){
-		$families = $this->host->gedcom->families->getPersonFamilies($indKey);
-		if(sizeof($families)>0){
-			foreach($families as $family){
-				$childs = $this->host->gedcom->families->getFamilyChildrenIds($family->Id);
-				$count = $count + sizeof($childs);
-				foreach($childs as $child){
-					$this->_getCount_($child['gid'], $count);
-				}
-			}
-		}		
+	public function getDescendantsCount($render_type){
+		$owner_id = $_SESSION['jmb']['gid'];
+		$tree_id = $_SESSION['jmb']['tid'];
 		
+		$lib = $this->host->getTreeLib($tree_id);
 		
-	}
-	
-	protected function getCount($indKey){
-		if($indKey==null) return false;
-		$count = 0;
-		$this->_getCount_($indKey, $count);
-		return $count;
-	}
-	
-	public function getDescendantsCount($r_type){
-		$parents = $this->host->gedcom->individuals->getParents($this->ownerId);
-		if(!empty($parents)){
-			$parentKey = ($r_type=='father')?$parents['fatherID']:$parents['motherID'];
-			if($parentKey==null) return array('response'=>'false');
-			$grandparents = $this->host->gedcom->individuals->getParents($parentKey);
-			if(!empty($grandparents)){
-				$gfather_parents = ($grandparents['fatherID']!=null)?$this->host->gedcom->individuals->getParents($grandparents['fatherID']):false;
-				$gmother_parents = ($grandparents['motherID']!=null)?$this->host->gedcom->individuals->getParents($grandparents['motherID']):false;
-				$response = array();
-				$grandparents_key = ($grandparents['motherID']!=null)?$grandparents['motherID']:$grandparents['fatherID'];
-				$response['grandparents'] = array('id'=>$grandparents_key,'count'=>$this->getCount($grandparents_key)); 
-				$response['greatgrandparents'] = array();
-				if(!empty($gfather_parents)){
-					$gfather_parents_key = ($gfather_parents['motherID']!=null)?$gfather_parents['motherID']:$gfather_parents['fatherID'];
-					$response['greatgrandparents']['father'] = array('id'=>$gfather_parents_key,'count'=>$this->getCount($gfather_parents_key));
-				} else { $response['greatgrandparents']['father'] = false; }
-				if(!empty($gmother_parents)){
-					$gmother_parents_key = ($gmother_parents['motherID']!=null)?$gmother_parents['motherID']:$gmother_parents['fatherID'];
-					$response['greatgrandparents']['mother'] = array('id'=>$gmother_parents_key,'count'=>$this->getCount($gmother_parents_key));
-				} else { $response['greatgrandparents']['mother'] = false; } 
-				return array('response'=>$response);
-			}			
-			return array('response'=>'false');
+		$parents = $this->host->getParents($owner_id, $lib);		
+		$parent = ($render_type=='father')?$parents['husb']:$parents['wife'];
+		if($parent!=null){
+		 	$response = $this->host->getParentTree($owner_id, $lib, 0);
+		 	return $response;
 		}
-		return array('response'=>'false');
+		return false;
 	}
+	
 	
 	public function getPersonInfoJSON($indKey){
 		$fmbUser = $this->host->getUserInfo($_SESSION['jmb']['gid']);

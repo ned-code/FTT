@@ -260,7 +260,9 @@ class JMBProfile {
 		$owner_id = $_SESSION['jmb']['gid'];
 		$tree_id = $_SESSION['jmb']['tid'];
 		$type = $this->host->gedcom->individuals->getMemberFamLine($tree_id, $owner_id, $indKey);
-		$this->host->gedcom->individuals->setMemberFamLine($tree_id, $owner_id, $result['i']->Id, $type[0]['type']);
+		if($type){
+			$this->host->gedcom->individuals->setMemberFamLine($tree_id, $owner_id, $result['i']->Id, $type[0]['type']);
+		}
 		return json_encode($result);	
 	}
 	/**
@@ -286,7 +288,9 @@ class JMBProfile {
 		$owner_id = $_SESSION['jmb']['gid'];
 		$tree_id = $_SESSION['jmb']['tid'];
 		$type = $this->host->gedcom->individuals->getMemberFamLine($tree_id, $owner_id, $indKey);
-		$this->host->gedcom->individuals->setMemberFamLine($tree_id, $owner_id, $ind->Id, $type[0]['type']);
+		if($type){
+			$this->host->gedcom->individuals->setMemberFamLine($tree_id, $owner_id, $ind->Id, $type[0]['type']);
+		}
 		return json_encode(array('data'=>$data,'spouse'=>array('indiv'=>$ind),'photo'=>$photo));
 	}
 	/**

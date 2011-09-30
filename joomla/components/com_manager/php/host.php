@@ -311,74 +311,126 @@ class Host {
 		
 	}
 	
-	// cash family line
-	protected function convert($array, $index){
+	public function array_merge_assoc($objects){
 		$result = array();
-		foreach($array as $el){
-			$result[$el[$index]][] = $el;
+		foreach($objects as $array){
+			foreach($array as $k => $v){
+				$result[$k] = $v;
+			}
 		}
 		return $result;
 	}
 	
-	protected function getParents($indKey, $childs_assoc_id, $families){
-		if(!isset($childs_assoc_id[$indKey])) return null;
-		$family_id = $childs_assoc_id[$indKey][0]['fid'];
-		return (isset($families[$family_id]))?$families[$family_id][0]:null;
+	public function convert2($array, $keys){
+		$arr = array();
+		foreach($keys as $key){
+			$arr[] = $this->convert($array, $key);
+		}
+		return $this->array_merge_assoc($arr);
 	}
 	
-	protected function getChildsByIndKey($indKey, $childs_assoc_id, $childs_assoc_fid){
-		if(!isset($childs_assoc_id[$indKey])) return null;
-		$family_id = $childs_assoc_id[$indKey][0]['fid'];
-		return (isset($childs_assoc_fid[$family_id]))?$childs_assoc_fid[$family_id]:null;
+	public function convert($array, $index){
+		$result = array();
+		$array = (array)$array;
+		foreach($array as $el){
+			if($el[$index]!=null){
+				$result[$el[$index]][] = $el;
+			}
+		}
+		return $result;
 	}
 	
-	protected function getChildsByFamKey($family_id, $childs_assoc_fid){
-		if(!isset($childs_assoc_fid[$family_id])) return null;
-		return $childs_assoc_fid[$family_id];
+	public function getTreeLib($treeId){	
+		$families = $this->gedcom->families->getFamilies($treeId);
+		$childs = $this->gedcom->families->getChilds($treeId);
+		$lib = array();
+		$lib['families']['gid'] = $this->convert2($families, array('husb','wife'));
+		$lib['families']['fid'] = $this->convert($families, 'id');
+		$lib['childrens']['gid'] = $this->convert($childs, 'gid');	
+		$lib['childrens']['fid'] = $this->convert($childs, 'fid');
+		return $lib;
 	}
+	
+	public function getParents($indKey, $lib){
+		if(!isset($lib['childrens']['gid'][$indKey])) return null;
+		$family_id = $lib['childrens']['gid'][$indKey][0]['fid'];
+		return (isset($lib['families']['fid'][$family_id]))?$lib['families']['fid'][$family_id][0]:null;
+	}
+	
+	public function getChildsByIndKey($indKey, $lib){
+		if(!isset($lib['families']['gid'][$indKey])) return null;
+		$family_id = $lib['families']['gid'][$indKey][0]['id'];
+		return (isset($lib['childrens']['fid'][$family_id]))?$lib['childrens']['fid'][$family_id]:null;
+	}
+	
+	public function getChildsByFamKey($family_id, $lib){
+		return (isset($lib['childrens']['fid'][$family_id]))?$lib['childrens']['fid'][$family_id]:null;
+	}
+	
+	public function getDescendantsCount($indKey, $lib){
+		$childs = $this->getChildsByIndKey($indKey, $lib);
+		if($childs==null) return 0;
+		$count = sizeof($childs);
+		foreach($childs as $child){
+			$count += $this->getDescendantsCount($child['gid'], $lib);
+		}
+		return $count;
+	}
+	
+	public function getParentTree($indKey, $lib, $level){
+		$parents = $this->getParents($indKey, $lib);
+		if($parents==null) return false;
+		$result = array();
+		if($parents['husb']){
+			$result['father'] = $this->getParentTree($parents['husb'], $lib, $level + 1);
+		}
+		if($parents['wife']){
+			$result['mother'] = $this->getParentTree($parents['wife'], $lib, $level + 1);
+		}
+		$count = $this->getDescendantsCount($indKey, $lib);
+		return array('key'=>$indKey,'descendants'=>$count, 'level'=>$level, 'parents'=>$result);		
+	}
+	
 		
-	protected function setParentFamLine($indKey, $type, &$line, &$childs_assoc_id, &$families){
+	protected function setParentFamLine($indKey, $type, &$line, $lib){
 		$line[$indKey]['key']= $indKey;
 		$line[$indKey]['type'][] = $type;
 		
-		$parents = $this->getParents($indKey, $childs_assoc_id, $families);
+		$parents = $this->getParents($indKey, $lib);
 		if($parents==null) return;
 		$father = ($parents['husb']!=null)?$parents['husb']:false;
 		$mother = ($parents['wife']!=null)?$parents['wife']:false;
 		if($father){
-			$this->setParentFamLine($father, $type, $line, $childs_assoc_id, $families);
+			$this->setParentFamLine($father, $type, $line, $lib);
 		}
 		if($mother){
-			$this->setParentFamLine($mother, $type, $line, $childs_assoc_id, $families);
+			$this->setParentFamLine($mother, $type, $line, $lib);
 		}
 	}
 	
-	protected function setChildFamLine($indKey, $type, &$line, &$childs_assoc_id, &$childs_assoc_fid, &$families, &$conflicts){
-		$childs = $this->getChildsByIndKey($indKey, $childs_assoc_id, $childs_assoc_fid);
+	protected function setChildFamLine($indKey, $type, &$line, $lib){
+		$childs = $this->getChildsByIndKey($indKey, $lib);
 		if($childs==null) return;
 		foreach($childs as $child){
-			$parents = $this->getParents($indKey, $childs_assoc_id, $families);
+			$parents = $this->getParents($indKey, $lib);
 			$father = ($parents['husb']!=null)?$parents['husb']:false;
 			$mother = ($parents['wife']!=null)?$parents['wife']:false;
+			$types = false;
 			if(isset($line[$father])&&isset($line[$mother])){
 				$f_types = $line[$father]['type'];
 				$m_types = $line[$mother]['type'];
 				$types = array_merge($f_types, $m_types);
 			} else if(isset($line[$father])){
 				$types = $line[$father]['type'];
-				$conflicts[$mother]['key'] = $mother;
 			} else if(isset($line[$mother])){
 				$types = $line[$mother]['type'];
-				$conflicts[$father]['key'] = $father;
-			} else {
-				$conflicts[$father]['key'] = $father;
-				$conflicts[$mother]['key'] = $mother;
-				break;
-				
 			}
-			$line[$child['gid']]['key']= $child['gid'];
-			foreach($types as $t){
-				$line[$child['gid']]['type'][] = $t;
+			if($types){
+				$line[$child['gid']]['key']= $child['gid'];
+				foreach($types as $key => $value){
+					$line[$child['gid']]['type'][$key] = $value;
+				}
+				$this->setChildFamLine($child['gid'], $line[$child['gid']]['type'], $line, $lib);
 			}
 		}
 	}
@@ -398,29 +450,24 @@ class Host {
 	
 	public function createCashFamilyLine($treeId, $ownerId){
 		//get data		
-		$families = $this->convert($this->gedcom->families->getFamilies($treeId), 'id');
-		$childs = $this->gedcom->families->getChilds($treeId);
-
-		$childs_assoc_id = $this->convert($childs, 'gid');
-		$childs_assoc_fid = $this->convert($childs, 'fid');
+		$lib = $this->getTreeLib($treeId);
 		
 		//parsse data
 		$line = array();
-		$conflicts = array();
-	
-		$owner_parents = $this->getParents($ownerId, $childs_assoc_id, $families);
+
+		$owner_parents = $this->getParents($ownerId, $lib);
 		$father = ($owner_parents['husb']!=null)?$owner_parents['husb']:false;
 		$mother = ($owner_parents['wife']!=null)?$owner_parents['wife']:false;
 		
 		if($father){
-			$this->setParentFamLine($father, 'f', $line, $childs_assoc_id, $families);
+			$this->setParentFamLine($father, 'f', $line, $lib);
 		}
 		if($mother){
-			$this->setParentFamLine($mother, 'm', $line, $childs_assoc_id, $families);
+			$this->setParentFamLine($mother, 'm', $line, $lib);
 		}
 		
 		foreach($line as $indiv){
-			$this->setChildFamLine($indiv['key'], $indiv['type'], $line, $childs_assoc_id, $childs_assoc_fid, $families, $conflicts);
+			$this->setChildFamLine($indiv['key'], $indiv['type'], $line, $lib);
 		}
 		
 		//insert to db
@@ -428,13 +475,14 @@ class Host {
 		foreach($result as $res){
 			$this->insertsToFamLine($treeId, $ownerId, $res);
 		}
+		return array('line'=>$line);
 	}
 	
-	public function getFamLine($indivs, $childs_assoc_id, $families, $members){
+	public function getFamLine($indivs, $lib){
 		$objects = array();
 		$types = array();
 		foreach($indivs as $indiv){
-			$parents = $this->getParents($indiv, $childs_assoc_id, $families);
+			$parents = $this->getParents($indiv, $lib);
 			$father = ($parents['husb']!=null)?$parents['husb']:false;
 			$mother = ($parents['wife']!=null)?$parents['wife']:false;
 			if($father){
@@ -449,6 +497,13 @@ class Host {
 				}
 				$objects[] = $mother;
 			}
+			$childs = $this->getChildsByIndKey($indiv, $lib);
+			$childs = (array)$childs;
+			foreach($childs as $child){
+				if(isset($members[$child['gid']])){
+					$types[] = $members[$child['gid']];
+				}
+			}
 		}
 		if(empty($objects)){ return false; }
 		if(!empty($types)){ 
@@ -460,7 +515,7 @@ class Host {
 			}
 			return $result;
 		}
-		return $this->getFamLine($objects,$childs_assoc_id, $families, $members);
+		return $this->getFamLine($objects, $lib);
 	}
 	
 	public function checkCashFamilyLine($treeId, $ownerId){
@@ -470,16 +525,26 @@ class Host {
 		$diff = array_diff_assoc($relatives, $members);
 		
 		//get data
-		$families = $this->convert($this->gedcom->families->getFamilies($treeId), 'id');
-		$childs = $this->gedcom->families->getChilds($treeId);
-		$childs_assoc_id = $this->convert($childs, 'gid');
+		$lib = $this->getTreeLib($treeId);
+		
+		$owner_parents = $this->getParents($ownerId, $lib);
+		$father = ($owner_parents['husb']!=null)?$owner_parents['husb']:false;
+		$mother = ($owner_parents['wife']!=null)?$owner_parents['wife']:false;
 		
 		$objects = array();
 		foreach($diff as $user){
 			$indKey = $user[0]['individuals_id'];
-			$type = $this->getFamLine(array($indKey), $childs_assoc_id, $families, $members);
-			if($type){
-				$objects[$indKey] = array('key'=>$indKey,'type'=>$type);
+			if($indKey == $ownerId){
+				$objects[$indKey] = array('key'=>$indKey,'type'=>array('f','m'));
+			} else if($father&&$indKey==$father){
+				$objects[$indKey] = array('key'=>$indKey,'type'=>array('f'));
+			} else if($mother&&$indKey==$mother){
+				$objects[$indKey] = array('key'=>$indKey,'type'=>array('m'));
+			} else {
+				$type = $this->getFamLine(array($indKey), $lib);
+				if($type){
+					$objects[$indKey] = array('key'=>$indKey,'type'=>$type);
+				}
 			}
 		}
 		
@@ -488,8 +553,9 @@ class Host {
 		foreach($result as $res){
 			$this->insertsToFamLine($treeId, $ownerId, $res);
 		}
-		
+		return array('objects'=>$objects);
 	}
+	
 }
 
 ?>

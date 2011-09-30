@@ -67,7 +67,6 @@ function JMBRecentVisitors(obj){
 		jQuery(li).each(function(i,e){
 			var id = jQuery(e).attr('id');
 			var div = jQuery(e).find('div.avatar');
-			profile.tooltip.cleaner();
 			profile.tooltip.render({
 				target:div,
 				id:id+'-rv',
