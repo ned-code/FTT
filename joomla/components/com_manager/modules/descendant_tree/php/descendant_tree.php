@@ -178,21 +178,21 @@ class JMBDescendantTree {
 		$mother = $parentTree['parents']['mother'];
 		$node = ($r_type=='father')?$father:$mother;
 		if($node){
-			$gfather = ($node['parents']['father'])?$node['parents']['father']:false;
-			$gmother = ($node['parents']['mother'])?$node['parents']['mother']:false;
+			$gfather = $node['parents']['father'];
+			$gmother = $node['parents']['mother'];
 			if($gfather||$gmother){
 				$gfather_count = ($gfather)?$gfather['descendants']:0;
 				$gmother_count = ($gmother)?$gmother['descendants']:0;
-				$grandparent = ($gfather>$gmother)?$gfather:$gmother;
+				$grandparent = ($gfather_count>=$gmother_count)?$gfather:$gmother;
 				$grandparent_count = $grandparent['descendants'];
 				
 				$greatgrandparents = $grandparent['parents'];
-				$greatgrandfather = ($greatgrandparents['father'])?$greatgrandparents['father']:false;
-				$greatgrandmother = ($greatgrandparents['mother'])?$greatgrandparents['mother']:false;
+				$greatgrandfather = $greatgrandparents['father'];
+				$greatgrandmother = $greatgrandparents['mother'];
 				if($greatgrandfather||$greatgrandmother){
 					$greatgrandfather_count = ($greatgrandfather)?$greatgrandfather['descendants']:0;
 					$greatgrandmother_count = ($greatgrandmother)?$greatgrandmother['descendants']:0;
-					$greatgrandparent = ($greatgrandfather_count>$greatgrandmother_count)?$greatgrandfather:$greatgrandmother;
+					$greatgrandparent = ($greatgrandfather_count>=$greatgrandmother_count)?$greatgrandfather:$greatgrandmother;
 					$greatgrandparent_count = $greatgrandparent['descendants'];
 					$diff = $greatgrandparent_count - $grandparent_count;
 					return ($diff>3)?$greatgrandparent['key']:$grandparent['key'];
@@ -213,7 +213,7 @@ class JMBDescendantTree {
 			$xml .=  $this->node($xml, $key);
 		$xml .= '</tree>';
 		
-		return json_encode(array('xml'=>$xml,'tree'=>$parentTree, 'key'=>$key_));		
+		return json_encode(array('xml'=>$xml,'tree'=>$parentTree, 'key'=>$key));		
 	}
 	
 	public function getTreeById($id){
