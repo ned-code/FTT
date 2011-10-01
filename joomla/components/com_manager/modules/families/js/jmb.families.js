@@ -236,6 +236,19 @@ JMBFamilies.prototype = {
 			self.render(obj);
 		})
 		
+		storage.header.famLine.show();
+		var famLine =  self.individs[obj.indKey].indiv.FamLine;
+		if(famLine.length == 2){
+			famLine = 'all';
+		} else {
+			famLine = (famLine[0].type=='m')?['mother']:['father'];
+		}	
+		storage.header.famLine.mode({
+			enabled:false,
+			click:false,
+			active:famLine
+		});
+		
 		//sircar space
 		var sircarDiv = self._createDivParent(obj.indKey, 'left', 1);
 		jQuery(div).find('.jmb-families-sircar').append(sircarDiv);

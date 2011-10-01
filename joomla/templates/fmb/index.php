@@ -85,9 +85,9 @@ $user = ($session)?$facebook->api('/me'):false;
 								<div class="jmb_header_fam_line_container">
 									<div class="jmb_header_fam_line_title"><span>Family Line:</span></div>
 									<div class="jmb_header_fam_line_content">
-										<div id="mother" class="jmb_header_fam_line_mother enabled active"><span>My Mother</span></div>
-										<div id="father" class="jmb_header_fam_line_father disabled"><span>My Father</span></div>
-										<div id="both" class="jmb_header_fam_line_both disabled"><span>both</span></div>
+										<div id="mother" class="jmb_header_fam_line_mother"><span>My Mother</span></div>
+										<div id="father" class="jmb_header_fam_line_father"><span>My Father</span></div>
+										<div id="both" class="jmb_header_fam_line_both"><span>both</span></div>
 									</div>
 								</div>
 							</td>

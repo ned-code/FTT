@@ -69,13 +69,11 @@
 	position: relative;
 }
 .jmb_header_fam_line_content div{
+	color:gray;
+	cursor:default;
 	background: white;
 	border: 1px solid #CDCDCD;
 	padding: 5px;
-}
-.jmb_header_fam_line_content div.disabled{
-	color:gray;
-	cursor:default;
 }
 .jmb_header_fam_line_content div.enabled{
 	color:blue;

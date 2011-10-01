@@ -31,7 +31,7 @@ function JMBDescendantTree(obj){
 	storage.header.famLine.show();
 	storage.header.famLine.mode({
 		enabled:['mother','father'], 
-		active:'mother',
+		click:'mother',
 		event:function(){
 			self.profile._headerEvent();
 			self.show_desc.init();

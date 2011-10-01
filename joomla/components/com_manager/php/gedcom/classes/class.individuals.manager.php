@@ -519,14 +519,8 @@ class IndividualsList{
         	$sql = $this->core->sql("SELECT type FROM #__mb_family_line WHERE `tid`=? AND `from`=? AND `to`=?",$treeId, $ownerId, $indKey);
         	$this->db->setQuery($sql);
         	$rows = $this->db->loadAssocList();
+        	if($rows==null) return false;
         	return $rows;
-        }
-        
-        public function setMemberFamLine($treeId, $ownerId, $indKey, $type){
-		$sqlString = "INSERT INTO #__mb_family_line (`tid`, `from`, `to`, `type`) VALUES (?,?,?,?)";
-		$sql = $this->core->sql($sqlString, $treeId, $ownerId, $indKey, $type);
-		$this->db->setQuery($sql);
-		$this->db->query();
         }
         
         public function getMembersByFamLine($treeId, $ownerId, $renderType=false){

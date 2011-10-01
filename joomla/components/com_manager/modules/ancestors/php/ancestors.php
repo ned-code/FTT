@@ -29,6 +29,7 @@ class JMBAncestors {
 	protected function check($indKey){
 		if($indKey==null) return false;
 		$ind = $this->host->gedcom->individuals->get($indKey);
+		$ind->FamLine = $this->host->gedcom->individuals->getMemberFamLine($_SESSION['jmb']['tid'], $_SESSION['jmb']['gid'], $indKey);
 		return $ind;
 	}
 	
@@ -47,6 +48,7 @@ class JMBAncestors {
 		$ancestor->name = $ind->FirstName.'_'.$ind->LastName;
 		$ancestor->data['flag'] = true;
 		$ancestor->data['gender'] = $ind->Gender;
+		$ancestor->data['famLine'] = $ind->FamLine;
 		$ancestor->data['prew'] = ($prew)?$prew->id:false;
 		$ancestor->children = array();
 		return $ancestor;

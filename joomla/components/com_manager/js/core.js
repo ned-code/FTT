@@ -58,18 +58,19 @@ storage.header.famLine = (function(){
 	var self = this;
 	return {
 		click:function(object){
-			jQuery(this.buttons).removeClass('active');
+			jQuery(this.buttons).removeClass('active').removeClass('click');
 			var id = jQuery(object).attr('id');
 			switch(id){
 				case 'mother':
 				case 'father':
-					jQuery(object).addClass('active');	
+					jQuery(object).addClass('active');
 				break;
 			
 				case 'both':
 					jQuery(this.buttons).addClass('active');
 				break;
 			}
+			jQuery(object).addClass('click');
 			storage.header.activeButton = object;
 		},
 		hide:function(){
@@ -78,35 +79,6 @@ storage.header.famLine = (function(){
 		show:function(){
 			jQuery(this.obj).show();
 		},
-		/*
-		mode:function(r, block){
-			var self = this;
-			jQuery(this.buttons).removeClass('enabled').removeClass('disabled');
-			jQuery(this.buttons).each(function(i, e){
-				switch(r){
-					case "mother":
-					case "father":
-						(jQuery(e).hasClass('jmb_header_fam_line_mother')||jQuery(e).hasClass('jmb_header_fam_line_father'))?jQuery(e).addClass('enabled'):jQuery(e).addClass('disabled');
-					break;
-					case "both": jQuery(e).addClass('enabled'); break;
-				}
-			});
-			if(!block) { 
-			} else {
-				jQuery(this.buttons).removeClass('enabled').addClass('disabled');
-			}
-			jQuery(this.buttons).unbind();
-			if(r!='both'){ 
-				jQuery(this.buttons).click(function(){ 
-					if(jQuery(this).hasClass('disabled')) return false;
-					self.click(this); 
-					storage.header.click();
-					return false;
-				});
-			}
-			this.click(jQuery('#'+r));
-		},
-		*/
 		mode:function(settings){
 			//set function
 			var self = this;
@@ -126,21 +98,20 @@ storage.header.famLine = (function(){
 			if(!settings) settings = {};
 			var config = jQuery.extend({enabled:'all', active:'all'}, settings);
 			
-			jQuery(this.buttons).removeClass('enabled').removeClass('disabled');
-			
+			jQuery(this.buttons).removeClass('enabled').removeClass('active').unbind();
+
 			set_class(config, 'enabled');//set class 'enabled'
 			set_class(config, 'active')//set class 'active'
 			
-			//set click events handlaer
-			jQuery(this.buttons).unbind().parent().find('.enabled').click(function(){
-				if(jQuery(this).hasClass('disabled')) return false;
+			//set click events handlaer	
+			jQuery(this.buttons).parent().find('.enabled').click(function(){
+				if(jQuery(this).hasClass('click')) return false;
 				self.click(this); 
 				storage.header.click();
 				return false;
 			});
 			
-			var click = (config.active&&config.active=='all')?'both':config.active;
-			jQuery(this.buttons).parent().find('#'+click).click();		
+			if(config.click)jQuery(this.buttons).parent().find('#'+config.click).click();		
 			if(config.event) config.event();
 		},
 		init:function(cont, callback){

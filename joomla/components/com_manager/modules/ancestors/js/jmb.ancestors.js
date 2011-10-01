@@ -279,18 +279,37 @@ JMBAncestors.prototype = {
 		//compute node positions and layout
 		st.compute();
 		//emulate a click on the root node.
-		st.select(st.root);	
+		st.select(st.root);
+		//set fam line
+		this.famLine(json);
 		return st;
 	}, 
+	famLine:function(json){
+		storage.header.famLine.show();
+		var famLine =  json.data.famLine;
+		if(famLine.length == 2){
+			famLine = 'all';
+		} else {
+			famLine = (famLine[0].type=='m')?['mother']:['father'];
+		}	
+		storage.header.famLine.mode({
+			enabled:false,
+			click:false,
+			active:famLine
+		});
+	},	
 	render:function(json){
 		this.profile.cleaner();
 		var st = this.st;
+		console.log(json);
 		//load json data
 		st.loadJSON(json);
 		//compute node positions and layout
 		st.compute();
 		//emulate a click on the root node.
 		st.select(st.root);
+		//set fam line
+		this.famLine(json);
 	}
 }
 
