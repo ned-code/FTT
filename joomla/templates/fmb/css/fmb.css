@@ -28,6 +28,39 @@
 #container {
 	position:relative;
 }
+
+/**
+* FMB STYLESHHET - TOP MENU BAR
+*/
+.jmb-top-menu-bar{
+	background: none repeat scroll 0 0 black;
+	height: 30px;
+    	position: relative;
+    	width: 100%;
+}
+.jmb-top-menu-bar div.jmb-top-menu-bar-content{
+	font-family: Calibri,Tahoma,sans-serif;
+	font-weight: bold;
+	position: absolute;
+	right: 40px;
+	top: 0;
+}
+
+.jmb-top-menu-bar div.jmb-top-menu-bar-content div.jmb-top-menu-bar-item{
+	color: white;
+	display: inline-block;
+	margin: 5px;
+	font-weight:bold;
+}
+
+.jmb-top-menu-bar div.jmb-top-menu-bar-content div.jmb-top-menu-bar-item span{
+	cursor: pointer;
+}
+
+.jmb-top-menu-bar div.jmb-top-menu-bar-content div#myfamily{
+	color:gold;
+}
+
 /**
 * FMB STYLESHHET - HEADER
 */

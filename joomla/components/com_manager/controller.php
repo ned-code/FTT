@@ -260,19 +260,7 @@ class JMBController extends JController
         	$srcWidth = imagesx($src); 
         	$srcHeight = imagesy($src);
 
-        	//get ratio
-        	/*
-        	if($srcWidth>$defaultWidth&&$srcHeight>$defaultHeight){
-        		$ratio = ($srcWidth>=$srcHeight)?$srcWidth/$defaultWidth:$srcHeight/$defaultHeight;
-        	} else if($srcWidth>$defaultWidth){
-        		$ratio = $srcWidth/$defaultWidth;
-        	} else if($srcHeight>$defaultHeight){
-        		$ratio = $srcHeight/$defaultHeight;
-        	} else {
-        		$ratio = ($srcWidth<$srcHeight)?$srcHeight/$defaultHeight:$srcWidth/$defaultWidth;
-        	}
-        	*/
-        	
+        	//get ratio        	
         	if($srcWidth>$defaultWidth&&$srcHeight>$defaultHeight){
         		$ratio = ($srcWidth>=$srcHeight)?$srcHeight/$defaultHeight:$srcWidth/$defaultWidth;
         	} else if($srcWidth>$defaultWidth){
@@ -306,6 +294,7 @@ class JMBController extends JController
         	die();
         }
         
+        /*
         protected function get_categories($type){
         	$db =& JFactory::getDBO();
         	switch($type){
@@ -325,6 +314,7 @@ class JMBController extends JController
         	$rows = $db->loadAssocList();
         	return $rows[0]['id'];
         }
+        */
         
         protected function check_user_in_system($fid){
         	$db =& JFactory::getDBO();
@@ -333,8 +323,27 @@ class JMBController extends JController
         	$rows = $db->loadAssocList();
         	return $rows[0];
         }
-        
-        protected function invite($fid, $token, $redirect=true){
+
+        protected function update_login_time ($gid){
+        	$db =& JFactory::getDBO();
+        	$mysqldate = date('Y-m-d H:i:s');
+        	$sql = "UPDATE #__mb_individuals as ind SET last_login='".$mysqldate."' WHERE ind.id ='".$gid."'";
+        	$db->setQuery($sql);
+        	$db->query();
+        }
+
+        protected function getCurrentAlias(){
+		$menu   = &JSite::getMenu();
+		$active   = $menu->getActive();
+		return $active->alias;
+	}
+		
+	protected function location($alias){
+		header('Location:'.JURI::base().'index.php/'.$alias);
+		exit();
+	}
+	
+	protected function invite($fid, $token, $redirect=true){
         	$host = new Host('joomla');
         	$db =& JFactory::getDBO();
         	$sql = "SELECT value FROM #__mb_variables WHERE belongs='".$token."'";
@@ -356,17 +365,10 @@ class JMBController extends JController
         	}
         	$host->createCashFamilyLine($args[1],$args[0]);
         	if($redirect){
-        		header('Location:'.JURI::base().'index.php');
+        		$_SESSION['jmb']['alias'] = 'myfamily';
+        		$this->location($_SESSION['jmb']['alias']);
         	}
         	exit;
-        }
-        
-        protected function update_login_time ($gid){
-        	$db =& JFactory::getDBO();
-        	$mysqldate = date('Y-m-d H:i:s');
-        	$sql = "UPDATE #__mb_individuals as ind SET last_login='".$mysqldate."' WHERE ind.id ='".$gid."'";
-        	$db->setQuery($sql);
-        	$db->query();
         }
         
         public function jmb($fb){
@@ -374,8 +376,78 @@ class JMBController extends JController
         	$option = JRequest::getCmd('option');
         	$view = JRequest::getCmd('view');
         	$id = JRequest::getCmd('id');
-        	$host = new Host('joomla');
+        	$token = JRequest::getCmd('token');
         	
+        	if($option!='com_manager') exit();
+        	if(strlen($task)!=0) return;
+        	
+        	$host = new Host('joomla');
+        	$fb_session = $fb->getSession();
+
+        	if(strlen($token)!=0){
+        		$_SESSION['jmb']['alias'] = 'invitation';
+        		$_SESSION['jmb']['token'] = $token;
+        	}
+        	
+        	$current_alias = $this->getCurrentAlias();
+        	$alias = (isset($_SESSION['jmb']['alias']))?$_SESSION['jmb']['alias']:'home';
+
+        	if($current_alias != $alias){ 
+        		$this->location($alias);
+        	} else {    
+        		switch($current_alias){
+        			case 'home':
+     				
+        			break;
+        		
+        			case 'first-page':
+        				
+        			break;
+        			
+        			case 'login':
+        				if($fb_session){
+        					$_SESSION['jmb']['alias'] = 'home';
+        					$this->location($_SESSION['jmb']['alias']);
+        				}
+        			break;
+        			
+        			case 'famous-family':
+        				
+        			break;
+        			
+        			case 'myfamily':
+        				if(!$fb_session){
+        					$_SESSION['jmb']['alias'] = 'login';	
+        					$this->location($_SESSION['jmb']['alias']);
+        				}
+        				$fid = $fb->getUser();
+        				$link = $this->check_user_in_system($fid);
+        				
+        				if(empty($link)&&$current_alias!='first-page'){
+        					$_SESSION['jmb']['alias'] = 'first-page';
+        					$this->location($_SESSION['jmb']['alias']);
+        				}
+        				$_SESSION['jmb']['gid'] = $link['gid'];
+					$_SESSION['jmb']['tid'] = $link['tid'];
+					$_SESSION['jmb']['permission'] = $link['type'];
+					$this->update_login_time($link['gid']);
+					$host->checkCashFamilyLine($link['tid'], $link['gid']); 
+        			break;
+        			
+        			case 'invitation':
+        				$this->invite($fid, $_SESSION['jmb']['token']);
+        			break;
+        		}
+        	}
+        }
+        /*
+        public function _jmb($fb){
+        	$task = JRequest::getCmd('task');
+        	$option = JRequest::getCmd('option');
+        	$view = JRequest::getCmd('view');
+        	$id = JRequest::getCmd('id');
+        	$host = new Host('joomla');
+
         	if($option!='com_manager') exit(); 
         	
         	$session = $fb->getSession();
@@ -419,6 +491,12 @@ class JMBController extends JController
         			$host->checkCashFamilyLine($link['tid'], $link['gid']);
         		}
         	}        	
+        }
+        */
+        
+        public function setLocation(){
+        	$alias = JRequest::getCmd('alias');
+        	$_SESSION['jmb']['alias'] = $alias;
         }
         
         public function timeout(){

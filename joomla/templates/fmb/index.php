@@ -48,6 +48,10 @@ $facebook = new Facebook(array('appId'=>JMB_FACEBOOK_APPID,'secret'=>JMB_FACEBOO
 $session = $facebook->getSession();
 $user = ($session)?$facebook->api('/me'):false;
 
+$menu   = &JSite::getMenu();
+$active   = $menu->getActive();
+$alias = $active->alias;
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->language; ?>" lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>" >
@@ -71,6 +75,15 @@ $user = ($session)?$facebook->api('/me'):false;
                 <script type="text/javascript" src="<?php echo $this->baseurl ?>/templates/fmb/javascript/fmb.js"></script>
 	</head>
 	<body fid="<?php echo ($user)?$user['id']:'' ?>">
+		<?php if(!$inIFrame): ?>
+			<div  class="jmb-top-menu-bar">
+				<div class="jmb-top-menu-bar-content">
+					<div id="myfamily" class="jmb-top-menu-bar-item"><span>My Family</span></div>
+					<div id="famous-family" class="jmb-top-menu-bar-item"><span>Famous Family</span></div>
+					<div id="home" class="jmb-top-menu-bar-item"><span>FTT Home</span></div>
+				</div>
+			</div>
+		<?php endif; ?>
 		<div class="content" style="<?php if($inIFrame): ?>max-width:760px;<?php else: ?>max-width:980px;<?php endif; ?>">
 			<div class="header">
 				<!-- <1111jdoc:include type="modules" name="header" /> -->
@@ -97,9 +110,11 @@ $user = ($session)?$facebook->api('/me'):false;
 							<!-- Expand Button -->
 							<td>
 								<div class="jmb_header_expand">
+									<?php if(!$inIFrame&&$alias!='famous-family'&&$alias!='home'):  ?>
 									<a href="<?php echo $aHref; ?>" target="_top">
 										<img src="<?php echo $baseUrl; ?>templates/fmb/images/<?php echo $imgName; ?>?111" width="32px" height="32px">
 									</a>
+									<?php endif; ?>
 								</div>
 							</td>
 						</tr>

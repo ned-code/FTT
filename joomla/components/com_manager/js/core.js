@@ -147,6 +147,23 @@ storage.tabs.cleaner = function(){
 	storage.request.cleaner();
 }
 
+storage.topMenuBar = {};
+storage.topMenuBar.init = function(){
+	var top_menu_bar = jQuery('.jmb-top-menu-bar');
+	if(jQuery(top_menu_bar).length==0) return false;
+	jQuery(top_menu_bar).find('.jmb-top-menu-bar-item').click(function(){
+		var id = jQuery(this).attr('id');
+		jQuery.ajax({
+			url: 'index.php?option=com_manager&task=setLocation&alias='+id,
+			type: "POST",
+			dataType: "json",
+			complete : function (req, err) {
+				window.location.reload();
+			}
+		});
+	});
+}
+
 storage.deleteButton = {};
 storage.deleteButton.init = function(container){
 	var fid = jQuery('body').attr('fid');
@@ -208,6 +225,7 @@ core.load = function(pages){
 	jQuery(document).ready(function() {
 	    host = new Host();
 	    storage.login = new JMBLogin('jmb_header_profile_box');
+	    storage.topMenuBar.init();
 	    var manager = new MyBranchesManager();
 	    jQuery.ajax({
 		url: 'index.php?option=com_manager&task=getXML&f=pages&pages='+pages,
@@ -246,6 +264,7 @@ core.loadTabs = function(pages){
     	host = new Host(); 
     	manager = new MyBranchesManager(); 
     	storage.login = new JMBLogin('jmb_header_profile_box');
+    	storage.topMenuBar.init();
     	ul = jQuery('<ul class="jmbtabs"></ul>'); 
     	div = jQuery('<div class="tab_container"></div>');
     	parent = jQuery('#container');
