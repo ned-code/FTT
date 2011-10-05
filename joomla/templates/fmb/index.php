@@ -32,7 +32,7 @@ $og_img = '';
 $og_site_name = 'FamilyTree-Top';
 
 $url_fb = 'http://apps.facebook.com/fmybranches/';
-$url_fmb = 'http://www.familytreetop.com/';
+$url_fmb = 'http://www.familytreetop.com/index.php/myfamily';
 
 // joomla params
 $app                = JFactory::getApplication();
@@ -51,6 +51,20 @@ $user = ($session)?$facebook->api('/me'):false;
 $menu   = &JSite::getMenu();
 $active   = $menu->getActive();
 $alias = $active->alias;
+
+switch($alias){
+	case 'myfamily':
+		$color = '5F8D34';
+	break;
+
+	case 'home':
+		$color = '3f48cc';
+	break;
+
+	case 'famous-family':
+		$color = 'aa6946';
+	break;
+}
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -78,16 +92,16 @@ $alias = $active->alias;
 		<?php if(!$inIFrame): ?>
 			<div  class="jmb-top-menu-bar">
 				<div class="jmb-top-menu-bar-content">
-					<div id="myfamily" class="jmb-top-menu-bar-item"><span>My Family</span></div>
-					<div id="famous-family" class="jmb-top-menu-bar-item"><span>Famous Family</span></div>
-					<div id="home" class="jmb-top-menu-bar-item"><span>FTT Home</span></div>
+					<div id="myfamily" class="jmb-top-menu-bar-item"><span <?php if($alias=='myfamily'): ?>class="active"<?php endif; ?> >My Family</span></div>
+					<div id="famous-family" class="jmb-top-menu-bar-item"><span <?php if($alias=='famous-family'): ?>class="active"<?php endif; ?>>Famous Family</span></div>
+					<div id="home" class="jmb-top-menu-bar-item"><span <?php if($alias=='home'): ?>class="active"<?php endif; ?>>FTT Home</span></div>
 				</div>
 			</div>
 		<?php endif; ?>
 		<div class="content" style="<?php if($inIFrame): ?>max-width:760px;<?php else: ?>max-width:980px;<?php endif; ?>">
 			<div class="header">
 				<!-- <1111jdoc:include type="modules" name="header" /> -->
-				<div class="jmb_header_body">
+				<div style="background:#<?php echo $color; ?>;" class="jmb_header_body">
 					<table>
 						<tr>
 							<!-- Title -->
@@ -110,7 +124,7 @@ $alias = $active->alias;
 							<!-- Expand Button -->
 							<td>
 								<div class="jmb_header_expand">
-									<?php if(!$inIFrame&&$alias!='famous-family'&&$alias!='home'):  ?>
+									<?php if($alias!='famous-family'&&$alias!='home'):  ?>
 									<a href="<?php echo $aHref; ?>" target="_top">
 										<img src="<?php echo $baseUrl; ?>templates/fmb/images/<?php echo $imgName; ?>?111" width="32px" height="32px">
 									</a>

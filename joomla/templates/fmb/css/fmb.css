@@ -57,7 +57,7 @@
 	cursor: pointer;
 }
 
-.jmb-top-menu-bar div.jmb-top-menu-bar-content div#myfamily{
+.jmb-top-menu-bar div.jmb-top-menu-bar-content div.jmb-top-menu-bar-item span.active{
 	color:gold;
 }
 
@@ -65,12 +65,11 @@
 * FMB STYLESHHET - HEADER
 */
 .jmb_header_body {	
-	background: none repeat scroll 0 0 #5F8D34;
 	margin-top: 20px;
 	position: relative;
 }
 .jmb_header_logo {
-	background: url("../images/ftt-temp-logo.png") no-repeat scroll 0 0 transparent;
+	background: url("../images/ftt-temp-logo2.png") no-repeat scroll 0 0 transparent;
 	color: white;
 	font-size: 20px;
 	height: 45px;
