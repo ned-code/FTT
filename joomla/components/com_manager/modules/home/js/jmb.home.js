@@ -1,6 +1,7 @@
 function JMBHome(obj){
 	obj = jQuery('#'+obj);
 	
+	
 	var ajax = function(id){
 		jQuery.ajax({
 			url: 'index.php?option=com_manager&task=setLocation&alias='+id,
