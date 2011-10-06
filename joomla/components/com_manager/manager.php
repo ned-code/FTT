@@ -3,6 +3,7 @@
 defined('_JEXEC') or die( 'Restricted access' );
 define("JMB_FACEBOOK_APPID", "184962764872486");
 define("JMB_FACEBOOK_SECRET", "6b69574c9ddd50ce2661b3053cd4dc02");
+define("JMB_FACEBOOK_URL",  'http://www.familytreetop.com/');
 define("JMB_FACEBOOK_COOKIE",  true);
 $_SESSION['jmb']['facebook_appid'] = JMB_FACEBOOK_APPID;
 $_SESSION['jmb']['facebook_secret'] = JMB_FACEBOOK_SECRET;
@@ -13,8 +14,6 @@ require_once(JPATH_COMPONENT.DS.'controller.php');
 require_once(JPATH_COMPONENT.DS.'php'.DS.'facebook.php'); 
 
 $facebook = new Facebook(array('appId'=>JMB_FACEBOOK_APPID,'secret'=>JMB_FACEBOOK_SECRET,'cookie'=>JMB_FACEBOOK_COOKIE));
-$session = $facebook->getSession();
-
 
 # include JS and CSS 
 $document =& JFactory::getDocument();

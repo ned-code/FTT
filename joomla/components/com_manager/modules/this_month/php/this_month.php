@@ -301,8 +301,9 @@ class JMBThisMonth {
 	* @return array json data
 	*/
 	public function load($args){
-		$fid = $_SESSION['jmb']['fid'];
-		$treeId = $this->host->gedcom->individuals->getTreeIdbyFid($fid);
+		$facebook_id = $_SESSION['jmb']['fid'];
+		$tree_id = $_SESSION['jmb']['tid'];
+		$gedcom_id = $_SESSION['jmb']['gid'];
 		
 		//vars
 		$args = json_decode($args);
@@ -311,17 +312,15 @@ class JMBThisMonth {
 		$sort = $args->sort;
 		$render_type = $args->render;
 		
-		$gid = $_SESSION['jmb']['gid'];
-		
 		//user info and global settings
-		$fmbUser = $this->host->getUserInfo($gid);
+		$fmbUser = $this->host->getUserInfo($gedcom_id);
 		$colors = $this->_getColors();
 		$path = JURI::root(true);
 		$language = $this->getLanguage();
 		
 		if($sort != 'false'){ $this->_setSortTypeParams($sort); }
-		$events = $this->getThisMonthMembersEvents($treeId, $month, $render_type);
-		$descendants = $this->getThisMonthMebmers($gid, $events);
+		$events = $this->getThisMonthMembersEvents($tree_id, $month, $render_type);
+		$descendants = $this->getThisMonthMebmers($gedcom_id, $events);
 		$this->settings['opt']['month'] = $month;
 		
 		return json_encode(array('fmbUser'=>$fmbUser,'colors'=>$colors,'path'=>$path,'events'=>$events,'descedants'=>$descendants,'language'=>$language,'settings'=>$this->settings));

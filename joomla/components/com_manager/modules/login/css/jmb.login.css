@@ -12,6 +12,7 @@
 }
 .jmb_header_profile_box .body {
 	position: relative;
+	margin-top:10px;
 }
 .jmb_header_profile_box .body .title {
 	font-size: 14px;

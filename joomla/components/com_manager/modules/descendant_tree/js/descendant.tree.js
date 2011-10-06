@@ -4,6 +4,7 @@ function JMBDescendantTree(obj){
 	var dhxLayout;
 	var dhxTree;
 	var selectDiv;
+	var base_url = jQuery('body').attr('_baseurl');
 	
 	// set main dhxmlx Layout
 	dhxLayout = new dhtmlXLayoutObject("descendant_tree", "2U");
@@ -17,7 +18,7 @@ function JMBDescendantTree(obj){
 	//dhxTree.setIconSize("16","16")
 	dhxTree.setIconSize("16","16");
 	dhxTree.setSkin('dhx_skyblue');
-	dhxTree.setImagePath("components/com_manager/codebase/imgs/csh_bluebooks_custom/");
+	dhxTree.setImagePath(base_url+"components/com_manager/codebase/imgs/csh_bluebooks_custom/");
 	
 	this.dhxLayout  = dhxLayout;
 	this.dhxTree = dhxTree;

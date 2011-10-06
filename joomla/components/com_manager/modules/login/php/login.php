@@ -5,8 +5,8 @@ class JMBLogin {
 	public function __construct(){
 		$this->host = new Host('Joomla');
 	}
-	
-	public function get($fid){
+
+	public function get(){
 		$ownerId = $_SESSION['jmb']['gid'];
 		$fmbUser = $this->host->getUserInfo($ownerId, $ownerId); 
 		$path = JURI::root(true);

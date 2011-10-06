@@ -9,18 +9,6 @@
 // No direct access.
 defined('_JEXEC') or die;
 
-//functions
-function checkLocation(){
-	$r = isset($_SERVER["HTTP_REFERER"])?$_SERVER["HTTP_REFERER"]:null;
-	if($r!=null){
-		$pUrl = parse_url($r);
-		if($pUrl['host']=='apps.facebook.com'){
-			return true;
-		}
-	} 
-	return false; 
-}
-
 // facebook params
 $fb_app_id = '100001614066938';
 $fb_admin_id = '184962764872486';
@@ -31,27 +19,17 @@ $og_url = 'http://www.familytreetop.com/';
 $og_img = '';
 $og_site_name = 'FamilyTree-Top';
 
-$url_fb = 'http://apps.facebook.com/fmybranches/';
-$url_fmb = 'http://www.familytreetop.com/index.php/myfamily';
-
 // joomla params
 $app                = JFactory::getApplication();
-
-//custom params
-$inIFrame = checkLocation();
-
-$aHref = ($inIFrame)?Juri::base():'http://apps.facebook.com/fmybranches/';
-$imgName = ($inIFrame)?'to_facebook.gif':'to_fmb.gif';
-$baseUrl = JURI::base();
+$base_url = Juri::base();
 
 $facebook = new Facebook(array('appId'=>JMB_FACEBOOK_APPID,'secret'=>JMB_FACEBOOK_SECRET,'cookie'=>JMB_FACEBOOK_COOKIE));
+$fb_login_url = $facebook->getLoginUrl();
 $session = $facebook->getSession();
 $user = ($session)?$facebook->api('/me'):false;
 
-$menu   = &JSite::getMenu();
-$active   = $menu->getActive();
-$alias = $active->alias;
-
+$alias = isset($_SESSION['jmb']['alias'])?$_SESSION['jmb']['alias']:'home';
+$color = '3f48cc';
 switch($alias){
 	case 'myfamily':
 		$color = '5F8D34';
@@ -88,17 +66,15 @@ switch($alias){
                 <!-- fmb template script -->
                 <script type="text/javascript" src="<?php echo $this->baseurl ?>/templates/fmb/javascript/fmb.js"></script>
 	</head>
-	<body fid="<?php echo ($user)?$user['id']:'' ?>">
-		<?php if(!$inIFrame): ?>
-			<div  class="jmb-top-menu-bar">
-				<div class="jmb-top-menu-bar-content">
-					<div id="myfamily" class="jmb-top-menu-bar-item"><span <?php if($alias=='myfamily'): ?>class="active"<?php endif; ?> >My Family</span></div>
-					<div id="famous-family" class="jmb-top-menu-bar-item"><span <?php if($alias=='famous-family'): ?>class="active"<?php endif; ?>>Famous Family</span></div>
-					<div id="home" class="jmb-top-menu-bar-item"><span <?php if($alias=='home'): ?>class="active"<?php endif; ?>>FTT Home</span></div>
-				</div>
+	<body _alias="<?php echo $alias; ?>" _baseurl="<?php echo $base_url; ?>" _fid="<?php echo ($user&&isset($user['id']))?$user['id']:'' ?>">
+		<div  class="jmb-top-menu-bar">
+			<div class="jmb-top-menu-bar-content">
+				<div id="myfamily" class="jmb-top-menu-bar-item"><span <?php if($alias=='myfamily'): ?>class="active"<?php endif; ?> >My Family</span></div>
+				<div id="famous-family" class="jmb-top-menu-bar-item"><span <?php if($alias=='famous-family'): ?>class="active"<?php endif; ?>>Famous Family</span></div>
+				<div id="home" class="jmb-top-menu-bar-item"><span <?php if($alias=='home'): ?>class="active"<?php endif; ?>>FTT Home</span></div>
 			</div>
-		<?php endif; ?>
-		<div class="content" style="<?php if($inIFrame): ?>max-width:760px;<?php else: ?>max-width:980px;<?php endif; ?>">
+		</div>
+		<div id="_content" class="content">
 			<div class="header">
 				<!-- <1111jdoc:include type="modules" name="header" /> -->
 				<div style="background:#<?php echo $color; ?>;" class="jmb_header_body">
@@ -106,7 +82,7 @@ switch($alias){
 						<tr>
 							<!-- Title -->
 							<td><div class="jmb_header_logo">&nbsp;</div></td>
-							<?php if($user): ?>
+							<?php if($alias=='myfamily'): ?>
 							<!-- Family Line -->
 							<td>
 								<div class="jmb_header_fam_line_container">
@@ -120,35 +96,44 @@ switch($alias){
 							</td>
 							<?php endif; ?>
 							<!-- Profile Line -->
-							<td><div id="jmb_header_profile_box" class="jmb_header_profile_box">&nbsp;</div></td>
+							<td>
+								<div id="jmb_header_profile_box" class="jmb_header_profile_box">
+									<div id="_login" class="body">
+										<div class="title"><span>Login to access your family tree</span></div>
+										<div style="width:180px;" class="content">
+											<div class="jmb-profile-login-button">
+												
+												<a href="<?php echo $fb_login_url; ?>">
+													Connect with Facebook
+												</a>
+											</div>
+										</div>
+									</div>
+									<div id="_content" class="body">
+										<div class="body"><div class="title">&nbsp;</div><div class="content">&nbsp;</div><div class="avatar"></div></div>
+									</div>
+								</div>
+							</td>
 							<!-- Expand Button -->
 							<td>
-								<div class="jmb_header_expand">
-									<?php if($alias!='famous-family'&&$alias!='home'):  ?>
-									<a href="<?php echo $aHref; ?>" target="_top">
-										<img src="<?php echo $baseUrl; ?>templates/fmb/images/<?php echo $imgName; ?>?111" width="32px" height="32px">
-									</a>
-									<?php endif; ?>
-								</div>
+								<div class="jmb_header_expand">&nbsp;</div>
 							</td>
 						</tr>
 					</table>
 				</div>
 			</div>
 			<div class="main">
-				<table>
+				<table width="100%">
 					<tr>
-						<td valign="top" style="<?php if($inIFrame): ?>width:760px;<?php else: ?>width:820px;<?php endif; ?>">
+						<td id="_main" valign="top">
 							<div id="fb-root"></div>
 							<jdoc:include type="component" />
 						</td>
-						<?php if(!$inIFrame): ?>
-							<td valign="top"><div class="right"><jdoc:include type="modules" name="right" /></div></td>
-						<?php endif; ?>
+						<td id="_right" valign="top"><div class="right"><jdoc:include type="modules" name="right" /></div></td>
 					</tr>
 				</table>
 			</div>
-			<?php if($inIFrame): ?><div class="footer"><jdoc:include type="modules" name="footer" /></div><?php endif; ?>
+			<div id="_bottom" class="footer"><jdoc:include type="modules" name="footer" /></div>
 		</div>
 		<script>
 			FB.init({
