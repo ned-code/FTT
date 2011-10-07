@@ -1,6 +1,6 @@
 function JMBHome(obj){
+	var module = this;
 	obj = jQuery('#'+obj);
-	
 	
 	var ajax = function(id){
 		jQuery.ajax({
@@ -37,11 +37,17 @@ function JMBHome(obj){
 			var id = jQuery(this).attr('id');
 			switch(id){
 				case 'connect':
-					ajax('myfamily');
+					//ajax('myfamily');
+					module.ajax('page', 'myfamily', function(){
+						window.location.reload();	
+					});
 				break;
 				
 				case 'view':
-					ajax('famous-family');
+					//ajax('famous-family');
+					module.ajax('page', 'famous-family', function(){
+						window.location.reload();
+					});
 				break;
 			}
 		});
@@ -49,14 +55,16 @@ function JMBHome(obj){
 	
 	var body = createBody(obj);
 	initButton(body);
-	
-	
-	
+
 	jQuery(obj).append(body);
 }
 
 JMBHome.prototype = {
-
+	ajax:function(func, params, callback){
+		host.callMethod("home", "JMBHome", func, params, function(res){
+				callback(res);
+		})
+	}
 }
 
 

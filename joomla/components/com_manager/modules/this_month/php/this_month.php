@@ -271,7 +271,7 @@ class JMBThisMonth {
 	}
 	
 	protected function setThisMonthMembers($gid, $id, &$members){
-		if($id!=null&&!array_key_exists($id, $members)){
+		if($id!=null&&!isset($members[$id])){
 			$member = $this->host->getUserInfo($id, $gid);
 			if($member!=null){
 				$members[$member['indiv']->Id] = $member;

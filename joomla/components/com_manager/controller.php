@@ -321,7 +321,7 @@ class JMBController extends JController
         	$sql = "SELECT link.individuals_id as gid, link.tree_id as tid, link.type FROM #__mb_tree_links as link LEFT JOIN #__mb_individuals as ind ON ind.id = link.individuals_id WHERE ind.fid='".$fid."'";
         	$db->setQuery($sql);
         	$rows = $db->loadAssocList();
-        	return $rows[0];
+        	return ($rows!=null)?$rows[0]:false;
         }
 
         protected function update_login_time ($gid){
@@ -371,6 +371,56 @@ class JMBController extends JController
         	exit;
         }
         
+        protected function curl_get_file_contents($URL) {
+	    $c = curl_init();
+	    curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
+	    curl_setopt($c, CURLOPT_SSL_VERIFYPEER, false);
+	    curl_setopt($c, CURLOPT_URL, $URL);
+	    $contents = curl_exec($c);
+	    $err  = curl_getinfo($c,CURLINFO_HTTP_CODE);
+	    curl_close($c);
+	    if ($contents) return $contents;
+	    else return FALSE;
+	}
+        
+        protected function facebookAccessTokenExpired($fb){
+        	$code = $_REQUEST["code"];
+        	if (isset($code)) {
+        		$token_url="https://graph.facebook.com/oauth/access_token?client_id=";
+        		$token_url .= JMB_FACEBOOK_APPID;
+        		$token_url .= "&redirect_uri=";
+        		$token_url .= urlencode(JMB_FACEBOOK_URL);
+        		$token_url .= "&client_secret=";
+        		$token_url .= JMB_FACEBOOK_SECRET;
+        		$token_url .= "&code=";
+        		$token_url .= $code;
+        		$token_url .= "&display=popup";
+        		
+        		$response = file_get_contents($token_url);
+        		$params = null;
+        		parse_str($response, $params);
+        		$access_token = $params['access_token'];
+        	}
+        	
+        	$graph_url = "https://graph.facebook.com/me?access_token=".$access_token;
+        	$response = $this->curl_get_file_contents($graph_url);
+        	$decoded_response = json_decode($response);
+        	
+        	if ($decoded_response->error) {
+        		if ($decoded_response->error->type== "OAuthException") {
+        			$dialog_url= "https://www.facebook.com/dialog/oauth?client_id".JMB_FACEBOOK_APPID."&redirect_uri=".urlencode(JMB_FACEBOOK_URL);
+        			//echo("<script> top.location.href='" . $dialog_url . "'</script>");
+        			echo $dialog_url;
+        		} else {
+        			echo "other error has happened";
+        		}
+        	} else {
+        		 echo("success" . $decoded_response->name);
+        		 echo($access_token);
+        	}
+        
+        }
+        
         public function jmb($fb){
         	$task = JRequest::getCmd('task');
         	$option = JRequest::getCmd('option');
@@ -383,6 +433,7 @@ class JMBController extends JController
         	
         	$host = new Host('joomla');
         	$fb_session = $fb->getSession();
+        	$user = ($fb_session)?$fb->api('/me'):false;
 
         	if(strlen($token)!=0){
         		$_SESSION['jmb']['alias'] = 'invitation';
@@ -391,22 +442,38 @@ class JMBController extends JController
         	
         	$current_alias = $this->getCurrentAlias();
         	$alias = (isset($_SESSION['jmb']['alias']))?$_SESSION['jmb']['alias']:'home';
-
         	if($current_alias != $alias){ 
         		$this->location($alias);
-        	} else {    
+        	} else{    
         		switch($current_alias){
         			case 'home':
      				
         			break;
         		
         			case 'first-page':
-        				
+        				if(!isset($user['id'])){
+        					$_SESSION['jmb']['alias'] = 'login';	
+        					$this->location($_SESSION['jmb']['alias']);
+        				}
+        				if(isset($user['id'])){
+        					$link = $this->check_user_in_system($user['id']);
+        					if($link){
+        						$_SESSION['jmb']['alias'] = 'myfamily';
+        					} else {
+        						$_SESSION['jmb']['alias'] = 'home';
+        					}
+        					$this->location($_SESSION['jmb']['alias']);
+        				}
         			break;
         			
         			case 'login':
-        				if($fb_session){
-        					$_SESSION['jmb']['alias'] = 'home';
+        				if(isset($user['id'])){
+        					$link = $this->check_user_in_system($user['id']);
+        					if($link){
+        						$_SESSION['jmb']['alias'] = 'myfamily';
+        					} else {
+        						$_SESSION['jmb']['alias'] = 'home';
+        					}
         					$this->location($_SESSION['jmb']['alias']);
         				}
         			break;
@@ -416,22 +483,31 @@ class JMBController extends JController
         			break;
         			
         			case 'myfamily':
-        				if(!$fb_session){
-        					$_SESSION['jmb']['alias'] = 'login';	
-        					$this->location($_SESSION['jmb']['alias']);
-        				}
-        				$fid = $fb->getUser();
-        				$link = $this->check_user_in_system($fid);
-        				
-        				if(empty($link)&&$current_alias!='first-page'){
-        					$_SESSION['jmb']['alias'] = 'first-page';
-        					$this->location($_SESSION['jmb']['alias']);
-        				}
-        				$_SESSION['jmb']['gid'] = $link['gid'];
-					$_SESSION['jmb']['tid'] = $link['tid'];
-					$_SESSION['jmb']['permission'] = $link['type'];
-					$this->update_login_time($link['gid']);
-					$host->checkCashFamilyLine($link['tid'], $link['gid']); 
+        				if(isset($_SESSION['jmb']['login_type'])&&$_SESSION['jmb']['login_type']=='famous_family'){
+        					
+        				} else {
+						if(!isset($user['id'])){
+							$_SESSION['jmb']['alias'] = 'login';	
+							$this->location($_SESSION['jmb']['alias']);
+						}        			
+						if($user['id']=='100001614066938'){
+							$user['id'] = '100000657385590';
+						}
+						$link = $this->check_user_in_system($user['id']);
+						
+						if(!$link&&$current_alias!='first-page'){
+							$_SESSION['jmb']['alias'] = 'first-page';
+							$this->location($_SESSION['jmb']['alias']);
+						}
+						
+						$_SESSION['jmb']['fid'] = $user['id'];
+						$_SESSION['jmb']['gid'] = $link['gid'];
+						$_SESSION['jmb']['tid'] = $link['tid'];
+						$_SESSION['jmb']['permission'] = $link['type'];
+						$_SESSION['jmb']['login_type'] = 'family_tree';
+						$this->update_login_time($link['gid']);
+						//$host->checkCashFamilyLine($link['tid'], $link['gid']); 
+					}
         			break;
         			
         			case 'invitation':

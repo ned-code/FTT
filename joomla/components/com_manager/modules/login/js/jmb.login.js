@@ -1,4 +1,5 @@
 function JMBLogin(obj){
+	var module = this;
 	obj = jQuery('#'+obj);
 
 	if(window!=window.top){
@@ -31,38 +32,6 @@ function JMBLogin(obj){
 	} else {
 		jQuery(obj).find('div#_login').show();
 	}
-	
-	/*
-	FB.getLoginStatus(function(response) {
-		switch(response.status){
-			case 'connected':
-				FB.api('/me', function(me) {
-					jQuery(box).find('.title').html(me.name);
-					var buttons = jQuery('<ul class="buttons"><li><span id="profile">Profile</span></li><li><span id="settings">Settings</span></li><li><span id="logout">Logout</span></li></ul>');
-					jQuery(buttons).find('span').click(function(){
-						parent[jQuery(this).attr('id')](me)
-					});
-					jQuery(box).find('.content').css('width', '130px').append(buttons);
-					jQuery(box).find('.avatar').html(get_avatar(me.id));
-				});	
-			break;
-			
-			case 'unknown':
-				jQuery(box).find('.title').html('<span>Login to access your family tree</span>');
-				jQuery(box).find('.content').css('width', '180px').html('<fb:login-button>Connect with Facebook</fb:login-button>');
-				jQuery(box).find('.avatar').hide();
-				parent.init();
-			break;
-		}
-	});
-	
-	FB.Event.subscribe('auth.login', function(response) {
-		window.location.reload();
-	});
-        FB.Event.subscribe('auth.logout', function(response) {
-        	window.location.reload();
-        });
-        */
 }
 
 JMBLogin.prototype = {

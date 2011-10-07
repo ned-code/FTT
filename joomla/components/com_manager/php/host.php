@@ -246,7 +246,10 @@ class Host {
 	public function getUserInfo($indKey, $indRel = false){
 		if($indKey==null){ return null; }
 		$indiv = $this->gedcom->individuals->get($indKey);
-		if($indRel) $indiv->Relation = $this->gedcom->individuals->relation->get_relation($indKey, $indRel);
+		$indiv->FamLine = $this->gedcom->individuals->getMemberFamLine($_SESSION['jmb']['tid'], $_SESSION['jmb']['gid'], $indKey);
+		if($indRel){
+			$indiv->Relation = $this->gedcom->individuals->relation->get_relation($indKey, $indRel);
+		}
 		$events = $this->gedcom->events->getAllEventsByIndKey($indKey);
 		$parents = $this->gedcom->individuals->getParents($indKey);
 		$children = $this->gedcom->individuals->getChilds($indKey);
