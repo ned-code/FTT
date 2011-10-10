@@ -479,11 +479,14 @@ class JMBController extends JController
         			break;
         			
         			case 'famous-family':
-        				
+        				$_SESSION['jmb']['login_type'] = 'famous_family';
+        				$_SESSION['jmb']['gid'] = null;
+					$_SESSION['jmb']['tid'] = null;
+					$_SESSION['jmb']['permission'] = null;
         			break;
         			
         			case 'myfamily':
-        				if(isset($_SESSION['jmb']['login_type'])&&$_SESSION['jmb']['login_type']=='famous_family'){
+        				if(isset($_SESSION['jmb']['login_type'])&&$_SESSION['jmb']['login_type']=='famous_family'&&$_SESSION['jmb']['tid']!=null){
         					
         				} else {
 						if(!isset($user['id'])){

@@ -22,12 +22,14 @@
     	text-align: center;
     	top: -5px;
     	width: 130px;
+    	background:none;
 }
 .jmb_header_profile_box .body .content {
 	height: 25px;
 	left: 10px;
     	position: absolute;
     	top: 10px;
+    	background:none;
 }
 .jmb_header_profile_box .body .content ul {}
 .jmb_header_profile_box .body .content ul li {
@@ -43,7 +45,8 @@
 	height: 50px;
     	position: absolute;
     	right: 4px;
-    	top: -10px;
+    	top: -6px;
     	width: 50px;
+    	background:none;
 }
 
