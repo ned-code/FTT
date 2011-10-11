@@ -259,14 +259,36 @@ class JMBThisMonth {
 		}
 	}
 	
+	protected function sortByPermission($events){
+		$permission = $_SESSION['jmb']['permission'];
+		if($permission=='OWNER'){ return $events; }
+		$tree = $this->host->getTree($_SESSION['jmb']['gid'],$_SESSION['jmb']['tid'],$permission);
+		$result = array();
+		foreach($tree as $key => $node){
+			foreach($events as $event){
+				if($key == $event[0]['gid']){
+					$retulst[] = $event;
+				}
+			}
+		}	
+		return $result;
+	}
+	
 	protected function getThisMonthMembersEvents($treeId, $month, $render_type){
 		$sort = array((int)$this->settings['split_event']['type'],$this->settings['split_event']['year']);
+
 		$birth = $this->host->gedcom->individuals->getByEvent($treeId, 'BIRT', $month, $sort);
 		$death = $this->host->gedcom->individuals->getByEvent($treeId, 'DEAT', $month, $sort);
 		$marr = $this->host->gedcom->families->getByEvent($treeId, 'MARR', $month, $sort);	
+		
 		$birth = $this->sortByFamilyLine($birth, $render_type);
 		$death = $this->sortByFamilyLine($death, $render_type);
 		$marr = $this->sortByFamilyLine($marr, $render_type);
+		
+		$birth = $this->sortByPermission($birth);
+		$death = $this->sortByPermission($death);
+		$marr = $this->sortByPermission($marr);
+
 		return array('b'=>$birth,'d'=>$death,'m'=>$marr);
 	}
 	

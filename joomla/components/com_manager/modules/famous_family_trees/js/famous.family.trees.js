@@ -2,7 +2,7 @@ function FamousFamilyTrees(obj){
 	var module = this;
 	obj = jQuery('#'+obj);
 	var getName = function(ind){
-		return [(ind.Nick!='')?ind.Nick:ind.FirstName,(ind.LastName)?ind.LastName:''].join(' ');	
+		return [(ind.Nick!=null)?ind.Nick:ind.FirstName,(ind.LastName!=null)?ind.LastName:''].join(' ');	
 	}
 	
 	var getAvatar = function(e){

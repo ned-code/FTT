@@ -136,7 +136,7 @@ JMBThisMonth.prototype = {
 		var view = jQuery('.jmb-this-month-body').find('#jmb-this-month-birth table');
 		var sb = host.stringBuffer();
 		var events = json.events;
-		if(events.b){
+		if(events.b&&events.b.length!=0){
 			var b = events.b;
 			jQuery(b).each(function(i,e){	
 				var data, key, birth, gender, color, append;
@@ -165,7 +165,7 @@ JMBThisMonth.prototype = {
 		var view = jQuery('.jmb-this-month-body').find('#jmb-this-month-death table');
 		var events = json.events;
 		var sb = host.stringBuffer();
-		if(events.d){
+		if(events.d&&events.d.length!=0){
 			var d = events.d;
 			jQuery(d).each(function(i,e){
 				var data, key, death, gender, color, append;
@@ -189,7 +189,7 @@ JMBThisMonth.prototype = {
 		var view = jQuery('.jmb-this-month-body').find('#jmb-this-month-marr table');
 		var events = json.events;
 		var sb = host.stringBuffer();
-		if(events.m){
+		if(events.m&&events.m.length!=0){
 			var m = events.m;
 			jQuery(m).each(function(i,e){
 				var key, sircar, spouse, event, append;
