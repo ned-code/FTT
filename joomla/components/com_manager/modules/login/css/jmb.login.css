@@ -10,43 +10,48 @@
 	top: 5px;
 	width: 200px;
 }
-.jmb_header_profile_box .body {
+.jmb_header_profile_box table{
+	margin-top: -10px;
+	width: 100%;
+}
+
+.jmb_header_profile_box .jmb-profile-box-body {
 	position: relative;
 	margin-top:10px;
 }
-.jmb_header_profile_box .body .title {
-	font-size: 14px;
-	height: 25px;
-    	left: 7px;
-    	position: absolute;
-    	text-align: center;
-    	top: -5px;
-    	width: 130px;
-    	background:none;
+
+.jmb-profile-login-button {
+	margin-top: 20px;
+	text-align: center;
 }
-.jmb_header_profile_box .body .content {
-	height: 25px;
-	left: 10px;
-    	position: absolute;
-    	top: 10px;
-    	background:none;
-}
-.jmb_header_profile_box .body .content ul {}
-.jmb_header_profile_box .body .content ul li {
+
+.jmb-profile-box-avatar {
+	border: 1px solid #999999;
 	display: inline-block;
-	margin-left: 3px;
+	height: 50px;
+	width: 50px;
+	margin-top: 1px;
 }
-.jmb_header_profile_box .body .content ul li span {
+.jmb-profile-box-content{
+	width:130px;
+	display:inline-block;
+}
+.jmb-profile-box-content.jmb-profile-box-text{
+	font-size: 14px;
+	font-weight: bold;
+    	padding: 7px;
+}
+.jmb-profile-box-title{
+	font-size: 14px;
+	font-weight: bold;
+	margin-left:5px;
+}
+.jmb-profile-box-content ul li{
+	display:inline;
+}
+.jmb-profile-box-content ul li span{
 	color: blue;
 	cursor: pointer;
-}
-.jmb_header_profile_box .body .avatar {
-	border: 1px solid #000000;
-	height: 50px;
-    	position: absolute;
-    	right: 4px;
-    	top: -6px;
-    	width: 50px;
-    	background:none;
+    	margin-left: 3px;
 }
 

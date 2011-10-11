@@ -98,20 +98,12 @@ switch($alias){
 							<!-- Profile Line -->
 							<td>
 								<div id="jmb_header_profile_box" class="jmb_header_profile_box">
-									<div id="_login" class="body">
-										<div class="title"><span>Login to access your family tree</span></div>
-										<div style="width:180px;" class="content">
-											<div class="jmb-profile-login-button">
-												
-												<a href="<?php echo $fb_login_url; ?>">
-													Connect with Facebook
-												</a>
-											</div>
+									<div id="profile_login" class="jmb-profile-box-body">
+										<div class="jmb-profile-login-button">
+											<a href="<?php echo $fb_login_url; ?>">Connect with Facebook</a>
 										</div>
 									</div>
-									<div id="_content" class="body">
-										<div class="body"><div class="title">&nbsp;</div><div class="content">&nbsp;</div><div class="avatar"></div></div>
-									</div>
+									<div id="profile_content" class="jmb-profile-box-body"></div>
 								</div>
 							</td>
 							<!-- Expand Button -->

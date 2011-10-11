@@ -6,10 +6,24 @@ function JMBLogin(obj){
 		jQuery(obj).hide();
 		return false;
 	}
+	
+	var facebook_id = jQuery('body').attr('_fid');
 	this.dialog_div = jQuery('<div></div>');
 
-	var getAvatar = function(id){
-		return ['<img src="index.php?option=com_manager&task=getResizeImage&fid=',id,'&w=50&h=50">'].join('');
+	var getAvatar = function(json){
+		if(json.avatar!=null){
+			return ['<img src="index.php?option=com_manager&task=getResizeImage&id=',json.avatar.Id,'&w=50&h=50">'].join('');
+		}
+		/*
+		if(facebook_id){
+			return ['<img src="index.php?option=com_manager&task=getResizeImage&fid=',id,'&w=50&h=50">'].join('');
+		}
+		*/
+		if(json.individ){
+			var gen = json.individ.Gender;
+			var img = (gen=="M")?'male.png':'female.png';
+			return ['<img width="50px" height="50px" src="',json.path,'/components/com_manager/modules/login/imgs/',img,'">'].join('');
+		}			
 	}
 	
 	var getName = function(json){
@@ -17,79 +31,70 @@ function JMBLogin(obj){
 	}
 	
 	
-	jQuery(obj).find('div#_login').hide();
-	jQuery(obj).find('div#_content').hide();
+	
+	jQuery(obj).find('div#profile_login').hide();
+	jQuery(obj).find('div#profile_content').hide();
 	
 	module.ajax('status',null,function(res){
 		var json = jQuery.parseJSON(res.responseText);
-		switch(json.login_type){
+		var type;
+		if(json.alias == 'login'){
+			type = json.alias;
+		} else if(json.alias == 'home'){
+			type = json.alias;
+		} else {
+			type = json.login_type;
+		}
+		switch(type){
+			case "home":
+			case "login":
 			case "family_tree":
-				if(json.facebook_id){
-					var box = jQuery(obj).find('div#_content');
-					jQuery(obj).find('div#_content').show();
-					jQuery(box).find('.title').html(getName(json));
+				if(facebook_id){
+					var box = jQuery(obj).find('div#profile_content');
+					var table = jQuery('<table><tr><td><div class="jmb-profile-box-content"></div></td><td><div class="jmb-profile-box-avatar"></div></td></tr></table>');
+					var divs = jQuery('<div><span class="jmb-profile-box-title"></span></div><div></div>');
 					var buttons = jQuery('<ul class="buttons"><li><span id="profile">Profile</span></li><li><span id="settings">Settings</span></li><li><span id="logout">Logout</span></li></ul>');
 					jQuery(buttons).find('span').click(function(){
 							module[jQuery(this).attr('id')](json.facebook_id);
 					});
-					jQuery(box).find('.content').css('width', '130px').append(buttons);
-					jQuery(box).find('.avatar').html(getAvatar(json.facebook_id));
+					jQuery(divs[0]).find('span').html(getName(json));
+					jQuery(divs[1]).append(buttons);
+					jQuery(table).find('.jmb-profile-box-content').append(divs);
+					jQuery(table).find('.jmb-profile-box-avatar').html(getAvatar(json));
+					jQuery(box).append(table);
+					jQuery(box).show();
 				} else {
-					jQuery(obj).find('div#_login').show();
+					jQuery(obj).find('div#profile_login').show();
 				}
+				
 			break;
 			
 			case "famous_family":
-				jQuery(obj).find('div#_content').show();
 				if(json.tree_id!=null){
-					var box = jQuery(obj).find('div#_content');
+					var box = jQuery(obj).find('div#profile_content');
+					var table = jQuery('<table><tr><td><div class="jmb-profile-box-content"></div></td><td><div class="jmb-profile-box-avatar"></div></td></tr></table>');
+					var divs = jQuery('<div style="margin-left:3px;"></div><div style="text-align:center;"></div><div style="text-align:center;"></div>');
+					var span = jQuery('<span class="jmb-profile-box-title">'+getName(json)+'</span>');
 					var buttons = jQuery('<ul class="buttons"><li><span id="logout">Logout</span></li></ul>');
-					var content = jQuery('<div>'+getName(json)+'</div><div></div>');
-					jQuery(content[0]).css('font-size','16px').css('font-weight','bold');
-					jQuery(content[1]).append(buttons);
 					jQuery(buttons).find('span').click(function(){
 						module.famousFamilyLogout();
 					});
-					jQuery(box).find('.title').html('You are logged in as:');
-					jQuery(box).find('.content').css('top','0px').css('left','40px').append(content);
+					jQuery(divs[0]).html('You logged in as:');
+					jQuery(divs[1]).append(span);
+					jQuery(divs[2]).append(buttons);
+					jQuery(table).find('.jmb-profile-box-content').append(divs);
+					jQuery(table).find('.jmb-profile-box-avatar').html(getAvatar(json));
+					jQuery(box).append(table);
 				} else {
-					jQuery(obj).find('div#_content').find('.content').css('width','130px').css('font-weight', 'bold').css('font-size','14px').css('top','5px').html('Please select a family from the list below');
+					var box = jQuery(obj).find('div#profile_content');
+					var table = jQuery('<table><tr><td><div class="jmb-profile-box-content"></div></td><td><div class="jmb-profile-box-avatar"></div></td></tr></table>');
+					jQuery(table).find('.jmb-profile-box-content').addClass('jmb-profile-box-text').html('Please select a family from the list below');
+					jQuery(box).append(table);
 				}
+				jQuery(obj).find('div#profile_content').show();
 			break;
 		}
 	});
-	
-	/*
-	FB.getLoginStatus(function(response) {
-		switch(response.status){
-			case 'connected':
-				FB.api('/me', function(me) {
-					jQuery(box).find('.title').html(me.name);
-					var buttons = jQuery('<ul class="buttons"><li><span id="profile">Profile</span></li><li><span id="settings">Settings</span></li><li><span id="logout">Logout</span></li></ul>');
-					jQuery(buttons).find('span').click(function(){
-						parent[jQuery(this).attr('id')](me)
-					});
-					jQuery(box).find('.content').css('width', '130px').append(buttons);
-					jQuery(box).find('.avatar').html(get_avatar(me.id));
-				});	
-			break;
-			
-			case 'unknown':
-				jQuery(box).find('.title').html('<span>Login to access your family tree</span>');
-				jQuery(box).find('.content').css('width', '180px').html('<fb:login-button>Connect with Facebook</fb:login-button>');
-				jQuery(box).find('.avatar').hide();
-				parent.init();
-			break;
-		}
-	});
-	
-	FB.Event.subscribe('auth.login', function(response) {
-		window.location.reload();
-	});
-        FB.Event.subscribe('auth.logout', function(response) {
-        	window.location.reload();
-        });
-        */
 }
 
 JMBLogin.prototype = {
