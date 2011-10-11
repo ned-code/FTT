@@ -360,6 +360,18 @@ class Host {
 		return (isset($lib['families']['fid'][$family_id]))?$lib['families']['fid'][$family_id][0]:null;
 	}
 	
+	public function getSpouse($indKey, $lib){
+		if(!isset($lib['families']['gid'][$indKey])) return null;
+		$fam = $lib['families']['gid'][$indKey][0];
+		return ($fam['husb']==$indKey)?$fam['wife']:$fam['husb'];
+	}
+	
+	public function getSibling($indKey, $lib){
+		if(!isset($lib['childrens']['gid'][$indKey])) return null;
+		$family_id = $lib['childrens']['gid'][$indKey][0]['fid'];
+		return $this->getChildsByFamKey($family_id, $lib);
+	}
+	
 	public function getChildsByIndKey($indKey, $lib){
 		if(!isset($lib['families']['gid'][$indKey])) return null;
 		$family_id = $lib['families']['gid'][$indKey][0]['id'];
@@ -557,6 +569,77 @@ class Host {
 			$this->insertsToFamLine($treeId, $ownerId, $res);
 		}
 		return array('objects'=>$objects);
+	}
+	
+	protected function getUserTree_($ind_key, $lib, &$objects){
+		if($ind_key==null) return;
+		//getParents,getChildsByIndKey,getChildsByFamKey,getSpouse,getSibling
+		$spouse = $this->getSpouse($ind_key, $lib);
+		$parents = $this->getParents($ind_key, $lib);
+		$sibling = $this->getSibling($ind_key, $lib);
+		$childrens = $this->getChildsByIndKey($ind_key, $lib);
+		
+		if($spouse!=null&&!isset($objects[$spouse])){
+			$objects[$spouse] = $spouse;
+		}
+
+		if($parents['husb']!=null&&!isset($objects[$parents['husb']])){
+			$objects[$parents['husb']] = $parents['husb'];
+			$this->getUserTree_($parents['husb'], $lib, $objects);
+		}
+		
+		if($parents['wife']!=null&&!isset($objects[$parents['wife']])){
+			$objects[$parents['wife']] = $parents['wife'];
+			$this->getUserTree_($parents['wife'], $lib, $objects);
+		}
+		
+		if(!empty($sibling)){
+			foreach($sibling as $ind){
+				if(!isset($objects[$ind['gid']])){
+					$objects[$ind['gid']] = $ind['gid'];
+					$this->getUserTree_($ind['gid'], $lib, $objects);
+				}
+			}
+		}
+		if(!empty($childrens)){
+			foreach($childrens as $ind){
+				if(!isset($objects[$ind['gid']])){
+					$objects[$ind['gid']] = $ind['gid'];
+					$this->getUserTree_($ind['gid'], $lib, $objects);
+				}
+			}
+		}
+	}
+	
+	public function getUserTree($owner_id, $tree_id){
+		$lib = $this->getTreeLib($tree_id);
+		$objects = array();
+		$spouse = $this->getSpouse($owner_id, $lib);
+		$this->getUserTree_($owner_id, $lib, $objects, $int);
+		$this->getUserTree_($spouse, $lib, $objects, $int);
+		return $objects;
+	}
+	
+	public function getOwnerTree($owner_id, $tree_id){
+		$relatives = $this->gedcom->individuals->getRelatives($tree_id);
+		$objects = array();
+		foreach($relatives as $ind){
+			$objects[$ind['individuals_id']] = $ind['individuals_id'];
+		}
+		return $objects;
+	}
+	
+	public function getTree($owner_id, $tree_id, $permission){
+		switch($permisssion){
+			case "USER":
+			case "MEMBER":
+				return $this->getUserTree($owner_id, $tree_id);
+			break;
+		
+			case "OWNER":
+				return $this->getOwnerTree($owner_id, $tree_id);
+			break;
+		}
 	}
 	
 }
