@@ -451,9 +451,9 @@ class JMBController extends JController
         					$_SESSION['jmb']['fid'] = $user['id'];
         					$link = $this->check_user_in_system($user['id']);
         					if($link){
-        						$_SESSION['jmb']['tid'] = (isset($_SESSION['jmb']['tid']))?$_SESSION['jmb']['tid']:$link['tid'];
-        						$_SESSION['jmb']['gid'] = (isset($_SESSION['jmb']['gid']))?$_SESSION['jmb']['gid']:$link['gid'];
-        						$_SESSION['jmb']['permission'] = (isset($_SESSION['jmb']['permission']))?$_SESSION['jmb']['permission']:$link['type'];
+        						$_SESSION['jmb']['tid'] = $link['tid'];
+        						$_SESSION['jmb']['gid'] = $link['gid'];
+        						$_SESSION['jmb']['permission'] = $link['type'];
         					} else {
         						$_SESSION['jmb']['alias'] = 'first-page';
         						$this->location($_SESSION['jmb']['alias']);

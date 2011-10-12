@@ -379,131 +379,6 @@ class IndividualsList{
         	$rows = $this->db->loadAssocList();
         	return $rows;
         }
-        public function getIndivCount($treeId){
-        	$sqlString = "SELECT COUNT( id ) FROM #__mb_individuals as indivs
-        			LEFT JOIN #__mb_tree_links as links ON links.individuals_id = indivs.id
-        			WHERE links.tree_id = '".$treeId."'";
-        	$this->db->setQuery($sqlString);
-        	$rows = $this->db->loadAssocList();
-        	return 0+$rows[0]['COUNT( id )'];
-        }
-        public function getIndivCountByFamilyLine($treeId, $renderType){
-        	$sqlString = "SELECT COUNT ( id )
-				FROM #__mb_individuals as indivs
-				LEFT JOIN #__mb_tree_links as links ON links.individuals_id = indivs.id
-				LEFT JOIN #__mb_family_line as line ON line.to = indivs.id
-				WHERE links.tree_id = ? AND line.type = ?";
-		$sql = $this->core->sql($sqlString, $treeId, $renderType);
-		$this->db->setQuery($sql);
-        	$rows = $this->db->loadAssocList();
-        	return 0+$rows[0]['COUNT( id )'];
-        }
-        public function getLivingIndivCount($treeId, $count=false){
-        	if(!$count) $count = $this->getIndivCount($treeId);
-        	$sqlString = "SELECT COUNT( ind.id) FROM #__mb_individuals as ind
-        			LEFT JOIN #__mb_events as event ON event.individuals_id = ind.id
-        			LEFT JOIN #__mb_tree_links as links ON links.individuals_id = ind.id
-        			WHERE event.type = 'DEAT' AND links.tree_id = '".$treeId."'";
-        	$this->db->setQuery($sqlString);
-        	$rows = $this->db->loadAssocList();
-        	return 0+$count-$rows[0]['COUNT( ind.id)'];
-        }
-        public function getLivingIndivCountByFamilyLine($treeId, $renderType, $count=false){
-        	if(!$count) $count = $this->getIndivCountByFamilyLine($treeId, $renderType);
-        	$sqlString = "SELECT COUNT( ind.id) FROM #__mb_individuals as ind
-        			LEFT JOIN #__mb_events as event ON event.individuals_id = ind.id
-        			LEFT JOIN #__mb_tree_links as links ON links.individuals_id = ind.id
-        			LEFT JOIN #__mb_family_line as line ON line.to = ind.id
-        			WHERE event.type = 'DEAT' AND links.tree_id = ? AND line.type = ?";
-        	$sql = $this->core->sql($sqlString, $treeId, $renderType);
-        	$this->db->setQuery($sql);
-        	$rows = $this->db->loadAssocList();
-        	return 0+$count-$rows[0]['COUNT( ind.id)'];
-        }
-        public function getIdYoungestMember($treeId){
-        	$sqlString = "SELECT indivs.id FROM #__mb_individuals as indivs
-				LEFT JOIN #__mb_events as events ON events.individuals_id = indivs.id
-				LEFT JOIN #__mb_dates as dates ON dates.events_id = events.id
-				LEFT JOIN #__mb_tree_links as links ON links.individuals_id = indivs.id
-				WHERE events.type = 'BIRT' AND dates.f_year != 'NULL' AND links.tree_id = '".$treeId."'
-				ORDER BY dates.f_year DESC LIMIT 1";
-        	$this->db->setQuery($sqlString);
-        	$rows = $this->db->loadAssocList();
-        	return 0+$rows[0]['id'];
-        }
-        public function getIdYoungestMemberByFamilyLine($treeId, $renderType){
-        	$sqlString = "SELECT indivs.id FROM #__mb_individuals as indivs
-				LEFT JOIN #__mb_events as events ON events.individuals_id = indivs.id
-				LEFT JOIN #__mb_dates as dates ON dates.events_id = events.id
-				LEFT JOIN #__mb_tree_links as links ON links.individuals_id = indivs.id
-				LEFT JOIN #__mb_family_line as line ON line.to = indivs.id
-				WHERE events.type = 'BIRT' AND dates.f_year != 'NULL' AND links.tree_id = ? AND line.type = ?
-				ORDER BY dates.f_year DESC LIMIT 1";
-		$sql = $this->core->sql($sqlString, $treeId, $renderType);		
-        	$this->db->setQuery($sql);
-        	$rows = $this->db->loadAssocList();
-        	return 0+$rows[0]['id'];
-        }
-        public function getIdOldestMember($treeId){  
-        	$sqlString = "SELECT indivs.id as id FROM #__mb_individuals as indivs
-				LEFT JOIN #__mb_events as events ON events.individuals_id = indivs.id
-				LEFT JOIN #__mb_dates as dates ON dates.events_id = events.id
-				LEFT JOIN #__mb_tree_links as links ON links.individuals_id = indivs.id
-				WHERE dates.f_year != 'NULL' AND links.tree_id = '".$treeId."'
-				ORDER BY dates.f_year ASC 
-				LIMIT 1";
-        	$this->db->setQuery($sqlString);
-        	$rows = $this->db->loadAssocList();
-        	return 0+$rows[0]['id'];
-        }        
-          public function getIdOldestMemberByFamilyLine($treeId, $renderType){  
-        	$sqlString = "SELECT indivs.id as id FROM #__mb_individuals as indivs
-				LEFT JOIN #__mb_events as events ON events.individuals_id = indivs.id
-				LEFT JOIN #__mb_dates as dates ON dates.events_id = events.id
-				LEFT JOIN #__mb_tree_links as links ON links.individuals_id = indivs.id
-				LEFT JOIN #__mb_family_line as line ON line.to = indivs.id
-				WHERE dates.f_year != 'NULL' AND links.tree_id = ? AND line.type = ?
-				ORDER BY dates.f_year ASC 
-				LIMIT 1";
-		$sql = $this->core->sql($sqlString, $treeId, $renderType);		
-        	$this->db->setQuery($sql);
-        	$rows = $this->db->loadAssocList();
-        	return 0+$rows[0]['id'];
-        }        
-        public function getIdEarliestMember($treeId){
-        	$sqlString = "SELECT indivs.id as id, events.type as birth, events2.type as death 
-        			FROM #__mb_individuals as indivs
-        			LEFT JOIN #__mb_events as events ON events.individuals_id = indivs.id AND events.type = 'BIRT'
-        			LEFT JOIN #__mb_events as events2 ON events2.individuals_id = indivs.id AND events2.type = 'DEAT'
-        			LEFT JOIN #__mb_dates as dates ON dates.events_id = events.id 
-        			LEFT JOIN #__mb_tree_links as links ON links.individuals_id = indivs.id
-        			WHERE dates.f_year != 'NULL' AND links.tree_id = ".$treeId." 
-        			ORDER BY dates.f_year ASC";
-        	$this->db->setQuery($sqlString);
-        	$rows = $this->db->loadAssocList();
-        	for($i=0;$i<sizeof($rows);$i++){
-        		if($rows[$i]['death'] == null) return $rows[$i]['id'];
-        	}
-        	return null;
-        }
-         public function getIdEarliestMemberByFamilyLine($treeId, $renderType){
-        	$sqlString = "SELECT indivs.id as id, events.type as birth, events2.type as death 
-        			FROM #__mb_individuals as indivs
-        			LEFT JOIN #__mb_events as events ON events.individuals_id = indivs.id AND events.type = 'BIRT'
-        			LEFT JOIN #__mb_events as events2 ON events2.individuals_id = indivs.id AND events2.type = 'DEAT'
-        			LEFT JOIN #__mb_dates as dates ON dates.events_id = events.id 
-        			LEFT JOIN #__mb_tree_links as links ON links.individuals_id = indivs.id
-        			LEFT JOIN #__mb_family_line as line ON line.to = indivs.id
-        			WHERE dates.f_year != 'NULL' AND links.tree_id = ? AND line.type = ?
-        			ORDER BY dates.f_year ASC";
-        	$sql = $this->core->sql($sqlString, $treeId, $renderType);
-        	$this->db->setQuery($sql);
-        	$rows = $this->db->loadAssocList();
-        	for($i=0;$i<sizeof($rows);$i++){
-        		if($rows[$i]['death'] == null) return $rows[$i]['id'];
-        	}
-        	return null;
-        }
         public function getLastLoginMembers($treeId){
         	$sqlString = "SELECT ind.*, links.tree_id, links.type, media.mid as avatar, names.first_name, names.middle_name, names.last_name FROM #__mb_individuals as ind
         			LEFT JOIN #__mb_tree_links as links ON links.individuals_id = ind.id
@@ -516,7 +391,10 @@ class IndividualsList{
         	$rows = $this->db->loadAssocList();
         	return $rows;
         }
-
+        
+        /*
+        * FAM LINE
+        */
         public function getMemberFamLine($treeId, $ownerId, $indKey){
         	$sql = $this->core->sql("SELECT type FROM #__mb_family_line WHERE `tid`=? AND `from`=? AND `to`=?",$treeId, $ownerId, $indKey);
         	$this->db->setQuery($sql);
@@ -524,7 +402,6 @@ class IndividualsList{
         	if($rows==null) return false;
         	return $rows;
         }
-        
         public function getMembersByFamLine($treeId, $ownerId, $renderType=false){
         	if($renderType){
         		$sql = $this->core->sql("SELECT `to` as individuals_id FROM #__mb_family_line WHERE `from` = ? AND `tid` = ? AND `type`=?", $ownerId, $treeId, $renderType);
@@ -532,6 +409,62 @@ class IndividualsList{
         		$sql = $this->core->sql("SELECT `to` as individuals_id, type FROM #__mb_family_line WHERE `from` = ? AND `tid` = ?", $ownerId, $treeId);
         	}
         	$this->db->setQuery($sql);
+        	$rows = $this->db->loadAssocList();
+        	return $rows;
+        }
+        /*
+        * THIS MONTH
+        */
+        public function getIndivCount($treeId){
+        	$sqlString = "SELECT id FROM #__mb_individuals as indivs
+        			LEFT JOIN #__mb_tree_links as links ON links.individuals_id = indivs.id
+        			WHERE links.tree_id = '".$treeId."'";
+        	$this->db->setQuery($sqlString);
+        	$rows = $this->db->loadAssocList();
+        	return $rows;
+        }
+        public function getDeathIndivCount($treeId){
+        	$sqlString = "SELECT COUNT ind.id FROM #__mb_individuals as ind
+        			LEFT JOIN #__mb_events as event ON event.individuals_id = ind.id
+        			LEFT JOIN #__mb_tree_links as links ON links.individuals_id = ind.id
+        			WHERE event.type = 'DEAT' AND links.tree_id = '".$treeId."'";
+        	$this->db->setQuery($sqlString);
+        	$rows = $this->db->loadAssocList();
+        	return $rows;
+        }
+        public function getIdYoungestMember($treeId){
+        	$sqlString = "SELECT indivs.id FROM #__mb_individuals as indivs
+				LEFT JOIN #__mb_events as events ON events.individuals_id = indivs.id
+				LEFT JOIN #__mb_dates as dates ON dates.events_id = events.id
+				LEFT JOIN #__mb_tree_links as links ON links.individuals_id = indivs.id
+				WHERE events.type = 'BIRT' AND dates.f_year != 'NULL' AND links.tree_id = '".$treeId."'
+				ORDER BY dates.f_year DESC LIMIT 1";
+        	$this->db->setQuery($sqlString);
+        	$rows = $this->db->loadAssocList();
+        	return $rows;
+        }
+        public function getIdOldestMember($treeId){  
+        	$sqlString = "SELECT indivs.id as id FROM #__mb_individuals as indivs
+				LEFT JOIN #__mb_events as events ON events.individuals_id = indivs.id
+				LEFT JOIN #__mb_dates as dates ON dates.events_id = events.id
+				LEFT JOIN #__mb_tree_links as links ON links.individuals_id = indivs.id
+				WHERE dates.f_year != 'NULL' AND links.tree_id = '".$treeId."'
+				ORDER BY dates.f_year ASC 
+				LIMIT 1";
+        	$this->db->setQuery($sqlString);
+        	$rows = $this->db->loadAssocList();
+        	return $rows;
+        }
+        public function getIdEarliestMember($treeId){
+        	$sqlString = "SELECT indivs.id as id, events.type as birth, events2.type as death 
+        			FROM #__mb_individuals as indivs
+        			LEFT JOIN #__mb_events as events ON events.individuals_id = indivs.id AND events.type = 'BIRT'
+        			LEFT JOIN #__mb_events as events2 ON events2.individuals_id = indivs.id AND events2.type = 'DEAT'
+        			LEFT JOIN #__mb_dates as dates ON dates.events_id = events.id 
+        			LEFT JOIN #__mb_tree_links as links ON links.individuals_id = indivs.id
+        			WHERE dates.f_year != 'NULL' AND links.tree_id = ".$treeId." 
+        			ORDER BY dates.f_year ASC";
+        	$this->db->setQuery($sqlString);
         	$rows = $this->db->loadAssocList();
         	return $rows;
         }
