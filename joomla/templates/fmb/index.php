@@ -32,7 +32,12 @@ $alias = isset($_SESSION['jmb']['alias'])?$_SESSION['jmb']['alias']:'home';
 $color = '3f48cc';
 switch($alias){
 	case 'myfamily':
-		$color = '5F8D34';
+		$login_type = isset($_SESSION['jmb']['login_type'])?$_SESSION['jmb']['login_type']:'family_tree';
+		if($login_type=='family_tree'){
+			$color = '5F8D34';
+		} else {
+			$color = 'aa6946';
+		}
 	break;
 
 	case 'home':

@@ -630,7 +630,7 @@ class Host {
 	}
 	
 	public function getTree($owner_id, $tree_id, $permission){
-		switch($permisssion){
+		switch($permission){
 			case "USER":
 			case "MEMBER":
 				return $this->getUserTree($owner_id, $tree_id);

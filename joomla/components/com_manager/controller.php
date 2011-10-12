@@ -447,7 +447,22 @@ class JMBController extends JController
         	} else{    
         		switch($current_alias){
         			case 'home':
-     				
+        				if(isset($user['id'])){
+        					$_SESSION['jmb']['fid'] = $user['id'];
+        					$link = $this->check_user_in_system($user['id']);
+        					if($link){
+        						$_SESSION['jmb']['tid'] = (isset($_SESSION['jmb']['tid']))?$_SESSION['jmb']['tid']:$link['tid'];
+        						$_SESSION['jmb']['gid'] = (isset($_SESSION['jmb']['gid']))?$_SESSION['jmb']['gid']:$link['gid'];
+        						$_SESSION['jmb']['permission'] = (isset($_SESSION['jmb']['permission']))?$_SESSION['jmb']['permission']:$link['type'];
+        					} else {
+        						$_SESSION['jmb']['alias'] = 'first-page';
+        						$this->location($_SESSION['jmb']['alias']);
+        					}
+        				} else {
+        					$_SESSION['jmb']['fid'] = null;
+        					$_SESSION['jmb']['alias'] = 'login';
+        					$this->location($_SESSION['jmb']['alias']);
+        				}
         			break;
         		
         			case 'first-page':
@@ -473,7 +488,7 @@ class JMBController extends JController
         						$_SESSION['jmb']['alias'] = 'myfamily';
         					} else {
         						$_SESSION['jmb']['alias'] = 'home';
-        					}
+        					}       					
         					$this->location($_SESSION['jmb']['alias']);
         				}
         			break;

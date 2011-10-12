@@ -367,9 +367,11 @@ class IndividualsList{
         	$sqlString .= " AND date.f_month=?";
         	if($sort&&$sort[0]!=0){
         		$sqlString .= ($sort[0]>0)?" AND date.f_year >= ?":" AND date.f_year < ?";
+        		$sqlString .= " GROUP BY ind.id";
         		$sqlString .= ' ORDER BY  date.f_day ASC';
         		$sql = $this->core->sql($sqlString, $treeId, $type, $month, $sort[1]);
         	} else {
+        		$sqlString .= " GROUP BY ind.id";
         		$sqlString .= ' ORDER BY  date.f_day ASC';
         		$sql = $this->core->sql($sqlString, $treeId, $type, $month);
         	}

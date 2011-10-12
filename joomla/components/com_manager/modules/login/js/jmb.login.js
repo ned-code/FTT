@@ -44,7 +44,7 @@ function JMBLogin(obj){
 			type = json.alias;
 		} else {
 			type = json.login_type;
-		}
+		}	
 		switch(type){
 			case "home":
 			case "login":
