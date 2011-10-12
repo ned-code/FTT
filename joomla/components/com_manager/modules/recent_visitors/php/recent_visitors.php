@@ -36,15 +36,27 @@ class JMBRecentVisitors {
 		}
 	}
 	
+	protected function sortByPermission($response){
+		if($_SESSION['jmb']['permission'] == 'OWNER' || empty($response)) return $response;
+		$tree = $this->host->getTree($_SESSION['jmb']['gid'], $_SESSION['jmb']['tid'], $_SESSION['jmb']['permission']);
+		$result = array();
+		foreach($response as $user){
+			if(isset($tree[$user['id']])){
+				$result[] = $user;
+			}
+		}
+		return $result;
+	}
+	
 	public function get_recent_visitors($render_type){
 		ob_clean();
-		$response = $this->host->gedcom->individuals->getLastLoginMembers($_SESSION['jmb']['tid']);
+		$response = $this->sortByPermission($this->host->gedcom->individuals->getLastLoginMembers($_SESSION['jmb']['tid']));
 		$result = $this->sort($render_type, $response);
 		$time = date('Y-m-d H:i:s');
 		$objects = $this->get_objects($result);
 		$path = JURI::root(true);
 		$fmbUser = $this->host->getUserInfo($_SESSION['jmb']['gid']);
-		return json_encode(array('response'=>$result,'objects'=>$objects,'time'=>$time,'path'=>$path,'fmbUser'=>$fmbUser));		
+		return json_encode(array('response'=>$result,'objects'=>$objects,'time'=>$time,'path'=>$path,'fmbUser'=>$fmbUser,'response'=>$response));		
 	}
 }
 ?>

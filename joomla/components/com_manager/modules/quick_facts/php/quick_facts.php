@@ -26,29 +26,62 @@ class JMBQuickFacts {
                 }
                 return $color;
 	}
-
+	
+	protected function sort($array, $tree, $empty){
+		if(empty($array)) { return $empty; }
+		$result = array();
+		foreach($array as $value){
+			if(isset($tree[$value['id']])){
+				return $value['id'];
+			}
+		}
+		return $result;
+	}
 	
 	public function get($type){
 		$ownerId = $_SESSION['jmb']['gid'];
 		$treeId = $_SESSION['jmb']['tid'];
-		switch($type){
-			case 'mother':
-			case 'father':
-				$count = $this->host->gedcom->individuals->getIndivCountByFamilyLine($treeId, $type[0]);
-				$living = $this->host->gedcom->individuals->getLivingIndivCountByFamilyLine($treeId, $type[0], $count);
-				$youngest = $this->host->getUserInfo($this->host->gedcom->individuals->getIdYoungestMemberByFamilyLine($treeId, $type[0]), $ownerId);
-				$oldest = $this->host->getUserInfo($this->host->gedcom->individuals->getIdOldestMemberByFamilyLine($treeId, $type[0]), $ownerId);
-				$earliest = $this->host->getUserInfo($this->host->gedcom->individuals->getIdEarliestMemberByFamilyLine($treeId,$type[0]), $ownerId);
-			break;
+
+		switch($_SESSION['jmb']['permission']){
+			case 'USER':
+			case 'MEMBER':
+				$tree = $this->host->getTree($_SESSION['jmb']['gid'], $_SESSION['jmb']['tid'], $_SESSION['jmb']['permission']);
+				$count = sizeof($tree);
+				$not_living = $this->host->gedcom->individuals->getDeathIndivCount($treeId);
+				$youngest = $this->host->gedcom->individuals->getIdYoungestMember($treeId);
+				$oldest = $this->host->gedcom->individuals->getIdOldestMember($treeId);
+				$earliest = $this->host->gedcom->individuals->getIdEarliestMember($treeId);
+				
+				$not_living = $this->sort($not_living, $tree, 0);
+				$not_living = ($not_living!=0)?sizeof($not_living):0;
+				$living = $count - $not_living;
+				$youngest = $this->sort($youngest, $tree, null);
+				$oldest = $this->sort($oldest, $tree, null);
+				foreach($earliest as $value){
+					if(isset($tree[$value['id']])&&$value['death']!=null){
+						$earliest = $value['id'];
+					}
+				}
+			break;	
 			
-			default:
+			case 'OWNER':
 				$count = $this->host->gedcom->individuals->getIndivCount($treeId);
-				$living = $this->host->gedcom->individuals->getLivingIndivCount($treeId, $count);
-				$youngest = $this->host->getUserInfo($this->host->gedcom->individuals->getIdYoungestMember($treeId), $ownerId);
-				$oldest = $this->host->getUserInfo($this->host->gedcom->individuals->getIdOldestMember($treeId), $ownerId);
-				$earliest = $this->host->getUserInfo($this->host->gedcom->individuals->getIdEarliestMember($treeId), $ownerId);
+				$not_living = $this->host->gedcom->individuals->getDeathIndivCount($treeId);
+				$youngest = $this->host->gedcom->individuals->getIdYoungestMember($treeId);
+				$oldest = $this->host->gedcom->individuals->getIdOldestMember($treeId);
+				$earliest = $this->host->gedcom->individuals->getIdEarliestMember($treeId);
+				
+				$count = sizeof($count);
+				$living = $count - sizeof($not_living);
+				$youngest = $youngest[0]['id'];
+				$oldest = $oldest[0]['id'];
+				$earliest = $earliest[0]['id'];
 			break;
 		}
+
+		$youngest = $this->host->getUserInfo($youngest, $owneerId);
+		$oldest = $this->host->getUserInfo($oldest, $owneerId);
+		$earliest = $this->host->getUserInfo($earliest, $owneerId);
 		
 		$colors = $this->getColors();
 		$fmbUser = $this->host->getUserInfo($_SESSION['jmb']['gid']);
