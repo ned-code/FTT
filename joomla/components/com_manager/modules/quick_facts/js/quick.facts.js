@@ -56,6 +56,7 @@ function JMBQuickFacts(obj){
 		return st.result();
 	}
 	var setMiniProfile = function(object, json, name){
+		if(json[name] == null) return 0;
 		profile.tooltip.render({
 			target:object,
 			id:json[name].indiv.Id+'-qf',

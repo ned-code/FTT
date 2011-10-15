@@ -104,9 +104,10 @@ JMBFamilies.prototype = {
 		var defImgPath = sb.clear()._(this.json.path)._("/components/com_manager/modules/families/css/")._(defImg).result();
 		return sb.clear()._('<img class="jmb-families-avatar view" height="')._(y)._('px" width="')._(x)._('px" src="')._(defImgPath)._('">').result()
 	},
-	_createDivParent:function(indKey, arrow, k){
-		var self,data, person, name, date, sb, imgPath;
+	_createDivParent:function(obj, arrow, k){
+		var self,data, person, name, date, sb, imgPath, indKey;
 		self = this;
+		indKey = obj.indKey;
 		data = self.individs[indKey];
 		person = self.individs[indKey].indiv;
 		if(!person) return;
@@ -114,7 +115,7 @@ JMBFamilies.prototype = {
 		date = self._getDate(person);
 		sb = host.stringBuffer();
 		sb._('<div>');
-			if(data.parents != null && (data.parents.fatherID != null || data.parents.motherID != null)){
+			if(obj.parents != null && (obj.parents.father||obj.parents.mother)){
 				sb._('<div  id="')._(person.Id)._('" class="jmb-families-button parent active">&nbsp;</div>');
 			} else {
 				sb._('<div  id="null" class="jmb-families-button parent">&nbsp;</div>');
@@ -134,9 +135,10 @@ JMBFamilies.prototype = {
 		sb._('</div>');
 		return jQuery(sb.result());
 	},
-	_createSpouse:function(indKey){
-		var self,data, person, name, date, sb, imgPath;
+	_createSpouse:function(obj){
+		var self,data, person, name, date, sb, imgPath, indKey;
 		self = this;
+		indKey = obj.indKey;
 		data = self.individs[indKey];
 		person = self.individs[indKey].indiv;
 		if(!person) return;
@@ -250,7 +252,7 @@ JMBFamilies.prototype = {
 		});
 		
 		//sircar space
-		var sircarDiv = self._createDivParent(obj.indKey, 'left', 1);
+		var sircarDiv = self._createDivParent(obj, 'left', 1);
 		jQuery(div).find('.jmb-families-sircar').append(sircarDiv);
 
 		if(obj.spouses&&jQuery(obj.spouses).length!=0){

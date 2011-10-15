@@ -198,7 +198,7 @@ JMBAncestors.prototype = {
 			eventType:'click',
 			parent:document.body,
 			beforeClose:function(){
-				console.log('[profile] closed');
+				
 			}
 		});
 	},
@@ -257,7 +257,6 @@ JMBAncestors.prototype = {
 				overridable: true
 			},
 			onCreateLabel: function(label, node){
-				//console.log(node);
 				label.id = node.id;            
 				label.innerHTML = self._createNode(label, node);
 				self._onClickToPhoto(label, node);
@@ -301,7 +300,6 @@ JMBAncestors.prototype = {
 	render:function(json){
 		this.profile.cleaner();
 		var st = this.st;
-		console.log(json);
 		//load json data
 		st.loadJSON(json);
 		//compute node positions and layout

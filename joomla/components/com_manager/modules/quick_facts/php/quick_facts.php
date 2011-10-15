@@ -62,6 +62,7 @@ class JMBQuickFacts {
 						$earliest = $value['id'];
 					}
 				}
+				$earliest = (is_array($earliest))?null:$earliest;
 			break;	
 			
 			case 'OWNER':
@@ -79,9 +80,9 @@ class JMBQuickFacts {
 			break;
 		}
 
-		$youngest = $this->host->getUserInfo($youngest, $owneerId);
-		$oldest = $this->host->getUserInfo($oldest, $owneerId);
-		$earliest = $this->host->getUserInfo($earliest, $owneerId);
+		$youngest = ($youngest)?$this->host->getUserInfo($youngest, $ownerId):null;
+		$oldest = ($oldest)?$this->host->getUserInfo($oldest, $ownerId):null;
+		$earliest = ($earliest)?$this->host->getUserInfo($earliest, $ownerId):null;
 		
 		$colors = $this->getColors();
 		$fmbUser = $this->host->getUserInfo($_SESSION['jmb']['gid']);

@@ -3,10 +3,12 @@ class JMBFamiliesObject{
 	public $indKey;
 	public $childrens;
 	public $spouses;
-	public function __construct($indKey,$childrens,$spouses){
+	public $parents;
+	public function __construct($indKey,$childrens,$spouses,$parents){
 		$this->indKey = $indKey;
 		$this->childrens = $childrens;
 		$this->spouses = $spouses;
+		$this->parents = $parents;
 	}
 }
 
@@ -88,55 +90,96 @@ class JMBFamilies {
                 return $color;
 	}
 
-	protected function getSpouses($indKey){
-		$spouses = $this->host->gedcom->individuals->getSpouses($indKey);
+	protected function getSpouses($indKey, $tree, $lib){
+		$spouses = $this->host->getSpouses($indKey, $lib);		
 		$result = array();
 		foreach($spouses as $id){
-			if($id!=null&&!array_key_exists($id, $this->individs)){
-				$this->individs[$id] =  $this->host->getUserInfo($id, $this->ownerId);
+			if($id!=null&&isset($tree[$id])){
+				if(!isset($this->individs[$id])){
+					$this->individs[$id] =  $this->host->getUserInfo($id, $this->ownerId);
+				}
+				$parents = $this->getParents($id, $tree, $lib);
+				$result[] = array('indKey'=>$id,'parents'=>$parents);
 			}
-			$parents = $this->host->gedcom->individuals->getParents($id);
-			
-		}
-		return ($spouses!=null)?$spouses:array();
-	}
-	
-	protected function getChildrens($indKey){
-		$childrens = $this->host->gedcom->individuals->getChildsId($indKey);
-		$result = array();
-		foreach($childrens as $child){
-			$id = $child['id'];
-			if($id!=null&&!array_key_exists($id, $this->individs)){
-				$this->individs[$id] =  $this->host->getUserInfo($id, $this->ownerId);
-			}
-			$childs = $this->host->gedcom->individuals->getChildsId($id);
-			$spouses = $this->host->gedcom->individuals->getSpouses($id);
-			$spouses = ($spouses!=null)?$spouses:array();
-			$result[] = array('indKey'=>$id,'children'=>$childs,'spouses'=>$spouses);
 		}
 		return $result;
 	}
 	
-	protected function setFamiliesObject($indKey){
-		$this->individs[$indKey] =  $this->host->getUserInfo($indKey, $this->ownerId);
-		$spouses = $this->getSpouses($indKey);
-		$childrens = $this->getChildrens($indKey);
-		$object = new JMBFamiliesObject($indKey, $childrens, $spouses);
-		$this->objects[$indKey] = $object;
+	protected function getChildrens($indKey, $tree, $lib){
+		$childrens = $this->host->getChildsByIndKey($indKey, $lib);
+		$result = array();
+		foreach($childrens as $child){
+			$id = $child['gid'];
+			if(isset($tree[$id])){
+				if($id!=null&&!isset($this->individs[$id])){
+					$this->individs[$id] =  $this->host->getUserInfo($id, $this->ownerId);
+				}			
+				$childs = $this->host->getChildsByIndKey($id, $lib);
+				$_childs = array();
+				if(!empty($childs)){
+					foreach($childs as $ch){
+						if(isset($tree[$ch['gid']])){
+							$_childs[] = $ch;
+						}
+					}
+				}
+				
+				$spouses = $this->host->getSpouses($id,$lib);	
+				$_spouses = array();
+				if(!empty($spouses))
+					foreach($spouses as $sp){
+						if(isset($tree[$sp])){
+							$_spouses = $sp;
+						}
+					}
+				}
+				$result[] = array('indKey'=>$id,'children'=>$_childs,'spouses'=>$_spouses);
+			}
+		}
+		return $result;
+	}
+	
+	protected function getParents($indKey, $tree, $lib){
+		$parents = $this->host->getParents($indKey, $lib);
+		if(empty($parents)) return false;
+		$husb = ($parents!=null&&$parents['husb']!=null)?$parents['husb']:false;
+		$wife = ($parents!=null&&$parents['wife']!=null)?$parents['wife']:false;
+		if($husb&&!isset($tree[$husb])){
+			$husb = false;
+		}
+		if($wife&&!isset($tree[$wife])){
+			$wife = false;
+		}
+		return array('father'=>$husb,'mother'=>$wife);
+	}
+	
+	protected function setFamiliesObject($indKey, $tree, $lib){
+		if(isset($tree[$indKey])){
+			$this->individs[$indKey] =  $this->host->getUserInfo($indKey, $this->ownerId);
+			$spouses = $this->getSpouses($indKey, $tree, $lib);
+			$childrens = $this->getChildrens($indKey, $tree, $lib);
+			$parents = $this->getParents($indKey, $tree, $lib);
+			$object = new JMBFamiliesObject($indKey, $childrens, $spouses, $parents);
+			$this->objects[$indKey] = $object;
+		}
 	}
 	
 	public function getFamiliesObject($indKey){
 		$this->ownerId = $_SESSION['jmb']['gid'];
-		$this->setFamiliesObject($indKey);
+		$tree = $this->host->getTree($_SESSION['jmb']['gid'], $_SESSION['jmb']['tid'], $_SESSION['jmb']['permission']);
+		$lib = $this->host->getTreeLib($_SESSION['jmb']['tid']);
+		$this->setFamiliesObject($indKey, $tree, $lib);
 		return json_encode(array('individs'=>$this->individs,'objects'=>$this->objects));
 	}	
 	
 	public function getFamilies(){
 		$this->ownerId = $_SESSION['jmb']['gid'];
+		$tree = $this->host->getTree($_SESSION['jmb']['gid'], $_SESSION['jmb']['tid'], $_SESSION['jmb']['permission']);
+		$lib = $this->host->getTreeLib($_SESSION['jmb']['tid']);
 		$fmbUser = $this->host->getUserInfo($this->ownerId);
 		$colors = $this->getColors();
 		$path = JURI::root(true);
-		$this->setFamiliesObject($this->ownerId);
+		$this->setFamiliesObject($this->ownerId, $tree, $lib);
 		return json_encode(array('fmbUser'=>$fmbUser,'path'=>$path,'colors'=>$colors,'individs'=>$this->individs,'objects'=>$this->objects));
 	}
 }

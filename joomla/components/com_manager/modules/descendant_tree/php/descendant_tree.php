@@ -60,7 +60,8 @@ class JMBDescendantTree {
 		}
 	}
 	
-	protected function solo(&$xml, $id){
+	protected function solo(&$xml, $id, $lib, $tree){
+		if(!isset($tree[$id])) return 0;
 		$ind = $this->host->gedcom->individuals->get($id);
 		$img = ($ind->Gender == "M") ? 'male.png' : 'female.png';
 		$color = '#';
@@ -89,8 +90,12 @@ class JMBDescendantTree {
 		 	 $xml .= "</item>";
 	}
 	
-	protected function family(&$xml, $family){
-		 $childs = $this->host->gedcom->families->getFamilyChildrenIds($family->Id);
+	protected function family(&$xml, $family, $lib, $tree){
+		 $sircar_in_tree = ($family->Sircar&&isset($tree[$family->Sircar->Id]));
+		 $spouse_in_tree = ($family->Spouse&&isset($tree[$family->Spouse->Id]));
+		 if(!$sircar_in_tree&&!$spouse_in_tree){ return 0; }
+		 //$childs = $this->host->gedcom->families->getFamilyChildrenIds($family->Id);
+		 $childs = $this->host->getChildsByFamKey($family->Id, $lib);
 		 $img = ($family->Sircar->Gender == "M")? "male-family.png" : "fem-family.png" ;
 		 $color_sircar = '#';
 		 $color_sircar .=(($family->Sircar&&$family->Sircar->Gender=='M')?$this->color['M']:$this->color['F']);
@@ -156,21 +161,47 @@ class JMBDescendantTree {
 		 	 	$xml .= "</div>";
 		 	 $xml .= "]]></itemtext>"; 
 		 }
-		 foreach($childs as $child){
-		 	 $this->node($xml, $child['gid']);
+		 if(!empty($childs)){
+			 foreach($childs as $child){
+				 $this->node($xml, $child['gid'], $lib, $tree);
+			 }
 		 }
 		 $xml .= "</item>";
 	}
 
-	protected function node(&$xml, $indKey){
+	protected function node(&$xml, $indKey, $lib, $tree){
 		 $families = $this->host->gedcom->families->getPersonFamilies($indKey);
 		 if(empty($families)){
-		 	 $this->solo($xml, $indKey);
+		 	 $this->solo($xml, $indKey, $lib, $tree);
 		 } elseif(sizeof($families)>0){
 		 	 foreach($families as $family){
-		 	 	 $this->family($xml, $family);
+		 	 	 $this->family($xml, $family, $lib, $tree);
 		 	 }
 		 }
+	}
+	
+	public function getTree($r_type){
+		$tree = $this->host->getTree($_SESSION['jmb']['gid'], $_SESSION['jmb']['tid'], $_SESSION['jmb']['permission']);
+		$lib = $this->host->getTreeLib($_SESSION['jmb']['tid']);
+		$parentTree = $this->getDescendantsCount($r_type, $lib, $tree);
+		$key = $this->getDefaultKey($parentTree, $r_type);
+		ob_clean();
+		$xml ='<?xml version="1.0" encoding="utf-8"?>';
+		$xml .= '<tree id="0">';
+			$xml .=  $this->node($xml, $key, $lib, $tree);
+		$xml .= '</tree>';
+		
+		return json_encode(array('xml'=>$xml,'tree'=>$parentTree, 'key'=>$key));		
+	}
+	
+	public function getTreeById($id){
+		ob_clean();
+		header("Content-type: text/xml");
+		$xml ='<?xml version="1.0" encoding="utf-8"?>';
+		$xml .= '<tree id="0">';
+			$xml .=  $this->node($xml, $id);
+		$xml .= '</tree>';
+		return $xml;
 	}
 		
 	protected function getDefaultKey($parentTree, $r_type){
@@ -203,40 +234,31 @@ class JMBDescendantTree {
 		}
 		return $parentTree['key'];
 	}
-	
-	public function getTree($r_type){
-		$parentTree = $this->getDescendantsCount($r_type);
-		$key = $this->getDefaultKey($parentTree, $r_type);
-		ob_clean();
-		$xml ='<?xml version="1.0" encoding="utf-8"?>';
-		$xml .= '<tree id="0">';
-			$xml .=  $this->node($xml, $key);
-		$xml .= '</tree>';
 		
-		return json_encode(array('xml'=>$xml,'tree'=>$parentTree, 'key'=>$key));		
+	protected function sortByPermission($response, $tree, &$result){
+		if(isset($tree[$response['key']])){
+			$result = array('key'=>$response['key'], 'descendants'=>$response['descendants'], 'level'=>$response['level'], 'parents'=>array('father'=>false,'mother'=>false));
+			if($reponse['parents']['father']&&isset($tree[$reponse['parents']['father']['key']])){
+				$this->sortByPermission($reponse['parents']['father'], $tree, $result);
+			}
+			if($reponse['parents']['mother']&&isset($tree[$reponse['parents']['mother']['key']])){
+				$this->sortByPermission($reponse['parents']['mother'], $tree, $result);
+			}
+		}
 	}
 	
-	public function getTreeById($id){
-		ob_clean();
-		header("Content-type: text/xml");
-		$xml ='<?xml version="1.0" encoding="utf-8"?>';
-		$xml .= '<tree id="0">';
-			$xml .=  $this->node($xml, $id);
-		$xml .= '</tree>';
-		return $xml;
-	}
-	
-	public function getDescendantsCount($render_type){
+	protected function getDescendantsCount($render_type, $lib, $tree){
 		$owner_id = $_SESSION['jmb']['gid'];
 		$tree_id = $_SESSION['jmb']['tid'];
-		
-		$lib = $this->host->getTreeLib($tree_id);
 		
 		$parents = $this->host->getParents($owner_id, $lib);		
 		$parent = ($render_type=='father')?$parents['husb']:$parents['wife'];
 		if($parent!=null){
 		 	$response = $this->host->getParentTree($owner_id, $lib, 0);
-		 	return $response;
+		 	if($_SESSION['jmb']['permission']=='OWNER') return $response;
+			$result = array();
+			$this->sortByPermission($response, $tree, $result);
+			return $result;
 		}
 		return false;
 	}
