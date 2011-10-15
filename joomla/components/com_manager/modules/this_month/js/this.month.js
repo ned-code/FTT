@@ -83,14 +83,14 @@ JMBThisMonth.prototype = {
 	_createEventTableView:function(id, title){
 		return jQuery(['<div id="',id,'"><div class="jmb-this-month-view">',title,'</div><div class="jmb-this-month-content"><table></table></div></div>'].join(''));
 	},
-	_createBody:function(){
+	_createBody:function(json){
 		var self = this;
 		var c = self.content;
-		var types = self.json.language.event_type
+		var lang = json.language;
 		c.table = self._createTableView();
-		c.birth = self._createEventTableView('jmb-this-month-birth', types.birthday+':');
-		c.death = self._createEventTableView('jmb-this-month-death', types.we_remember+':');
-		c.marr = self._createEventTableView('jmb-this-month-marr', types.anniversaries+':');
+		c.birth = self._createEventTableView('jmb-this-month-birth', lang.BIRTHDAYS+':');
+		c.death = self._createEventTableView('jmb-this-month-death', lang.REMEMBER+':');
+		c.marr = self._createEventTableView('jmb-this-month-marr', lang.ANNIVERSARIES+':');
 		jQuery(c.table[0].rows[0].cells[0]).append(c.birth);
 		jQuery(c.table[0].rows[2].cells[0]).append(c.death);
 		jQuery(c.table[0].rows[1].cells[0]).append(c.marr);
@@ -98,9 +98,10 @@ JMBThisMonth.prototype = {
 	},
 	_createMonthsSelect:function(json){
 		var sb = host.stringBuffer();
-		var months = this.json.language.months;
+		var lang = this.json.language;
+		var month_names = [ "JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE","JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER" ];
 		for(var i=0;i<12;i++){
-			sb._('<option ')._((i==json.settings.opt.month-1)?'selected':'')._(' value="')._(i+1)._('">')._(months[i])._('</option>')
+			sb._('<option ')._((i==json.settings.opt.month-1)?'selected':'')._(' value="')._(i+1)._('">')._(lang[month_names[i]])._('</option>')
 		}
 		return sb.result();
 	},
@@ -109,25 +110,25 @@ JMBThisMonth.prototype = {
 		var sb = host.stringBuffer();
 		var sort_date = json.settings.split_event.year;
 		var sort_type = json.settings.split_event.type;
-		var sort_lang = json.language.sort;
+		var lang = json.language;
 		if(date < sort_date && sort_type == '-1'){
-			return sb._('<option value="1">')._(sort_lang.after)._(' ')._(sort_date)._('</option><option selected value="-1">')._(sort_lang.before)._(' ')._(sort_date)._('</option><option value="0">')._(sort_lang.all)._(' ')._('</option>').result();
+			return sb._('<option value="1">')._(lang['AFTER'])._(' ')._(sort_date)._('</option><option selected value="-1">')._(lang['BEFORE'])._(' ')._(sort_date)._('</option><option value="0">')._(lang['ALLYEARS'])._(' ')._('</option>').result();
 		} else if(date < sort_date && sort_type == '0'){
-			return sb._('<option value="1">')._(sort_lang.after)._(' ')._(sort_date)._('</option><option value="-1">')._(sort_lang.before)._(' ')._(sort_date)._('</option><option selected value="0">')._(sort_lang.all)._(' ')._('</option>').result();
+			return sb._('<option value="1">')._(lang['AFTER'])._(' ')._(sort_date)._('</option><option value="-1">')._(lang['BEFORE'])._(' ')._(sort_date)._('</option><option selected value="0">')._(lang['ALLYEARS'])._(' ')._('</option>').result();
 		} else if(date < sort_date && sort_type == '1'){
-			return sb._('<option selected value="1">')._(sort_lang.after)._(' ')._(sort_date)._('</option><option value="-1">Before ')._(sort_date)._('</option><option value="0">')._(sort_lang.all)._(' ')._('</option>').result();
+			return sb._('<option selected value="1">')._(lang['AFTER'])._(' ')._(sort_date)._('</option><option value="-1">Before ')._(sort_date)._('</option><option value="0">')._(lang['ALLYEARS'])._(' ')._('</option>').result();
 		} else if(date > sort_date && sort_type == '-1'){
-			return sb._('<option selected value="-1">')._(sort_lang.before)._(' ')._(sort_date)._('</option><option value="0">')._(sort_lang.all)._(' ')._('</option>').result();
+			return sb._('<option selected value="-1">')._(lang['BEFORE'])._(' ')._(sort_date)._('</option><option value="0">')._(lang['ALLYEARS'])._(' ')._('</option>').result();
 		} else if(date > sort_date && sort_type == '0'){
-			return sb._('<option selected value="0">')._(sort_lang.all)._(' ')._('</option>').result();
+			return sb._('<option selected value="0">')._(lang['ALLYEARS'])._(' ')._('</option>').result();
 		} else if(date > sort_date && sort_type == '1'){
-			return sb._('<option value="0">')._(sort_lang.all)._(' ')._('</option>').result();
+			return sb._('<option value="0">')._(lang['ALLYEARS'])._(' ')._('</option>').result();
 		}
 	},
 	_setHEAD:function(json){
 		var header = jQuery(this.table).find('.jmb-this-month-header');
 		var sb = host.stringBuffer();
-		sb._('<span>')._(json.language.header)._('</span>: <select name="months">')._(this._createMonthsSelect(json))._('</select>');
+		sb._('<span>')._(json.language['HEADER'])._('</span>: <select name="months">')._(this._createMonthsSelect(json))._('</select>');
 		if(json.settings.opt.date<1900) sb._('<select name="sort">')._(this._createSortSelect(json))._('</select>');
 		jQuery(header).append(sb.result());
 	},
@@ -152,11 +153,11 @@ JMBThisMonth.prototype = {
 				jQuery(view).append(append);
 			});
 			if(self.b_count==0){
-				var howdo = self.json.language.howdo.replace('%%',self.json.language.event_type.birthday+' ').split('.');	
+				var howdo = self.json.language['HOWDO'].replace('%%',self.json.language['BIRTHDAYS']+' ').split('.');	
 				self._setMessage(view, 'howToDo.html','#jmb-this-month-birth', ['<div class="message">',howdo[0],'<font color="#b6bad9">',howdo[1],'</font></div>'].join(''));
 			}
 		} else {
-			var howdo = self.json.language.howdo.replace('%%',self.json.language.event_type.birthday+' ').split('.');	
+			var howdo = self.json.language['HOWDO'].replace('%%',self.json.languagelanguage['BIRTHDAYS']+' ').split('.');	
 			self._setMessage(view, 'howToDo.html','#jmb-this-month-birth', ['<div class="message">',howdo[0],'<font color="#b6bad9">',howdo[1],'</font></div>'].join(''));
 		}
 	},
@@ -180,7 +181,7 @@ JMBThisMonth.prototype = {
 			});
 			
 		} else {
-			var howdo = self.json.language.howdo.replace('%%',self.json.language.event_type.we_remember+' ').split('.');	
+			var howdo = self.json.language['HOWDO'].replace('%%',self.json.language['REMEMBER']+' ').split('.');	
 			self._setMessage(view, 'howToDo.html','#jmb-this-month-death', ['<div class="message">',howdo[0],'<font color="#b6bad9">',howdo[1],'</font></div>'].join(''));
 		}
 	},
@@ -209,7 +210,7 @@ JMBThisMonth.prototype = {
 				jQuery(view).append(append);
 			});
 		} else {
-			var howdo = self.json.language.howdo.replace('%%',self.json.language.event_type.anniversaries+' ').split('.');	
+			var howdo = self.json.language['HOWDO'].replace('%%',self.json.language['ANNIVERSARIES']+' ').split('.');	
 			self._setMessage(view, 'howToDo.html','#jmb-this-month-marr', ['<div class="message">',howdo[0],'<font color="#b6bad9">',howdo[1],'</font></div>'].join(''));
 		}
 	},
@@ -255,7 +256,7 @@ JMBThisMonth.prototype = {
 	},
 	render:function(json){
 		var self = this;
-		var table = self._createBody();
+		var table = self._createBody(json);
 		jQuery(self.table).find('.jmb-this-month-body').append(table);
 		//set documents
 		self._setHEAD(json);

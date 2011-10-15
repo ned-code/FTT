@@ -191,7 +191,7 @@ class JMBDescendantTree {
 			$xml .=  $this->node($xml, $key, $lib, $tree);
 		$xml .= '</tree>';
 		
-		return json_encode(array('xml'=>$xml,'tree'=>$parentTree, 'key'=>$key));		
+		return json_encode(array('xml'=>$xml,'tree'=>$parentTree, 'key'=>$key, '_tree'=>$tree, '_lib'=>$lib));		
 	}
 	
 	public function getTreeById($id){
@@ -236,13 +236,13 @@ class JMBDescendantTree {
 	}
 		
 	protected function sortByPermission($response, $tree, &$result){
-		if(isset($tree[$response['key']])){
+		if($response&&isset($tree[$response['key']])){
 			$result = array('key'=>$response['key'], 'descendants'=>$response['descendants'], 'level'=>$response['level'], 'parents'=>array('father'=>false,'mother'=>false));
-			if($reponse['parents']['father']&&isset($tree[$reponse['parents']['father']['key']])){
-				$this->sortByPermission($reponse['parents']['father'], $tree, $result);
+			if($response['parents']['father']&&isset($tree[$response['parents']['father']['key']])){
+				$this->sortByPermission($response['parents']['father'], $tree, $result['parents']['father']);
 			}
-			if($reponse['parents']['mother']&&isset($tree[$reponse['parents']['mother']['key']])){
-				$this->sortByPermission($reponse['parents']['mother'], $tree, $result);
+			if($response['parents']['mother']&&isset($tree[$response['parents']['mother']['key']])){
+				$this->sortByPermission($response['parents']['mother'], $tree, $result['parents']['mother']);
 			}
 		}
 	}

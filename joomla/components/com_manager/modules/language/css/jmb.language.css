@@ -1,0 +1,27 @@
+#jmb_language_filter {
+	left: 3px;
+	position: absolute;
+	top: 8px;
+}
+
+#jmb_language_filter ul {}
+#jmb_language_filter ul li {
+	margin-left: 5px;
+	display: inline-block;
+}
+#jmb_language_filter ul li a {
+	outline: 0;
+}
+#jmb_language_filter ul li div.jmb-language-icon{
+	height: 11px;
+	width: 16px;
+}
+#jmb_language_filter ul li div.jmb-language-icon.en-GB{
+	background: url("../imgs/en-GB.gif") no-repeat scroll 0 0 transparent;
+}
+#jmb_language_filter ul li div.jmb-language-icon.ru-RU{
+	background: url("../imgs/ru-RU.gif") no-repeat scroll 0 0 transparent;
+}
+#jmb_language_filter ul li div.jmb-language-icon.pt-PT{
+	background: url("../imgs/pt-PT.gif") no-repeat scroll 0 0 transparent;
+}

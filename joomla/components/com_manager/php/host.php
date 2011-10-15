@@ -269,41 +269,8 @@ class Host {
 		return array('indiv'=>$indiv,'events'=>$events,'parents'=>$parents,'families'=>$families,'spouses'=>$spouses,'children'=>$children,'notes'=>$notes,'sources'=>$sources,'photo'=>$photos,'avatar'=>$avatar);
 	}
 	
-	/**
-	* @return array all invdividuals links with first parent
-	* @var $id gedcom user id
-	* @var &$individs array link of array
-	*/
 	/*
-	public function getIndividsArray($indKey, &$individs, $indRel = false){
-		if($indKey==NULL){ return false; }
-		$individ = $this->getUserInfo($indKey, $indRel);
-		$individs[$indKey] = $individ;
-		
-		//Fill the array of families
-		foreach($individ['families'] as $family){
-			if($family->Spouse!=null&&!array_key_exists($family->Spouse->Id, $individs)){
-				$this->getIndividsArray($family->Spouse->Id, $individs, $indRel);
-			}
-		}
-
-		//Fill the array of children
-		foreach($individ['children'] as $child){
-			if(!array_key_exists($child['gid'], $individs)){
-				$this->getIndividsArray($child['gid'], $individs, $indRel);
-			}
-		}		
-		
-		//Fill the array of parents
-		if($individ['parents'] != null){
-			if($individ['parents']['fatherID'] != null && !array_key_exists($individ['parents']['fatherID'], $individs)){
-				$this->getIndividsArray($individ['parents']['fatherID'], $individs, $indRel);
-			}
-			if($individ['parents']['motherID'] != null && !array_key_exists($individ['parents']['motherID'], $individs)){
-				$this->getIndividsArray($individ['parents']['motherID'], $individs, $indRel);
-			}
-		}
-	}        
+	* ---
 	*/
 	
 	public function getLatestUpdates($treeId){
@@ -360,10 +327,14 @@ class Host {
 		return (isset($lib['families']['fid'][$family_id]))?$lib['families']['fid'][$family_id][0]:null;
 	}
 	
-	public function getSpouse($indKey, $lib){
+	public function getSpouses($indKey, $lib){
 		if(!isset($lib['families']['gid'][$indKey])) return null;
-		$fam = $lib['families']['gid'][$indKey][0];
-		return ($fam['husb']==$indKey)?$fam['wife']:$fam['husb'];
+		$fams = $lib['families']['gid'][$indKey];
+		$spouses = array();
+		foreach($fams as $fam){
+			$spouses[] = ($fam['husb']==$indKey)?$fam['wife']:$fam['husb'];
+		}
+		return $spouses;
 	}
 	
 	public function getSibling($indKey, $lib){
@@ -572,40 +543,43 @@ class Host {
 	}
 	
 	protected function getUserTree_($ind_key, $lib, &$objects){
-		if($ind_key==null) return;
-		//getParents,getChildsByIndKey,getChildsByFamKey,getSpouse,getSibling
-		$spouse = $this->getSpouse($ind_key, $lib);
+		if($ind_key==null) return 0;
+		if(isset($objects[$ind_key])) return 0;
 		$parents = $this->getParents($ind_key, $lib);
-		$sibling = $this->getSibling($ind_key, $lib);
 		$childrens = $this->getChildsByIndKey($ind_key, $lib);
-		
-		if($spouse!=null&&!isset($objects[$spouse])){
-			$objects[$spouse] = $spouse;
-		}
 
-		if($parents['husb']!=null&&!isset($objects[$parents['husb']])){
-			$objects[$parents['husb']] = $parents['husb'];
+		$objects[$ind_key] = $ind_key;
+
+		if(!empty($parents)&&$parents['husb']!=null){
 			$this->getUserTree_($parents['husb'], $lib, $objects);
 		}
 		
-		if($parents['wife']!=null&&!isset($objects[$parents['wife']])){
-			$objects[$parents['wife']] = $parents['wife'];
+		if(!empty($parents)&&$parents['wife']!=null){
 			$this->getUserTree_($parents['wife'], $lib, $objects);
 		}
-		
-		if(!empty($sibling)){
-			foreach($sibling as $ind){
-				if(!isset($objects[$ind['gid']])){
-					$objects[$ind['gid']] = $ind['gid'];
-					$this->getUserTree_($ind['gid'], $lib, $objects);
+
+		if(!empty($spouses)){
+			foreach($spouses as $spouse){
+				if($spouse!=null&&!isset($objects[$spouse])){
+					$objects[$spouse] = $spouse;
 				}
 			}
 		}
 		if(!empty($childrens)){
 			foreach($childrens as $ind){
-				if(!isset($objects[$ind['gid']])){
-					$objects[$ind['gid']] = $ind['gid'];
-					$this->getUserTree_($ind['gid'], $lib, $objects);
+				$this->getUserTree_($ind['gid'], $lib, $objects);
+			}
+		}
+	}
+	
+	protected function _getSpouseInUserTree_(&$objects, $lib){
+		foreach($objects as $key => $value){
+			$spouses = $this->getSpouses($key, $lib);
+			if(!empty($spouses)){
+				foreach($spouses as $spouse){
+					if($spouse!=null&&!isset($objects[$spouse])){
+						$objects[$spouse] = $spouse;
+					}
 				}
 			}
 		}
@@ -614,9 +588,14 @@ class Host {
 	public function getUserTree($owner_id, $tree_id){
 		$lib = $this->getTreeLib($tree_id);
 		$objects = array();
-		$spouse = $this->getSpouse($owner_id, $lib);
-		$this->getUserTree_($owner_id, $lib, $objects, $int);
-		$this->getUserTree_($spouse, $lib, $objects, $int);
+		$spouses = $this->getSpouses($owner_id, $lib);
+		$this->getUserTree_($owner_id, $lib, $objects);
+		if(!empty($spouses)){
+			foreach($spouses as $spouse){
+				$this->getUserTree_($spouse, $lib, $objects);
+			}
+		}
+		$this->_getSpouseInUserTree_($objects, $lib);
 		return $objects;
 	}
 	
@@ -640,6 +619,44 @@ class Host {
 				return $this->getOwnerTree($owner_id, $tree_id);
 			break;
 		}
+	}
+	
+	/*
+	* LANGUAGE
+	*/ 
+	protected function getDefaultLanguage(){
+		$db =& JFactory::getDBO();
+		$sql_string = "SELECT lang_id, lang_code, title, published FROM #__mb_language WHERE def='1'";
+		$sql = $this->gedcom->sql($sql_string);
+		$db->setQuery($sql);
+		$rows = $db->loadAssocList();
+		if($rows==null) return false;
+		return $rows[0];
+	}
+	
+	protected function getLanguage($lang_code){
+		$db =& JFactory::getDBO();
+		$sql_string = "SELECT lang_id, lang_code, title, published FROM #__mb_language WHERE lang_code=?";
+		$sql = $this->gedcom->sql($sql_string, $lang_code);
+		$db->setQuery($sql);
+		$rows = $db->loadAssocList();
+		if($rows==null) return false;
+		return $rows[0];
+	}
+	
+	public function getLangList($module_name){
+		$language = (isset($_SESSION['jmb']['language']))?$this->getLanguage($_SESSION['jmb']['language']):$this->getDefaultLanguage();
+		if(!$language) return false;
+		
+		$module_path = JPATH_BASE.DS.'components'.DS.'com_manager'.DS.'modules'.DS.$module_name;
+		if(is_dir($module_path)){
+			$lang_pack_path = $module_path.DS.'language'.DS.$language['lang_code'].'.'.$module_name.'.ini';
+			$ini_array = parse_ini_file($lang_pack_path);
+			if($ini_array){
+				return $ini_array;
+			}
+		}		
+		return false;
 	}
 	
 }

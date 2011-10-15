@@ -79,6 +79,10 @@ $document->addScript('components/com_manager/modules/profile/js/jmb.profile.tool
 $document->addStyleSheet('components/com_manager/modules/login/css/jmb.login.css?111');
 $document->addScript('components/com_manager/modules/login/js/jmb.login.js?111');
 
+//language
+$document->addStyleSheet('components/com_manager/modules/language/css/jmb.language.css?111');
+$document->addScript('components/com_manager/modules/language/js/jmb.language.js?111');
+
 # Create the controller
 $controller = new JMBController( );
 

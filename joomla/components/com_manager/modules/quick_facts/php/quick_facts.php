@@ -38,6 +38,12 @@ class JMBQuickFacts {
 		return $result;
 	}
 	
+	protected function getLanguage(){
+		$lang = $this->host->getLangList('quick_facts');
+		if(!$lang) return false;
+		return $lang;
+	}
+	
 	public function get($type){
 		$ownerId = $_SESSION['jmb']['gid'];
 		$treeId = $_SESSION['jmb']['tid'];
@@ -87,8 +93,9 @@ class JMBQuickFacts {
 		$colors = $this->getColors();
 		$fmbUser = $this->host->getUserInfo($_SESSION['jmb']['gid']);
 		$path = JURI::root(true);
+		$lang = $this->getLanguage();
 		
-		return json_encode(array('count'=>$count,'living'=>$living,'youngest'=>$youngest,'oldest'=>$oldest,'earliest'=>$earliest,'colors'=>$colors,'fmbUser'=>$fmbUser,'path'=>$path));		
+		return json_encode(array('lang'=>$lang,'count'=>$count,'living'=>$living,'youngest'=>$youngest,'oldest'=>$oldest,'earliest'=>$earliest,'colors'=>$colors,'fmbUser'=>$fmbUser,'path'=>$path));		
 	}
 }
 ?>

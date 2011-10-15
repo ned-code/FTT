@@ -108,32 +108,34 @@ class JMBFamilies {
 	protected function getChildrens($indKey, $tree, $lib){
 		$childrens = $this->host->getChildsByIndKey($indKey, $lib);
 		$result = array();
-		foreach($childrens as $child){
-			$id = $child['gid'];
-			if(isset($tree[$id])){
-				if($id!=null&&!isset($this->individs[$id])){
-					$this->individs[$id] =  $this->host->getUserInfo($id, $this->ownerId);
-				}			
-				$childs = $this->host->getChildsByIndKey($id, $lib);
-				$_childs = array();
-				if(!empty($childs)){
-					foreach($childs as $ch){
-						if(isset($tree[$ch['gid']])){
-							$_childs[] = $ch;
+		if(!empty($childrens)){
+			foreach($childrens as $child){
+				$id = $child['gid'];
+				if(isset($tree[$id])){
+					if($id!=null&&!isset($this->individs[$id])){
+						$this->individs[$id] =  $this->host->getUserInfo($id, $this->ownerId);
+					}			
+					$childs = $this->host->getChildsByIndKey($id, $lib);
+					$_childs = array();
+					if(!empty($childs)){
+						foreach($childs as $ch){
+							if(isset($tree[$ch['gid']])){
+								$_childs[] = $ch;
+							}
 						}
 					}
-				}
-				
-				$spouses = $this->host->getSpouses($id,$lib);	
-				$_spouses = array();
-				if(!empty($spouses))
-					foreach($spouses as $sp){
-						if(isset($tree[$sp])){
-							$_spouses = $sp;
+					
+					$spouses = $this->host->getSpouses($id,$lib);	
+					$_spouses = array();
+					if(!empty($spouses)){
+						foreach($spouses as $sp){
+							if(isset($tree[$sp])){
+								$_spouses = $sp;
+							}
 						}
 					}
+					$result[] = array('indKey'=>$id,'children'=>$_childs,'spouses'=>$_spouses);
 				}
-				$result[] = array('indKey'=>$id,'children'=>$_childs,'spouses'=>$_spouses);
 			}
 		}
 		return $result;

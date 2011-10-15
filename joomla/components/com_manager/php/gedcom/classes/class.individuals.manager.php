@@ -115,6 +115,7 @@ class JMBRelation {
 		
 		$a_level = $lca[1];
 		$b_level = $lca[2];
+
 		
 		$gender = $this->get_gender($a_id);
 		
@@ -139,7 +140,7 @@ class JMBRelation {
 				break;
 				
 				default:
-					return $this->ordinal_suffix($dist - 2).' cousin';
+					return $this->ordinal_suffix($a_level - 2).' cousin';
 				break;
 			}
 		}

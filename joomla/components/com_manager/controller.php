@@ -509,7 +509,7 @@ class JMBController extends JController
 							$this->location($_SESSION['jmb']['alias']);
 						}        			
 						if($user['id']=='100001614066938'){
-							$user['id'] = '100000657385590';
+							$user['id'] = '100002865287296';
 						}
 						$link = $this->check_user_in_system($user['id']);
 						

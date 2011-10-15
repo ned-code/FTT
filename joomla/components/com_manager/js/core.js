@@ -285,7 +285,6 @@ core.loadTabs = function(pages){
     	var manager, parent, ul, div;
     	host = new Host(); 
     	manager = new MyBranchesManager(); 
-    	storage.login = new JMBLogin('jmb_header_profile_box');
     	storage.topMenuBar.init();
     	storage.inIframe();
     	ul = jQuery('<ul class="jmbtabs"></ul>'); 
@@ -360,6 +359,8 @@ core.loadTabs = function(pages){
 			
 			jQuery("ul.jmbtabs li:first").click(); //click first
 			storage.deleteButton.init(buttons);
+			storage.login = new JMBLogin('jmb_header_profile_box');
+			new JMBLanguage();
     		}
     	});
     });

@@ -190,7 +190,13 @@ SiteSettings.prototype = {
 		sb._('<ul>');
 			for(var key in json.modules){
 				var module = json.modules[key];
-				sb._('<li id="')._(module.id||'null')._('" name="')._(module.name||'null')._('" class="')._((key in json.parse)?'translated':'no-translation')._('" >')._(module.name||'unknown')._('</li>');
+				var translate;
+				if(json.parse){
+					translate = (key in json.parse)?'translated':'no-translation';
+				} else {
+					translate = 'no-translation';
+				}
+				sb._('<li id="')._(module.id||'null')._('" name="')._(module.name||'null')._('" class="')._(translate)._('" >')._(module.name||'unknown')._('</li>');
 			}
 		sb._('</ul>');
 		var object = jQuery(sb.result());

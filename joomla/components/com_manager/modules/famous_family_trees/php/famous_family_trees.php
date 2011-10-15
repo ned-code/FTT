@@ -31,7 +31,9 @@ class JMBFamousFamily {
 		 foreach($families as $family){
 		 	 $ind = $this->host->gedcom->individuals->get($family['individuals_id']);
 		 	 $count = $this->host->gedcom->individuals->getIndivCount($family['tree_id']);
-		 	 $living = $this->host->gedcom->individuals->getLivingIndivCount($family['tree_id'], $count);	
+		 	 $count = sizeof($count);
+		 	 $death = $this->host->gedcom->individuals->getDeathIndivCount($family['tree_id']);
+		 	 $living = $count - sizeof($death);
 		 	 $avatar = $this->host->gedcom->media->getAvatarImage($family['individuals_id']);
 		 	 $result[] = array('id'=>$family['id'],'name'=>$family['name'],'tree_id'=>$family['tree_id'],'individ'=>$ind,'descendants'=>$count,'living'=>$living,'avatar'=>$avatar);
 		 }
