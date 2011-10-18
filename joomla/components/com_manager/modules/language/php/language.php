@@ -21,9 +21,9 @@ class JMBLanguage {
 		$sql = $this->host->gedcom->sql($sql_string, $lang_id);
 		$db->setQuery($sql);
 		$rows = $db->loadAssocList();
-		if($rows==null) return json_encode(array('error'=>'Not found this Language...'));
+		if($rows==null) return json_encode(array('error'=>'Not found this language...'));
 		$_SESSION['jmb']['language'] = $rows[0]['lang_code'];
-		return json_encode(array('success'=>array('lang'=>$rows[0],'set_lang'=>$_SESSION['jmb']['language'])));
+		return json_encode(array('success'=>array('lang'=>$rows[0])));
 	}
 }
 ?>

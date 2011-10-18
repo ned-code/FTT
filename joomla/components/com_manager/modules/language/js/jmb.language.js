@@ -17,13 +17,12 @@ function JMBLanguage(){
 	}
 	
 	var setEventHandlerByClick = function(ul){
-		return false;
 		jQuery(ul).find('li a').click(function(){
 			var id = jQuery(this).parent().attr('id');
 			var lang_title = jQuery(this).attr('title');
 			module.ajax('setLanguage', id, function(res){
 				var json = jQuery.parseJSON(res.responseText);
-				console.log(json);
+				window.location.reload();
 			});
 		});
 	}

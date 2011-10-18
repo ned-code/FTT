@@ -107,7 +107,7 @@ JMBProfileTooltip.prototype = {
 							sb._('</td>');
 						sb._('</tr>');
 					sb._('</table>');
-					if(self.permission(p)) sb._('<div class="jmb-profile-mini-switch"><span>View Full Profile</span></div>');
+					/*if(self.permission(p)) sb._('<div class="jmb-profile-mini-switch"><span>View Full Profile</span></div>');*/
 				sb._('</div>');
 				if(p.data.photo.length!=0){
 					sb._('<div class="jmb-profile-mini-images">');

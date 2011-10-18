@@ -344,7 +344,7 @@ class JMBController extends JController
 	}
 	
 	protected function invite($fid, $token, $redirect=true){
-        	$host = new Host('joomla');
+		$host = new Host('joomla');
         	$db =& JFactory::getDBO();
         	$sql = "SELECT value FROM #__mb_variables WHERE belongs='".$token."'";
         	$db->setQuery($sql);
@@ -354,7 +354,7 @@ class JMBController extends JController
         	$sql = "UPDATE #__mb_tree_links SET `type`='USER' WHERE individuals_id ='".$args[0]."' AND tree_id='".$args[1]."'";
         	$db->setQuery($sql);
         	$db->query();
-        	$sql = "UPDATE #__mb_individuals SET `fid`='".$fid."',`registered` = NOW() WHERE id='".$args[0]."'";
+        	$sql = "UPDATE #__mb_individuals SET `fid`='".$fid."',`change` = NOW() WHERE id='".$args[0]."'";
         	$db->setQuery($sql);
         	$db->query();
         	$sql = "DELETE FROM #__mb_variables WHERE belongs='".$token."'";
@@ -434,7 +434,7 @@ class JMBController extends JController
         	$host = new Host('joomla');
         	$fb_session = $fb->getSession();
         	$user = ($fb_session)?$fb->api('/me'):false;
-
+        	
         	if(strlen($token)!=0){
         		$_SESSION['jmb']['alias'] = 'invitation';
         		$_SESSION['jmb']['token'] = $token;
@@ -454,9 +454,6 @@ class JMBController extends JController
         						$_SESSION['jmb']['tid'] = $link['tid'];
         						$_SESSION['jmb']['gid'] = $link['gid'];
         						$_SESSION['jmb']['permission'] = $link['type'];
-        					} else {
-        						$_SESSION['jmb']['alias'] = 'first-page';
-        						$this->location($_SESSION['jmb']['alias']);
         					}
         				} else {
         					$_SESSION['jmb']['fid'] = null;
@@ -468,15 +465,6 @@ class JMBController extends JController
         			case 'first-page':
         				if(!isset($user['id'])){
         					$_SESSION['jmb']['alias'] = 'login';	
-        					$this->location($_SESSION['jmb']['alias']);
-        				}
-        				if(isset($user['id'])){
-        					$link = $this->check_user_in_system($user['id']);
-        					if($link){
-        						$_SESSION['jmb']['alias'] = 'myfamily';
-        					} else {
-        						$_SESSION['jmb']['alias'] = 'home';
-        					}
         					$this->location($_SESSION['jmb']['alias']);
         				}
         			break;
@@ -508,9 +496,6 @@ class JMBController extends JController
 							$_SESSION['jmb']['alias'] = 'login';	
 							$this->location($_SESSION['jmb']['alias']);
 						}        			
-						if($user['id']=='100001614066938'){
-							$user['id'] = '100002865287296';
-						}
 						$link = $this->check_user_in_system($user['id']);
 						
 						if(!$link&&$current_alias!='first-page'){
@@ -529,7 +514,11 @@ class JMBController extends JController
         			break;
         			
         			case 'invitation':
-        				$this->invite($fid, $_SESSION['jmb']['token']);
+        				if(!isset($user['id'])){
+						$_SESSION['jmb']['alias'] = 'login';	
+						$this->location($_SESSION['jmb']['alias']);
+					} 
+        				$this->invite($user['id'], $_SESSION['jmb']['token']);
         			break;
         		}
         	}

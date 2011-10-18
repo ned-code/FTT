@@ -14,11 +14,6 @@ function JMBLogin(obj){
 		if(json.avatar!=null){
 			return ['<img src="index.php?option=com_manager&task=getResizeImage&id=',json.avatar.Id,'&w=50&h=50">'].join('');
 		}
-		/*
-		if(facebook_id){
-			return ['<img src="index.php?option=com_manager&task=getResizeImage&fid=',id,'&w=50&h=50">'].join('');
-		}
-		*/
 		if(json.individ){
 			var gen = json.individ.Gender;
 			var img = (gen=="M")?'male.png':'female.png';
@@ -27,6 +22,7 @@ function JMBLogin(obj){
 	}
 	
 	var getName = function(json){
+		if(!json.individ) return null;
 		return [(json.individ.Nick!=null)?json.individ.Nick:json.individ.FirstName, (json.individ.LastName!=null)?json.individ.LastName:''].join(' ');
 	}
 	
@@ -42,10 +38,16 @@ function JMBLogin(obj){
 			type = json.alias;
 		} else if(json.alias == 'home'){
 			type = json.alias;
+		} else if(json.alias == 'first-page'){
+			type = json.alias;
 		} else {
-			type = json.login_type;
-		}	
+			type = (json.login_type!=null)?json.login_type:'_login';
+		}
 		switch(type){
+			case 'first-page': 
+				jQuery('.jmb_header_profile_box').hide();	
+			break;
+			
 			case "home":
 			case "login":
 			case "family_tree":
@@ -67,6 +69,10 @@ function JMBLogin(obj){
 					jQuery(obj).find('div#profile_login').show();
 				}
 				
+			break;
+		
+			case "_login":
+				jQuery(obj).find('div#profile_login').show();
 			break;
 			
 			case "famous_family":

@@ -167,7 +167,7 @@ storage.topMenuBar.init = function(){
 storage.deleteButton = {};
 storage.deleteButton.init = function(container){
 	var fid = jQuery('body').attr('fid');
-	if(fid!='100000657385590'&&fid!='100001614066938') return false;
+	if(fid!='100000657385590'||fid!='100001614066938') return false;
 	jQuery('.tab_container').append(container);
 	var d_button = jQuery(container).find('div#delete');
 	var d_object = new JMBDelete(d_button);

@@ -217,6 +217,32 @@ class JMBThisMonth {
 		$lang = $this->host->getLangList('this_month');
 		if(!$lang) return false;
 		return $lang;		
+		/*
+		$header = JTEXT::_('COM_MANAGER_THISMONTH_HEADER');
+		$howdo = JTEXT::_('COM_MANAGER_THISMONTH_HOWDO');
+		$event_type = array();
+		$event_type['birthday'] = JTEXT::_('COM_MANAGER_THISMONTH_BIRTHDAYS');
+		$event_type['anniversaries'] = JTEXT::_('COM_MANAGER_THISMONTH_ANNIVERSARIES');
+		$event_type['we_remember'] = JTEXT::_('COM_MANAGER_THISMONTH_REMEMBER');
+		$sort= array();
+		$sort['after'] = JTEXT::_('COM_MANAGER_THISMONTH_AFTER');
+		$sort['before'] = JTEXT::_('COM_MANAGER_THISMONTH_BEFORE');
+		$sort['all'] = JTEXT::_('COM_MANAGER_THISMONTH_ALLYEARS');
+		$months = array();
+		$months[] = JTEXT::_('COM_MANAGER_THISMONTH_JANUARY');
+		$months[] = JTEXT::_('COM_MANAGER_THISMONTH_FEBRUARY');
+		$months[] = JTEXT::_('COM_MANAGER_THISMONTH_MARCH');
+		$months[] = JTEXT::_('COM_MANAGER_THISMONTH_APRIL');
+		$months[] = JTEXT::_('COM_MANAGER_THISMONTH_MAY');
+		$months[] = JTEXT::_('COM_MANAGER_THISMONTH_JUNE');
+		$months[] = JTEXT::_('COM_MANAGER_THISMONTH_JULY');
+		$months[] = JTEXT::_('COM_MANAGER_THISMONTH_AUGUST');
+		$months[] = JTEXT::_('COM_MANAGER_THISMONTH_SEPTEMBER');
+		$months[] = JTEXT::_('COM_MANAGER_THISMONTH_OCTOBER');
+		$months[] = JTEXT::_('COM_MANAGER_THISMONTH_NOVEMBER');
+		$months[] = JTEXT::_('COM_MANAGER_THISMONTH_DECEMBER');
+		return array('header'=>$header,'howdo'=>$howdo,'event_type'=>$event_type,'sort'=>$sort,'months'=>$months);
+		*/
 	}
 	
 	protected function sortByFamilyLine($events, $type){
@@ -225,10 +251,12 @@ class JMBThisMonth {
 			case "mother":
 				$members = $this->host->gedcom->individuals->getMembersByFamLine($_SESSION['jmb']['tid'],$_SESSION['jmb']['gid'],$type[0]);
 				$result = array();
+				$crt = array();
 				foreach($events as $event){
 					foreach($members as $member){
-						if($event['gid']==$member['individuals_id']){
+						if($event['gid']==$member['individuals_id']&&!isset($crt[$event['gid']])){
 							$result[] = $event;
+							$crt[$event['gid']] = true;
 						}
 					}
 				}

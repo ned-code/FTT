@@ -542,6 +542,9 @@ class Host {
 		return array('objects'=>$objects);
 	}
 	
+	/*
+	* PERMISSION
+	*/
 	protected function getUserTree_($ind_key, $lib, &$objects){
 		if($ind_key==null) return 0;
 		if(isset($objects[$ind_key])) return 0;
