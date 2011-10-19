@@ -7,6 +7,15 @@
     	font-weight: normal;
     	position: relative;
 }
+.jmb-famous-family-backend-buttons{
+	position: absolute;
+	right: 10px;
+    	top: 40px;
+}
+.jmb-famous-family-backend-buttons input{
+	margin-left: 3px;
+	cursor:pointer;
+}
 /*
 * HEADER
 */
@@ -38,6 +47,9 @@
 	height: 19px;
     	line-height: 19px;
     	margin-left: 8px;
+}
+.jmb-famous-family-backend-tree-item span.active{
+	background: none repeat scroll 0 0 yellow;
 }
 .jmb-famous-family-backend-tree-item span{
 	margin-left: 33px;
@@ -72,8 +84,16 @@
 .jmb-famous-family-backend-content-keepers .body .head{
 	background: none repeat scroll 0 0 #E6E6E6;
 }
-.jmb-famous-family-backend-content-keepers .body .head div{
+.jmb-famous-family-backend-content-keepers .body div{
 	text-align:center;
+}
+
+.jmb-famous-family-backend-content-keepers .body .delete{
+	background: url("../imgs/delete.png") no-repeat scroll 0 0 transparent;
+	height: 16px;
+	margin: 3px;
+	width: 16px;
+	cursor:pointer;
 }
 .jmb-famous-family-backend-content-keepers-add{
 	color: #7174E1;
