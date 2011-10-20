@@ -16,6 +16,23 @@
 	margin-left: 3px;
 	cursor:pointer;
 }
+.jmb-famous-family-modal {
+	height: 100px;
+	opacity: 0.3;
+	position: absolute;
+	top: 32px;
+}
+.jmb-famous-family-keeper-create {
+	background: none repeat scroll 0 0 white;
+	border: 1px solid #999999;
+	left: 25%;
+	padding: 20px;
+	position: absolute;
+	top: 50%;
+}
+.jmb-famous-family-keeper-create input{
+	margin-left: 5px;
+}
 /*
 * HEADER
 */
