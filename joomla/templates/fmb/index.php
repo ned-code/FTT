@@ -74,8 +74,8 @@ switch($alias){
 	<body _alias="<?php echo $alias; ?>" _baseurl="<?php echo $base_url; ?>" _fid="<?php echo ($user&&isset($user['id']))?$user['id']:'' ?>">
 		<div  class="jmb-top-menu-bar">
 			<div class="jmb-top-menu-bar-content">
-				<div id="myfamily" class="jmb-top-menu-bar-item"><span <?php if($alias=='myfamily'): ?>class="active"<?php endif; ?> >My Family</span></div>
-				<div id="famous-family" class="jmb-top-menu-bar-item"><span <?php if($alias=='famous-family'): ?>class="active"<?php endif; ?>>Famous Family</span></div>
+				<div id="myfamily" class="jmb-top-menu-bar-item"><span <?php if($alias=='myfamily'&&$login_type=='family_tree'): ?>class="active"<?php endif; ?> >My Family</span></div>
+				<div id="famous-family" class="jmb-top-menu-bar-item"><span <?php if($alias=='famous-family'||$login_type=='famous_family'): ?>class="active"<?php endif; ?>>Famous Family</span></div>
 				<div id="home" class="jmb-top-menu-bar-item"><span <?php if($alias=='home'): ?>class="active"<?php endif; ?>>FTT Home</span></div>
 			</div>
 		</div>

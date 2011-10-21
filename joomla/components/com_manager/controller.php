@@ -466,7 +466,14 @@ class JMBController extends JController
         				if(!isset($user['id'])){
         					$_SESSION['jmb']['alias'] = 'login';	
         					$this->location($_SESSION['jmb']['alias']);
+        				} else {
+        					$link = $this->check_user_in_system($user['id']);
+        					if($link){
+        						$_SESSION['jmb']['alias'] = 'myfamily';
+        						$this->location($_SESSION['jmb']['alias']);
+        					}
         				}
+        				
         			break;
         			
         			case 'login':
