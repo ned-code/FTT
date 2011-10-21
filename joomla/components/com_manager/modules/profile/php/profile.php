@@ -494,6 +494,24 @@ class JMBProfile {
 			return json_encode(array('message'=>'Message successfully sent!'));
 		}
 	}
+	
+	public function inviteFacebookFriend($args){
+		$args = explode(';', $args);
+		$tree_id = (isset($_SESSION['jmb']['tid']))?$_SESSION['jmb']['tid']:false;
+		$individ = $this->host->gedcom->individuals->get($args[1]);
+		if($tree_id&&$tree_id==$individ->TreeId){
+			$sql_string ="UPDATE  #__mb_individuals SET  `fid` = ? WHERE  `id` = ?";
+			$sql = $this->host->gedcom->sql($sql_string, $args[0], $args[1]);
+			$this->db->setQuery($sql);
+			$this->db->query();
+			
+			$sql_string ="UPDATE  #__mb_tree_links SET  `type` = 'USER' WHERE  `tree_id` = ? AND `individuals_id` = ?";
+			$sql = $this->host->gedcom->sql($sql_string, $individ->TreeId, $individ->Id);
+			$this->db->setQuery($sql);
+			$this->db->query();
+			return json_encode(array('success'=>true));
+		}
+	}
 }
 
 ?>

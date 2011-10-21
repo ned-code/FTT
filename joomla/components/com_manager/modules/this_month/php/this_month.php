@@ -254,7 +254,7 @@ class JMBThisMonth {
 				$crt = array();
 				foreach($events as $event){
 					foreach($members as $member){
-						if($event['gid']==$member['individuals_id']&&!isset($crt[$event['gid']])){
+						if(isset($event['gid'])&&$event['gid']==$member['individuals_id']&&!isset($crt[$event['gid']])){
 							$result[] = $event;
 							$crt[$event['gid']] = true;
 						}

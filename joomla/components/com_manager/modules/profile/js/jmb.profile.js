@@ -811,6 +811,12 @@ function JMBEmailInvitation(object){
 }
 
 JMBEmailInvitation.prototype = {
+      	sendRequestToInviteFacebookFriend:function(facebook_id, callback){
+      		FB.ui({method: 'apprequests',
+      			message: 'Request to invitation in Family Tree Top application.',
+      			to: facebook_id, 
+      		}, callback);
+      	},
 	createDiv:function(json){
 		var self = this, sb = host.stringBuffer(), data = json.data;
 		sb._('<div class="jmb-dialog-invition"><form id="jmb:send-invitation" method="post" target="iframe-profile">');
@@ -830,8 +836,17 @@ JMBEmailInvitation.prototype = {
 			sb._('</div>');
 			sb._('<div class="jmb-dialog-invition-fields">');
 				sb._('<table>');
-					sb._('<tr><td><span class="title">Selec from Facebook friends:</span></td><td><input name="facebook_name" DISABLED placeholder="Temporarily unavailable"></td></tr>');
+					/*sb._('<tr><td><span class="title">Selec from Facebook friends:</span></td><td><input name="facebook_name" DISABLED placeholder="Temporarily unavailable"></td></tr>');*/
+					//facebook invitation
+					sb._('<tr>');
+						sb._('<td><span class="title">Selec from Facebook friends:</span></td>');
+						sb._('<td>');
+							sb._('<div id="jmb_facebook_friends">');
+							sb._('</div>');
+						sb._('</td>');
+					sb._('</tr>');
 					sb._('<tr><td></td><td><div style="text-align:center;">or</div></td></tr>');
+					//email invitation
 					sb._('<tr><td><span class="title">Send Email:</span></td><td><input name="email" placeholder="Enter Email address"></td></tr>');
 				sb._('</table>');
 			sb._('</div>');
@@ -846,6 +861,32 @@ JMBEmailInvitation.prototype = {
 		this.send(form, json);
 		this.overlay.render({object:div, width:450, height:255});
 		this.overlay.show();
+		FB.api('me/friends', function(res){
+			if(res.data){
+				var friends_div = jQuery(div).find('#jmb_facebook_friends');
+				var select = jQuery('<select name="friends"><option value="default">Facebook Friend</option></select>');
+				jQuery(friends_div).append(select);
+				jQuery(res.data).each(function(i,friend){
+					jQuery(select).append('<option value="'+friend.id+'">'+friend.name+'</option>');	
+				});
+				jQuery(select).change(function(){
+					var option = jQuery(this).find(':selected');
+					var id = jQuery(option).val();
+					var name = jQuery(option).text();
+					if(confirm('You want to send invitation in application to '+name)){
+						self.sendRequestToInviteFacebookFriend(id, function(){
+							self.parent._ajax('inviteFacebookFriend', id+';'+json.data.indiv.Id, function(res){
+								var json = jQuery.parseJSON(res.responseText);
+								if(json.success){
+									alert('An invitation has been sent.');
+								}
+								self.overlay.hide();
+							});	
+						});
+					}
+				});
+			}
+		});
 	},
 	send:function(form, p){
 		var self = this;
