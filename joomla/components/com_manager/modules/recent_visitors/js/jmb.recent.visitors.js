@@ -1,9 +1,16 @@
 function JMBRecentVisitors(obj){
 	obj = jQuery('#'+obj);
 	
-	var content = jQuery('<div class="jmb-rv-header"><span>Recent Visitors</span></div><div class="jmb-rv-content"></div><div class="jmb-rv-button"><span>Show all...</span></div>');
+	var parent = this;
+	//var content = jQuery('<div class="jmb-rv-header"><span>Recent Visitors</span></div><div class="jmb-rv-content"></div><div class="jmb-rv-button"><span>Show all...</span></div>');
+	var content = null;
 	var sb = host.stringBuffer();
 	var profile =  new JMBProfile();
+	
+	var createBody = function(json){
+		var lang = json.lang;
+		return jQuery('<div class="jmb-rv-header"><span>'+lang['HEADER']+'</span></div><div class="jmb-rv-content"></div><div class="jmb-rv-button"><span>'+lang['SHOW']+'...</span></div>');
+	}
 	
 	var get_avatar = function(object){
 		if(!object) return '';
@@ -14,7 +21,7 @@ function JMBRecentVisitors(obj){
 			
 		}
 	}
-	
+		
 	var get_name = function(object){ return [object.first_name, object.middle_name, object.last_name].join(' '); }	
 	
 	var get_time = function(time){ 
@@ -29,7 +36,8 @@ function JMBRecentVisitors(obj){
 		var dif = Math.round((now.getTime() - t.getTime())/1000);
 		var d = Math.floor(dif/86400);
 		var h = Math.floor(dif/3600%24);
-		return (d!=0)?d+' days '+h+' hours ago':h+' hors ago';
+		var lang = parent.lang;
+		return (d!=0)?d+' '+lang['DAYS']+' '+h+' '+lang['HOURS']+' '+lang['AGO']:h+' '+lang['HOURS']+' '+lang['AGO'];
 	}
 	
 	var init_tipty_tooltip = function(time, object, container){
@@ -79,10 +87,12 @@ function JMBRecentVisitors(obj){
 		});
 	}
 	
-	var parent = this;
-	var render = function(){
+	
+	var render = function(callback){
 		parent.ajax('get_recent_visitors', jQuery(storage.header.activeButton).attr('id'), function(res){
 			var json = jQuery.parseJSON(res.responseText);
+			parent.lang = json.lang;
+			content = createBody(json);
 			var count = (json.response.length<=15)?json.response.length:15;
 			var ul = jQuery('<ul></ul>');
 			init_visitors(ul, json, count);
@@ -90,7 +100,7 @@ function JMBRecentVisitors(obj){
 			init_button(json);
 			jQuery(content[1]).append(ul);	
 			jQuery(obj).append(content);
-			headerHandler();
+			if(callback) callback();
 		});
 	}
 	
@@ -102,7 +112,9 @@ function JMBRecentVisitors(obj){
 		});
 	}	
 
-	render();
+	render(function(){
+		headerHandler();
+	});
 }
 
 JMBRecentVisitors.prototype = {

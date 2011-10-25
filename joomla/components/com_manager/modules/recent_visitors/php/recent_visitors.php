@@ -56,7 +56,8 @@ class JMBRecentVisitors {
 		$objects = $this->get_objects($result);
 		$path = JURI::root(true);
 		$fmbUser = $this->host->getUserInfo($_SESSION['jmb']['gid']);
-		return json_encode(array('response'=>$result,'objects'=>$objects,'time'=>$time,'path'=>$path,'fmbUser'=>$fmbUser,'response'=>$response));		
+		$lang = $this->host->getLangList('recent_visitors');
+		return json_encode(array('response'=>$result,'objects'=>$objects,'time'=>$time,'path'=>$path,'fmbUser'=>$fmbUser,'response'=>$response, 'lang'=>$lang));		
 	}
 }
 ?>
