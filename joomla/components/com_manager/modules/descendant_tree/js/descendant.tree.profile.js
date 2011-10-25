@@ -41,6 +41,7 @@ DescendantTreeProfile.prototype = {
 	createDiv:function(parent){
 		var self = this;
 		var sb = host.stringBuffer();
+		var lang = parent.lang;
 		sb._('<div id="jmb-dtp-container" class="jmb-dtp-container">');
 			sb._('<div class="jmb-dtp-body">');
 				sb._('<div class="jmb-dtp-body-info">');
@@ -48,14 +49,14 @@ DescendantTreeProfile.prototype = {
 						sb._('<tr>');
 							sb._('<td><div class="jmb-dtp-body-info-avatar"><div class="jmb-dtp-facebook-icon" style="display:none">&nbsp;</div><div id="edit-button" class="jmb-dtp-body-edit-button">&nbsp;</div></div></td>');
 							sb._('<td>');
-								sb._('<div class="jmb-dtp-body-info-name"><span class="title">Name:</span>&nbsp;<span class="text"></span></div>');
-								sb._('<div class="jmb-dtp-body-info-born"><span class="title">Born:</span>&nbsp;<span class="text"></span></div>');
-								sb._('<div class="jmb-dtp-body-info-birthplace"><span class="title">Birthplace:</span>&nbsp;<span class="text"></span></div>');
-								sb._('<div class="jmb-dtp-body-info-relation"><span class="title">Relation:</span>&nbsp;<span class="text"></span></div>');
+								sb._('<div class="jmb-dtp-body-info-name"><span class="title">')._(lang['NAME'])._(':</span>&nbsp;<span class="text"></span></div>');
+								sb._('<div class="jmb-dtp-body-info-born"><span class="title">')._(lang['BORN'])._(':</span>&nbsp;<span class="text"></span></div>');
+								sb._('<div class="jmb-dtp-body-info-birthplace"><span class="title">')._(lang['BIRTHPLACE'])._(':</span>&nbsp;<span class="text"></span></div>');
+								sb._('<div class="jmb-dtp-body-info-relation"><span class="title">')._(lang['RELATION'])._(':</span>&nbsp;<span class="text"></span></div>');
 							sb._('</td>');
 						sb._('</tr>');
 					sb._('</table>');
-					sb._('<div style="display:none;" class="jmb-dtp-body-info-switch">Switch to Full Profile</div>');
+					sb._('<div style="display:none;" class="jmb-dtp-body-info-switch">')._(lang['SWITCH'])._('</div>');
 				sb._('</div>');
 				sb._('<div class="jmb-dtp-body-space">&nbsp;</div>');
 				sb._('<div class="jmb-dtp-body-media">&nbsp;</div>');
@@ -236,16 +237,18 @@ DescendantTreeProfile.prototype = {
 		return true;
 	},
 	setSendMail:function(obj, json){
+		var lang = this.parent.lang;
 		var table = jQuery(obj).find('.jmb-dtp-footer').find('table');
 		if(table.length!=0) jQuery(table).remove();
 		if(json.indiv.FacebookId!='0'||!this.validToInvitation(json)) return;
 		var self = this, sb = host.stringBuffer(), name = json.indiv.FirstName;
+		var email_invitation = lang['EMAIL_INVITATION'].replace('%%', name);
 		sb._('<table>');			
 			sb._('<tr>');
 				sb._('<td><div class="email">&nbsp;</div></td>');
 				sb._('<td>');
-					sb._('<div><span>')._(name)._(' is not registred.</span></div>');
-					sb._('<div><span class="send" style="color:blue;cursor:pointer">Click here to send ')._(name)._(' an email invitation.</span></div>');
+					sb._('<div><span>')._(name)._(' ')._(lang['NOT_REGISTERD'])._('.</span></div>');
+					sb._('<div><span class="send" style="color:blue;cursor:pointer">')._(email_invitation)._('</span></div>');
 				sb._('</td>');
 			sb._('</tr>');
 			

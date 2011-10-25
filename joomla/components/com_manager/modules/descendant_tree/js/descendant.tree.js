@@ -23,21 +23,12 @@ function JMBDescendantTree(obj){
 	this.dhxLayout  = dhxLayout;
 	this.dhxTree = dhxTree;
 	this.selectDiv = selectDiv;
-	this.profile = new DescendantTreeProfile(this);
-	this.show_desc = this.selectDesc(dhxTree.allTree);
 	this.obj = obj;
 	this.firstParent = null;
+	this.show_desc = this.selectDesc(dhxTree.allTree);
 	
-
-	storage.header.famLine.show();
-	storage.header.famLine.mode({
-		enabled:['mother','father'], 
-		click:'mother',
-		event:function(){
-			self.profile._headerEvent();
-			self.show_desc.init();
-		}
-	});
+	
+	
 	
 	self.loadTree(dhxTree, 'mother');		
 	dhxTree.attachEvent("onXLE", function(tree,id){
@@ -70,7 +61,18 @@ JMBDescendantTree.prototype = {
 		render = (render=='father')?'father':'mother';
 		this._ajax('getTree', render, function(res){
 			var json = jQuery.parseJSON(res.responseText);
+			parent.lang = json.lang;
 			parent.firstParent = json.key;
+			parent.profile = new DescendantTreeProfile(parent);
+			storage.header.famLine.show();
+			storage.header.famLine.mode({
+				enabled:['mother','father'], 
+				click:'mother',
+				event:function(){
+					parent.profile._headerEvent();
+					parent.show_desc.init();
+				}
+			});
 			parent.show_desc.load(json, render);
 			dhxTree.loadXMLString(json.xml);
 			dhxTree.openAllItems(0);
@@ -160,7 +162,7 @@ JMBDescendantTree.prototype = {
 					return false;
 				} 
 				jQuery(input).attr('id', object.key);
-				jQuery(span).html([object.count,' Descendants'].join(' '));
+				jQuery(span).html([object.count,' ', module.lang['DESCENDANTS']].join(' '));
 				return true;
 			},
 			getCount:function(object){
@@ -186,6 +188,7 @@ JMBDescendantTree.prototype = {
 				var ggm_count = _parent.getCount(grandmother);
 				var ggp_count = (ggf_count>ggm_count)?ggf_count:ggm_count;
 				var diff = (gp_count&&ggp_count)?(ggp_count - gp_count):false;
+				type = (type=='father')?module.lang['FATHER']:module.lang['MOTHER'];
 				var key;
 				if(diff){
 					key = (diff>3)?ggp_count.key:gp_count.key;
@@ -194,7 +197,7 @@ JMBDescendantTree.prototype = {
 				}
 				return {
 					start: key,
-					type:type[0].toUpperCase()+type.substr(1),
+					type:type,
 					grandparents: gp_count,
 					grandfatherparents: ggf_count,
 					grandmothetparents: ggm_count
@@ -222,18 +225,18 @@ JMBDescendantTree.prototype = {
 				sb._('<table>');
 					sb._('<tr>');
 						sb._('<td></td>');
-						sb._('<td><div class="title"><span>Grandmother</span></div></td>');
-						sb._('<td><div class="content"><div class="button"><input type="checkbox"></div><div class="text"><div class="header"><span>Great Grandparents</span></div><div class="count"><span>&nbsp;</span></div></div></div></td>');
+						sb._('<td><div class="title"><span>')._(module.lang['GRANDMOTHER'])._('</span></div></td>');
+						sb._('<td><div class="content"><div class="button"><input type="checkbox"></div><div class="text"><div class="header"><span>')._(module.lang['GREAT_GRANDPARENTS'])._('</span></div><div class="count"><span>&nbsp;</span></div></div></div></td>');
 					sb._('</tr>');
 					sb._('<tr>');
 						sb._('<td><div id="parent" class="title"><span></span></div></td>');
-						sb._('<td><div class="content"><div class="button"><input type="checkbox"></div><div class="text"><div class="header"><span>Grandparents</span></div><div class="count"><span>&nbsp;</span></div></div></div></td>');
+						sb._('<td><div class="content"><div class="button"><input type="checkbox"></div><div class="text"><div class="header"><span>')._(module.lang['GRANDPARENTS'])._('</span></div><div class="count"><span>&nbsp;</span></div></div></div></td>');
 						sb._('<td></td>');
 					sb._('</tr>');
 					sb._('<tr>');
 						sb._('<td></td>');
-						sb._('<td><div class="title"><span>Grandfather</span></div></td></td>');
-						sb._('<td><div class="content"><div class="button"><input type="checkbox"></div><div class="text"><div class="header"><span>Great Grandparents</span></div><div class="count"><span>&nbsp;</span></div></div></div></td>');
+						sb._('<td><div class="title"><span>')._(module.lang['GRANDFATHER'])._('</span></div></td></td>');
+						sb._('<td><div class="content"><div class="button"><input type="checkbox"></div><div class="text"><div class="header"><span>')._(module.lang['GREAT_GRANDPARENTS'])._('</span></div><div class="count"><span>&nbsp;</span></div></div></div></td>');
 					sb._('</tr>');
 				sb._('</table>');
 				sb._('<div class="jmb-dt-show-header"><span>Show descendants of:</span></div>');

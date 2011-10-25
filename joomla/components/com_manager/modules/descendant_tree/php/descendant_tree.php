@@ -185,13 +185,14 @@ class JMBDescendantTree {
 		$lib = $this->host->getTreeLib($_SESSION['jmb']['tid']);
 		$parentTree = $this->getDescendantsCount($r_type, $lib, $tree);
 		$key = $this->getDefaultKey($parentTree, $r_type);
+		$lang = $this->host->getLangList('descendant_tree');
 		ob_clean();
 		$xml ='<?xml version="1.0" encoding="utf-8"?>';
 		$xml .= '<tree id="0">';
 			$xml .=  $this->node($xml, $key, $lib, $tree);
 		$xml .= '</tree>';
 		
-		return json_encode(array('xml'=>$xml,'tree'=>$parentTree, 'key'=>$key, '_tree'=>$tree, '_lib'=>$lib));		
+		return json_encode(array('xml'=>$xml,'tree'=>$parentTree, 'key'=>$key, 'lang'=>$lang));		
 	}
 	
 	public function getTreeById($id){
