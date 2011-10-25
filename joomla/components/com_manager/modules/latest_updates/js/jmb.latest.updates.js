@@ -1,14 +1,7 @@
 function JMBLatestUpdates(obj){
 	obj = jQuery('#'+obj);	
-	var structure = [
-		{"id":"new_photo","name":"New photo"},
-		{"id":"just_registered","name":"Just registered"},
-		{"id":"profile_change","name":"Profile change"},
-		{"id":"family_member_added","name":"Family member added"},
-		{"id":"family_member_deleted","name":"Family member deleted"},
-	];
 	
-	var html = jQuery('<div class="jmb-lu-header"><span>Latest Updates</span></div><div class="jmb-lu-content"></div><div class="jmb-lu-button"><span>Show All...</span></div>');
+	var html = null;	
 	var profile =  new JMBProfile();
 	
 	var get_content = function(items){
@@ -21,9 +14,7 @@ function JMBLatestUpdates(obj){
 		return ul;
 	}
 		
-	var ul = get_content(structure);
-	jQuery(html[1]).append(ul);
-	jQuery(obj).append(html);
+	
 	
 	var get_name = function(indiv){
 		var name = [];
@@ -55,6 +46,18 @@ function JMBLatestUpdates(obj){
 	
 	this.ajax('get', null, function(res){
 		var json = jQuery.parseJSON(res.responseText);
+		var lang = json.lang;
+		var html = jQuery('<div class="jmb-lu-header"><span>'+lang['HEADER']+'</span></div><div class="jmb-lu-content"></div><div class="jmb-lu-button"><span>'+lang['SHOW']+'...</span></div>');
+		var structure = [
+			{"id":"new_photo","name":lang['PHOTO']},
+			{"id":"just_registered","name":lang['REGISTER']},
+			{"id":"profile_change","name":lang['PROFILE']},
+			{"id":"family_member_added","name":lang['ADDED']},
+			{"id":"family_member_deleted","name":lang['DELETED']},
+		];
+		
+		var ul = get_content(structure);
+		
 		jQuery(ul).find('#new_photo').find('span.text').html(get_string(json, 'new_photo'));
 		jQuery(ul).find('#just_registered').find('span.text').html(get_string(json, 'just_registered'));
 		jQuery(ul).find('#profile_change').find('span.text').html(get_string(json, 'profile_change'));
@@ -64,6 +67,9 @@ function JMBLatestUpdates(obj){
 		setMiniProfile(jQuery(ul).find('#just_registered').find('span.text'), json, 'just_registered');
 		setMiniProfile(jQuery(ul).find('#profile_change').find('span.text'), json, 'profile_change');
 		setMiniProfile(jQuery(ul).find('#family_member_added').find('span.text'), json, 'family_member_added');
+		
+		jQuery(html[1]).append(ul);
+		jQuery(obj).append(html);
 	})
 }
 
