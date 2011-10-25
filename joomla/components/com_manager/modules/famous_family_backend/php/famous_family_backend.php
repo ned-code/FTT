@@ -40,10 +40,24 @@ class JMBFamousFamilyBackend {
 		return $result;
 	}
 	
-	protected function getTrees(){
+	protected function getRelatives($row){
 		$db =& JFactory::getDBO();
-		$sqlString = "SELECT id, name FROM #__mb_tree";
-		$sql = $sqlString;
+		$sql_string = "SELECT ind.id, name.first_name, name.middle_name, name.last_name FROM #__mb_tree_links as link 
+				LEFT JOIN #__mb_individuals as ind ON ind.id = link.individuals_id
+				LEFT JOIN #__mb_names as name ON name.gid = ind.id
+				WHERE tree_id=?";
+		$sql = $this->host->gedcom->sql($sql_string, $row['tree_id']);
+		$db->setQuery($sql);
+		$rows = $db->loadAssocList();
+		return $rows;
+	}
+	
+	protected function getKeeperList(){
+		$db =& JFactory::getDBO();
+		$sql = "SELECT ind.id, name.first_name, name.middle_name, name.last_name  FROM #__mb_tree_links as links
+				LEFT JOIN #__mb_individuals as ind ON ind.id = links.individuals_id
+				LEFT JOIN #__mb_names as name ON name.gid = ind.id
+				WHERE links.type = 'USER' OR links.type = 'OWNER'";
 		$db->setQuery($sql);
 		$rows = $db->loadAssocList();
 		return $rows;
@@ -60,40 +74,52 @@ class JMBFamousFamilyBackend {
 		$result = array();
 		foreach($rows as $row){	
 			$result[$row['id']] = $row;
+			$result[$row['id']]['relatives'] = $this->getRelatives($row);
 			$result[$row['id']]['keepers'] = (isset($keepers[$row['id']]))?$keepers[$row['id']]:false;
 		}
 		$time = date('Y-m-d H:i:s');
-		$trees = $this->getTrees();
-		return json_encode(array('trees'=>$trees,'families'=>$rows,'sort_families'=>$result,'time'=>$time));
+		$keeper_list = $this->getKeeperList();
+		return json_encode(array('families'=>$rows,'sort_families'=>$result, 'keeper_list'=>$keeper_list, 'time'=>$time));
 	}
 	
 	public function createNewFamousFamily(){
 		$db =& JFactory::getDBO();
-		$tree_id = $_POST['tree_id'];
-		$individuals_id = $_POST['individuals_id'];
+		$tree_name = $_POST['tree_name'];
+		$first_name = $_POST['first_name'];
+		$last_name = $_POST['last_name'];
+		$know_as = $_POST['know_as'];
+		$gender = $_POST['gender'];
 		$description = (strlen($_POST['description'])!=0)?$_POST['description']:' ';
 		$permission = $_POST['permission'];
 		
-		//get individuals 
-		$sqlString = "SELECT id FROM #__mb_individuals WHERE id = ? LIMIT 1";
-		$sql = $this->host->gedcom->sql($sqlString, $individuals_id);
+		if(strlen($tree_name)<=0) return json_encode(array('error'=>'Invalid tree name.'));
+		if(strlen($first_name)<=0) return json_encode(array('error'=>'Invalid FirstName.'));
+		
+		//create tree into #__mb_tree table;
+		$sql_string = "INSERT INTO #__mb_tree (`id`, `name`) VALUES (NULL, ?)";
+		$sql = $this->host->gedcom->sql($sql_string, $tree_name);
 		$db->setQuery($sql);
-		$rows = $db->loadAssocList();
-		if($rows!=null){			
-			$sql = $this->host->gedcom->sql('SELECT id, name FROM #__mb_tree WHERE id = ?', $tree_id);
-			$db->setQuery($sql);
-			$rows = $db->loadAssocList();
-			$name = $rows[0]['name'];
-			
-			$sql = $this->host->gedcom->sql("INSERT INTO #__mb_famous_family (`id`, `name`, `tree_id`, `individuals_id`, `description`, `permission`) VALUES (NULL, ?, ?, ?, ?, ?)", $name, $tree_id, $individuals_id, $description , $permission);
-			$db->setQuery($sql);
-			$db->query();
-			$famous_family_id = $db->insertid();
-			
-			$family = array('id'=>$famous_family_id,'name'=>$name, 'tree_id'=>$tree_id, 'individuals_id'=>$individuals_id, 'description'=>$description, 'permission'=>$permission, 'keepers'=>false);
-			return json_encode(array('message'=>'Tree successfully saved!', 'family'=>$family));
-		}
-		return json_encode(array('message'=>'Tree save error.'));
+		$db->query();
+		$tree_id = $db->insertid();
+		
+		//create user
+		$ind = $this->host->gedcom->individuals->create();
+		$ind->FacebookId = 0;
+		$ind->TreeId = $tree_id;
+		$ind->FirstName = $first_name; 
+		$ind->LastName = $last_name;
+		$ind->Gender = $gender;
+		$ind->Nick = $know_as;
+		$ind->Id = $this->host->gedcom->individuals->save($ind);
+		
+		//create tree into #__mb_famous_family table;
+		$sql_string = "INSERT INTO #__mb_famous_family (`id`, `name`, `tree_id`, `individuals_id`, `description`, `permission`) VALUES (NULL, ?, ?, ?, ?, ?)";
+		$sql = $this->host->gedcom->sql($sql_string, $tree_name, $tree_id, $ind->Id, $description, $permission);
+		$db->setQuery($sql);
+		$db->query();
+		$famous_family_id = $db->insertid();
+		
+		return json_encode(array('message'=>'Tree has successfully saved.', 'family'=>array('id'=>$famous_family_id, 'name'=>$tree_name, 'tree_id'=>$tree_id, 'individuals_id'=>$ind->Id, 'description'=>$description, 'permission'=>$permission)));	
 	}
 
 	public function save($id){
@@ -145,10 +171,17 @@ class JMBFamousFamilyBackend {
 		$db->query();
 	}
 	
-	public function deleteFamousFamily($args){
+	public function deleteFamousFamily($tree_id){
 		$db =& JFactory::getDBO();
-		$sql_string = "DELETE FROM #__mb_famous_family WHERE id = ? ";
-		$sql = $this->host->gedcom->sql($sql_string, $args);
+		$relatives = $this->host->gedcom->individuals->getRelatives($tree_id);
+		foreach($relatives as $rel){
+			$sql_string = 'DELETE FROM #__mb_individuals WHERE id = ?';
+			$sql = $this->host->gedcom->sql($sql_string, $rel['individuals_id']);
+			$db->setQuery($sql);
+			$db->query();
+		}
+		$sql_string = "DELETE FROM #__mb_tree WHERE id = ? ";
+		$sql = $this->host->gedcom->sql($sql_string, $tree_id);
 		$db->setQuery($sql);
 		$db->query();
 	}

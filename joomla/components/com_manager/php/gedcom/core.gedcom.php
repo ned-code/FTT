@@ -6,7 +6,12 @@ class Gedcom{
         public $media;
         public $core;
         public function __construct(&$core){
-        	$gedcomPath = JPATH_BASE.DS.'components'.DS.'com_manager'.DS.'php'.DS.'gedcom'.DS.'classes';
+        	$jpath_base_explode = explode('/', JPATH_BASE);
+        	if(end($jpath_base_explode) == 'administrator'){
+        		array_pop($jpath_base_explode); 
+        	}
+        	$jpath_base = implode('/', $jpath_base_explode);
+        	$gedcomPath = $jpath_base.DS.'components'.DS.'com_manager'.DS.'php'.DS.'gedcom'.DS.'classes';        	
         	if(file_exists($gedcomPath.DS.'class.individuals.manager.php')){
         		require_once $gedcomPath.DS.'class.individuals.manager.php';
         		$this->individuals = new IndividualsList($this);
@@ -46,7 +51,6 @@ class Gedcom{
         	for ($i=$c=count($args)-1; $i<$c+20; $i++){ 
         		$args[$i+1] = "UNKNOWN_PLACEHOLDER_$i";
         	}
-        	
         	return call_user_func_array("sprintf", $args);
         }
 }

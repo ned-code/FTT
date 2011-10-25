@@ -177,6 +177,11 @@ class IndividualsList{
 		$this->relation = new JMBRelation($core);
         }
         
+        public function create(){
+        	$ind = new Individual();
+        	return $ind;
+        }
+        
         /**
         *
         */

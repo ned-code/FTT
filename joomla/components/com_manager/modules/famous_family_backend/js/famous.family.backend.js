@@ -83,15 +83,23 @@ function FamousFamilyBackend(obj){
 			sb._('<div class="jmb-famous-family-backend-buttons"><input type="submit" value="Save"></div>');
 			sb._('<div class="jmb-famous-family-backend-content-item">')
 				sb._('<div><span>Tree Name:</span></div>');
-				sb._('<div><select name="tree_id">')
-					jQuery(module.json.trees).each(function(i,e){
-						sb._('<option value="')._(e.id)._('">')._(e.name)._('</option>');
-					});
-				sb._('</select></div>');
+				sb._('<div><input name="tree_name"></div>');
 			sb._('</div>');	
 			sb._('<div class="jmb-famous-family-backend-content-item">')
-				sb._('<div><span>Key Member:</span></div>');
-				sb._('<div><input name="individuals_id" value=""></div>');
+				sb._('<div><span>Famous Person:</span></div>');
+				sb._('<div>')
+					sb._('<table>');
+						sb._('<tr>');
+							sb._('<td><div>*FirstName</div><div><input name="first_name"></div></td>');
+							sb._('<td><div>LastName</div><div><input name="last_name"></div></td>');
+							sb._('<td><div>KnowAs</div><div><input name="know_as"></div></td>');
+						sb._('</tr>');
+					sb._('</table>');
+				sb._('</div>');
+			sb._('</div>');	
+			sb._('<div class="jmb-famous-family-backend-content-item">')
+				sb._('<div><span>Gender:</span></div>');
+				sb._('<div><select name="gender"><option value="M">Male</option><option value="F">Female</option></select></div>');
 			sb._('</div>');	
 			sb._('<div class="jmb-famous-family-backend-content-item">')
 				sb._('<div><span>Description:</span></div>');
@@ -104,6 +112,7 @@ function FamousFamilyBackend(obj){
 		sb._('</form>');
 		var content = jQuery(sb.result());
 		module.ajaxForm(content, 'createNewFamousFamily', null, function(res){
+			if(res.error) { alert(res.error); return;  }
 			alert(res.message);
 			module.json.sort_families[res.family.id] = res.family;
 			var box = jQuery(obj).find('.jmb-famous-family-backend-tree');
@@ -130,7 +139,13 @@ function FamousFamilyBackend(obj){
 			sb._('</div>');	
 			sb._('<div class="jmb-famous-family-backend-content-item">')
 				sb._('<div><span>Key Member:</span></div>');
-				sb._('<div><input name="individuals_id" value="')._(object.individuals_id)._('"></div>');
+				sb._('<div>')
+					sb._('<select name="individuals_id">');
+						jQuery(object.relatives).each(function(i, ind){
+							sb._('<option value="')._(ind.id)._('">')._(getName(ind))._('</option>');
+						});
+					sb._('</select>');
+				sb._('</div>');
 			sb._('</div>');	
 			sb._('<div class="jmb-famous-family-backend-content-item">')
 				sb._('<div><span>Description:</span></div>');
@@ -164,9 +179,22 @@ function FamousFamilyBackend(obj){
 			sb._('</div>');
 		sb._('</div>');	
 		var content = jQuery(sb.result());
+		jQuery(content).find('select[name="individuals_id"][value="'+object.individuals_id+'"]').attr('selected', 'selected');
 		setSelectOption(content, object.permission);
 		jQuery(content).find('.jmb-famous-family-backend-content-keepers-add').click(function(){
-			var keeperForm = jQuery('<form id="jmb_create_famous_family_keeper" method="post" target="iframe-famous-family"><div class="jmb-famous-family-keeper-create"><span>Enter the individuals key:</span><input name="individuals_id"><input type="submit" value="Save"><input type="button" value="Close"></div></form>');
+			var st = host.stringBuffer();
+			st._('<form id="jmb_create_famous_family_keeper" method="post" target="iframe-famous-family">');
+				st._('<div class="jmb-famous-family-keeper-create">');
+					st._('<span>Select Keeper:</span>');
+					st._('<select name="individuals_id">');
+						jQuery(module.json.keeper_list).each(function(i, keeper){
+							st._('<option value="')._(keeper.id)._('">')._(getName(keeper))._('</option>')
+						});
+					st._('</select>');
+					st._('<input type="submit" value="Save"><input type="button" value="Close">');
+				st._('</div>');
+			st._('</form>');
+			var keeperForm = jQuery(st.result());
 			showModal();
 			jQuery(obj).append(keeperForm);
 			jQuery(keeperForm).find('input[value="Close"]').click(function(){
@@ -202,7 +230,7 @@ function FamousFamilyBackend(obj){
 		});
 		jQuery(content[0]).find('input[value="Delete"]').click(function(){
 			var box = jQuery(obj).find('.jmb-famous-family-backend-tree');
-			module.ajax('deleteFamousFamily', object.id, function(res){
+			module.ajax('deleteFamousFamily', object.tree_id, function(res){
 				jQuery(box).find('.jmb-famous-family-backend-tree-item span').removeClass('active');
 				jQuery(box).find('#'+object.id).remove();
 				jQuery(content).remove();
@@ -233,7 +261,6 @@ function FamousFamilyBackend(obj){
 	module.ajax('getFamousFamiliesTree',null, function(res){
 		var json = jQuery.parseJSON(res.responseText);
 		module.json = json;
-		console.log(module.json);
 		createFamousFamiliesTree(html_object);
 	});
 	
