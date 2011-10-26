@@ -9,7 +9,8 @@ function JMBRecentVisitors(obj){
 	
 	var createBody = function(json){
 		var lang = json.lang;
-		return jQuery('<div class="jmb-rv-header"><span>'+lang['HEADER']+'</span></div><div class="jmb-rv-content"></div><div class="jmb-rv-button"><span>'+lang['SHOW']+'...</span></div>');
+		var header_background_color = (json.config.login_type=='famous_family')?json.config.colors.famous_header:json.config.colors.family_header;
+		return jQuery('<div class="jmb-rv-header" style="background:#'+header_background_color+';"><span>'+lang['HEADER']+'</span></div><div class="jmb-rv-content"></div><div class="jmb-rv-button"><span>'+lang['SHOW']+'...</span></div>');
 	}
 	
 	var get_avatar = function(object){
@@ -89,8 +90,10 @@ function JMBRecentVisitors(obj){
 	
 	
 	var render = function(callback){
-		parent.ajax('get_recent_visitors', jQuery(storage.header.activeButton).attr('id'), function(res){
+		var id = jQuery(storage.header.activeButton).attr('id');
+		parent.ajax('get_recent_visitors', id, function(res){
 			var json = jQuery.parseJSON(res.responseText);
+			if(json.objects.length == 0) return;
 			parent.lang = json.lang;
 			content = createBody(json);
 			var count = (json.response.length<=15)?json.response.length:15;

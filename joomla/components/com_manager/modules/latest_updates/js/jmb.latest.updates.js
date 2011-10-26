@@ -28,7 +28,7 @@ function JMBLatestUpdates(obj){
 		if(json[type]==null) return '';
 		var object = json[type];
 		var name = get_name(object.indiv);
-		return ['<font style="color:#', json.colors[object.indiv.Gender],';">',name,'</font>'].join('');
+		return ['<font style="color:#', json.config.colors[object.indiv.Gender],';">',name,'</font>'].join('');
 	}
 
 	var setMiniProfile = function(object, json, name){
@@ -47,7 +47,8 @@ function JMBLatestUpdates(obj){
 	this.ajax('get', null, function(res){
 		var json = jQuery.parseJSON(res.responseText);
 		var lang = json.lang;
-		var html = jQuery('<div class="jmb-lu-header"><span>'+lang['HEADER']+'</span></div><div class="jmb-lu-content"></div><div class="jmb-lu-button"><span>'+lang['SHOW']+'...</span></div>');
+		var header_background_color = (json.config.login_type=='famous_family')?json.config.colors.famous_header:json.config.colors.family_header;
+		var html = jQuery('<div class="jmb-lu-header" style="background:#'+header_background_color+';"><span>'+lang['HEADER']+'</span></div><div class="jmb-lu-content"></div><div class="jmb-lu-button"><span>'+lang['SHOW']+'...</span></div>');
 		var structure = [
 			{"id":"new_photo","name":lang['PHOTO']},
 			{"id":"just_registered","name":lang['REGISTER']},

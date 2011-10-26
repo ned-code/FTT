@@ -79,6 +79,14 @@ class JMBThisMonth {
                             case "location":
                                     $color['L'] = $p[$i]['value'];
                             break;
+                            
+                    	    case "famous_header":
+                    	    	    $color['famous_header'] = $p[$i]['value'];
+                    	    break;
+                    
+                    	    case "family_header":
+                    	    	    $color['family_header'] = $p[$i]['value'];
+                    	    break;
                     }
                 }
                 return $color;
@@ -349,7 +357,9 @@ class JMBThisMonth {
 		$descendants = $this->getThisMonthMebmers($gedcom_id, $events);
 		$this->settings['opt']['month'] = $month;
 		
-		return json_encode(array('fmbUser'=>$fmbUser,'colors'=>$colors,'path'=>$path,'events'=>$events,'descedants'=>$descendants,'language'=>$language,'settings'=>$this->settings));
+		$config = array('alias'=>$_SESSION['jmb']['alias'],'login_type'=>$_SESSION['jmb']['login_type'],'colors'=>$colors);
+		
+		return json_encode(array('fmbUser'=>$fmbUser,'config'=>$config,'path'=>$path,'events'=>$events,'descedants'=>$descendants,'language'=>$language,'settings'=>$this->settings));
 	}
 	
 }

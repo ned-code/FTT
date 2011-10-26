@@ -18,6 +18,14 @@ class JMBLatestUpdates {
                             case "location":
                                     $color['L'] = $p[$i]['value'];
                             break;
+                            
+                            case "famous_header":
+                    	    	    $color['famous_header'] = $p[$i]['value'];
+                    	    break;
+                    
+                    	    case "family_header":
+                    	    	    $color['family_header'] = $p[$i]['value'];
+                    	    break;
                     }
                 }
                 return $color;
@@ -56,7 +64,8 @@ class JMBLatestUpdates {
 		$path = JURI::root(true);
 		$fmbUser = $this->host->getUserInfo($_SESSION['jmb']['gid']);
 		$lang = $this->host->getLangList('latest_updates');
-		return json_encode(array('lang'=>$lang,'colors'=>$colors,'path'=>$path,'fmbUser'=>$fmbUser, 'new_photo'=>$new_photo,'just_registered'=>$just_registered, 'profile_change'=>$profile_change, 'family_member_added'=>$family_member_added, 'family_member_deleted'=>$family_member_deleted));
+		$config = array('alias'=>$_SESSION['jmb']['alias'],'login_type'=>$_SESSION['jmb']['login_type'],'colors'=>$colors);
+		return json_encode(array('lang'=>$lang,'config'=>$config,'path'=>$path,'fmbUser'=>$fmbUser, 'new_photo'=>$new_photo,'just_registered'=>$just_registered, 'profile_change'=>$profile_change, 'family_member_added'=>$family_member_added, 'family_member_deleted'=>$family_member_deleted));
 	}
 }
 ?>

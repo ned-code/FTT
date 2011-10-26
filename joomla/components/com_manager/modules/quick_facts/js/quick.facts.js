@@ -6,7 +6,8 @@ function JMBQuickFacts(obj){
 	var createBody = function(json){
 		var sb = host.stringBuffer();
 		var lang = json.lang;
-		sb._('<div class="jmb_qf_header"><span>')._(lang['HEADER'])._('</span></div>');
+		var header_background_color = (json.config.login_type=='famous_family')?json.config.colors.famous_header:json.config.colors.family_header;
+		sb._('<div class="jmb_qf_header" style="background:#')._(header_background_color)._(';"><span>')._(lang['HEADER'])._('</span></div>');
 		sb._('<div class="jmb_qf_content">');
 			sb._('<div id="number_family_members" class="jmb_qf_item"><span class="jmb_qf_title">')._(lang['HEADER'])._(':</span><span class="jmb_qf_text"></span></div>');
 			sb._('<div id="youngest_living_member" class="jmb_qf_item"><span class="jmb_qf_title">')._(lang['YOUNGEST'])._(':</span><span class="jmb_qf_text"></span></div>');
@@ -46,21 +47,21 @@ function JMBQuickFacts(obj){
 		if(json.youngest == null) return 'unknown';
 		var st = host.stringBuffer();
 		var lang = json.lang;
-		st._('<font style="color:#')._(json.colors[json.youngest.indiv.Gender])._(';">')._(getFullName(json.youngest.indiv))._('</font> ( ')._(getTurn(json.youngest.indiv))._(' ')._(lang['YEARS'])._(' )');	
+		st._('<font style="color:#')._(json.config.colors[json.youngest.indiv.Gender])._(';">')._(getFullName(json.youngest.indiv))._('</font> ( ')._(getTurn(json.youngest.indiv))._(' ')._(lang['YEARS'])._(' )');	
 		return st.result();
 	}
 	var getOldestMemberString = function(json){
 		if(json.oldest == null) return 'unknown';
 		var st = host.stringBuffer();
 		var lang = json.lang;
-		st._('<font style="color:#')._(json.colors[json.oldest.indiv.Gender])._(';">')._(getFullName(json.oldest.indiv))._('</font> ( ')._(getTurn(json.oldest.indiv))._(' ')._(lang['YEARS'])._(' )');	
+		st._('<font style="color:#')._(json.config.colors[json.oldest.indiv.Gender])._(';">')._(getFullName(json.oldest.indiv))._('</font> ( ')._(getTurn(json.oldest.indiv))._(' ')._(lang['YEARS'])._(' )');	
 		return st.result();
 	}
 	var getEarliestDocumentString = function(json){
 		if(json.earliest == null) return '<font style="color:blue;">"Incognito"</font> (unknown)';
 		var st = host.stringBuffer();
 		var lang = json.lang;
-		st._('<font style="color:#')._(json.colors[json.earliest.indiv.Gender])._(';">')._(getFullName(json.earliest.indiv))._('</font> ( ')._(getTurn(json.earliest.indiv))._(' ')._(lang['YEARS'])._(' )');	
+		st._('<font style="color:#')._(json.config.colors[json.earliest.indiv.Gender])._(';">')._(getFullName(json.earliest.indiv))._('</font> ( ')._(getTurn(json.earliest.indiv))._(' ')._(lang['YEARS'])._(' )');	
 		return st.result();
 	}
 	var setMiniProfile = function(object, json, name){

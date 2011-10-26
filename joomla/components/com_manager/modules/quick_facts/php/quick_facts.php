@@ -22,6 +22,14 @@ class JMBQuickFacts {
                             case "location":
                                     $color['L'] = $p[$i]['value'];
                             break;
+                            
+                             case "famous_header":
+                    	    	    $color['famous_header'] = $p[$i]['value'];
+                    	    break;
+                    
+                    	    case "family_header":
+                    	    	    $color['family_header'] = $p[$i]['value'];
+                    	    break;
                     }
                 }
                 return $color;
@@ -94,8 +102,9 @@ class JMBQuickFacts {
 		$fmbUser = $this->host->getUserInfo($_SESSION['jmb']['gid']);
 		$path = JURI::root(true);
 		$lang = $this->getLanguage();
+		$config = array('alias'=>$_SESSION['jmb']['alias'],'login_type'=>$_SESSION['jmb']['login_type'],'colors'=>$colors);
 		
-		return json_encode(array('lang'=>$lang,'count'=>$count,'living'=>$living,'youngest'=>$youngest,'oldest'=>$oldest,'earliest'=>$earliest,'colors'=>$colors,'fmbUser'=>$fmbUser,'path'=>$path));		
+		return json_encode(array('lang'=>$lang,'count'=>$count,'living'=>$living,'youngest'=>$youngest,'oldest'=>$oldest,'earliest'=>$earliest,'config'=>$config,'fmbUser'=>$fmbUser,'path'=>$path));		
 	}
 }
 ?>

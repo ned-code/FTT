@@ -6,6 +6,35 @@ class JMBRecentVisitors {
 		$this->host = new Host('Joomla');
 	}
 	
+	protected function getColors(){
+		$color = array();
+		$p = $this->host->getSiteSettings('color');
+		for($i=0;$i<sizeof($p);$i++){
+                    switch($p[$i]['name']){	
+                            case "female":
+                                    $color['F'] = $p[$i]['value'];
+                            break;
+                            
+                            case "male":
+                                    $color['M'] = $p[$i]['value'];
+                            break;
+                            
+                            case "location":
+                                    $color['L'] = $p[$i]['value'];
+                            break;
+                            
+                             case "famous_header":
+                    	    	    $color['famous_header'] = $p[$i]['value'];
+                    	    break;
+                    
+                    	    case "family_header":
+                    	    	    $color['family_header'] = $p[$i]['value'];
+                    	    break;
+                    }
+                }
+                return $color;
+	}
+	
 	protected function get_objects($res){
 		$objects = array();
 		$owner_id = $_SESSION['jmb']['gid'];
@@ -57,7 +86,9 @@ class JMBRecentVisitors {
 		$path = JURI::root(true);
 		$fmbUser = $this->host->getUserInfo($_SESSION['jmb']['gid']);
 		$lang = $this->host->getLangList('recent_visitors');
-		return json_encode(array('response'=>$result,'objects'=>$objects,'time'=>$time,'path'=>$path,'fmbUser'=>$fmbUser,'response'=>$response, 'lang'=>$lang));		
+		$colors = $this->getColors();	
+		$config = array('alias'=>$_SESSION['jmb']['alias'],'login_type'=>$_SESSION['jmb']['login_type'],'colors'=>$colors);
+		return json_encode(array('config'=>$config,'response'=>$result,'objects'=>$objects,'time'=>$time,'path'=>$path,'fmbUser'=>$fmbUser,'response'=>$response, 'lang'=>$lang));		
 	}
 }
 ?>

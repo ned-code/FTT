@@ -127,6 +127,8 @@ JMBThisMonth.prototype = {
 	},
 	_setHEAD:function(json){
 		var header = jQuery(this.table).find('.jmb-this-month-header');
+		var header_background_color = (json.config.login_type=='famous_family')?json.config.colors.famous_header:json.config.colors.family_header;
+		jQuery(header).css('background', '#'+header_background_color);
 		var sb = host.stringBuffer();
 		sb._('<span>')._(json.language['HEADER'])._('</span>: <select name="months">')._(this._createMonthsSelect(json))._('</select>');
 		if(json.settings.opt.date<1900) sb._('<select name="sort">')._(this._createSortSelect(json))._('</select>');
@@ -147,7 +149,7 @@ JMBThisMonth.prototype = {
 				self.b_count++;
 				birth = data.indiv.Birth[0];
 				gender = (data.indiv.Gender=='M')?'male':'female';
-				color = json.colors[data.indiv.Gender];
+				color = json.config.colors[data.indiv.Gender];
 				append = sb._('<tr><td><div class="date">')._((birth.From.Day!=null)?birth.From.Day:'')._('</div></td><td><div class="img-')._(gender)._('">&nbsp;</div></td><td><div id="')._(key)._('" class="person ')._(gender)._('"><font color="')._(color)._('">')._(self._getFullName(json, key))._('</font> (turns ')._(self._getTurns(birth))._(')</div></td></tr>').result();
 				sb.clear();
 				jQuery(view).append(append);
@@ -174,7 +176,7 @@ JMBThisMonth.prototype = {
 				data = json.descedants[key];
 				death = data.indiv.Death[0];
 				gender = (data.indiv.Gender=='M')?'male':'female';
-				color = json.colors[data.indiv.Gender];
+				color = json.config.colors[data.indiv.Gender];
 				append = sb._('<tr><td><div class="date">')._((death.From.Day!=null)?death.From.Day:'')._('</div></td><td><div class="img-')._(gender)._('">&nbsp;</div></td><td><div id="')._(key)._('" class="person"><font color="')._(color)._('">')._(self._getFullName(json, key))._('</font> (turns ')._(self._getTurns(data.indiv.Birth[0]))._(')</div></td></tr>').result();
 				sb.clear();
 				jQuery(view).append(append);
@@ -196,12 +198,12 @@ JMBThisMonth.prototype = {
 				var key, sircar, spouse, event, append;
 				sircar = {
 					id:e.husb,
-					color:json.colors[json.descedants[e.husb].indiv.Gender],
+					color:json.config.colors[json.descedants[e.husb].indiv.Gender],
 					name:self._getFullName(json, e.husb)
 				}
 				spouse = {
 					id:e.wife,
-					color:json.colors[json.descedants[e.wife].indiv.Gender],
+					color:json.config.colors[json.descedants[e.wife].indiv.Gender],
 					name:self._getFullName(json, e.wife)
 				}	
 				event = self._getMarrEvent((e.husb!=null)?json.descedants[e.husb]:json.descedants[e.wife]);
