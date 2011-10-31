@@ -1,4 +1,4 @@
-function JMBQuickFacts(obj){
+function JMBQuickFactsObject(obj){
 	obj = jQuery('#'+obj);	
 	
 	var profile =  new JMBProfile();
@@ -112,7 +112,7 @@ function JMBQuickFacts(obj){
 	
 }
 
-JMBQuickFacts.prototype = {
+JMBQuickFactsObject.prototype = {
 	_ajax:function(func, params, callback){
 		host.callMethod("quick_facts", "JMBQuickFacts", func, params, function(res){
 				callback(res);

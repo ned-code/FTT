@@ -1,4 +1,4 @@
-function JMBAncestors(obj){
+function JMBAncestorsObject(obj){
 	obj = jQuery('#'+obj);	
 	var cont = jQuery('<div id="jit" class="jmb-ancestors-jit"></div>');
 	jQuery(obj).append(cont);
@@ -40,7 +40,7 @@ function JMBAncestors(obj){
 	storage.header.famLine.hide();
 }
 
-JMBAncestors.prototype = {
+JMBAncestorsObject.prototype = {
 	_ajax:function(func, params, callback){
 		host.callMethod("ancestors", "JMBAncestors", func, params, function(res){
 				callback(res);

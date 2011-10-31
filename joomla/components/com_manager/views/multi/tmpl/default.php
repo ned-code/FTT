@@ -7,7 +7,7 @@ foreach($this->msg as $obj){
 	$pages .= $obj->id.'|';
 }
 $pages = substr($pages, 0, strlen($pages)-1);
-$str ='<script>storage.core.loadTabs("'.$pages.'");</script>';
+$str ='<script>storage.core.load("'.$pages.'");</script>';
 echo $str;
 
 ?>

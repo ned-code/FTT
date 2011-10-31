@@ -1,4 +1,4 @@
-function JMBDescendantTree(obj){
+function JMBDescendantTreeObject(obj){
 	var self = this;
 	obj = jQuery("#"+obj);
 	var dhxLayout;
@@ -7,7 +7,7 @@ function JMBDescendantTree(obj){
 	var base_url = jQuery('body').attr('_baseurl');
 	
 	// set main dhxmlx Layout
-	dhxLayout = new dhtmlXLayoutObject("descendant_tree", "2U");
+	dhxLayout = new dhtmlXLayoutObject("JMBDescendantTreeContainer", "2U");
 	dhxLayout.cells("a").hideHeader();
 	dhxLayout.cells("b").hideHeader();
 	dhxLayout.cells("a").setWidth(380);
@@ -26,10 +26,7 @@ function JMBDescendantTree(obj){
 	this.obj = obj;
 	this.firstParent = null;
 	this.show_desc = this.selectDesc(dhxTree.allTree);
-	
-	
-	
-	
+
 	self.loadTree(dhxTree, 'mother');		
 	dhxTree.attachEvent("onXLE", function(tree,id){
 		var items = this.getAllSubItems(0).split(',');
@@ -50,7 +47,7 @@ function JMBDescendantTree(obj){
 	});	
 }
 
-JMBDescendantTree.prototype = {
+JMBDescendantTreeObject.prototype = {
 	_ajax:function(func, params, callback){
 		host.callMethod("descendant_tree", "JMBDescendantTree", func, params, function(res){
 				callback(res);

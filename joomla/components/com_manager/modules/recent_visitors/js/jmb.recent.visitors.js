@@ -1,4 +1,4 @@
-function JMBRecentVisitors(obj){
+function JMBRecentVisitorsObject(obj){
 	obj = jQuery('#'+obj);
 	
 	var parent = this;
@@ -58,7 +58,7 @@ function JMBRecentVisitors(obj){
 		for(var i=0;i<count;i++){
 			var li = jQuery(st.clear()._('<li id="')._(json.response[i].id)._('" ><div class="avatar">')._(get_avatar(json.response[i]))._('</div></li>').result());
 			jQuery(ul).append(li);
-			init_tipty_tooltip(json.time, json.response[i],li);
+			init_tipty_tooltip(json.time, json.response[i], li);
 		}
 	}
 	
@@ -120,7 +120,7 @@ function JMBRecentVisitors(obj){
 	});
 }
 
-JMBRecentVisitors.prototype = {
+JMBRecentVisitorsObject.prototype = {
 	ajax:function(func, params, callback){
 		host.callMethod("recent_visitors", "JMBRecentVisitors", func, params, function(res){
 				callback(res);

@@ -50,7 +50,6 @@ html ul.jmbtabs li.active, html ul.jmbtabs li.active a:hover  { /*--Makes sure t
 	position: relative;
 }
 .tab_content {
-	/*padding: 20px;*/
 	font-size: 1.2em;
 	background: #f5fae6;
 }
@@ -75,4 +74,31 @@ div.buttons span {
 	cursor: pointer;
     	font-size: 14px;
     	font-weight: bold;
+}
+
+.jmb_layout_row {
+	margin:0 auto;
+}
+.jmb_layout_row div {
+	/*text-align:center;*/
+}
+.jmb_layout_cell_single{
+	margin:0 auto;
+ 	width:100%; 
+	max-width:100%; 
+	min-width:100%; 
+	height:100%;
+}
+.jmb_layout_cell_double{
+	width:50%; 
+	max-width:50%;
+	margin:0 auto;
+	min-width:50%; 
+	height:100%;
+}
+.jmb_layout_cell_triple{
+ 	width:33%; 
+	max-width:33%; 
+	min-width:33%; 
+	height:100%;
 }

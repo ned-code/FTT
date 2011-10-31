@@ -1,4 +1,4 @@
-function JMBThisMonth(obj){
+function JMBThisMonthObject(obj){
 	obj = jQuery('#'+obj);
 	//vars 
 	this.obj = obj;
@@ -32,7 +32,7 @@ function JMBThisMonth(obj){
 	storage.header.famLine.mode();	
 }
 
-JMBThisMonth.prototype = {
+JMBThisMonthObject.prototype = {
 	_ajax:function(func, params, callback){
 		host.callMethod("this_month", "JMBThisMonth", func, params, function(req){
 				callback(req);

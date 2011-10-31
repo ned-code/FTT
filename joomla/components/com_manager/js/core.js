@@ -212,35 +212,159 @@ var date = new Date();
 var id =  Math.floor(date.getTime() /1000);
 var core = {};
 storage.core = core;
-core.modalWindow = jQuery('<div class="jmb-core-overlay">&nbsp;</div>')
+core.modalWindow = jQuery('<div class="jmb-core-overlay">&nbsp;</div>');
 
-core.loadPage = function(div, id, layout, callback){
-    var manager = new MyBranchesManager();
-    var path = manager.getLayoutUrl(layout);
-    jQuery.ajax({
-        url: path,
-        type: "GET",
-        dataType: "html",
-        complete : function (req, err) {
-            jQuery(div).html(req.responseText);
-            jQuery.ajax({
-                url: 'index.php?option=com_manager&task=loadPage&page_id='+id,
-                type: "GET",
-                dataType: "html",
-                complete : function (req, err) {
-                    var string = jQuery.trim(req.responseText);
-                    if(string != ""){
-                       	var obj = jQuery.parseJSON(string)
-                        var manager = new MyBranchesManager();
-                        manager.renderPage(div, obj);
-                        callback();
-                    }
-                }
-            });
-        }
-    });
+core.modal = function(arg){
+	var div = jQuery('div.tab_container');
+	var overlay = this.modalWindow;
+	jQuery(overlay).css('width',jQuery(div).width()+'px').css('height',jQuery(div).height()+'px');
+	return (arg)?jQuery(div).append(overlay):jQuery(overlay).remove();
 }
 
+core.createLayout = function(type){
+	var layout_type = {'single':1,'double':2,'triple':3};
+	var td_length = layout_type[type];
+	var table = jQuery('<table style="table-layout:fixed;" id="jmb_page_layout_table"  width="100%" height="100%"></table>');
+	var tr = jQuery('<tr class="jmb_layout_row"></tr>');
+	jQuery(table).append(tr);
+	for(var cell=1; cell<=td_length;cell++){
+		var td = jQuery('<td class="jmb_layout_cell_single" id="jmb_page_layout_content_'+cell+'" valign="top"></td>');
+		jQuery(tr).append(td);
+	}
+	return table;
+}
+
+core.appendFiles = function(module, type){
+	var self = this;
+	var url = jQuery('body').attr('_baseurl')+'components/com_manager/modules/'+module.info.name;
+	var head = document.getElementsByTagName("head");
+	var files = module.files[type];
+	for(var i=0;i<files.length;i++){
+		var src = url+'/'+type+'/'+files[i];
+		var script;
+		switch(type){
+			case "js":
+				var script = document.createElement("script");
+				script.src = src;
+				script.type="text/javascript";
+			break;
+			
+			case "css":
+				var script = document.createElement("link");
+				script.href = src;
+				script.rel="stylesheet";
+				script.type="text/css";
+			break;
+		}
+		head[0].appendChild(script);
+	}		
+}
+
+core.initModule = function(object_name, container_id){
+	var self = this;
+    	if(typeof window[object_name]=='function'){
+    		eval('new '+object_name+'("'+container_id+'");');
+    	}
+        else {
+        	setTimeout(function(){
+        		self.initModule(object_name, container_id);
+        	},1000);
+        }
+}
+
+core.renderPage = function(parent, page){
+	var self = this;
+	var grid = page.grid;
+	var table = self.createLayout(page.page_info.layout_type);
+	var tds = jQuery(table).find('td');
+	for(var i = 0; i < grid.tdLength; i++){
+		var td = tds[i];
+		for(j = 0; j < grid[i].divLength;j++){
+			var module_id = grid[i][j].id; 
+			var module = page.modules[module_id];
+			//append js files;
+			self.appendFiles(module, 'css');
+			self.appendFiles(module, 'js');
+			
+			//append module div;
+			var div = jQuery('<div id="'+module.container_id+'"></div>');
+			jQuery(td).append(div);
+			
+			//init module;
+			self.initModule(module.object_name, module.container_id);
+		}
+	}	
+	jQuery(parent).empty();
+	jQuery(parent).append(table);
+}
+core.renderTabs = function(parent, pages){
+	var self = this;
+	var ul = jQuery('<ul class="jmbtabs"></ul>'); 
+    	var div = jQuery('<div class="tab_container"></div>');
+    	
+    	jQuery(parent).append(ul);
+    	jQuery(parent).append(div);
+    	
+    	jQuery(pages).each(function(i,page){
+    		var div = jQuery('<div id="'+(new Date()).valueOf()+'">'+page.page_info.title+'</div>');
+    		var li = jQuery('<li id="'+i+'"><a href="jmbtab_'+i+'"></a></li>');
+    		jQuery(li).find('a').append(div);
+    		jQuery(ul).append(li);
+    	});
+    	
+    	var divs = jQuery('<div id="jmbtab" class="tab_content">&nbsp;</div>');	
+    	jQuery(div).append(divs);
+    	
+    	//When page loads...
+	jQuery(".tab_content").hide(); //Hide all content
+			
+	//On Click Event
+	jQuery("ul.jmbtabs li").click(function() {
+		if(jQuery(this).hasClass('active')) return false;
+
+		jQuery("ul.jmbtabs li").removeClass("active"); //Remove any "active" class
+		jQuery(this).addClass("active"); //Add "active" class to selected tab
+		jQuery(divs).hide(); //Hide all tab content
+	
+		var id = jQuery(this).attr('id');
+		var page = pages[id];
+		
+		self.renderPage('#jmbtab', page);
+		
+		storage.tabs.activeTab = this;
+		storage.tabs.click(this);	
+		jQuery(divs).show(); //Hide all tab content
+		return false;
+	});	
+	jQuery("ul.jmbtabs li:first").click(); //click first	
+}
+core.load = function(pages){
+	var self = this;
+	//var pages = '1,2,6,8,7,10';
+	jQuery(document.body).ready(function(){
+		host = new Host();
+		storage.login = new JMBLogin('jmb_header_profile_box');
+		storage.language = new JMBLanguage();
+		storage.topMenuBar.init();
+		storage.inIframe();
+		jQuery.ajax({
+			url:'index.php?option=com_manager&task=getPageInfo&ids='+pages,
+			type:'GET',
+			complete:function(req, err){
+				if(err=='success'){
+					var json = jQuery.parseJSON(req.responseText);
+					self.path = json.path;
+					if(json.pages.length==1){
+						self.renderPage('#page', json.pages[0])
+					} else {
+						self.renderTabs('#container', json.pages);
+					}
+				}
+			}
+		});
+	});
+}
+/*
 core.load = function(pages){
 	var self = this;
 	jQuery(document).ready(function() {
@@ -272,11 +396,32 @@ core.load = function(pages){
 	});		
 }
 
-core.modal = function(arg){
-	var div = jQuery('div.tab_container');
-	var overlay = this.modalWindow;
-	jQuery(overlay).css('width',jQuery(div).width()+'px').css('height',jQuery(div).height()+'px');
-	return (arg)?jQuery(div).append(overlay):jQuery(overlay).remove();
+
+core.loadPage = function(div, id, layout, callback){
+    var manager = new MyBranchesManager();
+    var path = manager.getLayoutUrl(layout);
+    jQuery.ajax({
+        url: path,
+        type: "GET",
+        //dataType: "html",
+        complete : function (req, err) {
+            jQuery(div).html(req.responseText);
+            jQuery.ajax({
+                url: 'index.php?option=com_manager&task=loadPage&page_id='+id,
+                type: "GET",
+                dataType: "html",
+                complete : function (req, err) {
+                    var string = jQuery.trim(req.responseText);
+                    if(string != ""){
+                       	var obj = jQuery.parseJSON(string)
+                        var manager = new MyBranchesManager();
+                        manager.renderPage(div, obj);
+                        callback();
+                    }
+                }
+            });
+        }
+    });
 }
 
 core.loadTabs = function(pages){
@@ -365,4 +510,5 @@ core.loadTabs = function(pages){
     	});
     });
 }
+*/
 

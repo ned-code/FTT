@@ -28,9 +28,13 @@ $facebook = new Facebook(array('appId'=>$_SESSION['jmb']['facebook_appid'],'secr
 $fb_login_url = $facebook->getLoginUrl();
 $fb_user = $facebook->getUser();     
 $fb_access_token = $facebook->getAccessToken();
-try{
-	$user = ($fb_user)?$facebook->api('/me'):false;
-} catch (FacebookApiException $e) {
+if($fb_user){
+	try{
+		$user = ($fb_user)?$facebook->api('/me'):false;
+	} catch (FacebookApiException $e) {
+		$user = false;
+	}
+} else {
 	$user = false;
 }
 
@@ -133,6 +137,9 @@ switch($alias){
 			</div>
 			<div id="_bottom" class="footer"><jdoc:include type="modules" name="footer" /></div>
 		</div>
+		<?php if(!$user): ?>
+			<div id="jmb_connect_with_facebook" style="display:none;"><a href="<?php echo $fb_login_url; ?>">Conncet With Facebook</a></div>
+		<?php endif; ?>
 		<script>
 			FB.init({
 				appId:"184962764872486", 

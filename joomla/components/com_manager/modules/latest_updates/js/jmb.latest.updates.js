@@ -1,4 +1,4 @@
-function JMBLatestUpdates(obj){
+function JMBLatestUpdatesObject(obj){
 	obj = jQuery('#'+obj);	
 	
 	var html = null;	
@@ -74,7 +74,7 @@ function JMBLatestUpdates(obj){
 	})
 }
 
-JMBLatestUpdates.prototype = {
+JMBLatestUpdatesObject.prototype = {
 	ajax:function(func, params, callback){
 		host.callMethod("latest_updates", "JMBLatestUpdates", func, params, function(res){
 				callback(res);

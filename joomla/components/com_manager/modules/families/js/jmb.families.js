@@ -1,4 +1,4 @@
-function JMBFamilies(obj){
+function JMBFamiliesObject(obj){
 	var self = this;
 	obj = jQuery("#"+obj);
 
@@ -39,7 +39,7 @@ function JMBFamilies(obj){
 
 	storage.header.famLine.hide();
 }
-JMBFamilies.prototype = {
+JMBFamiliesObject.prototype = {
 	_ajax:function(func, params, callback){
 		host.callMethod("families", "JMBFamilies", func, params, function(res){
 				callback(res);

@@ -45,6 +45,118 @@ class JMBController extends JController
             die;
         }
         
+        protected function getFiles($dir){
+        	$files = array();
+        	if($dh = opendir($dir)) {
+        		while (($file = readdir($dh)) !== false) {
+        			if($file!='.'&&$file!='..'&&$file!='index.html'){
+        				$file_parts = explode('.', $file);
+        				$end_file_part = end($file_parts);
+        				if($end_file_part=='css'||$end_file_part=='js'){
+        					$files[] = $file;
+        				}
+        			}
+        		}
+        	}
+        	return $files;
+        }
+        
+        protected function getIncludesFiles($module_name, $path){
+        	$module_path = $path.DS.$module_name;
+        	$css_dir = $module_path.DS.'css';
+        	$js_dir = $module_path.DS.'js';
+        	$files = array();
+        	$files['js'] = $this->getFiles($js_dir);
+        	$files['css'] = $this->getFiles($css_dir);
+        	return $files;        	
+        }
+        
+        protected function getModuleObjectName($module_name){
+        	$name_parts = explode('_', $module_name);
+        	$mod_name = 'JMB';
+        	foreach($name_parts as $part){
+        		$mod_name .= ucfirst(strtolower($part));
+        	}
+        	$mod_name .= 'Object';
+        	return $mod_name;
+        }
+        
+        protected function getModuleContainerId($module_name){
+        	$name_parts = explode('_', $module_name);
+        	$mod_name = 'JMB';
+        	foreach($name_parts as $part){
+        		$mod_name .= ucfirst(strtolower($part));
+        	}
+        	$mod_name .= 'Container';
+        	return $mod_name;	
+        }
+        
+        protected function parseModulesGrid($json_string, $path){
+        	$db =& JFactory::getDBO();
+        	$json_object = json_decode($json_string);
+        	
+        	//get all modules
+        	$sql_string = "SELECT id, name, title, description, is_system FROM #__mb_modules";
+        	$db->setQuery($sql_string);
+        	$modules_table = $db->loadAssocList();
+        	$mod_table = array();
+        	foreach($modules_table as $mod){
+        		$mod_table[$mod['id']] = $mod;
+        	}
+        	        	        	
+        	$modules = array();
+        	foreach($json_object as $td){
+        		if(is_object($td)){
+        			foreach($td as $div){
+        				if(is_object($div)){
+        					$mod_name = $mod_table[$div->id]['name'];
+        					$mod = array();
+        					$mod['info'] = $mod_table[$div->id];
+        					$mod['files'] = $this->getIncludesFiles($mod_name, $path);
+        					$mod['object_name'] = $this->getModuleObjectName($mod_name);
+        					$mod['container_id'] = $this->getModuleContainerId($mod_name);
+        					$modules[$div->id] = $mod;
+        				}
+        			}
+        		}
+        	}
+        	return $modules;
+        }
+        
+        public function getPageInfo(){
+        	ob_clean();
+        	$db =& JFactory::getDBO();
+        	$host = new Host('Joomla');
+        	$ids = explode('|', JRequest::getVar('ids'));
+        	
+        	$jpath_base_explode = explode('/', JPATH_BASE);
+        	if(end($jpath_base_explode) == 'administrator'){
+        		array_pop($jpath_base_explode); 
+        	}
+        	$jpath_base = implode('/', $jpath_base_explode);
+        	$path = $jpath_base.DS.'components'.DS.'com_manager'.DS.'modules';
+        	
+        	//get all pages
+        	$sql_string = "SELECT content.id, content.layout_type, content.title, grid.json FROM #__mb_content as content LEFT JOIN jos_mb_modulesgrid as grid ON grid.page_id = content.id";
+        	$db->setQuery($sql_string);
+        	$content_table = $db->loadAssocList();
+        	
+        	$pages = array();
+        	foreach($content_table as $page){
+        		foreach($ids as $id){
+        			if($page['id'] == $id){
+        				$p = array();
+        				$p['page_info'] = $page;
+        				$p['grid'] = json_decode($page['json']);
+        				$p['modules'] = $this->parseModulesGrid($page['json'], $path); 
+        				$pages[] = $p;
+        			}
+        		}
+        	}
+        	echo json_encode(array('pages'=>$pages));
+        	exit;
+        }
+        
         /**
         *
         */
@@ -400,6 +512,7 @@ class JMBController extends JController
         	$current_alias = $this->getCurrentAlias();
         	$alias = (isset($_SESSION['jmb']['alias']))?$_SESSION['jmb']['alias']:'myfamily';
         	if($current_alias != $alias){ 
+        		$_SESSION['jmb']['alias'] = $alias;
         		$this->location($alias);
         	} else{    
         		switch($current_alias){
