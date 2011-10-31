@@ -49,7 +49,6 @@ function JMBLogin(obj){
 			break;
 			
 			case "home":
-			case "login":
 			case "family_tree":
 				if(facebook_id){
 					var box = jQuery(obj).find('div#profile_content');
@@ -66,13 +65,16 @@ function JMBLogin(obj){
 					jQuery(box).append(table);
 					jQuery(box).show();
 				} else {
-					jQuery(obj).find('div#profile_login').show();
+					//jQuery(obj).find('div#profile_login').show();
+					jQuery(obj).hide();
 				}
 				
 			break;
 		
+			case "login":
 			case "_login":
-				jQuery(obj).find('div#profile_login').show();
+				//jQuery(obj).find('div#profile_login').show();
+				jQuery(obj).hide();
 			break;
 			
 			case "famous_family":
@@ -81,7 +83,7 @@ function JMBLogin(obj){
 					var table = jQuery('<table><tr><td><div class="jmb-profile-box-content"></div></td><td><div class="jmb-profile-box-avatar"></div></td></tr></table>');
 					var divs = jQuery('<div style="margin-left:3px;"></div><div style="text-align:center;"></div><div style="text-align:center;"></div>');
 					var span = jQuery('<span class="jmb-profile-box-title">'+getName(json)+'</span>');
-					var buttons = jQuery('<ul class="buttons"><li><span id="logout">Logout</span></li></ul>');
+					var buttons = jQuery('<ul class="buttons"><li><span id="logout">Exit this Family Tree</span></li></ul>');
 					jQuery(buttons).find('span').click(function(){
 						module.famousFamilyLogout();
 					});

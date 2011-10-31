@@ -23,16 +23,22 @@ $og_site_name = 'FamilyTree-Top';
 $app                = JFactory::getApplication();
 $base_url = Juri::base();
 
-$facebook = new Facebook(array('appId'=>JMB_FACEBOOK_APPID,'secret'=>JMB_FACEBOOK_SECRET,'cookie'=>JMB_FACEBOOK_COOKIE));
+$facebook = new Facebook(array('appId'=>$_SESSION['jmb']['facebook_appid'],'secret'=>$_SESSION['jmb']['facebook_secret'],'cookie'=>$_SESSION['jmb']['facebook_cookie']));
+
 $fb_login_url = $facebook->getLoginUrl();
-$session = $facebook->getSession();
-$user = ($session)?$facebook->api('/me'):false;
+$fb_user = $facebook->getUser();     
+$fb_access_token = $facebook->getAccessToken();
+try{
+	$user = ($fb_user)?$facebook->api('/me'):false;
+} catch (FacebookApiException $e) {
+	$user = false;
+}
 
 $alias = isset($_SESSION['jmb']['alias'])?$_SESSION['jmb']['alias']:'home';
+$login_type = isset($_SESSION['jmb']['login_type'])?$_SESSION['jmb']['login_type']:'family_tree';
 $color = '3f48cc';
 switch($alias){
 	case 'myfamily':
-		$login_type = isset($_SESSION['jmb']['login_type'])?$_SESSION['jmb']['login_type']:'family_tree';
 		if($login_type=='family_tree'){
 			$color = '5F8D34';
 		} else {
@@ -48,7 +54,6 @@ switch($alias){
 		$color = 'aa6946';
 	break;
 }
-
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->language; ?>" lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>" >
@@ -75,7 +80,7 @@ switch($alias){
 		<div  class="jmb-top-menu-bar">
 			<div class="jmb-top-menu-bar-content">
 				<div id="myfamily" class="jmb-top-menu-bar-item"><span <?php if($alias=='myfamily'&&$login_type=='family_tree'): ?>class="active"<?php endif; ?> >My Family</span></div>
-				<div id="famous-family" class="jmb-top-menu-bar-item"><span <?php if($alias=='famous-family'||$login_type=='famous_family'): ?>class="active"<?php endif; ?>>Famous Family</span></div>
+				<div id="famous-family" class="jmb-top-menu-bar-item"><span <?php if($alias=='famous-family'||$login_type=='famous_family'): ?>class="active"<?php endif; ?>>Famous Families</span></div>
 				<div id="home" class="jmb-top-menu-bar-item"><span <?php if($alias=='home'): ?>class="active"<?php endif; ?>>FTT Home</span></div>
 			</div>
 		</div>
@@ -103,11 +108,7 @@ switch($alias){
 							<!-- Profile Line -->
 							<td>
 								<div id="jmb_header_profile_box" class="jmb_header_profile_box">
-									<div id="profile_login" class="jmb-profile-box-body">
-										<div class="jmb-profile-login-button">
-											<a href="<?php echo $fb_login_url; ?>">Connect with Facebook</a>
-										</div>
-									</div>
+									<div id="profile_login" class="jmb-profile-box-body"></div>
 									<div id="profile_content" class="jmb-profile-box-body"></div>
 								</div>
 							</td>

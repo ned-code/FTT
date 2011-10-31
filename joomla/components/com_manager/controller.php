@@ -370,57 +370,7 @@ class JMBController extends JController
         	}
         	exit;
         }
-        
-        protected function curl_get_file_contents($URL) {
-	    $c = curl_init();
-	    curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
-	    curl_setopt($c, CURLOPT_SSL_VERIFYPEER, false);
-	    curl_setopt($c, CURLOPT_URL, $URL);
-	    $contents = curl_exec($c);
-	    $err  = curl_getinfo($c,CURLINFO_HTTP_CODE);
-	    curl_close($c);
-	    if ($contents) return $contents;
-	    else return FALSE;
-	}
-        
-        protected function facebookAccessTokenExpired($fb){
-        	$code = $_REQUEST["code"];
-        	if (isset($code)) {
-        		$token_url="https://graph.facebook.com/oauth/access_token?client_id=";
-        		$token_url .= JMB_FACEBOOK_APPID;
-        		$token_url .= "&redirect_uri=";
-        		$token_url .= urlencode(JMB_FACEBOOK_URL);
-        		$token_url .= "&client_secret=";
-        		$token_url .= JMB_FACEBOOK_SECRET;
-        		$token_url .= "&code=";
-        		$token_url .= $code;
-        		$token_url .= "&display=popup";
-        		
-        		$response = file_get_contents($token_url);
-        		$params = null;
-        		parse_str($response, $params);
-        		$access_token = $params['access_token'];
-        	}
-        	
-        	$graph_url = "https://graph.facebook.com/me?access_token=".$access_token;
-        	$response = $this->curl_get_file_contents($graph_url);
-        	$decoded_response = json_decode($response);
-        	
-        	if ($decoded_response->error) {
-        		if ($decoded_response->error->type== "OAuthException") {
-        			$dialog_url= "https://www.facebook.com/dialog/oauth?client_id".JMB_FACEBOOK_APPID."&redirect_uri=".urlencode(JMB_FACEBOOK_URL);
-        			//echo("<script> top.location.href='" . $dialog_url . "'</script>");
-        			echo $dialog_url;
-        		} else {
-        			echo "other error has happened";
-        		}
-        	} else {
-        		 echo("success" . $decoded_response->name);
-        		 echo($access_token);
-        	}
-        
-        }
-        
+
         public function jmb($fb){
         	$task = JRequest::getCmd('task');
         	$option = JRequest::getCmd('option');
@@ -432,16 +382,23 @@ class JMBController extends JController
         	if(strlen($task)!=0) return;
         	
         	$host = new Host('joomla');
-        	$fb_session = $fb->getSession();
-        	$user = ($fb_session)?$fb->api('/me'):false;
+
+        	$fb_user = $fb->getUser();     
+        	$fb_access_token = $fb->getAccessToken();
+        	
+        	try{
+        		$user = ($fb_user)?$fb->api('/me'):false;
+        	} catch (FacebookApiException $e) {
+        		$user = false;
+        	}
         	
         	if(strlen($token)!=0){
         		$_SESSION['jmb']['alias'] = 'invitation';
         		$_SESSION['jmb']['token'] = $token;
         	}
-        	
+
         	$current_alias = $this->getCurrentAlias();
-        	$alias = (isset($_SESSION['jmb']['alias']))?$_SESSION['jmb']['alias']:'home';
+        	$alias = (isset($_SESSION['jmb']['alias']))?$_SESSION['jmb']['alias']:'myfamily';
         	if($current_alias != $alias){ 
         		$this->location($alias);
         	} else{    
@@ -586,6 +543,17 @@ class JMBController extends JController
         
         public function setLocation(){
         	$alias = JRequest::getCmd('alias');
+        	switch($alias){
+        		case "myfamily":
+        			$_SESSION['jmb']['login_type'] = 'family_tree';
+        		case "home":	
+        			$_SESSION['jmb']['fid'] = null;       			
+				$_SESSION['jmb']['gid'] = null;
+				$_SESSION['jmb']['tid'] = null;
+				$_SESSION['jmb']['permission'] = null;        			
+        		case "famous-family":
+        		break;
+        	}
         	$_SESSION['jmb']['alias'] = $alias;
         }
         

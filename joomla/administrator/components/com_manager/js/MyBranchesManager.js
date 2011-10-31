@@ -86,7 +86,7 @@ MyBranchesManager.prototype = {
         }
     }, 
      getLayoutUrl:function(type){
-        return 'http://www.familytreetop.com/'+storage.url+'tpl/'+type+'.tpl';
+       return 'http://www.familytreetop.com/'+storage.url+'tpl/'+type+'.tpl';
     },
     getComManagerXMLTree:function(){
        return 'index.php?option=com_manager&task=getXml&f=tree';
