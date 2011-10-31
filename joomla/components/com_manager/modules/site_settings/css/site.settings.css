@@ -1,105 +1,46 @@
 .site-settings-box{
-	color: #000000;
-	font-family: Calibri,Tahoma;
-	font-size: 12px;
-	font-weight: normal;
-}
-.settings-progressbar{
-	background: url("../img/progressbar.gif") no-repeat scroll 50% 50% transparent;
-	left: 0;
-	position: absolute;
-	top: 0;
-}
-.site-settings-container{}
-.settings-tabs{
-	background: none repeat scroll 0 0 #DEE8F1;
-	border: 1px solid #A4BED4;
-	height: 30px;
-}
-.settings-tabs ul{
-	margin: 0;
-	padding: 0;
-}
-.settings-tabs ul li{
-	background: none repeat scroll 0 0 #BFDCF5;
-	display: inline-block;
-}
-.settings-tabs ul li div.item{
-	border: 1px solid #A4BED4;
-    	cursor: pointer;
-    	height: 22px;
-    	padding-top: 6px;
-    	text-align: center;
-    	width: 100px;
-}
-.settings-tabs ul li:hover{
-	background: none repeat scroll 0 0 #6b92b3;
-}
-.settings-tabs ul li.active{
-	background: none repeat scroll 0 0 #8AAFCE;
-	color: white;
-}
-.settings-content{
 	position: relative;
 }
-
-.settings-content:first-child td{
-	width:30%;
+.site-settings-box table{}
+.site-settings-box div#modules {}
+.site-settings-box div#languages {}
+.site-settings-box div#variables {
+	padding: 5px;
+	position: relative;
+	width: 350px;
 }
-.settings-content div.languages li,div.modules li{
+.site-settings-box div#variables div#controller{
+	position: absolute;
+	right: 5px;
+	top: 5px;
+}
+.site-settings-box div#variables div#controller input{}
+.site-settings-box div#variables div#values{
+	margin-top: 25px;
+}
+.site-settings-box div#variables div#values li{
+	margin: 3px;
+}
+.site-settings-box div#variables div#values li input{
+	width:150px;
+}
+.jmb-settings-module-item {
+	margin: 3px;
+}
+.jmb-settings-module-item span{
+	color: #3B5997;
 	cursor: pointer;
-	padding: 3px;
 }
-.settings-content div.languages li.active,div.modules li.active{
+.jmb-settings-module-item span.active{
 	background: none repeat scroll 0 0 yellow;
 }
-.settings-content div.modules li.translated {
-	color:black;
+.jmb-settings-lang-item {
+	margin: 3px;
 }
-.settings-content div.modules li.no-translation {
-	color:gray;
-	cursor:normal;
-}
-.settings-content div.buttons {
-	margin-left: 30px;
-	margin-top: 15px;
-}
-.settings-content div.buttons div {
-	margin: 10px;
-}
-.settings-content div.buttons input[type="submit"],input[type="button"] {
-	background: none repeat scroll 0 0 white;
-	border: 1px solid #999999;
-	border-radius: 3px 3px 3px 3px;
+.jmb-settings-lang-item span{
+	color: #3B5997;
 	cursor: pointer;
-	margin-left: 3px;
-	width: 70px;
 }
-
-.settings-content div.values {
-	border: 1px solid #A4BED4;
-	max-height: 280px;
-	overflow: auto;
-} 
-.settings-content div.value {
-	position:relative;
+.jmb-settings-lang-item span.active{
+	background: none repeat scroll 0 0 yellow;
 }
-.settings-content div.value span{
-	margin-left: 3px;
-	margin-right: 3px;
-}
-.settings-content div.value input[type="radio"]{
-	position: relative;
-	top: 3px;
-	cursor:pointer;
-}
-.settings-content div.value div.remove{
-	background: url("../img/remove.gif") no-repeat scroll 0 0 transparent;
-	cursor: pointer;
-	height: 14px;
-	position: absolute;
-	right: -6px;
-	top: -6px;
-	width: 14px;
-}
-.settings-content div.valueAdd {}

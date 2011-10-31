@@ -9,82 +9,63 @@ class SiteSettings {
 		$this->host = new Host('Joomla');
 	}
 	
+	protected function getModuleNameByLangFile($language_file){
+		$parts = explode('.', $language_file);
+		return $parts[sizeof($parts)-2];
+	}
+	
 	protected function write_ini_file($path, $arr){
-		$string = '';
-		foreach($arr as $key => $part){
-			$string .= '['.$key.']'.PHP_EOL;
-			foreach($part as $k => $value){
-				$string .= $k.'="'.$value.'"'.PHP_EOL;
-			}
+		$string = '';		
+		foreach($arr as $var){
+			$string .= $var->name.'="'.$var->value.'"'.PHP_EOL;
 		}
-		file_put_contents($path, $string);
+		return file_put_contents($path, $string);
 	}
 	
-	protected function parse_ini($moduleName, $arr){
-		$titles = array();
-		$values = array();
-		$arr2 = array();
-		foreach($arr as $key => $value){
-			$arr2[$key] = $value;
-			if(strpos($key, 'title')!==false&&!empty($value)) {
-				$mn = explode('_',$moduleName);
-				$mn = strtoupper((sizeof($mn)==2)?$mn[0].$mn[1]:$mn[0]);
-				$title = 'COM_MANAGER_'.$mn.'_'.strtoupper($value);
-				$titles[] = $title;
-			}
-			if(strpos($key, 'value')!==false&&!empty($value)) { $values[] = $value; }
-		}
-		if( (sizeof($titles)==0||sizeof($values)==0)||(sizeof($titles)!=sizeof($values)) ) return false;
-		return array($moduleName=>array_combine($titles, $values));
+	public function getModules(){
+		$db =& JFactory::getDBO();
+		$sql_string = "SELECT id, name, title, description FROM #__mb_modules WHERE is_system='0'";
+		//$sql = $this->host->gedcom->sql($sql_string);
+		$db->setQuery($sql_string);
+        	$modules_table = $db->loadAssocList();
+		return json_encode(array('modules'=>$modules_table));
 	}
 	
-	public function getModules($args){
-		$path = JPATH_ROOT.DS.'language'.DS.$args.DS.$args.'.com_manager.ini';
-		$parse = parse_ini_file($path, true);
-		$db = & JFactory::getDBO();
-		$sql = "SELECT id,name,title FROM #__mb_modules WHERE is_system='0'";
-		$db->setQuery($sql);
-		$rows = $db->loadAssocList();
-		$modules = array();
-		foreach($rows as $row){
-			$modules[$row['name']] = array('id'=>$row['id'],'name'=>$row['name'],'title'=>$row['title']);
-		}
-		return json_encode(array('parse'=>$parse,'modules'=>$modules));
-	}
-	
-	public function getLanguages(){
-		$db = & JFactory::getDBO();
-		$sql = 'SELECT lang_id,lang_code,title,title_native,sef,image,published FROM #__languages';
-		$db->setQuery($sql);
-		$rows = $db->loadAssocList();
-		return json_encode($rows);
-	}
-	
-	public function setLanguage($args){
-		list($method, $langType, $moduleName) = explode(';', $args);
-		$path = JPATH_ROOT.DS.'language'.DS.$langType.DS.$langType.'.com_manager.ini';
-		$ini = parse_ini_file($path, true);		
-		switch($method){
-			case "new":
-			case "update":
-				if($_FILES['upload']['size'] != 0){
-					$upload_ini = parse_ini_file($_FILES['upload']['tmp_name'],true);
-				} else {
-					$upload_ini = $this->parse_ini($moduleName, $_POST);
+	public function getLanguages($module_name){
+		$jpath = $this->host->getAbsoluePath();
+		$module_path = $jpath.DS.'components'.DS.'com_manager'.DS.'modules'.DS.$module_name.DS.'language';
+		$lang_files = array();
+		if(is_dir($module_path)&&$dh = opendir($module_path)) {
+			while (($file = readdir($dh)) !== false) {
+				if($file!='.'&&$file!='..'&&$file!='index.html'){
+					$file_parts = explode('.', $file);
+        				$end_file_part = end($file_parts);
+        				if($end_file_part=='ini'){
+        					$lang_files[] = $file;
+        				}
 				}
-				if(sizeof($upload_ini)>1||$moduleName!=key($upload_ini)) return json_encode(false);
-				$diff = array_diff_assoc($ini, $upload_ini);
-				$result = array_merge($diff, $upload_ini);
-			break;
-			
-			case "delete":
-				if(!array_key_exists($moduleName, $ini)) return json_encode(false);
-				unset($ini[$moduleName]);
-				$result = $ini;
-			break;
+			}
+			closedir($dh);
+			return json_encode(array('success'=>array('lang_files'=>$lang_files)));	
 		}
-		$this->write_ini_file($path, $result);
-		return json_encode(array('upload_ini'=>$upload_ini,'result'=>$result));
+		return json_encode(array('error'=>'module dir not found.'));
+	}
+	
+	public function getVariables($language_file){
+		$jpath = $this->host->getAbsoluePath();		
+		$module_name = $this->getModuleNameByLangFile($language_file);
+		$file_path = $jpath.DS.'components'.DS.'com_manager'.DS.'modules'.DS.$module_name.DS.'language'.DS.$language_file;
+		$ini_array = parse_ini_file($file_path);
+		return json_encode(array('success'=>array('variables'=>$ini_array)));
+	}
+	
+	public function saveVatiables($json_string){
+		$args = json_decode($json_string);
+		$jpath = $this->host->getAbsoluePath();		
+		$module_name = $this->getModuleNameByLangFile($args->language_file);
+		$file_path = $jpath.DS.'components'.DS.'com_manager'.DS.'modules'.DS.$module_name.DS.'language'.DS.$args->language_file;
+		$result = $this->write_ini_file($file_path, $args->variables);	
+		return json_encode(array('result'=>$result));
 	}
 }
 ?>

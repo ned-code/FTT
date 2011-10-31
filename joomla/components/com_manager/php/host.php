@@ -72,6 +72,14 @@ class Host {
             return JPATH_BASE;
         }
         
+        public function getAbsoluePath(){
+        	$jpath_base_explode = explode('/', JPATH_BASE);
+        	if(end($jpath_base_explode) == 'administrator'){
+        		array_pop($jpath_base_explode); 
+        	}
+        	return implode('/', $jpath_base_explode);
+        }
+        
         /**
         *
         */
