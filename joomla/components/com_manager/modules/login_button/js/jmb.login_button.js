@@ -1,10 +1,9 @@
 function JMBLoginButtonObject(obj){
 	obj = jQuery('#'+obj);
-	var module = this;
-	//var div = jQuery('<div class="fb-login-button" data-show-faces="true" data-width="200" data-max-rows="1">Connect With Facebook</div>');
 	var div = jQuery('#jmb_connect_with_facebook');
-	jQuery(div).show();
+	jQuery(div).addClass('jmb-facebook-login-button');
 	jQuery(obj).append(div);
+	jQuery(div).show();
 }
 
 JMBLoginButtonObject.prototype = {

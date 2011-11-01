@@ -446,56 +446,44 @@ class JMBController extends JController
 	
 	protected function get_alias($logged, $current_alias){
 		$alias = (isset($_SESSION['jmb']['alias']))?$_SESSION['jmb']['alias']:'myfamily';
-		if($logged){
-			$link = $this->check_user_in_system($logged);
-			if($link){
+		$link = ($logged)?$this->check_user_in_system($logged):false;
+		$famous_family_login = (isset($_SESSION['jmb']['login_type'])&&$_SESSION['jmb']['login_type']=='famous_family');
+		if(isset($_SESSION['jmb']['invitation'])){
+			$alias = 'invitation';
+		}
+		switch($alias){
+			case 'invitation':
+				if(!$logged) return 'login';
+				if($logged&&!$link) return 'home';
 				return $alias;
-			} else {
-				switch($alias){
-					case 'invitation':
-					case 'login':
-					case "first-page":
-						return 'first-page';
-					break;
-						
-					case 'home':
-					case 'famous-family':
-						return $alias;
-					break;
-					
-					case 'myfamily':
-						if(isset($_SESSION['jmb']['login_type'])&&$_SESSION['jmb']['login_type']=='famous_family'){
-							return 'myfamily';
-						} else {
-							return 'first-page';
-						}
-					break;
-				}
-			}
-		} else {
-			switch($alias){
-				case "login":
-				case "invitation":
-				case "first-page":
-					return 'login';
-				break;
-					
-				case "home":
-					return $alias;
-				break;
-						
-				case "famous-family":
-					return $alias;
-				break;
-						
-				case "myfamily":
-					if(isset($_SESSION['jmb']['login_type'])&&$_SESSION['jmb']['login_type']=='famous_family'){
-						return 'myfamily';
-					} else {
-						return 'login';
-					}
-				break;
-			}
+			break;
+			
+			case 'login':
+				if($logged&&!$link) return 'first-page';
+				if($logged&&$link) return 'myfamily';
+				return $alias;
+			break;
+				
+			case "first-page":
+				if(!$logged) return 'login';
+				if($logged&&$link) return 'myfamily';
+				return $alias;
+			break;
+			
+			case 'home':
+				return $alias;
+			break;
+			
+			case 'famous-family':
+				return $alias;
+			break;
+			
+			case 'myfamily':	
+				if($famous_family_login) return 'myfamily';
+				if(!$logged&&!$link) return 'login';
+				if($logged&&!$link) return 'first-page';
+				return $alias;
+			break;
 		}
 	}
 		

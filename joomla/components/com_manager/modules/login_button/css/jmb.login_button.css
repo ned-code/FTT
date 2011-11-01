@@ -1,3 +1,16 @@
-.jmb-fb-login-button-container{
-	margin-top: 50px;
+.jmb-facebook-login-button {
+	background: url("../imgs/facebook-login-button.png") no-repeat scroll 0 0 transparent;
+	height: 22px;
+	width: 154px;
+	margin: 50px auto 0;
+}
+
+.jmb-facebook-login-button a{
+	color: white;
+	font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
+	font-size: 10px;
+	font-weight: bold;
+	line-height: 20px;
+	margin-left: 26px;
+	text-decoration: none;
 }
