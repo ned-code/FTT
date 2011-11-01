@@ -16,7 +16,9 @@
 }
 .site-settings-box div#variables div#controller input{}
 .site-settings-box div#variables div#values{
+	height: 350px;
 	margin-top: 25px;
+	overflow: auto;
 }
 .site-settings-box div#variables div#values li{
 	margin: 3px;
