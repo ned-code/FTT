@@ -1,4 +1,4 @@
-function JMBHome(obj){
+function JMBHomeObject(obj){
 	var module = this;
 	obj = jQuery('#'+obj);
 	
@@ -59,7 +59,7 @@ function JMBHome(obj){
 	jQuery(obj).append(body);
 }
 
-JMBHome.prototype = {
+JMBHomeObject.prototype = {
 	ajax:function(func, params, callback){
 		host.callMethod("home", "JMBHome", func, params, function(res){
 				callback(res);

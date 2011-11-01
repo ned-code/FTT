@@ -1,22 +1,22 @@
-.jmb-home-container {
+#JMBHomeContainer {
 	position: relative;
 	font-family: Calibri,Tahoma,sans-serif;
 	font-size: 21px;
     	font-weight: normal;
     	position: relative;
 }
-.jmb-home-container .jmb-home-logo {
+#JMBHomeContainer .jmb-home-logo {
 	background: url("../imgs/jmbhomelogo.jpg") no-repeat scroll 0 0 transparent;
 	height: 668px;
 	width: 521px;
 }
-.jmb-home-container .jmb-home-body{
+#JMBHomeContainer .jmb-home-body{
 	position: absolute;
 	right: 30px;
 	top: 90px;
 }
-.jmb-home-container .jmb-home-body .title{}
-.jmb-home-container .jmb-home-body div.button{
+#JMBHomeContainer .jmb-home-body .title{}
+#JMBHomeContainer .jmb-home-body div.button{
 	border-radius: 5px 5px 5px 5px;
 	color: white;
 	cursor: pointer;
@@ -25,10 +25,10 @@
 	margin: 10px;
 	padding: 5px;
 }
-.jmb-home-container .jmb-home-body div#connect.button{
+#JMBHomeContainer .jmb-home-body div#connect.button{
 	background: #5c8e40;
 }
-.jmb-home-container .jmb-home-body div#view.button{
+#JMBHomeContainer .jmb-home-body div#view.button{
 	background: #a96946;
 }
 
