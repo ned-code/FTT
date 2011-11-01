@@ -1,4 +1,4 @@
-function JMBTreeCreator(obj){
+function JMBTreeCreatorObject(obj){
 	this.html = null;
 	
 	this.obj = jQuery(['#',obj].join(''));
@@ -11,7 +11,7 @@ function JMBTreeCreator(obj){
 	this.buttons();
 }
 
-JMBTreeCreator.prototype = {
+JMBTreeCreatorObject.prototype = {
 	_ajax:function(func, params, callback){
 		host.callMethod("tree_creator", "TreeCreator", func, params, function(req){
 				callback(req);

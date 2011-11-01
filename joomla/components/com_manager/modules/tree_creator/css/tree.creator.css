@@ -1,18 +1,18 @@
-.jmb-tree-creator-body{
+#JMBTreeCreatorContainer{
 	font-family: Calibri,Tahoma,sans-serif;
 	font-size: 12px;
 	font-weight: normal;
 	margin: 20px auto;
 	max-width: 650px;
 }
-.jmb-tree-creator-body fieldset{
+#JMBTreeCreatorContainer fieldset{
 	margin-top: 10px;
 	padding: 5px;
 }
-.jmb-tree-creator-body legend{
+#JMBTreeCreatorContainer legend{
 	font-weight: bold;
 }
-.jmb-tree-creator-body .button{
+#JMBTreeCreatorContainer .button{
 	text-align:center;
 	background: none repeat scroll 0 0 #F1E4B0;
 	border: 2px solid #999999;
@@ -27,6 +27,6 @@
 .jmb-tree-creator-body .button:hover{
 	background: #b5ab83;
 }
-.jmb-tree-creator-body .upload{}
-.jmb-tree-creator-body .upload .form{}
-.jmb-tree-creator-body .upload .result{}
+#JMBTreeCreatorContainer .upload{}
+#JMBTreeCreatorContainer .upload .form{}
+#JMBTreeCreatorContainer .upload .result{}
