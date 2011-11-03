@@ -87,7 +87,7 @@ class JMBRecentVisitors {
 		$fmbUser = $this->host->getUserInfo($_SESSION['jmb']['gid']);
 		$lang = $this->host->getLangList('recent_visitors');
 		$colors = $this->getColors();	
-		$config = array('alias'=>$_SESSION['jmb']['alias'],'login_type'=>$_SESSION['jmb']['login_type'],'colors'=>$colors);
+		$config = array('alias'=>'myfamily','login_type'=>$_SESSION['jmb']['login_type'],'colors'=>$colors);
 		return json_encode(array('config'=>$config,'response'=>$result,'objects'=>$objects,'time'=>$time,'path'=>$path,'fmbUser'=>$fmbUser,'response'=>$response, 'lang'=>$lang));		
 	}
 }

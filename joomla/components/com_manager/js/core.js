@@ -53,7 +53,7 @@ storage.header = {};
 storage.header.activeButton = null;
 storage.header.block = false;
 storage.createPull(storage.header);
-
+/*
 storage.header.famLine = (function(){
 	var self = this;
 	return {
@@ -127,7 +127,7 @@ storage.header.famLine = (function(){
 storage.header.famLine.init('.jmb_header_fam_line_container', function(){
 	this.mode('both');
 });
-
+*/
 
 //tabs
 storage.tabs = {};
@@ -135,11 +135,12 @@ storage.tabs.activeTab = null;
 //storage.createPull(storage.tabs);
 storage.tabs.clickPull = {};
 storage.tabs.clickPull.length = 0;
-storage.tabs.click = function(){ 
+storage.tabs.click = function(callback){ 
 	for(var i=0;i<storage.tabs.clickPull.length;i++){
 		storage.tabs.clickPull[i].click();
 	}
 	storage.tabs.cleaner();
+	if(callback) callback();
 }	
 storage.tabs.cleaner = function(){
 	storage.clearPull(storage.tabs);
@@ -212,14 +213,74 @@ var date = new Date();
 var id =  Math.floor(date.getTime() /1000);
 var core = {};
 storage.core = core;
-core.modalWindow = jQuery('<div class="jmb-core-overlay">&nbsp;</div>');
+core.appendFilesPull = {};
 
-core.modal = function(arg){
-	var div = jQuery('div.tab_container');
-	var overlay = this.modalWindow;
-	jQuery(overlay).css('width',jQuery(div).width()+'px').css('height',jQuery(div).height()+'px');
-	return (arg)?jQuery(div).append(overlay):jQuery(overlay).remove();
+core.modal = function(){
+	var modal_div = jQuery('<div class="jmb-core-overlay">&nbsp;</div>');
+	var modal_active = false;
+	return {
+		isActive:function(){
+			return modal_active;
+		},
+		on:function(){
+			jQuery(document.body).append(modal_div);
+			modal_active = true;
+		},
+		off:function(){
+			jQuery(modal_div).remove();
+			modal_active = false;
+		}
+	}
 }
+
+core.modulesPullFunc = function(){
+	var core = this;
+	var modal = core.modal();
+	core.modulesPull = { length:0 };
+	return {
+		insert:function(name){
+			core.modulesPull[name] = name;
+			core.modulesPull.length++;
+		},
+		unset:function(name){
+			if(core.modulesPull[name]){
+				delete core.modulesPull[name];
+				core.modulesPull.length--;
+				if(core.modulesPull.length<0){
+					core.modulesPull.length = 0;
+				}
+			}
+		},
+		clear:function(){
+			var pull = this;
+			for(var key in core.modulesPull){
+				pull.unset(key);
+			}
+			modal.off();
+		},
+		init:function(){
+			var pull = this;
+			pull.clear();
+			modal.on();
+			var it = 30;
+			var interval_id = setInterval(function(){
+				if(core.modulesPull.length==0){
+					modal.off();
+					clearInterval(interval_id);
+				}
+				if(it<=0){
+					if(modal.isActive()){
+						modal.off();
+					}
+					pull.clear();
+					clearInterval(interval_id); 
+				}
+				it--;
+			}, 1000);
+		}
+	}
+}
+core.modulesPullObject = core.modulesPullFunc();
 
 core.createLayout = function(type){
 	var layout_type = {'single':1,'double':2,'triple':3};
@@ -240,30 +301,34 @@ core.appendFiles = function(module, type){
 	var head = document.getElementsByTagName("head");
 	var files = module.files[type];
 	for(var i=0;i<files.length;i++){
-		var src = url+'/'+type+'/'+files[i];
-		var script;
-		switch(type){
-			case "js":
-				var script = document.createElement("script");
-				script.src = src;
-				script.type="text/javascript";
-			break;
-			
-			case "css":
-				var script = document.createElement("link");
-				script.href = src;
-				script.rel="stylesheet";
-				script.type="text/css";
-			break;
+		if(!core.appendFilesPull[files[i]]){
+			switch(type){
+				case "js":
+					var script = document.createElement("script");
+					script.src = url+'/'+type+'/'+files[i];
+					script.type="text/javascript";
+					head[0].appendChild(script);
+				break;
+				
+				case "css":
+					var link = document.createElement("link");
+					link.href = url+'/'+type+'/'+files[i];
+					link.rel="stylesheet";
+					link.type="text/css";
+					head[0].appendChild(link);
+				break;
+			}
+			core.appendFilesPull[files[i]] = files[i];
 		}
-		head[0].appendChild(script);
 	}		
 }
 
 core.initModule = function(object_name, container_id){
 	var self = this;
-    	if(typeof window[object_name]=='function'){
-    		eval('new '+object_name+'("'+container_id+'");');
+	var div = jQuery('#'+container_id);
+    	if(typeof window[object_name]=='function'&&jQuery(div).length>0){
+    		new window[object_name](div);
+    		
     	}
         else {
         	setTimeout(function(){
@@ -292,6 +357,7 @@ core.renderPage = function(parent, page){
 			
 			//init module;
 			self.initModule(module.object_name, module.container_id);
+			core.modulesPullObject.insert(module.object_name);
 		}
 	}	
 	jQuery(parent).empty();
@@ -321,7 +387,8 @@ core.renderTabs = function(parent, pages){
 	//On Click Event
 	jQuery("ul.jmbtabs li").click(function() {
 		if(jQuery(this).hasClass('active')) return false;
-
+		core.modulesPullObject.init();
+		
 		jQuery("ul.jmbtabs li").removeClass("active"); //Remove any "active" class
 		jQuery(this).addClass("active"); //Add "active" class to selected tab
 		jQuery(divs).hide(); //Hide all tab content
@@ -332,7 +399,7 @@ core.renderTabs = function(parent, pages){
 		self.renderPage('#jmbtab', page);
 		
 		storage.tabs.activeTab = this;
-		storage.tabs.click(this);	
+		storage.tabs.click();	
 		jQuery(divs).show(); //Hide all tab content
 		return false;
 	});	

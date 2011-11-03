@@ -1,6 +1,5 @@
 function JMBDescendantTreeObject(obj){
 	var self = this;
-	obj = jQuery("#"+obj);
 	var dhxLayout;
 	var dhxTree;
 	var selectDiv;
@@ -26,7 +25,10 @@ function JMBDescendantTreeObject(obj){
 	this.obj = obj;
 	this.firstParent = null;
 	this.show_desc = this.selectDesc(dhxTree.allTree);
-
+	
+	
+	
+	
 	self.loadTree(dhxTree, 'mother');		
 	dhxTree.attachEvent("onXLE", function(tree,id){
 		var items = this.getAllSubItems(0).split(',');
@@ -61,6 +63,7 @@ JMBDescendantTreeObject.prototype = {
 			parent.lang = json.lang;
 			parent.firstParent = json.key;
 			parent.profile = new DescendantTreeProfile(parent);
+			/*
 			storage.header.famLine.show();
 			storage.header.famLine.mode({
 				enabled:['mother','father'], 
@@ -70,9 +73,11 @@ JMBDescendantTreeObject.prototype = {
 					parent.show_desc.init();
 				}
 			});
+			*/
 			parent.show_desc.load(json, render);
 			dhxTree.loadXMLString(json.xml);
 			dhxTree.openAllItems(0);
+			storage.core.modulesPullObject.unset('JMBDescendantTreeObject');
 		});
 	},
 	loadTreeById:function(id){

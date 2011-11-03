@@ -1,6 +1,4 @@
-function JMBRecentVisitorsObject(obj){
-	obj = jQuery('#'+obj);
-	
+function JMBRecentVisitorsObject(obj){	
 	var parent = this;
 	//var content = jQuery('<div class="jmb-rv-header"><span>Recent Visitors</span></div><div class="jmb-rv-content"></div><div class="jmb-rv-button"><span>Show all...</span></div>');
 	var content = null;
@@ -58,7 +56,7 @@ function JMBRecentVisitorsObject(obj){
 		for(var i=0;i<count;i++){
 			var li = jQuery(st.clear()._('<li id="')._(json.response[i].id)._('" ><div class="avatar">')._(get_avatar(json.response[i]))._('</div></li>').result());
 			jQuery(ul).append(li);
-			init_tipty_tooltip(json.time, json.response[i], li);
+			init_tipty_tooltip(json.time, json.response[i],li);
 		}
 	}
 	
@@ -117,6 +115,7 @@ function JMBRecentVisitorsObject(obj){
 
 	render(function(){
 		headerHandler();
+		storage.core.modulesPullObject.unset('JMBRecentVisitorsObject');
 	});
 }
 

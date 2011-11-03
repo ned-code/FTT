@@ -93,14 +93,17 @@ class JMBFamilies {
 	protected function getSpouses($indKey, $tree, $lib){
 		$spouses = $this->host->getSpouses($indKey, $lib);		
 		$result = array();
-		foreach($spouses as $id){
-			if($id!=null&&isset($tree[$id])){
-				if(!isset($this->individs[$id])){
-					$this->individs[$id] =  $this->host->getUserInfo($id, $this->ownerId);
+		if(!empty($spouses)){
+			foreach($spouses as $id){
+				if($id!=null&&isset($tree[$id])){
+					if(!isset($this->individs[$id])){
+						$this->individs[$id] =  $this->host->getUserInfo($id, $this->ownerId);
+					}
+					$parents = $this->getParents($id, $tree, $lib);
+					$result[] = array('indKey'=>$id,'parents'=>$parents);
 				}
-				$parents = $this->getParents($id, $tree, $lib);
-				$result[] = array('indKey'=>$id,'parents'=>$parents);
 			}
+			return $result;
 		}
 		return $result;
 	}

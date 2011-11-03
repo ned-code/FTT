@@ -1,6 +1,4 @@
 function JMBLatestUpdatesObject(obj){
-	obj = jQuery('#'+obj);	
-	
 	var html = null;	
 	var profile =  new JMBProfile();
 	
@@ -71,6 +69,8 @@ function JMBLatestUpdatesObject(obj){
 		
 		jQuery(html[1]).append(ul);
 		jQuery(obj).append(html);
+		
+		storage.core.modulesPullObject.unset('JMBLatestUpdatesObject');
 	})
 }
 

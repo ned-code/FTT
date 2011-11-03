@@ -239,10 +239,10 @@ class JMBDescendantTree {
 	protected function sortByPermission($response, $tree, &$result){
 		if($response&&isset($tree[$response['key']])){
 			$result = array('key'=>$response['key'], 'descendants'=>$response['descendants'], 'level'=>$response['level'], 'parents'=>array('father'=>false,'mother'=>false));
-			if($response['parents']['father']&&isset($tree[$response['parents']['father']['key']])){
+			if($response['parents']&&isset($response['parents']['father'])&&isset($tree[$response['parents']['father']['key']])){
 				$this->sortByPermission($response['parents']['father'], $tree, $result['parents']['father']);
 			}
-			if($response['parents']['mother']&&isset($tree[$response['parents']['mother']['key']])){
+			if($response['parents']&&isset($response['parents']['mother'])&&isset($tree[$response['parents']['mother']['key']])){
 				$this->sortByPermission($response['parents']['mother'], $tree, $result['parents']['mother']);
 			}
 		}

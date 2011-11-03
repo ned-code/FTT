@@ -1,5 +1,6 @@
 function JMBThisMonthObject(obj){
-	obj = jQuery('#'+obj);
+	storage.core.modulesPullObject.unset('JMBThisMonthObject');
+	return;
 	//vars 
 	this.obj = obj;
 	this.json = null;
@@ -16,7 +17,9 @@ function JMBThisMonthObject(obj){
 	//workspace
 	var self = this;
 	self.load(this._getThisMonth(), 'false', function(json){
-		self.render(json);
+		self.render(json, function(){
+			storage.core.modulesPullObject.unset('JMBThisMonthObject');
+		});
 		storage.addEvent(storage.header.clickPull, function(object){
 			self.reload();
 		});
@@ -25,11 +28,9 @@ function JMBThisMonthObject(obj){
 	storage.addEvent(storage.tabs.clickPull, function(object){
 		self.profile.cleaner();
 	});
-	
-	
-	
-	storage.header.famLine.show();
-	storage.header.famLine.mode();	
+		
+	//storage.header.famLine.show();
+	//storage.header.famLine.mode();	
 }
 
 JMBThisMonthObject.prototype = {
@@ -256,7 +257,7 @@ JMBThisMonthObject.prototype = {
 			self.render(json);
 		});
 	},
-	render:function(json){
+	render:function(json, callback){
 		var self = this;
 		var table = self._createBody(json);
 		jQuery(self.table).find('.jmb-this-month-body').append(table);
@@ -291,6 +292,7 @@ JMBThisMonthObject.prototype = {
 		jQuery(self.table).find('select[name="sort"]').change(function(){
 			self.reload();
 		});
+		if(callback) callback();
 	}
 }
 

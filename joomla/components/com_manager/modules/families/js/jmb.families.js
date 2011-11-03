@@ -1,6 +1,5 @@
 function JMBFamiliesObject(obj){
 	var self = this;
-	obj = jQuery("#"+obj);
 
 	this.parent = obj;
 	this.storage = {};
@@ -26,18 +25,22 @@ function JMBFamiliesObject(obj){
 		}
 		var obj = json.objects[self.ownerId]; 
 		if(obj.childrens.length==0&&obj.spouses&&obj.spouses[0]==null&&json.individs[obj.indKey].parents!=null){
-			self.click(self.ownerId, true);
+			self.click(self.ownerId, true, function(){
+				storage.core.modulesPullObject.unset('JMBFamiliesObject');
+			});
 			return;
 		} else {
 			self.render(json.objects[self.ownerId]);
+			storage.core.modulesPullObject.unset('JMBFamiliesObject');
 		}
+		
 	});
 	
 	storage.addEvent(storage.tabs.clickPull, function(object){
 		self.profile.cleaner();
 	})
 
-	storage.header.famLine.hide();
+	//storage.header.famLine.hide();
 }
 JMBFamiliesObject.prototype = {
 	_ajax:function(func, params, callback){
@@ -238,6 +241,7 @@ JMBFamiliesObject.prototype = {
 			self.render(obj);
 		})
 		
+		/*
 		storage.header.famLine.show();
 		var famLine =  self.individs[obj.indKey].indiv.FamLine;
 		if(famLine.length == 2){
@@ -250,6 +254,7 @@ JMBFamiliesObject.prototype = {
 			click:false,
 			active:famLine
 		});
+		*/
 		
 		//sircar space
 		var sircarDiv = self._createDivParent(obj, 'left', 1);
@@ -346,7 +351,7 @@ JMBFamiliesObject.prototype = {
 		var sub = (params=='father')?'motherID':'fatherID';
 		return (this.individs[id].parents[params]!=null)?this.individs[id].parents[params]:this.individs[id].parents[sub];
 	},
-	click:function(id, type){
+	click:function(id, type, callback){
 		var indKey = (type)?this.getParentId(id):id;
 		if(this.objects[indKey]){
 			this.profile.tooltip.cleaner();
@@ -358,6 +363,7 @@ JMBFamiliesObject.prototype = {
 				self.individs = jQuery.extend(self.individs, json.individs);
 				self.objects = jQuery.extend(self.objects, json.objects);
 				self.render(json.objects[indKey]);
+				if(callback) callback();
 			});	
 		}		
 	}

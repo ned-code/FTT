@@ -1,6 +1,4 @@
 function JMBQuickFactsObject(obj){
-	obj = jQuery('#'+obj);	
-	
 	var profile =  new JMBProfile();
 	
 	var createBody = function(json){
@@ -98,6 +96,7 @@ function JMBQuickFactsObject(obj){
 			setMiniProfile(jQuery(htmlObject).find('div#youngest_living_member').find('span.jmb_qf_text'), json, 'youngest');
 			setMiniProfile(jQuery(htmlObject).find('div#oldest_living_member').find('span.jmb_qf_text'), json, 'oldest');
 			setMiniProfile(jQuery(htmlObject).find('div#earliest_document').find('span.jmb_qf_text'), json, 'earliest');
+			storage.core.modulesPullObject.unset('JMBQuickFactsObject');
 		})
 	}
 	

@@ -57,11 +57,12 @@ html ul.jmbtabs li.active, html ul.jmbtabs li.active a:hover  { /*--Makes sure t
 	min-height:400px;
 }
 .jmb-core-overlay {
-	background: url("progressbar.gif") no-repeat scroll 50% 50% white;
-	left: 0;
-	opacity: 0.6;
+	background: url("loading.gif") no-repeat scroll 50% 50% transparent;
+	height: 300px;
+	left: 36%;
 	position: absolute;
-	top: 47px;
+	top: 30%;
+	width: 300px;
 }
 
 div.buttons {

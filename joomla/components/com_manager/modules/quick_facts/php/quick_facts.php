@@ -102,8 +102,7 @@ class JMBQuickFacts {
 		$fmbUser = $this->host->getUserInfo($_SESSION['jmb']['gid']);
 		$path = JURI::root(true);
 		$lang = $this->getLanguage();
-		$config = array('alias'=>$_SESSION['jmb']['alias'],'login_type'=>$_SESSION['jmb']['login_type'],'colors'=>$colors);
-		
+		$config = array('alias'=>'myfamily','login_type'=>$_SESSION['jmb']['login_type'],'colors'=>$colors);
 		return json_encode(array('lang'=>$lang,'count'=>$count,'living'=>$living,'youngest'=>$youngest,'oldest'=>$oldest,'earliest'=>$earliest,'config'=>$config,'fmbUser'=>$fmbUser,'path'=>$path));		
 	}
 }

@@ -225,32 +225,6 @@ class JMBThisMonth {
 		$lang = $this->host->getLangList('this_month');
 		if(!$lang) return false;
 		return $lang;		
-		/*
-		$header = JTEXT::_('COM_MANAGER_THISMONTH_HEADER');
-		$howdo = JTEXT::_('COM_MANAGER_THISMONTH_HOWDO');
-		$event_type = array();
-		$event_type['birthday'] = JTEXT::_('COM_MANAGER_THISMONTH_BIRTHDAYS');
-		$event_type['anniversaries'] = JTEXT::_('COM_MANAGER_THISMONTH_ANNIVERSARIES');
-		$event_type['we_remember'] = JTEXT::_('COM_MANAGER_THISMONTH_REMEMBER');
-		$sort= array();
-		$sort['after'] = JTEXT::_('COM_MANAGER_THISMONTH_AFTER');
-		$sort['before'] = JTEXT::_('COM_MANAGER_THISMONTH_BEFORE');
-		$sort['all'] = JTEXT::_('COM_MANAGER_THISMONTH_ALLYEARS');
-		$months = array();
-		$months[] = JTEXT::_('COM_MANAGER_THISMONTH_JANUARY');
-		$months[] = JTEXT::_('COM_MANAGER_THISMONTH_FEBRUARY');
-		$months[] = JTEXT::_('COM_MANAGER_THISMONTH_MARCH');
-		$months[] = JTEXT::_('COM_MANAGER_THISMONTH_APRIL');
-		$months[] = JTEXT::_('COM_MANAGER_THISMONTH_MAY');
-		$months[] = JTEXT::_('COM_MANAGER_THISMONTH_JUNE');
-		$months[] = JTEXT::_('COM_MANAGER_THISMONTH_JULY');
-		$months[] = JTEXT::_('COM_MANAGER_THISMONTH_AUGUST');
-		$months[] = JTEXT::_('COM_MANAGER_THISMONTH_SEPTEMBER');
-		$months[] = JTEXT::_('COM_MANAGER_THISMONTH_OCTOBER');
-		$months[] = JTEXT::_('COM_MANAGER_THISMONTH_NOVEMBER');
-		$months[] = JTEXT::_('COM_MANAGER_THISMONTH_DECEMBER');
-		return array('header'=>$header,'howdo'=>$howdo,'event_type'=>$event_type,'sort'=>$sort,'months'=>$months);
-		*/
 	}
 	
 	protected function sortByFamilyLine($events, $type){
@@ -278,7 +252,7 @@ class JMBThisMonth {
 		if($_SESSION['jmb']['permission'] =='OWNER' || empty($events)){ return $events; }
 		$result = array();
 		foreach($events as $event){
-			if(isset($tree[$event['gid']])){
+			if(isset($event['gid'])&&isset($tree[$event['gid']])){
 				$result[] = $event;
 			}
 		}
@@ -293,9 +267,9 @@ class JMBThisMonth {
 		$death = $this->host->gedcom->individuals->getByEvent($treeId, 'DEAT', $month, $sort);
 		$marr = $this->host->gedcom->families->getByEvent($treeId, 'MARR', $month, $sort);	
 		
-		$birth = $this->sortByFamilyLine($birth, $render_type);
-		$death = $this->sortByFamilyLine($death, $render_type);
-		$marr = $this->sortByFamilyLine($marr, $render_type);
+		//$birth = $this->sortByFamilyLine($birth, $render_type);
+		//$death = $this->sortByFamilyLine($death, $render_type);
+		//$marr = $this->sortByFamilyLine($marr, $render_type);
 		
 		$birth = $this->sortByPermission($birth, $tree);
 		$death = $this->sortByPermission($death, $tree);
@@ -357,7 +331,7 @@ class JMBThisMonth {
 		$descendants = $this->getThisMonthMebmers($gedcom_id, $events);
 		$this->settings['opt']['month'] = $month;
 		
-		$config = array('alias'=>$_SESSION['jmb']['alias'],'login_type'=>$_SESSION['jmb']['login_type'],'colors'=>$colors);
+		$config = array('alias'=>'myfamily','login_type'=>$_SESSION['jmb']['login_type'],'colors'=>$colors);
 		
 		return json_encode(array('fmbUser'=>$fmbUser,'config'=>$config,'path'=>$path,'events'=>$events,'descedants'=>$descendants,'language'=>$language,'settings'=>$this->settings));
 	}
