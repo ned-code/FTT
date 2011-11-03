@@ -397,59 +397,141 @@ class IndividualsList{
         	$rows = $this->db->loadAssocList();
         	return $rows;
         }
-        
-        /*
-        * FAM LINE
-        */
-        public function getMemberFamLine($treeId, $ownerId, $indKey){
-        	$sql = $this->core->sql("SELECT type FROM #__mb_family_line WHERE `tid`=? AND `from`=? AND `to`=?",$treeId, $ownerId, $indKey);
-        	$this->db->setQuery($sql);
-        	$rows = $this->db->loadAssocList();
-        	if($rows==null) return false;
-        	return $rows;
-        }
-        public function getMembersByFamLine($treeId, $ownerId, $renderType=false){
-        	if($renderType){
-        		$sql = $this->core->sql("SELECT `to` as individuals_id FROM #__mb_family_line WHERE `from` = ? AND `tid` = ? AND `type`=?", $ownerId, $treeId, $renderType);
-        	} else {
-        		$sql = $this->core->sql("SELECT `to` as individuals_id, type FROM #__mb_family_line WHERE `from` = ? AND `tid` = ?", $ownerId, $treeId);
-        	}
-        	$this->db->setQuery($sql);
-        	$rows = $this->db->loadAssocList();
-        	return $rows;
-        }
+
         /*
         * THIS MONTH
         */
-        public function getIndivCount($treeId){
+        public function getIndividualsCount($tree_id, $permission='OWNER', $tree=false){
+        	$sql_string = "SELECT indiv.id FROM #__mb_individuals as indiv 
+        			LEFT JOIN #__mb_tree_links as links ON links.individuals_id = indiv.id 
+        			WHERE links.tree_id = '".$tree_id."'";
+        	$this->db->setQuery($sql_string);
+        	$rows = $this->db->loadAssocList();
+        	if($rows==null||$permission=='OWNER'){
+        		return ($rows==null)?0:sizeof($rows);
+        	}
+        	if($tree){
+        		$count = 0;
+        		foreach($rows as $row){
+        			if(isset($row['id'])&&isset($tree[$row['id']])){
+        				$count++;
+        			}
+        		}
+        		return $count;
+        	}
+        	return 0;
+        }
+        
+        public function getLivingIndividualsCount($tree_id, $permission='OWNER', $tree=false){
+        	$count = $this->getIndividualsCount($tree_id, $permission, $tree);
+        	$sql_string = "SELECT COUNT ind.id FROM #__mb_individuals as ind
+        			LEFT JOIN #__mb_events as event ON event.individuals_id = ind.id
+        			LEFT JOIN #__mb_tree_links as links ON links.individuals_id = ind.id
+        			WHERE event.type = 'DEAT' AND links.tree_id = '".$tree_id."'";
+        	$this->db->setQuery($sql_string);
+        	$rows = $this->db->loadAssocList();
+        	if($rows==null||$permission=='OWNER'){
+        		return ($rows==null)?$count:$count-sizeof($rows);
+        	}
+        	if($tree){
+        		$death_count = 0;
+        		foreach($rows as $row){
+        			if(isset($row['id'])&&isset($tree[$row['id']])){
+        				$death_count++;
+        			}
+        		}
+        		return $count-$death_count;
+        	}
+        	return $count;
+        }
+        
+        public function getYoungestId($tree_id, $permission='OWNER', $tree=false){
+        	$sql_string = "SELECT indivs.id FROM #__mb_individuals as indivs
+				LEFT JOIN #__mb_events as events ON events.individuals_id = indivs.id
+				LEFT JOIN #__mb_dates as dates ON dates.events_id = events.id
+				LEFT JOIN #__mb_tree_links as links ON links.individuals_id = indivs.id
+				WHERE events.type = 'BIRT' AND dates.f_year != 'NULL' AND links.tree_id = '".$tree_id."'
+				ORDER BY dates.f_year DESC";
+		$this->db->setQuery($sql_string);
+        	$rows = $this->db->loadAssocList();
+        	if($rows==null||$permission=='OWNER'){
+        		return ($rows==null)?null:$rows[0]['id'];
+        	}
+        	if($tree){
+        		foreach($rows as $row){
+        			if(isset($row['id'])&&isset($tree[$row['id']])){
+        				return $row['id'];
+        			}
+        		}
+        	}
+        	return null;
+        }
+        
+        public function getOldestId($tree_id, $permission='OWNER', $tree=false){
+        	$sql_string = "SELECT indivs.id as id FROM #__mb_individuals as indivs
+				LEFT JOIN #__mb_events as events ON events.individuals_id = indivs.id
+				LEFT JOIN #__mb_dates as dates ON dates.events_id = events.id
+				LEFT JOIN #__mb_tree_links as links ON links.individuals_id = indivs.id
+				WHERE dates.f_year != 'NULL' AND links.tree_id = '".$tree_id."'
+				ORDER BY dates.f_year ASC";
+		$this->db->setQuery($sql_string);
+        	$rows = $this->db->loadAssocList();
+        	if($rows==null||$permission=='OWNER'){
+        		return ($rows==null)?null:$rows[0]['id'];
+        	}
+        	if($tree){
+        		foreach($rows as $row){
+        			if(isset($row['id'])&&isset($tree[$row['id']])){
+        				return $row['id'];
+        			}
+        		}
+        	}
+        	return null;
+        }
+        
+        public function getEarliestInDocumentId($tree_id, $permission='OWNER', $tree=false){
+        	//not supported by sources
+        }
+        
+        /*
+        public function getIndivCount($treeId, $limit=false){
         	$sqlString = "SELECT id FROM #__mb_individuals as indivs
         			LEFT JOIN #__mb_tree_links as links ON links.individuals_id = indivs.id
         			WHERE links.tree_id = '".$treeId."'";
+        	if($limit){
+        		$sqlString .= " LIMIT ".$limit;
+        	}
         	$this->db->setQuery($sqlString);
         	$rows = $this->db->loadAssocList();
         	return $rows;
         }
-        public function getDeathIndivCount($treeId){
+        public function getDeathIndivCount($treeId, $limit=false){
         	$sqlString = "SELECT COUNT ind.id FROM #__mb_individuals as ind
         			LEFT JOIN #__mb_events as event ON event.individuals_id = ind.id
         			LEFT JOIN #__mb_tree_links as links ON links.individuals_id = ind.id
         			WHERE event.type = 'DEAT' AND links.tree_id = '".$treeId."'";
+        	if($limit){
+        		$sqlString .= " LIMIT ".$limit;
+        	}
         	$this->db->setQuery($sqlString);
         	$rows = $this->db->loadAssocList();
         	return $rows;
         }
-        public function getIdYoungestMember($treeId){
+        public function getIdYoungestMember($treeId, $limit=false){
         	$sqlString = "SELECT indivs.id FROM #__mb_individuals as indivs
 				LEFT JOIN #__mb_events as events ON events.individuals_id = indivs.id
 				LEFT JOIN #__mb_dates as dates ON dates.events_id = events.id
 				LEFT JOIN #__mb_tree_links as links ON links.individuals_id = indivs.id
 				WHERE events.type = 'BIRT' AND dates.f_year != 'NULL' AND links.tree_id = '".$treeId."'
 				ORDER BY dates.f_year DESC LIMIT 1";
-        	$this->db->setQuery($sqlString);
+        	if($limit){
+        		$sqlString .= " LIMIT ".$limit;
+        	}
+		$this->db->setQuery($sqlString);
         	$rows = $this->db->loadAssocList();
         	return $rows;
         }
-        public function getIdOldestMember($treeId){  
+        public function getIdOldestMember($treeId, $limit=false){  
         	$sqlString = "SELECT indivs.id as id FROM #__mb_individuals as indivs
 				LEFT JOIN #__mb_events as events ON events.individuals_id = indivs.id
 				LEFT JOIN #__mb_dates as dates ON dates.events_id = events.id
@@ -457,11 +539,14 @@ class IndividualsList{
 				WHERE dates.f_year != 'NULL' AND links.tree_id = '".$treeId."'
 				ORDER BY dates.f_year ASC 
 				LIMIT 1";
-        	$this->db->setQuery($sqlString);
+        	if($limit){
+        		$sqlString .= " LIMIT ".$limit;
+        	}
+		$this->db->setQuery($sqlString);
         	$rows = $this->db->loadAssocList();
         	return $rows;
         }
-        public function getIdEarliestMember($treeId){
+        public function getIdEarliestMember($treeId, $limit=false){
         	$sqlString = "SELECT indivs.id as id, events.type as birth, events2.type as death 
         			FROM #__mb_individuals as indivs
         			LEFT JOIN #__mb_events as events ON events.individuals_id = indivs.id AND events.type = 'BIRT'
@@ -470,9 +555,13 @@ class IndividualsList{
         			LEFT JOIN #__mb_tree_links as links ON links.individuals_id = indivs.id
         			WHERE dates.f_year != 'NULL' AND links.tree_id = ".$treeId." 
         			ORDER BY dates.f_year ASC";
+        	if($limit){
+        		$sqlString .= " LIMIT ".$limit;
+        	}
         	$this->db->setQuery($sqlString);
         	$rows = $this->db->loadAssocList();
         	return $rows;
         }
+        */
 }
 ?>

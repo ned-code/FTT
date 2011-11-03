@@ -13,22 +13,30 @@ class JMBDescendantTree {
 		$this->db =& JFactory::getDBO();
 		$this->host = new Host('Joomla');
 		$this->ownerId = $_SESSION['jmb']['gid'];
-		$color = array();
-		$p = $this->host->getSiteSettings('color');
-		for($i=0;$i<sizeof($p);$i++){
-                    switch($p[$i]['name']){	
-                            case "female":
-                                    $color['F'] = $p[$i]['value'];
+                $config = $_SESSION['jmb']['config'];
+                $color = array();
+                foreach($config['color'] as $key => $element){
+                	switch($key){
+                	    case "female":
+                                    $color['F'] = $element;
                             break;
                             
                             case "male":
-                                    $color['M'] = $p[$i]['value'];
+                                    $color['M'] = $element;
                             break;
                             
                             case "location":
-                                    $color['L'] = $p[$i]['value'];
+                                    $color['L'] = $element;
                             break;
-                    }
+                            
+                    	    case "famous_header":
+                    	    	    $color['famous_header'] = $element;
+                    	    break;
+                    
+                    	    case "family_header":
+                    	    	    $color['family_header'] = $element;
+                    	    break;
+                	}
                 }
                 $this->color = $color;
 	}
@@ -181,8 +189,8 @@ class JMBDescendantTree {
 	}
 	
 	public function getTree($r_type){
-		$tree = $this->host->getTree($_SESSION['jmb']['gid'], $_SESSION['jmb']['tid'], $_SESSION['jmb']['permission']);
-		$lib = $this->host->getTreeLib($_SESSION['jmb']['tid']);
+		$tree = $_SESSION['jmb']['tree'];
+		$lib = $_SESSION['jmb']['lib'];
 		$parentTree = $this->getDescendantsCount($r_type, $lib, $tree);
 		$key = $this->getDefaultKey($parentTree, $r_type);
 		$lang = $this->host->getLangList('descendant_tree');
@@ -236,6 +244,7 @@ class JMBDescendantTree {
 		return $parentTree['key'];
 	}
 		
+	/*
 	protected function sortByPermission($response, $tree, &$result){
 		if($response&&isset($tree[$response['key']])){
 			$result = array('key'=>$response['key'], 'descendants'=>$response['descendants'], 'level'=>$response['level'], 'parents'=>array('father'=>false,'mother'=>false));
@@ -247,19 +256,28 @@ class JMBDescendantTree {
 			}
 		}
 	}
+	*/
+	
+	protected function sort($response){
+		return $response;
+	}
 	
 	protected function getDescendantsCount($render_type, $lib, $tree){
 		$owner_id = $_SESSION['jmb']['gid'];
 		$tree_id = $_SESSION['jmb']['tid'];
+		$permission = $_SESSION['jmb']['permission'];
 		
 		$parents = $this->host->getParents($owner_id, $lib);		
 		$parent = ($render_type=='father')?$parents['husb']:$parents['wife'];
 		if($parent!=null){
 		 	$response = $this->host->getParentTree($owner_id, $lib, 0);
-		 	if($_SESSION['jmb']['permission']=='OWNER') return $response;
-			$result = array();
+		 	if($permission=='OWNER') return $response;
+			/*
+		 	$result = array();
 			$this->sortByPermission($response, $tree, $result);
 			return $result;
+			*/
+			return $this->sort($response);
 		}
 		return false;
 	}

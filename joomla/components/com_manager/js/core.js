@@ -145,7 +145,7 @@ storage.tabs.click = function(callback){
 storage.tabs.cleaner = function(){
 	storage.clearPull(storage.tabs);
 	storage.clearPull(storage.header);
-	storage.request.cleaner();
+	//storage.request.cleaner();
 }
 
 storage.topMenuBar = {};
@@ -223,11 +223,11 @@ core.modal = function(){
 			return modal_active;
 		},
 		on:function(){
-			jQuery(document.body).append(modal_div);
+			//jQuery(document.body).append(modal_div);
 			modal_active = true;
 		},
 		off:function(){
-			jQuery(modal_div).remove();
+			//jQuery(modal_div).remove();
 			modal_active = false;
 		}
 	}
@@ -323,16 +323,15 @@ core.appendFiles = function(module, type){
 	}		
 }
 
-core.initModule = function(object_name, container_id){
+core.initModule = function(object_name, div){
 	var self = this;
-	var div = jQuery('#'+container_id);
-    	if(typeof window[object_name]=='function'&&jQuery(div).length>0){
+    	if(typeof window[object_name]=='function'){
     		new window[object_name](div);
     		
     	}
         else {
         	setTimeout(function(){
-        		self.initModule(object_name, container_id);
+        		self.initModule(object_name, div);
         	},1000);
         }
 }
@@ -344,7 +343,7 @@ core.renderPage = function(parent, page){
 	var tds = jQuery(table).find('td');
 	for(var i = 0; i < grid.tdLength; i++){
 		var td = tds[i];
-		for(j = 0; j < grid[i].divLength;j++){
+		for(var j = 0; j < grid[i].divLength; j++){
 			var module_id = grid[i][j].id; 
 			var module = page.modules[module_id];
 			//append js files;
@@ -356,7 +355,7 @@ core.renderPage = function(parent, page){
 			jQuery(td).append(div);
 			
 			//init module;
-			self.initModule(module.object_name, module.container_id);
+			self.initModule(module.object_name, div);
 			core.modulesPullObject.insert(module.object_name);
 		}
 	}	
@@ -388,6 +387,9 @@ core.renderTabs = function(parent, pages){
 	jQuery("ul.jmbtabs li").click(function() {
 		if(jQuery(this).hasClass('active')) return false;
 		core.modulesPullObject.init();
+
+		storage.tabs.activeTab = this;
+		storage.tabs.click();
 		
 		jQuery("ul.jmbtabs li").removeClass("active"); //Remove any "active" class
 		jQuery(this).addClass("active"); //Add "active" class to selected tab
@@ -397,9 +399,6 @@ core.renderTabs = function(parent, pages){
 		var page = pages[id];
 		
 		self.renderPage('#jmbtab', page);
-		
-		storage.tabs.activeTab = this;
-		storage.tabs.click();	
 		jQuery(divs).show(); //Hide all tab content
 		return false;
 	});	
@@ -410,7 +409,7 @@ core.load = function(pages){
 	//var pages = '1,2,6,8,7,10';
 	jQuery(document.body).ready(function(){
 		host = new Host();
-		storage.login = new JMBLogin('jmb_header_profile_box');
+		storage.login = new JMBLogin(jQuery('#jmb_header_profile_box'));
 		storage.language = new JMBLanguage();
 		storage.topMenuBar.init();
 		storage.inIframe();

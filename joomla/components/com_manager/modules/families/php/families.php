@@ -13,48 +13,6 @@ class JMBFamiliesObject{
 }
 
 class JMBFamilies {
-	/*
-	protected $db;
-	protected $host;
-	
-	function __construct(){
-		$this->db =& JFactory::getDBO();
-		$this->host = new Host('Joomla');
-	}
-
-	protected function getColors(){
-		$color = array();
-		$p = $this->host->getSiteSettings('color');
-		for($i=0;$i<sizeof($p);$i++){
-                    switch($p[$i]['name']){	
-                            case "female":
-                                    $color['F'] = $p[$i]['value'];
-                            break;
-                            
-                            case "male":
-                                    $color['M'] = $p[$i]['value'];
-                            break;
-                            
-                            case "location":
-                                    $color['L'] = $p[$i]['value'];
-                            break;
-                    }
-                }
-                return $color;
-	}
-	
-	public function _getFamilies($render_type){
-		$id = $this->host->gedcom->individuals->getIdbyFId($_SESSION['jmb']['fid']);
-		$fmbUser = $this->host->getUserInfo($id);
-		$firstParentId = $this->host->gedcom->individuals->getFirstParent($id, $render_type, true);
-		$colors = $this->getColors();
-		$path = JURI::root(true);
-		$individs = array();
-		$this->host->getIndividsArray($id, $individs, $id);
-		return json_encode(array('debug'=>array('fid'=>$_SESSION['jmb']['fid'],'id'=>$id),'fmbUser'=>$fmbUser,'firstParent'=>$firstParentId,'individs'=>$individs,'colors'=>$colors,'path'=>$path));
-	}
-	*/
-	/*****************************/
 	protected $db;
 	protected $host;
 	protected $ownerId;
@@ -70,22 +28,30 @@ class JMBFamilies {
 	*
 	*/
 	protected function getColors(){
-		$color = array();
-		$p = $this->host->getSiteSettings('color');
-		for($i=0;$i<sizeof($p);$i++){
-                    switch($p[$i]['name']){	
-                            case "female":
-                                    $color['F'] = $p[$i]['value'];
+		$config = $_SESSION['jmb']['config'];
+                $color = array();
+                foreach($config['color'] as $key => $element){
+                	switch($key){
+                	    case "female":
+                                    $color['F'] = $element;
                             break;
                             
                             case "male":
-                                    $color['M'] = $p[$i]['value'];
+                                    $color['M'] = $element;
                             break;
                             
                             case "location":
-                                    $color['L'] = $p[$i]['value'];
+                                    $color['L'] = $element;
                             break;
-                    }
+                            
+                    	    case "famous_header":
+                    	    	    $color['famous_header'] = $element;
+                    	    break;
+                    
+                    	    case "family_header":
+                    	    	    $color['family_header'] = $element;
+                    	    break;
+                	}
                 }
                 return $color;
 	}
@@ -179,8 +145,8 @@ class JMBFamilies {
 	
 	public function getFamilies(){
 		$this->ownerId = $_SESSION['jmb']['gid'];
-		$tree = $this->host->getTree($_SESSION['jmb']['gid'], $_SESSION['jmb']['tid'], $_SESSION['jmb']['permission']);
-		$lib = $this->host->getTreeLib($_SESSION['jmb']['tid']);
+		$tree = $_SESSION['jmb']['tree'];
+		$lib = $_SESSION['jmb']['lib'];
 		$fmbUser = $this->host->getUserInfo($this->ownerId);
 		$colors = $this->getColors();
 		$path = JURI::root(true);

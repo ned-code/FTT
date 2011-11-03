@@ -1,6 +1,4 @@
 function JMBThisMonthObject(obj){
-	storage.core.modulesPullObject.unset('JMBThisMonthObject');
-	return;
 	//vars 
 	this.obj = obj;
 	this.json = null;

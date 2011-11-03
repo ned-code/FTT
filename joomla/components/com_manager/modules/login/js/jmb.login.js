@@ -1,6 +1,5 @@
 function JMBLogin(obj){
 	var module = this;
-	obj = jQuery('#'+obj);
 
 	if(window!=window.top){
 		jQuery(obj).hide();
@@ -68,7 +67,6 @@ function JMBLogin(obj){
 					//jQuery(obj).find('div#profile_login').show();
 					jQuery(obj).hide();
 				}
-				
 			break;
 		
 			case "login":

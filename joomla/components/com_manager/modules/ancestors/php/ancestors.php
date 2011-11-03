@@ -30,7 +30,6 @@ class JMBAncestors {
 		if($indKey==null) return false;
 		if(!isset($tree[$indKey])) return false;
 		$ind = $this->host->gedcom->individuals->get($indKey);
-		$ind->FamLine = $this->host->gedcom->individuals->getMemberFamLine($_SESSION['jmb']['tid'], $_SESSION['jmb']['gid'], $indKey);
 		return $ind;
 	}
 	
@@ -85,8 +84,8 @@ class JMBAncestors {
 	
 	public function get($indKey){
 		$this->ownerId  = $_SESSION['jmb']['gid'];
-		$tree = $this->host->getTree($_SESSION['jmb']['gid'], $_SESSION['jmb']['tid'], $_SESSION['jmb']['permission']);
-		$lib = $this->host->getTreeLib($_SESSION['jmb']['tid']);
+		$tree = $_SESSION['jmb']['tree'];
+		$lib = $_SESSION['jmb']['lib'];
 		$fmbUser = $this->host->getUserInfo($this->ownerId);
 		$user = ($indKey=='null')?$fmbUser['indiv']:$this->host->gedcom->individuals->get($indKey);
 		$path = JURI::root(true); 

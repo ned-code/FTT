@@ -63,191 +63,45 @@ class JMBThisMonth {
         /**
         * get global clolar settings
         */ 
-	protected function _getColors(){
-		$color = array();
-		$p = $this->host->getSiteSettings('color');
-		for($i=0;$i<sizeof($p);$i++){
-                    switch($p[$i]['name']){	
-                            case "female":
-                                    $color['F'] = $p[$i]['value'];
+	protected function _getColors(){     
+                $config = $_SESSION['jmb']['config'];
+                $color = array();
+                foreach($config['color'] as $key => $element){
+                	switch($key){
+                	    case "female":
+                                    $color['F'] = $element;
                             break;
                             
                             case "male":
-                                    $color['M'] = $p[$i]['value'];
+                                    $color['M'] = $element;
                             break;
                             
                             case "location":
-                                    $color['L'] = $p[$i]['value'];
+                                    $color['L'] = $element;
                             break;
                             
                     	    case "famous_header":
-                    	    	    $color['famous_header'] = $p[$i]['value'];
+                    	    	    $color['famous_header'] = $element;
                     	    break;
                     
                     	    case "family_header":
-                    	    	    $color['family_header'] = $p[$i]['value'];
+                    	    	    $color['family_header'] = $element;
                     	    break;
-                    }
+                	}
                 }
                 return $color;
 	}
 	
-	/**
-	* @return array with all events sorted by motn of event
-	* @var $month numeric of month event
-	* @var $individs array link of all user
-	* @var $descendants array link of descedants(user sort by month of event)
-	* @var $type string sortet individual by type event(BIRT,DEAT,MARR)
-	*/
-	protected function _getArrayEventRecords(&$individs, &$descendants, $type, $month){
-		$result = array();
-		foreach($individs as $id => $individ){
-			switch($type){
-				case "BIRT":
-					if($individ->Birth&& $individ->Birth[0] && $individ->Birth[0]->From->Month == (int)$month){
-						$death = ($individ->Death&&$individ->Death[0])?true:false;
-						$result[$id] = array('event'=>$individ->Birth[0], 'death'=>$death);
-						$descendants[$id] = $individ;
-					}
-				break;
-				
-				case "MARR":
-					$families = $this->host->gedcom->families->getPersonsFamilies($id, true);					
-					$spouses = array();
-					foreach($families as $family){
-						if($family->Spouse == null) continue;
-						$famevent = $this->host->gedcom->events->getFamilyEvents($family->Id);
-						$spouses[] = array('id'=>$family->Spouse->Id,'indiv'=>$family->Spouse,'event'=>$famevent);
-					}
-					foreach($spouses as $spouse){
-						if($spouse['event']){
-							foreach($spouse['event'] as $event){
-								if((int)$event->From->Month == (int)$month && $event->Type == 'MARR'){
-									if(!array_key_exists($event->FamKey, $result)){
-										$result[$event->FamKey] = array('sircar'=>$individ->Id, 'spouse'=>$spouse['id'], 'event'=>$event);
-										$descendants[$id] = $individ;
-										$descendants[$spouse['id']] = $individs[$spouse['id']];
-									}
-								}
-							}
-							foreach($spouse['event'] as $event){
-								if($event->Type == 'DIV'){
-									unset($result[$id]);
-								}
-							}
-						}
-					}
-				break;
-				
-				case "DEAT":
-					if($individ->Death && $individ->Death[0] && $individ->Death[0]->From->Month == (int)$month){
-						$result[$id] = array('event'=>$individ->Death[0]);
-						$descendants[$id] = $individ;
-					}
-				break;
-			}
-		}
-		return $result;
-	}
-	
-	/**
-	* @return array with all events
-	* @var $month numeric of month event
-	* @var $individs array link of all user(not null)
-	* @var $descendants array link of descedants(user sort by month of event)
-	*/
-	protected function _getEvents($month, &$individs, &$descendants){
-		$births = $this->_getArrayEventRecords($individs, $descendants, 'BIRT', $month);
-		$unions = $this->_getArrayEventRecords($individs, $descendants, 'MARR', $month);
-		$deaths = $this->_getArrayEventRecords($individs, $descendants, 'DEAT', $month);
-		return array('b'=>$births,'u'=>$unions,'d'=>$deaths);
-	}
-	
-	/**
-	* set type of sort if we set this params in module
-	* @var $type number of type sort(-1,1 or 0 => before,after or all)
-	*/
 	protected function _setSortTypeParams($type){
 		$this->settings['split_event']['type'] = $type;
 	}
-
-	/**
-	* sort event by year (after, before or all)
-	* @var &$events array link events 
-	*/
-	protected function _sort(&$events){
-		$s_year = $this->settings['split_event']['year'] + 0;
-		$list = array();
-		foreach($events as $key => $value){
-			foreach($value as $k => $v){
-				switch($this->settings['split_event']['type']){
-					case "-1":
-						if((int)$v['event']->From->Year <= (int)$s_year){
-							$list[$key][$k] = $v;
-						}
-					break;
-					
-					case "1":
-						if((int)$v['event']->From->Year >= (int)$s_year){
-							$list[$key][$k] = $v;
-						}
-					break;
-					
-					case "0":
-						$list[$key][$k] = $v;
-					break;
-				}
-			}
-		}	
-		$events = $list;
-	}
 	
-	/**
-	* @return earleast event date
-	* @var $events
-	*/
-	protected function getEarleastDate($events){
-		$result = 9999;
-		foreach($events as $element){
-			foreach($element as $u){
-				if($u['event']->From&&$u['event']->From->Year < $result){
-					$result = $u['event']->From->Year;
-				}
-			}
-		}
-		return (int)$result;
-	}
-	
-	/**
-	*
-	*/
 	protected function getLanguage(){
 		$lang = $this->host->getLangList('this_month');
 		if(!$lang) return false;
 		return $lang;		
 	}
-	
-	protected function sortByFamilyLine($events, $type){
-		switch($type){
-			case "father":
-			case "mother":
-				$members = $this->host->gedcom->individuals->getMembersByFamLine($_SESSION['jmb']['tid'],$_SESSION['jmb']['gid'],$type[0]);
-				$result = array();
-				$crt = array();
-				foreach($events as $event){
-					foreach($members as $member){
-						if(isset($event['gid'])&&$event['gid']==$member['individuals_id']&&!isset($crt[$event['gid']])){
-							$result[] = $event;
-							$crt[$event['gid']] = true;
-						}
-					}
-				}
-				return $result;
-			break;
-			default: return $events;
-		}
-	}
-	
+
 	protected function sortByPermission($events, $tree){
 		if($_SESSION['jmb']['permission'] =='OWNER' || empty($events)){ return $events; }
 		$result = array();
@@ -261,15 +115,11 @@ class JMBThisMonth {
 	
 	protected function getThisMonthMembersEvents($treeId, $month, $render_type){
 		$sort = array((int)$this->settings['split_event']['type'],$this->settings['split_event']['year']);
-		$tree = $this->host->getTree($_SESSION['jmb']['gid'], $_SESSION['jmb']['tid'], $_SESSION['jmb']['permission']);
-
+		$tree = $_SESSION['jmb']['tree'];
+		
 		$birth = $this->host->gedcom->individuals->getByEvent($treeId, 'BIRT', $month, $sort);
 		$death = $this->host->gedcom->individuals->getByEvent($treeId, 'DEAT', $month, $sort);
 		$marr = $this->host->gedcom->families->getByEvent($treeId, 'MARR', $month, $sort);	
-		
-		//$birth = $this->sortByFamilyLine($birth, $render_type);
-		//$death = $this->sortByFamilyLine($death, $render_type);
-		//$marr = $this->sortByFamilyLine($marr, $render_type);
 		
 		$birth = $this->sortByPermission($birth, $tree);
 		$death = $this->sortByPermission($death, $tree);
@@ -309,11 +159,12 @@ class JMBThisMonth {
 	* @return array json data
 	*/
 	public function load($args){
+		//vars
 		$facebook_id = $_SESSION['jmb']['fid'];
 		$tree_id = $_SESSION['jmb']['tid'];
 		$gedcom_id = $_SESSION['jmb']['gid'];
 		
-		//vars
+		
 		$args = json_decode($args);
 
 		$month = $args->month;
@@ -332,7 +183,6 @@ class JMBThisMonth {
 		$this->settings['opt']['month'] = $month;
 		
 		$config = array('alias'=>'myfamily','login_type'=>$_SESSION['jmb']['login_type'],'colors'=>$colors);
-		
 		return json_encode(array('fmbUser'=>$fmbUser,'config'=>$config,'path'=>$path,'events'=>$events,'descedants'=>$descendants,'language'=>$language,'settings'=>$this->settings));
 	}
 	

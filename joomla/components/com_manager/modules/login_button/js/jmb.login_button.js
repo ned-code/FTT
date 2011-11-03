@@ -1,5 +1,4 @@
 function JMBLoginButtonObject(obj){
-	obj = jQuery('#'+obj);
 	var div = jQuery('#jmb_connect_with_facebook');
 	jQuery(div).addClass('jmb-facebook-login-button');
 	jQuery(obj).append(div);

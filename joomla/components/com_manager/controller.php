@@ -533,7 +533,7 @@ class JMBController extends JController
         	$view = JRequest::getCmd('view');
         	$id = JRequest::getCmd('id');
         	$token = JRequest::getCmd('token');
-        	
+       	
         	if($option!='com_manager') exit();
         	if(strlen($task)!=0) return;
         	
@@ -561,11 +561,6 @@ class JMBController extends JController
         			case 'first-page':
         			case 'login':
         			case 'home':
-        				$_SESSION['jmb']['fid'] = null;
-					$_SESSION['jmb']['gid'] = null;
-					$_SESSION['jmb']['tid'] = null;
-					$_SESSION['jmb']['permission'] = null;
-					$_SESSION['jmb']['login_type'] = null;
         			break;
         			
         			case 'famous-family':
@@ -580,6 +575,9 @@ class JMBController extends JController
 						$_SESSION['jmb']['tid'] = $link['tid'];
 						$_SESSION['jmb']['permission'] = $link['type'];
 						$_SESSION['jmb']['login_type'] = 'family_tree';
+						$_SESSION['jmb']['config'] = $host->getConfig();
+						$_SESSION['jmb']['tree'] = $host->getTree($_SESSION['jmb']['gid'], $_SESSION['jmb']['tid'], $_SESSION['jmb']['permission']);
+						$_SESSION['jmb']['lib'] = $host->getTreeLib($_SESSION['jmb']['tid']);
 						$this->update_login_time($link['gid']);
 					}
         			break;
@@ -600,8 +598,7 @@ class JMBController extends JController
         }
         
         public function timeout(){
-        	ob_clean();
-        	echo isset($_SESSION['jmb']);
+        	echo 'ping!';
         	exit();
         }
 }

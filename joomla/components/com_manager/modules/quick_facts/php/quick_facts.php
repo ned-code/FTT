@@ -7,30 +7,30 @@ class JMBQuickFacts {
 	}
 	
 	protected function getColors(){
-		$color = array();
-		$p = $this->host->getSiteSettings('color');
-		for($i=0;$i<sizeof($p);$i++){
-                    switch($p[$i]['name']){	
-                            case "female":
-                                    $color['F'] = $p[$i]['value'];
+		$config = $_SESSION['jmb']['config'];
+                $color = array();
+                foreach($config['color'] as $key => $element){
+                	switch($key){
+                	    case "female":
+                                    $color['F'] = $element;
                             break;
                             
                             case "male":
-                                    $color['M'] = $p[$i]['value'];
+                                    $color['M'] = $element;
                             break;
                             
                             case "location":
-                                    $color['L'] = $p[$i]['value'];
+                                    $color['L'] = $element;
                             break;
                             
-                             case "famous_header":
-                    	    	    $color['famous_header'] = $p[$i]['value'];
+                    	    case "famous_header":
+                    	    	    $color['famous_header'] = $element;
                     	    break;
                     
                     	    case "family_header":
-                    	    	    $color['family_header'] = $p[$i]['value'];
+                    	    	    $color['family_header'] = $element;
                     	    break;
-                    }
+                	}
                 }
                 return $color;
 	}
@@ -53,9 +53,8 @@ class JMBQuickFacts {
 	}
 	
 	public function get($type){
-		$ownerId = $_SESSION['jmb']['gid'];
-		$treeId = $_SESSION['jmb']['tid'];
-
+		
+		/*
 		switch($_SESSION['jmb']['permission']){
 			case 'USER':
 			case 'MEMBER':
@@ -97,13 +96,23 @@ class JMBQuickFacts {
 		$youngest = ($youngest)?$this->host->getUserInfo($youngest, $ownerId):null;
 		$oldest = ($oldest)?$this->host->getUserInfo($oldest, $ownerId):null;
 		$earliest = ($earliest)?$this->host->getUserInfo($earliest, $ownerId):null;
+		*/
+		$owner_id = $_SESSION['jmb']['gid'];
+		$tree_id = $_SESSION['jmb']['tid'];
+		$permission = $_SESSION['jmb']['permission'];
+		$tree = $_SESSION['jmb']['tree'];
+		
+		$count = $this->host->gedcom->individuals->getIndividualsCount($tree_id, $permission, $tree);
+		$living = $this->host->gedcom->individuals->getIndividualsCount($tree_id, $permission, $tree);
+		$youngest = $this->host->getUserInfo($this->host->gedcom->individuals->getYoungestId($tree_id, $permission, $tree));
+		$oldest = $this->host->getUserInfo($this->host->gedcom->individuals->getOldestId($tree_id, $permission, $tree));
 		
 		$colors = $this->getColors();
-		$fmbUser = $this->host->getUserInfo($_SESSION['jmb']['gid']);
+		$fmbUser = $this->host->getUserInfo($owner_id);
 		$path = JURI::root(true);
 		$lang = $this->getLanguage();
 		$config = array('alias'=>'myfamily','login_type'=>$_SESSION['jmb']['login_type'],'colors'=>$colors);
-		return json_encode(array('lang'=>$lang,'count'=>$count,'living'=>$living,'youngest'=>$youngest,'oldest'=>$oldest,'earliest'=>$earliest,'config'=>$config,'fmbUser'=>$fmbUser,'path'=>$path));		
+		return json_encode(array('lang'=>$lang,'count'=>$count,'living'=>$living,'youngest'=>$youngest,'oldest'=>$oldest,'earliest'=>null,'config'=>$config,'fmbUser'=>$fmbUser, 'tree'=>$tree,'path'=>$path));		
 	}
 }
 ?>

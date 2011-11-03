@@ -7,30 +7,30 @@ class JMBRecentVisitors {
 	}
 	
 	protected function getColors(){
-		$color = array();
-		$p = $this->host->getSiteSettings('color');
-		for($i=0;$i<sizeof($p);$i++){
-                    switch($p[$i]['name']){	
-                            case "female":
-                                    $color['F'] = $p[$i]['value'];
+		$config = $_SESSION['jmb']['config'];
+                $color = array();
+                foreach($config['color'] as $key => $element){
+                	switch($key){
+                	    case "female":
+                                    $color['F'] = $element;
                             break;
                             
                             case "male":
-                                    $color['M'] = $p[$i]['value'];
+                                    $color['M'] = $element;
                             break;
                             
                             case "location":
-                                    $color['L'] = $p[$i]['value'];
+                                    $color['L'] = $element;
                             break;
                             
-                             case "famous_header":
-                    	    	    $color['famous_header'] = $p[$i]['value'];
+                    	    case "famous_header":
+                    	    	    $color['famous_header'] = $element;
                     	    break;
                     
                     	    case "family_header":
-                    	    	    $color['family_header'] = $p[$i]['value'];
+                    	    	    $color['family_header'] = $element;
                     	    break;
-                    }
+                	}
                 }
                 return $color;
 	}
@@ -44,30 +44,9 @@ class JMBRecentVisitors {
 		return $objects;
 	}
 	
-	protected function sort($type, $recent_visitors){
-		switch($type){
-			case "mother":
-			case "father":
-					$members = $this->host->gedcom->individuals->getMembersByFamLine($_SESSION['jmb']['tid'],$_SESSION['jmb']['gid'],$type[0]);
-					$result = array();
-					foreach($recent_visitors as $vis){
-						foreach($members as $member){
-							if($vis['id']==$member['individuals_id']){
-								$result[] = $vis;
-							}
-						}
-					}
-					return $result;
-				break;
-			default:
-					return $recent_visitors;
-				return;		
-		}
-	}
-	
 	protected function sortByPermission($response){
 		if($_SESSION['jmb']['permission'] == 'OWNER' || empty($response)) return $response;
-		$tree = $this->host->getTree($_SESSION['jmb']['gid'], $_SESSION['jmb']['tid'], $_SESSION['jmb']['permission']);
+		$tree = $_SESSION['jmb']['tree'];
 		$result = array();
 		foreach($response as $user){
 			if(isset($tree[$user['id']])){
@@ -79,16 +58,15 @@ class JMBRecentVisitors {
 	
 	public function get_recent_visitors($render_type){
 		ob_clean();
-		$response = $this->sortByPermission($this->host->gedcom->individuals->getLastLoginMembers($_SESSION['jmb']['tid']));
-		$result = $this->sort($render_type, $response);
+		$result = $this->sortByPermission($this->host->gedcom->individuals->getLastLoginMembers($_SESSION['jmb']['tid']));
 		$time = date('Y-m-d H:i:s');
 		$objects = $this->get_objects($result);
 		$path = JURI::root(true);
 		$fmbUser = $this->host->getUserInfo($_SESSION['jmb']['gid']);
 		$lang = $this->host->getLangList('recent_visitors');
 		$colors = $this->getColors();	
-		$config = array('alias'=>'myfamily','login_type'=>$_SESSION['jmb']['login_type'],'colors'=>$colors);
-		return json_encode(array('config'=>$config,'response'=>$result,'objects'=>$objects,'time'=>$time,'path'=>$path,'fmbUser'=>$fmbUser,'response'=>$response, 'lang'=>$lang));		
+		$config = array('alias'=>$_SESSION['jmb']['alias'],'login_type'=>$_SESSION['jmb']['login_type'],'colors'=>$colors);
+		return json_encode(array('config'=>$config,'response'=>$result,'objects'=>$objects,'time'=>$time,'path'=>$path,'fmbUser'=>$fmbUser,'lang'=>$lang));		
 	}
 }
 ?>

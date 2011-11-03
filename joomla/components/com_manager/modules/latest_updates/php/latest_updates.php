@@ -3,30 +3,30 @@ class JMBLatestUpdates {
 	protected $host;
 	
 	protected function getColors(){
-		$color = array();
-		$p = $this->host->getSiteSettings('color');
-		for($i=0;$i<sizeof($p);$i++){
-                    switch($p[$i]['name']){	
-                            case "female":
-                                    $color['F'] = $p[$i]['value'];
+		$config = $_SESSION['jmb']['config'];
+                $color = array();
+                foreach($config['color'] as $key => $element){
+                	switch($key){
+                	    case "female":
+                                    $color['F'] = $element;
                             break;
                             
                             case "male":
-                                    $color['M'] = $p[$i]['value'];
+                                    $color['M'] = $element;
                             break;
                             
                             case "location":
-                                    $color['L'] = $p[$i]['value'];
+                                    $color['L'] = $element;
                             break;
                             
-                            case "famous_header":
-                    	    	    $color['famous_header'] = $p[$i]['value'];
+                    	    case "famous_header":
+                    	    	    $color['famous_header'] = $element;
                     	    break;
                     
                     	    case "family_header":
-                    	    	    $color['family_header'] = $p[$i]['value'];
+                    	    	    $color['family_header'] = $element;
                     	    break;
-                    }
+                	}
                 }
                 return $color;
 	}

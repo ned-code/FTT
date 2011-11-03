@@ -1,6 +1,5 @@
 function JMBRecentVisitorsObject(obj){	
 	var parent = this;
-	//var content = jQuery('<div class="jmb-rv-header"><span>Recent Visitors</span></div><div class="jmb-rv-content"></div><div class="jmb-rv-button"><span>Show all...</span></div>');
 	var content = null;
 	var sb = host.stringBuffer();
 	var profile =  new JMBProfile();

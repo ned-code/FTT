@@ -254,7 +254,6 @@ class Host {
 	public function getUserInfo($indKey, $indRel = false){
 		if($indKey==null){ return null; }
 		$indiv = $this->gedcom->individuals->get($indKey);
-		$indiv->FamLine = $this->gedcom->individuals->getMemberFamLine($_SESSION['jmb']['tid'], $_SESSION['jmb']['gid'], $indKey);
 		if($indRel){
 			$indiv->Relation = $this->gedcom->individuals->relation->get_relation($indKey, $indRel);
 		}
@@ -550,6 +549,9 @@ class Host {
 		return array('objects'=>$objects);
 	}
 	
+	/*
+	* USER TREE BY PERMISSION
+	*/
 	protected function getUserTree_($ind_key, $lib, &$objects){
 		if($ind_key==null) return 0;
 		if(isset($objects[$ind_key])) return 0;
@@ -666,6 +668,27 @@ class Host {
 		}		
 		return false;
 	}
+	
+	/* 
+	* CONFIG
+	*/
+	public function getConfig(){
+		$db =& JFactory::getDBO();
+		$sql_string = "SELECT uid, name,value, type, priority FROM #__mb_system_settings";
+		$db->setQuery($sql_string);
+		$rows = $db->loadAssocList();
+		if($rows == null) return array();
+		$color = array();
+		foreach($rows as $row){
+			switch($row['type']){
+				case 'color':
+					$color[strtolower($row['name'])] = strtolower($row['value']);
+				break;
+			}
+		}
+		return array('color'=>$color);
+	}
+	
 	
 }
 
