@@ -120,3 +120,16 @@
 .jmb-famous-family-backend-content-keepers-add span{
 	cursor:pointer;
 }
+
+.jmb-famous-individual {
+	background: none repeat scroll 0 0 white;
+	border: 1px solid #999999;
+    	left: 50%;
+    	padding: 20px;
+    	position: absolute;
+    	top: 50%;
+}
+
+.jmb-famous-individual input{
+	margin-left:5px;
+}

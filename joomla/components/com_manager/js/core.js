@@ -222,12 +222,15 @@ core.modal = function(){
 		isActive:function(){
 			return modal_active;
 		},
-		on:function(){
-			//jQuery(document.body).append(modal_div);
+		on:function(div){
+			var w = jQuery(div).width();
+			var h = jQuery(div).height();
+			jQuery(modal_div).css('width', w+'px').css('height', '400px');
+			jQuery(div).append(modal_div);
 			modal_active = true;
 		},
 		off:function(){
-			//jQuery(modal_div).remove();
+			jQuery(modal_div).remove();
 			modal_active = false;
 		}
 	}
@@ -258,10 +261,10 @@ core.modulesPullFunc = function(){
 			}
 			modal.off();
 		},
-		init:function(){
+		init:function(div){
 			var pull = this;
 			pull.clear();
-			modal.on();
+			modal.on(div);
 			var it = 30;
 			var interval_id = setInterval(function(){
 				if(core.modulesPull.length==0){
@@ -386,7 +389,7 @@ core.renderTabs = function(parent, pages){
 	//On Click Event
 	jQuery("ul.jmbtabs li").click(function() {
 		if(jQuery(this).hasClass('active')) return false;
-		core.modulesPullObject.init();
+		core.modulesPullObject.init(div);
 
 		storage.tabs.activeTab = this;
 		storage.tabs.click();

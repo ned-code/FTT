@@ -5,15 +5,27 @@ define("JMB_FACEBOOK_APPID", "184962764872486");
 define("JMB_FACEBOOK_SECRET", "6b69574c9ddd50ce2661b3053cd4dc02");
 define("JMB_FACEBOOK_URL",  'http://www.familytreetop.com/');
 define("JMB_FACEBOOK_COOKIE",  true);
-$_SESSION['jmb']['facebook_appid'] = JMB_FACEBOOK_APPID;
-$_SESSION['jmb']['facebook_secret'] = JMB_FACEBOOK_SECRET;
-$_SESSION['jmb']['facebook_cookie'] = JMB_FACEBOOK_COOKIE;
 
+if(!isset($_SESSION['jmb']['facebook_appid'])){
+	$_SESSION['jmb']['facebook_appid'] = JMB_FACEBOOK_APPID;
+	$_SESSION['jmb']['facebook_secret'] = JMB_FACEBOOK_SECRET;
+	$_SESSION['jmb']['facebook_cookie'] = JMB_FACEBOOK_COOKIE;
+}
+	
 # Require the com_content helper library
 require_once(JPATH_COMPONENT.DS.'controller.php'); 
-require_once(JPATH_COMPONENT.DS.'php'.DS.'facebook.php'); 
 
-$facebook = new Facebook(array('appId'=>JMB_FACEBOOK_APPID,'secret'=>JMB_FACEBOOK_SECRET,'cookie'=>JMB_FACEBOOK_COOKIE));
+# Create the controller
+$controller = new JMBController( );
+
+# Perform the Request task
+$controller->execute(JRequest::getCmd('task'));
+
+# FTT permission get
+$controller->jmb();
+
+# Redirect if set by the controller
+$controller->redirect(); 
 
 # include JS and CSS 
 $document =& JFactory::getDocument();
@@ -23,22 +35,7 @@ $document->addStyleSheet('components/com_manager/codebase/skins/dhtmlxlayout_dhx
 $document->addStyleSheet('components/com_manager/codebase/dhtmlxlayout.css');
 $document->addStyleSheet('components/com_manager/codebase/dhtmlxtree.css');
 $document->addStyleSheet('components/com_manager/js/core.css?111');
-
-$css_code = 'html, body {
-	    	width: 100%;
-	        margin: 0px;
-	       
-}
 	
-	#pages {
-		width: 980px;
-		position: relative;
-	}
-';
-
-$document->addStyleDeclaration($css_code);
-
-
 //dhtmlx Part
 $document->addScript('components/com_manager/codebase/dhtmlxcontainer.js');
 $document->addScript('components/com_manager/codebase/dhtmlxcommon.js');
@@ -46,7 +43,7 @@ $document->addScript('components/com_manager/codebase/dhtmlxlayout.js');
 $document->addScript('components/com_manager/codebase/dhtmlxtree.js');
 $document->addStyleSheet('administrator/components/com_manager/codebase/dhtmlxtabbar.css');
 $document->addScript('administrator/components/com_manager/codebase/dhtmlxtabbar.js');
-
+	
 //jquery Part
 $document->addScript('administrator/components/com_manager/js/jquery.min.js');
 $document->addScript('administrator/components/com_manager/js/jquery-ui.min.js');
@@ -54,15 +51,15 @@ $document->addScript('administrator/components/com_manager/js/jquery.form.js');
 $document->addScript('components/com_manager/js/core.js?111');
 $document->addScript('administrator/components/com_manager/js/MyBranchesManager.js?111');
 $document->addScript('administrator/components/com_manager/js/host.js?111');
-
+	
 //jmb overlay
 $document->addStyleSheet('components/com_manager/modules/overlay/css/jmb.overlay.css?111');
 $document->addScript('components/com_manager/modules/overlay/js/jmb.overlay.js?111');
-
+	
 //jmb delete tree button
 $document->addStyleSheet('components/com_manager/modules/delete/css/jmb.delete.css?111');
 $document->addScript('components/com_manager/modules/delete/js/jmb.delete.js?111');
-
+	
 //profile editor[mini, full, tooltip]
 $document->addStyleSheet('components/com_manager/modules/profile/css/jmb.profile.css?111');
 $document->addStyleSheet('components/com_manager/modules/profile/css/jmb.profile.full.css?111');
@@ -83,18 +80,6 @@ $document->addScript('components/com_manager/modules/login/js/jmb.login.js?111')
 $document->addStyleSheet('components/com_manager/modules/language/css/jmb.language.css?111');
 $document->addScript('components/com_manager/modules/language/js/jmb.language.js?111');
 
-# Create the controller
-$controller = new JMBController( );
-
-# FTT permission get
-$controller->jmb($facebook);
-
-# Perform the Request task
-$controller->execute( JRequest::getCmd('task'));
-
-# Redirect if set by the controller
-$controller->redirect(); 
-
-$document->addCustomTag( '<script type="text/javascript">jQuery.noConflict();</script>');
+$document->addCustomTag('<script type="text/javascript">jQuery.noConflict();</script>');
 
 ?>

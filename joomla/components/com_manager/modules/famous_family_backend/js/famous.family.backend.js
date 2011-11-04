@@ -74,13 +74,45 @@ function FamousFamilyBackend(obj){
 		jQuery(object).addClass('active');
 		createContent(id, html_object);
 	}
+	var gedcomIndividualsSelect = function(res, html){
+		var box = jQuery(html).find('.jmb-famous-family-backend-content');
+		var sb = host.stringBuffer();
+		sb._('<form id="jmb_famous_indiv" method="post" target="iframe-famous-family">');
+			sb._('<div class="jmb-famous-individual">');
+				sb._('<select name="individuals_id">');
+				jQuery(res.Individuals).each(function(i,e){
+						sb._('<option value="')._(e.Id)._('">')._([(e.FirstName!=null)?e.FirstName:'',(e.LastName!=null)?e.LastName:''].join(' '))._('</option>');
+				});
+				sb._('</select>');
+				sb._('<input type="submit" value="set">');
+			sb._('</div>')
+		sb._('</form>');
+		var form = jQuery(sb.result());
+		showModal();
+		jQuery(box).append(form);
+		console.log(form);
+		console.log(box);
+		console.log(res);
+		module.ajaxForm(form, 'setFamousIndivid', null, function(res){
+			jQuery(form).remove();
+			module.json.sort_families[res.family.id] = res.family;
+			var tree_div = jQuery(html).find('.jmb-famous-family-backend-tree');
+			var div = jQuery('<div id="'+res.family.id+'" class="jmb-famous-family-backend-tree-item"><span>'+res.family.name+'</span></div>');
+			jQuery(tree_div).append(div);	
+			jQuery(div).find('span').click(function(){
+				treeItemClick(tree_div, this, html_object)
+			});
+			alert(res.message);
+			hideModal();
+		});
+	}
 	var createNewContent = function(html){
 		var box = jQuery(html).find('.jmb-famous-family-backend-content');
 		var sb = host.stringBuffer();
 		jQuery(box).html('');
 		//create html
 		sb._('<form id="jmb_create_famous_family" method="post" target="iframe-famous-family">');
-			sb._('<div class="jmb-famous-family-backend-buttons"><input type="submit" value="Save"></div>');
+			sb._('<div class="jmb-famous-family-backend-buttons"><input name="upload" type="file"><input type="submit" value="Save"></div>');
 			sb._('<div class="jmb-famous-family-backend-content-item">')
 				sb._('<div><span>Tree Name:</span></div>');
 				sb._('<div><input name="tree_name"></div>');
@@ -113,6 +145,10 @@ function FamousFamilyBackend(obj){
 		var content = jQuery(sb.result());
 		module.ajaxForm(content, 'createNewFamousFamily', null, function(res){
 			if(res.error) { alert(res.error); return;  }
+			if(res.res) {
+				gedcomIndividualsSelect(res.res, html);
+				return;
+			}
 			alert(res.message);
 			module.json.sort_families[res.family.id] = res.family;
 			var box = jQuery(obj).find('.jmb-famous-family-backend-tree');
@@ -179,7 +215,7 @@ function FamousFamilyBackend(obj){
 			sb._('</div>');
 		sb._('</div>');	
 		var content = jQuery(sb.result());
-		jQuery(content).find('select[name="individuals_id"][value="'+object.individuals_id+'"]').attr('selected', 'selected');
+		jQuery(content).find('select[name="individuals_id"] option[value="'+object.individuals_id+'"]').attr('selected', 'selected');
 		setSelectOption(content, object.permission);
 		jQuery(content).find('.jmb-famous-family-backend-content-keepers-add').click(function(){
 			var st = host.stringBuffer();

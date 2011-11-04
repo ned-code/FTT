@@ -6,17 +6,18 @@ class ParserList{
             $this->core=$core;
             $this->db = & JFactory::getDBO();
         }
- public function parse($tmpfname){
+ public function parse($tmpfname,$mode='standart'){
     $host = new Host('joomla');  
     $sxe = simplexml_load_file($tmpfname);
     $data = new Parser;   
+    $tree_id=$this->getMergeTreeId();     
    foreach($sxe->xpath('//person') as $item ){
         $name = explode(" ", $item->name->first);
         $nick = null;
         foreach($item->attribute as $attr){
             if ($attr['type']=='Nickname') {$nick = $attr['value'];}            
         }
-        $id = $this->new_individual($item->gender, $name[0], $name[1], $item->name->last, $nick, $item->name->title, $item->name->last['prefix'], $item->name->suffix);
+        $id = $this->new_individual($item->gender, $name[0], $name[1], $item->name->last, $nick, $item->name->title, $item->name->last['prefix'], $item->name->suffix,$tree_id);
         $data->Individuals[]= $host->gedcom->individuals->get($id);
         $handle=(string)$item['handle'];
         $arr_person[$handle]=$id;
@@ -43,7 +44,7 @@ class ParserList{
 
    foreach($sxe->xpath('//event') as $item){
         $handle = (string)($item['handle']);
-        $key_type = ($arr_event[$handle]!='')?'IND':'FAM';
+        $key_type = (isset($arr_event[$handle])&&$arr_event[$handle]!='')?'IND':'FAM';
         $key = ($key_type=='IND')?$arr_event[$handle]:$arr_event_fam[$handle];   
         $caus = null;
         $agency =null;
@@ -66,9 +67,8 @@ class ParserList{
             $date_type = 'BET';
             $f_date =$this->strToEvDate($item->datespan['start']);
             $t_date =$this->strToEvDate($item->datespan['stop']);     
-        }   
-        $id = $item['id'];
-        $id = $this->new_event($key, $key_type, $item->type, $item->description, $caus, $agency, $date_type, $f_date, $t_date);
+        }        
+        $id = $this->new_event($key, $key_type,substr(strtoupper($item->type),0,4), $item->description, $caus, $agency, $date_type, $f_date, $t_date);
         foreach($sxe->xpath('placeobj') as $place){
             if (((string)$item->place['hlink'])==((string)$place['handle'])) {
                 $this->new_place($id,$place->ptitle,$place->location['street'],$place->location['city'],$place->location['state'],$place->location['postal'],$place->location['country'],$place->location['phone']);
@@ -79,11 +79,12 @@ class ParserList{
    } 
 
  public function convert($gedfname){
-    $tmpfname =tempnam(JPATH_ROOT."/components/com_manager/php/gramps/xml","xml"); 
+    $jpath = $this->core->core->getAbsoluePath(); 
+    $tmpfname =tempnam($jpath."/components/com_manager/php/gramps/xml","xml"); 
     chmod($tmpfname,0777);
-    $gramps = JPATH_ROOT."/components/com_manager/gramps/src/";
-    $script = JPATH_ROOT."/components/com_manager/php/gramps/python/GedToXml.py";
-    $log = JPATH_ROOT."/components/com_manager/php/gramps/log.txt";
+    $gramps = $jpath."/components/com_manager/gramps/src";
+    $script = $jpath."/components/com_manager/php/gramps/python/GedToXml.py";
+    $log = $jpath."/components/com_manager/php/gramps/log.txt";
     $se ="python ".$script." ".$gramps." ".$gedfname." ".$tmpfname."  2>&1 ";
     $cont= $se;
 	$s0 = exec($se, $sa, $sr);
@@ -94,7 +95,7 @@ class ParserList{
     
    return $res;             
  }
- protected function new_individual($gender, $fname, $mname, $lname, $nick, $pref, $spref, $suff){
+ protected function new_individual($gender, $fname, $mname, $lname, $nick, $pref, $spref, $suff,$tree_id){
         $host = new Host('joomla');   
         $person = new Individual();
         $person->FacebookId = 0; 
@@ -106,6 +107,7 @@ class ParserList{
 		$person->Prefix = $pref;
 		$person->SurnamePrefix = $spref;
 		$person->Suffix = $suff;
+        $person->TreeId= $tree_id;
         return $host->gedcom->individuals->save($person);        
     } 
  protected function new_family($husb_id, $wife_id, $type){     
@@ -151,10 +153,77 @@ class ParserList{
         $host = new Host('joomla');
         $str = explode("-",$str);
         $date = new EventDate();
-        $date->Day = $str[2];
-        $date->Month = $str[1];
-        $date->Year = $str[0];
+        $date->Day = isset($str[2])?$str[2]:null;
+        $date->Month = isset($str[1])?$str[1]:null;
+        $date->Year = isset($str[0])?$str[0]:null;
         return $date;       
-   }   
+   }  
+//****************deleting test tree****************
+public function clear($treeId, $individuals, $families){
+		 $host = new Host('joomla');
+        foreach($individuals as $ind){
+			if(!empty($ind))$host->gedcom->individuals->delete($ind['individuals_id']);
+		}
+		foreach($families as $fam){
+			if(!empty($fam))$host->gedcom->families->delete($fam);
+		}
+
+}		
+protected function getFamilies($rows){
+     $host = new Host('joomla');
+		$families = array();
+		foreach($rows as $row){
+			$families[] = $host->gedcom->individuals->getFamilyId($row['individuals_id'], 'FAMS');
+		}
+		return $families;		
+}	
+public function delete($treeId){
+     $host = new Host('joomla');
+		//$treeId = $this->getTestTreeId();     /// $this->host->gedcom->individuals->getTreeIdbyFid($_SESSION['jmb']['fid']);
+        $relatives = $host->gedcom->individuals->getRelatives($treeId);
+		$families = $this->getFamilies($relatives);
+		$this->clear($treeId, $relatives,$families);
+        $this->deleteMergeTree($treeId);
+}
+public function getTestTreeId(){
+ $host = new Host('joomla');
+ $sql=$host->gedcom->sql("SELECT `id` FROM #__mb_tree WHERE `name`='Merge Test Tree'");
+ $this->db->setQuery($sql);
+ $rows = $this->db->loadAssocList();
+ return $rows[0]['id'];  
+}
+//**************************************************    
+//*************updating for multi merge process***********
+public function getMergeTreeId(){
+ $host = new Host('joomla');   
+ $owner_id=8811; //$host->gedcom->individuals->getIdbyFId($_SESSION['jmb']['fid']);
+ $name='merge tree of '.$owner_id; 
+ $sql=$host->gedcom->sql("INSERT INTO #__mb_tree (`name`) values (?)",$name);
+ $this->db->setQuery($sql);
+ $this->db->query();
+ $id= $this->db->insertid();
+ $sql=$host->gedcom->sql("INSERT INTO #__mb_merge_link (`id`,`ind_id`) values (?,?)",$id,$owner_id);
+ $this->db->setQuery($sql);
+ $this->db->query();
+ return $id;    
+}
+public function deleteMergeTree($id){
+ $host = new Host('joomla'); 
+ $sql=$host->gedcom->sql("DELETE FROM #__mb_merge_link WHERE `id`=?",$id);
+ $this->db->setQuery($sql);
+ $this->db->query();
+ $sql=$host->gedcom->sql("DELETE FROM #__mb_tree WHERE `id`=?",$id);
+ $this->db->setQuery($sql);
+ $this->db->query();   
+}
+public function getMergeIds(){           
+ $host = new Host('joomla');   
+ $owner_id=8811; //$host->gedcom->individuals->getIdbyFId($_SESSION['jmb']['fid']);
+ $sql=$host->gedcom->sql("SELECT `id` FROM #__mb_merge_link WHERE `ind_id`=?",$owner_id);
+ $this->db->setQuery($sql);
+ $rows= $this->db->loadAssocList();
+ return $rows;   
+}
+//*********************************************
 }
 ?>

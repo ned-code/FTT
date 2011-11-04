@@ -2,8 +2,8 @@
 # Check to ensure this file is included in Joomla!
 defined('_JEXEC') or die( 'Restricted access' );
 
-require JPATH_ROOT.'/components/com_manager/php/pageManager.php';
-require JPATH_ROOT.'/components/com_manager/php/moduleManager.php';
+//require JPATH_ROOT.'/components/com_manager/php/pageManager.php';
+//require JPATH_ROOT.'/components/com_manager/php/moduleManager.php';
 require JPATH_ROOT.'/components/com_manager/php/host.php';
 
 
@@ -28,7 +28,7 @@ class JMBController extends JController
             ob_clean();
             $host = new Host('joomla');
             echo $host->callMethod(JRequest::getVar('module'),JRequest::getVar('class'),JRequest::getVar('method'),JRequest::getVar('args'));
-            die;
+            exit;
         }
         
         /**
@@ -527,7 +527,7 @@ class JMBController extends JController
         	exit;
         }
         
-        public function jmb($fb){
+        public function jmb(){      	
         	$task = JRequest::getCmd('task');
         	$option = JRequest::getCmd('option');
         	$view = JRequest::getCmd('view');
@@ -543,9 +543,13 @@ class JMBController extends JController
         		$_SESSION['jmb']['invitation'] = true;
         		$_SESSION['jmb']['token'] = $token;
         	}
-
+        	
+        	//include and init facebook class
+        	require_once(JPATH_COMPONENT.DS.'php'.DS.'facebook.php');
+        	$facebook = new Facebook(array('appId'=>JMB_FACEBOOK_APPID,'secret'=>JMB_FACEBOOK_SECRET,'cookie'=>JMB_FACEBOOK_COOKIE));
+        	
         	//check alias var;
-        	$logged = $this->get_logged_user($fb);
+        	$logged = $this->get_logged_user($facebook);
         	$current_alias = $this->get_current_alias();
         	$alias = $this->get_alias($logged, $current_alias);
 

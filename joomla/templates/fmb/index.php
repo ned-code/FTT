@@ -23,22 +23,17 @@ $og_site_name = 'FamilyTree-Top';
 $app                = JFactory::getApplication();
 $base_url = Juri::base();
 
+//facebook api
 $facebook = new Facebook(array('appId'=>$_SESSION['jmb']['facebook_appid'],'secret'=>$_SESSION['jmb']['facebook_secret'],'cookie'=>$_SESSION['jmb']['facebook_cookie']));
-
 $fb_login_url = $facebook->getLoginUrl();
 $fb_user = $facebook->getUser();     
-$fb_access_token = $facebook->getAccessToken();
-if($fb_user){
-	try{
-		$user = ($fb_user)?$facebook->api('/me'):false;
-	} catch (FacebookApiException $e) {
-		$user = false;
-	}
-} else {
+try{
+	$user = $facebook->api('/me');
+} catch (FacebookApiException $e) {
 	$user = false;
 }
 
-$alias = isset($_SESSION['jmb']['alias'])?$_SESSION['jmb']['alias']:'home';
+$alias = isset($_SESSION['jmb']['alias'])?$_SESSION['jmb']['alias']:'myfamily';
 $login_type = isset($_SESSION['jmb']['login_type'])?$_SESSION['jmb']['login_type']:'family_tree';
 $color = '3f48cc';
 switch($alias){
@@ -58,6 +53,7 @@ switch($alias){
 		$color = 'aa6946';
 	break;
 }
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->language; ?>" lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>" >
@@ -96,7 +92,7 @@ switch($alias){
 						<tr>
 							<!-- Title -->
 							<td><div class="jmb_header_logo">&nbsp;</div></td>
-							<?php if($alias=='myfamily'): ?>
+							<?php if(false&&$alias=='myfamily'): ?>
 							<!-- Family Line -->
 							<td>
 								<div class="jmb_header_fam_line_container">

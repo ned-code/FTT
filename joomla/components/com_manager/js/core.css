@@ -58,11 +58,9 @@ html ul.jmbtabs li.active, html ul.jmbtabs li.active a:hover  { /*--Makes sure t
 }
 .jmb-core-overlay {
 	background: url("loading.gif") no-repeat scroll 50% 50% transparent;
-	height: 300px;
-	left: 36%;
 	position: absolute;
-	top: 30%;
-	width: 300px;
+	top:0;
+	left:0;
 }
 
 div.buttons {

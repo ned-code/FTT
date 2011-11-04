@@ -80,6 +80,28 @@ class JMBFamousFamilyBackend {
 		$time = date('Y-m-d H:i:s');
 		$keeper_list = $this->getKeeperList();
 		return json_encode(array('families'=>$rows,'sort_families'=>$result, 'keeper_list'=>$keeper_list, 'time'=>$time));
+	}	
+	
+	public function setFamousIndivid(){
+		$db =& JFactory::getDBO();
+		$individuals_id = $_POST['individuals_id'];
+		$ind = $this->host->gedcom->individuals->get($individuals_id);
+		
+		$tree_name = (($ind->FirstName!=null)?$ind->FirstName:'').' '.(($ind->LastName)?$ind->LastName:'').' Tree';
+		$tree_id = $ind->TreeId;
+		$description = ' ';
+		$permission = 2;
+		
+		//create tree into #__mb_famous_family table;
+		$sql_string = "INSERT INTO #__mb_famous_family (`id`, `name`, `tree_id`, `individuals_id`, `description`, `permission`) VALUES (NULL, ?, ?, ?, ?, ?)";
+		$sql = $this->host->gedcom->sql($sql_string, $tree_name, $tree_id, $ind->Id, $description, $permission);
+		$db->setQuery($sql);
+		$db->query();
+		$famous_family_id = $db->insertid();
+		
+		$relatives =  $this->getRelatives(array('tree_id'=>$tree_id));
+		return json_encode(array('message'=>'Tree has successfully saved.', 'family'=>array('id'=>$famous_family_id, 'name'=>$tree_name, 'tree_id'=>$tree_id, 'individuals_id'=>$ind->Id, 'description'=>$description, 'permission'=>$permission, 'relatives'=>$relatives)));
+		
 	}
 	
 	public function createNewFamousFamily(){
@@ -91,6 +113,12 @@ class JMBFamousFamilyBackend {
 		$gender = $_POST['gender'];
 		$description = (strlen($_POST['description'])!=0)?$_POST['description']:' ';
 		$permission = $_POST['permission'];
+		
+		if(isset($_FILES['upload'])&&$_FILES['upload']['size']!=0){
+			$res = $this->host->gramps->parser->convert($_FILES['upload']['tmp_name']);
+			$_SESSION['jmb']['upload'] = array('individuals'=>$res->Individuals, 'families'=>$res->Families);
+			return json_encode(array('res'=>$res));
+		}
 		
 		if(strlen($tree_name)<=0) return json_encode(array('error'=>'Invalid tree name.'));
 		if(strlen($first_name)<=0) return json_encode(array('error'=>'Invalid FirstName.'));
@@ -119,7 +147,9 @@ class JMBFamousFamilyBackend {
 		$db->query();
 		$famous_family_id = $db->insertid();
 		
-		return json_encode(array('message'=>'Tree has successfully saved.', 'family'=>array('id'=>$famous_family_id, 'name'=>$tree_name, 'tree_id'=>$tree_id, 'individuals_id'=>$ind->Id, 'description'=>$description, 'permission'=>$permission)));	
+		$rel = array('id'=>$ind->Id, 'first_name'=>$ind->FirstName, 'middle_name'=>$ind->MidleName, 'last_name'=>$ind->LastName);
+		
+		return json_encode(array('message'=>'Tree has successfully saved.', 'family'=>array('id'=>$famous_family_id, 'name'=>$tree_name, 'tree_id'=>$tree_id, 'individuals_id'=>$ind->Id, 'description'=>$description, 'permission'=>$permission,'relatives'=>array($rel))));	
 	}
 
 	public function save($id){
