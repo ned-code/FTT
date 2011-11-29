@@ -317,9 +317,9 @@ class Host {
 		return $result;
 	}
 	
-	public function getTreeLib($treeId){	
-		$families = $this->gedcom->families->getFamilies($treeId);
-		$childs = $this->gedcom->families->getChilds($treeId);
+	public function getTreeLib($tree_id){	
+		$families = $this->gedcom->families->getFamilies($tree_id);
+		$childs = $this->gedcom->families->getChilds($tree_id);
 		$lib = array();
 		$lib['families']['gid'] = $this->convert2($families, array('husb','wife'));
 		$lib['families']['fid'] = $this->convert($families, 'id');

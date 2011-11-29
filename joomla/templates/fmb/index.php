@@ -8,6 +8,10 @@
  */
 // No direct access.
 defined('_JEXEC') or die;
+define("JMB_FACEBOOK_APPID", "184962764872486");
+define("JMB_FACEBOOK_SECRET", "6b69574c9ddd50ce2661b3053cd4dc02");
+define("JMB_FACEBOOK_URL",  'http://www.familytreetop.com/');
+define("JMB_FACEBOOK_COOKIE",  true);
 
 // facebook params
 $fb_app_id = '100001614066938';
@@ -24,7 +28,9 @@ $app                = JFactory::getApplication();
 $base_url = Juri::base();
 
 //facebook api
-$facebook = new Facebook(array('appId'=>$_SESSION['jmb']['facebook_appid'],'secret'=>$_SESSION['jmb']['facebook_secret'],'cookie'=>$_SESSION['jmb']['facebook_cookie']));
+//$facebook = new Facebook(array('appId'=>$_SESSION['jmb']['facebook_appid'],'secret'=>$_SESSION['jmb']['facebook_secret'],'cookie'=>$_SESSION['jmb']['facebook_cookie']));
+$facebook = new Facebook(array('appId'=>JMB_FACEBOOK_APPID,'secret'=>JMB_FACEBOOK_SECRET,'cookie'=>JMB_FACEBOOK_COOKIE));
+
 $fb_login_url = $facebook->getLoginUrl();
 $fb_user = $facebook->getUser();     
 try{

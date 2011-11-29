@@ -5,12 +5,6 @@ define("JMB_FACEBOOK_APPID", "184962764872486");
 define("JMB_FACEBOOK_SECRET", "6b69574c9ddd50ce2661b3053cd4dc02");
 define("JMB_FACEBOOK_URL",  'http://www.familytreetop.com/');
 define("JMB_FACEBOOK_COOKIE",  true);
-
-if(!isset($_SESSION['jmb']['facebook_appid'])){
-	$_SESSION['jmb']['facebook_appid'] = JMB_FACEBOOK_APPID;
-	$_SESSION['jmb']['facebook_secret'] = JMB_FACEBOOK_SECRET;
-	$_SESSION['jmb']['facebook_cookie'] = JMB_FACEBOOK_COOKIE;
-}
 	
 # Require the com_content helper library
 require_once(JPATH_COMPONENT.DS.'controller.php'); 

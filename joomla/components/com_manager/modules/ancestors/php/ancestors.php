@@ -85,7 +85,8 @@ class JMBAncestors {
 	public function get($indKey){
 		$this->ownerId  = $_SESSION['jmb']['gid'];
 		$tree = $_SESSION['jmb']['tree'];
-		$lib = $_SESSION['jmb']['lib'];
+		//$lib = $_SESSION['jmb']['lib'];
+		$lib = $this->host->getTreeLib($_SESSION['jmb']['tid']);
 		$fmbUser = $this->host->getUserInfo($this->ownerId);
 		$user = ($indKey=='null')?$fmbUser['indiv']:$this->host->gedcom->individuals->get($indKey);
 		$path = JURI::root(true); 

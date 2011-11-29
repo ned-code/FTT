@@ -158,7 +158,7 @@ JMBThisMonthObject.prototype = {
 				self._setMessage(view, 'howToDo.html','#jmb-this-month-birth', ['<div class="message">',howdo[0],'<font color="#b6bad9">',howdo[1],'</font></div>'].join(''));
 			}
 		} else {
-			var howdo = self.json.language['HOWDO'].replace('%%',self.json.languagelanguage['BIRTHDAYS']+' ').split('.');	
+			var howdo = self.json.language['HOWDO'].replace('%%',self.json.language['BIRTHDAYS']+' ').split('.');	
 			self._setMessage(view, 'howToDo.html','#jmb-this-month-birth', ['<div class="message">',howdo[0],'<font color="#b6bad9">',howdo[1],'</font></div>'].join(''));
 		}
 	},
@@ -191,7 +191,7 @@ JMBThisMonthObject.prototype = {
 		var view = jQuery('.jmb-this-month-body').find('#jmb-this-month-marr table');
 		var events = json.events;
 		var sb = host.stringBuffer();
-		if(events.m&&events.m.length!=0){
+		if(events.m!=null&&events.m.length!=0){
 			var m = events.m;
 			jQuery(m).each(function(i,e){
 				var key, sircar, spouse, event, append;
@@ -261,7 +261,7 @@ JMBThisMonthObject.prototype = {
 		jQuery(self.table).find('.jmb-this-month-body').append(table);
 		//set documents
 		self._setHEAD(json);
-		if(json.events.b.length!=0||json.events.m.length!=0||json.events.m.length!=0){
+		if(json.events.b.length!=0||json.events.d.length!=0||json.events.m!=null){
 			if(json.settings.event.birthdays == 'true') self._setBIRTH(table, json);
 			if(json.settings.event.deaths == 'true') self._setDEATH(table, json);
 			if(json.settings.event.anniversaries == 'true') self._setMARR(table,  json);

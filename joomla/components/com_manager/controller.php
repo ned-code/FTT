@@ -28,7 +28,7 @@ class JMBController extends JController
             ob_clean();
             $host = new Host('joomla');
             echo $host->callMethod(JRequest::getVar('module'),JRequest::getVar('class'),JRequest::getVar('method'),JRequest::getVar('args'));
-            exit;
+            die;
         }
         
         /**
@@ -580,9 +580,8 @@ class JMBController extends JController
 						$_SESSION['jmb']['permission'] = $link['type'];
 						$_SESSION['jmb']['login_type'] = 'family_tree';
 						$_SESSION['jmb']['config'] = $host->getConfig();
-						$_SESSION['jmb']['tree'] = $host->getTree($_SESSION['jmb']['gid'], $_SESSION['jmb']['tid'], $_SESSION['jmb']['permission']);
-						$_SESSION['jmb']['lib'] = $host->getTreeLib($_SESSION['jmb']['tid']);
-						$this->update_login_time($link['gid']);
+						$_SESSION['jmb']['tree'] = $host->getTree($link['gid'], $link['tid'], $link['type']);
+						$this->update_login_time($link['gid']);						
 					}
         			break;
         		}

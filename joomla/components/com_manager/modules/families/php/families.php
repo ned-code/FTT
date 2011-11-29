@@ -146,7 +146,8 @@ class JMBFamilies {
 	public function getFamilies(){
 		$this->ownerId = $_SESSION['jmb']['gid'];
 		$tree = $_SESSION['jmb']['tree'];
-		$lib = $_SESSION['jmb']['lib'];
+		//$lib = $_SESSION['jmb']['lib'];
+		$lib = $this->host->getTreeLib($_SESSION['jmb']['tid']);
 		$fmbUser = $this->host->getUserInfo($this->ownerId);
 		$colors = $this->getColors();
 		$path = JURI::root(true);

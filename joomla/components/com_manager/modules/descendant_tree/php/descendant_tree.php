@@ -190,7 +190,8 @@ class JMBDescendantTree {
 	
 	public function getTree($r_type){
 		$tree = $_SESSION['jmb']['tree'];
-		$lib = $_SESSION['jmb']['lib'];
+		//$lib = $_SESSION['jmb']['lib'];
+		$lib = $this->host->getTreeLib($_SESSION['jmb']['tid']);
 		$parentTree = $this->getDescendantsCount($r_type, $lib, $tree);
 		$key = $this->getDefaultKey($parentTree, $r_type);
 		$lang = $this->host->getLangList('descendant_tree');

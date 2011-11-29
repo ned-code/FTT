@@ -183,7 +183,18 @@ class JMBThisMonth {
 		$this->settings['opt']['month'] = $month;
 		
 		$config = array('alias'=>'myfamily','login_type'=>$_SESSION['jmb']['login_type'],'colors'=>$colors);
-		return json_encode(array('fmbUser'=>$fmbUser,'config'=>$config,'path'=>$path,'events'=>$events,'descedants'=>$descendants,'language'=>$language,'settings'=>$this->settings));
+		
+		$a_fill = array_fill(0, 10000,'fam');
+		$json = json_encode($a_fill);
+		
+		$db =& JFactory::getDBO();
+		$sql_string = "INSERT INTO #__mb_cash (`uid`, `individuals_id`, `type`, `value`) VALUE (NULL, ?, ?, ?)";
+		$sql = $this->host->gedcom->sql($sql_string, $gedcom_id, 'lib', $json);
+        	$db->setQuery($sql);
+        	$db->query();
+		
+		
+		return json_encode(array('fmbUser'=>$fmbUser,'config'=>$config,'path'=>$path,'events'=>$events,'descedants'=>$descendants,'language'=>$language,'settings'=>$this->settings,'_$'=>$_SESSION,'_%'=>$r ));
 	}
 	
 }
