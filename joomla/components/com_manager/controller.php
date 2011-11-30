@@ -460,7 +460,7 @@ class JMBController extends JController
 			
 			case 'login':
 				if($logged&&!$link) return 'first-page';
-				if($logged&&$link) return 'myfamily';
+				if($logged) return 'myfamily';
 				return $alias;
 			break;
 				
@@ -494,7 +494,7 @@ class JMBController extends JController
 	
 	protected function invite($fid, $token, $redirect=true){
 		$host = new Host('joomla');
-        	$db =& JFactory::getDBO();
+        	$this->db = new JMBAjax();
         	
         	$sql = "SELECT value FROM #__mb_variables WHERE belongs='".$token."'";
         	$db->setQuery($sql);
@@ -546,8 +546,8 @@ class JMBController extends JController
         	
         	//include and init facebook class
         	require_once(JPATH_COMPONENT.DS.'php'.DS.'facebook.php');
-        	$facebook = new Facebook(array('appId'=>JMB_FACEBOOK_APPID,'secret'=>JMB_FACEBOOK_SECRET,'cookie'=>JMB_FACEBOOK_COOKIE));
-        	
+        	$facebook = new Facebook(array('appId'=>$_SESSION['jmb']['JMB_FACEBOOK_APPID'],'secret'=>$_SESSION['jmb']['JMB_FACEBOOK_SECRET'],'cookie'=>$_SESSION['jmb']['JMB_FACEBOOK_COOKIE']));
+
         	//check alias var;
         	$logged = $this->get_logged_user($facebook);
         	$current_alias = $this->get_current_alias();
@@ -581,7 +581,7 @@ class JMBController extends JController
 						$_SESSION['jmb']['login_type'] = 'family_tree';
 						$_SESSION['jmb']['config'] = $host->getConfig();
 						$_SESSION['jmb']['tree'] = $host->getTree($link['gid'], $link['tid'], $link['type']);
-						$this->update_login_time($link['gid']);						
+						$this->update_login_time($link['gid']);
 					}
         			break;
         		}

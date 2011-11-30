@@ -1,41 +1,37 @@
 <?php
 class ConflictsList {
       public $core;
-
+      public $db;
      function __construct(&$core){
        	 require_once 'class.conflict.php';
        	 $this->core=$core;
-       	 $this->db = & JFactory::getDBO();
+       	 $this->db = new JMBAjax();
      }
     
     public function get($id){
       if($id==null){ return null; }        	
-      $sql = $this->core->sql("SELECT * FROM #__mb_conflicts WHERE `id`=? ",$id);
-      $this->db->setQuery($sql);
+      $this->db->setQuery("SELECT * FROM #__mb_conflicts WHERE `id`=? ",$id);
       $rows = $this->db->loadAssocList();
       $conflict = $this->setConflictData($rows[0]);
       return $conflict;  
     }
     public function save($conflict, $key, $key_type='IND'){
-      $sqlString = "INSERT INTO #__mb_conflicts (`id`,`conflict_target`,`method`,`property`,`value`,";
+      $sqlString = "INSERT INTO #__mb_conflicts (`id`,`merge_id`,`conflict_target`,`method`,`property`,`value`,";
       $sqlString .= ($key_type=="IND")?"`individuals_id`":"`families_id`";
-      $sqlString .= ") VALUES (NULL, ?, ?, ?, ?, ?)";
-      $sql = $this->core->sql($sqlString, $conflict->ConflictTarget, $conflict->Method, $conflict->Property, $conflict->Value, $key);
-      $this->db->setQuery($sql);
+      $sqlString .= ") VALUES (NULL,?, ?, ?, ?, ?, ?)";
+      $this->db->setQuery($sqlString,$conflict->MergeId, $conflict->ConflictTarget, $conflict->Method, $conflict->Property, $conflict->Value, $key);
       $this->db->query();
       $id = $this->db->insertid();
       return $id;
     }
     public function update($conflict){
-      $sqlString = "UPDATE #__mb_conflicts SET `conflict_target`=?, `method`=?, `property`=?, `value`=? WHERE `id`=?";
-      $sql = $this->core->sql($sqlString, $conflict->ConflictTarget, $conflict->Method, $conflict->Property, $conflict->Value, $conflict->Id);
-      $this->db->setQuery($sql);
+      $sqlString = "UPDATE #__mb_conflicts SET `merge_id`=?,`individuals_id`=?, `families_id`=?, `conflict_target`=?, `method`=?, `property`=?, `value`=? WHERE `id`=?";
+      $this->db->setQuery($sqlString,$conflict->MergeId, $conflict->IndId,$conflict->FamId,$conflict->ConflictTarget, $conflict->Method, $conflict->Property, $conflict->Value, $conflict->Id);
       $this->db->query();  
     }
     public function getIndividualConflicts($id){
       $sqlString = "SELECT * FROM #__mb_conflicts WHERE `individuals_id`=?";
-      $sql = $this->core->sql($sqlString,$id);
-      $this->db->setQuery($sql);
+      $this->db->setQuery($sqlString,$id);
       $rows = $this->db->loadAssocList();
       if($rows == null) {return false;}
       $conflicts = array();
@@ -47,8 +43,7 @@ class ConflictsList {
     
     public function getFamilyConflicts($id){
       $sqlString = "SELECT * FROM #__mb_conflicts WHERE `families_id`=?";
-      $sql = $this->core->sql($sqlString,$id);
-      $this->db->setQuery($sql);
+      $this->db->setQuery($sqlString,$id);
       $rows = $this->db->loadAssocList();
       if($rows == null) {return false;}
       $conflicts = array();
@@ -60,6 +55,9 @@ class ConflictsList {
     public function setConflictData($row){
         $conflict = new Conflict();
         $conflict->Id = $row['id'];
+        $conflict->MergeId = $row['merge_id'];
+        $conflict->IndId= $row['individuals_id'];
+        $conflict->FamId= $row['families_id'];
         $conflict->ConflictTarget = $row['conflict_target'];
         $conflict->Method = $row['method'];
         $conflict->Property = $row['property'];
@@ -163,6 +161,39 @@ class ConflictsList {
        }
       return array("table"=>$table,"field"=>$field,"id"=>$id,"key_field"=>$key_field);    
     }
+//*********************** for undo******************88
+public function getAllConflicts(){
+   $host = new Host('joomla');
+ $merge_id=$host->gramps->merge->getPersMergeId();
+  $sqlString = "SELECT * FROM #__mb_conflicts WHERE `merge_id`=?";
+      $this->db->setQuery($sqlString,$merge_id);
+      $rows = $this->db->loadAssocList();
+      if($rows == null) {return false;}
+      $conflicts = array();
+      foreach($rows as $row){
+        $conflicts[] = $this->setConflictData($row);
+      }
+      return $conflicts;    
+} 
+public function deleteAllConflicts(){
+    $host = new Host('joomla');
+ $merge_id=$host->gramps->merge->getPersMergeId();  
+  $this->db->setQuery("DELETE * FROM #__mb_conflicts `merge_id`=?",$merge_id);
+  $this->db->query();  
+}
+public function updateValue($conflict){
+  $owner_id=($conflict->IndId!=null)?($conflict->IndId):($conflict->FamId);  
+  $coord = $this->getPropCoord($conflict->Property,$owner_id);
+  $this->db->setQuery('SELECT '.$coord['field'].'as value FROM '.$coord['table'].' WHERE '.$coord['key_field'].'=?',$coord['id']);
+  $rows = $this->db->loadAssocList();
+
+  $this->db->setQuery('UPDATE '.$coord['table'].' SET '.$coord['field'].'=? WHERE '.$coord['key_field'].'=? ',$conflict->Value,$coord['id']);
+  $this->db->query();
+  $conflict->Value=$rows[0]['value'];
+  $conflict->Method='redo';   
+  $this->update($conflict);   
+}
+//******************************************************   
 }
 
 

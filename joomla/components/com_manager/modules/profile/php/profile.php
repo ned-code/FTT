@@ -379,7 +379,7 @@ class JMBProfile {
 	*/
 	public function getUserInfo(){
 		$data = $this->host->getUserInfo($_SESSION['jmb']['gid']);
-		$path = JURI::root(true); 
+		$path = ""; 
 		return json_encode(array('data'=>$data,'path'=>$path));
 	}
 	/**

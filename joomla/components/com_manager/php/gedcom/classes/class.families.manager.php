@@ -5,12 +5,11 @@ class FamiliesList{
 	function  __construct($core) {
 		require_once 'class.family.php';
 		$this->core = $core;
-		$this->db = & JFactory::getDBO();
+		$this->db = new JMBAjax();
         }
         public function get($id, $lite=false){
         	if($id==NULL) { return null; }
-        	$sql = $this->core->sql('SELECT id,husb,wife FROM #__mb_families WHERE id=?',$id);
-        	$this->db->setQuery($sql);         
+        	$this->db->setQuery('SELECT id,husb,wife FROM #__mb_families WHERE id=?',$id);         
         	$rows = $this->db->loadAssocList();
         	if($rows == null) { return false; }
                 return $this->setData($rows[0]['husb'] ,$rows[0], $lite);
@@ -30,8 +29,7 @@ class FamiliesList{
 			}
                 }
 		$sqlString = "INSERT INTO #__mb_families (`id`, `husb`, `wife`,`type`) VALUES (NULL, ?, ?, ?)";
-		$sql = $this->core->sql($sqlString, $husb, $wife, $family->Type);
-		$this->db->setQuery($sql);    
+		$this->db->setQuery($sqlString, $husb, $wife, $family->Type);    
         	$this->db->query();
         	return $this->db->insertid();
         }
@@ -51,15 +49,13 @@ class FamiliesList{
 			}
                 }
 		$sqlString = "UPDATE #__mb_families SET `husb`=?,`wife`=?,`type`=?,`change`=NOW() WHERE `id`=?";
-		$sql = $this->core->sql($sqlString, $husb, $wife,$family->Type,$family->Id);
-		$this->db->setQuery($sql);    
+		$this->db->setQuery($sqlString, $husb, $wife,$family->Type,$family->Id);    
         	$this->db->query();
         	return true;
         }
         public function delete($id){
         	if($id==NULL){ return false; }
-        	$sql = $this->core->sql('DELETE FROM #__mb_families WHERE id=?',$id);
-        	$this->db->setQuery($sql);    
+        	$this->db->setQuery('DELETE FROM #__mb_families WHERE id=?',$id);    
         	$this->db->query();
         	return true;
         }
@@ -93,22 +89,19 @@ class FamiliesList{
         public function addChild($fId, $id, $fRel=null, $mRel=null){
         	if($fId==null||$id==null) { return false; }
         	$sqlString = "INSERT INTO #__mb_childrens (`fid`, `gid`, `frel`, `mrel`) VALUES (?,?,?,?)";
-        	$sql = $this->core->sql($sqlString, $fId, $id, $fRel, $mRel);
-		$this->db->setQuery($sql);    
+		$this->db->setQuery($sqlString, $fId, $id, $fRel, $mRel);    
         	$this->db->query();
         }
         public function deleteChild($id){
            if ($id==null) {return false;}
            $pers=$this->core->individuals->get($id);
-           $sql=$this->core->sql("DELETE FROM #__mb_childrens WHERE `gid`=?",$id);
-           $this->db->setQuery($sql);    
+           $this->db->setQuery("DELETE FROM #__mb_childrens WHERE `gid`=?",$id);    
        	   $this->db->query();
            $this->core->individuals->delete($id);    
         }
         public function getPersonFamilies($indKey, $lite=false){
         	if($indKey==null){ return null; }
-        	$sql = $this->core->sql('SELECT id, husb, wife, type FROM #__mb_families WHERE husb=? OR wife=?', $indKey, $indKey);
-        	$this->db->setQuery($sql);         
+        	$this->db->setQuery('SELECT id, husb, wife, type FROM #__mb_families WHERE husb=? OR wife=?', $indKey, $indKey);         
         	$rows = $this->db->loadAssocList();
         	$families = array();
         	foreach($rows as $row){        		
@@ -124,8 +117,7 @@ class FamiliesList{
         		LEFT JOIN #__mb_dates as dates ON dates.events_id = events.id
         		WHERE fid=?
         		ORDER BY  dates.f_year DESC";
-        	$sql = $this->core->sql($sqlString, $fId);
-        	$this->db->setQuery($sql);         
+        	$this->db->setQuery($sqlString, $fId);         
         	$rows = $this->db->loadAssocList();
         	if($rows!=null){
         		return $rows;
@@ -146,13 +138,12 @@ class FamiliesList{
         		$sqlString .= ((int)$sort[0]<0)?"AND date.f_year < ?":"AND date.f_year > ?";
         		$sqlString .= " GROUP BY family.id";
         		$sqlString .= ' ORDER BY  date.f_day ASC';
-        		$sql = $this->core->sql($sqlString, $treeId, $type, $month, $sort[1]);
+        		$this->db->setQuery($sqlString, $treeId, $type, $month, $sort[1]); 
         	} else {
         		$sqlString .= " GROUP BY family.id";
         		$sqlString .= ' ORDER BY  date.f_day ASC';
-        		$sql = $this->core->sql($sqlString, $treeId, $type, $month);
-        	}
-        	$this->db->setQuery($sql);         
+        		$this->db->setQuery($sqlString, $treeId, $type, $month); 
+        	}     
         	$rows = $this->db->loadAssocList();
         	return $rows;
         }
@@ -162,8 +153,7 @@ class FamiliesList{
 				LEFT JOIN #__mb_tree_links as links ON links.individuals_id = family.husb OR links.individuals_id = family.wife
 				WHERE links.tree_id = ?
 				GROUP BY family.id";
-		$sql = $this->core->sql($sqlString, $treeId);
-		$this->db->setQuery($sql);
+		$this->db->setQuery($sqlString, $treeId);
 		return $this->db->loadAssocList();
         }
         
@@ -171,8 +161,7 @@ class FamiliesList{
         	$sqlString = "SELECT childs.fid, childs.gid FROM #__mb_childrens as childs
 				LEFT JOIN #__mb_tree_links as links ON links.individuals_id = childs.gid
 				WHERE links.tree_id = ?";
-		$sql = $this->core->sql($sqlString, $treeId);
-		$this->db->setQuery($sql);
+		$this->db->setQuery($sqlString, $treeId);
 		return $this->db->loadAssocList();
         }
         

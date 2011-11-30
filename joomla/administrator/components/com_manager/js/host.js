@@ -4,17 +4,21 @@ function Host(){
 
 Host.prototype = {
         callMethod:function(module, classname, method, args, callback){
-            var url = 'index.php?option=com_manager&task=callMethod';
+            var url = storage.baseurl+storage.url+'php/ajax.php';
+            var key = storage.request.key();
             var xnr = jQuery.ajax({
             	url: url,
 		type: "POST",
 		data: 'module='+module+'&class='+classname+'&method='+method+'&args='+args,
 		dataType: "html",
 		complete : function (req, err) {
-			callback(req);
+			storage.request.del(key);
+			if(req.responseText.length!=0){
+				callback(req);
+			}
 		}
 	    });
-	    if(storage&&storage.request) storage.request.add(xnr);
+	    storage.request.add(xnr, key);
 	    return xnr;
 	},
         getModuleParametersStructure:function(module, callback){
@@ -70,24 +74,6 @@ Host.prototype = {
         	window.open(url, name, 'width=300,height=200,left=100,top=100,toolbar=0,location=0,direction=0,menubar=0,scrollbars=0,resizable=0,status=0,fullscreen=0');
         },
         stringBuffer:function(){
-            	/*
-        	return (function(){
-        		var string = Array();
-        		return {
-        			_:function(str){
-        				string.push(str);
-        				return this;
-        			},
-        			clear:function(){
-        				string = Array();
-        				return this;
-        			},
-        			result:function(){
-        				return string.join("");
-        			}
-        		}
-        	}).call(this);	
-        	*/
         	return (function(){
         		var b = "";
         		this.length = 0;

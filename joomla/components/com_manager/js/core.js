@@ -32,22 +32,33 @@ storage.fb.appId = "184962764872486";
 storage.fb.status = true;
 storage.fb.cookie = true;
 storage.fb.xfbml = true;
+
 //ajax request
 storage.request = {};
-storage.request.length = 0;
-storage.request.add = function(object){
-	var r = storage.request;
-	r[r.length] = object;
-	r.length++;
+storage.request.pull = {};
+storage.request.pull.length = 0;
+storage.request.key = function(){
+	return (new Date()).valueOf();
+}
+storage.request.add = function(object, key){
+	storage.request.pull[key] = object;
+	storage.request.pull.length++;
+}
+storage.request.del = function(key){
+	delete storage.request.pull[key];
+	storage.request.pull.length--;
 }
 storage.request.cleaner = function(){
-	var r = storage.request;
-	for(var i=0;i<r.length;i++){
-		r[i].abort();
-		delete r[i];
+	var pull = storage.request.pull;
+	if(pull.length!=0){
+		for(var key in pull){
+			pull[key].abort();
+			delete pull[key];
+		}
 	}
-	r.length = 0;
+	storage.request.pull.length = 0;
 }
+
 //header
 storage.header = {};
 storage.header.activeButton = null;
@@ -390,6 +401,8 @@ core.renderTabs = function(parent, pages){
 	jQuery("ul.jmbtabs li").click(function() {
 		if(jQuery(this).hasClass('active')) return false;
 		core.modulesPullObject.init(div);
+		
+		storage.request.cleaner();
 
 		storage.tabs.activeTab = this;
 		storage.tabs.click();
@@ -412,6 +425,7 @@ core.load = function(pages){
 	//var pages = '1,2,6,8,7,10';
 	jQuery(document.body).ready(function(){
 		host = new Host();
+		storage.baseurl = jQuery('body').attr('_baseurl');
 		storage.login = new JMBLogin(jQuery('#jmb_header_profile_box'));
 		storage.language = new JMBLanguage();
 		storage.topMenuBar.init();

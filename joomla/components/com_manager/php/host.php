@@ -1,4 +1,5 @@
 <?php
+require_once('class.ajax.php');
 require_once('gedcom/core.gedcom.php');
 require_once('gramps/core.gramps.php');
 //class
@@ -8,14 +9,15 @@ class Host {
 	*/
 	public $gedcom;
         public $modulesPath;
-        public $gramps;    
+        public $gramps;  
+        
 	/**
 	*
 	*/
 	function __construct($type){		
             $this->modulesPath = JPATH_ROOT."/components/com_manager/modules/";
             $this->gedcom = new Gedcom($this);
-            $this->gramps = new Gramps($this);
+            //$this->gramps = new Gramps($this);
 	}
 	
 	/**
@@ -69,11 +71,11 @@ class Host {
         *
         */
         function getAbsoluteRootPath(){
-            return JPATH_BASE;
+            return JPATH_ROOT;
         }
         
         public function getAbsoluePath(){
-        	$jpath_base_explode = explode('/', JPATH_BASE);
+        	$jpath_base_explode = explode('/', JPATH_ROOT);
         	if(end($jpath_base_explode) == 'administrator'){
         		array_pop($jpath_base_explode); 
         	}
@@ -91,9 +93,8 @@ class Host {
         *
         */
         function getModuleName($nameOrId){
-            $db =& JFactory::getDBO();
-            $db->setQuery('SELECT name,id FROM #__mb_modules WHERE
-                       (name = "'.$nameOrId.'" OR id="'.$nameOrId.'")');
+            $db = new JMBAjax();
+            $db->setQuery('SELECT name,id FROM #__mb_modules WHERE (name = "?" OR id="?")', $nameOrId, $nameOrId);
               $rows = $db->loadAssocList();
               if(isset($rows[0]['name']))
                   return ($rows[0]['name']);
@@ -105,9 +106,8 @@ class Host {
         *
         */
         function getModuleId($nameOrId){
-            $db =& JFactory::getDBO();
-            $db->setQuery('SELECT name,id FROM #__mb_modules WHERE
-                       (name = "'.$nameOrId.'" OR id="'.$nameOrId.'")');
+            $db = new JMBAjax();
+            $db->setQuery('SELECT name,id FROM #__mb_modules WHERE (name = "?" OR id="?")', $nameOrId, $nameOrId);
               $rows = $db->loadAssocList();
               if(isset($rows[0]['id']))
                   return ($rows[0]['id']);
@@ -146,11 +146,11 @@ class Host {
             $name = $this->getModuleName($modulename);
             if($name == null)
                 return null;
-            $db =& JFactory::getDBO();
+            $db = new JMBAjax();
             $db->setQuery('SELECT structure, value
                                 FROM #__mb_settings
-                                WHERE module_name = "'.$name.'"
-                         ');
+                                WHERE module_name = "?"
+                         ', $name);
             $rows = $db->loadAssocList();
           
             $values = array();
@@ -160,7 +160,7 @@ class Host {
           
             $db->setQuery('SELECT "title" as name, #__mb_modules.title as value
                                 FROM #__mb_modules
-                                WHERE name = "'.$name.'"');
+                                WHERE name = "?"', $name);
             $title = $db->loadAssocList();
             $ar = array ();
 
@@ -187,7 +187,7 @@ class Host {
         public function getSiteSettings($tab){
             if($tab == 'color'){
         	$sql = "SELECT name, value FROM #__mb_system_settings WHERE type='color'";
-        	$db =& JFactory::getDBO();
+        	$db = new JMBAjax();
         	$db->setQuery($sql);
 		$s_array = $db->loadAssocList();
                 
@@ -211,7 +211,7 @@ class Host {
          *  @params: modulename, properties JSON string
          */
         function saveJsonProperties($modulename, $properties_json){
-            $db =& JFactory::getDBO();
+            $db = new JMBAjax();
             $name = $this->getModuleName($modulename);
             $id = $this->getModuleId($modulename);
             if($name == null)
@@ -281,9 +281,8 @@ class Host {
 	*/
 	
 	public function getLatestUpdates($treeId){
-		$db =& JFactory::getDBO();
-		$sql = $this->gedcom->sql("SELECT * FROM #__mb_updates WHERE tree_id = ?", $treeId);
-		$db->setQuery($sql);
+		$db = new JMBAjax();
+		$db->setQuery("SELECT * FROM #__mb_updates WHERE tree_id = ?", $treeId);
 		return $db->loadAssocList();
 		
 	}
@@ -429,7 +428,7 @@ class Host {
 	}
 	
 	protected function insertsToFamLine($treeId, $ownerId, $objects){
-		$db =& JFactory::getDBO();
+		$db = new JMBAjax();
 		$sql = "INSERT INTO #__mb_family_line (`tid`, `from`, `to`, `type`) VALUES ";
 		foreach($objects as $obj){
 			$types = array_keys(array_count_values($obj['type']));
@@ -635,20 +634,18 @@ class Host {
 	* LANGUAGE
 	*/ 
 	protected function getDefaultLanguage(){
-		$db =& JFactory::getDBO();
+		$db = new JMBAjax();
 		$sql_string = "SELECT lang_id, lang_code, title, published FROM #__mb_language WHERE def='1'";
-		$sql = $this->gedcom->sql($sql_string);
-		$db->setQuery($sql);
+		$db->setQuery($sql_string);
 		$rows = $db->loadAssocList();
 		if($rows==null) return false;
 		return $rows[0];
 	}
 	
 	protected function getLanguage($lang_code){
-		$db =& JFactory::getDBO();
+		$db = new JMBAjax();
 		$sql_string = "SELECT lang_id, lang_code, title, published FROM #__mb_language WHERE lang_code=?";
-		$sql = $this->gedcom->sql($sql_string, $lang_code);
-		$db->setQuery($sql);
+		$db->setQuery($sql_string, $lang_code);
 		$rows = $db->loadAssocList();
 		if($rows==null) return false;
 		return $rows[0];
@@ -658,7 +655,7 @@ class Host {
 		$language = (isset($_SESSION['jmb']['language']))?$this->getLanguage($_SESSION['jmb']['language']):$this->getDefaultLanguage();
 		if(!$language) return false;
 		
-		$module_path = JPATH_BASE.DS.'components'.DS.'com_manager'.DS.'modules'.DS.$module_name;
+		$module_path = JPATH_ROOT.DS.'components'.DS.'com_manager'.DS.'modules'.DS.$module_name;
 		if(is_dir($module_path)){
 			$lang_pack_path = $module_path.DS.'language'.DS.$language['lang_code'].'.'.$module_name.'.ini';
 			$ini_array = parse_ini_file($lang_pack_path);
@@ -673,9 +670,8 @@ class Host {
 	* CONFIG
 	*/
 	public function getConfig(){
-		$db =& JFactory::getDBO();
-		$sql_string = "SELECT uid, name,value, type, priority FROM #__mb_system_settings";
-		$db->setQuery($sql_string);
+		$db = new JMBAjax();
+		$db->setQuery("SELECT uid, name,value, type, priority FROM #__mb_system_settings");
 		$rows = $db->loadAssocList();
 		if($rows == null) return array();
 		$color = array();

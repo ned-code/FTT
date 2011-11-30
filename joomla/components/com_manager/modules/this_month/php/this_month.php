@@ -158,7 +158,7 @@ class JMBThisMonth {
 	* @var $sort get of how sort people(after,before or all)
 	* @return array json data
 	*/
-	public function load($args){
+	public function load($args){		
 		//vars
 		$facebook_id = $_SESSION['jmb']['fid'];
 		$tree_id = $_SESSION['jmb']['tid'];
@@ -174,7 +174,7 @@ class JMBThisMonth {
 		//user info and global settings
 		$fmbUser = $this->host->getUserInfo($gedcom_id);
 		$colors = $this->_getColors();
-		$path = JURI::root(true);
+		$path = "";
 		$language = $this->getLanguage();
 		
 		if($sort != 'false'){ $this->_setSortTypeParams($sort); }
@@ -183,18 +183,8 @@ class JMBThisMonth {
 		$this->settings['opt']['month'] = $month;
 		
 		$config = array('alias'=>'myfamily','login_type'=>$_SESSION['jmb']['login_type'],'colors'=>$colors);
-		
-		$a_fill = array_fill(0, 10000,'fam');
-		$json = json_encode($a_fill);
-		
-		$db =& JFactory::getDBO();
-		$sql_string = "INSERT INTO #__mb_cash (`uid`, `individuals_id`, `type`, `value`) VALUE (NULL, ?, ?, ?)";
-		$sql = $this->host->gedcom->sql($sql_string, $gedcom_id, 'lib', $json);
-        	$db->setQuery($sql);
-        	$db->query();
-		
-		
-		return json_encode(array('fmbUser'=>$fmbUser,'config'=>$config,'path'=>$path,'events'=>$events,'descedants'=>$descendants,'language'=>$language,'settings'=>$this->settings,'_$'=>$_SESSION,'_%'=>$r ));
+
+		return json_encode(array('fmbUser'=>$fmbUser,'config'=>$config,'path'=>$path,'events'=>$events,'descedants'=>$descendants,'language'=>$language,'settings'=>$this->settings));
 	}
 	
 }

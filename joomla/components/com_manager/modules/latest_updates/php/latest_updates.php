@@ -61,7 +61,7 @@ class JMBLatestUpdates {
 				break;
 			}
 		}
-		$path = JURI::root(true);
+		$path = "";
 		$fmbUser = $this->host->getUserInfo($_SESSION['jmb']['gid']);
 		$lang = $this->host->getLangList('latest_updates');
 		$config = array('alias'=>'myfamily','login_type'=>$_SESSION['jmb']['login_type'],'colors'=>$colors);

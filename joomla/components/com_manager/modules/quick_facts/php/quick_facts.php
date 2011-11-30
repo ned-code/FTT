@@ -109,7 +109,7 @@ class JMBQuickFacts {
 		
 		$colors = $this->getColors();
 		$fmbUser = $this->host->getUserInfo($owner_id);
-		$path = JURI::root(true);
+		$path = "";
 		$lang = $this->getLanguage();
 		$config = array('alias'=>'myfamily','login_type'=>$_SESSION['jmb']['login_type'],'colors'=>$colors);
 		return json_encode(array('lang'=>$lang,'count'=>$count,'living'=>$living,'youngest'=>$youngest,'oldest'=>$oldest,'earliest'=>null,'config'=>$config,'fmbUser'=>$fmbUser, 'tree'=>$tree,'path'=>$path));		

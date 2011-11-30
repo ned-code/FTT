@@ -14,7 +14,7 @@ class JMBLogin {
 		$login_type = (isset($_SESSION['jmb']['login_type']))?$_SESSION['jmb']['login_type']:null;
 		$permission = (isset($_SESSION['jmb']['permission']))?$_SESSION['jmb']['permission']:null;
 		
-		$path = JURI::root(true);
+		$path = "";
 		$ind = $this->host->gedcom->individuals->get($gid);
 		$avatar = $this->host->gedcom->media->getAvatarImage($gid);		
 		return json_encode(array('alias'=>$alias,'facebook_id'=>$fid,'gedcom_id'=>$gid,'login_type'=>$login_type,'permission'=>$permission,'tree_id'=>$tid,'individ'=>$ind,'avatar'=>$avatar,'path'=>$path));
@@ -30,7 +30,7 @@ class JMBLogin {
 	public function get(){
 		$ownerId = $_SESSION['jmb']['gid'];
 		$fmbUser = $this->host->getUserInfo($ownerId, $ownerId); 
-		$path = JURI::root(true);
+		$path = "";
 		return json_encode(array('fmbUser'=>$fmbUser,'imgPath'=>$path));
 	}
 }

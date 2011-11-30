@@ -150,7 +150,7 @@ class JMBFamilies {
 		$lib = $this->host->getTreeLib($_SESSION['jmb']['tid']);
 		$fmbUser = $this->host->getUserInfo($this->ownerId);
 		$colors = $this->getColors();
-		$path = JURI::root(true);
+		$path = "";
 		$this->setFamiliesObject($this->ownerId, $tree, $lib);
 		return json_encode(array('fmbUser'=>$fmbUser,'path'=>$path,'colors'=>$colors,'individs'=>$this->individs,'objects'=>$this->objects));
 	}

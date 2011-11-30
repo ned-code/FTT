@@ -61,7 +61,7 @@ class JMBRecentVisitors {
 		$result = $this->sortByPermission($this->host->gedcom->individuals->getLastLoginMembers($_SESSION['jmb']['tid']));
 		$time = date('Y-m-d H:i:s');
 		$objects = $this->get_objects($result);
-		$path = JURI::root(true);
+		$path = "";
 		$fmbUser = $this->host->getUserInfo($_SESSION['jmb']['gid']);
 		$lang = $this->host->getLangList('recent_visitors');
 		$colors = $this->getColors();	
