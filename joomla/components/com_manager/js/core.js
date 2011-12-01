@@ -52,8 +52,10 @@ storage.request.cleaner = function(){
 	var pull = storage.request.pull;
 	if(pull.length!=0){
 		for(var key in pull){
-			pull[key].abort();
-			delete pull[key];
+			if(key!='length'){
+				pull[key].abort();
+				delete pull[key];
+			}
 		}
 	}
 	storage.request.pull.length = 0;
@@ -268,7 +270,9 @@ core.modulesPullFunc = function(){
 		clear:function(){
 			var pull = this;
 			for(var key in core.modulesPull){
-				pull.unset(key);
+				if(key!='length'){
+					pull.unset(key);
+				}
 			}
 			modal.off();
 		},
@@ -386,7 +390,7 @@ core.renderTabs = function(parent, pages){
     	
     	jQuery(pages).each(function(i,page){
     		var div = jQuery('<div id="'+(new Date()).valueOf()+'">'+page.page_info.title+'</div>');
-    		var li = jQuery('<li id="'+i+'"><a href="jmbtab_'+i+'"></a></li>');
+    		var li = jQuery('<li id="'+i+'"><a href="jmbtab_'+i+'" onclick="return false;"></a></li>');
     		jQuery(li).find('a').append(div);
     		jQuery(ul).append(li);
     	});

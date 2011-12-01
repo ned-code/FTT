@@ -1,6 +1,6 @@
 <?php
 class JMBAjax {
-	protected $config;
+	public $config;
 	protected $dbprefix;
 	protected $link;
 	protected $db_selected;

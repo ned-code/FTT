@@ -23,11 +23,10 @@ $mainframe->initialise();
 
 require_once(JPATH_ROOT.DS.'components'.DS.'com_manager'.DS.'php'.DS.'host.php');
 
-session_start();
-
 $host = new Host('Joomla');
 $ajax = new JMBAjax();
 $link = $ajax->connect();
+session_start();
 echo $ajax->callMethod($host);
 $ajax->close($link);
 exit;

@@ -1,5 +1,4 @@
 function JMBAncestorsObject(obj){
-	obj = jQuery('#'+obj);	
 	var cont = jQuery('<div id="jit" class="jmb-ancestors-jit"></div>');
 	jQuery(obj).append(cont);
 	
@@ -20,12 +19,14 @@ function JMBAncestorsObject(obj){
 		var req = jQuery.parseJSON(res.responseText);
 		self.response = req;
 		self.json = req.json;
-		self.imgPath = req.path;
+		//self.imgPath = req.path;
+		self.imgPath = storage.baseurl;
 		self.fmbUser = req.fmbUser;
 		self.ancestors = req.ancestors;
 		self.objects = req.objects;
 		self.first = req.json.id;
 		self.send(self.json);
+		storage.core.modulesPullObject.unset('JMBAncestorsObject');
 	});
 	jQuery(home_button).click(function(){
 		if(self.json==null||!self.st) return false;
@@ -37,7 +38,7 @@ function JMBAncestorsObject(obj){
 		self.profile.cleaner();
 	})
 	
-	storage.header.famLine.hide();
+	//storage.header.famLine.hide();
 }
 
 JMBAncestorsObject.prototype = {
@@ -280,7 +281,7 @@ JMBAncestorsObject.prototype = {
 		//emulate a click on the root node.
 		st.select(st.root);
 		//set fam line
-		this.famLine(json);
+		//this.famLine(json);
 		return st;
 	}, 
 	famLine:function(json){
@@ -307,7 +308,7 @@ JMBAncestorsObject.prototype = {
 		//emulate a click on the root node.
 		st.select(st.root);
 		//set fam line
-		this.famLine(json);
+		//this.famLine(json);
 	}
 }
 

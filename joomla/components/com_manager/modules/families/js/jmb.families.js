@@ -104,7 +104,8 @@ JMBFamiliesObject.prototype = {
 		else if(fId != '0'){
 			return sb.clear()._('<img class="jmb-families-avatar view" src="index.php?option=com_manager&task=getResizeImage&fid=')._(fId)._('&w=')._(x)._('&h=')._(y)._('">').result();
 		}
-		var defImgPath = sb.clear()._(this.json.path)._("/components/com_manager/modules/families/css/")._(defImg).result();
+		//var defImgPath = sb.clear()._(this.json.path)._("/components/com_manager/modules/families/css/")._(defImg).result();
+		var defImgPath = sb.clear()._(storage.baseurl)._("/components/com_manager/modules/families/css/")._(defImg).result();
 		return sb.clear()._('<img class="jmb-families-avatar view" height="')._(y)._('px" width="')._(x)._('px" src="')._(defImgPath)._('">').result()
 	},
 	_createDivParent:function(obj, arrow, k){
@@ -126,7 +127,8 @@ JMBFamiliesObject.prototype = {
 			sb._('<div id="')._(person.Id)._('-view" type="imgContainer" class="jmb-families-parent-img">')._(this._getAvatar(data, 'parent', 1));
 				sb._('<div id="')._(person.Id)._('-edit" class="jmb-families-edit-button parent">&nbsp;</div>');
 				if(person.FacebookId != '0'){
-					imgPath = self.json.path+"/components/com_manager/modules/families/css/facebook.gif";
+					//imgPath = self.json.path+"/components/com_manager/modules/families/css/facebook.gif";
+					imgPath = storage.baseurl+"/components/com_manager/modules/families/css/facebook.gif";
 					sb._('<div class="jmb-families-fb-icon parent" id="')._(person.FacebookId)._('"><img src="')._(imgPath)._('" width="18x" height="18px"></div>');
 				}
 			sb._('</div>');
@@ -152,7 +154,8 @@ JMBFamiliesObject.prototype = {
 			sb._('<div id="')._(person.Id)._('-view" type="imgContainer" class="jmb-families-parent-img">')._(this._getAvatar(data, 'parent', 1));
 				sb._('<div id="')._(person.Id)._('-edit" class="jmb-families-edit-button parent">&nbsp;</div>');
 				if(person.FacebookId != '0'){
-					var imgPath = self.json.path+"/components/com_manager/modules/families/css/facebook.gif";
+					//var imgPath = self.json.path+"/components/com_manager/modules/families/css/facebook.gif";
+					var imgPath = storage.baseurl+"/components/com_manager/modules/families/css/facebook.gif";
 					sb._('<div class="jmb-families-fb-icon parent" id="')._(person.FacebookId)._('"><img src="')._(imgPath)._('" width="18px" height="18px"></div>');
 				}
 			sb._('</div>');
@@ -174,7 +177,8 @@ JMBFamiliesObject.prototype = {
 				editButtonClass = (k!=1)?'jmb-families-edit-button child small':'jmb-families-edit-button child';
 				sb._('<div id="')._(person.Id)._('-edit" class="')._(editButtonClass)._('">&nbsp;</div>');
 				if(person.FacebookId != '0'){
-					imgPath = self.json.path+"/components/com_manager/modules/families/css/facebook.gif";
+					//imgPath = self.json.path+"/components/com_manager/modules/families/css/facebook.gif";
+					imgPath = storage.baseurl+"/components/com_manager/modules/families/css/facebook.gif";
 					sb._('<div class="jmb-families-fb-icon child" id="')._(person.FacebookId)._('"><img src="')._(imgPath)._('" width="18px" height="18px"></div>');
 				}
 			sb._('</div>')
@@ -311,7 +315,8 @@ JMBFamiliesObject.prototype = {
 				id: jQuery(e).parent().attr('id'),
 				type: 'mini',
 				data: self.json.individs[jQuery(e).parent().attr('id').split('-')[0]],
-				imgPath:self.json.path,
+				//imgPath:self.json.path,
+				imgPath:storage.baseurl,
 				fmbUser:self.json.fmbUser,
 				eventType:'click',
 				parent:document.body
@@ -324,7 +329,8 @@ JMBFamiliesObject.prototype = {
 				id:jQuery(e).attr('id'),
 				type: 'tooltip',
 				data: self.json.individs[jQuery(e).attr('id').split('-')[0]],
-				imgPath:self.json.path,
+				//imgPath:self.json.path,
+				imgPath:storage.baseurl,
 				fmbUser:self.json.fmbUser,
 				eventType:'click',
 				parent:document.body,
