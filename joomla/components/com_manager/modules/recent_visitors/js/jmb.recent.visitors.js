@@ -90,7 +90,10 @@ function JMBRecentVisitorsObject(obj){
 		var id = jQuery(storage.header.activeButton).attr('id');
 		parent.ajax('get_recent_visitors', id, function(res){
 			var json = jQuery.parseJSON(res.responseText);
-			if(json.objects.length == 0) return;
+			if(json.objects.length == 0){
+				storage.core.modulesPullObject.unset('JMBRecentVisitorsObject');
+				return jQuery(obj).remove();
+			}
 			parent.lang = json.lang;
 			content = createBody(json);
 			var count = (json.response.length<=15)?json.response.length:15;

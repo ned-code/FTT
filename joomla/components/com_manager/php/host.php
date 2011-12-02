@@ -371,13 +371,16 @@ class Host {
 	
 	public function getParentTree($indKey, $lib, $level){
 		$parents = $this->getParents($indKey, $lib);
-		if($parents==null) return false;
 		$result = array();
-		if($parents['husb']){
-			$result['father'] = $this->getParentTree($parents['husb'], $lib, $level + 1);
-		}
-		if($parents['wife']){
-			$result['mother'] = $this->getParentTree($parents['wife'], $lib, $level + 1);
+		if($parents!=null){
+			if($parents['husb']){
+				$result['father'] = $this->getParentTree($parents['husb'], $lib, $level + 1);
+			}
+			if($parents['wife']){
+				$result['mother'] = $this->getParentTree($parents['wife'], $lib, $level + 1);
+			}
+		} else {
+			$result = false;
 		}
 		$count = $this->getDescendantsCount($indKey, $lib);
 		return array('key'=>$indKey,'descendants'=>$count, 'level'=>$level, 'parents'=>$result);		

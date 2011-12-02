@@ -598,6 +598,7 @@ class JMBController extends JController
         		case 'home':
         		break;
         	}
+        	exit;
         }
         
         public function timeout(){

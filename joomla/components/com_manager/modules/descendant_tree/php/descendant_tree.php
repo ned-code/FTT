@@ -190,9 +190,8 @@ class JMBDescendantTree {
 	
 	public function getTree($r_type){
 		$tree = $_SESSION['jmb']['tree'];
-		//$lib = $_SESSION['jmb']['lib'];
 		$lib = $this->host->getTreeLib($_SESSION['jmb']['tid']);
-		$parentTree = $this->getDescendantsCount($r_type, $lib, $tree);
+		$parentTree = $this->host->getParentTree($_SESSION['jmb']['gid'], $lib, 0);
 		$key = $this->getDefaultKey($parentTree, $r_type);
 		$lang = $this->host->getLangList('descendant_tree');
 		ob_clean();
@@ -244,45 +243,6 @@ class JMBDescendantTree {
 		}
 		return $parentTree['key'];
 	}
-		
-	/*
-	protected function sortByPermission($response, $tree, &$result){
-		if($response&&isset($tree[$response['key']])){
-			$result = array('key'=>$response['key'], 'descendants'=>$response['descendants'], 'level'=>$response['level'], 'parents'=>array('father'=>false,'mother'=>false));
-			if($response['parents']&&isset($response['parents']['father'])&&isset($tree[$response['parents']['father']['key']])){
-				$this->sortByPermission($response['parents']['father'], $tree, $result['parents']['father']);
-			}
-			if($response['parents']&&isset($response['parents']['mother'])&&isset($tree[$response['parents']['mother']['key']])){
-				$this->sortByPermission($response['parents']['mother'], $tree, $result['parents']['mother']);
-			}
-		}
-	}
-	*/
-	
-	protected function sort($response){
-		return $response;
-	}
-	
-	protected function getDescendantsCount($render_type, $lib, $tree){
-		$owner_id = $_SESSION['jmb']['gid'];
-		$tree_id = $_SESSION['jmb']['tid'];
-		$permission = $_SESSION['jmb']['permission'];
-		
-		$parents = $this->host->getParents($owner_id, $lib);		
-		$parent = ($render_type=='father')?$parents['husb']:$parents['wife'];
-		if($parent!=null){
-		 	$response = $this->host->getParentTree($owner_id, $lib, 0);
-		 	if($permission=='OWNER') return $response;
-			/*
-		 	$result = array();
-			$this->sortByPermission($response, $tree, $result);
-			return $result;
-			*/
-			return $this->sort($response);
-		}
-		return false;
-	}
-	
 	
 	public function getPersonInfoJSON($indKey){
 		$fmbUser = $this->host->getUserInfo($_SESSION['jmb']['gid']);

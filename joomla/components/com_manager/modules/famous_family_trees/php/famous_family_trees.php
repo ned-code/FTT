@@ -40,10 +40,8 @@ class JMBFamousFamily {
 		 $result = array();
 		 foreach($families as $family){
 		 	 $ind = $this->host->gedcom->individuals->get($family['individuals_id']);
-		 	 $count = $this->host->gedcom->individuals->getIndivCount($family['tree_id']);
-		 	 $count = sizeof($count);
-		 	 $death = $this->host->gedcom->individuals->getDeathIndivCount($family['tree_id']);
-		 	 $living = $count - sizeof($death);
+		 	 $count = $this->host->gedcom->individuals->getIndividualsCount($family['tree_id']);
+		 	 $living = $this->host->gedcom->individuals->getLivingIndividualsCount($family['tree_id']);
 		 	 $avatar = $this->host->gedcom->media->getAvatarImage($family['individuals_id']);
 		 	 $result[] = array('id'=>$family['id'],'name'=>$family['name'],'tree_id'=>$family['tree_id'],'individ'=>$ind,'descendants'=>$count,'living'=>$living,'avatar'=>$avatar);
 		 }
@@ -67,6 +65,8 @@ class JMBFamousFamily {
 		$_SESSION['jmb']['permission'] = $permission;
 		$_SESSION['jmb']['alias'] = 'myfamily';
 		$_SESSION['jmb']['login_type'] = 'famous_family';
+		$_SESSION['jmb']['config'] = $this->host->getConfig();
+		$_SESSION['jmb']['tree'] = $this->host->getTree($args->Id, $args->TreeId, $permission);		
 	}
 }
 ?>

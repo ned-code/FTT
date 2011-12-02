@@ -57,7 +57,6 @@ class JMBRecentVisitors {
 	}
 	
 	public function get_recent_visitors($render_type){
-		ob_clean();
 		$result = $this->sortByPermission($this->host->gedcom->individuals->getLastLoginMembers($_SESSION['jmb']['tid']));
 		$time = date('Y-m-d H:i:s');
 		$objects = $this->get_objects($result);

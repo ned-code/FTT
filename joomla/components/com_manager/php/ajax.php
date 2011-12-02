@@ -12,21 +12,19 @@ foreach($path as $key => $value){
 	if($value == 'components') break;
 	$base_url_array[] = $value;
 }
-define('JPATH_ROOT', implode(DS, $base_url_array));
-define('JPATH_BASE', JPATH_ROOT);
+define('JPATH_BASE', implode(DS, $base_url_array));
 
-require_once ( JPATH_ROOT .DS.'includes'.DS.'defines.php' );
-require_once ( JPATH_ROOT .DS.'includes'.DS.'framework.php' );
+require_once ( JPATH_BASE .DS.'includes'.DS.'defines.php' );
+require_once ( JPATH_BASE .DS.'includes'.DS.'framework.php' );
 
 $mainframe =& JFactory::getApplication('site');
 $mainframe->initialise();
 
-require_once(JPATH_ROOT.DS.'components'.DS.'com_manager'.DS.'php'.DS.'host.php');
+require_once(JPATH_BASE.DS.'components'.DS.'com_manager'.DS.'php'.DS.'host.php');
 
 $host = new Host('Joomla');
 $ajax = new JMBAjax();
 $link = $ajax->connect();
-session_start();
 echo $ajax->callMethod($host);
 $ajax->close($link);
 exit;

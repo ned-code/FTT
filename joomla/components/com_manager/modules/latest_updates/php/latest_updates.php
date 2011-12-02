@@ -37,11 +37,11 @@ class JMBLatestUpdates {
 	}
 	
 	public function get(){
-		ob_clean();
 		$treeId = $_SESSION['jmb']['tid'];
 		$ownerId = $_SESSION['jmb']['gid'];
 		$colors = $this->getColors();	
 		$updates = $this->host->getLatestUpdates($treeId);
+		if($updates==null) return json_encode(array('error'=>'Latest Update in null.'));
 		foreach($updates as $upd){
 			switch($upd['type']){
 				case 'new_photo':

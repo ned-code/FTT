@@ -1,6 +1,5 @@
 function JMBHomeObject(obj){
 	var module = this;
-	obj = jQuery('#'+obj);
 	
 	var ajax = function(id){
 		jQuery.ajax({
