@@ -1,13 +1,9 @@
 <?php
 class JMBRelation {
-	protected $core;
-	
-	public function __construct(&$core){
-		$this->core = $core;
-	}
+	protected $individuals;
 	
 	protected function get_parents($id){
-		$parents = $this->core->individuals->getParents($id);
+		$parents = $this->individuals->getParents($id);
 		$father = $parents['fatherID'];
 		$mother = $parents['motherID'];
 		return array($father,$mother);
@@ -27,7 +23,7 @@ class JMBRelation {
 	}
 	
 	protected function get_gender($id){
-		$ind = $this->core->individuals->get($id);
+		$ind = $this->individuals->get($id);
 		return $ind->Gender;
 	}
 	
@@ -94,12 +90,16 @@ class JMBRelation {
 		return $count.' '.($count == 1 || $count == -1 ? $singular : $plural);
 	}
 
+	public function __construct(&$individuals){
+		$this->individuals = $individuals;
+	}
+
 	public function get_relation($a_id, $b_id){
 		if($a_id == $b_id){
 			return 'self';
 		}
 		
-		$spouses = $this->core->individuals->getSpouses($a_id);
+		$spouses = $this->individuals->getSpouses($a_id);
 		if($spouses!=null){
 			foreach($spouses as $spouse){
 				if($spouse==$b_id){

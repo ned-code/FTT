@@ -1,17 +1,16 @@
 <?php
 class IndividualsList{
 	protected $db;
-	protected $core;
+	protected $events;
 	public $relation;
 	
 	/**
 	*
 	*/
-	function  __construct($core) {
+	function  __construct(&$events) {
 		require_once 'class.individual.php';
-		$this->core=$core;
+		$this->events=$events;
 		$this->db = new JMBAjax();		
-		$this->relation = new JMBRelation($core);
         }
         
         public function create(){
@@ -45,8 +44,8 @@ class IndividualsList{
 		$pers->Permission = $rows[0]['permission'];
 		
 		if(!$lite){
-			$pers->Birth = $this->core->events->getPersonEventsByType($pers->Id,'BIRT');
-			$pers->Death = $this->core->events->getPersonEventsByType($pers->Id,'DEAT');
+			$pers->Birth = $this->events->getPersonEventsByType($pers->Id,'BIRT');
+			$pers->Death = $this->events->getPersonEventsByType($pers->Id,'DEAT');
 		}
 		return $pers;
         }

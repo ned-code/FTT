@@ -1,10 +1,7 @@
 <?php
-class LocationsList{
-	public $core;
-        
-	function  __construct($core) {
+class LocationsList{       
+	function  __construct() {
 		require_once 'class.location.php';
-		$this->core = $core;
 		$this->db = new JMBAjax();
         }
         

@@ -1,7 +1,9 @@
 <?php
 require_once('class.ajax.php');
+require_once('class.usertree.php');
 require_once('gedcom/core.gedcom.php');
 require_once('gramps/core.gramps.php');
+
 //class
 class Host {
 	/**
@@ -11,13 +13,16 @@ class Host {
         public $modulesPath;
         public $gramps;  
         
+        
 	/**
 	*
 	*/
 	function __construct($type){		
             $this->modulesPath = JPATH_ROOT."/components/com_manager/modules/";
-            $this->gedcom = new Gedcom($this);
+            $this->gedcom = new Gedcom();
             //$this->gramps = new Gramps($this);
+            
+            //$this->usertree = new JMBUserTree($this->gedcom);
 	}
 	
 	/**
@@ -255,7 +260,7 @@ class Host {
 		if($indKey==null){ return null; }
 		$indiv = $this->gedcom->individuals->get($indKey);
 		if($indRel){
-			$indiv->Relation = $this->gedcom->individuals->relation->get_relation($indKey, $indRel);
+			$indiv->Relation = $this->gedcom->relation->get_relation($indKey, $indRel);
 		}
 		$events = $this->gedcom->events->getAllEventsByIndKey($indKey);
 		$parents = $this->gedcom->individuals->getParents($indKey);

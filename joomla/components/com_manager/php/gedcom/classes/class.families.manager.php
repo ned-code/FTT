@@ -1,10 +1,12 @@
 <?php
 class FamiliesList{
-	public $core;
+	protected $individuals;
+	protected $events;
 
-	function  __construct($core) {
+	function  __construct(&$individuals, &$events) {
 		require_once 'class.family.php';
-		$this->core = $core;
+		$this->individuals = $individuals;
+		$this->events = $events;
 		$this->db = new JMBAjax();
         }
         public function get($id, $lite=false){
@@ -60,13 +62,13 @@ class FamiliesList{
         	return true;
         }
         public function setData($id, $row, $lite){
-        	$sircar = $this->core->individuals->get($id, $lite);
+        	$sircar = $this->individuals->get($id, $lite);
         	if($id == $row['husb']){
-        		$spouse = $this->core->individuals->get($row['wife'], $lite);
+        		$spouse = $this->individuals->get($row['wife'], $lite);
         	} else {
-        		$spouse = $this->core->individuals->get($row['husb'], $lite);
+        		$spouse = $this->individuals->get($row['husb'], $lite);
         	}
-        	$events = (!$lite)?$this->core->events->getFamilyEvents($row['id']):null;
+        	$events = (!$lite)?$this->events->getFamilyEvents($row['id']):null;
         	$marriage = null;
                 $divorce = null;
                 if($events != null){
@@ -94,10 +96,10 @@ class FamiliesList{
         }
         public function deleteChild($id){
            if ($id==null) {return false;}
-           $pers=$this->core->individuals->get($id);
+           $pers=$this->individuals->get($id);
            $this->db->setQuery("DELETE FROM #__mb_childrens WHERE `gid`=?",$id);    
        	   $this->db->query();
-           $this->core->individuals->delete($id);    
+           $this->individuals->delete($id);    
         }
         public function getPersonFamilies($indKey, $lite=false){
         	if($indKey==null){ return null; }

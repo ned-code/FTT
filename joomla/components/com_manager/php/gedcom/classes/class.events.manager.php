@@ -1,10 +1,10 @@
 <?php
 class EventsList{
-        public $core;
+        public $locations;
 
-        function __construct($core){
+        function __construct(&$locations){
         	 require_once 'class.event.php';
-        	 $this->core=$core;
+        	 $this->locations=$locations;
         	 $this->db = new JMBAjax();
         }
         public function get($id){
@@ -28,7 +28,7 @@ class EventsList{
         	$sqlString = "INSERT INTO #__mb_dates (`events_id`, `type`, `f_day`, `f_month`, `f_year`, `t_day`, `t_month`, `t_year`) VALUES (?,?,?,?,?,?,?,?)";
         	$this->db->setQuery($sqlString, $lastId, $event->DateType, ($event->From!=null)?$event->From->Day:$event->From, ($event->From!=null)?$event->From->Month:$event->From, ($event->From!=null)?$event->From->Year:$event->From, ($event->To!=null)?$event->To->Day:$event->To, ($event->To!=null)?$event->To->Month:$event->To, ($event->To!=null)?$event->To->Year:$event->To);    
         	$this->db->query();
-        	$this->core->locations->save($lastId, $event->Place);
+        	$this->locations->save($lastId, $event->Place);
         	return $lastId;
         }
         public function update($event, $type='IND'){
@@ -40,9 +40,9 @@ class EventsList{
         	$this->db->setQuery($sqlString, $event->DateType, $event->From->Day, $event->From->Month, $event->From->Year, $event->To->Day, $event->To->Month, $event->To->Year, $event->Id);    
         	$this->db->query();
         	if(empty($event->Place->Id)){
-        		$this->core->locations->save($event->Id, $event->Place);
+        		$this->locations->save($event->Id, $event->Place);
         	} else {
-        		$this->core->locations->update($event->Id, $event->Place);
+        		$this->locations->update($event->Id, $event->Place);
         	}
         	return true;
         }
@@ -67,7 +67,7 @@ class EventsList{
 		$event->ResAgency = $row['res_agency']; 
 		$event->Notes = NULL;
 		$event->Sources = NULL;
-		$event->Place = $this->core->locations->getPlaceByEventId($row['event_id']);
+		$event->Place = $this->locations->getPlaceByEventId($row['event_id']);
 		$event->IndKey = (isset($row['individuals_id']))?$row['individuals_id']:null;
 		$event->FamKey = (isset($row['families_id']))?$row['families_id']:null;
 		return $event;

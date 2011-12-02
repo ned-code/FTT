@@ -1,9 +1,7 @@
 <?php
 class MediaList{
-        public $core;
-        function  __construct($core) {
+        function  __construct() {
             require_once 'class.media.php';
-            $this->core=$core;
             $this->db = new JMBAjax();
         }
         function getAvatarImage($id){
