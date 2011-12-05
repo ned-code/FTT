@@ -133,5 +133,29 @@ class EventsList{
         	}
         	return $events;
         }
+        public function getIndividualsEventsList($tree_id){
+        	$sql_string = "SELECT events.id as event_id, events.individuals_id as gedcom_id,events.type, events.name,
+        				dates.type as date_type, dates.f_day,dates.f_month, dates.f_month, dates.f_year, dates.t_day, dates.t_month, dates.t_year  
+        			FROM #__mb_events as events
+        			LEFT JOIN #__mb_dates as dates ON dates.events_id = events.id
+        			LEFT JOIN #__mb_tree_links as links ON links.individuals_id = events.individuals_id
+        			WHERE links.tree_id = ?";
+        	$this->db->setQuery($sql_string, $tree_id);
+        	$rows = $this->db->loadAssocList('gedcom_id');
+        	return $rows;
+        }
+        public function getFamiliesEvenetsList($tree_id){
+        	$sql_string = "SELECT events.id as event_id, links.individuals_id as gedcom_id, events.families_id as family_id, events.type, events.name, 
+        				dates.type as date_type, dates.f_day,dates.f_month, dates.f_month, 
+        				dates.f_year, dates.t_day, dates.t_month, dates.t_year
+        			FROM jos_mb_events as events
+        			LEFT JOIN jos_mb_dates as dates ON dates.events_id = events.id
+        			LEFT JOIN jos_mb_families as family ON family.id = events.families_id
+        			LEFT JOIN jos_mb_tree_links as links ON links.individuals_id = family.wife OR links.individuals_id = family.husb
+        			WHERE links.tree_id = ?";
+        	$this->db->setQuery($sql_string, $tree_id);
+        	$rows = $this->db->loadAssocList('family_id');
+        	return $rows;
+        }
 }
 ?>

@@ -216,6 +216,18 @@ class IndividualsList{
         	$rows = $this->db->loadAssocList();
         	return $rows;
         }
+        public function getIndividualsList($tree_id){
+        	$sqlString = "SELECT ind.id as gedcom_id, ind.fid as facebook_id, ind.sex as gender, 
+        				name.first_name, name.middle_name, name.last_name, name.nick, 
+        				links.type as permission, rel.relation FROM #__mb_individuals as ind 
+				LEFT JOIN #__mb_names as name ON name.gid = ind.id
+				LEFT JOIN #__mb_tree_links as links ON links.individuals_id = ind.id
+				LEFT JOIN #__mb_relations as rel ON rel.to = ind.id AND rel.tree_id = links.tree_id 
+				WHERE links.tree_id = ?";
+		$this->db->setQuery($sqlString, $tree_id);
+		$rows = $this->db->loadAssocList('gedcom_id');
+        	return $rows;  	
+        }
 
         /*
         * THIS MONTH

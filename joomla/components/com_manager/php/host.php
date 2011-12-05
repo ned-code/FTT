@@ -12,6 +12,7 @@ class Host {
 	public $gedcom;
         public $modulesPath;
         public $gramps;  
+        public $usertree;
         
         
 	/**
@@ -21,8 +22,7 @@ class Host {
             $this->modulesPath = JPATH_ROOT."/components/com_manager/modules/";
             $this->gedcom = new Gedcom();
             //$this->gramps = new Gramps($this);
-            
-            //$this->usertree = new JMBUserTree($this->gedcom);
+            $this->usertree = new JMBUserTree($this->gedcom);
 	}
 	
 	/**

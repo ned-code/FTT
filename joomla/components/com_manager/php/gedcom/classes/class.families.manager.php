@@ -1,14 +1,28 @@
 <?php
 class FamiliesList{
+	/**
+	* gedcom individuals object
+	*/
 	protected $individuals;
+	/**
+	* gedcom events object
+	*/
 	protected $events;
 
+	/**
+	* FamiliesList constructor
+	* $individuals gedcom object
+	* $events gedcom object 
+	*/
 	function  __construct(&$individuals, &$events) {
 		require_once 'class.family.php';
 		$this->individuals = $individuals;
 		$this->events = $events;
 		$this->db = new JMBAjax();
         }
+        /**
+        *
+        */
         public function get($id, $lite=false){
         	if($id==NULL) { return null; }
         	$this->db->setQuery('SELECT id,husb,wife FROM #__mb_families WHERE id=?',$id);         
@@ -16,6 +30,10 @@ class FamiliesList{
         	if($rows == null) { return false; }
                 return $this->setData($rows[0]['husb'] ,$rows[0], $lite);
         }
+        /**
+        * save family into db
+        * $family gedcom family object
+        */
         public function save($family){
         	if(($family->Sircar != null && $family->Sircar->Id)||($family->Spouse != null && $family->Spouse->Id)){
         		$id1 = ($family->Sircar != null && $family->Sircar->Id) ? $family->Sircar->Id : '';
@@ -35,6 +53,10 @@ class FamiliesList{
         	$this->db->query();
         	return $this->db->insertid();
         }
+        /**
+        * update exists family in db
+        * $family gedcom family object
+        */
         public function update($family){
         	if($family->Id==NULL) { return false; }
         	if(($family->Sircar != null && $family->Sircar->Id)||($family->Spouse != null && $family->Spouse->Id)){
@@ -55,12 +77,19 @@ class FamiliesList{
         	$this->db->query();
         	return true;
         }
+        /**
+        * delete family from db
+        * $id uid family record in db
+        */
         public function delete($id){
         	if($id==NULL){ return false; }
         	$this->db->setQuery('DELETE FROM #__mb_families WHERE id=?',$id);    
         	$this->db->query();
         	return true;
         }
+        /**
+        *	
+        */
         public function setData($id, $row, $lite){
         	$sircar = $this->individuals->get($id, $lite);
         	if($id == $row['husb']){
@@ -88,12 +117,18 @@ class FamiliesList{
                 $family->Events = $events;
                 return $family;
         }
+        /**
+        *
+        */
         public function addChild($fId, $id, $fRel=null, $mRel=null){
         	if($fId==null||$id==null) { return false; }
         	$sqlString = "INSERT INTO #__mb_childrens (`fid`, `gid`, `frel`, `mrel`) VALUES (?,?,?,?)";
 		$this->db->setQuery($sqlString, $fId, $id, $fRel, $mRel);    
         	$this->db->query();
         }
+        /**
+        *
+        */
         public function deleteChild($id){
            if ($id==null) {return false;}
            $pers=$this->individuals->get($id);
@@ -101,6 +136,9 @@ class FamiliesList{
        	   $this->db->query();
            $this->individuals->delete($id);    
         }
+        /**
+        *
+        */
         public function getPersonFamilies($indKey, $lite=false){
         	if($indKey==null){ return null; }
         	$this->db->setQuery('SELECT id, husb, wife, type FROM #__mb_families WHERE husb=? OR wife=?', $indKey, $indKey);         
@@ -112,6 +150,9 @@ class FamiliesList{
         	return $families;
         	
         }
+        /**
+        *
+        */
         public function getFamilyChildrenIds($fId){
         	if($fId==null) { return null; }
         	$sqlString = "SELECT DISTINCT childrens.gid FROM #__mb_childrens as childrens
@@ -127,6 +168,9 @@ class FamiliesList{
         		return array();
         	}
         }
+        /**
+        *
+        */
         public function getByEvent($treeId, $type, $month, $sort=false){
         	$sqlString = "SELECT family.id, family.husb, family.wife 
 				FROM #__mb_families AS family
@@ -149,7 +193,9 @@ class FamiliesList{
         	$rows = $this->db->loadAssocList();
         	return $rows;
         }
-        
+        /**
+        *
+        */
         public function getFamilies($treeId){
 		$sqlString = "SELECT family.id, family.husb, family.wife FROM #__mb_families as family
 				LEFT JOIN #__mb_tree_links as links ON links.individuals_id = family.husb OR links.individuals_id = family.wife
@@ -158,7 +204,9 @@ class FamiliesList{
 		$this->db->setQuery($sqlString, $treeId);
 		return $this->db->loadAssocList();
         }
-        
+        /**
+        *
+        */
         public function getChilds($treeId){
         	$sqlString = "SELECT childs.fid, childs.gid FROM #__mb_childrens as childs
 				LEFT JOIN #__mb_tree_links as links ON links.individuals_id = childs.gid
@@ -166,7 +214,27 @@ class FamiliesList{
 		$this->db->setQuery($sqlString, $treeId);
 		return $this->db->loadAssocList();
         }
-        
+        /**
+        *
+        */
+        public function getFamiliesList($treeId){
+		$sqlString = "SELECT family.id as family_id, family.husb, family.wife FROM #__mb_families as family
+				LEFT JOIN #__mb_tree_links as links ON links.individuals_id = family.husb OR links.individuals_id = family.wife
+				WHERE links.tree_id = ?
+				GROUP BY family.id";
+		$this->db->setQuery($sqlString, $treeId);
+		return $this->db->loadAssocList(array('husb','wife','F'=>'family_id'),'I');
+        }
+        /**
+        *
+        */
+        public function getChildrensList($treeId){
+        	$sqlString = "SELECT childs.fid as family_id, childs.gid as gedcom_id, childs.frel as father_relation, childs.mrel as mother_relation FROM #__mb_childrens as childs
+				LEFT JOIN #__mb_tree_links as links ON links.individuals_id = childs.gid
+				WHERE links.tree_id = ?";
+		$this->db->setQuery($sqlString, $treeId);
+		return $this->db->loadAssocList(array('I'=>'gedcom_id','F'=>'family_id'));
+        }
         
 }    
 ?>

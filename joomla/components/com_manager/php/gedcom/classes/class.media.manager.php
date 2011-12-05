@@ -114,5 +114,20 @@ class MediaList{
             }            
             $this->clearLinks($id);
         }
+        public function getMediaList($tree_id){
+        	$sql_string = "SELECT media.id as media_id, media.form, media.title, 
+        				media.path, m_links.type, m_links.gid as gedcom_id
+				FROM #__mb_medias as media
+				LEFT JOIN #__mb_media_link as m_links ON m_links.mid = media.id
+				LEFT JOIN #__mb_tree_links as t_links ON t_links.individuals_id = m_links.gid
+				WHERE t_links.tree_id = ?";
+		$this->db->setQuery($sql_string, $tree_id);
+        	$rows = $this->db->loadAssocList('gedcom_id');
+        	return $rows;	
+        }
+        
+        
+        
+        
     }
 ?>

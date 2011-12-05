@@ -1,6 +1,6 @@
 <?php
 class JMBAjax {
-	public $config;
+	protected $config;
 	protected $dbprefix;
 	protected $link;
 	protected $db_selected;
@@ -54,12 +54,25 @@ class JMBAjax {
         public function query(){
         	mysql_query($this->query);
         }
-        public function loadAssocList(){
+        public function loadAssocList($sort=false, $common_prefix=''){
         	$result = mysql_query($this->query);
         	if($result){
 			$assoc_array = array();
 			while($row = mysql_fetch_assoc($result)){
-				$assoc_array[] = $row;
+				if(!$sort){
+					$assoc_array[] = $row;
+				} else {
+					if(is_array($sort)){
+						foreach($sort as $k => $s){
+							$prefix = (!is_string($k))?$common_prefix:$k;
+							$assoc_array[$prefix.$row[$s]][] = $row;	
+							
+						}
+					} else {
+						$assoc_array[$row[$sort]][] = $row;
+					}
+				}
+				
 			}
 			return $assoc_array;
 		}
