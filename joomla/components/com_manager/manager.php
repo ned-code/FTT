@@ -48,9 +48,20 @@ $document->addScript('administrator/components/com_manager/codebase/dhtmlxtabbar
 $document->addScript('administrator/components/com_manager/js/jquery.min.js');
 $document->addScript('administrator/components/com_manager/js/jquery-ui.min.js');
 $document->addScript('administrator/components/com_manager/js/jquery.form.js');
+
+//core part
 $document->addScript('components/com_manager/js/core.js?111');
 $document->addScript('administrator/components/com_manager/js/MyBranchesManager.js?111');
 $document->addScript('administrator/components/com_manager/js/host.js?111');
+
+//include library
+$document->addStyleSheet('components/com_manager/js/prettyPhoto.css?111');
+$document->addStyleSheet('components/com_manager/js/tipsy.css?111');
+$document->addScript('components/com_manager/js/excanvas.js?111');
+$document->addScript('components/com_manager/js/jit.js?111');
+$document->addScript('components/com_manager/js/jquery.bt.js?111');
+$document->addScript('components/com_manager/js/jquery.prettyPhoto.js?111');
+$document->addScript('components/com_manager/js/jquery.tipsy.js?111');
 	
 //jmb overlay
 $document->addStyleSheet('components/com_manager/modules/overlay/css/jmb.overlay.css?111');
@@ -60,17 +71,17 @@ $document->addScript('components/com_manager/modules/overlay/js/jmb.overlay.js?1
 $document->addStyleSheet('components/com_manager/modules/delete/css/jmb.delete.css?111');
 $document->addScript('components/com_manager/modules/delete/js/jmb.delete.js?111');
 	
+################################################################################
 //profile editor[mini, full, tooltip]
 $document->addStyleSheet('components/com_manager/modules/profile/css/jmb.profile.css?111');
 $document->addStyleSheet('components/com_manager/modules/profile/css/jmb.profile.full.css?111');
 $document->addStyleSheet('components/com_manager/modules/profile/css/jmb.profile.tooltip.css?111');
-$document->addStyleSheet('components/com_manager/modules/profile/css/prettyPhoto.css?111');
-$document->addScript('components/com_manager/modules/profile/js/excanvas.js?111');
-$document->addScript('components/com_manager/modules/profile/js/jquery.bt.js?111');
-$document->addScript('components/com_manager/modules/profile/js/jquery.prettyPhoto.js?111');
 $document->addScript('components/com_manager/modules/profile/js/jmb.profile.js?111');
 $document->addScript('components/com_manager/modules/profile/js/jmb.profile.full.js?111');
 $document->addScript('components/com_manager/modules/profile/js/jmb.profile.tooltip.js?111');
+
+
+###############################################################################
 
 //login\profile in header (login\logout)
 $document->addStyleSheet('components/com_manager/modules/login/css/jmb.login.css?111');
