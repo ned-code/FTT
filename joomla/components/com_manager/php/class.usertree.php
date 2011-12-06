@@ -1,6 +1,7 @@
 <?php
 class JMBUserTree {
 	protected $gedcom;
+	protected $db;
 	
 	protected $_TreeId;
 	protected $_Permission;
@@ -16,6 +17,7 @@ class JMBUserTree {
 	*/
 	public function __construct(&$gedcom){
 		$this->gedcom = $gedcom;
+		$this->db = new JMBAjax();
 	}
 	/**
 	*
@@ -213,10 +215,11 @@ class JMBUserTree {
 					} else {
 						$this->_setUser($family['spouse'], $objects, $level + 1);
 					}
-					foreach($family['childrens'] as $child){
-						$this->_setUser($child['gedcom_id'], $objects, $level);
+					if(!empty($family['childrens'])){
+						foreach($family['childrens'] as $child){
+							$this->_setUser($child['gedcom_id'], $objects, $level);
+						}
 					}
-					
 				}
 			}
 		}
@@ -290,32 +293,79 @@ class JMBUserTree {
 	/**
 	*
 	*/
-	public function getTree($tree_id, $gedcom_id, $permission){
-		//$start = microtime(true);
-		################################################
+	public function get($tree_id, $gedcom_id, $permission){
 		$this->_TreeId = $tree_id;
 		$this->_Permission = $permission;
 		$this->_init();
 		
 		$objects = array();
 		$this->_setUser($gedcom_id, $objects);	
-		$objects['length'] = sizeof($objects);
-		
-		################################################
-		/*
-		$script_work_time = microtime(true) - $start;
-		$obj = array(
-			'_IndividualsList'=>$this->_IndividualsList,
-			'_FamiliesList'=>$this->_FamiliesList,
-			'_ChildrensList'=>$this->_ChildrensList,
-			'_IndividualsEventsList'=>$this->_IndividualsEventsList,
-			'_FamiliesEventsList'=>$this->_FamiliesEventsList,
-			'_LocationsEventsList'=>$this->_LocationsEventsList,
-			'_MediaList'=>$this->_MediaList
-		);
-		return json_encode(array('objects'=>$objects, 'script_work_time'=>$script_work_time, 'this'=>$obj));
-		*/
+
 		return $objects;
+	}	
+	/**
+	*
+	*/
+	public function compress($usertree){
+		return base64_encode( serialize( $usertree ) );
+	}
+	/**
+	*
+	*/
+	public function uncompress($value){
+		return unserialize( base64_decode( $value ) );
+	}
+	/**
+	*
+	*/
+	public function load($tree_id, $gedcom_id){
+		$sql_string = "SELECT value FROM #__mb_cash WHERE tree_id = ? AND individuals_id = ?";
+		$this->db->setQuery($sql_string, $tree_id, $gedcom_id);
+		$rows = $this->db->loadAssocList();
+		return $this->uncompress($rows[0]['value']);
+	}	
+	/**
+	*
+	*/
+	public function save($tree_id, $gedcom_id, $compress_usertree){
+		$sql_string = "INSERT INTO #__mb_cash (`uid`,`tree_id`, `individuals_id`, `type`, `value`, `change`) VALUES (NULL,?,?,?,?, NOW())";
+		$this->db->setQuery($sql_string, $tree_id, $gedcom_id, "usertree", $compress_usertree);
+		$this->db->query();
+	}
+	/**
+	*
+	*/
+	public function update($tree_id, $gedcom_id, $compress_usertree){
+		$sql_string = "UPDATE #__mb_cash SET `value`=?,`change`=NOW() WHERE tree_id = ? AND individuals_id = ?";
+		$this->db->setQuery($sql_string, $compress_usertree, $tree_id, $gedcom_id);
+		$this->db->query();
+	}
+	/**
+	*
+	*/
+	public function delete($tree_id, $gedcom_id){
+		//
+	}
+	/**
+	*
+	*/
+	public function check($tree_id, $gedcom_id){
+		$sql_string = "SELECT uid FROM #__mb_cash WHERE tree_id = ? and individuals_id = ?";
+		$this->db->setQuery($sql_string, $tree_id, $gedcom_id);
+		$rows = $this->db->loadAssocList();
+		return ($rows!=null)?true:false;
+	}
+	/**
+	*
+	*/
+	public function init($tree_id, $gedcom_id, $permission){
+		$usertree = $this->get($tree_id, $gedcom_id, $permission);		
+		$compress_usertree = $this->compress($usertree);
+		if($this->check($tree_id, $gedcom_id)){
+			$this->update($tree_id, $gedcom_id, $compress_usertree);
+		} else {
+			$this->save($tree_id, $gedcom_id, $compress_usertree);
+		}
 	}	
 }
 ?>

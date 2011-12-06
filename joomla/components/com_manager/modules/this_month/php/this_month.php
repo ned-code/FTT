@@ -163,8 +163,7 @@ class JMBThisMonth {
 		$facebook_id = $_SESSION['jmb']['fid'];
 		$tree_id = $_SESSION['jmb']['tid'];
 		$gedcom_id = $_SESSION['jmb']['gid'];
-		
-		
+
 		$args = json_decode($args);
 
 		$month = $args->month;
@@ -184,7 +183,16 @@ class JMBThisMonth {
 		
 		$config = array('alias'=>'myfamily','login_type'=>$_SESSION['jmb']['login_type'],'colors'=>$colors);
 
-		return json_encode(array('fmbUser'=>$fmbUser,'config'=>$config,'path'=>$path,'events'=>$events,'descedants'=>$descendants,'language'=>$language,'settings'=>$this->settings));
+		return json_encode(array(
+				'fmbUser'=>$fmbUser,
+				'config'=>$config,
+				'path'=>$path,
+				'events'=>$events,
+				'descedants'=>$descendants,
+				'language'=>$language,
+				'settings'=>$this->settings
+			)
+		);
 	}
 	
 }
