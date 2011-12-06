@@ -1,0 +1,69 @@
+.jmb-tooltip-view-container{}
+.jmb-tooltip-view-content{
+	background: none repeat scroll 0 0 #F1E4B0;
+	margin: 5px;
+	position: relative;
+	width: 395px;
+}
+.jmb-tooltip-view-info{}
+.jmb-tooltip-view-avatar{
+	width: 100px;
+}
+.jmb-tooltip-view-avatar div{
+	background: none repeat scroll 0 0 white;
+	border: 2px solid #000000;
+	height: 90px;
+	margin-left: 5px;
+	width: 81px;
+}
+.jmb-tooltip-view-info-data{
+	font-family: Calibri,Tahoma;
+	font-size: 12px;
+}
+.jmb-tooltip-view-info-data div {
+	margin: 5px;
+}
+.jmb-tooltip-view-info-data span {
+	color: gray;
+}
+.jmb-tooltip-view-info-data span.text {
+	color: black;
+	font-size: 14px;
+}
+.jmb-tooltip-view-images{
+	background: none repeat scroll 0 0 #F1E4B0;
+	overflow-x: auto;
+    	overflow-y: hidden;
+    	padding-bottom: 5px;
+    	padding-left: 3px;
+    	padding-top: 3px;
+}
+.jmb-tooltip-view-images ul{
+	margin: 0 !important;
+	padding: 3px 0 0 !important;
+}
+.jmb-tooltip-view-images ul li{
+	display: inline !important;
+}
+.jmb-tooltip-view-images img{
+	border: 1px solid #000000;
+	cursor: pointer;
+	margin-left: 3px;
+}
+.jmb-tooltip-view-send{
+	background: none repeat scroll 0 0 white;
+	margin-bottom: 5px;
+    	margin-left: 5px;
+    	margin-right: 5px;
+    	padding: 10px;
+}
+.jmb-tooltip-view-send span{
+	margin-left: 5px;
+}
+.jmb-tooltip-view-icon-email{
+	background: url("../image/email.png") no-repeat scroll 0 0 transparent;
+	cursor: pointer;
+    	height: 31px;
+    	margin-left: 30px;
+    	width: 31px;
+}

@@ -1,7 +1,5 @@
 //globl object storage
 storage = {};
-
-storage.login = {};
 //function
 storage.addEvent = function(pull, func){
 	pull[pull.length] = {};
@@ -32,6 +30,11 @@ storage.fb.appId = "184962764872486";
 storage.fb.status = true;
 storage.fb.cookie = true;
 storage.fb.xfbml = true;
+storage.login = {};
+storage.language = {};
+storage.media = {};
+storage.tooltip = {};
+storage.profile = {};
 
 //ajax request
 storage.request = {};
@@ -66,81 +69,6 @@ storage.header = {};
 storage.header.activeButton = null;
 storage.header.block = false;
 storage.createPull(storage.header);
-/*
-storage.header.famLine = (function(){
-	var self = this;
-	return {
-		click:function(object){
-			jQuery(this.buttons).removeClass('active').removeClass('click');
-			var id = jQuery(object).attr('id');
-			switch(id){
-				case 'mother':
-				case 'father':
-					jQuery(object).addClass('active');
-				break;
-			
-				case 'both':
-					jQuery(this.buttons).addClass('active');
-				break;
-			}
-			jQuery(object).addClass('click');
-			storage.header.activeButton = object;
-		},
-		hide:function(){
-			jQuery(this.obj).hide();
-		},
-		show:function(){
-			jQuery(this.obj).show();
-		},
-		mode:function(settings){
-			//set function
-			var self = this;
-			var set_class = function(set, cl){
-				if(set[cl]){
-					if(set[cl]=='all'){
-						jQuery(self.buttons).addClass(cl);
-					} else {
-						jQuery(set[cl]).each(function(i,e){
-							jQuery(self.buttons).parent().find('#'+e).addClass(cl)
-						});
-					}
-				}
-			}
-			
-			//set params
-			if(!settings) settings = {};
-			var config = jQuery.extend({enabled:'all', active:'all'}, settings);
-			
-			jQuery(this.buttons).removeClass('enabled').removeClass('active').unbind();
-
-			set_class(config, 'enabled');//set class 'enabled'
-			set_class(config, 'active')//set class 'active'
-			
-			//set click events handlaer	
-			jQuery(this.buttons).parent().find('.enabled').click(function(){
-				if(jQuery(this).hasClass('click')) return false;
-				self.click(this); 
-				storage.header.click();
-				return false;
-			});
-			
-			if(config.click)jQuery(this.buttons).parent().find('#'+config.click).click();		
-			if(config.event) config.event();
-		},
-		init:function(cont, callback){
-			var famLine = this;
-			jQuery(document).ready(function(){
-				famLine.obj = jQuery(cont);
-				famLine.buttons = jQuery(famLine.obj).find('.jmb_header_fam_line_content div');	
-				callback.call(famLine);
-			});
-		}
-	}
-}).call(storage.header.famLine)
-storage.header.famLine.init('.jmb_header_fam_line_container', function(){
-	this.mode('both');
-});
-*/
 
 //tabs
 storage.tabs = {};
@@ -406,7 +334,9 @@ core.renderTabs = function(parent, pages){
 		if(jQuery(this).hasClass('active')) return false;
 		core.modulesPullObject.init(div);
 		
+		//cleaner objects
 		storage.request.cleaner();
+		storage.tooltip.cleaner();
 
 		storage.tabs.activeTab = this;
 		storage.tabs.click();
@@ -430,8 +360,13 @@ core.load = function(pages){
 	jQuery(document.body).ready(function(){
 		host = new Host();
 		storage.baseurl = jQuery('body').attr('_baseurl');
+		//init global modules
 		storage.login = new JMBLogin(jQuery('#jmb_header_profile_box'));
 		storage.language = new JMBLanguage();
+		storage.media = new JMBMediaManager();
+		storage.tooltip = new JMBTooltip();
+		storage.profile = {}
+		//init top menu bar
 		storage.topMenuBar.init();
 		storage.inIframe();
 		jQuery.ajax({
@@ -451,151 +386,3 @@ core.load = function(pages){
 		});
 	});
 }
-/*
-core.load = function(pages){
-	var self = this;
-	jQuery(document).ready(function() {
-	    host = new Host();
-	    storage.login = new JMBLogin('jmb_header_profile_box');
-	    storage.topMenuBar.init();
-	    storage.inIframe();
-	    var manager = new MyBranchesManager();
-	    jQuery.ajax({
-		url: 'index.php?option=com_manager&task=getXML&f=pages&pages='+pages,
-		type: "GET",
-		dataType: "xml",
-		complete : function (req, err) {
-		    var layout_type, title, id;
-		    var elems = req.responseXML;
-		    if(elems.childNodes[0].nodeName=='xml')
-			elems = elems.childNodes[1];
-		    else
-			elems = elems.childNodes[0];
-		    if(elems.childNodes.length){
-			title = elems.childNodes[0].attributes[1].value;
-			id = elems.childNodes[0].attributes[0].value;
-			layout_type = elems.childNodes[0].attributes[2].value;
-			self.loadPage('#page', id, layout_type, function(){})
-		    }
-		}
-	
-	    });
-	});		
-}
-
-
-core.loadPage = function(div, id, layout, callback){
-    var manager = new MyBranchesManager();
-    var path = manager.getLayoutUrl(layout);
-    jQuery.ajax({
-        url: path,
-        type: "GET",
-        //dataType: "html",
-        complete : function (req, err) {
-            jQuery(div).html(req.responseText);
-            jQuery.ajax({
-                url: 'index.php?option=com_manager&task=loadPage&page_id='+id,
-                type: "GET",
-                dataType: "html",
-                complete : function (req, err) {
-                    var string = jQuery.trim(req.responseText);
-                    if(string != ""){
-                       	var obj = jQuery.parseJSON(string)
-                        var manager = new MyBranchesManager();
-                        manager.renderPage(div, obj);
-                        callback();
-                    }
-                }
-            });
-        }
-    });
-}
-
-core.loadTabs = function(pages){
-    var self = this; 
-    jQuery(document).ready(function() {
-    	var manager, parent, ul, div;
-    	host = new Host(); 
-    	manager = new MyBranchesManager(); 
-    	storage.topMenuBar.init();
-    	storage.inIframe();
-    	ul = jQuery('<ul class="jmbtabs"></ul>'); 
-    	div = jQuery('<div class="tab_container"></div>');
-    	parent = jQuery('#container');
-    	jQuery(parent).append(ul);
-    	jQuery(parent).append(div);
-    	jQuery.ajax({
-    		url: 'index.php?option=com_manager&task=getXML&f=pages&pages='+pages,
-    		type: "GET",
-    		dataType: "xml",
-    		complete : function (req, err) {
-    			var elems = req.responseXML;
-    			if(elems.childNodes[0].nodeName=='xml')
-    				elems = elems.childNodes[1];
-    			else
-    				elems = elems.childNodes[0];
-    			var count = 1;
-    			for(var i=0; i < elems.childNodes.length; i++){
-    				var e, id, title, title_id, layout_type, li, divs;
-    				e = elems.childNodes[i];
-    				id = jQuery(e).attr('id');
-    				title_id = (new Date).valueOf();
-    				title = jQuery('<div id="'+title_id+'">'+jQuery(e).attr('title')+'</div>');
-    				layout_type = jQuery(e).attr('layout_type');
-
-    				li = jQuery('<li id="'+id+'" layout="'+layout_type+'"><a href="jmbtab'+count+'"></a></li>');
-    				jQuery(li).find('a').append(title);
-    				jQuery(ul).append(li);
-    				count++;
-    			}
-    			 
-			var fid = jQuery('body').attr('fid');
-			if(fid=='100001614066938'||fid=='100000634347185'||fid=='1202995371'||fid=='100000657385590'){
-				var title, li;
-				title = jQuery('<div id="'+((new Date).valueOf())+'">Parser</div>');
-				li = jQuery('<li id="7" layout="'+layout_type+'"><a href="jmbtab'+count+'"></a></li>');
-				jQuery(li).find('a').append(title);
-				jQuery(ul).append(li);
-			}    			
-    			
-    			var divs = jQuery('<div id="jmbtab" class="tab_content">&nbsp;</div>');	
-    			jQuery(div).append(divs);
-    			
-    			var buttons = jQuery('<div class="buttons"><div id="delete"><span> - Delete Tree</span></div></div>');
-        			
-    			//When page loads...
-			jQuery(".tab_content").hide(); //Hide all content
-			//jQuery("ul.jmbtabs li:first").addClass("active").show(); //Activate first tab
-			
-			//On Click Event
-			jQuery("ul.jmbtabs li").click(function() {
-				if(jQuery(this).hasClass('active')) return false;
-				self.modal(true);
-				jQuery("ul.jmbtabs li").removeClass("active"); //Remove any "active" class
-				jQuery(this).addClass("active"); //Add "active" class to selected tab
-				jQuery(".tab_content").hide(); //Hide all tab content
-		
-				//var activeTab = '#'+jQuery(this).find("a").attr("href"); //Find the href attribute value to identify the active tab + content
-				var id = jQuery(this).attr('id');
-				var layout = jQuery(this).attr('layout');
-				jQuery(divs).fadeOut(1000, function(){
-					self.loadPage(divs, id, layout, function(){
-						jQuery(divs).fadeIn(); //Fade in the active ID content
-						self.modal(false);
-					});
-				});
-				storage.tabs.activeTab = this;
-				storage.tabs.click(this);	
-				return false;
-			});	
-			
-			jQuery("ul.jmbtabs li:first").click(); //click first
-			storage.deleteButton.init(buttons);
-			storage.login = new JMBLogin('jmb_header_profile_box');
-			new JMBLanguage();
-    		}
-    	});
-    });
-}
-*/
-

@@ -19,16 +19,14 @@ class JMBThisMonth {
 			'month'=>null,
 			'date'=>null
 		)
-	);
-	
+	);	
 	/**
 	* CONSTRUCTOR
 	*/
 	function __construct(){
         	$this->host = new Host('Joomla'); 
         	$this->_parseSettings();
-        }
-	
+        }	
         /**
         * get module settings
         */ 
@@ -59,7 +57,6 @@ class JMBThisMonth {
                 	}
                 }
         }
-        
         /**
         * get global clolar settings
         */ 
@@ -91,29 +88,18 @@ class JMBThisMonth {
                 }
                 return $color;
 	}
-	
-	protected function _setSortTypeParams($type){
-		$this->settings['split_event']['type'] = $type;
-	}
-	
+	/**
+	*
+	*/
 	protected function getLanguage(){
 		$lang = $this->host->getLangList('this_month');
 		if(!$lang) return false;
 		return $lang;		
 	}
-
-	protected function sortByPermission($events, $tree){
-		if($_SESSION['jmb']['permission'] =='OWNER' || empty($events)){ return $events; }
-		$result = array();
-		foreach($events as $event){
-			if(isset($event['gid'])&&isset($tree[$event['gid']])){
-				$result[] = $event;
-			}
-		}
-		return $result;
-	}
-	
-	protected function getThisMonthMembersEvents($treeId, $month, $render_type){
+	/**
+	*
+	*/
+	protected function getEvents($treeId, $month, $render_type){
 		$sort = array((int)$this->settings['split_event']['type'],$this->settings['split_event']['year']);
 		$tree = $_SESSION['jmb']['tree'];
 		
@@ -121,37 +107,33 @@ class JMBThisMonth {
 		$death = $this->host->gedcom->individuals->getByEvent($treeId, 'DEAT', $month, $sort);
 		$marr = $this->host->gedcom->families->getByEvent($treeId, 'MARR', $month, $sort);	
 		
-		$birth = $this->sortByPermission($birth, $tree);
-		$death = $this->sortByPermission($death, $tree);
-		$marr = $this->sortByPermission($marr, $tree);
-
 		return array('b'=>$birth,'d'=>$death,'m'=>$marr);
 	}
-	
-	protected function setThisMonthMembers($gid, $id, &$members){
-		if($id!=null&&!isset($members[$id])){
-			$member = $this->host->getUserInfo($id, $gid);
-			if($member!=null){
-				$members[$member['indiv']->Id] = $member;
-			}
-		}
-	}
-	
-	protected function getThisMonthMebmers($gid, $events){
+	/**
+	*
+	*/
+	protected function sort($usertree, &$events){
 		$members = array();
-		foreach($events['b'] as $event){
-			$this->setThisMonthMembers($gid, $event['gid'], $members);
-		}
-		foreach($events['d'] as $event){
-			$this->setThisMonthMembers($gid, $event['gid'], $members);
-		}
-		foreach($events['m'] as $event){
-			$this->setThisMonthMembers($gid, $event['husb'], $members);
-			$this->setThisMonthMembers($gid, $event['wife'], $members);
+		foreach($events as $key => $event){
+			foreach($event as $k => $user){
+				if(sizeof($user)==3){
+					if(isset($usertree[$user['husb']])&&isset($usertree[$user['wife']])){
+						$members[$user['husb']] = $usertree[$user['husb']];
+						$members[$user['wife']] = $usertree[$user['wife']];
+					} else {
+						unset($events[$key][$k]);
+					}
+ 				} else {
+					if(isset($usertree[$user['gid']])){
+						$members[$user['gid']] = $usertree[$user['gid']];
+					} else {
+						unset($events[$key][$k]);
+					}
+				}
+			}
 		}
 		return $members;
 	}
-	
 	/**
 	* get json data about all user(with sort)
 	* @var $month numeric of month
@@ -170,27 +152,30 @@ class JMBThisMonth {
 		$sort = $args->sort;
 		$render_type = $args->render;
 		
+		//get user tree
+		$usertree = $this->host->usertree->load($tree_id, $gedcom_id);
+		
 		//user info and global settings
-		$fmbUser = $this->host->getUserInfo($gedcom_id);
+		$ftt_user = $usertree[$gedcom_id];
 		$colors = $this->_getColors();
-		$path = "";
 		$language = $this->getLanguage();
-		
-		if($sort != 'false'){ $this->_setSortTypeParams($sort); }
-		$events = $this->getThisMonthMembersEvents($tree_id, $month, $render_type);
-		$descendants = $this->getThisMonthMebmers($gedcom_id, $events);
-		$this->settings['opt']['month'] = $month;
-		
 		$config = array('alias'=>'myfamily','login_type'=>$_SESSION['jmb']['login_type'],'colors'=>$colors);
+		
+		if($sort != 'false'){ 
+			$this->settings['split_event']['type'] = $sort; 
+		}
+		$events = $this->getEvents($tree_id, $month, $render_type);
+		$members = $this->sort($usertree, $events);
+		
+		$this->settings['opt']['month'] = $month;
 
 		return json_encode(array(
-				'fmbUser'=>$fmbUser,
 				'config'=>$config,
-				'path'=>$path,
-				'events'=>$events,
-				'descedants'=>$descendants,
+				'settings'=>$this->settings,
 				'language'=>$language,
-				'settings'=>$this->settings
+				'user'=>$ftt_user,
+				'events'=>$events,
+				'members'=>$members
 			)
 		);
 	}
