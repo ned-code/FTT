@@ -136,7 +136,8 @@ JMBThisMonthObject.prototype = {
 		var events = json.events;
 		if(events.b&&events.b.length!=0){
 			var b = events.b;
-			jQuery(b).each(function(i,e){					
+			jQuery(b).each(function(i,e){	
+				if(!json.members[e.gid]) return;
 				var	ind_key = e.gid,
 					members = json.members,
 					data = members[ind_key],
@@ -176,7 +177,8 @@ JMBThisMonthObject.prototype = {
 		var sb = host.stringBuffer();
 		if(events.d&&events.d.length!=0){
 			var d = events.d;
-			jQuery(d).each(function(i,e){			
+			jQuery(d).each(function(i,e){
+				if(!json.members[e.gid]) return;
 				var	ind_key = e.gid,
 					members = json.members,
 					data = members[ind_key],
@@ -210,13 +212,14 @@ JMBThisMonthObject.prototype = {
 		if(events.m!=null&&events.m.length!=0){
 			var m = events.m;
 			jQuery(m).each(function(i,e){
+				if(!json.members[e.husb]||!json.members[e.wife]) return;
 				var	fam_key = e.id,
 					members = json.members,
 					data = members[fam_key],
 					family = self._getFamilyInfo(e, members),
-					date = family.date,
+					date = family.event.date,
 					append;
-					
+
 				append = sb._('<tr><td><div class="date">')
 					._((date!=null)?date[0]:'')
 					._('</div></td><td><div class="anniversaries-start">&nbsp</div></td><td><div id="')

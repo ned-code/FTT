@@ -121,13 +121,13 @@ class JMBThisMonth {
 						$members[$user['husb']] = $usertree[$user['husb']];
 						$members[$user['wife']] = $usertree[$user['wife']];
 					} else {
-						unset($events[$key][$k]);
+						array_splice($events[$key],$k,1);
 					}
  				} else {
 					if(isset($usertree[$user['gid']])){
 						$members[$user['gid']] = $usertree[$user['gid']];
 					} else {
-						unset($events[$key][$k]);
+						array_splice($events[$key],$k,1);
 					}
 				}
 			}
