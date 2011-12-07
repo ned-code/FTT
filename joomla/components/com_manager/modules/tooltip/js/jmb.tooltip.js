@@ -42,6 +42,7 @@ function JMBTooltip(){
 	module.objPull = {
 		length:0
 	};
+	module.idPull = {};
 	module.btActive = null;
 	module.path = "/components/com_manager/modules/tooltip/image/";
 }
@@ -203,10 +204,12 @@ JMBTooltip.prototype = {
 	},
 	_pulling:function(cont, settings){
 		var 	module = this,
+			gedcom_id = settings.object.user.gedcom_id,
 			object = {
 				cont:cont,
 				settings:settings
 			};
+		module.idPull[id] = cont;
 		module.objPull[module.objPull.length] = object;
 		module.objPull.length++;
 	},
@@ -217,18 +220,25 @@ JMBTooltip.prototype = {
 			jQuery(pull[i].cont).remove();
 			delete pull[i];
 		}
+		module.idPull = {};
 		module.objPull.length = 0;
 	},
 	render:function(type, settings){
-		var module = this, cont;		
+		var	module = this,
+			id = settings.object.user.gedcom_id,
+			cont;		
 		if(!module._checkType(type)) return;
 		settings = module._setSettings(type, settings);
 		
-		cont = module._create(type, settings);
-		storage.media.init(cont);	
+		if(!module.idPull[id]){
+			cont = module._create(type, settings);
+			storage.media.init(cont);	
 		
-		jQuery(document.body).append(cont);
-		jQuery(cont).hide();
+			jQuery(document.body).append(cont);
+			jQuery(cont).hide();
+		} else {
+			cont = module.idPull[id];
+		}
 		
 		settings.style.contentSelector = ["jQuery('#", settings.object.user.gedcom_id, "-tooltip-view')"].join('');
 
