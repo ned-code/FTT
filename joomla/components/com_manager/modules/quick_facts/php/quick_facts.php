@@ -34,85 +34,64 @@ class JMBQuickFacts {
                 }
                 return $color;
 	}
-	
-	protected function sort($array, $tree, $empty){
-		if(empty($array)) { return $empty; }
-		$result = array();
-		foreach($array as $value){
-			if(isset($tree[$value['id']])){
-				return $value['id'];
-			}
-		}
-		return $result;
-	}
-	
+
 	protected function getLanguage(){
 		$lang = $this->host->getLangList('quick_facts');
 		if(!$lang) return false;
 		return $lang;
 	}
 	
-	public function get($type){
-		
-		/*
-		switch($_SESSION['jmb']['permission']){
-			case 'USER':
-			case 'MEMBER':
-				$tree = $this->host->getTree($_SESSION['jmb']['gid'], $_SESSION['jmb']['tid'], $_SESSION['jmb']['permission']);
-				$count = sizeof($tree);
-				$not_living = $this->host->gedcom->individuals->getDeathIndivCount($treeId);
-				$youngest = $this->host->gedcom->individuals->getIdYoungestMember($treeId);
-				$oldest = $this->host->gedcom->individuals->getIdOldestMember($treeId);
-				$earliest = $this->host->gedcom->individuals->getIdEarliestMember($treeId);
-				
-				$not_living = $this->sort($not_living, $tree, 0);
-				$not_living = ($not_living!=0)?sizeof($not_living):0;
-				$living = $count - $not_living;
-				$youngest = $this->sort($youngest, $tree, null);
-				$oldest = $this->sort($oldest, $tree, null);
-				foreach($earliest as $value){
-					if(isset($tree[$value['id']])&&$value['death']!=null){
-						$earliest = $value['id'];
+	protected function getFacts($usertree){
+		$count = 0;
+		$youngest = 9999;
+		$youngest_object = null;
+		$oldest = 0;
+		$oldest_object = null;
+		foreach($usertree as $object){
+			if($object['user']['death']===null){
+				$count++;
+				if($object['user']['birth']!==null){
+					$date = $object['user']['birth']['date'];
+					if(is_array($date)&&$date[2]!==null){
+						$turns = date('Y') - $date[2];
+						if($turns <= 150 && $turns > $oldest){
+							$oldest_object = $object;
+							$oldest = $turns;
+						}
+						if($turns < $youngest){
+							$youngest_object = $object;
+							$youngest = $turns;
+						}
 					}
 				}
-				$earliest = (is_array($earliest))?null:$earliest;
-			break;	
-			
-			case 'OWNER':
-				$count = $this->host->gedcom->individuals->getIndivCount($treeId);
-				$not_living = $this->host->gedcom->individuals->getDeathIndivCount($treeId);
-				$youngest = $this->host->gedcom->individuals->getIdYoungestMember($treeId);
-				$oldest = $this->host->gedcom->individuals->getIdOldestMember($treeId);
-				$earliest = $this->host->gedcom->individuals->getIdEarliestMember($treeId);
-				
-				$count = sizeof($count);
-				$living = $count - sizeof($not_living);
-				$youngest = $youngest[0]['id'];
-				$oldest = $oldest[0]['id'];
-				$earliest = $earliest[0]['id'];
-			break;
+			}
 		}
-
-		$youngest = ($youngest)?$this->host->getUserInfo($youngest, $ownerId):null;
-		$oldest = ($oldest)?$this->host->getUserInfo($oldest, $ownerId):null;
-		$earliest = ($earliest)?$this->host->getUserInfo($earliest, $ownerId):null;
-		*/
+		return array('living'=>$count,'youngest'=>$youngest_object,'oldest'=>$oldest_object);
+	}
+	
+	public function get(){
+		//vars
 		$owner_id = $_SESSION['jmb']['gid'];
 		$tree_id = $_SESSION['jmb']['tid'];
 		$permission = $_SESSION['jmb']['permission'];
-		$tree = $_SESSION['jmb']['tree'];
+		$usertree = $this->host->usertree->load($tree_id, $owner_id);
 		
-		$count = $this->host->gedcom->individuals->getIndividualsCount($tree_id, $permission, $tree);
-		$living = $this->host->gedcom->individuals->getIndividualsCount($tree_id, $permission, $tree);
-		$youngest = $this->host->getUserInfo($this->host->gedcom->individuals->getYoungestId($tree_id, $permission, $tree));
-		$oldest = $this->host->getUserInfo($this->host->gedcom->individuals->getOldestId($tree_id, $permission, $tree));
-		
+		//facts
+		$count = sizeof($usertree);
+		$facts = $this->getFacts($usertree);
 		$colors = $this->getColors();
-		$fmbUser = $this->host->getUserInfo($owner_id);
-		$path = "";
-		$lang = $this->getLanguage();
+		$user = $usertree[$owner_id];
+		$language = $this->getLanguage();
 		$config = array('alias'=>'myfamily','login_type'=>$_SESSION['jmb']['login_type'],'colors'=>$colors);
-		return json_encode(array('lang'=>$lang,'count'=>$count,'living'=>$living,'youngest'=>$youngest,'oldest'=>$oldest,'earliest'=>null,'config'=>$config,'fmbUser'=>$fmbUser, 'tree'=>$tree,'path'=>$path));		
+		return json_encode(array(
+			'config'=>$config,
+			'lang'=>$language,
+			'user'=>$user,
+			'count'=>$count,
+			'living'=>$facts['living'],
+			'youngest'=>$facts['youngest'],
+			'oldest'=>$facts['oldest']
+		));
 	}
 }
 ?>
