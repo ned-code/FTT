@@ -80,6 +80,14 @@ $document->addScript('components/com_manager/modules/profile/js/jmb.profile.js?1
 $document->addScript('components/com_manager/modules/profile/js/jmb.profile.full.js?111');
 $document->addScript('components/com_manager/modules/profile/js/jmb.profile.tooltip.js?111');
 
+//alternative tooltip object
+$document->addStyleSheet('components/com_manager/modules/tooltip/css/jmb.tooltip.css?111');
+$document->addScript('components/com_manager/modules/tooltip/js/jmb.tooltip.js?111');
+//media object
+$document->addScript('components/com_manager/modules/media/js/jmb.media.js?111');
+//invitation object
+$document->addStyleSheet('components/com_manager/modules/invitation/css/jmb.invitation.css?111');
+$document->addScript('components/com_manager/modules/invitation/js/jmb.invitation.js?111');
 
 ###############################################################################
 

@@ -28,7 +28,6 @@ function JMBTooltip(){
 			padding: 0, 
 			cornerRadius: 0, 
 			trigger: 'none',
-			//trigger:'click',
 			closeWhenOthersOpen: true,
 			textzIndex:       999,
 			boxzIndex:        998,
@@ -197,8 +196,10 @@ JMBTooltip.prototype = {
 			return false;
 		});
 	},
-	_subClick:function(){
-		
+	_invitation:function(cont, settings){
+		jQuery(cont).find('.jmb-tooltip-view-send .send').click(function(){
+			storage.invitation.render(settings.object);
+		});
 	},
 	_pulling:function(cont, settings){
 		var 	module = this,
@@ -224,8 +225,8 @@ JMBTooltip.prototype = {
 		settings = module._setSettings(type, settings);
 		
 		cont = module._create(type, settings);
-		storage.media.init(cont);
-				
+		storage.media.init(cont);	
+		
 		jQuery(document.body).append(cont);
 		jQuery(cont).hide();
 		
@@ -233,6 +234,7 @@ JMBTooltip.prototype = {
 
 		jQuery(settings.target).bt(settings.style);
 		
+		module._invitation(cont, settings);
 		module._click(settings);
 		module._pulling(cont, settings);
 	}
