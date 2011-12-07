@@ -1,12 +1,19 @@
 <?php
 class JMBRecentVisitors {
+	/**
+	*
+	*/
 	protected $host;
-	
+	/**
+	*
+	*/
 	public function __construct(){
 		$this->host = new Host('Joomla');
 	}
-	
-	protected function getColors(){
+	/**
+	*
+	*/
+	protected function _getColors(){
 		$config = $_SESSION['jmb']['config'];
                 $color = array();
                 foreach($config['color'] as $key => $element){
@@ -34,38 +41,46 @@ class JMBRecentVisitors {
                 }
                 return $color;
 	}
-	
-	protected function get_objects($res){
+	/**
+	*
+	*/
+	protected function _sort(&$last_login_users, $usertree){
 		$objects = array();
-		$owner_id = $_SESSION['jmb']['gid'];
-		foreach($res as $obj){
-			$objects[$obj['id']] = $this->host->getUserInfo($obj['id'], $owner_id);
+		foreach($last_login_users as $user){
+			$id = $user['id'];
+			if(!isset($usertree[$id])){
+				unset($usertree[$id]);
+			} else {
+				$objects[$id] = $usertree[$id];
+			}
 		}
 		return $objects;
 	}
-	
-	protected function sortByPermission($response){
-		if($_SESSION['jmb']['permission'] == 'OWNER' || empty($response)) return $response;
-		$tree = $_SESSION['jmb']['tree'];
-		$result = array();
-		foreach($response as $user){
-			if(isset($tree[$user['id']])){
-				$result[] = $user;
-			}
-		}
-		return $result;
-	}
-	
-	public function get_recent_visitors($render_type){
-		$result = $this->sortByPermission($this->host->gedcom->individuals->getLastLoginMembers($_SESSION['jmb']['tid']));
+	/**
+	*
+	*/
+	public function getRecentVisitors(){
+		$owner_id = $_SESSION['jmb']['gid'];
+		$tree_id = $_SESSION['jmb']['tid'];
+		$facebook_id = $_SESSION['jmb']['fid'];
+		if(!$facebook_id||!$owner_id) return json_encode(array('error'=>'not register user'));
+				
+		$usertree = $this->host->usertree->load($tree_id, $owner_id);
+		$user = $usertree[$owner_id];
+		$language = $this->host->getLangList('recent_visitors');
+		$colors = $this->_getColors();
 		$time = date('Y-m-d H:i:s');
-		$objects = $this->get_objects($result);
-		$path = "";
-		$fmbUser = $this->host->getUserInfo($_SESSION['jmb']['gid']);
-		$lang = $this->host->getLangList('recent_visitors');
-		$colors = $this->getColors();	
+		$last_login_users = $this->host->gedcom->individuals->getLastLoginMembers($tree_id);
+		$objects = $this->_sort($last_login_users, $usertree);
 		$config = array('alias'=>$_SESSION['jmb']['alias'],'login_type'=>$_SESSION['jmb']['login_type'],'colors'=>$colors);
-		return json_encode(array('config'=>$config,'response'=>$result,'objects'=>$objects,'time'=>$time,'path'=>$path,'fmbUser'=>$fmbUser,'lang'=>$lang));		
+		
+		return json_encode(array(
+			'config'=>$config,
+			'user'=>$user,
+			'lang'=>$language,
+			'objects'=>$objects,
+			'time'=>$time
+		));	
 	}
 }
 ?>

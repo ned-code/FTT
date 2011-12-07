@@ -11,16 +11,17 @@ function JMBRecentVisitorsObject(obj){
 	}
 	
 	var get_avatar = function(object){
-		if(!object) return '';
-		if(object.avatar!=null){
-			return ['<img src="index.php?option=com_manager&task=getResizeImage&id=',object.avatar,'&w=32&h=32">'].join(''); 
+		if(!object) return;
+		var	media = object.media,
+			avatar = (media!=null)?media.avatar:null,
+			facebook_id = object.user.facebook_id;
+		if(avatar!=null){
+			return ['<img src="index.php?option=com_manager&task=getResizeImage&id=',avatar.media_id,'&w=32&h=32">'].join(''); 
 		} else {
-			return ['<img src="index.php?option=com_manager&task=getResizeImage&fid=',object.fid,'&w=32&h=32">'].join(''); 
+			return ['<img src="index.php?option=com_manager&task=getResizeImage&fid=',facebook_id,'&w=32&h=32">'].join(''); 
 			
 		}
 	}
-		
-	var get_name = function(object){ return [object.first_name, object.middle_name, object.last_name].join(' '); }	
 	
 	var get_time = function(time){ 
 		var t = time.split(/[- :]/); 
@@ -39,10 +40,12 @@ function JMBRecentVisitorsObject(obj){
 	}
 	
 	var init_tipty_tooltip = function(time, object, container){
-		var st = host.stringBuffer();
-		var name = get_name(object);
-		var time = get_difference(time, object);
-		var fallback = st._('<div>')._(name)._('</div>')._('<div>')._(time)._('</div>').result();
+		if(!object) return;
+		var 	st = host.stringBuffer(),
+			user = object.user,
+			name = [user.first_name, user.last_name].join(' '),
+			time = get_difference(time, user),
+			fallback = st._('<div>')._(name)._('</div>')._('<div>')._(time)._('</div>').result();
 		jQuery(container).tipsy({
 			gravity: 'sw',
 			html: true,
@@ -50,45 +53,31 @@ function JMBRecentVisitorsObject(obj){
 		});
 	}
 	
-	var init_visitors = function(ul, json, count){
+	var init_visitors = function(ul, json){	
 		var st = host.stringBuffer();
-		for(var i=0;i<count;i++){
-			var li = jQuery(st.clear()._('<li id="')._(json.response[i].id)._('" ><div class="avatar">')._(get_avatar(json.response[i]))._('</div></li>').result());
+		var objects = json.objects;
+		for(var key in objects){			
+			var user = objects[key].user;
+			var li = jQuery(st.clear()._('<li id="')._(user.gedcom_id)._('" ><div class="avatar">')._(get_avatar(objects[key]))._('</div></li>').result());
 			jQuery(ul).append(li);
-			init_tipty_tooltip(json.time, json.response[i],li);
+			init_tipty_tooltip(json.time, objects[key], li);
 		}
-	}
-	
-	var init_button = function(json){
-		jQuery(content[2]).click(function(){
-			jQuery(content[1]).html('');
-			var ul = jQuery('<ul></ul>');
-			init_visitors(ul, json, json.response.length);
-			jQuery(content[1]).append(ul);	
-		});
 	}
 	
 	var init_mini_profile = function(ul,json){
 		var li = jQuery(ul).find('li');
-		jQuery(li).each(function(i,e){
+		jQuery(li).each(function(i,e){	
 			var id = jQuery(e).attr('id');
 			var div = jQuery(e).find('div.avatar');
-			profile.tooltip.render({
-				target:div,
-				id:id+'-rv',
-				type:'mini',
-				data:json.objects[id],
-				imgPath:json.path,
-				fmbUser:json.fmbUser,
-				eventType:'click'
-			});	
+			storage.tooltip.render('view', {
+				object:json.objects[id],
+				target:div
+			});
 		});
 	}
-	
-	
+
 	var render = function(callback){
-		var id = jQuery(storage.header.activeButton).attr('id');
-		parent.ajax('get_recent_visitors', id, function(res){
+		parent.ajax('getRecentVisitors', null, function(res){
 			var json = jQuery.parseJSON(res.responseText);
 			if(json.objects.length == 0){
 				storage.core.modulesPullObject.unset('JMBRecentVisitorsObject');
@@ -96,11 +85,9 @@ function JMBRecentVisitorsObject(obj){
 			}
 			parent.lang = json.lang;
 			content = createBody(json);
-			var count = (json.response.length<=15)?json.response.length:15;
 			var ul = jQuery('<ul></ul>');
-			init_visitors(ul, json, count);
+			init_visitors(ul, json);
 			init_mini_profile(ul, json);
-			init_button(json);
 			jQuery(content[1]).append(ul);	
 			jQuery(obj).append(content);
 			if(callback) callback();

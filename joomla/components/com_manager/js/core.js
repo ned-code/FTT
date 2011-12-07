@@ -30,9 +30,11 @@ storage.fb.appId = "184962764872486";
 storage.fb.status = true;
 storage.fb.cookie = true;
 storage.fb.xfbml = true;
+storage.iframe = jQuery('<iframe id="ftt_iframe" name="ftt_iframe" style="display:none;position:absolute;left:-1000px;width:1px;height:1px">');
 storage.login = {};
 storage.language = {};
 storage.media = {};
+storage.invitation = {};
 storage.tooltip = {};
 storage.profile = {};
 
@@ -360,10 +362,13 @@ core.load = function(pages){
 	jQuery(document.body).ready(function(){
 		host = new Host();
 		storage.baseurl = jQuery('body').attr('_baseurl');
+		jQuery(document.body).append(storage.iframe);
 		//init global modules
+		storage.overlay = new JMBOverlay();
 		storage.login = new JMBLogin(jQuery('#jmb_header_profile_box'));
 		storage.language = new JMBLanguage();
 		storage.media = new JMBMediaManager();
+		storage.invitation = new JMBInvitation();
 		storage.tooltip = new JMBTooltip();
 		storage.profile = {}
 		//init top menu bar

@@ -249,6 +249,7 @@ class JMBUserTree {
 		$is_alive = ($death!=null)?false:true;
 		$is_mother_line = false;
 		$is_father_line = false;
+		$last_login = date('Y-m-d H:i:s');
 		return array(
 			'gedcom_id'=>$user['gedcom_id'], 
 			'facebook_id'=>$user['facebook_id'], 
@@ -259,6 +260,7 @@ class JMBUserTree {
 			'nick'=>$user['nick'],
 			'relation'=>$user['relation'], 
 			'permission'=>$user['permission'],
+			'last_login'=>$user['last_login'],
 			'birth'=>$birth,
 			'death'=>$death,
 			'is_alive'=>$is_alive,
@@ -301,6 +303,7 @@ class JMBUserTree {
 		$objects = array();
 		$this->_setUser($gedcom_id, $objects);	
 
+		ksort($objects);
 		return $objects;
 	}	
 	/**

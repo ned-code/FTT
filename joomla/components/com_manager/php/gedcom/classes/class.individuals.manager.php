@@ -217,7 +217,7 @@ class IndividualsList{
         	return $rows;
         }
         public function getIndividualsList($tree_id){
-        	$sqlString = "SELECT ind.id as gedcom_id, ind.fid as facebook_id, ind.sex as gender, 
+        	$sqlString = "SELECT ind.id as gedcom_id, ind.fid as facebook_id, ind.sex as gender,ind.last_login, 
         				name.first_name, name.middle_name, name.last_name, name.nick, 
         				links.type as permission, rel.relation FROM #__mb_individuals as ind 
 				LEFT JOIN #__mb_names as name ON name.gid = ind.id
