@@ -1,3 +1,6 @@
+/*
+* tooltip view
+*/
 .jmb-tooltip-view-container{}
 .jmb-tooltip-view-content{
 	background: none repeat scroll 0 0 #F1E4B0;
@@ -66,4 +69,108 @@
     	height: 31px;
     	margin-left: 30px;
     	width: 31px;
+}
+/*
+* tooltip edit
+*/
+.jmb-profile-tooltip-container{
+	margin-left: 10px;
+	margin-right: 10px;
+	color:#2945c0;
+	text-align:left;
+}
+.jmb-profile-tooltip-container fieldset{
+	border: medium none;
+	margin:0;
+	padding:0;
+}
+.jmb-profile-tooltip-button-edit{
+	background: url("../image/profile.gif") no-repeat scroll 0 0 transparent;
+	cursor:pointer;
+	margin-top:10px;
+}
+.jmb-profile-tooltip-button-edit span {
+	margin-left: 20px;
+}
+.jmb-profile-tooltip-fieldset{
+	margin-top: 10px;
+}
+.jmb-profile-tooltip-fieldset legend{
+	color: black;
+}
+.jmb-profile-tooltip-fieldset div{
+	background: url("../image/add.gif") no-repeat scroll 0 0 transparent;
+	cursor:pointer;
+	height: 14px;
+   	margin: 3px;
+}
+.jmb-profile-tooltip-fieldset div span{
+	margin-left: 20px;
+}
+.jmb-profile-tooltip-parent{}
+.jmb-profile-tooltip-spouse{}
+.jmb-profile-tooltip-bs{}
+.jmb-profile-tooltip-child{}
+
+.jmb-profile-tooltip-send{
+	background: none repeat scroll 0 0 #F1E4B0;
+	border-left: 1px solid #999999;
+	border-right: 1px solid #999999;
+	border-top: 1px solid #999999;
+	cursor: pointer;
+	left: -18px;
+	padding-left: 16px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	position: relative;
+	width: 199px;
+	position:relative;
+	top:8px;
+}
+.jmb-profile-tooltip-send tr{
+	margin-top: 5px;
+}
+.jmb-profile-tooltip-send-img{
+	background: url("../image/email.jpg") no-repeat scroll 0 0 transparent;
+	height: 14px;
+	margin: 3px;
+	width: 14px;
+}
+.jmb-profile-tooltip-options{
+	height:40px;
+	margin-top:10px;
+	margin-left: 3px;
+}
+.jmb-profile-tooltip-options span[type="title"]{
+	background: url("../image/gear.jpg") no-repeat scroll 0 0 transparent;
+	padding-left:20px;
+	cursor:pointer;
+}
+.jmb-profile-tooltip-options table{
+	margin-left:15px;
+	
+}
+.jmb-profile-tooltip-options-delete {
+	height:14px;
+	margin-top: 5px;
+}
+.jmb-profile-tooltip-options-delete span[type="delete"]{
+	background: url("../image/remove.gif") no-repeat scroll 0 0 transparent;
+	padding-left:20px;
+	padding-bottom: 1px;
+	cursor:pointer;
+}
+.jmb-profile-tooltip-close {
+	cursor:pointer;
+	position: absolute;
+	top: 5px;
+	right: 5px;
+}
+.jmb-profile-tooltip-close a {
+	text-decoration:none;
+}
+.jmb-profile-tooltip-close a div {
+	background: url("../image/close.gif") no-repeat scroll 0 0 transparent;
+	height: 12px;
+	width: 12px;
 }

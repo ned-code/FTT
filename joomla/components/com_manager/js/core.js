@@ -38,6 +38,52 @@ storage.invitation = {};
 storage.tooltip = {};
 storage.profile = {};
 
+//usertree
+storage.usertree = {};
+storage.usertree.parse = function(object){
+	var	user = object.user,
+		date_num = {"day":0,"month":1,"year":2};
+	return {
+		_month:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
+		gedcom_id:user.gedcom_id,
+		relation:(user.relation!=null)?relation:false,
+		full_name:(function(){
+			var	first_name = user.first_name,
+				middle_name = user.middle_name,
+				last_name = user.last_name;
+				
+			return [first_name, middle_name, last_name].join(' ');
+		})(),
+		nick:(function(){
+			var	nick = user.nick,
+				first_name = user.first_name;
+				return (nick!=null)?nick:first_name;
+		})(),
+		birth:function(f){
+			var	event = user['birth'],
+				date = (event!=null)?event.date:null;
+			return (date!=null&&date[date_num[f]]!=null)?date[date_num[f]]:'';
+		},
+		death:function(f){
+			var	event = user['death'],
+				date = (event!=null)?event.date:null;
+			return (date!=null&&date[date_num[f]]!=null)?date[date_num[f]]:'';
+		},
+		date:function(event){
+			var 	event = user[event],
+				date = (event!=null)?event.date:null,
+				day, month, year;
+			if(date!=null){
+				day = date[0];
+				month = this._month[date[1]-1];
+				year = date[2];
+				return [day,month,year].join(' ');
+			}
+			return '';
+		}
+	}
+}
+
 //ajax request
 storage.request = {};
 storage.request.pull = {};

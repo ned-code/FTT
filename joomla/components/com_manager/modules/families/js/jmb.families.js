@@ -1,46 +1,38 @@
 function JMBFamiliesObject(obj){
-	var self = this;
-
-	this.parent = obj;
-	this.storage = {};
-	this.div = null;
-	this.btActive = null;
-	this.viewActive = null;
-	this.viewFlag = false;
-	this.profile = new JMBProfile();
-	
-	this.json = null;
-	this.individs = null;
-	this.objects = null;
-	this.ownerId = null;
-	
-	this._ajax('getFamilies', null, function(res){
-		var json = jQuery.parseJSON(res.responseText);
-		self.json = json;
-		self.individs = json.individs;
-		self.objects = json.objects;
-		for(var key in json.objects){
-			self.ownerId = key;
-			break;
-		}
-		var obj = json.objects[self.ownerId]; 
-		if(obj.childrens.length==0&&obj.spouses&&obj.spouses[0]==null&&json.individs[obj.indKey].parents!=null){
-			self.click(self.ownerId, true, function(){
-				storage.core.modulesPullObject.unset('JMBFamiliesObject');
-			});
-			return;
-		} else {
-			self.render(json.objects[self.ownerId]);
-			storage.core.modulesPullObject.unset('JMBFamiliesObject');
-		}
+	var	module = this,
+		json,
+		gedcom_id;
 		
-	});
+	module.parent = obj;
+	module.path = storage.baseurl+"/components/com_manager/modules/families/";
+	module.cssPath = module.path+'css/';
+	module.json = null;
+	module.user = null;
+	module.usertree = null;
+	module.colors = null;
+	module.cont = null;
+	module.start_id = null;
+	module.imageSize = {
+		parent:{
+			width:108,
+			height:120
+		},
+		child:{
+			width:72,
+			height:80
+		}
+	}
 	
-	storage.addEvent(storage.tabs.clickPull, function(object){
-		self.profile.cleaner();
-	})
-
-	//storage.header.famLine.hide();
+	module._ajax('getFamilies', null, function(res){
+		json = jQuery.parseJSON(res.responseText);
+		module.json = json;
+		module.user = json.user;
+		module.usertree = json.usertree;
+		module.colors = json.colors;
+		module.start_id = module._first(json.user.user.gedcom_id);
+		module.render(module.start_id);
+		storage.core.modulesPullObject.unset('JMBFamiliesObject');
+	});
 }
 JMBFamiliesObject.prototype = {
 	_ajax:function(func, params, callback){
@@ -48,8 +40,112 @@ JMBFamiliesObject.prototype = {
 				callback(res);
 		})
 	},
-	_createDiv:function(){
-		var sb = host.stringBuffer();
+	_getImageSize:function(type, k){
+		var	module = this,
+			imageSize = module.imageSize,
+			size = imageSize[type],
+			width = Math.round(size.width*k),
+			height = Math.round(size.height*k);
+		return {
+			width: width,
+			height: height 
+		};
+	},
+	_avatar:function(object, type, k){
+		var	module = this,
+			sb = host.stringBuffer(),
+			user = object.user,
+			facebook_id = user.facebook_id,
+			media = object.media,
+			image = (user.gender!='M')?'female.png':'male.png',
+			src = [module.cssPath,image].join(''),
+			size = module._getImageSize(type, k);		
+		//get avatar image
+		if(media!=null&&media.avatar!=null){
+			return sb._('<img class="jmb-families-avatar view" src="index.php?option=com_manager&task=getResizeImage&id=')._(media.avatar.media_id)._('&w=')._(size.width)._('&h=')._(size.height)._('">').result(); 
+		}
+		//get facebook image
+		if(facebook_id !== '0'){
+			return sb._('<img class="jmb-families-avatar view" src="index.php?option=com_manager&task=getResizeImage&fid=')._(facebook_id)._('&w=')._(size.width)._('&h=')._(size.height)._('">').result();
+		}
+		//get default image
+		return sb._('<img class="jmb-families-avatar view" height="')._(size.height)._('px" width="')._(size.width)._('px" src="')._(src)._('">').result();		
+	},
+	_parentId:function(parents){
+		var mother, father;
+		for(var key in parents){
+			if(key!='length'){
+				mother = parents[key].mother;
+				father = parents[key].father;
+				return (mother)?mother.gedcom_id:father.gedcom_id;
+			}
+		}
+	},
+	_spouses:function(families){
+		if(families==null) return [];
+		var spouses = [], family, spouse;
+		for(var key in families){
+			if (!families.hasOwnProperty(key)) continue;
+			if(key!='length'){
+				family = families[key];
+				if(family.spouse!=null){
+					spouse = [family.id, family.spouse];
+					spouses.push(spouse);
+				}
+			}
+		}
+		return spouses;
+	},
+	_childrens:function(families){
+		var childrens = [], family, child;
+		for(var key in families){
+			if (!families.hasOwnProperty(key)) continue;
+			if(key!='length'){
+				family = families[key];
+				if(family.childrens!=null){
+					for(var i = 0 ; i < family.childrens.length ; i ++){
+						child = family.childrens[i];
+						childrens.push(child);
+					}
+				}
+			}
+		}
+		return childrens;
+	},
+	_childrensCount:function(families){
+		var	module = this,
+			count = 0;
+		for(var key in families){
+			if (!families.hasOwnProperty(key)) continue;
+			if(key!='length'&&families[key].childrens!=null){
+				count += families[key].childrens.length;
+			}
+		}
+		return count;	
+	},
+	_first:function(gedcom_id){
+		var	module = this;
+			object = module.usertree[gedcom_id],
+			families = object.families,
+			parents = object.parents;
+		if(families!=null&&module._childrensCount(families)!=0){
+			return gedcom_id;
+		} else {
+			if(parents.length!=0){
+				return module._parentId(parents);
+			}
+		}
+		return gedcom_id;
+	},
+	_home:function(cont){
+		var	module = this,
+			gedcom_id = module.user.gedcom_id;
+		jQuery(cont).find('div.home').click(function(){
+			module.render(module.start_id);
+		});
+	},
+	_create:function(){
+		var	sb = host.stringBuffer();
 		sb._('<div class="jmb-families-body">');
 			sb._('<table width="100%">');
 				sb._('<tr>');
@@ -67,310 +163,270 @@ JMBFamiliesObject.prototype = {
 		sb._('</div>');
 		return jQuery(sb.result());
 	},
-	_isEmpty:function(v){
-		return (v==null||v.length==0)?true:false;
-	},
-	_getYear:function(data){
-		if(data){
-			return data.From.Year;
+	_info:function(object, spouse){
+		var	module = this,
+			sb = host.stringBuffer(),
+			event = object.families[spouse[0]].event,
+			date,
+			place,
+			location = '';
+			
+		if(event!=null){
+			date = event.date;
+			place = event.place;
+			if(place != null){
+				location = place.country;
+			}
+			sb._('<div>');
+				sb._('<div>')._(date[2])._('</div>');
+				sb._('<div>')._(location)._('</div>');
+			sb._('</div>');
 		}
-		return false;
+		return '';
 	},
-	_getDate:function(obj){
-		var self = this;
-		var birth = self._getYear(obj.Birth[0]);
-		birth = (birth)?birth:'';
-		var death = self._getYear(obj.Death[0]);
-		death = (death)?'-'+death:'';
-		return birth+death;		
-	},
-	_getLongName:function(obj){
-		if(!obj) return '';
-		return (this._isEmpty(obj.Nick))?obj.FirstName+' '+obj.LastName:obj.Nick+' '+obj.LastName;
-	},
-	_getName:function(obj){
-		return (this._isEmpty(obj.Nick))?obj.FirstName:obj.Nick;
-	},
-	_getAvatar:function(obj, type, k){
-		var sb = host.stringBuffer();
-		var x,y,fId,av,defImg;
-		fId = obj.indiv.FacebookId;
-		av = obj.avatar;
-		defImg = (obj.indiv.Gender=="M")?'male.png':'female.png';
-		if(type=="parent"){ x=Math.round(108*k);y=Math.round(120*k); } else if(type=="child"){ x=Math.round(72*k);y=Math.round(80*k); }
- 		if(av != null && av.FilePath != null){
-			return sb.clear()._('<img class="jmb-families-avatar view" src="index.php?option=com_manager&task=getResizeImage&id=')._(av.Id)._('&w=')._(x)._('&h=')._(y)._('">').result();
-		}
-		else if(fId != '0'){
-			return sb.clear()._('<img class="jmb-families-avatar view" src="index.php?option=com_manager&task=getResizeImage&fid=')._(fId)._('&w=')._(x)._('&h=')._(y)._('">').result();
-		}
-		//var defImgPath = sb.clear()._(this.json.path)._("/components/com_manager/modules/families/css/")._(defImg).result();
-		var defImgPath = sb.clear()._(storage.baseurl)._("/components/com_manager/modules/families/css/")._(defImg).result();
-		return sb.clear()._('<img class="jmb-families-avatar view" height="')._(y)._('px" width="')._(x)._('px" src="')._(defImgPath)._('">').result()
-	},
-	_createDivParent:function(obj, arrow, k){
-		var self,data, person, name, date, sb, imgPath, indKey;
-		self = this;
-		indKey = obj.indKey;
-		data = self.individs[indKey];
-		person = self.individs[indKey].indiv;
-		if(!person) return;
-		name = self._getLongName(person);
-		date = self._getDate(person);
-		sb = host.stringBuffer();
+	_sircar:function(gedcom_id){
+		var	module = this,
+			sb = host.stringBuffer(),
+			usertree = module.usertree,
+			object = usertree[gedcom_id],
+			gedcom_id = object.user.gedcom_id,
+			facebook_id = object.user.facebook_id,
+			parents = object.parents,
+			get = storage.usertree.parse(object);
 		sb._('<div>');
-			if(obj.parents != null && (obj.parents.father||obj.parents.mother)){
-				sb._('<div  id="')._(person.Id)._('" class="jmb-families-button parent active">&nbsp;</div>');
+			if(parents != null){
+				sb._('<div  id="')._(gedcom_id)._('" class="jmb-families-button parent active">&nbsp;</div>');
 			} else {
 				sb._('<div  id="null" class="jmb-families-button parent">&nbsp;</div>');
 			}
-			sb._('<div id="')._(person.Id)._('-view" type="imgContainer" class="jmb-families-parent-img">')._(this._getAvatar(data, 'parent', 1));
-				sb._('<div id="')._(person.Id)._('-edit" class="jmb-families-edit-button parent">&nbsp;</div>');
-				if(person.FacebookId != '0'){
-					//imgPath = self.json.path+"/components/com_manager/modules/families/css/facebook.gif";
-					imgPath = storage.baseurl+"/components/com_manager/modules/families/css/facebook.gif";
-					sb._('<div class="jmb-families-fb-icon parent" id="')._(person.FacebookId)._('"><img src="')._(imgPath)._('" width="18x" height="18px"></div>');
+			sb._('<div id="')._(gedcom_id)._('-view" type="imgContainer" class="jmb-families-parent-img">')._(module._avatar(object, 'parent', 1));
+				sb._('<div id="')._(gedcom_id)._('-edit" class="jmb-families-edit-button parent">&nbsp;</div>');
+				if(facebook_id != '0'){
+					sb._('<div class="jmb-families-fb-icon parent" id="')._(facebook_id)._('"><img src="')._(module.cssPath)._('facebook.gif" width="18x" height="18px"></div>');
 				}
 			sb._('</div>');
 			sb._('<div>');
-				sb._('<div class="jmb-families-parent-name">')._(name)._('</div>');
-				sb._('<div class="jmb-families-parent-date">')._(date)._('</div>');
+				sb._('<div class="jmb-families-parent-name">')._(get.nick)._('</div>');
+				sb._('<div class="jmb-families-parent-date">')._(get.birth('year'))._('</div>');
 			sb._('</div>');
-			if(data.spouses[0] != null || arrow == 'right') sb._('<div class="jmb-families-arrow-')._(arrow)._('">&nbsp</div>');
-		sb._('</div>');
+			if(families!=null){
+				sb._('<div class="jmb-families-arrow-left">&nbsp</div>');
+			}
+		sb._('</div>');		
 		return jQuery(sb.result());
 	},
-	_createSpouse:function(obj){
-		var self,data, person, name, date, sb, imgPath, indKey;
-		self = this;
-		indKey = obj.indKey;
-		data = self.individs[indKey];
-		person = self.individs[indKey].indiv;
-		if(!person) return;
-		name = self._getLongName(person);
-		date = self._getDate(person);
-		sb = host.stringBuffer();
+	_spouse:function(spouse){
+		var	module = this,
+			sb = host.stringBuffer(),
+			family_id = spouse[0],
+			gedcom_id = spouse[1],
+			usertree = module.usertree,
+			object = usertree[gedcom_id],
+			gedcom_id = object.user.gedcom_id,
+			facebook_id = object.user.facebook_id,
+			parents = object.parents,
+			get = storage.usertree.parse(object);
+		sb._('<div>');
+			if(parents != null){
+				sb._('<div  id="')._(gedcom_id)._('" class="jmb-families-button parent active">&nbsp;</div>');
+			} else {
+				sb._('<div  id="null" class="jmb-families-button parent">&nbsp;</div>');
+			}
+			sb._('<div id="')._(gedcom_id)._('-view" type="imgContainer" class="jmb-families-parent-img">')._(module._avatar(object, 'parent', 1));
+				sb._('<div id="')._(gedcom_id)._('-edit" class="jmb-families-edit-button parent">&nbsp;</div>');
+				if(facebook_id != '0'){
+					sb._('<div class="jmb-families-fb-icon parent" id="')._(facebook_id)._('"><img src="')._(module.cssPath)._('facebook.gif" width="18x" height="18px"></div>');
+				}
+			sb._('</div>');
+			sb._('<div>');
+				sb._('<div class="jmb-families-parent-name">')._(get.nick)._('</div>');
+				sb._('<div class="jmb-families-parent-date">')._(get.birth('year'))._('</div>');
+			sb._('</div>');
+			if(families!=null){
+				sb._('<div class="jmb-families-arrow-right">&nbsp</div>');
+			}
+		sb._('</div>');		
+		return jQuery(sb.result());
+	},
+	_former_spouse:function(spouse){
+		var	module = this,
+			sb = host.stringBuffer(),
+			family_id = spouse[0],
+			gedcom_id = spouse[1],
+			usertree = module.usertree,
+			object = usertree[gedcom_id],
+			gedcom_id = object.user.gedcom_id,
+			facebook_id = object.user.facebook_id,
+			parents = object.parents,
+			get = storage.usertree.parse(object);
+			
 		sb._('<div class="jmb-families-spouse-div">');
-			sb._('<div id="')._(person.Id)._('-view" type="imgContainer" class="jmb-families-parent-img">')._(this._getAvatar(data, 'parent', 1));
-				sb._('<div id="')._(person.Id)._('-edit" class="jmb-families-edit-button parent">&nbsp;</div>');
-				if(person.FacebookId != '0'){
-					//var imgPath = self.json.path+"/components/com_manager/modules/families/css/facebook.gif";
-					var imgPath = storage.baseurl+"/components/com_manager/modules/families/css/facebook.gif";
-					sb._('<div class="jmb-families-fb-icon parent" id="')._(person.FacebookId)._('"><img src="')._(imgPath)._('" width="18px" height="18px"></div>');
+			sb._('<div id="')._(gedcom_id)._('-view" type="imgContainer" class="jmb-families-parent-img">')._(module._avatar(object, 'parent', 1));
+				sb._('<div id="')._(gedcom_id)._('-edit" class="jmb-families-edit-button parent">&nbsp;</div>');
+				if(facebook_id != '0'){
+					sb._('<div class="jmb-families-fb-icon parent" id="')._(facebook_id)._('"><img src="')._(module.cssPath)._('facebook.gif" width="18px" height="18px"></div>');
 				}
 			sb._('</div>');
 			sb._('<div>');
-				sb._('<div class="jmb-families-parent-name">')._(name)._('</div>');
-				sb._('<div class="jmb-families-parent-date">')._(date)._('</div>');
+				sb._('<div class="jmb-families-parent-name">')._(get.nick)._('</div>');
+				sb._('<div class="jmb-families-parent-date">')._(get.birth('year'))._('</div>');
 			sb._('</div>');
 		sb._('</div>');
 		return jQuery(sb.result());
 	},
-	_createDivChild:function(obj, arrow, k){
-		var self, data, person, sb, editButtonClass, imgPath, date, buttonChild, arrowClass;
-		self = this;
-		data = self.individs[obj.indKey];
-		person = self.individs[obj.indKey].indiv;
-		sb = host.stringBuffer();
-		sb._('<div childId="')._(person.Id)._('" class="jmb-families-child" style="height:')._(Math.round(170*k))._('px;">');
-		sb._('<div id="')._(person.Id)._('-view" type="imgContainer" style="height:')._(Math.round(80*k))._('px;width:')._(Math.round(72*k))._('px;" class="jmb-families-child-img">')._(this._getAvatar(data, 'child', k));	
-				editButtonClass = (k!=1)?'jmb-families-edit-button child small':'jmb-families-edit-button child';
-				sb._('<div id="')._(person.Id)._('-edit" class="')._(editButtonClass)._('">&nbsp;</div>');
-				if(person.FacebookId != '0'){
-					//imgPath = self.json.path+"/components/com_manager/modules/families/css/facebook.gif";
-					imgPath = storage.baseurl+"/components/com_manager/modules/families/css/facebook.gif";
-					sb._('<div class="jmb-families-fb-icon child" id="')._(person.FacebookId)._('"><img src="')._(imgPath)._('" width="18px" height="18px"></div>');
+	_child:function(child, k){
+		var	module = this,
+			sb = host.stringBuffer(),
+			usertree = module.usertree,
+			gedcom_id = child.gedcom_id,
+			object = usertree[gedcom_id],
+			user = object.user,
+			families = object.families,
+			facebook_id = user.facebook_id,
+			edit_button = (k!=1)?'jmb-families-edit-button child small':'jmb-families-edit-button child',
+			child_button_active = (k!=1)?'jmb-families-button childs active small':'jmb-families-button childs active',
+			child_button_unactive = (k!=1)?'jmb-families-button childs small':'jmb-families-button childs',
+			arrow_class = (k!=1)?'jmb-families-arrow-up small':'jmb-families-arrow-up',
+			get = storage.usertree.parse(object),
+			date = get.birth('year');
+
+		sb._('<div childId="')._(gedcom_id)._('" class="jmb-families-child" style="height:')._(Math.round(170*k))._('px;">');
+		sb._('<div id="')._(gedcom_id)._('-view" type="imgContainer" style="height:')._(Math.round(80*k))._('px;width:')._(Math.round(72*k))._('px;" class="jmb-families-child-img">')._(module._avatar(object, 'child', k));	
+				sb._('<div id="')._(gedcom_id)._('-edit" class="')._(edit_button)._('">&nbsp;</div>');
+				if(facebook_id != '0'){
+					sb._('<div class="jmb-families-fb-icon child" id="')._(facebook_id)._('"><img src="')._(module.cssPath)._('facebook.gif" width="18px" height="18px"></div>');
 				}
 			sb._('</div>')
 			sb._('<div>');
-				sb._('<div class="jmb-families-child-name">')._(self._getName(person))._('</div>');
-				date = self._getDate(person);
-				if(date.length!=0) sb._('<div class="jmb-families-child-date">')._(self._getDate(person))._('</div>');
+				sb._('<div class="jmb-families-child-name">')._(get.nick)._('</div>');
+				if(date.length!=0) sb._('<div class="jmb-families-child-date">')._(date)._('</div>');
 			sb._('</div>');
-			if((jQuery(obj.spouses).length != 0&&obj.spouses[0]!=null)||jQuery(obj.children).length != 0){
-				buttonChild = (k!=1)?'jmb-families-button childs active small':'jmb-families-button childs active';
-				sb._('<div id="')._(person.Id)._('" class="')._(buttonChild)._('">&nbsp;</div>');
+			if(module._childrensCount(families)!=0){
+				sb._('<div id="')._(gedcom_id)._('" class="')._(child_button_active)._('">&nbsp;</div>');
 			} else {
-				buttonChild = (k!=1)?'jmb-families-button childs small':'jmb-families-button childs';
-				sb._('<div id="null" class="')._(buttonChild)._('">&nbsp;</div>');
+				sb._('<div id="null" class="')._(child_button_unactive)._('">&nbsp;</div>');
 			}
-			arrowClass = (k!=1)?'jmb-families-arrow-'+arrow+' small':'jmb-families-arrow-'+arrow;
-			sb._('<div class="')._(arrowClass)._('">&nbsp</div>');
+			
+			sb._('<div class="')._(arrow_class)._('">&nbsp</div>');
 			if(date.length==0) sb._('<div>&nbsp;</div>');
 		return jQuery(sb.result());
 	},
-	_createDivInfo:function(obj){
-		if(!obj) return;
-		var self = this;
-		var sb = host.stringBuffer();
-		var event = false;
-		jQuery(obj).each(function(i,e){
-			if(e.Type == 'MARR') event = e;
-		});
-		if(!event) return '';
-		var year = (event.From.Year)?event.From.Year:'';
-		var place = event.Place;
-		var location = (place)?place.Locations[0]:{ Country:'' };
-		sb._('<div>');
-			sb._('<div>')._(year)._('</div>');
-			sb._('<div>')._(location.Country)._('</div>');
-		sb._('</div>');
-		return jQuery(sb.result());
-	},
-	sortChildrens:function(childrens){
-		var self = this;
-		var get_year = function(object){
-			var indiv = (object&&object.indiv!=null)?object.indiv:false;
-			var event = (indiv&&indiv.Birth.length!=0&&indiv.Birth[0]!=null)?indiv.Birth[0]:false;
-			return (event&&event.From!=null&&event.From.Year!=null)?event.From.Year:false; 
-		}
-		childrens.sort(function(a,b){		
-			var a_year = get_year(self.individs[a.indKey]);
-			var b_year = get_year(self.individs[b.indKey]);
-			return (a_year&&b_year)?a_year-b_year:0;
-		})
-		return childrens;
-	},
-	render:function(obj){
-		var self = this;
-		if(self.div != null) jQuery(self.div).remove();
-
-		var div = self._createDiv();
-		self.div = div;
-		
-		jQuery(self.parent).append(div);
-		
-		jQuery(self.parent).find('div.home').click(function(){
-			var obj = self.objects[self.ownerId];
-			self.render(obj);
-		})
-		
-		/*
-		storage.header.famLine.show();
-		var famLine =  self.individs[obj.indKey].indiv.FamLine;
-		if(famLine.length == 2){
-			famLine = 'all';
-		} else {
-			famLine = (famLine[0].type=='m')?['mother']:['father'];
-		}	
-		storage.header.famLine.mode({
-			enabled:false,
-			click:false,
-			active:famLine
-		});
-		*/
-		
-		//sircar space
-		var sircarDiv = self._createDivParent(obj, 'left', 1);
-		jQuery(div).find('.jmb-families-sircar').append(sircarDiv);
-
-		if(obj.spouses&&jQuery(obj.spouses).length!=0){
-			var data = self.individs[obj.indKey];
-			//info space
-			if(data.spouses.length>0){
-				var infoDiv = self._createDivInfo(data.spouses[0].event);
-				jQuery(div).find('.jmb-families-event').append(infoDiv);
-				
-				//spouse space
-				jQuery(obj.spouses).each(function(i,e){
-					if(!e) return;
-					if(i == 0) { 
-						var spouseDiv = self._createDivParent(e, 'right', 1); 
-						jQuery(div).find('.jmb-families-spouse').append(spouseDiv);
-					} else {
-						var spouses = self._createSpouse(e);
-						jQuery(div).find('.jmb-families-spouse-container').append(spouses);
-					}
-				});
-			}
-		}
-
-		
-		
-		//children array	
-		var childLength = jQuery(obj.childrens).length;
-		var childsTable = jQuery('<table align="center" width="100%"><tr><td></td></tr><tr><td></td></tr></table>');
-		var count = (childLength >10 && childLength <20)? Math.round(childLength/2) :10;
-		jQuery(div).find('.jmb-families-childs-container').append(childsTable);
-		jQuery(this.sortChildrens(obj.childrens)).each(function(index, element){
-			if(element.indKey==null) return;
-			var childDiv = self._createDivChild(element, 'up', (childLength<10||(childLength>10&&childLength<20))?1:0.9);
-			jQuery(childsTable[0].rows[(index<count)?0:1].cells[0]).append(childDiv);
-			//self.effectChild(childDiv, index+1);			
-		});
-				
-		//up or down in tree
-		jQuery(div).find('.jmb-families-button').each(function(index, element){
+	_arrows:function(cont){
+		var module = this, id;
+		jQuery(cont).find('.jmb-families-button').each(function(index, element){
 			jQuery(element).click(function(){
-				var id = jQuery(this).attr('id');
-				if(id == 'null') return false;
-				var type = jQuery(this).hasClass('parent');
-				self.click(id, type);
-			});
-		});
-		//when we click in avatar
-		jQuery(div).find('.jmb-families-avatar.view').each(function(i,e){
-			self.profile.tooltip.render({
-				target: e,
-				id: jQuery(e).parent().attr('id'),
-				type: 'mini',
-				data: self.json.individs[jQuery(e).parent().attr('id').split('-')[0]],
-				//imgPath:self.json.path,
-				imgPath:storage.baseurl,
-				fmbUser:self.json.fmbUser,
-				eventType:'click',
-				parent:document.body
-			});	
-		})
-		//when we click to edit button
-		jQuery(div).find('.jmb-families-edit-button').each(function(i,e){
-			self.profile.tooltip.render({
-				target: e,
-				id:jQuery(e).attr('id'),
-				type: 'tooltip',
-				data: self.json.individs[jQuery(e).attr('id').split('-')[0]],
-				//imgPath:self.json.path,
-				imgPath:storage.baseurl,
-				fmbUser:self.json.fmbUser,
-				eventType:'click',
-				parent:document.body,
-				beforeClose:function(){
-					return;
-					self._ajax('getFamiliesObject', jQuery(e).attr('id').split('-')[0], function(res){
-						var json = jQuery.parseJSON(res.responseText);
-						self.profile.tooltip.cleaner();
-						self.render(obj);
-					});
+				if( (id = jQuery(this).attr('id')) == 'null'){
+					return false;
 				}
+				module.reload(id, jQuery(this).hasClass('parent'));
 			});
 		});
-		//when we click in facebook icon
-		jQuery(div).find('.jmb-families-fb-icon').each(function(i,e){
+	},
+	_key:function(id, type){
+		var	module = this,
+			usertree = module.usertree,
+			object = usertree[id],
+			parents = object.parents;
+		if(type){
+			return module._parentId(parents);
+		} else {
+			return id;	
+		}
+	},
+	_view:function(cont){
+		var	module = this,
+			usertree = module.usertree, 
+			gedcom_id;
+		jQuery(cont).find('.jmb-families-avatar.view').each(function(i,e){
+			gedcom_id = jQuery(e).parent().attr('id').split('-')[0];
+			storage.tooltip.render('view', {
+				object:usertree[gedcom_id],
+				target:e
+			});
+		});
+	},
+	_edit:function(cont){
+		var	module = this,
+			usertree = module.usertree,
+			gedcom_id;
+		jQuery(cont).find('.jmb-families-edit-button').each(function(i,e){
+			gedcom_id = jQuery(e).attr('id').split('-')[0];
+			storage.tooltip.render('edit', {
+				object:usertree[gedcom_id],
+				target:e
+			});
+		});
+	},
+	_facebook:function(cont){
+		var id;
+		jQuery(cont).find('.jmb-families-fb-icon').each(function(i,e){
 			jQuery(e).click(function(){
-				var id = jQuery(e).attr('id');
+				id = jQuery(e).attr('id');
 				window.open('http://www.facebook.com/profile.php?id='+id,'new','width=320,height=240,toolbar=1')
 			});
 		});
 	},
-	getParentId:function(id){
-		var params =(jQuery(storage.header.activeButton).text()=='My Father')?'fatherID':'motherID';	
-		var sub = (params=='father')?'motherID':'fatherID';
-		return (this.individs[id].parents[params]!=null)?this.individs[id].parents[params]:this.individs[id].parents[sub];
+	render:function(gedcom_id){
+		var	module = this,
+			object = module.usertree[gedcom_id],
+			families = object.families,
+			cont = module._create(),
+			spouses = module._spouses(families),
+			childrens = module._childrens(families),
+			sircar, 
+			info,
+			spouse,
+			i,
+			childrens_table,
+			row_count,
+			k;
+				
+		if(module.cont!=null){
+			jQuery(module.cont).remove();
+		}
+		module.cont = cont;
+		
+		jQuery(module.parent).append(cont);
+		
+		module._home(cont);	
+		
+		sircar = module._sircar(gedcom_id);
+		jQuery(cont).find('.jmb-families-sircar').append(sircar);
+
+		if(spouses.length!=0){
+			info = module._info(object, spouses[0]);
+			jQuery(cont).find('.jmb-families-event').append(info);
+			spouse = module._spouse(spouses[0]);
+			jQuery(cont).find('.jmb-families-spouse').append(spouse);
+			if(spouse.length > 1){
+				for(i = 1 ; i < spouses.length ; i ++){
+					spouse = module._former_spouse(spouses[i]);
+					jQuery(cont).find('.jmb-families-spouse-container').append(spouse);
+				}
+			}
+		}
+		
+		if(childrens.length!=0){
+			childrens_table = jQuery('<table align="center" width="100%"><tr><td></td></tr><tr><td></td></tr></table>');
+			row_count = (childrens.length > 10 && childrens.length < 20)? Math.round(childrens.length/2):10;
+			k = (childrens.length<10||(childrens.length>10&&childrens.length<20))?1:0.9;
+			for(i = 0; i < childrens.length ; i++){
+				child = module._child(childrens[i], k);
+				jQuery(childrens_table[0].rows[(i<row_count)?0:1].cells[0]).append(child);
+			}
+			jQuery(cont).find('.jmb-families-childs-container').append(childrens_table);
+		}	
+		
+		module._arrows(cont);
+		module._view(cont);
+		module._edit(cont);
+		module._facebook(cont);
 	},
-	click:function(id, type, callback){
-		var indKey = (type)?this.getParentId(id):id;
-		if(this.objects[indKey]){
-			this.profile.tooltip.cleaner();
-			this.render(this.objects[indKey]);	
-		} else {
-			var self = this;
-			this._ajax('getFamiliesObject', indKey, function(res){
-				var json = jQuery.parseJSON(res.responseText);
-				self.individs = jQuery.extend(self.individs, json.individs);
-				self.objects = jQuery.extend(self.objects, json.objects);
-				self.render(json.objects[indKey]);
-				if(callback) callback();
-			});	
-		}		
+	reload:function(id, type){
+		var	module = this,
+			gedcom_id = module._key(id, type);
+		storage.tooltip.cleaner(function(){
+			module.render(gedcom_id);
+		});		
 	}
 }

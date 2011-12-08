@@ -66,9 +66,10 @@ JMBTooltip.prototype = {
 	_view:function(settings){
 		var	module = this,
 			sb = host.stringBuffer(),
-			user = settings.object.user,
-			media = settings.object.media,
-			get = module._get(settings),
+			object = settings.object,
+			user = object.user,
+			media = object.media,
+			get = storage.usertree.parse(object),
 			name = get.full_name,
 			birthday = get.date('birth'),
 			death = get.date('death'),
@@ -112,7 +113,41 @@ JMBTooltip.prototype = {
 		return jQuery(sb.result());
 	},
 	_edit:function(settings){
-	
+		var	module = this,
+			sb = host.stringBuffer(),
+			user = settings.object.user,
+			gedcom_id = user.gedcom_id,
+			get = storage.usertree.parse(settings.object),
+			nick = get.nick;
+		
+		sb._("<div id='")._(gedcom_id)._("-tooltip-edit' class='jmb-profile-tooltip-container'>");
+			sb._("<div class='jmb-profile-tooltip-button-edit'><span>Edit this Profile</span></div>");
+			sb._("<div class='jmb-profile-tooltip-fieldset'><fieldset>");
+				sb._("<legend>Add:</legend>");
+				sb._("<div class='jmb-profile-tooltip-parent'><span>Parent</span></div>");
+				sb._("<div class='jmb-profile-tooltip-spouse'><span>Spouse</span></div>");
+				sb._("<div class='jmb-profile-tooltip-bs'><span>Brother or Sister</span></div>");
+				sb._("<div class='jmb-profile-tooltip-child'><span>Child</span></div>");
+			sb._('</fieldset></div>');
+			sb._("<div class='jmb-profile-tooltip-options'><span type='title'>More Options</span><table style='display:none;'><tr><td><div class='jmb-profile-tooltip-options-delete'><span type='delete'>Delete this Person</span></div></td></tr></table></div>")
+			if(user.facebook_id == '0'){
+				sb._("<div class='jmb-profile-tooltip-send'>");
+					sb._('<table>');
+						sb._('<tr>');
+							sb._('<td rowspan="2">');
+								sb._("<div class='jmb-profile-tooltip-send-img'>&nbsp;</div>");
+							sb._('</td>');
+							sb._('<td><span> ')._(nick)._(' is not registred.</span></td>');
+						sb._('</tr>');
+						sb._('<tr>');
+							sb._("<td><span>Send ")._(nick)._(" an invations.</span></td>");
+						sb._('</tr>');
+					sb._('</table>');
+				sb._('</div>');
+			}
+			sb._("<div class='jmb-profile-tooltip-close'><a href='javascript:void(jQuery(storage.tooltip.btActive.target).btOff());'><div>&nbsp;</div></a></div>");
+		sb._('</div>');
+		return jQuery(sb.result());
 	},
 	_create:function(type, settings){
 		return (type==='view')?this._view(settings):this._edit(settings);
@@ -146,7 +181,7 @@ JMBTooltip.prototype = {
 			user = object.user,
 			facebook_id = user.facebook_id,
 			media = object.media,
-			image = (user.gender!='M')?'male.png':'female.png',
+			image = (user.gender!='M')?'female.png':'male.png',
 			src = storage.baseurl+module.path+image;
 		//get avatar image
 		if(media!=null&&media.avatar!=null){
@@ -189,32 +224,55 @@ JMBTooltip.prototype = {
 	_click:function(settings){
 		var module = this;
 		jQuery(settings.target).click(function(){
-			if(module.btActive!=null){
-				jQuery(module.btActive.target).btOff();	
-			}
 			module.btActive = settings;
 			jQuery(settings.target).btOn();
 			return false;
 		});
 	},
-	_invitation:function(cont, settings){
-		jQuery(cont).find('.jmb-tooltip-view-send .send').click(function(){
+	_buttons:function(cont, settings){
+		var	module = this,
+			object = settings.object,
+			divs = jQuery(cont).find('.jmb-profile-tooltip-fieldset div'),
+			class_name;
+		jQuery(divs).each(function(index, el){
+			jQuery(el).click(function(){
+				class_name = jQuery(this).attr('class').split('-');
+				console.log(class_name[class_name.length-1]);
+			});
+		});
+	},
+	_invitation:function(cont, type, settings){
+		var class_name;
+		switch(type){
+			case "view": class_name = '.jmb-tooltip-view-send .send'; break;
+			case "edit": class_name = '.jmb-profile-tooltip-send table'; break;
+			default: return;
+		}
+		jQuery(cont).find(class_name).click(function(){
 			storage.invitation.render(settings.object);
 		});
 	},
-	_pulling:function(cont, settings){
+	_pulling:function(cont, type, settings){
 		var 	module = this,
 			gedcom_id = settings.object.user.gedcom_id,
 			object = {
 				cont:cont,
 				settings:settings
 			};
-		module.idPull[id] = cont;
+		module.idPull[module._getId(gedcom_id, type)] = cont;
 		module.objPull[module.objPull.length] = object;
 		module.objPull.length++;
 	},
-	cleaner:function(){
+	_getId:function(id, type){
+		return [type,id].join(':');
+	},
+	cleaner:function(callback){
 		var module = this, i, pull;
+		
+		if(module.btActive!=null){
+			jQuery(module.btActive.target).btOff();
+		}
+		
 		pull = module.objPull;
 		for(i = 0 ; i < pull.length ; i++){
 			jQuery(pull[i].cont).remove();
@@ -222,30 +280,36 @@ JMBTooltip.prototype = {
 		}
 		module.idPull = {};
 		module.objPull.length = 0;
+		module.btActive = null;
+		if(callback) callback();
 	},
 	render:function(type, settings){
 		var	module = this,
 			id = settings.object.user.gedcom_id,
 			cont;		
+		
 		if(!module._checkType(type)) return;
 		settings = module._setSettings(type, settings);
 		
-		if(!module.idPull[id]){
+		if(!module.idPull[module._getId(id,type)]){
 			cont = module._create(type, settings);
 			storage.media.init(cont);	
 		
 			jQuery(document.body).append(cont);
 			jQuery(cont).hide();
+			
+			module._pulling(cont, type, settings);
 		} else {
 			cont = module.idPull[id];
 		}
 		
-		settings.style.contentSelector = ["jQuery('#", settings.object.user.gedcom_id, "-tooltip-view')"].join('');
-
-		jQuery(settings.target).bt(settings.style);
+		settings.style.contentSelector = ["jQuery('#", settings.object.user.gedcom_id, "-tooltip-", type,"')"].join('');
 		
-		module._invitation(cont, settings);
+		jQuery(settings.target).bt(settings.style);
 		module._click(settings);
-		module._pulling(cont, settings);
+		module._invitation(cont, type, settings);
+		if(type == 'edit'){
+			module._buttons(cont, settings);
+		}
 	}
 }

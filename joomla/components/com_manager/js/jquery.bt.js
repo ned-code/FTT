@@ -583,7 +583,7 @@ jQuery.bt = {version: '0.9.5-rc1'};
         } // </ switch >
         
         var canvas = document.createElement('canvas');
-        jQuery(canvas).attr('width', (numb(jQuerytext.btOuterWidth(true)) + opts.strokeWidth*2 + shadowMarginX)).attr('height', (numb(jQuerytext.outerHeight(true)) + opts.strokeWidth*2 + shadowMarginY)).appendTo(jQuerybox).css({position: 'absolute', zIndex: opts.boxzIndex});
+        jQuery(canvas).attr('width', (numb(jQuerytext.btOuterWidth(true)) + opts.strokeWidth*2 + shadowMarginX)).attr('height', (numb(jQuerytext.outerHeight(true)) + opts.strokeWidth*2 + shadowMarginY)).appendTo(jQuerybox).css({position: 'relative', zIndex: opts.boxzIndex});
 
   
         // if excanvas is set up, we need to initialize the new canvas element
