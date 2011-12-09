@@ -46,6 +46,11 @@ storage.usertree.parse = function(object){
 	return {
 		_month:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
 		gedcom_id:user.gedcom_id,
+		first_name:user.first_name,
+		middle_name:user.middle_name,
+		last_name:user.last_name,
+		nick:user.nick,
+		gender:user.gender,
 		relation:(user.relation!=null)?relation:false,
 		full_name:(function(){
 			var	first_name = user.first_name,
@@ -59,15 +64,49 @@ storage.usertree.parse = function(object){
 				first_name = user.first_name;
 				return (nick!=null)?nick:first_name;
 		})(),
+		is_death:(function(){
+			return (user.is_alive)?0:1;
+		})(),
+		is_alive:user.is_alive,
+		is_birth:(function(){
+			var event = user['birth'], date;
+			if(event!=null){
+				date = event.date;
+				return ( date[0]!=null || date[1] != null || date[2] != null )?1:0;
+			}
+			return 0;
+		})(),
+		is_death:(function(){
+			var event = user['birth'], date;
+			if(event!=null){
+				date = event.date;
+				return ( date[0]!=null || date[1] != null || date[2] != null )?1:0;
+			}
+			return 0;
+		})(),
 		birth:function(f){
-			var	event = user['birth'],
-				date = (event!=null)?event.date:null;
-			return (date!=null&&date[date_num[f]]!=null)?date[date_num[f]]:'';
+			var event, date;
+			event = user['birth'];
+			if(event!=null){
+				date = event.date;
+				if(f){
+					return (date[date_num[f]]!=null)?date[date_num[f]]:'';
+				}
+				return date;
+			}
+			return '';
 		},
 		death:function(f){
-			var	event = user['death'],
-				date = (event!=null)?event.date:null;
-			return (date!=null&&date[date_num[f]]!=null)?date[date_num[f]]:'';
+			var event, date;
+			event = user['death'];
+			if(event!=null){
+				date = event.date;
+				if(f){
+					return (date[date_num[f]]!=null)?date[date_num[f]]:'';
+				}
+				return date;
+			}
+			return '';
 		},
 		date:function(event){
 			var 	event = user[event],
@@ -78,6 +117,17 @@ storage.usertree.parse = function(object){
 				month = this._month[date[1]-1];
 				year = date[2];
 				return [day,month,year].join(' ');
+			}
+			return '';			
+		},
+		place:function(event_type, sub){
+			var	event, place;
+			event = user[event_type];
+			if(event!=null){
+				place = event.place;
+				if(place!=null){
+					return (!sub)?place[0]:((place[0][sub]!=null)?place[0][sub]:'');
+				}
 			}
 			return '';
 		}
@@ -413,10 +463,11 @@ core.load = function(pages){
 		storage.overlay = new JMBOverlay();
 		storage.login = new JMBLogin(jQuery('#jmb_header_profile_box'));
 		storage.language = new JMBLanguage();
+		storage.profile = new JMBProfile();
 		storage.media = new JMBMediaManager();
 		storage.invitation = new JMBInvitation();
 		storage.tooltip = new JMBTooltip();
-		storage.profile = {}
+		
 		//init top menu bar
 		storage.topMenuBar.init();
 		storage.inIframe();

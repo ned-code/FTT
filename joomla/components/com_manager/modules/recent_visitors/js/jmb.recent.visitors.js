@@ -2,7 +2,6 @@ function JMBRecentVisitorsObject(obj){
 	var parent = this;
 	var content = null;
 	var sb = host.stringBuffer();
-	var profile =  new JMBProfile();
 	
 	var createBody = function(json){
 		var lang = json.lang;
@@ -96,7 +95,6 @@ function JMBRecentVisitorsObject(obj){
 	
 	var headerHandler = function(){
 		storage.addEvent(storage.header.clickPull, function(object){
-			profile.tooltip.cleaner();
 			jQuery(content[1]).html('');
 			render();
 		});

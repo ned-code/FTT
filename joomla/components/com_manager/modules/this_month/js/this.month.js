@@ -7,7 +7,6 @@ function JMBThisMonthObject(obj){
 	
 	//objects
 	this.table = jQuery('<table cellpadding="0" cellspacing="0" width="100%"><tr><td><div class="jmb-this-month-header"></div></td></tr><tr><td><div class="jmb-this-month-body"></div></td></tr></table>');
-	this.profile = new JMBProfile();
 	
 	//appends
 	jQuery(obj).append(this.table);
@@ -269,7 +268,6 @@ JMBThisMonthObject.prototype = {
 	},
 	reload:function(){
 		var self = this;
-		self.profile.cleaner();
 		var header = jQuery(self.table).find('.jmb-this-month-header');
 		var month = jQuery(header).find('select[name="months"]').val();
 		var sort = jQuery(header).find('select[name="sort"]').val();

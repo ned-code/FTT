@@ -1,6 +1,5 @@
 function JMBLatestUpdatesObject(obj){
 	var html = null;	
-	var profile =  new JMBProfile();
 	
 	var get_content = function(items){
 		var st = host.stringBuffer();
@@ -31,6 +30,7 @@ function JMBLatestUpdatesObject(obj){
 
 	var setMiniProfile = function(object, json, name){
 		if(json[name]==null) return;
+		/*
 		profile.tooltip.render({
 			target:object,
 			id:json[name].indiv.Id+'-lu',
@@ -40,6 +40,7 @@ function JMBLatestUpdatesObject(obj){
 			fmbUser:json.fmbUser,
 			eventType:'click'
 		});
+		*/
 	}
 	
 	this.ajax('get', null, function(res){

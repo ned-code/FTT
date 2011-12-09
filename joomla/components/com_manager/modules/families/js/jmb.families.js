@@ -352,6 +352,7 @@ JMBFamiliesObject.prototype = {
 		jQuery(cont).find('.jmb-families-edit-button').each(function(i,e){
 			gedcom_id = jQuery(e).attr('id').split('-')[0];
 			storage.tooltip.render('edit', {
+				individuals:usertree,
 				object:usertree[gedcom_id],
 				target:e
 			});

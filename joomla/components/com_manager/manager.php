@@ -74,12 +74,7 @@ $document->addScript('components/com_manager/modules/delete/js/jmb.delete.js?111
 ################################################################################
 //profile editor[mini, full, tooltip]
 $document->addStyleSheet('components/com_manager/modules/profile/css/jmb.profile.css?111');
-$document->addStyleSheet('components/com_manager/modules/profile/css/jmb.profile.full.css?111');
-$document->addStyleSheet('components/com_manager/modules/profile/css/jmb.profile.tooltip.css?111');
 $document->addScript('components/com_manager/modules/profile/js/jmb.profile.js?111');
-$document->addScript('components/com_manager/modules/profile/js/jmb.profile.full.js?111');
-$document->addScript('components/com_manager/modules/profile/js/jmb.profile.tooltip.js?111');
-
 //alternative tooltip object
 $document->addStyleSheet('components/com_manager/modules/tooltip/css/jmb.tooltip.css?111');
 $document->addScript('components/com_manager/modules/tooltip/js/jmb.tooltip.js?111');
@@ -88,7 +83,6 @@ $document->addScript('components/com_manager/modules/media/js/jmb.media.js?111')
 //invitation object
 $document->addStyleSheet('components/com_manager/modules/invitation/css/jmb.invitation.css?111');
 $document->addScript('components/com_manager/modules/invitation/js/jmb.invitation.js?111');
-
 ###############################################################################
 
 //login\profile in header (login\logout)
