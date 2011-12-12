@@ -186,4 +186,232 @@
 	padding: 1px;
 	width: 80px;
 }
+/**
+* unions
+*/
+.jmb-dialog-profile-content-unions{
+	font-family: Calibri,Tahoma;
+	font-size: 12px;
+	margin-top: 10px;
+	margin-left: 20px;
+}
+.jmb-dialog-profile-content-union{
+	background: none repeat scroll 0 0 #9A7423;
+	border-radius: 5px 5px 5px 5px;
+	width: 500px;
+	padding-top: 30px;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-bottom: 3px;
+	margin-top: 10px;
+}
+.jmb-dialog-profile-content-unions-header{
+	position: relative;
+	margin-top: -30px;
+}
+.jmb-dialog-profile-content-unions-header div#title{
+	position: absolute;
+	top: 1px;
+	left: 10px;
+	color: white;
+	font-weight: bold;
+	font-size: 20px;
+}
+.jmb-dialog-profile-content-unions-header div#button{
+	position: absolute;
+	top: 1px;
+	right: 0px;
+}
+.jmb-dialog-profile-content-unions-header input{
+	border: 2px solid black !important;
+	border-radius: 5px 5px 5px 5px;
+	font-family: Calibri,Tahoma;
+	font-size: 14px;
+	font-weight: bold;
+	margin: 3px;
+	width: 65px !important;
+	cursor:pointer;
+}
+.jmb-dialog-profile-content-unions form {
+	background: none repeat scroll 0 0 #F1E4B0;
+	border: 1px solid #473E1B;
+	border-radius: 5px 5px 5px 5px;
+}
+.jmb-dialog-profile-content-unions  table#container {
+	 margin-bottom: 10px;
+	 margin-top: 30px;
+}
+.jmb-dialog-profile-content-unions  table span{
+	font-weight:bold;
+}
+.jmb-dialog-profile-content-unions  table input[type="text"] {
+	border: 1px solid gray;
+	font-family: tahoma;
+	font-size: 12px;
+	height: 16px;
+	margin: 3px;
+}
+.jmb-dialog-profile-content-unions  table select {
+	border: 1px solid #999999;
+	margin: 3px;
+	padding: 1px;
+	width: 80px;
+}
 
+
+.jmb-dialog-profile-content-unions-body{
+	margin: 5px;
+	margin-top: 30px;
+}
+.jmb-dialog-profile-content-unions-part{}
+.jmb-dialog-profile-content-unions-person{
+	display: inline-block;
+	margin-top: 10px;
+}
+.jmb-dialog-profile-content-unions-person table{
+	border-spacing: 0px;
+}
+.jmb-dialog-profile-content-unions-person .avatar{
+	border: 1px solid #9A7423;
+	width: 72px;
+	height: 80px;
+	background: white;
+}
+.jmb-dialog-profile-content-unions-person .info{
+	background: white;
+	border: 1px solid #9A7423;
+	padding: 10px;
+	height: 60px;
+}
+.jmb-dialog-profile-content-unions-person .info .name{}
+.jmb-dialog-profile-content-unions-person .info .date{}
+.jmb-dialog-profile-content-unions-person .info .location{}
+.jmb-dialog-profile-content-unions-add{
+	width: 102px;
+	/*margin: 0 auto;*/
+	margin-top: 5px;
+}
+.jmb-dialog-profile-content-unions-add input{
+	border: 1px solid #000000;
+	border-radius: 5px 5px 5px 5px;
+	cursor: pointer;
+	font-family: Calibri,Tahoma;
+	font-size: 12px;
+	font-weight: bold;
+	padding: 5px;	
+}
+
+.jmb-dialog-profile-content-union.add table input[type="text"]{
+	border: 1px solid gray;
+	font-family: tahoma;
+	font-size: 12px;
+	height: 16px;
+	margin: 3px;
+	width: 170px;
+}
+/**
+* photos
+*/
+.jmb-dialog-photos-content{
+	font-family: Calibri,Tahoma,sans-serif;
+	font-size: 12px;
+	font-weight: normal;
+	margin: 5px;
+	position: relative;
+}
+.jmb-dialog-photos-content .buttons {
+	left: 0;
+	position: relative;
+	top: 0;
+}
+.jmb-dialog-photos-content .buttons .switch-avatar{
+	left: 245px;
+	position: absolute;
+	top: 1px;
+}
+.jmb-dialog-photos-content .buttons input[type="submit"]{
+	cursor: pointer;
+	height: 22px;
+	margin-left: 3px;
+	width: 50px;
+}
+.jmb-dialog-photos-content .list{
+	margin: 10px;
+}
+.jmb-dialog-photos-content .list ul li{
+	display: inline-block;
+	margin-left: 3px;
+}
+.jmb-dialog-photos-content .list .list-item{
+	border:1px solid white;
+	background: none repeat scroll 0 0 #E9E9E9;
+	height: 125px;
+	width: 110px;
+}
+.jmb-dialog-photos-content .list .list-item.active{
+	border:1px solid black;
+}
+.jmb-dialog-photos-content .list .list-item .header{
+	height: 20px;
+	line-height: 20px;
+	position: relative;
+	text-align: center;
+}
+.jmb-dialog-photos-content .list .list-item .header span{
+	color: #77807D;
+	font-weight: bold;
+}
+.jmb-dialog-photos-content .list .list-item .header .delete{
+	background: url("../image/delete.png") no-repeat scroll 0 0 transparent;
+	cursor: pointer;
+	height: 14px;
+	position: absolute;
+	right: 1px;
+	top: 3px;
+	width: 14px;
+}
+.jmb-dialog-photos-content .list .list-item .item{
+	text-align: center;
+	cursor:pointer;
+}
+/**
+* view profile
+*/
+.jmb-dialog-view-profile {
+	width: 510px;
+	background: none repeat scroll 0 0 #9A7423;
+	border-radius: 3px 3px 3px 3px;
+    	font-family: Calibri,Tahoma;
+    	font-size: 12px;
+    	font-weight: normal;
+    	margin: 10px;
+    	padding: 5px;
+}
+.jmb-dialog-view-profile-content{
+	background: none repeat scroll 0 0 #F1E4B0;
+	border: 1px solid #473E1B;
+    	border-radius: 5px 5px 5px 5px;
+}
+.jmb-dialog-view-profile-content div.title{
+	text-align: right;
+	width: 70px;
+}
+.jmb-dialog-view-profile-content div.title span {
+	color:gray;
+}
+.jmb-dialog-view-profile-content div.text span {
+	margin-left: 10px;
+}
+.jmb-dialog-view-profile-content div.list {
+	margin-bottom: 10px;
+	margin-left: 40px;
+}
+.jmb-dialog-view-profile-content div.list-header {
+	color: gray;
+	font-weight: bold;
+}
+.jmb-dialog-view-profile-content div.list-item {
+	font-weight:bold;
+	color: #3B5997;
+	margin-left: 15px;
+}

@@ -116,7 +116,8 @@ class MediaList{
         }
         public function getMediaList($tree_id){
         	$sql_string = "SELECT media.id as media_id, media.form, media.title, 
-        				media.path, m_links.type, m_links.gid as gedcom_id
+        				media.path, m_links.type, m_links.gid as gedcom_id,
+        				media.size
 				FROM #__mb_medias as media
 				LEFT JOIN #__mb_media_link as m_links ON m_links.mid = media.id
 				LEFT JOIN #__mb_tree_links as t_links ON t_links.individuals_id = m_links.gid

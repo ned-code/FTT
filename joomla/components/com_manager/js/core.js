@@ -42,9 +42,21 @@ storage.profile = {};
 storage.usertree = {};
 storage.usertree.parse = function(object){
 	var	user = object.user,
+		families = object.families,
 		date_num = {"day":0,"month":1,"year":2};
 	return {
 		_month:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
+		_getSub:function(mod, sub){
+			if(mod!=null){
+				if(sub){
+					return mod[sub];
+				} else {
+					return mod;
+				}
+				
+			}
+			return '';
+		},
 		gedcom_id:user.gedcom_id,
 		first_name:user.first_name,
 		middle_name:user.middle_name,
@@ -76,6 +88,9 @@ storage.usertree.parse = function(object){
 			}
 			return 0;
 		})(),
+		is_married_event:function(id){
+			return (families[id]&&families[id].event!=null)?1:0;
+		},
 		is_death:(function(){
 			var event = user['birth'], date;
 			if(event!=null){
@@ -84,6 +99,22 @@ storage.usertree.parse = function(object){
 			}
 			return 0;
 		})(),
+		marr:function(id, type, sub){
+			var	family = families[id],
+				event = (family)?family.event:false;
+			if(event){
+				switch(type){
+					case "date":
+						return this._getSub(event.date, sub);
+					break;
+					
+					case "place":
+						return this._getSub(event.place, sub);
+					break;
+				}	
+			}
+			return '';
+		},
 		birth:function(f){
 			var event, date;
 			event = user['birth'];
@@ -108,21 +139,21 @@ storage.usertree.parse = function(object){
 			}
 			return '';
 		},
-		date:function(event){
+		date:function(event, sub){
 			var 	event = user[event],
-				date = (event!=null)?event.date:null,
-				day, month, year;
+				date = (event!=null)?event.date:null;
 			if(date!=null){
-				day = date[0];
-				month = this._month[date[1]-1];
-				year = date[2];
-				return [day,month,year].join(' ');
+				if(sub){
+					return (date[sub])?date[sub]:0;
+				} else {
+					return [date[0],this._month[date[1]-1],date[2]].join(' ');
+				}
 			}
 			return '';			
 		},
-		place:function(event_type, sub){
+		place:function(type, sub){
 			var	event, place;
-			event = user[event_type];
+			event = user[type];
 			if(event!=null){
 				place = event.place;
 				if(place!=null){

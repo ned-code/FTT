@@ -27,6 +27,8 @@ function JMBProfile(){
 	module.individuals = null;
 	module.object = null;
 	module.container = null;
+	
+	module._iframe();
 }
 
 JMBProfile.prototype = {
@@ -51,6 +53,12 @@ JMBProfile.prototype = {
 			}
 		});
 	},
+	_iframe:function(){
+		if(jQuery("#iframe-profile").length==0){
+			var iframe = '<iframe id="iframe-profile" name="#iframe-profile" style="display:none;position:absolute;left:-1000px;width:1px;height:1px">';
+			jQuery(document.body).append(iframe);
+		}
+	},
 	_dialog:function(settings){
 		var	module = this;
 		settings = jQuery.extend(settings, module.dialog_settings);
@@ -66,20 +74,21 @@ JMBProfile.prototype = {
 		sb._('</div>');
 		return jQuery(sb.result());
 	},
-	_initEditorHeaderButtons:function(mode){
+	_initEditorHeaderButtons:function(cont){
 		var	module = this,
 			divs = jQuery(module.editor_buttons).find('div[type="button"]'),
-			div_num = (mode=='edit')?0:1,
 			active = function(object){
+				module._clearMenu();
 				jQuery(divs).removeClass('active');
 				jQuery(object).addClass('active');
 				module.editor_header_active_button = object;
+				module['_'+jQuery(object).attr('value')](cont);
 			};
 		
 		jQuery(divs).click(function(){
 			active(this);
 		});	
-		active(divs[div_num]);
+		active(divs[0]);
 		jQuery(module.box).parent().find('.ui-dialog-titlebar').append(module.editor_buttons);	
 	},
 	_initMenuButtons:function(){
@@ -96,6 +105,9 @@ JMBProfile.prototype = {
 			click[jQuery(this).attr('id')]();
 		});
 	},
+	_photo:function(object, width, height){
+		return sb._('<img class="" src="index.php?option=com_manager&task=getResizeImage&id=')._(object.media_id)._('&w=')._(width)._('&h=')._(height)._('">').result();
+	},
 	_avatar:function(object, width, height){
 		var	module = this,
 			sb = host.stringBuffer(),
@@ -106,14 +118,14 @@ JMBProfile.prototype = {
 			src = [module.imagePath,image].join('');
 		//get avatar image
 		if(media!=null&&media.avatar!=null){
-			return sb._('<img class="jmb-families-avatar view" src="index.php?option=com_manager&task=getResizeImage&id=')._(media.avatar.media_id)._('&w=')._(width)._('&h=')._(height)._('">').result(); 
+			return sb._('<img class="" src="index.php?option=com_manager&task=getResizeImage&id=')._(media.avatar.media_id)._('&w=')._(width)._('&h=')._(height)._('">').result(); 
 		}
 		//get facebook image
 		if(facebook_id !== '0'){
-			return sb._('<img class="jmb-families-avatar view" src="index.php?option=com_manager&task=getResizeImage&fid=')._(facebook_id)._('&w=')._(width)._('&h=')._(height)._('">').result();
+			return sb._('<img class="" src="index.php?option=com_manager&task=getResizeImage&fid=')._(facebook_id)._('&w=')._(width)._('&h=')._(height)._('">').result();
 		}
 		//get default image
-		return sb._('<img class="jmb-families-avatar view" height="')._(height)._('px" width="')._(width)._('px" src="')._(src)._('">').result();
+		return sb._('<img class="" height="')._(height)._('px" width="')._(width)._('px" src="')._(src)._('">').result();
 	},
 	_gen:function(){
 		var	module = this,
@@ -176,7 +188,7 @@ JMBProfile.prototype = {
 				},
 				months:function(name, selected){
 					sb.clear();
-					sb._('<select name="">');
+					sb._('<select name="')._(name)._('">');
 						for(i=0 ; i < months.length ; i++ ){
 							if(selected&&selected == i){
 								sb._('<option SELECTED value="')._(i)._('">')._(months[i])._('</option>');
@@ -195,7 +207,8 @@ JMBProfile.prototype = {
 			sb = host.stringBuffer(),
 			gen = module._gen(),
 			user = storage.usertree.parse(object),
-			spouse, parse_spouse;
+			spouse, parse_spouse,
+			place, place_name;
 		return {
 			basic:function(){
 				sb.clear();
@@ -240,7 +253,7 @@ JMBProfile.prototype = {
 					sb._('<tr id="birthplace">');
 						sb._('<td><div><span>Birthplace</span></div></td>');
 						sb._('<td>');
-							sb._('<input name="birth_town"  type="text" placeholder="Town/City" value="')._(user.place('birth', 'city'))._('">');
+							sb._('<input name="birth_city"  type="text" placeholder="Town/City" value="')._(user.place('birth', 'city'))._('">');
 							sb._('<input name="birth_state" type="text" placeholder="Prov/State" value="')._(user.place('birth', 'state'))._('">')
 							sb._('<input name="birth_country" type="text" placeholder="Country" value="')._(user.place('birth', 'country'))._('">')
 						sb._('</td>');
@@ -257,7 +270,7 @@ JMBProfile.prototype = {
 					sb._('<tr id="deathplace" style="')._((user.is_alive)?'display:none':'')._('">');
 						sb._('<td><div><span>Deathplace</span></div></td>');
 						sb._('<td>');
-							sb._('<input name="death_town"  type="text" placeholder="Town/City" value="')._(user.place('death', 'city'))._('">');
+							sb._('<input name="death_city"  type="text" placeholder="Town/City" value="')._(user.place('death', 'city'))._('">');
 							sb._('<input name="death_state" type="text" placeholder="Prov/State" value="')._(user.place('death', 'state'))._('">')
 							sb._('<input name="death_country" type="text" placeholder="Country" value="')._(user.place('death', 'country'))._('">')
 						sb._('</td>');
@@ -291,12 +304,14 @@ JMBProfile.prototype = {
 							sb._('<table>');
 								sb._('<tr>');
 									sb._('<td>');
-										sb._('<div style="margin-left: 30px;">');
+										sb._('<div>');
 											sb._('<div class="jmb-dialog-profile-content-unions-person"><table><tr>');
 												sb._('<td><div style="border-right:none;" class="info">')
 													sb._('<div class="name">')._(user.full_name)._('</div>');
 													sb._('<div class="date">')._(user.date('birth'))._('</div>');
-													sb._('<div class="location">')._(user.place('birth').place_name)._('</div>');
+													place = user.place('birth');
+													place_name = (place!='')?place.place_name:'';
+													sb._('<div class="location">')._(place_name)._('</div>');
 												sb._('</div></td>');
 												sb._('<td><div class="avatar">')._(module._avatar(object, 72, 80))._('</div></td>');
 											sb._('</tr></table></div>');
@@ -305,14 +320,41 @@ JMBProfile.prototype = {
 												sb._('<td><div style="border-left:none;" class="info">')
 													sb._('<div class="name">')._(parse_spouse.full_name)._('</div>');
 													sb._('<div class="date">')._(parse_spouse.date('birth'))._('</div>');
-													sb._('<div class="location">')._(parse_spouse.place('birth').place_nam)._('</div>');
+													place = parse_spouse.place('birth');
+													place_name = (place!='')?place.place_name:'';
+													sb._('<div class="location">')._(place_name)._('</div>');
 												sb._('</div></td>');
 											sb._('</tr></table></div>');
 										sb._('</div>');
 									sb._('</td>');
 								sb._('</tr>');
 								sb._('<tr>');
-									sb._('<td valign="top"><div class="jmb-dialog-profile-content-unions-part">')._('___formUnionEventFields___')._('</div></td>');
+									sb._('<td valign="top"><div class="jmb-dialog-profile-content-unions-part">');
+										sb._('<table id="union_event">');
+											sb._('<tr>');
+												sb._('<td><span>Type:</span></td>');
+												sb._('<td><select name="marr_type"><option value="MARR">Marriage</option></select></td>');
+											sb._('</tr>');
+											sb._('<tr id="marrdate">');
+												sb._('<td><div><span>Date</span></div></td>');
+												sb._('<td>');
+													sb._(gen.select.days('marr_days', user.marr(family.id, 'date')));
+													sb._(gen.select.months('marr_months', user.marr(family.id,'date', 1)));
+													sb._('<input name="marr_year" type="text" style="width:40px;" maxlength="4" placeholder="Year" value="')._(user.marr(family.id,'date', 2))._('">');
+													sb._('<input name="marr_option" ')._(!user.is_married_event(family.id)?'checked':'')._(' type="checkbox"> Unknown');
+												sb._('</td>');
+											sb._('</tr>');
+											sb._('<tr id="birthplace">');
+												sb._('<td><div><span>Location</span></div></td>');
+												sb._('<td>');
+													sb._('<input name="marr_city"  type="text" placeholder="Town/City" value="')._(user.marr(family.id, 'place', 'city'))._('">');
+													sb._('<input name="marr_city" type="text" placeholder="Prov/State" value="')._(user.marr(family.id, 'place', 'state'))._('">')
+													sb._('<input name="marr_city" type="text" placeholder="Country" value="')._(user.marr(family.id, 'place', 'country'))._('">')
+												sb._('</td>');
+											sb._('</tr>');
+											sb._('<tr><td></td><td><input name="deceased" type="checkbox" style="position:relative; top:3px;">&nbsp;Divorced/Separated&nbsp;<input placeholder="Year" name="marr_divorce_year" type="text" style="width:40px;" maxlength="4"></td></tr>')
+										sb._('</table>');
+									sb._('</div></td>');
 								sb._('</tr>');
 							sb._('</table>');
 						sb._('</div>');
@@ -345,23 +387,72 @@ JMBProfile.prototype = {
 		var	module = this,
 			sb = host.stringBuffer(),
 			object = module.object,
+			parse = storage.usertree.parse(object),
 			media = object.media,
 			families = object.families,
 			user = object.user,
 			cont = module.container,
 			form = module._form(object),
-			html, i, key, count;
+			html, i, key, count, place, place_name;
 		return {
 			view_profile:function(){
-				
+				sb.clear();
+				sb._('<div class="jmb-dialog-view-profile">');
+					sb._('<div class="jmb-dialog-view-profile-content">')
+						sb._('<table>');
+							sb._('<tr>');
+								sb._('<td><div class="jmb-dialog-photo">')._(module._avatar(object, 135, 150))._('</td>');
+								sb._('<td valign="top">');
+									sb._('<table style="margin-top: 10px;">');
+										sb._('<tr>');
+											sb._('<td><div class="title"><span>Full Name:</span></div></td>');
+											sb._('<td><div id="full_name" class="text"><span>')._(parse.full_name)._('</span></div></td>');
+										sb._('</tr>');
+										sb._('<tr>');
+											sb._('<td><div class="title"><span>Know As:</span></div></td>');
+											sb._('<td><div id="know_as" class="text"><span>')._(parse.nick)._('</span></div></td>');
+										sb._('</tr>');
+										sb._('<tr>');
+											sb._('<td><div class="title"><span>Birthday:</span></div></td>');
+											sb._('<td><div id="birthday" class="text"><span>')._(parse.date('birth'))._('</span></div></td>');
+										sb._('</tr>');
+										place = parse.place('birth');
+										place_name = (place!='')?place.place_name:'';
+										if(place_name!=''){
+											sb._('<tr>');
+												sb._('<td><div class="title"><span>Birthplace:</span></div></td>');	
+												
+												sb._('<td><div id="birthplace" class="text"><span>')._(place_name)._('</span></div></td>');
+											sb._('</tr>');
+										}
+										if(parse.relation){
+											sb._('<tr>');
+												sb._('<td><div class="title"><span>Relation:</span></div></td>');
+												sb._('<td><div id="relation" class="text"><span>')._(parse.relation)._('</span></div></td>');
+											sb._('</tr>');
+										}
+									sb._('</table>');
+								sb._('</td>');
+							sb._('</tr>');
+						sb._('</table>');
+					sb._('</div>');
+				sb._('</div>');
+				html = jQuery(sb.result());
+				jQuery(module.box).find('div.jmb-dialog-profile-content').append(html);
 			},
 			view_photos:function(){
-				
+				if(media!=null){
+					sb.clear();
+					sb._(storage.media.render(media.photos));
+					html = jQuery(sb.result());
+					storage.media.init(html);
+					jQuery(module.box).find('div.jmb-dialog-profile-content').append(html);
+				}
 			},
 			edit_basic:function(){
 				sb.clear();
 				sb._('<div class="jmb-dialog-profile-content-basic"><form id="jmb:fullprofile:basic" method="post" target="iframe-profile">');
-					sb._('<div class="jmb-dialog-button-submit"><input type="submit" value="Save"><input type="button" value="Cancel"></div>');
+					sb._('<div class="jmb-dialog-button-submit"><input type="submit" value="Save"></div>');
 					sb._('<div class="jmb-dialog-profile-content-basic-body">');
 						sb._('<table style="width:100%;">');
 							sb._('<tr>');
@@ -380,12 +471,16 @@ JMBProfile.prototype = {
 				sb._('</form></div>');
 				html = jQuery(sb.result());
 				module._buttons(html);
+				module._ajaxForm(jQuery(html).find('form'), 'basic', user.gedcom_id, function(data){}, function(res){
+					console.log(res);
+				}); 
 				jQuery(module.box).find('div.jmb-dialog-profile-content').append(html);
 			},
 			edit_unions:function(){
 				count = 0;
 				sb.clear();
 				sb._('<div class="jmb-dialog-profile-content-unions">');
+				sb._('<div class="jmb-dialog-profile-content-unions-add"><input type="button" value="Add another union"></div>');
 				for(key in families){
 					if (!families.hasOwnProperty(key)) continue;
 					if(key != 'length' || families[key].spouse != null){
@@ -398,7 +493,23 @@ JMBProfile.prototype = {
 				jQuery(module.box).find('div.jmb-dialog-profile-content').append(html);
 			},
 			edit_photos:function(){
-				
+				sb.clear();
+				sb._('<div class="jmb-dialog-photos-content">');
+					sb._('<div class="buttons">');
+						sb._('<form id="jmb:profile:photos" method="post" target="iframe-profile">');
+							sb._('<input name="upload" type="file"><input type="submit" value="Send">');
+						sb._('</form>');
+						sb._('<div class="switch-avatar">');
+							sb._('<input id="set" type="button" value="Set Avatar" style="display:none;" >');
+							sb._('<input id="unset" type="button" value="Unset Avatar" style="display:none;">');
+						sb._('</div>');					
+					sb._('</div>');
+					if(media!=null&&media.photos!=null){
+						sb._(storage.media.render(media.photos, true));
+					}
+				sb._('</div>');
+				html = jQuery(sb.result());
+				jQuery(module.box).find('div.jmb-dialog-profile-content').append(html);
 			}
 		}
 	},
@@ -426,6 +537,16 @@ JMBProfile.prototype = {
 		var 	module = this,
 			items = module.edit_menu;
 		module._menu(cont, items);
+	},
+	_clearMenu:function(){
+		var	module = this,
+			items = module.menu_item_pull, 
+			i;
+		for(i = items.length-1 ; i >= 0 ; i--){
+			jQuery(items.pop()).remove();	
+		}
+		module.menu_item_pull = [];
+		
 	},
 	_clearContent:function(){
 		var module = this;
@@ -462,8 +583,7 @@ JMBProfile.prototype = {
 		module._dialog({ title: name, height: 450 });
 		jQuery(module.box).css({ background:"white", border:"none" });
 		jQuery(module.box).append(cont);
-		module._initEditorHeaderButtons(mode);
-		module['_'+mode](cont);
+		module._initEditorHeaderButtons(cont);
 	},
 	add:function(object){
 		return {

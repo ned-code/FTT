@@ -240,6 +240,12 @@ JMBTooltip.prototype = {
 				console.log(class_name[class_name.length-1]);
 			});
 		});
+		jQuery(cont).find('.jmb-profile-tooltip-button-edit').click(function(){
+		storage.profile.editor('edit', {
+				object:settings.object,
+				individuals:settings.individuals
+			});
+		});
 	},
 	_invitation:function(cont, type, settings){
 		var class_name;

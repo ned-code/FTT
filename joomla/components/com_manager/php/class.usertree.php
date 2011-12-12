@@ -182,7 +182,13 @@ class JMBUserTree {
 	*
 	*/
 	protected function _getPhotos($media){
-		return $media;
+		$media_sort = array();
+		foreach($media as $el){
+			if($el['type'] === 'IMAG'){
+				$media_sort[] = $el;
+			}
+		}
+		return $media_sort;
 	}
 	/**
 	*
