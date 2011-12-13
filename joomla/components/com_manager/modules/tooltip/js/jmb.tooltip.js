@@ -162,7 +162,7 @@ JMBTooltip.prototype = {
 		var 	module = this,
 			object = settings.object,
 			media = object.media,
-			photos = (media!=null)?media.photos:false;
+			photos = (media!=null)?media.photos:false,
 			sb = host.stringBuffer();
 		
 		if(!photos) return '';

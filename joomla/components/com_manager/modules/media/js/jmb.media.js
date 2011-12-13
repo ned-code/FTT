@@ -10,7 +10,8 @@ JMBMediaManager.prototype = {
 		return sb._('<img src="index.php?option=com_manager&task=getResizeImage&id=')._(image.media_id)._('&w=100&h=100')._('" alt="" />').result();
 	},
 	render:function(photos, edit){
-		var self = this,sb = host.stringBuffer();
+		var 	self = this,
+			sb = host.stringBuffer();
 		sb._('<div class="jmb-dialog-photos-content">');
 			sb._('<div class="list">');
 				sb._('<ul>');

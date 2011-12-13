@@ -58,12 +58,16 @@ storage.usertree.parse = function(object){
 			return '';
 		},
 		gedcom_id:user.gedcom_id,
+		facebook_id:user.facebook_id,
 		first_name:user.first_name,
 		middle_name:user.middle_name,
 		last_name:user.last_name,
 		nick:user.nick,
 		gender:user.gender,
 		relation:(user.relation!=null)?relation:false,
+		name:(function(){
+			return [user.first_name,user.last_name].join('');
+		})(),
 		full_name:(function(){
 			var	first_name = user.first_name,
 				middle_name = user.middle_name,
