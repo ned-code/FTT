@@ -1,33 +1,72 @@
 function JMBDescendantTreeObject(obj){
-	var module = this;
-	var id = jQuery(obj).attr('id');
+	var	module = this,
+		id = jQuery(obj).attr('id');
+		
 	module.obj = obj;
-	module.call(id);		
+	module.baseurl = jQuery('body').attr('_baseurl');	
+	module.imgPath = module.baseurl+"components/com_manager/modules/descendant_tree/imgs/"
+	module.imagePath = module.baseurl+"components/com_manager/codebase/imgs/csh_bluebooks_custom/";
+	module.profile_container = jQuery('<div id="jmb_desc_profile_cont"></div>')[0];
+	module.dhxLayout = null;
+	module.dhxTree = null;
+	module.modal = null;
+	module.members = null;
+	module.select = null;
+	module.first = null;
+	module.lang = null;
+	
+	module.profile = new DescendantTreeProfile(module);
+	
+	module.check(id);		
 }
 
 JMBDescendantTreeObject.prototype = {
-	_ajax:function(func, params, callback){
+	ajax:function(func, params, callback){
 		host.callMethod("descendant_tree", "JMBDescendantTree", func, params, function(res){
 				callback(res);
 		})
 	},
-	call:function(id){
-		var module = this;
-		if(jQuery('#'+id).length>0){
-			module.load(id);
-		} else {
-			setTimeout(function(){
-				module.call(id);
-			}, 1000);
+	overlay:function(){
+		var	module = this,
+			modal_box;
+
+		modal_box = jQuery('<div class="jmb-dtp-modal"></div>');
+		jQuery(modal_box).width(jQuery(module.profile_container).parent().width()+'px');
+		jQuery(modal_box).height(jQuery(module.profile_container).parent().height()+'px');
+		jQuery(module.profile_container).parent().append(modal_box);
+		jQuery(modal_box).hide();
+
+		return {
+			on:function(){
+				jQuery(modal_box).width(jQuery(module.profile_container).parent().width()+'px');
+				jQuery(modal_box).height(jQuery(module.profile_container).parent().height()+'px');
+				jQuery(modal_box).show();	
+			},
+			off:function(){
+				jQuery(modal_box).hide();
+			},
 		}
 	},
-	load:function(id){
-		var self = this;
-		var dhxLayout;
-		var dhxTree;
-		var selectDiv;
-		var base_url = jQuery('body').attr('_baseurl');
-		
+	check:function(id){
+		var	module = this,
+			object;
+		object = jQuery('#'+id);
+		if(object.length!=0){
+			module.init(id);
+		} else {
+			setTimeout(function(){
+				module.check(id);
+			}, 250);
+		}
+	},
+	init:function(id){
+		var	module = this,
+			dhxLayout,
+			dhxTree,
+			select,
+			items,
+			user;
+
 		// set main dhxmlx Layout
 		dhxLayout = new dhtmlXLayoutObject(id, "2U");
 		dhxLayout.cells("a").hideHeader();
@@ -35,64 +74,63 @@ JMBDescendantTreeObject.prototype = {
 		dhxLayout.cells("a").setWidth(380);
 		dhxLayout.cells("a").fixSize(true);
 		
+		dhxLayout.cells("b").attachObject(module.profile_container);		
+
 		// set layout in left side[layout.cells('a')]
 		dhxTree = dhxLayout.cells("a").attachTree();
 		//dhxTree.setIconSize("16","16")
 		dhxTree.setIconSize("16","16");
 		dhxTree.setSkin('dhx_skyblue');
-		dhxTree.setImagePath(base_url+"components/com_manager/codebase/imgs/csh_bluebooks_custom/");
+		dhxTree.setImagePath(module.imagePath);
+
+		module.dhxLayout = dhxLayout;
+		module.dhxTree = dhxTree;
+		module.modal = module.overlay();
 		
-		this.dhxLayout  = dhxLayout;
-		this.dhxTree = dhxTree;
-		this.selectDiv = selectDiv;
-		this.firstParent = null;
-		this.show_desc = this.selectDesc(dhxTree.allTree);
 		
-		self.loadTree(dhxTree, 'mother');		
+		module.loadTree(dhxTree, 'mother');		
+		
 		dhxTree.attachEvent("onXLE", function(tree,id){
-			var items = this.getAllSubItems(0).split(',');
+			/*
+			* to fix;
+			*/
+			/*
+			items = this.getAllSubItems(0).split(',');
 			jQuery(items).each(function(i,e){
 				if(e.substr(0,1) == "F") {
 					dhxTree._idpull[e].htmlNode.childNodes[0].childNodes[0].childNodes[2].childNodes[0].style.width = '32px';
 				}
 			});
+			*/
 			jQuery('div[name="descendant-node"]').each(function(index, element){
 				jQuery(element).click(function(){
-					self.click(element);
+					module.click(this);
 				});
 			});
-			var user = jQuery('[name="descendant-node"][user="true"]');
+			
+			user = jQuery('div[name="descendant-node"][user="true"]');
 			jQuery(user[0]).click();
-			var x = jQuery(user[0]).offset().top - 300;
-			jQuery('div.containerTableStyle').animate({scrollTop: x}, 250);
+			jQuery('div.containerTableStyle').scrollTop((jQuery(user[0]).offset().top - 300));
 		});
 	},
 	loadTree:function(dhxTree, render){
-		var parent = this;
+		var	module = this,
+			json;
 		render = (render=='father')?'father':'mother';
-		this._ajax('getTree', render, function(res){
-			var json = jQuery.parseJSON(res.responseText);
-			parent.lang = json.lang;
-			parent.firstParent = json.key;
-			parent.profile = new DescendantTreeProfile(parent);
-			/*
-			storage.header.famLine.show();
-			storage.header.famLine.mode({
-				enabled:['mother','father'], 
-				click:'mother',
-				event:function(){
-					parent.profile._headerEvent();
-					parent.show_desc.init();
-				}
-			});
-			*/
-			parent.show_desc.load(json, render);
+		module.ajax('getTree', render, function(res){
+			json = jQuery.parseJSON(res.responseText);
+			module.lang = json.lang;
+			module.first = json.key;
+			module.members = json.members;
 			dhxTree.loadXMLString(json.xml);
 			dhxTree.openAllItems(0);
 			storage.core.modulesPullObject.unset('JMBDescendantTreeObject');
 		});
 	},
 	loadTreeById:function(id){
+		/* 
+		* to fix;
+		*/
 		var dhxTree = this.dhxTree;
 		dhxTree.deleteChildItems('0');
 		dhxTree.deleteItem('0');
@@ -102,17 +140,19 @@ JMBDescendantTreeObject.prototype = {
 		});
 	},
 	click:function(element){
-		if(this.selectDiv) jQuery(this.selectDiv).css('background', 'none');
+		var	module = this;	
+		if(module.select===element) return false;
+		if(module.select!=null) jQuery(module.select).css('background', 'none');
 		jQuery(element).css('background', 'yellow');
-		this.selectDiv = element;
+		module.select = element;
 		//item click
-		this.treeClick(element);
+		module.treeClick(element);
 	},
 	treeClick:function(obj){
-		var profile = this.profile;
-		var id = jQuery(obj).attr('id');
-		profile.render(id);	
-	},
+		var	module = this;
+		module.profile.render(module.members[jQuery(obj).attr('id')]);
+	}
+	/*
 	selectDesc:function(offsetParent){
 		var module = this;
 		var htmlObject = {};
@@ -259,6 +299,8 @@ JMBDescendantTreeObject.prototype = {
 				_parent.initSelectButton();	
 				return htmlObject;
 			}
-		}		
+		}
+		
 	}
+	*/
 }

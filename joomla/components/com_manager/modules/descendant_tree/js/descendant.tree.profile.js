@@ -1,4 +1,5 @@
 function DescendantTreeProfile(parent){
+	/*
 	var self = this;	
 	var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 	var colors = {
@@ -16,14 +17,110 @@ function DescendantTreeProfile(parent){
 	this.renderType = null;
 	this.editDiv = null;
 	this.profile = new JMBProfile();
+	*/
+	var	module = this;
+	
+	module.parent = parent;
+	module.cont = parent.profile_container;
+	
+	
+	
+	/*
+		jQuery(object).find('.jmb-dtp-body-info-switch').click(function(){
+			storage.profile.editor('edit', {
+				object:settings.object,
+				individuals:settings.individuals
+			});
+		});
+		*/
 }
 
 DescendantTreeProfile.prototype = {
-	_ajax:function(func, params, callback){
+	ajax:function(func, params, callback){
 		host.callMethod("descendant_tree", "JMBDescendantTree", func, params, function(res){
 				callback(res);
 		})
 	},
+	clear:function(){
+		var	module = this;
+		jQuery(module.cont).html('');	
+		storage.tooltip.cleaner();
+	},
+	avatar:function(object){
+		var	module = this,
+			sb = host.stringBuffer(),
+			user = object.user,
+			facebook_id = user.facebook_id,
+			media = object.media,
+			image = (user.gender!='M')?'female.png':'male.png',
+			src = module.parent.imgPath+image;
+		//get avatar image
+		if(media!=null&&media.avatar!=null){
+			return sb._('<img src="index.php?option=com_manager&task=getResizeImage&id=')._(media.avatar.media_id)._('&w=72&h=80">').result(); 
+		}
+		//get facebook image
+		if(facebook_id !== '0'){
+			return sb._('<img src="index.php?option=com_manager&task=getResizeImage&fid=')._(facebook_id)._('&w=72&h=80">').result();
+		}
+		//get default image
+		return sb._('<img height="80px" width="72px" src="')._(src)._('">').result();
+	},
+	create:function(ch){
+		var	module = this,
+			sb = host.stringBuffer(),
+			language = module.parent.lang,
+			user = ch.user,
+			parse = storage.usertree.parse(ch),
+			html;
+
+		sb._('<div id="jmb-dtp-container" class="jmb-dtp-container">');
+			sb._('<div class="jmb-dtp-body">');
+				sb._('<div class="jmb-dtp-body-info">');
+					sb._('<table>');
+						sb._('<tr>');
+							sb._('<td><div class="jmb-dtp-body-info-avatar">')._(module.avatar(ch))._('<div class="jmb-dtp-facebook-icon" style="display:none">&nbsp;</div><div id="edit-button" class="jmb-dtp-body-edit-button">&nbsp;</div></div></td>');
+							sb._('<td>');
+								sb._('<div class="jmb-dtp-body-info-name"><span class="title">')._(language['NAME'])._(':</span>&nbsp;<span class="text">')._(parse.full_name)._('</span></div>');
+								sb._('<div class="jmb-dtp-body-info-born"><span class="title">')._(language['BORN'])._(':</span>&nbsp;<span class="text">')._(parse.date('birth'))._('</span></div>');
+								sb._('<div class="jmb-dtp-body-info-birthplace"><span class="title">')._(language['BIRTHPLACE'])._(':</span>&nbsp;<span class="text">')._((parse.place('birth')!='')?parse.place('birth').place_name:'')._('</span></div>');
+								if(parse.relation) sb._('<div class="jmb-dtp-body-info-relation"><span class="title">')._(language['RELATION'])._(':</span>&nbsp;<span class="text">')._(parse.relation)._('</span></div>');
+							sb._('</td>');
+						sb._('</tr>');
+					sb._('</table>');
+					//sb._('<div class="jmb-dtp-body-info-switch">')._(language['SWITCH'])._('</div>');
+				sb._('</div>');
+				sb._('<div class="jmb-dtp-body-space">&nbsp;</div>');
+				sb._('<div class="jmb-dtp-body-media">&nbsp;</div>');
+			sb._('</div>');
+			sb._('<div class="jmb-dtp-footer"></div>');
+		sb._('</div>');	
+		
+		html = jQuery(sb.result());
+		jQuery(module.cont).append(html);
+		
+		return html;
+	},
+	edit:function(html, object){
+		var	module = this;
+		storage.tooltip.render('edit', {
+			individuals:module.parent.members,
+			object:object,
+			target:jQuery(html).find('div#edit-button')
+		});
+	},
+	render:function(object){
+		var	module = this, html;
+		
+		//module.parent.modal.on();
+		
+		module.clear();
+		html = module.create(object);
+		
+		module.edit(html, object);
+		
+		//module.parent.modal.off();
+	}
+	/*
 	_headerEvent:function(){
 		var self = this;
 		storage.addEvent(storage.header.clickPull, function(object){
@@ -301,4 +398,5 @@ DescendantTreeProfile.prototype = {
 			self.json = json;
 		})
 	}
+	*/
 }
