@@ -43,7 +43,11 @@ class JMBAjax {
         	foreach ($args as $i=>$v) {
         		if (!$i) continue;
         		if (is_int($v)) continue;
-        		$args[$i] =($args[$i]==null)?"NULL":"'".mysql_escape_string($v)."'";
+        		if($v==null || $v == '' ){
+        			$args[$i] = "NULL";
+        		} else {
+        			$args[$i] = "'".mysql_escape_string($v)."'";
+        		}
         	}
         	for ($i=$c=count($args)-1; $i<$c+20; $i++){ 
         		$args[$i+1] = "UNKNOWN_PLACEHOLDER_$i";
@@ -52,6 +56,7 @@ class JMBAjax {
         }
         
         public function query(){
+        	//var_dump($this->query);
         	mysql_query($this->query);
         }
         public function loadAssocList($sort=false, $common_prefix=''){

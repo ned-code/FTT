@@ -246,9 +246,18 @@ JMBTooltip.prototype = {
 			});
 		});
 		jQuery(cont).find('.jmb-profile-tooltip-button-edit').click(function(){
-		storage.profile.editor('edit', {
+			storage.profile.editor('edit', {
 				object:settings.object,
-				individuals:settings.individuals
+				individuals:settings.individuals,
+				events:{
+					afterEditorClose:function(object){
+						settings.individuals[object.user.gedcom_id] = object;
+						settings.object = object;
+						if(typeof(settings.afterEditorClose)==='function'){
+							settings.afterEditorClose(object);
+						}
+					}
+				}
 			});
 		});
 	},

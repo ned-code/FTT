@@ -18,15 +18,20 @@ function JMBProfile(){
 		close:function(){
 			jQuery(this).dialog("destroy");
 			jQuery(this).remove();
+			module.events.afterEditorClose(module.object);
 		}	
 	}
-	
+		
 	module.editor_header_active_button = null;
 	module.editor_menu_active_button = null;
 	module.menu_item_pull = [];
 	module.individuals = null;
 	module.object = null;
 	module.container = null;
+	
+	module.events = {
+		beforeClose:function(){}
+	}
 	
 	module._iframe();
 }
@@ -472,7 +477,11 @@ JMBProfile.prototype = {
 				html = jQuery(sb.result());
 				module._buttons(html);
 				module._ajaxForm(jQuery(html).find('form'), 'basic', user.gedcom_id, function(data){}, function(res){
-					console.log(res);
+					module.object = res.user;
+					object = module.object;
+					parse = storage.usertree.parse(object);
+					user = object.user;
+					form = module._form(object);
 				}); 
 				jQuery(module.box).find('div.jmb-dialog-profile-content').append(html);
 			},
@@ -561,11 +570,12 @@ JMBProfile.prototype = {
 		module.object = null;
 		module.individuals = null;
 		module.container = null;
-	},
-	editor:function(mode, data, settings){
-		if(!settings) {
-			settings = {}
+		
+		module.events = {
+			afterEditorClose:function(){}
 		}
+	},
+	editor:function(mode, data){
 		var	module = this,
 			cont = module._container(),
 			object = data.object,
@@ -575,6 +585,7 @@ JMBProfile.prototype = {
 			name = get.full_name;
 			
 		module._clear();
+		jQuery.extend(module.events, data.events);
 		
 		module.container = cont;
 		module.object = object;

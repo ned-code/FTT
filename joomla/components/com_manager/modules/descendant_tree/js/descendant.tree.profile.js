@@ -132,10 +132,13 @@ DescendantTreeProfile.prototype = {
 	edit:function(html, object){
 		var	module = this;
 		storage.tooltip.render('edit', {
-			individuals:module.parent.members,
-			object:object,
+			offsetParent:document.body,
 			target:jQuery(html).find('div#edit-button'),
-			offsetParent:document.body
+			object:object,
+			individuals:module.parent.members,
+			afterEditorClose:function(object){
+				module.render(object);	
+			}
 		});
 	},
 	render:function(object){

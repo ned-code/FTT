@@ -336,7 +336,8 @@ class JMBUserTree {
 	/**
 	*
 	*/
-	public function save($tree_id, $gedcom_id, $compress_usertree){
+	public function save($tree_id, $gedcom_id, $usertree){
+		$compress_usertree = $this->compress($usertree);
 		$sql_string = "INSERT INTO #__mb_cash (`uid`,`tree_id`, `individuals_id`, `type`, `value`, `change`) VALUES (NULL,?,?,?,?, NOW())";
 		$this->db->setQuery($sql_string, $tree_id, $gedcom_id, "usertree", $compress_usertree);
 		$this->db->query();
@@ -344,7 +345,8 @@ class JMBUserTree {
 	/**
 	*
 	*/
-	public function update($tree_id, $gedcom_id, $compress_usertree){
+	public function update($tree_id, $gedcom_id, $usertree){
+		$compress_usertree = $this->compress($usertree);
 		$sql_string = "UPDATE #__mb_cash SET `value`=?,`change`=NOW() WHERE tree_id = ? AND individuals_id = ?";
 		$this->db->setQuery($sql_string, $compress_usertree, $tree_id, $gedcom_id);
 		$this->db->query();
@@ -369,11 +371,10 @@ class JMBUserTree {
 	*/
 	public function init($tree_id, $gedcom_id, $permission){
 		$usertree = $this->get($tree_id, $gedcom_id, $permission);		
-		$compress_usertree = $this->compress($usertree);
 		if($this->check($tree_id, $gedcom_id)){
-			$this->update($tree_id, $gedcom_id, $compress_usertree);
+			$this->update($tree_id, $gedcom_id, $usertree);
 		} else {
-			$this->save($tree_id, $gedcom_id, $compress_usertree);
+			$this->save($tree_id, $gedcom_id, $usertree);
 		}
 	}	
 }

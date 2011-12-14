@@ -727,6 +727,7 @@ jQuery.bt = {version: '0.9.5-rc1'};
         
         // set up the stuff to happen AFTER the tip is hidden
         i.btCleanup = function(){
+        /*
           var box = jQuery(i).data('bt-box');
           var contentOrig = jQuery(i).data('bt-content-orig');
           var overlay = jQuery(i).data('bt-overlay');
@@ -739,6 +740,22 @@ jQuery.bt = {version: '0.9.5-rc1'};
             jQuery(contentOrig).data('bt-clones', arrayRemove(clones, contentOrig.clone));
           }
           if (typeof overlay == 'object') {
+            jQuery(overlay).remove();
+            jQuery(i).removeData('bt-overlay');
+          }
+          */
+          var box = jQuery(i).data('bt-box');
+          var contentOrig = jQuery(i).data('bt-content-orig');
+          var overlay = jQuery(i).data('bt-overlay');
+          if (box != null &&  typeof box == 'object') {
+            jQuery(box).remove();
+            jQuery(i).removeData('bt-box');
+          }
+          if (contentOrig != null && typeof contentOrig == 'object') {
+            var clones = jQuery(contentOrig.original).data('bt-clones');
+            jQuery(contentOrig).data('bt-clones', arrayRemove(clones, contentOrig.clone));
+          }
+          if (overlay != null && typeof overlay == 'object') {
             jQuery(overlay).remove();
             jQuery(i).removeData('bt-overlay');
           }

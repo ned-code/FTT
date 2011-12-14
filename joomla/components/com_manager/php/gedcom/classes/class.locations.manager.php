@@ -82,7 +82,8 @@ class LocationsList{
         	if($place==null){ return false; }
         	foreach($place->Locations as $loc){
         		$phones = (is_array($loc->Phones))?implode(',', $loc->Phones):NULL;
-        		$this->db->setQuery('UPDATE #__mb_locations SET `name`=?, `cont`=?,`adr1`=?,`adr2`=?,`city`=?,`state`=?,`post`=?,`country`=?,`phones`=?,`change`= NOW() WHERE place_id=?', $loc->Name, $loc->Cont, $loc->Adr1, $loc->Adr2, $loc->City, $loc->State, $loc->Post, $loc->Country, $phones, $place->Id);         
+        		$sql_string = 'UPDATE #__mb_locations SET `name`=?, `cont`=?,`adr1`=?,`adr2`=?,`city`=?,`state`=?,`post`=?,`country`=?,`phones`=?,`change`= NOW() WHERE place_id=?';
+        		$this->db->setQuery($sql_string, $loc->Name, ($loc->Cont!=NULL)?implode(',',$loc->Cont):NULL, $loc->Adr1, $loc->Adr2, $loc->City, $loc->State, $loc->Post, $loc->Country, $phones, $place->Id);         
         		$this->db->query();
         	}
         }

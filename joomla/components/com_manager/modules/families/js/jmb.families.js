@@ -8,6 +8,7 @@ function JMBFamiliesObject(obj){
 	module.cssPath = module.path+'css/';
 	module.json = null;
 	module.user = null;
+	module.now_id = null;
 	module.usertree = null;
 	module.colors = null;
 	module.cont = null;
@@ -354,7 +355,11 @@ JMBFamiliesObject.prototype = {
 			storage.tooltip.render('edit', {
 				individuals:usertree,
 				object:usertree[gedcom_id],
-				target:e
+				target:e,
+				afterEditorClose:function(object){
+					module.usertree[object.user.gedcom_id] = object;
+					module.render(module.now_id);	
+				}
 			});
 		});
 	},
@@ -386,6 +391,7 @@ JMBFamiliesObject.prototype = {
 			jQuery(module.cont).remove();
 		}
 		module.cont = cont;
+		module.now_id = gedcom_id;
 		
 		jQuery(module.parent).append(cont);
 		

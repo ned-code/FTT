@@ -36,15 +36,17 @@ class JMBProfile {
 		$this->host->gedcom->individuals->update($ind);
 	}
 	
-	protected function updateIndividualEvent($user_id, $event, $request){
-		if(empty($event)){
+	protected function updateIndividualEvent($user_id, $event, $type, $request){
+		if(empty($event)){			
 			$event = new Events();
 			$event->IndKey = $user_id;
+			$event->DateType = 'EVO';
+			$event->Type = $type;
 			$event->Id = $this->host->gedcom->events->save($event);
 		} else {
 			$event = $event[0];
 		}
-		$prefix = ($event->Type=='BIRT')?'birth_':'death_';
+		$prefix = ($event->Type=='BIRT')?'birth_':'death_';		
 		$place_name = $this->getPlaceName($request, $prefix);
 		$city = $request[$prefix.'city'];
 		$state = $request[$prefix.'state'];
@@ -58,7 +60,6 @@ class JMBProfile {
 			$event->From->Month = null;
 			$event->From->Year = null;
 		}
-		$event->Place = $this->host->gedcom->locations->getPlaceByEventId($event->Id);
 		if($event->Place!=null){
 			$event->Place->Name = $place_name;
 			$location = $event->Place->Locations[0];
@@ -78,12 +79,25 @@ class JMBProfile {
 		$this->host->gedcom->events->update($event);
 	}
 
-	public function basic($user_id){
+	public function basic($user_id){				
+		// update user in db
 		$ind = $this->host->gedcom->individuals->get($user_id);
 		$this->updateIndividual($ind, $_REQUEST);
-		//$this->updateIndividualEvent($user_id, $ind->Birth, $_REQUEST);
-		//$this->updateIndividualEvent($user_id, $ind->Death, $_REQUEST);	
-		//return json_encode(array('ind'=>$ind));
+		$this->updateIndividualEvent($user_id, $ind->Birth, 'BIRT', $_REQUEST);
+		if($_REQUEST['living']=='1'){
+			if( sizeof($ind->Death) != 0){
+				$this->host->gedcom->events->delete($ind->Death[0]->Id);
+			}
+		} else {			
+			$this->updateIndividualEvent($user_id, $ind->Death, 'DEAT', $_REQUEST);	
+		}
+		//update user tree
+		$owner_id = $_SESSION['jmb']['gid'];
+		$tree_id = $_SESSION['jmb']['tid'];
+		$permission = $_SESSION['jmb']['permission'];
+		$this->host->usertree->init($tree_id, $owner_id, $permission);
+		$usertree = $this->host->usertree->load($tree_id, $owner_id);
+		return json_encode(array('user'=>$usertree[$user_id]));
 	}
 }
 
