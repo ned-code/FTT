@@ -65,14 +65,19 @@ DescendantTreeProfile.prototype = {
 		//get default image
 		return sb._('<img height="80px" width="72px" src="')._(src)._('">').result();
 	},
+	image:function(img){
+		var	module = this,
+			sb = host.stringBuffer();
+		return sb._('<a href="')._(img.path)._('" rel="prettyPhoto[pp_gal]" title=""><img src="index.php?option=com_manager&task=getResizeImage&id=')._(img.media_id)._('&w=50&h=50" alt="" /></a>').result();
+	},
 	create:function(ch){
 		var	module = this,
 			sb = host.stringBuffer(),
 			language = module.parent.lang,
 			user = ch.user,
+			media = ch.media,
 			parse = storage.usertree.parse(ch),
 			html;
-
 		sb._('<div id="jmb-dtp-container" class="jmb-dtp-container">');
 			sb._('<div class="jmb-dtp-body">');
 				sb._('<div class="jmb-dtp-body-info">');
@@ -90,14 +95,38 @@ DescendantTreeProfile.prototype = {
 					//sb._('<div class="jmb-dtp-body-info-switch">')._(language['SWITCH'])._('</div>');
 				sb._('</div>');
 				sb._('<div class="jmb-dtp-body-space">&nbsp;</div>');
-				sb._('<div class="jmb-dtp-body-media">&nbsp;</div>');
+				sb._('<div class="jmb-dtp-body-media">')
+					if(media!=null){
+						sb._('<ul class="media-list">');
+							jQuery(media.photos).each(function(i, img){
+								sb._('<li class="media-item">')._(module.image(img))._('</li>');
+							});
+						sb._('</ul>');
+					}
+				sb._('</div>');
 			sb._('</div>');
-			sb._('<div class="jmb-dtp-footer"></div>');
+			if(parse.facebook_id=='0'){
+				sb._('<div class="jmb-dtp-footer">');
+					sb._('<table>');			
+						sb._('<tr>');
+							sb._('<td><div class="email">&nbsp;</div></td>');
+							sb._('<td>');
+								sb._('<div><span>')._(parse.name)._(' ')._('is no registered')._('.</span></div>');
+								sb._('<div><span class="send" style="color:blue;cursor:pointer" >Send invitation to ')._(parse.name)._('</span></div>');
+							sb._('</td>');
+						sb._('</tr>');
+						
+					sb._('</table>');
+				sb._('</div>');
+			}
 		sb._('</div>');	
 		
 		html = jQuery(sb.result());
 		jQuery(module.cont).append(html);
-		
+		storage.media.init(html);
+		jQuery(html).find('div.jmb-dtp-footer .send').click(function(){
+			storage.invitation.render(ch);
+		}); 
 		return html;
 	},
 	edit:function(html, object){

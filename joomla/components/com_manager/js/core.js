@@ -66,7 +66,7 @@ storage.usertree.parse = function(object){
 		gender:user.gender,
 		relation:(user.relation!=null)?relation:false,
 		name:(function(){
-			return [user.first_name,user.last_name].join('');
+			return [user.first_name,user.last_name].join(' ');
 		})(),
 		full_name:(function(){
 			var	first_name = user.first_name,

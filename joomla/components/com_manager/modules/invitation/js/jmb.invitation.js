@@ -31,7 +31,7 @@ JMBInvitation.prototype = {
 			user = object.user,
 			facebook_id = user.facebook_id,
 			media = object.media,
-			image = (user.gender!='M')?'male.png':'female.png',
+			image = (user.gender=='M')?'male.png':'female.png',
 			src = storage.baseurl+module.path+image;
 		//get avatar image
 		if(media!=null&&media.avatar!=null){
