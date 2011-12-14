@@ -154,9 +154,14 @@ JMBTooltip.prototype = {
 	},
 	_setSettings:function(type, settings){
 		var 	module = this, 
+			result = {},
 			default_settings;					
 		default_settings = (type==='view')?module.viewSettings:module.editSettings;
-		return jQuery.extend(settings, default_settings);
+		jQuery.extend(result, settings, default_settings);
+		if(settings.offsetParent){
+			result.style.offsetParent = settings.offsetParent;
+		}
+		return result;
 	},
 	_images:function(settings){
 		var 	module = this,

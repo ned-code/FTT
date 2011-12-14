@@ -134,7 +134,8 @@ DescendantTreeProfile.prototype = {
 		storage.tooltip.render('edit', {
 			individuals:module.parent.members,
 			object:object,
-			target:jQuery(html).find('div#edit-button')
+			target:jQuery(html).find('div#edit-button'),
+			offsetParent:document.body
 		});
 	},
 	render:function(object){
