@@ -47,6 +47,11 @@ class JMBProfile {
 			$event = $event[0];
 		}
 		$prefix = ($event->Type=='BIRT')?'birth_':'death_';		
+		$update_event = $this->updateEvent($event, $prefix, $request);
+		$this->host->gedcom->events->update($update_event);
+	}
+	
+	protected function updateEvent($event, $prefix, $request){
 		$place_name = $this->getPlaceName($request, $prefix);
 		$city = $request[$prefix.'city'];
 		$state = $request[$prefix.'state'];
@@ -54,7 +59,7 @@ class JMBProfile {
 		if(!isset($request[$prefix.'option'])){
 			$event->From->Day = ($request[$prefix.'days']!='0')?$request[$prefix.'days']:NULL;
 			$event->From->Month = ($request[$prefix.'months']!='0')?$request[$prefix.'months']:NULL;
-			$event->From->Year = $request[$prefix.'year'];
+			$event->From->Year = ($request[$prefix.'year']!='')?$request[$prefix.'year']:NULL;
 		} else {
 			$event->From->Day = null;
 			$event->From->Month = null;
@@ -76,7 +81,7 @@ class JMBProfile {
 			$place->Locations = array();
 			$place->Locations[] = $location;
 		}
-		$this->host->gedcom->events->update($event);
+		return $event;
 	}
 
 	public function basic($user_id){				
@@ -100,7 +105,57 @@ class JMBProfile {
 		return json_encode(array('user'=>$usertree[$user_id]));
 	}
 	
-	public function union(){}
+	public function union($args){
+		$args = json_decode($args);
+		switch($args->method){
+			case "save":
+				$family = $this->host->gedcom->families->get($args->family_id);
+				//marriage
+				if($family->Marriage==null){
+					$event = new Events();
+					$event->Name = 'Marriage';
+					$event->FamKey = $args->family_id;
+					$event->DateType = 'EVO';
+					$event->Type = 'MARR';
+					$event->Id = $this->host->gedcom->events->save($event);
+				} else {
+					$event = $family->Marriage;
+				}
+				$update_marr = $this->updateEvent($event, 'marr_', $_REQUEST);
+				$this->host->gedcom->events->update($update_marr);
+				//divorce
+				if(isset($_REQUEST['deceased'])){
+					if($family->Divorce==null){
+						$event = new Events();
+						$event->Name = 'Divorce';
+						$event->FamKey = $args->family_id;
+						$event->DateType = 'EVO';
+						$event->Type = 'DIV';
+						$event->Id = $this->host->gedcom->events->save($event);
+					} else {
+						$event = $family->Divorce;
+					}
+					$div_year = (isset($_REQUEST['marr_divorce_year']))?$_REQUEST['marr_divorce_year']:null;
+					$event->From->Year = $div_year;
+					$this->host->gedcom->events->update($update_divorce);
+				} else {
+					if($family->Divorce!=null){
+						$this->host->gedcom->events->delete($family->Divorce);
+					}
+				}
+			break;
+		}
+		
+		//update user tree
+		$owner_id = $_SESSION['jmb']['gid'];
+		$tree_id = $_SESSION['jmb']['tid'];
+		$permission = $_SESSION['jmb']['permission'];
+		$this->host->usertree->init($tree_id, $owner_id, $permission);
+		$usertree = $this->host->usertree->load($tree_id, $owner_id);
+		return json_encode(array('user'=>$usertree[$args->gedcom_id], 'family'=>$family));
+	}
+	
+	
 	public function photo($args){
 		$args = json_decode($args);
 		switch($args->method){
@@ -114,7 +169,6 @@ class JMBProfile {
 				if($_FILES['upload']['size'] != 0){
 					$media_id = $this->host->gedcom->media->save($args->gedcom_id, $_FILES["upload"]["tmp_name"], $_FILES["upload"]["name"], $_FILES['upload']['size']);
 					if($media_id) {
-						//$this->host->gedcom->media->setAvatarImage($args->gedcom_id, $media_id);
 						$res = $this->host->gedcom->media->get($media_id);
 						$image = array(
 							'media_id'=>$res->Id,

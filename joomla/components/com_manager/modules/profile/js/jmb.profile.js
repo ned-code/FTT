@@ -302,7 +302,7 @@ JMBProfile.prototype = {
 				spouse = module.individuals[family.spouse];
 				parse_spouse = storage.usertree.parse(spouse);
 				sb._('<div id="jmb-union-')._(count)._('" class="jmb-dialog-profile-content-union" spouse_id="')._(family.spouse)._('">');
-					sb._('<form id="jmb-profile-addpsc-')._(count)._('" method="post" target="iframe-profile">');
+					sb._('<form id="jmb-profile-addpsc-')._(count)._('" method="post" family_id="')._(family.id)._('" target="iframe-profile">');
 						sb._('<div class="jmb-dialog-profile-content-unions-header">');
 							sb._('<div id="title">Union ')._(count+1)._('</div>');
 							sb._('<div id="button"><input type="submit" value="Save"></div>');
@@ -355,8 +355,8 @@ JMBProfile.prototype = {
 												sb._('<td><div><span>Location</span></div></td>');
 												sb._('<td>');
 													sb._('<input name="marr_city"  type="text" placeholder="Town/City" value="')._(user.marr(family.id, 'place', 'city'))._('">');
-													sb._('<input name="marr_city" type="text" placeholder="Prov/State" value="')._(user.marr(family.id, 'place', 'state'))._('">')
-													sb._('<input name="marr_city" type="text" placeholder="Country" value="')._(user.marr(family.id, 'place', 'country'))._('">')
+													sb._('<input name="state" type="text" placeholder="Prov/State" value="')._(user.marr(family.id, 'place', 'state'))._('">')
+													sb._('<input name="marr_country" type="text" placeholder="Country" value="')._(user.marr(family.id, 'place', 'country'))._('">')
 												sb._('</td>');
 											sb._('</tr>');
 											sb._('<tr><td></td><td><input name="deceased" type="checkbox" style="position:relative; top:3px;">&nbsp;Divorced/Separated&nbsp;<input placeholder="Year" name="marr_divorce_year" type="text" style="width:40px;" maxlength="4"></td></tr>')
@@ -401,7 +401,18 @@ JMBProfile.prototype = {
 			cont = module.container,
 			form = module._form(object),
 			html,
-			select_photo;
+			select_photo,
+			update_data;
+		
+		update_data = function(res){
+			module.object = res.user;
+			object = module.object;
+			media = object.media,
+			families = object.families,
+			parse = storage.usertree.parse(object);
+			user = object.user;
+			form = module._form(object);
+		}
 		return {
 			view_profile:function(){
 				var place, place_name;
@@ -481,16 +492,12 @@ JMBProfile.prototype = {
 				html = jQuery(sb.result());
 				module._buttons(html);
 				module._ajaxForm(jQuery(html).find('form'), 'basic', user.gedcom_id, function(data){}, function(res){
-					module.object = res.user;
-					object = module.object;
-					parse = storage.usertree.parse(object);
-					user = object.user;
-					form = module._form(object);
+					update_data(res);
 				}); 
 				jQuery(module.box).find('div.jmb-dialog-profile-content').append(html);
 			},
 			edit_unions:function(){
-				var key, count = 0;
+				var key, count = 0, json;
 				sb.clear();
 				sb._('<div class="jmb-dialog-profile-content-unions">');
 				sb._('<div class="jmb-dialog-profile-content-unions-add"><input type="button" value="Add another union"></div>');
@@ -504,8 +511,9 @@ JMBProfile.prototype = {
 				sb._('</div>');
 				html = jQuery(sb.result());
 				jQuery(html).find('form').each(function(i, form){
-					module._ajaxForm(form, 'union', null, function(data){}, function(res){
-						
+					json = '{"gedcom_id":"'+parse.gedcom_id+'","family_id":"'+jQuery(form).attr('family_id')+'","method":"save"}';
+					module._ajaxForm(form, 'union', json, function(data){}, function(res){
+						update_data(res);
 					}); 
 				});
 				jQuery(module.box).find('div.jmb-dialog-profile-content').append(html);

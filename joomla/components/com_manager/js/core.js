@@ -44,26 +44,15 @@ storage.usertree.parse = function(object){
 	var	user = object.user,
 		families = object.families,
 		media = object.media,
-		date_num = {"day":0,"month":1,"year":2};
+		date_num = {"day":0,"month":1,"year":2},
+		_month = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 	return {
-		_month:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
-		_getSub:function(mod, sub){
-			if(mod!=null){
-				if(sub){
-					return mod[sub];
-				} else {
-					return mod;
-				}
-				
-			}
-			return '';
-		},
 		gedcom_id:user.gedcom_id,
 		facebook_id:user.facebook_id,
-		first_name:user.first_name,
-		middle_name:user.middle_name,
-		last_name:user.last_name,
-		nick:user.nick,
+		first_name:(user.first_name!=null)?user.first_name:'',
+		middle_name:(user.middle_name!=null)?user.middle_name:'',
+		last_name:(user.last_name!=null)?user.last_name:'',
+		nick:(user.nick!=null)?user.nick:'',
 		gender:user.gender,
 		relation:(user.relation!=null)?relation:false,
 		avatar_id:(function(){
@@ -123,14 +112,12 @@ storage.usertree.parse = function(object){
 			var	family = families[id],
 				event = (family)?family.event:false;
 			if(event){
-				switch(type){
-					case "date":
-						return this._getSub(event.date, sub);
-					break;
-					
-					case "place":
-						return this._getSub(event.place, sub);
-					break;
+				if(event[type]!=null){
+					if(sub){
+					 	return (event[type][sub]!=null)?event[type][sub]:'';
+					} else {
+						return event[type];
+					}
 				}	
 			}
 			return '';
@@ -166,7 +153,7 @@ storage.usertree.parse = function(object){
 				if(sub){
 					return (date[sub])?date[sub]:0;
 				} else {
-					return [date[0],this._month[date[1]-1],date[2]].join(' ');
+					return [date[0],_month[date[1]-1],date[2]].join(' ');
 				}
 			}
 			return '';			
