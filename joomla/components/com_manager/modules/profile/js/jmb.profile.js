@@ -286,6 +286,7 @@ JMBProfile.prototype = {
 			avatar:function(width, height){
 				sb.clear();
 				sb._('<div class="jmb-dialog-photo">')._(module._avatar(object, width, height))._('</div>');
+				/*
 				sb._('<div class="jmb-dialog-photo-button">');
 					sb._('<span class="jmb-dialog-photo-button-wrapper">');
 						sb._('<input type="file" name="photo" id="photo">');
@@ -293,6 +294,7 @@ JMBProfile.prototype = {
 						sb._('<div class="jmb-dialog-photo-context"></div>');
 					sb._('</span>');
 				sb._('</div>');
+				*/
 				return sb.result();
 			},
 			spouse:function(family, count){
@@ -398,9 +400,11 @@ JMBProfile.prototype = {
 			user = object.user,
 			cont = module.container,
 			form = module._form(object),
-			html, i, key, count, place, place_name;
+			html,
+			select_photo;
 		return {
 			view_profile:function(){
+				var place, place_name;
 				sb.clear();
 				sb._('<div class="jmb-dialog-view-profile">');
 					sb._('<div class="jmb-dialog-view-profile-content">')
@@ -450,7 +454,7 @@ JMBProfile.prototype = {
 					sb.clear();
 					sb._(storage.media.render(media.photos));
 					html = jQuery(sb.result());
-					storage.media.init(html);
+					storage.media.init(html);				
 					jQuery(module.box).find('div.jmb-dialog-profile-content').append(html);
 				}
 			},
@@ -486,7 +490,7 @@ JMBProfile.prototype = {
 				jQuery(module.box).find('div.jmb-dialog-profile-content').append(html);
 			},
 			edit_unions:function(){
-				count = 0;
+				var key, count = 0;
 				sb.clear();
 				sb._('<div class="jmb-dialog-profile-content-unions">');
 				sb._('<div class="jmb-dialog-profile-content-unions-add"><input type="button" value="Add another union"></div>');
@@ -499,9 +503,53 @@ JMBProfile.prototype = {
 				}
 				sb._('</div>');
 				html = jQuery(sb.result());
+				jQuery(html).find('form').each(function(i, form){
+					module._ajaxForm(form, 'union', null, function(data){}, function(res){
+						
+					}); 
+				});
 				jQuery(module.box).find('div.jmb-dialog-profile-content').append(html);
 			},
 			edit_photos:function(){
+				var photoDelete, photoSelect;
+				photoDelete = function(li){
+					jQuery(li).find('div.delete').click(function(){
+						var	click = this,
+							json = '{"method":"delete","media_id":"'+jQuery(click).attr('id')+'"}';
+						module._ajax('photo', json, function(res){
+							jQuery(click).parent().parent().parent().remove();
+							jQuery(html).find('div.switch-avatar input').hide();
+						});
+						return false;
+					});	
+				}
+				photoSelect = function(li){
+					jQuery(li).click(function(){
+						var input, json;
+						jQuery(html).find('div.jmb-dialog-photos-content li').removeClass('active');
+						jQuery(li).addClass('active');
+						select_photo = li;
+						jQuery(html).find('div.switch-avatar input').hide();
+						if(jQuery(li).attr('id') != parse.avatar_id){
+							jQuery(html).find('div.switch-avatar input#set').show();
+						}
+					});
+				}
+				initSetAvatar = function(html){
+					var input = jQuery(html).find('div.switch-avatar input'), id;
+					jQuery(input).click(function(){
+						json = '{"method":"set_avatar","media_id":"'+jQuery(select_photo).attr('id')+'","gedcom_id":"'+parse.gedcom_id+'"}';
+						module._ajax('photo', json, function(res){
+							id = jQuery(select_photo).attr('id');
+							media.avatar = media.photos[parse.getPhotoIndex(id)];
+							parse.avatar_id = id;
+							jQuery(input).hide();
+						});
+						return false;
+					});
+				}
+				
+				
 				sb.clear();
 				sb._('<div class="jmb-dialog-photos-content">');
 					sb._('<div class="buttons">');
@@ -510,7 +558,6 @@ JMBProfile.prototype = {
 						sb._('</form>');
 						sb._('<div class="switch-avatar">');
 							sb._('<input id="set" type="button" value="Set Avatar" style="display:none;" >');
-							sb._('<input id="unset" type="button" value="Unset Avatar" style="display:none;">');
 						sb._('</div>');					
 					sb._('</div>');
 					if(media!=null&&media.photos!=null){
@@ -518,6 +565,32 @@ JMBProfile.prototype = {
 					}
 				sb._('</div>');
 				html = jQuery(sb.result());
+				initSetAvatar(html);
+				jQuery(html).find('div.jmb-dialog-photos-content li').each(function(i, li){
+					photoDelete(li);
+					photoSelect(li);
+				});
+				module._ajaxForm(jQuery(html).find('form'), 'photo','{"gedcom_id":"'+parse.gedcom_id+'","method":"add"}', function(data){}, function(res){
+					var li;
+					if(res.image!='false'){
+						if(jQuery(html).find('.jmb-dialog-photos-content').length==0){
+							jQuery(html).append(storage.media.render([res.image], true));
+							li = jQuery(html).find('.jmb-dialog-photos-content li')[0];							
+						} else {
+							li = jQuery(storage.media.getListItem(res.image, true));
+							jQuery(html).find('.jmb-dialog-photos-content div.list ul').append(li);
+						}
+						photoDelete(li);
+						photoSelect(li);
+						if(media==null){
+							media = {
+								avatar:null,
+								photos:[]
+							}
+						};
+						media.photos.push(res.image);	
+					}
+				});
 				jQuery(module.box).find('div.jmb-dialog-profile-content').append(html);
 			}
 		}

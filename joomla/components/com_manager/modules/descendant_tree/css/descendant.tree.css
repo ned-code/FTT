@@ -101,6 +101,7 @@
 }
 .jmb-dtp-body-media li.media-item {
 	display: inline-block;
+	margin-top: 10px;
 	margin-left: 5px;
 }
 .jmb-dtp-footer table{

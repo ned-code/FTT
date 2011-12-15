@@ -52,8 +52,8 @@ class JMBProfile {
 		$state = $request[$prefix.'state'];
 		$country = $request[$prefix.'country'];
 		if(!isset($request[$prefix.'option'])){
-			$event->From->Day = $request[$prefix.'days'];
-			$event->From->Month = $request[$prefix.'months'];
+			$event->From->Day = ($request[$prefix.'days']!='0')?$request[$prefix.'days']:NULL;
+			$event->From->Month = ($request[$prefix.'months']!='0')?$request[$prefix.'months']:NULL;
 			$event->From->Year = $request[$prefix.'year'];
 		} else {
 			$event->From->Day = null;
@@ -98,6 +98,41 @@ class JMBProfile {
 		$this->host->usertree->init($tree_id, $owner_id, $permission);
 		$usertree = $this->host->usertree->load($tree_id, $owner_id);
 		return json_encode(array('user'=>$usertree[$user_id]));
+	}
+	
+	public function union(){}
+	public function photo($args){
+		$args = json_decode($args);
+		switch($args->method){
+			case "delete":
+				return json_encode(array( 'message'=>$this->host->gedcom->media->delete($args->media_id) ) );
+			break;
+			
+			case "add":
+				$media_id = false;
+				$image = false;
+				if($_FILES['upload']['size'] != 0){
+					$media_id = $this->host->gedcom->media->save($args->gedcom_id, $_FILES["upload"]["tmp_name"], $_FILES["upload"]["name"], $_FILES['upload']['size']);
+					if($media_id) {
+						//$this->host->gedcom->media->setAvatarImage($args->gedcom_id, $media_id);
+						$res = $this->host->gedcom->media->get($media_id);
+						$image = array(
+							'media_id'=>$res->Id,
+							'title'=>$res->Title,
+							'path'=>$res->FilePath,
+							'gedcom_id'=>$args->gedcom_id,
+							'size'=>$res->Size
+						);
+					}
+				}
+				return json_encode(array('image'=>$image));
+			break;
+			
+			case "set_avatar":
+				$this->host->gedcom->media->setAvatarImage($args->gedcom_id, $args->media_id);
+				return true;
+			break;
+		}
 	}
 }
 

@@ -43,6 +43,7 @@ storage.usertree = {};
 storage.usertree.parse = function(object){
 	var	user = object.user,
 		families = object.families,
+		media = object.media,
 		date_num = {"day":0,"month":1,"year":2};
 	return {
 		_month:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
@@ -65,6 +66,21 @@ storage.usertree.parse = function(object){
 		nick:user.nick,
 		gender:user.gender,
 		relation:(user.relation!=null)?relation:false,
+		avatar_id:(function(){
+			var avatar = (media!=null)?media.avatar:null;
+			if(avatar!=null){
+				return avatar.media_id;
+			}
+			return 0;
+		})(),
+		getPhotoIndex:function(media_id){
+			if(media==null) return false;
+			for(var index in media.photos){
+				if(media.photos[index].media_id == media_id){
+					return index;
+				}
+			}
+		},
 		name:(function(){
 			return [user.first_name,user.last_name].join(' ');
 		})(),

@@ -339,8 +339,12 @@
 	margin: 10px;
 }
 .jmb-dialog-photos-content .list ul li{
+	border: 1px solid white;
 	display: inline-block;
 	margin-left: 3px;
+}
+.jmb-dialog-photos-content .list ul li.active{
+	border:1px solid #000;
 }
 .jmb-dialog-photos-content .list .list-item{
 	border:1px solid white;

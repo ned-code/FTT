@@ -30,6 +30,7 @@ class MediaList{
             $media->Type = $rows[0]['form'];
             $media->Title = $rows[0]['title'];
             $media->FilePath = $rows[0]['path'];
+            $media->Size = $rows[0]['size'];
          
             return $media;
         }
@@ -63,23 +64,25 @@ class MediaList{
             return $jspath;
         }
         
-        function save($foreignkey, $filepath, $name){
+        function save($foreignkey, $filepath, $name, $size=null){
             if(is_file($filepath)){   
             	$extension = explode('.', $name);
                 $extension = $extension[count($extension)-1];
 
-                $this->db->setQuery('INSERT INTO #__mb_medias (`form`, `title`) VALUES (?,?)',$extension,$name);
+                $this->db->setQuery('INSERT INTO #__mb_medias (`form`, `title`,`size`) VALUES (?,?,?)',$extension,$name,$size);
                 $this->db->query();
 
                 $id = $this->db->insertid();
+                $jspath = $this->getMediaPath();
                 
-            	  $path = JPATH_ROOT.DS."components".DS."com_manager".DS."media".DS;
-                if(!is_dir(JPATH_ROOT.DS."components".DS."com_manager".DS."media"))
-                        mkdir(JPATH_ROOT.DS."components".DS."com_manager".DS."media");  
-                
-                if(copy($filepath, $path.$id.'.'.$extension)){
-                    $jspath = $this->getMediaPath();
-                    $this->db->setQuery('UPDATE #__mb_medias SET path=? WHERE id=?', $jspath.'/'.$id.'.'.$extension, $id);
+                if(!is_dir($jspath)){
+                	mkdir($jspath);
+                }
+
+                $file = $id.'.'.$extension;
+                $path = DS."components".DS."com_manager".DS."media".DS.$file;
+            	if(copy($filepath, $jspath.DS.$file)){
+                    $this->db->setQuery('UPDATE #__mb_medias SET path=? WHERE id=?', $path, $id);
                     $this->db->query();
                     $this->link($id, $foreignkey);
                     return $id;
@@ -99,6 +102,7 @@ class MediaList{
         function delete($id){
             $this->db->setQuery('SELECT #__mb_medias.title, path FROM #__mb_medias WHERE id =?', $id);
             $rows = $this->db->loadAssocList();
+            if($rows==null) return false;
             $extension = explode('.', $rows[0]['title']);
             $extension = $extension[count($extension)-1];
             $this->db->setQuery('DELETE FROM #__mb_medias WHERE id=?', $id);
@@ -113,6 +117,7 @@ class MediaList{
               unlink(JPATH_ROOT."/components/com_manager/media/".$path);           
             }            
             $this->clearLinks($id);
+            return true;
         }
         public function getMediaList($tree_id){
         	$sql_string = "SELECT media.id as media_id, media.form, media.title, 
