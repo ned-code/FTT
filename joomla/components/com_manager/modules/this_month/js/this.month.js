@@ -40,14 +40,14 @@ JMBThisMonthObject.prototype = {
 		if(husb.families.length!=0){
 			for(var key in husb.families){
 				if(key!='length'&&key==family_key){
-					return husb.families[key].event;	
+					return husb.families[key].marriage;	
 				}
 			}
 		}
 		if(wife.families.length!=0){
 			for(var key in wife.families){
 				if(key!='length'&&key==family_key){
-					return wife.families[key].event;	
+					return wife.families[key].marriage;	
 				}
 			}
 		}

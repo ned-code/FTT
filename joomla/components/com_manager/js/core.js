@@ -98,7 +98,10 @@ storage.usertree.parse = function(object){
 			return 0;
 		})(),
 		is_married_event:function(id){
-			return (families[id]&&families[id].event!=null)?1:0;
+			return (families[id]&&families[id].marriage!=null)?1:0;
+		},
+		is_divorce_event:function(id){
+			return (families[id]&&families[id].divorce!=null)?1:0;
 		},
 		is_death:(function(){
 			var event = user['birth'], date;
@@ -110,7 +113,7 @@ storage.usertree.parse = function(object){
 		})(),
 		marr:function(id, type, sub){
 			var	family = families[id],
-				event = (family)?family.event:false;
+				event = (family)?family.marriage:false;
 			if(event){
 				if(event[type]!=null){
 					if(sub){
@@ -119,6 +122,20 @@ storage.usertree.parse = function(object){
 						return event[type];
 					}
 				}	
+			}
+			return '';
+		},
+		divorce:function(id, type, sub){
+			var	family = families[id],
+				event = (family)?family.divorce:false;
+			if(event){
+				if(event[type]!=null){
+					if(sub){
+					 	return (event[type][sub]!=null)?event[type][sub]:'';
+					} else {
+						return event[type];
+					}
+				}
 			}
 			return '';
 		},

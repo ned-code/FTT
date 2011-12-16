@@ -314,7 +314,7 @@ JMBProfile.prototype = {
 										sb._('<div>');
 											sb._('<div class="jmb-dialog-profile-content-unions-person"><table><tr>');
 												sb._('<td><div style="border-right:none;" class="info">')
-													sb._('<div class="name">')._(user.full_name)._('</div>');
+													sb._('<div class="name">')._(user.name)._('</div>');
 													sb._('<div class="date">')._(user.date('birth'))._('</div>');
 													place = user.place('birth');
 													place_name = (place!='')?place.place_name:'';
@@ -325,7 +325,7 @@ JMBProfile.prototype = {
 											sb._('<div style="margin-left: 10px;" class="jmb-dialog-profile-content-unions-person"><table><tr>');
 											sb._('<td><div class="avatar">')._(module._avatar(spouse, 72, 80))._('</td></div>');
 												sb._('<td><div style="border-left:none;" class="info">')
-													sb._('<div class="name">')._(parse_spouse.full_name)._('</div>');
+													sb._('<div class="name">')._(parse_spouse.name)._('</div>');
 													sb._('<div class="date">')._(parse_spouse.date('birth'))._('</div>');
 													place = parse_spouse.place('birth');
 													place_name = (place!='')?place.place_name:'';
@@ -355,11 +355,11 @@ JMBProfile.prototype = {
 												sb._('<td><div><span>Location</span></div></td>');
 												sb._('<td>');
 													sb._('<input name="marr_city"  type="text" placeholder="Town/City" value="')._(user.marr(family.id, 'place', 'city'))._('">');
-													sb._('<input name="state" type="text" placeholder="Prov/State" value="')._(user.marr(family.id, 'place', 'state'))._('">')
+													sb._('<input name="marr_state" type="text" placeholder="Prov/State" value="')._(user.marr(family.id, 'place', 'state'))._('">')
 													sb._('<input name="marr_country" type="text" placeholder="Country" value="')._(user.marr(family.id, 'place', 'country'))._('">')
 												sb._('</td>');
 											sb._('</tr>');
-											sb._('<tr><td></td><td><input name="deceased" type="checkbox" style="position:relative; top:3px;">&nbsp;Divorced/Separated&nbsp;<input placeholder="Year" name="marr_divorce_year" type="text" style="width:40px;" maxlength="4"></td></tr>')
+											sb._('<tr><td></td><td><input name="deceased" ')._(user.is_divorce_event(family.id)?'checked':'')._(' type="checkbox" style="position:relative; top:3px;">&nbsp;Divorced/Separated&nbsp;<input placeholder="Year" name="marr_divorce_year" type="text" style="width:40px;" value="')._(user.divorce(family.id, 'date', 2))._('" maxlength="4"></td></tr>');
 										sb._('</table>');
 									sb._('</div></td>');
 								sb._('</tr>');
@@ -368,27 +368,124 @@ JMBProfile.prototype = {
 					sb._('</form>');
 				sb._('</div>');
 				return sb.result();
+			},
+			add_spouse:function(){
+				sb.clear();
+				sb._('<div class="jmb-profile-add-union"><form id="jmb:fullprofile:add_union" method="post" target="iframe-profile">');
+					sb._('<div class="jmb-profile-add-union-buttons"><input type="Submit" value="Save"><input type="button" value="Cancel"></div>');
+					sb._('<div class="title"><span>Basic Info:</span></div>');
+					sb._('<div id="basic_fields"><table>');
+						sb._('<tr>');
+							sb._('<td><div><span>Gender:</span></div></td>');
+							sb._('<td>')._(gen.select.gender('gender'))._('</td>');
+							sb._('<td><div><span>Living:</span></div></td>');
+							sb._('<td>')._(gen.select.living('living', true))._('</td>');
+						sb._('</tr>');
+						sb._('<tr>');
+							sb._('<td><div><span>First Name:</span></div></td>');
+							sb._('<td colspan="3"><input name="first_name" type="text" value=""></td>');
+						sb._('</tr>');
+						sb._('<tr>');
+							sb._('<td><div><span>Middle Name:</span></div></td>');
+							sb._('<td colspan="3"><input name="middle_name" type="text" value=""></td>');
+						sb._('</tr>');
+						sb._('<tr>');
+							sb._('<td><div><span>Last Name:</span></div></td>');
+							sb._('<td colspan="3"><input name="last_name" type="text" value=""></td>');
+						sb._('</tr>');
+						sb._('<tr>');
+							sb._('<td><div><span>Know as:</span></div></td>');
+							sb._('<td colspan="3"><input name="nick" type="text" value=""></td>');
+						sb._('</tr>');
+					sb._('</table></div>');
+					sb._('<div id="date_fields"><table>');
+						sb._('<tr id="birthdate">');
+							sb._('<td><div><span>Born</span></div></td>');
+							sb._('<td>');
+								sb._(gen.select.days('birth_days'));
+								sb._(gen.select.months('birth_months'));
+								sb._('<input name="birth_year" type="text" style="width:40px;" maxlength="4" placeholder="Year" value="">');
+								sb._('<input name="birth_option" checked type="checkbox"> Unknown');
+							sb._('</td>');
+						sb._('</tr>');
+						sb._('<tr id="birthplace">');
+							sb._('<td><div><span>Birthplace</span></div></td>');
+							sb._('<td>');
+								sb._('<input name="birth_city"  type="text" placeholder="Town/City" value="">');
+								sb._('<input name="birth_state" type="text" placeholder="Prov/State" value="">')
+								sb._('<input name="birth_country" type="text" placeholder="Country" value="">')
+							sb._('</td>');
+						sb._('</tr>');
+						sb._('<tr id="deathdate" style="display:none;">');
+							sb._('<td><div><span>Death</span></div></td>');
+							sb._('<td>');
+								sb._(gen.select.days('death_days'));
+								sb._(gen.select.months('death_months'));
+								sb._('<input name="death_year" type="text" style="width:40px;" maxlength="4" placeholder="Year" value="">');
+								sb._('<input name="death_option" checked type="checkbox"> Unknown');
+							sb._('</td>');
+						sb._('</tr>');
+						sb._('<tr id="deathplace" style="display:none;">');
+							sb._('<td><div><span>Deathplace</span></div></td>');
+							sb._('<td>');
+								sb._('<input name="death_city"  type="text" placeholder="Town/City" value="">');
+								sb._('<input name="death_state" type="text" placeholder="Prov/State" value="">')
+								sb._('<input name="death_country" type="text" placeholder="Country" value="">')
+							sb._('</td>');
+						sb._('</tr>');
+					sb._('</table>');
+					sb._('<div class="title"><span>Union Event:</span></div>');
+					sb._('<div id="union_event"><table>');
+						sb._('<tr>');
+							sb._('<td><span>Type:</span></td>');
+							sb._('<td><select name="marr_type"><option value="MARR">Marriage</option></select></td>');
+						sb._('</tr>');
+						sb._('<tr id="marrdate">');
+							sb._('<td><div><span>Date</span></div></td>');
+							sb._('<td>');
+								sb._(gen.select.days('marr_days'));
+								sb._(gen.select.months('marr_months'));
+								sb._('<input name="marr_year" type="text" style="width:40px;" maxlength="4" placeholder="Year" value="">');
+								sb._('<input name="marr_option" checked type="checkbox"> Unknown');
+							sb._('</td>');
+						sb._('</tr>');
+						sb._('<tr id="birthplace">');
+							sb._('<td><div><span>Location</span></div></td>');
+							sb._('<td>');
+								sb._('<input name="marr_city"  type="text" placeholder="Town/City" value="">');
+								sb._('<input name="marr_state" type="text" placeholder="Prov/State" value="">')
+								sb._('<input name="marr_country" type="text" placeholder="Country" value="">')
+							sb._('</td>');
+						sb._('</tr>');
+						sb._('<tr><td></td><td><input name="deceased" type="checkbox" style="position:relative; top:3px;">&nbsp;Divorced/Separated&nbsp;<input placeholder="Year" name="marr_divorce_year" type="text" style="width:40px;" value="" maxlength="4"></td></tr>');
+					sb._('</table></div>');
+				sb._('</form></div>');
+				return sb.result();
 			}
 		}
 	},
-	_buttons:function(html){
-		var	module = this, select, val;
-		select = jQuery(html).find('select');
-		jQuery(select).each(function(i,e){
-			switch(jQuery(e).attr('name')){
-				case "living":
-					jQuery(e).change(function(){
-						val = jQuery(html).find('#deathdate,#deathplace');
-						if(parseInt(jQuery(this).val())){
-							jQuery(val).hide();
-						} else {
-							jQuery(val).show();
-						}
-					});
-				break;
+	_events:function(html){
+		var	module = this;
+		return {
+			cancel:function(callback){
+				var input = jQuery(html).find('input[value="Cancel"]');
+				jQuery(input).click(function(){
+					jQuery(html).remove();
+					callback();
+				});
+			},
+			living:function(){
+				var select = jQuery(html).find('select[name="living"]'), death;
+				jQuery(select).change(function(){
+					death = jQuery(html).find('#deathdate,#deathplace');
+					if(parseInt(jQuery(this).val())){
+						jQuery(death).hide();
+					} else {
+						jQuery(death).show();
+					}
+				});
 			}
-			
-		});
+		}
 	},
 	_click:function(){
 		var	module = this,
@@ -470,6 +567,7 @@ JMBProfile.prototype = {
 				}
 			},
 			edit_basic:function(){
+				var events;
 				sb.clear();
 				sb._('<div class="jmb-dialog-profile-content-basic"><form id="jmb:fullprofile:basic" method="post" target="iframe-profile">');
 					sb._('<div class="jmb-dialog-button-submit"><input type="submit" value="Save"></div>');
@@ -490,14 +588,45 @@ JMBProfile.prototype = {
 					sb._('</div>');
 				sb._('</form></div>');
 				html = jQuery(sb.result());
-				module._buttons(html);
+				//init events
+				events = module._events(html);
+				events.living();
+				//ajax form
 				module._ajaxForm(jQuery(html).find('form'), 'basic', user.gedcom_id, function(data){}, function(res){
 					update_data(res);
 				}); 
 				jQuery(module.box).find('div.jmb-dialog-profile-content').append(html);
 			},
 			edit_unions:function(){
-				var key, count = 0, json;
+				var	key, 
+					count = 0,
+					json,
+					add_active = false,
+					save_union,
+					add_union;
+				
+				save_union = function(form){
+					json = '{"gedcom_id":"'+parse.gedcom_id+'","family_id":"'+jQuery(form).attr('family_id')+'","method":"save"}';
+					module._ajaxForm(form, 'union', json, function(data){}, function(res){
+						update_data(res);
+					}); 
+				}
+				
+				add_union = function(div){
+					module._ajaxForm(jQuery(div).find('form'), 'union', '{"gedcom_id":"'+parse.gedcom_id+'","method":"add"}', function(data){}, function(res){
+						if(res.data&&res.data.spouse!=null){
+							module.individuals[res.data.spouse.user.gedcom_id] = res.data.spouse;
+						}
+						update_data(res);
+						jQuery(div).remove();
+						div = form.spouse(res.user.families[res.data.family_id],count);
+						jQuery(html).append(div);
+						save_union(jQuery(div).find('form'));
+						count++;
+						add_active = false;
+					});
+				}
+				
 				sb.clear();
 				sb._('<div class="jmb-dialog-profile-content-unions">');
 				sb._('<div class="jmb-dialog-profile-content-unions-add"><input type="button" value="Add another union"></div>');
@@ -511,10 +640,18 @@ JMBProfile.prototype = {
 				sb._('</div>');
 				html = jQuery(sb.result());
 				jQuery(html).find('form').each(function(i, form){
-					json = '{"gedcom_id":"'+parse.gedcom_id+'","family_id":"'+jQuery(form).attr('family_id')+'","method":"save"}';
-					module._ajaxForm(form, 'union', json, function(data){}, function(res){
-						update_data(res);
-					}); 
+					save_union(form);
+				});
+				jQuery(html).find('.jmb-dialog-profile-content-unions-add input').click(function(){
+					if(add_active) return false;
+					var div = jQuery(form.add_spouse());
+					events = module._events(div);
+					events.living();
+					events.cancel(function(){ add_active = false; });
+					add_union(div);
+					jQuery(html).append(div);
+					add_active = true;
+					return false;
 				});
 				jQuery(module.box).find('div.jmb-dialog-profile-content').append(html);
 			},

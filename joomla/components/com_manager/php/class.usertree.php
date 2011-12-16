@@ -101,10 +101,16 @@ class JMBUserTree {
 		if(isset($this->_FamiliesList[$ind_key])){
 			$families = array();
 			foreach($this->_FamiliesList[$ind_key] as $el){
+				$events = $this->_getFamEvent($el['family_id']);
+				$spouse = ($el['husb']==$gedcom_id)?$el['wife']:$el['husb'];
+				$marriage = $this->_getFamEventByType($events, 'MARR');
+				$divorce = $this->_getFamEventByType($events, 'DIV');
 				$families[$el['family_id']] = array(
 					'id'=>$el['family_id'], 
-					'spouse'=>($el['husb']==$gedcom_id)?$el['wife']:$el['husb'], 
-					'event'=>$this->_getFamEvent($el['family_id']),
+					'spouse'=>$spouse,
+					'marriage'=>$marriage,
+					'divorce'=>$divorce,
+					'events'=>$events,
 					'childrens'=>$this->_getFamChildrens($el['family_id'])
 				);
 			}
@@ -135,15 +141,35 @@ class JMBUserTree {
 	/**
 	*
 	*/
+	protected function _getFamEventByType($events, $type){
+		if(!empty($events)){
+			foreach($events as $key => $event){
+				if($event['type'] == $type){
+					return $event;
+				}
+			}
+		}
+	}
+	/**
+	*
+	*/
 	protected function _getFamEvent($family_id){
+		$events = array();
 		if(isset($this->_FamiliesEventsList[$family_id])){
-			$event = $this->_FamiliesEventsList[$family_id][0];
-			$place = $this->_getPlaces($event['event_id']);
-			return array(
-				'id'=>$event['event_id'], 'name'=>$event['name'],
-				'date'=>array($event['f_day'],$event['f_month'],$event['f_year']),
-				'place'=>$place	
-			);
+			foreach($this->_FamiliesEventsList[$family_id] as $key => $event){
+				if(!isset($events[$event['event_id']])){
+					$places = $this->_getPlaces($event['event_id']);
+					$date = array($event['f_day'],$event['f_month'],$event['f_year']);
+					$events[$event['event_id']] = array(
+							'id'=>$event['event_id'], 
+							'name'=>$event['name'],
+							'type'=>$event['type'],
+							'date'=>$date,
+							'place'=>$places
+						);
+				}
+			}
+			return $events;
 		}
 		return null;
 	}
@@ -336,8 +362,7 @@ class JMBUserTree {
 	/**
 	*
 	*/
-	public function save($tree_id, $gedcom_id, $usertree){
-		$compress_usertree = $this->compress($usertree);
+	public function save($tree_id, $gedcom_id, $compress_usertree){
 		$sql_string = "INSERT INTO #__mb_cash (`uid`,`tree_id`, `individuals_id`, `type`, `value`, `change`) VALUES (NULL,?,?,?,?, NOW())";
 		$this->db->setQuery($sql_string, $tree_id, $gedcom_id, "usertree", $compress_usertree);
 		$this->db->query();
@@ -345,8 +370,7 @@ class JMBUserTree {
 	/**
 	*
 	*/
-	public function update($tree_id, $gedcom_id, $usertree){
-		$compress_usertree = $this->compress($usertree);
+	public function update($tree_id, $gedcom_id, $compress_usertree){
 		$sql_string = "UPDATE #__mb_cash SET `value`=?,`change`=NOW() WHERE tree_id = ? AND individuals_id = ?";
 		$this->db->setQuery($sql_string, $compress_usertree, $tree_id, $gedcom_id);
 		$this->db->query();
@@ -371,11 +395,20 @@ class JMBUserTree {
 	*/
 	public function init($tree_id, $gedcom_id, $permission){
 		$usertree = $this->get($tree_id, $gedcom_id, $permission);		
+		$compress_usertree = $this->compress($usertree);
 		if($this->check($tree_id, $gedcom_id)){
-			$this->update($tree_id, $gedcom_id, $usertree);
+			$this->update($tree_id, $gedcom_id, $compress_usertree);
 		} else {
-			$this->save($tree_id, $gedcom_id, $usertree);
+			$this->save($tree_id, $gedcom_id, $compress_usertree);
 		}
 	}	
+	/**
+	*
+	*/
+	public function link($tree_id, $gedcom_id, $type="MEMBER"){
+		$sql_string = "INSERT INTO #__mb_tree_links (`individuals_id`, `tree_id`, type) VALUES (?, ?, ?)";
+		$this->db->setQuery($sql_string, $gedcom_id, $tree_id, $type);
+		$this->db->query();
+	}
 }
 ?>

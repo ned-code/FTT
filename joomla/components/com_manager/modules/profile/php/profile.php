@@ -51,6 +51,53 @@ class JMBProfile {
 		$this->host->gedcom->events->update($update_event);
 	}
 	
+	protected function updateIndividualEvents($individual, $request){
+		$this->updateIndividualEvent($individual->Id, $individual->Birth, 'BIRT', $request);
+		if($request['living']=='1'){
+			if(sizeof($individual->Death) != 0){
+				$this->host->gedcom->events->delete($individual->Death[0]->Id);
+			}
+		} else {			
+			$this->updateIndividualEvent($individual->Id, $individual->Death, 'DEAT', $request);	
+		}
+	}
+	
+	protected function updateFamilyEvents($family, $request){
+		//marriage
+		if($family->Marriage==null){
+			$event = new Events();
+			$event->Name = 'Marriage';
+			$event->FamKey = $family->Id;
+			$event->DateType = 'EVO';
+			$event->Type = 'MARR';
+			$event->Id = $this->host->gedcom->events->save($event);
+		} else {
+			$event = $family->Marriage;
+		}
+		$update_marr = $this->updateEvent($event, 'marr_', $request);
+		$this->host->gedcom->events->update($update_marr);
+		//divorce
+		if(isset($request['deceased'])){
+			if($family->Divorce==null){
+				$event = new Events();
+				$event->Name = 'Divorce';
+				$event->FamKey = $family->Id;
+				$event->DateType = 'EVO';
+				$event->Type = 'DIV';
+				$event->Id = $this->host->gedcom->events->save($event);
+			} else {
+				$event = $family->Divorce;
+			}
+			$div_year = (isset($request['marr_divorce_year']))?$request['marr_divorce_year']:null;
+			$event->From->Year = $div_year;
+			$this->host->gedcom->events->update($event);
+		} else {
+			if($family->Divorce!=null){
+				$this->host->gedcom->events->delete($family->Divorce->Id);
+			}
+		}
+	}
+	
 	protected function updateEvent($event, $prefix, $request){
 		$place_name = $this->getPlaceName($request, $prefix);
 		$city = $request[$prefix.'city'];
@@ -80,6 +127,7 @@ class JMBProfile {
 			$place->Name = $place_name;
 			$place->Locations = array();
 			$place->Locations[] = $location;
+			$event->Place = $place;
 		}
 		return $event;
 	}
@@ -88,14 +136,7 @@ class JMBProfile {
 		// update user in db
 		$ind = $this->host->gedcom->individuals->get($user_id);
 		$this->updateIndividual($ind, $_REQUEST);
-		$this->updateIndividualEvent($user_id, $ind->Birth, 'BIRT', $_REQUEST);
-		if($_REQUEST['living']=='1'){
-			if( sizeof($ind->Death) != 0){
-				$this->host->gedcom->events->delete($ind->Death[0]->Id);
-			}
-		} else {			
-			$this->updateIndividualEvent($user_id, $ind->Death, 'DEAT', $_REQUEST);	
-		}
+		$this->updateIndividualEvents($ind, $_REQUEST);
 		//update user tree
 		$owner_id = $_SESSION['jmb']['gid'];
 		$tree_id = $_SESSION['jmb']['tid'];
@@ -107,52 +148,50 @@ class JMBProfile {
 	
 	public function union($args){
 		$args = json_decode($args);
+		$request = $_REQUEST;
+		$owner_id = $_SESSION['jmb']['gid'];
+		$tree_id = $_SESSION['jmb']['tid'];
+		$permission = $_SESSION['jmb']['permission'];
+		$data = false;
 		switch($args->method){
 			case "save":
 				$family = $this->host->gedcom->families->get($args->family_id);
-				//marriage
-				if($family->Marriage==null){
-					$event = new Events();
-					$event->Name = 'Marriage';
-					$event->FamKey = $args->family_id;
-					$event->DateType = 'EVO';
-					$event->Type = 'MARR';
-					$event->Id = $this->host->gedcom->events->save($event);
-				} else {
-					$event = $family->Marriage;
-				}
-				$update_marr = $this->updateEvent($event, 'marr_', $_REQUEST);
-				$this->host->gedcom->events->update($update_marr);
-				//divorce
-				if(isset($_REQUEST['deceased'])){
-					if($family->Divorce==null){
-						$event = new Events();
-						$event->Name = 'Divorce';
-						$event->FamKey = $args->family_id;
-						$event->DateType = 'EVO';
-						$event->Type = 'DIV';
-						$event->Id = $this->host->gedcom->events->save($event);
-					} else {
-						$event = $family->Divorce;
-					}
-					$div_year = (isset($_REQUEST['marr_divorce_year']))?$_REQUEST['marr_divorce_year']:null;
-					$event->From->Year = $div_year;
-					$this->host->gedcom->events->update($update_divorce);
-				} else {
-					if($family->Divorce!=null){
-						$this->host->gedcom->events->delete($family->Divorce);
-					}
-				}
+				$this->updateFamilyEvents($family, $request);
+			break;
+			
+			case "add":
+				
+				$sircar = $this->host->gedcom->individuals->get($args->gedcom_id);
+				//add spouse in db
+				$spouse = $this->host->gedcom->individuals->create();
+				$spouse->FacebookId = '0';
+				$spouse->Gender = $request['gender'];
+				$spouse->FirstName = ($request['first_name']!='')?$request['first_name']:'unknown';
+				$spouse->MiddleName = $request['middle_name'];
+				$spouse->LastName = $request['last_name'];
+				$spouse->Nick = $request['nick'];
+				$spouse->Id = $this->host->gedcom->individuals->save($spouse);
+				$this->host->usertree->link($tree_id, $spouse->Id);
+				$this->updateIndividualEvents($spouse, $request);
+				//add family in db
+				$family = new Family();
+				$family->Sircar = $sircar;
+				$family->Spouse = $spouse;
+				$family->Id = $this->host->gedcom->families->save($family);
+				$this->updateFamilyEvents($family, $request);
+				$data = true;
 			break;
 		}
 		
 		//update user tree
-		$owner_id = $_SESSION['jmb']['gid'];
-		$tree_id = $_SESSION['jmb']['tid'];
-		$permission = $_SESSION['jmb']['permission'];
 		$this->host->usertree->init($tree_id, $owner_id, $permission);
 		$usertree = $this->host->usertree->load($tree_id, $owner_id);
-		return json_encode(array('user'=>$usertree[$args->gedcom_id], 'family'=>$family));
+		if($data){
+			$family_id = $family->Id;  
+			$spouse = $usertree[$spouse->Id];
+			$data = array('family_id'=>$family_id, 'spouse'=>$spouse);
+		}
+		return json_encode(array('user'=>$usertree[$args->gedcom_id], 'data'=>$data));
 	}
 	
 	
