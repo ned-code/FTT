@@ -185,6 +185,20 @@ JMBFamiliesObject.prototype = {
 		}
 		return '';
 	},
+	_checkParents:function(parents){
+		if(parents==null) return false;
+		var module = this, key, family, father, mother;
+		
+		for(key in parents){
+			if(key!='length'){
+				family = parents[key];
+				father = (family.father!=null&&module.usertree[family.father.gedcom_id])?family.father.gedcom_id:false;
+				mother = (family.mother!=null&&module.usertree[family.mother.gedcom_id])?family.mother.gedcom_id:false;
+				return (mother)?mother:father;
+			}
+		}
+		return false;
+	},
 	_sircar:function(gedcom_id){
 		var	module = this,
 			sb = host.stringBuffer(),
@@ -195,8 +209,8 @@ JMBFamiliesObject.prototype = {
 			parents = object.parents,
 			get = storage.usertree.parse(object);
 		sb._('<div>');
-			if(parents != null){
-				sb._('<div  id="')._(gedcom_id)._('" class="jmb-families-button parent active">&nbsp;</div>');
+			if(parent_key = module._checkParents(parents)){
+				sb._('<div  id="')._(parent_key)._('" class="jmb-families-button parent active">&nbsp;</div>');
 			} else {
 				sb._('<div  id="null" class="jmb-families-button parent">&nbsp;</div>');
 			}
@@ -226,10 +240,11 @@ JMBFamiliesObject.prototype = {
 			gedcom_id = object.user.gedcom_id,
 			facebook_id = object.user.facebook_id,
 			parents = object.parents,
-			get = storage.usertree.parse(object);
+			get = storage.usertree.parse(object), 
+			parent_key;
 		sb._('<div>');
-			if(parents != null){
-				sb._('<div  id="')._(gedcom_id)._('" class="jmb-families-button parent active">&nbsp;</div>');
+			if(parent_key = module._checkParents(parents)){
+				sb._('<div  id="')._(parent_key)._('" class="jmb-families-button parent active">&nbsp;</div>');
 			} else {
 				sb._('<div  id="null" class="jmb-families-button parent">&nbsp;</div>');
 			}
@@ -356,8 +371,8 @@ JMBFamiliesObject.prototype = {
 				individuals:usertree,
 				object:usertree[gedcom_id],
 				target:e,
-				afterEditorClose:function(object){
-					module.usertree[object.user.gedcom_id] = object;
+				afterEditorClose:function(object, individuals){
+					module.usertree = individuals;
 					module.render(module.now_id);	
 				}
 			});
@@ -430,10 +445,9 @@ JMBFamiliesObject.prototype = {
 		module._facebook(cont);
 	},
 	reload:function(id, type){
-		var	module = this,
-			gedcom_id = module._key(id, type);
+		var	module = this;
 		storage.tooltip.cleaner(function(){
-			module.render(gedcom_id);
+			module.render(id);
 		});		
 	}
 }

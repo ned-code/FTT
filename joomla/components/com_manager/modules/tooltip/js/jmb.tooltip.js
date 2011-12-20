@@ -238,11 +238,25 @@ JMBTooltip.prototype = {
 		var	module = this,
 			object = settings.object,
 			divs = jQuery(cont).find('.jmb-profile-tooltip-fieldset div'),
-			class_name;
+			add = storage.profile.add({
+				object:object,
+				individuals:settings.individuals,
+				events:{
+					afterEditorClose:function(object, individuals){
+						settings.individuals = individuals;
+						settings.object = object;
+						if(typeof(settings.afterEditorClose)==='function'){
+							settings.afterEditorClose(object, individuals);
+						}
+					}
+				}
+			}),
+			class_name, method;
 		jQuery(divs).each(function(index, el){
 			jQuery(el).click(function(){
 				class_name = jQuery(this).attr('class').split('-');
-				console.log(class_name[class_name.length-1]);
+				method = class_name[class_name.length-1]
+				add[method]().init();
 			});
 		});
 		jQuery(cont).find('.jmb-profile-tooltip-button-edit').click(function(){
@@ -250,11 +264,11 @@ JMBTooltip.prototype = {
 				object:settings.object,
 				individuals:settings.individuals,
 				events:{
-					afterEditorClose:function(object){
-						settings.individuals[object.user.gedcom_id] = object;
+					afterEditorClose:function(object, individuals){
+						settings.individuals = individuals;
 						settings.object = object;
 						if(typeof(settings.afterEditorClose)==='function'){
-							settings.afterEditorClose(object);
+							settings.afterEditorClose(object, individuals);
 						}
 					}
 				}

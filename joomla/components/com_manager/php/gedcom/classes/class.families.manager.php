@@ -153,6 +153,14 @@ class FamiliesList{
         /**
         *
         */
+        public function getFamilyIdByParnerId($husb, $wife){
+        	$this->db->setQuery('SELECT id FROM #__mb_families WHERE husb=? OR wife=?', $husb, $wife);
+        	$rows = $this->db->loadAssocList();
+        	return ($rows!=null)?$rows[0]['id']:null;
+        }
+        /**
+        *
+        */
         public function getFamilyChildrenIds($fId){
         	if($fId==null) { return null; }
         	$sqlString = "SELECT DISTINCT childrens.gid FROM #__mb_childrens as childrens

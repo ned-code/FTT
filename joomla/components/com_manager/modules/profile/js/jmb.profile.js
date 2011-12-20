@@ -4,6 +4,7 @@ function JMBProfile(){
 	module.path = storage.baseurl+"/components/com_manager/modules/profile/";
 	module.imagePath = module.path+'image/';
 	module.box = jQuery('<div id="jmb:dialog" class="jmb-dialog-container"></div>');
+	module.addBox = jQuery('<div id="jmb:dialog_add" class="jmb-dialog-container"></div>');
 	module.view_menu = {"view_profile":"Profile","view_photos":"Photos"};
 	module.edit_menu = {"edit_basic":"Basic Details","edit_unions":"Unions","edit_photos":"Photos"};
 	module.editor_buttons = jQuery('<div class="jmb-dialog-interface-button"><div type="button" value="edit"><span>Edit</span></div><div value="view" type="button" class="active"><span>View</span></div></div>');
@@ -18,7 +19,7 @@ function JMBProfile(){
 		close:function(){
 			jQuery(this).dialog("destroy");
 			jQuery(this).remove();
-			module.events.afterEditorClose(module.object);
+			module.events.afterEditorClose(module.object, module.individuals);
 		}	
 	}
 		
@@ -30,7 +31,9 @@ function JMBProfile(){
 	module.container = null;
 	
 	module.events = {
-		beforeClose:function(){}
+		afterEditorClose:function(object){
+			return false;
+		}
 	}
 	
 	module._iframe();
@@ -43,7 +46,7 @@ JMBProfile.prototype = {
 		});
 	},
 	_ajaxForm:function(obj, method, args, beforeSubmit, success){
-		var url = [storage.baseurl,'/components/com_manager/php/ajax.php'].join('');
+		var url = [storage.baseurl,'components/com_manager/php/ajax.php'].join('');
 		jQuery(obj).ajaxForm({
 			url:url,
 			type:"POST",
@@ -64,10 +67,10 @@ JMBProfile.prototype = {
 			jQuery(document.body).append(iframe);
 		}
 	},
-	_dialog:function(settings){
-		var	module = this;
-		settings = jQuery.extend(settings, module.dialog_settings);
-		jQuery(module.box).dialog(settings);
+	_dialog:function(box, options){
+		var	module = this, result;
+		result = jQuery.extend({}, module.dialog_settings, options);
+		jQuery(box).dialog(result);
 	},
 	_container:function(){
 		var	module = this,
@@ -150,6 +153,24 @@ JMBProfile.prototype = {
 			};
 		return {
 			select:{
+				spouse:function(name, families){
+					var family, spouse, parse, count = 0;
+					sb.clear();
+					sb._('<select style="width:120px;" name="')._(name)._('">');
+						for(var key in families){
+							if(key!='length'){
+								family = families[key];
+								if(family.spouse!=null){
+									spouse = module.individuals[family.spouse];
+									parse = storage.usertree.parse(spouse);
+									sb._('<option value="')._(parse.gedcom_id)._('">')._(parse.name)._('</option>');
+									count++;
+								}
+							}
+						}
+					sb._('</select>');
+					return (count!=0)?sb.result():false;
+				},
 				gender:function(name, selected){
 					if(selected){
 						if(selected == 'F'){
@@ -371,7 +392,7 @@ JMBProfile.prototype = {
 			},
 			add_spouse:function(){
 				sb.clear();
-				sb._('<div class="jmb-profile-add-union"><form id="jmb:fullprofile:add_union" method="post" target="iframe-profile">');
+				sb._('<form id="jmb:fullprofile:add_union" method="post" target="iframe-profile">');
 					sb._('<div class="jmb-profile-add-union-buttons"><input type="Submit" value="Save"><input type="button" value="Cancel"></div>');
 					sb._('<div class="title"><span>Basic Info:</span></div>');
 					sb._('<div id="basic_fields"><table>');
@@ -433,7 +454,7 @@ JMBProfile.prototype = {
 								sb._('<input name="death_country" type="text" placeholder="Country" value="">')
 							sb._('</td>');
 						sb._('</tr>');
-					sb._('</table>');
+					sb._('</table></div>');
 					sb._('<div class="title"><span>Union Event:</span></div>');
 					sb._('<div id="union_event"><table>');
 						sb._('<tr>');
@@ -459,7 +480,171 @@ JMBProfile.prototype = {
 						sb._('</tr>');
 						sb._('<tr><td></td><td><input name="deceased" type="checkbox" style="position:relative; top:3px;">&nbsp;Divorced/Separated&nbsp;<input placeholder="Year" name="marr_divorce_year" type="text" style="width:40px;" value="" maxlength="4"></td></tr>');
 					sb._('</table></div>');
-				sb._('</form></div>');
+				sb._('</form>');
+				return sb.result();
+			},
+			add_parent:function(){
+				sb.clear();
+				sb._('<form id="jmb:profile:addpsc" method="post" target="iframe-profile">');
+					sb._('<div class="buttons"><input type="submit" value="Save"></div>');
+					sb._('<table style="width:100%;">');
+						sb._('<tr>');
+							sb._('<td>');
+								sb._('<div id="basic_fields"><table>');
+									sb._('<tr>');
+										sb._('<td><div><span>Gender:</span></div></td>');
+										sb._('<td>')._(gen.select.gender('gender'))._('</td>');
+										sb._('<td><div><span>Living:</span></div></td>');
+										sb._('<td>')._(gen.select.living('living', true))._('</td>');
+									sb._('</tr>');
+									sb._('<tr>');
+										sb._('<td><div><span>First Name:</span></div></td>');
+										sb._('<td colspan="3"><input name="first_name" type="text" value=""></td>');
+									sb._('</tr>');
+									sb._('<tr>');
+										sb._('<td><div><span>Middle Name:</span></div></td>');
+										sb._('<td colspan="3"><input name="middle_name" type="text" value=""></td>');
+									sb._('</tr>');
+									sb._('<tr>');
+										sb._('<td><div><span>Last Name:</span></div></td>');
+										sb._('<td colspan="3"><input name="last_name" type="text" value=""></td>');
+									sb._('</tr>');
+									sb._('<tr>');
+										sb._('<td><div><span>Know as:</span></div></td>');
+										sb._('<td colspan="3"><input name="nick" type="text" value=""></td>');
+									sb._('</tr>');
+								sb._('</table></div>');
+							sb._('</td>');
+						sb._('</tr>');
+						sb._('<tr>');
+							sb._('<td>');	
+								sb._('<div id="date_fields"><table>');
+									sb._('<tr id="birthdate">');
+										sb._('<td><div><span>Born</span></div></td>');
+										sb._('<td>');
+											sb._(gen.select.days('birth_days'));
+											sb._(gen.select.months('birth_months'));
+											sb._('<input name="birth_year" type="text" style="width:40px;" maxlength="4" placeholder="Year" value="">');
+											sb._('<input name="birth_option" checked type="checkbox"> Unknown');
+										sb._('</td>');
+									sb._('</tr>');
+									sb._('<tr id="birthplace">');
+										sb._('<td><div><span>Birthplace</span></div></td>');
+										sb._('<td>');
+											sb._('<input name="birth_city"  type="text" placeholder="Town/City" value="">');
+											sb._('<input name="birth_state" type="text" placeholder="Prov/State" value="">')
+											sb._('<input name="birth_country" type="text" placeholder="Country" value="">')
+										sb._('</td>');
+									sb._('</tr>');
+									sb._('<tr id="deathdate" style="display:none;">');
+										sb._('<td><div><span>Death</span></div></td>');
+										sb._('<td>');
+											sb._(gen.select.days('death_days'));
+											sb._(gen.select.months('death_months'));
+											sb._('<input name="death_year" type="text" style="width:40px;" maxlength="4" placeholder="Year" value="">');
+											sb._('<input name="death_option" checked type="checkbox"> Unknown');
+										sb._('</td>');
+									sb._('</tr>');
+									sb._('<tr id="deathplace" style="display:none;">');
+										sb._('<td><div><span>Deathplace</span></div></td>');
+										sb._('<td>');
+											sb._('<input name="death_city"  type="text" placeholder="Town/City" value="">');
+											sb._('<input name="death_state" type="text" placeholder="Prov/State" value="">')
+											sb._('<input name="death_country" type="text" placeholder="Country" value="">')
+										sb._('</td>');
+									sb._('</tr>');
+								sb._('</table></div>');
+							sb._('</td>');
+						sb._('</tr>');
+					sb._('</table>');
+				sb._('</form>');
+				return sb.result();	
+			},
+			add_bs:function(){
+				return this.add_parent();
+			},
+			add_child:function(){
+				var spouse_select;
+				sb.clear();
+				sb._('<form id="jmb:profile:addpsc" method="post" target="iframe-profile">');
+					sb._('<div class="buttons"><input type="submit" value="Save"></div>');
+					sb._('<table style="width:100%;">');
+						sb._('<tr>');
+							sb._('<td>');
+								sb._('<div id="basic_fields"><table>');
+									sb._('<tr>');
+										sb._('<td><div><span>Gender:</span></div></td>');
+										sb._('<td>')._(gen.select.gender('gender'))._('</td>');
+										sb._('<td><div><span>Living:</span></div></td>');
+										sb._('<td>')._(gen.select.living('living', true))._('</td>');
+									sb._('</tr>');
+									if(spouse_select = gen.select.spouse('spouse', object.families)){
+										sb._('<tr>');
+											sb._('<td><div><span>Spouse:</span></div></td>');
+											sb._('<td colspan="3">')._(spouse_select)._('</td>');
+										sb._('</tr>');
+									}
+									sb._('<tr>');
+										sb._('<td><div><span>First Name:</span></div></td>');
+										sb._('<td colspan="3"><input name="first_name" type="text" value=""></td>');
+									sb._('</tr>');
+									sb._('<tr>');
+										sb._('<td><div><span>Middle Name:</span></div></td>');
+										sb._('<td colspan="3"><input name="middle_name" type="text" value=""></td>');
+									sb._('</tr>');
+									sb._('<tr>');
+										sb._('<td><div><span>Last Name:</span></div></td>');
+										sb._('<td colspan="3"><input name="last_name" type="text" value=""></td>');
+									sb._('</tr>');
+									sb._('<tr>');
+										sb._('<td><div><span>Know as:</span></div></td>');
+										sb._('<td colspan="3"><input name="nick" type="text" value=""></td>');
+									sb._('</tr>');
+								sb._('</table></div>');
+							sb._('</td>');
+						sb._('</tr>');
+						sb._('<tr>');
+							sb._('<td>');	
+								sb._('<div id="date_fields"><table>');
+									sb._('<tr id="birthdate">');
+										sb._('<td><div><span>Born</span></div></td>');
+										sb._('<td>');
+											sb._(gen.select.days('birth_days'));
+											sb._(gen.select.months('birth_months'));
+											sb._('<input name="birth_year" type="text" style="width:40px;" maxlength="4" placeholder="Year" value="">');
+											sb._('<input name="birth_option" checked type="checkbox"> Unknown');
+										sb._('</td>');
+									sb._('</tr>');
+									sb._('<tr id="birthplace">');
+										sb._('<td><div><span>Birthplace</span></div></td>');
+										sb._('<td>');
+											sb._('<input name="birth_city"  type="text" placeholder="Town/City" value="">');
+											sb._('<input name="birth_state" type="text" placeholder="Prov/State" value="">')
+											sb._('<input name="birth_country" type="text" placeholder="Country" value="">')
+										sb._('</td>');
+									sb._('</tr>');
+									sb._('<tr id="deathdate" style="display:none;">');
+										sb._('<td><div><span>Death</span></div></td>');
+										sb._('<td>');
+											sb._(gen.select.days('death_days'));
+											sb._(gen.select.months('death_months'));
+											sb._('<input name="death_year" type="text" style="width:40px;" maxlength="4" placeholder="Year" value="">');
+											sb._('<input name="death_option" checked type="checkbox"> Unknown');
+										sb._('</td>');
+									sb._('</tr>');
+									sb._('<tr id="deathplace" style="display:none;">');
+										sb._('<td><div><span>Deathplace</span></div></td>');
+										sb._('<td>');
+											sb._('<input name="death_city"  type="text" placeholder="Town/City" value="">');
+											sb._('<input name="death_state" type="text" placeholder="Prov/State" value="">')
+											sb._('<input name="death_country" type="text" placeholder="Country" value="">')
+										sb._('</td>');
+									sb._('</tr>');
+								sb._('</table></div>');
+							sb._('</td>');
+						sb._('</tr>');
+					sb._('</table>');
+				sb._('</form>');
 				return sb.result();
 			}
 		}
@@ -644,7 +829,7 @@ JMBProfile.prototype = {
 				});
 				jQuery(html).find('.jmb-dialog-profile-content-unions-add input').click(function(){
 					if(add_active) return false;
-					var div = jQuery(form.add_spouse());
+					var div = jQuery('<div class="jmb-profile-add-union"></div>').append(form.add_spouse());
 					events = module._events(div);
 					events.living();
 					events.cancel(function(){ add_active = false; });
@@ -809,17 +994,92 @@ JMBProfile.prototype = {
 		module.object = object;
 		module.individuals = individuals;
 		
-		module._dialog({ title: name, height: 450 });
+		module._dialog(module.box, { title: name, height: 450 });
 		jQuery(module.box).css({ background:"white", border:"none" });
 		jQuery(module.box).append(cont);
 		module._initEditorHeaderButtons(cont);
 	},
-	add:function(object){
+	add:function(data){
+		var	module = this,
+			sb = host.stringBuffer(),
+			object = data.object,
+			parse = storage.usertree.parse(object),
+			form = module._form(object),
+			container = '',
+			cont = '',
+			title = '',
+			w = 700,
+			h = 500,
+			query = '',
+			beforeSend = function(){},
+			success = function(res){
+				module.individuals = res.usertree;
+			};
+			
+		module.individuals = data.individuals;
+		module.object = data.object;
+		jQuery.extend(module.events, data.events);
 		return {
-			parent:function(){},
-			spouse:function(){},
-			bs:function(){},
-			child:function(){}
+			clear:function(){
+				jQuery(container).html('');
+				jQuery(container).remove();
+				jQuery(cont).remove();
+				jQuery(module.addBox).html('');
+				container = null;
+			},
+			init:function(){
+				module._dialog(module.addBox, {title:title, width:w, height:h});
+				jQuery(module.addBox).css({ background:"none", border:"none" });
+				jQuery(module.addBox).append(container);
+				jQuery(container).append(cont);
+				module._ajaxForm(cont, 'add', query, beforeSend, success);
+			},
+			parent:function(){
+				this.clear();
+				container = jQuery('<div class="jmb-dialog-profile-add-parent"></div>');
+				cont = jQuery(form.add_parent());
+				w = 455;
+				h = 315;
+				title = 'Add Parent';
+				query = '{"method":"parent","owner_id":"'+parse.gedcom_id+'"}';
+				return this;
+			},
+			spouse:function(){
+				this.clear();
+				container = jQuery('<div class="jmb-profile-add-union"></div>');
+				jQuery(container).css({
+					border:'none',
+					margin: '0',
+					padding: '0',
+					width: 'auto'
+				});
+				cont = jQuery(form.add_spouse());
+				w = 455;
+				h = 517;
+				title = 'Add Spouse';
+				query = '{"method":"spouse","owner_id":"'+parse.gedcom_id+'"}';
+				return this;
+			},
+			bs:function(){
+				this.clear();
+				container = jQuery('<div class="jmb-dialog-profile-add-parent"></div>');
+				cont = jQuery(form.add_bs());
+				w = 455;
+				h = 315;
+				title = 'Add Brother or Sister';
+				query = '{"method":"sibling","owner_id":"'+parse.gedcom_id+'"}';
+				return this;
+			},
+			child:function(){
+				this.clear();
+				container = jQuery('<div class="jmb-dialog-profile-add-parent"></div>');
+				cont = jQuery(form.add_child());
+				w = 455;
+				h = 315;
+				title = 'Add Child';
+				query = '{"method":"child","owner_id":"'+parse.gedcom_id+'"}';
+				return this;
+			}
 		}
 	}
 }

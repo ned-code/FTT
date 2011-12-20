@@ -40,6 +40,13 @@ storage.profile = {};
 
 //usertree
 storage.usertree = {};
+storage.usertree.extend = function(def, sub){
+	for (var key in sub){
+		if(!def[key]){
+			def[key] = sub[key];
+		}
+	}
+}
 storage.usertree.parse = function(object){
 	var	user = object.user,
 		families = object.families,

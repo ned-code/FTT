@@ -13,6 +13,8 @@
 	color:white;
 }
 .jmb-dialog-container {
+	font-family: Calibri,Tahoma;
+	font-size: 12px;
 	margin-top: 3px;
 	border-radius: 5px;
 	margin: 0 !important;
@@ -429,6 +431,11 @@
     	padding: 3px 3px 3px;
     	width: 500px;
 }
+.jmb-profile-add-union form {
+	background: none repeat scroll 0 0 #F1E4B0;
+	border: 1px solid #473E1B;
+	border-radius: 5px 5px 5px 5px;
+}
 .jmb-profile-add-union div.title {
 	margin-left:5px;
 	margin-top:5px;
@@ -447,5 +454,65 @@
 	font-size: 14px;
 	font-weight: bold;
 	margin: 3px;
+	height: 22px;
 	width: 65px !important;
 }
+.jmb-profile-add-union input {
+	border: 1px solid gray;
+	font-family: tahoma;
+	font-size: 12px;
+	height: 16px;
+	margin: 3px;
+}
+.jmb-profile-add-union select {
+	border: 1px solid #999999;
+	margin: 3px;
+	padding: 1px;
+	width: 80px;
+}
+/**
+* add parent,brother\sister,child
+*/ 
+.jmb-dialog-profile-add-parent {
+	font-family: Calibri,Tahoma;
+	font-size: 12px;
+}
+.jmb-dialog-profile-add-parent form{
+	background: none repeat scroll 0 0 #F1E4B0;
+	border: 1px solid #473E1B;
+    	border-radius: 5px 5px 5px 5px;
+    	position:relative;
+}
+.jmb-dialog-profile-add-parent .buttons {
+	position:absolute;
+	top:5px;
+	right:5px;
+}
+.jmb-dialog-profile-add-parent .buttons input{
+	border: 2px solid black !important;
+	border-radius: 5px 5px 5px 5px;
+	cursor: pointer;
+	font-family: Calibri,Tahoma;
+	font-size: 14px;
+	font-weight: bold;
+	margin: 3px;
+	height: 22px;
+	width: 65px !important;
+}
+.jmb-dialog-profile-add-parent span {
+	font-weight: bold;
+}
+.jmb-dialog-profile-add-parent select {
+	border: 1px solid #999999;
+	margin: 3px;
+	padding: 1px;
+	width: 80px;
+}
+.jmb-dialog-profile-add-parent input {
+	border: 1px solid gray;
+	font-family: tahoma;
+	font-size: 12px;
+	height: 16px;
+	margin: 3px;
+}
+
