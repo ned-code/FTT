@@ -169,15 +169,10 @@ JMBAncestorsObject.prototype = {
 			usertree = module.usertree,
 			tree = {},
 			count = 0,
-			object, 
-			parse, 
-			node,
-			ids,
-			first,
-			ind,
-			key,
-			parents,
+			get_parents,
+			get_parents_id,
 			set_data,
+			set_null_data,
 			set_ancestors;
 			
 		get_parents = function(id){
@@ -186,6 +181,7 @@ JMBAncestorsObject.prototype = {
 		}
 		
 		get_parents_id = function(par){
+			var first, key;
 			for(key in par){
 				first = par[key];
 				break;
@@ -195,8 +191,10 @@ JMBAncestorsObject.prototype = {
 		
 		set_data = function(id, prew){
 			if(!usertree[id]) return set_null_data();
-			object = usertree[id];
-			parse = storage.usertree.parse(object);
+			var	object = usertree[id],
+				parse = storage.usertree.parse(object),
+				node;
+			
 			node = {
 				id: parse.gedcom_id,
 				name: parse.name,
@@ -223,8 +221,9 @@ JMBAncestorsObject.prototype = {
 		}
 						
 		set_ancestors = function(el){
-			ind = el.id;	
-			parents = get_parents(ind);
+			var	ind = el.id,	
+				parents = get_parents(ind),
+				ids;
 			if(parents&&parents.length!=0){
 				ids = get_parents_id(parents);
 				el.children.push(set_data(ids[0], el));
