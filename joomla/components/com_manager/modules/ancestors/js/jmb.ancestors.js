@@ -135,7 +135,9 @@ JMBAncestorsObject.prototype = {
 					sb._('<td>');
 						sb._('<div id="')._(parse.gedcom_id)._('-view" class="photo">')._(module.avatar(object));
 							sb._('<div id="')._(parse.gedcom_id)._('-edit" class="jit-edit-button">&nbsp;</div>');
-							sb._('<div class="jit-facebook-icon" id="')._(parse.facebook_id)._('"><img src="')._(module.imagePath)._('facebook.gif" width="18x" height="18px"></div>');
+							if(parse.facebook_id != '0'){
+								sb._('<div class="jit-facebook-icon" id="')._(parse.facebook_id)._('"><img src="')._(module.imagePath)._('facebook.gif" width="18x" height="18px"></div>');
+							}
 						sb._('</div>');
 					sb._('</td>');
 					sb._('<td valign="top"><div class="data')._((parse.gender=='M')?' male':' female')._('">')
