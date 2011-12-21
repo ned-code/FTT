@@ -1,4 +1,7 @@
 function JMBLatestUpdatesObject(obj){
+	jQuery(obj).remove();
+	storage.core.modulesPullObject.unset('JMBLatestUpdatesObject');
+	return;
 	var html = null;	
 	
 	var get_content = function(items){

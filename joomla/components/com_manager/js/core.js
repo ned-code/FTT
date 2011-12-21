@@ -61,7 +61,7 @@ storage.usertree.parse = function(object){
 		last_name:(user.last_name!=null)?user.last_name:'',
 		nick:(user.nick!=null)?user.nick:'',
 		gender:user.gender,
-		relation:(user.relation!=null)?relation:false,
+		relation:(user.relation!=null)?user.relation:false,
 		avatar_id:(function(){
 			var avatar = (media!=null)?media.avatar:null;
 			if(avatar!=null){

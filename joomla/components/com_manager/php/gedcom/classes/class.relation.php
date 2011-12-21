@@ -1,14 +1,38 @@
 <?php
 class JMBRelation {
+	protected $db;
+	protected $families;
 	protected $individuals;
+	protected $_FamiliesList;
+	protected $_ChildrensList;
+	protected $_Relatives;
 	
-	protected function get_parents($id){
-		$parents = $this->individuals->getParents($id);
-		$father = $parents['fatherID'];
-		$mother = $parents['motherID'];
-		return array($father,$mother);
+	protected function get_parents($gedcom_id){
+		$ind_key = 'I'.$gedcom_id;
+		if(isset($this->_ChildrensList[$ind_key])){
+			$parents = array();
+			$families = $this->_ChildrensList[$ind_key];
+			foreach($families as $fam){
+				$family_id = $fam['family_id'];
+				$family_key = 'F'.$family_id;
+				if(isset($this->_FamiliesList[$family_key])){
+					$family = $this->_FamiliesList[$family_key][0];
+					return array($family['husb'], $family['wife']);
+				}
+			}
+		}
+		return null;
 	}
-		
+	
+	protected function get_spouse($gedcom_id){
+		$ind_key = 'I'.$gedcom_id;
+		if(isset($this->_FamiliesList[$ind_key])){
+			$family = $this->_FamiliesList[$ind_key][0];
+			return $family['wife'];
+		}
+		return null;
+	}
+	
 	protected function set_ancestors($id, &$ancestors, $level = 1){
 		if(!$id) return;
 		$parents = $this->get_parents($id);
@@ -22,7 +46,12 @@ class JMBRelation {
 		}
 	}
 	
-	protected function get_gender($id){
+	protected function get_gender($gedcom_id){
+		if(isset($this->_IndividualsList[$gedcom_id])){
+			return $this->_IndividualsList[$gedcom_id][0]['gender'];
+		}
+		return null;
+		
 		$ind = $this->individuals->get($id);
 		return $ind->Gender;
 	}
@@ -89,12 +118,8 @@ class JMBRelation {
 	protected function format_plural($count, $singular, $plural){	
 		return $count.' '.($count == 1 || $count == -1 ? $singular : $plural);
 	}
-
-	public function __construct(&$individuals){
-		$this->individuals = $individuals;
-	}
-
-	public function get_relation($a_id, $b_id){
+	
+	protected function get_relation($a_id, $b_id){
 		if($a_id == $b_id){
 			return 'self';
 		}
@@ -159,6 +184,61 @@ class JMBRelation {
 		$cous_gen = abs($a_level - $b_level);
 		return $this->ordinal_suffix($cous_ord).' cousin '.$this->format_plural($cous_gen, 'time', 'times').' removed';
 		
+	}
+	
+	protected function init($tree_id){
+		$this->_FamiliesList = $this->families->getFamiliesList($tree_id);
+		$this->_ChildrensList = $this->families->getChildrensList($tree_id);
+		$this->_IndividualsList = $this->individuals->getIndividualsList($tree_id);
+		$this->_Relatives = $this->individuals->getRelatives($tree_id);
+	}
+	
+	protected function set_relation($tree_id, $gedcom_id, $check){
+		$insert = array();
+		foreach($check as $rel){
+			$relation = $this->get_relation($rel['individuals_id'], $gedcom_id);
+			$insert[] = array('member'=>$rel, 'relation'=>($relation)?$relation:'unknown');
+		}
+		
+		$result = array_chunk($insert, 25, true);
+		foreach($result as $res){
+			$sql = "INSERT INTO #__mb_relations (`tree_id`, `from`, `to`, `relation`) VALUES ";
+			foreach($res as $el){
+				$sql .= "('".$tree_id."','".$gedcom_id."','".$el['member']['individuals_id']."','".$el['relation']."'),";
+			}
+			$this->db->setQuery(substr($sql,0,-1));
+			$this->db->query();
+		}
+		return $insert;
+	}
+
+	public function __construct(&$families, &$individuals){
+		$this->db = new JMBAjax();
+		$this->families = $families;
+		$this->individuals = $individuals;
+	}
+	
+	public function check($tree_id, $gedcom_id){
+		$this->init($tree_id);
+		$sql_string = "SELECT rel.to as individuals_id, rel.relation FROM jos_mb_relations as rel WHERE rel.tree_id = ? AND rel.from = ?";
+		$this->db->setQuery($sql_string, $tree_id, $gedcom_id);
+		$relations = $this->db->loadAssocList('individuals_id');
+		if($relations==null){
+			$check = $this->_Relatives;
+		} else {
+			if(sizeof($this->_Relatives) == sizeof($relations)){
+				return;
+			} else {
+				$check = array();
+				foreach($this->_Relatives as $rel){
+					$id = $rel['individuals_id'];
+					if(!isset($relations[$id])){
+						$check[] = $rel;
+					}
+				}
+			}
+		}
+		return $this->set_relation($tree_id, $gedcom_id, $check);
 	}
 }
 ?>

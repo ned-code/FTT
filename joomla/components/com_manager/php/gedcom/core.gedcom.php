@@ -31,14 +31,15 @@ class Gedcom{
         		require_once $gedcomPath.DS.'class.individuals.manager.php';
         		$this->individuals = new IndividualsList($this->events);
         	}
-        	if(file_exists($gedcomPath.DS.'class.relation.php')){
-        		require_once $gedcomPath.DS.'class.relation.php';
-        		$this->relation = new JMBRelation($this->individuals);
-        	}
         	if(file_exists($gedcomPath.DS.'class.families.manager.php')){
         		require_once $gedcomPath.DS.'class.families.manager.php';
         		$this->families = new FamiliesList($this->individuals, $this->events);
         	}
+        	if(file_exists($gedcomPath.DS.'class.relation.php')){
+        		require_once $gedcomPath.DS.'class.relation.php';
+        		$this->relation = new JMBRelation($this->families, $this->individuals);
+        	}
+        	
         }  
 }
 ?>

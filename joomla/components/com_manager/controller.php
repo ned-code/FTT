@@ -581,7 +581,8 @@ class JMBController extends JController
 						$_SESSION['jmb']['login_type'] = 'family_tree';
 						$_SESSION['jmb']['config'] = $host->getConfig();
 						$_SESSION['jmb']['tree'] = $host->getTree($link['gid'], $link['tid'], $link['type']);
-						$host->usertree->init($link['tid'], $link['gid'], $link['type']);		
+						$host->gedcom->relation->check($link['tid'],$link['gid']);
+						$host->usertree->init($link['tid'], $link['gid'], $link['type']);
 						$this->update_login_time($link['gid']);
 					}
         			break;
