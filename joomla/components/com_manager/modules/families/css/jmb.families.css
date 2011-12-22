@@ -27,8 +27,7 @@
 	margin-left: 30px;
 }
 .jmb-families-childs-container{
-	/*height:180px;*/
-	/*margin:10px;*/
+	text-align: center;
 }
 .jmb-families-child{
 	display: inline-block;
@@ -66,7 +65,8 @@
 	margin-top: 1px;
 }
 img.jmb-families-avatar.view{
-	cursor: url("magnify.png"), pointer;
+	/*cursor: url("magnify.png"), pointer;*/
+	cursor: url("cursor.png") 5 1, pointer;
 }
 .jmb-families-parent-img{
 	background: white;
@@ -140,144 +140,90 @@ img.jmb-families-avatar.view{
 	top: 120px;
 	width: 38px;
 }
+/**
+* ftt edit button
+*/ 
 .jmb-families-edit-button {
-	background: url("edit2.jpg") no-repeat scroll 0 0 transparent;
-	background-color: #3B5998;
-	border: none;
+	border: 2px solid white;
+	background-color: #22b14c;
 	color: white;
 	cursor: pointer;
 	font-size: 27px;
 	font-weight: bolder;
-	height: 18px;
+	height: 9px;
 	line-height: 17px;
 	position: absolute;	
+	width: 9px;
+}
+.jmb-families-edit-button:hover{
+	border: 2px solid yellow;
+}
+.jmb-families-edit-button.hover {
+	background: url("edit.gif") no-repeat scroll 0 0 transparent;
 	width: 18px;
+	height: 18px;
 }
 .jmb-families-edit-button.parent {
-	left: 92px;
+	left: 95px;
 	position: absolute;
-	top: -2px;
+	top: 0px;
+}
+.jmb-families-edit-button.parent.hover {
+	left: 86px;
+	position: absolute;
+	top: 0px;
 }
 .jmb-families-edit-button.child{
-	left: 56px;
+	left: 59px;
 	position: absolute;
-	top: -2px;
+	top: 0px;
+}
+.jmb-families-edit-button.child.hover{
+	left: 50px;
+	position: absolute;
+	top: 0px;
 }
 .jmb-families-edit-button.child.small{
-	left: 49px;
-	top: -2px;
+	left: 52px;
+	top: 0;
 }
-/*
-.jmb-families-edit-container{
-	margin-bottom: 10px;
-	margin-left: 10px;
-	margin-right: 10px;
+.jmb-families-edit-button.child.small.hover{
+	left: 43px;
+	top: 0;
 }
-.jmb-families-edit-container fieldset{
-	margin:0;
-	padding:0;
-}
-.jmb-families-edit-profile{
-	background: url("gear.jpg") no-repeat scroll 0 0 transparent;
-	cursor:pointer;
-}
-.jmb-families-edit-profile span {
-	font-weight: bold;
-	margin-left: 20px;
-}
-.jmb-families-edit-fieldset{
-	margin-top: 10px;
-}
-.jmb-families-edit-parent{}
-.jmb-families-edit-spouse{}
-.jmb-families-edit-bs{}
-.jmb-families-edit-child{}
-.jmb-families-edit-fieldset div{
-	background: url("add.gif") no-repeat scroll 0 0 transparent;
-	cursor:pointer;
-	height: 14px;
-   	margin: 3px;
-}
-.jmb-families-edit-fieldset div span{
-	margin-left: 20px;
-}
-.jmb-families-edit-send{
-	cursor:pointer;
-	margin-top:10px;
-}
-.jmb-families-edit-send-img{
-	background: url("email.jpg") no-repeat scroll 0 0 transparent;
-	height: 14px;
-	margin: 3px;
-	width: 14px;
-}
-.jmb-families-edit-options{
-	margin-left: 3px;
-	margin-top:10px;
-	height: 30px;
-}
-.jmb-families-edit-options legend {
-	cursor:pointer;
-	background: url("gear.jpg") no-repeat scroll 0 0 transparent;
-	padding:0;
-	margin:0;
-}
-.jmb-families-edit-options legend span {
-	margin-left: 20px;
-}
-.jmb-families-edit-options div {
-	margin-left: 10px;
-	margin-top: 3px;
-}
-.jmb-families-edit-options-delete{
-	background: url("remove.gif") no-repeat scroll 0 0 transparent;
-	height: 14px;
-	color: red;
-	cursor:pointer;
-}
-.jmb-families-edit-options-delete span{
-	margin-left: 20px;
-}
-.jmb-families-edit-options span{
-	margin-left: 20px;
-}
-.jmb-families-edit-close {
-	background: url("close.gif") no-repeat scroll 0 0 transparent;
-	height: 12px;
-	width: 12px;
-	cursor:pointer;
-	position: absolute;
-	top: 5px;
-	right: 5px;
-	text-decoration: none;
-}
-.jmb-families-img-view {
-	background: url("magnify.gif?111") no-repeat scroll 0 0 transparent;
-	width:35px;
-	height:33px;
-	cursor:pointer;
-	position: absolute;
-}
-.jmb-families-img-view.parent{
-	left: 65px;
-	top: 80px;
-}
-.jmb-families-img-view.child{
-	left: 35px;
-	top: 45px;
-}
+/**
+* facebook icon
 */
 .jmb-families-fb-icon{
+	background:url("facebook_small.gif") no-repeat transparent;
+	border: 2px solid white;
 	cursor: pointer;
-	height: 18px;
+	height: 9px;
 	position: absolute;
-	width: 18px;
+	width: 9px;
 }
-.jmb-families-fb-icon.parent{
-	left: 90px;
-	top: 102px;
+.jmb-families-fb-icon.hover{
+	width:18px;
+	height:18px;
+	background:url("facebook.gif") no-repeat transparent;
+}
+.jmb-families-fb-icon:hover{
+	border: 2px solid yellow;
 }
 .jmb-families-fb-icon.child{
-	left: 54px;
-	top: 61px;
+	left: 59px;
+	top: 67px;
 }
+.jmb-families-fb-icon.child.hover{
+	left: 50px;
+	top: 58px;
+}
+.jmb-families-fb-icon.parent{
+	left: 95px;
+	top: 107px;
+}
+.jmb-families-fb-icon.parent.hover{
+	left: 86px;
+	top: 98px;
+}
+

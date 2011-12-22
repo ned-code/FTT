@@ -217,7 +217,8 @@ JMBFamiliesObject.prototype = {
 			sb._('<div id="')._(gedcom_id)._('-view" type="imgContainer" class="jmb-families-parent-img">')._(module._avatar(object, 'parent', 1));
 				sb._('<div id="')._(gedcom_id)._('-edit" class="jmb-families-edit-button parent">&nbsp;</div>');
 				if(facebook_id != '0'){
-					sb._('<div class="jmb-families-fb-icon parent" id="')._(facebook_id)._('"><img src="')._(module.cssPath)._('facebook.gif" width="18x" height="18px"></div>');
+					//sb._('<div class="jmb-families-fb-icon parent" id="')._(facebook_id)._('"><img src="')._(module.cssPath)._('facebook.gif" width="18x" height="18px"></div>');
+					sb._('<div class="jmb-families-fb-icon parent" id="')._(facebook_id)._('">&nbsp;</div>');
 				}
 			sb._('</div>');
 			sb._('<div>');
@@ -251,7 +252,8 @@ JMBFamiliesObject.prototype = {
 			sb._('<div id="')._(gedcom_id)._('-view" type="imgContainer" class="jmb-families-parent-img">')._(module._avatar(object, 'parent', 1));
 				sb._('<div id="')._(gedcom_id)._('-edit" class="jmb-families-edit-button parent">&nbsp;</div>');
 				if(facebook_id != '0'){
-					sb._('<div class="jmb-families-fb-icon parent" id="')._(facebook_id)._('"><img src="')._(module.cssPath)._('facebook.gif" width="18x" height="18px"></div>');
+					//sb._('<div class="jmb-families-fb-icon parent" id="')._(facebook_id)._('"><img src="')._(module.cssPath)._('facebook.gif" width="18x" height="18px"></div>');
+					sb._('<div class="jmb-families-fb-icon parent" id="')._(facebook_id)._('">&nbsp;</div>');
 				}
 			sb._('</div>');
 			sb._('<div>');
@@ -280,7 +282,8 @@ JMBFamiliesObject.prototype = {
 			sb._('<div id="')._(gedcom_id)._('-view" type="imgContainer" class="jmb-families-parent-img">')._(module._avatar(object, 'parent', 1));
 				sb._('<div id="')._(gedcom_id)._('-edit" class="jmb-families-edit-button parent">&nbsp;</div>');
 				if(facebook_id != '0'){
-					sb._('<div class="jmb-families-fb-icon parent" id="')._(facebook_id)._('"><img src="')._(module.cssPath)._('facebook.gif" width="18px" height="18px"></div>');
+					//sb._('<div class="jmb-families-fb-icon parent" id="')._(facebook_id)._('"><img src="')._(module.cssPath)._('facebook.gif" width="18px" height="18px"></div>');
+					sb._('<div class="jmb-families-fb-icon parent" id="')._(facebook_id)._('">&nbsp;</div>');
 				}
 			sb._('</div>');
 			sb._('<div>');
@@ -310,7 +313,8 @@ JMBFamiliesObject.prototype = {
 		sb._('<div id="')._(gedcom_id)._('-view" type="imgContainer" style="height:')._(Math.round(80*k))._('px;width:')._(Math.round(72*k))._('px;" class="jmb-families-child-img">')._(module._avatar(object, 'child', k));	
 				sb._('<div id="')._(gedcom_id)._('-edit" class="')._(edit_button)._('">&nbsp;</div>');
 				if(facebook_id != '0'){
-					sb._('<div class="jmb-families-fb-icon child" id="')._(facebook_id)._('"><img src="')._(module.cssPath)._('facebook.gif" width="18px" height="18px"></div>');
+					//sb._('<div class="jmb-families-fb-icon child" id="')._(facebook_id)._('"><img src="')._(module.cssPath)._('facebook.gif" width="18px" height="18px"></div>');
+					sb._('<div class="jmb-families-fb-icon child" id="')._(facebook_id)._('">&nbsp;</div>');
 				}
 			sb._('</div>')
 			sb._('<div>');
@@ -387,6 +391,18 @@ JMBFamiliesObject.prototype = {
 			});
 		});
 	},
+	_win:function(cont){
+		var	module = this;
+		jQuery(cont).find('div[type="imgContainer"]').each(function(i,div){
+			jQuery(div).mouseenter(function(){
+				jQuery(div).find('.jmb-families-edit-button').addClass('hover');
+				jQuery(div).find('.jmb-families-fb-icon').addClass('hover');
+			}).mouseleave(function(){
+				jQuery(div).find('.jmb-families-edit-button').removeClass('hover');
+				jQuery(div).find('.jmb-families-fb-icon').removeClass('hover');
+			});
+		});
+	},
 	render:function(gedcom_id){
 		var	module = this,
 			object = module.usertree[gedcom_id],
@@ -443,6 +459,7 @@ JMBFamiliesObject.prototype = {
 		module._view(cont);
 		module._edit(cont);
 		module._facebook(cont);
+		module._win(cont);
 	},
 	reload:function(id, type){
 		var	module = this;
