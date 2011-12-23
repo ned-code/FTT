@@ -111,7 +111,7 @@ storage.usertree.parse = function(object){
 			return (families[id]&&families[id].divorce!=null)?1:0;
 		},
 		is_death:(function(){
-			var event = user['birth'], date;
+			var event = user['death'], date;
 			if(event!=null){
 				date = event.date;
 				return ( date[0]!=null || date[1] != null || date[2] != null )?1:0;
