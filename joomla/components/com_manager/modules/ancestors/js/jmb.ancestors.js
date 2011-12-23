@@ -88,14 +88,21 @@ JMBAncestorsObject.prototype = {
 				});
 			},
 			photo:function(){
-				object = jQuery(label).find('div.photo'),
+				object = jQuery(label).find('div.photo');
+				jQuery(object).mouseenter(function(){
+					jQuery(label).find('.jit-edit-button').addClass('hover');
+					jQuery(label).find('.jit-facebook-icon').addClass('hover');
+				}).mouseleave(function(){
+					jQuery(label).find('.jit-edit-button').removeClass('hover');
+					jQuery(label).find('.jit-facebook-icon').removeClass('hover');
+				});
 				storage.tooltip.render('view', {
 					object:module.usertree[node.id],
 					target:object
 				});
 			},
 			edit:function(){
-				object = jQuery(label).find('.jit-edit-button'),
+				object = jQuery(label).find('.jit-edit-button');
 				storage.tooltip.render('edit', {
 					individuals:module.usertree,
 					object:module.usertree[node.id],
@@ -136,7 +143,7 @@ JMBAncestorsObject.prototype = {
 						sb._('<div id="')._(parse.gedcom_id)._('-view" class="photo">')._(module.avatar(object));
 							sb._('<div id="')._(parse.gedcom_id)._('-edit" class="jit-edit-button">&nbsp;</div>');
 							if(parse.facebook_id != '0'){
-								sb._('<div class="jit-facebook-icon" id="')._(parse.facebook_id)._('"><img src="')._(module.imagePath)._('facebook.gif" width="18x" height="18px"></div>');
+								sb._('<div class="jit-facebook-icon" id="')._(parse.facebook_id)._('">&nbsp;</div>');
 							}
 						sb._('</div>');
 					sb._('</td>');

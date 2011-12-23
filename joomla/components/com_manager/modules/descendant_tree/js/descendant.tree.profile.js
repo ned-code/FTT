@@ -100,7 +100,7 @@ DescendantTreeProfile.prototype = {
 		return html;
 	},
 	edit:function(html, object){
-		var	module = this;
+		var	module = this;		
 		storage.tooltip.render('edit', {
 			offsetParent:document.body,
 			target:jQuery(html).find('div#edit-button'),
@@ -111,6 +111,20 @@ DescendantTreeProfile.prototype = {
 			}
 		});
 	},
+	facebook:function(html, object){
+		if(object.user.facebook_id!='0'){
+			jQuery(html).find('.jmb-dtp-facebook-icon').show();
+		}
+	},
+	photo:function(html){
+		jQuery(html).find('.jmb-dtp-body-info-avatar').mouseenter(function(){
+				jQuery(html).find('.jmb-dtp-body-edit-button').addClass('hover');
+				jQuery(html).find('.jmb-dtp-facebook-icon').addClass('hover');
+			}).mouseleave(function(){
+				jQuery(html).find('.jmb-dtp-body-edit-button').removeClass('hover');
+				jQuery(html).find('.jmb-dtp-facebook-icon').removeClass('hover');
+			});
+	},
 	render:function(object){
 		var	module = this, html;
 		
@@ -118,8 +132,10 @@ DescendantTreeProfile.prototype = {
 		
 		module.clear();
 		html = module.create(object);
-		
+			
+		module.photo(html);
 		module.edit(html, object);
+		module.facebook(html, object);
 		
 		//module.parent.modal.off();
 	}

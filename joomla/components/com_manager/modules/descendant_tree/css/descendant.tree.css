@@ -59,28 +59,6 @@
 	position: relative;
 	width: 72px;
 }
-.jmb-dtp-body-edit-button{
-	background: url("../imgs/edit2.jpg") no-repeat scroll 0 0 #3B5998;
-	border: medium none;
-	color: white;
-	cursor: pointer;
-	font-size: 27px;
-	font-weight: bolder;
-	height: 18px;
-	left: 55px;
-	line-height: 17px;
-	position: absolute;
-	top: -1px;
-	width: 18px;
-}
-.jmb-dtp-facebook-icon {
-	cursor: pointer;
-	height: 14px;
-	left: 58px;
-	position: absolute;
-	top: 66px;
-	width: 14px;
-}
 .jmb-dtp-body-info span.title {
 	color:gray;
 }
@@ -205,4 +183,50 @@
 	opacity: 0.1;
 	position: absolute;
 	top: 0;
+}
+/**
+* edit
+*/ 
+.jmb-dtp-body-edit-button{
+	background-color: #22B14C;
+	border: 2px solid white;
+	color: white;
+	cursor: pointer;
+	height: 9px;	
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 9px;
+}
+
+.jmb-dtp-body-edit-button:hover{
+	border: 2px solid yellow;
+}
+
+.jmb-dtp-body-edit-button.hover{
+	background: url("../imgs/edit.gif") no-repeat scroll 0 0 transparent;
+	width: 18px;
+	height: 18px;
+}
+
+/**
+* facebook
+*/
+.jmb-dtp-facebook-icon {
+	background: url("../imgs/facebook_small.gif") no-repeat scroll 0 0 transparent;
+	border: 2px solid white;
+	bottom: 0;
+	cursor: pointer;
+	height: 9px;
+	position: absolute;
+	right: 0;
+	width: 9px;
+}
+.jmb-dtp-facebook-icon.hover{
+	width:18px;
+	height:18px;
+	background:url("../imgs/facebook.gif") no-repeat transparent;
+}
+.jmb-dtp-facebook-icon:hover{
+	border: 2px solid yellow;
 }

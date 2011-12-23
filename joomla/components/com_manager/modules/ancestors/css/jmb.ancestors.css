@@ -41,7 +41,7 @@
 	width: 72px;
 }
 .jit-node-item .photo img {
-	cursor: url("../images/magnify.png"), pointer;
+	cursor: url("../images/cursor.png") 5 1, pointer;
 }
 .jit-node-item .data{
 	font-family: Calibri,Tahoma;
@@ -82,20 +82,47 @@
 	right: -20px;
 	top: 30px;
 }
+/**
+* edit
+*/
 .jit-edit-button {
-	background: url("../images/edit2.jpg") no-repeat scroll 0 0 transparent;
+	border: 2px solid white;
+	background-color: #22b14c;
 	cursor: pointer;
-	height: 18px;
+	height: 9px;
 	position: absolute;
 	right: 0;
 	top: 0;
-	width: 18px;
+	width: 9px;
 }
-.jit-facebook-icon {
-	cursor: pointer;
+
+.jit-edit-button:hover{
+	border: 2px solid yellow;
+} 
+.jit-edit-button.hover {
+	background: url("../images/edit.gif") no-repeat scroll 0 0 transparent;
+	width: 18px;
 	height: 18px;
-    	position: absolute;
-    	right: 0;
-    	top: 62px;
-    	width: 18px;
+}
+/**
+* facebook
+*/
+.jit-facebook-icon {
+	background: url("../images/facebook_small.gif") no-repeat scroll 0 0 transparent;
+	border: 2px solid white;
+	cursor: pointer;
+	height: 9px;
+	position: absolute;
+	right: 0;
+	top: 66px;
+	width: 9px;
+}
+.jit-facebook-icon.hover{
+	width:18px;
+	height:18px;
+	top: 58px;
+	background:url("../images/facebook.gif") no-repeat transparent;
+}
+.jit-facebook-icon:hover{
+	border: 2px solid yellow;
 }
