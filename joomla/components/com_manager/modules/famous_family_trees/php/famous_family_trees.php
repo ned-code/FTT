@@ -58,15 +58,14 @@ class JMBFamousFamily {
 		} else {
 			$permission = 'MEMBER';
 		}
-		//$permission = $this->_getUserTreePermission($args);
 		$_SESSION['jmb']['fid'] = '0';
         	$_SESSION['jmb']['gid'] = $args->Id;
 		$_SESSION['jmb']['tid'] = $args->TreeId;
 		$_SESSION['jmb']['permission'] = $permission;
 		$_SESSION['jmb']['alias'] = 'myfamily';
 		$_SESSION['jmb']['login_type'] = 'famous_family';
-		$_SESSION['jmb']['config'] = $this->host->getConfig();
-		$_SESSION['jmb']['tree'] = $this->host->getTree($args->Id, $args->TreeId, $permission);		
+		$_SESSION['jmb']['config'] = $this->host->getConfig();	
+		return true;
 	}
 }
 ?>
