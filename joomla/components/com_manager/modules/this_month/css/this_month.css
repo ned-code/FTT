@@ -37,9 +37,12 @@
 	margin: 3px 3px 10px 10px;
 }
 .jmb-this-month-content .date{
+	background: url("../imgs/calendar.gif") no-repeat scroll 0 0 transparent;
+	height: 16px;
+	line-height: 20px;
 	margin: 0;
-	padding: 0;
-	width: 15px;
+	text-align: center;
+	width: 16px;
 }
 .jmb-this-month-content .person{
 
