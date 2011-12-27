@@ -168,6 +168,12 @@ JMBTooltip.prototype = {
 		if(settings.offsetParent){
 			result.style.offsetParent = settings.offsetParent;
 		}
+		if(settings.preBuild){
+			result.style.preBuild = settings.preBuild;
+		}
+		if(settings.preShow){
+			result.style.preShow = settings.preShow;
+		}
 		return result;
 	},
 	_images:function(settings){
@@ -247,7 +253,8 @@ JMBTooltip.prototype = {
 			divs,
 			add,
 			class_name,
-			method;
+			method,
+			offset;
 			
 		switch(type){
 			case "edit":
@@ -296,9 +303,16 @@ JMBTooltip.prototype = {
 				jQuery(cont).find('div.jmb-tooltip-view-facebook').click(function(){
 					window.open('http://www.facebook.com/profile.php?id='+storage.usertree.user,'new','width=320,height=240,toolbar=1');
 				});
+				offset = jQuery(cont).find('div.jmb-tooltip-view-edit').offset();
 				storage.tooltip.render('edit', {
 					object:object,
-					target:jQuery(cont).find('div.jmb-tooltip-view-edit')
+					target:jQuery(cont).find('div.jmb-tooltip-view-edit'),
+					preBuild:function(){
+						offset = jQuery('div.bt-content').find('div.jmb-tooltip-view-edit').offset();
+					},
+					preShow:function(box){
+						jQuery(box).offset({top:offset.top + 20 , left:offset.left});
+					}
 				});
 			break;
 		}
