@@ -1,3 +1,4 @@
+/*
 .jmb_header_profile_box {
 	background: none repeat scroll 0 0 white;
 	border: 1px solid #999999;
@@ -53,5 +54,88 @@
 	color: blue;
 	cursor: pointer;
     	margin-left: 3px;
+}
+*/
+
+.jmb-profile-cont {
+	font-family: Calibri,Tahoma,sans-serif;
+	font-size: 16px;
+	height: 30px;
+	left: 0;
+	line-height: 28px;
+	margin:-3px;
+	position: absolute;
+	top: 0;
+}
+.jmb-profile-cont div.avatar{
+	border: 1px solid #ccc;
+	height: 22px;
+    	margin-left: 3px;
+    	margin-top: 3px;
+    	width: 22px;
+}
+.jmb-profile-cont div.login {
+	margin-left: 3px;
+}
+.jmb-profile-cont div.login span {
+	color: #ccc;
+}
+.jmb-profile-cont div.settings {
+	position:relative;
+}
+.jmb-profile-cont div.settings div.button{
+	background: url("../imgs/arrows.png") no-repeat scroll 0 -21px black;
+	border-color: black #CCCCCC black black;
+	border-right: 1px solid #CCCCCC;
+	border-style: solid;
+	border-width: 1px;
+	cursor: pointer;
+	height: 22px;
+	margin-top: 3px;
+	width: 22px;
+}
+.jmb-profile-cont div.settings div.button.active {
+	background: url("../imgs/arrows.png") no-repeat scroll 0 0 white;
+	border-color: #CCCCCC #CCCCCC white;
+    	border-style: solid;
+    	border-width: 1px;
+}
+.jmb-profile-cont div.settings div.menu {
+	background: none repeat scroll 0 0 white;
+	border-color: white #CCCCCC #CCCCCC;
+	border-style: solid;
+	border-width: 1px;
+	height: 90px;
+	padding-left: 3px;
+	position: absolute;
+	width: 150px;
+}
+.jmb-profile-cont div.settings div.menu div{
+	background: url("../imgs/list.png") no-repeat scroll 3px 10px transparent;
+	height: 20px;
+}
+.jmb-profile-cont div.settings div.menu div span {
+	color: #153FC5;
+	font-size: 12px;
+	margin-left: 15px;
+	cursor: pointer;
+}
+.jmb-profile-cont div.facebook {
+	background: url("../imgs/facebook-login-button.png") no-repeat scroll 0 0 transparent;
+	border: 1px solid white;
+	height: 22px;
+	margin-left: 5px;
+	margin-top: 5px;
+	width: 154px;
+}
+.jmb-profile-cont div.facebook span {
+	color: white;
+	cursor: pointer;
+	font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
+	font-size: 10px;
+	font-weight: bold;
+	line-height: 20px;
+	margin-left: 26px;
+	text-decoration: none;
 }
 

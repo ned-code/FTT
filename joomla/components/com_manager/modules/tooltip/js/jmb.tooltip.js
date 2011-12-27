@@ -240,13 +240,11 @@ JMBTooltip.prototype = {
 			divs = jQuery(cont).find('.jmb-profile-tooltip-fieldset div'),
 			add = storage.profile.add({
 				object:object,
-				individuals:settings.individuals,
 				events:{
-					afterEditorClose:function(object, individuals){
-						settings.individuals = individuals;
+					afterEditorClose:function(object){
 						settings.object = object;
 						if(typeof(settings.afterEditorClose)==='function'){
-							settings.afterEditorClose(object, individuals);
+							settings.afterEditorClose(object);
 						}
 					}
 				}
@@ -262,13 +260,11 @@ JMBTooltip.prototype = {
 		jQuery(cont).find('.jmb-profile-tooltip-button-edit').click(function(){
 			storage.profile.editor('edit', {
 				object:settings.object,
-				individuals:settings.individuals,
 				events:{
-					afterEditorClose:function(object, individuals){
-						settings.individuals = individuals;
+					afterEditorClose:function(object){
 						settings.object = object;
 						if(typeof(settings.afterEditorClose)==='function'){
-							settings.afterEditorClose(object, individuals);
+							settings.afterEditorClose(object);
 						}
 					}
 				}

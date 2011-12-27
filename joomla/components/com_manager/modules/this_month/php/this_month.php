@@ -101,8 +101,7 @@ class JMBThisMonth {
 	*/
 	protected function getEvents($treeId, $month, $render_type){
 		$sort = array((int)$this->settings['split_event']['type'],$this->settings['split_event']['year']);
-		$tree = $_SESSION['jmb']['tree'];
-		
+	
 		$birth = $this->host->gedcom->individuals->getByEvent($treeId, 'BIRT', $month, $sort);
 		$death = $this->host->gedcom->individuals->getByEvent($treeId, 'DEAT', $month, $sort);
 		$marr = $this->host->gedcom->families->getByEvent($treeId, 'MARR', $month, $sort);	

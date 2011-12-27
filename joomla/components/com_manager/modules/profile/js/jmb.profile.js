@@ -19,7 +19,7 @@ function JMBProfile(){
 		close:function(){
 			jQuery(this).dialog("destroy");
 			jQuery(this).remove();
-			module.events.afterEditorClose(module.object, module.individuals);
+			module.events.afterEditorClose(module.object);
 		}	
 	}
 		
@@ -801,6 +801,7 @@ JMBProfile.prototype = {
 					module._ajaxForm(jQuery(div).find('form'), 'union', '{"gedcom_id":"'+parse.gedcom_id+'","method":"add"}', function(data){}, function(res){
 						if(res.data&&res.data.spouse!=null){
 							module.individuals[res.data.spouse.user.gedcom_id] = res.data.spouse;
+							storage.usertree.pull[res.data.spouse.user.gedcom_id] = res.data.spouse; 
 						}
 						update_data(res);
 						jQuery(div).remove();
@@ -982,7 +983,6 @@ JMBProfile.prototype = {
 		var	module = this,
 			cont = module._container(),
 			object = data.object,
-			individuals = data.individuals,
 			user = object.user,
 			get = storage.usertree.parse(object),
 			name = get.full_name;
@@ -992,7 +992,7 @@ JMBProfile.prototype = {
 		
 		module.container = cont;
 		module.object = object;
-		module.individuals = individuals;
+		module.individuals = storage.usertree.pull;
 		
 		module._dialog(module.box, { title: name, height: 450 });
 		jQuery(module.box).css({ background:"white", border:"none" });
@@ -1014,9 +1014,10 @@ JMBProfile.prototype = {
 			beforeSend = function(){},
 			success = function(res){
 				module.individuals = res.usertree;
+				storage.usertree.pull = res.usertree;
 			};
 			
-		module.individuals = data.individuals;
+		module.individuals = storage.usertree.pull;
 		module.object = data.object;
 		jQuery.extend(module.events, data.events);
 		return {

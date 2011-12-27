@@ -461,7 +461,7 @@ class JMBController extends JController
 			case 'login':
 				if($logged&&!$link) return 'first-page';
 				if($logged) return 'myfamily';
-				return $alias;
+				return 'home';
 			break;
 				
 			case "first-page":

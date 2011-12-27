@@ -372,11 +372,9 @@ JMBFamiliesObject.prototype = {
 		jQuery(cont).find('.jmb-families-edit-button').each(function(i,e){
 			gedcom_id = jQuery(e).attr('id').split('-')[0];
 			storage.tooltip.render('edit', {
-				individuals:usertree,
 				object:usertree[gedcom_id],
 				target:e,
-				afterEditorClose:function(object, individuals){
-					module.usertree = individuals;
+				afterEditorClose:function(object){
 					module.render(module.now_id);	
 				}
 			});
@@ -445,7 +443,7 @@ JMBFamiliesObject.prototype = {
 		}
 		
 		if(childrens.length!=0){
-			childrens_table = jQuery('<table align="center" width="100%"><tr><td></td></tr><tr><td></td></tr></table>');
+			childrens_table = jQuery('<table align="center" width="100%"><tr><td valing="top"></td></tr><tr><td valing="top"></td></tr></table>');
 			row_count = (childrens.length > 10 && childrens.length < 20)? Math.round(childrens.length/2):10;
 			k = (childrens.length<10||(childrens.length>10&&childrens.length<20))?1:0.9;
 			for(i = 0; i < childrens.length ; i++){

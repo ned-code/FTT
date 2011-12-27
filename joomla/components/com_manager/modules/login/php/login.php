@@ -6,32 +6,20 @@ class JMBLogin {
 		$this->host = new Host('Joomla');
 	}
 	
-	public function status(){
-		$alias = (isset($_SESSION['jmb']['alias']))?$_SESSION['jmb']['alias']:null;
-		$fid = (isset($_SESSION['jmb']['fid']))?$_SESSION['jmb']['fid']:null;
-		$tid = (isset($_SESSION['jmb']['tid']))?$_SESSION['jmb']['tid']:null;
-		$gid = (isset($_SESSION['jmb']['gid']))?$_SESSION['jmb']['gid']:null;
-		$login_type = (isset($_SESSION['jmb']['login_type']))?$_SESSION['jmb']['login_type']:null;
-		$permission = (isset($_SESSION['jmb']['permission']))?$_SESSION['jmb']['permission']:null;
-		
-		$path = "";
-		$ind = $this->host->gedcom->individuals->get($gid);
-		$avatar = $this->host->gedcom->media->getAvatarImage($gid);		
-		return json_encode(array('alias'=>$alias,'facebook_id'=>$fid,'gedcom_id'=>$gid,'login_type'=>$login_type,'permission'=>$permission,'tree_id'=>$tid,'individ'=>$ind,'avatar'=>$avatar,'path'=>$path));
+	public function facebook($args){
+		$args = json_decode($args);
+		require_once(JPATH_BASE.DS.'components'.DS.'com_manager'.DS.'php'.DS.'facebook.php');
+		$facebook = new Facebook(array('appId'=>$_SESSION['jmb']['JMB_FACEBOOK_APPID'],'secret'=>$_SESSION['jmb']['JMB_FACEBOOK_SECRET'],'cookie'=>$_SESSION['jmb']['JMB_FACEBOOK_COOKIE']));
+		$facebook->setAccessToken($args->access_token);
+		return true;
 	}
-
-	public function familyLogout(){
-		$_SESSION['jmb']['tid'] = null;
-		$_SESSION['jmb']['gid'] = null;
-		$_SESSION['jmb']['permission'] = null;
-		$_SESSION['jmb']['alias'] = 'famous-family';
-	}
-	
-	public function get(){
-		$ownerId = $_SESSION['jmb']['gid'];
-		$fmbUser = $this->host->getUserInfo($ownerId, $ownerId); 
-		$path = "";
-		return json_encode(array('fmbUser'=>$fmbUser,'imgPath'=>$path));
+	public function user(){
+		$gedcom_id = $_SESSION['jmb']['gid'];
+		$tree_id = $_SESSION['jmb']['tid'];
+		$permission = $_SESSION['jmb']['permission'];
+		$this->host->usertree->init($tree_id, $gedcom_id, $permission);
+		$usertree = $this->host->usertree->load($tree_id, $gedcom_id);
+		return json_encode(array('user_id'=>$gedcom_id, 'usertree'=>$usertree));
 	}
 }
 ?>

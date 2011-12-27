@@ -32,7 +32,7 @@ storage.fb.cookie = true;
 storage.fb.xfbml = true;
 storage.iframe = jQuery('<iframe id="ftt_iframe" name="ftt_iframe" style="display:none;position:absolute;left:-1000px;width:1px;height:1px">');
 storage.login = {};
-storage.language = {};
+//storage.language = {};
 storage.media = {};
 storage.invitation = {};
 storage.tooltip = {};
@@ -40,6 +40,8 @@ storage.profile = {};
 
 //usertree
 storage.usertree = {};
+storage.usertree.user = null;
+storage.usertree.pull = null;
 storage.usertree.extend = function(def, sub){
 	for (var key in sub){
 		if(!def[key]){
@@ -523,8 +525,7 @@ core.load = function(pages){
 		jQuery(document.body).append(storage.iframe);
 		//init global modules
 		storage.overlay = new JMBOverlay();
-		storage.login = new JMBLogin(jQuery('#jmb_header_profile_box'));
-		storage.language = new JMBLanguage();
+		storage.login = new JMBLogin();
 		storage.profile = new JMBProfile();
 		storage.media = new JMBMediaManager();
 		storage.invitation = new JMBInvitation();
@@ -537,15 +538,17 @@ core.load = function(pages){
 			url:'index.php?option=com_manager&task=getPageInfo&ids='+pages,
 			type:'GET',
 			complete:function(req, err){
-				if(err=='success'){
-					var json = jQuery.parseJSON(req.responseText);
-					self.path = json.path;
-					if(json.pages.length==1){
-						self.renderPage('#page', json.pages[0])
-					} else {
-						self.renderTabs('#container', json.pages);
+				storage.login.init(function(){
+					if(err=='success'){
+						var json = jQuery.parseJSON(req.responseText);
+						self.path = json.path;
+						if(json.pages.length==1){
+							self.renderPage('#page', json.pages[0])
+						} else {
+							self.renderTabs('#container', json.pages);
+						}
 					}
-				}
+				});
 			}
 		});
 	});

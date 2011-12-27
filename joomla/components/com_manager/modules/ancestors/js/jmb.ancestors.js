@@ -104,7 +104,6 @@ JMBAncestorsObject.prototype = {
 			edit:function(){
 				object = jQuery(label).find('.jit-edit-button');
 				storage.tooltip.render('edit', {
-					individuals:module.usertree,
 					object:module.usertree[node.id],
 					target:object
 				});

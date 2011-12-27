@@ -105,7 +105,6 @@ DescendantTreeProfile.prototype = {
 			offsetParent:document.body,
 			target:jQuery(html).find('div#edit-button'),
 			object:object,
-			individuals:module.parent.members,
 			afterEditorClose:function(object){
 				module.render(object);	
 			}

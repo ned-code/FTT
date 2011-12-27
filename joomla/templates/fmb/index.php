@@ -108,12 +108,14 @@ switch($alias){
 							</td>
 							<?php endif; ?>
 							<!-- Profile Line -->
+							<!--
 							<td>
 								<div id="jmb_header_profile_box" class="jmb_header_profile_box">
 									<div id="profile_login" class="jmb-profile-box-body"></div>
 									<div id="profile_content" class="jmb-profile-box-body"></div>
 								</div>
 							</td>
+							-->
 							<!-- Expand Button -->
 							<td>
 								<div class="jmb_header_expand">&nbsp;</div>
@@ -136,7 +138,7 @@ switch($alias){
 			<div id="_bottom" class="footer"><jdoc:include type="modules" name="footer" /></div>
 		</div>
 		<?php if(!$user): ?>
-			<div id="jmb_connect_with_facebook" style="display:none;"><a href="<?php echo $fb_login_url; ?>">Conncet With Facebook</a></div>
+			<!-- <div id="jmb_connect_with_facebook" style="display:none;"><a href="<?php /*echo $fb_login_url;*/ ?>">Conncet With Facebook</a></div> -->
 		<?php endif; ?>
 		<script>
 			FB.init({
