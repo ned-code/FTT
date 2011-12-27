@@ -79,7 +79,14 @@ JMBTooltip.prototype = {
 				sb._('<div class="jmb-tooltip-view-info">');
 					sb._('<table>');
 						sb._('<tr>');
-							sb._('<td class="jmb-tooltip-view-avatar"><div>')._(module._avatar(settings))._('</div></td>');
+							sb._('<td class="jmb-tooltip-view-avatar">')
+							sb._('<div class="image">')._(module._avatar(settings));
+								sb._('<div class="jmb-tooltip-view-edit">&nbsp;</div>');
+								if(user.facebook_id!=='0'){
+									sb._('<div class="jmb-tooltip-view-facebook">&nbsp;</div>');
+								}	
+							sb._('</td>');
+							sb._('</div>');
 							sb._('<td class="jmb-tooltip-view-info-data">');
 								sb._('<div><span>Name:</span> <span class="text">')._(name)._('</span></div>');
 								sb._('<div><span>Born:</span> <span class="text">')._(birthday)._('</span></div>');
@@ -234,42 +241,67 @@ JMBTooltip.prototype = {
 			return false;
 		});
 	},
-	_buttons:function(cont, settings){
+	_buttons:function(cont, settings, type){
 		var	module = this,
 			object = settings.object,
-			divs = jQuery(cont).find('.jmb-profile-tooltip-fieldset div'),
-			add = storage.profile.add({
-				object:object,
-				events:{
-					afterEditorClose:function(object){
-						settings.object = object;
-						if(typeof(settings.afterEditorClose)==='function'){
-							settings.afterEditorClose(object);
+			divs,
+			add,
+			class_name,
+			method;
+			
+		switch(type){
+			case "edit":
+				divs = jQuery(cont).find('.jmb-profile-tooltip-fieldset div');
+				add = storage.profile.add({
+					object:object,
+					events:{
+						afterEditorClose:function(object){
+							settings.object = object;
+							if(typeof(settings.afterEditorClose)==='function'){
+								settings.afterEditorClose(object);
+							}
 						}
 					}
-				}
-			}),
-			class_name, method;
-		jQuery(divs).each(function(index, el){
-			jQuery(el).click(function(){
-				class_name = jQuery(this).attr('class').split('-');
-				method = class_name[class_name.length-1]
-				add[method]().init();
-			});
-		});
-		jQuery(cont).find('.jmb-profile-tooltip-button-edit').click(function(){
-			storage.profile.editor('edit', {
-				object:settings.object,
-				events:{
-					afterEditorClose:function(object){
-						settings.object = object;
-						if(typeof(settings.afterEditorClose)==='function'){
-							settings.afterEditorClose(object);
+				});
+				jQuery(divs).each(function(index, el){
+					jQuery(el).click(function(){
+						class_name = jQuery(this).attr('class').split('-');
+						method = class_name[class_name.length-1]
+						add[method]().init();
+					});
+				});
+				jQuery(cont).find('.jmb-profile-tooltip-button-edit').click(function(){
+					storage.profile.editor('edit', {
+						object:settings.object,
+						events:{
+							afterEditorClose:function(object){
+								settings.object = object;
+								if(typeof(settings.afterEditorClose)==='function'){
+									settings.afterEditorClose(object);
+								}
+							}
 						}
-					}
-				}
-			});
-		});
+					});
+				});
+			break;
+		
+			case "view":
+				jQuery(cont).find('div.image').mouseenter(function(){
+					jQuery(this).find('div.jmb-tooltip-view-edit').addClass('active');
+					jQuery(this).find('div.jmb-tooltip-view-facebook').addClass('active');
+				}).mouseleave(function(){
+					jQuery(this).find('div.jmb-tooltip-view-edit').removeClass('active');
+					jQuery(this).find('div.jmb-tooltip-view-facebook').removeClass('active');
+				});
+				jQuery(cont).find('div.jmb-tooltip-view-facebook').click(function(){
+					window.open('http://www.facebook.com/profile.php?id='+storage.usertree.user,'new','width=320,height=240,toolbar=1');
+				});
+				storage.tooltip.render('edit', {
+					object:object,
+					target:jQuery(cont).find('div.jmb-tooltip-view-edit')
+				});
+			break;
+		}
 	},
 	_invitation:function(cont, type, settings){
 		var class_name;
@@ -338,8 +370,6 @@ JMBTooltip.prototype = {
 		jQuery(settings.target).bt(settings.style);
 		module._click(settings);
 		module._invitation(cont, type, settings);
-		if(type == 'edit'){
-			module._buttons(cont, settings);
-		}
+		module._buttons(cont, settings, type);
 	}
 }

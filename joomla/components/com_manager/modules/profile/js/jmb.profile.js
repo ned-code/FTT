@@ -818,7 +818,7 @@ JMBProfile.prototype = {
 				sb._('<div class="jmb-dialog-profile-content-unions-add"><input type="button" value="Add another union"></div>');
 				for(key in families){
 					if (!families.hasOwnProperty(key)) continue;
-					if(key != 'length' || families[key].spouse != null){
+					if(key != 'length' && families[key].spouse != null){
 						sb._(form.spouse(families[key],count));	
 						count++
 					}
