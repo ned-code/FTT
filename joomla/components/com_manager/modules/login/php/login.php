@@ -21,5 +21,14 @@ class JMBLogin {
 		$usertree = $this->host->usertree->load($tree_id, $gedcom_id);
 		return json_encode(array('user_id'=>$gedcom_id, 'usertree'=>$usertree));
 	}
+	public function famous($args){
+		if($args == 'logout'){
+			$_SESSION['jmb']['tid'] = null;
+			$_SESSION['jmb']['gid'] = null;
+			$_SESSION['jmb']['permission'] = null;
+			$_SESSION['jmb']['alias'] = 'home';
+			return true;
+		}
+	}
 }
 ?>

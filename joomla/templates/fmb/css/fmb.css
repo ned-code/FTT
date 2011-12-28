@@ -20,7 +20,7 @@ html, body {
 	color: #333333;
 	font-family: Calibri,Tahoma;
 	font-size: 12px;
-	margin: 0 auto;
+	margin: 35px auto 0;
 	max-width: 760px;
 	padding-top: 0;
 }
@@ -44,8 +44,10 @@ html, body {
 .jmb-top-menu-bar{
 	background: none repeat scroll 0 0 black;
 	height: 30px;
-    	position: relative;
-    	width: 100%;
+	left: 0;
+	position: absolute;
+	top: 0;
+	width: 100%;
 }
 .jmb-top-menu-bar div.jmb-top-menu-bar-content{
 	font-family: Calibri,Tahoma,sans-serif;
@@ -56,6 +58,7 @@ html, body {
 }
 
 .jmb-top-menu-bar div.jmb-top-menu-bar-content div.jmb-top-menu-bar-item{
+	background: url("../images/home.png") no-repeat scroll 0 2px transparent;
 	color: white;
 	display: inline-block;
 	margin: 5px;
@@ -64,6 +67,7 @@ html, body {
 
 .jmb-top-menu-bar div.jmb-top-menu-bar-content div.jmb-top-menu-bar-item span{
 	cursor: pointer;
+	margin-left: 18px;
 }
 
 .jmb-top-menu-bar div.jmb-top-menu-bar-content div.jmb-top-menu-bar-item span.active{

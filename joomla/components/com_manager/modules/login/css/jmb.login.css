@@ -1,62 +1,3 @@
-/*
-.jmb_header_profile_box {
-	background: none repeat scroll 0 0 white;
-	border: 1px solid #999999;
-	font-family: Calibri,Tahoma,sans-serif;
-	font-size: 12px;
-	font-weight: normal;
-	height: 60px;
-	position: absolute;
-	right: 50px;
-	top: 5px;
-	width: 200px;
-}
-.jmb_header_profile_box table{
-	margin-top: -10px;
-	width: 100%;
-}
-
-.jmb_header_profile_box .jmb-profile-box-body {
-	position: relative;
-	margin-top:10px;
-}
-
-.jmb-profile-login-button {
-	margin-top: 20px;
-	text-align: center;
-}
-
-.jmb-profile-box-avatar {
-	border: 1px solid #999999;
-	display: inline-block;
-	height: 50px;
-	width: 50px;
-	margin-top: 1px;
-}
-.jmb-profile-box-content{
-	width:130px;
-	display:inline-block;
-}
-.jmb-profile-box-content.jmb-profile-box-text{
-	font-size: 14px;
-	font-weight: bold;
-    	padding: 7px;
-}
-.jmb-profile-box-title{
-	font-size: 14px;
-	font-weight: bold;
-	margin-left:5px;
-}
-.jmb-profile-box-content ul li{
-	display:inline;
-}
-.jmb-profile-box-content ul li span{
-	color: blue;
-	cursor: pointer;
-    	margin-left: 3px;
-}
-*/
-
 .jmb-profile-cont {
 	font-family: Calibri,Tahoma,sans-serif;
 	font-size: 16px;
@@ -137,5 +78,46 @@
 	line-height: 20px;
 	margin-left: 26px;
 	text-decoration: none;
+}
+
+.jmb-profile-famous-cont {
+	background: none repeat scroll 0 0 white;
+	border: 1px solid #CCCCCC;
+	font-family: Calibri,Tahoma,sans-serif;
+	font-size: 12px;
+	height: 60px;
+	position: absolute;
+	right: 50px;
+	top: 5px;
+	width: 200px;;
+}
+.jmb-profile-famous-cont table{
+	margin: 3px;
+	width: 100%;
+}
+.jmb-profile-famous-cont .text {
+	text-align: left;
+}
+.jmb-profile-famous-cont .text span{
+	
+}
+.jmb-profile-famous-cont .avatar {
+	border: 1px solid black;
+	height: 50px;
+    	width: 50px;
+}
+.jmb-profile-famous-cont .avatar img{}
+.jmb-profile-famous-cont .name {
+	text-align: center;
+}
+.jmb-profile-famous-cont .name span{
+	font-weight: bold;
+}
+.jmb-profile-famous-cont .logout {
+	text-align: center;
+}
+.jmb-profile-famous-cont .logout span{
+	color:#686fe3;
+	cursor: pointer;
 }
 

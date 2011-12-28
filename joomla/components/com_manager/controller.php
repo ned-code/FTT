@@ -560,14 +560,29 @@ class JMBController extends JController
         		switch($current_alias){
         			case 'invitation':
         				$this->invite($user['id'], $_SESSION['jmb']['token']);
+        				$link = $this->check_user_in_system($logged);
+        				$_SESSION['jmb']['fid'] = $logged;
+					$_SESSION['jmb']['gid'] = $link['gid'];
+					$_SESSION['jmb']['tid'] = $link['tid'];
+					$_SESSION['jmb']['permission'] = $link['type'];
         			break;
         			
         			case 'first-page':
         			case 'login':
         			case 'home':
+        				$link = $this->check_user_in_system($logged);
+        				$_SESSION['jmb']['fid'] = $logged;
+					$_SESSION['jmb']['gid'] = $link['gid'];
+					$_SESSION['jmb']['tid'] = $link['tid'];
+					$_SESSION['jmb']['permission'] = $link['type'];
         			break;
         			
         			case 'famous-family':
+        				$link = $this->check_user_in_system($logged);
+        				$_SESSION['jmb']['fid'] = $logged;
+					$_SESSION['jmb']['gid'] = $link['gid'];
+					$_SESSION['jmb']['tid'] = $link['tid'];
+					$_SESSION['jmb']['permission'] = $link['type'];
         			break;
         			
         			case 'myfamily':

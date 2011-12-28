@@ -1,7 +1,7 @@
 function JMBLogin(){
 	var	module = this,
 		fn,
-		facebook_id;
+		fb_logged;
 
 	if(window!=window.top){
 		jQuery(obj).hide();
@@ -9,7 +9,10 @@ function JMBLogin(){
 	}
 	
 	//init vars
-	facebook_id = jQuery('body').attr('_fid');
+	fb_logged = jQuery(document.body).attr('_fb');
+	type = jQuery(document.body).attr('_type');
+	alias = jQuery(document.body).attr('_alias');
+	path = "/components/com_manager/modules/login/imgs/";
 	
 	//init functions
 	fn = {
@@ -118,53 +121,113 @@ function JMBLogin(){
 				}
 			});
 		},
-		user:function(callback){
-			var json;
-			fn.ajax('user', null, function(res){
-				json = jQuery.parseJSON(res.responseText);
-				if(callback){
-					storage.usertree.user = json.user_id;
-					storage.usertree.pull = json.usertree;
-					callback(json.usertree[json.user_id]);
-				}
-			});
-		},
 		setName:function(object, cont){
-			var	box = jQuery(cont).find('div.login span'),
+			var	box = jQuery(cont).find('div.login span'),parse, name;
+			if(object.link){
+				jQuery(box).html(object.name);
+			} else {
 				parse = storage.usertree.parse(object);
-			jQuery(box).html(parse.name);			
+				jQuery(box).html(parse.name);	
+			}		
 		},
 		setAvatar:function(object ,cont){
 			var	box = jQuery(cont).find('div.avatar'),
-				parse = storage.usertree.parse(object),
-				media = object.media,
 				sb = host.stringBuffer(),
+				parse,
+				media,
 				image;
-			if(media!=null&&media.avatar!=null){
-				image = sb._('<img class="jmb-families-avatar view" src="index.php?option=com_manager&task=getResizeImage&id=')._(media.avatar.media_id)._('&w=22&h=22">').result(); 
+			if(object.link){
+				image = sb._('<img src="index.php?option=com_manager&task=getResizeImage&fid=')._(object.id)._('&w=22&h=22">').result();
 			} else {
-				image = sb._('<img class="jmb-families-avatar view" src="index.php?option=com_manager&task=getResizeImage&fid=')._(parse.facebook_id)._('&w=22&h=22">').result();
+				parse = storage.usertree.parse(object);
+				media = object.media;
+				if(media!=null&&media.avatar!=null){
+					image = sb._('<img src="index.php?option=com_manager&task=getResizeImage&id=')._(media.avatar.media_id)._('&w=22&h=22">').result(); 
+				} else {
+					image = sb._('<img src="index.php?option=com_manager&task=getResizeImage&fid=')._(parse.facebook_id)._('&w=22&h=22">').result();
+				}
 			}
 			jQuery(box).html(image);
 		},
-		init:function(callback){
-			var cont;
-			jQuery(document.body).ready(function(){
-				if(facebook_id.length!=0){
-					cont = fn.create();
+		getAvatar:function(object){
+			var 	sb = host.stringBuffer(), 
+				parse = storage.usertree.parse(object), 
+				media = object.media, 
+				img = (parse.gender=="M")?'male.png':'female.png',
+				src = storage.baseurl+path+img;
+			if(media!=null&&media.avatar!=null){
+				return sb._('<img src="index.php?option=com_manager&task=getResizeImage&id=')._(media.avatar.media_id)._('&w=50&h=50">').result(); 
+			} else {
+				return sb._('<img height="50px" width="50px" src="')._(src)._('">').result();
+			}
+		},
+		famous:function(object){
+			var	sb = host.stringBuffer(), parse = storage.usertree.parse(object), htmlObject;
+			sb._('<div class="jmb-profile-famous-cont">');
+				sb._('<table>');
+					sb._('<tr><td><div class="text"><span>You logged in:</span></div></td><td rowspan="3"><div class="avatar">')._(fn.getAvatar(object))._('</div></td></tr>');
+					sb._('<tr><td><div class="name"><span>')._(parse.name)._('</span></div></td></tr>');
+					sb._('<tr><td><div class="logout"><span>Exit this Family Trees</span></div></td></tr>');
+				sb._('</table>');
+			sb._('</div>');
+			htmlObject = jQuery(sb.result());
+			jQuery(htmlObject).find('div.logout span').click(function(){
+				fn.ajax('famous', 'logout', function(res){
+				});
+			});
+			jQuery('div.jmb_header_body').append(htmlObject);
+		},
+		check:function(){
+			if(type == 'famous_family' && alias == 'myfamily'){
+				if(storage.usertree.user!=null){
+					ch = storage.usertree.pull[storage.usertree.user];
+					fn.famous(ch);
+				} else {
 					fn.user(function(object){
+						fn.famous(object);
+					}, true);
+				}
+			}	
+		},
+		user:function(callback, f){
+			var json, object, me;
+			fn.ajax('user', null, function(res){
+				json = jQuery.parseJSON(res.responseText);
+				if(json.user_id != null){
+					object = json.usertree[json.user_id];
+					storage.usertree.user = json.user_id;
+					storage.usertree.pull = json.usertree;
+					if(f){ callback(object); return true; }
+					if(object.user.facebook_id=='0'){
+						FB.api('/me', function(res){
+							callback(res)
+						});
+						return true;
+					}
+					callback(object);
+					return true;
+				} 
+				callback(false);
+				return false;
+			});
+		},
+		init:function(callback){
+			var cont, ch;
+			jQuery(document.body).ready(function(){
+				fn.user(function(object){
+					if(object){
+						cont = fn.create();
 						fn.setName(object, cont);
 						fn.setAvatar(object, cont);
-						fn.click(cont);
-						jQuery(document.body).append(cont);
-						callback();
-					});
-				} else {
-					cont = fn.connect();
-					fn.login(cont);
+						if(!object.link) fn.click(cont);
+					} else {
+						cont = fn.connect();
+						fn.login(cont);	
+					}
 					jQuery(document.body).append(cont);
+					fn.check();
 					callback();
-				}				
+				});			
 			});
 		}
 	}

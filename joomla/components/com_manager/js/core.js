@@ -40,7 +40,6 @@ storage.profile = {};
 
 //usertree
 storage.usertree = {};
-storage.usertree.user = null;
 storage.usertree.pull = null;
 storage.usertree.extend = function(def, sub){
 	for (var key in sub){
@@ -249,23 +248,6 @@ storage.tabs.cleaner = function(){
 	storage.clearPull(storage.tabs);
 	storage.clearPull(storage.header);
 	//storage.request.cleaner();
-}
-
-storage.topMenuBar = {};
-storage.topMenuBar.init = function(){
-	var top_menu_bar = jQuery('.jmb-top-menu-bar');
-	if(jQuery(top_menu_bar).length==0) return false;
-	jQuery(top_menu_bar).find('.jmb-top-menu-bar-item').click(function(){
-		var id = jQuery(this).attr('id');
-		jQuery.ajax({
-			url: 'index.php?option=com_manager&task=setLocation&alias='+id,
-			type: "POST",
-			dataType: "json",
-			complete : function (req, err) {
-				window.location.reload();
-			}
-		});
-	});
 }
 
 storage.deleteButton = {};
@@ -530,9 +512,10 @@ core.load = function(pages){
 		storage.media = new JMBMediaManager();
 		storage.invitation = new JMBInvitation();
 		storage.tooltip = new JMBTooltip();
+		storage.topmenubar = new JMBTopMenuBar();
 		
 		//init top menu bar
-		storage.topMenuBar.init();
+		storage.topmenubar.init();
 		storage.inIframe();
 		jQuery.ajax({
 			url:'index.php?option=com_manager&task=getPageInfo&ids='+pages,
