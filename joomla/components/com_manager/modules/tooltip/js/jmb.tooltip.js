@@ -85,6 +85,9 @@ JMBTooltip.prototype = {
 								if(user.facebook_id!=='0'){
 									sb._('<div class="jmb-tooltip-view-facebook">&nbsp;</div>');
 								}	
+								if(get.is_death){
+									sb._('<div class="jmb-tooltip-view-death-marker">&nbsp;</div>');
+								}
 							sb._('</td>');
 							sb._('</div>');
 							sb._('<td class="jmb-tooltip-view-info-data">');
@@ -311,7 +314,9 @@ JMBTooltip.prototype = {
 						offset = jQuery('div.bt-content').find('div.jmb-tooltip-view-edit').offset();
 					},
 					preShow:function(box){
-						jQuery(box).offset({top:offset.top + 20 , left:offset.left});
+						if(offset!=null){
+							jQuery(box).offset({top:offset.top + 20 , left:offset.left});
+						}
 					}
 				});
 			break;

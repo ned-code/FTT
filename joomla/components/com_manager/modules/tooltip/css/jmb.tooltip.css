@@ -221,3 +221,14 @@
 .jmb-tooltip-view-facebook:hover{
 	border: 2px solid yellow;
 }
+/**
+* death marker
+*/
+.jmb-tooltip-view-death-marker{
+	background: url("../image/death_marker.png") no-repeat scroll -40px 0 transparent;
+	height: 10px;
+    	left: 0;
+    	position: absolute;
+    	top: 0;
+    	width: 10px;
+}
