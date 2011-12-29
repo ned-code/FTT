@@ -230,3 +230,14 @@
 .jmb-dtp-facebook-icon:hover{
 	border: 2px solid yellow;
 }
+/**
+* death marker
+*/
+.jmb-dtp-death-marker{
+	background: url("../imgs/death_marker.png") no-repeat scroll -40px 0 transparent;
+	height: 10px;
+    	left: 0;
+    	position: absolute;
+    	top: 0;
+    	width: 10px;
+}

@@ -53,7 +53,16 @@ DescendantTreeProfile.prototype = {
 				sb._('<div class="jmb-dtp-body-info">');
 					sb._('<table>');
 						sb._('<tr>');
-							sb._('<td><div class="jmb-dtp-body-info-avatar">')._(module.avatar(ch))._('<div class="jmb-dtp-facebook-icon" style="display:none">&nbsp;</div><div id="edit-button" class="jmb-dtp-body-edit-button">&nbsp;</div></div></td>');
+							sb._('<td><div class="jmb-dtp-body-info-avatar">');
+								sb._(module.avatar(ch));
+								sb._('<div id="edit-button" class="jmb-dtp-body-edit-button">&nbsp;</div>');
+								if(parse.facebook_id != '0'){
+									sb._('<div class="jmb-dtp-facebook-icon">&nbsp;</div>');
+								}
+								if(parse.is_death){
+									sb._('<div class="jmb-dtp-death-marker">&nbsp;</div>');
+								}
+							sb._('</div></td>');
 							sb._('<td>');
 								sb._('<div class="jmb-dtp-body-info-name"><span class="title">')._(language['NAME'])._(':</span>&nbsp;<span class="text">')._(parse.full_name)._('</span></div>');
 								sb._('<div class="jmb-dtp-body-info-born"><span class="title">')._(language['BORN'])._(':</span>&nbsp;<span class="text">')._(parse.date('birth'))._('</span></div>');
@@ -110,11 +119,6 @@ DescendantTreeProfile.prototype = {
 			}
 		});
 	},
-	facebook:function(html, object){
-		if(object.user.facebook_id!='0'){
-			jQuery(html).find('.jmb-dtp-facebook-icon').show();
-		}
-	},
 	photo:function(html){
 		jQuery(html).find('.jmb-dtp-body-info-avatar').mouseenter(function(){
 				jQuery(html).find('.jmb-dtp-body-edit-button').addClass('hover');
@@ -134,7 +138,6 @@ DescendantTreeProfile.prototype = {
 			
 		module.photo(html);
 		module.edit(html, object);
-		module.facebook(html, object);
 		
 		//module.parent.modal.off();
 	}
