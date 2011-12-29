@@ -104,6 +104,7 @@ JMBAncestorsObject.prototype = {
 			edit:function(){
 				object = jQuery(label).find('.jit-edit-button');
 				storage.tooltip.render('edit', {
+					individuals:module.usertree,
 					object:module.usertree[node.id],
 					target:object
 				});
@@ -143,6 +144,9 @@ JMBAncestorsObject.prototype = {
 							sb._('<div id="')._(parse.gedcom_id)._('-edit" class="jit-edit-button">&nbsp;</div>');
 							if(parse.facebook_id != '0'){
 								sb._('<div class="jit-facebook-icon" id="')._(parse.facebook_id)._('">&nbsp;</div>');
+							}
+							if(parse.is_death){
+								sb._('<div class="jit-death-marker">&nbsp;</div>');
 							}
 						sb._('</div>');
 					sb._('</td>');

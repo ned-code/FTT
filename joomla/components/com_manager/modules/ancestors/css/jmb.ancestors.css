@@ -52,10 +52,10 @@
 	width: 136px;
 }
 .jit-node-item .data.male{
-	background:white;
+	background: #d5f3fe;
 }
 .jit-node-item .data.female{
-	background: antiqueWhite;
+	background: #fcdbf0;
 }
 .jit-node-item .data div{
 	height: 20px;
@@ -125,4 +125,15 @@
 }
 .jit-facebook-icon:hover{
 	border: 2px solid yellow;
+}
+/**
+* death marker
+*/
+.jit-death-marker {
+	background: url("../images/death_marker.png") no-repeat scroll -40px 0 transparent;
+	height: 10px;
+    	left: 0;
+    	position: absolute;
+    	top: 0;
+    	width: 10px;
 }
