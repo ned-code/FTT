@@ -226,4 +226,14 @@ img.jmb-families-avatar.view{
 	left: 86px;
 	top: 98px;
 }
-
+/**
+*
+*/
+.jmb-families-death-marker {
+	background: url("death_marker.png") no-repeat scroll -40px 0 transparent;
+	height: 10px;
+    	left: 0;
+    	position: absolute;
+    	top: 0;
+    	width: 10px;
+}

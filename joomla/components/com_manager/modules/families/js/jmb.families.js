@@ -217,8 +217,10 @@ JMBFamiliesObject.prototype = {
 			sb._('<div id="')._(gedcom_id)._('-view" type="imgContainer" class="jmb-families-parent-img">')._(module._avatar(object, 'parent', 1));
 				sb._('<div id="')._(gedcom_id)._('-edit" class="jmb-families-edit-button parent">&nbsp;</div>');
 				if(facebook_id != '0'){
-					//sb._('<div class="jmb-families-fb-icon parent" id="')._(facebook_id)._('"><img src="')._(module.cssPath)._('facebook.gif" width="18x" height="18px"></div>');
 					sb._('<div class="jmb-families-fb-icon parent" id="')._(facebook_id)._('">&nbsp;</div>');
+				}
+				if(get.is_death){
+					sb._('<div class="jmb-families-death-marker parent">&nbsp;</div>');
 				}
 			sb._('</div>');
 			sb._('<div>');
@@ -252,8 +254,10 @@ JMBFamiliesObject.prototype = {
 			sb._('<div id="')._(gedcom_id)._('-view" type="imgContainer" class="jmb-families-parent-img">')._(module._avatar(object, 'parent', 1));
 				sb._('<div id="')._(gedcom_id)._('-edit" class="jmb-families-edit-button parent">&nbsp;</div>');
 				if(facebook_id != '0'){
-					//sb._('<div class="jmb-families-fb-icon parent" id="')._(facebook_id)._('"><img src="')._(module.cssPath)._('facebook.gif" width="18x" height="18px"></div>');
 					sb._('<div class="jmb-families-fb-icon parent" id="')._(facebook_id)._('">&nbsp;</div>');
+				}
+				if(get.is_death){
+					sb._('<div class="jmb-families-death-marker parent">&nbsp;</div>');
 				}
 			sb._('</div>');
 			sb._('<div>');
@@ -282,8 +286,10 @@ JMBFamiliesObject.prototype = {
 			sb._('<div id="')._(gedcom_id)._('-view" type="imgContainer" class="jmb-families-parent-img">')._(module._avatar(object, 'parent', 1));
 				sb._('<div id="')._(gedcom_id)._('-edit" class="jmb-families-edit-button parent">&nbsp;</div>');
 				if(facebook_id != '0'){
-					//sb._('<div class="jmb-families-fb-icon parent" id="')._(facebook_id)._('"><img src="')._(module.cssPath)._('facebook.gif" width="18px" height="18px"></div>');
 					sb._('<div class="jmb-families-fb-icon parent" id="')._(facebook_id)._('">&nbsp;</div>');
+				}
+				if(get.is_death){
+					sb._('<div class="jmb-families-death-marker parent">&nbsp;</div>');
 				}
 			sb._('</div>');
 			sb._('<div>');
@@ -313,8 +319,10 @@ JMBFamiliesObject.prototype = {
 		sb._('<div id="')._(gedcom_id)._('-view" type="imgContainer" style="height:')._(Math.round(80*k))._('px;width:')._(Math.round(72*k))._('px;" class="jmb-families-child-img">')._(module._avatar(object, 'child', k));	
 				sb._('<div id="')._(gedcom_id)._('-edit" class="')._(edit_button)._('">&nbsp;</div>');
 				if(facebook_id != '0'){
-					//sb._('<div class="jmb-families-fb-icon child" id="')._(facebook_id)._('"><img src="')._(module.cssPath)._('facebook.gif" width="18px" height="18px"></div>');
 					sb._('<div class="jmb-families-fb-icon child" id="')._(facebook_id)._('">&nbsp;</div>');
+				}
+				if(get.is_death){
+					sb._('<div class="jmb-families-death-marker parent">&nbsp;</div>');
 				}
 			sb._('</div>')
 			sb._('<div>');
