@@ -306,16 +306,12 @@ JMBProfile.prototype = {
 			},
 			avatar:function(width, height){
 				sb.clear();
-				sb._('<div class="jmb-dialog-photo">')._(module._avatar(object, width, height))._('</div>');
-				/*
-				sb._('<div class="jmb-dialog-photo-button">');
-					sb._('<span class="jmb-dialog-photo-button-wrapper">');
-						sb._('<input type="file" name="photo" id="photo">');
-						sb._('<span class="jmb-dialog-photo-button2">Upload Photo</span>');
-						sb._('<div class="jmb-dialog-photo-context"></div>');
-					sb._('</span>');
+				sb._('<div class="jmb-dialog-photo">');
+					sb._(module._avatar(object, width, height));
+					if(user.is_death){
+						sb._('<div class="jmb-dialog-profile-death-marker">&nbsp;</div>');
+					}
 				sb._('</div>');
-				*/
 				return sb.result();
 			},
 			spouse:function(family, count){
@@ -703,7 +699,12 @@ JMBProfile.prototype = {
 					sb._('<div class="jmb-dialog-view-profile-content">')
 						sb._('<table>');
 							sb._('<tr>');
-								sb._('<td><div class="jmb-dialog-photo">')._(module._avatar(object, 135, 150))._('</td>');
+								sb._('<td><div class="jmb-dialog-photo">');
+									sb._(module._avatar(object, 135, 150));
+									if(parse.is_death){
+										sb._('<div class="jmb-dialog-profile-death-marker">&nbsp;</div>');
+									}
+								sb._('</div></td>');
 								sb._('<td valign="top">');
 									sb._('<table style="margin-top: 10px;">');
 										sb._('<tr>');

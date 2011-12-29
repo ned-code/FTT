@@ -76,7 +76,8 @@
 * avatar
 */
 .jmb-dialog-photo{
-	 background: white;
+	position:relative;
+	background: white;
 	border: 2px solid #000000;
 	border-radius: 3px 3px 3px 3px;
 	height: 150px;
@@ -515,4 +516,14 @@
 	height: 16px;
 	margin: 3px;
 }
-
+/**
+* death marker
+*/
+.jmb-dialog-profile-death-marker{
+	background: url("../image/death_marker.png") no-repeat scroll -40px 0 transparent;
+	height: 10px;
+    	left: 0;
+    	position: absolute;
+    	top: 0;
+    	width: 10px;
+}
