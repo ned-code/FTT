@@ -71,7 +71,7 @@ DescendantTreeProfile.prototype = {
 							sb._('</td>');
 						sb._('</tr>');
 					sb._('</table>');
-					//sb._('<div class="jmb-dtp-body-info-switch">')._(language['SWITCH'])._('</div>');
+					sb._('<div class="jmb-dtp-body-info-switch">')._('edit the profile')._('</div>');
 				sb._('</div>');
 				sb._('<div class="jmb-dtp-body-space">&nbsp;</div>');
 				sb._('<div class="jmb-dtp-body-media">')
@@ -119,6 +119,18 @@ DescendantTreeProfile.prototype = {
 			}
 		});
 	},
+	editor:function(html, object){
+		jQuery(html).find('.jmb-dtp-body-info-switch').click(function(){
+			storage.profile.editor('edit', {
+				object:object,
+				events:{
+					afterEditorClose:function(obj){
+						object = obj;
+					}
+				}
+			});
+		});
+	},
 	photo:function(html){
 		jQuery(html).find('.jmb-dtp-body-info-avatar').mouseenter(function(){
 				jQuery(html).find('.jmb-dtp-body-edit-button').addClass('hover');
@@ -131,14 +143,11 @@ DescendantTreeProfile.prototype = {
 	render:function(object){
 		var	module = this, html;
 		
-		//module.parent.modal.on();
-		
 		module.clear();
 		html = module.create(object);
 			
 		module.photo(html);
 		module.edit(html, object);
-		
-		//module.parent.modal.off();
+		module.editor(html, object);
 	}
 }

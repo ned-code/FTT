@@ -99,6 +99,7 @@ JMBTooltip.prototype = {
 							sb._('</td>');
 						sb._('</tr>');
 					sb._('</table>');
+					sb._('<div class="jmb-tooltip-view-switch"><span>Edit the profile</span></div>')
 				sb._('</div>');
 				if(media!=null&&media.photos.length!=0){
 					sb._('<div class="jmb-tooltip-view-images">');
@@ -305,6 +306,19 @@ JMBTooltip.prototype = {
 				});
 				jQuery(cont).find('div.jmb-tooltip-view-facebook').click(function(){
 					window.open('http://www.facebook.com/profile.php?id='+storage.usertree.user,'new','width=320,height=240,toolbar=1');
+				});
+				jQuery(cont).find('div.jmb-tooltip-view-switch span').click(function(){
+					storage.profile.editor('view', {
+						object:object,
+						events:{
+							afterEditorClose:function(obj){
+								object = obj;
+								if(typeof(settings.afterEditorClose)==='function'){
+									settings.afterEditorClose(obj);
+								}
+							}
+						}
+					});
 				});
 				offset = jQuery(cont).find('div.jmb-tooltip-view-edit').offset();
 				storage.tooltip.render('edit', {
