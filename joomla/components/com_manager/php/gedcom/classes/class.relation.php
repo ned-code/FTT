@@ -186,10 +186,10 @@ class JMBRelation {
 		
 	}
 	
-	protected function init($tree_id){
+	protected function init($tree_id, $gedcom_id){
 		$this->_FamiliesList = $this->families->getFamiliesList($tree_id);
 		$this->_ChildrensList = $this->families->getChildrensList($tree_id);
-		$this->_IndividualsList = $this->individuals->getIndividualsList($tree_id);
+		$this->_IndividualsList = $this->individuals->getIndividualsList($tree_id, $gedcom_id);
 		$this->_Relatives = $this->individuals->getRelatives($tree_id);
 	}
 	
@@ -219,7 +219,7 @@ class JMBRelation {
 	}
 	
 	public function check($tree_id, $gedcom_id){
-		$this->init($tree_id);
+		$this->init($tree_id, $gedcom_id);
 		$sql_string = "SELECT rel.to as individuals_id, rel.relation FROM jos_mb_relations as rel WHERE rel.tree_id = ? AND rel.from = ?";
 		$this->db->setQuery($sql_string, $tree_id, $gedcom_id);
 		$relations = $this->db->loadAssocList('individuals_id');

@@ -20,6 +20,8 @@ function JMBTooltip(){
 		}
 	};
 	module.viewSettings = {
+		button_facebook:true,
+		button_edit:true,
 		style:{
 			fill: '#628638', 
 			strokeStyle: '#628638', 
@@ -81,8 +83,10 @@ JMBTooltip.prototype = {
 						sb._('<tr>');
 							sb._('<td class="jmb-tooltip-view-avatar">')
 							sb._('<div class="image">')._(module._avatar(settings));
-								sb._('<div class="jmb-tooltip-view-edit">&nbsp;</div>');
-								if(user.facebook_id!=='0'){
+								if(settings.button_edit){
+									sb._('<div class="jmb-tooltip-view-edit">&nbsp;</div>');
+								}
+								if(user.facebook_id!=='0'&&settings.button_facebook){
 									sb._('<div class="jmb-tooltip-view-facebook">&nbsp;</div>');
 								}	
 								if(get.is_death){
@@ -99,7 +103,7 @@ JMBTooltip.prototype = {
 							sb._('</td>');
 						sb._('</tr>');
 					sb._('</table>');
-					sb._('<div class="jmb-tooltip-view-switch"><span>Edit the profile</span></div>')
+					sb._('<div class="jmb-tooltip-view-switch"><span>Show full profile</span></div>')
 				sb._('</div>');
 				if(media!=null&&media.photos.length!=0){
 					sb._('<div class="jmb-tooltip-view-images">');
@@ -168,7 +172,7 @@ JMBTooltip.prototype = {
 			result = {},
 			default_settings;					
 		default_settings = (type==='view')?module.viewSettings:module.editSettings;
-		jQuery.extend(result, settings, default_settings);
+		jQuery.extend(result, default_settings, settings);
 		if(settings.offsetParent){
 			result.style.offsetParent = settings.offsetParent;
 		}

@@ -82,7 +82,7 @@ JMBProfile.prototype = {
 		sb._('</div>');
 		return jQuery(sb.result());
 	},
-	_initEditorHeaderButtons:function(cont){
+	_initEditorHeaderButtons:function(cont, mode){
 		var	module = this,
 			divs = jQuery(module.editor_buttons).find('div[type="button"]'),
 			active = function(object){
@@ -96,7 +96,7 @@ JMBProfile.prototype = {
 		jQuery(divs).click(function(){
 			active(this);
 		});	
-		active(divs[0]);
+		active((mode=='edit')?divs[0]:divs[1]);
 		jQuery(module.box).parent().find('.ui-dialog-titlebar').append(module.editor_buttons);	
 	},
 	_initMenuButtons:function(){
@@ -998,7 +998,7 @@ JMBProfile.prototype = {
 		module._dialog(module.box, { title: name, height: 450 });
 		jQuery(module.box).css({ background:"white", border:"none" });
 		jQuery(module.box).append(cont);
-		module._initEditorHeaderButtons(cont);
+		module._initEditorHeaderButtons(cont, mode);
 	},
 	add:function(data){
 		var	module = this,

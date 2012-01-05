@@ -71,7 +71,7 @@ DescendantTreeProfile.prototype = {
 							sb._('</td>');
 						sb._('</tr>');
 					sb._('</table>');
-					sb._('<div class="jmb-dtp-body-info-switch">')._('edit the profile')._('</div>');
+					sb._('<div class="jmb-dtp-body-info-switch">')._('Show full profile')._('</div>');
 				sb._('</div>');
 				sb._('<div class="jmb-dtp-body-space">&nbsp;</div>');
 				sb._('<div class="jmb-dtp-body-media">')
@@ -121,7 +121,7 @@ DescendantTreeProfile.prototype = {
 	},
 	editor:function(html, object){
 		jQuery(html).find('.jmb-dtp-body-info-switch').click(function(){
-			storage.profile.editor('edit', {
+			storage.profile.editor('view', {
 				object:object,
 				events:{
 					afterEditorClose:function(obj){

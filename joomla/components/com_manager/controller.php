@@ -552,7 +552,7 @@ class JMBController extends JController
         	$logged = $this->get_logged_user($facebook);
         	$current_alias = $this->get_current_alias();
         	$alias = $this->get_alias($logged, $current_alias);
-        	
+
         	if($current_alias != $alias){ 
         		$_SESSION['jmb']['alias'] = $alias;
         		$this->location($alias);
@@ -612,7 +612,12 @@ class JMBController extends JController
         	switch($alias){
         		case 'myfamily':
         			$_SESSION['jmb']['login_type'] = 'family_tree';
+        		break;
+        		
         		case 'famous-family':
+        			
+        		break;
+        		
         		case 'home':
         		break;
         	}

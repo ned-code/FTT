@@ -97,6 +97,8 @@ JMBAncestorsObject.prototype = {
 					jQuery(label).find('.jit-facebook-icon').removeClass('hover');
 				});
 				storage.tooltip.render('view', {
+					button_facebook:false,
+					button_edit:false,
 					object:module.usertree[node.id],
 					target:object
 				});

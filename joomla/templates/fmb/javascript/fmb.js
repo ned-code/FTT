@@ -11,7 +11,7 @@ function JMBTopMenuBar(){
 			sb._('<div  class="jmb-top-menu-bar">');
 				sb._('<div class="jmb-top-menu-bar-content">');
 					sb._('<div id="myfamily" class="jmb-top-menu-bar-item"><span>My Family</span></div>');
-					sb._('<div id="famous_family" class="jmb-top-menu-bar-item"><span>Famous Families</span></div>');
+					sb._('<div id="famous-family" class="jmb-top-menu-bar-item"><span>Famous Families</span></div>');
 					sb._('<div id="home" class="jmb-top-menu-bar-item"><span>FTT Home</span></div>');
 				sb._('</div>');
 			sb._('</div>');

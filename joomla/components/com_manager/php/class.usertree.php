@@ -5,6 +5,7 @@ class JMBUserTree {
 	
 	protected $_TreeId;
 	protected $_Permission;
+	protected $_GedcomId;
 	protected $_IndividualsList;
 	protected $_FamiliesList;
 	protected $_ChildrensList;
@@ -316,7 +317,7 @@ class JMBUserTree {
 	*
 	*/
 	protected function _init(){
-		$this->_IndividualsList = $this->gedcom->individuals->getIndividualsList($this->_TreeId);
+		$this->_IndividualsList = $this->gedcom->individuals->getIndividualsList($this->_TreeId, $this->_GedcomId);
 		$this->_FamiliesList = $this->gedcom->families->getFamiliesList($this->_TreeId);
 		$this->_ChildrensList = $this->gedcom->families->getChildrensList($this->_TreeId);
 		$this->_IndividualsEventsList = $this->gedcom->events->getIndividualsEventsList($this->_TreeId);
@@ -330,6 +331,7 @@ class JMBUserTree {
 	public function get($tree_id, $gedcom_id, $permission){
 		$this->_TreeId = $tree_id;
 		$this->_Permission = $permission;
+		$this->_GedcomId = $gedcom_id;
 		$this->_init();
 		
 		$objects = array();

@@ -4,7 +4,7 @@ function JMBLogin(){
 		fb_logged;
 
 	if(window!=window.top){
-		jQuery(obj).hide();
+		module.init = function(callback){ callback(); }
 		return false;
 	}
 	
@@ -173,6 +173,7 @@ function JMBLogin(){
 			htmlObject = jQuery(sb.result());
 			jQuery(htmlObject).find('div.logout span').click(function(){
 				fn.ajax('famous', 'logout', function(res){
+					window.location.reload();
 				});
 			});
 			jQuery('div.jmb_header_body').append(htmlObject);
