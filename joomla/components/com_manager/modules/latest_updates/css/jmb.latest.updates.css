@@ -23,21 +23,17 @@
     	margin-top: -1px;
     	padding: 5px;
 }
-.jmb-lu-content ul {}
-.jmb-lu-content ul li {
-	display: block;
-}
-.jmb-lu-content ul li div{}
-.jmb-lu-content ul li div span.title {
-	font-weight: bold;
-}
-.jmb-lu-content ul li div span.text {
-	margin-left:5px;
-	cursor:pointer;
-}
 .jmb-lu-button {
 	color: blue;
 	cursor: pointer;
     	position: absolute;
     	right: 0;
 }
+.jmb-lu-content ul li {
+	display: block;
+}
+.jmb-lu-content ul li div span.title {
+	font-weight: bold;
+}
+
+

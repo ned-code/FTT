@@ -1,96 +1,71 @@
-function JMBLatestUpdatesObject(obj){
-	jQuery(obj).remove();
-	storage.core.modulesPullObject.unset('JMBLatestUpdatesObject');
-	return;
-	var html = null;	
+function JMBLatestUpdatesObject(offsetParent){	
+	var	module = this,	
+		cont,
+		content,
+		fn;
 	
-	var get_content = function(items){
-		var st = host.stringBuffer();
-		var ul = jQuery('<ul></ul>');
-		for(var i=0;i<items.length;i++){
-			var li = st.clear()._('<li><div id="')._(items[i].id)._('"><span class="title">')._(items[i].name)._(':</span><span class="text"></span></div></li>').result();
-			jQuery(ul).append(li);
-		}
-		return ul;
-	}
-		
-	
-	
-	var get_name = function(indiv){
-		var name = [];
-		(indiv.FirstName!=null)?name.push(indiv.FirstName):'';
-		(indiv.MiddleName!=null)?name.push(indiv.MiddleName):'';
-		(indiv.LastName!=null)?name.push(indiv.LastName):'';
-		return name.join(' ');
-	}
-	
-	var get_string = function(json, type){
-		if(json[type]==null) return '';
-		var object = json[type];
-		var name = get_name(object.indiv);
-		return ['<font style="color:#', json.config.colors[object.indiv.Gender],';">',name,'</font>'].join('');
-	}
-
-	var setMiniProfile = function(object, json, name){
-		if(json[name]==null) return;
-		/*
-		profile.tooltip.render({
-			target:object,
-			id:json[name].indiv.Id+'-lu',
-			type:'mini',
-			data:json[name],
-			imgPath:json.path,
-			fmbUser:json.fmbUser,
-			eventType:'click'
-		});
-		*/
-	}
-	
-	this.ajax('get', null, function(res){
-		var json = jQuery.parseJSON(res.responseText);
-		if(json.error) {
+	fn = {
+		ajax:function(func, params, callback){
+			host.callMethod("latest_updates", "JMBLatestUpdates", func, params, function(res){
+					callback(res);
+			})
+		},
+		finish:function(){
 			storage.core.modulesPullObject.unset('JMBLatestUpdatesObject');
-			return jQuery(obj).remove();
+		},
+		start:function(callback){
+			fn.ajax('get', null, function(res){
+				callback(jQuery.parseJSON(res.responseText));
+			});
+		},
+		content:function(json){
+			var	ul,
+				li,
+				color,
+				data = json.data,
+				config = json.config,
+				colors = config.colors,
+				lang = json.language;
+			ul = jQuery('<ul></ul>');
+			for(var key in data){
+				if(data.hasOwnProperty(key)&&data[key]){
+					if(data[key][2]){
+						color = colors[data[key][2]];
+					} else {
+						color= 'gray';
+					}
+					li = '<li id="'+data[key][0]+'"><div><span class="title">'+lang[key]+':</span>&nbsp;<span style="color:#'+color+'" class="value">'+data[key][1]+'</span></div></li>';
+					jQuery(ul).append(li);
+				}
+			}
+			return ul;
+		},
+		create:function(json){
+			var	sb = host.stringBuffer(), 
+				config = json.config, 
+				colors = config.colors,
+				lang = json.language,
+				h_color = (config.login_type=="famous_family")?colors.famous_header:colors.family_header;			
+			sb._('<div class="jmb-lu-header" style="background:#'+h_color+';">');
+				sb._('<span>'+lang['HEADER']+'</span>');
+			sb._('</div>');
+			sb._('<div class="jmb-lu-content"></div>');
+			sb._('<div class="jmb-lu-button">');
+				sb._('<span>'+lang['SHOW']+'...</span>');
+			sb._('</div>');
+			return jQuery(sb.result());
 		}
-		var lang = json.lang;
-		var header_background_color = (json.config.login_type=='famous_family')?json.config.colors.famous_header:json.config.colors.family_header;
-		var html = jQuery('<div class="jmb-lu-header" style="background:#'+header_background_color+';"><span>'+lang['HEADER']+'</span></div><div class="jmb-lu-content"></div><div class="jmb-lu-button"><span>'+lang['SHOW']+'...</span></div>');
-		var structure = [
-			{"id":"new_photo","name":lang['PHOTO']},
-			{"id":"just_registered","name":lang['REGISTER']},
-			{"id":"profile_change","name":lang['PROFILE']},
-			{"id":"family_member_added","name":lang['ADDED']},
-			{"id":"family_member_deleted","name":lang['DELETED']},
-		];
-		
-		var ul = get_content(structure);
-		
-		jQuery(ul).find('#new_photo').find('span.text').html(get_string(json, 'new_photo'));
-		jQuery(ul).find('#just_registered').find('span.text').html(get_string(json, 'just_registered'));
-		jQuery(ul).find('#profile_change').find('span.text').html(get_string(json, 'profile_change'));
-		jQuery(ul).find('#family_member_added').find('span.text').html(get_string(json, 'family_member_added'));
-		if(json.family_member_deleted!=null) jQuery(ul).find('#family_member_deleted').find('span.text').html(json.family_member_deleted.split(',').join(' '));
-		setMiniProfile(jQuery(ul).find('#new_photo').find('span.text'), json, 'new_photo');
-		setMiniProfile(jQuery(ul).find('#just_registered').find('span.text'), json, 'just_registered');
-		setMiniProfile(jQuery(ul).find('#profile_change').find('span.text'), json, 'profile_change');
-		setMiniProfile(jQuery(ul).find('#family_member_added').find('span.text'), json, 'family_member_added');
-		
-		jQuery(html[1]).append(ul);
-		jQuery(obj).append(html);
-		
-		storage.core.modulesPullObject.unset('JMBLatestUpdatesObject');
-	})
+	
+	}
+	
+	fn.start(function(json){
+		cont = fn.create(json);
+		content = fn.content(json);
+		jQuery(cont[1]).append(content);
+		jQuery(offsetParent).append(cont);
+		fn.finish();
+	});
 }
-
-JMBLatestUpdatesObject.prototype = {
-	ajax:function(func, params, callback){
-		host.callMethod("latest_updates", "JMBLatestUpdates", func, params, function(res){
-				callback(res);
-		})
-	},
-
-}
-
 
 
 
