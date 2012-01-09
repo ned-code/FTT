@@ -368,6 +368,8 @@ JMBFamiliesObject.prototype = {
 		jQuery(cont).find('.jmb-families-avatar.view').each(function(i,e){
 			gedcom_id = jQuery(e).parent().attr('id').split('-')[0];
 			storage.tooltip.render('view', {
+				button_facebook:false,
+				button_edit:false,
 				object:usertree[gedcom_id],
 				target:e
 			});

@@ -56,7 +56,7 @@ class IndividualsList{
         public function save($pers){
         	if($pers==null){ return false; }
         	//insert to individuals table;
-        	$sqlString = 'INSERT INTO #__mb_individuals (`id`, `fid`, `sex`) VALUES (NULL,?,?)'; 
+        	$sqlString = 'INSERT INTO #__mb_individuals (`id`, `fid`, `sex`,`create_time`) VALUES (NULL,?,?, NOW())'; 
         	$this->db->setQuery($sqlString, $pers->FacebookId, $pers->Gender);    
         	$this->db->query(); 
         	$id = $this->db->insertid();
@@ -96,6 +96,21 @@ class IndividualsList{
         	if($id==NULL){ return null; }
         	$this->db->setQuery('DELETE FROM #__mb_individuals WHERE id=?', $id);    
         	$this->db->query();
+        }
+        
+        public function cashDelete($tree_id, $gedcom_id, $ind){
+        	$sql_string = "SELECT * FROM #__mb_cash WHERE tree_id = ? AND individuals_id = ?";
+        	$this->db->setQuery($sql_string, $tree_id, $gedcom_id);
+        	$rows = $this->db->loadAssocList();
+        	if($rows!=null){
+        		$sql_string = "UPDATE #__mb_cash SET `value`= ?, `change` = NOW() WHERE `tree_id` = ?";
+        		$this->db->setQuery($ind->First_name.' '.$ind->LastName, $tree_id);
+        		$this->db->query();
+        	} else {
+        		$sql_string = "INSERT INTO #__mb_cash (`uid`, `tree_id`, `individuals_id`, `type`, `value`, `change`) VALUES (NULL, ?, ?, ?, ?, NOW())";
+        		$this->db->setQuery($sql_string, $tree_id, $gedcom_id, `family_deleted`, $ind->First_name.' '.$ind->LastName);
+        		$this->db->query();
+        	}
         }
 
         public function getParents($id){

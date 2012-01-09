@@ -482,7 +482,7 @@ JMBProfile.prototype = {
 			add_parent:function(){
 				sb.clear();
 				sb._('<form id="jmb:profile:addpsc" method="post" target="iframe-profile">');
-					sb._('<div class="buttons"><input type="submit" value="Save"></div>');
+					sb._('<div class="buttons"><input type="submit" value="Save and Close"><input id="cancel" type="button" value="Cancel"></div>');
 					sb._('<table style="width:100%;">');
 						sb._('<tr>');
 							sb._('<td>');
@@ -563,7 +563,7 @@ JMBProfile.prototype = {
 				var spouse_select;
 				sb.clear();
 				sb._('<form id="jmb:profile:addpsc" method="post" target="iframe-profile">');
-					sb._('<div class="buttons"><input type="submit" value="Save"></div>');
+					sb._('<div class="buttons"><input type="submit" value="Save and Close"><input id="cancel" type="button" value="Cancel"></div>');
 					sb._('<table style="width:100%;">');
 						sb._('<tr>');
 							sb._('<td>');
@@ -1010,12 +1010,13 @@ JMBProfile.prototype = {
 			cont = '',
 			title = '',
 			w = 700,
-			h = 500,
+			h = 'auto',//500
 			query = '',
 			beforeSend = function(){},
 			success = function(res){
 				module.individuals = res.usertree;
 				storage.usertree.pull = res.usertree;
+				jQuery(module.addBox).dialog("close");
 			};
 			
 		module.individuals = storage.usertree.pull;
@@ -1029,26 +1030,37 @@ JMBProfile.prototype = {
 				jQuery(module.addBox).html('');
 				container = null;
 			},
+			cancel:function(cont){
+				jQuery(cont).find('input#cancel').click(function(){
+					jQuery(module.addBox).dialog("close");
+					return false;
+				});
+				return this;
+			},
 			init:function(){
 				module._dialog(module.addBox, {title:title, width:w, height:h});
 				jQuery(module.addBox).css({ background:"none", border:"none" });
 				jQuery(module.addBox).append(container);
 				jQuery(container).append(cont);
 				module._ajaxForm(cont, 'add', query, beforeSend, success);
+				return this;
 			},
 			parent:function(){
 				this.clear();
 				container = jQuery('<div class="jmb-dialog-profile-add-parent"></div>');
 				cont = jQuery(form.add_parent());
 				w = 455;
-				h = 315;
+				//h = 'auto';
 				title = 'Add Parent';
 				query = '{"method":"parent","owner_id":"'+parse.gedcom_id+'"}';
+				this.cancel(cont);
 				return this;
 			},
 			spouse:function(){
+				var buttons =  jQuery('<div class="buttons"><input type="submit" value="Save and Close"><input id="cancel" type="button" value="Cancel"></div>');
 				this.clear();
 				container = jQuery('<div class="jmb-profile-add-union"></div>');
+				jQuery(container).append(buttons);
 				jQuery(container).css({
 					border:'none',
 					margin: '0',
@@ -1056,10 +1068,13 @@ JMBProfile.prototype = {
 					width: 'auto'
 				});
 				cont = jQuery(form.add_spouse());
+				jQuery(cont).find('.jmb-profile-add-union-buttons').remove();
+				
 				w = 455;
-				h = 517;
+				//h = 517;
 				title = 'Add Spouse';
 				query = '{"method":"spouse","owner_id":"'+parse.gedcom_id+'"}';
+				this.cancel(buttons);
 				return this;
 			},
 			bs:function(){
@@ -1067,9 +1082,10 @@ JMBProfile.prototype = {
 				container = jQuery('<div class="jmb-dialog-profile-add-parent"></div>');
 				cont = jQuery(form.add_bs());
 				w = 455;
-				h = 315;
+				//h = 315;
 				title = 'Add Brother or Sister';
 				query = '{"method":"sibling","owner_id":"'+parse.gedcom_id+'"}';
+				this.cancel(cont);
 				return this;
 			},
 			child:function(){
@@ -1077,9 +1093,10 @@ JMBProfile.prototype = {
 				container = jQuery('<div class="jmb-dialog-profile-add-parent"></div>');
 				cont = jQuery(form.add_child());
 				w = 455;
-				h = 315;
+				//h = 315;
 				title = 'Add Child';
 				query = '{"method":"child","owner_id":"'+parse.gedcom_id+'"}';
+				this.cancel(cont);
 				return this;
 			}
 		}

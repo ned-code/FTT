@@ -25,7 +25,9 @@ function JMBLatestUpdatesObject(offsetParent){
 				data = json.data,
 				config = json.config,
 				colors = config.colors,
-				lang = json.language;
+				usertree = json.usertree,
+				lang = json.language,
+				gedcom_id;
 			ul = jQuery('<ul></ul>');
 			for(var key in data){
 				if(data.hasOwnProperty(key)&&data[key]){
@@ -34,7 +36,16 @@ function JMBLatestUpdatesObject(offsetParent){
 					} else {
 						color= 'gray';
 					}
-					li = '<li id="'+data[key][0]+'"><div><span class="title">'+lang[key]+':</span>&nbsp;<span style="color:#'+color+'" class="value">'+data[key][1]+'</span></div></li>';
+					gedcom_id = data[key][0];
+					li = jQuery('<li id="'+gedcom_id+'"><div><span class="title">'+lang[key]+':</span>&nbsp;<span style="color:#'+color+'" class="value">'+data[key][1]+'</span></div></li>');
+					if(gedcom_id!=null){
+						storage.tooltip.render('view', {
+							object:usertree[gedcom_id],
+							target:li
+						});
+					} else {
+						jQuery(li).css('cursor', 'default');
+					}
 					jQuery(ul).append(li);
 				}
 			}

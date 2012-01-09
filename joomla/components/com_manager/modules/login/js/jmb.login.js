@@ -4,7 +4,16 @@ function JMBLogin(){
 		fb_logged;
 
 	if(window!=window.top){
-		module.init = function(callback){ callback(); }
+		module.init = function(callback){ 
+			host.callMethod("login", "JMBLogin", 'user', null, function(res){
+				json = jQuery.parseJSON(res.responseText);
+				if(json.user_id != null){
+					storage.usertree.user = json.user_id;
+					storage.usertree.pull = json.usertree;
+				}
+				callback();
+			});
+		}
 		return false;
 	}
 	
@@ -122,13 +131,9 @@ function JMBLogin(){
 			});
 		},
 		setName:function(object, cont){
-			var	box = jQuery(cont).find('div.login span'),parse, name;
-			if(object.link){
-				jQuery(box).html(object.name);
-			} else {
-				parse = storage.usertree.parse(object);
-				jQuery(box).html(parse.name);	
-			}		
+			var	box = jQuery(cont).find('div.login span'),parse;
+			parse = storage.usertree.parse(object);
+			jQuery(box).html(parse.name);		
 		},
 		setAvatar:function(object ,cont){
 			var	box = jQuery(cont).find('div.avatar'),
@@ -136,16 +141,12 @@ function JMBLogin(){
 				parse,
 				media,
 				image;
-			if(object.link){
-				image = sb._('<img src="index.php?option=com_manager&task=getResizeImage&fid=')._(object.id)._('&w=22&h=22">').result();
+			parse = storage.usertree.parse(object);
+			media = object.media;
+			if(media!=null&&media.avatar!=null){
+				image = sb._('<img src="index.php?option=com_manager&task=getResizeImage&id=')._(media.avatar.media_id)._('&w=22&h=22">').result(); 
 			} else {
-				parse = storage.usertree.parse(object);
-				media = object.media;
-				if(media!=null&&media.avatar!=null){
-					image = sb._('<img src="index.php?option=com_manager&task=getResizeImage&id=')._(media.avatar.media_id)._('&w=22&h=22">').result(); 
-				} else {
-					image = sb._('<img src="index.php?option=com_manager&task=getResizeImage&fid=')._(parse.facebook_id)._('&w=22&h=22">').result();
-				}
+				image = sb._('<img src="index.php?option=com_manager&task=getResizeImage&fid=')._(parse.facebook_id)._('&w=22&h=22">').result();
 			}
 			jQuery(box).html(image);
 		},
@@ -165,7 +166,7 @@ function JMBLogin(){
 			var	sb = host.stringBuffer(), parse = storage.usertree.parse(object), htmlObject;
 			sb._('<div class="jmb-profile-famous-cont">');
 				sb._('<table>');
-					sb._('<tr><td><div class="text"><span>You logged in:</span></div></td><td rowspan="3"><div class="avatar">')._(fn.getAvatar(object))._('</div></td></tr>');
+					sb._('<tr><td><div class="text"><span>You logged in as:</span></div></td><td rowspan="3"><div class="avatar">')._(fn.getAvatar(object))._('</div></td></tr>');
 					sb._('<tr><td><div class="name"><span>')._(parse.name)._('</span></div></td></tr>');
 					sb._('<tr><td><div class="logout"><span>Exit this Family Trees</span></div></td></tr>');
 				sb._('</table>');
@@ -178,36 +179,17 @@ function JMBLogin(){
 			});
 			jQuery('div.jmb_header_body').append(htmlObject);
 		},
-		check:function(){
-			if(type == 'famous_family' && alias == 'myfamily'){
-				if(storage.usertree.user!=null){
-					ch = storage.usertree.pull[storage.usertree.user];
-					fn.famous(ch);
-				} else {
-					fn.user(function(object){
-						fn.famous(object);
-					}, true);
-				}
-			}	
-		},
-		user:function(callback, f){
-			var json, object, me;
+		user:function(callback){
+			var json, object;
 			fn.ajax('user', null, function(res){
 				json = jQuery.parseJSON(res.responseText);
 				if(json.user_id != null){
 					object = json.usertree[json.user_id];
 					storage.usertree.user = json.user_id;
 					storage.usertree.pull = json.usertree;
-					if(f){ callback(object); return true; }
-					if(object.user.facebook_id=='0'){
-						FB.api('/me', function(res){
-							callback(res)
-						});
-						return true;
-					}
 					callback(object);
 					return true;
-				} 
+				}
 				callback(false);
 				return false;
 			});
@@ -216,17 +198,20 @@ function JMBLogin(){
 			var cont, ch;
 			jQuery(document.body).ready(function(){
 				fn.user(function(object){
-					if(object){
-						cont = fn.create();
-						fn.setName(object, cont);
-						fn.setAvatar(object, cont);
-						if(!object.link) fn.click(cont);
+					if(type == 'famous_family' && alias == 'myfamily'){
+						fn.famous(object);
 					} else {
-						cont = fn.connect();
-						fn.login(cont);	
+						if(object){
+							cont = fn.create();
+							fn.setName(object, cont);
+							fn.setAvatar(object, cont);
+							if(!object.link) fn.click(cont);
+						} else {
+							cont = fn.connect();
+							fn.login(cont);
+						}
+						jQuery(document.body).append(cont);
 					}
-					jQuery(document.body).append(cont);
-					fn.check();
 					callback();
 				});			
 			});

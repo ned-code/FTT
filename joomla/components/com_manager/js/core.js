@@ -171,6 +171,16 @@ storage.usertree.parse = function(object){
 			}
 			return '';
 		},
+		turns:(function(){
+			var	event = user['birth'];
+			if(event){
+				date = event.date;
+				if(date&&date[2]!=null){
+					return (new Date()).getFullYear() - date[2];
+				}
+			} 
+			return 0;
+		})(),
 		date:function(event, sub){
 			var 	event = user[event],
 				date = (event!=null)?event.date:null;

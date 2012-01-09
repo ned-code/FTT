@@ -35,5 +35,8 @@
 .jmb-lu-content ul li div span.title {
 	font-weight: bold;
 }
+.jmb-lu-content ul li div span.value {
+	cursor:pointer;
+}
 
 

@@ -75,7 +75,8 @@ JMBTooltip.prototype = {
 			name = get.full_name,
 			birthday = get.date('birth'),
 			death = get.date('death'),
-			relation = get.relation;
+			relation = get.relation,
+			place;
 		sb._('<div id="')._(user.gedcom_id)._('-tooltip-view" class="jmb-tooltip-view-container">');
 			sb._('<div class="jmb-tooltip-view-content">');
 				sb._('<div class="jmb-tooltip-view-info">');
@@ -96,7 +97,14 @@ JMBTooltip.prototype = {
 							sb._('</div>');
 							sb._('<td class="jmb-tooltip-view-info-data">');
 								sb._('<div><span>Name:</span> <span class="text">')._(name)._('</span></div>');
-								sb._('<div><span>Born:</span> <span class="text">')._(birthday)._('</span></div>');
+								if(get.is_birth){
+									place = get.place('birth');
+									sb._('<div><span>Born:</span> <span class="text">')._(birthday)._((place.length!=0)?' '+place.place_name:'')._('</span></div>');
+								}
+								if(get.is_death){
+									place = get.place('death');
+									sb._('<div><span>Deceased:</span> <span class="text">')._(death)._((place.length!=0)?' '+place.place_name:'')._('</span></div>');
+								}
 								if(relation){
 									sb._('<div><span>Relation:</span> <span class="text">')._(relation)._('</span></div>');
 								}
@@ -111,7 +119,7 @@ JMBTooltip.prototype = {
 					sb._('</div>');
 				}
 			sb._('</div>');
-			if(user.facebook_id==='0'){
+			if(user.facebook_id==='0' && get.turns < 150 && get.is_alive){
 				sb._('<div class="jmb-tooltip-view-send">');
 					sb._('<table>');			
 						sb._('<tr>');

@@ -192,8 +192,8 @@ JMBThisMonthObject.prototype = {
 					._(gender)._('">&nbsp;</div></td><td><div id="')
 					._(ind_key)._('" class="person"><font color="')
 					._(color)._('">')
-					._(self._getFullName(data.user))._('</font> (turns ')
-					._(self._getTurns(date))._(')</div></td></tr>').result();
+					._(self._getFullName(data.user))._('</font> (')
+					._(self._getTurns(date))._(' years ago)</div></td></tr>').result();
 				sb.clear();
 				jQuery(view).append(append);
 			});

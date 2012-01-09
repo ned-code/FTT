@@ -78,7 +78,7 @@ function JMBRecentVisitorsObject(obj){
 	var render = function(callback){
 		parent.ajax('getRecentVisitors', null, function(res){
 			var json = jQuery.parseJSON(res.responseText);
-			if(json.objects.length == 0){
+			if(json.error || json.objects.length == 0){
 				storage.core.modulesPullObject.unset('JMBRecentVisitorsObject');
 				return jQuery(obj).remove();
 			}

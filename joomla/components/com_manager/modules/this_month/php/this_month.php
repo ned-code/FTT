@@ -167,7 +167,7 @@ class JMBThisMonth {
 		$members = $this->sort($usertree, $events);
 		
 		$this->settings['opt']['month'] = $month;
-
+		
 		return json_encode(array(
 				'config'=>$config,
 				'settings'=>$this->settings,

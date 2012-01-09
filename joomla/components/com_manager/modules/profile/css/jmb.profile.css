@@ -12,6 +12,9 @@
 .ui-dialog-title{
 	color:white;
 }
+.ui-dialog .ui-dialog-content {
+	overflow: visible;
+}
 .jmb-dialog-container {
 	font-family: Calibri,Tahoma;
 	font-size: 12px;
@@ -471,6 +474,21 @@
 	padding: 1px;
 	width: 80px;
 }
+.jmb-profile-add-union .buttons {
+	position:absolute;
+	top:-35px;
+	right:5px;
+}
+.jmb-profile-add-union .buttons input{
+	border: 2px solid black !important;
+	border-radius: 5px 5px 5px 5px;
+	cursor: pointer;
+	font-family: Calibri,Tahoma;
+	font-size: 14px;
+	font-weight: bold;
+	margin: 3px;
+	height: 22px;
+}
 /**
 * add parent,brother\sister,child
 */ 
@@ -486,7 +504,7 @@
 }
 .jmb-dialog-profile-add-parent .buttons {
 	position:absolute;
-	top:5px;
+	top:-35px;
 	right:5px;
 }
 .jmb-dialog-profile-add-parent .buttons input{
@@ -498,7 +516,6 @@
 	font-weight: bold;
 	margin: 3px;
 	height: 22px;
-	width: 65px !important;
 }
 .jmb-dialog-profile-add-parent span {
 	font-weight: bold;
