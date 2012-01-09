@@ -207,9 +207,16 @@ JMBDescendantTreeObject.prototype = {
 						var node, sb = host.stringBuffer(), data_style;
 						sb._('<div id ="')._(settings.id)._('" class="node')._((settings.descendants)?' descendants':'')._('">');
 							if(settings.descendants){
-								sb._('<span><input type="checkbox"></span>');
+								sb._('<span style="position:relative;top:-5px;"><input type="checkbox"></span>');
 							}
-							sb._('<span class="title">')._(settings.title)._('</span>');
+							sb._('<span class="title">');
+								if(settings.descendants){
+									sb._('<div class="text">')._(settings.title)._('</div>');
+									sb._('<div class="count">')._('52 Descendants')._('</div>');
+								} else {
+									sb._(settings.title);
+								}
+							sb._('</span>');
 						sb._('</div>');
 						node = jQuery(sb.result());
 						if(settings.style){
@@ -253,24 +260,24 @@ JMBDescendantTreeObject.prototype = {
 							ctx.stroke();
 							ctx.restore();
 						}
-						line(10, 100, 90);
-						line(100, 50, 100, true);
-						line(100, 50, 125);
-						line(100, 150, 125);
-						line(225, 20, 60, true);
-						line(225, 20, 25);
-						line(225, 80, 25);
-						line(225, 120, 60, true);
-						line(225, 120, 25);
-						line(225, 180, 25);
+						line(10, 100, 60);
+						line(70, 50, 100, true);
+						line(70, 50, 125);
+						line(70, 150, 125);
+						line(195, 20, 60, true);
+						line(195, 20, 25);
+						line(195, 80, 25);
+						line(195, 120, 60, true);
+						line(195, 120, 25);
+						line(195, 180, 25);
 						
 						//create nodes
 						this.node({
-							id:'father',
-							title:'Father',
+							id:'mother',
+							title:'Mother',
 							style:{
 								top:'90px',
-								left:'40px'
+								left:'20px'
 							}
 						});
 						this.node({
@@ -278,7 +285,7 @@ JMBDescendantTreeObject.prototype = {
 							title:'Grandmother',
 							style:{
 								top:'40px',
-								left:'140px'
+								left:'100px'
 							}
 						});
 						this.node({
@@ -286,10 +293,36 @@ JMBDescendantTreeObject.prototype = {
 							title:'Grandfather',
 							style:{
 								top:'140px',
-								left:'140px'
+								left:'100px'
 							}
 						});
-						
+						this.node({
+							id:'grandparents',
+							title:'Grandparents',
+							descendants:true,
+							style:{
+								top:'85px',
+								left:'80px'
+							}
+						});
+						this.node({
+							id:'grandmotherparents',
+							title:'Great Grandparents',
+							descendants:true,
+							style:{
+								top:'35px',
+								left:'200px'
+							}
+						});
+						this.node({
+							id:'grandfatherparents',
+							title:'Great Grandparents',
+							descendants:true,
+							style:{
+								top:'135px',
+								left:'200px'
+							}
+						});
 						jQuery(module.dhxTree.allTree).parent().append(div);
 					},
 					off:function(){

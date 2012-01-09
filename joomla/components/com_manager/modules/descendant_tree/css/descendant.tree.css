@@ -105,85 +105,6 @@
 	top:0px;
 	left:0px;
 }
-
-.jmb-descendats-tree-node-select {
-	background: url("../imgs/node-select-previous.png") no-repeat scroll 0 0 transparent;
-	cursor: pointer;
-	height: 16px;
-	position: absolute;
-	right: 3px;
-	top: 3px;
-	width: 16px;
-}
-
-.jmb-descendants-tree-show-container {
-	background: none repeat scroll 0 0 white;
-	border: 3px solid #999999;
-	font-family: Calibri,Tahoma,sans-serif;
-	font-size: 12px;
-	font-weight: normal;
-	padding: 5px;
-	position: absolute;
-	left:5px;
-	top:35px;
-}
-.jmb-descendants-tree-show-container table{
-	margin: 20px 10px 10px -30px;
-	position: relative;
-}
-.jmb-descendants-tree-show-container .title{
-	width: 90px;
-}
-.jmb-descendants-tree-show-container .title span{
-	color: gray;
-	font-size: 14px;
-	margin-left: 50px;
-}
-.jmb-descendants-tree-show-container .content{
-	width: 130px;
-}
-.jmb-descendants-tree-show-container .content .button{
-	display: inline-block;
-}
-.jmb-descendants-tree-show-container .content .button input{
-	position: relative;
-	top: -5px;
-}
-.jmb-descendants-tree-show-container .content .text{
-	display: inline-block;
-	margin-left: 5px;
-}
-.jmb-descendants-tree-show-container .content .text .header{}
-.jmb-descendants-tree-show-container .content .text .header span{
-	color: blue;
-}
-.jmb-descendants-tree-show-container .content .text .count{}
-.jmb-descendants-tree-show-container .content .text .count span{}
-.jmb-descendants-tree-show-container .jmb-dt-show-header{
-	left: 5px;
-	position: absolute;
-    	top: 5px;
-}
-.jmb-descendants-tree-show-container .jmb-dt-show-header span {
-	font-size: 18px;
-	margin-left: 10px;
-}
-.jmb-descendants-tree-show-container .jmb-dt-show-close {
-	background: url("../imgs/close.gif") repeat scroll 0 0 transparent;
-	cursor: pointer;
-    	height: 12px;
-    	position: absolute;
-    	right: 5px;
-    	top: 5px;
-    	width: 12px;
-}
-.jmb-dt-show-overlay{
-	background: none repeat scroll 0 0 #000000;
-	left: 0;
-	opacity: 0.1;
-	position: absolute;
-	top: 0;
-}
 /**
 * edit
 */ 
@@ -240,4 +161,70 @@
     	position: absolute;
     	top: 0;
     	width: 10px;
+}
+/**
+* buttons
+*/
+.jmb-desc-buttons {
+	height: 16px;
+	position: absolute;
+	right: 20px;
+	top: 3px;
+}
+.jmb-desc-buttons div {
+	height:16px;
+	width:16px;
+	display:inline-block;
+	cursor: pointer;
+}
+.jmb-desc-buttons .jmb-desc-button-home {
+	background: url("../imgs/icon-home.png") no-repeat scroll 0 0 transparent;
+}
+.jmb-desc-buttons .jmb-desc-button-select {
+	background: url("../imgs/node-select-previous.png") no-repeat scroll 0 0 transparent;
+}
+/**
+* select
+*/
+.jmb-desc-select {
+	background: none repeat scroll 0 0 white;
+	border: 2px solid gray;
+	font-family: Calibri,Tahoma,sans-serif;
+	font-size: 12px;
+	left: 10px;
+	position: absolute;
+	top: 10px;
+}
+.jmb-desc-select div.jmb-desc-select-title{
+	font-weight: bold;
+	margin: 3px 3px 3px 10px;
+}
+.jmb-desc-select div.jmb-desc-select-content{
+	position:relative;
+}
+.jmb-desc-select div.jmb-desc-select-content .node{
+	background: none repeat scroll 0 0 white;
+	color: gray;
+	padding: 3px;
+	position: absolute;
+}
+.jmb-desc-select div.jmb-desc-select-content .node span{
+	display:inline-block;
+}
+.jmb-desc-select div.jmb-desc-select-content .node span.title div.text{
+	color: blue;
+	text-align: center;
+}
+.jmb-desc-select div.jmb-desc-select-content .node span.title div.count{
+	font-size: 11px;
+	text-align: center;
+}
+.jmb-desc-select div.jmb-desc-select-close{
+	background: url("../imgs/close.gif") no-repeat scroll 0 0 transparent;
+	cursor: pointer;
+    	height: 12px;
+    	position: absolute;
+    	right: 3px;
+    	top: 3px;
+    	width: 12px;
 }
