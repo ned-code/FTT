@@ -1,0 +1,107 @@
+.jmb-family-line-container{
+	position: absolute;
+	font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
+	font-size:11px;
+}
+.jmb-family-line-container td{
+	background: none repeat scroll 0 0 #C3C3C3;	
+	display: inline-block;
+	padding-bottom: 5px;
+	padding-top: 5px;
+}
+.jmb-family-line-container td.left{
+	border-radius: 3px 0 0 3px;
+	height: 21px;
+	padding-left: 3px;
+}
+.jmb-family-line-container td.right{
+	height: 21px;
+	padding-right: 5px;
+}
+.jmb-family-line-container td.options.left{
+	border-radius: 0 0 0 0;
+	margin-left: 2px;
+	padding-left: 0;
+}
+.jmb-family-line-container td.options.right{
+	border-radius: 0 3px 3px 0;
+	padding-right: 5px;
+}
+.jmb-family-line-container td.options select{
+	border: 1px solid #ACACAC;
+	font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
+	font-size: 11px;
+	height: 21px;
+	line-height: 21px;
+	margin-left: 3px;
+} 
+.jmb-family-line-container .icon{
+	 border-radius: 3px 3px 3px 3px;
+	 height: 21px;
+	 width: 21px;
+	 cursor:pointer;
+	 margin-left: 3px;
+	 -webkit-user-select: none;
+	 -khtml-user-select: none;
+	 -moz-user-select: none;
+	 -ms-user-select: none;
+	 -o-user-select: none;
+	 user-select: none;
+}
+.jmb-family-line-container .icon.settings{
+	background: url("../images/icon_pull.png") no-repeat scroll 0 0 #C3C3C3;
+}
+.jmb-family-line-container .icon.select{
+	background: url("../images/icon_pull.png") no-repeat scroll -63px -22px white;
+}
+.jmb-family-line-container .icon.pencil.mother{
+	background: url("../images/icon_pull.png") no-repeat scroll -21px -21px white;
+}
+.jmb-family-line-container .icon.pencil.father{
+	background: url("../images/icon_pull.png") no-repeat scroll 0 -22px white;
+}
+.jmb-family-line-container .icon.eye{
+	background: url("../images/icon_pull.png") no-repeat scroll -21px 0 white;
+}
+.jmb-family-line-container .icon.select.active{
+	background: url("../images/icon_pull.png") no-repeat scroll -63px 0 white;
+}
+.jmb-family-line-container .icon.eye.active{
+	background: url("../images/icon_pull.png") no-repeat scroll -42px 0 white;
+}
+.jmb-family-line-container .icon.pencil.mother.active{
+	background: url("../images/icon_pull.png") no-repeat scroll -21px -21px #f4ff28;
+}
+.jmb-family-line-container .icon.pencil.father.active{
+	background: url("../images/icon_pull.png") no-repeat scroll 0 -22px #ffb76f;
+}
+.jmb-family-line-container .title{
+	background: none repeat scroll 0 0 white;
+	height: 21px;
+    	line-height: 21px;
+}
+.jmb-family-line-container .title.mother.active{
+	background: none repeat scroll 0 0 #f4ff28;
+}
+.jmb-family-line-container .title.father.active{
+	background: none repeat scroll 0 0 #ffb76f;
+}
+.jmb-family-line-container .title span {
+	position: relative;
+	top: -5px;
+}
+.jmb-family-line-container .title div#chart{
+	display:inline-block;
+	margin-left: 3px;
+	margin-right: 3px;
+}
+.jmb-family-line-container .title.mother{
+	border-radius: 3px 0 0 3px;
+	margin-left: 3px;
+	padding-right: 3px;
+}
+.jmb-family-line-container .title.father{
+	border-radius: 0 3px 3px 0;
+	margin-left: 2px;
+	padding-left: 3px;
+}
