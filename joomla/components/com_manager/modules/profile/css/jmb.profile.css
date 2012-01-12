@@ -13,7 +13,7 @@
 	color:white;
 }
 .ui-dialog .ui-dialog-content {
-	overflow: visible;
+	/*overflow: visible;*/
 }
 .jmb-dialog-container {
 	font-family: Calibri,Tahoma;
