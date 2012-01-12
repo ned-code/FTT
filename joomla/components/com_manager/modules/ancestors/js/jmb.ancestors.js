@@ -16,6 +16,7 @@ function JMBAncestorsObject(obj){
 	module.user = null;
 	module.st = null;
 	module.objects = {};	
+	module.active = null;
 	
 	module.ajax('get', null, function(res){
 		json = jQuery.parseJSON(res.responseText);
@@ -65,25 +66,19 @@ JMBAncestorsObject.prototype = {
 			object,
 			tree;
 		return {
-			_prew:function(node){
-				if(node.data.prew){
-					object = module.objects[node.data.prew];
-					if(object.prew){
-						return object.prew;
-					}
-					return node.data.prew;
-				}
-				return false;
-			},
 			arrow:function(){
 				sub = this;
 				jQuery(label).find('.jit-node-arrow').click(function(){
-					id = (node._depth==2)?node.id:sub._prew(node);
-					if(id){
+					id = parseInt(jQuery(this).attr('id'));
+					if(id!=0){
+						/*
 						tree = $jit.json.getSubtree(module.tree, id);
 						storage.tooltip.cleaner(function(){
 							module.render(tree);
 						});
+						*/
+						module.st.onClick(id);
+						module.active = id;
 					}
 				});
 			},
@@ -133,11 +128,22 @@ JMBAncestorsObject.prototype = {
 			sb = host.stringBuffer(),
 			data = node.data,
 			parse,
+			prew,
 			object;
 			
-		if(!data.is_exist) return '<div class="jit-node-item-question">&nbsp;</div>';
+		if(!data.is_exist) return '<div class="jit-node-item-question">&nbsp;</div>';		
 		parse = data.parse;
 		object = data.object;
+		
+		prew = function(){
+			var	id = node.data.prew,
+				objects = module.objects;
+			if(id){
+				return (objects[id].prew)?objects[id].prew:id;
+			}
+			return 0;			
+		}
+		
 		sb._('<div class="jit-node-item">');			
 			sb._('<table>');
 				sb._('<tr>');
@@ -166,12 +172,9 @@ JMBAncestorsObject.prototype = {
 					sb._('</div></td>')
 				sb._('</tr>')
 			sb._('</table>');
-			if(node._depth == 0 && node.data.prew){
-				sb._('<div class="jit-node-arrow left">&nbsp;</div>');
-			}
-			if(node._depth == 2 && node.data.next){
-				sb._('<div class="jit-node-arrow right">&nbsp;</div>');
-			}
+			//style="display:none;"
+			sb._('<div id="')._(prew(node.data.prew))._('" class="jit-node-arrow left">&nbsp;</div>');
+			sb._('<div id="')._((node.data.next?node.data.next:0))._('" class="jit-node-arrow right">&nbsp;</div>');
 		sb._('</div>');
 		return sb.result();
 	},
@@ -292,6 +295,30 @@ JMBAncestorsObject.prototype = {
 				label.innerHTML = module.node(label, node);
 				click = module.click(label, node);
 				click.init();
+			},
+			onPlaceLabel: function(label, node){
+				var	left = jQuery(label).find('div.jit-node-arrow.left'),
+					right = jQuery(label).find('div.jit-node-arrow.right'),
+					data = node.data,
+					active = module.active,
+					mod = node._depth%2;
+				
+				jQuery(left).show();
+				jQuery(right).show();
+				if(!data.prew || mod!=0 || node.id != active){
+					jQuery(left).hide();
+				}
+				if(mod || node.id == active){
+					jQuery(right).hide();
+				}
+				
+			},
+			onBeforePlotNode:function(node){},
+			onBeforePlotLine:function(adj){
+				adj.data.$color = "#999";
+				if(adj.nodeTo.id==module.active){
+					adj.data.$color = "#F5FAE6";
+				}
 			}
 		});
 		
@@ -300,6 +327,7 @@ JMBAncestorsObject.prototype = {
 		//compute node positions and layout
 		st.compute();
 		//emulate a click on the root node.
+		module.active = st.root;
 		st.select(st.root);
 		return st;	
 	},

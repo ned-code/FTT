@@ -523,6 +523,7 @@ core.load = function(pages){
 		storage.invitation = new JMBInvitation();
 		storage.tooltip = new JMBTooltip();
 		storage.topmenubar = new JMBTopMenuBar();
+		storage.family_line = new JMBFamilyLine();
 		
 		//init top menu bar
 		storage.topmenubar.init();
@@ -538,6 +539,7 @@ core.load = function(pages){
 						if(json.pages.length==1){
 							self.renderPage('#page', json.pages[0])
 						} else {
+							storage.family_line.init();
 							self.renderTabs('#container', json.pages);
 						}
 					}
