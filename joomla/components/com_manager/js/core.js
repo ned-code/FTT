@@ -234,13 +234,6 @@ storage.request.cleaner = function(){
 	}
 	storage.request.pull.length = 0;
 }
-
-//header
-storage.header = {};
-storage.header.activeButton = null;
-storage.header.block = false;
-storage.createPull(storage.header);
-
 //tabs
 storage.tabs = {};
 storage.tabs.activeTab = null;
@@ -256,19 +249,8 @@ storage.tabs.click = function(callback){
 }	
 storage.tabs.cleaner = function(){
 	storage.clearPull(storage.tabs);
-	storage.clearPull(storage.header);
 	//storage.request.cleaner();
 }
-
-storage.deleteButton = {};
-storage.deleteButton.init = function(container){
-	var fid = jQuery('body').attr('fid');
-	if(fid!='100000657385590'||fid!='100001614066938') return false;
-	jQuery('.tab_container').append(container);
-	var d_button = jQuery(container).find('div#delete');
-	var d_object = new JMBDelete(d_button);
-}
-
 storage.timeout = function(){
 	setInterval(function(){
 		jQuery.ajax({
@@ -437,6 +419,7 @@ core.initModule = function(object_name, div){
 }
 
 core.renderPage = function(parent, page){
+	storage.family_line.init(page);
 	var self = this;
 	var grid = page.grid;
 	var table = self.createLayout(page.page_info.layout_type);
@@ -539,7 +522,6 @@ core.load = function(pages){
 						if(json.pages.length==1){
 							self.renderPage('#page', json.pages[0])
 						} else {
-							storage.family_line.init();
 							self.renderTabs('#container', json.pages);
 						}
 					}

@@ -93,15 +93,7 @@ function JMBRecentVisitorsObject(obj){
 		});
 	}
 	
-	var headerHandler = function(){
-		storage.addEvent(storage.header.clickPull, function(object){
-			jQuery(content[1]).html('');
-			render();
-		});
-	}	
-
 	render(function(){
-		headerHandler();
 		storage.core.modulesPullObject.unset('JMBRecentVisitorsObject');
 	});
 }

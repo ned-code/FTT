@@ -111,9 +111,6 @@ function JMBQuickFactsObject(obj){
 	*/
 	var init = function(){
 		load();
-		storage.addEvent(storage.header.clickPull, function(object){
-			clean(); load();
-		});
 	}
 	
 	init();	

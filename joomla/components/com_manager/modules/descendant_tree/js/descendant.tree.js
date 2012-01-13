@@ -116,7 +116,8 @@ JMBDescendantTreeObject.prototype = {
 				});
 			});
 			
-			user = jQuery('div[name="descendant-node"][user="true"]');
+			//user = jQuery('div[name="descendant-node"][user="true"]');
+			user = jQuery('div#'+module.owner+'[name="descendant-node"]');
 			jQuery(user[0]).click();
 			jQuery('div.containerTableStyle').scrollTop((jQuery(user[0]).offset().top - 300));
 			
@@ -132,6 +133,7 @@ JMBDescendantTreeObject.prototype = {
 			module.lang = json.lang;
 			module.first = json.key;
 			module.members = json.members;
+			module.owner = json.owner;
 			dhxTree.loadXMLString(json.xml);
 			dhxTree.openAllItems(0);
 			storage.core.modulesPullObject.unset('JMBDescendantTreeObject');
@@ -150,18 +152,32 @@ JMBDescendantTreeObject.prototype = {
 		});
 	},
 	click:function(element){
-		var	module = this;	
-		if(module.select===element) return false;
-		if(module.select!=null) jQuery(module.select).css('background', 'none');
-		storage.tooltip.cleaner();
-		jQuery(element).css('background', 'yellow');
-		module.select = element;
-		//item click
-		module.treeClick(element);
+		var 	moudle, id, find;
+		
+		module = this;
+		id = jQuery(element).attr('id');
+		
+		find = function(id, callback){		
+			jQuery('div[name="descendant-node"]').each(function(i,e){
+				if(jQuery(e).attr('id') == id){
+					callback(e);
+				}
+			});
+		}
+		
+		if(module.select == id) return false;
+		if(module.select != null){
+			find(module.select, function(e){ jQuery(e).css('background', 'none'); });
+		}
+		module.select = id;
+		find(id, function(e){ jQuery(e).css('background', 'yellow'); });
+		module.treeClick(id)
+		
+		
 	},
-	treeClick:function(obj){
+	treeClick:function(id){
 		var	module = this;
-		module.profile.render(module.members[jQuery(obj).attr('id')]);
+		module.profile.render(module.members[id]);
 	},
 	board:function(){
 		var	module = this,
@@ -338,7 +354,8 @@ JMBDescendantTreeObject.prototype = {
 				box.on();
 			},
 			home:function(){
-				var user = jQuery('div[name="descendant-node"][user="true"]');
+				//var user = jQuery('div[name="descendant-node"][user="true"]');
+				var user = jQuery('div#'+module.owner+'[name="descendant-node"]');
 				jQuery(user[0]).click();
 				jQuery('div.containerTableStyle').scrollTop(0);
 				jQuery('div.containerTableStyle').scrollTop((jQuery(user[0]).offset().top - 300));

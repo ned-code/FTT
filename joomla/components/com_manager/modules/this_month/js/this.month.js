@@ -258,7 +258,7 @@ JMBThisMonthObject.prototype = {
 	},
 	load:function(month, sort, callback){
 		var self = this;
-		var render = jQuery(storage.header.activeButton).attr('id');
+		var render = null;
 		var settings = ['{"month":"',month,'","sort":"',sort,'","render":"',render,'"}'].join('');
 		this._ajax("load", settings, function(req){
 			var json = jQuery.parseJSON(req.responseText);

@@ -1,7 +1,33 @@
 function JMBFamilyLine(){
 	var	module = this,	
 		cont,
-		fn;
+		fn,
+		objPull,
+		options;
+		
+	options = {
+		"Bulletin Board":{
+			select:false,
+			eye:true,
+			pencil:true
+		},
+		"Descendants":{
+			select:false,
+			eye:false,
+			pencil:false
+		},
+		"Families":{
+			select:false,
+			eye:false,
+			pencil:false
+		},
+		"Ancestors":{
+			select:false,
+			eye:false,
+			pencil:false
+		}
+	}
+		
 	//protected
 	fn = {
 		set:{
@@ -89,23 +115,52 @@ function JMBFamilyLine(){
 							jQuery(this).addClass('active');
 						}
 					break;
-				}				
+				}		
+				if(list[1] != 'settings') objPull.event(this);
 			});
 		},
+		pull:function(){
+			var	sub = this,
+				pull = [];
+			return {
+				bind:function(name, callback){
+					var object = { id:name, func:callback }
+					pull.push(object);
+				},
+				event:function(object){
+					var	list = object.classList,
+						key,
+						ev;
+						
+					ev = {
+						line:list[1],
+						type:list[2],
+						active:jQuery(object).hasClass('active')
+					}
+					for(key in pull){
+						pull[key].func(ev);
+					}
+				}
+			}
+		},
 		init:function(settings){
-			sb = host.stringBuffer();			
+			if(cont){
+				jQuery(cont).remove();
+				cont = null;
+			}		
+			sb = host.stringBuffer();	
 			sb._('<div class="jmb-family-line-container">');
 				sb._('<table>');
 					sb._('<tr>');
 						sb._('<td class="left"></td>');
-						sb._('<td><div class="icon mother select">&nbsp;</div></td>');
-						sb._('<td><div class="icon mother pencil">&nbsp;</div></td>');
-						sb._('<td><div class="icon mother eye active">&nbsp;</div></td>');
+						if(settings.select) sb._('<td><div class="icon mother select">&nbsp;</div></td>');
+						if(settings.pencil) sb._('<td><div class="icon mother pencil">&nbsp;</div></td>');
+						if(settings.eye) sb._('<td><div class="icon mother eye active">&nbsp;</div></td>');
 						sb._('<td><div class="title mother"><div id="chart"><canvas width="21px" height="21px"></canvas></div><span>Mother</span></div></td>');
 						sb._('<td><div class="title father"><span>Father</span><div id="chart"><canvas width="21px" height="21px"></canvas></div></div></td>');
-						sb._('<td><div class="icon father eye active">&nbsp;</div></td>');
-						sb._('<td><div class="icon father pencil">&nbsp;</div></td>');
-						sb._('<td><div class="icon father select">&nbsp;</div></td>');
+						if(settings.eye) sb._('<td><div class="icon father eye active">&nbsp;</div></td>');
+						if(settings.pencil) sb._('<td><div class="icon father pencil">&nbsp;</div></td>');
+						if(settings.select) sb._('<td><div class="icon father select">&nbsp;</div></td>');
 						sb._('<td class="right"></td>');
 						sb._('<td class="options left">');
 							sb._('<div style="display:none" id="adopted">');
@@ -130,16 +185,17 @@ function JMBFamilyLine(){
 			
 			return this;
 		}
-	}	
+	}
 
-	options = {
-		
-	}	
-	
-	
+	objPull = fn.pull();	
+
 	//public
-	this.init = function(){
-		fn.init({});
+	this.bind = function(name, callback){
+		objPull.bind(name, callback);
+	}
+	this.init = function(page){
+		var title = page.page_info.title;
+		fn.init(options[title]);
 	};
 }
 
