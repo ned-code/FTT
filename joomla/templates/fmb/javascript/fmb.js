@@ -9,6 +9,7 @@ function JMBTopMenuBar(){
 		create:function(){
 			var sb = host.stringBuffer();
 			sb._('<div  class="jmb-top-menu-bar">');
+				sb._('<div class="jmb-top-menu-bar-logo">&nbsp;</div>');
 				sb._('<div class="jmb-top-menu-bar-content">');
 					sb._('<div id="myfamily" class="jmb-top-menu-bar-item"><span>My Family</span></div>');
 					sb._('<div id="famous-family" class="jmb-top-menu-bar-item"><span>Famous Families</span></div>');

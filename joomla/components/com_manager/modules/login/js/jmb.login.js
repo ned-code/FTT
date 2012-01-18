@@ -2,7 +2,7 @@ function JMBLogin(){
 	var	module = this,
 		fn,
 		fb_logged;
-
+		
 	if(window!=window.top){
 		module.init = function(callback){ 
 			host.callMethod("login", "JMBLogin", 'user', null, function(res){

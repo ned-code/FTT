@@ -49,16 +49,25 @@ html, body {
 	top: 0;
 	width: 100%;
 }
+.jmb-top-menu-bar-logo{
+	background: url("../images/ftt_logo.png") no-repeat scroll 0 0 transparent;
+	height: 35px;
+	left: 0;
+	position: absolute;
+	top: 4px;
+	width: 100px;
+}
 .jmb-top-menu-bar div.jmb-top-menu-bar-content{
+	border-left: 1px solid #CCCCCC;
 	font-family: Calibri,Tahoma,sans-serif;
 	font-weight: bold;
+	left: 110px;
 	position: absolute;
-	right: 40px;
 	top: 0;
 }
 
 .jmb-top-menu-bar div.jmb-top-menu-bar-content div.jmb-top-menu-bar-item{
-	background: url("../images/home.png") no-repeat scroll 0 2px transparent;
+	/*background: url("../images/home.png") no-repeat scroll 0 2px transparent;*/
 	color: white;
 	display: inline-block;
 	margin: 5px;
