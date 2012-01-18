@@ -73,6 +73,9 @@ $document->addStyleSheet('components/com_manager/modules/delete/css/jmb.delete.c
 $document->addScript('components/com_manager/modules/delete/js/jmb.delete.js?111');
 	
 ################################################################################
+//header
+$document->addStyleSheet('components/com_manager/modules/header/css/jmb.header.css?111');
+$document->addScript('components/com_manager/modules/header/js/jmb.header.js?111');
 //profile editor[mini, full, tooltip]
 $document->addStyleSheet('components/com_manager/modules/profile/css/jmb.profile.css?111');
 $document->addScript('components/com_manager/modules/profile/js/jmb.profile.js?111');
@@ -84,6 +87,9 @@ $document->addScript('components/com_manager/modules/media/js/jmb.media.js?111')
 //invitation object
 $document->addStyleSheet('components/com_manager/modules/invitation/css/jmb.invitation.css?111');
 $document->addScript('components/com_manager/modules/invitation/js/jmb.invitation.js?111');
+//family line object
+$document->addStyleSheet('components/com_manager/modules/family_line/css/jmb.family.line.css?111');
+$document->addScript('components/com_manager/modules/family_line/js/jmb.family.line.js?111');
 ###############################################################################
 
 //login\profile in header (login\logout)

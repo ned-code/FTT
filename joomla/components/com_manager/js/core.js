@@ -499,6 +499,7 @@ core.load = function(pages){
 		storage.baseurl = jQuery('body').attr('_baseurl');
 		jQuery(document.body).append(storage.iframe);
 		//init global modules
+		storage.header = new JMBHeader();
 		storage.overlay = new JMBOverlay();
 		storage.login = new JMBLogin();
 		storage.profile = new JMBProfile();
