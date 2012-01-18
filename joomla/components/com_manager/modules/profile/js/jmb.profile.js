@@ -87,11 +87,15 @@ JMBProfile.prototype = {
 		var	module = this,
 			divs = jQuery(module.editor_buttons).find('div[type="button"]'),
 			active = function(object){
+				var val = jQuery(object).attr('value');
 				module._clearMenu();
+				jQuery(cont).parent().parent().removeClass('edit');
+				jQuery(cont).parent().parent().removeClass('view');
+				jQuery(cont).parent().parent().addClass(val);
 				jQuery(divs).removeClass('active');
 				jQuery(object).addClass('active');
 				module.editor_header_active_button = object;
-				module['_'+jQuery(object).attr('value')](cont);
+				module['_'+val](cont);
 			};
 		
 		jQuery(divs).click(function(){
@@ -969,7 +973,7 @@ JMBProfile.prototype = {
 	},
 	_clear:function(){
 		var module = this;
-		jQuery(module.container).html('');
+		jQuery(module.container).remove();
 		module.editor_header_active_button = null;
 		module.editor_menu_active_button = null;
 		module.menu_item_pull = [];
