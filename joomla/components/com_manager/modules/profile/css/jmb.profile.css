@@ -15,6 +15,11 @@
 .ui-dialog .ui-dialog-content {
 	/*overflow: visible;*/
 }
+.ui-widget-overlay {
+	background: #000000;
+	opacity: 0.8;
+}
+
 .jmb-dialog-container {
 	font-family: Calibri,Tahoma;
 	font-size: 12px;

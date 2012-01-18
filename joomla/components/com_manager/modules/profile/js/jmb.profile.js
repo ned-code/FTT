@@ -71,6 +71,7 @@ JMBProfile.prototype = {
 		var	module = this, result;
 		result = jQuery.extend({}, module.dialog_settings, options);
 		jQuery(box).dialog(result);
+		jQuery(box).parent().css('top', '40px');
 	},
 	_container:function(){
 		var	module = this,
@@ -1037,9 +1038,25 @@ JMBProfile.prototype = {
 				});
 				return this;
 			},
+			living:function(){
+				jQuery(cont).find('select[name="living"]').change(function(){
+					var	val = parseInt(jQuery(this).val()),
+						d_date = jQuery(cont).find('tr#deathdate'),
+						d_place = jQuery(cont).find('tr#deathplace');
+					if(val){
+						jQuery(d_date).hide();
+						jQuery(d_place).hide();
+					} else {
+						jQuery(d_date).show();
+						jQuery(d_place).show();
+					}
+				});
+			},
 			init:function(){
+				this.living();
 				module._dialog(module.addBox, {title:title, width:w, height:h});
-				jQuery(module.addBox).css({ background:"none", border:"none" });
+				jQuery(module.addBox).css({ background:"none", border:"none"});
+				jQuery(module.addBox).css('overflow', 'visible');
 				jQuery(module.addBox).append(container);
 				jQuery(container).append(cont);
 				module._ajaxForm(cont, 'add', query, beforeSend, success);
