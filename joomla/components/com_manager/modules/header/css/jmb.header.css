@@ -1,1 +1,55 @@
+.jmb-header-container {
+	position: relative;
+}
+.jmb-header-container.myfamily{
+	background: none repeat scroll 0 0 #5C8E40;
+	border-radius: 2px 2px 2px 2px;
+    	height: 45px;
+}
+.jmb-header-container.famous-family{
+	background: none repeat scroll 0 0 #A96946;
+	border-radius: 2px 2px 2px 2px;
+    	height: 45px;
+}
 
+.jmb-header-logo {
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	-o-user-select: none;
+	user-select: none;
+	height: 40px;
+	left: 0;
+	position: absolute;
+	top: 0;
+	width: 110px;
+}
+.jmb-header-container.myfamily .jmb-header-logo{
+	background: url("../imgs/myfamily.png") no-repeat scroll 0 0 transparent;
+}
+.jmb-header-container.famous-family .jmb-header-logo{
+	background: url("../imgs/famous-family.png") no-repeat scroll 0 0 transparent;
+}
+
+.jmb-header-expand {
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	-o-user-select: none;
+	user-select: none;
+	cursor: pointer;
+	height: 40px;
+	position: absolute;
+	right: 5px;
+	text-decoration: none;
+	top: 2px;
+	width: 40px;
+}
+.jmb-header-expand.familytreetop{
+	background: url("../imgs/expand.png") no-repeat scroll 0 0 transparent;
+}
+.jmb-header-expand.facebook {
+	background: url("../imgs/expand.png") no-repeat scroll -40px 0 transparent;
+}

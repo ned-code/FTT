@@ -263,27 +263,6 @@ storage.timeout = function(){
 
 }
 storage.timeout();
-//iframe check
-storage.inIframe = function(){
-	var in_iframe = (window!=window.top);
-	var url = (in_iframe)?'http://apps.facebook.com/fmybranches/':'http://www.familytreetop.com/';
-	var base_url = jQuery('body').attr('_baseurl');
-	var a_href = (in_iframe)?base_url:'http://apps.facebook.com/fmybranches/';
-	var img_name = (in_iframe)?'to_facebook.gif':'to_fmb.gif';
-	var content_width = (in_iframe)?760:980;
-	var main_td_width = (in_iframe)?760:820;
-	jQuery('div#_content').css('max-width',content_width+'px');
-	jQuery('td#_main').css('width', main_td_width+'px');
-	var a = jQuery('<a href="'+a_href+'" target="_top"><img src="'+base_url+'templates/fmb/images/'+img_name+'?111" width="32px" height="32px"></a>')
-	jQuery('div.jmb_header_expand').append(a);
-	if(in_iframe){
-		jQuery('td#_right').hide();
-		jQuery('div.jmb-top-menu-bar').hide();
-	} else {
-		jQuery('div#_bottom').hide();
-	}
-}
-
 
 //core object
 var date = new Date();
@@ -511,7 +490,6 @@ core.load = function(pages){
 		
 		//init top menu bar
 		storage.topmenubar.init();
-		storage.inIframe();
 		jQuery.ajax({
 			url:'index.php?option=com_manager&task=getPageInfo&ids='+pages,
 			type:'GET',
