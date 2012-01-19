@@ -44,7 +44,7 @@ function JMBTopMenuBar(){
 					fn.sw(jQuery(cont).find('div#home span'));
 				break;
 				
-				case "famous_family":
+				case "famous-family":
 					fn.sw(jQuery(cont).find('div#famous_family span'));
 				break;
 				
@@ -59,6 +59,8 @@ function JMBTopMenuBar(){
 			
 		},
 		init:function(){
+			if(window != window.top) return false;
+			
 			cont = fn.create();			
 			fn.click();
 			fn.activate();

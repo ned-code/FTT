@@ -103,7 +103,7 @@ class JMBLatestUpdates {
 		$just_registered = $this->getUser($this->getJustRegistered($tree_id), $usertree);
 		$profile_change = $this->getUser($this->getProfileChange($tree_id), $usertree);
 		$family_added = $this->getUser($this->getFamilyMemberAdded($tree_id), $usertree);
-		$family_deleted = $this->getUser($this->getFamilyMemberDeleted($tree_id), $usertree);
+		$family_deleted = $this->getUser($this->getFamilyMemberDeleted($tree_id, $gedcom_id), $usertree);
 		
 		$lang = $this->host->getLangList('latest_updates');
 		$colors = $this->getColors();

@@ -30,6 +30,11 @@ function JMBFamilyLine(){
 		
 	//protected
 	fn = {
+		ajax:function(func, params, callback){
+			host.callMethod("family_line", "JMBFamilyLine", func, params, function(res){
+					callback(res);
+			});
+		},
 		set:{
 			align:function(type){
 				var top, left;
@@ -144,10 +149,11 @@ function JMBFamilyLine(){
 			}
 		},
 		init:function(settings){
+			if(!settings) return false;
 			if(cont){
 				jQuery(cont).remove();
 				cont = null;
-			}		
+			}
 			sb = host.stringBuffer();	
 			sb._('<div class="jmb-family-line-container">');
 				sb._('<table>');
@@ -156,8 +162,8 @@ function JMBFamilyLine(){
 						if(settings.select) sb._('<td><div class="icon mother select">&nbsp;</div></td>');
 						if(settings.pencil) sb._('<td><div class="icon mother pencil">&nbsp;</div></td>');
 						if(settings.eye) sb._('<td><div class="icon mother eye active">&nbsp;</div></td>');
-						sb._('<td><div class="title mother"><div id="chart"><canvas width="21px" height="21px"></canvas></div><span>Mother</span></div></td>');
-						sb._('<td><div class="title father"><span>Father</span><div id="chart"><canvas width="21px" height="21px"></canvas></div></div></td>');
+						sb._('<td><div class="title mother"><span>Mother</span><div id="chart"><canvas width="21px" height="21px"></canvas></div></div></td>');
+						sb._('<td><div class="title father"><div id="chart"><canvas width="21px" height="21px"></canvas></div><span>Father</span></div></td>');
 						if(settings.eye) sb._('<td><div class="icon father eye active">&nbsp;</div></td>');
 						if(settings.pencil) sb._('<td><div class="icon father pencil">&nbsp;</div></td>');
 						if(settings.select) sb._('<td><div class="icon father select">&nbsp;</div></td>');
@@ -194,8 +200,10 @@ function JMBFamilyLine(){
 		objPull.bind(name, callback);
 	}
 	this.init = function(page){
-		var title = page.page_info.title;
-		fn.init(options[title]);
+		fn.ajax('get',null, function(res){
+			var title = page.page_info.title;
+			fn.init(options[title]);
+		});
 	};
 }
 

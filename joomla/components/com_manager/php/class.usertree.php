@@ -282,7 +282,6 @@ class JMBUserTree {
 		$is_alive = ($death!=null)?false:true;
 		$is_mother_line = false;
 		$is_father_line = false;
-		$last_login = date('Y-m-d H:i:s');
 		return array(
 			'gedcom_id'=>$user['gedcom_id'], 
 			'facebook_id'=>$user['facebook_id'], 
@@ -325,6 +324,119 @@ class JMBUserTree {
 		$this->_LocationsEventsList = $this->gedcom->locations->getEventsLocationsList($this->_TreeId);
 		$this->_MediaList = $this->gedcom->media->getMediaList($this->_TreeId);
 	}
+	/**
+	*
+	*/
+	protected function _setFamilyLineParents(&$objects, $id, $type){
+		if(!$id){
+			return false;
+		}
+		if(!isset($objects[$id][$type])){
+			$objects[$id][$type] = true;
+		}
+		$parents = $this->_getParents($id);
+		if(!empty($parents)){
+			foreach($parents as $key => $el){
+				if($key!='length'){
+					$this->_setFamilyLineParents($objects, $el['father']['gedcom_id'], $type);
+					$this->_setFamilyLineParents($objects, $el['mother']['gedcom_id'], $type);
+				}
+			}
+		}
+	}
+	/**
+	*
+	*/
+	protected function _setFamilyLineChildrens(&$objects, $id, $types){
+		if(!$id) return false;
+		$childrens = $this->_getChildrens($id);
+		if(!empty($childrens)){
+			foreach($childrens as $child){
+				if(!isset($objects[$child['gedcom_id']])&&$this->_GedcomId!=$child['gedcom_id']){
+					if(!isset($objects[$child['gedcom_id']])){
+						$objects[$child['gedcom_id']] = $types;
+						$this->_setFamilyLineSpouses($objects,  $child['gedcom_id'], $types);
+						$this->_setFamilyLineChildrens($objects, $child['gedcom_id'], $types);
+					}
+				}
+			}
+		}
+	}
+	/**
+	*
+	*/
+	protected function _setFamilyLineSpouses(&$objects, $id, $types){
+		if(!$id) return false;
+		$families = $this->_getFamilies($id);
+		if(!empty($families)){
+			foreach($families as $family){
+				$spouse = $family['spouse'];
+				if(!isset($objects[$spouse])){
+					$objects[$spouse] = $types;
+					$this->_setFamilyLineParents($objects, $id, $types);
+					$this->_setFamilyLineChildrens($objects, $id, $types);
+				}
+			}
+		}
+	}
+	
+	/**
+	*
+	*/
+	public function getFamilyLine($tree_id, $gedcom_id, $permission){
+ 		$this->_TreeId = $tree_id;
+		$this->_Permission = $permission;
+		$this->_GedcomId = $gedcom_id;
+		$this->_init();
+		
+		$objects = array();
+		//calculate for parents
+		$parents = $this->_getParents($gedcom_id);
+		foreach($parents as $key => $el){
+			if($key!='length'){
+				$this->_setFamilyLineParents($objects, $el['father']['gedcom_id'], 'is_father');
+				$this->_setFamilyLineParents($objects, $el['mother']['gedcom_id'], 'is_mother');
+			}
+		}
+		//calculate for childrens
+		foreach($objects as $id => $types){
+			$this->_setFamilyLineChildrens($objects, $id, $types);
+		}		
+		$objects[$gedcom_id] = array('is_self'=>true);
+		$this->_setFamilyLineChildrens($objects, $gedcom_id, array('is_descendant'=>true));
+		ksort($objects);
+		return $objects;
+	}
+	/**
+	*
+	*/
+	public function saveFamilyLine($tree_id, $gedcom_id, $permission){
+		$objects = $this->getFamilyLine($tree_id, $gedcom_id, $permission);
+		//delete old records
+		$sql_string = "DELETE FROM #__mb_family_line WHERE tid = ? AND gedcom_id = ?";
+		$this->db->setQuery($sql_string, $tree_id, $gedcom_id);
+		$this->db->query();
+		
+		$chunk = array_chunk($objects, 50, true);
+		foreach($chunk as $el){
+			$sql_string = "INSERT INTO #__mb_family_line (`tid`, `gedcom_id`,`member_id`,`is_self`,`is_descendant`,`is_father`,`is_mother`) VALUES ";
+			foreach($el as $key => $val){
+				$is_self = ($key==$gedcom_id)?1:0;
+				$is_descendant = isset($val['is_descendant'])?1:0;
+				$is_father = isset($val['is_father'])?1:0;
+				$is_mother = isset($val['is_mother'])?1:0;
+				$sql_string .= "(".$tree_id.", ".$gedcom_id.", ".$key.", ".$is_self.", ".$is_descendant.", ".$is_father.", ".$is_mother."),";
+			}
+			$sql = substr($sql_string, 0, -1);
+			$this->db->setQuery($sql, $tree_id, $gedcom_id);
+			$this->db->query();
+		}
+		
+	
+	}
+	
+	
+	
 	/**
 	*
 	*/
