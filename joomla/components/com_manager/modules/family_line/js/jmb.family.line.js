@@ -60,7 +60,7 @@ function JMBFamilyLine(){
 					radius,
 					thisvalue;
 				
-				thisvalue = data[i] / this._total;
+				thisvalue = data / this._total;
 					
 				context.save();
 				
@@ -84,15 +84,15 @@ function JMBFamilyLine(){
 				
 				return sofar + thisvalue;
 			},
-			init:function(object, data){
-				var sofar = 0;
+			init:function(object, total, data){
+				var sofar = 0, k;
 				if(data.length > 2) return false;
 				this._canvas = object;
 				this._context = object.getContext("2d");
-				this._total = data[0] + data[1];
-				for(var i = 0; i < data.length; i++){
-					sofar = this.segment(data, sofar, i);
-				}
+				this._total = total;
+				k = total - data;
+				sofar = this.segment(data, sofar, 0);
+				this.segment(k, sofar, 1);
 			}
 		},
 		click:function(){
@@ -148,7 +148,7 @@ function JMBFamilyLine(){
 				}
 			}
 		},
-		init:function(settings){
+		init:function(settings, json){
 			if(!settings) return false;
 			if(cont){
 				jQuery(cont).remove();
@@ -186,8 +186,8 @@ function JMBFamilyLine(){
 			jQuery(document.body).append(cont);
 			fn.click();
 			fn.set.align();
-			fn.draw.init(jQuery(cont).find('div.mother canvas')[0], [220, 447]);
-			fn.draw.init(jQuery(cont).find('div.father canvas')[0], [447, 220]);
+			fn.draw.init(jQuery(cont).find('div.mother canvas')[0], json.size[0], json.size[1]);
+			fn.draw.init(jQuery(cont).find('div.father canvas')[0], json.size[0], json.size[2]);
 			
 			return this;
 		}
@@ -201,8 +201,9 @@ function JMBFamilyLine(){
 	}
 	this.init = function(page){
 		fn.ajax('get',null, function(res){
+			var json = jQuery.parseJSON(res.responseText);
 			var title = page.page_info.title;
-			fn.init(options[title]);
+			fn.init(options[title], json);
 		});
 	};
 }

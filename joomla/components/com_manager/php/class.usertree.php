@@ -280,8 +280,8 @@ class JMBUserTree {
 		$birth = $this->_getEvent($gedcom_id, 'BIRT');
 		$death = $this->_getEvent($gedcom_id, 'DEAT');
 		$is_alive = ($death!=null)?false:true;
-		$is_mother_line = false;
-		$is_father_line = false;
+		$is_mother_line = ($user['is_descendant']||$user['is_mother']);
+		$is_father_line = ($user['is_descendant']||$user['is_father']);
 		return array(
 			'gedcom_id'=>$user['gedcom_id'], 
 			'facebook_id'=>$user['facebook_id'], 
@@ -328,18 +328,21 @@ class JMBUserTree {
 	*
 	*/
 	protected function _setFamilyLineParents(&$objects, $id, $type){
-		if(!$id){
-			return false;
-		}
-		if(!isset($objects[$id][$type])){
-			$objects[$id][$type] = true;
+		if(!$id) return false;
+		if(!isset($objects[$id])){
+			$objects[$id] = array();
 		}
 		$parents = $this->_getParents($id);
+		$objects[$id][$type] = true;
 		if(!empty($parents)){
 			foreach($parents as $key => $el){
 				if($key!='length'){
-					$this->_setFamilyLineParents($objects, $el['father']['gedcom_id'], $type);
-					$this->_setFamilyLineParents($objects, $el['mother']['gedcom_id'], $type);
+					if($el['father']){
+						$this->_setFamilyLineParents($objects, $el['father']['gedcom_id'], $type);
+					}
+					if($el['mother']){
+						$this->_setFamilyLineParents($objects, $el['mother']['gedcom_id'], $type);
+					}
 				}
 			}
 		}
@@ -353,14 +356,36 @@ class JMBUserTree {
 		if(!empty($childrens)){
 			foreach($childrens as $child){
 				if(!isset($objects[$child['gedcom_id']])&&$this->_GedcomId!=$child['gedcom_id']){
-					if(!isset($objects[$child['gedcom_id']])){
-						$objects[$child['gedcom_id']] = $types;
-						$this->_setFamilyLineSpouses($objects,  $child['gedcom_id'], $types);
-						$this->_setFamilyLineChildrens($objects, $child['gedcom_id'], $types);
-					}
+					$objects[$child['gedcom_id']] = $types;
+					$this->_setFamilyLineChildrens($objects, $child['gedcom_id'], $types);
 				}
 			}
 		}
+	}
+	/**
+	*
+	*/
+	protected function _setFamilyLineSiblings(&$objects, $id, $types){
+		if(!$id) return false;
+		$childrens = array();
+		$parents = $this->_getParents($id);
+		if(!empty($parents)){
+			foreach($parents as $key => $el){
+				if($key!='length'){
+					$childs = $this->_getFamChildrens($key);
+					$childrens = array_merge($childrens, $childs);
+				}
+			}
+		}
+		if(!empty($childrens)){
+			foreach($childrens as $child){
+				if(!isset($objects[$child['gedcom_id']])&&$this->_GedcomId!=$child['gedcom_id']){
+					$objects[$child['gedcom_id']] = $types;
+					$this->_setFamilyLineChildrens($objects, $child['gedcom_id'], $types);
+				}
+			}
+		}
+	
 	}
 	/**
 	*
@@ -371,40 +396,59 @@ class JMBUserTree {
 		if(!empty($families)){
 			foreach($families as $family){
 				$spouse = $family['spouse'];
-				if(!isset($objects[$spouse])){
+				if($spouse&&!isset($object[$spouse])&&$this->_GedcomId!=$spouse){
 					$objects[$spouse] = $types;
-					$this->_setFamilyLineParents($objects, $id, $types);
-					$this->_setFamilyLineChildrens($objects, $id, $types);
+					$this->_setFamilyLineChildrens($objects, $spouse, $types);
+					foreach($types as $type){
+						$this->_setFamilyLineParents($objects, $el['father']['gedcom_id'], $type);
+					}
 				}
 			}
 		}
 	}
-	
+	/**
+	*
+	*/
+	protected function getUserFamilyLine($id, $objects){
+			
+	}
 	/**
 	*
 	*/
 	public function getFamilyLine($tree_id, $gedcom_id, $permission){
- 		$this->_TreeId = $tree_id;
+		$this->_TreeId = $tree_id;
 		$this->_Permission = $permission;
 		$this->_GedcomId = $gedcom_id;
 		$this->_init();
-		
 		$objects = array();
-		//calculate for parents
+		//start set line
+		$objects[$gedcom_id] = array('is_self'=>true);
+		$this->_setFamilyLineSpouses($objects, $gedcom_id, array('is_spouse'=>true));
+		$this->_setFamilyLineChildrens($objects, $gedcom_id, array('is_descendant'=>true,'is_mother'=>true,'is_father'=>true));
+		$this->_setFamilyLineSiblings($objects, $gedcom_id, array('is_mother'=>true,'is_father'=>true));		
 		$parents = $this->_getParents($gedcom_id);
-		foreach($parents as $key => $el){
-			if($key!='length'){
-				$this->_setFamilyLineParents($objects, $el['father']['gedcom_id'], 'is_father');
-				$this->_setFamilyLineParents($objects, $el['mother']['gedcom_id'], 'is_mother');
+		if(!empty($parents)){
+			foreach($parents as $key => $el){
+				if($key!='length'){
+					$this->_setFamilyLineParents($objects, $el['father']['gedcom_id'], 'is_father');
+					$this->_setFamilyLineParents($objects, $el['mother']['gedcom_id'], 'is_mother');
+				}
 			}
 		}
-		//calculate for childrens
 		foreach($objects as $id => $types){
 			$this->_setFamilyLineChildrens($objects, $id, $types);
+		}
+		foreach($objects as $id => $types){
+			$this->_setFamilyLineSpouses($objects, $id, $types);
+		}
+		
+		$relatives = $this->gedcom->individuals->getRelatives($tree_id);
+		foreach($relatives as $el){
+			if(!isset($objects[$el['individuals_id']])){
+				$objects[$el['individuals_id']] = array();
+			}
 		}		
-		$objects[$gedcom_id] = array('is_self'=>true);
-		$this->_setFamilyLineChildrens($objects, $gedcom_id, array('is_descendant'=>true));
-		ksort($objects);
+		//ksort($objects);
 		return $objects;
 	}
 	/**
@@ -419,13 +463,14 @@ class JMBUserTree {
 		
 		$chunk = array_chunk($objects, 50, true);
 		foreach($chunk as $el){
-			$sql_string = "INSERT INTO #__mb_family_line (`tid`, `gedcom_id`,`member_id`,`is_self`,`is_descendant`,`is_father`,`is_mother`) VALUES ";
+			$sql_string = "INSERT INTO #__mb_family_line (`tid`, `gedcom_id`,`member_id`,`is_self`,`is_spouse`,`is_descendant`,`is_father`,`is_mother`) VALUES ";
 			foreach($el as $key => $val){
 				$is_self = ($key==$gedcom_id)?1:0;
+				$is_spouse = isset($val['is_spouse'])?1:0;
 				$is_descendant = isset($val['is_descendant'])?1:0;
 				$is_father = isset($val['is_father'])?1:0;
 				$is_mother = isset($val['is_mother'])?1:0;
-				$sql_string .= "(".$tree_id.", ".$gedcom_id.", ".$key.", ".$is_self.", ".$is_descendant.", ".$is_father.", ".$is_mother."),";
+				$sql_string .= "(".$tree_id.", ".$gedcom_id.", ".$key.", ".$is_self.", ".$is_spouse.", ".$is_descendant.", ".$is_father.", ".$is_mother."),";
 			}
 			$sql = substr($sql_string, 0, -1);
 			$this->db->setQuery($sql, $tree_id, $gedcom_id);
@@ -433,9 +478,7 @@ class JMBUserTree {
 		}
 		
 	
-	}
-	
-	
+	}	
 	
 	/**
 	*
@@ -508,7 +551,8 @@ class JMBUserTree {
 	*
 	*/
 	public function init($tree_id, $gedcom_id, $permission){
-		$usertree = $this->get($tree_id, $gedcom_id, $permission);		
+		$usertree = $this->get($tree_id, $gedcom_id, $permission);
+		$_SESSION['jmb']['tree_size'] = sizeof($usertree);		
 		$compress_usertree = $this->compress($usertree);
 		if($this->check($tree_id, $gedcom_id)){
 			$this->update($tree_id, $gedcom_id, $compress_usertree);
