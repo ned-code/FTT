@@ -1,12 +1,15 @@
 function JMBAncestorsObject(obj){
 	var	module = this,
 		cont = jQuery('<div id="jit" class="jmb-ancestors-jit"></div>'),
-		home_button = jQuery('<div class="home"></div>'),
+		home_button = jQuery('<div class="jmb-ancestors-home"></div>'),
 		json, parse;
 		
 	jQuery(obj).append(cont);
 	jQuery(obj).append(home_button);
 
+	module.parent = obj;
+	module.nodePull = [];
+	module.overlay = jQuery('<div class="jmb-ancestors-overlay">&nbsp;</div>');
 	module.path = storage.baseurl+"components/com_manager/modules/ancestors/";
 	module.imagePath = module.path+'images/';
 	module.container = cont;
@@ -29,9 +32,36 @@ function JMBAncestorsObject(obj){
 	
 	jQuery(home_button).click(function(){
 		if(module.user==null) return false;
-		module.render(module.tree);
+		if(module.active == module.st.root) return false;
+		module.active = module.st.root;
+		module.st.onClick(module.st.root);
 		return false;
 	})
+	
+	storage.family_line.bind('JMBAncestorsObject', function(res){
+		var nodes = module.nodePull;
+		for(var index in nodes){
+			var el = nodes[index];
+			var data = el.node.data;
+			var label = el.label;
+			var user = (data.is_exist)?data.object.user:false;
+			if(!user) continue;
+			if(res._line == 'father' && parseInt(user.is_father_line)){
+				if(res._active){
+					jQuery(label).find('div#father_line').css('border', '2px solid '+res._background);	
+				} else {
+					jQuery(label).find('div#father_line').css('border', '2px solid #F5FAE6');
+				}
+			}
+			if(res._line == 'mother' && parseInt(user.is_mother_line)){
+				if(res._active){
+					jQuery(label).find('div#mother_line').css('border', '2px solid '+res._background);	
+				} else {
+					jQuery(label).find('div#mother_line').css('border', '2px solid #F5FAE6');
+				}
+			}
+		}
+	});
 }
 
 JMBAncestorsObject.prototype = {
@@ -77,8 +107,8 @@ JMBAncestorsObject.prototype = {
 							module.render(tree);
 						});
 						*/
-						module.st.onClick(id);
 						module.active = id;
+						module.st.onClick(id);
 					}
 				});
 			},
@@ -128,12 +158,15 @@ JMBAncestorsObject.prototype = {
 			sb = host.stringBuffer(),
 			data = node.data,
 			parse,
+			place,
 			prew,
-			object;
+			object,
+			fam_opt;
 			
 		if(!data.is_exist) return '<div class="jit-node-item-question">&nbsp;</div>';		
 		parse = data.parse;
 		object = data.object;
+		fam_opt = storage.family_line.get.opt();
 		
 		prew = function(){
 			var	id = node.data.prew,
@@ -143,7 +176,12 @@ JMBAncestorsObject.prototype = {
 			}
 			return 0;			
 		}
-		
+		sb._('<div id="father_line" style="border:2px solid ')
+			._((fam_opt.father.pencil)?fam_opt.father.pencil:'#F5FAE6')
+		._('" >');
+		sb._('<div id="mother_line" style="border:2px solid ')
+			._((fam_opt.mother.pencil)?fam_opt.mother.pencil:'#F5FAE6')
+		._('" >');
 		sb._('<div class="jit-node-item">');			
 			sb._('<table>');
 				sb._('<tr>');
@@ -161,10 +199,12 @@ JMBAncestorsObject.prototype = {
 					sb._('<td valign="top"><div class="data')._((parse.gender=='M')?' male':' female')._('">')
 						sb._('<div class="name">')._(parse.name)._('</div>');
 						if(parse.is_birth){
-							sb._('<div class="birt">B: ')._(parse.date('birth'))._('</div>');
+							place = parse.place('birth');
+							sb._('<div class="birt">B: ')._(parse.birth('year'))._((place.length!=0)?' ('+place.city+','+place.country+')':'')._('</div>');
 						}
 						if(parse.is_death){
-							sb._('<div class="deat">D: ')._(parse.date('death'))._('</div>');
+							place = parse.place('death');
+							sb._('<div class="deat">D: ')._(parse.death('year'))._((place.length!=0)?' ('+place.city+','+place.country+')':'')._('</div>');
 						}
 						if(parse.relation){
 							sb._('<div class="relation">')._(parse.relation)._('</div>');
@@ -176,6 +216,7 @@ JMBAncestorsObject.prototype = {
 			sb._('<div id="')._(prew(node.data.prew))._('" class="jit-node-arrow left">&nbsp;</div>');
 			sb._('<div id="')._((node.data.next?node.data.next:0))._('" class="jit-node-arrow right">&nbsp;</div>');
 		sb._('</div>');
+		sb._('</div></div>');
 		return sb.result();
 	},
 	getTree:function(ch){
@@ -274,7 +315,8 @@ JMBAncestorsObject.prototype = {
 			offsetX:240,
 			offsetY:0,
 			duration: 800,
-			transition: $jit.Trans.Quart.easeInOut,
+			//transition: $jit.Trans.Quart.easeInOut,
+			transition: $jit.Trans.Quint.easeOut,
 			Node: {
 				height: 80,
 				width: 210,
@@ -290,11 +332,21 @@ JMBAncestorsObject.prototype = {
 				color:'#999',  
 				overridable: true
 			},
+			onBeforeCompute: function(node){  
+				var	width = jQuery(module.parent).width(), 
+					height  = jQuery(module.parent).height();
+				jQuery(module.overlay).css('width', width+'px').css('height', height+'px');
+				jQuery(module.parent).append(module.overlay);
+			},  
+			onAfterCompute: function(){  
+				jQuery(module.overlay).remove();
+			},  
 			onCreateLabel: function(label, node){
-				label.id = node.id;            
+				label.id = node.id;
 				label.innerHTML = module.node(label, node);
 				click = module.click(label, node);
 				click.init();
+				module.nodePull.push({"node":node,"label":label});
 			},
 			onPlaceLabel: function(label, node){
 				var	left = jQuery(label).find('div.jit-node-arrow.left'),

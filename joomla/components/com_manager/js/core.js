@@ -32,11 +32,12 @@ storage.fb.cookie = true;
 storage.fb.xfbml = true;
 storage.iframe = jQuery('<iframe id="ftt_iframe" name="ftt_iframe" style="display:none;position:absolute;left:-1000px;width:1px;height:1px">');
 storage.login = {};
-//storage.language = {};
+storage.header = {};
 storage.media = {};
 storage.invitation = {};
 storage.tooltip = {};
 storage.profile = {};
+storage.family_line = {};
 
 //usertree
 storage.usertree = {};

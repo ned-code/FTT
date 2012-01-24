@@ -280,8 +280,8 @@ class JMBUserTree {
 		$birth = $this->_getEvent($gedcom_id, 'BIRT');
 		$death = $this->_getEvent($gedcom_id, 'DEAT');
 		$is_alive = ($death!=null)?false:true;
-		$is_mother_line = ($user['is_descendant']||$user['is_mother']);
-		$is_father_line = ($user['is_descendant']||$user['is_father']);
+		$is_mother_line = ($user['is_self']||$user['is_descendant']||$user['is_mother'])?1:0;
+		$is_father_line = ($user['is_self']||$user['is_descendant']||$user['is_father'])?1:0;
 		return array(
 			'gedcom_id'=>$user['gedcom_id'], 
 			'facebook_id'=>$user['facebook_id'], 
@@ -396,7 +396,7 @@ class JMBUserTree {
 		if(!empty($families)){
 			foreach($families as $family){
 				$spouse = $family['spouse'];
-				if($spouse&&!isset($object[$spouse])&&$this->_GedcomId!=$spouse){
+				if($spouse&&!isset($objects[$spouse])&&$this->_GedcomId!=$spouse){
 					$objects[$spouse] = $types;
 					$this->_setFamilyLineChildrens($objects, $spouse, $types);
 					foreach($types as $type){
@@ -448,7 +448,7 @@ class JMBUserTree {
 				$objects[$el['individuals_id']] = array();
 			}
 		}		
-		//ksort($objects);
+		ksort($objects);
 		return $objects;
 	}
 	/**

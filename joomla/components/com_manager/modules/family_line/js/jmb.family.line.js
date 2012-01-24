@@ -12,19 +12,19 @@ function JMBFamilyLine(){
 			pencil:true
 		},
 		"Descendants":{
-			select:false,
+			select:true,
 			eye:false,
 			pencil:false
 		},
 		"Families":{
 			select:false,
 			eye:false,
-			pencil:false
+			pencil:true
 		},
 		"Ancestors":{
 			select:false,
 			eye:false,
-			pencil:false
+			pencil:true
 		}
 	}
 		
@@ -45,6 +45,33 @@ function JMBFamilyLine(){
 			}
 		},
 		get:{
+			opt:function(){
+				var response = {};
+				jQuery(cont).find('div.icon').each(function(i,e){
+					var list;
+					if(jQuery(e).attr('id')!='button'){
+						list = jQuery(e).attr('class').split(/\s+/);
+						if(!response[list[1]]) response[list[1]] = {};
+						if(jQuery(e).hasClass('active')){
+							response[list[1]][list[2]] = fn.get.bg(e);
+						} else {
+							response[list[1]][list[2]] = false;
+						}
+					}
+				});
+				return response;
+			},
+			bg:function(div){
+				var rgb = jQuery(div).css('backgroundColor');
+				var parts = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+				delete(parts[0]);
+				for (var i = 1; i <= 3; ++i) {
+					parts[i] = parseInt(parts[i]).toString(16);
+					if (parts[i].length == 1) parts[i] = '0' + parts[i];
+				}
+				color = '#' + parts.join('');
+				return color;
+			}
 		},
 		draw:{
 			_canvas:null,
@@ -98,7 +125,8 @@ function JMBFamilyLine(){
 		click:function(){
 			var icons = jQuery(cont).find('div.icon');
 			jQuery(icons).click(function(){				
-				var list = this.classList;
+				//var list = this.classList;
+				var list = jQuery(this).attr('class').split(/\s+/);
 				switch(list[2]){
 					case 'pencil':
 						if(jQuery(this).hasClass('active')){
@@ -121,29 +149,75 @@ function JMBFamilyLine(){
 						}
 					break;
 				}		
-				if(list[1] != 'settings') objPull.event(this);
+				if(list[1] != 'settings') objPull.change(this);
 			});
 		},
 		pull:function(){
 			var	sub = this,
-				pull = [];
+				pull = {};
 			return {
+				clear:function(){
+					pull = {};
+				},
 				bind:function(name, callback){
 					var object = { id:name, func:callback }
-					pull.push(object);
+					pull[name] = object;
 				},
-				event:function(object){
-					var	list = object.classList,
-						key,
-						ev;
-						
-					ev = {
-						line:list[1],
-						type:list[2],
-						active:jQuery(object).hasClass('active')
+				opt:function(){
+					var response = {};
+					jQuery(cont).find('div.icon').each(function(i,e){
+						var list;
+						if(jQuery(e).attr('id')!='button'){
+							list = jQuery(e).attr('class').split(/\s+/);
+							if(!response[list[1]]) response[list[1]] = {};
+							response[list[1]][list[2]] = jQuery(e).hasClass('active');
+						}
+					});
+					return response;
+				},
+				bg:function(div){
+					var rgb = jQuery(div).css('backgroundColor');
+					var parts = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+					delete(parts[0]);
+					for (var i = 1; i <= 3; ++i) {
+						parts[i] = parseInt(parts[i]).toString(16);
+						if (parts[i].length == 1) parts[i] = '0' + parts[i];
+					}
+					color = '#' + parts.join('');
+					return color;
+				},
+				jsonString:function(status){
+					var json_string = '{';
+					for(var key in status){
+						var el = status[key];
+						json_string += '"'+key+'":{';
+						for(var k in el){
+							json_string += '"'+k+'":"'+((el[k])?1:0)+'",'; 
+						}
+						json_string = json_string.substr(0, json_string.length-1);
+						json_string +='},';
+					}
+					json_string = json_string.substr(0, json_string.length-1);
+					json_string += '}';
+					return json_string;
+				},
+				change:function(div){
+					var	status, opt, list;
+					list = jQuery(div).attr('class').split(/\s+/);
+					opt = this.opt();
+					status = {
+						_active:jQuery(div).hasClass('active'),
+						_line:list[1],
+						_type:list[2],
+						_background:this.bg(div),
+						cont:cont,
+						div:div,
+						classList:list,
+						opt:opt,
+						jsonString:this.jsonString(options)	
 					}
 					for(key in pull){
-						pull[key].func(ev);
+						pull[key].func(status)
 					}
 				}
 			}
@@ -196,10 +270,12 @@ function JMBFamilyLine(){
 	objPull = fn.pull();	
 
 	//public
+	this.get = fn.get;
 	this.bind = function(name, callback){
 		objPull.bind(name, callback);
 	}
 	this.init = function(page){
+		objPull.clear();
 		fn.ajax('get',null, function(res){
 			var json = jQuery.parseJSON(res.responseText);
 			var title = page.page_info.title;
