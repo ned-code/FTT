@@ -26,7 +26,7 @@ class JMBLogin {
 			$_SESSION['jmb']['tid'] = null;
 			$_SESSION['jmb']['gid'] = null;
 			$_SESSION['jmb']['permission'] = null;
-			$_SESSION['jmb']['alias'] = 'home';
+			$_SESSION['jmb']['alias'] = 'famous-family';
 			return true;
 		}
 	}

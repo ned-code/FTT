@@ -891,7 +891,7 @@ JMBProfile.prototype = {
 				sb._('<div class="jmb-dialog-photos-content">');
 					sb._('<div class="buttons">');
 						sb._('<form id="jmb:profile:photos" method="post" target="iframe-profile">');
-							sb._('<input name="upload" type="file"><input type="submit" value="Send">');
+							sb._('<input name="upload" type="file"><input type="submit" value="Upload">');
 						sb._('</form>');
 						sb._('<div class="switch-avatar">');
 							sb._('<input id="set" type="button" value="Set Avatar" style="display:none;" >');

@@ -20,12 +20,12 @@ class JMBFamilyLine {
 	protected function size($tree_id, $gedcom_id){
 		$usertree = $this->host->usertree->load($tree_id, $gedcom_id);
 		//father side
-		$sql_string = "SELECT member_id FROM #__mb_family_line WHERE tid = ? AND gedcom_id = ? AND is_father = 1";
+		$sql_string = "SELECT member_id FROM #__mb_family_line WHERE tid = ? AND gedcom_id = ? AND is_father = 1 OR is_descendant = 1";
 		$this->db->setQuery($sql_string, $tree_id, $gedcom_id);
 		$rows = $this->db->loadAssocList();
 		$father = $this->getCount($rows, $usertree);
 		//mother side
-		$sql_string = "SELECT member_id FROM #__mb_family_line WHERE tid = ? AND gedcom_id = ? AND is_mother = 1";
+		$sql_string = "SELECT member_id FROM #__mb_family_line WHERE tid = ? AND gedcom_id = ? AND is_mother = 1 OR is_descendant = 1";
 		$this->db->setQuery($sql_string, $tree_id, $gedcom_id);
 		$rows = $this->db->loadAssocList();
 		$mother = $this->getCount($rows, $usertree);

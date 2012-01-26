@@ -11,7 +11,11 @@
 	border-radius: 2px 2px 2px 2px;
     	height: 45px;
 }
-
+.jmb-header-container.familytreetop{
+	background: none repeat scroll 0 0 #5C8E40;
+	border-radius: 2px 2px 2px 2px;
+    	height: 45px;
+}
 .jmb-header-logo {
 	-webkit-user-select: none;
 	-khtml-user-select: none;
@@ -31,6 +35,11 @@
 .jmb-header-container.famous-family .jmb-header-logo{
 	background: url("../imgs/famous-family.png") no-repeat scroll 0 0 transparent;
 }
+.jmb-header-container.familytreetop .jmb-header-logo{
+	background: url("../imgs/logo.png") no-repeat scroll 0 0 transparent;
+	height: 45px;
+	width: 190px;
+}
 
 .jmb-header-expand {
 	-webkit-user-select: none;
@@ -48,8 +57,8 @@
 	width: 40px;
 }
 .jmb-header-expand.familytreetop{
-	background: url("../imgs/expand.png") no-repeat scroll 0 0 transparent;
+	background: url("../imgs/expand.png") no-repeat scroll -40px 0 transparent;
 }
 .jmb-header-expand.facebook {
-	background: url("../imgs/expand.png") no-repeat scroll -40px 0 transparent;
+	background: url("../imgs/expand.png") no-repeat scroll 0 0 transparent;
 }

@@ -2,7 +2,7 @@ function JMBLogin(){
 	var	module = this,
 		fn,
 		fb_logged;
-		
+
 	if(window!=window.top){
 		module.init = function(callback){ 
 			host.callMethod("login", "JMBLogin", 'user', null, function(res){
@@ -177,7 +177,7 @@ function JMBLogin(){
 					window.location.reload();
 				});
 			});
-			jQuery('div.jmb_header_body').append(htmlObject);
+			jQuery('div.jmb-header-container').append(htmlObject);
 		},
 		user:function(callback){
 			var json, object;

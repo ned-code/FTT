@@ -588,6 +588,7 @@ class JMBController extends JController
         			case 'myfamily':
         				if(isset($_SESSION['jmb']['login_type'])&&$_SESSION['jmb']['login_type']=='famous_family'){
         					$host->gedcom->relation->check($_SESSION['jmb']['tid'], $_SESSION['jmb']['gid']);    
+        					$host->usertree->saveFamilyLine($_SESSION['jmb']['tid'], $_SESSION['jmb']['gid'], $_SESSION['jmb']['permission']);
         					$host->usertree->init($_SESSION['jmb']['tid'], $_SESSION['jmb']['gid'], $_SESSION['jmb']['permission']);
         				} else {
 						$link = $this->check_user_in_system($logged);

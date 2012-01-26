@@ -79,6 +79,7 @@
 .jmb-profile-tooltip-container{
 	margin-left: 10px;
 	margin-right: 10px;
+	padding-left: 35px;
 	color:#2945c0;
 	text-align:left;
 }
@@ -120,13 +121,12 @@
 	border-left: 1px solid #999999;
 	border-right: 1px solid #999999;
 	border-top: 1px solid #999999;
-	cursor: pointer;
-	left: -18px;
-	padding-left: 16px;
+	left: -53px;
+	padding-left: 5px;
 	padding-top: 5px;
-	padding-bottom: 5px;
+	padding-bottom: 4px;
 	position: relative;
-	width: 199px;
+	width: 210px;
 	position:relative;
 	top:8px;
 }
@@ -134,34 +134,18 @@
 	margin-top: 5px;
 }
 .jmb-profile-tooltip-send-img{
-	background: url("../image/email.jpg") no-repeat scroll 0 0 transparent;
-	height: 14px;
-	margin: 3px;
-	width: 14px;
+	background: url("../image/email.png") no-repeat scroll 0 0 transparent;
+	height: 31px;
+	width: 31px;
+	margin-right: 10px;
 }
-.jmb-profile-tooltip-options{
-	height:40px;
-	margin-top:10px;
-	margin-left: 3px;
+.jmb-profile-tooltip-send span.info{
+	color: black;
 }
-.jmb-profile-tooltip-options span[type="title"]{
-	background: url("../image/gear.jpg") no-repeat scroll 0 0 transparent;
-	padding-left:20px;
-	cursor:pointer;
-}
-.jmb-profile-tooltip-options table{
-	margin-left:15px;
-	
-}
-.jmb-profile-tooltip-options-delete {
-	height:14px;
-	margin-top: 5px;
-}
-.jmb-profile-tooltip-options-delete span[type="delete"]{
-	background: url("../image/remove.gif") no-repeat scroll 0 0 transparent;
-	padding-left:20px;
-	padding-bottom: 1px;
-	cursor:pointer;
+.jmb-profile-tooltip-send span.click{
+	color: #2D4BDF;
+	cursor: pointer;
+	font-weight: bold;
 }
 .jmb-profile-tooltip-close {
 	cursor:pointer;

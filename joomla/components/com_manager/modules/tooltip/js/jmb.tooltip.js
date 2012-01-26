@@ -15,7 +15,7 @@ function JMBTooltip(){
 			wrapperzIndex:    997,
 			cssStyles: {
 				fontFamily: '"lucida grande",tahoma,verdana,arial,sans-serif', 
-				fontSize: '11px'
+				fontSize: '12px'
 			}
 		}
 	};
@@ -31,14 +31,14 @@ function JMBTooltip(){
 			cornerRadius: 0, 
 			trigger: 'none',
 			positions:['left','right','bottom'],
-			closeWhenOthersOpen: false,
+			closeWhenOthersOpen: true,
 			textzIndex:       999,
 			boxzIndex:        998,
 			wrapperzIndex:    997,
 			width:405,
 			cssStyles: {
 				fontFamily: '"lucida grande",tahoma,verdana,arial,sans-serif', 
-				fontSize: '11px'
+				fontSize: '12px'
 			}
 		}
 	};
@@ -100,11 +100,11 @@ JMBTooltip.prototype = {
 								sb._('<div><span>Name:</span> <span class="text">')._(name)._('</span></div>');
 								if(get.is_birth){
 									place = get.place('birth');
-									sb._('<div><span>Born:</span> <span class="text">')._(birthday)._((place.length!=0)?' '+place.place_name:'')._('</span></div>');
+									sb._('<div><span>Born:</span> <span class="text">')._(birthday)._((place.length!=0)?' ('+place.city+','+place.country+')':'')._('</span></div>');
 								}
 								if(get.is_death){
 									place = get.place('death');
-									sb._('<div><span>Deceased:</span> <span class="text">')._(death)._((place.length!=0)?' '+place.place_name:'')._('</span></div>');
+									sb._('<div><span>Deceased:</span> <span class="text">')._(death)._((place.length!=0)?' ('+place.city+','+place.country+')':'')._('</span></div>');
 								}
 								if(relation){
 									sb._('<div><span>Relation:</span> <span class="text">')._(relation)._('</span></div>');
@@ -153,7 +153,6 @@ JMBTooltip.prototype = {
 				sb._("<div class='jmb-profile-tooltip-bs'><span>Brother or Sister</span></div>");
 				sb._("<div class='jmb-profile-tooltip-child'><span>Child</span></div>");
 			sb._('</fieldset></div>');
-			sb._("<div class='jmb-profile-tooltip-options'><span type='title'>More Options</span><table style='display:none;'><tr><td><div class='jmb-profile-tooltip-options-delete'><span type='delete'>Delete this Person</span></div></td></tr></table></div>")
 			if(user.facebook_id == '0'){
 				sb._("<div class='jmb-profile-tooltip-send'>");
 					sb._('<table>');
@@ -161,10 +160,10 @@ JMBTooltip.prototype = {
 							sb._('<td rowspan="2">');
 								sb._("<div class='jmb-profile-tooltip-send-img'>&nbsp;</div>");
 							sb._('</td>');
-							sb._('<td><span> ')._(nick)._(' is not registred.</span></td>');
+							sb._('<td><span class="info">')._(nick)._(' is not registred.</span></td>');
 						sb._('</tr>');
 						sb._('<tr>');
-							sb._("<td><span>Send ")._(nick)._(" an invations.</span></td>");
+							sb._('<td><span  class="click">Send ')._(nick)._(" an invations.</span></td>");
 						sb._('</tr>');
 					sb._('</table>');
 				sb._('</div>');
@@ -353,7 +352,7 @@ JMBTooltip.prototype = {
 		var class_name;
 		switch(type){
 			case "view": class_name = '.jmb-tooltip-view-send .send'; break;
-			case "edit": class_name = '.jmb-profile-tooltip-send table'; break;
+			case "edit": class_name = '.jmb-profile-tooltip-send span.click'; break;
 			default: return;
 		}
 		jQuery(cont).find(class_name).click(function(){

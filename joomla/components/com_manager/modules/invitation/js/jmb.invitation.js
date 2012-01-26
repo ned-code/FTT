@@ -49,7 +49,7 @@ JMBInvitation.prototype = {
 		return {
 			_month:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
 			gedcom_id:user.gedcom_id,
-			relation:(user.relation!=null)?relation:false,
+			relation:(user.relation!=null)?user.relation:false,
 			full_name:(function(){
 				var	first_name = user.first_name,
 					middle_name = user.middle_name,

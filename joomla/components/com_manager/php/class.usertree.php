@@ -396,11 +396,11 @@ class JMBUserTree {
 		if(!empty($families)){
 			foreach($families as $family){
 				$spouse = $family['spouse'];
-				if($spouse&&!isset($objects[$spouse])&&$this->_GedcomId!=$spouse){
+				if($spouse&&!isset($objects[$spouse])){
 					$objects[$spouse] = $types;
 					$this->_setFamilyLineChildrens($objects, $spouse, $types);
-					foreach($types as $type){
-						$this->_setFamilyLineParents($objects, $el['father']['gedcom_id'], $type);
+					foreach($types as $key => $type){
+						$this->_setFamilyLineParents($objects, $spouse, $key);
 					}
 				}
 			}
@@ -423,8 +423,8 @@ class JMBUserTree {
 		$objects = array();
 		//start set line
 		$objects[$gedcom_id] = array('is_self'=>true);
+		$this->_setFamilyLineChildrens($objects, $gedcom_id, array('is_descendant'=>true));
 		$this->_setFamilyLineSpouses($objects, $gedcom_id, array('is_spouse'=>true));
-		$this->_setFamilyLineChildrens($objects, $gedcom_id, array('is_descendant'=>true,'is_mother'=>true,'is_father'=>true));
 		$this->_setFamilyLineSiblings($objects, $gedcom_id, array('is_mother'=>true,'is_father'=>true));		
 		$parents = $this->_getParents($gedcom_id);
 		if(!empty($parents)){
@@ -435,6 +435,8 @@ class JMBUserTree {
 				}
 			}
 		}
+		
+		
 		foreach($objects as $id => $types){
 			$this->_setFamilyLineChildrens($objects, $id, $types);
 		}
@@ -514,7 +516,7 @@ class JMBUserTree {
 		$sql_string = "SELECT value FROM #__mb_cash WHERE tree_id = ? AND individuals_id = ?";
 		$this->db->setQuery($sql_string, $tree_id, $gedcom_id);
 		$rows = $this->db->loadAssocList();
-		return $this->uncompress($rows[0]['value']);
+		return (!empty($rows))?$this->uncompress($rows[0]['value']):null;
 	}	
 	/**
 	*

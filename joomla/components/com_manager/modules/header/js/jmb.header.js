@@ -4,11 +4,13 @@ function JMBHeader(){
 		cont,
 		parent, 
 		alias,
+		type,
 		exists;
 
 	cont = jQuery('<div class="jmb-header-container"><div class="jmb-header-logo" style="display:none;">&nbsp;</div><div style="display:none;" class="jmb-header-expand">&nbsp;</div></div>');
 	parent = jQuery('div#.content div.header');	
-	alias = jQuery('body').attr('_alias');
+	alias = jQuery(document.body).attr('_alias');
+	type = jQuery(document.body).attr('_type');
 
 	exists = {
 		"famous-family":true,
@@ -39,6 +41,12 @@ function JMBHeader(){
 					}
 				}, 
 				logo:function(){
+					if(window!=window.top){
+						return 'familytreetop';
+					}
+					if(type=='famous_family'){
+						return 'famous-family';
+					}
 					return alias;
 				}
 			}
@@ -66,7 +74,7 @@ function JMBHeader(){
 		},
 		init:function(){
 			if(exists[alias]){
-				if(alias == 'myfamily'){
+				if(alias == 'myfamily' && type != 'famous_family'){
 					this.show.expand();
 					this.click.expand();
 				}
