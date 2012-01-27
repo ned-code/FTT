@@ -116,7 +116,7 @@ img.jmb-families-avatar.view{
 	height: 28px;
 	left: 39px;
 	position: absolute;
-	top: -26px;
+	top: -24px;
 	width: 1px;
 }
 .jmb-families-arrow-up.small{
@@ -127,7 +127,7 @@ img.jmb-families-avatar.view{
 .jmb-families-arrow-left {
 	background: url("arrow.gif") no-repeat scroll 0 -27px transparent;
 	height: 1px;
-	left: 112px;
+	left: 114px;
 	position: absolute;
 	top: 120px;
 	width: 38px;
@@ -135,7 +135,7 @@ img.jmb-families-avatar.view{
 .jmb-families-arrow-right {
 	background: url("arrow.gif") no-repeat scroll 0 -27px transparent;
 	height: 1px;
-	left: -38px;
+	left: -34px;
 	position: absolute;
 	top: 120px;
 	width: 38px;

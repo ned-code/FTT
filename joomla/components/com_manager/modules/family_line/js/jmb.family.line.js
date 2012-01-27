@@ -233,7 +233,7 @@ function JMBFamilyLine(){
 				sb._('<table>');
 					sb._('<tr>');
 						sb._('<td class="left"></td>');
-						if(settings.select) sb._('<td><div class="icon mother select">&nbsp;</div></td>');
+						if(settings.select) sb._('<td><div class="icon mother select active">&nbsp;</div></td>');
 						if(settings.pencil) sb._('<td><div class="icon mother pencil">&nbsp;</div></td>');
 						if(settings.eye) sb._('<td><div class="icon mother eye active">&nbsp;</div></td>');
 						sb._('<td><div class="title mother"><span>Mother</span><div id="chart"><canvas width="21px" height="21px"></canvas></div></div></td>');
