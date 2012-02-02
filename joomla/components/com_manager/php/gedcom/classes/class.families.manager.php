@@ -153,8 +153,8 @@ class FamiliesList{
         /**
         *
         */
-        public function getFamilyIdByParnerId($husb, $wife){
-        	$this->db->setQuery('SELECT id FROM #__mb_families WHERE husb=? OR wife=?', $husb, $wife);
+        public function getFamilyIdByPartnerId($husb, $wife){
+        	$this->db->setQuery('SELECT id FROM #__mb_families WHERE husb=? AND wife=?', $husb, $wife);
         	$rows = $this->db->loadAssocList();
         	return ($rows!=null)?$rows[0]['id']:null;
         }

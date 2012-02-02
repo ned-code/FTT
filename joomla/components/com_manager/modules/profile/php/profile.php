@@ -308,12 +308,10 @@ class JMBProfile {
 						$husb = $request['spouse'];
 						$wife = $member->Id;
 					}
-					$family_id = $this->host->gedcom->families->getFamilyIdByParnerId($husb, $wife);
+					$family_id = $this->host->gedcom->families->getFamilyIdByPartnerId($husb, $wife);
 					$family = $this->host->gedcom->families->get($family_id);
-				} else {
-					$family = $this->createFamily($sircar, $spouse);
-				}
-				$this->host->gedcom->families->addChild($family->Id, $individual->Id);
+					$this->host->gedcom->families->addChild($family->Id, $individual->Id);
+				} 
 			break;
 		}
 		
