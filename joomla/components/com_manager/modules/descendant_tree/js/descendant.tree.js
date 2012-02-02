@@ -18,7 +18,14 @@ function JMBDescendantTreeObject(obj){
 	module.profile = new DescendantTreeProfile(module);
 	module.buttons = module.board();
 	
-	module.check(id);		
+	module.check(id);	
+
+	storage.family_line.bind('JMBDescendantTreeObject', function(res){
+		module.clear();
+		module.dhxTree.deleteChildItems(0);
+		module.loadTree(module.dhxTree, res._line);
+	});
+	
 }
 
 JMBDescendantTreeObject.prototype = {
@@ -26,6 +33,12 @@ JMBDescendantTreeObject.prototype = {
 		host.callMethod("descendant_tree", "JMBDescendantTree", func, params, function(res){
 				callback(res);
 		})
+	},
+	clear:function(){
+		module.members = null;
+		module.select = null;
+		module.first = null;
+		module.lang = null;
 	},
 	overlay:function(){
 		var	module = this,
@@ -137,18 +150,6 @@ JMBDescendantTreeObject.prototype = {
 			dhxTree.loadXMLString(json.xml);
 			dhxTree.openAllItems(0);
 			storage.core.modulesPullObject.unset('JMBDescendantTreeObject');
-		});
-	},
-	loadTreeById:function(id){
-		/* 
-		* to fix;
-		*/
-		var dhxTree = this.dhxTree;
-		dhxTree.deleteChildItems('0');
-		dhxTree.deleteItem('0');
-		this._ajax('getTreeById', id, function(res){
-			dhxTree.loadXMLString(res.responseText);
-			dhxTree.openAllItems(0);
 		});
 	},
 	click:function(element){

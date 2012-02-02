@@ -2,6 +2,7 @@ function JMBRecentVisitorsObject(obj){
 	var parent = this;
 	var content = null;
 	var sb = host.stringBuffer();
+	var objs = null;
 	
 	var createBody = function(json){
 		var lang = json.lang;
@@ -57,7 +58,16 @@ function JMBRecentVisitorsObject(obj){
 		var objects = json.objects;
 		for(var key in objects){			
 			var user = objects[key].user;
-			var li = jQuery(st.clear()._('<li id="')._(user.gedcom_id)._('" ><div class="avatar">')._(get_avatar(objects[key]))._('</div></li>').result());
+			st.clear();
+			st._('<li id="')._(user.gedcom_id)._('" >');
+				st._('<div id="father_line" style="border: 2px solid #F5FAE6;">');
+					st._('<div id="mother_line" style="border: 2px solid #F5FAE6;">')
+						st._('<div class="avatar">')._(get_avatar(objects[key]))._('</div>');
+					st._('</div>');
+				sb._('</div>')
+			st._('</li>');
+			var html = st.result()
+			var li = jQuery(html);
 			jQuery(ul).append(li);
 			init_tipty_tooltip(json.time, objects[key], li);
 		}
@@ -82,6 +92,7 @@ function JMBRecentVisitorsObject(obj){
 				storage.core.modulesPullObject.unset('JMBRecentVisitorsObject');
 				return jQuery(obj).remove();
 			}
+			objs = json.objects;
 			parent.lang = json.lang;
 			content = createBody(json);
 			var ul = jQuery('<ul></ul>');
@@ -95,6 +106,44 @@ function JMBRecentVisitorsObject(obj){
 	
 	render(function(){
 		storage.core.modulesPullObject.unset('JMBRecentVisitorsObject');
+	});
+	
+	// family line part
+		
+	storage.family_line.bind('JMBRecentVisitorsObject', function(res){
+		jQuery(content[1]).find('li').each(function(i, el){
+			var type = 'is_'+res._line+'_line';
+			var id = jQuery(el).attr('id');
+			var object = objs[id];
+			var user = object.user;
+			switch(res._type){
+				case "pencil":
+					if(parseInt(user[type])){
+						var bg_color = (res._active)?res._background:"#F5FAE6";
+						jQuery(el).find('div#'+res._line+'_line').css('border', '2px solid '+bg_color);		
+					}
+				break;
+				
+				case "eye":
+					if(parseInt(user.is_father_line)&&parseInt(user.is_mother_line)){
+						var opt = [res.opt.mother.eye, res.opt.father.eye];
+						if(!opt[0]&&!opt[1]){
+							jQuery(el).hide();
+						} else if(opt[0]||opt[1]){
+							jQuery(el).show();
+						}
+					} else {
+						if(parseInt(user[type])){
+							if(res._active){
+								jQuery(el).show();
+							} else {
+								jQuery(el).hide();
+							}
+						}
+					}
+				break;
+			}
+		});		
 	});
 }
 

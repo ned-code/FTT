@@ -18,6 +18,40 @@ function JMBThisMonthObject(obj){
 			storage.core.modulesPullObject.unset('JMBThisMonthObject');
 		});
 	});
+	
+	storage.family_line.bind('JMBThisMonthObject', function(res){
+		jQuery(self.obj).find('div.person').each(function(i,el){
+			var type = 'is_'+res._line+'_line';
+			var id = jQuery(el).attr('id');
+			var object = self.json.members[id];
+			var user = object.user;
+			switch(res._type){
+				case "pencil":
+					//
+				break;
+				
+				case "eye":
+					var element = jQuery(el).parents('tr').filter(':first');
+					if(parseInt(user.is_father_line)&&parseInt(user.is_mother_line)){
+						var opt = [res.opt.mother.eye, res.opt.father.eye];
+						if(!opt[0]&&!opt[1]){
+							jQuery(element).hide();
+						} else if(opt[0]||opt[1]){
+							jQuery(element).show();
+						}
+					} else {
+						if(parseInt(user[type])){
+							if(res._active){
+								jQuery(element).show();
+							} else {
+								jQuery(element).hide();
+							}
+						}
+					}
+				break;
+			}
+		});
+	});
 }
 
 JMBThisMonthObject.prototype = {
@@ -74,17 +108,17 @@ JMBThisMonthObject.prototype = {
 	_createTableView:function(){
 		return jQuery('<table><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table><div class="empty" style="display:none;"><div class="text">No events to show for this month</div><div class="button"><span>How do i add events?</span></div></div>');
 	},
-	_createEventTableView:function(id, title){
-		return jQuery(['<div id="',id,'"><div class="jmb-this-month-view">',title,'</div><div class="jmb-this-month-content"><table></table></div></div>'].join(''));
+	_createEventTableView:function(id, type, title){
+		return jQuery(['<div id="',id,'"><div class="jmb-this-month-view ',type,'">',title,'</div><div class="jmb-this-month-content"><table></table></div></div>'].join(''));
 	},
 	_createBody:function(json){
 		var self = this;
 		var c = self.content;
 		var lang = json.language;
 		c.table = self._createTableView();
-		c.birth = self._createEventTableView('jmb-this-month-birth', lang.BIRTHDAYS+':');
-		c.death = self._createEventTableView('jmb-this-month-death', lang.REMEMBER+':');
-		c.marr = self._createEventTableView('jmb-this-month-marr', lang.ANNIVERSARIES+':');
+		c.birth = self._createEventTableView('jmb-this-month-birth', 'birthday', lang.BIRTHDAYS+':');
+		c.death = self._createEventTableView('jmb-this-month-death', 'deceased', lang.REMEMBER+':');
+		c.marr = self._createEventTableView('jmb-this-month-marr', 'marriage', lang.ANNIVERSARIES+':');
 		jQuery(c.table[0].rows[0].cells[0]).append(c.birth);
 		jQuery(c.table[0].rows[2].cells[0]).append(c.death);
 		jQuery(c.table[0].rows[1].cells[0]).append(c.marr);

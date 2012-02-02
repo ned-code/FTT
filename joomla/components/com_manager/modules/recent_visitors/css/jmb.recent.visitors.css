@@ -27,14 +27,12 @@
 }
 .jmb-rv-content ul li{
 	display: inline-block;
+	margin-left: 1px;
 }
 .jmb-rv-content ul li div.avatar{
-	 border: 1px solid white;
-	 cursor: pointer;
-	 height: 32px;
-	 margin-left: 3px;
-	 margin-top: 5px;
-	 width: 32px;
+	cursor: pointer;
+	height: 32px;
+	width: 32px;
 }
 .jmb-rv-button {
 	color: blue;
