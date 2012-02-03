@@ -2,6 +2,8 @@ function JMBLatestUpdatesObject(offsetParent){
 	var	module = this,	
 		cont,
 		content,
+		data,
+		usertree,
 		fn;
 	
 	fn = {
@@ -70,13 +72,48 @@ function JMBLatestUpdatesObject(offsetParent){
 	}
 	
 	fn.start(function(json){
+		data = json.data;
+		usertree = json.usertree;
 		cont = fn.create(json);
 		content = fn.content(json);
 		jQuery(cont[1]).append(content);
 		jQuery(offsetParent).append(cont);
 		fn.finish();
 	});
+	
+	storage.family_line.bind('JMBLatestUpdatesObject', function(res){
+		if(res._type!= 'pencil') return false;
+		jQuery(content).find('li').each(function(i, el){
+			var type = 'is_'+res._line+'_line';
+			var id = jQuery(el).attr('id');
+			var object = usertree[id];
+			var user = object.user;
+			var span = jQuery(el).find('span.value');
+			if(parseInt(user.is_father_line)&&parseInt(user.is_mother_line)){
+				var opt = storage.family_line.get.opt();
+				if(opt.mother.pencil&&opt.father.pencil){
+					jQuery(span).addClass('jmb-familiy-line-bg');
+				} else {
+					jQuery(span).removeClass('jmb-familiy-line-bg');
+					if(opt.mother.pencil||opt.father.pencil){
+						if(opt[res._line].pencil){
+							jQuery(span).css('background-color', opt[res._line].pencil);	
+						} else {
+							jQuery(span).css('background-color', (opt.mother.pencil)?opt.mother.pencil:opt.father.pencil);
+						}
+					} else {
+						jQuery(span).css('background-color', 'white');	
+					}
+				}
+			} else {
+				if(parseInt(user[type])){
+					jQuery(span).css('background-color', res._background);	
+				}
+			}
+		});
+	});
 }
+
 
 
 

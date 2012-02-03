@@ -87,6 +87,8 @@
 	background: none repeat scroll 0 0 #ffb76f;
 }
 .jmb-family-line-container .title span {
+	margin-left: 3px;
+	margin-right: 3px;
 	position: relative;
 	top: -5px;
 }
@@ -104,4 +106,9 @@
 	border-radius: 0 3px 3px 0;
 	margin-left: 2px;
 	padding-left: 3px;
+}
+
+/* Attach object class */
+.jmb-familiy-line-bg {
+	background: url("../images/bg.png") repeat scroll 0 0 transparent;
 }
