@@ -1,7 +1,15 @@
 #JMBAncestorsContainer{
 	position:relative;
 }
-.jmb-ancestors-container .home {
+div#jit-label div.node{
+	background: #C3C3C3;
+}
+.jmb-ancestors-overlay{
+	position:absolute;
+	top:0;
+	left:0;
+}
+.jmb-ancestors-home {
 	background: url("../images/icon-home.png") no-repeat scroll 0 0 transparent;
 	cursor: pointer;
 	height: 16px;
@@ -45,7 +53,7 @@
 }
 .jit-node-item .data{
 	font-family: Calibri,Tahoma;
-	font-size: 12px;
+	font-size: 11px;
 	height: 80px;
 	margin-left: -2px;
 	margin-top: 1px;

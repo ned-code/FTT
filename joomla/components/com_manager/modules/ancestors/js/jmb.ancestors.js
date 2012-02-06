@@ -19,21 +19,21 @@ function JMBAncestorsObject(obj){
 	module.user = null;
 	module.st = null;
 	module.objects = {};	
-	module.active = null;
+	module.spouse = null;
+	module.nodes = null;
 	
 	module.ajax('get', null, function(res){
 		json = jQuery.parseJSON(res.responseText);
 		module.usertree = json.usertree;
 		module.user = json.user;
 		module.tree = module.getTree(json.user);
-		module.st = module.init();
+		module.init();
 		storage.core.modulesPullObject.unset('JMBAncestorsObject');
 	});
 	
 	jQuery(home_button).click(function(){
 		if(module.user==null) return false;
-		if(module.active == module.st.root) return false;
-		module.active = module.st.root;
+		if(module.st.clickedNode.id == module.st.root) return false;
 		module.st.onClick(module.st.root);
 		return false;
 	})
@@ -101,13 +101,6 @@ JMBAncestorsObject.prototype = {
 				jQuery(label).find('.jit-node-arrow').click(function(){
 					id = parseInt(jQuery(this).attr('id'));
 					if(id!=0){
-						/*
-						tree = $jit.json.getSubtree(module.tree, id);
-						storage.tooltip.cleaner(function(){
-							module.render(tree);
-						});
-						*/
-						module.active = id;
 						module.st.onClick(id);
 					}
 				});
@@ -318,10 +311,10 @@ JMBAncestorsObject.prototype = {
 			//transition: $jit.Trans.Quart.easeInOut,
 			transition: $jit.Trans.Quint.easeOut,
 			Node: {
-				height: 80,
-				width: 210,
+				height: 84,
+				width: 214,
 				type: 'rectangle',
-				color:'#c3c3c3',  
+				color:'#C3C3C3',  
 				lineWidth: 2,  
 				align:"center",  
 				overridable: true
@@ -333,13 +326,41 @@ JMBAncestorsObject.prototype = {
 				overridable: true
 			},
 			onBeforeCompute: function(node){  
+				//overlay
 				var	width = jQuery(module.parent).width(), 
 					height  = jQuery(module.parent).height();
 				jQuery(module.overlay).css('width', width+'px').css('height', height+'px');
 				jQuery(module.parent).append(module.overlay);
+				//set spouse				
+				var parent = node.getParents();
+				if(parent.length!=0){
+					var ptree = $jit.json.getSubtree(module.tree, parent[0].id);
+					var id = (ptree.children[0].id != node.id)?ptree.children[0].id:ptree.children[1].id;
+					module.spouse = module.st.graph.getNode(id);
+				} else {
+					module.spouse = null;
+				}
+					
+				//set active nodes
+				var subtree = $jit.json.getSubtree(module.tree, node.id);
+				var nodes = {};
+				var set_node = function(tr, level){
+					if(level == 3) return false; 
+					nodes[tr.id] = tr.id;
+					if(tr.children!=0){
+						set_node(tr.children[0], level + 1);
+						set_node(tr.children[1], level + 1);
+					}
+				}
+				set_node(subtree, 0);
+				module.nodes = nodes;				
 			},  
 			onAfterCompute: function(){  
 				jQuery(module.overlay).remove();
+				if(module.spouse != null){
+					var labels = module.st.labels.labels;
+					jQuery(labels[module.spouse.id]).fadeOut("slow");
+				}
 			},  
 			onCreateLabel: function(label, node){
 				label.id = node.id;
@@ -352,7 +373,7 @@ JMBAncestorsObject.prototype = {
 				var	left = jQuery(label).find('div.jit-node-arrow.left'),
 					right = jQuery(label).find('div.jit-node-arrow.right'),
 					data = node.data,
-					active = module.active,
+					active = module.st.clickedNode.id,
 					mod = node._depth%2;
 				
 				jQuery(left).show();
@@ -365,23 +386,28 @@ JMBAncestorsObject.prototype = {
 				}
 				
 			},
-			onBeforePlotNode:function(node){},
+			onBeforePlotNode:function(node){
+				node.Node.color = "#C3C3C3";
+				if(module.spouse != null && module.spouse.id == node.id){
+					node.Node.color = "#F5FAE6";
+				}
+			},
 			onBeforePlotLine:function(adj){
-				adj.data.$color = "#999";
-				if(adj.nodeTo.id==module.active){
-					adj.data.$color = "#F5FAE6";
+				adj.data.$color = "#F5FAE6";
+				if((adj.nodeTo.id in module.nodes || adj.nodeFrom.id in module.nodes)&&adj.nodeTo.id!=module.st.clickedNode.id){
+					adj.data.$color = "#999";
 				}
 			}
 		});
+		
+		module.st = st;
 		
 		//load json data
 		st.loadJSON(module.tree);
 		//compute node positions and layout
 		st.compute();
 		//emulate a click on the root node.
-		module.active = st.root;
-		st.select(st.root);
-		return st;	
+		st.select(st.root);	
 	},
 	render:function(tree){
 		var	module = this,
