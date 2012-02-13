@@ -109,7 +109,7 @@ JMBThisMonthObject.prototype = {
 		return false;
 	},
 	_getFamilyInfo:function(e, members){
-		var	module = this;
+		var	module = this,
 			sircar_key = e.husb,
 			spouse_key = e.wife,
 			family_key = e.id,

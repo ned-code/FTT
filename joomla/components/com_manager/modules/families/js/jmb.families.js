@@ -339,8 +339,9 @@ JMBFamiliesObject.prototype = {
 		sb._('</div>');
 		return jQuery(sb.result());
 	},
-	_child:function(child, k){
+	_child:function(child, len){
 		var	module = this,
+			k = 1,
 			sb = host.stringBuffer(),
 			usertree = module.usertree,
 			gedcom_id = child.gedcom_id,
@@ -355,7 +356,7 @@ JMBFamiliesObject.prototype = {
 			get = storage.usertree.parse(object),
 			fam_opt = storage.family_line.get.opt(),
 			date = get.birth('year'),
-			bcolor = module.spouse_border[child.family_id];
+			bcolor = (len>1)?module.spouse_border[child.family_id]:"000000";
 			
 		sb._('<div id="')._(gedcom_id)._('" class="jmb-families-child" style="height:')._(Math.round(170*k))._('px;">');
 			sb._('<div id="father_line" style="border: 2px solid ')
@@ -434,6 +435,8 @@ JMBFamiliesObject.prototype = {
 				object:usertree[gedcom_id],
 				target:e,
 				afterEditorClose:function(object){
+					var id = object.user.gedcom_id;
+					module.usertree[id] = object;
 					module.render(module.now_id);	
 				}
 			});
@@ -492,7 +495,7 @@ JMBFamiliesObject.prototype = {
 			module.spouse_border[spouses[0][0]] = module.borders[0];
 			info = module._info(object, spouses[0]);
 			jQuery(cont).find('.jmb-families-event').append(info);
-			spouse = module._spouse(spouses[0], module.borders[0]);
+			spouse = module._spouse(spouses[0], (spouses.length>1)?module.borders[0]:"000000");
 			jQuery(cont).find('.jmb-families-spouse').attr('id', spouses[0][1]).append(spouse);
 			if(spouses.length > 1){
 				for(i = 1 ; i < spouses.length ; i ++){
@@ -505,7 +508,7 @@ JMBFamiliesObject.prototype = {
 		
 		if(childrens.length!=0){
 			for(i = 0 ; i < childrens.length ; i++){
-				child = module._child(childrens[i], 1);
+				child = module._child(childrens[i], spouses.length);
 				jQuery(cont).find('.jmb-families-childs-container').append(child);
 			}
 		}	

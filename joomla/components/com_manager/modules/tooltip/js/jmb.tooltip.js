@@ -42,10 +42,8 @@ function JMBTooltip(){
 			}
 		}
 	};
-	module.objPull = {
-		length:0
-	};
 	module.idPull = {};
+	module.stPull = {};
 	module.btActive = null;
 	module.path = "/components/com_manager/modules/tooltip/image/";
 }
@@ -112,7 +110,7 @@ JMBTooltip.prototype = {
 							sb._('</td>');
 						sb._('</tr>');
 					sb._('</table>');
-					sb._('<div class="jmb-tooltip-view-switch"><span>Show full profile</span></div>')
+					sb._('<div class="jmb-tooltip-view-switch"><span id="')._(get.getcom_id)._('">Show full profile</span></div>')
 				sb._('</div>');
 				if(media!=null&&media.photos.length!=0){
 					sb._('<div class="jmb-tooltip-view-images">');
@@ -176,11 +174,14 @@ JMBTooltip.prototype = {
 		return (type==='view')?this._view(settings):this._edit(settings);
 	},
 	_setSettings:function(type, settings){
-		var 	module = this, 
+		var 	module = this,
+			id = settings.object.user.gedcom_id,
 			result = {},
 			default_settings;					
 		default_settings = (type==='view')?module.viewSettings:module.editSettings;
+
 		jQuery.extend(result, default_settings, settings);
+
 		if(settings.offsetParent){
 			result.style.offsetParent = settings.offsetParent;
 		}
@@ -190,7 +191,10 @@ JMBTooltip.prototype = {
 		if(settings.preShow){
 			result.style.preShow = settings.preShow;
 		}
-		return result;
+		
+		module.stPull[module._getId(id,type)] = result;
+
+		return module.stPull[module._getId(id,type)];
 	},
 	_images:function(settings){
 		var 	module = this,
@@ -263,88 +267,100 @@ JMBTooltip.prototype = {
 			return false;
 		});
 	},
-	_buttons:function(cont, settings, type){
+	_button_view:function(cont, settings){
+		var	module = this,
+			object = settings.object,
+			offset;
+			
+		jQuery(cont).find('div.image').mouseenter(function(){
+			jQuery(this).find('div.jmb-tooltip-view-edit').addClass('active');
+			jQuery(this).find('div.jmb-tooltip-view-facebook').addClass('active');
+		}).mouseleave(function(){
+			jQuery(this).find('div.jmb-tooltip-view-edit').removeClass('active');
+			jQuery(this).find('div.jmb-tooltip-view-facebook').removeClass('active');
+		});
+		jQuery(cont).find('div.jmb-tooltip-view-facebook').click(function(){
+			window.open('http://www.facebook.com/profile.php?id='+storage.usertree.user,'new','width=320,height=240,toolbar=1');
+		});
+		jQuery(cont).find('div.jmb-tooltip-view-switch span').click(function(){
+			var id = jQuery(this).attr('id');
+			var st = module.stPull[module._getId(id,'view')];
+			storage.profile.editor('view', {
+				object:object,
+				events:{
+					afterEditorClose:function(obj){
+						object = obj;
+						if(typeof(settings.afterEditorClose)==='function'){
+							settings.afterEditorClose(obj);
+						}
+					}
+				}
+			});
+		});
+		offset = jQuery(cont).find('div.jmb-tooltip-view-edit').offset();
+		storage.tooltip.render('edit', {
+			object:object,
+			target:jQuery(cont).find('div.jmb-tooltip-view-edit'),
+			preBuild:function(){
+				offset = jQuery('div.bt-content').find('div.jmb-tooltip-view-edit').offset();
+			},
+			preShow:function(box){
+				if(offset!=null){
+					jQuery(box).offset({top:offset.top + 20 , left:offset.left});
+				}
+			}
+		});
+	},
+	_button_edit:function(cont, settings){
 		var	module = this,
 			object = settings.object,
 			divs,
-			add,
-			class_name,
-			method,
-			offset;
+			add;
 			
-		switch(type){
-			case "edit":
-				divs = jQuery(cont).find('.jmb-profile-tooltip-fieldset div');
-				add = storage.profile.add({
-					object:object,
-					events:{
-						afterEditorClose:function(object){
-							settings.object = object;
-							if(typeof(settings.afterEditorClose)==='function'){
-								settings.afterEditorClose(object);
-							}
+		divs = jQuery(cont).find('.jmb-profile-tooltip-fieldset div');
+		add = storage.profile.add({
+			object:object,
+			events:{
+				afterEditorClose:function(object){
+					settings.object = object;
+					if(typeof(settings.afterEditorClose)==='function'){
+						settings.afterEditorClose(object);
+					}
+				}
+			}
+		});
+		jQuery(divs).each(function(index, el){
+			jQuery(el).click(function(){
+				var class_name = jQuery(this).attr('class').split('-');
+				var method = class_name[class_name.length-1]
+				add[method]().init();
+			});
+		});
+		jQuery(cont).find('.jmb-profile-tooltip-button-edit').click(function(){
+			var id = jQuery(this).parent().attr('id').split('-')[0];
+			var st = module.stPull[module._getId(id,'edit')];
+			storage.profile.editor('edit', {
+				object:st.object,
+				events:{
+					afterEditorClose:function(object){
+						st.object = object;
+						if(typeof(st.afterEditorClose)==='function'){
+							st.afterEditorClose(object);
 						}
 					}
-				});
-				jQuery(divs).each(function(index, el){
-					jQuery(el).click(function(){
-						class_name = jQuery(this).attr('class').split('-');
-						method = class_name[class_name.length-1]
-						add[method]().init();
-					});
-				});
-				jQuery(cont).find('.jmb-profile-tooltip-button-edit').click(function(){
-					storage.profile.editor('edit', {
-						object:settings.object,
-						events:{
-							afterEditorClose:function(object){
-								settings.object = object;
-								if(typeof(settings.afterEditorClose)==='function'){
-									settings.afterEditorClose(object);
-								}
-							}
-						}
-					});
-				});
+				}
+			});
+		});
+	},
+	_buttons:function(cont, settings, type){
+		var	module = this;		
+		switch(type){
+			case "edit":
+				module._button_edit(cont, settings);	
 			break;
 		
 			case "view":
-				jQuery(cont).find('div.image').mouseenter(function(){
-					jQuery(this).find('div.jmb-tooltip-view-edit').addClass('active');
-					jQuery(this).find('div.jmb-tooltip-view-facebook').addClass('active');
-				}).mouseleave(function(){
-					jQuery(this).find('div.jmb-tooltip-view-edit').removeClass('active');
-					jQuery(this).find('div.jmb-tooltip-view-facebook').removeClass('active');
-				});
-				jQuery(cont).find('div.jmb-tooltip-view-facebook').click(function(){
-					window.open('http://www.facebook.com/profile.php?id='+storage.usertree.user,'new','width=320,height=240,toolbar=1');
-				});
-				jQuery(cont).find('div.jmb-tooltip-view-switch span').click(function(){
-					storage.profile.editor('view', {
-						object:object,
-						events:{
-							afterEditorClose:function(obj){
-								object = obj;
-								if(typeof(settings.afterEditorClose)==='function'){
-									settings.afterEditorClose(obj);
-								}
-							}
-						}
-					});
-				});
-				offset = jQuery(cont).find('div.jmb-tooltip-view-edit').offset();
-				storage.tooltip.render('edit', {
-					object:object,
-					target:jQuery(cont).find('div.jmb-tooltip-view-edit'),
-					preBuild:function(){
-						offset = jQuery('div.bt-content').find('div.jmb-tooltip-view-edit').offset();
-					},
-					preShow:function(box){
-						if(offset!=null){
-							jQuery(box).offset({top:offset.top + 20 , left:offset.left});
-						}
-					}
-				});
+				module._button_view(cont, settings);
 			break;
 		}
 	},
@@ -359,62 +375,41 @@ JMBTooltip.prototype = {
 			storage.invitation.render(settings.object);
 		});
 	},
-	_pulling:function(cont, type, settings){
-		var 	module = this,
-			gedcom_id = settings.object.user.gedcom_id,
-			object = {
-				cont:cont,
-				settings:settings
-			};
-		module.idPull[module._getId(gedcom_id, type)] = cont;
-		module.objPull[module.objPull.length] = object;
-		module.objPull.length++;
-	},
 	_getId:function(id, type){
 		return [type,id].join(':');
 	},
 	cleaner:function(callback){
 		var module = this, i, pull;
-		
 		if(module.btActive!=null){
 			jQuery(module.btActive.target).btOff();
 		}
-		
-		pull = module.objPull;
-		for(i = 0 ; i < pull.length ; i++){
-			jQuery(pull[i].cont).remove();
-			delete pull[i];
-		}
 		module.idPull = {};
-		module.objPull.length = 0;
 		module.btActive = null;
 		if(callback) callback();
 	},
 	render:function(type, settings){
 		var	module = this,
-			id = settings.object.user.gedcom_id,
+			id = module._getId(settings.object.user.gedcom_id,type),
 			cont;		
-		
+			
 		if(!module._checkType(type)) return;
-		settings = module._setSettings(type, settings);
+		st = module._setSettings(type, settings);
 		
-		if(!module.idPull[module._getId(id,type)]){
-			cont = module._create(type, settings);
+		if(!module.idPull[id]){
+			cont = module._create(type, st);
 			storage.media.init(cont);	
 		
 			jQuery(document.body).append(cont);
 			jQuery(cont).hide();
-			
-			module._pulling(cont, type, settings);
 		} else {
 			cont = module.idPull[id];
 		}
 		
-		settings.style.contentSelector = ["jQuery('#", settings.object.user.gedcom_id, "-tooltip-", type,"')"].join('');
+		st.style.contentSelector = ["jQuery('#", st.object.user.gedcom_id, "-tooltip-", type,"')"].join('');
 		
-		jQuery(settings.target).bt(settings.style);
-		module._click(settings);
-		module._invitation(cont, type, settings);
-		module._buttons(cont, settings, type);
+		jQuery(st.target).bt(st.style);
+		module._click(st);
+		module._invitation(cont, type, st);
+		module._buttons(cont, st, type);
 	}
 }

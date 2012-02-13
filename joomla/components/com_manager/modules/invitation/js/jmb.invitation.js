@@ -145,6 +145,8 @@ JMBInvitation.prototype = {
 								storage.overlay.hide();
 							});	
 						});
+					} else {
+						jQuery(select).find('option[value="default"]').attr("selected", "selected");
 					}
 				});
 			}

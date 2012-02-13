@@ -1,5 +1,17 @@
 function JMBProfile(){
 	var	module = this;
+		
+	module.editor_header_active_button = null;
+	module.editor_menu_active_button = null;
+	module.menu_item_pull = [];
+	module.individuals = null;
+	module.object = null;
+	module.container = null;
+	module.events = {
+		afterEditorClose:function(object){
+			return false;
+		}
+	}
 	
 	module.path = storage.baseurl+"/components/com_manager/modules/profile/";
 	module.imagePath = module.path+'image/';
@@ -21,19 +33,6 @@ function JMBProfile(){
 			jQuery(this).remove();
 			module.events.afterEditorClose(module.object);
 		}	
-	}
-		
-	module.editor_header_active_button = null;
-	module.editor_menu_active_button = null;
-	module.menu_item_pull = [];
-	module.individuals = null;
-	module.object = null;
-	module.container = null;
-	
-	module.events = {
-		afterEditorClose:function(object){
-			return false;
-		}
 	}
 	
 	module._iframe();

@@ -99,9 +99,9 @@ storage.usertree.parse = function(object){
 		})(),
 		is_alive:user.is_alive,
 		is_birth:(function(){
-			var event = user['birth'], date;
+			var event = user['birth'];
 			if(event!=null){
-				date = event.date;
+				var date = event.date;
 				return ( date[0]!=null || date[1] != null || date[2] != null )?1:0;
 			}
 			return 0;
@@ -113,9 +113,9 @@ storage.usertree.parse = function(object){
 			return (families[id]&&families[id].divorce!=null)?1:0;
 		},
 		is_death:(function(){
-			var event = user['death'], date;
+			var event = user['death'];
 			if(event!=null){
-				date = event.date;
+				var date = event.date;
 				return ( date[0]!=null || date[1] != null || date[2] != null )?1:0;
 			}
 			return 0;
@@ -149,10 +149,9 @@ storage.usertree.parse = function(object){
 			return '';
 		},
 		birth:function(f){
-			var event, date;
-			event = user['birth'];
+			var event = user['birth'];
 			if(event!=null){
-				date = event.date;
+				var date = event.date;
 				if(f){
 					return (date[date_num[f]]!=null)?date[date_num[f]]:'';
 				}
@@ -161,10 +160,9 @@ storage.usertree.parse = function(object){
 			return '';
 		},
 		death:function(f){
-			var event, date;
-			event = user['death'];
+			var event = user['death'];
 			if(event!=null){
-				date = event.date;
+				var date = event.date;
 				if(f){
 					return (date[date_num[f]]!=null)?date[date_num[f]]:'';
 				}
@@ -173,9 +171,9 @@ storage.usertree.parse = function(object){
 			return '';
 		},
 		turns:(function(){
-			var	event = user['birth'];
+			var event = user['birth'];
 			if(event){
-				date = event.date;
+				var date = event.date;
 				if(date&&date[2]!=null){
 					return (new Date()).getFullYear() - date[2];
 				}
@@ -195,10 +193,9 @@ storage.usertree.parse = function(object){
 			return '';			
 		},
 		place:function(type, sub){
-			var	event, place;
-			event = user[type];
+			var event = user[type];
 			if(event!=null){
-				place = event.place;
+				var place = event.place;
 				if(place!=null){
 					return (!sub)?place[0]:((place[0][sub]!=null)?place[0][sub]:'');
 				}
