@@ -282,7 +282,7 @@ JMBFamiliesObject.prototype = {
 			sb._('<div id="mother_line" style="width:112px;border: 2px solid ')
 				sb._((object.user.is_mother_line&&fam_opt.mother.pencil)?fam_opt.mother.pencil:'#F5FAE6');
 			sb._(';">');
-				sb._('<div id="')._(gedcom_id)._('-view" type="imgContainer" class="jmb-families-parent-img" style="border:2px solid #')._(bcolor)._('">')._(module._avatar(object, 'parent', 1));
+				sb._('<div id="')._(gedcom_id)._('-view" type="imgContainer" class="jmb-families-parent-img" style="border:2px solid #')._(bcolor)._(';">')._(module._avatar(object, 'parent', 1));
 					sb._('<div id="')._(gedcom_id)._('-edit" class="jmb-families-edit-button parent">&nbsp;</div>');
 					if(facebook_id != '0'){
 						sb._('<div class="jmb-families-fb-icon parent" id="')._(facebook_id)._('">&nbsp;</div>');
@@ -297,7 +297,7 @@ JMBFamiliesObject.prototype = {
 				sb._('<div class="jmb-families-parent-date">')._(get.birth('year'))._('</div>');
 			sb._('</div>');
 			if(families!=null){
-				sb._('<div class="jmb-families-arrow-right">&nbsp</div>');
+				sb._('<div class="jmb-families-arrow-right" style="background:#')._(bcolor)._(';">&nbsp</div>');
 			}
 		sb._('</div>');		
 		return jQuery(sb.result());
@@ -385,7 +385,7 @@ JMBFamiliesObject.prototype = {
 				sb._('<div id="null" class="')._(child_button_unactive)._('">&nbsp;</div>');
 			}
 			
-			sb._('<div class="')._(arrow_class)._('">&nbsp</div>');
+			sb._('<div class="')._(arrow_class)._('" style="background:#')._(bcolor)._(';">&nbsp</div>');
 			if(date.length==0) sb._('<div>&nbsp;</div>');
 		return jQuery(sb.result());
 	},

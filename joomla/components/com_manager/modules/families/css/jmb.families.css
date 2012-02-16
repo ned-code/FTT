@@ -112,7 +112,8 @@ img.jmb-families-avatar.view{
 	text-align: center;
 }
 .jmb-families-arrow-up {
-	background: url("arrow.gif") no-repeat scroll 0 0 transparent;
+	/*background: url("arrow.gif") no-repeat scroll 0 0 transparent;*/
+	background:#000000;
 	height: 28px;
 	left: 39px;
 	position: absolute;
@@ -125,7 +126,8 @@ img.jmb-families-avatar.view{
 	top: -25px;
 }
 .jmb-families-arrow-left {
-	background: url("arrow.gif") no-repeat scroll 0 -27px transparent;
+	/*background: url("arrow.gif") no-repeat scroll 0 -27px transparent;*/
+	background:#000000;
 	height: 1px;
 	left: 114px;
 	position: absolute;
@@ -133,7 +135,8 @@ img.jmb-families-avatar.view{
 	width: 38px;
 }
 .jmb-families-arrow-right {
-	background: url("arrow.gif") no-repeat scroll 0 -27px transparent;
+	/*background: url("arrow.gif") no-repeat scroll 0 -27px transparent;*/
+	background:#000000;
 	height: 1px;
 	left: -34px;
 	position: absolute;
