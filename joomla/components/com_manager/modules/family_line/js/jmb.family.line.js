@@ -122,30 +122,53 @@ function JMBFamilyLine(){
 				this.segment(k, sofar, 1);
 			}
 		},
-		click:function(){
+		overlay:function(titles, type){
+			var target = (type=='mother')?titles[0]:titles[1];
+			var div = jQuery('<div id="overlay" style="position:absolute;top:0px;left:0px;opacity:0.7;background:#C3C3C3;">&nbsp;</div>');
+			jQuery(div).css('width', (jQuery(target).parent().width())+'px');
+			jQuery(div).css('height', (jQuery(target).parent().height())+'px');
+			jQuery(target).append(div);
+		},
+		click:function(settings){
 			var icons = jQuery(cont).find('div.icon');
+			var titles = jQuery(cont).find('div.title');
 			jQuery(icons).click(function(){				
 				//var list = this.classList;
 				var list = jQuery(this).attr('class').split(/\s+/);
+				var type = (list[1]=='mother')?'father':'mother';
 				switch(list[2]){
 					case 'pencil':
 						if(jQuery(this).hasClass('active')){
 							jQuery(cont).find('div.title.'+list[1]).removeClass('active');
+							jQuery(this).removeClass('active');
 						} else {
 							jQuery(cont).find('div.title.'+list[1]).addClass('active');
-						}					
+							jQuery(this).addClass('active');
+						}	
+					break;	
+				
 					case 'eye':
 						if(jQuery(this).hasClass('active')){
 							jQuery(this).removeClass('active');
+							fn.overlay(titles, type);
+							if(settings.pencil){
+								var pencil = jQuery(cont).find('div.icon.'+type+'.pencil');
+								if(jQuery(pencil).hasClass('active')){
+									jQuery(pencil).click();
+								}
+							}
 						} else {
 							jQuery(this).addClass('active');
+							jQuery((type=='mother')?titles[0]:titles[1]).find('div#overlay').remove();
 						}
 					break;
 					
 					case 'select':
 						if(!jQuery(this).hasClass('active')){
-							jQuery(cont).find('div.icon.'+(list[1]=='mother'?'father':'mother')+'.select').removeClass('active');
+							jQuery(cont).find('div.icon.'+type+'.select').removeClass('active');
 							jQuery(this).addClass('active');
+							fn.overlay(titles, type);
+							jQuery((type=='mother')?titles[1]:titles[0]).find('div#overlay').remove();
 						}
 					break;
 				}		
@@ -258,10 +281,15 @@ function JMBFamilyLine(){
 			sb._('</div>');
 			cont =  jQuery(sb.result());
 			jQuery(document.body).append(cont);
-			fn.click();
+			fn.click(settings);
 			fn.set.align();
 			fn.draw.init(jQuery(cont).find('div.mother canvas')[0], json.size[0], json.size[1]);
 			fn.draw.init(jQuery(cont).find('div.father canvas')[0], json.size[0], json.size[2]);
+			
+			if(settings.select){
+				var titles = jQuery(cont).find('div.title');
+				fn.overlay(titles, 'father');
+			}
 			
 			return this;
 		}

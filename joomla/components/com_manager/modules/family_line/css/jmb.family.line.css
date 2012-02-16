@@ -79,6 +79,7 @@
 	background: none repeat scroll 0 0 white;
 	height: 21px;
     	line-height: 21px;
+    	position:relative;
 }
 .jmb-family-line-container .title.mother.active{
 	background: none repeat scroll 0 0 #f4ff28;
