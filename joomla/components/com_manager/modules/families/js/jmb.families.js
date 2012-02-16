@@ -463,6 +463,11 @@ JMBFamiliesObject.prototype = {
 			});
 		});
 	},
+	_length:function(len){
+		var limit = 8;
+		var rows = Math.ceil(len/limit);
+		return Math.round(len/rows);
+	},
 	render:function(gedcom_id){
 		var	module = this,
 			object = module.usertree[gedcom_id],
@@ -507,9 +512,22 @@ JMBFamiliesObject.prototype = {
 		}
 		
 		if(childrens.length!=0){
+			var row_length = module._length(childrens.length);
+			var ul = jQuery('<ul></ul>');
+			var li = jQuery('<li></li>');
+			jQuery(ul).append(li);
+			jQuery(cont).find('.jmb-families-childs-container').append(ul);
+			var index = 0;
 			for(i = 0 ; i < childrens.length ; i++){
+				if(index == row_length){
+					li = jQuery('<li></li>');
+					jQuery(ul).append(li);
+					index = 0;
+				}
 				child = module._child(childrens[i], spouses.length);
-				jQuery(cont).find('.jmb-families-childs-container').append(child);
+				//jQuery(cont).find('.jmb-families-childs-container').append(child);
+				jQuery(li).append(child);
+				index++;
 			}
 		}	
 		

@@ -326,6 +326,7 @@ JMBProfile.prototype = {
 					sb._('<form id="jmb-profile-addpsc-')._(count)._('" method="post" family_id="')._(family.id)._('" target="iframe-profile">');
 						sb._('<div class="jmb-dialog-profile-content-unions-header">');
 							sb._('<div id="title">Union ')._(count+1)._('</div>');
+							sb._('<div id="current_partner"><input name="current_partner" type="checkbox"> Show as current or latest partner</div>');
 							sb._('<div id="button"><input type="submit" value="Save"></div>');
 						sb._('</div>');
 						sb._('<div class="jmb-dialog-profile-content-unions-body">');

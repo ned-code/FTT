@@ -230,6 +230,15 @@
 	font-weight: bold;
 	font-size: 20px;
 }
+.jmb-dialog-profile-content-unions-header div#current_partner{
+	color: white;
+	left: 80px;
+	position: absolute;
+	top: 5px;
+}
+.jmb-dialog-profile-content-unions-header div#current_partner input{
+	width: 13px !important;
+}
 .jmb-dialog-profile-content-unions-header div#button{
 	position: absolute;
 	top: 1px;

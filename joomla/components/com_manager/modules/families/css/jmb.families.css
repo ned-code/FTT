@@ -29,6 +29,9 @@
 .jmb-families-childs-container{
 	text-align: center;
 }
+.jmb-families-childs-container li{
+	list-style: none outside none;
+}
 .jmb-families-child{
 	display: inline-block;
 	margin-left: 3px;
