@@ -138,6 +138,12 @@ function JMBFamilyLine(){
 				var type = (list[1]=='mother')?'father':'mother';
 				switch(list[2]){
 					case 'pencil':
+						if(settings.eye){
+							var eye = jQuery(cont).find('div.icon.'+list[1]+'.eye');
+							if(!jQuery(eye).hasClass('active')){
+								return false;
+							}
+						}
 						if(jQuery(this).hasClass('active')){
 							jQuery(cont).find('div.title.'+list[1]).removeClass('active');
 							jQuery(this).removeClass('active');
@@ -149,17 +155,17 @@ function JMBFamilyLine(){
 				
 					case 'eye':
 						if(jQuery(this).hasClass('active')){
-							jQuery(this).removeClass('active');
-							fn.overlay(titles, type);
 							if(settings.pencil){
-								var pencil = jQuery(cont).find('div.icon.'+type+'.pencil');
+								var pencil = jQuery(cont).find('div.icon.'+list[1]+'.pencil');
 								if(jQuery(pencil).hasClass('active')){
 									jQuery(pencil).click();
 								}
 							}
+							jQuery(this).removeClass('active');
+							fn.overlay(titles, list[1]);
 						} else {
 							jQuery(this).addClass('active');
-							jQuery((type=='mother')?titles[0]:titles[1]).find('div#overlay').remove();
+							jQuery((list[1]=='mother')?titles[0]:titles[1]).find('div#overlay').remove();
 						}
 					break;
 					
