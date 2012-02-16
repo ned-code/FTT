@@ -318,7 +318,7 @@ JMBProfile.prototype = {
 				sb._('</div>');
 				return sb.result();
 			},
-			spouse:function(family, count){
+			spouse:function(family, count, cp){
 				sb.clear();
 				spouse = module.individuals[family.spouse];
 				parse_spouse = storage.usertree.parse(spouse);
@@ -326,7 +326,7 @@ JMBProfile.prototype = {
 					sb._('<form id="jmb-profile-addpsc-')._(count)._('" method="post" family_id="')._(family.id)._('" target="iframe-profile">');
 						sb._('<div class="jmb-dialog-profile-content-unions-header">');
 							sb._('<div id="title">Union ')._(count+1)._('</div>');
-							sb._('<div id="current_partner"><input name="current_partner" type="checkbox"> Show as current or latest partner</div>');
+							if(cp) sb._('<div id="current_partner"><input name="current_partner" type="checkbox"> Show as current or latest partner</div>');
 							sb._('<div id="button"><input type="submit" value="Save"></div>');
 						sb._('</div>');
 						sb._('<div class="jmb-dialog-profile-content-unions-body">');
@@ -795,7 +795,7 @@ JMBProfile.prototype = {
 					add_active = false,
 					save_union,
 					add_union;
-				
+					
 				save_union = function(form){
 					json = '{"gedcom_id":"'+parse.gedcom_id+'","family_id":"'+jQuery(form).attr('family_id')+'","method":"save"}';
 					module._ajaxForm(form, 'union', json, function(data){}, function(res){
@@ -811,21 +811,21 @@ JMBProfile.prototype = {
 						}
 						update_data(res);
 						jQuery(div).remove();
-						div = form.spouse(res.user.families[res.data.family_id],count);
+						div = form.spouse(res.user.families[res.data.family_id],count, true);
 						jQuery(html).append(div);
 						save_union(jQuery(div).find('form'));
 						count++;
 						add_active = false;
 					});
 				}
-				
+				var cp = (families!=null&&families.length>0);
 				sb.clear();
 				sb._('<div class="jmb-dialog-profile-content-unions">');
-				sb._('<div class="jmb-dialog-profile-content-unions-add"><input type="button" value="Add another union"></div>');
+				sb._('<div class="jmb-dialog-profile-content-unions-add"><input type="button" value="')._((cp)?"Add another union":"Add union")._('"></div>');
 				for(key in families){
 					if (!families.hasOwnProperty(key)) continue;
 					if(key != 'length' && families[key].spouse != null){
-						sb._(form.spouse(families[key],count));	
+						sb._(form.spouse(families[key],count,cp));	
 						count++
 					}
 				}
