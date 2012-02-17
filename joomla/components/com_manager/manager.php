@@ -58,11 +58,13 @@ $document->addScript('administrator/components/com_manager/js/host.js?111');
 //include library
 $document->addStyleSheet('components/com_manager/js/prettyPhoto.css');
 $document->addStyleSheet('components/com_manager/js/tipsy.css');
+$document->addStyleSheet('components/com_manager/js/scrollbar.css');
 $document->addScript('components/com_manager/js/excanvas.js');
 $document->addScript('components/com_manager/js/jit.js');
 $document->addScript('components/com_manager/js/jquery.bt.js');
 $document->addScript('components/com_manager/js/jquery.prettyPhoto.js');
 $document->addScript('components/com_manager/js/jquery.tipsy.js');
+$document->addScript('components/com_manager/js/jquery.scroll.min.js');
 	
 //jmb overlay
 $document->addStyleSheet('components/com_manager/modules/overlay/css/jmb.overlay.css?111');

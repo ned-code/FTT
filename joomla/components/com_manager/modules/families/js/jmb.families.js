@@ -98,7 +98,7 @@ JMBFamiliesObject.prototype = {
 			}
 		}
 	},
-	_spouses:function(families){
+	_spouses:function(families, def){
 		if(families==null) return [];
 		var spouses = [], family, spouse;
 		for(var key in families){
@@ -111,7 +111,13 @@ JMBFamiliesObject.prototype = {
 				}
 			}
 		}
-		return spouses;
+		return spouses.sort(function(){
+			if(arguments[0][0] == def){
+				return false;
+			} else {
+				return true;
+			} 
+		});
 	},
 	_childrens:function(families){
 		var childrens = [], family, child;
@@ -473,7 +479,7 @@ JMBFamiliesObject.prototype = {
 			object = module.usertree[gedcom_id],
 			families = object.families,
 			cont = module._create(),
-			spouses = module._spouses(families),
+			spouses = module._spouses(families, object.user.default_family),
 			childrens = module._childrens(families),
 			sircar, 
 			info,
@@ -506,9 +512,15 @@ JMBFamiliesObject.prototype = {
 				for(i = 1 ; i < spouses.length ; i ++){
 					module.spouse_border[spouses[i][0]] = module.borders[i];
 					spouse = module._former_spouse(spouses[i], module.borders[i]);
-					jQuery(cont).find('.jmb-families-spouse-container').append(spouse);	
+					jQuery(cont).find('.jmb-families-spouse-container').append(spouse);
 				}
-			}
+				jQuery(cont).find('.jmb-families-spouse-container').addClass('active');
+				jQuery(cont).find('.jmb-families-spouse-container').scrollbar();
+			} else {
+				jQuery(cont).find('.jmb-families-spouse-container').removeClass('active');
+			}		
+		} else {
+			jQuery(cont).find('.jmb-families-spouse-container').removeClass('active');
 		}
 		
 		if(childrens.length!=0){
@@ -525,7 +537,6 @@ JMBFamiliesObject.prototype = {
 					index = 0;
 				}
 				child = module._child(childrens[i], spouses.length);
-				//jQuery(cont).find('.jmb-families-childs-container').append(child);
 				jQuery(li).append(child);
 				index++;
 			}
