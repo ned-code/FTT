@@ -322,7 +322,7 @@ JMBProfile.prototype = {
 				sb.clear();
 				spouse = module.individuals[family.spouse];
 				parse_spouse = storage.usertree.parse(spouse);
-				sb._('<div id="jmb-union-')._(count)._('" class="jmb-dialog-profile-content-union" spouse_id="')._(family.spouse)._('">');
+				sb._('<div id="jmb-union-')._(count)._('" class="jmb-dialog-profile-content-union" family_id="')._(family.id)._('" spouse_id="')._(family.spouse)._('">');
 					sb._('<form id="jmb-profile-addpsc-')._(count)._('" method="post" family_id="')._(family.id)._('" target="iframe-profile">');
 						sb._('<div class="jmb-dialog-profile-content-unions-header">');
 							sb._('<div id="title">Union ')._(count+1)._('</div>');
@@ -845,6 +845,19 @@ JMBProfile.prototype = {
 					add_active = true;
 					return false;
 				});
+				jQuery(html).find('input[name="current_partner"]').click(function(){
+					var flag = jQuery(this).is(':checked');
+					jQuery(html).find('input[name="current_partner"]').attr('checked', false);
+					if(flag){
+						jQuery(this).attr('checked', true);
+					} else {
+						jQuery(this).attr('checked', false);
+					}
+				});
+				if(parse.default_family){
+					jQuery(html).find('div.jmb-dialog-profile-content-union[family_id="'+parse.default_family+'"]').find('input[name="current_partner"]').attr('checked', true);
+				}
+				jQuery(html).find()
 				jQuery(module.box).find('div.jmb-dialog-profile-content').append(html);
 			},
 			edit_photos:function(){

@@ -165,10 +165,12 @@ class JMBProfile {
 			case "save":
 				$family = $this->host->gedcom->families->get($args->family_id);
 				$this->updateFamilyEvents($family, $request);
+				if(isset($request['current_partner'])){
+					$this->host->gedcom->individuals->addedCurrentPartner($args->family_id, $args->gedcom_id);
+				}
 			break;
 			
 			case "add":
-				
 				$sircar = $this->host->gedcom->individuals->get($args->gedcom_id);
 				//add spouse in db
 				$spouse = $this->host->gedcom->individuals->create();

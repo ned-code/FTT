@@ -295,6 +295,7 @@ class JMBUserTree {
 			'last_login'=>$user['last_login'],
 			'birth'=>$birth,
 			'death'=>$death,
+			'default_family'=>$user['default_family'],
 			'is_alive'=>$is_alive,
 			'is_mother_line'=>$is_mother_line,
 			'is_father_line'=>$is_father_line

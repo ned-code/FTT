@@ -232,7 +232,7 @@ class IndividualsList{
         	return $rows;
         }
         public function getIndividualsList($tree_id, $gedcom_id){
-        	$sqlString = "SELECT ind.id as gedcom_id, ind.fid as facebook_id, ind.sex as gender,ind.last_login, 
+        	$sqlString = "SELECT ind.id as gedcom_id, ind.fid as facebook_id, ind.sex as gender, ind.last_login, ind.default_family,
         				name.first_name, name.middle_name, name.last_name, name.nick, 
         				links.type as permission, rel.relation,
         				f_line.is_self, f_line.is_spouse, f_line.is_descendant, f_line.is_father, f_line.is_mother FROM #__mb_individuals as ind 
@@ -339,6 +339,11 @@ class IndividualsList{
         
         public function getEarliestInDocumentId($tree_id, $permission='OWNER', $tree=false){
         	//not supported by sources
+        }
+        public function addedCurrentPartner($family_id, $gedcom_id){
+        	$sql_string = "UPDATE #__mb_individuals SET `default_family` = ? WHERE `id` = ?";
+        	$this->db->setQuery($sql_string, $family_id, $gedcom_id);    	
+        	$this->db->query();
         }
 }
 ?>
