@@ -13,7 +13,7 @@ function JMBTopMenuBar(){
 				sb._('<div class="jmb-top-menu-bar-content">');
 					sb._('<div id="myfamily" class="jmb-top-menu-bar-item"><span>My Family</span></div>');
 					sb._('<div id="famous-family" class="jmb-top-menu-bar-item"><span>Famous Families</span></div>');
-					sb._('<div id="home" class="jmb-top-menu-bar-item"><span>FTT Home</span></div>');
+					sb._('<div id="home" class="jmb-top-menu-bar-item"><span>Home</span></div>');
 				sb._('</div>');
 			sb._('</div>');
 			return jQuery(sb.result());
@@ -45,12 +45,12 @@ function JMBTopMenuBar(){
 				break;
 				
 				case "famous-family":
-					fn.sw(jQuery(cont).find('div#famous_family span'));
+					fn.sw(jQuery(cont).find('div#famous-family span'));
 				break;
 				
 				case "myfamily":
 					if(type == 'famous_family'){
-						fn.sw(jQuery(cont).find('div#famous_family span'));
+						fn.sw(jQuery(cont).find('div#famous-family span'));
 					} else {
 						fn.sw(jQuery(cont).find('div#myfamily span'));
 					}
@@ -64,6 +64,11 @@ function JMBTopMenuBar(){
 			cont = fn.create();			
 			fn.click();
 			fn.activate();
+			
+			if(alias == 'login'){
+				jQuery(cont).find('.jmb-top-menu-bar-content').css('visibility', 'hidden');
+			}
+			
 			jQuery(document.body).append(cont);
 		}
 	}

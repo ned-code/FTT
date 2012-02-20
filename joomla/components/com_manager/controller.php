@@ -128,6 +128,7 @@ class JMBController extends JController
         	$db =& JFactory::getDBO();
         	$host = new Host('Joomla');
         	$ids = explode('|', JRequest::getVar('ids'));
+        	$_SESSION['jmb']['mode'] = JRequest::getVar('mode');
         	
         	$jpath_base_explode = explode('/', JPATH_BASE);
         	if(end($jpath_base_explode) == 'administrator'){
@@ -461,7 +462,7 @@ class JMBController extends JController
 			case 'login':
 				if($logged&&!$link) return 'first-page';
 				if($logged) return 'myfamily';
-				return 'home';
+				return 'login';
 			break;
 				
 			case "first-page":

@@ -64,6 +64,7 @@ storage.usertree.parse = function(object){
 		nick:(user.nick!=null)?user.nick:'',
 		gender:user.gender,
 		relation:(user.relation!=null)?user.relation:false,
+		default_family:(user.default_family!='0')?user.default_family:false,
 		avatar_id:(function(){
 			var avatar = (media!=null)?media.avatar:null;
 			if(avatar!=null){
@@ -488,8 +489,10 @@ core.load = function(pages){
 		
 		//init top menu bar
 		storage.topmenubar.init();
+		
+		var mode = (window != window.top)?'facebook':'standalone';
 		jQuery.ajax({
-			url:'index.php?option=com_manager&task=getPageInfo&ids='+pages,
+			url:'index.php?option=com_manager&task=getPageInfo&ids='+pages+'&mode='+mode,
 			type:'GET',
 			complete:function(req, err){
 				storage.login.init(function(){
