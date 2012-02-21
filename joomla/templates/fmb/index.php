@@ -9,8 +9,8 @@
 // No direct access.
 defined('_JEXEC') or die;
 // facebook params
-$fb_app_id = '100001614066938';
-$fb_admin_id = '184962764872486';
+$fb_app_id = '184962764872486';
+$fb_admin_id = '100001614066938';
 
 $og_title = 'FamilyTree-Top';
 $og_type = 'website';
@@ -18,20 +18,29 @@ $og_url = 'http://www.familytreetop.com/';
 $og_img = '';
 $og_site_name = 'FamilyTree-Top';
 
-// joomla params
 $app                = JFactory::getApplication();
-$base_url = Juri::base();
-$facebook = new Facebook(array('appId'=>$_SESSION['jmb']['JMB_FACEBOOK_APPID'],'secret'=>$_SESSION['jmb']['JMB_FACEBOOK_SECRET'],'cookie'=>$_SESSION['jmb']['JMB_FACEBOOK_COOKIE']));
-$alias = isset($_SESSION['jmb']['alias'])?$_SESSION['jmb']['alias']:'myfamily';
-$login_type = isset($_SESSION['jmb']['login_type'])?$_SESSION['jmb']['login_type']:'family_tree';
+$jfb = JFBConnectFacebookLibrary::getInstance();
+$session = JFactory::getSession();
 
-$fb_login_url = $facebook->getLoginUrl();
-$fb_user = $facebook->getUser();     
-try{
-	$user = $facebook->api('/me');
-} catch (FacebookApiException $e) {
-	$user = false;
+//joomla vars
+$base_url = Juri::base();
+
+//facebook vars
+$facebook_id = false;
+$jfb_facebook_id = $jfb->getUserId();
+$session_facebook_id = $session->get('facebook_id');
+
+//ftt vars
+$alias = $session->get('alias');
+$login_method = $session->get('login_method');
+
+//update vars
+if($jfb_facebook_id){
+	$facebook_id = $jfb_facebook_id;
+}else if(!empty($session_facebook_id)){
+	$facebook_id = $session_facebook_id;
 }
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->language; ?>" lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>" >
@@ -54,7 +63,7 @@ try{
                 <!-- fmb template script -->
                 <script type="text/javascript" src="<?php echo $this->baseurl ?>/templates/fmb/javascript/fmb.js"></script>
 	</head>
-	<body _alias="<?php echo $alias; ?>" _baseurl="<?php echo $base_url; ?>" _fb="<?php echo ($user)?1:0; ?>" _type="<?php echo $login_type; ?>">
+	<body _alias="<?php echo $alias; ?>" _baseurl="<?php echo $base_url; ?>" _fb="<?php echo ($facebook_id)?$facebook_id:0; ?>" _type="<?php echo $login_method; ?>">
 		<div id="_content" class="content">
 			<div class="header"></div>
 			<div class="main">
@@ -64,11 +73,11 @@ try{
 							<div id="fb-root"></div>
 							<jdoc:include type="component" />
 						</td>
-						<td id="_right" valign="top"><div class="right"><jdoc:include type="modules" name="right" /></div></td>
+						<td id="_right" valign="top"><?php if($_SESSION['jmb']['mode'] == 'standalone' ): ?> <div class="right"><jdoc:include type="modules" name="right" /></div><?php endif; ?></td>
 					</tr>
 				</table>
 			</div>
-			<div id="_bottom" class="footer"><jdoc:include type="modules" name="footer" /></div>
+			<?php if($_SESSION['jmb']['mode'] == 'facebook' ): ?> <div id="_bottom" class="footer"><jdoc:include type="modules" name="footer" /></div><?php endif; ?>
 		</div>
 		<script>
 			FB.init({

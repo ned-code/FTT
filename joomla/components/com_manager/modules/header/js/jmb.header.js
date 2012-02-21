@@ -41,8 +41,8 @@ function JMBHeader(){
 					}
 				}, 
 				logo:function(){
-					if(window!=window.top){
-						return 'familytreetop';
+					if(fn.get.is_iframe()){
+						return (alias!='login')?'familytreetop':alias;
 					}
 					if(type=='famous_family'){
 						return 'famous-family';

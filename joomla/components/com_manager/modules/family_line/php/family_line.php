@@ -36,9 +36,10 @@ class JMBFamilyLine {
 	}
 	
 	public function get(){
-		$gedcom_id = $_SESSION['jmb']['gid'];
-		$tree_id = $_SESSION['jmb']['tid'];
-		$permission = $_SESSION['jmb']['permission'];
+		$session = JFactory::getSession();
+		$gedcom_id = $session->get('gedcom_id');
+		$tree_id = $session->get('tree_id');
+		$permission = $session->get('permission');
 		$size = $this->size($tree_id, $gedcom_id);
 		return json_encode(array('size'=>$size));
 	}

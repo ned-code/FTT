@@ -57,37 +57,6 @@ class JMBThisMonth {
                 	}
                 }
         }
-        /**
-        * get global clolar settings
-        */ 
-	protected function _getColors(){     
-                $config = $_SESSION['jmb']['config'];
-                $color = array();
-                foreach($config['color'] as $key => $element){
-                	switch($key){
-                	    case "female":
-                                    $color['F'] = $element;
-                            break;
-                            
-                            case "male":
-                                    $color['M'] = $element;
-                            break;
-                            
-                            case "location":
-                                    $color['L'] = $element;
-                            break;
-                            
-                    	    case "famous_header":
-                    	    	    $color['famous_header'] = $element;
-                    	    break;
-                    
-                    	    case "family_header":
-                    	    	    $color['family_header'] = $element;
-                    	    break;
-                	}
-                }
-                return $color;
-	}
 	/**
 	*
 	*/
@@ -141,10 +110,16 @@ class JMBThisMonth {
 	*/
 	public function load($args){		
 		//vars
-		$facebook_id = $_SESSION['jmb']['fid'];
-		$tree_id = $_SESSION['jmb']['tid'];
-		$gedcom_id = $_SESSION['jmb']['gid'];
-
+		$session = JFactory::getSession();
+		$facebook_id = $session->get('facebook_id');
+		$gedcom_id = $session->get('gedcom_id');
+        	$tree_id = $session->get('tree_id');
+        	$permission = $session->get('permission');
+        	
+        	$settings = $session->get('settings');
+        	$alias = $session->get('alias');
+        	$login_method = $session->get('login_method');
+        	
 		$args = json_decode($args);
 
 		$month = $args->month;
@@ -156,9 +131,8 @@ class JMBThisMonth {
 		
 		//user info and global settings
 		$ftt_user = $usertree[$gedcom_id];
-		$colors = $this->_getColors();
 		$language = $this->getLanguage();
-		$config = array('alias'=>'myfamily','login_type'=>$_SESSION['jmb']['login_type'],'colors'=>$colors);
+		$config = array('alias'=>$alias,'login_method'=>$login_method,'colors'=>$settings['colors']);
 		
 		if($sort != 'false'){ 
 			$this->settings['split_event']['type'] = $sort; 

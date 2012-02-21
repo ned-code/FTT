@@ -5,28 +5,21 @@ class JMBLogin {
 	public function __construct(){
 		$this->host = new Host('Joomla');
 	}
-	
-	public function facebook($args){
-		$args = json_decode($args);
-		require_once(JPATH_BASE.DS.'components'.DS.'com_manager'.DS.'php'.DS.'facebook.php');
-		$facebook = new Facebook(array('appId'=>$_SESSION['jmb']['JMB_FACEBOOK_APPID'],'secret'=>$_SESSION['jmb']['JMB_FACEBOOK_SECRET'],'cookie'=>$_SESSION['jmb']['JMB_FACEBOOK_COOKIE']));
-		$facebook->setAccessToken($args->access_token);
-		return true;
-	}
 	public function user(){
-		$gedcom_id = $_SESSION['jmb']['gid'];
-		$tree_id = $_SESSION['jmb']['tid'];
-		$permission = $_SESSION['jmb']['permission'];
-		$this->host->usertree->init($tree_id, $gedcom_id, $permission);
+		$session = JFactory::getSession();
+		$gedcom_id = $session->get('gedcom_id');
+		$tree_id = $session->get('tree_id');
 		$usertree = $this->host->usertree->load($tree_id, $gedcom_id);
 		return json_encode(array('user_id'=>$gedcom_id, 'usertree'=>$usertree));
 	}
 	public function famous($args){
-		if($args == 'logout'){
-			$_SESSION['jmb']['tid'] = null;
-			$_SESSION['jmb']['gid'] = null;
-			$_SESSION['jmb']['permission'] = null;
-			$_SESSION['jmb']['alias'] = 'famous-family';
+		if($args == 'logout'){			
+			$session = JFactory::getSession();
+			$session->clear('gedcom_id');
+			$session->clear('tree_id');
+			$session->clear('permission');
+			$session->clear('facebook_id');
+			$session->set('alias', 'famous-family');
 			return true;
 		}
 	}

@@ -85,7 +85,7 @@ function JMBLogin(){
 					language:function(){},
 					logout:function(){
 						FB.logout(function(){
-							window.location.reload();
+							window.location = storage.baseurl+'index.php?option=com_jfbconnect&task=logout&return=login';
 						});
 					},
 				},
@@ -108,10 +108,7 @@ function JMBLogin(){
 			jQuery(cont).find('div.facebook span').click(function(){
 				FB.login(function(response){
 					if(response.authResponse){
-						json = '{"access_token":"'+response.authResponse.accessToken+'"}';
-						fn.ajax('facebook', json, function(){
-							window.location.reload();
-						});
+						window.location = storage.baseurl+'index.php?option=com_jfbconnect&task=loginFacebookUser&return=myfamily';
 					} else {
 						alert('Login failed.')
 					}

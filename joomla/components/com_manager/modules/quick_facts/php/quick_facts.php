@@ -5,35 +5,6 @@ class JMBQuickFacts {
 	public function __construct(){
 		$this->host = new Host('Joomla');
 	}
-	
-	protected function getColors(){
-		$config = $_SESSION['jmb']['config'];
-                $color = array();
-                foreach($config['color'] as $key => $element){
-                	switch($key){
-                	    case "female":
-                                    $color['F'] = $element;
-                            break;
-                            
-                            case "male":
-                                    $color['M'] = $element;
-                            break;
-                            
-                            case "location":
-                                    $color['L'] = $element;
-                            break;
-                            
-                    	    case "famous_header":
-                    	    	    $color['famous_header'] = $element;
-                    	    break;
-                    
-                    	    case "family_header":
-                    	    	    $color['family_header'] = $element;
-                    	    break;
-                	}
-                }
-                return $color;
-	}
 
 	protected function getLanguage(){
 		$lang = $this->host->getLangList('quick_facts');
@@ -71,18 +42,25 @@ class JMBQuickFacts {
 	
 	public function get(){
 		//vars
-		$owner_id = $_SESSION['jmb']['gid'];
-		$tree_id = $_SESSION['jmb']['tid'];
-		$permission = $_SESSION['jmb']['permission'];
+		$session = JFactory::getSession();
+		$facebook_id = $session->get('facebook_id');
+		$owner_id = $session->get('gedcom_id');
+        	$tree_id = $session->get('tree_id');
+        	$permission = $session->get('permission');
+        	
+        	$settings = $session->get('settings');
+        	$alias = $session->get('alias');
+        	$login_method = $session->get('login_method');
+				
 		$usertree = $this->host->usertree->load($tree_id, $owner_id);
 		
 		//facts
 		$count = sizeof($usertree);
 		$facts = $this->getFacts($usertree);
-		$colors = $this->getColors();
 		$user = $usertree[$owner_id];
 		$language = $this->getLanguage();
-		$config = array('alias'=>'myfamily','login_type'=>$_SESSION['jmb']['login_type'],'colors'=>$colors);
+		$config = array('alias'=>$alias,'login_method'=>$login_method,'colors'=>$settings['colors']);
+		
 		return json_encode(array(
 			'config'=>$config,
 			'lang'=>$language,

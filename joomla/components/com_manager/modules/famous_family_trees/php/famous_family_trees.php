@@ -57,14 +57,15 @@ class JMBFamousFamily {
 			$permission = 'USER';
 		} else {
 			$permission = 'MEMBER';
-		}
-		$_SESSION['jmb']['fid'] = '0';
-        	$_SESSION['jmb']['gid'] = $args->Id;
-		$_SESSION['jmb']['tid'] = $args->TreeId;
-		$_SESSION['jmb']['permission'] = $permission;
-		$_SESSION['jmb']['alias'] = 'myfamily';
-		$_SESSION['jmb']['login_type'] = 'famous_family';
-		$_SESSION['jmb']['config'] = $this->host->getConfig();	
+		}		
+		$session = JFactory::getSession();
+		$session->set('facebook_id', 0);
+		$session->set('gedcom_id', $args->Id);
+		$session->set('tree_id', $args->TreeId);
+		$session->set('permission', $permission);
+		$session->set('alias', 'myfamily');
+		$session->set('login_method', 'famous_family');
+		
 		return true;
 	}
 }

@@ -18,7 +18,7 @@ function JMBLoginButtonObject(obj){
 	jQuery(cont).find('.jmb-login-button').click(function(){
 		FB.login(function(response) {
 			if (response.authResponse) {
-				window.location.reload();
+				window.location = storage.baseurl+'index.php?option=com_jfbconnect&task=loginFacebookUser&return=myfamily';
 			} else {
 				//console.log('User cancelled login or did not fully authorize.');
 			}

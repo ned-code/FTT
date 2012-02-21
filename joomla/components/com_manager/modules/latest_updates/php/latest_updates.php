@@ -46,34 +46,7 @@ class JMBLatestUpdates {
 		$rows = $this->db->loadAssocList();
 		return ($rows!=null)?$rows[0]:false;
 	}
-	protected function getColors(){
-		$config = $_SESSION['jmb']['config'];
-                $color = array();
-                foreach($config['color'] as $key => $element){
-                	switch($key){
-                	    case "female":
-                                    $color['F'] = $element;
-                            break;
-                            
-                            case "male":
-                                    $color['M'] = $element;
-                            break;
-                            
-                            case "location":
-                                    $color['L'] = $element;
-                            break;
-                            
-                    	    case "famous_header":
-                    	    	    $color['famous_header'] = $element;
-                    	    break;
-                    
-                    	    case "family_header":
-                    	    	    $color['family_header'] = $element;
-                    	    break;
-                	}
-                }
-                return $color;
-	}
+	
 	protected function getUser($data, $usertree){
 		if(!$data) return false;
 		if(isset($data['value'])){
@@ -93,9 +66,16 @@ class JMBLatestUpdates {
 	}
 	
 	public function get(){
-		$tree_id = $_SESSION['jmb']['tid'];
-		$gedcom_id = $_SESSION['jmb']['gid'];
-		$permission = $_SESSION['jmb']['permission'];
+		//vars
+		$session = JFactory::getSession();
+		$facebook_id = $session->get('facebook_id');
+		$gedcom_id = $session->get('gedcom_id');
+        	$tree_id = $session->get('tree_id');
+        	$permission = $session->get('permission');
+        	
+        	$settings = $session->get('settings');
+        	$alias = $session->get('alias');
+        	$login_method = $session->get('login_method');
 		
 		$usertree = $this->host->usertree->load($tree_id, $gedcom_id);
 		
@@ -106,8 +86,7 @@ class JMBLatestUpdates {
 		$family_deleted = $this->getUser($this->getFamilyMemberDeleted($tree_id, $gedcom_id), $usertree);
 		
 		$lang = $this->host->getLangList('latest_updates');
-		$colors = $this->getColors();
-		$config = array('alias'=>'myfamily','login_type'=>$_SESSION['jmb']['login_type'],'colors'=>$colors);
+		$config = array('alias'=>$alias,'login_method'=>$login_method,'colors'=>$settings['colors']);
 		
 		return json_encode(array(
 			'config'=>$config,
