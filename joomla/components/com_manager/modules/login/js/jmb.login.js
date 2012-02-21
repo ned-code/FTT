@@ -1,6 +1,7 @@
 function JMBLogin(){
 	var	module = this,
 		fn,
+		settings = {},
 		fb_logged;
 
 	if(window!=window.top){
@@ -50,12 +51,39 @@ function JMBLogin(){
 			sb._('</div>');
 			return jQuery(sb.result());
 		},
+		langList:function(){
+			var st = host.stringBuffer();
+			st._('<ul>');
+			jQuery(settings.languages).each(function(i,el){
+				if(parseInt(el.published)){
+					st._('<li id="')._(el.lang_code)._('">')._(el.title)._('</li>');	
+				}
+			});
+			st._('</ul>');
+			var html = jQuery(st.result());	
+			return html;
+		},
+		getDefaultLang:function(){
+			var lang = settings.languages;
+			for(var key in lang){
+				var l = lang[key];
+				if(settings.default_language!=null){
+					if(l.lang_code == settings.default_language){
+						return l.title;
+					}
+				} else {
+					if(parseInt(l.def)){
+						return l.title;
+					}
+				}
+			}
+		},
 		menu:function(){
-			var menu, sb = host.stringBuffer();
+			var module = this, menu, list, sb = host.stringBuffer();
 			sb._('<div class="menu">');
 				sb._('<div id="profile"><span>Profile</span></div>');
 				sb._('<div id="preferences"><span>Preferences</span></div>');
-				sb._('<div id="language"><span>Language: English</span></div>');
+				sb._('<div id="language"><span>Language: ')._(this.getDefaultLang())._('</span></div>');
 				sb._('<div id="logout"><span>Log Out</span></div>');
 			sb._('</div>');
 			menu = jQuery(sb.result());
@@ -82,7 +110,25 @@ function JMBLogin(){
 						});
 					},
 					preferences:function(){},
-					language:function(){},
+					language:function(object){
+						if(!jQuery(object).hasClass('collapse')){
+							list = module.langList();
+							jQuery(object).append(list);
+							jQuery(object).addClass('collapse');
+							jQuery(list).find('li').click(function(){
+								if(confirm("Are you sure you want to set the language?")){
+									fn.ajax('language', jQuery(this).attr('id'), function(res){
+										window.location.reload();
+									});
+								}
+								return false;
+							});
+						} else {
+							jQuery(list).remove();
+							jQuery(object).removeClass('collapse');
+						}
+						jQuery(object).removeClass('active');
+					},
 					logout:function(){
 						FB.logout(function(){
 							window.location = storage.baseurl+'index.php?option=com_jfbconnect&task=logout&return=login';
@@ -95,7 +141,7 @@ function JMBLogin(){
 						if(jQuery(this).hasClass('active')) return false;
 						jQuery(menu).find('div').removeClass('active');
 						jQuery(this).addClass('active');
-						_menu.click[jQuery(this).attr('id')]();
+						_menu.click[jQuery(this).attr('id')](this);
 						return false;
 					});
 					return this;
@@ -181,6 +227,8 @@ function JMBLogin(){
 			fn.ajax('user', null, function(res){
 				json = jQuery.parseJSON(res.responseText);
 				if(json.user_id != null){
+					settings.languages = json.languages;
+					settings.default_language = json.default_language;
 					object = json.usertree[json.user_id];
 					storage.usertree.user = json.user_id;
 					storage.usertree.pull = json.usertree;

@@ -9,8 +9,11 @@ class JMBLogin {
 		$session = JFactory::getSession();
 		$gedcom_id = $session->get('gedcom_id');
 		$tree_id = $session->get('tree_id');
+		$lang = $session->get('language');
+		
 		$usertree = $this->host->usertree->load($tree_id, $gedcom_id);
-		return json_encode(array('user_id'=>$gedcom_id, 'usertree'=>$usertree));
+		$languages = $this->host->getLanguages();
+		return json_encode(array('user_id'=>$gedcom_id, 'usertree'=>$usertree,'default_language'=>$lang,'languages'=>$languages));
 	}
 	public function famous($args){
 		if($args == 'logout'){			
@@ -22,6 +25,11 @@ class JMBLogin {
 			$session->set('alias', 'famous-family');
 			return true;
 		}
+	}
+	public function language($lang_code){
+		$session = JFactory::getSession();
+		$session->set('language', $lang_code);
+		return json_encode(array('success'=>$lang_code));
 	}
 }
 ?>

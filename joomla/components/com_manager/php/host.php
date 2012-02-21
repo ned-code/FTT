@@ -287,21 +287,15 @@ class Host {
 			}
 		}
 		return false;
-		
-		/*
-		$language = (isset($_SESSION['jmb']['language']))?$this->getLanguage($_SESSION['jmb']['language']):$this->getDefaultLanguage();
-		if(!$language) return false;
-		
-		$module_path = JPATH_ROOT.DS.'components'.DS.'com_manager'.DS.'modules'.DS.$module_name;
-		if(is_dir($module_path)){
-			$lang_pack_path = $module_path.DS.'language'.DS.$language['lang_code'].'.'.$module_name.'.ini';
-			$ini_array = parse_ini_file($lang_pack_path);
-			if($ini_array){
-				return $ini_array;
-			}
-		}		
-		return false;
-		*/
+	}
+	
+	public function getLanguages(){
+		$db = new JMBAjax();
+		$sql_string = "SELECT lang_id, lang_code, title, published FROM #__mb_language WHERE 1";
+		$db->setQuery($sql_string);
+		$rows = $db->loadAssocList();
+		if($rows==null) return false;
+		return $rows;
 	}
 	
 	/* 
