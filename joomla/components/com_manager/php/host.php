@@ -272,6 +272,23 @@ class Host {
 	}
 	
 	public function getLangList($module_name){
+		$session = JFactory::getSession();
+		$lang = $session->get('language');
+		$language = (!empty($lang))?$this->getLanguage($lang):$this->getDefaultLanguage();
+		if(!$language) return false;
+		
+		$lang_pack_path = JPATH_ROOT.DS.'components'.DS.'com_manager'.DS.'language'.DS.$language['lang_code'];
+		$file_name = $language['lang_code'].'.'.$module_name.'.ini';		
+		
+		if(is_dir($lang_pack_path)&&file_exists($lang_pack_path.DS.$file_name)){
+			$ini_array = parse_ini_file($lang_pack_path.DS.$file_name);
+			if($ini_array){
+				return $ini_array;
+			}
+		}
+		return false;
+		
+		/*
 		$language = (isset($_SESSION['jmb']['language']))?$this->getLanguage($_SESSION['jmb']['language']):$this->getDefaultLanguage();
 		if(!$language) return false;
 		
@@ -284,6 +301,7 @@ class Host {
 			}
 		}		
 		return false;
+		*/
 	}
 	
 	/* 
