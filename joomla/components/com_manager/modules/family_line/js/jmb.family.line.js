@@ -316,6 +316,10 @@ function JMBFamilyLine(){
 			fn.init(options[title], json);
 		});
 	};
+	
+	jQuery(window).resize(function() {
+		fn.set.align();
+	});
 }
 
 
