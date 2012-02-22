@@ -291,7 +291,7 @@ class Host {
 	
 	public function getLanguages(){
 		$db = new JMBAjax();
-		$sql_string = "SELECT lang_id, lang_code, title, published FROM #__mb_language WHERE 1";
+		$sql_string = "SELECT lang_id, lang_code, title, published, def FROM #__mb_language WHERE 1";
 		$db->setQuery($sql_string);
 		$rows = $db->loadAssocList();
 		if($rows==null) return false;

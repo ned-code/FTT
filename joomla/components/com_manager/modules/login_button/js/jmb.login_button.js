@@ -4,7 +4,7 @@ function JMBLoginButtonObject(obj){
 		cont = null;
 		
 	sb._('<div class="jmb-login-button-container">');
-		sb._('<div class="jmb-login-button-title"><span>You must logged in acces you Family Tree</span></div>');
+		sb._('<div class="jmb-login-button-title"><span>You must be logged in to access your Family Tree</span></div>');
 		sb._('<div class="jmb-login-button">');
 			sb._('<div class="jmb-login-button-f">f</div>');
 			sb._('<div class="jmb-login-button-body">');
