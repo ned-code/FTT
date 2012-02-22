@@ -64,7 +64,7 @@ if($jfb_facebook_id){
                 <script type="text/javascript" src="<?php echo $this->baseurl ?>/templates/fmb/javascript/fmb.js"></script>
 	</head>
 	<body _alias="<?php echo $alias; ?>" _baseurl="<?php echo $base_url; ?>" _fb="<?php echo ($facebook_id)?$facebook_id:0; ?>" _type="<?php echo $login_method; ?>">
-		<div id="_content" class="content">
+		<div id="_content" class="content"> 
 			<div class="header"></div>
 			<div class="main">
 				<table width="100%">
@@ -73,11 +73,11 @@ if($jfb_facebook_id){
 							<div id="fb-root"></div>
 							<jdoc:include type="component" />
 						</td>
-						<td id="_right" valign="top"><?php if($_SESSION['jmb']['mode'] == 'standalone' ): ?> <div class="right"><jdoc:include type="modules" name="right" /></div><?php endif; ?></td>
+						<td id="_right" valign="top"><div class="right"><jdoc:include type="modules" name="right" /></div></td>
 					</tr>
 				</table>
 			</div>
-			<?php if($_SESSION['jmb']['mode'] == 'facebook' ): ?> <div id="_bottom" class="footer"><jdoc:include type="modules" name="footer" /></div><?php endif; ?>
+			<div id="_bottom" class="footer"><jdoc:include type="modules" name="footer" /></div>
 		</div>
 		<script>
 			FB.init({

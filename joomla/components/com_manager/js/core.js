@@ -491,6 +491,14 @@ core.load = function(pages){
 		storage.topmenubar.init();
 		
 		var mode = (window != window.top)?'facebook':'standalone';
+		var cont = jQuery("div.content");
+		if(mode == 'facebook'){
+			jQuery(cont).css('max-width', '760px');
+			jQuery(cont).find('div.right').remove();
+		} else if(mode == 'standalone'){
+			jQuery(cont).css('max-width', '920px');
+			jQuery(cont).find('div.footer').remove();
+		}
 		jQuery.ajax({
 			url:'index.php?option=com_manager&task=getPageInfo&ids='+pages+'&mode='+mode,
 			type:'GET',
