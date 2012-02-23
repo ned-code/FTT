@@ -500,7 +500,7 @@ core.load = function(pages){
 			jQuery(cont).find('div.footer').remove();
 		}
 		jQuery.ajax({
-			url:'index.php?option=com_manager&task=getPageInfo&ids='+pages+'&mode='+mode,
+			url:'index.php?option=com_manager&task=getPageInfo&ids='+pages,
 			type:'GET',
 			complete:function(req, err){
 				storage.login.init(function(){

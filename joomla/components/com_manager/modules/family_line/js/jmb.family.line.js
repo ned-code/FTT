@@ -3,7 +3,10 @@ function JMBFamilyLine(){
 		cont,
 		fn,
 		objPull,
-		options;
+		options,
+		alias;
+		
+	alias = jQuery(document.body).attr('_alias');
 		
 	options = {
 		"Bulletin Board":{
@@ -302,7 +305,7 @@ function JMBFamilyLine(){
 	}
 
 	objPull = fn.pull();	
-
+	
 	//public
 	this.get = fn.get;
 	this.bind = function(name, callback){
@@ -310,6 +313,7 @@ function JMBFamilyLine(){
 	}
 	this.init = function(page){
 		objPull.clear();
+		if(alias!='myfamily') return false;
 		fn.ajax('get',null, function(res){
 			var json = jQuery.parseJSON(res.responseText);
 			var title = page.page_info.title;

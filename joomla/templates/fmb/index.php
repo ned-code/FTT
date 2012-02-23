@@ -18,7 +18,7 @@ $og_url = 'http://www.familytreetop.com/';
 $og_img = '';
 $og_site_name = 'FamilyTree-Top';
 
-$app                = JFactory::getApplication();
+$app = JFactory::getApplication();
 $jfb = JFBConnectFacebookLibrary::getInstance();
 $session = JFactory::getSession();
 
@@ -73,11 +73,11 @@ if($jfb_facebook_id){
 							<div id="fb-root"></div>
 							<jdoc:include type="component" />
 						</td>
-						<td id="_right" valign="top"><div class="right"><jdoc:include type="modules" name="right" /></div></td>
+						<td id="_right" valign="top"><div class="right"><?php if($alias=='myfamily'): ?><jdoc:include type="modules" name="right" /></div><?php endif; ?></td>
 					</tr>
 				</table>
 			</div>
-			<div id="_bottom" class="footer"><jdoc:include type="modules" name="footer" /></div>
+			<div id="_bottom" class="footer"><?php if($alias=='myfamily'): ?><jdoc:include type="modules" name="footer" /><?php endif; ?></div>
 		</div>
 		<script>
 			FB.init({

@@ -66,7 +66,7 @@ function JMBTopMenuBar(){
 			fn.activate();
 			
 			if(alias == 'login'){
-				jQuery(cont).find('.jmb-top-menu-bar-content').css('visibility', 'hidden');
+				jQuery(cont).find('div#myfamily').hide();
 			}
 			
 			jQuery(document.body).append(cont);

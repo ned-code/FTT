@@ -125,8 +125,6 @@ class JMBController extends JController
         
         public function getPageInfo(){
         	ob_clean();
-        	$session = JFactory::getSession();
-        	$session->set('mode', JRequest::getVar('mode'));
         	
         	$db =& JFactory::getDBO();
         	$host = new Host('Joomla');
@@ -431,16 +429,13 @@ class JMBController extends JController
 		return $active->alias;
 	}
 
-	protected function get_alias($user_data, $current_alias){
+	protected function get_alias($user_data, $facebook_id, $current_alias){
 		$session = JFactory::getSession();
-		$jfb = JFBConnectFacebookLibrary::getInstance();
 		
 		$alias = $session->get('alias');
 		$login_method = $session->get('login_method');
 		$invite = $session->get('invitation');
 		
-		$facebook_id = $jfb->getUserId();
-
 		if(!empty($invite)){
 			$alias = 'invitation';
 		}
@@ -531,7 +526,8 @@ class JMBController extends JController
         	
         	if($redirect){
         		$session->set('alias', 'myfamily');
-        		$app->redirect('index.php/'.$alias);
+        		//$app->redirect('index.php/'.$alias);
+        		$this->location('myfamily');
         	}
         	exit;
         }
@@ -568,6 +564,7 @@ class JMBController extends JController
         protected function get_facebook_id(){
         	$session = JFactory::getSession();
         	$jfb = JFBConnectFacebookLibrary::getInstance();
+        	
         	if($logged = $jfb->getUserId()){
         		return $logged;
         	}
@@ -578,12 +575,18 @@ class JMBController extends JController
         }
         
         public function jmb(){      	
-        	$task = JRequest::getCmd('task');
-        	$option = JRequest::getCmd('option');
-        	$view = JRequest::getCmd('view');
-        	$id = JRequest::getCmd('id');
-        	$token = JRequest::getCmd('token');
-       	
+        	$task = JRequest::getVar('task');
+        	$option = JRequest::getVar('option');
+        	$view = JRequest::getVar('view');
+        	$id = JRequest::getVar('id');
+        	$token = JRequest::getVar('token');
+        	$canvas = JRequest::getVar('canvas');
+        	
+        	if((bool)$canvas){
+     			header('Location: https://www.facebook.com/dialog/oauth?client_id='.JMB_FACEBOOK_APPID.'&redirect_uri='.JURI::base());
+     			exit;
+        	}
+
         	if($option!='com_manager') exit();
         	if(strlen($task)!=0) return;
         	
@@ -601,11 +604,12 @@ class JMBController extends JController
         	$user_data = $this->get_user_data($facebook_id);
         	
         	$current_alias = $this->get_current_alias();
-        	$alias = $this->get_alias($user_data, $current_alias);
-
+        	$alias = $this->get_alias($user_data, $facebook_id, $current_alias);
+        	
                	$session->set('alias', $alias);
         	if($current_alias != $alias){ 
-        		$app->redirect('index.php/'.$alias);
+        		//$app->redirect('index.php/'.$alias);
+        		$this->location($alias);
         	} else{    
         		switch($current_alias){
         			case 'invitation':

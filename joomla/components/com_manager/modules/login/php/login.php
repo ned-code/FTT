@@ -2,7 +2,7 @@
 class JMBLogin {
 	protected $host;
 	
-	public function __construct(){
+	public function __construct(){		
 		$this->host = new Host('Joomla');
 	}
 	public function user(){
@@ -13,7 +13,8 @@ class JMBLogin {
 		
 		$usertree = $this->host->usertree->load($tree_id, $gedcom_id);
 		$languages = $this->host->getLanguages();
-		return json_encode(array('user_id'=>$gedcom_id, 'usertree'=>$usertree,'default_language'=>$lang,'languages'=>$languages));
+	
+		return json_encode('user_id'=>$gedcom_id, 'usertree'=>$usertree,'default_language'=>$lang,'languages'=>$languages));
 	}
 	public function famous($args){
 		if($args == 'logout'){			
