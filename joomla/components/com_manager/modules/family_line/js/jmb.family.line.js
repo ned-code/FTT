@@ -262,7 +262,7 @@ function JMBFamilyLine(){
 			}
 			sb = host.stringBuffer();	
 			sb._('<div class="jmb-family-line-container">');
-				sb._('<table>');
+				sb._('<table cellspacing="0">');
 					sb._('<tr>');
 						sb._('<td class="left"></td>');
 						if(settings.select) sb._('<td><div class="icon mother select active">&nbsp;</div></td>');

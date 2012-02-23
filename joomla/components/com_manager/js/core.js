@@ -349,7 +349,7 @@ core.createLayout = function(type){
 	var tr = jQuery('<tr class="jmb_layout_row"></tr>');
 	jQuery(table).append(tr);
 	for(var cell=1; cell<=td_length;cell++){
-		var td = jQuery('<td class="jmb_layout_cell_single" id="jmb_page_layout_content_'+cell+'" valign="top"></td>');
+		var td = jQuery('<td style="width:auto;" class="jmb_layout_cell_single" id="jmb_page_layout_content_'+cell+'" valign="top"></td>');
 		jQuery(tr).append(td);
 	}
 	return table;
