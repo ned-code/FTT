@@ -21,6 +21,7 @@ function JMBAncestorsObject(obj){
 	module.objects = {};	
 	module.spouse = null;
 	module.nodes = null;
+	module.clickNode = null;
 	
 	module.ajax('get', null, function(res){
 		json = jQuery.parseJSON(res.responseText);
@@ -42,7 +43,7 @@ function JMBAncestorsObject(obj){
 		var nodes = module.nodePull;
 		for(var index in nodes){
 			var el = nodes[index];
-			var data = el.node.data;
+			var data = el.node.data.ftt_storage;
 			var label = el.label;
 			var user = (data.is_exist)?data.object.user:false;
 			if(!user) continue;
@@ -101,6 +102,7 @@ JMBAncestorsObject.prototype = {
 				jQuery(label).find('.jit-node-arrow').click(function(){
 					id = parseInt(jQuery(this).attr('id'));
 					if(id!=0){
+						module.clickNode = jQuery(this).attr('clickedId');
 						module.st.onClick(id);
 					}
 				});
@@ -149,7 +151,7 @@ JMBAncestorsObject.prototype = {
 	node:function(label, node){
 		var	module = this,
 			sb = host.stringBuffer(),
-			data = node.data,
+			data = node.data.ftt_storage,
 			parse,
 			place,
 			prew,
@@ -162,7 +164,7 @@ JMBAncestorsObject.prototype = {
 		fam_opt = storage.family_line.get.opt();
 		
 		prew = function(){
-			var	id = node.data.prew,
+			var	id = node.data.ftt_storage.prew,
 				objects = module.objects;
 			if(id){
 				return (objects[id].prew)?objects[id].prew:id;
@@ -206,8 +208,8 @@ JMBAncestorsObject.prototype = {
 				sb._('</tr>')
 			sb._('</table>');
 			//style="display:none;"
-			sb._('<div id="')._(prew(node.data.prew))._('" class="jit-node-arrow left">&nbsp;</div>');
-			sb._('<div id="')._((node.data.next?node.data.next:0))._('" class="jit-node-arrow right">&nbsp;</div>');
+			sb._('<div id="')._(prew(node.data.ftt_storage.prew))._('" clickedId="')._(node.data.ftt_storage.id)._('" class="jit-node-arrow left">&nbsp;</div>');
+			sb._('<div id="')._((node.data.ftt_storage.next?node.data.ftt_storage.next:0))._('" clickedId="')._(node.data.ftt_storage.id)._('" class="jit-node-arrow right">&nbsp;</div>');
 		sb._('</div>');
 		sb._('</div></div>');
 		return sb.result();
@@ -248,10 +250,12 @@ JMBAncestorsObject.prototype = {
 				id: parse.gedcom_id,
 				name: parse.name,
 				data:{
-					object:object,
-					parse:parse,
-					prew:(prew)?prew.id:false,
-					is_exist:true
+					ftt_storage:{
+						object:object,
+						parse:parse,
+						prew:(prew)?prew.id:false,
+						is_exist:true
+					}
 				},
 				children:[]
 			}
@@ -264,7 +268,7 @@ JMBAncestorsObject.prototype = {
 			return {
 				id:'_'+count,
 				name:'',
-				data:{ is_exist:false },
+				data:{ ftt_storage:{ is_exist:false} },
 				children:[]
 			}
 		}
@@ -278,7 +282,7 @@ JMBAncestorsObject.prototype = {
 				el.children.push(set_data(ids[0], el));
 				el.children.push(set_data(ids[1], el));
 				if(ids){
-					el.data.next = ind;
+					el.data.ftt_storage.next = ind;
 				}
 				if(ids[0]){
 					set_ancestors(el.children[0]);
@@ -368,7 +372,7 @@ JMBAncestorsObject.prototype = {
 			onPlaceLabel: function(label, node){
 				var	left = jQuery(label).find('div.jit-node-arrow.left'),
 					right = jQuery(label).find('div.jit-node-arrow.right'),
-					data = node.data,
+					data = node.data.ftt_storage,
 					active = module.st.clickedNode.id,
 					mod = node._depth%2;
 				
@@ -395,7 +399,7 @@ JMBAncestorsObject.prototype = {
 			},
 			onBeforePlotLine:function(adj){	
 				adj.data.$color = "#F5FAE6";
-				if((adj.nodeTo.id in module.nodes || adj.nodeFrom.id in module.nodes)&&adj.nodeTo.id!=module.st.clickedNode.id){
+				if(adj.nodeTo.id in module.nodes && adj.nodeFrom.id in module.nodes){
 					adj.data.$color = "#999";
 				}
 			}
@@ -408,7 +412,7 @@ JMBAncestorsObject.prototype = {
 		//compute node positions and layout
 		st.compute();
 		//emulate a click on the root node.
-		st.select(st.root);
+		st.onClick(st.root);
 	},
 	render:function(tree){
 		var	module = this,
