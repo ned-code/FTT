@@ -353,14 +353,10 @@ JMBAncestorsObject.prototype = {
 					}
 				}
 				set_node(subtree, 0);
-				module.nodes = nodes;				
+				module.nodes = nodes;	
 			},  
 			onAfterCompute: function(){  
 				jQuery(module.overlay).remove();
-				if(module.spouse != null){
-					var labels = module.st.labels.labels;
-					jQuery(labels[module.spouse.id]).fadeOut("slow");
-				}
 			},  
 			onCreateLabel: function(label, node){
 				label.id = node.id;
@@ -384,15 +380,20 @@ JMBAncestorsObject.prototype = {
 				if(mod || node.id == active){
 					jQuery(right).hide();
 				}
-				
-			},
-			onBeforePlotNode:function(node){
-				node.Node.color = "#C3C3C3";
-				if(module.spouse != null && module.spouse.id == node.id){
-					node.Node.color = "#F5FAE6";
+				if(node.id in module.nodes){
+					jQuery(label).css('visibility', 'visible');
+				} else {
+					jQuery(label).css('visibility', 'hidden');
 				}
 			},
-			onBeforePlotLine:function(adj){
+			onBeforePlotNode:function(node){
+				if(node.id in module.nodes){
+					node.data.$color = "#C3C3C3"
+				} else {
+					node.data.$color = "#F5FAE6"
+				}
+			},
+			onBeforePlotLine:function(adj){	
 				adj.data.$color = "#F5FAE6";
 				if((adj.nodeTo.id in module.nodes || adj.nodeFrom.id in module.nodes)&&adj.nodeTo.id!=module.st.clickedNode.id){
 					adj.data.$color = "#999";
@@ -407,7 +408,7 @@ JMBAncestorsObject.prototype = {
 		//compute node positions and layout
 		st.compute();
 		//emulate a click on the root node.
-		st.select(st.root);	
+		st.select(st.root);
 	},
 	render:function(tree){
 		var	module = this,
