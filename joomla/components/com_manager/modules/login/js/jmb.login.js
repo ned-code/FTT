@@ -232,6 +232,7 @@ function JMBLogin(){
 					object = json.usertree[json.user_id];
 					storage.usertree.user = json.user_id;
 					storage.usertree.pull = json.usertree;
+					storage.usertree.members = json.tree_members;
 					callback(object);
 					return true;
 				}

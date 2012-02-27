@@ -13,8 +13,10 @@ class JMBLogin {
 		
 		$usertree = $this->host->usertree->load($tree_id, $gedcom_id);
 		$languages = $this->host->getLanguages();
-	
-		return json_encode('user_id'=>$gedcom_id, 'usertree'=>$usertree,'default_language'=>$lang,'languages'=>$languages));
+		
+		$tree_members = $this->host->usertree->getMembers($tree_id);
+		
+		return json_encode(array('tree_members'=>$tree_members, 'user_id'=>$gedcom_id, 'usertree'=>$usertree,'default_language'=>$lang,'languages'=>$languages));
 	}
 	public function famous($args){
 		if($args == 'logout'){			
