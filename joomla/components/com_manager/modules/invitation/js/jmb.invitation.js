@@ -3,6 +3,11 @@ function JMBInvitation(){
 }
 
 JMBInvitation.prototype = {
+	ajax:function(func, params, callback){
+		host.callMethod("invitation", "JMBInvitation", func, params, function(res){
+				callback(res);
+		})
+	},
 	ajaxForm:function(obj, method, args, beforeSubmit, success){
 		var url = [storage.baseurl,'/components/com_manager/php/ajax.php'].join('');
 		jQuery(obj).ajaxForm({
@@ -136,8 +141,8 @@ JMBInvitation.prototype = {
 					id = jQuery(option).val();
 					name = jQuery(option).text();
 					if(confirm('You want to send invitation in application to '+name)){
-						self.sendRequestToInviteFacebookFriend(id, function(){
-							self.parent._ajax('inviteFacebookFriend', id+';'+json.user.gedcom_id, function(res){
+						module.sendRequestToInviteFacebookFriend(id, function(){
+							module.ajax('inviteFacebookFriend', id+';'+json.user.gedcom_id, function(res){
 								var json = jQuery.parseJSON(res.responseText);
 								if(json.success){
 									alert('An invitation has been sent.');
