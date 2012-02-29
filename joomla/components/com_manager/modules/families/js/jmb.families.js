@@ -13,6 +13,8 @@ function JMBFamiliesObject(obj){
 	module.colors = null;
 	module.cont = null;
 	module.start_id = null;
+	module.clickItem = false;
+	module.childsPos = {};
 	module.imageSize = {
 		parent:{
 			width:108,
@@ -169,21 +171,11 @@ JMBFamiliesObject.prototype = {
 	},
 	_create:function(){
 		var	sb = host.stringBuffer();
-		sb._('<div class="jmb-families-body">');
-			sb._('<table width="100%">');
-				sb._('<tr>');
-					sb._('<td style="width:170px;"><div style="width:150px;" class="jmb-families-header">&nbsp;</div></td>');
-					sb._('<td style="width:150px;"><div class="jmb-families-sircar">&nbsp;</div></td>');
-					sb._('<td style="width:90px;"><div class="jmb-families-event">&nbsp;</div></td>');
-					sb._('<td style="width:150px;"><div class="jmb-families-spouse">&nbsp;</div></td>');
-					sb._('<td style="width:170px;"><div class="jmb-families-spouse-container">&nbsp;</div></td>');
-				sb._('</tr>');
-				sb._('<tr>');
-					sb._('<td colspan="5" align="center"><div class="jmb-families-childs-container">&nbsp;</div></td>');
-				sb._('</tr>');
-			sb._('</table>');
-			sb._('<div class="home">&nbsp;</div>');
-		sb._('</div>');
+		sb._('<div class="jmb-families-sircar">&nbsp;</div>');
+		sb._('<div class="jmb-families-event">&nbsp;</div>');
+		sb._('<div class="jmb-families-spouse">&nbsp;</div>');
+		sb._('<div class="jmb-families-spouse-container">&nbsp;</div>');
+		sb._('<div class="home">&nbsp;</div>')
 		return jQuery(sb.result());
 	},
 	_info:function(object, spouse){
@@ -345,7 +337,7 @@ JMBFamiliesObject.prototype = {
 		sb._('</div>');
 		return jQuery(sb.result());
 	},
-	_child:function(child, len){
+	_child:function(child, len, position){
 		var	module = this,
 			k = 1,
 			sb = host.stringBuffer(),
@@ -363,8 +355,8 @@ JMBFamiliesObject.prototype = {
 			fam_opt = storage.family_line.get.opt(),
 			date = get.birth('year'),
 			bcolor = (len>1)?module.spouse_border[child.family_id]:"000000";
-			
-		sb._('<div id="')._(gedcom_id)._('" class="jmb-families-child" style="height:')._(Math.round(170*k))._('px;">');
+
+		sb._('<div id="')._(gedcom_id)._('" class="jmb-families-child" style="height:')._(Math.round(170*k))._('px;top:')._(position.top)._('px;left:')._(position.left)._('px;">');
 			sb._('<div id="father_line" style="border: 2px solid ')
 				sb._((user.is_father_line&&fam_opt.father.pencil)?fam_opt.father.pencil:'#F5FAE6');
 			sb._(';">');
@@ -402,6 +394,15 @@ JMBFamiliesObject.prototype = {
 				if( (id = jQuery(this).attr('id')) == 'null'){
 					return false;
 				}
+				var is_parent = jQuery(this).hasClass('parent');
+				var object = is_parent?jQuery(element).parent().parent():jQuery(element).parent();
+				var clickItem = { 
+					object:object, 
+					is_parent:is_parent,
+					offset:jQuery(object).offset(),
+					position:jQuery(object).position()
+				}
+				module.clickItem = clickItem;
 				module.reload(id, jQuery(this).hasClass('parent'));
 			});
 		});
@@ -426,6 +427,7 @@ JMBFamiliesObject.prototype = {
 			storage.tooltip.render('view', {
 				button_facebook:false,
 				button_edit:false,
+				offsetParent:document.body,
 				object:usertree[gedcom_id],
 				target:e
 			});
@@ -440,6 +442,7 @@ JMBFamiliesObject.prototype = {
 			storage.tooltip.render('edit', {
 				object:usertree[gedcom_id],
 				target:e,
+				offsetParent:document.body,
 				afterEditorClose:function(object){
 					var id = object.user.gedcom_id;
 					module.usertree[id] = object;
@@ -470,88 +473,173 @@ JMBFamiliesObject.prototype = {
 		});
 	},
 	_length:function(len){
-		var limit = 8;
+		var limit = 7;
 		var rows = Math.ceil(len/limit);
 		return Math.round(len/rows);
 	},
-	render:function(gedcom_id){
+	_start_top:function(len){
+		if(len>=3){
+			return 450;
+		} 
+		return 315;
+	},
+	render:function(gedcom_id, render_type){
 		var	module = this,
 			object = module.usertree[gedcom_id],
 			families = object.families,
 			cont = module._create(),
 			spouses = module._spouses(families, object.user.default_family),
 			childrens = module._childrens(families),
+			childs = [],
 			sircar, 
 			info,
-			spouse,
+			spouse = [],
 			i,
 			childrens_table,
 			row_count,
 			k;
 				
 		if(module.cont!=null){
-			jQuery(module.cont).remove();
+			jQuery(module.parent).html('');
 		}
 		module.cont = cont;
 		module.now_id = gedcom_id;
 		
 		jQuery(module.parent).append(cont);
 		
-		module._home(cont);	
-		
 		sircar = module._sircar(gedcom_id);
-		jQuery(cont).find('.jmb-families-sircar').attr('id', gedcom_id).append(sircar);
+		jQuery(cont[0]).css({top:"50px",left:"120px",visibility:"hidden"}).attr('id', gedcom_id).append(sircar);
 
 		if(spouses.length!=0){
-			module.spouse_border[spouses[0][0]] = module.borders[0];
 			info = module._info(object, spouses[0]);
-			jQuery(cont).find('.jmb-families-event').append(info);
-			spouse = module._spouse(spouses[0], (spouses.length>1)?module.borders[0]:"000000");
-			jQuery(cont).find('.jmb-families-spouse').attr('id', spouses[0][1]).append(spouse);
+			jQuery(cont[1]).css({top:"155px", left:"275px",visibility:"hidden"}).append(info);
+			
+			module.spouse_border[spouses[0][0]] = module.borders[0];
+			spouse[0] = module._spouse(spouses[0], (spouses.length>1)?module.borders[0]:"000000");
+			jQuery(cont[2]).attr('id', spouses[0][1]).css({top:"50px",left:"395px",visibility:"hidden"}).append(spouse[0]);
 			if(spouses.length > 1){
+				jQuery(cont[3]).css({top:(spouses.length>=3)?"30px":"75px",left:"555px",visibility:"hidden"});
 				for(i = 1 ; i < spouses.length ; i ++){
 					module.spouse_border[spouses[i][0]] = module.borders[i];
-					spouse = module._former_spouse(spouses[i], module.borders[i]);
-					jQuery(cont).find('.jmb-families-spouse-container').append(spouse);
+					spouse[i] = module._former_spouse(spouses[i], module.borders[i]);
+					spouse[10+i] = module._former_spouse(spouses[i], module.borders[i]);
+					jQuery(cont[3]).append(spouse[i]);
+					jQuery(cont[3]).append(spouse[10+i]);
 				}
-				jQuery(cont).find('.jmb-families-spouse-container').addClass('active');
-				jQuery(cont).find('.jmb-families-spouse-container').scrollbar();
+				jQuery(cont[3]).addClass('active');
+				jQuery(cont[3]).scrollbar();
 			} else {
-				jQuery(cont).find('.jmb-families-spouse-container').removeClass('active');
+				jQuery(cont[3]).removeClass('active');
 			}		
 		} else {
-			jQuery(cont).find('.jmb-families-spouse-container').removeClass('active');
+			jQuery(cont[3]).removeClass('active');
 		}
 		
+		var start_top = module._start_top(spouses.length);
 		if(childrens.length!=0){
 			var row_length = module._length(childrens.length);
-			var ul = jQuery('<ul></ul>');
-			var li = jQuery('<li></li>');
-			jQuery(ul).append(li);
-			jQuery(cont).find('.jmb-families-childs-container').append(ul);
+			var left_del = 100;
 			var index = 0;
+			var start_left = 350 - 100*(row_length/2);
 			for(i = 0 ; i < childrens.length ; i++){
 				if(index == row_length){
-					li = jQuery('<li></li>');
-					jQuery(ul).append(li);
+					start_top += 185;
 					index = 0;
+					if((childrens.length-i)<row_length){
+						start_left = 350 - 100*((childrens.length-i)/2);
+					}
 				}
-				child = module._child(childrens[i], spouses.length);
-				jQuery(li).append(child);
+				var pos = {top:start_top, left:start_left+(index*left_del)};
+				module.childsPos[childrens[i].gedcom_id] = pos;
+				childs[i] = module._child(childrens[i], spouses.length, pos);
+				jQuery(childs[i]).css("visibility","hidden");
+				jQuery(module.parent).append(childs[i]);
 				index++;
 			}
 		}	
+
+		module._home(module.parent);
+		module._arrows(module.parent);
+		module._view(module.parent);
+		module._edit(module.parent);
+		module._facebook(module.parent);
+		module._win(module.parent);
 		
-		module._arrows(cont);
-		module._view(cont);
-		module._edit(cont);
-		module._facebook(cont);
-		module._win(cont);
+		jQuery(module.parent).height(start_top + 200);
+		jQuery(module.parent).css('overflow', 'hidden');
+		
+		if(!module.clickItem){
+			module.startAnimation(cont, childs);
+		} else {
+			module.animation(cont, childs);
+		}	
+	},
+	startAnimation:function(cont, childs){
+		jQuery(cont[0]).css({left:"-155px", visibility:"visible"}).animate({ "left":"+=275"},"slow");
+		jQuery(cont[2]).css({left:"760px", visibility:"visible"}).animate({ "left":"-=365"},"slow");
+		jQuery(cont[3]).css({left:"760px", visibility:"visible"}).show().animate({ "left":"-=205"},"slow");
+		jQuery(childs).each(function(i, el){
+			jQuery(el).css({opacity:0, visibility:"visible"}).animate({"opacity":1}, 300*i);
+		});
+	},
+	animation:function(cont, childs){
+		var	module = this, 
+			clickItem = module.clickItem,
+			childsPos = module.childsPos,
+			id =  jQuery(clickItem.object).attr('id'),
+			clone = jQuery(clickItem.object).find('img').clone();
+		if(clickItem.is_parent){
+			var position = clickItem.position;
+			var pos = childsPos[id];
+			jQuery(clone).css({position:"absolute",top:position.top+"px",left:position.left+"px",visibility:"visible"}).show();
+			jQuery(module.parent).append(clone);
+			jQuery(childs).each(function(i, el){
+				if(jQuery(el).attr('id') == id){
+					jQuery(clone).animate({
+						width:"72px",
+						height:"80px",
+						top:(pos.top+6)+"px",
+						left:(pos.left+6)+"px"
+					}, 1000, function(){
+						jQuery(clone).remove();
+						jQuery(el).css({opacity:0, visibility:"visible"}).animate({"opacity":1}, 250);
+						jQuery(cont[0]).css({left:"-155px", visibility:"visible"}).animate({ "left":"+=275"},"slow");
+						jQuery(cont[2]).css({left:"760px", visibility:"visible"}).animate({ "left":"-=365"},"slow");
+						jQuery(cont[3]).css({left:"760px", visibility:"visible"}).show().animate({ "left":"-=205"},"slow");
+						jQuery(childs).each(function(i, el){
+							if(jQuery(el).attr('id') == id) return false;
+							jQuery(el).css({opacity:0, visibility:"visible"}).animate({"opacity":1}, 300*i);
+						});
+						jQuery(module.parent).css('overflow', 'visible');
+					});
+				}
+			});
+		} else {
+			var pos = childsPos[id];
+			jQuery(clone).css({position:"absolute",top:pos.top+"px",left:pos.left+"px",visibility:"visible"}).show();
+			jQuery(module.parent).append(clone);
+			jQuery(clone).animate({
+				width:"108px",
+				height:"120px",
+				top:"101px",
+				left:"126px"
+			}, 1000, function(){
+				jQuery(clone).remove();
+				jQuery(cont[0]).css({visibility:"visible", opacity:0}).animate({ "opacity":1}, "slow");
+				jQuery(cont[2]).css({left:"760px", visibility:"visible"}).animate({ "left":"-=365"},"slow");
+				jQuery(cont[3]).css({left:"760px", visibility:"visible"}).show().animate({ "left":"-=205"},"slow");
+				jQuery(childs).each(function(i, el){
+					jQuery(el).css({opacity:0, visibility:"visible"}).animate({"opacity":1}, 300*i);
+				});
+				jQuery(module.parent).css('overflow', 'visible');
+			});
+		}
+		
 	},
 	reload:function(id, type){
 		var	module = this;
 		storage.tooltip.cleaner(function(){
-			module.render(id);
+			module.render(id, type);
 		});		
 	}
 }

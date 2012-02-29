@@ -2,7 +2,7 @@
 	position:relative;
 }
 .jmb-families-body{}
-.jmb-families-body .home{
+#JMBFamiliesContainer .home{
 	background: url("icon-home.png") no-repeat scroll 0 0 transparent;
 	cursor: pointer;
 	height: 16px;
@@ -14,13 +14,19 @@
 .jmb-families-header{}
 .jmb-families-sircar{
 	height: 260px;
-	position: relative;
+	width:155px;
+	position: absolute;
 }
-.jmb-families-event{}
+.jmb-families-event{
+	position:absolute;
+	height:30px;
+	width:120px;
+}
 .jmb-families-spouse{
 	height: 260px;
+	width:120px;
 	margin-left: 38px;
-	position: relative;
+	position: absolute;
 }
 .jmb-families-spouse-div{
 	margin-bottom: 7px;
@@ -28,8 +34,9 @@
 }
 .jmb-families-spouse-container{
 	border: 1px solid #F5FAE6;
-	margin-top: 30px;
 	max-height: 375px;
+	position:absolute;
+	width:175px;
 }
 .jmb-families-spouse-container.active{
 	border: 1px solid #c3c3c3;
@@ -41,10 +48,7 @@
 	list-style: none outside none;
 }
 .jmb-families-child{
-	display: inline-block;
-	margin-left: 3px;
-	margin-top: 28px;
-	position: relative;
+	position: absolute;
 }
 .jmb-families-button {
 	height: 24px;
