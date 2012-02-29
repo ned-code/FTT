@@ -31,7 +31,7 @@ function JMBTooltip(){
 			cornerRadius: 0, 
 			trigger: 'none',
 			positions:['left','right','bottom'],
-			closeWhenOthersOpen: true,
+			closeWhenOthersOpen: false,
 			textzIndex:       999,
 			boxzIndex:        998,
 			wrapperzIndex:    997,
@@ -44,7 +44,7 @@ function JMBTooltip(){
 	};
 	module.idPull = {};
 	module.stPull = {};
-	module.btActive = null;
+	module.btActive = [];
 	module.path = "/components/com_manager/modules/tooltip/image/";
 }
 
@@ -166,7 +166,7 @@ JMBTooltip.prototype = {
 					sb._('</table>');
 				sb._('</div>');
 			}
-			sb._("<div class='jmb-profile-tooltip-close'><a href='javascript:void(jQuery(storage.tooltip.btActive.target).btOff());'><div>&nbsp;</div></a></div>");
+			sb._("<div class='jmb-profile-tooltip-close'><a href='javascript:void(jQuery(storage.tooltip.btActive[storage.tooltip.btActive.length-1].target).btOff());'><div>&nbsp;</div></a></div>");
 		sb._('</div>');
 		return jQuery(sb.result());
 	},
@@ -262,7 +262,14 @@ JMBTooltip.prototype = {
 	_click:function(settings){
 		var module = this;
 		jQuery(settings.target).click(function(){
-			module.btActive = settings;
+			if(module.btActive.length!=0&&typeof(settings.sub_item) == "undefined"){
+				if(typeof(module.btActive[module.btActive.length-1].sub_item) != "undefined"){
+					jQuery(module.btActive[module.btActive.length-2].target).btOff();
+				} else {
+					jQuery(module.btActive[module.btActive.length-1].target).btOff();
+				}
+			} 
+			module.btActive[module.btActive.length] = settings;
 			jQuery(settings.target).btOn();
 			return false;
 		});
@@ -299,6 +306,7 @@ JMBTooltip.prototype = {
 		});
 		offset = jQuery(cont).find('div.jmb-tooltip-view-edit').offset();
 		storage.tooltip.render('edit', {
+			sub_item:true,
 			object:object,
 			target:jQuery(cont).find('div.jmb-tooltip-view-edit'),
 			preBuild:function(){
@@ -380,11 +388,11 @@ JMBTooltip.prototype = {
 	},
 	cleaner:function(callback){
 		var module = this, i, pull;
-		if(module.btActive!=null){
-			jQuery(module.btActive.target).btOff();
+		if(module.btActive.length!=0){
+			jQuery(module.btActive[module.btActive.length-1].target).btOff();
 		}
 		module.idPull = {};
-		module.btActive = null;
+		module.btActive = [];
 		if(callback) callback();
 	},
 	render:function(type, settings){
