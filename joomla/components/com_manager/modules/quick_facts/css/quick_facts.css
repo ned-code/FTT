@@ -1,5 +1,5 @@
 #JMBQuickFactsContainer {
-	font-family: Calibri,Tahoma,sans-serif;
+	font-family: Tahoma,sans-serif;
 	font-size: 12px;
 	font-weight: normal;
 	margin: 10px 10px 20px;
@@ -12,10 +12,11 @@
 	padding: 5px;
 }
 .jmb_qf_header  span{
-	font-size: 18px;
-	left: 40%;
-    	position: absolute;
-    	top: 5px;
+	font-size: 13px;
+	font-weight: bold;
+	left: 38%;
+	position: absolute;
+	top: 8px;
 }
 .jmb_qf_content {
 	background: none repeat scroll 0 0 white;

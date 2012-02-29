@@ -52,7 +52,7 @@ div#jit-label div.node{
 	cursor: url("../images/cursor.png") 5 1, pointer;
 }
 .jit-node-item .data{
-	font-family: Calibri,Tahoma;
+	font-family: Tahoma;
 	font-size: 11px;
 	height: 80px;
 	margin-left: -2px;

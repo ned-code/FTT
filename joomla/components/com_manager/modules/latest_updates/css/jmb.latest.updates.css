@@ -1,6 +1,6 @@
 #JMBLatestUpdatesContainer {
-	font-family: Calibri,Tahoma,sans-serif;
-	font-size: 12px;
+	font-family: Tahoma,sans-serif;
+	font-size: 11px;
     	font-weight: normal;
     	margin: 10px 10px 20px;
     	position: relative;
@@ -12,10 +12,11 @@
     	padding: 5px;
 }
 .jmb-lu-header span {
-	font-size: 18px;
+	font-size: 13px;
+	font-weight: bold;
 	left: 35%;
 	position: absolute;
-	top: 5px;
+	top: 8px;
 }
 .jmb-lu-content {
 	background: none repeat scroll 0 0 white;

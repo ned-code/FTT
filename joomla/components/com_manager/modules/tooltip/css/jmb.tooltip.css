@@ -23,7 +23,7 @@
 	width: 81px;
 }
 .jmb-tooltip-view-info-data{
-	font-family: Calibri,Tahoma;
+	font-family: Tahoma;
 	font-size: 12px;
 }
 .jmb-tooltip-view-info-data div {
@@ -230,7 +230,7 @@
 .jmb-tooltip-view-switch span {
 	color: blue;
 	cursor: pointer;
-    	font-family: Calibri,Tahoma,sans-serif;
+    	font-family: Tahoma,sans-serif;
     	font-size: 11px;
     	font-weight: bold;
 }

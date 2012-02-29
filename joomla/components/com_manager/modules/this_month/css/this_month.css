@@ -10,29 +10,43 @@
 	padding: 5px;
 }
 .jmb-this-month-header span {
-	font-family: Calibri,Tahoma;
-	font-size: 18px;
+	font-family: Tahoma;
+	font-size: 13px;
+	font-weight: bold;
 	margin-left: 10px;
 }
 .jmb-this-month-header select {
 	border: 1px solid #999999;
-	font-family: Calibri,Tahoma;
+	font-family: Tahoma;
 	font-size: 12px;
 	padding: 3px;
+	margin-left: 3px;
 }
 .jmb-this-month-header select option {
 	width: 70px;
 }
 .jmb-this-month-body{
+	margin-left: 15px;
+	margin-right: 15px;
 	padding: 10px;
 }
 .jmb-this-month-view{
-	font-family: Calibri,Tahoma;
-	font-size: 12px;
-	font-weight: bold;
+	padding-left: 18px;
+	font-family: Tahoma;
+    	font-size: 12px;
+    	font-weight: bold;
+}
+.jmb-this-month-view.birthday{
+	background: url("../imgs/birthday.png") no-repeat scroll 0 0 transparent;
+}
+.jmb-this-month-view.marriage{
+	background: url("../imgs/union.png") no-repeat scroll 0 0 transparent;
+}
+.jmb-this-month-view.deceased{
+	background: url("../imgs/deceased.png") no-repeat scroll 0 0 transparent;
 }
 .jmb-this-month-content{
-	font-family: Calibri,Tahoma;
+	font-family: Tahoma;
 	font-size: 11px;
 	margin: 3px 3px 10px 10px;
 }
@@ -75,7 +89,7 @@
 	cursor:pointer;
 }
 .jmb-this-month-content .message{
-	font-family: Calibri,Tahoma;
+	font-family: Tahoma;
 	font-size: 11px;
 	font-weight: bold;
 }

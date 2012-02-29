@@ -97,7 +97,7 @@ img.jmb-families-avatar.view{
 	position: relative;
 }
 .jmb-families-parent-name{
-	font-family: Calibri,Tahoma;
+	font-family: Tahoma;
 	font-size: 12px;
 	height: 20px;
 	line-height: 20px;
@@ -105,7 +105,7 @@ img.jmb-families-avatar.view{
 	width: 112px;
 }
 .jmb-families-parent-date{
-	font-family: Calibri,Tahoma;
+	font-family: Tahoma;
 	font-size: 12px;
 	height: 20px;
 	line-height: 20px;
@@ -113,14 +113,14 @@ img.jmb-families-avatar.view{
 	width: 112px;
 }
 .jmb-families-child-name{
-	font-family: Calibri,Tahoma;
+	font-family: Tahoma;
 	font-size: 12px;
 	height: 20px;
 	line-height: 20px;
 	text-align: center;
 }
 .jmb-families-child-date{
-	font-family: Calibri,Tahoma;
+	font-family: Tahoma;
 	font-size: 12px;
 	height: 24px;
 	line-height: 24px;
