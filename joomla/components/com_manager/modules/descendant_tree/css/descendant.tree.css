@@ -35,7 +35,7 @@
 .jmb-dtp-body-info {
 	border-bottom: 2px solid #999999;
 	font-family: Tahoma,sans-serif;
-	font-size: 14px;
+	font-size: 11px;
 	font-weight: bold;
 	margin: 5px;
 	position: relative;
@@ -190,7 +190,7 @@
 	background: none repeat scroll 0 0 white;
 	border: 2px solid gray;
 	font-family: Tahoma,sans-serif;
-	font-size: 12px;
+	font-size: 11px;
 	left: 10px;
 	position: absolute;
 	top: 10px;

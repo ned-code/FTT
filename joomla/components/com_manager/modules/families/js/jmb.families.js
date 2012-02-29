@@ -375,7 +375,7 @@ JMBFamiliesObject.prototype = {
 			sb._('</div></div>');	
 			sb._('<div>');
 				sb._('<div class="jmb-families-child-name">')._(get.nick)._('</div>');
-				if(date.length!=0) sb._('<div class="jmb-families-child-date">')._(date)._('</div>');
+				sb._('<div class="jmb-families-child-date">')._((date.length!=0)?date:"....")._('</div>');
 			sb._('</div>');
 			if(module._childrensCount(families)!=0){
 				sb._('<div id="')._(gedcom_id)._('" class="')._(child_button_active)._('">&nbsp;</div>');
@@ -384,7 +384,6 @@ JMBFamiliesObject.prototype = {
 			}
 			
 			sb._('<div class="')._(arrow_class)._('" style="background:#')._(bcolor)._(';">&nbsp</div>');
-			if(date.length==0) sb._('<div>&nbsp;</div>');
 		return jQuery(sb.result());
 	},
 	_arrows:function(cont){
@@ -522,9 +521,7 @@ JMBFamiliesObject.prototype = {
 				for(i = 1 ; i < spouses.length ; i ++){
 					module.spouse_border[spouses[i][0]] = module.borders[i];
 					spouse[i] = module._former_spouse(spouses[i], module.borders[i]);
-					spouse[10+i] = module._former_spouse(spouses[i], module.borders[i]);
 					jQuery(cont[3]).append(spouse[i]);
-					jQuery(cont[3]).append(spouse[10+i]);
 				}
 				jQuery(cont[3]).addClass('active');
 				jQuery(cont[3]).scrollbar();
@@ -607,8 +604,9 @@ JMBFamiliesObject.prototype = {
 						jQuery(cont[2]).css({left:"760px", visibility:"visible"}).animate({ "left":"-=365"},"slow");
 						jQuery(cont[3]).css({left:"760px", visibility:"visible"}).show().animate({ "left":"-=205"},"slow");
 						jQuery(childs).each(function(i, el){
-							if(jQuery(el).attr('id') == id) return false;
-							jQuery(el).css({opacity:0, visibility:"visible"}).animate({"opacity":1}, 300*i);
+							if(jQuery(el).attr('id') != id){
+								jQuery(el).css({opacity:0, visibility:"visible"}).animate({"opacity":1}, 300*i);
+							}
 						});
 						jQuery(module.parent).css('overflow', 'visible');
 					});

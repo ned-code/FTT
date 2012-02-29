@@ -59,8 +59,8 @@
 	margin-left: 47px;
 }
 .jmb-families-button.childs{	
-	margin-left: 28px;
-	margin-top: 2px;
+	margin-left: 30px;
+	margin-top: 5px;
 }
 .jmb-families-button.parent.active{
 	background: url("vector-up2.gif") no-repeat scroll 0 0 transparent;
@@ -98,7 +98,7 @@ img.jmb-families-avatar.view{
 }
 .jmb-families-parent-name{
 	font-family: Tahoma;
-	font-size: 12px;
+	font-size: 11px;
 	height: 20px;
 	line-height: 20px;
 	text-align: center;
@@ -106,7 +106,7 @@ img.jmb-families-avatar.view{
 }
 .jmb-families-parent-date{
 	font-family: Tahoma;
-	font-size: 12px;
+	font-size: 11px;
 	height: 20px;
 	line-height: 20px;
 	text-align: center;
@@ -114,16 +114,16 @@ img.jmb-families-avatar.view{
 }
 .jmb-families-child-name{
 	font-family: Tahoma;
-	font-size: 12px;
-	height: 20px;
-	line-height: 20px;
+	font-size: 11px;
+	height: 11px;
+	line-height: 11px;
 	text-align: center;
 }
 .jmb-families-child-date{
 	font-family: Tahoma;
-	font-size: 12px;
-	height: 24px;
-	line-height: 24px;
+	font-size: 11px;
+	height: 14px;
+	line-height: 14px;
 	text-align: center;
 }
 .jmb-families-arrow-up {
