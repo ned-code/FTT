@@ -17,9 +17,11 @@ class JMBInvitation {
 	*/
 	public function sendInvitation($gedcom_id){
 		require_once("Mail.php");		
-		$owner_id = $_SESSION['jmb']['gid'];
-		$tree_id = $_SESSION['jmb']['tid'];
-		$facebook_id = $_SESSION['jmb']['fid'];
+		$session = JFactory::getSession();
+		$facebook_id = $session->get('facebook_id');
+		$owner_id = $session->get('gedcom_id');
+        	$tree_id = $session->get('tree_id');
+        	$permission = $session->get('permission');
 		
 		$usertree = $this->host->usertree->load($tree_id, $owner_id);
 		$owner = $usertree[$owner_id];
@@ -30,9 +32,10 @@ class JMBInvitation {
 		if(!$to) return;
 		
 		$value = $recipient['user']['gedcom_id'].','.$tree_id;	
+		
 		$token = md5($value);
 		$sql_string = "INSERT INTO #__mb_variables (`id`,`belongs`,`value`) VALUES (NULL,?,?)";		
-		$this->db->setQuery($sql, $token, $value);
+		$this->db->setQuery($sql_string, $token, $value);
         	$this->db->query();
 		
 		#recipient  
@@ -68,7 +71,7 @@ class JMBInvitation {
 			return json_encode(array('message'=>'Message delivery failed...'));
 			
 		} else {
-			return json_encode(array('message'=>'Message successfully sent!'));
+			return json_encode(array('message'=>'Message successfully sent!', 'token'=>$token, 'value'=>$value, 'sql_string'=>$sql_string));
 		}
 	}
 	

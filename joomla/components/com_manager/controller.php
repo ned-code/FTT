@@ -448,7 +448,7 @@ class JMBController extends JController
 			case 'invitation':
 				if(!$facebook_id){
 					return 'login';
-				} 
+				}
 				return $alias;
 			break;
 			
@@ -500,33 +500,34 @@ class JMBController extends JController
         	$session = JFactory::getSession();
         	$app = JFactory::getApplication();
         	
-        	$sql = "SELECT value FROM #__mb_variables WHERE belongs='".$token."'";
-        	$db->setQuery($sql);
-        	$rows = $db->loadAssocList();
-        	
-        	if($rows==null) header('Location:index.php');
+        	$sql = "SELECT value FROM #__mb_variables WHERE belongs=?";
+        	$this->db->setQuery($sql, $token);
+        	$rows = $this->db->loadAssocList();
+
+        	if($rows==null) $this->location('home');
         	$args = explode(',', $rows[0]['value']);
+
         	
-        	$sql = "UPDATE #__mb_tree_links SET `type`='USER' WHERE individuals_id ='".$args[0]."' AND tree_id='".$args[1]."'";
-        	$db->setQuery($sql);
-        	$db->query();
+        	$sql = "UPDATE #__mb_tree_links SET `type`='USER' WHERE individuals_id =? AND tree_id=?";
+        	$this->db->setQuery($sql, $args[0], $args[1]);
+        	$this->db->query();
         	
-        	$sql = "UPDATE #__mb_individuals SET `fid`='".$fid."',`change` = NOW() WHERE id='".$args[0]."'";
-        	$db->setQuery($sql);
-        	$db->query();
+        	$sql = "UPDATE #__mb_individuals SET `fid`=?,`change` = NOW(), `join_time`= NOW() WHERE id=?";
+        	$this->db->setQuery($sql, $fid, $args[0]);
+        	$this->db->query();
         	
-        	$sql = "DELETE FROM #__mb_variables WHERE belongs='".$token."'";
-        	$db->setQuery($sql);
-        	$db->query();
+        	$sql = "DELETE FROM #__mb_variables WHERE belongs=?";
+        	$this->db->setQuery($sql, $token);
+        	$this->db->query();
         	
-        	if(isset($_SESSION['jmb']['invitation'])){        		
+        	$invitation = $session->get('invitation');
+        	if(!empty($invitation)){        		
         		$session->clear('invitation');
         		$session->clear('token');
         	}
         	
         	if($redirect){
         		$session->set('alias', 'myfamily');
-        		//$app->redirect('index.php/'.$alias);
         		$this->location('myfamily');
         	}
         	exit;
@@ -573,47 +574,7 @@ class JMBController extends JController
         	}
         	return false;
         }
-        
-        protected function checkLogin(&$app, &$session, &$jfb){
-        	$fb_session = JRequest::getVar('session');
-        	$check_status = $session->get('check_status');
-        	$user = JFactory::getUser();
-        	if($user->guest){
-        		require_once(JPATH_ROOT.DS.'components'.DS.'com_manager'.DS.'php'.DS.'facebook.php');
-        		require_once (JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_jfbconnect' . DS . 'models' . DS . 'usermap.php');
-        		//init
-        		$facebook = new Facebook(array('appId'=>JMB_FACEBOOK_APPID,'secret'=>JMB_FACEBOOK_SECRET));
-        		$user_map_model = new JFBConnectModelUserMap();
-        		//check facebook status
-        		if($check_status == null){
-        			$session->set('check_status', time());
-        			$facebook_login_url = $facebook->getLoginStatusUrl(array(
-        				'ok_session'=>'http://familytreetop.com/index.php/myfamily',
-        				'no_user'=>'http://familytreetop.com/index.php/login',
-        				'no_session'=>'http://familytreetop.com/index.php/login'
-        				));
-				header('Location: '.$facebook_login_url);
-				exit;        			
-        		}
-        		//check facebook session 
-        		if($fb_session==null){
-        			return false;
-        		} else {       		
-				$fb_session = json_decode($fb_session);
-				$session->set('facebook_id', $fb_session->uid);
-				$facebook->setAccessToken($fb_session->access_token);
-				$joomla_user_id = $user_map_model->getJoomlaUserId($fb_session->uid);
-				if($joomla_user_id!=null){
-					require_once(JPATH_ROOT.DS.'components'.DS.'com_jfbconnect'.DS.'controllers'.DS.'loginregister.php');
-					$login_controller = new JFBConnectControllerLoginRegister();
-					$login_controller->login(); // Perform the login function
-				}
-        		}
-        	}   
-        	$session->clear('check_status');
-        	return true;
-        }
-        
+                
         public function jmb(){      	
         	$task = JRequest::getVar('task');
         	$option = JRequest::getVar('option');
@@ -635,8 +596,6 @@ class JMBController extends JController
         	$session = JFactory::getSession();
         	$jfb = JFBConnectFacebookLibrary::getInstance();
 
-        	//$this->checkLogin($app, $session, $jfb);
-        	
         	if(strlen($token)!=0){
         		$session->set('invitation', true);
         		$session->set('token', $token);
@@ -656,7 +615,7 @@ class JMBController extends JController
         		switch($current_alias){
         			case 'invitation':
         				$this->set_user_data($user_data);
-        				$this->invite($user['id'], $_SESSION['jmb']['token']);
+        				$this->invite($facebook_id, $token);
         			break;
         			
         			case 'first-page':
