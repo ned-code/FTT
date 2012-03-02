@@ -397,10 +397,16 @@ JMBTooltip.prototype = {
 	},
 	render:function(type, settings){
 		var	module = this,
-			id = module._getId(settings.object.user.gedcom_id,type),
+			object = settings.object,
+			id,
 			cont;		
 			
 		if(!module._checkType(type)) return;
+		if(object!=null){
+			module._getId(object.user.gedcom_id,type);
+		} else {
+			return false;
+		}
 		st = module._setSettings(type, settings);
 		
 		if(!module.idPull[id]){
