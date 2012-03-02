@@ -171,6 +171,16 @@ JMBAncestorsObject.prototype = {
 			}
 			return 0;			
 		}
+		
+		event_string = function(type){
+			var p = parse.place(type);
+			var year = parse[type]('year');
+			if(p.length!=0){
+				return year + ' ('+place.city+','+place.country.substr(0, 3)+')';
+			}
+			return year;			
+		}
+		
 		sb._('<div id="father_line" style="border:2px solid ')
 			._((fam_opt.father.pencil)?fam_opt.father.pencil:'#F5FAE6')
 		._('" >');
@@ -195,11 +205,11 @@ JMBAncestorsObject.prototype = {
 						sb._('<div class="name">')._(parse.name)._('</div>');
 						if(parse.is_birth){
 							place = parse.place('birth');
-							sb._('<div class="birt">B: ')._(parse.birth('year'))._((place.length!=0)?' ('+place.city+','+place.country+')':'')._('</div>');
+							sb._('<div class="birt">B: ')._(event_string('birth'))._('</div>');
 						}
 						if(parse.is_death){
 							place = parse.place('death');
-							sb._('<div class="deat">D: ')._(parse.death('year'))._((place.length!=0)?' ('+place.city+','+place.country+')':'')._('</div>');
+							sb._('<div class="deat">D: ')._(event_string('death'))._('</div>');
 						}
 						if(parse.relation){
 							sb._('<div class="relation">')._(parse.relation)._('</div>');

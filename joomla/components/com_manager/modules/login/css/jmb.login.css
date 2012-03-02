@@ -1,6 +1,6 @@
 .jmb-profile-cont {
-	font-family: Calibri,Tahoma,sans-serif;
-	font-size: 16px;
+	font-family: Tahoma,sans-serif;
+	font-size: 11px;
 	height: 30px;
 	right: 10px;
 	line-height: 28px;
@@ -20,6 +20,7 @@
 }
 .jmb-profile-cont div.login span {
 	color: #ccc;
+	font-weight: bold;
 }
 .jmb-profile-cont div.settings {
 	position:relative;
@@ -55,10 +56,11 @@
 .jmb-profile-cont div.settings div.menu div{
 	background: url("../imgs/list.png") no-repeat scroll 3px 3px transparent;
 	line-height: 16px;
+	margin-top: 5px;
 }
 .jmb-profile-cont div.settings div.menu div span {
 	color: #153FC5;
-	font-size: 12px;
+	font-size: 11px;
 	margin-left: 15px;
 	cursor: pointer;
 }

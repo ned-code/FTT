@@ -23,6 +23,7 @@
 	margin-left: 3px;
 }
 .jmb-this-month-header select option {
+	padding-left: 5px;
 	width: 70px;
 }
 .jmb-this-month-body{

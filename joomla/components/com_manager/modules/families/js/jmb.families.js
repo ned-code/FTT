@@ -165,7 +165,9 @@ JMBFamiliesObject.prototype = {
 	_home:function(cont){
 		var	module = this,
 			gedcom_id = module.user.gedcom_id;
+			
 		jQuery(cont).find('div.home').click(function(){
+			module.clickItem = false;
 			module.render(module.start_id);
 		});
 	},
