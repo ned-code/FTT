@@ -433,6 +433,7 @@ class JMBController extends JController
 		$session = JFactory::getSession();
 		$invitation = $session->get('invitation');
 		$alias = $session->get('alias');
+		$login_method = $session->get('login_method');
 		if(!empty($invitation)){
 			return 'invitation';
 		}		
@@ -461,6 +462,7 @@ class JMBController extends JController
 			break;
 			
 			case "myfamily":
+				if(!empty($login_method)&&$login_method=="famous_family") return "myfamily";
 				if(!$facebook_id) return "login";
 				if(!$user_data) return "first-page";
 				return "myfamily";			
@@ -519,7 +521,7 @@ class JMBController extends JController
         protected function get_user_data($facebook_id){
         	if($facebook_id){
         		$link = $this->check_user_in_system($facebook_id);
-        		return array('facebook_id'=>$facebook_id, 'gedcom_id'=>$link['gid'], 'tree_id'=>$link['tid'], 'permission'=>$link['type']);
+        		return ($link)?array('facebook_id'=>$facebook_id, 'gedcom_id'=>$link['gid'], 'tree_id'=>$link['tid'], 'permission'=>$link['type']):$link;
         	} else {
         		return false;
         	}

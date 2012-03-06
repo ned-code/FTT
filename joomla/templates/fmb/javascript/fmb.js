@@ -65,10 +65,6 @@ function JMBTopMenuBar(){
 			fn.click();
 			fn.activate();
 			
-			if(alias == 'login'){
-				jQuery(cont).find('div#myfamily').hide();
-			}
-			
 			jQuery(document.body).append(cont);
 		}
 	}
