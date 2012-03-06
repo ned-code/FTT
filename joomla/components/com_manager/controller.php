@@ -429,62 +429,45 @@ class JMBController extends JController
 		return $active->alias;
 	}
 
-	protected function get_alias($user_data, $facebook_id, $current_alias){
+	protected function get_alias($user_data, $facebook_id){
 		$session = JFactory::getSession();
-		
+		$invitation = $session->get('invitation');
 		$alias = $session->get('alias');
-		$login_method = $session->get('login_method');
-		$invite = $session->get('invitation');
-		
-		if(!empty($invite)){
-			$alias = 'invitation';
-		}
-		
-		if(empty($alias)){
-			$session->set('alias', 'home');
-			$alias = 'home';
-		}
+		if(!empty($invitation)){
+			return 'invitation';
+		}		
 		switch($alias){
-			case 'invitation':
-				if(!$facebook_id){
-					return 'login';
-				}
-				return $alias;
+			case "invitation":
+				if(!$facebook_id) return "login";
+				return "invitation";
 			break;
 			
-			case 'login':
-				if($facebook_id&&!$user_data){
-					return 'first-page';
-				} else if($facebook_id&&$user_data){
-					return 'myfamily';
-				}
-				return $alias;				
+			case "home":
+				return "home";
 			break;
-				
+			
+			case "famous-family":
+				return "famous-family";
+			break;
+		
+			case "login":
+				if($facebook_id) return "myfamily";
+				return "login";
+			break;
+			
 			case "first-page":
-				if(!$facebook_id){
-					return 'login';	
-				} else if($user_data){
-					return 'myfamily';
-				}
-				return $alias;
+				if(!$facebook_id) return "login";
+				return "first-page";
 			break;
 			
-			case 'home':
-				return $alias;
+			case "myfamily":
+				if(!$facebook_id) return "login";
+				if(!$user_data) return "first-page";
+				return "myfamily";			
 			break;
 			
-			case 'famous-family':
-				return $alias;
-			break;
-			
-			case 'myfamily':	
-				if(!$facebook_id){
-					return 'login';
-				} else if(!$user_data){
-					return 'first-page';
-				}
-				return $alias;
+			default:
+				return "home";
 			break;
 		}
 	}
@@ -605,11 +588,11 @@ class JMBController extends JController
         	$user_data = $this->get_user_data($facebook_id);
         	
         	$current_alias = $this->get_current_alias();
-        	$alias = $this->get_alias($user_data, $facebook_id, $current_alias);
+        	$alias = $this->get_alias($user_data, $facebook_id);
         	
                	$session->set('alias', $alias);
+
         	if($current_alias != $alias){ 
-        		//$app->redirect('index.php/'.$alias);
         		$this->location($alias);
         	} else{    
         		switch($current_alias){
