@@ -7,16 +7,18 @@ class JMBHome {
 	}
 	
 	public function page($args){
+		$session = JFactory::getSession();
 		switch($args){
 			case 'myfamily':
-				$_SESSION['jmb']['login_type'] = 'family_tree';
+				$session->set('login_method', 'family_tree');
 			break;
 			
 			case 'famous-family':
-				$_SESSION['jmb']['login_type'] = 'famous_family';
+				$session->set('login_method', 'famous_family');
 			break;
 		}
-		$_SESSION['jmb']['alias'] = $args;
+		$session->set('alias', $args);
+		return true;
 	}
 }
 ?>
