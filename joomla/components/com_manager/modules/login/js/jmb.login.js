@@ -19,7 +19,6 @@ function JMBLogin(){
 	}
 	
 	//init vars
-	fb_logged = jQuery(document.body).attr('_fb');
 	type = jQuery(document.body).attr('_type');
 	alias = jQuery(document.body).attr('_alias');
 	path = "/components/com_manager/modules/login/imgs/";
@@ -244,18 +243,18 @@ function JMBLogin(){
 			var cont, ch;
 			jQuery(document.body).ready(function(){
 				fn.user(function(object){
+					fb_logged = jQuery(document.body).attr('_fb');
 					if(type == 'famous_family' && alias == 'myfamily'){
 						fn.famous(object);
-					} else {
-						if(object){
-							cont = fn.create();
-							fn.setName(object, cont);
-							fn.setAvatar(object, cont);
-							if(!object.link) fn.click(cont);
-						} else {
-							cont = fn.connect();
-							fn.login(cont);
-						}
+					} else if (alias == 'myfamily' && object){
+						cont = fn.create();
+						fn.setName(object, cont);
+						fn.setAvatar(object, cont);
+						if(!object.link) fn.click(cont);
+						jQuery(document.body).append(cont);
+					} else if(!parseInt(fb_logged)) {
+						cont = fn.connect();
+						fn.login(cont);
 						jQuery(document.body).append(cont);
 					}
 					callback();
