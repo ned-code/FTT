@@ -57,12 +57,19 @@
 	background: url("../imgs/list.png") no-repeat scroll 3px 3px transparent;
 	line-height: 16px;
 	margin-top: 5px;
+	margin-left: -3px;
 }
 .jmb-profile-cont div.settings div.menu div span {
 	color: #153FC5;
 	font-size: 11px;
 	margin-left: 15px;
 	cursor: pointer;
+}
+.jmb-profile-cont div.settings div.menu div:hover {
+	background:#627AAD;
+}
+.jmb-profile-cont div.settings div.menu div:hover span {
+	color:white;
 }
 .jmb-profile-cont div.settings div.menu ul{
 	list-style: none outside none;
