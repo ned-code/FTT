@@ -442,12 +442,43 @@ class JMBDescendantTree {
 			if($parents!=null){
 				$key = ($render=='mother')?0:1;
 				if($parents[$key]!=null){
-					//return $parents[$key]['gedcom_id'];
 					return $this->getFirstParent($parents[$key]['gedcom_id'], $usertree, 'mother', $level + 1);
 				}
 			}
 			return $id;
 		}		
+	}
+	protected function getDescendantsCount($id, $usertree){
+		if(!isset($usertree[$id])) return 0;
+		$count = 0;
+		$object = $usertree[$id];
+		if(!empty($object['families'])){
+			foreach($object['families'] as $family){
+				if($family!='length'){
+					$count += sizeof($family['childrens']);
+					if(!empty($family['childrens'])){
+						foreach($family['childrens'] as $child){
+							$count += $this->getDescendantsCount($child['gedcom_id'], $usertree);	
+						}
+					}
+				}
+			}
+		}
+		return $count;
+	}
+	protected function getDescendantsTree($id, $usertree, $level=0){
+		if(!isset($usertree[$id])||$level==4) return false;
+		$object = $usertree[$id];
+		$parents = $this->getParents($object);
+		$tree = array('id'=>$id, 'level'=>$level, 'object'=>$object, 'count'=>$this->getDescendantsCount($id, $usertree), 'parents'=>array());
+		if(!empty($parents)){
+			foreach($parents as $el){
+				if($el!=null){
+					$tree['parents'][$el['relation']] = $this->getDescendantsTree($el['gedcom_id'], $usertree, $level + 1);
+				}
+			}
+		}
+		return $tree;
 	}
 	public function getTree($render){
 		$session = JFactory::getSession();
@@ -461,11 +492,26 @@ class JMBDescendantTree {
 		$this->owner_id = $owner_id;
 	
 		$lang = $this->host->getLangList('descendant_tree');
-		$key = $this->getFirstParent($owner_id, $usertree, $render);;
-		$tree = false;
+		
+		$key = $this->getFirstParent($owner_id, $usertree, $render);
+		$tree = $this->getDescendantsTree($owner_id, $usertree);
+		
 		$xml = $this->xml($key, $usertree);
 				
 		return json_encode(array('xml'=>$xml,'owner'=>$owner_id, 'tree'=>$tree,'members'=>$usertree, 'key'=>$key, 'lang'=>$lang));
+	}
+	public function getTreeById($id){
+		$session = JFactory::getSession();
+		$facebook_id = $session->get('facebook_id');
+		$owner_id = $session->get('gedcom_id');
+        	$tree_id = $session->get('tree_id');
+        	$permission = $session->get('permission');
+		$usertree = $this->host->usertree->load($tree_id, $owner_id);
+		
+		$this->owner_id = $owner_id;
+		
+		$xml = $this->xml($id, $usertree);
+		return json_encode(array('xml'=>$xml));
 	}
 }
 ?>

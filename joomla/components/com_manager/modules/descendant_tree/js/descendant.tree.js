@@ -14,6 +14,9 @@ function JMBDescendantTreeObject(obj){
 	module.select = null;
 	module.first = null;
 	module.lang = null;
+	module.tree = null;
+	module.render = 'mother';
+	module.checked = null;
 	
 	module.profile = new DescendantTreeProfile(module);
 	module.buttons = module.board();
@@ -23,6 +26,7 @@ function JMBDescendantTreeObject(obj){
 	storage.family_line.bind('JMBDescendantTreeObject', function(res){
 		module.clear();
 		module.dhxTree.deleteChildItems(0);
+		module.render = res._line;
 		module.loadTree(module.dhxTree, res._line);
 	});
 	
@@ -102,7 +106,7 @@ JMBDescendantTreeObject.prototype = {
 		module.modal = module.overlay();
 		
 		
-		module.loadTree(dhxTree, 'mother');		
+		module.loadTree(dhxTree, module.render);		
 		
 		dhxTree.attachEvent("onXLE", function(tree,id){
 			var correct_style = function(item){
@@ -129,10 +133,9 @@ JMBDescendantTreeObject.prototype = {
 				});
 			});
 			
-			//user = jQuery('div[name="descendant-node"][user="true"]');
 			user = jQuery('div#'+module.owner+'[name="descendant-node"]');
 			jQuery(user[0]).click();
-			jQuery('div.containerTableStyle').scrollTop((jQuery(user[0]).offset().top - 300));
+			jQuery('div.containerTableStyle').scrollTop(0).scrollTop((jQuery(user[0]).offset().top - 300));
 			
 			module.buttons.init();
 		});
@@ -140,17 +143,30 @@ JMBDescendantTreeObject.prototype = {
 	loadTree:function(dhxTree, render){
 		var	module = this,
 			json;
-		render = (render=='father')?'father':'mother';
 		module.ajax('getTree', render, function(res){
 			json = jQuery.parseJSON(res.responseText);
 			module.lang = json.lang;
 			module.first = json.key;
 			module.members = json.members;
 			module.owner = json.owner;
+			module.tree = json.tree;
 			dhxTree.loadXMLString(json.xml);
 			dhxTree.openAllItems(0);
 			storage.core.modulesPullObject.unset('JMBDescendantTreeObject');
 		});
+	},
+	loadTreeById:function(id){
+		var module = this;
+		if(typeof(id) != 'undefined' && module.checked != id){
+			module.ajax('getTreeById', id, function(res){
+				module.select = null;
+				module.checked = id;
+				var json = jQuery.parseJSON(res.responseText);
+				module.dhxTree.deleteChildItems(0);
+				module.dhxTree.loadXMLString(json.xml);
+				module.dhxTree.openAllItems(0);
+			});		
+		}
 	},
 	click:function(element){
 		var 	moudle, id, find;
@@ -215,7 +231,7 @@ JMBDescendantTreeObject.prototype = {
 					sb._('</div>');
 					sb._('<div class="jmb-desc-select-close">&nbsp;</div>');
 				sb._('</div>');
-				div = jQuery(sb.result());
+				var div = jQuery(sb.result());
 				return {
 					cont:function(){
 						return div;
@@ -224,12 +240,12 @@ JMBDescendantTreeObject.prototype = {
 						var node, sb = host.stringBuffer(), data_style;
 						sb._('<div id ="')._(settings.id)._('" class="node')._((settings.descendants)?' descendants':'')._('">');
 							if(settings.descendants){
-								sb._('<span style="position:relative;top:-5px;"><input type="checkbox"></span>');
+								sb._('<span style="position:relative;top:-5px;"><input id="')._(settings.input_id())._('" type="checkbox"></span>');
 							}
 							sb._('<span class="title">');
 								if(settings.descendants){
 									sb._('<div class="text">')._(settings.title)._('</div>');
-									sb._('<div class="count">')._('52 Descendants')._('</div>');
+									sb._('<div class="count">')._(settings.count()+' Descendants')._('</div>');
 								} else {
 									sb._(settings.title);
 								}
@@ -250,10 +266,12 @@ JMBDescendantTreeObject.prototype = {
 						}
 					},
 					on:function(){
+						if(!module.tree) return false;
 						var canvas, ctx, line;
 						modal.on();
-						jQuery(div).find('div.jmb-desc-select-close').click(function(){
+						jQuery(div).find('div.jmb-desc-select-close').unbind().click(function(){
 							box.off();
+							module.loadTreeById(jQuery(div).find('input:checked').attr('id'));
 						});
 						//draw line
 						canvas = jQuery(div).find('canvas')[0];
@@ -277,70 +295,126 @@ JMBDescendantTreeObject.prototype = {
 							ctx.stroke();
 							ctx.restore();
 						}
-						line(10, 100, 60);
-						line(70, 50, 100, true);
-						line(70, 50, 125);
-						line(70, 150, 125);
-						line(195, 20, 60, true);
-						line(195, 20, 25);
-						line(195, 80, 25);
-						line(195, 120, 60, true);
-						line(195, 120, 25);
-						line(195, 180, 25);
+						
 						
 						//create nodes
-						this.node({
-							id:'mother',
-							title:'Mother',
-							style:{
-								top:'90px',
-								left:'20px'
+						var parents = module.tree.parents;
+						if(parents.length!=0){
+							var parent = parents[module.render];
+							if(parent){
+								line(10, 100, 60);
+								line(70, 50, 100, true);
+								line(70, 50, 125);
+								line(70, 150, 125);
+								this.node({
+									id:module.render,
+									title:(module.render=='mother')?'Mother':'father',
+									count:parent.count,
+									style:{
+										top:'90px',
+										left:'20px'
+									}
+								});
+								var grandparents = parent.parents;
+								var grandfather = grandparents['father'];
+								var grandmother = grandparents['mother'];
+								if(grandfather||grandmother){								
+									this.node({
+										id:'grandparents',
+										title:'Grandparents',
+										descendants:true,
+										count:function(){ 
+											if(!grandmother&&!grandfather) return 0;
+											return (grandfather)?grandfather.count:grandmother.count;
+										},
+										input_id:function(){
+											return (grandmother)?grandmother.id:grandfather.id;
+										},
+										style:{
+											top:'85px',
+											left:'80px'
+										}
+									});
+									if(grandfather){
+										line(195, 20, 60, true);
+										line(195, 20, 25);
+										line(195, 80, 25);
+										this.node({
+											id:'grandfather',
+											title:'Grandfather',
+											style:{
+												top:'140px',
+												left:'100px'
+											}
+										});
+										this.node({
+											id:'grandfatherparents',
+											title:'Great Grandparents',
+											descendants:true,
+											count:function(){ 
+												var parents = grandfather.parents;
+												if(!parents.father&&!parents.mother) return 0;
+												return (parents.mother)?parents.mother.count:parents.father.count;
+											},
+											input_id:function(){
+												var parents = grandfather.parents;
+												if(!parents.father&&!parents.mother) return 0;
+												return (parents.mother)?parents.mother.id:parents.father.id;
+											},
+											style:{
+												top:'135px',
+												left:'200px'
+											}
+										});
+										
+									}
+									if(grandmother){
+										line(195, 120, 60, true);
+										line(195, 120, 25);
+										line(195, 180, 25);
+										
+										this.node({
+											id:'grandmother',
+											title:'Grandmother',
+											style:{
+												top:'40px',
+												left:'100px'
+											}
+										});
+										
+										this.node({
+											id:'grandmotherparents',
+											title:'Great Grandparents',
+											descendants:true,
+											count:function(){ 
+												var parents = grandmother.parents;
+												if(!parents.father&&!parents.mother) return 0;
+												return (parents.mother)?parents.mother.count:parents.father.count;
+											},
+											input_id:function(){
+												var parents = grandmother.parents;
+												if(!parents.father&&!parents.mother) return 0;
+												return (parents.mother)?parents.mother.id:parents.father.id;
+											},
+											style:{
+												top:'35px',
+												left:'200px'
+											}
+										});
+									}
+									jQuery(module.dhxTree.allTree).parent().append(div);
+									jQuery(div).find('input').click(function(){
+										jQuery(div).find('input').attr('checked', false);
+										jQuery(this).attr('checked', true);
+									});
+									if(module.checked!=null){
+										jQuery(div).find('input#'+module.checked).attr('checked', true);
+									}
+								} else {
+									box.off();
+								}
 							}
-						});
-						this.node({
-							id:'grandmother',
-							title:'Grandmother',
-							style:{
-								top:'40px',
-								left:'100px'
-							}
-						});
-						this.node({
-							id:'grandfather',
-							title:'Grandfather',
-							style:{
-								top:'140px',
-								left:'100px'
-							}
-						});
-						this.node({
-							id:'grandparents',
-							title:'Grandparents',
-							descendants:true,
-							style:{
-								top:'85px',
-								left:'80px'
-							}
-						});
-						this.node({
-							id:'grandmotherparents',
-							title:'Great Grandparents',
-							descendants:true,
-							style:{
-								top:'35px',
-								left:'200px'
-							}
-						});
-						this.node({
-							id:'grandfatherparents',
-							title:'Great Grandparents',
-							descendants:true,
-							style:{
-								top:'135px',
-								left:'200px'
-							}
-						});
-						jQuery(module.dhxTree.allTree).parent().append(div);
+						} 												
 					},
 					off:function(){
 						jQuery(div).remove();
@@ -355,7 +429,6 @@ JMBDescendantTreeObject.prototype = {
 				box.on();
 			},
 			home:function(){
-				//var user = jQuery('div[name="descendant-node"][user="true"]');
 				var user = jQuery('div#'+module.owner+'[name="descendant-node"]');
 				jQuery(user[0]).click();
 				jQuery('div.containerTableStyle').scrollTop(0);
