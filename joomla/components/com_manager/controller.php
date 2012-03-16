@@ -567,12 +567,7 @@ class JMBController extends JController
         	$id = JRequest::getVar('id');
         	$token = JRequest::getVar('token');
         	$canvas = JRequest::getVar('canvas');
-        	
-        	if((bool)$canvas){
-     			header('Location: https://www.facebook.com/dialog/oauth?client_id='.JMB_FACEBOOK_APPID.'&redirect_uri='.JURI::base());
-     			exit;
-        	}
-
+        	    	
         	if($option!='com_manager') exit();
         	if(strlen($task)!=0) return;
         	
@@ -580,6 +575,12 @@ class JMBController extends JController
         	$app = JFactory::getApplication();
         	$session = JFactory::getSession();
         	$jfb = JFBConnectFacebookLibrary::getInstance();
+        	
+        	if((bool)$canvas){
+        		$session->set('alias', 'myfamily');
+        		header('Location: https://www.facebook.com/dialog/oauth?client_id='.JMB_FACEBOOK_APPID.'&redirect_uri='.JURI::base().'index.php/myfamily');
+     			exit;
+        	}
 
         	if(strlen($token)!=0){
         		$session->set('invitation', true);
