@@ -2,7 +2,7 @@
 require_once('class.ajax.php');
 require_once('class.usertree.php');
 require_once('gedcom/core.gedcom.php');
-//require_once('gramps/core.gramps.php');
+require_once('gramps/core.gramps.php');
 
 //class
 class Host {
@@ -11,7 +11,7 @@ class Host {
 	*/
 	public $gedcom;
         public $modulesPath;
-        //public $gramps;  
+        public $gramps;  
         
         
 	/**
@@ -21,7 +21,7 @@ class Host {
             $this->modulesPath = JPATH_ROOT."/components/com_manager/modules/";
             $this->gedcom = new Gedcom();
             $this->usertree = new JMBUserTree($this->gedcom);            
-            //$this->gramps = new Gramps($this);
+            $this->gramps = new Gramps($this);
 	}
 	
 	/**

@@ -4,7 +4,7 @@ class ParserList{
         function  __construct($core) {
             require_once 'class.parser.php';
             $this->core=$core;
-            $this->db = & JFactory::getDBO();
+            $this->db = new JMBAjax();
         }
  public function parse($tmpfname,$mode='standart'){
     $host = new Host('joomla');  
@@ -187,8 +187,7 @@ public function delete($treeId){
 }
 public function getTestTreeId(){
  $host = new Host('joomla');
- $sql=$host->gedcom->sql("SELECT `id` FROM #__mb_tree WHERE `name`='Merge Test Tree'");
- $this->db->setQuery($sql);
+ $this->db->setQuery("SELECT `id` FROM #__mb_tree WHERE `name`='Merge Test Tree'");
  $rows = $this->db->loadAssocList();
  return $rows[0]['id'];  
 }
@@ -198,29 +197,24 @@ public function getMergeTreeId(){
  $host = new Host('joomla');   
  $owner_id=8811; //$host->gedcom->individuals->getIdbyFId($_SESSION['jmb']['fid']);
  $name='merge tree of '.$owner_id; 
- $sql=$host->gedcom->sql("INSERT INTO #__mb_tree (`name`) values (?)",$name);
- $this->db->setQuery($sql);
+ $this->db->setQuery("INSERT INTO #__mb_tree (`name`) values (?)",$name);
  $this->db->query();
  $id= $this->db->insertid();
- $sql=$host->gedcom->sql("INSERT INTO #__mb_merge_link (`id`,`ind_id`) values (?,?)",$id,$owner_id);
- $this->db->setQuery($sql);
+ $this->db->setQuery("INSERT INTO #__mb_merge_link (`id`,`ind_id`) values (?,?)",$id,$owner_id);
  $this->db->query();
  return $id;    
 }
 public function deleteMergeTree($id){
  $host = new Host('joomla'); 
- $sql=$host->gedcom->sql("DELETE FROM #__mb_merge_link WHERE `id`=?",$id);
- $this->db->setQuery($sql);
+ $this->db->setQuery("DELETE FROM #__mb_merge_link WHERE `id`=?",$id);
  $this->db->query();
- $sql=$host->gedcom->sql("DELETE FROM #__mb_tree WHERE `id`=?",$id);
- $this->db->setQuery($sql);
+ $this->db->setQuery("DELETE FROM #__mb_tree WHERE `id`=?",$id);
  $this->db->query();   
 }
 public function getMergeIds(){           
  $host = new Host('joomla');   
  $owner_id=8811; //$host->gedcom->individuals->getIdbyFId($_SESSION['jmb']['fid']);
- $sql=$host->gedcom->sql("SELECT `id` FROM #__mb_merge_link WHERE `ind_id`=?",$owner_id);
- $this->db->setQuery($sql);
+ $this->db->setQuery("SELECT `id` FROM #__mb_merge_link WHERE `ind_id`=?",$owner_idl);
  $rows= $this->db->loadAssocList();
  return $rows;   
 }

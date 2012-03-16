@@ -10,7 +10,7 @@ class Gramps{
         		require_once $grampsPath.DS.'class.parser.manager.php';
         		 $this->parser = new ParserList($this);
         	}
-            if(file_exists($grampsPath.DS.'class.merge.manager.php')){
+        	if(file_exists($grampsPath.DS.'class.merge.manager.php')){
         		require_once $grampsPath.DS.'class.merge.manager.php';
         		 $this->merge = new MergeList($this);
         	}

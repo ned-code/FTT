@@ -86,8 +86,8 @@ class JMBFamousFamilyBackend {
 		//create tree into #__mb_famous_family table;
 		$sql_string = "INSERT INTO #__mb_famous_family (`id`, `name`, `tree_id`, `individuals_id`, `description`, `permission`) VALUES (NULL, ?, ?, ?, ?, ?)";
 		$this->db->setQuery($sql_string, $tree_name, $tree_id, $ind->Id, $description, $permission);
-		$db->query();
-		$famous_family_id = $db->insertid();
+		$this->db->query();
+		$famous_family_id = $this->db->insertid();
 		
 		$relatives =  $this->getRelatives(array('tree_id'=>$tree_id));
 		return json_encode(array('message'=>'Tree has successfully saved.', 'family'=>array('id'=>$famous_family_id, 'name'=>$tree_name, 'tree_id'=>$tree_id, 'individuals_id'=>$ind->Id, 'description'=>$description, 'permission'=>$permission, 'relatives'=>$relatives)));

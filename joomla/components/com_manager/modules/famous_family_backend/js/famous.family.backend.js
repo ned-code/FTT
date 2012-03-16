@@ -90,9 +90,6 @@ function FamousFamilyBackend(obj){
 		var form = jQuery(sb.result());
 		showModal();
 		jQuery(box).append(form);
-		console.log(form);
-		console.log(box);
-		console.log(res);
 		module.ajaxForm(form, 'setFamousIndivid', null, function(res){
 			jQuery(form).remove();
 			module.json.sort_families[res.family.id] = res.family;
@@ -144,6 +141,7 @@ function FamousFamilyBackend(obj){
 		sb._('</form>');
 		var content = jQuery(sb.result());
 		module.ajaxForm(content, 'createNewFamousFamily', null, function(res){
+			console.log(res);
 			if(res.error) { alert(res.error); return;  }
 			if(res.res) {
 				gedcomIndividualsSelect(res.res, html);
