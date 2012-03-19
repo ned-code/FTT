@@ -1,4 +1,89 @@
 #JMBTreeCreatorContainer{
+	font-family: Tahoma;
+	font-size: 12px;
+}
+#JMBTreeCreatorContainer div#button {
+	border: 1px solid #AAAAAA;
+	border-radius: 3px 3px 3px 3px;
+    	cursor: pointer;
+    	height: 40px;
+    	line-height: 38px;
+    	text-align: center;
+    	width: 300px;
+    	margin-left: 30px;
+    	margin-top: 65px;
+}
+#JMBTreeCreatorContainer div#button  span{
+	font-size: 14px;
+	font-weight: bold;
+}
+.ui-dialog.ui-widget.ftt_tree_creator {
+	background: none repeat scroll 0 0 #AAAAAA;
+}
+.dialog_box.ui-dialog-content.ui-widget-content {
+	 background: none repeat scroll 0 0 white;
+	 border-radius: 3px 3px 3px 3px;
+}
+
+.tc_content{
+	font-family: Tahoma;
+	font-size: 12px;
+}
+.tc_header{
+
+}
+.tc_ftt_friends{
+	border: 1px solid #AAAAAA;
+	height: 250px;
+    	margin: 15px;
+    	width: 400px;
+    	overflow-y: scroll;
+}
+
+.tc_ftt_friends ul{
+	list-style: none outside none;
+}
+.tc_ftt_friends ul li div.avatar{
+}
+.tc_ftt_friends ul li div.name{
+	color: #9BB4D1;
+	margin-left: 5px;
+}
+.tc_ftt_friends ul li:hover{
+	background:#f5df63;
+}
+.tc_ftt_friends ul li:hover div.name{
+	color:#5c60ba;
+}
+.tc_ftt_friends ul li:hover div.request{
+	visibility: visible;
+}
+.tc_ftt_friends ul li div.request{
+	visibility:hidden;
+	background: none repeat scroll 0 0 #00A2E8;
+	border-radius: 3px 3px 3px 3px;
+	color: white;
+	cursor: pointer;
+	font-family: Tahoma;
+	font-size: 14px;
+	font-weight: bold;
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+	width: 150px;
+}
+
+.tc_footer{
+	margin-left: 50px;
+}
+
+.tc_footer span.button{
+	color:#548dd4;
+	cursor:pointer;
+}
+
+/*
+#JMBTreeCreatorContainer{
 	font-family: Calibri,Tahoma,sans-serif;
 	font-size: 12px;
 	font-weight: normal;
@@ -30,3 +115,4 @@
 #JMBTreeCreatorContainer .upload{}
 #JMBTreeCreatorContainer .upload .form{}
 #JMBTreeCreatorContainer .upload .result{}
+*/

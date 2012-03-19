@@ -1,5 +1,6 @@
 <?php
 class TreeCreator {
+	/*
 	protected $host;
 	
 	public function __construct(){
@@ -131,5 +132,44 @@ class TreeCreator {
 		$ind->Id = $this->host->gedcom->individuals->save($ind); 		
 		$this->addOwnerLink($id, $ind->Id);
 	}
+	*/
+	
+	protected $host;
+	protected $db;
+	
+	public function __construct(){
+		$this->host = new Host('Joomla');
+		$this->db = new JMBAjax();
+	}
+
+	public function verify_facebook_friends($friends){
+		$sql_string = "SELECT ind.id as gedcom_id, ind.fid as facebook_id FROM #__mb_individuals as ind
+				LEFT JOIN #__mb_tree_links as link ON ind.id = link.individuals_id
+				WHERE ind.fid != 0 and link.type = 'OWNER'";
+		$this->db->setQuery($sql_string);
+		$rows = $this->db->loadAssocList();
+		$result = array();
+		$f = get_object_vars(json_decode($friends));
+		
+		/*
+		* TEST DATA
+		*/
+		/*
+		$rows = array(
+			array('gedcom_id'=>'8609','facebook_id'=>'100000205827487'),
+			array('gedcom_id'=>'8912','facebook_id'=>'100000256873501'),
+			array('gedcom_id'=>'9531','facebook_id'=>'100000300676412'),
+			array('gedcom_id'=>'8811','facebook_id'=>'100000441298414')
+			);
+		*/
+		
+		foreach($rows as $row){
+			if(isset($f[$row['facebook_id']])){
+				$result[] = array('facebook_id'=>$row['facebook_id'],'gedcom_id'=>$row['gedcom_id'],'name'=>$f[$row['facebook_id']]);
+			}	
+		}
+		return json_encode(array('result'=>$result));
+	}
+	
 }
 ?>

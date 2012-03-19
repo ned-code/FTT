@@ -1,3 +1,132 @@
+function JMBTreeCreatorObject(parent){
+	var module = this, fn;
+	
+	module.body = null;
+	module.dialog_box = null;
+	
+	module.dialog_settings = {
+		width:700,
+		height:500,
+		title: 'Welcome to Family TreeTop',
+		resizable: false,
+		draggable: false,
+		position: "top",
+		closeOnEscape: false,
+		modal:true,
+		close:function(){
+			
+		}	
+	}
+
+	
+	fn = {
+		ajax:function(func, params, callback){
+			host.callMethod("tree_creator", "TreeCreator", func, params, function(res){
+					callback(res);
+			})
+		},
+		body:function(){
+			var sb = host.stringBuffer();
+			sb._('<div id="button"><span>Connect to Family TreeTop</span></div>');
+			return jQuery(sb.result());
+		},
+		dialog_box:function(){
+			var sb = host.stringBuffer();
+			sb._('<div id="dialog_box" class="dialog_box"></div>');
+			return jQuery(sb.result());
+		},
+		create_dialog_window:function(){
+			jQuery(module.dialog_box).dialog(module.dialog_settings);
+			jQuery(module.dialog_box).parent().addClass('ftt_tree_creator');
+			jQuery(module.dialog_box).parent().css('top', '20px');
+		},
+		connect_to_family_treetop:function(body){
+			jQuery(body).find('span').click(function(){
+				fn.create_dialog_window();
+			});
+		},
+		send_friend_request:function(e){
+			console.log(e);
+			alert('send request');
+		},
+		create_new_tree:function(e){
+			alert('create new tree');
+			console.log(e);
+		},
+		set_facebook_friends:function(html){
+			var cont = jQuery(html).find('div.tc_ftt_friends');
+			FB.api('/me/friends', function(response){
+				var data = response.data;
+				var query = '{';
+				for(var key in data){
+					query += '"'+data[key].id+'":"'+data[key].name+'",';
+				}
+				query = query.substr(0, query.length - 1)+'}';
+				fn.ajax('verify_facebook_friends', query, function(res){
+					var json = jQuery.parseJSON(res.responseText);
+					var ul = jQuery('<ul></ul>');
+					jQuery(json.result).each(function(i, el){
+						var li = jQuery('<li></li>');
+						var sb = host.stringBuffer();
+						sb._('<table>');
+							sb._('<tr>');
+								sb._('<td>');
+									sb._('<div class="avatar">');
+										sb._('<img src="index.php?option=com_manager&task=getResizeImage&fid=')._(el.facebook_id)._('&w=50&h=50">');
+									sb._('</div>');
+								sb._('</td>');
+								sb._('<td><div class="name">')._(el.name)._('</div></td>');
+								sb._('<td>');
+									sb._('<div class="request" facebook_id="')._(el.facebook_id)._('" gedcom_id="')._(el.gedcom_id)._('">');
+										sb._('<span>Request Invitation</span>');
+									sb._('</div>');
+								sb._('</td>');
+							sb._('</tr>');
+						sb._('</table>');
+						var html = sb.result();
+						jQuery(li).append(html);						
+						jQuery(ul).append(li);
+					});
+					jQuery(cont).append(ul);
+					jQuery(ul).find('div.request').click(fn.send_friend_request);
+				});
+			});
+			
+		},
+		set_start_content:function(dialog_box){
+			var sb = host.stringBuffer();
+			sb._('<div class="tc_content">');
+				sb._('<div class="tc_header">');
+					sb._('<div><span>Are You Related?</span></div>');
+					sb._('<div><span>Some of your Facebook friends are members of Family TreeTop. Are you related to any of the people listed below? If so, you many request an invitation to join their familytree.</span></div>');
+				sb._('</div>');
+				sb._('<div class="tc_ftt_friends">');
+				sb._('</div>');
+				sb._('<div class="tc_footer">');
+					sb._('<div><span>if you are not related to anyone listed below, <span class="button">click here</span> to create new Family Tree</span></div>');
+				sb._('</div>');
+			sb._('</div>');
+			var html = jQuery(sb.result());
+			jQuery(html).find('div.tc_footer span.button').click(fn.create_new_tree);
+			fn.set_facebook_friends(html);
+			jQuery(dialog_box).append(html);
+		},
+		init:function(){
+			var body = fn.body();
+			var dialog_box = fn.dialog_box();
+			module.body = body;
+			module.dialog_box = dialog_box;
+			jQuery(parent).append(body);
+			fn.connect_to_family_treetop(body);
+			fn.set_start_content(dialog_box);
+			
+		}
+	}
+	
+	fn.init();
+}
+
+/*
 function JMBTreeCreatorObject(obj){
 	this.html = null;
 	
@@ -131,7 +260,7 @@ JMBTreeCreatorObject.prototype = {
 		jQuery(this.obj).append(this.html);
 	}
 }
-
+*/
 
 
 
