@@ -154,7 +154,6 @@ class TreeCreator {
 		/*
 		* TEST DATA
 		*/
-		
 		/*
 		$rows = array(
 			array('gedcom_id'=>'8609','facebook_id'=>'100000205827487'),
@@ -171,13 +170,106 @@ class TreeCreator {
 		}
 		return json_encode(array('result'=>$result));
 	}
+	
+	protected function place_name($prefix, $args){
+		$place = array();
+		$place[] = $args[$prefix.'city'];
+		$place[] = $args[$prefix.'state'];
+		$place[] = $args[$prefix.'country'];
+		$place_name = '';
+		foreach($place as $v){
+			if($v!=''){
+				$place_name .= $v;
+				$place_name .= ',';
+			}
+		}
+		return substr($place_name, 0, -1);
+	}
+	
+	protected function event($event, $prefix, $args){
+		$place_name = $this->place_name($prefix, $args);
+		$city = (strlen($args[$prefix.'city'])!=0)?$args[$prefix.'city']:null;
+		$state = (strlen($args[$prefix.'state'])!=0)?$args[$prefix.'state']:null;
+		$country = (strlen($args[$prefix.'country'])!=0)?$args[$prefix.'country']:null;
+		$event->From->Day = ($args[$prefix.'day']!=0)?$args[$prefix.'day']:null;
+		$event->From->Month = ($args[$prefix.'month']!=0)?$args[$prefix.'month']:null;
+		$event->From->Year = (strlen($args[$prefix.'year'])!=0)?$args[$prefix.'year']:null;
+		$event->Place = new Place();
+		$event->Place->Name = $place_name;
+		$location = new Location();
+		$location->City = $city;
+		$location->State = $state;
+		$location->Country = $country;
+		$event->Place->Locations[0] = $location;
+		return $event;
+	}
+	
+	protected function individual_event($user_id, $type, $args){
+		$event = new Events();
+		$event->IndKey = $user_id;
+		$event->DateType = 'EVO';
+		$event->Type = $type;
+		$event->Id = $this->host->gedcom->events->save($event);
+		$prefix = ($event->Type=='BIRT')?'b_':'d_';		
+		$update_event = $this->event($event, $prefix, $args);
+		$this->host->gedcom->events->update($update_event);
+		return $event;
+	}
+	
+	protected function individuals_events(&$individual, $args){
+	 	$individual->Birth = $this->individual_event($individual->Id, 'BIRT', $args);
+		if($args['living']=='0'){
+			$individual->Death = $this->individual_event($individual->Id, 'DEAT', $args);	
+		}
+	}
+	
+	protected function user($args, $facebook_id){
+		$individual = $this->host->gedcom->individuals->create();
+		$individual->FacebookId = $facebook_id;
+		$individual->Gender = strtoupper($args->gender);
+		$individual->FirstName = $args->first_name; 
+		$individual->MiddleName = $args->middle_name;
+		$individual->LastName = $args->last_name;
+		$individual->Nick = $args->nick;
+		$individual->Id = $this->host->gedcom->individuals->save($individual);
+		$this->individuals_events($individual, get_object_vars($args));
+		return $individual;
+	}
 
 	public function create_tree($args){
-		$args = json_decode($args);
+		$session = JFactory::getSession();
+		$facebook_id = $session->get('facebook_id');
+		$args = json_decode($args);	
+
+		$self = $this->user($args->self, $facebook_id);
+		$mother = $this->user($args->mother, 0);
+		$father = $this->user($args->father, 0);
 		
+		//create family;
+		$family = new Family();
+		$family->Sircar = $father;
+		$family->Spouse = $mother;
+		$family->Id = $this->host->gedcom->families->save($family);
 		
+		//addchild
+		$this->host->gedcom->families->addChild($family->Id, $self->Id);
 		
+		//create tree
+		$sql_string = "INSERT INTO #__mb_tree (`id`, `name`) VALUES (NULL, ?)";
+		$this->db->setQuery($sql_string, $self->FirstName.' '.$self->LastName.' Tree');
+		$this->db->query();
+		$tree_id = $this->db->insertid();
 		
+		//link users with tree
+		$sql_string = "INSERT INTO #__mb_tree_links (`individuals_id`, `tree_id`, `type`) VALUES (?, ?, 'OWNER'),(?, ?, 'MEMBER'),(?, ?, 'MEMBER')";
+		$this->db->setQuery($sql_string, $self->Id, $tree_id, $mother->Id, $tree_id, $father->Id, $tree_id);
+		$this->db->query();
+		
+		$session->set('gedcom_id', $self->Id);
+		$session->set('tree_id', $tree_id);
+		$session->set('permission', 'OWNER');
+		$session->set('alias', 'myfamily');
+		return true;
 	}
 }
 ?>

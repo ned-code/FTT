@@ -605,6 +605,10 @@ class JMBController extends JController
         			break;
         			
         			case 'first-page':
+        				$this->clear_user_data();
+        				$session->set('facebook_id', $facebook_id);
+        			break;
+        				
         			case 'login':
         			case 'home':
         				$this->set_user_data($user_data);

@@ -5,6 +5,7 @@ function JMBTreeCreatorObject(parent){
 	module.dialog_box = null;
 	module.error_message = '';
 	module.args_pull = [];
+	module.reload = false;
 	
 	module.path = 'modules/tree_creator/'
 	module.css_path = [storage.baseurl,storage.url,module.path,'css/'].join('');
@@ -33,6 +34,7 @@ function JMBTreeCreatorObject(parent){
 		closeOnEscape: false,
 		modal:true,
 		close:function(){
+			if(module.reload) window.location.reload();
 			module.args_pull = [];
 			module.title_count = 0;
 		}	
@@ -126,7 +128,7 @@ function JMBTreeCreatorObject(parent){
 								sb._('</tr>');
 								sb._('<tr>');
 									sb._('<td><div class="title"><span>Know As:</span></div></td>');
-									sb._('<td colspan="2"><div><input name="know_as" class="text" type="text"></div></td>');
+									sb._('<td colspan="2"><div><input name="nick" class="text" type="text"></div></td>');
 								sb._('</tr>');
 							sb._('</table>');
 						sb._('</div>')
@@ -315,7 +317,34 @@ function JMBTreeCreatorObject(parent){
 			jQuery(user_form).find('.finish_button').click(function(){
 				var query = fn.convert_to_string(module.args_pull);
 				fn.ajax('create_tree', query, function(res){
-					console.log(res);
+					module.reload = true;
+					sb.clear();
+					sb._('<div class="video">');
+						/*
+						sb._('<object width="425" height="355" >');
+							sb._('<param name="movie" value="http://youtube.com/v/_t2TzJOyops&feature=topvideos_music">');
+							sb._('<param name="wmode" value="transparent">');
+							sb._('<embed src="http://youtube.com/v/_t2TzJOyops&amp;feature=topvideos_music" type="application/x-shockwave-flash" wmode="transparent" width="425" height="355">');
+						sb._('</object>');
+						*/
+						sb._('<object id="scPlayer" class="embeddedObject" width="640" height="405" type="application/x-shockwave-flash" data="http://content.screencast.com/users/Fernando_Oliveira/folders/Default/media/6da2d84e-67f3-4a00-9ef8-7ba592f8aba3/scplayer.swf" style="width: 474.0740740740741px; height: 300px; ">');
+							sb._('<param name="movie" value="http://content.screencast.com/users/Fernando_Oliveira/folders/Default/media/6da2d84e-67f3-4a00-9ef8-7ba592f8aba3/scplayer.swf">');
+							sb._('<param name="quality" value="high">');
+							sb._('<param name="bgcolor" value="#FFFFFF">');
+							sb._('<param name="flashVars" value="thumb=http://content.screencast.com/users/Fernando_Oliveira/folders/Default/media/6da2d84e-67f3-4a00-9ef8-7ba592f8aba3/FirstFrame.png&amp;containerwidth=640&amp;containerheight=405&amp;autohide=true&amp;autostart=false&amp;loop=false&amp;showendscreen=true&amp;showsearch=false&amp;showstartscreen=true&amp;tocdoc=left&amp;xmp=sc.xmp&amp;advseek=true&amp;content=http://content.screencast.com/users/Fernando_Oliveira/folders/Default/media/6da2d84e-67f3-4a00-9ef8-7ba592f8aba3/ftt-green-button2.mp4&amp;blurover=false">');
+							sb._('<param name="allowFullScreen" value="true">');
+							sb._('<param name="scale" value="showall">');
+							sb._('<param name="allowScriptAccess" value="always">');
+							sb._('<param name="base" value="http://content.screencast.com/users/Fernando_Oliveira/folders/Default/media/6da2d84e-67f3-4a00-9ef8-7ba592f8aba3/">');
+							sb._('<iframe class="embeddedObject" type="text/html" frameborder="0" scrolling="no" style="overflow-x: hidden; overflow-y: hidden; width: 474.0740740740741px; height: 300px; " src="http://www.screencast.com/users/Fernando_Oliveira/folders/Default/media/6da2d84e-67f3-4a00-9ef8-7ba592f8aba3/embed" height="405" width="640"></iframe>');
+						sb._('</object>');
+					sb._('</div>');
+					sb._('<div class="switch_to_myfamily"><span>Switch to MyFamily</span></div>')
+					jQuery(user_form).html(sb.result());
+					jQuery(user_form).dialog('option', 'width', 500);
+					jQuery(user_form).find('.finish_button').click(function(){
+						window.location.reload();
+					});
 				});
 			});
 		},

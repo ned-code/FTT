@@ -180,7 +180,21 @@
 	margin: 0 auto;
 	width: 100px;
 }
+.tree_create_user_form .switch_to_myfamily {
+	background: url("bg_next.png") repeat scroll 0 0 transparent;
+	border: 1px solid white;
+	border-radius: 10px 10px 10px 10px;
+	color: white;
+	cursor: pointer;
+	height: 22px;
+	line-height: 22px;
+	text-align: center;
+	margin: 10px auto 0;
+	width: 125px;
+}
+.tree_create_user_form .video{
 
+}
 .tree_create_user_form .box {}
 .tree_create_user_form .box div.avatar{
 	height: 45px;
