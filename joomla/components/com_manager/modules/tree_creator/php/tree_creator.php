@@ -154,6 +154,7 @@ class TreeCreator {
 		/*
 		* TEST DATA
 		*/
+		
 		/*
 		$rows = array(
 			array('gedcom_id'=>'8609','facebook_id'=>'100000205827487'),
@@ -170,6 +171,13 @@ class TreeCreator {
 		}
 		return json_encode(array('result'=>$result));
 	}
-	
+
+	public function create_tree($args){
+		$args = json_decode($args);
+		
+		
+		
+		
+	}
 }
 ?>

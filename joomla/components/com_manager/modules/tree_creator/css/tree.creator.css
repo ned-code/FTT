@@ -81,7 +81,113 @@
 	color:#548dd4;
 	cursor:pointer;
 }
+.dialog_box.ui-dialog-content.ui-widget-content {
+	 background: none repeat scroll 0 0 white;
+	 border-radius: 3px 3px 3px 3px;
+}
+.tree_create_user_form.ui-dialog-content.ui-widget-content{
+	overflow: visible;
+}
+.tree_create_user_form {
+	 background: none repeat scroll 0 0 #F1E4B0 !important;
+	 border: 1px solid #4E4628 !important;
+    	 border-radius: 3px 3px 3px 3px;
+    	 font-family: Tahoma;
+    	 font-size: 12px;
+}
+.tree_create_user_form .avatar{
+	background: none repeat scroll 0 0 white;
+	border: 1px solid #000000;
+    	border-radius: 3px 3px 3px 3px;
+    	height: 150px;
+    	width: 135px;
+    	position: relative;
+}
+.tree_create_user_form .avatar .upload{
+	background: none repeat scroll 0 0 #d3d9e0;
+	border: 1px solid #76808b;
+    	border-radius: 3px 3px 3px 3px;
+    	height: 20px;
+    	left: 36px;
+    	line-height: 20px;
+    	position: absolute;
+    	text-align: center;
+    	top: 125px;
+    	width: 75px;
+    	overflow: hidden;
+}
+.tree_create_user_form .title {
+	display: inline-block;
+	font-weight: bold;
+	margin-left: 5px;
+	margin-right: 5px;
+	text-align: left;
+}
+.tree_create_user_form .title span {}
+.tree_create_user_form input {
+	border: 1px solid #999999;
+	height: 17px;
+    	line-height: 17px;
+    	margin-left: 3px;
+    	margin-right: 3px;
+}
+.tree_create_user_form input.text {
+	width: 167px;
+}
+.tree_create_user_form input.year {
+	width: 35px;
+}
+.tree_create_user_form input.place {
+	width:105px;
+}
+.tree_create_user_form select {
+	border: 1px solid #999999;
+	height: 19px;
+    	line-height: 19px;
+    	margin-left: 3px;
+    	margin-right: 3px;
+}
 
+.tree_create_user_form .next {
+	background: url("bg_next.png") repeat scroll 0 0 transparent;
+	border: 1px solid white;
+	border-radius: 10px 10px 10px 10px;
+	cursor: pointer;
+	height: 22px;
+	line-height: 22px;
+	position: absolute;
+	right: 30px;
+	text-align: center;
+	top: -33px;
+	width: 100px;
+}
+.tree_create_user_form .next span {
+	background: url("bg_next_arrow.png") no-repeat scroll 30px -1px transparent;
+	color: white;
+	height: 22px;
+	padding-right: 20px;
+}
+
+.tree_create_user_form .finish_button{
+	background: url("bg_next.png") repeat scroll 0 0 transparent;
+	border: 1px solid white;
+	border-radius: 10px 10px 10px 10px;
+	color: white;
+	cursor: pointer;
+	height: 22px;
+	line-height: 22px;
+	text-align: center;
+	margin: 0 auto;
+	width: 100px;
+}
+
+.tree_create_user_form .box {}
+.tree_create_user_form .box div.avatar{
+	height: 45px;
+	width: 40px;
+}
+.tree_create_user_form .box div.title{}
+.tree_create_user_form .box div.value{}
 /*
 #JMBTreeCreatorContainer{
 	font-family: Calibri,Tahoma,sans-serif;
