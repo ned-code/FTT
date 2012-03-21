@@ -202,6 +202,87 @@
 }
 .tree_create_user_form .box div.title{}
 .tree_create_user_form .box div.value{}
+
+.tree_create_request_form.ui-dialog-content.ui-widget-content {
+	font-family:Tahoma;
+	font-size:12px;
+	background: #f1e4b0;
+	border:1px solid #4a4121;
+	border-radius: 3px;
+}
+.tree_create_request_form select {
+	border: 1px solid #999999;
+	height: 19px;
+    	line-height: 19px;
+}
+.tree_create_request_form input {
+	border: 1px solid #999999;
+	height: 17px;
+    	line-height: 17px;
+}
+.tree_create_request_form .relation {
+	margin: 0 auto;
+	text-align: center;
+    	width: 300px;
+}
+.tree_create_request_form .data {}
+.tree_create_request_form .data .box {
+	margin: 10px;
+}
+.tree_create_request_form .data .box .box_title {
+	font-weight: bold;
+}
+.tree_create_request_form .data .box .user_box {
+	background: none repeat scroll 0 0 white;
+	border: 2px solid #999999;
+    	padding: 3px;
+}
+.tree_create_request_form .data .box .mother_box {
+	background: none repeat scroll 0 0 white;
+	border: 2px solid #ffaec9;
+	padding: 3px;
+}
+.tree_create_request_form .data .box .father_box {
+	background: none repeat scroll 0 0 white;
+	border: 2px solid #7092be;
+    	padding: 3px;
+}
+.tree_create_request_form .data .box .facebook_avatar{
+	border: 1px solid #999999;
+	height: 80px;
+    	width: 72px;
+}
+.tree_create_request_form .data .box .title {
+	width: 65px;
+}
+.tree_create_request_form .data .box .text {}
+.tree_create_request_form .message {
+	 margin: 10px;
+}
+.tree_create_request_form .message .title{
+	color: #999999;
+	font-weight: bold;
+    	margin: 3px;
+}
+.tree_create_request_form .message .text{}
+.tree_create_request_form .message .text textarea{
+	height: 70px;
+	width: 445px;
+	border: 1px solid #999999;
+	resize: none;
+}
+.tree_create_request_form .button {
+	background: url("bg_next.png") repeat scroll 0 0 transparent;
+	border: 1px solid white;
+	border-radius: 10px 10px 10px 10px;
+	color: white;
+	cursor: pointer;
+	height: 22px;
+	line-height: 22px;
+	text-align: center;
+	margin: 10px auto 0;
+	width: 290px;
+}
 /*
 #JMBTreeCreatorContainer{
 	font-family: Calibri,Tahoma,sans-serif;

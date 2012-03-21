@@ -154,14 +154,12 @@ class TreeCreator {
 		/*
 		* TEST DATA
 		*/
-		/*
 		$rows = array(
 			array('gedcom_id'=>'8609','facebook_id'=>'100000205827487'),
 			array('gedcom_id'=>'8912','facebook_id'=>'100000256873501'),
 			array('gedcom_id'=>'9531','facebook_id'=>'100000300676412'),
 			array('gedcom_id'=>'8811','facebook_id'=>'100000441298414')
 			);
-		*/
 		
 		foreach($rows as $row){
 			if(isset($f[$row['facebook_id']])){
@@ -270,6 +268,20 @@ class TreeCreator {
 		$session->set('permission', 'OWNER');
 		$session->set('alias', 'myfamily');
 		return true;
+	}
+	
+	public function send_request($args){
+		$std = json_decode($args);
+		$sql_string = "SELECT tree_id FROM #__mb_tree_links WHERE individuals_id = ?";
+		$this->db->setQuery($sql_string, $std->target->gedcom_id);
+		$rows = $this->db->loadAssocList();
+		if($rows == null) return json_encode(array('error'=>'target user not exists.'));
+		$tree_id = $rows[0]['tree_id'];
+		
+		$sql_string = "INSERT INTO #__mb_notifications (`id`, `tree_id`, `gedcom_id`, `data`, `status`) VALUES (NULL, ?, ?, ?, 0)";
+		$this->db->setQuery($sql_string, $tree_id, $std->target->gedcom_id, $args);
+		$this->db->query();
+		return json_encode(array('success'=>true));
 	}
 }
 ?>

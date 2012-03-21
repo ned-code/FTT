@@ -5,7 +5,9 @@ function JMBTreeCreatorObject(parent){
 	module.dialog_box = null;
 	module.error_message = '';
 	module.args_pull = [];
+	module.request_pull = {};
 	module.reload = false;
+	module.request_send = false;
 	
 	module.path = 'modules/tree_creator/'
 	module.css_path = [storage.baseurl,storage.url,module.path,'css/'].join('');
@@ -38,6 +40,20 @@ function JMBTreeCreatorObject(parent){
 			module.args_pull = [];
 			module.title_count = 0;
 		}	
+	}
+	
+	module.request_settings = {
+		width:510,
+		height:450,
+		resizable: false,
+		draggable: false,
+		position: "top",
+		closeOnEscape: false,
+		modal:true,
+		close:function(){
+			module.request_pull = {};
+			module.request_send = false;
+		}
 	}
 
 	
@@ -95,9 +111,25 @@ function JMBTreeCreatorObject(parent){
 				sb._('</select>');
 				return sb.result();
 			},
-		},
-		get_data:function(user_form){
-			
+			relations:function(){
+				var sb = host.stringBuffer();
+				sb._('<select name="relations">');
+					sb._('<option value="Father">Father</option>');
+					sb._('<option value="Mother">Mother</option>');
+					sb._('<option value="Brother">Brother</option>');
+					sb._('<option value="Sister">Sister</option>');
+					sb._('<option value="Son">Son</option>');
+					sb._('<option value="Daughter">Daughter</option>');
+					sb._('<option value="Uncle">Uncle</option>');
+					sb._('<option value="Niece">Niece</option>');
+					sb._('<option value="Nephew">Nephew</option>');
+					sb._('<option value="Aunt">Aunt</option>');
+					sb._('<option value="Cousin">Cousin</option>');
+					sb._('<option value="Grandmother">Grandmother</option>');
+					sb._('<option value="Grandfather">Grandfather</option>');
+				sb._('</select>');
+				return sb.result();
+			}
 		},
 		user_form:function(type){
 			var sb = host.stringBuffer();
@@ -179,6 +211,78 @@ function JMBTreeCreatorObject(parent){
 			sb._('</div>');
 			return jQuery(sb.result());
 		},
+		request_form_box:function(args){
+			var sb = host.stringBuffer();
+			sb._('<table>');
+				if(args){
+					sb._('<tr style="height: 88px;">');
+						sb._('<td valign="top"><div class="facebook_avatar"><img src="index.php?option=com_manager&task=getResizeImage&fid=')._(args.me.id)._('&w=72&h=80" width="72px" height="80px"></div></td>');
+						sb._('<td valign="top"><span style="font-weight: bold;margin-left: 5px;">Gender:</span> ')._(fn.select.gender())._('</td>');
+					sb._('</tr>');
+				}
+				sb._('<tr>');
+					sb._('<td><div class="title"><span>Name:</span></div></td>');
+					if(args){
+						sb._('<td><div class="text"><input name="name" type="text" value="')._(args.me.name)._('"></div></td>');
+					} else{
+						sb._('<td><div class="text"><input name="name" type="text"></div></td>');
+					}
+				sb._('</tr>');
+				if(args){
+					sb._('<tr>');
+						sb._('<td><div class="title"><span>Know as:</span></div></td>');
+						sb._('<td><div class="text"><input name="nick" type="text"></div></td>');
+					sb._('</tr>');
+				}
+				sb._('<tr>');
+					sb._('<td><div class="title"><span>Birth Year:</span></div></td>');
+					sb._('<td><div class="text"><input name="b_year" type="text"></div></td>');
+				sb._('</tr>');
+				sb._('<tr>');
+					sb._('<td><div  class="title"><span>Birth Place:</span></div></td>');
+					sb._('<td><div class="text"><input name="b_place" type="text"></div></td>');
+				sb._('</tr>');
+			sb._('</table>');
+			return sb.result();
+		},
+		request_form:function(args){
+			var sb = host.stringBuffer();
+			sb._('<div class="tree_create_request_form">');
+				sb._('<div class="relation">')._(args.target.name)._(' is your: ')._(fn.select.relations())._('</div>');
+				sb._('<div class="data">');
+					sb._('<table>');
+						sb._('<tr>');
+							sb._('<td rowspan="2" valign="top">');
+								sb._('<div class="box">');
+									sb._('<div class="box_title"><span>You</span></div>');
+									sb._('<div class="user_box">')._(fn.request_form_box(args))._('</div>');
+								sb._('</div>');
+							sb._('</td>');
+							sb._('<td>');
+								sb._('<div class="box">');
+									sb._('<div class="box_title"><span>Your Mother</span></div>');
+									sb._('<div class="mother_box">')._(fn.request_form_box())._('</div>');
+								sb._('</div>');
+							sb._('</td>');
+						sb._('</tr>');
+						sb._('<tr>');
+							sb._('<td>');
+								sb._('<div class="box">');
+									sb._('<div class="box_title"><span>Your Father</span></div>');
+									sb._('<div class="father_box">')._(fn.request_form_box())._('</div>');
+								sb._('</div>');
+							sb._('</td>');
+						sb._('</tr>');
+					sb._('</table>');
+				sb._('</div>');
+				sb._('<div class="message">');
+					sb._('<div class="title"><span>Message:</span></div>');
+					sb._('<div class="text"><textarea></textarea></div>');
+				sb._('</div>');
+				sb._('<div class="button"><span>Send Request to ')._(args.target.name)._('</span></div>');
+			sb._('</div>');
+			return jQuery(sb.result());
+		},
 		create_dialog_window:function(){
 			jQuery(module.dialog_box).dialog(module.dialog_settings);
 			jQuery(module.dialog_box).parent().addClass('ftt_tree_creator');
@@ -189,8 +293,69 @@ function JMBTreeCreatorObject(parent){
 				fn.create_dialog_window();
 			});
 		},
+		get_request_form_box_data:function(object){
+			var pull = {};
+			jQuery(object).find('input, select').each(function(i, el){
+				var name = jQuery(el).attr('name');
+				var value = jQuery(el).attr('value');
+				pull[name] = value;
+			});
+			return pull;
+		},
+		json_to_string:function(json){
+			var string = '{';
+			for(var key in json){
+				if(typeof(json[key]) == 'object'){
+					string += '"'+key+'":'+fn.json_to_string(json[key])+',';
+				} else {
+					string += '"'+key+'":"'+json[key]+'",';
+				}	
+			}
+			string = string.substr(0, string.length -1) + '}';
+			return string;
+		},
+		request_form_event:function(form, args){
+			jQuery(form).find('.button').click(function(){
+				if(module.request_send) return false;
+				module.request_send = true;
+				var pull = {
+					me:args.me,
+					target: args.target,
+					relation:jQuery(form).find('select[name="relations"]').val(),
+					user_info:fn.get_request_form_box_data(jQuery(form).find('.user_box')),
+					mother_info:fn.get_request_form_box_data(jQuery(form).find('.mother_box')),
+					father_info:fn.get_request_form_box_data(jQuery(form).find('.father_box')),
+					message:jQuery(form).find('div.message textarea').val()
+				};
+				fn.ajax('send_request', fn.json_to_string(pull), function(res){
+					var response = jQuery.parseJSON(res.responseText);
+					if(response.error){
+						alert(response.error);
+						module.request_send = false;
+						return false;
+					} else if(response.success){
+						jQuery(form).dialog('close');
+					}
+				});
+			});
+		},
 		send_friend_request:function(e){
-			
+			var target = e.currentTarget;
+			var facebook_id = jQuery(target).attr('facebook_id');
+			var gedcom_id = jQuery(target).attr('gedcom_id');
+			var user_name = jQuery(target).attr('user_name');
+			FB.api('/me', function(res){
+				var args = {me:res, target:{name:user_name, facebook_id:facebook_id, gedcom_id:gedcom_id}};
+				var request_form = fn.request_form(args);				
+				var option = jQuery(request_form).find('select[name="gender"]').find('option');
+				jQuery(option[(res.gender=='male')?1:0]).attr('selected', 'selected');
+				jQuery(module.dialog_box).dialog('close');
+				jQuery(request_form).dialog(module.request_settings);
+				jQuery(request_form).dialog('option', 'title', 'Family TreeTop - Invitation Request');
+				jQuery(request_form).parent().addClass('ftt_tree_creator');
+				jQuery(request_form).parent().css('top', '20px');
+				fn.request_form_event(request_form, args);
+			});
 		},
 		verify_date:function(prefix, user_form){
 			var day = jQuery(user_form).find('select[name="'+prefix+'day"]').val();
@@ -320,13 +485,6 @@ function JMBTreeCreatorObject(parent){
 					module.reload = true;
 					sb.clear();
 					sb._('<div class="video">');
-						/*
-						sb._('<object width="425" height="355" >');
-							sb._('<param name="movie" value="http://youtube.com/v/_t2TzJOyops&feature=topvideos_music">');
-							sb._('<param name="wmode" value="transparent">');
-							sb._('<embed src="http://youtube.com/v/_t2TzJOyops&amp;feature=topvideos_music" type="application/x-shockwave-flash" wmode="transparent" width="425" height="355">');
-						sb._('</object>');
-						*/
 						sb._('<object id="scPlayer" class="embeddedObject" width="640" height="405" type="application/x-shockwave-flash" data="http://content.screencast.com/users/Fernando_Oliveira/folders/Default/media/6da2d84e-67f3-4a00-9ef8-7ba592f8aba3/scplayer.swf" style="width: 474.0740740740741px; height: 300px; ">');
 							sb._('<param name="movie" value="http://content.screencast.com/users/Fernando_Oliveira/folders/Default/media/6da2d84e-67f3-4a00-9ef8-7ba592f8aba3/scplayer.swf">');
 							sb._('<param name="quality" value="high">');
@@ -381,7 +539,7 @@ function JMBTreeCreatorObject(parent){
 								sb._('</td>');
 								sb._('<td><div class="name">')._(el.name)._('</div></td>');
 								sb._('<td>');
-									sb._('<div class="request" facebook_id="')._(el.facebook_id)._('" gedcom_id="')._(el.gedcom_id)._('">');
+									sb._('<div class="request" user_name="')._(el.name)._('" facebook_id="')._(el.facebook_id)._('" gedcom_id="')._(el.gedcom_id)._('">');
 										sb._('<span>Request Invitation</span>');
 									sb._('</div>');
 								sb._('</td>');
