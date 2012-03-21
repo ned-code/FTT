@@ -150,17 +150,7 @@ class TreeCreator {
 		$rows = $this->db->loadAssocList();
 		$result = array();
 		$f = get_object_vars(json_decode($friends));
-		
-		/*
-		* TEST DATA
-		*/
-		$rows = array(
-			array('gedcom_id'=>'8609','facebook_id'=>'100000205827487'),
-			array('gedcom_id'=>'8912','facebook_id'=>'100000256873501'),
-			array('gedcom_id'=>'9531','facebook_id'=>'100000300676412'),
-			array('gedcom_id'=>'8811','facebook_id'=>'100000441298414')
-			);
-		
+
 		foreach($rows as $row){
 			if(isset($f[$row['facebook_id']])){
 				$result[] = array('facebook_id'=>$row['facebook_id'],'gedcom_id'=>$row['gedcom_id'],'name'=>$f[$row['facebook_id']]);

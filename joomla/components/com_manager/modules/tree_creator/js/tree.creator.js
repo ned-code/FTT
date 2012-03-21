@@ -335,6 +335,7 @@ function JMBTreeCreatorObject(parent){
 						return false;
 					} else if(response.success){
 						jQuery(form).dialog('close');
+						return true;
 					}
 				});
 			});
