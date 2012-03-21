@@ -434,6 +434,7 @@ class JMBController extends JController
 		$invitation = $session->get('invitation');
 		$alias = $session->get('alias');
 		$login_method = $session->get('login_method');
+
 		if(!empty($invitation)){
 			return 'invitation';
 		}		
@@ -452,7 +453,8 @@ class JMBController extends JController
 			break;
 		
 			case "login":
-				if($facebook_id) return "myfamily";
+				if($facebook_id&&$user_data) return "myfamily";
+				if($facebook_id&&!$user_data) return "first-page";
 				return "login";
 			break;
 			
@@ -462,14 +464,18 @@ class JMBController extends JController
 			break;
 			
 			case "myfamily":
-				if(!empty($login_method)&&$login_method=="famous_family") return "myfamily";
+				if(!empty($login_method)&&$login_method=="famous_family") {
+					return "myfamily";
+				}
 				if(!$facebook_id) return "login";
 				if(!$user_data) return "first-page";
 				return "myfamily";			
 			break;
 			
 			default:
-				return "home";
+				if(!$facebook_id) return "login";
+				if(!$user_Data) return "first-page";
+				return "myfamily";
 			break;
 		}
 	}
@@ -592,8 +598,6 @@ class JMBController extends JController
         	
         	$current_alias = $this->get_current_alias();
         	$alias = $this->get_alias($user_data, $facebook_id);
-        	
-               	$session->set('alias', $alias);
 
         	if($current_alias != $alias){ 
         		$this->location($alias);
@@ -602,20 +606,24 @@ class JMBController extends JController
         			case 'invitation':
         				$this->set_user_data($user_data);
         				$this->invite($facebook_id, $token);
+        				$session->set('alias', $current_alias);
         			break;
         			
         			case 'first-page':
         				$this->clear_user_data();
         				$session->set('facebook_id', $facebook_id);
+        				$session->set('alias', $current_alias);
         			break;
         				
         			case 'login':
         			case 'home':
         				$this->set_user_data($user_data);
+        				$session->set('alias', $current_alias);
         			break;
         			
         			case 'famous-family':
         				$this->set_user_data($user_data);
+        				$session->set('alias', $current_alias);
         			break;
         			
         			case 'myfamily':
@@ -638,6 +646,7 @@ class JMBController extends JController
 						$host->usertree->init($user_data['tree_id'], $user_data['gedcom_id'], $user_data['permission']);
 						$this->update_login_time($user_data['gedcom_id']);
 					}
+					$session->set('alias', $current_alias);
         			break;
         		}
         	}
