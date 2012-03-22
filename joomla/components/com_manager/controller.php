@@ -474,7 +474,7 @@ class JMBController extends JController
 			
 			default:
 				if(!$facebook_id) return "login";
-				if(!$user_Data) return "first-page";
+				if(!$user_data) return "first-page";
 				return "myfamily";
 			break;
 		}
@@ -652,6 +652,27 @@ class JMBController extends JController
         	}
         }
 
+        public function notifications(){
+        	$db = new JMBAjax();
+        	switch(JRequest::getVar('type')){
+        		case "request":
+        			$id = JRequest::getVar('id');
+        			$status = JRequest::getVar('status');
+        			if($status == 'accept'){
+        				$status = 1;	
+        			} else if($status == 'deny'){
+        				$status = 2;
+        			} else {
+        				$status = 3;
+        			}
+        			$sql_string = "UPDATE #__mb_notifications SET `status` = ? WHERE `id` = ?";
+        			$db->setQuery($sql_string, $status, $id);
+        			$db->query();
+        		break;
+        	}
+        	exit;
+        }
+        
         public function setLocation(){
         	$session = JFactory::getSession();
         	$alias = JRequest::getCmd('alias');
