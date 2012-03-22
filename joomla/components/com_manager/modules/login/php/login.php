@@ -1,10 +1,20 @@
 <?php
 class JMBLogin {
 	protected $host;
+	protected $db;
 	
 	public function __construct(){		
 		$this->host = new Host('Joomla');
+		$this->db = new JMBAjax();
 	}
+	
+	protected function getNotifications($tree_id, $gedcom_id){
+		$sql_string = "SELECT id,data,status FROM #__mb_notifications WHERE tree_id = ? AND gedcom_id = ?";
+		$this->db->setQuery($sql_string, $tree_id, $gedcom_id);
+		$rows = $this->db->loadAssocList();
+		return $rows;
+	}
+	
 	public function user(){
 		$session = JFactory::getSession();
 		$gedcom_id = $session->get('gedcom_id');
@@ -16,7 +26,9 @@ class JMBLogin {
 		
 		$tree_members = $this->host->usertree->getMembers($tree_id);
 		
-		return json_encode(array('tree_members'=>$tree_members, 'user_id'=>$gedcom_id, 'usertree'=>$usertree,'default_language'=>$lang,'languages'=>$languages));
+		$notifications = $this->getNotifications($tree_id, $gedcom_id);
+		
+		return json_encode(array('tree_members'=>$tree_members, 'user_id'=>$gedcom_id, 'notifications'=>$notifications, 'usertree'=>$usertree, 'default_language'=>$lang, 'languages'=>$languages));
 	}
 	public function famous($args){
 		if($args == 'logout'){			

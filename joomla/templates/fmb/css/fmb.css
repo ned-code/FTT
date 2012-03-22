@@ -25,7 +25,9 @@ html, body {
 	padding-top: 0;
 }
 .header {}
-.main {}
+.main {
+	position:relative;
+}
 .right {
 	padding-top: 46px;
 }
@@ -36,6 +38,7 @@ html, body {
 
 #container {
 	position:relative;
+	top: 10px;
 }
 
 /**

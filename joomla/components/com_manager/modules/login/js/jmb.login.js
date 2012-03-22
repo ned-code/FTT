@@ -2,6 +2,7 @@ function JMBLogin(){
 	var	module = this,
 		fn,
 		settings = {},
+		notifications,
 		fb_logged;
 
 	if(window!=window.top){
@@ -232,6 +233,7 @@ function JMBLogin(){
 					storage.usertree.user = json.user_id;
 					storage.usertree.pull = json.usertree;
 					storage.usertree.members = json.tree_members;
+					storage.notifications.init(json.notifications);
 					callback(object);
 					return true;
 				}

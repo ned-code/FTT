@@ -41,6 +41,8 @@ storage.family_line = {};
 
 //usertree
 storage.usertree = {};
+storage.usertree.user = null;
+storage.usertree.members = null;
 storage.usertree.pull = null;
 storage.usertree.extend = function(def, sub){
 	for (var key in sub){
@@ -206,6 +208,253 @@ storage.usertree.parse = function(object){
 	}
 }
 
+storage.notifications = {};
+storage.notifications.is_not_confirmed = false;
+storage.notifications.is_accepted = false;
+storage.notifications.is_denied = false;
+storage.notifications.pull = [];
+storage.notifications.confirmed = {};
+storage.notifications.denied = {};
+storage.notifications.not_confirmed = {};
+storage.notifications.manager = function(){
+	var 	ntf = storage.notifications,
+		dialog_box = jQuery('<div class="notifications_manager"></div>'),
+		cont = null,
+		settings = null,
+		create_conteiner = function(){},
+		parse = function(){},
+		active = function(){},
+		user_box = function(){},
+		parent_box = function(){},
+		place = function(){},
+		click_item = function(){},
+		menu = function(){};
+		
+	settings = {
+		width:600,
+		height:400,
+		title: 'Invitations to Join Family Tree',
+		resizable: false,
+		draggable: false,
+		position: "top",
+		closeOnEscape: false,
+		modal:true,
+		close:function(){
+			
+		}	
+	}
+	//
+	create_conteiner = function(){
+		var sb = host.stringBuffer();
+		sb._('<table class="container">');
+			sb._('<tr>');
+				sb._('<td style="width:120px;" valign="top"><div class="menu">');
+					sb._('<div id="not_confirmed"><span>Not Confirmed</span></div>');
+					//sb._('<div id="confirmed"><span>Waiting for Link</span></div>');
+					//sb._('<div id="denied"><span>Denied</span></div>');
+				sb._('</div></td>');
+				sb._('<td valign="top"><div class="data"></div></td>')
+			sb._('</tr>');
+		sb._('</table>');	
+		return jQuery(sb.result());
+	}
+	// parse current notification
+	parse = function(arg){
+		return (arg&&arg.data)?jQuery.parseJSON(arg.data):false;
+	}
+	//
+	active = function(e){
+		if(jQuery(e.currentTarget).hasClass('active')) return false;
+		var id = jQuery(e.currentTarget).attr('id');
+		jQuery(cont).find('div.menu div').removeClass('active');
+		jQuery(e.currentTarget).addClass('active');
+		menu(id);	
+	}
+	user_box = function(args, facebook_id, link){
+		var sb = host.stringBuffer();
+		sb._('<div class="user_box">');
+			sb._('<table>');
+				sb._('<tr>');
+					sb._('<td valign="top">');
+						sb._('<div class="avatar"><img src="index.php?option=com_manager&task=getResizeImage&fid=')._(facebook_id)._('&w=72&h=80"></div>');
+					sb._('</td>');
+					sb._('<td>');
+						sb._('<table>');
+							sb._('<tr>');
+								sb._('<td><div class="title"><span>Name:</span></div></td>');
+								sb._('<td><div class="text"><span>')._(args.name)._('</span></div></td>');
+							sb._('</tr>');
+							sb._('<tr>');
+								sb._('<td><div class="title"><span>Know as:</span></div></td>');
+								sb._('<td><div class="text"><span>')._(args.nick)._('</span></div></td>');
+							sb._('</tr>');
+							sb._('<tr>');
+								sb._('<td><div class="title"><span>Born:</span></div></td>');
+								sb._('<td><div class="text"><span>')._(place(args))._('</span></div></td>');
+							sb._('</tr>');
+							sb._('<tr>');
+								sb._('<td colspan="2"><div class="link"><a href="')._(link)._('">www.facebook.com/')._(args.name)._('</a></div></td>');
+							sb._('</tr>');
+						sb._('</table>');
+					sb._('</td>');
+				sb._('</tr>');
+			sb._('</table>');
+		sb._('</div>');
+		return sb.result();
+	}
+	parent_box = function(name, args){
+		var sb = host.stringBuffer();
+		sb._('<div class="parent_box">');
+			sb._('<table>');
+				sb._('<tr>');
+					sb._('<td>')._(name)._(':</td>');
+					sb._('<td><div class="text"><span>')._(args.name)._('</span></div></td>');
+				sb._('</tr>');
+				sb._('<tr>');
+					sb._('<td>Born:</td>');
+					sb._('<td><div class="text">')._(place(args))._('</div></td>');
+				sb._('</tr>');
+			sb._('</table>');
+		sb._('</div>');
+		return sb.result();
+	}
+	place = function(args){
+		var year = (args.b_year!='')?'<span class="year">'+args.b_year+'</span>':'';
+		var place = (args.b_place!='')?'in <span class="place">'+args.b_place+'</span>':'';
+		return [year,place].join(' ');
+	}
+	click_item = function(el, pull){
+		jQuery(cont).find('div.data div.users').hide();
+		jQuery(cont).find('div.menu').parent().hide();
+		var id = jQuery(el).attr('id');
+		var object = pull[id];
+		var sb = host.stringBuffer();
+		var json = parse(object);
+		var html;
+		sb._('<div class="status"><span class="title">Status:</span><span class="value">Action Required</span></div>');
+		sb._('<div class="prefix">')._(json.user_info.name)._(' is claiming to be your ')._(json.relation)._(' and would like to join your family tree.')._('</div>');
+		sb._('<div class="info">');
+			sb._('<table>');
+				sb._('<tr>');
+					sb._('<td>');
+						sb._(user_box(json.user_info, json.me.id, json.me.link));
+					sb._('</td>');
+					sb._('<td>');
+						sb._(parent_box('Father', json.father_info));
+						sb._(parent_box('Mother', json.mother_info));
+					sb._('</td>');
+				sb._('</tr>');
+				sb._('<tr>');
+					sb._('<td colspan="2">');
+						sb._('<div class="message_title">')._(json.user_info.name)._(' writes:</div>');
+						sb._('<div class="message_text">')._(json.message)._('</div>');
+					sb._('</td>');
+				sb._('</tr>');
+			sb._('</table>');
+		sb._('</div>');
+		sb._('<div class="click_items">');
+			sb._('<div id="accept" class="button"><div>Accept</div><div>Add ')._(json.user_info.name)._(' to my Family Tree</div></div>');
+			sb._('<div id="deny" class="button"><div>Deny</div><div>Do not add ')._(json.user_info.name)._(' to my Family Tree</div></div>');
+		sb._('</div>');
+		html = jQuery(sb.result());
+		jQuery(html).find('div#accept,div#deny').click(function(){
+			var status = jQuery(this).attr('id');
+			jQuery.ajax({
+				url:'index.php?option=com_manager&task=notifications&type=request&status='+status+'&id='+id,
+				type:'GET',
+				complete:function(req, err){
+					if(!ntf.is_accepted){
+						ntf.is_accepted = true;
+					}
+					delete ntf.not_confirmed[id];
+					ntf.confirmed[id] = object;
+					jQuery(dialog_box).dialog('close');
+				}
+			});
+		});
+		jQuery(cont).find('div.data').append(html);
+	}
+	//
+	menu = function(id){
+		var pull = ntf[id], sb = host.stringBuffer(), html;
+		sb._('<div class="users">');
+			for(var key in pull){
+				var json = parse(pull[key]);
+				sb._('<div id="')._(key)._('" class="')._(json.me.gender)._('"><span>')._(json.me.name)._('</span>')._((json.user_info.b_year!=''?'('+json.user_info.b_year+')':''))._('</div>');
+			}
+		sb._('</div>');
+		html = jQuery(sb.result());
+		jQuery(html).find('div').click(function(){ click_item(this, pull); });
+		jQuery(cont).find('div.data').html('').append(html);
+	}
+	
+	// create dialog manager
+	jQuery(dialog_box).dialog(settings);
+	jQuery(dialog_box).parent().addClass('notifications');
+	jQuery(dialog_box).parent().css('top', '20px');
+	
+	cont = create_conteiner();
+	jQuery(dialog_box).append(cont);
+	
+	jQuery(cont).find('div.menu div').click(active);
+	
+	
+	
+	
+	
+}
+storage.notifications.init = function(notifications){
+	var	ntf = storage.notifications,
+		alias = jQuery(document.body).attr('_alias'),
+		type = jQuery(document.body).attr('_type'),
+		check = function(){},
+		view_alert = function(){};
+
+	ntf.pull = notifications;
+	
+	// sort notifications
+	sort = function(args){
+		for(var key in notifications){
+			var object = notifications[key];
+			if(object&&object.status == 0){
+				if(!ntf.is_not_confirmed){
+					ntf.is_not_confirmed = true;
+				}
+				ntf.not_confirmed[object.id] = object;		
+			} else if(object&&object.status == 1) {
+				if(!ntf.is_accepted){
+					ntf.is_accepted = true;
+				}
+				ntf.confirmed[object.id] = object;	
+			} else if(object&&object.status == 2){
+				if(!ntf.is_denied){
+					ntf.is_denied = true;
+				}
+				ntf.denied[object.id] = object;	
+			}
+		}	
+	}
+	// view alert about not confirmed notification
+	view_alert = function(pull){
+		var html, sb = host.stringBuffer();
+		sb._('<div class="ftt_notifications_alert">');
+			sb._('<div class="message"><div>You have Invitation Request</div><div class="button">Click here to view it</div></div>');
+		sb._('</div>');
+		html = jQuery(sb.result());
+		jQuery(html).find('div.button').click(function(){
+			ntf.manager();
+		});
+		jQuery('div.main').append(html);
+	}
+	
+	
+	sort(notifications);
+	
+	if(ntf.is_not_confirmed&&alias=='myfamily'&&type!='famous_family'){
+		view_alert(ntf.not_confirmed);
+	}
+}
+
 //ajax request
 storage.request = {};
 storage.request.pull = {};
@@ -345,7 +594,7 @@ core.modulesPullObject = core.modulesPullFunc();
 core.createLayout = function(type){
 	var layout_type = {'single':1,'double':2,'triple':3};
 	var td_length = layout_type[type];
-	var table = jQuery('<table style="table-layout:fixed;" id="jmb_page_layout_table"  width="100%" height="100%"></table>');
+	var table = jQuery('<table style="table-layout:fixed;width:760px;" id="jmb_page_layout_table"  width="100%" height="100%"></table>');
 	var tr = jQuery('<tr class="jmb_layout_row"></tr>');
 	jQuery(table).append(tr);
 	for(var cell=1; cell<=td_length;cell++){
@@ -365,14 +614,14 @@ core.appendFiles = function(module, type){
 			switch(type){
 				case "js":
 					var script = document.createElement("script");
-					script.src = url+'/'+type+'/'+files[i];
+					script.src = url+'/'+type+'/'+files[i]+'?111';
 					script.type="text/javascript";
 					head[0].appendChild(script);
 				break;
 				
 				case "css":
 					var link = document.createElement("link");
-					link.href = url+'/'+type+'/'+files[i];
+					link.href = url+'/'+type+'/'+files[i]+'?111';
 					link.rel="stylesheet";
 					link.type="text/css";
 					head[0].appendChild(link);
