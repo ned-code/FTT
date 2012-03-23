@@ -118,7 +118,7 @@ JMBTooltip.prototype = {
 					sb._('</div>');
 				}
 			sb._('</div>');
-			if(user.facebook_id==='0' && get.turns < 150 && get.is_alive){
+			if(user.facebook_id==='0' && get.turns < 100 && get.is_alive){
 				sb._('<div class="jmb-tooltip-view-send">');
 					sb._('<table>');			
 						sb._('<tr>');
@@ -151,11 +151,17 @@ JMBTooltip.prototype = {
 				sb._("<div class='jmb-profile-tooltip-bs'><span>Brother or Sister</span></div>");
 				sb._("<div class='jmb-profile-tooltip-child'><span>Child</span></div>");
 			sb._('</fieldset></div>');
-			if(user.facebook_id == '0'){
+			if(user.facebook_id==='0' && get.turns < 100 && get.is_alive){
 				sb._("<div class='jmb-profile-tooltip-send'>");
+					sb._('<div class="info"><span>')._(nick)._(' is not regitred.</span></div>');
+					sb._('<div class="invitions"><span class="click">Send ')._(nick)._(' an invitions.</span></div>');
+					if(storage.notifications.is_accepted){
+						sb._('<div class="link"><span>Link with existing request.</span></div>');
+					}
+					/*
 					sb._('<table>');
 						sb._('<tr>');
-							sb._('<td rowspan="2">');
+							sb._('<td rowspan="3">');
 								sb._("<div class='jmb-profile-tooltip-send-img'>&nbsp;</div>");
 							sb._('</td>');
 							sb._('<td><span class="info">')._(nick)._(' is not registred.</span></td>');
@@ -163,7 +169,13 @@ JMBTooltip.prototype = {
 						sb._('<tr>');
 							sb._('<td><span  class="click">Send ')._(nick)._(" an invations.</span></td>");
 						sb._('</tr>');
+						if(storage.notifications.is_accepted){
+							sb._('<tr>');
+								sb._('<td><span  class="link">Link with existing request.</span></td>');
+							sb._('</tr>');
+						}
 					sb._('</table>');
+					*/
 				sb._('</div>');
 			}
 			sb._("<div class='jmb-profile-tooltip-close'><a href='javascript:void(jQuery(storage.tooltip.btActive[storage.tooltip.btActive.length-1].target).btOff());'><div>&nbsp;</div></a></div>");
@@ -383,6 +395,17 @@ JMBTooltip.prototype = {
 			storage.invitation.render(settings.object);
 		});
 	},
+	link_with_request:function(cont, type, st){
+		var class_name;
+		switch(type){
+			//case "view": class_name = '.jmb-tooltip-view-send .send'; break;
+			case "edit": class_name = '.jmb-profile-tooltip-send div.link span'; break;
+			default: return;
+		}
+		jQuery(cont).find(class_name).click(function(){
+			storage.notifications.link(st);
+		});
+	},
 	_getId:function(id, type){
 		return [type,id].join(':');
 	},
@@ -424,6 +447,7 @@ JMBTooltip.prototype = {
 		jQuery(st.target).bt(st.style);
 		module._click(st);
 		module._invitation(cont, type, st);
+		module.link_with_request(cont, type, st);
 		module._buttons(cont, st, type);
 	}
 }

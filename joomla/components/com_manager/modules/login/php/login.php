@@ -9,7 +9,7 @@ class JMBLogin {
 	}
 	
 	protected function getNotifications($tree_id, $gedcom_id){
-		$sql_string = "SELECT id,data,status FROM #__mb_notifications WHERE tree_id = ? AND gedcom_id = ?";
+		$sql_string = "SELECT id,data,status FROM #__mb_notifications WHERE tree_id = ? AND gedcom_id = ? AND processed = 0";
 		$this->db->setQuery($sql_string, $tree_id, $gedcom_id);
 		$rows = $this->db->loadAssocList();
 		return $rows;

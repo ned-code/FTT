@@ -139,13 +139,24 @@
 	width: 31px;
 	margin-right: 10px;
 }
-.jmb-profile-tooltip-send span.info{
-	color: black;
+.jmb-profile-tooltip-send div {
+	margin:3px;
 }
-.jmb-profile-tooltip-send span.click{
-	color: #2D4BDF;
-	cursor: pointer;
-	font-weight: bold;
+.jmb-profile-tooltip-send div.info{
+	color: black;
+	text-align:center;
+}
+.jmb-profile-tooltip-send div.invitions span, .jmb-profile-tooltip-send div.link span{
+	cursor:pointer;
+	font-size: 11px;
+	margin-left: 20px;
+}
+
+.jmb-profile-tooltip-send div.invitions{
+	background: url("../image/cover_small.png") no-repeat scroll 0 -2px transparent;
+}
+.jmb-profile-tooltip-send div.link{
+	background: url("../image/link.png") no-repeat scroll 0 0 transparent;
 }
 .jmb-profile-tooltip-close {
 	cursor:pointer;

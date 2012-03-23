@@ -216,6 +216,210 @@ storage.notifications.pull = [];
 storage.notifications.confirmed = {};
 storage.notifications.denied = {};
 storage.notifications.not_confirmed = {};
+storage.notifications.link = function(st){
+	var	ntf = storage.notifications,
+		dialog_box = jQuery('<div></div>'),
+		settings = null,
+		cont = null,
+		parent = function(){},
+		place = function(){},
+		first = function(){},
+		select = function(){},
+		create = function(){},
+		user = function(){},
+		target = function(){};
+		
+	settings = {
+		width:600,
+		height:400,
+		title: 'Associate Facebook Member with Existing Profile',
+		resizable: false,
+		draggable: false,
+		position: "top",
+		closeOnEscape: false,
+		modal:true,
+		close:function(){
+			
+		}	
+	}
+	
+	place = function(args){
+		var year = (args.b_year!='')?'<span class="year">'+args.b_year+'</span>':'';
+		var place = (args.b_place!='')?'in <span class="place">'+args.b_place+'</span>':'';
+		return [year,place].join(' ');
+	}
+	
+	parent = function(name, args){
+		var sb = host.stringBuffer();
+		sb._('<div class="parent_box">');
+			sb._('<table>');
+				sb._('<tr>');
+					sb._('<td>')._(name)._(':</td>');
+					sb._('<td><div class="text"><span>')._(args.name)._('</span></div></td>');
+				sb._('</tr>');
+				sb._('<tr>');
+					sb._('<td>Born:</td>');
+					sb._('<td><div class="text">')._(place(args))._('</div></td>');
+				sb._('</tr>');
+			sb._('</table>');
+		sb._('</div>');
+		return sb.result();
+	}
+	
+	gedcom_parent = function(name, id){
+		var sb = host.stringBuffer();
+		var obj = (id)?storage.usertree[id]:null;
+		sb._('<div class="parent_box">');
+			sb._('<table>');
+				sb._('<tr>');
+				sb._('<td>')._(name)._(':</td>');
+					sb._('<td><div class="text"><span>')._((obj!=null)?[obj.user.first_name,obj.user.last_name].join(' '):'')._('</span></div></td>');
+				sb._('</tr>');
+				sb._('<tr>');
+					sb._('<td>Born:</td>');
+					var birth = (obj!=null&&obj.user.birth!=null)?obj.user.birth:false;
+					var place = (birth&&birth.place!=null)?birth.place.name:'';
+					var year = (birth&&birth.date[2]!=null)?birth[2]:'';
+					sb._('<td><div class="text">')._(year)._((place!='')?' in '+place:'')._('</div></td>');
+				sb._('</tr>');
+			sb._('</table>');
+		sb._('</div>');
+		return sb.result();
+	}
+		
+	user = function(st, pull){
+		var sb = host.stringBuffer();
+		var args = jQuery.parseJSON(pull.data);
+		sb._('<div class="user_box">');
+			sb._('<table>');
+				sb._('<tr>');
+					sb._('<td>');
+						sb._('<div class="avatar"><img src="index.php?option=com_manager&task=getResizeImage&fid=')._(args.me.id)._('&w=72&h=80"></div>');
+					sb._('</td>');
+					sb._('<td valign="top">');
+						sb._('<table>');
+							sb._('<tr>');
+								sb._('<td><div class="title"><span>Name:</span></div></td>');
+								sb._('<td><div class="text"><span>')._(args.user_info.name)._('</span></div></td>');
+							sb._('</tr>');
+							sb._('<tr>');
+								sb._('<td><div class="title"><span>Know as:</span></div></td>');
+								sb._('<td><div class="text"><span>')._(args.user_info.nick)._('</span></div></td>');
+							sb._('</tr>');
+							sb._('<tr>');
+								sb._('<td><div class="title"><span>Born:</span></div></td>');
+								sb._('<td><div class="text"><span>')._(place(args.user_info))._('</span></div></td>');
+							sb._('</tr>');
+						sb._('</table>');
+					sb._('</td>');
+				sb._('</tr>');
+				sb._('<tr>');
+					sb._('<td colspan="2">')._(parent('Father', args.father_info))._('</td>');
+				sb._('</tr>');
+				sb._('<tr>');
+					sb._('<td colspan="2">')._(parent('Mother', args.mother_info))._('</td>');
+				sb._('</tr>');
+				sb._('<tr>');
+					sb._('<td colspan="2"><div class="link"><a href="')._(args.me.link)._('">www.facebook.com/')._(args.user_info.name)._('</a></div></td>');
+				sb._('</tr>');
+			sb._('</table>');
+		sb._('</div>');
+		return sb.result();
+	}
+	
+	target = function(st, pull){
+		var sb = host.stringBuffer();
+		var obj = st.object;
+		var user = obj.user;
+		var parent_key = (parents!=null)?get_key(obj.parents):false;;
+		sb._('<div class="user_box">');
+			sb._('<table>');
+				sb._('<tr>');
+					sb._('<td>');
+						sb._('<div class="avatar"><img width="72px" height="80px" src="')._(storage.baseurl)._(storage.url)._('js/images/')._(user.gender=='F'?'female_big.png':'male_big.png')._('"></div>');
+					sb._('</td>');
+					sb._('<td valign="top">');
+						sb._('<table>');
+							sb._('<tr>');
+								sb._('<td><div class="title"><span>Name:</span></div></td>');
+								sb._('<td><div class="text"><span>')._([user.first_name, user.last_name].join(' '))._('</span></div></td>');
+							sb._('</tr>');
+							sb._('<tr>');
+								sb._('<td><div class="title"><span>Know as:</span></div></td>');
+								sb._('<td><div class="text"><span>')._((user.nick!=null)?user.nick:'')._('</span></div></td>');
+							sb._('</tr>');
+							sb._('<tr>');
+								sb._('<td><div class="title"><span>Born:</span></div></td>');
+								sb._('<td><div class="text"><span>')._((user.birth!=null&&user.birth.place!=null)?user.birth.place.name:'')._('</span></div></td>');
+							sb._('</tr>');
+						sb._('</table>');
+					sb._('</td>');
+				sb._('</tr>');
+				sb._('<tr>');
+					sb._('<td colspan="2">')._(gedcom_parent('Father', (parent_key)?obj.parents[parent_key].father.gedcom_id:false))._('</td>');
+				sb._('</tr>');
+				sb._('<tr>');
+					sb._('<td colspan="2">')._(gedcom_parent('Mother', (parent_key)?obj.parents[parent_key].mother.gedcom_id:false))._('</td>');
+				sb._('</tr>');
+			sb._('</table>');
+		sb._('</div>');
+		return sb.result();
+	}
+	
+	select = function(pull){
+		var sb = host.stringBuffer();
+		sb._('<select name="users">');
+			for(var key in pull){
+				var data = jQuery.parseJSON(pull[key].data);
+				var year = (data.user_info.b_year!='')?'('+data.user_info.b_year+')':'';
+				sb._('<option value="')._(key)._('">')._(data.me.name)._(year)._('</option>');
+			}
+		sb._('</select>');
+		return sb.result();
+	}
+	
+	get_key = function(pull){
+		 for (var key in pull) return key;
+	}
+	
+	create = function(st){
+		var sb = host.stringBuffer();
+		var confirmed = ntf.confirmed;
+		var id = get_key(confirmed);
+		var pull = confirmed[id];
+		var args = jQuery.parseJSON(pull.data);
+		sb._('<div>');
+			sb._('<div class="users_select">');
+				sb._('<div><span>Select user from the invitation list</span></div>');
+				sb._('<div>')._(select(confirmed))._('</div>');
+			sb._('</div>');
+			sb._('<div class="user_info">');
+				sb._('<table>');
+					sb._('<tr>');
+						sb._('<td valign="top">')._(user(st, pull))._('</td>');
+						sb._('<td><div class="arrow">&nbsp;</div></td>');
+						sb._('<td valign="top">')._(target(st, pull))._('</td>');
+					sb._('</tr>');
+				sb._('</table>');
+			sb._('</div>');
+			sb._('<div class="questions">');
+				sb._('<div><span>Would you like to associate <b>')._(args.me.name)._('</b> from Facebook</span></div>');
+				sb._('<div><span>with the profile for <b>')._([st.object.user.first_name,st.object.user.last_name].join(' '))._('</b> in your family tree?</span></div>');
+			sb._('</div>');
+			sb._('<div class="button"><span>Yes</span></div>');
+		sb._('</div>');
+		return jQuery(sb.result());
+	}
+	
+	// create dialog manager
+	jQuery(dialog_box).dialog(settings);
+	jQuery(dialog_box).parent().addClass('notifications_link');
+	jQuery(dialog_box).parent().css('top', '20px');
+	
+	cont = create(st);
+	jQuery(dialog_box).append(cont);	
+	
+}
 storage.notifications.manager = function(){
 	var 	ntf = storage.notifications,
 		dialog_box = jQuery('<div class="notifications_manager"></div>'),
@@ -397,11 +601,6 @@ storage.notifications.manager = function(){
 	jQuery(dialog_box).append(cont);
 	
 	jQuery(cont).find('div.menu div').click(active);
-	
-	
-	
-	
-	
 }
 storage.notifications.init = function(notifications){
 	var	ntf = storage.notifications,
