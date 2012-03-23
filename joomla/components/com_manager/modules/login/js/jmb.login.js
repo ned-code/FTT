@@ -231,6 +231,7 @@ function JMBLogin(){
 					settings.default_language = json.default_language;
 					object = json.usertree[json.user_id];
 					storage.usertree.user = json.user_id;
+					storage.usertree.tree = json.tree_id;
 					storage.usertree.pull = json.usertree;
 					storage.usertree.members = json.tree_members;
 					storage.notifications.init(json.notifications);

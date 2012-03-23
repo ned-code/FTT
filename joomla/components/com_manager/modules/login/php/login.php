@@ -28,7 +28,7 @@ class JMBLogin {
 		
 		$notifications = $this->getNotifications($tree_id, $gedcom_id);
 		
-		return json_encode(array('tree_members'=>$tree_members, 'user_id'=>$gedcom_id, 'notifications'=>$notifications, 'usertree'=>$usertree, 'default_language'=>$lang, 'languages'=>$languages));
+		return json_encode(array('tree_members'=>$tree_members, 'user_id'=>$gedcom_id, 'tree_id'=>$tree_id, 'notifications'=>$notifications, 'usertree'=>$usertree, 'default_language'=>$lang, 'languages'=>$languages));
 	}
 	public function famous($args){
 		if($args == 'logout'){			

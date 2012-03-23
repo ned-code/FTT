@@ -669,6 +669,26 @@ class JMBController extends JController
         			$db->setQuery($sql_string, $status, $id);
         			$db->query();
         		break;
+        		
+        		case "processed":
+        			$host = new Host('joomla');
+        			$facebook_id = JRequest::getVar('facebook_id');
+        			$gedcom_id = JRequest::getVar('gedcom_id');
+        			$tree_id = JRequest::getVar('tree_id');
+        			$request_id = JRequest::getVar('request_id');
+        			
+        			$sql_string = "UPDATE #__mb_notifications SET `processed` = 1 WHERE `id` = ?";
+        			$db->setQuery($sql_string, $request_id);
+        			$db->query();
+        			
+        			$sql_string = "UPDATE #__mb_tree_links SET `type` = 'USER' WHERE `individuals_id` = ? AND `tree_id` = ?";
+        			$db->setQuery($sql_string, $gedcom_id, $tree_id);
+        			$db->query();
+        			
+        			$i = $host->gedcom->individuals->get($gedcom_id);
+        			$i->FacebookId = $facebook_id;
+        			$host->gedcom->individuals->update($i); 
+        		break;
         	}
         	exit;
         }

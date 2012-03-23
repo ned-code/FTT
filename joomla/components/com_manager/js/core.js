@@ -42,6 +42,7 @@ storage.family_line = {};
 //usertree
 storage.usertree = {};
 storage.usertree.user = null;
+storage.usertree.tree = null;
 storage.usertree.members = null;
 storage.usertree.pull = null;
 storage.usertree.extend = function(def, sub){
@@ -221,6 +222,7 @@ storage.notifications.link = function(st){
 		dialog_box = jQuery('<div></div>'),
 		settings = null,
 		cont = null,
+		selected = null,
 		parent = function(){},
 		place = function(){},
 		first = function(){},
@@ -388,6 +390,7 @@ storage.notifications.link = function(st){
 		var id = get_key(confirmed);
 		var pull = confirmed[id];
 		var args = jQuery.parseJSON(pull.data);
+		selected = id;
 		sb._('<div>');
 			sb._('<div class="users_select">');
 				sb._('<div><span>Select user from the invitation list</span></div>');
@@ -396,14 +399,14 @@ storage.notifications.link = function(st){
 			sb._('<div class="user_info">');
 				sb._('<table>');
 					sb._('<tr>');
-						sb._('<td valign="top">')._(user(st, pull))._('</td>');
+						sb._('<td id="facebook" valign="top">')._(user(st, pull))._('</td>');
 						sb._('<td><div class="arrow">&nbsp;</div></td>');
-						sb._('<td valign="top">')._(target(st, pull))._('</td>');
+						sb._('<td id="gedcom" valign="top">')._(target(st, pull))._('</td>');
 					sb._('</tr>');
 				sb._('</table>');
 			sb._('</div>');
 			sb._('<div class="questions">');
-				sb._('<div><span>Would you like to associate <b>')._(args.me.name)._('</b> from Facebook</span></div>');
+				sb._('<div><span>Would you like to associate <b id="facebook_name">')._(args.me.name)._('</b> from Facebook</span></div>');
 				sb._('<div><span>with the profile for <b>')._([st.object.user.first_name,st.object.user.last_name].join(' '))._('</b> in your family tree?</span></div>');
 			sb._('</div>');
 			sb._('<div class="button"><span>Yes</span></div>');
@@ -418,6 +421,30 @@ storage.notifications.link = function(st){
 	
 	cont = create(st);
 	jQuery(dialog_box).append(cont);	
+	
+	jQuery(cont).find('select').change(function(){
+		var id = jQuery(this).val();
+		selected = id;
+		var confirmed = ntf.confirmed;
+		var pull = confirmed[id];
+		var facebook = user(st, pull);
+		var args = jQuery.parseJSON(pull.data);
+		jQuery(cont).find('td#facebook').html(facebook);
+		jQuery(cont).find('b#facebook_name').html(args.me.name);
+	});
+	
+	jQuery(cont).find('.button').click(function(){
+		var confirmed = ntf.confirmed;
+		var pull = confirmed[selected];	
+		var args = jQuery.parseJSON(pull.data);
+		jQuery.ajax({
+			url:'index.php?option=com_manager&task=notifications&type=processed&facebook_id='+args.me.id+'&tree_id='+storage.usertree.tree+'&gedcom_id='+st.object.user.gedcom_id+'&request_id='+selected,
+			type:'GET',
+			complete:function(req, err){
+				jQuery(dialog_box).dialog('close');
+			}
+		});
+	})
 	
 }
 storage.notifications.manager = function(){
