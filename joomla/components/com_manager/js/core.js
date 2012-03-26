@@ -217,6 +217,70 @@ storage.notifications.pull = [];
 storage.notifications.confirmed = {};
 storage.notifications.denied = {};
 storage.notifications.not_confirmed = {};
+storage.notifications.deny = function(id, json, object){
+	var	ntf = storage.notifications,
+		sb = host.stringBuffer(),
+		box = jQuery('<div></div>');
+		cont = '';
+		
+	sb._('<div class="header"><span>The following message be sent to ')._(json.me.name)._('. You may edit the section shown yellow.</span></div>');
+	sb._('<div class="deny_content">');
+		sb._('<div class="status"><div><span>Family TreeTop</span></div><div><span>Invition Request Status: <b>Denied</b></span></div></div>');
+		sb._('<div class="text">');
+			sb._('<div><span>Dear ')._(json.me.name)._(',</span></div>');
+			sb._('<div><span>')._(json.target.name)._(' has denied your Family TreeTop invitation request.');
+				sb._(' He does not  believe that you are member of his family. If you still think thay you are related to ');
+				sb._(json.target.name.split(' ')[0])._(', you may send him one last message to provide more information.');
+			sb._('</span></div>');
+		sb._('</div>');
+		sb._('<div class="edit">');
+			sb._('<div><span>')._(json.target.name.split(' ')[0])._(' Writes:</span></div>');
+			sb._('<div><textarea name="message">')
+				sb._('Hi ')._(json.me.name.split(' ')[0])._(', \n\n');
+				sb._('I am not sure how we are related. Are you able to explain how you are connected to my family tree?\n\n');
+				sb._('Thanks,\n');
+				sb._(json.target.name);
+			sb._('</textarea></div>');
+		sb._('</div>');
+	sb._('</div>');
+	sb._('<div class="button"><span>Send Message</span></div>');
+	cont = sb.result();
+	
+	
+	jQuery(box).append(cont);
+	jQuery(box).dialog({
+		width:600,
+		height:400,
+		title: json.me.name+' Invition Request',
+		resizable: false,
+		draggable: false,
+		position: "top",
+		closeOnEscape: false,
+		modal:true,
+		close:function(){
+			
+		}		
+	});
+	jQuery(box).parent().addClass('notifications_deny');
+	jQuery(box).parent().css('top', '20px');
+
+	jQuery(box).find('div.button').click(function(){
+		var message = jQuery(cont).find('textarea').val();
+		jQuery.ajax({
+			url:'index.php?option=com_manager&task=notifications&type=request&status=deny&id='+id,
+			type:'POST',
+			data:'message='+encodeURIComponent(message)+'&data='+object.data,
+			complete:function(req, err){				
+				if(!ntf.is_denied){
+					ntf.is_denied = true;
+				}
+				delete ntf.not_confirmed[id];
+				ntf.denied[id] = object;
+				jQuery(box).dialog('close');
+			}
+		});
+	});
+}
 storage.notifications.link = function(st){
 	var	ntf = storage.notifications,
 		dialog_box = jQuery('<div></div>'),
@@ -554,6 +618,7 @@ storage.notifications.manager = function(){
 		var place = (args.b_place!='')?'in <span class="place">'+args.b_place+'</span>':'';
 		return [year,place].join(' ');
 	}
+	
 	click_item = function(el, pull){
 		jQuery(cont).find('div.data div.users').hide();
 		jQuery(cont).find('div.menu').parent().hide();
@@ -588,10 +653,9 @@ storage.notifications.manager = function(){
 			sb._('<div id="deny" class="button"><div>Deny</div><div>Do not add ')._(json.user_info.name)._(' to my Family Tree</div></div>');
 		sb._('</div>');
 		html = jQuery(sb.result());
-		jQuery(html).find('div#accept,div#deny').click(function(){
-			var status = jQuery(this).attr('id');
+		jQuery(html).find('div#accept').click(function(){
 			jQuery.ajax({
-				url:'index.php?option=com_manager&task=notifications&type=request&status='+status+'&id='+id,
+				url:'index.php?option=com_manager&task=notifications&type=request&status=accept&id='+id,
 				type:'GET',
 				complete:function(req, err){
 					if(!ntf.is_accepted){
@@ -602,6 +666,10 @@ storage.notifications.manager = function(){
 					jQuery(dialog_box).dialog('close');
 				}
 			});
+		});
+		jQuery(html).find('div#deny').click(function(){
+			jQuery(dialog_box).dialog('close');
+			ntf.deny(id, json, object);
 		});
 		jQuery(cont).find('div.data').append(html);
 	}

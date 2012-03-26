@@ -334,3 +334,56 @@ div.buttons span {
 	font-weight: bold;
 	font-size: 11px;
 }
+
+.ui-dialog.notifications_deny{
+	background:#999999;
+	font-family:Tahoma;
+	font-size:12px;
+}
+.notifications_deny .ui-dialog-content {
+	background: none repeat scroll 0 0 #ffffff;
+	border: 1px solid #574F2E;
+    	border-radius: 5px 5px 5px 5px;
+}
+
+.notifications_deny .header{
+	text-align: center;
+}
+.notifications_deny .deny_content{
+	background: none repeat scroll 0 0 #F5FAE6;
+	border: 1px solid #999999;
+    	margin: 20px;
+    	padding: 5px;
+}
+.notifications_deny .deny_content .status{
+	margin-left: 10px;
+}
+.notifications_deny .deny_content .text{
+	margin: 10px;
+}
+.notifications_deny .deny_content .text div:last-child{
+	margin-top:5px;
+}
+.notifications_deny .deny_content .edit{
+	margin: 10px;
+}
+.notifications_deny .deny_content .edit textarea{
+	background: none repeat scroll 0 0 #FFFFCC;
+	border: 1px solid #808066;
+	height: 110px;
+	resize: none;	
+	width: 470px;
+}
+.notifications_deny .button{
+	background: none repeat scroll 0 0 #22B14C;
+	border: 1px solid #000000;
+    	border-radius: 3px 3px 3px 3px;
+    	color: white;
+    	cursor: pointer;
+    	font-weight: bold;
+    	height: 22px;
+    	line-height: 22px;
+    	margin: 0 auto;
+    	text-align: center;
+    	width: 150px;
+}

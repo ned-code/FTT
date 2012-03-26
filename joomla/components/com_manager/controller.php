@@ -659,15 +659,59 @@ class JMBController extends JController
         			$id = JRequest::getVar('id');
         			$status = JRequest::getVar('status');
         			if($status == 'accept'){
-        				$status = 1;	
+        				$sql_string = "UPDATE #__mb_notifications SET `status` = ? WHERE `id` = ?";
+        				$db->setQuery($sql_string, 1, $id);
+        				$db->query();
         			} else if($status == 'deny'){
         				$status = 2;
+        				$message = preg_replace('/%([0-9a-f]{2})/ie', 'chr(hexdec($1))', (string) JRequest::getVar('message'));
+        				$data = json_decode(JRequest::getVar('data'));
+        				
+        				require_once("Mail.php");
+        				$target_name = explode(" ", $data->target->name);
+        				$me_name = explode(" ", $data->me->name);
+        				#recipient  
+        				//$to = "<".$data->me->email.">";
+        				$to = "fantomhp@gmail.com";
+        				$from = "<familytreetop@gmail.com>";
+		
+        				#subject
+        				$subject = "Family Treetop invitation.";  
+        				
+        				$host = "ssl://smtp.gmail.com";
+        				$port = "465";
+        				$username = "familytreetop@gmail.com";
+        				$password = "3d#@technology";
+
+        				#mail body 
+					$mail_body = '<html><head>Family TreeTop invitation.</head><body>';
+					$mail_body .= "<div style='margin:10px;'>Dear ".$data->me->name.",</div>";
+					$mail_body .= "<div style='margin:10px;'>".$data->target->name." has denied your Family TreeTop invitation request.";
+					$mail_body .= " He does not  believe that you are member of his family. If you still think thay you are related to ";
+					$mail_body .= $target_name[0].", you may send him one last message to provide more information.</div>";
+					$mail_body .= "<div style='margin-left:10px;'>".$target_name[0]." Writes:</div>";
+					$mail_body .= "<div style='margin-left:10px;'>".$message."</div>";
+					$mail_body .= '</body></html>';
+
+					$headers = array ("MIME-Version"=> '1.0', "Content-type" => "text/html; charset=iso-8859-1",'From' => $from,'To' => $to,'Subject' => $subject);
+				
+					$smtp = Mail::factory('smtp',array ('host' => $host,'port' => $port,'auth' => true,'username' => $username,'password' => $password));
+			
+					$mail = $smtp->send($to, $headers, $mail_body);
+			
+					if (PEAR::isError($mail)) {
+						echo json_encode(array('message'=>'Message delivery failed...'));
+						
+					} else {
+						echo json_encode(array('message'=>'Message successfully sent!'));
+					}
+					
+					$sql_string = "UPDATE #__mb_notifications SET `processed` = 1, `status` = ? WHERE `id` = ?";
+        				$db->setQuery($sql_string, 2, $id);
+        				$db->query();
         			} else {
         				$status = 3;
         			}
-        			$sql_string = "UPDATE #__mb_notifications SET `status` = ? WHERE `id` = ?";
-        			$db->setQuery($sql_string, $status, $id);
-        			$db->query();
         		break;
         		
         		case "processed":
