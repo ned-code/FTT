@@ -146,9 +146,10 @@ class JMBProfile {
 		$this->updateIndividual($ind, $_REQUEST);
 		$this->updateIndividualEvents($ind, $_REQUEST);
 		//update user tree
-		$owner_id = $_SESSION['jmb']['gid'];
-		$tree_id = $_SESSION['jmb']['tid'];
-		$permission = $_SESSION['jmb']['permission'];
+		$session = JFactory::getSession();
+		$owner_id = $session->get('gedcom_id');
+		$tree_id = $session->get('tree_id');
+		$permission = $session->get('permission');
 		$this->host->usertree->init($tree_id, $owner_id, $permission);
 		$usertree = $this->host->usertree->load($tree_id, $owner_id);
 		return json_encode(array('user'=>$usertree[$user_id]));
@@ -157,9 +158,10 @@ class JMBProfile {
 	public function union($args){
 		$args = json_decode($args);
 		$request = $_REQUEST;
-		$owner_id = $_SESSION['jmb']['gid'];
-		$tree_id = $_SESSION['jmb']['tid'];
-		$permission = $_SESSION['jmb']['permission'];
+		$session = JFactory::getSession();
+		$owner_id = $session->get('gedcom_id');
+		$tree_id = $session->get('tree_id');
+		$permission = $session->get('permission');
 		$data = false;
 		switch($args->method){
 			case "save":
@@ -240,9 +242,10 @@ class JMBProfile {
 			return false;
 		}
 		
-		$owner_id = $_SESSION['jmb']['gid'];
-		$tree_id = $_SESSION['jmb']['tid'];
-		$permission = $_SESSION['jmb']['permission'];
+		$session = JFactory::getSession();
+		$owner_id = $session->get('gedcom_id');
+		$tree_id = $session->get('tree_id');
+		$permission = $session->get('permission');
 		
 		$request = $_REQUEST;
 		$sircar = null;

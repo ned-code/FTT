@@ -671,8 +671,7 @@ class JMBController extends JController
         				$target_name = explode(" ", $data->target->name);
         				$me_name = explode(" ", $data->me->name);
         				#recipient  
-        				//$to = "<".$data->me->email.">";
-        				$to = "fantomhp@gmail.com";
+        				$to = "<".$data->me->email.">";
         				$from = "<familytreetop@gmail.com>";
 		
         				#subject

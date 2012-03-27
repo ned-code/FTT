@@ -163,9 +163,7 @@ JMBFamiliesObject.prototype = {
 		return gedcom_id;
 	},
 	_home:function(cont){
-		var	module = this,
-			gedcom_id = module.user.gedcom_id;
-			
+		var	module = this;	
 		jQuery(cont).find('div.home').click(function(){
 			module.clickItem = false;
 			module.render(module.start_id);
@@ -177,7 +175,7 @@ JMBFamiliesObject.prototype = {
 		sb._('<div class="jmb-families-event">&nbsp;</div>');
 		sb._('<div class="jmb-families-spouse">&nbsp;</div>');
 		sb._('<div class="jmb-families-spouse-container">&nbsp;</div>');
-		sb._('<div class="home">&nbsp;</div>')
+		sb._('<div class="home">&nbsp;</div>');
 		return jQuery(sb.result());
 	},
 	_info:function(object, spouse){
@@ -484,7 +482,7 @@ JMBFamiliesObject.prototype = {
 		} 
 		return 315;
 	},
-	render:function(gedcom_id, render_type){
+	render:function(gedcom_id){
 		var	module = this,
 			object = module.usertree[gedcom_id],
 			families = object.families,
@@ -557,12 +555,12 @@ JMBFamiliesObject.prototype = {
 			}
 		}	
 
-		module._home(module.parent);
 		module._arrows(module.parent);
 		module._view(module.parent);
 		module._edit(module.parent);
 		module._facebook(module.parent);
 		module._win(module.parent);
+		module._home(module.parent);
 		
 		jQuery(module.parent).height(start_top + 200);
 		jQuery(module.parent).css('overflow', 'hidden');
@@ -639,7 +637,7 @@ JMBFamiliesObject.prototype = {
 	reload:function(id, type){
 		var	module = this;
 		storage.tooltip.cleaner(function(){
-			module.render(id, type);
-		});		
+			module.render(id);
+		});	
 	}
 }
