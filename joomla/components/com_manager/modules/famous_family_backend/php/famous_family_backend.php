@@ -103,14 +103,14 @@ class JMBFamousFamilyBackend {
 		$description = (strlen($_POST['description'])!=0)?$_POST['description']:' ';
 		$permission = $_POST['permission'];
 		
+		if(strlen($tree_name)<=0) return json_encode(array('error'=>'Invalid tree name.'));
+		if(strlen($first_name)<=0) return json_encode(array('error'=>'Invalid FirstName.'));
+		
 		if(isset($_FILES['upload'])&&$_FILES['upload']['size']!=0){
-			$res = $this->host->gramps->parser->convert($_FILES['upload']['tmp_name']);
+			$res = $this->host->gramps->parser->convert($_FILES['upload']['tmp_name'], $tree_name);
 			$_SESSION['jmb']['upload'] = array('individuals'=>$res->Individuals, 'families'=>$res->Families);
 			return json_encode(array('res'=>$res));
 		}
-		
-		if(strlen($tree_name)<=0) return json_encode(array('error'=>'Invalid tree name.'));
-		if(strlen($first_name)<=0) return json_encode(array('error'=>'Invalid FirstName.'));
 		
 		//create tree into #__mb_tree table;
 		$sql_string = "INSERT INTO #__mb_tree (`id`, `name`) VALUES (NULL, ?)";
