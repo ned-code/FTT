@@ -231,7 +231,7 @@ class IndividualsList{
         	$rows = $this->db->loadAssocList();
         	return $rows;
         }
-        public function getIndividualsList($tree_id, $gedcom_id){
+        public function getIndividualsList($tree_id, $owner_id, $gedcom_id = false){
         	$sqlString = "SELECT ind.id as gedcom_id, ind.fid as facebook_id, ind.sex as gender, ind.last_login, ind.default_family,
         				name.first_name, name.middle_name, name.last_name, name.nick, 
         				links.type as permission, rel.relation,
@@ -239,9 +239,14 @@ class IndividualsList{
 				LEFT JOIN #__mb_names as name ON name.gid = ind.id
 				LEFT JOIN #__mb_tree_links as links ON links.individuals_id = ind.id
 				LEFT JOIN #__mb_relations as rel ON rel.to = ind.id AND rel.tree_id = links.tree_id
-				LEFT JOIN #__mb_family_line as f_line ON f_line.member_id = ind.id AND f_line.tid = links.tree_id AND f_line.gedcom_id = rel.from
-				WHERE links.tree_id = ? and rel.from = ?";
-		$this->db->setQuery($sqlString, $tree_id, $gedcom_id);
+				LEFT JOIN #__mb_family_line as f_line ON f_line.member_id = ind.id AND f_line.tid = links.tree_id AND f_line.gedcom_id = rel.from";
+		if($gedcom_id){
+			$sqlString .= " WHERE links.tree_id = ? and rel.from = ? and ind.id = ?";
+			$this->db->setQuery($sqlString, $tree_id, $owner_id, $gedcom_id);
+		} else {
+			$sqlString .= " WHERE links.tree_id = ? and rel.from = ?";
+			$this->db->setQuery($sqlString, $tree_id, $owner_id);
+		}
 		$rows = $this->db->loadAssocList('gedcom_id');
         	return $rows;  	
         }

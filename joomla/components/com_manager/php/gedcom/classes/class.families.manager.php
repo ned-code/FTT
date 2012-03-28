@@ -225,22 +225,35 @@ class FamiliesList{
         /**
         *
         */
-        public function getFamiliesList($treeId){
-		$sqlString = "SELECT family.id as family_id, family.husb, family.wife FROM #__mb_families as family
-				LEFT JOIN #__mb_tree_links as links ON links.individuals_id = family.husb OR links.individuals_id = family.wife
-				WHERE links.tree_id = ?
-				GROUP BY family.id";
-		$this->db->setQuery($sqlString, $treeId);
+        public function getFamiliesList($tree_id, $gedcom_id = false){
+		$sqlString = "SELECT family.id as family_id, family.husb, family.wife 
+				FROM #__mb_families as family
+				LEFT JOIN #__mb_tree_links as links ON links.individuals_id = family.husb OR links.individuals_id = family.wife";
+		if($gedcom_id){
+			$sqlString .= " WHERE links.tree_id = ? and links.individuals_id = ?";
+			$this->db->setQuery($sqlString, $tree_id, $gedcom_id);
+		} else {
+			$sqlString .= " WHERE links.tree_id = ? GROUP BY family.id";
+			$this->db->setQuery($sqlString, $tree_id);
+		}
 		return $this->db->loadAssocList(array('husb','wife','F'=>'family_id'),'I');
         }
         /**
         *
         */
-        public function getChildrensList($treeId){
-        	$sqlString = "SELECT childs.fid as family_id, childs.gid as gedcom_id, childs.frel as father_relation, childs.mrel as mother_relation FROM #__mb_childrens as childs
-				LEFT JOIN #__mb_tree_links as links ON links.individuals_id = childs.gid
-				WHERE links.tree_id = ?";
-		$this->db->setQuery($sqlString, $treeId);
+        public function getChildrensList($tree_id, $gedcom_id = false){
+        	$sqlString = "SELECT childs.fid as family_id, childs.gid as gedcom_id, childs.frel as father_relation, childs.mrel as mother_relation 
+        			FROM #__mb_childrens as childs
+				LEFT JOIN #__mb_tree_links as links ON links.individuals_id = childs.gid";
+		if($gedcom_id) {
+			$sqlString .= " LEFT JOIN #__mb_families as family ON family.id = childs.fid";
+			$sqlString .= " LEFT JOIN #__mb_tree_links as flinks ON flinks.individuals_id = family.husb OR flinks.individuals_id = family.wife";
+			$sqlString .= " WHERE links.tree_id = ? and flinks.individuals_id = ?";
+			$this->db->setQuery($sqlString, $tree_id, $gedcom_id);
+		} else {
+			$sqlString .= " WHERE links.tree_id = ?";
+			$this->db->setQuery($sqlString, $tree_id);
+		}
 		return $this->db->loadAssocList(array('I'=>'gedcom_id','F'=>'family_id'));
         }
         

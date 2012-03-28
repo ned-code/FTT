@@ -87,15 +87,20 @@ class LocationsList{
         		$this->db->query();
         	}
         }
-        public function getEventsLocationsList($tree_id){
+        public function getEventsLocationsList($tree_id, $gedcom_id = false){
 		$sql_string = "SELECT locations.place_id, events.id as event_id, locations.name as location_name, places.name as place_name, locations.city, locations.state, locations.country  
 				FROM #__mb_locations as locations
 				LEFT JOIN #__mb_places as places ON places.place_id = locations.place_id
 				LEFT JOIN #__mb_events as events ON events.id = places.events_id
 				LEFT JOIN #__mb_families as family ON family.id = events.families_id
-				LEFT JOIN #__mb_tree_links as links ON links.individuals_id = family.wife OR links.individuals_id = family.husb OR links.individuals_id = events.individuals_id
-				WHERE links.tree_id = ?";
-		$this->db->setQuery($sql_string, $tree_id);
+				LEFT JOIN #__mb_tree_links as links ON links.individuals_id = family.wife OR links.individuals_id = family.husb OR links.individuals_id = events.individuals_id";
+		if($gedcom_id) {
+			$sql_string .= " WHERE links.tree_id = ? and links.individuals_id = ?";
+			$this->db->setQuery($sql_string, $tree_id, $gedcom_id);
+		} else {
+			$sql_string .= " WHERE links.tree_id = ?";
+			$this->db->setQuery($sql_string, $tree_id);
+		}	
         	$rows = $this->db->loadAssocList('event_id');
         	return $rows;
         }

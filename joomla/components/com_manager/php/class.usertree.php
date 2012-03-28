@@ -316,14 +316,14 @@ class JMBUserTree {
 	/**
 	*
 	*/
-	protected function _init(){
-		$this->_IndividualsList = $this->gedcom->individuals->getIndividualsList($this->_TreeId, $this->_GedcomId);
-		$this->_FamiliesList = $this->gedcom->families->getFamiliesList($this->_TreeId);
-		$this->_ChildrensList = $this->gedcom->families->getChildrensList($this->_TreeId);
-		$this->_IndividualsEventsList = $this->gedcom->events->getIndividualsEventsList($this->_TreeId);
-		$this->_FamiliesEventsList = $this->gedcom->events->getFamiliesEvenetsList($this->_TreeId);
-		$this->_LocationsEventsList = $this->gedcom->locations->getEventsLocationsList($this->_TreeId);
-		$this->_MediaList = $this->gedcom->media->getMediaList($this->_TreeId);
+	protected function _init($gedcom_id = false){
+		$this->_IndividualsList = $this->gedcom->individuals->getIndividualsList($this->_TreeId, $this->_GedcomId, $gedcom_id);
+		$this->_FamiliesList = $this->gedcom->families->getFamiliesList($this->_TreeId, $gedcom_id);
+		$this->_ChildrensList = $this->gedcom->families->getChildrensList($this->_TreeId, $gedcom_id);
+		$this->_IndividualsEventsList = $this->gedcom->events->getIndividualsEventsList($this->_TreeId, $gedcom_id);
+		$this->_FamiliesEventsList = $this->gedcom->events->getFamiliesEvenetsList($this->_TreeId, $gedcom_id);
+		$this->_LocationsEventsList = $this->gedcom->locations->getEventsLocationsList($this->_TreeId, $gedcom_id);
+		$this->_MediaList = $this->gedcom->media->getMediaList($this->_TreeId, $gedcom_id);	
 	}
 	/**
 	*
@@ -413,6 +413,19 @@ class JMBUserTree {
 	protected function getUserFamilyLine($id, $objects){
 			
 	}
+	
+	public function getUser($tree_id, $owner_id, $gedcom_id){
+		$this->_TreeId = $tree_id;
+		$this->_GedcomId = $owner_id;
+		$this->init($gedcom_id);
+		$node = array();
+		$node['user'] = $this->_getUserInfo($gedcom_id);
+		$node['parents'] = $this->_getUserParents($gedcom_id);
+		$node['families'] = $this->_getUserFamilies($gedcom_id);
+		$node['media'] = $this->_getMedia($gedcom_id);
+		return $node;
+	}
+	
 	/**
 	*
 	*/

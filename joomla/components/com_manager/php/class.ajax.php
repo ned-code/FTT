@@ -74,7 +74,9 @@ class JMBAjax {
 							
 						}
 					} else {
-						$assoc_array[$row[$sort]][] = $row;
+						if(!empty($row[$sort])){
+							$assoc_array[$row[$sort]][] = $row;
+						}
 					}
 				}
 				

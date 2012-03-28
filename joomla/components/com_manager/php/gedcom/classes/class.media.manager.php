@@ -119,16 +119,21 @@ class MediaList{
             $this->clearLinks($id);
             return true;
         }
-        public function getMediaList($tree_id){
+        public function getMediaList($tree_id, $gedcom_id = false){
         	$sql_string = "SELECT media.id as media_id, media.form, media.title, 
         				media.path, m_links.type, m_links.gid as gedcom_id,
         				media.size
 				FROM #__mb_medias as media
 				LEFT JOIN #__mb_media_link as m_links ON m_links.mid = media.id
-				LEFT JOIN #__mb_tree_links as t_links ON t_links.individuals_id = m_links.gid
-				WHERE t_links.tree_id = ?";
-		$this->db->setQuery($sql_string, $tree_id);
-        	$rows = $this->db->loadAssocList('gedcom_id');
+				LEFT JOIN #__mb_tree_links as t_links ON t_links.individuals_id = m_links.gid";
+		if($gedcom_id) {
+			$sql_string .= " WHERE t_links.tree_id = ? and t_links.individuals_id = ?";
+			$this->db->setQuery($sql_string, $tree_id, $gedcom_id);
+		} else {
+			$sql_string .= " WHERE t_links.tree_id = ?";
+			$this->db->setQuery($sql_string, $tree_id);
+		}
+		$rows = $this->db->loadAssocList('gedcom_id');
         	return $rows;	
         }
         
