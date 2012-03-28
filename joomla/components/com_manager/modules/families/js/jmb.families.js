@@ -439,7 +439,6 @@ JMBFamiliesObject.prototype = {
 				target:e,
 				offsetParent:document.body,
 				afterEditorClose:function(){
-					console.log(module.usertree);
 					module.render(module.now_id);	
 				}
 			});

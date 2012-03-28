@@ -23,7 +23,7 @@ class JMBLogin {
 		$gedcom_id = $session->get('gedcom_id');
 		$permission = $session->get('permission');
 		
-		if(!empty($tree_id)&&!empty($gedcom_id)&&!empty($facebook_id)&&!empty($permission)){
+		if(!empty($tree_id)&&!empty($gedcom_id)){
 			$usertree = $this->host->usertree->load($tree_id, $gedcom_id);
 			$users = $this->host->usertree->getMembers($tree_id);
 			return array('tree_id'=>$tree_id,'facebook_id'=>$facebook_id,'gedcom_id'=>$gedcom_id,'permission'=>$permission,'users'=>$users,'pull'=>$usertree);

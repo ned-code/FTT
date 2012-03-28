@@ -2,6 +2,9 @@ function JMBLogin(){
 	var	module = this,
 		fn,
 		settings = {},
+		type = '',
+		alias = '',
+		path = "/components/com_manager/modules/login/imgs/",
 		notifications,
 		fb_logged;
 
@@ -22,8 +25,7 @@ function JMBLogin(){
 	//init vars
 	type = jQuery(document.body).attr('_type');
 	alias = jQuery(document.body).attr('_alias');
-	path = "/components/com_manager/modules/login/imgs/";
-	
+
 	//init functions
 	fn = {
 		ajax:function(func, params, callback){
@@ -251,7 +253,7 @@ function JMBLogin(){
 			});
 		},
 		init:function(callback){
-			var cont, ch;
+			var cont;
 			fn.user(function(object){
 				fb_logged = jQuery(document.body).attr('_fb');
 				switch(alias){
@@ -261,7 +263,9 @@ function JMBLogin(){
 					case "invitation":
 					case "myfamily":
 					case "famous-family":
-						if(type=='myfamily'){
+						if(type=="famous_family" && object){
+							fn.famous(object);
+						} else {
 							if(!parseInt(fb_logged)){
 								cont = fn.connect();
 								fn.login(cont);
@@ -274,8 +278,6 @@ function JMBLogin(){
 								}
 							}
 							jQuery(document.body).append(cont);
-						} else {
-							fn.famous(object);
 						}
 					break;
 				}

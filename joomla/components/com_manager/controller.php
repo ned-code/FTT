@@ -742,7 +742,7 @@ class JMBController extends JController
         	$session->set('alias', $alias);
         	switch($alias){
         		case 'myfamily':
-        			$session->set('login_method', 'family_tree');
+        			$session->set('login_method', 'myfamily');
         		break;
         		
         		case 'famous-family':
