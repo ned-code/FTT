@@ -217,6 +217,20 @@ class JMBRelation {
 		$this->families = $families;
 		$this->individuals = $individuals;
 	}
+
+	public function set($tree_id, $gedcom_id, $target_id){
+		$this->init($tree_id, $gedcom_id);
+		$relation =  $this->get_relation($target_id, $gedcom_id);		
+		$sql_string = "INSERT INTO #__mb_relations (`tree_id`, `from`, `to`, `relation`) VALUES (?, ?, ?, ?)";
+		$this->db->setQuery($sql_string, $tree_id, $gedcom_id, $target_id, ($relation)?$relation:'unknown');
+		$this->db->query();
+	}
+	
+	public function get($tree_id, $gedcom_id, $target_id){
+		$this->init($tree_id, $gedcom_id);
+		$relation =  $this->get_relation($target_id, $gedcom_id);
+		return $relation;
+	}
 	
 	public function check($tree_id, $gedcom_id){
 		$this->init($tree_id, $gedcom_id);

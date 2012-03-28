@@ -341,10 +341,9 @@ JMBTooltip.prototype = {
 		add = storage.profile.add({
 			object:object,
 			events:{
-				afterEditorClose:function(object){
-					settings.object = object;
+				afterEditorClose:function(){
 					if(typeof(settings.afterEditorClose)==='function'){
-						settings.afterEditorClose(object);
+						settings.afterEditorClose();
 					}
 				}
 			}

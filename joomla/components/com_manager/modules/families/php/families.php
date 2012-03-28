@@ -7,6 +7,7 @@ class JMBFamilies {
 	}
 	
 	public function getFamilies(){
+		/*
 		$session = JFactory::getSession();
 		$facebook_id = $session->get('facebook_id');
 		$gedcom_id = $session->get('gedcom_id');
@@ -26,6 +27,12 @@ class JMBFamilies {
 			'user'=>$user,
 			'usertree'=>$usertree
 		));
+		*/
+		$session = JFactory::getSession();
+        	$settings = $session->get('settings');
+		$colors = $settings['colors'];
+		
+		return json_encode(array('colors'=>$colors));
 		
 	}
 	

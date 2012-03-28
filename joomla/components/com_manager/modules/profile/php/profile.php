@@ -140,6 +140,18 @@ class JMBProfile {
 		return $family;
 	}
 	
+	protected function createIndividual($request){
+		$individual = $this->host->gedcom->individuals->create();
+		$individual->FacebookId = '0';
+		$individual->Gender = $request['gender'];
+		$individual->FirstName = ($request['first_name']!='')?$request['first_name']:'unknown';
+		$individual->MiddleName = $request['middle_name'];
+		$individual->LastName = $request['last_name'];
+		$individual->Nick = $request['nick'];
+		$individual->Id = $this->host->gedcom->individuals->save($individual);
+		return $individual;
+	}
+	
 	public function basic($user_id){				
 		// update user in db
 		$ind = $this->host->gedcom->individuals->get($user_id);
@@ -252,21 +264,15 @@ class JMBProfile {
 		$spouse = null;
 		$family = null;
 		$args = json_decode($query);
+		$target_ids = array();
 		$member = $this->host->gedcom->individuals->get($args->owner_id);	
 				
 		if(empty($member->Id)){
 			return false;
 		}
-		
+
 		//add character
-		$individual = $this->host->gedcom->individuals->create();
-		$individual->FacebookId = '0';
-		$individual->Gender = $request['gender'];
-		$individual->FirstName = ($request['first_name']!='')?$request['first_name']:'unknown';
-		$individual->MiddleName = $request['middle_name'];
-		$individual->LastName = $request['last_name'];
-		$individual->Nick = $request['nick'];
-		$individual->Id = $this->host->gedcom->individuals->save($individual);
+		$individual = $this->createIndividual($request);
 		$this->host->usertree->link($tree_id, $individual->Id);
 		$this->updateIndividualEvents($individual, $request);
 		
@@ -274,7 +280,6 @@ class JMBProfile {
 			case "parent":
 				$parents = $this->host->gedcom->individuals->getParents($member->Id);
 				$parent_type = ($individual->Gender=="M")?"sircar":"spouse";
-				$$parent_type = $individual;
 				if(empty($parents)){
 					$family = $this->createFamily($sircar, $spouse);					
 				} else {
@@ -316,15 +321,26 @@ class JMBProfile {
 					$family_id = $this->host->gedcom->families->getFamilyIdByPartnerId($husb, $wife);
 					$family = $this->host->gedcom->families->get($family_id);
 					$this->host->gedcom->families->addChild($family->Id, $individual->Id);
-				} 
+				} else {
+					if($member->Gender=='M'){
+						$husb = $member;
+						$wife = $this->createIndividual(array('gender'=>'F','first_name'=>'','middle_name'=>'','last_name'=>'','nick'=>''));
+						$this->host->usertree->link($tree_id, $wife->Id);
+						$this->host->gedcom->relation->set($tree_id, $owner_id, $wife->Id);
+					} else {
+						$wife = $member;
+						$husb = $this->createIndividual(array('gender'=>'M','first_name'=>'','middle_name'=>'','last_name'=>'','nick'=>''));
+						$this->host->usertree->link($tree_id, $husb->Id);
+						$this->host->gedcom->relation->set($tree_id, $owner_id, $husb->Id);
+					}
+					$family = $this->createFamily($husb, $wife);
+					$this->host->gedcom->families->addChild($family->Id, $individual->Id);
+				}
 			break;
-		}
-		
-		//update user tree
-		$this->host->usertree->init($tree_id, $owner_id, $permission);
-		$usertree = $this->host->usertree->load($tree_id, $owner_id);
-				
-		return json_encode(array('usertree'=>$usertree));
+		}		
+		$this->host->gedcom->relation->set($tree_id, $owner_id, $individual->Id);
+		$objects = $this->host->usertree->getUser($tree_id, $owner_id, $individual->Id);
+		return json_encode(array('objects'=>$objects));
 	}
 }
 

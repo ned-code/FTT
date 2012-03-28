@@ -6,8 +6,6 @@ function JMBFamiliesObject(obj){
 	module.parent = obj;
 	module.path = storage.baseurl+"/components/com_manager/modules/families/";
 	module.cssPath = module.path+'css/';
-	module.json = null;
-	module.user = null;
 	module.now_id = null;
 	module.usertree = null;
 	module.colors = null;
@@ -30,11 +28,9 @@ function JMBFamiliesObject(obj){
 	
 	module._ajax('getFamilies', null, function(res){
 		json = jQuery.parseJSON(res.responseText);
-		module.json = json;
-		module.user = json.user;
-		module.usertree = json.usertree;
 		module.colors = json.colors;
-		module.start_id = module._first(json.user.user.gedcom_id);
+		module.start_id = storage.usertree.gedcom_id;
+		module.usertree = storage.usertree.pull;
 		module.render(module.start_id);
 		storage.core.modulesPullObject.unset('JMBFamiliesObject');
 	});
@@ -249,7 +245,7 @@ JMBFamiliesObject.prototype = {
 				sb._('<div class="jmb-families-parent-name">')._(get.nick)._('</div>');
 				sb._('<div class="jmb-families-parent-date">')._(get.birth('year'))._('</div>');
 			sb._('</div>');
-			if(families!=null){
+			if(object.families!=null){
 				sb._('<div class="jmb-families-arrow-left">&nbsp</div>');
 			}
 		sb._('</div>');		
@@ -294,7 +290,7 @@ JMBFamiliesObject.prototype = {
 				sb._('<div class="jmb-families-parent-name">')._(get.nick)._('</div>');
 				sb._('<div class="jmb-families-parent-date">')._(get.birth('year'))._('</div>');
 			sb._('</div>');
-			if(families!=null){
+			if(object.families!=null){
 				sb._('<div class="jmb-families-arrow-right" style="background:#')._(bcolor)._(';">&nbsp</div>');
 			}
 		sb._('</div>');		
@@ -442,9 +438,8 @@ JMBFamiliesObject.prototype = {
 				object:usertree[gedcom_id],
 				target:e,
 				offsetParent:document.body,
-				afterEditorClose:function(object){
-					var id = object.user.gedcom_id;
-					module.usertree[id] = object;
+				afterEditorClose:function(){
+					console.log(module.usertree);
 					module.render(module.now_id);	
 				}
 			});
@@ -497,7 +492,7 @@ JMBFamiliesObject.prototype = {
 			childrens_table,
 			row_count,
 			k;
-				
+		
 		if(module.cont!=null){
 			jQuery(module.parent).html('');
 		}

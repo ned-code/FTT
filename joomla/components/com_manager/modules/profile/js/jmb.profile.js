@@ -8,7 +8,7 @@ function JMBProfile(){
 	module.object = null;
 	module.container = null;
 	module.events = {
-		afterEditorClose:function(object){
+		afterEditorClose:function(){
 			return false;
 		}
 	}
@@ -18,7 +18,7 @@ function JMBProfile(){
 	module.box = jQuery('<div id="jmb:dialog" class="jmb-dialog-container"></div>');
 	module.addBox = jQuery('<div id="jmb:dialog_add" class="jmb-dialog-container"></div>');
 	module.view_menu = {"view_profile":"Profile","view_photos":"Photos"};
-	module.edit_menu = {"edit_basic":"Basic Details","edit_unions":"Unions","edit_photos":"Photos"};
+	module.edit_menu = {"edit_basic":"Basic Details","edit_unions":"Unions","edit_photos":"Photos","more_options":"More Options"};
 	module.editor_buttons = jQuery('<div class="jmb-dialog-interface-button"><div type="button" value="edit"><span>Edit</span></div><div value="view" type="button" class="active"><span>View</span></div></div>');
 	module.dialog_settings = {
 		width:700,
@@ -31,7 +31,7 @@ function JMBProfile(){
 		close:function(){
 			jQuery(this).dialog("destroy");
 			jQuery(this).remove();
-			module.events.afterEditorClose(module.object);
+			module.events.afterEditorClose();
 		}	
 	}
 	
@@ -942,6 +942,19 @@ JMBProfile.prototype = {
 					}
 				});
 				jQuery(module.box).find('div.jmb-dialog-profile-content').append(html);
+			},
+			more_options:function(){
+				sb.clear();
+				sb._('<div class="jmb-dialog-options-content" style="margin: 10px;">');
+					sb._('<ul style="list-style: none outside none;">');
+						sb._('<li id="delete">');
+							sb._('<div id="text"><span>Delete this person from your family tree.</span></div>');
+							sb._('<div id="description"></div>')
+						sb._('</li>')
+					sb._('</ul>');
+				sb._('</div>');				
+				html = jQuery(sb.result());
+				jQuery(module.box).find('div.jmb-dialog-profile-content').append(html);
 			}
 		}
 	},
@@ -1032,8 +1045,12 @@ JMBProfile.prototype = {
 			query = '',
 			beforeSend = function(){},
 			success = function(res){
-				module.individuals = res.usertree;
-				storage.usertree.pull = res.usertree;
+				var objects = res.objects;
+				jQuery(objects).each(function(i, el){
+					if(el.user != null && el.user.gedcom_id != null){
+						storage.usertree.pull[el.user.gedcom_id] = el;
+					}
+				});
 				jQuery(module.addBox).dialog("close");
 			};
 			
