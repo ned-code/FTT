@@ -41,9 +41,11 @@ storage.family_line = {};
 
 //usertree
 storage.usertree = {};
-storage.usertree.user = null;
-storage.usertree.tree = null;
-storage.usertree.members = null;
+storage.usertree.gedcom_id = null;
+storage.usertree.facebook_id = null;
+storage.usertree.tree_id = null;
+storage.usertree.permission = null;
+storage.usertree.users = null;
 storage.usertree.pull = null;
 storage.usertree.extend = function(def, sub){
 	for (var key in sub){
@@ -1014,7 +1016,6 @@ core.renderTabs = function(parent, pages){
 }
 core.load = function(pages){
 	var self = this;
-	//var pages = '1,2,6,8,7,10';
 	jQuery(document.body).ready(function(){
 		host = new Host();
 		storage.baseurl = jQuery('body').attr('_baseurl');
@@ -1033,6 +1034,7 @@ core.load = function(pages){
 		//init top menu bar
 		storage.topmenubar.init();
 		
+		//set width
 		var mode = (window != window.top)?'facebook':'standalone';
 		var cont = jQuery("div.content");
 		if(mode == 'facebook'){
@@ -1049,7 +1051,6 @@ core.load = function(pages){
 				storage.login.init(function(){
 					if(err=='success'){
 						var json = jQuery.parseJSON(req.responseText);
-						self.path = json.path;
 						if(json.pages.length==1){
 							self.renderPage('#page', json.pages[0])
 						} else {

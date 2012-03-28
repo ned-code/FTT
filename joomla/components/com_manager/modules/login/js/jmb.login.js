@@ -222,19 +222,27 @@ function JMBLogin(){
 			});
 			jQuery('div.jmb-header-container').append(htmlObject);
 		},
+		set_global_data:function(json){
+			storage.usertree.gedcom_id = json.usertree.gedcom_id;
+			storage.usertree.facebook_id = json.usertree.facebook_id;
+			storage.usertree.tree_id = json.usertree.tree_id;
+			storage.usertree.permission = json.usertree.permission;
+			storage.usertree.users = json.usertree.users;
+			storage.usertree.pull = json.usertree.pull;
+			storage.notifications.init(json.notifications);
+		},
+		get_data_user:function(json){
+			return json.usertree.pull[json.usertree.gedcom_id];
+		},
 		user:function(callback){
 			var json, object;
 			fn.ajax('user', null, function(res){
 				json = jQuery.parseJSON(res.responseText);
-				if(json.user_id != null){
+				if(json.usertree){
+					fn.set_global_data(json);
 					settings.languages = json.languages;
 					settings.default_language = json.default_language;
-					object = json.usertree[json.user_id];
-					storage.usertree.user = json.user_id;
-					storage.usertree.tree = json.tree_id;
-					storage.usertree.pull = json.usertree;
-					storage.usertree.members = json.tree_members;
-					storage.notifications.init(json.notifications);
+					object = fn.get_data_user(json);
 					callback(object);
 					return true;
 				}
@@ -244,28 +252,38 @@ function JMBLogin(){
 		},
 		init:function(callback){
 			var cont, ch;
-			jQuery(document.body).ready(function(){
-				fn.user(function(object){
-					fb_logged = jQuery(document.body).attr('_fb');
-					if(type == 'famous_family' && alias == 'myfamily'){
-						fn.famous(object);
-					} else if (alias == 'myfamily' && object){
-						cont = fn.create();
-						fn.setName(object, cont);
-						fn.setAvatar(object, cont);
-						if(!object.link) fn.click(cont);
-						jQuery(document.body).append(cont);
-					} else if(!parseInt(fb_logged)) {
-						cont = fn.connect();
-						fn.login(cont);
-						jQuery(document.body).append(cont);
-					}
-					callback();
-				});			
+			fn.user(function(object){
+				fb_logged = jQuery(document.body).attr('_fb');
+				switch(alias){
+					case "home":
+					case "login":
+					case "first-page":
+					case "invitation":
+					case "myfamily":
+					case "famous-family":
+						if(type=='myfamily'){
+							if(!parseInt(fb_logged)){
+								cont = fn.connect();
+								fn.login(cont);
+							} else {
+								cont = fn.create();
+								fn.setName(object, cont);
+								fn.setAvatar(object, cont);
+								if(!object.link){
+									fn.click(cont);
+								}
+							}
+							jQuery(document.body).append(cont);
+						} else {
+							fn.famous(object);
+						}
+					break;
+				}
+				callback();
 			});
 		}
 	}
 	
-	module.init = function(callback){ fn.init(callback); }
+	module.init = fn.init;
 }
 
