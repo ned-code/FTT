@@ -65,12 +65,15 @@ function JMBAncestorsObject(obj){
 			}
 		}
 	});
-	
+
 	module.usertree = storage.usertree.pull;
 	module.user = module.usertree[storage.usertree.gedcom_id];
 	module.tree = module.getTree(module.user);
-	module.init();
-	storage.core.modulesPullObject.unset('JMBAncestorsObject');
+	setTimeout(function(){
+		module.init(function(){
+			storage.core.modulesPullObject.unset('JMBAncestorsObject');
+		});
+	}, 1);
 }
 
 JMBAncestorsObject.prototype = {
@@ -318,7 +321,7 @@ JMBAncestorsObject.prototype = {
 		set_ancestors(tree);
 		return tree;
 	},
-	init:function(){
+	init:function(callback){
 		var	module = this,
 			st,
 			click;
@@ -431,6 +434,10 @@ JMBAncestorsObject.prototype = {
 		st.compute();
 		//emulate a click on the root node.
 		st.onClick(st.root);
+		
+		if(callback){
+			callback();
+		}
 	},
 	render:function(tree){
 		var	module = this,

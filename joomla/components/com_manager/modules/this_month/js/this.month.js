@@ -27,7 +27,7 @@ function JMBThisMonthObject(obj){
 			var type = 'is_'+res._line+'_line';
 			var id = jQuery(el).attr('id');
 			var object = self.json.members[id];
-			var user = self.json.members[storage.usertree.gedcom_id];
+			var user = object.user;
 			switch(res._type){
 				case "pencil":
 					var font = jQuery(el).find('font');

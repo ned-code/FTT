@@ -413,7 +413,11 @@ JMBTooltip.prototype = {
 		if(module.btActive.length!=0){
 			jQuery(module.btActive[module.btActive.length-1].target).btOff();
 		}
+		for(var id in module.idPull){
+			jQuery(module.idPull[id]).remove();
+		}
 		module.idPull = {};
+		module.stPull = {};
 		module.btActive = [];
 		if(callback) callback();
 	},
@@ -425,7 +429,7 @@ JMBTooltip.prototype = {
 			
 		if(!module._checkType(type)) return;
 		if(object!=null){
-			module._getId(object.user.gedcom_id,type);
+			id = module._getId(object.user.gedcom_id,type);
 		} else {
 			return false;
 		}
@@ -437,6 +441,8 @@ JMBTooltip.prototype = {
 		
 			jQuery(document.body).append(cont);
 			jQuery(cont).hide();
+			
+			module.idPull[id] = cont;
 		} else {
 			cont = module.idPull[id];
 		}

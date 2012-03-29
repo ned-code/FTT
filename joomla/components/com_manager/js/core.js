@@ -934,7 +934,6 @@ core.initModule = function(object_name, div){
 	var self = this;
     	if(typeof window[object_name]=='function'){
     		new window[object_name](div);
-    		
     	}
         else {
         	setTimeout(function(){
@@ -949,6 +948,8 @@ core.renderPage = function(parent, page){
 	var grid = page.grid;
 	var table = self.createLayout(page.page_info.layout_type);
 	var tds = jQuery(table).find('td');
+	jQuery(parent).empty();
+	jQuery(parent).append(table);
 	for(var i = 0; i < grid.tdLength; i++){
 		var td = tds[i];
 		for(var j = 0; j < grid[i].divLength; j++){
@@ -963,12 +964,11 @@ core.renderPage = function(parent, page){
 			jQuery(td).append(div);
 			
 			//init module;
-			self.initModule(module.object_name, div);
 			core.modulesPullObject.insert(module.object_name);
+			self.initModule(module.object_name, div);	
 		}
 	}	
-	jQuery(parent).empty();
-	jQuery(parent).append(table);
+	
 }
 core.renderTabs = function(parent, pages){
 	var self = this;

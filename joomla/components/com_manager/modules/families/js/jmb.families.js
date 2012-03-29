@@ -25,16 +25,7 @@ function JMBFamiliesObject(obj){
 	}
 	module.borders = ['61c77f','a64751','5c63d3','d3c15c','705cd3'];
 	module.spouse_border = {};
-	
-	module._ajax('getFamilies', null, function(res){
-		json = jQuery.parseJSON(res.responseText);
-		module.colors = json.colors;
-		module.start_id = storage.usertree.gedcom_id;
-		module.usertree = storage.usertree.pull;
-		module.render(module.start_id);
-		storage.core.modulesPullObject.unset('JMBFamiliesObject');
-	});
-	
+
 	storage.family_line.bind('JMBFamiliesObject', function(res){
 		var divs = jQuery(module.cont).find('div.jmb-families-sircar,div.jmb-families-spouse,div.jmb-families-child');
 		jQuery(divs).each(function(i, el){
@@ -48,6 +39,13 @@ function JMBFamiliesObject(obj){
 			}
 		});
 	});
+
+	module.settings = storage.settings;
+	module.colors = module.settings.colors;
+	module.start_id = storage.usertree.gedcom_id;
+	module.usertree = storage.usertree.pull;
+	module.render(module.start_id);
+	storage.core.modulesPullObject.unset('JMBFamiliesObject');
 }
 JMBFamiliesObject.prototype = {
 	_ajax:function(func, params, callback){
