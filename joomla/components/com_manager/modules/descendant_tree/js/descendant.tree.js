@@ -147,8 +147,8 @@ JMBDescendantTreeObject.prototype = {
 			json = jQuery.parseJSON(res.responseText);
 			module.lang = json.lang;
 			module.first = json.key;
-			module.members = json.members;
-			module.owner = json.owner;
+			module.members = storage.usertree.pull;
+			module.owner = storage.usertree.gedcom_id;
 			module.tree = json.tree;
 			dhxTree.loadXMLString(json.xml);
 			dhxTree.openAllItems(0);
