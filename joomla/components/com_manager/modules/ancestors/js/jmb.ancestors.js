@@ -23,6 +23,7 @@ function JMBAncestorsObject(obj){
 	module.nodes = null;
 	module.clickNode = null;
 	
+	/*
 	module.ajax('get', null, function(res){
 		json = jQuery.parseJSON(res.responseText);
 		module.usertree = json.usertree;
@@ -31,6 +32,7 @@ function JMBAncestorsObject(obj){
 		module.init();
 		storage.core.modulesPullObject.unset('JMBAncestorsObject');
 	});
+	*/
 	
 	jQuery(home_button).click(function(){
 		if(module.user==null) return false;
@@ -63,6 +65,12 @@ function JMBAncestorsObject(obj){
 			}
 		}
 	});
+	
+	module.usertree = storage.usertree.pull;
+	module.user = module.usertree[storage.usertree.gedcom_id];
+	module.tree = module.getTree(module.user);
+	module.init();
+	storage.core.modulesPullObject.unset('JMBAncestorsObject');
 }
 
 JMBAncestorsObject.prototype = {
