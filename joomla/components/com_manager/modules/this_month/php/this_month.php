@@ -126,9 +126,6 @@ class JMBThisMonth {
 		$sort = $args->sort;
 		$render_type = $args->render;
 		
-		//get user tree
-		$usertree = $this->host->usertree->load($tree_id, $gedcom_id);
-		
 		//user info and global settings
 		$ftt_user = $usertree[$gedcom_id];
 		$language = $this->getLanguage();
@@ -146,9 +143,7 @@ class JMBThisMonth {
 				'config'=>$config,
 				'settings'=>$this->settings,
 				'language'=>$language,
-				'user'=>$ftt_user,
-				'events'=>$events,
-				'members'=>$members
+				'events'=>$events
 			)
 		);
 	}

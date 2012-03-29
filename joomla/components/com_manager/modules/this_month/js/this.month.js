@@ -1,7 +1,7 @@
 function JMBThisMonthObject(obj){
 	//vars 
 	this.obj = obj;
-	this.json = null;
+	this.json = {};
 	this.content = { table:null, birth:null, death:null, marr:null };
 	this.b_count = 0;
 	
@@ -24,7 +24,7 @@ function JMBThisMonthObject(obj){
 			var type = 'is_'+res._line+'_line';
 			var id = jQuery(el).attr('id');
 			var object = self.json.members[id];
-			var user = object.user;
+			var user = self.json.members[storage.usertree.gedcom_id];
 			switch(res._type){
 				case "pencil":
 					var font = jQuery(el).find('font');
@@ -312,12 +312,13 @@ JMBThisMonthObject.prototype = {
 		})
 	},
 	load:function(month, sort, callback){
-		var self = this;
+		var module = this;
 		var render = null;
 		var settings = ['{"month":"',month,'","sort":"',sort,'","render":"',render,'"}'].join('');
 		this._ajax("load", settings, function(req){
 			var json = jQuery.parseJSON(req.responseText);
-			self.json = json;
+			module.json =  json;
+			module.json.members = storage.usertree.pull;
 			callback(json);
 		});
 	},
