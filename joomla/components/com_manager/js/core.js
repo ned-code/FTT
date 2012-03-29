@@ -949,7 +949,7 @@ core.renderPage = function(parent, page){
 	var table = self.createLayout(page.page_info.layout_type);
 	var tds = jQuery(table).find('td');
 	jQuery(parent).empty();
-	jQuery(parent).append(table);
+	
 	for(var i = 0; i < grid.tdLength; i++){
 		var td = tds[i];
 		for(var j = 0; j < grid[i].divLength; j++){
@@ -968,7 +968,7 @@ core.renderPage = function(parent, page){
 			self.initModule(module.object_name, div);	
 		}
 	}	
-	
+	jQuery(parent).append(table);
 }
 core.renderTabs = function(parent, pages){
 	var self = this;

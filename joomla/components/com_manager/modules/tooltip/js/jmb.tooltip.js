@@ -342,6 +342,7 @@ JMBTooltip.prototype = {
 			object:object,
 			events:{
 				afterEditorClose:function(){
+					jQuery(module.btActive[module.btActive.length-1].target).btOff();
 					if(typeof(settings.afterEditorClose)==='function'){
 						settings.afterEditorClose();
 					}

@@ -193,7 +193,13 @@ class JMBRelation {
 		$this->_Relatives = $this->individuals->getRelatives($tree_id);
 	}
 	
-	protected function set_relation($tree_id, $gedcom_id, $check){
+	public function __construct(&$families, &$individuals){
+		$this->db = new JMBAjax();
+		$this->families = $families;
+		$this->individuals = $individuals;
+	}
+	
+	public function set_relation($tree_id, $gedcom_id, $check){
 		$insert = array();
 		foreach($check as $rel){
 			$relation = $this->get_relation($rel['individuals_id'], $gedcom_id);
@@ -210,12 +216,6 @@ class JMBRelation {
 			$this->db->query();
 		}
 		return $insert;
-	}
-
-	public function __construct(&$families, &$individuals){
-		$this->db = new JMBAjax();
-		$this->families = $families;
-		$this->individuals = $individuals;
 	}
 
 	public function set($tree_id, $gedcom_id, $target_id){

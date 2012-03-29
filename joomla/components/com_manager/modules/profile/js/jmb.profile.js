@@ -1111,7 +1111,6 @@ JMBProfile.prototype = {
 				var buttons =  jQuery('<div class="buttons"><input type="submit" value="Save and Close"><input id="cancel" type="button" value="Cancel"></div>');
 				this.clear();
 				container = jQuery('<div class="jmb-profile-add-union"></div>');
-				jQuery(container).append(buttons);
 				jQuery(container).css({
 					border:'none',
 					margin: '0',
@@ -1119,6 +1118,7 @@ JMBProfile.prototype = {
 					width: 'auto'
 				});
 				cont = jQuery(form.add_spouse());
+				jQuery(cont).append(buttons);
 				jQuery(cont).find('.jmb-profile-add-union-buttons').remove();
 				
 				w = 455;

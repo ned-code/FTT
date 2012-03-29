@@ -520,10 +520,14 @@ class JMBUserTree {
 		if(!empty($node['families'])){
 			foreach($node['families'] as $family){
 				if($family!=='length'){
-					$nodes[] = $this->getNode($family['spouse']);
+					if($family['spouse']!=null){
+						$nodes[] = $this->getNode($family['spouse']);
+					}
 					if(!empty($family['childrens'])){
 						foreach($family['childrens'] as $child){
-							$nodes[] = $this->getNode($child['gedcom_id']);
+							if($child['gedcom_id']!=null){
+								$nodes[] = $this->getNode($child['gedcom_id']);
+							}
 						}
 					}
 				}
