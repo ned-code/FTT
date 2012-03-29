@@ -3,10 +3,13 @@ function JMBRecentVisitorsObject(obj){
 	var content = null;
 	var sb = host.stringBuffer();
 	var objs = null;
+	var type = jQuery(document.body).attr('_type');
+	var alias = jQuery(document.body).attr('_alias');
+	var settings = storage.settings;
 	
 	var createBody = function(json){
 		var lang = json.lang;
-		var header_background_color = (json.config.login_type=='famous_family')?json.config.colors.famous_header:json.config.colors.family_header;
+		var header_background_color = (type=='famous_family')?settings.colors.famous_header:settings.colors.family_header;
 		return jQuery('<div class="jmb-rv-header" style="background:#'+header_background_color+';"><span>'+lang['HEADER']+'</span></div><div class="jmb-rv-content"></div><div class="jmb-rv-button"><span>'+lang['SHOW']+'...</span></div>');
 	}
 	
