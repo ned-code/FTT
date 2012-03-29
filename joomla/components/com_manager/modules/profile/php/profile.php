@@ -280,16 +280,14 @@ class JMBProfile {
 			case "parent":
 				if($individual->Gender == "M"){
 					$sircar = $individual;
-					$this->host->usertree->link($tree_id, $individual->Id);
 					$spouse = $this->createIndividual(array('gender'=>'F','first_name'=>'','middle_name'=>'','last_name'=>'','nick'=>''));
 					$this->host->usertree->link($tree_id, $spouse->Id);
-					$this->host->gedcom->relation->set_relation($tree_id, $owner_id, array(array('individuals_id'=>$individual->Id),array('individuals_id'=>$spouse->Id)));
+					$this->host->gedcom->relation->set($tree_id, $owner_id, $spouse->Id);
 				} else {
 					$sircar = $this->createIndividual(array('gender'=>'M','first_name'=>'','middle_name'=>'','last_name'=>'','nick'=>''));
 					$this->host->usertree->link($tree_id, $sircar->Id);
 					$spouse = $individual;
-					$this->host->usertree->link($tree_id, $individual->Id);
-					$this->host->gedcom->relation->set_relation($tree_id, $owner_id, array(array('individuals_id'=>$individual->Id),array('individuals_id'=>$sircar->Id)));
+					$this->host->gedcom->relation->set($tree_id, $owner_id, $sircar->Id);
 				}
 				$family = $this->createFamily($sircar, $spouse);
 				$this->host->gedcom->families->addChild($family->Id, $member->Id);
@@ -311,6 +309,7 @@ class JMBProfile {
 					$this->host->usertree->link($tree_id, $spouse->Id);
 					$family = $this->createFamily($sircar, $spouse);
 					$this->host->gedcom->relation->set_relation($tree_id, $owner_id, array(array('individuals_id'=>$sircar->Id),array('individuals_id'=>$spouse->Id)));
+					$this->host->gedcom->families->addChild($family->Id, $member->Id);
 				} else {
 					$family = $this->host->gedcom->families->get($parents['familyId']);
 				}

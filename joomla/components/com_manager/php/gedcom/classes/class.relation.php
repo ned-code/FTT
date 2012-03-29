@@ -234,7 +234,11 @@ class JMBRelation {
 	
 	public function check($tree_id, $gedcom_id){
 		$this->init($tree_id, $gedcom_id);
-		$sql_string = "SELECT rel.to as individuals_id, rel.relation FROM jos_mb_relations as rel WHERE rel.tree_id = ? AND rel.from = ?";
+		$sql_string = "DELETE FROM #__mb_relations WHERE tree_id = ? and from = ? and relation = 'unknown'";
+		$this->db->setQuery($sql_string, $tree_id, $gedcom_id);
+		$this->db->query();
+		
+		$sql_string = "SELECT rel.to as individuals_id, rel.relation FROM #__mb_relations as rel WHERE rel.tree_id = ? AND rel.from = ?";
 		$this->db->setQuery($sql_string, $tree_id, $gedcom_id);
 		$relations = $this->db->loadAssocList('individuals_id');
 		if($relations==null){
