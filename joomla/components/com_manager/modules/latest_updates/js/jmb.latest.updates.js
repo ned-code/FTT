@@ -1,5 +1,9 @@
 function JMBLatestUpdatesObject(offsetParent){	
 	var	module = this,	
+		type = jQuery(document.body).attr('_type'),
+		alias = jQuery(document.body).attr('_alias'),
+		usertree = storage.usertree.pull,
+		settings = storage.settings,
 		cont,
 		content,
 		data,
@@ -25,9 +29,7 @@ function JMBLatestUpdatesObject(offsetParent){
 				li,
 				color,
 				data = json.data,
-				config = json.config,
-				colors = config.colors,
-				usertree = json.usertree,
+				colors = settings.colors,
 				lang = json.language,
 				gedcom_id;
 			ul = jQuery('<ul></ul>');
@@ -55,10 +57,9 @@ function JMBLatestUpdatesObject(offsetParent){
 		},
 		create:function(json){
 			var	sb = host.stringBuffer(), 
-				config = json.config, 
-				colors = config.colors,
+				colors = settings.colors,
 				lang = json.language,
-				h_color = (config.login_type=="famous_family")?colors.famous_header:colors.family_header;			
+				h_color = (type=="famous_family")?colors.famous_header:colors.family_header;			
 			sb._('<div class="jmb-lu-header" style="background:#'+h_color+';">');
 				sb._('<span>'+lang['HEADER']+'</span>');
 			sb._('</div>');
@@ -73,7 +74,6 @@ function JMBLatestUpdatesObject(offsetParent){
 	
 	fn.start(function(json){
 		data = json.data;
-		usertree = json.usertree;
 		cont = fn.create(json);
 		content = fn.content(json);
 		jQuery(cont[1]).append(content);

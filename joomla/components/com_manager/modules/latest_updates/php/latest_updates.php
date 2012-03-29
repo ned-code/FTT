@@ -72,11 +72,7 @@ class JMBLatestUpdates {
 		$gedcom_id = $session->get('gedcom_id');
         	$tree_id = $session->get('tree_id');
         	$permission = $session->get('permission');
-        	
-        	$settings = $session->get('settings');
-        	$alias = $session->get('alias');
-        	$login_method = $session->get('login_method');
-		
+
 		$usertree = $this->host->usertree->load($tree_id, $gedcom_id);
 		
 		$new_photo = $this->getUser($this->getNewPhoto($tree_id), $usertree);
@@ -86,10 +82,8 @@ class JMBLatestUpdates {
 		$family_deleted = $this->getUser($this->getFamilyMemberDeleted($tree_id, $gedcom_id), $usertree);
 		
 		$lang = $this->host->getLangList('latest_updates');
-		$config = array('alias'=>$alias,'login_method'=>$login_method,'colors'=>$settings['colors']);
 		
 		return json_encode(array(
-			'config'=>$config,
 			'language'=>$lang,
 			'data'=>array(
 				'PHOTO'=>$new_photo,
@@ -97,8 +91,7 @@ class JMBLatestUpdates {
 				'PROFILE'=>$profile_change,
 				'ADDED'=>$family_added,
 				'DELETED'=>$family_deleted
-			),
-			'usertree'=>$usertree
+			)
 		));
 		
  	}
