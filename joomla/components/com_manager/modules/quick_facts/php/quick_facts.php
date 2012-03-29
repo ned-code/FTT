@@ -47,11 +47,7 @@ class JMBQuickFacts {
 		$owner_id = $session->get('gedcom_id');
         	$tree_id = $session->get('tree_id');
         	$permission = $session->get('permission');
-        	
-        	$settings = $session->get('settings');
-        	$alias = $session->get('alias');
-        	$login_method = $session->get('login_method');
-				
+
 		$usertree = $this->host->usertree->load($tree_id, $owner_id);
 		
 		//facts
@@ -59,10 +55,8 @@ class JMBQuickFacts {
 		$facts = $this->getFacts($usertree);
 		$user = $usertree[$owner_id];
 		$language = $this->getLanguage();
-		$config = array('alias'=>$alias,'login_method'=>$login_method,'colors'=>$settings['colors']);
 		
 		return json_encode(array(
-			'config'=>$config,
 			'lang'=>$language,
 			'user'=>$user,
 			'count'=>$count,

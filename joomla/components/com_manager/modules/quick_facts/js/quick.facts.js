@@ -1,5 +1,8 @@
 function JMBQuickFactsObject(object){	
 	var	module = this,
+		settings = storage.settings,
+		type = jQuery(document.body).attr('_type'),
+		alias = jQuery(document.body).attr('_alias'),
 		json,
 		cont,
 		fn;
@@ -27,7 +30,7 @@ function JMBQuickFactsObject(object){
 			var sb = host.stringBuffer();
 			var lang = json.lang;
 			sb._('<font id="')._(json.youngest.user.gedcom_id)._('" style="color:#');
-				sb._(json.config.colors[json.youngest.user.gender])._(';">');
+				sb._(settings.colors[json.youngest.user.gender])._(';">');
 					sb._(fn.getFullName(json.youngest.user));
 			sb._('</font> ( ');
 			sb._(fn.getTurn(json.youngest.user))._(' ')
@@ -39,7 +42,7 @@ function JMBQuickFactsObject(object){
 			var sb = host.stringBuffer();
 			var lang = json.lang;
 			sb._('<font id="')._(json.oldest.user.gedcom_id)._('" style="color:#');
-				sb._(json.config.colors[json.oldest.user.gender]);
+				sb._(settings.colors[json.oldest.user.gender]);
 			sb._(';">');
 				sb._(fn.getFullName(json.oldest.user));
 			sb._('</font> ( ');
@@ -50,7 +53,7 @@ function JMBQuickFactsObject(object){
 		create:function(){
 			var sb = host.stringBuffer();
 			var lang = json.lang;
-			var header_background_color = (json.config.login_type=='famous_family')?json.config.colors.famous_header:json.config.colors.family_header;
+			var header_background_color = (type=='famous_family')?settings.colors.famous_header:settings.colors.family_header;
 			sb._('<div class="jmb_qf_header" style="background:#')._(header_background_color)._(';"><span>')._(lang['HEADER'])._('</span></div>');
 			sb._('<div class="jmb_qf_content">');
 				sb._('<div id="number_family_members" class="jmb_qf_item">');

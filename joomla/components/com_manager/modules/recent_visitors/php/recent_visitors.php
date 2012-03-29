@@ -45,7 +45,6 @@ class JMBRecentVisitors {
 		$objects = $this->_sort($last_login_users, $usertree);
 
 		return json_encode(array(
-			'config'=>$config,
 			'user'=>$user,
 			'lang'=>$language,
 			'objects'=>$objects,
