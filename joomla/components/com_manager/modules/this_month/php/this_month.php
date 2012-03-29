@@ -116,10 +116,6 @@ class JMBThisMonth {
         	$tree_id = $session->get('tree_id');
         	$permission = $session->get('permission');
         	
-        	$settings = $session->get('settings');
-        	$alias = $session->get('alias');
-        	$login_method = $session->get('login_method');
-        	
 		$args = json_decode($args);
 
 		$month = $args->month;
@@ -127,9 +123,8 @@ class JMBThisMonth {
 		$render_type = $args->render;
 		
 		//user info and global settings
-		$ftt_user = $usertree[$gedcom_id];
 		$language = $this->getLanguage();
-		$config = array('alias'=>$alias,'login_method'=>$login_method,'colors'=>$settings['colors']);
+		$usertree = $this->host->usertree->load($tree_id, $gedcom_id);
 		
 		if($sort != 'false'){ 
 			$this->settings['split_event']['type'] = $sort; 
@@ -140,7 +135,6 @@ class JMBThisMonth {
 		$this->settings['opt']['month'] = $month;
 		
 		return json_encode(array(
-				'config'=>$config,
 				'settings'=>$this->settings,
 				'language'=>$language,
 				'events'=>$events

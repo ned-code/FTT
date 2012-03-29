@@ -232,6 +232,7 @@ function JMBLogin(){
 			storage.usertree.users = json.usertree.users;
 			storage.usertree.pull = json.usertree.pull;
 			storage.notifications.init(json.notifications);
+			storage.settings = json.settings;
 		},
 		get_data_user:function(json){
 			return json.usertree.pull[json.usertree.gedcom_id];

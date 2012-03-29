@@ -24,13 +24,15 @@ storage.clearPull = function(o){
 
 //global varning
 storage.url = "components/com_manager/";
-storage.session = id;
 storage.fb = {};
 storage.fb.appId = "184962764872486";
 storage.fb.status = true;
 storage.fb.cookie = true;
 storage.fb.xfbml = true;
 storage.iframe = jQuery('<iframe id="ftt_iframe" name="ftt_iframe" style="display:none;position:absolute;left:-1000px;width:1px;height:1px">');
+storage.settings = null;
+
+//modules
 storage.login = {};
 storage.header = {};
 storage.media = {};

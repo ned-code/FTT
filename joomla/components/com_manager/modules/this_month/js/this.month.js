@@ -1,6 +1,9 @@
 function JMBThisMonthObject(obj){
 	//vars 
 	this.obj = obj;
+	this.alias = jQuery(document.body).attr('_alias');
+	this.type = jQuery(document.body).attr('_type');
+	this.settings = {};
 	this.json = {};
 	this.content = { table:null, birth:null, death:null, marr:null };
 	this.b_count = 0;
@@ -175,8 +178,9 @@ JMBThisMonthObject.prototype = {
 		}
 	},
 	_setHEAD:function(json){
+		var self = this;
 		var header = jQuery(this.table).find('.jmb-this-month-header');
-		var header_background_color = (json.config.login_type=='famous_family')?json.config.colors.famous_header:json.config.colors.family_header;
+		var header_background_color = (self.type=='famous_family')?self.settings.colors.famous_header:self.settings.colors.family_header;
 		jQuery(header).css('background', '#'+header_background_color);
 		var sb = host.stringBuffer();
 		sb._('<span>')._(json.language['HEADER'])._('</span>: <select name="months">')._(this._createMonthsSelect(json))._('</select>');
@@ -198,7 +202,7 @@ JMBThisMonthObject.prototype = {
 					birth = data.user.birth,
 					date = (birth!=null)?birth.date:null,
 					gender = data.user.gender,
-					color = json.config.colors[gender],
+					color = self.settings.colors[gender],
 					append;
 					
 				self.b_count++;
@@ -239,7 +243,7 @@ JMBThisMonthObject.prototype = {
 					death = data.user.death,
 					date = (death!=null)?death.date:null,
 					gender = data.user.gender,
-					color = json.config.colors[gender],
+					color = self.settings.colors[gender],
 					append;
 				
 				append = sb._('<tr><td><div class="date">')
@@ -278,10 +282,10 @@ JMBThisMonthObject.prototype = {
 					._((date!=null)?date[0]:'')
 					._('</div></td><td><div class="anniversaries-start">&nbsp</div></td><td><div id="')
 					._(family.husb.user.gedcom_id)._('" class="person"><font color="')
-					._(json.config.colors[family.husb.user.gender])._('">')
+					._(self.settings.colors[family.husb.user.gender])._('">')
 					._(self._getFullName(family.husb.user))._('</font></div><div id="')
 					._(family.wife.user.gedcom_id)._('" class="person"><font color="')
-					._(json.config.colors[family.wife.user.gender])._('">')
+					._(self.settings.colors[family.wife.user.gender])._('">')
 					._(self._getFullName(family.wife.user))._('</font></div></td><td><div class="anniversaries-end">&nbsp;</div></td><td><div>(')
 					._(self._getTurns(date))._(' years ago)</div></td></tr>').result();
 				sb.clear();
@@ -319,6 +323,7 @@ JMBThisMonthObject.prototype = {
 			var json = jQuery.parseJSON(req.responseText);
 			module.json =  json;
 			module.json.members = storage.usertree.pull;
+			module.settings = storage.settings;
 			callback(json);
 		});
 	},

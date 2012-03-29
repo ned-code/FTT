@@ -31,6 +31,11 @@ class JMBLogin {
 		return false;
 	}
 	
+	protected function getSystemSettings(){
+		$session = JFactory::getSession();
+        	return $session->get('settings');
+	}
+	
 	public function user(){
 		$session = JFactory::getSession();
 		
@@ -40,9 +45,10 @@ class JMBLogin {
 		
 		$languages = $this->host->getLanguages();
 		$data = $this->getUsertreeData();
+		$settings = $this->getSystemSettings();
 		
 		$notifications = $this->getNotifications($tree_id, $gedcom_id);
-		return json_encode(array('default_language'=>$lang, 'languages'=>$languages,'notifications'=>$notifications,'usertree'=>$data));
+		return json_encode(array('default_language'=>$lang, 'languages'=>$languages,'notifications'=>$notifications,'settings'=>$settings, 'usertree'=>$data));
 	}
 	public function famous($args){
 		if($args == 'logout'){			
