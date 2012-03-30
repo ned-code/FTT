@@ -343,6 +343,11 @@ class JMBProfile {
 		$objects = $this->host->usertree->getUser($tree_id, $owner_id, $individual->Id);
 		return json_encode(array('objects'=>$objects));
 	}
+
+    public function delete($args){
+        $this->host->gedcom->individuals->delete($args);
+        return true;
+    }
 }
 
 ?>

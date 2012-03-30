@@ -560,3 +560,17 @@
     	top: 0;
     	width: 10px;
 }
+
+/**
+* delete button
+*/
+.jmb-dialog-options-content .delete {
+    background: none repeat scroll 0 0 #999999;
+    border: 1px solid #000000;
+    border-radius: 5px 5px 5px 5px;
+    color: white;
+    cursor: pointer;
+    padding: 5px;
+    text-align: center;
+    width: 300px;
+}

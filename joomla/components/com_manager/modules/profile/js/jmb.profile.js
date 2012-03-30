@@ -32,6 +32,7 @@ function JMBProfile(){
 		close:function(){
 			jQuery(this).dialog("destroy");
 			jQuery(this).remove();
+            module._clear();
 			module.events.afterEditorClose();
 		}	
 	}
@@ -947,13 +948,35 @@ JMBProfile.prototype = {
 				sb._('<div class="jmb-dialog-options-content" style="margin: 10px;">');
 					sb._('<ul style="list-style: none outside none;">');
 						sb._('<li id="delete">');
-							sb._('<div id="text"><span>Delete this person from your family tree.</span></div>');
+							sb._('<div id="text"><div class="delete"><span>Delete this person from your family tree.</span></div></div>');
 							sb._('<div id="description"></div>')
 						sb._('</li>')
 					sb._('</ul>');
 				sb._('</div>');				
 				html = jQuery(sb.result());
 				jQuery(module.box).find('div.jmb-dialog-profile-content').append(html);
+                jQuery(html).find('li#delete span').click(function(){
+                    var mo_object = storage.usertree.pull[module.target_id];
+                    var mo_spouses = [];
+                    if(mo_object.families!=null){
+                        var mo_families = mo_object.families;
+                        for(var key in mo_families){
+                            if(key == 'length') continue;
+                            var mo_family = mo_families[key];
+                            if(mo_family.spouse!=null){
+                                mo_spouses.push(mo_family.spouse);
+                            }
+                            if(mo_family.childens!=null){
+                                return false;
+                            }
+                        }
+                    }
+                    if(confirm("Are you sure you want to delete this user?")){
+                        module._ajax('delete', module.target_id, function(res){
+                            window.location.reload();
+                        });
+                    }
+                });
 			}
 		}
 	},
