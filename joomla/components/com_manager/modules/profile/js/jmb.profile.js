@@ -6,6 +6,7 @@ function JMBProfile(){
 	module.menu_item_pull = [];
 	module.individuals = null;
 	module.object = null;
+    module.target_id = null;
 	module.container = null;
 	module.events = {
 		afterEditorClose:function(){
@@ -232,13 +233,16 @@ JMBProfile.prototype = {
 			}
 		}	
 	},
-	_form:function(object){
+	_form:function(o){
 		var	module = this,
 			sb = host.stringBuffer(),
 			gen = module._gen(),
+            object = storage.usertree.pull[o.user.gedcom_id],
 			user = storage.usertree.parse(object),
-			spouse, parse_spouse,
-			place, place_name;
+			spouse,
+            parse_spouse,
+			place,
+            place_name;
 		return {
 			basic:function(){
 				sb.clear();
@@ -676,26 +680,25 @@ JMBProfile.prototype = {
 	_click:function(){
 		var	module = this,
 			sb = host.stringBuffer(),
-			object = module.object,
+			object = storage.usertree.pull[module.target_id],
 			parse = storage.usertree.parse(object),
 			media = object.media,
 			families = object.families,
 			user = object.user,
-			cont = module.container,
 			form = module._form(object),
 			html,
 			select_photo,
 			update_data;
 		
 		update_data = function(res){
-			module.object = res.user;
-			object = module.object;
-			media = object.media,
-			families = object.families,
-			parse = storage.usertree.parse(object);
-			user = object.user;
-			form = module._form(object);
+			storage.usertree.update(res.objects);
+            object = storage.usertree.pull[module.target_id];
+            media = object.media,
+            families = object.families;
+            user = object.user;
+            form = module._form(object);
 		}
+
 		return {
 			view_profile:function(){
 				var place, place_name;
@@ -805,13 +808,9 @@ JMBProfile.prototype = {
 				
 				add_union = function(div){
 					module._ajaxForm(jQuery(div).find('form'), 'union', '{"gedcom_id":"'+parse.gedcom_id+'","method":"add"}', function(data){}, function(res){
-						if(res.data&&res.data.spouse!=null){
-							module.individuals[res.data.spouse.user.gedcom_id] = res.data.spouse;
-							storage.usertree.pull[res.data.spouse.user.gedcom_id] = res.data.spouse; 
-						}
 						update_data(res);
 						jQuery(div).remove();
-						div = form.spouse(res.user.families[res.data.family_id],count, true);
+						div = form.spouse(families[res.data.family_id],count, true);
 						jQuery(html).append(div);
 						save_union(jQuery(div).find('form'));
 						count++;
@@ -1014,8 +1013,7 @@ JMBProfile.prototype = {
 	editor:function(mode, data){
 		var	module = this,
 			cont = module._container(),
-			object = data.object,
-			user = object.user,
+			object = storage.usertree.pull[data.object.user.gedcom_id],
 			get = storage.usertree.parse(object),
 			name = get.full_name;
 			
@@ -1024,6 +1022,7 @@ JMBProfile.prototype = {
 		
 		module.container = cont;
 		module.object = object;
+        module.target_id = object.user.gedcom_id;
 		module.individuals = storage.usertree.pull;
 		
 		module._dialog(module.box, { title: name, height: 450 });

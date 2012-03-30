@@ -3,10 +3,7 @@ class JMBProfile {
 	protected $db;
 	protected $host;
 	protected $relation;
-	
-	/**
-	*
-	*/
+
 	function __construct(){
 		$this->db =& JFactory::getDBO();
 		$this->host = new Host('Joomla');
@@ -161,10 +158,9 @@ class JMBProfile {
 		$session = JFactory::getSession();
 		$owner_id = $session->get('gedcom_id');
 		$tree_id = $session->get('tree_id');
-		$permission = $session->get('permission');
-		$this->host->usertree->init($tree_id, $owner_id, $permission);
-		$usertree = $this->host->usertree->load($tree_id, $owner_id);
-		return json_encode(array('user'=>$usertree[$user_id]));
+        //get objects
+        $objects = $this->host->usertree->getUser($tree_id, $owner_id, $ind->Id);
+        return json_encode(array('objects'=>$objects));
 	}
 	
 	public function union($args){
@@ -173,7 +169,6 @@ class JMBProfile {
 		$session = JFactory::getSession();
 		$owner_id = $session->get('gedcom_id');
 		$tree_id = $session->get('tree_id');
-		$permission = $session->get('permission');
 		$data = false;
 		switch($args->method){
 			case "save":
@@ -196,6 +191,7 @@ class JMBProfile {
 				$spouse->Nick = $request['nick'];
 				$spouse->Id = $this->host->gedcom->individuals->save($spouse);
 				$this->host->usertree->link($tree_id, $spouse->Id);
+                $this->host->gedcom->relation->set($tree_id, $owner_id, $spouse->Id);
 				$this->updateIndividualEvents($spouse, $request);
 				//add family in db
 				$family = $this->createFamily($sircar, $spouse);
@@ -203,16 +199,14 @@ class JMBProfile {
 				$data = true;
 			break;
 		}
-		
-		//update user tree
-		$this->host->usertree->init($tree_id, $owner_id, $permission);
-		$usertree = $this->host->usertree->load($tree_id, $owner_id);
+
 		if($data){
-			$family_id = $family->Id;  
-			$spouse = $usertree[$spouse->Id];
-			$data = array('family_id'=>$family_id, 'spouse'=>$spouse);
+			$family_id = $family->Id;
+			$data = array('family_id'=>$family_id);
 		}
-		return json_encode(array('user'=>$usertree[$args->gedcom_id], 'data'=>$data));
+
+        $objects = $this->host->usertree->getUser($tree_id, $owner_id, $args->gedcom_id);
+        return json_encode(array('objects'=>$objects, 'data'=>$data));
 	}
 	
 	

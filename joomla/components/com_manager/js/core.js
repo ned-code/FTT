@@ -56,6 +56,18 @@ storage.usertree.extend = function(def, sub){
 		}
 	}
 }
+storage.usertree.update = function(objects){
+    var pull = storage.usertree.pull;
+    for(var key in objects) {
+        var item = objects[key];
+        if (item) {
+            var gedcom_id = item.user.gedcom_id;
+            if (gedcom_id != null) {
+                pull[gedcom_id] = item;
+            }
+        }
+    }
+}
 storage.usertree.parse = function(object){
 	var	user = object.user,
 		families = object.families,
