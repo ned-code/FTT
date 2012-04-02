@@ -345,6 +345,10 @@ class JMBProfile {
 	}
 
     public function delete($args){
+        $families = $this->host->gedcom->families->getPersonFamilies($args);
+        foreach($families as $family){
+            $this->host->gedcom->families->delete($family->Id);
+        }
         $this->host->gedcom->individuals->delete($args);
         return true;
     }

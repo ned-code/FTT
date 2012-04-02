@@ -22,10 +22,14 @@ $mainframe->initialise();
 
 require_once(JPATH_BASE.DS.'components'.DS.'com_manager'.DS.'php'.DS.'host.php');
 
+$modulename = JRequest::getVar('module');
+$classname = JRequest::getVar('class');
+$method = JRequest::getVar('method');
+$arguments = JRequest::getVar('args');
+
 $host = new Host('Joomla');
-$ajax = new JMBAjax();
-$link = $ajax->connect();
-echo $ajax->callMethod($host);
-$ajax->close($link);
+
+echo $host->ajax->callMethod($modulename, $classname, $method, $arguments);
+
 exit;
 ?>

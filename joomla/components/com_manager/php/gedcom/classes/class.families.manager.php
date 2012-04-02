@@ -3,30 +3,29 @@ class FamiliesList{
 	/**
 	* gedcom individuals object
 	*/
-	protected $individuals;
+	private $individuals;
 	/**
 	* gedcom events object
 	*/
-	protected $events;
+	private $events;
 
-	/**
-	* FamiliesList constructor
-	* $individuals gedcom object
-	* $events gedcom object 
-	*/
-	function  __construct(&$individuals, &$events) {
-		require_once 'class.family.php';
-		$this->individuals = $individuals;
-		$this->events = $events;
-		$this->db = new JMBAjax();
-        }
+        /**
+        * FamiliesList constructor
+        * $individuals gedcom object
+        * $events gedcom object
+        */
+        public function  __construct(&$ajax, &$individuals, &$events) {
+            $this->ajax = $ajax;
+            $this->individuals = $individuals;
+            $this->events = $events;
+            }
         /**
         *
         */
         public function get($id, $lite=false){
         	if($id==NULL) { return null; }
-        	$this->db->setQuery('SELECT id,husb,wife FROM #__mb_families WHERE id=?',$id);         
-        	$rows = $this->db->loadAssocList();
+        	$this->ajax->setQuery('SELECT id,husb,wife FROM #__mb_families WHERE id=?',$id);
+        	$rows = $this->ajax->loadAssocList();
         	if($rows == null) { return false; }
                 return $this->setData($rows[0]['husb'] ,$rows[0], $lite);
         }
@@ -49,9 +48,9 @@ class FamiliesList{
 			}
                 }
 		$sqlString = "INSERT INTO #__mb_families (`id`, `husb`, `wife`,`type`) VALUES (NULL, ?, ?, ?)";
-		$this->db->setQuery($sqlString, $husb, $wife, $family->Type);    
-        	$this->db->query();
-        	return $this->db->insertid();
+		$this->ajax->setQuery($sqlString, $husb, $wife, $family->Type);
+        	$this->ajax->query();
+        	return $this->ajax->insertid();
         }
         /**
         * update exists family in db
@@ -73,8 +72,8 @@ class FamiliesList{
 			}
                 }
 		$sqlString = "UPDATE #__mb_families SET `husb`=?,`wife`=?,`type`=?,`change`=NOW() WHERE `id`=?";
-		$this->db->setQuery($sqlString, $husb, $wife,$family->Type,$family->Id);    
-        	$this->db->query();
+		$this->ajax->setQuery($sqlString, $husb, $wife,$family->Type,$family->Id);
+        	$this->ajax->query();
         	return true;
         }
         /**
@@ -83,8 +82,8 @@ class FamiliesList{
         */
         public function delete($id){
         	if($id==NULL){ return false; }
-        	$this->db->setQuery('DELETE FROM #__mb_families WHERE id=?',$id);    
-        	$this->db->query();
+        	$this->ajax->setQuery('DELETE FROM #__mb_families WHERE id=?',$id);
+        	$this->ajax->query();
         	return true;
         }
         /**
@@ -123,8 +122,8 @@ class FamiliesList{
         public function addChild($fId, $id, $fRel=null, $mRel=null){
         	if($fId==null||$id==null) { return false; }
         	$sqlString = "INSERT INTO #__mb_childrens (`fid`, `gid`, `frel`, `mrel`) VALUES (?,?,?,?)";
-		$this->db->setQuery($sqlString, $fId, $id, $fRel, $mRel);    
-        	$this->db->query();
+		    $this->ajax->setQuery($sqlString, $fId, $id, $fRel, $mRel);
+        	$this->ajax->query();
         }
         /**
         *
@@ -132,8 +131,8 @@ class FamiliesList{
         public function deleteChild($id){
            if ($id==null) {return false;}
            $pers=$this->individuals->get($id);
-           $this->db->setQuery("DELETE FROM #__mb_childrens WHERE `gid`=?",$id);    
-       	   $this->db->query();
+           $this->ajax->setQuery("DELETE FROM #__mb_childrens WHERE `gid`=?",$id);
+       	   $this->ajax->query();
            $this->individuals->delete($id);    
         }
         /**
@@ -141,8 +140,8 @@ class FamiliesList{
         */
         public function getPersonFamilies($indKey, $lite=false){
         	if($indKey==null){ return null; }
-        	$this->db->setQuery('SELECT id, husb, wife, type FROM #__mb_families WHERE husb=? OR wife=?', $indKey, $indKey);         
-        	$rows = $this->db->loadAssocList();
+        	$this->ajax->setQuery('SELECT id, husb, wife, type FROM #__mb_families WHERE husb=? OR wife=?', $indKey, $indKey);
+        	$rows = $this->ajax->loadAssocList();
         	$families = array();
         	foreach($rows as $row){        		
         		$families[] = $this->setData($indKey, $row, $lite);
@@ -154,8 +153,8 @@ class FamiliesList{
         *
         */
         public function getFamilyIdByPartnerId($husb, $wife){
-        	$this->db->setQuery('SELECT id FROM #__mb_families WHERE husb=? AND wife=?', $husb, $wife);
-        	$rows = $this->db->loadAssocList();
+        	$this->ajax->setQuery('SELECT id FROM #__mb_families WHERE husb=? AND wife=?', $husb, $wife);
+        	$rows = $this->ajax->loadAssocList();
         	return ($rows!=null)?$rows[0]['id']:null;
         }
         /**
@@ -168,8 +167,8 @@ class FamiliesList{
         		LEFT JOIN #__mb_dates as dates ON dates.events_id = events.id
         		WHERE fid=?
         		ORDER BY  dates.f_year DESC";
-        	$this->db->setQuery($sqlString, $fId);         
-        	$rows = $this->db->loadAssocList();
+        	$this->ajax->setQuery($sqlString, $fId);
+        	$rows = $this->ajax->loadAssocList();
         	if($rows!=null){
         		return $rows;
         	} else{ 
@@ -192,13 +191,13 @@ class FamiliesList{
         		$sqlString .= ((int)$sort[0]<0)?"AND date.f_year < ?":"AND date.f_year > ?";
         		$sqlString .= " GROUP BY family.id";
         		$sqlString .= ' ORDER BY  date.f_day ASC';
-        		$this->db->setQuery($sqlString, $treeId, $type, $month, $sort[1]); 
+        		$this->ajax->setQuery($sqlString, $treeId, $type, $month, $sort[1]);
         	} else {
         		$sqlString .= " GROUP BY family.id";
         		$sqlString .= ' ORDER BY  date.f_day ASC';
-        		$this->db->setQuery($sqlString, $treeId, $type, $month); 
+        		$this->ajax->setQuery($sqlString, $treeId, $type, $month);
         	}     
-        	$rows = $this->db->loadAssocList();
+        	$rows = $this->ajax->loadAssocList();
         	return $rows;
         }
         /**
@@ -209,8 +208,8 @@ class FamiliesList{
 				LEFT JOIN #__mb_tree_links as links ON links.individuals_id = family.husb OR links.individuals_id = family.wife
 				WHERE links.tree_id = ?
 				GROUP BY family.id";
-		$this->db->setQuery($sqlString, $treeId);
-		return $this->db->loadAssocList();
+		$this->ajax->setQuery($sqlString, $treeId);
+		return $this->ajax->loadAssocList();
         }
         /**
         *
@@ -219,8 +218,8 @@ class FamiliesList{
         	$sqlString = "SELECT childs.fid, childs.gid FROM #__mb_childrens as childs
 				LEFT JOIN #__mb_tree_links as links ON links.individuals_id = childs.gid
 				WHERE links.tree_id = ?";
-		$this->db->setQuery($sqlString, $treeId);
-		return $this->db->loadAssocList();
+		$this->ajax->setQuery($sqlString, $treeId);
+		return $this->ajax->loadAssocList();
         }
         /**
         *
@@ -231,12 +230,12 @@ class FamiliesList{
 				LEFT JOIN #__mb_tree_links as links ON links.individuals_id = family.husb OR links.individuals_id = family.wife";
 		if($gedcom_id){
 			$sqlString .= " WHERE links.tree_id = ? and links.individuals_id = ?";
-			$this->db->setQuery($sqlString, $tree_id, $gedcom_id);
+			$this->ajax->setQuery($sqlString, $tree_id, $gedcom_id);
 		} else {
 			$sqlString .= " WHERE links.tree_id = ? GROUP BY family.id";
-			$this->db->setQuery($sqlString, $tree_id);
+			$this->ajax->setQuery($sqlString, $tree_id);
 		}
-		return $this->db->loadAssocList(array('husb','wife','F'=>'family_id'),'I');
+		return $this->ajax->loadAssocList(array('husb','wife','F'=>'family_id'),'I');
         }
         /**
         *
@@ -249,12 +248,12 @@ class FamiliesList{
 			$sqlString .= " LEFT JOIN #__mb_families as family ON family.id = childs.fid";
 			$sqlString .= " LEFT JOIN #__mb_tree_links as flinks ON flinks.individuals_id = family.husb OR flinks.individuals_id = family.wife";
 			$sqlString .= " WHERE links.tree_id = ? and flinks.individuals_id = ?";
-			$this->db->setQuery($sqlString, $tree_id, $gedcom_id);
+			$this->ajax->setQuery($sqlString, $tree_id, $gedcom_id);
 		} else {
 			$sqlString .= " WHERE links.tree_id = ?";
-			$this->db->setQuery($sqlString, $tree_id);
+			$this->ajax->setQuery($sqlString, $tree_id);
 		}
-		return $this->db->loadAssocList(array('I'=>'gedcom_id','F'=>'family_id'));
+		return $this->ajax->loadAssocList(array('I'=>'gedcom_id','F'=>'family_id'));
         }
         
 }    

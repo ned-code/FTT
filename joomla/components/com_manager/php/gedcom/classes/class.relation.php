@@ -1,11 +1,17 @@
 <?php
 class JMBRelation {
-	protected $db;
-	protected $families;
-	protected $individuals;
-	protected $_FamiliesList;
-	protected $_ChildrensList;
-	protected $_Relatives;
+	private $ajax;
+    private $families;
+    private $individuals;
+    private $_FamiliesList;
+    private $_ChildrensList;
+    private $_Relatives;
+
+    public function __construct(&$ajax, &$families, &$individuals){
+        $this->ajax = $ajax;
+        $this->families = $families;
+        $this->individuals = $individuals;
+    }
 	
 	protected function get_parents($gedcom_id){
 		$ind_key = 'I'.$gedcom_id;
@@ -192,13 +198,7 @@ class JMBRelation {
 		$this->_IndividualsList = $this->individuals->getIndividualsList($tree_id, $gedcom_id);
 		$this->_Relatives = $this->individuals->getRelatives($tree_id);
 	}
-	
-	public function __construct(&$families, &$individuals){
-		$this->db = new JMBAjax();
-		$this->families = $families;
-		$this->individuals = $individuals;
-	}
-	
+
 	public function set_relation($tree_id, $gedcom_id, $check){
 		$insert = array();
 		foreach($check as $rel){
@@ -212,8 +212,8 @@ class JMBRelation {
 			foreach($res as $el){
 				$sql .= "('".$tree_id."','".$gedcom_id."','".$el['member']['individuals_id']."','".$el['relation']."'),";
 			}
-			$this->db->setQuery(substr($sql,0,-1));
-			$this->db->query();
+			$this->ajax->setQuery(substr($sql,0,-1));
+			$this->ajax->query();
 		}
 		return $insert;
 	}
@@ -222,8 +222,8 @@ class JMBRelation {
 		$this->init($tree_id, $gedcom_id);
 		$relation =  $this->get_relation($target_id, $gedcom_id);		
 		$sql_string = "INSERT INTO #__mb_relations (`tree_id`, `from`, `to`, `relation`) VALUES (?, ?, ?, ?)";
-		$this->db->setQuery($sql_string, $tree_id, $gedcom_id, $target_id, ($relation)?$relation:'unknown');
-		$this->db->query();
+		$this->ajax->setQuery($sql_string, $tree_id, $gedcom_id, $target_id, ($relation)?$relation:'unknown');
+		$this->ajax->query();
 	}
 	
 	public function get($tree_id, $gedcom_id, $target_id){
@@ -235,12 +235,12 @@ class JMBRelation {
 	public function check($tree_id, $gedcom_id){
 		$this->init($tree_id, $gedcom_id);
 		$sql_string = "DELETE FROM #__mb_relations WHERE tree_id = ? and from = ? and relation = 'unknown'";
-		$this->db->setQuery($sql_string, $tree_id, $gedcom_id);
-		$this->db->query();
+		$this->ajax->setQuery($sql_string, $tree_id, $gedcom_id);
+		$this->ajax->query();
 		
 		$sql_string = "SELECT rel.to as individuals_id, rel.relation FROM #__mb_relations as rel WHERE rel.tree_id = ? AND rel.from = ?";
-		$this->db->setQuery($sql_string, $tree_id, $gedcom_id);
-		$relations = $this->db->loadAssocList('individuals_id');
+		$this->ajax->setQuery($sql_string, $tree_id, $gedcom_id);
+		$relations = $this->ajax->loadAssocList('individuals_id');
 		if($relations==null){
 			$check = $this->_Relatives;
 		} else {

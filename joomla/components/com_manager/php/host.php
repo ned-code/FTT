@@ -1,28 +1,40 @@
 <?php
 require_once('class.ajax.php');
 require_once('class.usertree.php');
+require_once('class.image.php');
 require_once('gedcom/core.gedcom.php');
 require_once('gramps/core.gramps.php');
 
 //class
 class Host {
+    private $modulesPath;
+
+    public $ajax;
+
+    public $gedcom;
+    public $gramps;
+    public $usertree;
+
+    public $images;
+
 	/**
 	*
 	*/
-	public $gedcom;
-        public $modulesPath;
-        public $gramps;  
-        
-        
-	/**
-	*
-	*/
-	function __construct($type){		
-            $this->modulesPath = JPATH_ROOT."/components/com_manager/modules/";
-            $this->gedcom = new Gedcom();
-            $this->usertree = new JMBUserTree($this->gedcom);            
-            $this->gramps = new Gramps($this);
+	public function __construct($type){
+            $this->modulesPath = $this->getModulesPath();
+
+            $this->ajax = new JMBAjax();
+
+            $this->gedcom = new Gedcom($this->ajax);
+            $this->gramps = new Gramps($this->ajax, $this->gedcom);
+            $this->usertree = new JMBUserTree($this->ajax, $this->gedcom);
+
+            $this->images = new JMBImage($this->gedcom);
 	}
+
+    private function getModulesPath(){
+            return JPATH_ROOT."/components/com_manager/modules/";
+    }
 	
 	/**
 	*
@@ -253,19 +265,17 @@ class Host {
 	* LANGUAGE
 	*/ 
 	protected function getDefaultLanguage(){
-		$db = new JMBAjax();
 		$sql_string = "SELECT lang_id, lang_code, title, published FROM #__mb_language WHERE def='1'";
-		$db->setQuery($sql_string);
-		$rows = $db->loadAssocList();
+		$this->ajax->setQuery($sql_string);
+		$rows = $this->ajax->loadAssocList();
 		if($rows==null) return false;
 		return $rows[0];
 	}
 	
 	protected function getLanguage($lang_code){
-		$db = new JMBAjax();
 		$sql_string = "SELECT lang_id, lang_code, title, published FROM #__mb_language WHERE lang_code=?";
-		$db->setQuery($sql_string, $lang_code);
-		$rows = $db->loadAssocList();
+        $this->ajax->setQuery($sql_string, $lang_code);
+		$rows = $this->ajax->loadAssocList();
 		if($rows==null) return false;
 		return $rows[0];
 	}
@@ -289,10 +299,9 @@ class Host {
 	}
 	
 	public function getLanguages(){
-		$db = new JMBAjax();
 		$sql_string = "SELECT lang_id, lang_code, title, published, def FROM #__mb_language WHERE 1";
-		$db->setQuery($sql_string);
-		$rows = $db->loadAssocList();
+        $this->ajax->setQuery($sql_string);
+		$rows = $this->ajax->loadAssocList();
 		if($rows==null) return false;
 		return $rows;
 	}
@@ -301,9 +310,8 @@ class Host {
 	* CONFIG
 	*/
 	public function getConfig(){
-		$db = new JMBAjax();
-		$db->setQuery("SELECT uid, name, alias, value, type, priority FROM #__mb_system_settings");
-		$rows = $db->loadAssocList();
+        $this->ajax->setQuery("SELECT uid, name, alias, value, type, priority FROM #__mb_system_settings");
+		$rows = $this->ajax->loadAssocList();
 		if($rows == null) return array();
 		$colors = array();
 		foreach($rows as $row){

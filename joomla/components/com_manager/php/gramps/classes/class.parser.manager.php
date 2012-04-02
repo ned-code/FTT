@@ -1,19 +1,19 @@
 <?php
 class ParserList{
-	public $core;
-	public $host;
-	public function  __construct($core) {
-		require_once 'class.parser.php';
-		$this->core=$core;
-		$this->host = new Host('joomla');
-		$this->db = new JMBAjax();
+	private $ajax;
+    private $gedcom;
+
+	public function  __construct(&$ajax, &$gedcom) {
+        $this->ajax = $ajax;
+        $this->gedcom = $gedcom;
 	}
 	
 	protected function createTree($tree_name){
-		$this->db->setQuery("INSERT INTO #__mb_tree (`name`) values (?)", $tree_name);
-		$this->db->query();
-		$id= $this->db->insertid();
-		return $id;  
+		$this->ajax->setQuery("INSERT INTO #__mb_tree (`name`) VALUES( ? ) ", $tree_name);
+        $this->ajax->query();
+		$id= $this->ajax->insertid();
+		return $id;
+
 	}
 	
 	protected function new_event($key, $key_type, $ev_type, $name=null, $caus=null, $agency=null, $date_type=null, $f_date=null, $t_date=null){
@@ -30,7 +30,7 @@ class ParserList{
 		$event->DateType = $date_type;
 		$event->From = $f_date;
 		$event->To = $t_date;
-		return $this->host->gedcom->events->save($event,$key_type);            
+		return $this->gedcom->events->save($event,$key_type);
 	}
 	
 	protected function new_place($ev_id, $name, $adr, $city, $state, $post, $country, $phone){
@@ -45,7 +45,7 @@ class ParserList{
 		$place = new Place();        
 		$place->Name = $name;
 		$place->Locations[] = $loc;
-		return $this->host->gedcom->locations->save($ev_id,$place);
+		return $this->gedcom->locations->save($ev_id,$place);
 	} 
 	
 	protected function new_individual($gender, $fname, $mname, $lname, $nick, $pref, $spref, $suff,$tree_id){  
@@ -60,17 +60,17 @@ class ParserList{
 		$person->SurnamePrefix = $spref;
 		$person->Suffix = $suff;
 		$person->TreeId= $tree_id;
-		return $this->host->gedcom->individuals->save($person);        
+		return $this->gedcom->individuals->save($person);
 	} 
 	
 	protected function new_family($husb_id, $wife_id, $type){     
-		$husb = $this->host->gedcom->individuals->get($husb_id);
-		$wife = $this->host->gedcom->individuals->get($wife_id);
+		$husb = $this->gedcom->individuals->get($husb_id);
+		$wife = $this->gedcom->individuals->get($wife_id);
 		$fam = new Family();
 		$fam->Type = $type;
 		$fam->Sircar = $husb;
 		$fam->Spouse = $wife;
-		return $this->host->gedcom->families->save($fam);        
+		return $this->gedcom->families->save($fam);
 	} 
 	
 	protected function strToEvDate($str){
@@ -95,7 +95,7 @@ class ParserList{
 				}            
 			}
 			$id = $this->new_individual($item->gender, $name[0], $name[1], $item->name->last, $nick, $item->name->title, $item->name->last['prefix'], $item->name->suffix,$tree_id);
-			$data->Individuals[]= $this->host->gedcom->individuals->get($id);
+			$data->Individuals[]= $this->gedcom->individuals->get($id);
 			$handle=(string)$item['handle'];
 			$arr_person[$handle]=$id;
 			foreach ($item->eventref as $event){
@@ -115,7 +115,7 @@ class ParserList{
 			}
 			foreach ($item->childref as $child){        
 				$child_id = $arr_person[(string)$child['hlink']];
-				$this->host->gedcom->families->addChild($id, $child_id, strtoupper($child['mrel']), strtoupper($child['frel']));
+				$this->gedcom->families->addChild($id, $child_id, strtoupper($child['mrel']), strtoupper($child['frel']));
 			}
 		}
 

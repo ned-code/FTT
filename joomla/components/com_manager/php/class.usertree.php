@@ -1,24 +1,25 @@
 <?php
+
 class JMBUserTree {
-	protected $gedcom;
-	protected $db;
-	
-	protected $_TreeId;
-	protected $_Permission;
-	protected $_GedcomId;
-	protected $_IndividualsList;
-	protected $_FamiliesList;
-	protected $_ChildrensList;
-	protected $_IndividualsEventsList;
-	protected $_FamiliesEventsList;
-	protected $_LocationsEventsList;	
-	protected $_MediaList;
+	private $gedcom;
+	private $ajax;
+
+    private $_TreeId;
+    private $_Permission;
+    private $_GedcomId;
+    private $_IndividualsList;
+    private $_FamiliesList;
+    private $_ChildrensList;
+    private $_IndividualsEventsList;
+    private $_FamiliesEventsList;
+    private $_LocationsEventsList;
+    private $_MediaList;
 	/**
 	*
 	*/
-	public function __construct(&$gedcom){
+	public function __construct(&$ajax, &$gedcom){
 		$this->gedcom = $gedcom;
-		$this->db = new JMBAjax();
+		$this->ajax = $ajax;
 	}
 	/**
 	*
@@ -224,6 +225,7 @@ class JMBUserTree {
 		if(isset($objects[$gedcom_id])||empty($gedcom_id)){
 			return false;
 		}
+
 		$node = array();
 		$node['user'] = $this->_getUserInfo($gedcom_id);
 		$node['parents'] = $this->_getUserParents($gedcom_id);
@@ -279,6 +281,7 @@ class JMBUserTree {
 		$user = $this->_getIndividuals($gedcom_id);
 		$birth = $this->_getEvent($gedcom_id, 'BIRT');
 		$death = $this->_getEvent($gedcom_id, 'DEAT');
+
 		$is_alive = ($death!=null)?false:true;
 		$is_mother_line = ($user['is_self']||$user['is_descendant']||$user['is_mother'])?1:0;
 		$is_father_line = ($user['is_self']||$user['is_descendant']||$user['is_father'])?1:0;
@@ -323,7 +326,17 @@ class JMBUserTree {
 		$this->_IndividualsEventsList = $this->gedcom->events->getIndividualsEventsList($this->_TreeId, $gedcom_id);
 		$this->_FamiliesEventsList = $this->gedcom->events->getFamiliesEvenetsList($this->_TreeId, $gedcom_id);
 		$this->_LocationsEventsList = $this->gedcom->locations->getEventsLocationsList($this->_TreeId, $gedcom_id);
-		$this->_MediaList = $this->gedcom->media->getMediaList($this->_TreeId, $gedcom_id);	
+		$this->_MediaList = $this->gedcom->media->getMediaList($this->_TreeId, $gedcom_id);
+        /*
+        var_dump(array('name'=>"_IndividualsList", 'size'=>sizeof($this->_IndividualsList) ));
+        var_dump(array('name'=>"_FamiliesList", 'size'=>sizeof($this->_FamiliesList) ));
+        var_dump(array('name'=>"_ChildrensList", 'size'=>sizeof($this->_ChildrensList) ));
+        var_dump(array('name'=>"_IndividualsEventsList", 'size'=>sizeof($this->_IndividualsEventsList) ));
+        var_dump(array('name'=>"_FamiliesEventsList", 'size'=>sizeof($this->_FamiliesEventsList) ));
+        var_dump(array('name'=>"_LocationsEventsList", 'size'=>sizeof($this->_LocationsEventsList) ));
+        var_dump(array('name'=>"_MediaList", 'size'=>sizeof($this->_MediaList) ));
+        exit;
+        */
 	}
 	/**
 	*
@@ -463,8 +476,8 @@ class JMBUserTree {
 		$objects = $this->getFamilyLine($tree_id, $gedcom_id, $permission);
 		//delete old records
 		$sql_string = "DELETE FROM #__mb_family_line WHERE tid = ? AND gedcom_id = ?";
-		$this->db->setQuery($sql_string, $tree_id, $gedcom_id);
-		$this->db->query();
+		$this->ajax->setQuery($sql_string, $tree_id, $gedcom_id);
+		$this->ajax->query();
 		
 		$chunk = array_chunk($objects, 50, true);
 		foreach($chunk as $el){
@@ -478,8 +491,8 @@ class JMBUserTree {
 				$sql_string .= "(".$tree_id.", ".$gedcom_id.", ".$key.", ".$is_self.", ".$is_spouse.", ".$is_descendant.", ".$is_father.", ".$is_mother."),";
 			}
 			$sql = substr($sql_string, 0, -1);
-			$this->db->setQuery($sql, $tree_id, $gedcom_id);
-			$this->db->query();
+			$this->ajax->setQuery($sql, $tree_id, $gedcom_id);
+			$this->ajax->query();
 		}
 		
 	
@@ -544,7 +557,7 @@ class JMBUserTree {
 		$this->_Permission = $permission;
 		$this->_GedcomId = $gedcom_id;
 		$this->_init();
-		
+
 		$objects = array();
 		$this->_setUser($gedcom_id, $objects);	
 
@@ -568,8 +581,8 @@ class JMBUserTree {
 	*/
 	public function load($tree_id, $gedcom_id){
 		$sql_string = "SELECT value FROM #__mb_cash WHERE tree_id = ? AND individuals_id = ?";
-		$this->db->setQuery($sql_string, $tree_id, $gedcom_id);
-		$rows = $this->db->loadAssocList();
+		$this->ajax->setQuery($sql_string, $tree_id, $gedcom_id);
+		$rows = $this->ajax->loadAssocList();
 		return (!empty($rows))?$this->uncompress($rows[0]['value']):null;
 	}	
 	/**
@@ -577,16 +590,16 @@ class JMBUserTree {
 	*/
 	public function save($tree_id, $gedcom_id, $compress_usertree){
 		$sql_string = "INSERT INTO #__mb_cash (`uid`,`tree_id`, `individuals_id`, `type`, `value`, `change`) VALUES (NULL,?,?,?,?, NOW())";
-		$this->db->setQuery($sql_string, $tree_id, $gedcom_id, "usertree", $compress_usertree);
-		$this->db->query();
+		$this->ajax->setQuery($sql_string, $tree_id, $gedcom_id, "usertree", $compress_usertree);
+		$this->ajax->query();
 	}
 	/**
 	*
 	*/
 	public function update($tree_id, $gedcom_id, $compress_usertree){
 		$sql_string = "UPDATE #__mb_cash SET `value`=?,`change`=NOW() WHERE tree_id = ? AND individuals_id = ?";
-		$this->db->setQuery($sql_string, $compress_usertree, $tree_id, $gedcom_id);
-		$this->db->query();
+		$this->ajax->setQuery($sql_string, $compress_usertree, $tree_id, $gedcom_id);
+		$this->ajax->query();
 	}
 	/**
 	*
@@ -599,8 +612,8 @@ class JMBUserTree {
 	*/
 	public function check($tree_id, $gedcom_id){
 		$sql_string = "SELECT uid FROM #__mb_cash WHERE tree_id = ? and individuals_id = ?";
-		$this->db->setQuery($sql_string, $tree_id, $gedcom_id);
-		$rows = $this->db->loadAssocList();
+		$this->ajax->setQuery($sql_string, $tree_id, $gedcom_id);
+		$rows = $this->ajax->loadAssocList();
 		return ($rows!=null)?true:false;
 	}
 	/**
@@ -621,8 +634,8 @@ class JMBUserTree {
 	*/
 	public function link($tree_id, $gedcom_id, $type="MEMBER"){
 		$sql_string = "INSERT INTO #__mb_tree_links (`individuals_id`, `tree_id`, type) VALUES (?, ?, ?)";
-		$this->db->setQuery($sql_string, $gedcom_id, $tree_id, $type);
-		$this->db->query();
+		$this->ajax->setQuery($sql_string, $gedcom_id, $tree_id, $type);
+		$this->ajax->query();
 	}
 	
 	/**
@@ -632,8 +645,8 @@ class JMBUserTree {
 		$sql_string = "SELECT users.id as gedcom_id, users.fid as facebook_id FROM #__mb_tree_links as links
 				LEFT JOIN #__mb_individuals as users ON users.id = links.individuals_id 
 				WHERE links.tree_id = ? AND links.type != 'MEMBER'";
-		$this->db->setQuery($sql_string, $tree_id);
-		$rows = $this->db->loadAssocList('facebook_id');		
+		$this->ajax->setQuery($sql_string, $tree_id);
+		$rows = $this->ajax->loadAssocList('facebook_id');
 		return ($rows!=null)?$rows:false;
 	}
 }

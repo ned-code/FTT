@@ -1,11 +1,11 @@
 <?php
 class EventsList{
-        public $locations;
+        private $locations;
+        private $ajax;
 
-        function __construct(&$locations){
-        	 require_once 'class.event.php';
-        	 $this->locations=$locations;
-        	 $this->db = new JMBAjax();
+        public function __construct(&$ajax, &$locations){
+        	 $this->locations= $locations;
+        	 $this->ajax = $ajax;
         }
         public function get($id){
         	if($id==null){ return null; }        	
@@ -14,31 +14,31 @@ class EventsList{
         			#__mb_dates.t_year as t_year FROM #__mb_events 
         		LEFT JOIN #__mb_dates ON #__mb_events.id = #__mb_dates.events_id
         		WHERE `id`=?";
-        	$this->db->setQuery($sqlString, $id);         
-        	$rows = $this->db->loadAssocList();
+        	$this->ajax->setQuery($sqlString, $id);
+        	$rows = $this->ajax->loadAssocList();
         	$event = $this->setEventData($rows[0]);
 		return $event;
         }
         public function save($event, $type='IND'){
         	if($event==null||($event->IndKey!=null&&$event->FamKey!=null)){ return false; }
         	$sqlString = "INSERT INTO #__mb_events (`id`, `type`, `name`, `caus`, `res_agency`,`individuals_id`,`families_id`) VALUES (NULL,?,?,?,?,?,?)";
-        	$this->db->setQuery($sqlString, $event->Type, $event->Name, $event->Caus, $event->ResAgency, $event->IndKey, $event->FamKey);    
-        	$this->db->query();
+        	$this->ajax->setQuery($sqlString, $event->Type, $event->Name, $event->Caus, $event->ResAgency, $event->IndKey, $event->FamKey);
+        	$this->ajax->query();
         	$lastId = $this->db->insertid();
         	$sqlString = "INSERT INTO #__mb_dates (`events_id`, `type`, `f_day`, `f_month`, `f_year`, `t_day`, `t_month`, `t_year`) VALUES (?,?,?,?,?,?,?,?)";
-        	$this->db->setQuery($sqlString, $lastId, $event->DateType, ($event->From!=null)?$event->From->Day:$event->From, ($event->From!=null)?$event->From->Month:$event->From, ($event->From!=null)?$event->From->Year:$event->From, ($event->To!=null)?$event->To->Day:$event->To, ($event->To!=null)?$event->To->Month:$event->To, ($event->To!=null)?$event->To->Year:$event->To);    
-        	$this->db->query();
+        	$this->ajax->setQuery($sqlString, $lastId, $event->DateType, ($event->From!=null)?$event->From->Day:$event->From, ($event->From!=null)?$event->From->Month:$event->From, ($event->From!=null)?$event->From->Year:$event->From, ($event->To!=null)?$event->To->Day:$event->To, ($event->To!=null)?$event->To->Month:$event->To, ($event->To!=null)?$event->To->Year:$event->To);
+        	$this->ajax->query();
         	$this->locations->save($lastId, $event->Place);
         	return $lastId;
         }
         public function update($event, $type='IND'){
         	if($event==null||($event->IndKey!=null&&$event->FamKey!=null)){ return false; }
         	$sqlString = "UPDATE #__mb_events SET `type`=?,`name`=?,`caus`=?,`res_agency`=?,`individuals_id`=?,`families_id`=?,`change`=NOW()  WHERE id=?";
-        	$this->db->setQuery($sqlString, $event->Type, $event->Name, $event->Caus, $event->ResAgency, $event->IndKey, $event->FamKey, $event->Id);    
-        	$this->db->query();
+        	$this->ajax->setQuery($sqlString, $event->Type, $event->Name, $event->Caus, $event->ResAgency, $event->IndKey, $event->FamKey, $event->Id);
+        	$this->ajax->query();
         	$sqlString = "UPDATE #__mb_dates SET `type`=?,`f_day`=?,`f_month`=?,`f_year`=?,`t_day`=?,`t_month`=?,`t_year`=?,`change`=NOW() WHERE events_id=?";
-        	$this->db->setQuery($sqlString, $event->DateType, $event->From->Day, $event->From->Month, $event->From->Year, $event->To->Day, $event->To->Month, $event->To->Year, $event->Id);    
-        	$this->db->query();
+        	$this->ajax->setQuery($sqlString, $event->DateType, $event->From->Day, $event->From->Month, $event->From->Year, $event->To->Day, $event->To->Month, $event->To->Year, $event->Id);
+        	$this->ajax->query();
         	if(empty($event->Place->Id)){
         		$this->locations->save($event->Id, $event->Place);
         	} else {
@@ -48,8 +48,8 @@ class EventsList{
         }
         public function delete($id){
         	if($id==null){ return false; }
-        	$this->db->setQuery('DELETE FROM #__mb_events WHERE id=?', $id);    
-        	$this->db->query();
+        	$this->ajax->setQuery('DELETE FROM #__mb_events WHERE id=?', $id);
+        	$this->ajax->query();
         }
         public function setEventData($row){
         	$event = new Events();
@@ -79,8 +79,8 @@ class EventsList{
         			#__mb_dates.t_year as t_year FROM #__mb_events 
         		LEFT JOIN #__mb_dates ON #__mb_events.id = #__mb_dates.events_id
         		WHERE `individuals_id`=?";
-        	$this->db->setQuery($sqlString, $indKey);         
-        	$rows = $this->db->loadAssocList();
+        	$this->ajax->setQuery($sqlString, $indKey);
+        	$rows = $this->ajax->loadAssocList();
         	$events = array();
         	foreach($rows as $row){
         		$events[] = $this->setEventData($row);
@@ -94,8 +94,8 @@ class EventsList{
         			#__mb_dates.t_year as t_year FROM #__mb_events 
         		LEFT JOIN #__mb_dates ON #__mb_events.id = #__mb_dates.events_id
         		WHERE #__mb_events.individuals_id=? AND #__mb_events.type=?";
-        	$this->db->setQuery($sqlString, $indKey, $type);         
-        	$rows = $this->db->loadAssocList();
+        	$this->ajax->setQuery($sqlString, $indKey, $type);
+        	$rows = $this->ajax->loadAssocList();
         	$events = array();
         	foreach($rows as $row){
         		$events[] = $this->setEventData($row);
@@ -109,8 +109,8 @@ class EventsList{
         			#__mb_dates.t_year as t_year FROM #__mb_events 
         		LEFT JOIN #__mb_dates ON #__mb_events.id = #__mb_dates.events_id
         		WHERE #__mb_events.families_id=?";
-        	$this->db->setQuery($sqlString, $famKey);         
-        	$rows = $this->db->loadAssocList();
+        	$this->ajax->setQuery($sqlString, $famKey);
+        	$rows = $this->ajax->loadAssocList();
         	$events = array();
         	foreach($rows as $row){
         		$events[] = $this->setEventData($row);
@@ -125,8 +125,8 @@ class EventsList{
         	LEFT JOIN jos_mb_dates as dates ON events.id = dates.events_id
         	LEFT JOIN jos_mb_families as families ON events.families_id = families.id
         	WHERE events.individuals_id= ? OR families.husb = ? OR families.wife = ?";
-        	$this->db->setQuery($sqlString, $indKey, $indKey, $indKey);         
-        	$rows = $this->db->loadAssocList();
+        	$this->ajax->setQuery($sqlString, $indKey, $indKey, $indKey);
+        	$rows = $this->ajax->loadAssocList();
         	$events = array();
         	foreach($rows as $row){
         		$events[] = $this->setEventData($row);
@@ -142,12 +142,12 @@ class EventsList{
         			////
         	if($gedcom_id){
         		$sql_string .= " WHERE links.tree_id = ? and links.individuals_id = ?";
-        		$this->db->setQuery($sql_string, $tree_id, $gedcom_id);
+        		$this->ajax->setQuery($sql_string, $tree_id, $gedcom_id);
 		} else {
 			$sql_string .= " WHERE links.tree_id = ?";
-			$this->db->setQuery($sql_string, $tree_id);
+			$this->ajax->setQuery($sql_string, $tree_id);
 		}			
-        	$rows = $this->db->loadAssocList('gedcom_id');
+        	$rows = $this->ajax->loadAssocList('gedcom_id');
         	return $rows;
         }
         public function getFamiliesEvenetsList($tree_id, $gedcom_id = false){
@@ -160,12 +160,12 @@ class EventsList{
         			LEFT JOIN #__mb_tree_links as links ON links.individuals_id = family.wife OR links.individuals_id = family.husb";
         	if($gedcom_id){
         		$sql_string .= "WHERE links.tree_id = ? and links.individuals_id = ?";
-			$this->db->setQuery($sql_string, $tree_id, $gedcom_id);
+			$this->ajax->setQuery($sql_string, $tree_id, $gedcom_id);
 		} else {
 			$sql_string .= "WHERE links.tree_id = ?";
-			$this->db->setQuery($sql_string, $tree_id);
+			$this->ajax->setQuery($sql_string, $tree_id);
 		}
-        	$rows = $this->db->loadAssocList('family_id');
+        	$rows = $this->ajax->loadAssocList('family_id');
         	return $rows;
         }
 }

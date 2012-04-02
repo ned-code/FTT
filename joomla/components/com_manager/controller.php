@@ -6,7 +6,6 @@ defined('_JEXEC') or die( 'Restricted access' );
 //require JPATH_ROOT.'/components/com_manager/php/moduleManager.php';
 require JPATH_ROOT.'/components/com_manager/php/host.php';
 
-
 jimport('joomla.application.component.controller' );
 
 class JMBController extends JController
@@ -228,6 +227,7 @@ class JMBController extends JController
         *
         */
         public function getXML(){
+            /*
         	ob_clean();
         	header('Content-Type: text/xml');
         	$task = JRequest::getVar('f');     	
@@ -250,6 +250,7 @@ class JMBController extends JController
         		echo $manager->appendModule($module);
         	}
         	die;
+            */
         }
         
         /**
@@ -299,113 +300,11 @@ class JMBController extends JController
 		die;
 	}
 	
-	protected function getImageByMime($mime, $filePath){
-		switch($mime){
-        		case "jpg":
-        		case "jpeg":
-        			$img = imagecreatefromjpeg($filePath); 
-        		break;
-        		
-        		case "gif":
-        			$img = imagecreatefromgif($filePath); 
-        		break;
-        		
-        		case "png":
-        			$img = imagecreatefrompng($filePath); 
-        		break;
-        	}
-        	return $img;
-	}
-	
-	protected function Image($img, $type, $tmpFile=null){
-		switch($type){
-        		case "jpg":
-        		case "jpeg":
-        			imagejpeg($img, $tmpFile); 
-        		break;
-        		
-        		case "gif":
-        			imagegif($img, $tmpFile); 
-        		break;
-        		
-        		case "png":
-        			imagepng($img, $tmpFile); 
-        		break;
-        	}
-	}
-        
-	/**
-        *
-        */
-        function getResizeImage(){
-        	$id = JRequest::getVar('id');
-        	$fid = JRequest::getVar('fid');
-        	$uid = ($id)?$id:$fid;
-        	$defaultWidth = JRequest::getVar('w');
-        	$defaultHeight = JRequest::getVar('h');
-        	
-        	//var
-        	$host = new Host('joomla');
-        	$path = JPATH_ROOT."/components/com_manager/media/tmp/";
-        	
-        	//file        	
-        	if($id){
-        		$f = $host->gedcom->media->get($id);	
-        		$filePath = substr(JURI::base(), 0, -1).$f->FilePath;
-        	} else {
-        		$filePath = 'http://graph.facebook.com/'.$fid.'/picture?type=large';
-        	}
-        	$size = getimagesize($filePath);
-        	$type = explode('/', $size['mime']);
-        	$hash = hash_file('md5', $filePath);
-        	$tmpFile = $path.$uid.'.'.$hash.'.'.$defaultWidth.'.'.$defaultHeight.'.'.$type[1];
-        	
-        	if(file_exists($tmpFile)){
-        		$img = $this->getImageByMime($type[1], $tmpFile);
-        		ob_clean();
-        		header("Content-type: image/".$type[1]);
-        		$this->Image($img, $type[1]);
-        		imagedestroy($img);
-        		die;
-        	}
-        	
-        	$src = $this->getImageByMime($type[1], $filePath);
-        	$srcWidth = imagesx($src); 
-        	$srcHeight = imagesy($src);
-
-        	//get ratio        	
-        	if($srcWidth>$defaultWidth&&$srcHeight>$defaultHeight){
-        		$ratio = ($srcWidth>=$srcHeight)?$srcHeight/$defaultHeight:$srcWidth/$defaultWidth;
-        	} else if($srcWidth>$defaultWidth){
-        		$ratio = $srcHeight/$defaultHeight;
-        	} else if($srcHeight>$defaultHeight){
-        		$ratio = $srcWidth/$defaultWidth;
-        	} else {
-        		$ratio = ($srcWidth<$srcHeight)?$srcWidth/$defaultWidth:$srcHeight/$defaultHeight;
-        	}
-        	
-        	
-        	//create new image
-        	$width = round($srcWidth/$ratio);
-        	$height = round($srcHeight/$ratio);
-        	
-        	//$img = imagecreatetruecolor($width,$height);
-        	//imagecopyresampled($img, $src, 0, 0, 0, 0, $width, $height, $srcWidth, $srcHeight);
-        	
-        	$src_x = ($width>$defaultWidth)?round(($width-$defaultWidth)/2):0;
-        	$src_y = ($height>$defaultHeight)?round(($height-$defaultHeight)/2):0;
-
-        	$img = imagecreatetruecolor($defaultWidth,$defaultHeight);
-        	imagecopyresampled($img, $src, 0, 0, $src_x, $src_y, $width, $height, $srcWidth, $srcHeight);
-
-        	ob_clean();
-        	header("Content-type: image/".$type[1]); 
-        	$this->Image($img, $type[1], $tmpFile);
-        	$this->Image($img, $type[1]);
-        	imagedestroy($img);
-        	imagedestroy($src); 
-        	die();
-        }
+	public function getResizeImage(){
+        $host = new Host('Joomla');
+        $host->images->getImage('png',JRequest::getVar('id'), JRequest::getVar('fid'), JRequest::getVar('w'), JRequest::getVar('h'));
+        exit;
+    }
 
 	protected function check_user_in_system($fid){
         	$db =& JFactory::getDBO();
@@ -486,13 +385,12 @@ class JMBController extends JController
 	}
 	
 	protected function invite($fid, $token, $redirect=true){
-		$host = new Host('joomla');
-        	$this->db = new JMBAjax();
+		    $host = new Host('joomla');
         	$session = JFactory::getSession();
         	$app = JFactory::getApplication();
         	
         	$sql = "SELECT value FROM #__mb_variables WHERE belongs=?";
-        	$this->db->setQuery($sql, $token);
+            $host->ajax->setQuery($sql, $token);
         	$rows = $this->db->loadAssocList();
 
         	if($rows==null) $this->location('home');
@@ -500,16 +398,16 @@ class JMBController extends JController
 
         	
         	$sql = "UPDATE #__mb_tree_links SET `type`='USER' WHERE individuals_id =? AND tree_id=?";
-        	$this->db->setQuery($sql, $args[0], $args[1]);
-        	$this->db->query();
+            $host->ajax->setQuery($sql, $args[0], $args[1]);
+            $host->ajax->query();
         	
         	$sql = "UPDATE #__mb_individuals SET `fid`=?,`change` = NOW(), `join_time`= NOW() WHERE id=?";
-        	$this->db->setQuery($sql, $fid, $args[0]);
-        	$this->db->query();
+            $host->ajax->setQuery($sql, $fid, $args[0]);
+            $host->ajax->query();
         	
         	$sql = "DELETE FROM #__mb_variables WHERE belongs=?";
-        	$this->db->setQuery($sql, $token);
-        	$this->db->query();
+            $host->ajax->setQuery($sql, $token);
+            $host->ajax->query();
         	
         	$invitation = $session->get('invitation');
         	if(!empty($invitation)){        		
@@ -653,17 +551,16 @@ class JMBController extends JController
         }
 
         public function notifications(){
-        	$db = new JMBAjax();
+            $host = new Host('Joomla');
         	switch(JRequest::getVar('type')){
         		case "request":
         			$id = JRequest::getVar('id');
         			$status = JRequest::getVar('status');
         			if($status == 'accept'){
         				$sql_string = "UPDATE #__mb_notifications SET `status` = ? WHERE `id` = ?";
-        				$db->setQuery($sql_string, 1, $id);
-        				$db->query();
+        				$host->ajax->setQuery($sql_string, 1, $id);
+                        $host->ajax->query();
         			} else if($status == 'deny'){
-        				$status = 2;
         				$message = preg_replace('/%([0-9a-f]{2})/ie', 'chr(hexdec($1))', (string) JRequest::getVar('message'));
         				$data = json_decode(JRequest::getVar('data'));
         				
@@ -683,50 +580,47 @@ class JMBController extends JController
         				$password = "3d#@technology";
 
         				#mail body 
-					$mail_body = '<html><head>Family TreeTop invitation.</head><body>';
-					$mail_body .= "<div style='margin:10px;'>Dear ".$data->me->name.",</div>";
-					$mail_body .= "<div style='margin:10px;'>".$data->target->name." has denied your Family TreeTop invitation request.";
-					$mail_body .= " He does not  believe that you are member of his family. If you still think thay you are related to ";
-					$mail_body .= $target_name[0].", you may send him one last message to provide more information.</div>";
-					$mail_body .= "<div style='margin-left:10px;'>".$target_name[0]." Writes:</div>";
-					$mail_body .= "<div style='margin-left:10px;'>".$message."</div>";
-					$mail_body .= '</body></html>';
+                        $mail_body = '<html><head>Family TreeTop invitation.</head><body>';
+                        $mail_body .= "<div style='margin:10px;'>Dear ".$data->me->name.",</div>";
+                        $mail_body .= "<div style='margin:10px;'>".$data->target->name." has denied your Family TreeTop invitation request.";
+                        $mail_body .= " He does not  believe that you are member of his family. If you still think thay you are related to ";
+                        $mail_body .= $target_name[0].", you may send him one last message to provide more information.</div>";
+                        $mail_body .= "<div style='margin-left:10px;'>".$target_name[0]." Writes:</div>";
+                        $mail_body .= "<div style='margin-left:10px;'>".$message."</div>";
+                        $mail_body .= '</body></html>';
 
-					$headers = array ("MIME-Version"=> '1.0', "Content-type" => "text/html; charset=iso-8859-1",'From' => $from,'To' => $to,'Subject' => $subject);
-				
-					$smtp = Mail::factory('smtp',array ('host' => $host,'port' => $port,'auth' => true,'username' => $username,'password' => $password));
-			
-					$mail = $smtp->send($to, $headers, $mail_body);
-			
-					if (PEAR::isError($mail)) {
-						echo json_encode(array('message'=>'Message delivery failed...'));
-						
-					} else {
-						echo json_encode(array('message'=>'Message successfully sent!'));
-					}
-					
-					$sql_string = "UPDATE #__mb_notifications SET `processed` = 1, `status` = ? WHERE `id` = ?";
-        				$db->setQuery($sql_string, 2, $id);
-        				$db->query();
-        			} else {
-        				$status = 3;
-        			}
+                        $headers = array ("MIME-Version"=> '1.0', "Content-type" => "text/html; charset=iso-8859-1",'From' => $from,'To' => $to,'Subject' => $subject);
+
+                        $smtp = Mail::factory('smtp',array ('host' => $host,'port' => $port,'auth' => true,'username' => $username,'password' => $password));
+
+                        $mail = $smtp->send($to, $headers, $mail_body);
+
+                        if (PEAR::isError($mail)) {
+                            echo json_encode(array('message'=>'Message delivery failed...'));
+
+                        } else {
+                            echo json_encode(array('message'=>'Message successfully sent!'));
+                        }
+
+                        $sql_string = "UPDATE #__mb_notifications SET `processed` = 1, `status` = ? WHERE `id` = ?";
+                        $host->ajax->setQuery($sql_string, 2, $id);
+                        $host->ajax->query();
+                     }
         		break;
         		
         		case "processed":
-        			$host = new Host('joomla');
         			$facebook_id = JRequest::getVar('facebook_id');
         			$gedcom_id = JRequest::getVar('gedcom_id');
         			$tree_id = JRequest::getVar('tree_id');
         			$request_id = JRequest::getVar('request_id');
         			
         			$sql_string = "UPDATE #__mb_notifications SET `processed` = 1 WHERE `id` = ?";
-        			$db->setQuery($sql_string, $request_id);
-        			$db->query();
+                    $host->ajax->setQuery($sql_string, $request_id);
+                    $host->ajax->query();
         			
         			$sql_string = "UPDATE #__mb_tree_links SET `type` = 'USER' WHERE `individuals_id` = ? AND `tree_id` = ?";
-        			$db->setQuery($sql_string, $gedcom_id, $tree_id);
-        			$db->query();
+                    $host->ajax->setQuery($sql_string, $gedcom_id, $tree_id);
+                    $host->ajax->query();
         			
         			$i = $host->gedcom->individuals->get($gedcom_id);
         			$i->FacebookId = $facebook_id;
@@ -761,6 +655,3 @@ class JMBController extends JController
         }
 }
 ?>
-
-
-
