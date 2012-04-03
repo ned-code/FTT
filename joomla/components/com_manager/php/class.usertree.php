@@ -192,10 +192,18 @@ class JMBUserTree {
 			$media = $this->_MediaList[$gedcom_id];
 			$avatar = $this->_getAvatar($media);
 			$photos = $this->_getPhotos($media);
-			return array('avatar'=>$avatar,'photos'=>$photos);
+            $cache = $this->_getMediaCache($this->_TreeId, $media);
+			return array('avatar'=>$avatar,'photos'=>$photos, 'cache'=>$cache);
 		}
 		return null;
 	}
+    protected function _getMediaCache($tree_id, $media){
+        $media_sort = array();
+        foreach($media as $el){
+            $media_sort[$el['media_id']] = $this->gedcom->media->getHashedImagesPath($tree_id, $el['media_id'], $el['form']);
+        }
+        return $media_sort;
+    }
 	/**
 	*
 	*/

@@ -218,7 +218,6 @@ class JMBProfile {
 			break;
 			
 			case "add":
-				$media_id = false;
 				$image = false;
 				if($_FILES['upload']['size'] != 0){
 					$media_id = $this->host->gedcom->media->save($args->gedcom_id, $_FILES["upload"]["tmp_name"], $_FILES["upload"]["name"], $_FILES['upload']['size']);

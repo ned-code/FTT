@@ -3,7 +3,7 @@ class JMBImage {
     private $gedcom;
 
     private $path;
-    private $type;
+    private $tree_id;
     private $dWidth;
     private $dHeight;
 
@@ -38,7 +38,7 @@ class JMBImage {
 
     private function getTmpFilePath($tmpId, $type){
         $name = implode("_", array(($this->mediaId!=null)?"M":"F", $tmpId, $this->dWidth, $this->dHeight, $type));
-        return $this->path.md5($name).'.'.$type;
+        return $this->path.$this->tree_id.DS.md5($name).'.'.$type;
     }
 
     private function getFileType($filePath){
@@ -79,10 +79,10 @@ class JMBImage {
         }
     }
 
-    private function setSettings($imgType, $mediaId, $facebookId, $dWidth, $dHeight){
+    private function setSettings($tree_id, $mediaId, $facebookId, $dWidth, $dHeight){
         $this->mediaId = $mediaId;
         $this->facebookId = $facebookId;
-        $this->type = $imgType;
+        $this->tree_id = $tree_id;
         $this->dWidth = $dWidth;
         $this->dHeight = $dHeight;
     }
@@ -150,11 +150,15 @@ class JMBImage {
         exit;
     }
 
-    public function getImage($imgType, $mediaId, $facebookId, $dWidth, $dHeight){
-        $this->setSettings($imgType, $mediaId, $facebookId, $dWidth, $dHeight);
+    public function getImage($tree_id, $mediaId, $facebookId, $dWidth, $dHeight){
+        $this->setSettings($tree_id, $mediaId, $facebookId, $dWidth, $dHeight);
         $filePath = $this->getFilePath();
         $tmpId = $this->getTmpId();
         $tmpFile = $this->getTmpFile($tmpId, $filePath);
+
+        if(!is_dir($this->path.$tree_id)){
+            mkdir($this->path.$tree_id);
+        }
 
         if($tmpFile){
             $this->image($tmpFile);

@@ -24,6 +24,7 @@ storage.clearPull = function(o){
 
 //global varning
 storage.url = "components/com_manager/";
+storage.mediaTmpPath = "media/tmp/";
 storage.fb = {};
 storage.fb.appId = "184962764872486";
 storage.fb.status = true;
@@ -223,6 +224,71 @@ storage.usertree.parse = function(object){
 			return '';
 		}
 	}
+}
+storage.usertree.avatar = {}
+storage.usertree.avatar._type = function(object){
+    var media = object.media;
+    if(media!=null){
+        if(media.avatar!=null){
+            return 'media';
+        }
+    }
+    if(object.user.facebook_id != "0"){
+        return 'facebook'
+    }
+    return 'default';
+}
+storage.usertree.avatar.get = function(settings){
+    if(!settings.object) return '';
+    var stavObject = storage.usertree.avatar,
+        object = settings.object,
+        sb = host.stringBuffer();
+    switch(stavObject._type(object)){
+        case "facebook":
+            sb._('<img');
+            sb._(' class="')._( (settings.cssClass)? settings.cssClass : '' )._('"');
+            sb._(' src="index.php?option=com_manager&task=getResizeImage');
+            sb._('&fid=')._(object.user.facebook_id);
+            sb._('&w=')._(settings.width);
+            sb._('&h=')._(settings.height);
+            sb._('"');
+            sb._('>');
+            break;
+
+        case "media":
+            var media = object.media,
+                cache = media.cache,
+                pathTmp = storage.baseurl + storage.url + storage.mediaTmpPath + storage.usertree.tree_id + '/',
+                cacheFileName = [settings.width, settings.height].join('_'),
+                imgPull = media.avatar;
+            sb._('<img');
+            sb._(' class="')._( (settings.cssClass)? settings.cssClass : '' )._('" ');
+            if(cache[imgPull.media_id]&&cache[imgPull.media_id][cacheFileName]){
+                var filePath = pathTmp + cache[imgPull.media_id][cacheFileName];
+                sb._(' src="')._(filePath)._('"');
+            } else {
+                sb._(' src="index.php?option=com_manager&task=getResizeImage');
+                sb._('&id=')._(media.avatar.media_id);
+                sb._('&w=')._(settings.width);
+                sb._('&h=')._(settings.height);
+                sb._('"');
+            }
+            sb._('>');
+            break;
+
+        default:
+            var gender = object.user.gender,
+                pathImage = [storage.baseurl,storage.url,'js/images/',(gender=="F")?"female_big.png":"male_big.png"].join("");
+            sb._('<img');
+            sb._(' class="')._( (settings.cssClass)? settings.cssClass : '' )._('"');
+                sb._(' src="')._(pathImage)._('"');
+                sb._('width="')._(settings.width)._('px"');
+                sb._('height="')._(settings.height)._('px"');
+            sb._('>');
+            break;
+
+    }
+    return sb.result();
 }
 
 storage.notifications = {};

@@ -14,16 +14,11 @@ function JMBRecentVisitorsObject(obj){
 	}
 	
 	var get_avatar = function(object){
-		if(!object) return;
-		var	media = object.media,
-			avatar = (media!=null)?media.avatar:null,
-			facebook_id = object.user.facebook_id;
-		if(avatar!=null){
-			return ['<img src="index.php?option=com_manager&task=getResizeImage&id=',avatar.media_id,'&w=32&h=32">'].join(''); 
-		} else {
-			return ['<img src="index.php?option=com_manager&task=getResizeImage&fid=',facebook_id,'&w=32&h=32">'].join(''); 
-			
-		}
+        return storage.usertree.avatar.get({
+            object:object,
+            width:32,
+            height:32
+        });
 	}
 	
 	var get_time = function(time){ 

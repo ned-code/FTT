@@ -302,7 +302,8 @@ class JMBController extends JController
 	
 	public function getResizeImage(){
         $host = new Host('Joomla');
-        $host->images->getImage('png',JRequest::getVar('id'), JRequest::getVar('fid'), JRequest::getVar('w'), JRequest::getVar('h'));
+        $session = JFactory::getSession();
+        $host->images->getImage($session->get('tree_id'),JRequest::getVar('id'), JRequest::getVar('fid'), JRequest::getVar('w'), JRequest::getVar('h'));
         exit;
     }
 

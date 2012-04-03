@@ -17,23 +17,11 @@ DescendantTreeProfile.prototype = {
 		storage.tooltip.cleaner();
 	},
 	avatar:function(object){
-		var	module = this,
-			sb = host.stringBuffer(),
-			user = object.user,
-			facebook_id = user.facebook_id,
-			media = object.media,
-			image = (user.gender!='M')?'female.png':'male.png',
-			src = module.parent.imgPath+image;
-		//get avatar image
-		if(media!=null&&media.avatar!=null){
-			return sb._('<img src="index.php?option=com_manager&task=getResizeImage&id=')._(media.avatar.media_id)._('&w=72&h=80">').result(); 
-		}
-		//get facebook image
-		if(facebook_id !== '0'){
-			return sb._('<img src="index.php?option=com_manager&task=getResizeImage&fid=')._(facebook_id)._('&w=72&h=80">').result();
-		}
-		//get default image
-		return sb._('<img height="80px" width="72px" src="')._(src)._('">').result();
+        return storage.usertree.avatar.get({
+            object:object,
+            width:72,
+            height:80
+        });
 	},
 	image:function(img){
 		var	module = this,

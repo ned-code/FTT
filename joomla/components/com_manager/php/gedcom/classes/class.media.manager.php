@@ -1,9 +1,20 @@
 <?php
 class MediaList{
         private $ajax;
+        private $path;
+        private $size;
 
         public function  __construct(&$ajax) {
             $this->ajax = $ajax;
+            $this->path = JPATH_ROOT."/components/com_manager/media/tmp/";
+            $this->size = array(
+                array('32','32'),
+                array('72','80'),
+                array('22','22'),
+                array('108','120'),
+                array('81','90'),
+                array('50','50')
+            );
         }
         public function getAvatarImage($id){
             $this->ajax->setQuery('SELECT * FROM #__mb_media_link WHERE type="AVAT" AND gid=? LIMIT 1', $id);
@@ -137,9 +148,27 @@ class MediaList{
 		$rows = $this->ajax->loadAssocList('gedcom_id');
         	return $rows;	
         }
-        
-        
-        
-        
+
+        private function getHashedNames($media_id, $type){
+            $names = array();
+            $sizes = $this->size;
+            foreach($sizes as $size){
+                $name = md5(implode("_", array("M", $media_id, $size[0], $size[1], $type)));
+                $names[$name.'.'.$type] = $size[0].'_'.$size[1];
+            }
+            return $names;
+        }
+
+        public function getHashedImagesPath($tree_id, $media_id, $type){
+            $path = $this->path.$tree_id.'/';
+            $names = $this->getHashedNames($media_id, $type);
+            $result = array();
+            foreach($names as $key => $value){
+                if(file_exists($path.$key)){
+                    $result[$names[$key]] = $key;
+                }
+            }
+            return $result;
+        }
     }
 ?>

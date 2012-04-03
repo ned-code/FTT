@@ -225,24 +225,11 @@ JMBTooltip.prototype = {
 		return sb.result(); 
 	},
 	_avatar:function(settings){
-		var	module = this,
-			sb = host.stringBuffer(),
-			object = settings.object,
-			user = object.user,
-			facebook_id = user.facebook_id,
-			media = object.media,
-			image = (user.gender!='M')?'female.png':'male.png',
-			src = storage.baseurl+module.path+image;
-		//get avatar image
-		if(media!=null&&media.avatar!=null){
-			return sb._('<img src="index.php?option=com_manager&task=getResizeImage&id=')._(media.avatar.media_id)._('&w=81&h=90">').result(); 
-		}
-		//get facebook image
-		if(facebook_id !== '0'){
-			return sb._('<img src="index.php?option=com_manager&task=getResizeImage&fid=')._(facebook_id)._('&w=81&h=90">').result();
-		}
-		//get default image
-		return sb._('<img height="90px" width="81px" src="')._(src)._('">').result();		
+        return storage.usertree.avatar.get({
+            object:settings.object,
+            width:81,
+            height:90
+        });
 	},
 	_get:function(settings){
 		var 	user = settings.object.user;

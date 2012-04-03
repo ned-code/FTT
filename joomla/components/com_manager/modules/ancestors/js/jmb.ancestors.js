@@ -83,23 +83,11 @@ JMBAncestorsObject.prototype = {
 		})
 	},
 	avatar:function(el){
-		var	module = this,
-			sb = host.stringBuffer(),
-			user = el.user,
-			media = el.media,
-			facebook_id = user.facebook_id,
-			image = (user.gender!='M')?'female.png':'male.png',
-			src = [module.imagePath,image].join('');
-			
-		if(media!=null&&media.avatar!=null){
-			return sb._('<img class="" src="index.php?option=com_manager&task=getResizeImage&id=')._(media.avatar.media_id)._('&w=72&h=80">').result(); 
-		}
-		//get facebook image
-		if(facebook_id !== '0'){
-			return sb._('<img class="" src="index.php?option=com_manager&task=getResizeImage&fid=')._(facebook_id)._('&w=72&h=80">').result();
-		}
-		//get default image
-		return sb._('<img class="" width="72px" height="80px" src="')._(src)._('">').result();		
+        return storage.usertree.avatar.get({
+            object:el,
+            width:72,
+            height:80
+        });
 	},
 	click:function(label, node){
 		var	module = this,

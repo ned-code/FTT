@@ -65,7 +65,8 @@ JMBFamiliesObject.prototype = {
 		};
 	},
 	_avatar:function(object, type, k){
-		var	module = this,
+		/*
+        var	module = this,
 			sb = host.stringBuffer(),
 			user = object.user,
 			facebook_id = user.facebook_id,
@@ -82,7 +83,16 @@ JMBFamiliesObject.prototype = {
 			return sb._('<img class="jmb-families-avatar view" src="index.php?option=com_manager&task=getResizeImage&fid=')._(facebook_id)._('&w=')._(size.width)._('&h=')._(size.height)._('">').result();
 		}
 		//get default image
-		return sb._('<img class="jmb-families-avatar view" height="')._(size.height)._('px" width="')._(size.width)._('px" src="')._(src)._('">').result();		
+		return sb._('<img class="jmb-families-avatar view" height="')._(size.height)._('px" width="')._(size.width)._('px" src="')._(src)._('">').result();
+        */
+        var module = this,
+            size = module._getImageSize(type, k);
+        return storage.usertree.avatar.get({
+            object:object,
+            cssClass:"jmb-families-avatar view",
+            width:size.width,
+            height:size.height
+        });
 	},
 	_parentId:function(parents){
 		var mother, father;
