@@ -7,13 +7,9 @@ function JMBProfile(){
 	module.individuals = null;
 	module.object = null;
     module.target_id = null;
+    module.afterEditorClose = null;
 	module.container = null;
-	module.events = {
-		afterEditorClose:function(){
-			return false;
-		}
-	}
-	
+
 	module.path = storage.baseurl+"/components/com_manager/modules/profile/";
 	module.imagePath = module.path+'image/';
 	module.box = jQuery('<div id="jmb:dialog" class="jmb-dialog-container"></div>');
@@ -32,8 +28,8 @@ function JMBProfile(){
 		close:function(){
 			jQuery(this).dialog("destroy");
 			jQuery(this).remove();
+            module.afterEditorClose();
             module._clear();
-			module.events.afterEditorClose();
 		}	
 	}
 	
@@ -865,10 +861,19 @@ JMBProfile.prototype = {
 				photoDelete = function(li){
 					jQuery(li).find('div.delete').click(function(){
 						var	click = this,
-							json = '{"method":"delete","media_id":"'+jQuery(click).attr('id')+'"}';
+                            id = jQuery(click).attr('id'),
+							json = '{"method":"delete","media_id":"'+id+'"}';
 						module._ajax('photo', json, function(res){
 							jQuery(click).parent().parent().parent().remove();
 							jQuery(html).find('div.switch-avatar input').hide();
+                            jQuery(media.photos).each(function(i, el){
+                                if(el.media_id == id){
+                                    media.photos.splice(i,1);
+                                }
+                            });
+                            if(media.avatar.media_id == id){
+                                media.avatar = null;
+                            }
 						});
 						return false;
 					});	
@@ -1027,10 +1032,8 @@ JMBProfile.prototype = {
 		module.object = null;
 		module.individuals = null;
 		module.container = null;
-		
-		module.events = {
-			afterEditorClose:function(){}
-		}
+        module.afterEditorClose = null;
+        module.target_id = null;
 	},
 	editor:function(mode, data){
 		var	module = this,
@@ -1040,13 +1043,13 @@ JMBProfile.prototype = {
 			name = get.full_name;
 			
 		module._clear();
-		jQuery.extend(module.events, data.events);
-		
+
 		module.container = cont;
 		module.object = object;
         module.target_id = object.user.gedcom_id;
 		module.individuals = storage.usertree.pull;
-		
+        module.afterEditorClose = data.events.afterEditorClose;
+
 		module._dialog(module.box, { title: name, height: 450 });
 		jQuery(module.box).css({ background:"white", border:"none" });
 		jQuery(module.box).append(cont);
@@ -1070,14 +1073,13 @@ JMBProfile.prototype = {
 				jQuery(objects).each(function(i, el){
 					if(el.user != null && el.user.gedcom_id != null){
 						storage.usertree.pull[el.user.gedcom_id] = el;
+                        data.events.afterEditorClose();
 					}
 				});
 				jQuery(module.addBox).dialog("close");
 			};
-			
+
 		module.individuals = storage.usertree.pull;
-		module.object = data.object;
-		jQuery.extend(module.events, data.events);
 		return {
 			clear:function(){
 				jQuery(container).html('');

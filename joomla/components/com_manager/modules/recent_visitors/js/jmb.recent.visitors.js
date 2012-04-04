@@ -2,7 +2,7 @@ function JMBRecentVisitorsObject(obj){
 	var parent = this;
 	var content = null;
 	var sb = host.stringBuffer();
-	var objs = null;
+	var objs = [];
 	var type = jQuery(document.body).attr('_type');
 	var alias = jQuery(document.body).attr('_alias');
 	var settings = storage.settings;
@@ -54,32 +54,46 @@ function JMBRecentVisitorsObject(obj){
 	var init_visitors = function(ul, json){	
 		var st = host.stringBuffer();
 		var objects = json.objects;
-		for(var key in objects){			
-			var user = objects[key].user;
+		for(var key in objects){
+            var object = storage.usertree.pull[objects[key].gedcom_id];
+			var user = object.user
 			st.clear();
 			st._('<li id="')._(user.gedcom_id)._('" >');
 				st._('<div id="father_line" style="border: 2px solid #F5FAE6;">');
 					st._('<div id="mother_line" style="border: 2px solid #F5FAE6;">')
-						st._('<div class="avatar">')._(get_avatar(objects[key]))._('</div>');
+						st._('<div class="avatar">')._(get_avatar(object))._('</div>');
 					st._('</div>');
 				sb._('</div>')
 			st._('</li>');
 			var html = st.result()
 			var li = jQuery(html);
 			jQuery(ul).append(li);
-			init_tipty_tooltip(json.time, objects[key], li);
+			init_tipty_tooltip(json.time, object, li);
 		}
 	}
-	
+
+    var setMiniTooltip = function(div, id){
+        storage.tooltip.render('view', {
+            object:storage.usertree.pull[id],
+            target:div,
+            afterEditorClose:function(){
+                jQuery(storage.tooltip.idPull['edit:'+id]).remove();
+                jQuery(storage.tooltip.idPull['view:'+id]).remove();
+                delete storage.tooltip.idPull['edit:'+id];
+                delete storage.tooltip.idPull['view:'+id];
+                delete storage.tooltip.stPull['edit:'+id];
+                delete storage.tooltip.stPull['view:'+id];
+                setMiniTooltip(div, id);
+            }
+        });
+    }
+
 	var init_mini_profile = function(ul,json){
 		var li = jQuery(ul).find('li');
 		jQuery(li).each(function(i,e){	
 			var id = jQuery(e).attr('id');
 			var div = jQuery(e).find('div.avatar');
-			storage.tooltip.render('view', {
-				object:json.objects[id],
-				target:div
-			});
+			setMiniTooltip(div, id);
 		});
 	}
 
@@ -90,7 +104,9 @@ function JMBRecentVisitorsObject(obj){
 				storage.core.modulesPullObject.unset('JMBRecentVisitorsObject');
 				return jQuery(obj).remove();
 			}
-			objs = json.objects;
+			jQuery(json.objects).each(function(i,el){
+                objs.push(storage.usertree.pull[el.gedcom_id]);
+            });
 			parent.lang = json.lang;
 			content = createBody(json);
 			var ul = jQuery('<ul></ul>');

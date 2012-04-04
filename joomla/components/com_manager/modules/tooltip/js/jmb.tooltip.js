@@ -294,10 +294,9 @@ JMBTooltip.prototype = {
 			storage.profile.editor('view', {
 				object:object,
 				events:{
-					afterEditorClose:function(obj){
-						object = obj;
+					afterEditorClose:function(){
 						if(typeof(settings.afterEditorClose)==='function'){
-							settings.afterEditorClose(obj);
+                            settings.afterEditorClose();
 						}
 					}
 				}
@@ -349,10 +348,9 @@ JMBTooltip.prototype = {
 			storage.profile.editor('edit', {
 				object:st.object,
 				events:{
-					afterEditorClose:function(object){
-						st.object = object;
+					afterEditorClose:function(){
 						if(typeof(st.afterEditorClose)==='function'){
-							st.afterEditorClose(object);
+							st.afterEditorClose();
 						}
 					}
 				}

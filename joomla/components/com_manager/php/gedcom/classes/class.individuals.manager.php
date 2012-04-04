@@ -219,10 +219,8 @@ class IndividualsList{
         	return $rows;
         }
         public function getLastLoginMembers($treeId){
-        	$sqlString = "SELECT ind.*, links.tree_id, links.type, media.mid as avatar, names.first_name, names.middle_name, names.last_name FROM #__mb_individuals as ind
+        	$sqlString = "SELECT ind.id as gedcom_id FROM #__mb_individuals as ind
         			LEFT JOIN #__mb_tree_links as links ON links.individuals_id = ind.id
-        			LEFT JOIN #__mb_media_link as media ON media.gid = ind.id AND media.type = 'AVAT'
-        			LEFT JOIN #__mb_names as names ON names.gid = ind.id
         			WHERE links.tree_id = ? AND ind.fid != '0'
         			ORDER BY ind.last_login DESC";
         	$this->ajax->setQuery($sqlString, $treeId);

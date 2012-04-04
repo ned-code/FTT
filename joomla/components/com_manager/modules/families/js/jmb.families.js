@@ -65,26 +65,6 @@ JMBFamiliesObject.prototype = {
 		};
 	},
 	_avatar:function(object, type, k){
-		/*
-        var	module = this,
-			sb = host.stringBuffer(),
-			user = object.user,
-			facebook_id = user.facebook_id,
-			media = object.media,
-			image = (user.gender!='M')?'female.png':'male.png',
-			src = [module.cssPath,image].join(''),
-			size = module._getImageSize(type, k);		
-		//get avatar image
-		if(media!=null&&media.avatar!=null){
-			return sb._('<img class="jmb-families-avatar view" src="index.php?option=com_manager&task=getResizeImage&id=')._(media.avatar.media_id)._('&w=')._(size.width)._('&h=')._(size.height)._('">').result(); 
-		}
-		//get facebook image
-		if(facebook_id !== '0'){
-			return sb._('<img class="jmb-families-avatar view" src="index.php?option=com_manager&task=getResizeImage&fid=')._(facebook_id)._('&w=')._(size.width)._('&h=')._(size.height)._('">').result();
-		}
-		//get default image
-		return sb._('<img class="jmb-families-avatar view" height="')._(size.height)._('px" width="')._(size.width)._('px" src="')._(src)._('">').result();
-        */
         var module = this,
             size = module._getImageSize(type, k);
         return storage.usertree.avatar.get({
@@ -447,7 +427,9 @@ JMBFamiliesObject.prototype = {
 				target:e,
 				offsetParent:document.body,
 				afterEditorClose:function(){
-					module.render(module.now_id);	
+                    storage.tooltip.cleaner(function(){
+                        module.render(module.now_id);
+                    });
 				}
 			});
 		});
@@ -495,10 +477,7 @@ JMBFamiliesObject.prototype = {
 			sircar, 
 			info,
 			spouse = [],
-			i,
-			childrens_table,
-			row_count,
-			k;
+			i;
 		
 		if(module.cont!=null){
 			jQuery(module.parent).html('');
