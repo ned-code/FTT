@@ -24,7 +24,7 @@ class EventsList{
         	$sqlString = "INSERT INTO #__mb_events (`id`, `type`, `name`, `caus`, `res_agency`,`individuals_id`,`families_id`) VALUES (NULL,?,?,?,?,?,?)";
         	$this->ajax->setQuery($sqlString, $event->Type, $event->Name, $event->Caus, $event->ResAgency, $event->IndKey, $event->FamKey);
         	$this->ajax->query();
-        	$lastId = $this->db->insertid();
+        	$lastId = $this->ajax->insertid();
         	$sqlString = "INSERT INTO #__mb_dates (`events_id`, `type`, `f_day`, `f_month`, `f_year`, `t_day`, `t_month`, `t_year`) VALUES (?,?,?,?,?,?,?,?)";
         	$this->ajax->setQuery($sqlString, $lastId, $event->DateType, ($event->From!=null)?$event->From->Day:$event->From, ($event->From!=null)?$event->From->Month:$event->From, ($event->From!=null)?$event->From->Year:$event->From, ($event->To!=null)?$event->To->Day:$event->To, ($event->To!=null)?$event->To->Month:$event->To, ($event->To!=null)?$event->To->Year:$event->To);
         	$this->ajax->query();

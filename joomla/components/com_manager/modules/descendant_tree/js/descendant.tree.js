@@ -24,6 +24,7 @@ function JMBDescendantTreeObject(obj){
 	module.check(id);	
 
 	storage.family_line.bind('JMBDescendantTreeObject', function(res){
+        module.buttons.close();
 		module.clear();
 		module.dhxTree.deleteChildItems(0);
 		module.render = res._line;
@@ -62,7 +63,7 @@ JMBDescendantTreeObject.prototype = {
 			},
 			off:function(){
 				jQuery(modal_box).hide();
-			},
+			}
 		}
 	},
 	check:function(id){
@@ -203,6 +204,11 @@ JMBDescendantTreeObject.prototype = {
 			box;
 		cont = jQuery('<div id="jmb_desc_buttons" class="jmb-desc-buttons"><div id="select" class="jmb-desc-button-select">&nbsp;</div><div id="home" class="jmb-desc-button-home">&nbsp;</div></div>');
 		return {
+            close:function(){
+                if(box!=null){
+                    box.off();
+                }
+            },
 			overlay:function(){
 				var div = jQuery('<div style="background:gray;opacity:0.6;position:absolute;top:0;left:0;cursor:pointer;">&nbsp;</div>');
 				return {
@@ -278,9 +284,9 @@ JMBDescendantTreeObject.prototype = {
 						ctx = canvas.getContext("2d");
 						
 						ctx.clearRect(0, 0, canvas.width, canvas.height);
-						ctx.strokeStyle = '#000000'; // Цвет обводки
-						ctx.fillStyle = '#000000'; // Цвет заливки
-						ctx.lineWidth = 1; // Ширина линии
+						ctx.strokeStyle = '#000000'; // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+						ctx.fillStyle = '#000000'; // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+						ctx.lineWidth = 1; // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 
 						line = function(x, y, length, hor){
 							ctx.save();
@@ -443,6 +449,7 @@ JMBDescendantTreeObject.prototype = {
 					board[id]();	
 				});
 				jQuery(module.dhxTree.allTree).parent().append(cont);
+                return box;
 			}
 		}
 	}

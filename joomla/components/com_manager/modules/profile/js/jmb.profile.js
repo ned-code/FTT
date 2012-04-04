@@ -861,7 +861,7 @@ JMBProfile.prototype = {
 				jQuery(module.box).find('div.jmb-dialog-profile-content').append(html);
 			},
 			edit_photos:function(){
-				var photoDelete, photoSelect,initSetAvatar;
+                var photoDelete, photoSelect,initSetAvatar;
 				photoDelete = function(li){
 					jQuery(li).find('div.delete').click(function(){
 						var	click = this,
