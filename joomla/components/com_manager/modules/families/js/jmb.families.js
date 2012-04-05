@@ -412,7 +412,12 @@ JMBFamiliesObject.prototype = {
 				button_edit:false,
 				offsetParent:document.body,
 				object:usertree[gedcom_id],
-				target:e
+				target:e,
+                afterEditorClose:function(){
+                    storage.tooltip.cleaner(function(){
+                        module.render(module.now_id);
+                    });
+                }
 			});
 		});
 	},

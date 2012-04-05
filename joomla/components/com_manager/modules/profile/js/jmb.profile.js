@@ -926,7 +926,7 @@ JMBProfile.prototype = {
 				});
 				module._ajaxForm(jQuery(html).find('form'), 'photo','{"gedcom_id":"'+parse.gedcom_id+'","method":"add"}', function(data){}, function(res){
 					var li;
-					if(res.image!='false'){
+					if(res.image){
 						if(jQuery(html).find('.jmb-dialog-photos-content').length==0){
 							jQuery(html).append(storage.media.render([res.image], true));
 							li = jQuery(html).find('.jmb-dialog-photos-content li')[0];							

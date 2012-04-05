@@ -306,7 +306,7 @@ storage.usertree.photos.image = function(args){
 
     sb._('<img');
     sb._(' class="')._( (args.cssClass)? settings.cssClass : '' )._('" ');
-    if(cache&&cache[image.media_id][cacheName]){
+    if(cache&&cache[image.media_id]&&cache[image.media_id][cacheName]){
         var filePath = pathTmp + cache[image.media_id][cacheName];
         sb._(' src="')._(filePath)._('"');
         sb._(' width="')._(args.width)._('px"');
