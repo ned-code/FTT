@@ -53,14 +53,14 @@ function JMBAncestorsObject(obj){
 				if(res._active){
 					jQuery(label).find('div#father_line').css('border', '2px solid '+res._background);	
 				} else {
-					jQuery(label).find('div#father_line').css('border', '2px solid #F5FAE6');
+					jQuery(label).find('div#father_line').css('border', '2px solid #EDF0F8');
 				}
 			}
 			if(res._line == 'mother' && parseInt(user.is_mother_line)){
 				if(res._active){
 					jQuery(label).find('div#mother_line').css('border', '2px solid '+res._background);	
 				} else {
-					jQuery(label).find('div#mother_line').css('border', '2px solid #F5FAE6');
+					jQuery(label).find('div#mother_line').css('border', '2px solid #EDF0F8');
 				}
 			}
 		}
@@ -181,10 +181,10 @@ JMBAncestorsObject.prototype = {
 		}
 		
 		sb._('<div id="father_line" style="border:2px solid ')
-			._((fam_opt.father.pencil)?fam_opt.father.pencil:'#F5FAE6')
+			._((fam_opt.father.pencil)?fam_opt.father.pencil:'#EDF0F8')
 		._('" >');
 		sb._('<div id="mother_line" style="border:2px solid ')
-			._((fam_opt.mother.pencil)?fam_opt.mother.pencil:'#F5FAE6')
+			._((fam_opt.mother.pencil)?fam_opt.mother.pencil:'#EDF0F8')
 		._('" >');
 		sb._('<div class="jit-node-item">');			
 			sb._('<table>');
@@ -400,14 +400,14 @@ JMBAncestorsObject.prototype = {
 				}
 			},
 			onBeforePlotNode:function(node){
-				if(node.id in module.nodes){
+				if(node.id in module.nodes && module.nodes[node.id][0] == '_'){
 					node.data.$color = "#C3C3C3"
 				} else {
-					node.data.$color = "#F5FAE6"
+					node.data.$color = "#EDF0F8"
 				}
 			},
 			onBeforePlotLine:function(adj){	
-				adj.data.$color = "#F5FAE6";
+				adj.data.$color = "#EDF0F8";
 				if(adj.nodeTo.id in module.nodes && adj.nodeFrom.id in module.nodes){
 					adj.data.$color = "#999";
 				}

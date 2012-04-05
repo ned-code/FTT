@@ -10,7 +10,6 @@ class JMBInvitation {
 	*/
 	public function __construct(){
 		$this->host = new Host('Joomla');
-		$this->db = new JMBAjax();
 	}
 	/**
 	*
@@ -20,8 +19,7 @@ class JMBInvitation {
 		$session = JFactory::getSession();
 		$facebook_id = $session->get('facebook_id');
 		$owner_id = $session->get('gedcom_id');
-        	$tree_id = $session->get('tree_id');
-        	$permission = $session->get('permission');
+        $tree_id = $session->get('tree_id');
 		
 		$usertree = $this->host->usertree->load($tree_id, $owner_id);
 		$owner = $usertree[$owner_id];
@@ -35,8 +33,8 @@ class JMBInvitation {
 		
 		$token = md5($value);
 		$sql_string = "INSERT INTO #__mb_variables (`id`,`belongs`,`value`) VALUES (NULL,?,?)";		
-		$this->db->setQuery($sql_string, $token, $value);
-        	$this->db->query();
+		$this->host->ajax->setQuery($sql_string, $token, $value);
+       	$this->host->ajax->query();
 		
 		#recipient  
 		$from = "<familytreetop@gmail.com>";
@@ -77,16 +75,17 @@ class JMBInvitation {
 	
 	public function inviteFacebookFriend($args){
 		$args = explode(';', $args);
-		$tree_id = (isset($_SESSION['jmb']['tid']))?$_SESSION['jmb']['tid']:false;
+        $session = JFactory::getSession();
+        $tree_id = $session->get('tree_id');
 		$individ = $this->host->gedcom->individuals->get($args[1]);
 		if($tree_id&&$tree_id==$individ->TreeId){
 			$sql_string ="UPDATE  #__mb_individuals SET  `fid` = ? WHERE  `id` = ?";
-			$this->db->setQuery($sql_string, $args[0], $args[1]);
-			$this->db->query();
+			$this->host->ajax->setQuery($sql_string, $args[0], $args[1]);
+			$this->host->ajax->query();
 			
 			$sql_string ="UPDATE  #__mb_tree_links SET  `type` = 'USER' WHERE  `tree_id` = ? AND `individuals_id` = ?";
-			$this->db->setQuery($sql_string, $individ->TreeId, $individ->Id);
-			$this->db->query();
+			$this->host->ajax->setQuery($sql_string, $individ->TreeId, $individ->Id);
+			$this->host->ajax->query();
 			return json_encode(array('success'=>true));
 		}
 	}

@@ -29,8 +29,8 @@ JMBInvitation.prototype = {
       			message: 'Request to invitation in Family Tree Top application.',
       			to: facebook_id, 
       		}, callback);
-      	},
-      	avatar:function(object){
+    },
+    avatar:function(object){
 		var	module = this,
 			sb = host.stringBuffer(),
 			user = object.user,
