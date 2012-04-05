@@ -629,7 +629,6 @@ class JMBUserTree {
 	*/
 	public function init($tree_id, $gedcom_id, $permission){
 		$usertree = $this->get($tree_id, $gedcom_id, $permission);
-		$_SESSION['jmb']['tree_size'] = sizeof($usertree);		
 		$compress_usertree = $this->compress($usertree);
 		if($this->check($tree_id, $gedcom_id)){
 			$this->update($tree_id, $gedcom_id, $compress_usertree);

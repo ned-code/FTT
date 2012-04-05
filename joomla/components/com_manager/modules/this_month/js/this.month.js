@@ -271,11 +271,9 @@ JMBThisMonthObject.prototype = {
 			var m = events.m;
 			jQuery(m).each(function(i,e){
 				if(!json.members[e.husb]||!json.members[e.wife]) return;
-				var	fam_key = e.id,
-					members = json.members,
-					data = members[fam_key],
+				var	members = json.members,
 					family = self._getFamilyInfo(e, members),
-					date = family.event.date,
+					date = (family.event!=null&&family.event.date)?family.event.date:null,
 					append;
 
 				append = sb._('<tr><td><div class="date">')

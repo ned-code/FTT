@@ -209,17 +209,26 @@ JMBTooltip.prototype = {
 		return module.stPull[module._getId(id,type)];
 	},
 	_images:function(settings){
-		var 	module = this,
-			object = settings.object,
-			media = object.media,
-			photos = (media!=null)?media.photos:false,
-			sb = host.stringBuffer();
+        var gedcom_id = settings.object.user.gedcom_id,
+            object = storage.usertree.pull[gedcom_id],
+            media = object.media,
+            photos = (media!=null)?media.photos:false,
+            cache = (media!=null)?media.cache:false,
+            sb = host.stringBuffer();
 		
 		if(!photos) return '';
 			
 		sb._('<ul style="width:')._(55*photos.length)._('px;">');
 		jQuery(photos).each(function(i,e){
-			sb._('<li><a href="')._(e.path)._('" rel="prettyPhoto[pp_gal]" title=""><img src="index.php?option=com_manager&task=getResizeImage&id=')._(e.media_id)._('&w=50&h=50')._('" alt="" /></a></li>');
+			sb._('<li>');
+            sb._( storage.usertree.photos.get({
+                image:e,
+                cache:cache,
+                width:50,
+                height:50,
+                prettyPhoto:true
+            }) );
+            sb._('</li>');
 		});
 		sb._('</ul>')
 		return sb.result(); 

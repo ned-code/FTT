@@ -871,7 +871,7 @@ JMBProfile.prototype = {
                                     media.photos.splice(i,1);
                                 }
                             });
-                            if(media.avatar.media_id == id){
+                            if(media.avatar!=null&&media.avatar.media_id == id){
                                 media.avatar = null;
                             }
 						});

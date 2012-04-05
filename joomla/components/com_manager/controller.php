@@ -2,8 +2,6 @@
 # Check to ensure this file is included in Joomla!
 defined('_JEXEC') or die( 'Restricted access' );
 
-//require JPATH_ROOT.'/components/com_manager/php/pageManager.php';
-//require JPATH_ROOT.'/components/com_manager/php/moduleManager.php';
 require JPATH_ROOT.'/components/com_manager/php/host.php';
 
 jimport('joomla.application.component.controller' );

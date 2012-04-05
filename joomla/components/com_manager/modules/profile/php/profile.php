@@ -253,14 +253,12 @@ class JMBProfile {
 		$session = JFactory::getSession();
 		$owner_id = $session->get('gedcom_id');
 		$tree_id = $session->get('tree_id');
-		$permission = $session->get('permission');
-		
+
 		$request = $_REQUEST;
 		$sircar = null;
 		$spouse = null;
 		$family = null;
 		$args = json_decode($query);
-		$target_ids = array();
 		$member = $this->host->gedcom->individuals->get($args->owner_id);	
 				
 		if(empty($member->Id)){

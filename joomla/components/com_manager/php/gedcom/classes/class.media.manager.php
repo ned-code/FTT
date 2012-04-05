@@ -75,13 +75,18 @@ class MediaList{
             $jspath = JPATH_ROOT.DS."components".DS."com_manager".DS."media";
             return $jspath;
         }
-        
+
+        private function getFileType($filePath){
+            $size = getimagesize($filePath);
+            $type = explode('/', $size['mime']);
+            return $type[1];
+        }
+
         public function save($foreignkey, $filepath, $name, $size=null){
             if(is_file($filepath)){   
-            	$extension = explode('.', $name);
-                $extension = $extension[count($extension)-1];
+                $fileType = $this->getFileType($filepath);
 
-                $this->ajax->setQuery('INSERT INTO #__mb_medias (`form`, `title`,`size`) VALUES (?,?,?)',$extension,$name,$size);
+                $this->ajax->setQuery('INSERT INTO #__mb_medias (`form`, `title`,`size`) VALUES (?,?,?)', $fileType,$name,$size);
                 $this->ajax->query();
 
                 $id = $this->ajax->insertid();
@@ -91,7 +96,7 @@ class MediaList{
                 	mkdir($jspath);
                 }
 
-                $file = $id.'.'.$extension;
+                $file = $id.'.'.$fileType;
                 $path = DS."components".DS."com_manager".DS."media".DS.$file;
             	if(copy($filepath, $jspath.DS.$file)){
                     $this->ajax->setQuery('UPDATE #__mb_medias SET path=? WHERE id=?', $path, $id);
@@ -153,7 +158,7 @@ class MediaList{
             $names = array();
             $sizes = $this->size;
             foreach($sizes as $size){
-                $name = md5(implode("_", array("M", $media_id, $size[0], $size[1], $type)));
+                $name = md5(implode("_", array( "M".$media_id, $size[0], $size[1])));
                 $names[$name.'.'.$type] = $size[0].'_'.$size[1];
             }
             return $names;
@@ -167,8 +172,9 @@ class MediaList{
                 if(file_exists($path.$key)){
                     $result[$names[$key]] = $key;
                 }
+                $result['_tmp'][$names[$key]] = $key;
             }
             return $result;
         }
-    }
+ }
 ?>

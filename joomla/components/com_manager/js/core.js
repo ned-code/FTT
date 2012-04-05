@@ -225,6 +225,10 @@ storage.usertree.parse = function(object){
 		}
 	}
 }
+storage.usertree.paths = {}
+storage.usertree.paths.getMediaTmp = function(){
+    return storage.baseurl + storage.url + storage.mediaTmpPath + storage.usertree.tree_id + '/';
+}
 storage.usertree.avatar = {}
 storage.usertree.avatar._type = function(object){
     var media = object.media;
@@ -258,7 +262,7 @@ storage.usertree.avatar.get = function(settings){
         case "media":
             var media = object.media,
                 cache = media.cache,
-                pathTmp = storage.baseurl + storage.url + storage.mediaTmpPath + storage.usertree.tree_id + '/',
+                pathTmp = storage.usertree.paths.getMediaTmp(),
                 cacheFileName = [settings.width, settings.height].join('_'),
                 imgPull = media.avatar;
             sb._('<img');
@@ -266,6 +270,8 @@ storage.usertree.avatar.get = function(settings){
             if(cache[imgPull.media_id]&&cache[imgPull.media_id][cacheFileName]){
                 var filePath = pathTmp + cache[imgPull.media_id][cacheFileName];
                 sb._(' src="')._(filePath)._('"');
+                sb._(' width="')._(settings.width)._('px"');
+                sb._(' height="')._(settings.height)._('px"');
             } else {
                 sb._(' src="index.php?option=com_manager&task=getResizeImage');
                 sb._('&id=')._(media.avatar.media_id);
@@ -290,6 +296,45 @@ storage.usertree.avatar.get = function(settings){
     }
     return sb.result();
 }
+storage.usertree.photos = {}
+storage.usertree.photos.image = function(args){
+    var sb = host.stringBuffer(),
+        cache = args.cache,
+        cacheName = [args.width, args.height].join("_"),
+        pathTmp = storage.usertree.paths.getMediaTmp(),
+        image = args.image;
+
+    sb._('<img');
+    sb._(' class="')._( (args.cssClass)? settings.cssClass : '' )._('" ');
+    if(cache&&cache[image.media_id][cacheName]){
+        var filePath = pathTmp + cache[image.media_id][cacheName];
+        sb._(' src="')._(filePath)._('"');
+        sb._(' width="')._(args.width)._('px"');
+        sb._(' height="')._(args.height)._('px"');
+    } else {
+        sb._(' src="index.php?option=com_manager&task=getResizeImage');
+        sb._('&id=')._(image.media_id);
+        sb._('&w=')._(args.width);
+        sb._('&h=')._(args.height);
+        sb._('"');
+    }
+    sb._('>');
+    return sb.result();
+}
+storage.usertree.photos.get = function(args){
+    if(args.image==null) return '';
+    var sb = host.stringBuffer(),
+        stphObject = storage.usertree.photos;
+    if(args.prettyPhoto){
+        sb._('<a href="')._(storage.baseurl + args.image.path.substr(1))._('" rel="prettyPhoto[pp_gal]" title="">');
+            sb._(stphObject.image(args));
+        sb._('</a>');
+    } else {
+        sb._(stphObject.imagte(args));
+    }
+    return sb.result();
+}
+
 
 storage.notifications = {};
 storage.notifications.is_not_confirmed = false;

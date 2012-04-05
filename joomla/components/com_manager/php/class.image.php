@@ -37,8 +37,8 @@ class JMBImage {
     }
 
     private function getTmpFilePath($tmpId, $type){
-        $name = implode("_", array(($this->mediaId!=null)?"M":"F", $tmpId, $this->dWidth, $this->dHeight, $type));
-        return $this->path.$this->tree_id.DS.md5($name).'.'.$type;
+        $name = md5(implode("_", array( (($this->mediaId!=null)?"M":"F").$tmpId, $this->dWidth, $this->dHeight)));
+        return $this->path.$this->tree_id.DS.$name.'.'.$type;
     }
 
     private function getFileType($filePath){
@@ -151,6 +151,7 @@ class JMBImage {
     }
 
     public function getImage($tree_id, $mediaId, $facebookId, $dWidth, $dHeight){
+        if($tree_id == null) return;
         $this->setSettings($tree_id, $mediaId, $facebookId, $dWidth, $dHeight);
         $filePath = $this->getFilePath();
         $tmpId = $this->getTmpId();
@@ -190,20 +191,6 @@ class JMBImage {
             imagedestroy($srcImage);
         }
         exit;
-    }
-
-    public function clear(){
-        if ($dh = opendir($this->path)) {
-            while (($file = readdir($dh)) !== false) {
-                if(is_file($this->path.$file)){
-                    $date =	date ("Y_m_d", filemtime($this->path.$file));
-                    $now =	date ("Y_m_d", time());
-                    if($file != 'index.html' && $date !== $now){
-                        unlink($this->path.$file);
-                    }
-                }
-            }
-        }
     }
 }
 ?>
