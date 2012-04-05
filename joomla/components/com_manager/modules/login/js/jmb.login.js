@@ -8,20 +8,6 @@ function JMBLogin(){
 		notifications,
 		fb_logged;
 
-	if(window!=window.top){
-		module.init = function(callback){ 
-			host.callMethod("login", "JMBLogin", 'user', null, function(res){
-				json = jQuery.parseJSON(res.responseText);
-				if(json.user_id != null){
-					storage.usertree.user = json.user_id;
-					storage.usertree.pull = json.usertree;
-				}
-				callback();
-			});
-		}
-		return false;
-	}
-	
 	//init vars
 	type = jQuery(document.body).attr('_type');
 	alias = jQuery(document.body).attr('_alias');
@@ -135,7 +121,7 @@ function JMBLogin(){
 						FB.logout(function(){
 							window.location = storage.baseurl+'index.php?option=com_jfbconnect&task=logout&return=login';
 						});
-					},
+					}
 				},
 				init:function(){
 					var _menu = this;
@@ -286,7 +272,18 @@ function JMBLogin(){
 			});
 		}
 	}
-	
+
+    if(window!=window.top){
+        module.init = function(callback){
+            host.callMethod("login", "JMBLogin", 'user', null, function(res){
+                json = jQuery.parseJSON(res.responseText);
+                fn.set_global_data(json);
+                callback();
+            });
+        }
+        return false;
+    }
+
 	module.init = fn.init;
 }
 

@@ -937,10 +937,11 @@ JMBProfile.prototype = {
 						photoDelete(li);
 						photoSelect(li);
 						if(media==null){
-							media = {
+                            storage.usertree.pull[parse.gedcom_id].media = {
 								avatar:null,
 								photos:[]
 							}
+                            media = storage.usertree.pull[parse.gedcom_id].media;
 						};
 						media.photos.push(res.image);	
 					}
