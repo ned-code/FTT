@@ -150,7 +150,9 @@ JMBFamiliesObject.prototype = {
 		var	module = this;	
 		jQuery(cont).find('div.home').click(function(){
 			module.clickItem = false;
-			module.render(module.start_id);
+            storage.tooltip.cleaner(function(){
+                module.render(module.start_id);
+            });
 		});
 	},
 	_create:function(){

@@ -50,8 +50,8 @@ JMBProfile.prototype = {
 			data: { "module":"profile","class":"JMBProfile", "method":method, "args": args },
 			dataType:"json",
 			target:jQuery(storage.iframe).attr('name'),
-			beforeSubmit:function(){
-				return beforeSubmit();	
+			beforeSubmit:function(data){
+				return beforeSubmit(data);
 			},
 			success:function(data){
 				success(data);

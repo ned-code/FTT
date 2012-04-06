@@ -449,5 +449,20 @@ JMBTooltip.prototype = {
 		module._invitation(cont, type, st);
 		module.link_with_request(cont, type, st);
 		module._buttons(cont, st, type);
-	}
+	},
+    update:function(target_id){
+        var module = this;
+        for(var id in module.idPull){
+            jQuery(module.idPull[id]).remove();
+        }
+        for(var key in module.stPull){
+            var cont = module._create(key.split(':')[0], module.stPull[key]);
+            storage.media.init(cont);
+
+            jQuery(document.body).append(cont);
+            jQuery(cont).hide();
+
+            module.idPull[id] = cont;
+        }
+    }
 }

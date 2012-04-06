@@ -66,6 +66,16 @@ function JMBLogin(){
 				}
 			}
 		},
+        editor:function(id, obj){
+            storage.profile.editor('edit', {
+                object:storage.usertree.pull[id],
+                events:{
+                    afterEditorClose:function(){
+                        storage.tooltip.update();
+                    }
+                }
+            });
+        },
 		menu:function(){
 			var module = this, menu, list, sb = host.stringBuffer();
 			sb._('<div class="menu">');
@@ -87,15 +97,9 @@ function JMBLogin(){
 					return this;
 				},
 				click:{
-					profile:function(){
-						storage.profile.editor('edit', {
-							object:storage.usertree.pull[storage.usertree.user],
-							events:{
-								afterEditorClose:function(object){
-									storage.usertree.pull[storage.usertree.user] = object;
-								}
-							}
-						});
+					profile:function(obj){
+                        var id = storage.usertree.gedcom_id;
+						fn.editor(id, obj);
 					},
 					preferences:function(){},
 					language:function(object){

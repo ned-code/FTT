@@ -219,21 +219,32 @@ class JMBProfile {
 			
 			case "add":
 				$image = false;
+                $name = explode('.', $_FILES["upload"]["name"]);
 				if($_FILES['upload']['size'] != 0){
-					$media_id = $this->host->gedcom->media->save($args->gedcom_id, $_FILES["upload"]["tmp_name"], $_FILES["upload"]["name"], $_FILES['upload']['size']);
-					if($media_id) {
-						$res = $this->host->gedcom->media->get($media_id);
-                        $form = explode('.', $_FILES['upload']['name']);
-						$image = array(
-                            'form' => end($form),
-                            'gedcom_id'=>$args->gedcom_id,
-							'media_id'=>$res->Id,
-                            'path'=>$res->FilePath,
-                            'size'=>$res->Size,
-							'title'=>$res->Title,
-                            'type'=>$res->Type
-						);
-					}
+                    switch(end($name)){
+                        case "jpeg":
+                        case "jpg":
+                        case "gif":
+                        case "png":
+                            $media_id = $this->host->gedcom->media->save($args->gedcom_id, $_FILES["upload"]["tmp_name"], $_FILES["upload"]["name"], $_FILES['upload']['size']);
+                            if($media_id) {
+                                $res = $this->host->gedcom->media->get($media_id);
+                                $form = explode('.', $_FILES['upload']['name']);
+                                $image = array(
+                                    'form' => end($form),
+                                    'gedcom_id'=>$args->gedcom_id,
+                                    'media_id'=>$res->Id,
+                                    'path'=>$res->FilePath,
+                                    'size'=>$res->Size,
+                                    'title'=>$res->Title,
+                                    'type'=>$res->Type
+                                );
+                            }
+                        break;
+
+                        default:
+                        break;
+                    }
 				}
 				return json_encode(array('image'=>$image));
 			break;
