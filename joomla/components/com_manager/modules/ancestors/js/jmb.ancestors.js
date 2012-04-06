@@ -37,8 +37,10 @@ function JMBAncestorsObject(obj){
 	jQuery(home_button).click(function(){
 		if(module.user==null) return false;
 		if(module.st.clickedNode.id == module.st.root) return false;
+        jQuery(obj).css('overflow', 'hidden');
 		module.st.onClick(module.st.root);
-		return false;
+        jQuery(obj).css('overflow', '');
+        return false;
 	})
 	
 	storage.family_line.bind('JMBAncestorsObject', function(res){
@@ -393,7 +395,7 @@ JMBAncestorsObject.prototype = {
 				if(mod || node.id == active){
                     jQuery(right).hide();
 				}
-                if(data.object && data.object.parent == null){
+                if(data.object && data.object.parents == null){
                     jQuery(right).hide();
                 }
 
@@ -404,7 +406,7 @@ JMBAncestorsObject.prototype = {
 				}
 			},
 			onBeforePlotNode:function(node){
-				if(node.id in module.nodes && module.nodes[node.id][0] == '_'){
+				if(node.id in module.nodes /*&& module.nodes[node.id][0] == '_'*/){
 					node.data.$color = "#C3C3C3"
 				} else {
 					node.data.$color = "#EDF0F8"
