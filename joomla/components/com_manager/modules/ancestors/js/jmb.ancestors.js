@@ -391,8 +391,12 @@ JMBAncestorsObject.prototype = {
 					jQuery(left).hide();
 				}
 				if(mod || node.id == active){
-					jQuery(right).hide();
+                    jQuery(right).hide();
 				}
+                if(data.object && data.object.parent == null){
+                    jQuery(right).hide();
+                }
+
 				if(node.id in module.nodes){
 					jQuery(label).css('visibility', 'visible');
 				} else {
