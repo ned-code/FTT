@@ -242,6 +242,30 @@ storage.usertree.avatar._type = function(object){
     }
     return 'default';
 }
+storage.usertree.avatar.def = function(settings, gender){
+    if(!settings.object) return '';
+    var stavObject = storage.usertree.avatar,
+        object = settings.object,
+        sb = host.stringBuffer();
+
+    switch(stavObject._type(object)){
+        case "facebook":
+        case "media":
+            sb._(storage.usertree.avatar.get(settings));
+        break;
+
+        default:
+            var pathImage = [storage.baseurl,storage.url,'js/images/',(gender=="F")?"female_big.png":"male_big.png"].join("");
+            sb._('<img');
+            sb._(' class="')._( (settings.cssClass)? settings.cssClass : '' )._('"');
+            sb._(' src="')._(pathImage)._('"');
+            sb._('width="')._(settings.width)._('px"');
+            sb._('height="')._(settings.height)._('px"');
+            sb._('>');
+        break;
+    }
+    return sb.result();
+}
 storage.usertree.avatar.get = function(settings){
     if(!settings.object) return '';
     var stavObject = storage.usertree.avatar,
@@ -274,7 +298,7 @@ storage.usertree.avatar.get = function(settings){
                 sb._(' height="')._(settings.height)._('px"');
             } else {
                 sb._(' src="index.php?option=com_manager&task=getResizeImage');
-                sb._('&id=')._(media.avatar.media_id);
+                sb._('&id=')._(imgPull.media_id);
                 sb._('&w=')._(settings.width);
                 sb._('&h=')._(settings.height);
                 sb._('"');
@@ -283,13 +307,13 @@ storage.usertree.avatar.get = function(settings){
             break;
 
         default:
-            var gender = object.user.gender,
-                pathImage = [storage.baseurl,storage.url,'js/images/',(gender=="F")?"female_big.png":"male_big.png"].join("");
+            var gender = object.user.gender;
+            var pathImage = [storage.baseurl,storage.url,'js/images/',(gender=="F")?"female_big.png":"male_big.png"].join("");
             sb._('<img');
             sb._(' class="')._( (settings.cssClass)? settings.cssClass : '' )._('"');
-                sb._(' src="')._(pathImage)._('"');
-                sb._('width="')._(settings.width)._('px"');
-                sb._('height="')._(settings.height)._('px"');
+            sb._(' src="')._(pathImage)._('"');
+            sb._('width="')._(settings.width)._('px"');
+            sb._('height="')._(settings.height)._('px"');
             sb._('>');
             break;
 

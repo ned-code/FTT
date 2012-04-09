@@ -121,23 +121,11 @@ JMBProfile.prototype = {
 		return sb._('<img class="" src="index.php?option=com_manager&task=getResizeImage&id=')._(object.media_id)._('&w=')._(width)._('&h=')._(height)._('">').result();
 	},
 	_avatar:function(object, width, height){
-		var	module = this,
-			sb = host.stringBuffer(),
-			user = object.user,
-			facebook_id = user.facebook_id,
-			media = object.media,
-			image = (user.gender!='M')?'female.png':'male.png',
-			src = [module.imagePath,image].join('');
-		//get avatar image
-		if(media!=null&&media.avatar!=null){
-			return sb._('<img class="" src="index.php?option=com_manager&task=getResizeImage&id=')._(media.avatar.media_id)._('&w=')._(width)._('&h=')._(height)._('">').result(); 
-		}
-		//get facebook image
-		if(facebook_id !== '0'){
-			return sb._('<img class="" src="index.php?option=com_manager&task=getResizeImage&fid=')._(facebook_id)._('&w=')._(width)._('&h=')._(height)._('">').result();
-		}
-		//get default image
-		return sb._('<img class="" height="')._(height)._('px" width="')._(width)._('px" src="')._(src)._('">').result();
+        return storage.usertree.avatar.get({
+            object:object,
+            width:width,
+            height:height
+        });
 	},
 	_gen:function(){
 		var	module = this,
@@ -673,7 +661,18 @@ JMBProfile.prototype = {
 						jQuery(death).show();
 					}
 				});
-			}
+			},
+            gender:function(object, width, height){
+                var select = jQuery(html).find('select[name="gender"]');
+                jQuery(select).change(function(){
+                    var avatar = storage.usertree.avatar.def({
+                            object:object,
+                            width:width,
+                            height:height
+                        }, jQuery(this).val());
+                    jQuery(html).find('div.jmb-dialog-photo').html(avatar);
+                });
+            }
 		}
 	},
 	_click:function(){
@@ -784,6 +783,7 @@ JMBProfile.prototype = {
 				//init events
 				events = module._events(html);
 				events.living();
+                events.gender(object, 135, 150);
 				//ajax form
 				module._ajaxForm(jQuery(html).find('form'), 'basic', user.gedcom_id, function(data){}, function(res){
 					update_data(res);
