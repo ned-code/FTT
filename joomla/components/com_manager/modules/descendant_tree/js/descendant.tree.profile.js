@@ -61,14 +61,19 @@ DescendantTreeProfile.prototype = {
 					sb._('</table>');
 					sb._('<div class="jmb-dtp-body-info-switch">')._('Show full profile')._('</div>');
 				sb._('</div>');
-				sb._('<div class="jmb-dtp-body-space">&nbsp;</div>');
+				/*sb._('<div class="jmb-dtp-body-space">&nbsp;</div>');*/
 				sb._('<div class="jmb-dtp-body-media">')
 					if(media!=null){
-						sb._('<ul class="media-list">');
+						/*
+                        sb._('<ul class="media-list">');
 							jQuery(media.photos).each(function(i, img){
 								sb._('<li class="media-item">')._(module.image(img))._('</li>');
 							});
 						sb._('</ul>');
+                        */
+                        jQuery(media.photos).each(function(i, img){
+                            sb._('<div class="media-item">')._(module.image(img))._('</div>');
+                        });
 					}
 				sb._('</div>');
 			sb._('</div>');
@@ -90,7 +95,17 @@ DescendantTreeProfile.prototype = {
 		
 		html = jQuery(sb.result());
 		jQuery(module.cont).append(html);
-		storage.media.init(html);
+        if(media!=null){
+            storage.media.init(html);
+            if(media.photos.length > 35){
+                var parentHeight = jQuery(module.cont).parent().height();
+                var bodyHeight = jQuery(html).find("div.jmb-dtp-body-info").height();
+                var sendHeight = jQuery(html).find("div.jmb-dtp-footer").height();
+                var rHeight = parentHeight - bodyHeight - sendHeight - 25;
+                jQuery(html).find("div.jmb-dtp-body-media").css('height', rHeight+'px');
+                jQuery(html).find("div.jmb-dtp-body-media").scrollbar();
+            }
+        }
 		jQuery(html).find('div.jmb-dtp-footer .send').click(function(){
 			storage.invitation.render(ch);
 		}); 

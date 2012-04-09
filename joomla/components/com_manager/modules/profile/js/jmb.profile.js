@@ -28,7 +28,9 @@ function JMBProfile(){
 		close:function(){
 			jQuery(this).dialog("destroy");
 			jQuery(this).remove();
-            module.afterEditorClose();
+            if(typeof(module.afterEditorClose) == 'function'){
+                module.afterEditorClose();
+            }
             module._clear();
 		}	
 	}
@@ -1077,7 +1079,9 @@ JMBProfile.prototype = {
 				jQuery(objects).each(function(i, el){
 					if(el.user != null && el.user.gedcom_id != null){
 						storage.usertree.pull[el.user.gedcom_id] = el;
-                        data.events.afterEditorClose();
+                        if(typeof(data.events.afterEditor) == 'function'){
+                            data.events.afterEditorClose();
+                        }
 					}
 				});
 				jQuery(module.addBox).dialog("close");
