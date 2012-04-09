@@ -924,7 +924,9 @@ JMBProfile.prototype = {
 					photoDelete(li);
 					photoSelect(li);
 				});
-				module._ajaxForm(jQuery(html).find('form'), 'photo','{"gedcom_id":"'+parse.gedcom_id+'","method":"add"}', function(data){}, function(res){
+				module._ajaxForm(jQuery(html).find('form'), 'photo','{"gedcom_id":"'+parse.gedcom_id+'","method":"add"}', function(data){
+                    return data[0].value != '';
+                }, function(res){
 					var li;
 					if(res.image){
 						if(jQuery(html).find('.jmb-dialog-photos-content').length==0){
@@ -943,7 +945,8 @@ JMBProfile.prototype = {
 							}
                             media = storage.usertree.pull[parse.gedcom_id].media;
 						};
-						media.photos.push(res.image);	
+						media.photos.push(res.image);
+                        jQuery(html).find('form').resetForm();
 					}
 				});
 				jQuery(module.box).find('div.jmb-dialog-profile-content').append(html);

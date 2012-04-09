@@ -27,7 +27,7 @@ function JMBFamiliesObject(obj){
 	module.spouse_border = {};
 
 	storage.family_line.bind('JMBFamiliesObject', function(res){
-		var divs = jQuery(module.cont).find('div.jmb-families-sircar,div.jmb-families-spouse,div.jmb-families-child');
+		var divs = jQuery(module.cont).parent().find('div.jmb-families-sircar,div.jmb-families-spouse,div.jmb-families-child');
 		jQuery(divs).each(function(i, el){
 			var id = jQuery(el).attr('id');
 			var object = module.usertree[id];

@@ -80,7 +80,7 @@ function JMBLogin(){
 			var module = this, menu, list, sb = host.stringBuffer();
 			sb._('<div class="menu">');
 				sb._('<div id="profile"><span>Profile</span></div>');
-				sb._('<div id="preferences"><span>Preferences</span></div>');
+				/*sb._('<div id="preferences"><span>Preferences</span></div>');*/
 				sb._('<div id="language"><span>Language: ')._(this.getDefaultLang())._('</span></div>');
 				sb._('<div id="logout"><span>Log Out</span></div>');
 			sb._('</div>');

@@ -413,7 +413,6 @@ JMBTooltip.prototype = {
 		}
 		module.idPull = {};
 		module.stPull = {};
-		module.btActive = [];
 		if(callback) callback();
 	},
 	render:function(type, settings){
@@ -450,7 +449,7 @@ JMBTooltip.prototype = {
 		module.link_with_request(cont, type, st);
 		module._buttons(cont, st, type);
 	},
-    update:function(target_id){
+    update:function(){
         var module = this;
         for(var id in module.idPull){
             jQuery(module.idPull[id]).remove();

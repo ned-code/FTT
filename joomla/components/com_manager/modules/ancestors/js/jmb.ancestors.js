@@ -134,7 +134,8 @@ JMBAncestorsObject.prototype = {
 			},
 			facebook:function(){
 				jQuery(label).find('.jit-facebook-icon').click(function(){
-					window.open(['http://www.facebook.com/profile.php?id=',node.id].join(''),'new','width=320,height=240,toolbar=1');
+                    var id = jQuery(this).attr('id');
+					window.open(['http://www.facebook.com/profile.php?id=',id].join(''),'new','width=320,height=240,toolbar=1');
 					return false;
 				});
 			},
