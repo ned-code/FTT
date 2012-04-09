@@ -2,7 +2,6 @@ function JMBRecentVisitorsObject(obj){
 	var parent = this;
 	var content = null;
 	var sb = host.stringBuffer();
-	var objs = [];
 	var type = jQuery(document.body).attr('_type');
 	var alias = jQuery(document.body).attr('_alias');
 	var settings = storage.settings;
@@ -104,9 +103,6 @@ function JMBRecentVisitorsObject(obj){
 				storage.core.modulesPullObject.unset('JMBRecentVisitorsObject');
 				return jQuery(obj).remove();
 			}
-			jQuery(json.objects).each(function(i,el){
-                objs.push(storage.usertree.pull[el.gedcom_id]);
-            });
 			parent.lang = json.lang;
 			content = createBody(json);
 			var ul = jQuery('<ul></ul>');
@@ -128,7 +124,7 @@ function JMBRecentVisitorsObject(obj){
 		jQuery(content[1]).find('li').each(function(i, el){
 			var type = 'is_'+res._line+'_line';
 			var id = jQuery(el).attr('id');
-			var object = objs[id];
+			var object = storage.usertree.pull[id];
 			var user = object.user;
 			switch(res._type){
 				case "pencil":
