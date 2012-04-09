@@ -232,9 +232,10 @@ class JMBDescendantTree {
 		$session = JFactory::getSession();
 		$facebook_id = $session->get('facebook_id');
 		$owner_id = $session->get('gedcom_id');
-        	$tree_id = $session->get('tree_id');
-        	$permission = $session->get('permission');
-		
+        $tree_id = $session->get('tree_id');
+        $permission = $session->get('permission');
+
+        $this->host->usertree->init($tree_id, $owner_id, $permission);
 		$usertree = $this->host->usertree->load($tree_id, $owner_id);
 
 		$this->owner_id = $owner_id;
@@ -252,8 +253,10 @@ class JMBDescendantTree {
 		$session = JFactory::getSession();
 		$facebook_id = $session->get('facebook_id');
 		$owner_id = $session->get('gedcom_id');
-        	$tree_id = $session->get('tree_id');
-        	$permission = $session->get('permission');
+        $tree_id = $session->get('tree_id');
+        $permission = $session->get('permission');
+
+        $this->host->usertree->init($tree_id, $owner_id, $permission);
 		$usertree = $this->host->usertree->load($tree_id, $owner_id);
 		
 		$this->owner_id = $owner_id;

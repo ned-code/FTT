@@ -76,13 +76,7 @@ function JMBRecentVisitorsObject(obj){
             object:storage.usertree.pull[id],
             target:div,
             afterEditorClose:function(){
-                jQuery(storage.tooltip.idPull['edit:'+id]).remove();
-                jQuery(storage.tooltip.idPull['view:'+id]).remove();
-                delete storage.tooltip.idPull['edit:'+id];
-                delete storage.tooltip.idPull['view:'+id];
-                delete storage.tooltip.stPull['edit:'+id];
-                delete storage.tooltip.stPull['view:'+id];
-                setMiniTooltip(div, id);
+                storage.tooltip.update();
             }
         });
     }

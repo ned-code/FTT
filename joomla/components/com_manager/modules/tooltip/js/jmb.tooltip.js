@@ -427,7 +427,7 @@ JMBTooltip.prototype = {
 		} else {
 			return false;
 		}
-		st = module._setSettings(type, settings);
+		var st = module._setSettings(type, settings);
 		
 		if(!module.idPull[id]){
 			cont = module._create(type, st);
@@ -455,13 +455,23 @@ JMBTooltip.prototype = {
             jQuery(module.idPull[id]).remove();
         }
         for(var key in module.stPull){
-            var cont = module._create(key.split(':')[0], module.stPull[key]);
+            var st = module.stPull[key];
+            st.object = storage.usertree.pull[st.object.user.gedcom_id];
+            var type = key.split(':')[0];
+            var cont = module._create(type, st);
             storage.media.init(cont);
 
             jQuery(document.body).append(cont);
             jQuery(cont).hide();
 
-            module.idPull[id] = cont;
+            delete module.idPull[key];
+            module.idPull[key] = cont;
+
+            jQuery(st.target).bt(st.style);
+            module._click(st);
+            module._invitation(cont, type, st);
+            module.link_with_request(cont, type, st);
+            module._buttons(cont, st, type);
         }
     }
 }

@@ -37,9 +37,8 @@ function JMBAncestorsObject(obj){
 	jQuery(home_button).click(function(){
 		if(module.user==null) return false;
 		if(module.st.clickedNode.id == module.st.root) return false;
-        jQuery(obj).css('overflow', 'hidden');
-		module.st.onClick(module.st.root);
-        jQuery(obj).css('overflow', '');
+        //module.render(module.tree);
+        module.st.select(module.st.root);
         return false;
 	})
 	
@@ -442,7 +441,7 @@ JMBAncestorsObject.prototype = {
 		//compute node positions and layout
 		st.compute();
 		//emulate a click on the root node.
-		st.select(st.root);
+		st.onClick(st.root);
 	}
 }
 

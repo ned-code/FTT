@@ -23,10 +23,18 @@ DescendantTreeProfile.prototype = {
             height:80
         });
 	},
-	image:function(img){
-		var	module = this,
-			sb = host.stringBuffer();
-		return sb._('<a href="')._(img.path)._('" rel="prettyPhoto[pp_gal]" title=""><img src="index.php?option=com_manager&task=getResizeImage&id=')._(img.media_id)._('&w=50&h=50" alt="" /></a>').result();
+	image:function(img, media){
+		var sb = host.stringBuffer();
+        var cache = (media!=null)?media.cache:false;
+        sb._('<a href="')._(img.path)._('" rel="prettyPhoto[pp_gal]" title="">');
+            sb._(storage.usertree.photos.image({
+                cache:cache,
+                width:50,
+                height:50,
+                image:img
+            }));
+        sb._('</a>');
+        return sb.result();
 	},
 	create:function(ch){
 		var	module = this,
@@ -72,7 +80,7 @@ DescendantTreeProfile.prototype = {
 						sb._('</ul>');
                         */
                         jQuery(media.photos).each(function(i, img){
-                            sb._('<div class="media-item">')._(module.image(img))._('</div>');
+                            sb._('<div class="media-item">')._(module.image(img, media))._('</div>');
                         });
 					}
 				sb._('</div>');
@@ -97,7 +105,7 @@ DescendantTreeProfile.prototype = {
 		jQuery(module.cont).append(html);
         if(media!=null){
             storage.media.init(html);
-            if(media.photos.length > 35){
+            if(media.photos.length > 24){
                 var parentHeight = jQuery(module.cont).parent().height();
                 var bodyHeight = jQuery(html).find("div.jmb-dtp-body-info").height();
                 var sendHeight = jQuery(html).find("div.jmb-dtp-footer").height();

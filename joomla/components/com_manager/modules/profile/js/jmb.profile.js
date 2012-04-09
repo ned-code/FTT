@@ -948,8 +948,8 @@ JMBProfile.prototype = {
                             media = storage.usertree.pull[parse.gedcom_id].media;
 						};
 						media.photos.push(res.image);
-                        jQuery(html).find('form').resetForm();
 					}
+                    jQuery(html).find('form').resetForm();
 				});
 				jQuery(module.box).find('div.jmb-dialog-profile-content').append(html);
 			},
