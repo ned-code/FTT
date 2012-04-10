@@ -4,7 +4,6 @@ function JMBProfile(){
 	module.editor_header_active_button = null;
 	module.editor_menu_active_button = null;
 	module.menu_item_pull = [];
-	module.individuals = null;
 	module.object = null;
     module.target_id = null;
     module.afterEditorClose = null;
@@ -157,7 +156,7 @@ JMBProfile.prototype = {
 							if(key!='length'){
 								family = families[key];
 								if(family.spouse!=null){
-									spouse = module.individuals[family.spouse];
+									spouse = storage.usertree.pull[family.spouse];
 									parse = storage.usertree.parse(spouse);
 									sb._('<option value="')._(parse.gedcom_id)._('">')._(parse.name)._('</option>');
 									count++;
@@ -315,7 +314,7 @@ JMBProfile.prototype = {
 			},
 			spouse:function(family, count, cp){
 				sb.clear();
-				spouse = module.individuals[family.spouse];
+				spouse = storage.usertree.pull[family.spouse];
 				parse_spouse = storage.usertree.parse(spouse);
 				sb._('<div id="jmb-union-')._(count)._('" class="jmb-dialog-profile-content-union" family_id="')._(family.id)._('" spouse_id="')._(family.spouse)._('">');
 					sb._('<form id="jmb-profile-addpsc-')._(count)._('" method="post" family_id="')._(family.id)._('" target="iframe-profile">');
@@ -695,6 +694,7 @@ JMBProfile.prototype = {
 		update_data = function(res){
 			storage.usertree.update(res.objects);
             object = storage.usertree.pull[module.target_id];
+            parse = storage.usertree.parse(object);
             media = object.media,
             families = object.families;
             user = object.user;
@@ -934,7 +934,7 @@ JMBProfile.prototype = {
                     return data[0].value != '';
                 }, function(res){
 					var li;
-					if(res.image){
+					if(res!=null&&res.image){
 						if(jQuery(html).find('.jmb-dialog-photos-content').length==0){
 							jQuery(html).append(storage.media.render([res.image], true));
 							li = jQuery(html).find('.jmb-dialog-photos-content li')[0];							
@@ -1055,7 +1055,6 @@ JMBProfile.prototype = {
 		module.editor_menu_active_button = null;
 		module.menu_item_pull = [];
 		module.object = null;
-		module.individuals = null;
 		module.container = null;
         module.afterEditorClose = null;
         module.target_id = null;
@@ -1072,7 +1071,6 @@ JMBProfile.prototype = {
 		module.container = cont;
 		module.object = object;
         module.target_id = object.user.gedcom_id;
-		module.individuals = storage.usertree.pull;
         module.afterEditorClose = data.events.afterEditorClose;
 
 		module._dialog(module.box, { title: name, height: 450 });
@@ -1098,7 +1096,7 @@ JMBProfile.prototype = {
 				jQuery(objects).each(function(i, el){
 					if(el.user != null && el.user.gedcom_id != null){
 						storage.usertree.pull[el.user.gedcom_id] = el;
-                        if(typeof(data.events.afterEditor) == 'function'){
+                        if(typeof(data.events.afterEditorClose) == 'function'){
                             data.events.afterEditorClose();
                         }
 					}
@@ -1106,7 +1104,6 @@ JMBProfile.prototype = {
 				jQuery(module.addBox).dialog("close");
 			};
 
-		module.individuals = storage.usertree.pull;
 		return {
 			clear:function(){
 				jQuery(container).html('');
