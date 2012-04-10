@@ -110,7 +110,8 @@
 	position: absolute;
 	right: 10px;
 	top: 5px;
-	width: 200px;;
+	width: 200px;
+    z-index: 1;
 }
 .jmb-profile-famous-cont table{
 	margin: 3px;

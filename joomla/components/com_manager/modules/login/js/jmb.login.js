@@ -245,28 +245,39 @@ function JMBLogin(){
 			fn.user(function(object){
 				fb_logged = jQuery(document.body).attr('_fb');
 				switch(alias){
+                    case "myfamily":
+                        if(type=="famous_family" && object){
+                            fn.famous(object);
+                        } else {
+                            cont = fn.create();
+                            fn.setName(object, cont);
+                            fn.setAvatar(object, cont);
+                            if(!object.link){
+                                fn.click(cont);
+                            }
+                            jQuery(document.body).append(cont);
+                        }
+                    break;
+
+
 					case "home":
 					case "login":
 					case "first-page":
 					case "invitation":
 					case "myfamily":
 					case "famous-family":
-						if(type=="famous_family" && object){
-							fn.famous(object);
-						} else {
-							if(!parseInt(fb_logged)){
-								cont = fn.connect();
-								fn.login(cont);
-							} else {
-								cont = fn.create();
-								fn.setName(object, cont);
-								fn.setAvatar(object, cont);
-								if(!object.link){
-									fn.click(cont);
-								}
-							}
-							jQuery(document.body).append(cont);
-						}
+                        if(!parseInt(fb_logged)){
+                            cont = fn.connect();
+                            fn.login(cont);
+                        } else {
+                            cont = fn.create();
+                            fn.setName(object, cont);
+                            fn.setAvatar(object, cont);
+                            if(!object.link){
+                                fn.click(cont);
+                            }
+                        }
+                        jQuery(document.body).append(cont);
 					break;
 				}
 				callback();
