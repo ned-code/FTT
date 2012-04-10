@@ -55,7 +55,12 @@ JMBProfile.prototype = {
 			target:jQuery(storage.iframe).attr('name'),
 			beforeSubmit:function(data){
                 storage.progressbar.loading();
-				return beforeSubmit(data);
+				if(beforeSubmit(data)){
+                    return true;
+                } else {
+                    storage.progressbar.off();
+                    return false;
+                }
 			},
 			success:function(data){
                 storage.progressbar.off();

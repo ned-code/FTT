@@ -11,6 +11,7 @@ function JMBFamiliesObject(obj){
 	module.colors = null;
 	module.cont = null;
 	module.start_id = null;
+    module.nameTooltip = [];
 	module.clickItem = false;
 	module.childsPos = {};
 	module.imageSize = {
@@ -199,6 +200,18 @@ JMBFamiliesObject.prototype = {
 		}
 		return false;
 	},
+    _getName:function(object){
+        var module = this,
+            parse = storage.usertree.parse(object),
+            nick = parse.nick;
+
+        if(nick.length > 12){
+            module.nameTooltip.push(object);
+            return nick.substr(0,6)+'...';
+        } else {
+            return nick;
+        }
+    },
 	_sircar:function(gedcom_id){
 		var	module = this,
 			sb = host.stringBuffer(),
@@ -232,7 +245,7 @@ JMBFamiliesObject.prototype = {
 				sb._('</div>');
 			sb._('</div></div>');
 			sb._('<div>');
-				sb._('<div class="jmb-families-parent-name">')._(get.nick)._('</div>');
+				sb._('<div class="jmb-families-parent-name">')._(module._getName(object))._('</div>');
 				sb._('<div class="jmb-families-parent-date">')._(get.birth('year'))._('</div>');
 			sb._('</div>');
 			if(object.families!=null){
@@ -277,7 +290,7 @@ JMBFamiliesObject.prototype = {
 				sb._('</div>');
 			sb._('</div></div>');
 			sb._('<div>');
-				sb._('<div class="jmb-families-parent-name">')._(get.nick)._('</div>');
+				sb._('<div class="jmb-families-parent-name">')._(module._getName(object))._('</div>');
 				sb._('<div class="jmb-families-parent-date">')._(get.birth('year'))._('</div>');
 			sb._('</div>');
 			if(object.families!=null){
@@ -317,7 +330,7 @@ JMBFamiliesObject.prototype = {
 				sb._('</div>');
 			sb._('</div></div>');
 			sb._('<div>');
-				sb._('<div class="jmb-families-parent-name">')._(get.nick)._('</div>');
+				sb._('<div class="jmb-families-parent-name">')._(module._getName(object))._('</div>');
 				sb._('<div class="jmb-families-parent-date">')._(get.birth('year'))._('</div>');
 			sb._('</div>');
 		sb._('</div>');
@@ -360,7 +373,7 @@ JMBFamiliesObject.prototype = {
 				sb._('</div>')
 			sb._('</div></div>');	
 			sb._('<div>');
-				sb._('<div class="jmb-families-child-name">')._(get.nick)._('</div>');
+				sb._('<div class="jmb-families-child-name">')._(module._getName(object))._('</div>');
 				sb._('<div class="jmb-families-child-date">')._((date.length!=0)?date:"....")._('</div>');
 			sb._('</div>');
 			if(module._childrensCount(families)!=0){
@@ -450,6 +463,22 @@ JMBFamiliesObject.prototype = {
 			});
 		});
 	},
+    _tooltips:function(cont){
+        var module = this,
+            pull = module.nameTooltip,
+            sb = host.stringBuffer();
+        jQuery(pull).each(function(i, el){
+            var parse = storage.usertree.parse(el);
+            var div = jQuery(cont).find('div#'+parse.gedcom_id).find('.jmb-families-child-name,.jmb-families-parent-name');
+            sb.clear();
+            jQuery(div).tipsy({
+                gravity: 'sw',
+                html: true,
+                fallback: sb._('<div>')._(parse.nick)._('</div>').result()
+            });
+        });
+        module.nameTooltip = [];
+    },
 	_win:function(cont){
 		var	module = this;
 		jQuery(cont).find('div[type="imgContainer"]').each(function(i,div){
@@ -547,6 +576,7 @@ JMBFamiliesObject.prototype = {
 		module._view(module.parent);
 		module._edit(module.parent);
 		module._facebook(module.parent);
+        module._tooltips(module.parent);
 		module._win(module.parent);
 		module._home(module.parent);
 		
