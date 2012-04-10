@@ -362,6 +362,18 @@ class JMBProfile {
         $this->host->gedcom->individuals->delete($args);
         return true;
     }
+
+    public function unlink($args){
+        //11126
+        //100001612661158
+        $session = JFactory::getSession();
+        $tree_id = $session->get('tree_id');
+        $owner_id = $session->get('gedcom_id');
+        $gedcom_id = $args;
+        $this->host->gedcom->individuals->unlink($tree_id, $gedcom_id);
+        $objects = $this->host->usertree->getUser($tree_id, $owner_id, $gedcom_id);
+        return json_encode(array('objects'=>$objects));
+    }
 }
 
 ?>

@@ -60,15 +60,11 @@ $document->addScript('components/com_manager/js/jquery.prettyPhoto.js');
 $document->addScript('components/com_manager/js/jquery.tipsy.js');
 $document->addScript('components/com_manager/js/jquery.scroll.min.js');
 	
+
+################################################################################
 //jmb overlay
 $document->addStyleSheet('components/com_manager/modules/overlay/css/jmb.overlay.css?111');
 $document->addScript('components/com_manager/modules/overlay/js/jmb.overlay.js?111');
-	
-//jmb delete tree button
-$document->addStyleSheet('components/com_manager/modules/delete/css/jmb.delete.css?111');
-$document->addScript('components/com_manager/modules/delete/js/jmb.delete.js?111');
-	
-################################################################################
 //header
 $document->addStyleSheet('components/com_manager/modules/header/css/jmb.header.css?111');
 $document->addScript('components/com_manager/modules/header/js/jmb.header.js?111');
@@ -86,15 +82,13 @@ $document->addScript('components/com_manager/modules/invitation/js/jmb.invitatio
 //family line object
 $document->addStyleSheet('components/com_manager/modules/family_line/css/jmb.family.line.css?111');
 $document->addScript('components/com_manager/modules/family_line/js/jmb.family.line.js?111');
-###############################################################################
-
 //login\profile in header (login\logout)
 $document->addStyleSheet('components/com_manager/modules/login/css/jmb.login.css?111');
 $document->addScript('components/com_manager/modules/login/js/jmb.login.js?111');
-
-//language
-//$document->addStyleSheet('components/com_manager/modules/language/css/jmb.language.css?111');
-//$document->addScript('components/com_manager/modules/language/js/jmb.language.js?111');
+//progressbar
+$document->addStyleSheet('components/com_manager/modules/progressbar/css/jmb.progressbar.css?111');
+$document->addScript('components/com_manager/modules/progressbar/js/jmb.progressbar.js?111');
+###############################################################################
 
 $document->addCustomTag('<script type="text/javascript">jQuery.noConflict();</script>');
 

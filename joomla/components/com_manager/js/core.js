@@ -41,6 +41,7 @@ storage.invitation = {};
 storage.tooltip = {};
 storage.profile = {};
 storage.family_line = {};
+storage.progressbar = {};
 
 //usertree
 storage.usertree = {};
@@ -1179,6 +1180,7 @@ core.load = function(pages){
 		storage.tooltip = new JMBTooltip();
 		storage.topmenubar = new JMBTopMenuBar();
 		storage.family_line = new JMBFamilyLine();
+        storage.progressbar = new JMBProgressbarObject();
 		
 		//init top menu bar
 		storage.topmenubar.init();

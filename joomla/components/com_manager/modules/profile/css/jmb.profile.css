@@ -564,13 +564,14 @@
 /**
 * delete button
 */
-.jmb-dialog-options-content .delete {
+.jmb-dialog-options-content .button {
     background: none repeat scroll 0 0 #999999;
     border: 1px solid #000000;
     border-radius: 5px 5px 5px 5px;
     color: white;
     cursor: pointer;
     padding: 5px;
+    margin: 10px;
     text-align: center;
     width: 300px;
 }

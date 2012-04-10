@@ -40,8 +40,10 @@ function JMBProfile(){
 
 JMBProfile.prototype = {
 	_ajax:function(func, params, callback){
+        storage.progressbar.loading();
 		host.callMethod("profile", "JMBProfile", func, params, function(res){
 			callback(res);
+            storage.progressbar.off();
 		});
 	},
 	_ajaxForm:function(obj, method, args, beforeSubmit, success){
@@ -53,9 +55,11 @@ JMBProfile.prototype = {
 			dataType:"json",
 			target:jQuery(storage.iframe).attr('name'),
 			beforeSubmit:function(data){
+                storage.progressbar.loading();
 				return beforeSubmit(data);
 			},
 			success:function(data){
+                storage.progressbar.off();
 				success(data);
 			}
 		});
@@ -958,10 +962,16 @@ JMBProfile.prototype = {
 				sb._('<div class="jmb-dialog-options-content" style="margin: 10px;">');
 					sb._('<ul style="list-style: none outside none;">');
 						sb._('<li id="delete">');
-							sb._('<div id="text"><div class="delete"><span>Delete this person from your family tree.</span></div></div>');
-							sb._('<div id="description"></div>')
-						sb._('</li>')
-					sb._('</ul>');
+							sb._('<div id="text"><div class="button"><span>Delete this person from your family tree.</span></div></div>');
+							sb._('<div id="description"></div>');
+						sb._('</li>');
+                        if(storage.usertree.gedcom_id != module.target_id && user.permission == 'OWNER'){
+                            sb._('<li id="unlink">');
+                                sb._('<div id="text"><div class="button"><span>Unlink this person from your family tree.</span></div></div>');
+                                sb._('<div id="description"></div>');
+                            sb._('</li>');
+                        }
+			        sb._('</ul>');
 				sb._('</div>');				
 				html = jQuery(sb.result());
 				jQuery(module.box).find('div.jmb-dialog-profile-content').append(html);
@@ -984,6 +994,15 @@ JMBProfile.prototype = {
                     if(confirm("Are you sure you want to delete this user?")){
                         module._ajax('delete', module.target_id, function(res){
                             window.location.reload();
+                        });
+                    }
+                });
+                jQuery(html).find('li#unlink span').click(function(){
+                    if(confirm("Are you sure you want to unlink this user?")){
+                        module._ajax('unlink', module.target_id, function(res){
+                            var json = jQuery.parseJSON(res.responseText);
+                            storage.usertree.update(json.objects);
+                            jQuery(html).find('li#unlink').remove();
                         });
                     }
                 });

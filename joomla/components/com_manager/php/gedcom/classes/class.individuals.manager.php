@@ -95,20 +95,16 @@ class IndividualsList{
         	$this->ajax->setQuery('DELETE FROM #__mb_individuals WHERE id=?', $id);
         	$this->ajax->query();
         }
-        
-        public function cashDelete($tree_id, $gedcom_id, $ind){
-        	$sql_string = "SELECT * FROM #__mb_cash WHERE tree_id = ? AND individuals_id = ?";
-        	$this->ajax->setQuery($sql_string, $tree_id, $gedcom_id);
-        	$rows = $this->ajax->loadAssocList();
-        	if($rows!=null){
-        		$sql_string = "UPDATE #__mb_cash SET `value`= ?, `change` = NOW() WHERE `tree_id` = ?";
-        		$this->ajax->setQuery($ind->First_name.' '.$ind->LastName, $tree_id);
-        		$this->ajax->query();
-        	} else {
-        		$sql_string = "INSERT INTO #__mb_cash (`uid`, `tree_id`, `individuals_id`, `type`, `value`, `change`) VALUES (NULL, ?, ?, ?, ?, NOW())";
-        		$this->ajax->setQuery($sql_string, $tree_id, $gedcom_id, `family_deleted`, $ind->First_name.' '.$ind->LastName);
-        		$this->ajax->query();
-        	}
+
+        public function unlink($tree_id, $gedcom_id){
+            if($gedcom_id==NULL){ return null; }
+            $sql_string = "UPDATE #__mb_individuals SET `fid` = '0' WHERE id = ?";
+            $this->ajax->setQuery($sql_string, $gedcom_id);
+            $this->ajax->query();
+
+            $sql_string = "UPDATE #__mb_tree_links SET `type` = 'MEMBER' WHERE tree_id = ? AND individuals_id = ?";
+            $this->ajax->setQuery($sql_string, $tree_id, $gedcom_id);
+            $this->ajax->query();
         }
 
         public function getParents($id){
