@@ -195,7 +195,7 @@ JMBDescendantTreeObject.prototype = {
 	},
 	treeClick:function(id){
 		var	module = this;
-		module.profile.render(module.members[id]);
+		module.profile.render(id);
 	},
 	board:function(){
 		var	module = this,

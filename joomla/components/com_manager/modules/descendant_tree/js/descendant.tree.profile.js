@@ -1,6 +1,7 @@
 function DescendantTreeProfile(parent){
 	var	module = this;
-	
+
+    module.id = null;
 	module.parent = parent;
 	module.cont = parent.profile_container;
 }
@@ -13,6 +14,7 @@ DescendantTreeProfile.prototype = {
 	},
 	clear:function(){
 		var	module = this;
+        module.id = null;
 		jQuery(module.cont).html('');	
 		storage.tooltip.cleaner();
 	},
@@ -125,18 +127,23 @@ DescendantTreeProfile.prototype = {
 			offsetParent:document.body,
 			target:jQuery(html).find('div#edit-button'),
 			object:object,
-			afterEditorClose:function(object){
-				module.render(object);	
+			afterEditorClose:function(){
+                storage.tooltip.cleaner(function(){
+                    module.render(module.id);
+                });
 			}
 		});
 	},
 	editor:function(html, object){
+        var module = this;
 		jQuery(html).find('.jmb-dtp-body-info-switch').click(function(){
 			storage.profile.editor('view', {
 				object:object,
 				events:{
 					afterEditorClose:function(obj){
-						object = obj;
+                        storage.tooltip.cleaner(function(){
+                            module.render(module.id);
+                        });
 					}
 				}
 			});
@@ -151,12 +158,16 @@ DescendantTreeProfile.prototype = {
 				jQuery(html).find('.jmb-dtp-facebook-icon').removeClass('hover');
 			});
 	},
-	render:function(object){
-		var	module = this, html;
-		
+	render:function(id){
+		var	module = this,
+            object = storage.usertree.pull[id],
+            html;
+
+
 		module.clear();
 		html = module.create(object);
-			
+		module.id = id;
+
 		module.photo(html);
 		module.edit(html, object);
 		module.editor(html, object);
