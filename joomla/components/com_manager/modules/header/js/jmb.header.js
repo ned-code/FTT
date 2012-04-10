@@ -44,9 +44,12 @@ function JMBHeader(){
 					if(fn.get.is_iframe()){
 						return (alias!='login')?'familytreetop':alias;
 					}
-					if(type=='famous_family'){
+					if(alias == 'myfamily' && type=='famous_family'){
 						return 'famous-family';
 					}
+                    if(alias == 'famous-family'){
+                        return 'famous-family';
+                    }
 					return alias;
 				}
 			}
