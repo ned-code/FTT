@@ -209,7 +209,7 @@ storage.usertree.parse = function(object){
 				if(sub){
 					return (date[sub])?date[sub]:0;
 				} else {
-					return [date[0],_month[date[1]],date[2]].join(' ');
+					return [date[0],_month[date[1]-1],date[2]].join(' ');
 				}
 			}
 			return '';			

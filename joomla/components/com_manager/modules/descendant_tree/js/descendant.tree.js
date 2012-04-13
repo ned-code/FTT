@@ -95,9 +95,7 @@ JMBDescendantTreeObject.prototype = {
 		
 		dhxLayout.cells("b").attachObject(module.profile_container);		
 
-		// set layout in left side[layout.cells('a')]
 		dhxTree = dhxLayout.cells("a").attachTree();
-		//dhxTree.setIconSize("16","16")
 		dhxTree.setIconSize("16","16");
 		dhxTree.setSkin('dhx_skyblue');
 		dhxTree.setImagePath(module.imagePath);
@@ -246,12 +244,15 @@ JMBDescendantTreeObject.prototype = {
 						var node, sb = host.stringBuffer(), data_style;
 						sb._('<div id ="')._(settings.id)._('" class="node')._((settings.descendants)?' descendants':'')._('">');
 							if(settings.descendants){
-								sb._('<span style="position:relative;top:-5px;"><input id="')._(settings.input_id())._('" type="checkbox"></span>');
+								sb._('<span style="position:relative;top:-5px;"><input ');
+                                        sb._((settings.count==0)?'disabled="true"':'');
+                                        sb._(' id="')._(settings.input_id)._('" type="checkbox">');
+                                sb._('</span>');
 							}
 							sb._('<span class="title">');
 								if(settings.descendants){
 									sb._('<div class="text">')._(settings.title)._('</div>');
-									sb._('<div class="count">')._(settings.count()+' Descendants')._('</div>');
+                                    sb._('<div class="count">')._(settings.count+' Descendants')._('</div>');
 								} else {
 									sb._(settings.title);
 								}
@@ -329,13 +330,13 @@ JMBDescendantTreeObject.prototype = {
 										id:'grandparents',
 										title:'Grandparents',
 										descendants:true,
-										count:function(){ 
+										count:(function(){
 											if(!grandmother&&!grandfather) return 0;
 											return (grandfather)?grandfather.count:grandmother.count;
-										},
-										input_id:function(){
+										})(),
+										input_id:(function(){
 											return (grandmother)?grandmother.id:grandfather.id;
-										},
+										})(),
 										style:{
 											top:'85px',
 											left:'80px'
@@ -357,16 +358,16 @@ JMBDescendantTreeObject.prototype = {
 											id:'grandfatherparents',
 											title:'Great Grandparents',
 											descendants:true,
-											count:function(){ 
+											count:(function(){
 												var parents = grandfather.parents;
 												if(!parents.father&&!parents.mother) return 0;
 												return (parents.mother)?parents.mother.count:parents.father.count;
-											},
-											input_id:function(){
+											})(),
+											input_id:(function(){
 												var parents = grandfather.parents;
 												if(!parents.father&&!parents.mother) return 0;
 												return (parents.mother)?parents.mother.id:parents.father.id;
-											},
+											})(),
 											style:{
 												top:'135px',
 												left:'200px'
@@ -392,16 +393,16 @@ JMBDescendantTreeObject.prototype = {
 											id:'grandmotherparents',
 											title:'Great Grandparents',
 											descendants:true,
-											count:function(){ 
+											count:(function(){
 												var parents = grandmother.parents;
 												if(!parents.father&&!parents.mother) return 0;
 												return (parents.mother)?parents.mother.count:parents.father.count;
-											},
-											input_id:function(){
+											})(),
+											input_id:(function(){
 												var parents = grandmother.parents;
 												if(!parents.father&&!parents.mother) return 0;
 												return (parents.mother)?parents.mother.id:parents.father.id;
-											},
+											})(),
 											style:{
 												top:'35px',
 												left:'200px'

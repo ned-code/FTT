@@ -8,64 +8,39 @@ jimport('joomla.application.component.controller' );
 
 class JMBController extends JController
 {	
-	/**
-	* Method to display the view
-	*
-	* @access    public
-	*/
-	function display()
-	{
-		parent::display();
-	}
-	
-	/**
-	*
-	*/
-        function callMethod(){
-            ob_clean();
-            $host = new Host('joomla');
-            echo $host->callMethod(JRequest::getVar('module'),JRequest::getVar('class'),JRequest::getVar('method'),JRequest::getVar('args'));
-            die;
-        }
-        
         /**
+        * Method to display the view
         *
+        * @access    public
         */
-        function callHostMethod(){
-            ob_clean();
-            $host = new Host('joomla');
-            if((JRequest::getVar('module')!=null)){
-                $params = array(JRequest::getVar('module'),JRequest::getVar('args'));
-            }else
-                $params = array(JRequest::getVar('args'));
-            echo call_user_func_array(array($host, JRequest::getVar('method')), $params);
-            die;
+        function display() {
+            parent::display();
         }
-        
+
         protected function getFiles($dir){
-        	$files = array();
-        	if($dh = opendir($dir)) {
-        		while (($file = readdir($dh)) !== false) {
-        			if($file!='.'&&$file!='..'&&$file!='index.html'){
-        				$file_parts = explode('.', $file);
-        				$end_file_part = end($file_parts);
-        				if($end_file_part=='css'||$end_file_part=='js'){
-        					$files[] = $file;
-        				}
-        			}
-        		}
-        	}
-        	return $files;
+            $files = array();
+            if($dh = opendir($dir)) {
+                while (($file = readdir($dh)) !== false) {
+                    if($file!='.'&&$file!='..'&&$file!='index.html'){
+                        $file_parts = explode('.', $file);
+                        $end_file_part = end($file_parts);
+                        if($end_file_part=='css'||$end_file_part=='js'){
+                            $files[] = $file;
+                        }
+                    }
+                }
+            }
+            return $files;
         }
-        
+
         protected function getIncludesFiles($module_name, $path){
-        	$module_path = $path.DS.$module_name;
-        	$css_dir = $module_path.DS.'css';
-        	$js_dir = $module_path.DS.'js';
-        	$files = array();
-        	$files['js'] = $this->getFiles($js_dir);
-        	$files['css'] = $this->getFiles($css_dir);
-        	return $files;        	
+            $module_path = $path.DS.$module_name;
+            $css_dir = $module_path.DS.'css';
+            $js_dir = $module_path.DS.'js';
+            $files = array();
+            $files['js'] = $this->getFiles($js_dir);
+            $files['css'] = $this->getFiles($css_dir);
+            return $files;
         }
         
         protected function getModuleObjectName($module_name){
@@ -154,150 +129,7 @@ class JMBController extends JController
         	echo json_encode(array('pages'=>$pages));
         	exit;
         }
-        
-        /**
-        *
-        */
-        public function getModule(){	
-        	ob_clean();
-        	header('Content-Type: text/html');
-        	$id = JRequest::getVar('id');
-        	$task = JRequest::getVar('f');
-        	$manager = new moduleManager();
-        	if($task == 'module'){
-        		$module = $manager->getModule($id);
-        		echo $module->render(true);
-        	}
-        	die;
-        }
-        
-        /**
-        *
-        */
-        public function moduleScript(){
-        	ob_clean();
-        	header('Content-type: text/javascript');
-        	$id = JRequest::getVar('id');
-        	$task = JRequest::getVar('f');
-        	$manager = new moduleManager();
-        	if($task=='append'){
-        		$module = $manager->getModule($id);
-        		echo $manager->appendModule($module);
-        	}
-        	if($task=='init'){
-        		$module = $manager->getModule($id);
-        		echo $module->initialize(true);
-        	}
-        	die;
-        }
-        
-         /**
-        *
-        */
-        public function getModules(){
-        	ob_clean();
-        	header('Content-Type: text/xml');
-        	$task = JRequest::getVar('f');
-        	$manager = new moduleManager();
-        	if(isset($task)){
-        		if($task=='modules'){
-        			echo $manager->getUserModules();
-        		}else if($task=='system'){
-        			echo $manager->getSystemModules();
-        		}else if($task=='uninstall'){
-        			$manager->uninstallModules(JRequest::getVar('id'));
-        		}else if($task=='all'){
-        			echo $manager->getModulesXml("all");
-        		}
-        	}else if(isset($_POST)){
-        		if(isset($_FILES['browse'])){
-        			echo $manager->unpackModule();
-        		}else if(isset($_POST["rollback"])){
-        			echo $manager->installModule($_POST['title'],$_POST['description'],$_POST['name'],$_POST['javascript'],$_POST['stylesheets'],$_POST['tables'],$_POST['rollback']);
-        		}else if(isset($_POST["method"])){
-        			$manager->callMethod($_POST["module"],$_POST["method"],$_POST["arguments"]);
-        		}
-        	}
-        	die;
-        }
-        
-        /**
-        *
-        */
-        public function getXML(){
-            /*
-        	ob_clean();
-        	header('Content-Type: text/xml');
-        	$task = JRequest::getVar('f');     	
-        	$manager = new moduleManager();
-        	if($task =='tree')
-        		echo $manager->getModulesXmlTree();
-        	else if($task =='module'){
-        		$module = $manager->getModule(JRequest::getVar('id'));
-        		$manager->appendModule($module);
-        		return $module->render();
-        	}else if($task =='custom'){
-        		echo $manager->getUserModules();
-        	}else if($task =='system'){
-        		echo $manager->getSystemModules();
-        	}else if($task =='pages'){
-        		$page = new pageManager();
-        		echo $page->getPagesSet(JRequest::getVar('pages'));
-        	}else if($task =='append'){
-        		$module = $manager->getModule(JRequest::getVar('id'));
-        		echo $manager->appendModule($module);
-        	}
-        	die;
-            */
-        }
-        
-        /**
-        *
-        */
-        public function getTpl(){
-        	ob_clean();
-        	$type = JRequest::getVar('type');
-        	//echo file_get_contents(JUri::base());
-        	echo file_get_contents(JUri::base()."components/com_manager/tpl/".$type.".tpl");
-        	die;
-        }
-        
-	/**
-        *
-        */
-        function loadPage(){
-            $page_id = JRequest::getVar('page_id');
-            $db =& JFactory::getDBO();
-            $sql = "SELECT uid, page_id, json FROM #__mb_modulesgrid WHERE page_id='".$page_id."'";
-            $db->setQuery($sql);
-            $rows = $db->loadAssocList();
-            echo $rows[0]['json'];
-            die;
-	}
-	
-	/**
-	*
-	*/
-	function savePage(){
-		$page_id = JRequest::getVar('page_id');
-		$json = JRequest::getVar('json');
-		$db =& JFactory::getDBO();
-		$sql = "SELECT uid FROM #__mb_modulesgrid WHERE page_id ='".$page_id."'";
-		$db->setQuery($sql);
-		$result = $db->loadResult();
-		if($result){
-			$sql = "UPDATE `#__mb_modulesgrid` SET `json` = '".$json."' WHERE page_id ='".$page_id."'";
-			$db->setQuery($sql);
-			$db->query();
-		}
-		else{
-			$sql = "INSERT INTO `#__mb_modulesgrid` (`uid` ,`page_id`,`json`)VALUES (NULL , '".$page_id."', '".$json."');";
-			$db->setQuery($sql);
-			$db->query();
-		}
-		die;
-	}
-	
+
 	public function getResizeImage(){
         $host = new Host('Joomla');
         $session = JFactory::getSession();
@@ -436,7 +268,7 @@ class JMBController extends JController
         		$session->set('gedcom_id', $user_data['gedcom_id']);
         		$session->set('tree_id', $user_data['tree_id']);
         		$session->set('permission', $user_data['permission']);
-        		$session->set('facebook_id', $user_data['facebook_id']);
+                $session->set('facebook_id', $user_data['facebook_id']);
         		return true;
         	}
         	return false;

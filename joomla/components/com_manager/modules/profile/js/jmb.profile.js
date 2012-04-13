@@ -215,11 +215,11 @@ JMBProfile.prototype = {
 				months:function(name, selected){
 					sb.clear();
 					sb._('<select name="')._(name)._('">');
-						for(i=0 ; i < months.length ; i++ ){
+						for(i=1 ; i <= months.length ; i++ ){
 							if(selected&&selected == i){
-								sb._('<option SELECTED value="')._(i)._('">')._(months[i])._('</option>');
+								sb._('<option SELECTED value="')._(i)._('">')._(months[i-1])._('</option>');
 							} else {
-								sb._('<option value="')._(i)._('">')._(months[i])._('</option>');
+								sb._('<option value="')._(i)._('">')._(months[i-1])._('</option>');
 							}
 						}
 					sb._('</select>');
@@ -794,7 +794,7 @@ JMBProfile.prototype = {
 				events.living();
                 events.gender(object, 135, 150);
 				//ajax form
-				module._ajaxForm(jQuery(html).find('form'), 'basic', user.gedcom_id, function(data){}, function(res){
+				module._ajaxForm(jQuery(html).find('form'), 'basic', user.gedcom_id, function(data){ return true; }, function(res){
 					update_data(res);
 				}); 
 				jQuery(module.box).find('div.jmb-dialog-profile-content').append(html);
@@ -809,13 +809,13 @@ JMBProfile.prototype = {
 					
 				save_union = function(form){
 					json = '{"gedcom_id":"'+parse.gedcom_id+'","family_id":"'+jQuery(form).attr('family_id')+'","method":"save"}';
-					module._ajaxForm(form, 'union', json, function(data){}, function(res){
+					module._ajaxForm(form, 'union', json, function(data){ return true; }, function(res){
 						update_data(res);
 					}); 
 				}
 				
 				add_union = function(div){
-					module._ajaxForm(jQuery(div).find('form'), 'union', '{"gedcom_id":"'+parse.gedcom_id+'","method":"add"}', function(data){}, function(res){
+					module._ajaxForm(jQuery(div).find('form'), 'union', '{"gedcom_id":"'+parse.gedcom_id+'","method":"add"}', function(data){ return true; }, function(res){
 						update_data(res);
 						jQuery(div).remove();
 						div = form.spouse(families[res.data.family_id],count, true);
@@ -1095,7 +1095,7 @@ JMBProfile.prototype = {
 			w = 700,
 			h = 'auto',//500
 			query = '',
-			beforeSend = function(){},
+			beforeSend = function(){ return true; },
 			success = function(res){
 				var objects = res.objects;
 				jQuery(objects).each(function(i, el){

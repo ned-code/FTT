@@ -77,7 +77,7 @@ function JMBQuickFactsObject(object){
 			return htmlObject;
 		},
 		setMiniProfile:function(target, object){
-			if(object == null) return fasle;
+			if(object == null) return false;
 			storage.tooltip.render('view', {
 				object:object,
 				target:target
