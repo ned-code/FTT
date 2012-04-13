@@ -42,6 +42,7 @@ $document->addScript('administrator/components/com_manager/codebase/dhtmlxtabbar
 $document->addScript('administrator/components/com_manager/js/jquery.min.js');
 $document->addScript('administrator/components/com_manager/js/jquery-ui.min.js');
 $document->addScript('administrator/components/com_manager/js/jquery.form.js');
+$document->addScript('administrator/components/com_manager/js/jquery.validate.min.js');
 
 
 //core part

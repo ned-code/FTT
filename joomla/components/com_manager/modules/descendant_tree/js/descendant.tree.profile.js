@@ -158,6 +158,12 @@ DescendantTreeProfile.prototype = {
 				jQuery(html).find('.jmb-dtp-facebook-icon').removeClass('hover');
 			});
 	},
+    facebook:function(html, object){
+         jQuery(html).find('.jmb-dtp-facebook-icon').click(function(){
+             window.open('http://www.facebook.com/profile.php?id='+object.user.facebook_id,'new','width=320,height=240,toolbar=1')
+             return false;
+         });
+    },
 	render:function(id){
 		var	module = this,
             object = storage.usertree.pull[id],
@@ -169,6 +175,7 @@ DescendantTreeProfile.prototype = {
 		module.id = id;
 
 		module.photo(html);
+        module.facebook(html, object);
 		module.edit(html, object);
 		module.editor(html, object);
 	}

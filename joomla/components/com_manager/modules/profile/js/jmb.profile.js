@@ -45,7 +45,16 @@ JMBProfile.prototype = {
             storage.progressbar.off();
 		});
 	},
-	_ajaxForm:function(obj, method, args, beforeSubmit, success){
+    _validateForm:function(form, opts, ajaxSumbit){
+        var default_opts = {
+            submitHandler: function(form) {
+                ajaxSumbit(form);
+            }
+        }
+        var options = jQuery.extend({},default_opts, opts);
+        jQuery(form).validate(options);
+    },
+	_ajaxForm:function(obj, method, args, success){
 		var url = [storage.baseurl,'components/com_manager/php/ajax.php'].join('');
 		jQuery(obj).ajaxForm({
 			url:url,
@@ -55,12 +64,7 @@ JMBProfile.prototype = {
 			target:jQuery(storage.iframe).attr('name'),
 			beforeSubmit:function(data){
                 storage.progressbar.loading();
-				if(beforeSubmit(data)){
-                    return true;
-                } else {
-                    storage.progressbar.off();
-                    return false;
-                }
+				return true;
 			},
 			success:function(data){
                 storage.progressbar.off();
@@ -794,9 +798,20 @@ JMBProfile.prototype = {
 				events.living();
                 events.gender(object, 135, 150);
 				//ajax form
-				module._ajaxForm(jQuery(html).find('form'), 'basic', user.gedcom_id, function(data){ return true; }, function(res){
-					update_data(res);
-				}); 
+                module._validateForm(jQuery(html).find('form'),{
+                    rules:{
+                        birth_year:{
+                            date:true
+                        }
+                    },
+                    messages:{
+                        birth_year:""
+                    }
+                }, function(f){
+                    module._ajaxForm(f, 'basic', user.gedcom_id, function(res){
+                        update_data(res);
+                    });
+                });
 				jQuery(module.box).find('div.jmb-dialog-profile-content').append(html);
 			},
 			edit_unions:function(){
@@ -809,21 +824,26 @@ JMBProfile.prototype = {
 					
 				save_union = function(form){
 					json = '{"gedcom_id":"'+parse.gedcom_id+'","family_id":"'+jQuery(form).attr('family_id')+'","method":"save"}';
-					module._ajaxForm(form, 'union', json, function(data){ return true; }, function(res){
-						update_data(res);
-					}); 
+                    module._validateForm(form,{}, function(f){
+                        module._ajaxForm(f, 'union', json, function(res){
+                            update_data(res);
+                        });
+                    });
 				}
 				
 				add_union = function(div){
-					module._ajaxForm(jQuery(div).find('form'), 'union', '{"gedcom_id":"'+parse.gedcom_id+'","method":"add"}', function(data){ return true; }, function(res){
-						update_data(res);
-						jQuery(div).remove();
-						div = form.spouse(families[res.data.family_id],count, true);
-						jQuery(html).append(div);
-						save_union(jQuery(div).find('form'));
-						count++;
-						add_active = false;
-					});
+                    module._validateForm(jQuery(div).find('form'),{}, function(f){
+                        var post_string = '{"gedcom_id":"'+parse.gedcom_id+'","method":"add"}';
+                        module._ajaxForm(f, 'union', post_string, function(res){
+                            update_data(res);
+                            jQuery(div).remove();
+                            div = form.spouse(families[res.data.family_id],count, true);
+                            jQuery(html).append(div);
+                            save_union(jQuery(div).find('form'));
+                            count++;
+                            add_active = false;
+                        });
+                    });
 				}
 				var cp = (families!=null&&families.length>0);
 				sb.clear();
@@ -935,31 +955,41 @@ JMBProfile.prototype = {
 					photoDelete(li);
 					photoSelect(li);
 				});
-				module._ajaxForm(jQuery(html).find('form'), 'photo','{"gedcom_id":"'+parse.gedcom_id+'","method":"add"}', function(data){
-                    return data[0].value != '';
-                }, function(res){
-					var li;
-					if(res!=null&&res.image){
-						if(jQuery(html).find('.jmb-dialog-photos-content').length==0){
-							jQuery(html).append(storage.media.render([res.image], true));
-							li = jQuery(html).find('.jmb-dialog-photos-content li')[0];							
-						} else {
-							li = jQuery(storage.media.getListItem(res.image, true));
-							jQuery(html).find('.jmb-dialog-photos-content div.list ul').append(li);
-						}
-						photoDelete(li);
-						photoSelect(li);
-						if(media==null){
-                            storage.usertree.pull[parse.gedcom_id].media = {
-								avatar:null,
-								photos:[]
-							}
-                            media = storage.usertree.pull[parse.gedcom_id].media;
-						};
-						media.photos.push(res.image);
-					}
-                    jQuery(html).find('form').resetForm();
-				});
+                module._validateForm(jQuery(html).find('form'), {
+                    rules:{
+                        upload:{
+                            accept: "jpg|gif|png"
+                        }
+                    },
+                    messages:{
+                        upload:""
+                    }
+                }, function(f){
+                    var post_string = '{"gedcom_id":"'+parse.gedcom_id+'","method":"add"}';
+                    module._ajaxForm(f, 'photo', post_string, function(res){
+                        var li;
+                        if(res!=null&&res.image){
+                            if(jQuery(html).find('.jmb-dialog-photos-content').length==0){
+                                jQuery(html).append(storage.media.render([res.image], true));
+                                li = jQuery(html).find('.jmb-dialog-photos-content li')[0];
+                            } else {
+                                li = jQuery(storage.media.getListItem(res.image, true));
+                                jQuery(html).find('.jmb-dialog-photos-content div.list ul').append(li);
+                            }
+                            photoDelete(li);
+                            photoSelect(li);
+                            if(media==null){
+                                storage.usertree.pull[parse.gedcom_id].media = {
+                                    avatar:null,
+                                    photos:[]
+                                }
+                                media = storage.usertree.pull[parse.gedcom_id].media;
+                            };
+                            media.photos.push(res.image);
+                        }
+                        jQuery(html).find('form').resetForm();
+                    });
+                });
 				jQuery(module.box).find('div.jmb-dialog-profile-content').append(html);
 			},
 			more_options:function(){
@@ -1095,7 +1125,6 @@ JMBProfile.prototype = {
 			w = 700,
 			h = 'auto',//500
 			query = '',
-			beforeSend = function(){ return true; },
 			success = function(res){
 				var objects = res.objects;
 				jQuery(objects).each(function(i, el){
@@ -1145,7 +1174,9 @@ JMBProfile.prototype = {
 				jQuery(module.addBox).css('overflow', 'visible');
 				jQuery(module.addBox).append(container);
 				jQuery(container).append(cont);
-				module._ajaxForm(cont, 'add', query, beforeSend, success);
+                module._validateForm(cont, {}, function(f){
+                    module._ajaxForm(f, 'add', query, success);
+                });
 				return this;
 			},
 			parent:function(){
