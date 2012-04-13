@@ -143,32 +143,50 @@ storage.usertree.parse = function(object){
 			return 0;
 		})(),
 		marr:function(id, type, sub){
-			var	family = families[id],
-				event = (family)?family.marriage:false;
-			if(event){
-				if(event[type]!=null){
-					if(sub){
-					 	return (event[type][sub]!=null)?event[type][sub]:'';
-					} else {
-						return event[type];
-					}
-				}	
-			}
+			var family = families[id];
+            if(family){
+                var event = family.marriage;
+                if(event && type){
+                    var evType = event[type];
+                    if(!sub){
+                        return evType;
+                    } else{
+                        switch(type){
+                            case "date":
+                                return evType[sub] != null ? evType[sub] : '';
+                            break;
+
+                            case "place":
+                                return evType[0][sub] != null ? evType[0][sub] : '';
+                            break;
+                        }
+                    }
+                }
+            }
 			return '';
 		},
 		divorce:function(id, type, sub){
-			var	family = families[id],
-				event = (family)?family.divorce:false;
-			if(event){
-				if(event[type]!=null){
-					if(sub){
-					 	return (event[type][sub]!=null)?event[type][sub]:'';
-					} else {
-						return event[type];
-					}
-				}
-			}
-			return '';
+            var family = families[id];
+            if(family){
+                var event = family.divorce;
+                if(event && type){
+                    var evType = event[type];
+                    if(!sub){
+                        return evType;
+                    } else{
+                        switch(type){
+                            case "date":
+                                return evType[sub] != null ? evType[sub] : '';
+                                break;
+
+                            case "place":
+                                return evType[0][sub] != null ? evType[0][sub] : '';
+                                break;
+                        }
+                    }
+                }
+            }
+            return '';
 		},
 		birth:function(f){
 			var event = user['birth'];

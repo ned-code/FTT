@@ -89,21 +89,63 @@ class LocationsList{
         	}
         }
         public function getEventsLocationsList($tree_id, $gedcom_id = false){
-		$sql_string = "SELECT locations.place_id, events.id as event_id, locations.name as location_name, places.name as place_name, locations.city, locations.state, locations.country  
-				FROM #__mb_locations as locations
-				LEFT JOIN #__mb_places as places ON places.place_id = locations.place_id
-				LEFT JOIN #__mb_events as events ON events.id = places.events_id
-				LEFT JOIN #__mb_families as family ON family.id = events.families_id
-				LEFT JOIN #__mb_tree_links as links ON links.individuals_id = family.wife OR links.individuals_id = family.husb OR links.individuals_id = events.individuals_id";
-		if($gedcom_id) {
-			$sql_string .= " WHERE links.tree_id = ? and links.individuals_id = ?";
-			$this->ajax->setQuery($sql_string, $tree_id, $gedcom_id);
-		} else {
-			$sql_string .= " WHERE links.tree_id = ?";
-			$this->ajax->setQuery($sql_string, $tree_id);
-		}	
-        	$rows = $this->ajax->loadAssocList('event_id');
-        	return $rows;
+		    $family_places = $this->getFamilyPlaces($tree_id, $gedcom_id);
+            $individuals_places = $this->getIndividualPlaces($tree_id, $gedcom_id);
+            $result = array();
+            if(!empty($family_places)){
+                foreach($family_places as $key => $ev){
+                    if(!isset($result[$key])){
+                        $result[$key] = $ev;
+                    }
+                }
+            }
+            if(!empty($individuals_places)){
+                foreach($individuals_places as $key => $ev){
+                    if(!isset($result[$key])){
+                        $result[$key] = $ev;
+                    }
+                }
+            }
+            return $result;
+        }
+        public function getFamilyPlaces($tree_id, $gedcom_id = false){
+            $sql_string = "SELECT DISTINCT place.place_id, event.id as event_id, location.name as location_name,
+                                           place.name as place_name, location.city, location.state, location.country
+                            FROM #__mb_places as place
+                            LEFT JOIN #__mb_events as event ON place.events_id = event.id
+                            LEFT JOIN #__mb_families as family ON family.id = event.families_id
+                            LEFT JOIN #__mb_individuals as ind ON family.husb = ind.id OR family.wife = ind.id
+                            LEFT JOIN #__mb_tree_links as link ON link.individuals_id = ind.id
+                            LEFT JOIN #__mb_locations as location ON location.place_id = place.place_id";
+            if($gedcom_id){
+                $sql_string .= " WHERE lin.tree_id = ? and link.individuals_id =? ";
+                $this->ajax->setQuery($sql_string, $tree_id, $gedcom_id);
+            } else {
+                $sql_string .= " WHERE link.tree_id = ?";
+                $this->ajax->setQuery($sql_string, $tree_id);
+            }
+            //var_dump($this->ajax->getQuery());
+            $rows = $this->ajax->loadAssocList('event_id');
+            return $rows;
+        }
+        public function getIndividualPlaces($tree_id, $gedcom_id = false){
+            $sql_string = "SELECT DISTINCT place.place_id, event.id as event_id, location.name as location_name,
+                                           place.name as place_name, location.city, location.state, location.country
+                            FROM #__mb_places as place
+                            LEFT JOIN #__mb_events as event ON place.events_id = event.id
+                            LEFT JOIN #__mb_individuals as ind ON event.individuals_id = ind.id
+                            LEFT JOIN #__mb_tree_links as link ON link.individuals_id = ind.id
+                            LEFT JOIN #__mb_locations as location ON location.place_id = place.place_id";
+            if($gedcom_id){
+                $sql_string .= " WHERE link.tree_id = ? and link.individuals_id =? ";
+                $this->ajax->setQuery($sql_string, $tree_id, $gedcom_id);
+            } else {
+                $sql_string .= " WHERE link.tree_id = ?";
+                $this->ajax->setQuery($sql_string, $tree_id);
+            }
+            //var_dump($this->ajax->getQuery());
+            $rows = $this->ajax->loadAssocList('event_id');
+            return $rows;
         }
 }
 ?>

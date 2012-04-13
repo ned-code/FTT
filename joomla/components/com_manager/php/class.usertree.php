@@ -178,7 +178,7 @@ class JMBUserTree {
 	/**
 	*
 	*/
-	protected function _getPlaces($event_id){
+	protected function z($event_id){
 		if(isset($this->_LocationsEventsList[$event_id])){
 			return $this->_LocationsEventsList[$event_id];
 		}
@@ -335,14 +335,17 @@ class JMBUserTree {
 		$this->_FamiliesEventsList = $this->gedcom->events->getFamiliesEvenetsList($this->_TreeId, $gedcom_id);
 		$this->_LocationsEventsList = $this->gedcom->locations->getEventsLocationsList($this->_TreeId, $gedcom_id);
 		$this->_MediaList = $this->gedcom->media->getMediaList($this->_TreeId, $gedcom_id);
+
         /*
-        var_dump(array('name'=>"_IndividualsList", 'size'=>sizeof($this->_IndividualsList) ));
-        var_dump(array('name'=>"_FamiliesList", 'size'=>sizeof($this->_FamiliesList) ));
-        var_dump(array('name'=>"_ChildrensList", 'size'=>sizeof($this->_ChildrensList) ));
-        var_dump(array('name'=>"_IndividualsEventsList", 'size'=>sizeof($this->_IndividualsEventsList) ));
-        var_dump(array('name'=>"_FamiliesEventsList", 'size'=>sizeof($this->_FamiliesEventsList) ));
-        var_dump(array('name'=>"_LocationsEventsList", 'size'=>sizeof($this->_LocationsEventsList) ));
-        var_dump(array('name'=>"_MediaList", 'size'=>sizeof($this->_MediaList) ));
+        //var_dump($this->_TreeId);
+        //var_dump($gedcom_id);
+        //var_dump(array('name'=>"_IndividualsList", 'size'=>sizeof($this->_IndividualsList) ));
+        //var_dump(array('name'=>"_FamiliesList", 'size'=>sizeof($this->_FamiliesList) ));
+        //var_dump(array('name'=>"_ChildrensList", 'size'=>sizeof($this->_ChildrensList) ));
+        //var_dump(array('name'=>"_IndividualsEventsList", 'size'=>sizeof($this->_IndividualsEventsList) ));
+        //var_dump(array('name'=>"_FamiliesEventsList", 'size'=>sizeof($this->_FamiliesEventsList) ));
+        //var_dump(array('name'=>"_LocationsEventsList", 'size'=>sizeof($this->_LocationsEventsList) ));
+        //var_dump(array('name'=>"_MediaList", 'size'=>sizeof($this->_MediaList) ));
         exit;
         */
 	}
@@ -657,4 +660,5 @@ class JMBUserTree {
 		return ($rows!=null)?$rows:false;
 	}
 }
+
 ?>

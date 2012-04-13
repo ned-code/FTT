@@ -45,32 +45,28 @@ JMBProfile.prototype = {
             storage.progressbar.off();
 		});
 	},
-    _validateForm:function(form, opts, ajaxSumbit){
-        var default_opts = {
-            submitHandler: function(form) {
-                ajaxSumbit(form);
-            }
-        }
-        var options = jQuery.extend({},default_opts, opts);
-        jQuery(form).validate(options);
-    },
-	_ajaxForm:function(obj, method, args, success){
-		var url = [storage.baseurl,'components/com_manager/php/ajax.php'].join('');
-		jQuery(obj).ajaxForm({
-			url:url,
-			type:"POST",
-			data: { "module":"profile","class":"JMBProfile", "method":method, "args": args },
-			dataType:"json",
-			target:jQuery(storage.iframe).attr('name'),
-			beforeSubmit:function(data){
+	_ajaxForm:function(settings){
+        var validate_options = (settings.validate)?settings.validate:{};
+        jQuery(settings.target).validate(validate_options);
+        jQuery(settings.target).ajaxForm({
+            url:[storage.baseurl,'components/com_manager/php/ajax.php'].join(''),
+            type:"POST",
+            data: { "module":"profile","class":"JMBProfile", "method":settings.method, "args": settings.args },
+            dataType:"json",
+            target:jQuery(storage.iframe).attr('name'),
+            beforeSubmit:function(){
                 storage.progressbar.loading();
-				return true;
-			},
-			success:function(data){
+                return true;
+            },
+            success:function(data){
                 storage.progressbar.off();
-				success(data);
-			}
-		});
+                if(typeof(settings.success) == 'function'){
+                    settings.success(data);
+                }
+            }
+        });
+
+
 	},
 	_iframe:function(){
 		if(jQuery("#iframe-profile").length==0){
@@ -376,7 +372,7 @@ JMBProfile.prototype = {
 													sb._('<input name="marr_option" ')._(!user.is_married_event(family.id)?'checked':'')._(' type="checkbox"> Unknown');
 												sb._('</td>');
 											sb._('</tr>');
-											sb._('<tr id="birthplace">');
+											sb._('<tr id="marrplace">');
 												sb._('<td><div><span>Location</span></div></td>');
 												sb._('<td>');
 													sb._('<input name="marr_city"  type="text" placeholder="Town/City" value="')._(user.marr(family.id, 'place', 'city'))._('">');
@@ -798,43 +794,52 @@ JMBProfile.prototype = {
 				events.living();
                 events.gender(object, 135, 150);
 				//ajax form
-                module._validateForm(jQuery(html).find('form'),{
-                    rules:{
-                        birth_year:{
-                            date:true
+                module._ajaxForm({
+                    target:jQuery(html).find('form'),
+                    method:'basic',
+                    args:user.gedcom_id,
+                    validate:{
+                        rules:{
+                            birth_year:{
+                                date:true
+                            }
+                        },
+                        messages:{
+                            birth_year:""
                         }
                     },
-                    messages:{
-                        birth_year:""
-                    }
-                }, function(f){
-                    module._ajaxForm(f, 'basic', user.gedcom_id, function(res){
+                    success:function(res){
                         update_data(res);
-                    });
+                    }
                 });
 				jQuery(module.box).find('div.jmb-dialog-profile-content').append(html);
 			},
 			edit_unions:function(){
 				var	key, 
 					count = 0,
-					json,
 					add_active = false,
 					save_union,
 					add_union;
 					
 				save_union = function(form){
-					json = '{"gedcom_id":"'+parse.gedcom_id+'","family_id":"'+jQuery(form).attr('family_id')+'","method":"save"}';
-                    module._validateForm(form,{}, function(f){
-                        module._ajaxForm(f, 'union', json, function(res){
+					var args = '{"gedcom_id":"'+parse.gedcom_id+'","family_id":"'+jQuery(form).attr('family_id')+'","method":"save"}';
+                    module._ajaxForm({
+                        target:form,
+                        method:'union',
+                        args:args,
+                        success:function(res){
                             update_data(res);
-                        });
+                        }
                     });
 				}
 				
 				add_union = function(div){
-                    module._validateForm(jQuery(div).find('form'),{}, function(f){
-                        var post_string = '{"gedcom_id":"'+parse.gedcom_id+'","method":"add"}';
-                        module._ajaxForm(f, 'union', post_string, function(res){
+                    var args = '{"gedcom_id":"'+parse.gedcom_id+'","method":"add"}';
+                    module._ajaxForm({
+                        target:jQuery(div).find('form'),
+                        method:'union',
+                        args:args,
+                        success:function(res){
                             update_data(res);
                             jQuery(div).remove();
                             div = form.spouse(families[res.data.family_id],count, true);
@@ -842,7 +847,7 @@ JMBProfile.prototype = {
                             save_union(jQuery(div).find('form'));
                             count++;
                             add_active = false;
-                        });
+                        }
                     });
 				}
 				var cp = (families!=null&&families.length>0);
@@ -955,18 +960,23 @@ JMBProfile.prototype = {
 					photoDelete(li);
 					photoSelect(li);
 				});
-                module._validateForm(jQuery(html).find('form'), {
-                    rules:{
-                        upload:{
-                            accept: "jpg|gif|png"
+                module._ajaxForm({
+                    target:jQuery(html).find('form'),
+                    method:'photo',
+                    args:'{"gedcom_id":"'+parse.gedcom_id+'","method":"add"}',
+                    validate:{
+                        rules:{
+                            upload:{
+                                accept: "jpg|gif|png",
+                                required: true
+                            }
+                        },
+                        messages:{
+                            upload:"",
+                            required: ""
                         }
                     },
-                    messages:{
-                        upload:""
-                    }
-                }, function(f){
-                    var post_string = '{"gedcom_id":"'+parse.gedcom_id+'","method":"add"}';
-                    module._ajaxForm(f, 'photo', post_string, function(res){
+                    success:function(res){
                         var li;
                         if(res!=null&&res.image){
                             if(jQuery(html).find('.jmb-dialog-photos-content').length==0){
@@ -988,7 +998,7 @@ JMBProfile.prototype = {
                             media.photos.push(res.image);
                         }
                         jQuery(html).find('form').resetForm();
-                    });
+                    }
                 });
 				jQuery(module.box).find('div.jmb-dialog-profile-content').append(html);
 			},
@@ -1174,8 +1184,11 @@ JMBProfile.prototype = {
 				jQuery(module.addBox).css('overflow', 'visible');
 				jQuery(module.addBox).append(container);
 				jQuery(container).append(cont);
-                module._validateForm(cont, {}, function(f){
-                    module._ajaxForm(f, 'add', query, success);
+                module._ajaxForm({
+                    target:cont,
+                    method:'add',
+                    args:query,
+                    success:success
                 });
 				return this;
 			},

@@ -159,12 +159,12 @@ class EventsList{
         			LEFT JOIN #__mb_families as family ON family.id = events.families_id
         			LEFT JOIN #__mb_tree_links as links ON links.individuals_id = family.wife OR links.individuals_id = family.husb";
         	if($gedcom_id){
-        		$sql_string .= "WHERE links.tree_id = ? and links.individuals_id = ?";
-			$this->ajax->setQuery($sql_string, $tree_id, $gedcom_id);
-		} else {
-			$sql_string .= "WHERE links.tree_id = ?";
-			$this->ajax->setQuery($sql_string, $tree_id);
-		}
+        		$sql_string .= " WHERE links.tree_id = ? and links.individuals_id = ?";
+			    $this->ajax->setQuery($sql_string, $tree_id, $gedcom_id);
+		    } else {
+                $sql_string .= " WHERE links.tree_id = ?";
+                $this->ajax->setQuery($sql_string, $tree_id);
+		    }
         	$rows = $this->ajax->loadAssocList('family_id');
         	return $rows;
         }
