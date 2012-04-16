@@ -269,15 +269,17 @@ function JMBLogin(){
                         if(!parseInt(fb_logged)){
                             cont = fn.connect();
                             fn.login(cont);
-                        } else {
+                            jQuery(document.body).append(cont);
+                        } else if(object) {
                             cont = fn.create();
                             fn.setName(object, cont);
                             fn.setAvatar(object, cont);
                             if(!object.link){
                                 fn.click(cont);
                             }
+                            jQuery(document.body).append(cont);
                         }
-                        jQuery(document.body).append(cont);
+                        
 					break;
 				}
 				callback();

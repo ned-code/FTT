@@ -87,7 +87,7 @@ JMBTooltip.prototype = {
 									sb._('<div class="jmb-tooltip-view-edit">&nbsp;</div>');
 								}
 								if(user.facebook_id!=='0'&&settings.button_facebook){
-									sb._('<div class="jmb-tooltip-view-facebook">&nbsp;</div>');
+									sb._('<div id="')._(user.facebook_id)._('" class="jmb-tooltip-view-facebook">&nbsp;</div>');
 								}	
 								if(get.is_death){
 									sb._('<div class="jmb-tooltip-view-death-marker">&nbsp;</div>');
@@ -295,7 +295,8 @@ JMBTooltip.prototype = {
 			jQuery(this).find('div.jmb-tooltip-view-facebook').removeClass('active');
 		});
 		jQuery(cont).find('div.jmb-tooltip-view-facebook').click(function(){
-			window.open('http://www.facebook.com/profile.php?id='+storage.usertree.user,'new','width=320,height=240,toolbar=1');
+			var id = jQuery(this).attr('id');
+			window.open('http://www.facebook.com/profile.php?id='+id,'new','width=320,height=240,toolbar=1');
 		});
 		jQuery(cont).find('div.jmb-tooltip-view-switch span').click(function(){
 			var id = jQuery(this).attr('id');
