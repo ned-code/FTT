@@ -1,13 +1,10 @@
 function OpenContentManager(obj){
-	if(typeof(obj) != 'object') obj = document.getElementById(obj);
-	OpenContentManager.prototype._construct(obj);	
+    var module = this;
+    module.init(obj);
 }
 
 OpenContentManager.prototype = {
-	/**
-	*
-	*/
-	_construct:function(obj){
+	init:function(obj){
 		//set object area
 		this.parentObj = obj;
 		this.table = {};
@@ -54,11 +51,8 @@ OpenContentManager.prototype = {
 		
 		document.onselectstart = function () { return false; };
 	},
-	/**
-	*
-	*/
 	_ajax:function(func, params, callback){
-		host.callMethod("open_content_manager", "OpenContentManager", func, params, function(req){
+		host.callMethod("open_content_manager", "FTTOpenContentManagerClass", func, params, function(req){
 				callback(req);
 		});
 	},
@@ -72,9 +66,6 @@ OpenContentManager.prototype = {
 		}
 		return table;
 	},
-	/**
-	* event handler when we dbl click in div
-	*/
 	_click:function(obj){
 		if(jQuery(obj).parent().attr('class') == 'ui-dialog-content ui-widget-content ui-droppable') return;
 		if(this.selectDiv){ 
@@ -85,10 +76,6 @@ OpenContentManager.prototype = {
 		//set div to storage
 		this.selectDiv = obj;
 	},
-	/**
-	* convert snapshoot object from page to array 
-	* @return array 
-	*/
 	_getArrayModulesInPage:function(){
 		var array = new Array();
 		if(typeof(this.state[this.pageIndex]) == 'undefined' ) return array;
@@ -102,10 +89,6 @@ OpenContentManager.prototype = {
 		}
 		return array;
 	},
-	/**
-	* create module div element with params, append him to parent
-	* @return object div
-	*/
 	_createDivModule:function(parent, params){
 		//vars
 		var self = this;
@@ -152,7 +135,7 @@ OpenContentManager.prototype = {
 		jQuery(parent).append(div);
 		return div;
 	},
-        _hidePresentOnThePageModules:function(parent){
+    _hidePresentOnThePageModules:function(parent){
             if(parent != undefined){
                 var self = this;
                 var modulesList = parent.childNodes;
@@ -170,10 +153,7 @@ OpenContentManager.prototype = {
                 }
 
             }
-        },
-	/**
-	* create modules in dialog window
-	*/
+     },
 	_createModules:function(parent){
 		var self = this;
 		jQuery.ajax({
@@ -328,30 +308,29 @@ OpenContentManager.prototype = {
 	* ajax query  load page info (modules). JSON.
 	*/
 	_loadPageInfo:function(pageIndex){
-		var self = this;
+		var module = this;
 		this._ajax('loadPageInfo', this.pageIndex, function(req){
-			var string = jQuery.trim(req.responseText);
-			if(string.length == 0){
-				if(self.modules != undefined){
-					for(var i=0; i<self.modules.childNodes.length; i++){
-						self.modules.removeChild(self.modules.childNodes[i]);
+            var json = jQuery.parseJSON(req.responseText);
+			if(!json){
+				if(module.modules != undefined){
+					for(var i=0; i<module.modules.childNodes.length; i++){
+                        module.modules.removeChild(module.modules.childNodes[i]);
 					}
-					self._createModules(self.modules);
-					self._hidePresentOnThePageModules(self.modules);
+                    module._createModules(module.modules);
+                    module._hidePresentOnThePageModules(module.modules);
 				}
 				return;
-			}    
-			var obj = eval( '(' + string + ')' );
-			self._createTableWithSnapShoot(null , obj);
-			self._saveSnapShoot();
+			}
+            module._createTableWithSnapShoot(null , json);
+            module._saveSnapShoot();
                                
-                        if(self.modules != undefined){
-                        	for(var i=0; i<self.modules.childNodes.length; i++){
-                        		self.modules.removeChild(self.modules.childNodes[i]);
-                        	}
-                        	self._createModules(self.modules);
-                        	self._hidePresentOnThePageModules(self.modules);
-                        }
+            if(module.modules != undefined){
+                for(var i=0; i<module.modules.childNodes.length; i++){
+                    module.modules.removeChild(module.modules.childNodes[i]);
+                }
+                module._createModules(module.modules);
+                module._hidePresentOnThePageModules(module.modules);
+            }
 		});		
 	},
 	/**
@@ -470,13 +449,14 @@ OpenContentManager.prototype = {
 		var self = this;
 		
 		this._ajax('getPageInfo', storage.obj.dhxTree.getSelectedItemId(), function(req){
-			var row, index, title, layoutType, div;
+			var json, data, index, title, layoutType, div;
 			//get row
-			row = jQuery(req.responseXML).find('row');
+			json = jQuery.parseJSON(req.responseText);
+            data = json.data[0];
 			//get page params
-			index = jQuery(row).find('id').text()
-			title = jQuery(row).find('title').text()
-			layoutType = jQuery(row).find('layoutType').text()
+			index = data.id;
+			title = data.title;
+			layoutType = data.layoutType;
 			//create page title
 			div = jQuery('<div class="ocmPageTitle">'+title+'</div>');
 			jQuery(parent).append(div);

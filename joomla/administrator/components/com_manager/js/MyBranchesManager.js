@@ -10,7 +10,7 @@ MyBranchesManager.prototype = {
     call:function(data){
     	var self = this;
     	if(typeof window[data['object']]=='function'){
-    		eval('new '+data['object']+'("'+data['container']+'");');
+            new window[data['object']](jQuery('#'+data['container']));
     	}
         else {
         	setTimeout(function(){

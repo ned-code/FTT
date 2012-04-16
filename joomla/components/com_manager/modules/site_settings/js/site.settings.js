@@ -1,5 +1,5 @@
 function SiteSettings(obj){
-	var parent = jQuery('#'+obj);
+	var parent = obj
 	var module = this;
 	
 	var sb = host.stringBuffer();

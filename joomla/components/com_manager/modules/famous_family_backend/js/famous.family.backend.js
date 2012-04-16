@@ -1,7 +1,6 @@
 function FamousFamilyBackend(obj){
 	var module = this;
-	obj = jQuery('#'+obj);
-	
+
 	module.json = null;
 	
 	if(jQuery("#iframe-famous-family").length==0){

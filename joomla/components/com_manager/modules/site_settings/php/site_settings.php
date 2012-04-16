@@ -23,11 +23,10 @@ class SiteSettings {
 	}
 	
 	public function getModules(){
-		$db =& JFactory::getDBO();
 		$sql_string = "SELECT id, name, title, description FROM #__mb_modules WHERE is_system='0'";
 		//$sql = $this->host->gedcom->sql($sql_string);
-		$db->setQuery($sql_string);
-        	$modules_table = $db->loadAssocList();
+		$this->host->ajax->setQuery($sql_string);
+        $modules_table = $this->host->ajax->loadAssocList();
 		return json_encode(array('modules'=>$modules_table));
 	}
 	

@@ -36,15 +36,6 @@ storage.request.cleaner = function(){
 }
 
 dhtmlxEvent(window,"load",function(){
-   /*
-   var includeFiles = new Array('components/com_manager/js/jquery-ui.min.js','components/com_manager/js/jquery.form.js','components/com_manager/js/excanvas.js','components/com_manager/js/jquery.bt.js','components/com_manager/js/jquery.colorpicker.js', '../components/com_manager/modules/member_profile/js/jquery.lightbox-0.5.pack.js');
-   for(var i=0; i<includeFiles.length;i++){
-        var script = document.createElement("script");
-        script.src = includeFiles[i];
-        script.type="text/javascript";
-        document.getElementsByTagName("head")[0].appendChild(script);
-    }
-    */
     var dhxLayoutParent, dhxLayout, dhxTree;
 	
     dhxLayoutParent = new dhtmlXLayoutObject("dhxLayoutObj", "1C");
@@ -64,7 +55,6 @@ dhtmlxEvent(window,"load",function(){
     storage.obj.dhxLayoutParent = dhxLayoutParent;
     storage.obj.dhxLayout = dhxLayout;
     storage.obj.dhxTree = dhxTree;
-
 
     dhxTree.attachEvent("onSelect", function(id){
     	var manager = new MyBranchesManager();

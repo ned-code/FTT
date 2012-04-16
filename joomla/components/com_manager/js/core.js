@@ -146,19 +146,21 @@ storage.usertree.parse = function(object){
 			var family = families[id];
             if(family){
                 var event = family.marriage;
-                if(event && type){
+                if(event != null && type){
                     var evType = event[type];
-                    if(!sub){
-                        return evType;
-                    } else{
-                        switch(type){
-                            case "date":
-                                return evType[sub] != null ? evType[sub] : '';
-                            break;
+                    if(evType){
+                        if(!sub){
+                            return evType;
+                        } else{
+                            switch(type){
+                                case "date":
+                                    return (evType[sub] != null) ? evType[sub] : '';
+                                break;
 
-                            case "place":
-                                return evType[0][sub] != null ? evType[0][sub] : '';
-                            break;
+                                case "place":
+                                    return (evType[0]!= null && evType[0][sub] != null) ? evType[0][sub] : '';
+                                break;
+                            }
                         }
                     }
                 }
@@ -169,19 +171,21 @@ storage.usertree.parse = function(object){
             var family = families[id];
             if(family){
                 var event = family.divorce;
-                if(event && type){
+                if(event != null && type){
                     var evType = event[type];
-                    if(!sub){
-                        return evType;
-                    } else{
-                        switch(type){
-                            case "date":
-                                return evType[sub] != null ? evType[sub] : '';
-                                break;
+                    if(evType){
+                        if(!sub){
+                            return evType;
+                        } else{
+                            switch(type){
+                                case "date":
+                                    return evType[sub] != null ? evType[sub] : '';
+                                    break;
 
-                            case "place":
-                                return evType[0][sub] != null ? evType[0][sub] : '';
-                                break;
+                                case "place":
+                                    return evType[0][sub] != null ? evType[0][sub] : '';
+                                    break;
+                            }
                         }
                     }
                 }
