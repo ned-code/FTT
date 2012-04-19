@@ -1,0 +1,59 @@
+.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.jmb_feedback_dialog{
+    background: none repeat scroll 0 0 #9A7423;
+}
+.jmb_feedback_dialog_box.ui-dialog-content.ui-widget-content {
+    background: white;
+    border-radius: 5px;
+}
+div#jmb_feedback_form {
+    background: none repeat scroll 0 0 #A4B6DB;
+    color: white;
+    font-family: Tahoma;
+    font-size: 12px;
+    margin: 5px;
+    padding: 3px;
+    width: 140px;
+}
+div#jmb_feedback_form div.header {
+    text-align: center;
+    padding: 5px;
+}
+div#jmb_feedback_form div.header span {
+    color: #314A6C;
+    font-weight: bold;
+}
+div#jmb_feedback_form div.body {
+    background: none repeat scroll 0 0 #3B5998;
+
+}
+div#jmb_feedback_form div.body div.text {
+    border-bottom: 1px solid white;
+    padding: 10px 5px;
+}
+div#jmb_feedback_form div.body div.buttons{
+    border-bottom: 1px solid white;
+    bottom: 0;
+    padding: 10px 5px;
+    position: relative;
+    right: 0;
+}
+div#jmb_feedback_form div.body div.buttons div{
+    background: none repeat scroll 0 0 white;
+    border: 1px solid gray;
+    border-radius: 5px 5px 5px 5px;
+    margin: 3px;
+    padding: 5px;
+    text-align: center;
+}
+div#jmb_feedback_form div.body div.buttons span{
+    color: gray;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: normal;
+}
+div#jmb_feedback_form div.body div.likes {
+    padding: 10px 5px;
+}
+div#jmb_feedback_form div.body div.likes div{
+    margin-top: 3px;
+}

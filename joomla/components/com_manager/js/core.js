@@ -42,6 +42,7 @@ storage.tooltip = {};
 storage.profile = {};
 storage.family_line = {};
 storage.progressbar = {};
+storage.feedback = {};
 
 //usertree
 storage.usertree = {};
@@ -1082,14 +1083,14 @@ core.appendFiles = function(module, type){
 			switch(type){
 				case "js":
 					var script = document.createElement("script");
-					script.src = url+'/'+type+'/'+files[i]+'?111';
+					script.src = url+'/'+type+'/'+files[i]+'?'+(new Date()).valueOf();
 					script.type="text/javascript";
 					head[0].appendChild(script);
 				break;
 				
 				case "css":
 					var link = document.createElement("link");
-					link.href = url+'/'+type+'/'+files[i]+'?111';
+					link.href = url+'/'+type+'/'+files[i]+'?'+(new Date()).valueOf();
 					link.rel="stylesheet";
 					link.type="text/css";
 					head[0].appendChild(link);
@@ -1203,6 +1204,7 @@ core.load = function(pages){
 		storage.topmenubar = new JMBTopMenuBar();
 		storage.family_line = new JMBFamilyLine();
         storage.progressbar = new JMBProgressbarObject();
+        storage.feedback = new JMBFeedback();
 		
 		//init top menu bar
 		storage.topmenubar.init();

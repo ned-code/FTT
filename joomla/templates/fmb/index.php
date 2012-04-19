@@ -73,13 +73,26 @@ if($jfb_facebook_id){
 							<div id="fb-root"></div>
 							<jdoc:include type="component" />
 						</td>
-						<td id="_right" valign="top"><div class="right"><?php if($alias=='myfamily'): ?><jdoc:include type="modules" name="right" /></div><?php endif; ?></td>
+						<td id="_right" valign="top">
+                            <div class="right">
+                                <?php if($alias=='myfamily'): ?>
+                                    <!--<jdoc:include type="modules" name="right" /></div>-->
+                                    <div id="jmb_feedback_form">
+                                        <div style="display:none;" class="likes">
+                                            <div class="message">Like whay you see? Pass the word along to your friends:</div>
+                                            <div class="facebook">{JFBCLike url=http://familytreetop.com/index.php/myfamily layout=button_count show_faces=false show_send_button=false width=300 action=like font=tahoma colorscheme=light}</div>
+                                            <div class="twitter">{SCTwitterShare}</div>
+                                            <div class="google">{SCGooglePlusOne url=http://familytreetop.com/index.php/myfamily annotation=none size=standart}</div>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+                        </td>
 					</tr>
 				</table>
 			</div>
 			<div id="_bottom" class="footer"><?php if($alias=='myfamily'): ?><jdoc:include type="modules" name="footer" /><?php endif; ?></div>
 		</div>
-		<script>
+        <script>
 			FB.init({
 				appId:"184962764872486", 
 				status:true, 

@@ -89,6 +89,9 @@ $document->addScript('components/com_manager/modules/login/js/jmb.login.js?111')
 //progressbar
 $document->addStyleSheet('components/com_manager/modules/progressbar/css/jmb.progressbar.css?111');
 $document->addScript('components/com_manager/modules/progressbar/js/jmb.progressbar.js?111');
+//feedback
+$document->addStyleSheet('components/com_manager/modules/feedback/css/jmb.feedback.css?111');
+$document->addScript('components/com_manager/modules/feedback/js/jmb.feedback.js?111');
 ###############################################################################
 
 $document->addCustomTag('<script type="text/javascript">jQuery.noConflict();</script>');
