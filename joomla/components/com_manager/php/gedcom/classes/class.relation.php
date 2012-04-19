@@ -53,13 +53,10 @@ class JMBRelation {
 	}
 	
 	protected function get_gender($gedcom_id){
-		if(isset($this->_IndividualsList[$gedcom_id])){
+        if(isset($this->_IndividualsList[$gedcom_id])){
 			return $this->_IndividualsList[$gedcom_id][0]['gender'];
 		}
 		return null;
-		
-		$ind = $this->individuals->get($id);
-		return $ind->Gender;
 	}
 	
 	protected function lowest_common_ancestor($a_id, $b_id){
@@ -149,7 +146,7 @@ class JMBRelation {
 
 		
 		$gender = $this->get_gender($a_id);
-		
+
 		if($a_level == 0){
 			$rel = ($gender=="M")?'father':'mother';	
 			return $this->aggrandize_relationship($rel, $b_level);
@@ -205,7 +202,6 @@ class JMBRelation {
 			$relation = $this->get_relation($rel['individuals_id'], $gedcom_id);
 			$insert[] = array('member'=>$rel, 'relation'=>($relation)?$relation:'unknown');
 		}
-		
 		$result = array_chunk($insert, 25, true);
 		foreach($result as $res){
 			$sql = "INSERT INTO #__mb_relations (`tree_id`, `from`, `to`, `relation`) VALUES ";
