@@ -12,6 +12,7 @@ function JMBDescendantTreeObject(obj){
 	module.modal = null;
 	module.members = null;
 	module.select = null;
+    module.selected = null;
 	module.first = null;
 	module.lang = null;
 	module.tree = null;
@@ -131,11 +132,14 @@ JMBDescendantTreeObject.prototype = {
 					module.click(this);
 				});
 			});
-			
-			user = jQuery('div#'+module.owner+'[name="descendant-node"]');
-			jQuery(user[0]).click();
-			jQuery('div.containerTableStyle').scrollTop(0).scrollTop((jQuery(user[0]).offset().top - 300));
-			
+
+            if(module.selected!=null){
+                jQuery('div#'+module.selected+'[name="descendant-node"]').click();
+            } else {
+                user = jQuery('div#'+module.owner+'[name="descendant-node"]');
+                jQuery(user[0]).click();
+                jQuery('div.containerTableStyle').scrollTop(0).scrollTop((jQuery(user[0]).offset().top - 300));
+            }
 			module.buttons.init();
 		});
 	},
@@ -159,7 +163,6 @@ JMBDescendantTreeObject.prototype = {
 		if(typeof(id) != 'undefined' && module.checked != id){
 			module.ajax('getTreeById', id, function(res){
 				module.select = null;
-				module.checked = id;
 				var json = jQuery.parseJSON(res.responseText);
 				module.dhxTree.deleteChildItems(0);
 				module.dhxTree.loadXMLString(json.xml);
@@ -278,7 +281,8 @@ JMBDescendantTreeObject.prototype = {
 						modal.on();
 						jQuery(div).find('div.jmb-desc-select-close').unbind().click(function(){
 							box.off();
-							module.loadTreeById(jQuery(div).find('input:checked').attr('id'));
+                            module.checked = jQuery(div).find('input:checked').attr('id');
+							module.loadTreeById(module.checked);
 						});
 						//draw line
 						canvas = jQuery(div).find('canvas')[0];

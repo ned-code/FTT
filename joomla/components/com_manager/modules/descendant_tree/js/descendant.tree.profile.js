@@ -71,16 +71,8 @@ DescendantTreeProfile.prototype = {
 					sb._('</table>');
 					sb._('<div class="jmb-dtp-body-info-switch">')._('Show full profile')._('</div>');
 				sb._('</div>');
-				/*sb._('<div class="jmb-dtp-body-space">&nbsp;</div>');*/
 				sb._('<div class="jmb-dtp-body-media">')
 					if(media!=null){
-						/*
-                        sb._('<ul class="media-list">');
-							jQuery(media.photos).each(function(i, img){
-								sb._('<li class="media-item">')._(module.image(img))._('</li>');
-							});
-						sb._('</ul>');
-                        */
                         jQuery(media.photos).each(function(i, img){
                             sb._('<div class="media-item">')._(module.image(img, media))._('</div>');
                         });
@@ -129,7 +121,9 @@ DescendantTreeProfile.prototype = {
 			object:object,
 			afterEditorClose:function(){
                 storage.tooltip.cleaner(function(){
-                    module.render(module.id);
+                    var p = module.parent;
+                    p.selected = module.id;
+                    p.loadTreeById((p.checked!=null)?p.checked:p.first);
                 });
 			}
 		});
@@ -142,7 +136,9 @@ DescendantTreeProfile.prototype = {
 				events:{
 					afterEditorClose:function(obj){
                         storage.tooltip.cleaner(function(){
-                            module.render(module.id);
+                            var p = module.parent;
+                            p.selected = module.id;
+                            p.loadTreeById((p.checked!=null)?p.checked:p.first);
                         });
 					}
 				}
