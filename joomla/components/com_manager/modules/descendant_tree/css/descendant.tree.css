@@ -33,7 +33,6 @@
 	padding:1px;
 }
 .jmb-dtp-body-info {
-	border-bottom: 2px solid #999999;
 	font-family: Tahoma,sans-serif;
 	font-size: 11px;
 	font-weight: bold;
@@ -67,8 +66,7 @@
 	 text-align: left !important;
 }
 .jmb-dtp-body-media {
-	/*overflow:auto;*/
-	/*width:395px;*/
+	margin:3px;
 }
 .jmb-dtp-body-media div.media-item{
     display: inline-block;
