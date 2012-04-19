@@ -209,7 +209,7 @@ JMBThisMonthObject.prototype = {
 				if(data.user.death!=null) return;
 				
 				append = sb._('<tr><td><div class="date">')
-						._((date!=null)?date[0]:'')._('</div></td><td><div class="img-')
+						._((date!=null&&date[0]!=null)?date[0]:'')._('</div></td><td><div class="img-')
 						._(gender)._('">&nbsp;</div></td><td><div id="')
 						._(ind_key)._('" class="person ')
 						._(gender)._('"><font color="')
@@ -247,7 +247,7 @@ JMBThisMonthObject.prototype = {
 					append;
 				
 				append = sb._('<tr><td><div class="date">')
-					._((date!=null)?date[0]:'')._('</div></td><td><div class="img-')
+					._((date!=null&&date[0]!=null)?date[0]:'')._('</div></td><td><div class="img-')
 					._(gender)._('">&nbsp;</div></td><td><div id="')
 					._(ind_key)._('" class="person"><font color="')
 					._(color)._('">')
@@ -277,7 +277,7 @@ JMBThisMonthObject.prototype = {
 					append;
 
 				append = sb._('<tr><td><div class="date">')
-					._((date!=null)?date[0]:'')
+					._((date!=null&&date[0]!=null)?date[0]:'')
 					._('</div></td><td><div class="anniversaries-start">&nbsp</div></td><td><div id="')
 					._(family.husb.user.gedcom_id)._('" class="person"><font color="')
 					._(self.settings.colors[family.husb.user.gender])._('">')

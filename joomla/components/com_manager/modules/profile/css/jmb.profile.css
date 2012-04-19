@@ -522,6 +522,7 @@
 	position:absolute;
 	top:-35px;
 	right:5px;
+    height:30px;
 }
 .jmb-dialog-profile-add-parent .buttons input{
 	border: 2px solid black !important;
