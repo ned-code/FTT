@@ -65,7 +65,13 @@ DescendantTreeProfile.prototype = {
 								sb._('<div class="jmb-dtp-body-info-name"><span class="title">')._(language['NAME'])._(':</span>&nbsp;<span class="text">')._(parse.full_name)._('</span></div>');
 								sb._('<div class="jmb-dtp-body-info-born"><span class="title">')._(language['BORN'])._(':</span>&nbsp;<span class="text">')._(parse.date('birth'))._('</span></div>');
 								sb._('<div class="jmb-dtp-body-info-birthplace"><span class="title">')._(language['BIRTHPLACE'])._(':</span>&nbsp;<span class="text">')._((parse.place('birth')!='')?parse.place('birth').place_name:'')._('</span></div>');
-								if(parse.relation) sb._('<div class="jmb-dtp-body-info-relation"><span class="title">')._(language['RELATION'])._(':</span>&nbsp;<span class="text">')._(parse.relation)._('</span></div>');
+                                if(parse.is_death){
+                                    sb._('<div class="jmb-dtp-body-info-born"><span class="title">')._('Death')._(':</span>&nbsp;<span class="text">')._(parse.date('death'))._('</span></div>');
+                                    sb._('<div class="jmb-dtp-body-info-birthplace"><span class="title">')._('Deathplace')._(':</span>&nbsp;<span class="text">')._((parse.place('death')!='')?parse.place('death').place_name:'')._('</span></div>');
+                                }
+                                if(parse.relation){
+                                    sb._('<div class="jmb-dtp-body-info-relation"><span class="title">')._(language['RELATION'])._(':</span>&nbsp;<span class="text">')._(parse.relation)._('</span></div>');
+                                }
 							sb._('</td>');
 						sb._('</tr>');
 					sb._('</table>');
