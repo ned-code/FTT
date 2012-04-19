@@ -8,7 +8,7 @@ function JMBFamousFamilyTreesObject(obj){
 	var getAvatar = function(e){
 		var sb = host.stringBuffer();
 		if(e.avatar){
-			return sb._('<img src="index.php?option=com_manager&task=getResizeImage&id=')._(e.avatar.Id)._('&w=50&h=50">').result();
+			return sb._('<img src="index.php?option=com_manager&task=getResizeImage&tree_id=')._(e.tree_id)._('&id=')._(e.avatar.Id)._('&w=50&h=50">').result();
 		} else {
 			var img_name = (e.individ.Gender=="M")?'male.png':'female.png';
 			var img_path  = sb._(module.Path)._("/components/com_manager/modules/famous_family_trees/imgs/")._(img_name).result();

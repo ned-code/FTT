@@ -300,6 +300,7 @@ storage.usertree.avatar.get = function(settings){
             sb._('<img');
             sb._(' class="')._( (settings.cssClass)? settings.cssClass : '' )._('"');
             sb._(' src="index.php?option=com_manager&task=getResizeImage');
+            sb._('&tree_id=')._(storage.usertree.tree_id);
             sb._('&fid=')._(object.user.facebook_id);
             sb._('&w=')._(settings.width);
             sb._('&h=')._(settings.height);
@@ -322,6 +323,7 @@ storage.usertree.avatar.get = function(settings){
                 sb._(' height="')._(settings.height)._('px"');
             } else {
                 sb._(' src="index.php?option=com_manager&task=getResizeImage');
+                sb._('&tree_id=')._(storage.usertree.tree_id);
                 sb._('&id=')._(imgPull.media_id);
                 sb._('&w=')._(settings.width);
                 sb._('&h=')._(settings.height);
@@ -361,6 +363,7 @@ storage.usertree.photos.image = function(args){
         sb._(' height="')._(args.height)._('px"');
     } else {
         sb._(' src="index.php?option=com_manager&task=getResizeImage');
+        sb._('&tree_id=')._(storage.usertree.tree_id);
         sb._('&id=')._(image.media_id);
         sb._('&w=')._(args.width);
         sb._('&h=')._(args.height);
