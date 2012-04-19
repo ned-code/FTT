@@ -79,7 +79,7 @@ DescendantTreeProfile.prototype = {
 					}
 				sb._('</div>');
 			sb._('</div>');
-			if(parse.facebook_id=='0'){
+			if(parse.facebook_id=='0' && parse.is_alive && parse.turns < 120){
 				sb._('<div class="jmb-dtp-footer">');
 					sb._('<table>');			
 						sb._('<tr>');
