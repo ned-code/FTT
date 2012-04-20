@@ -79,8 +79,11 @@ function JMBQuickFactsObject(object){
 		setMiniProfile:function(target, object){
 			if(object == null) return false;
 			storage.tooltip.render('view', {
-				object:object,
-				target:target
+				gedcom_id:object.user.gedcom_id,
+				target:target,
+                afterEditorClose:function(){
+                    storage.tooltip.update();
+                }
 			});
 		},
 		init:function(callback){

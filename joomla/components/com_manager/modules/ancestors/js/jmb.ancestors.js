@@ -119,7 +119,7 @@ JMBAncestorsObject.prototype = {
 				storage.tooltip.render('view', {
 					button_facebook:false,
 					button_edit:false,
-					object:module.usertree[node.id],
+					gedcom_id:node.id,
 					target:object
 				});
 			},
@@ -127,7 +127,7 @@ JMBAncestorsObject.prototype = {
 				object = jQuery(label).find('.jit-edit-button');
 				storage.tooltip.render('edit', {
 					individuals:module.usertree,
-					object:module.usertree[node.id],
+					gedcom_id:node.id,
 					target:object
 				});
 			},

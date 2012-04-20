@@ -90,7 +90,7 @@ function JMBLogin(){
 					profile:function(obj){
                         var id = storage.usertree.gedcom_id;
                         storage.profile.editor('edit', {
-                            object:storage.usertree.pull[id],
+                            gedcom_id:id,
                             events:{
                                 afterEditorClose:function(){
                                     jQuery(obj).removeClass('active');
@@ -169,30 +169,21 @@ function JMBLogin(){
 		},
 		setAvatar:function(object ,cont){
 			var	box = jQuery(cont).find('div.avatar'),
-				sb = host.stringBuffer(),
-				parse,
-				media,
 				image;
-			parse = storage.usertree.parse(object);
-			media = object.media;
-			if(media!=null&&media.avatar!=null){
-				image = sb._('<img src="index.php?option=com_manager&task=getResizeImage&id=')._(media.avatar.media_id)._('&w=22&h=22">').result(); 
-			} else {
-				image = sb._('<img src="index.php?option=com_manager&task=getResizeImage&fid=')._(parse.facebook_id)._('&w=22&h=22">').result();
-			}
+
+            image = storage.usertree.avatar.get({
+                object:object,
+                width:22,
+                height:22
+            });
 			jQuery(box).html(image);
 		},
 		getAvatar:function(object){
-			var 	sb = host.stringBuffer(), 
-				parse = storage.usertree.parse(object), 
-				media = object.media, 
-				img = (parse.gender=="M")?'male.png':'female.png',
-				src = storage.baseurl+path+img;
-			if(media!=null&&media.avatar!=null){
-				return sb._('<img src="index.php?option=com_manager&task=getResizeImage&id=')._(media.avatar.media_id)._('&w=50&h=50">').result(); 
-			} else {
-				return sb._('<img height="50px" width="50px" src="')._(src)._('">').result();
-			}
+            return storage.usertree.avatar.get({
+                object:object,
+                width:50,
+                height:50
+            });
 		},
 		famous:function(object){
 			var	sb = host.stringBuffer(), parse = storage.usertree.parse(object), htmlObject;

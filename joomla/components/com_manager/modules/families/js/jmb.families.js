@@ -426,7 +426,7 @@ JMBFamiliesObject.prototype = {
 				button_facebook:false,
 				button_edit:false,
 				offsetParent:document.body,
-				object:usertree[gedcom_id],
+				gedcom_id:gedcom_id,
 				target:e,
                 afterEditorClose:function(){
                     storage.tooltip.cleaner(function(){
@@ -443,7 +443,7 @@ JMBFamiliesObject.prototype = {
 		jQuery(cont).find('.jmb-families-edit-button').each(function(i,e){
 			gedcom_id = jQuery(e).attr('id').split('-')[0];
 			storage.tooltip.render('edit', {
-				object:usertree[gedcom_id],
+				gedcom_id:gedcom_id,
 				target:e,
 				offsetParent:document.body,
 				afterEditorClose:function(){

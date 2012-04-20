@@ -353,7 +353,7 @@ JMBThisMonthObject.prototype = {
 		//events
 		jQuery(table).find('.jmb-this-month-content .person font').each(function(i,e){
 			storage.tooltip.render('view', {
-				object:self.json.members[jQuery(e).parent().attr('id')],
+				gedcom_id:jQuery(e).parent().attr('id'),
 				target:jQuery(e).parent()
 			});
 		});

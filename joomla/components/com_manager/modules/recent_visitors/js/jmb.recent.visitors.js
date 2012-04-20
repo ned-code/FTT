@@ -73,7 +73,7 @@ function JMBRecentVisitorsObject(obj){
 
     var setMiniTooltip = function(div, id){
         storage.tooltip.render('view', {
-            object:storage.usertree.pull[id],
+            gedcom_id:id,
             target:div,
             afterEditorClose:function(){
                 storage.tooltip.update();

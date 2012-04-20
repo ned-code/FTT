@@ -341,15 +341,17 @@
 	margin: 5px;
 	position: relative;
 }
+.jmb-dialog-photos-content form {
+    display:inline-block;
+}
 .jmb-dialog-photos-content .buttons {
 	left: 0;
 	position: relative;
 	top: 0;
 }
 .jmb-dialog-photos-content .buttons .switch-avatar{
-	left: 250px;
-	position: absolute;
-	top: 1px;
+	display: inline-block;
+    margin-left:3px;
 }
 .jmb-dialog-photos-content .buttons input[type="submit"]{
 	cursor: pointer;

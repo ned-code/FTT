@@ -260,7 +260,7 @@ function JMBFamilyLine(){
 				jQuery(cont).remove();
 				cont = null;
 			}
-			sb = host.stringBuffer();	
+			var sb = host.stringBuffer();
 			sb._('<div class="jmb-family-line-container">');
 				sb._('<table cellspacing="0">');
 					sb._('<tr>');

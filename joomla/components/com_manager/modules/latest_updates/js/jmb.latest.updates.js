@@ -44,8 +44,11 @@ function JMBLatestUpdatesObject(offsetParent){
 					li = jQuery('<li id="'+gedcom_id+'"><div><span class="title">'+lang[key]+':</span>&nbsp;<span style="color:#'+color+'" class="value">'+data[key][1]+'</span></div></li>');
 					if(gedcom_id!=null){
 						storage.tooltip.render('view', {
-							object:usertree[gedcom_id],
-							target:li
+							gedcom_id:gedcom_id,
+							target:li,
+                            afterEditorClose:function(){
+                                storage.tooltip.update();
+                            }
 						});
 					} else {
 						jQuery(li).css('cursor', 'default');

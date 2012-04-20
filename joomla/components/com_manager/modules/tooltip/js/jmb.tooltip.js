@@ -9,7 +9,7 @@ function JMBTooltip(){
 			padding: 8, 
 			cornerRadius: 0, 
 			trigger: 'none',
-			closeWhenOthersOpen: true,
+			closeWhenOthersOpen: false,
 			textzIndex:       999,
 			boxzIndex:        998,
 			wrapperzIndex:    997,
@@ -42,9 +42,8 @@ function JMBTooltip(){
 			}
 		}
 	};
-	module.idPull = {};
-	module.stPull = {};
-	module.btActive = [];
+    module.lastBtActive = false;
+	module.btActive = {};
 	module.path = "/components/com_manager/modules/tooltip/image/";
 }
 
@@ -55,15 +54,7 @@ JMBTooltip.prototype = {
 				callback(res);
 		})
 	},
-	_checkType:function(type){
-		if(type === 'view'){
-			return true;
-		} else if(type === 'edit'){
-			return true;
-		} else {
-			return false;
-		}
-	},
+
 	_view:function(settings){
 		var	module = this,
 			sb = host.stringBuffer(),
@@ -137,9 +128,10 @@ JMBTooltip.prototype = {
 	_edit:function(settings){
 		var	module = this,
 			sb = host.stringBuffer(),
-			user = settings.object.user,
-			gedcom_id = user.gedcom_id,
-			get = storage.usertree.parse(settings.object),
+            gedcom_id = settings.gedcom_id,
+            object = settings.object,
+			user = object.user,
+			get = storage.usertree.parse(object),
 			nick = get.nick;
 		
 		sb._("<div id='")._(gedcom_id)._("-tooltip-edit' class='jmb-profile-tooltip-container'>");
@@ -158,55 +150,14 @@ JMBTooltip.prototype = {
 					if(storage.notifications.is_accepted){
 						sb._('<div class="link"><span>Link with existing request.</span></div>');
 					}
-					/*
-					sb._('<table>');
-						sb._('<tr>');
-							sb._('<td rowspan="3">');
-								sb._("<div class='jmb-profile-tooltip-send-img'>&nbsp;</div>");
-							sb._('</td>');
-							sb._('<td><span class="info">')._(nick)._(' is not registred.</span></td>');
-						sb._('</tr>');
-						sb._('<tr>');
-							sb._('<td><span  class="click">Send ')._(nick)._(" an invations.</span></td>");
-						sb._('</tr>');
-						if(storage.notifications.is_accepted){
-							sb._('<tr>');
-								sb._('<td><span  class="link">Link with existing request.</span></td>');
-							sb._('</tr>');
-						}
-					sb._('</table>');
-					*/
 				sb._('</div>');
 			}
-			sb._("<div class='jmb-profile-tooltip-close'><a href='javascript:void(jQuery(storage.tooltip.btActive[storage.tooltip.btActive.length-1].target).btOff());'><div>&nbsp;</div></a></div>");
+			sb._("<div class='jmb-profile-tooltip-close'><a href='javascript:void(storage.tooltip.close());'><div>&nbsp;</div></a></div>");
 		sb._('</div>');
 		return jQuery(sb.result());
 	},
-	_create:function(type, settings){
-		return (type==='view')?this._view(settings):this._edit(settings);
-	},
-	_setSettings:function(type, settings){
-		var 	module = this,
-			id = settings.object.user.gedcom_id,
-			result = {},
-			default_settings;					
-		default_settings = (type==='view')?module.viewSettings:module.editSettings;
-
-		jQuery.extend(result, default_settings, settings);
-
-		if(settings.offsetParent){
-			result.style.offsetParent = settings.offsetParent;
-		}
-		if(settings.preBuild){
-			result.style.preBuild = settings.preBuild;
-		}
-		if(settings.preShow){
-			result.style.preShow = settings.preShow;
-		}
-		
-		module.stPull[module._getId(id,type)] = result;
-
-		return module.stPull[module._getId(id,type)];
+	_create:function(settings){
+		return (settings.type==='view')?this._view(settings):this._edit(settings);
 	},
 	_images:function(settings){
         var gedcom_id = settings.object.user.gedcom_id,
@@ -267,23 +218,9 @@ JMBTooltip.prototype = {
 			}
 		}
 	},
-	_click:function(settings){
-		var module = this;
-		jQuery(settings.target).click(function(){
-			if(module.btActive.length!=0&&typeof(settings.sub_item) == "undefined"){
-				if(typeof(module.btActive[module.btActive.length-1].sub_item) != "undefined"){
-					jQuery(module.btActive[module.btActive.length-2].target).btOff();
-				} else {
-					jQuery(module.btActive[module.btActive.length-1].target).btOff();
-				}
-			} 
-			module.btActive[module.btActive.length] = settings;
-			jQuery(settings.target).btOn();
-			return false;
-		});
-	},
 	_button_view:function(cont, settings){
 		var	module = this,
+            st = settings,
 			object = settings.object,
 			offset;
 			
@@ -299,14 +236,12 @@ JMBTooltip.prototype = {
 			window.open('http://www.facebook.com/profile.php?id='+id,'new','width=320,height=240,toolbar=1');
 		});
 		jQuery(cont).find('div.jmb-tooltip-view-switch span').click(function(){
-			var id = jQuery(this).attr('id');
-			var st = module.stPull[module._getId(id,'view')];
 			storage.profile.editor('view', {
 				object:object,
 				events:{
 					afterEditorClose:function(){
-						if(typeof(settings.afterEditorClose)==='function'){
-                            settings.afterEditorClose();
+						if(typeof(st.afterEditorClose)==='function'){
+                            st.afterEditorClose();
 						}
 					}
 				}
@@ -314,8 +249,8 @@ JMBTooltip.prototype = {
 		});
 		offset = jQuery(cont).find('div.jmb-tooltip-view-edit').offset();
 		storage.tooltip.render('edit', {
-			sub_item:true,
-			object:object,
+            sub_item:true,
+			gedcom_id:settings.gedcom_id,
 			target:jQuery(cont).find('div.jmb-tooltip-view-edit'),
 			preBuild:function(){
 				offset = jQuery('div.bt-content').find('div.jmb-tooltip-view-edit').offset();
@@ -324,11 +259,17 @@ JMBTooltip.prototype = {
 				if(offset!=null){
 					jQuery(box).offset({top:offset.top + 20 , left:offset.left});
 				}
-			}
+			},
+            afterEditorClose:function(){
+                if(typeof(st.afterEditorClose)==='function'){
+                    st.afterEditorClose();
+                }
+             }
 		});
 	},
 	_button_edit:function(cont, settings){
 		var	module = this,
+            st = settings,
 			object = settings.object,
 			divs,
 			add;
@@ -338,9 +279,9 @@ JMBTooltip.prototype = {
 			object:object,
 			events:{
 				afterEditorClose:function(){
-					jQuery(module.btActive[module.btActive.length-1].target).btOff();
-					if(typeof(settings.afterEditorClose)==='function'){
-						settings.afterEditorClose();
+					module.close();
+					if(typeof(st.afterEditorClose)==='function'){
+                        st.afterEditorClose();
 					}
 				}
 			}
@@ -353,23 +294,21 @@ JMBTooltip.prototype = {
 			});
 		});
 		jQuery(cont).find('.jmb-profile-tooltip-button-edit').click(function(){
-			var id = jQuery(this).parent().attr('id').split('-')[0];
-			var st = module.stPull[module._getId(id,'edit')];
 			storage.profile.editor('edit', {
-				object:st.object,
+				object:object,
 				events:{
 					afterEditorClose:function(){
 						if(typeof(st.afterEditorClose)==='function'){
-							st.afterEditorClose();
+                            st.afterEditorClose();
 						}
 					}
 				}
 			});
 		});
 	},
-	_buttons:function(cont, settings, type){
+	_buttons:function(cont, settings){
 		var	module = this;		
-		switch(type){
+		switch(settings.type){
 			case "edit":
 				module._button_edit(cont, settings);	
 			break;
@@ -379,9 +318,9 @@ JMBTooltip.prototype = {
 			break;
 		}
 	},
-	_invitation:function(cont, type, settings){
+	_invitation:function(cont, settings){
 		var class_name;
-		switch(type){
+		switch(settings.type){
 			case "view": class_name = '.jmb-tooltip-view-send .send'; break;
 			case "edit": class_name = '.jmb-profile-tooltip-send span.click'; break;
 			default: return;
@@ -390,89 +329,126 @@ JMBTooltip.prototype = {
 			storage.invitation.render(settings.object);
 		});
 	},
-	link_with_request:function(cont, type, st){
+	link_with_request:function(cont, settings){
 		var class_name;
-		switch(type){
+		switch(settings.type){
 			//case "view": class_name = '.jmb-tooltip-view-send .send'; break;
 			case "edit": class_name = '.jmb-profile-tooltip-send div.link span'; break;
 			default: return;
 		}
 		jQuery(cont).find(class_name).unbind().click(function(){
-			storage.notifications.link(st);
+			storage.notifications.link(settings);
 		});
 	},
-	_getId:function(id, type){
-		return [type,id].join(':');
+	_getId:function(settings){
+		return [settings.type,settings.gedcom_id].join(':');
 	},
 	cleaner:function(callback){
-		var module = this, i, pull;
-		if(module.btActive.length!=0){
-			jQuery(module.btActive[module.btActive.length-1].target).btOff();
-		}
-		for(var id in module.idPull){
-			jQuery(module.idPull[id]).remove();
-		}
-		module.idPull = {};
-		module.stPull = {};
+		var module, btActive;
+        module = this;
+        btActive = module.btActive;
+        for(var key in btActive){
+            var el = btActive[key];
+            jQuery(el.target).btOff();
+        }
+        module.lastBtActive = false;
+        module.btActive = {};
 		if(callback) callback();
 	},
-	render:function(type, settings){
+    closeOpenTooltip:function(settings){
+        var module = this
+        if(settings.sub_item){
+            return false;
+        } else {
+            module.close();
+        }
+    },
+    close:function(){
+        if(this.lastBtActive){
+            jQuery(this.lastBtActive.target).btOff();
+            this.lastBtActive = false;
+        }
+    },
+    _addBtActive:function(settings){
+        var module, id;
+        module = this;
+        id = module._getId(settings);
+        module.btActive[id] = settings;
+        module.lastBtActive = settings;
+    },
+    _click:function(target){
+        var module = this;
+        jQuery(target).click(function(){
+            var settings, cont;
+            settings = jQuery.data(target, 'settings');
+            settings.object = storage.usertree.pull[settings.gedcom_id];
+            module.closeOpenTooltip(settings);
+
+            cont = module._create(settings);
+            jQuery(cont).hide();
+            jQuery(document.body).append(cont);
+
+            module._addBtActive(settings);
+
+            settings.style.preHide = function(){
+                delete module.btActive[module._getId(settings)];
+                jQuery(cont).remove();
+            }
+            module._invitation(cont, settings);
+            module.link_with_request(cont, settings);
+            module._buttons(cont, settings);
+
+            jQuery(settings.target).bt(settings.style);
+            setTimeout(function(){jQuery(settings.target).btOn();}, 1);
+            return false;
+        });
+    },
+    _checkType:function(type){
+        if(type === 'view'){
+            return true;
+        } else if(type === 'edit'){
+            return true;
+        } else {
+            return false;
+        }
+    },
+    _getDefaultSettings:function(type){
+        return (type==='view')?this.viewSettings:this.editSettings;
+    },
+    _getArgsSettings:function(args){
+        var argsSettings = args;
+        if(!argsSettings.style){
+            argsSettings.style = {};
+        }
+        if(args.offsetParent){
+            argsSettings.style.offsetParent = args.offsetParent;
+        }
+        if(args.preBuild){
+            argsSettings.style.preBuild = args.preBuild;
+        }
+        if(args.preShow){
+            argsSettings.style.preShow = args.preShow;
+        }
+        return argsSettings;
+    },
+    _getSettings:function(type, args){
+        var module = this,
+            dSettings = module._getDefaultSettings(type),
+            argsSettings = module._getArgsSettings(args);
+        argsSettings.type = type;
+        argsSettings.style.contentSelector = ["jQuery('#", args.gedcom_id, "-tooltip-", type,"')"].join('');
+        return jQuery.extend(true, {}, argsSettings, dSettings);
+    },
+	render:function(type, args){
 		var	module = this,
-			object = settings.object,
-			id,
-			cont;		
-			
-		if(!module._checkType(type)) return;
-		if(object!=null){
-			id = module._getId(object.user.gedcom_id,type);
-		} else {
-			return false;
-		}
-		var st = module._setSettings(type, settings);
-		
-		if(!module.idPull[id]){
-			cont = module._create(type, st);
-			storage.media.init(cont);	
-		
-			jQuery(document.body).append(cont);
-			jQuery(cont).hide();
-			
-			module.idPull[id] = cont;
-		} else {
-			cont = module.idPull[id];
-		}
-		
-		st.style.contentSelector = ["jQuery('#", st.object.user.gedcom_id, "-tooltip-", type,"')"].join('');
-		
-		jQuery(st.target).bt(st.style);
-		module._click(st);
-		module._invitation(cont, type, st);
-		module.link_with_request(cont, type, st);
-		module._buttons(cont, st, type);
+            settings;
+        if(!module._checkType(type)) return false;
+        if(!args.gedcom_id) return false;
+        settings = module._getSettings(type, args);
+        jQuery.data(settings.target, 'settings', settings);
+        module._click(settings.target);
 	},
     update:function(){
-        var module = this;
-        for(var id in module.idPull){
-            jQuery(module.idPull[id]).remove();
-        }
-        for(var key in module.stPull){
-            var st = module.stPull[key];
-            st.object = storage.usertree.pull[st.object.user.gedcom_id];
-            var type = key.split(':')[0];
-            var cont = module._create(type, st);
-            storage.media.init(cont);
-
-            jQuery(document.body).append(cont);
-            jQuery(cont).hide();
-
-            delete module.idPull[key];
-            module.idPull[key] = cont;
-
-            jQuery(st.target).bt(st.style);
-            module._click(st);
-            module._invitation(cont, type, st);
-            module.link_with_request(cont, type, st);
-            module._buttons(cont, st, type);
-        }
+        return true;
     }
 }

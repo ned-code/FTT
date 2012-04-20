@@ -124,7 +124,7 @@ DescendantTreeProfile.prototype = {
 		storage.tooltip.render('edit', {
 			offsetParent:document.body,
 			target:jQuery(html).find('div#edit-button'),
-			object:object,
+			gedcom_id:object.user.gedcom_id,
 			afterEditorClose:function(){
                 storage.tooltip.cleaner(function(){
                     var p = module.parent;
