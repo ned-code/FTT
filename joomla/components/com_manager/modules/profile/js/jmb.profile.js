@@ -322,7 +322,7 @@ JMBProfile.prototype = {
 					sb._('<form id="jmb-profile-addpsc-')._(count)._('" method="post" family_id="')._(family.id)._('" target="iframe-profile">');
 						sb._('<div class="jmb-dialog-profile-content-unions-header">');
 							sb._('<div id="title">Union ')._(count+1)._('</div>');
-							if(cp) sb._('<div id="current_partner"><input name="current_partner" type="checkbox"> Show as current or latest partner</div>');
+							if(cp) sb._('<div id="current_partner"><input name="current_partner" type="radio"> Show as current or latest partner</div>');
 							sb._('<div id="button"><input type="submit" value="Save"></div>');
 						sb._('</div>');
 						sb._('<div class="jmb-dialog-profile-content-unions-body">');
@@ -366,7 +366,7 @@ JMBProfile.prototype = {
 													sb._(gen.select.days('marr_days', user.marr(family.id, 'date')));
 													sb._(gen.select.months('marr_months', user.marr(family.id,'date', 1)));
 													sb._('<input name="marr_year" type="text" style="width:40px;" maxlength="4" placeholder="Year" value="')._(user.marr(family.id,'date', 2))._('">');
-													sb._('<input name="marr_option" ')._(!user.is_married_event(family.id)?'checked':'')._(' type="checkbox"> Unknown');
+													sb._('<input name="marr_option" ')._(!user.is_married_date_exist(family.id)?'checked':'')._(' type="checkbox"> Unknown');
 												sb._('</td>');
 											sb._('</tr>');
 											sb._('<tr id="marrplace">');

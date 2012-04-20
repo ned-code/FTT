@@ -132,6 +132,14 @@ storage.usertree.parse = function(object){
 		is_married_event:function(id){
 			return (families[id]&&families[id].marriage!=null)?1:0;
 		},
+        is_married_date_exist:function(id){
+            var family = families[id];
+            if(family&&family.marriage!=null){
+                var date = family.marriage.date;
+                return (date[0]!=null||date[1]!=null||date[2]!=null);
+            }
+            return false;
+        },
 		is_divorce_event:function(id){
 			return (families[id]&&families[id].divorce!=null)?1:0;
 		},
