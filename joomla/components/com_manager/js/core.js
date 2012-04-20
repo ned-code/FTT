@@ -274,6 +274,17 @@ storage.usertree.avatar._type = function(object){
     }
     return 'default';
 }
+storage.usertree.avatar.def_image = function(settings, gender){
+    var pathImage = [storage.baseurl,storage.url,'js/images/',(gender=="F")?"female_big.png":"male_big.png"].join("");
+    var sb = host.stringBuffer();
+    sb._('<img');
+    sb._(' class="')._( (settings.cssClass)? settings.cssClass : '' )._('"');
+    sb._(' src="')._(pathImage)._('"');
+    sb._('width="')._(settings.width)._('px"');
+    sb._('height="')._(settings.height)._('px"');
+    sb._('>');
+    return sb.result();
+}
 storage.usertree.avatar.def = function(settings, gender){
     if(!settings.object) return '';
     var stavObject = storage.usertree.avatar,
@@ -287,13 +298,7 @@ storage.usertree.avatar.def = function(settings, gender){
         break;
 
         default:
-            var pathImage = [storage.baseurl,storage.url,'js/images/',(gender=="F")?"female_big.png":"male_big.png"].join("");
-            sb._('<img');
-            sb._(' class="')._( (settings.cssClass)? settings.cssClass : '' )._('"');
-            sb._(' src="')._(pathImage)._('"');
-            sb._('width="')._(settings.width)._('px"');
-            sb._('height="')._(settings.height)._('px"');
-            sb._('>');
+            sb._(storage.usertree.avatar.def_image(settings, gender));
         break;
     }
     return sb.result();
@@ -342,13 +347,7 @@ storage.usertree.avatar.get = function(settings){
 
         default:
             var gender = object.user.gender;
-            var pathImage = [storage.baseurl,storage.url,'js/images/',(gender=="F")?"female_big.png":"male_big.png"].join("");
-            sb._('<img');
-            sb._(' class="')._( (settings.cssClass)? settings.cssClass : '' )._('"');
-            sb._(' src="')._(pathImage)._('"');
-            sb._('width="')._(settings.width)._('px"');
-            sb._('height="')._(settings.height)._('px"');
-            sb._('>');
+            sb._(storage.usertree.avatar.def_image(settings, gender));
             break;
 
     }

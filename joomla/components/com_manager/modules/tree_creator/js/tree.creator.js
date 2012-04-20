@@ -216,7 +216,7 @@ function JMBTreeCreatorObject(parent){
 			sb._('<table>');
 				if(args){
 					sb._('<tr style="height: 88px;">');
-						sb._('<td valign="top"><div class="facebook_avatar"><img src="index.php?option=com_manager&task=getResizeImage&fid=')._(args.me.id)._('&w=72&h=80" width="72px" height="80px"></div></td>');
+						sb._('<td valign="top"><div class="facebook_avatar">')._(storage.usertree.avatar.def_image({ width:72, height:80 }, args.me.gender.substring(0, 1).toUpperCase() ))._('</div></td>');
 						sb._('<td valign="top"><span style="font-weight: bold;margin-left: 5px;">Gender:</span> ')._(fn.select.gender())._('</td>');
 					sb._('</tr>');
 				}
@@ -349,6 +349,12 @@ function JMBTreeCreatorObject(parent){
 				var args = {me:res, target:{name:user_name, facebook_id:facebook_id, gedcom_id:gedcom_id}};
 				var request_form = fn.request_form(args);				
 				var option = jQuery(request_form).find('select[name="gender"]').find('option');
+                jQuery(request_form).find('select[name="gender"]').change(function(){
+                    var gender = jQuery(this).val();
+                    var avatarDiv = jQuery(request_form).find('div.facebook_avatar');
+                    jQuery(avatarDiv).html('');
+                    jQuery(avatarDiv).append(storage.usertree.avatar.def_image({ width:72, height:80 }, gender.toUpperCase()));
+                });
 				jQuery(option[(res.gender=='male')?1:0]).attr('selected', 'selected');
 				jQuery(module.dialog_box).dialog('close');
 				jQuery(request_form).dialog(module.request_settings);
