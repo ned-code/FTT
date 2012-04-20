@@ -812,7 +812,8 @@ JMBProfile.prototype = {
 				jQuery(module.box).find('div.jmb-dialog-profile-content').append(html);
 			},
 			edit_unions:function(){
-				var	key, 
+				var	subm = this,
+                    key,
 					count = 0,
 					add_active = false,
 					save_union,
@@ -838,12 +839,8 @@ JMBProfile.prototype = {
                         args:args,
                         success:function(res){
                             update_data(res);
-                            jQuery(div).remove();
-                            div = form.spouse(families[res.data.family_id],count, true);
-                            jQuery(html).append(div);
-                            save_union(jQuery(div).find('form'));
-                            count++;
-                            add_active = false;
+                            module._clearContent();
+                            subm.edit_unions();
                         }
                     });
 				}
@@ -866,7 +863,7 @@ JMBProfile.prototype = {
 				jQuery(html).find('.jmb-dialog-profile-content-unions-add input').click(function(){
 					if(add_active) return false;
 					var div = jQuery('<div class="jmb-profile-add-union"></div>').append(form.add_spouse());
-					events = module._events(div);
+					var events = module._events(div);
 					events.living();
 					events.cancel(function(){ add_active = false; });
 					add_union(div);
