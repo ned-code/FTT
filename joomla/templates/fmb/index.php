@@ -80,9 +80,8 @@ if($jfb_facebook_id){
                                     <div id="jmb_feedback_form">
                                         <div style="display:none;" class="likes">
                                             <div class="message">Like whay you see? Pass the word along to your friends:</div>
-                                            <div class="facebook">{JFBCLike url=http://familytreetop.com/index.php/myfamily layout=button_count show_faces=false show_send_button=false width=300 action=like font=tahoma colorscheme=light}</div>
+                                            <div class="facebook">{JFBCLike url=http://familytreetop.com/index.php/myfamily layout=button_count show_faces=false show_send_button=false width=300 action=share font=tahoma colorscheme=light}</div>
                                             <div class="twitter">{SCTwitterShare}</div>
-                                            <div class="google">{SCGooglePlusOne url=http://familytreetop.com/index.php/myfamily annotation=none size=standart}</div>
                                         </div>
                                     </div>
                                 <?php endif; ?>

@@ -56,4 +56,15 @@ div#jmb_feedback_form div.body div.likes {
 }
 div#jmb_feedback_form div.body div.likes div{
     margin-top: 3px;
+    display: inline-block;
+    overflow: hidden;
+}
+
+div#jmb_feedback_form div.body div.likes div.facebook{
+    width: 45px;
+    margin-left: 10px;
+}
+
+div#jmb_feedback_form div.body div.likes div.twitter{
+    width: 60px;
 }

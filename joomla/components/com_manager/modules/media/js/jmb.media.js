@@ -3,11 +3,11 @@ function JMBMediaManager(){
 JMBMediaManager.prototype = {
 	getImage:function(image){
 		var sb = host.stringBuffer();
-		return sb._('<a href="')._(image.path)._('" rel="prettyPhoto[pp_gal]" title=""><img src="index.php?option=com_manager&task=getResizeImage&id=')._(image.media_id)._('&w=100&h=100')._('" alt="" /></a>').result();
+		return sb._('<a href="')._(image.path)._('" rel="prettyPhoto[pp_gal]" title=""><img src="index.php?option=com_manager&task=getResizeImage&tree_id=')._(storage.usertree.tree_id)._('&id=')._(image.media_id)._('&w=100&h=100')._('" alt="" /></a>').result();
 	},
 	getImageEdit:function(image){
 		var sb = host.stringBuffer();
-		return sb._('<img src="index.php?option=com_manager&task=getResizeImage&id=')._(image.media_id)._('&w=100&h=100')._('" alt="" />').result();
+		return sb._('<img src="index.php?option=com_manager&task=getResizeImage&tree_id=')._(storage.usertree.tree_id)._('&id=')._(image.media_id)._('&w=100&h=100')._('" alt="" />').result();
 	},
 	getListItem:function(image, edit){
 		var self = this, sb = host.stringBuffer();

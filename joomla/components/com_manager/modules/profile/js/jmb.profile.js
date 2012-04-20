@@ -125,9 +125,6 @@ JMBProfile.prototype = {
 			click[jQuery(this).attr('id')]();
 		});
 	},
-	_photo:function(object, width, height){
-		return sb._('<img class="" src="index.php?option=com_manager&task=getResizeImage&id=')._(object.media_id)._('&w=')._(width)._('&h=')._(height)._('">').result();
-	},
 	_avatar:function(object, width, height){
         return storage.usertree.avatar.get({
             object:object,
