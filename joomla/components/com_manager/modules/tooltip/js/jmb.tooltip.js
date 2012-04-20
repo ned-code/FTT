@@ -397,7 +397,7 @@ JMBTooltip.prototype = {
 			case "edit": class_name = '.jmb-profile-tooltip-send div.link span'; break;
 			default: return;
 		}
-		jQuery(cont).find(class_name).click(function(){
+		jQuery(cont).find(class_name).unbind().click(function(){
 			storage.notifications.link(st);
 		});
 	},

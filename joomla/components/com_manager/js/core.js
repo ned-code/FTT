@@ -582,7 +582,7 @@ storage.notifications.link = function(st){
 		var sb = host.stringBuffer();
 		var obj = st.object;
 		var user = obj.user;
-		var parent_key = (parents!=null)?get_key(obj.parents):false;;
+		var parent_key = (obj.parents!=null)?get_key(obj.parents):false;;
 		sb._('<div class="user_box">');
 			sb._('<table>');
 				sb._('<tr>');

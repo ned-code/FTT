@@ -216,7 +216,7 @@ function JMBTreeCreatorObject(parent){
 			sb._('<table>');
 				if(args){
 					sb._('<tr style="height: 88px;">');
-						sb._('<td valign="top"><div class="facebook_avatar">')._(storage.usertree.avatar.def_image({ width:72, height:80 }, args.me.gender.substring(0, 1).toUpperCase() ))._('</div></td>');
+						sb._('<td valign="top"><div class="facebook_avatar">')._(storage.usertree.avatar.def_image({ width:72, height:80 }, args.me.gender.substr(0, 1).toUpperCase() ))._('</div></td>');
 						sb._('<td valign="top"><span style="font-weight: bold;margin-left: 5px;">Gender:</span> ')._(fn.select.gender())._('</td>');
 					sb._('</tr>');
 				}
@@ -541,7 +541,7 @@ function JMBTreeCreatorObject(parent){
 							sb._('<tr>');
 								sb._('<td>');
 									sb._('<div class="avatar">');
-										sb._('<img src="index.php?option=com_manager&task=getResizeImage&fid=')._(el.facebook_id)._('&w=50&h=50">');
+										sb._(storage.usertree.avatar.def_image({ width:50, height:50 }, el.gender.substr(0, 1).toUpperCase()))
 									sb._('</div>');
 								sb._('</td>');
 								sb._('<td><div class="name">')._(el.name)._('</div></td>');
