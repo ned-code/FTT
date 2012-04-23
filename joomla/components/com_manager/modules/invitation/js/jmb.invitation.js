@@ -99,7 +99,7 @@ JMBInvitation.prototype = {
 			sb._('<div class="jmb-dialog-invition-fields">');
 				sb._('<table>');
 					sb._('<tr>');
-						sb._('<td><span class="title">Selec from Facebook friends:</span></td>');
+						sb._('<td><span class="title">Select from Facebook friends:</span></td>');
 						sb._('<td>');
 							sb._('<div id="jmb_facebook_friends">');
 							sb._('</div>');

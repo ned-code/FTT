@@ -91,7 +91,7 @@ DescendantTreeProfile.prototype = {
 						sb._('<tr>');
 							sb._('<td><div class="email">&nbsp;</div></td>');
 							sb._('<td>');
-								sb._('<div><span>')._(parse.name)._(' ')._('is no registered')._('.</span></div>');
+								sb._('<div><span>')._(parse.name)._(' ')._('is not registered')._('.</span></div>');
 								sb._('<div><span class="send" style="color:blue;cursor:pointer" >Send invitation to ')._(parse.name)._('</span></div>');
 							sb._('</td>');
 						sb._('</tr>');

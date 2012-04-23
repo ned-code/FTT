@@ -115,7 +115,7 @@ JMBTooltip.prototype = {
 						sb._('<tr>');
 							sb._('<td><div class="jmb-tooltip-view-icon-email">&nbsp;</div></td>');
 							sb._('<td>');
-								sb._('<div><span>')._(name)._(' is not registred.</span></div>');
+								sb._('<div><span>')._(name)._(' is not registered.</span></div>');
 								sb._('<div><span class="send" style="color:blue;cursor:pointer">Click here to send ')._(name)._(' an email invitation.</span></div>');
 							sb._('</td>');
 						sb._('</tr>');
@@ -145,7 +145,7 @@ JMBTooltip.prototype = {
 			sb._('</fieldset></div>');
 			if(user.facebook_id==='0' && get.turns < 100 && get.is_alive){
 				sb._("<div class='jmb-profile-tooltip-send'>");
-					sb._('<div class="info"><span>')._(nick)._(' is not regitred.</span></div>');
+					sb._('<div class="info"><span>')._(nick)._(' is not registered.</span></div>');
 					sb._('<div class="invitions"><span class="click">Send ')._(nick)._(' an invitions.</span></div>');
 					if(storage.notifications.is_accepted){
 						sb._('<div class="link"><span>Link with existing request.</span></div>');
