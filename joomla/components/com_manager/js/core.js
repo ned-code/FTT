@@ -1,6 +1,7 @@
 //globl object storage
 storage = {};
 //function
+
 storage.addEvent = function(pull, func){
 	pull[pull.length] = {};
 	pull[pull.length].click = func;
@@ -1018,13 +1019,17 @@ core.modal = function(){
 		}
 	}
 }
-
 core.modulesPullFunc = function(){
 	var core = this;
 	var modal = core.modal();
 	core.modulesPull = { length:0 };
+    core.activeModule = null;
 	return {
+        getActiveModule:function(){
+            return core.activeModule;
+        },
 		insert:function(name){
+            core.activeModule = name;
 			core.modulesPull[name] = name;
 			core.modulesPull.length++;
 		},
@@ -1044,6 +1049,7 @@ core.modulesPullFunc = function(){
 					pull.unset(key);
 				}
 			}
+            core.activeModule = null;
 			modal.off();
 		},
 		init:function(div){
@@ -1129,8 +1135,8 @@ core.renderPage = function(parent, page){
 	var grid = page.grid;
 	var table = self.createLayout(page.page_info.layout_type);
 	var tds = jQuery(table).find('td');
-	jQuery(parent).empty();
-	
+	jQuery(parent).html('');
+
 	for(var i = 0; i < grid.tdLength; i++){
 		var td = tds[i];
 		for(var j = 0; j < grid[i].divLength; j++){
@@ -1148,8 +1154,8 @@ core.renderPage = function(parent, page){
 			core.modulesPullObject.insert(module.object_name);
 			self.initModule(module.object_name, div);	
 		}
-	}	
-	jQuery(parent).append(table);
+	}
+    jQuery(parent).append(table);
 }
 core.renderTabs = function(parent, pages){
 	var self = this;

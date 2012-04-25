@@ -45,8 +45,12 @@ function JMBFamiliesObject(obj){
 	module.colors = module.settings.colors;
 	module.start_id = storage.usertree.gedcom_id;
 	module.usertree = storage.usertree.pull;
-	module.render(module.start_id);
-	storage.core.modulesPullObject.unset('JMBFamiliesObject');
+
+    jQuery(module.parent).ready(function(){
+
+        module.render(module.start_id);
+        storage.core.modulesPullObject.unset('JMBFamiliesObject');
+    });
 }
 JMBFamiliesObject.prototype = {
 	_ajax:function(func, params, callback){
@@ -584,7 +588,7 @@ JMBFamiliesObject.prototype = {
 		jQuery(module.parent).css('overflow', 'hidden');
 		
 		if(!module.clickItem){
-			module.startAnimation(cont, childs);
+            module.startAnimation(cont, childs);
 		} else {
 			module.animation(cont, childs);
 		}	

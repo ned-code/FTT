@@ -22,22 +22,10 @@ function JMBAncestorsObject(obj){
 	module.spouse = null;
 	module.nodes = null;
 	module.clickNode = null;
-	
-	/*
-	module.ajax('get', null, function(res){
-		json = jQuery.parseJSON(res.responseText);
-		module.usertree = json.usertree;
-		module.user = json.user;
-		module.tree = module.getTree(json.user);
-		module.init();
-		storage.core.modulesPullObject.unset('JMBAncestorsObject');
-	});
-	*/
-	
+
 	jQuery(home_button).click(function(){
 		if(module.user==null) return false;
 		if(module.st.clickedNode.id == module.st.root) return false;
-        //module.render(module.tree);
         module.st.select(module.st.root);
         return false;
 	})
@@ -423,14 +411,14 @@ JMBAncestorsObject.prototype = {
 		});
 		
 		module.st = st;
-		
+
 		//load json data
 		st.loadJSON(module.tree);
 		//compute node positions and layout
 		st.compute();
 		//emulate a click on the root node.
 		st.onClick(st.root);
-		
+
 		if(callback){
 			callback();
 		}

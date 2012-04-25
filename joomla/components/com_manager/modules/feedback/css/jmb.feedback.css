@@ -61,10 +61,11 @@ div#jmb_feedback_form div.body div.likes div{
 }
 
 div#jmb_feedback_form div.body div.likes div.facebook{
-    width: 45px;
-    margin-left: 10px;
+    margin-left:5px;
 }
 
 div#jmb_feedback_form div.body div.likes div.twitter{
-    width: 60px;
+}
+
+div#jmb_feedback_form div.body div.likes div.email{
 }
