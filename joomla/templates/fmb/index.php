@@ -78,20 +78,13 @@ if($jfb_facebook_id){
                                 <?php if($alias=='myfamily'): ?>
                                     <!--<jdoc:include type="modules" name="right" /></div>-->
                                     <div id="jmb_feedback_form">
-                                        <!--
-                                        <div style="display:none;" class="likes">
-                                            <div class="message">Like whay you see? Pass the word along to your friends:</div>
-                                            <div class="facebook">{JFBCLike url=http://familytreetop.com/index.php/myfamily layout=button_count show_faces=false show_send_button=false width=300 action=share font=tahoma colorscheme=light}</div>
-                                            <div class="twitter">{SCTwitterShare}</div>
-                                        </div>
-                                        -->
                                         <div style="display:none;" class="likes">
                                             <!-- AddThis Button BEGIN -->
                                                 <div class="addthis_toolbox addthis_default_style addthis_32x32_style">
                                                     <div class="message">Like whay you see? Pass the word along to your friends:</div>
-                                                    <div class="facebook"><a class="addthis_button_preferred_1"></a></div>
-                                                    <div class="twitter"><a class="addthis_button_preferred_2"></a></div>
-                                                    <div class="email"><a class="addthis_button_preferred_3"></a></div>
+                                                    <div class="facebook"><a class="addthis_button_facebook at300b"></a></div>
+                                                    <div class="twitter"><a class="addthis_button_twitter at300b"></a></div>
+                                                    <div class="email"><a class="addthis_button_email at300b"></a></div>
                                                 </div>
                                                 <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4f97ad88304db623"></script>
                                             <!-- AddThis Button END -->

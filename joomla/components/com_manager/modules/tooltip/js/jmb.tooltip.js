@@ -101,7 +101,9 @@ JMBTooltip.prototype = {
 							sb._('</td>');
 						sb._('</tr>');
 					sb._('</table>');
-					sb._('<div class="jmb-tooltip-view-switch"><span id="')._(get.getcom_id)._('">Show full profile</span></div>')
+					if(settings.button_edit){
+                        sb._('<div class="jmb-tooltip-view-switch"><span id="')._(get.getcom_id)._('">Show full profile</span></div>');
+                    }
 				sb._('</div>');
 				if(media!=null&&media.photos.length!=0){
 					sb._('<div class="jmb-tooltip-view-images">');
@@ -429,6 +431,10 @@ JMBTooltip.prototype = {
         if(args.preShow){
             argsSettings.style.preShow = args.preShow;
         }
+        if(typeof(args.button_edit) == 'undefined'){
+            var sut = storage.usertree;
+            argsSettings.button_edit = (sut.pull[args.gedcom_id].user.facebook_id == '0' || sut.gedcom_id == args.gedcom_id);
+        }
         return argsSettings;
     },
     _getSettings:function(type, args){
@@ -437,7 +443,7 @@ JMBTooltip.prototype = {
             argsSettings = module._getArgsSettings(args);
         argsSettings.type = type;
         argsSettings.style.contentSelector = ["jQuery('#", args.gedcom_id, "-tooltip-", type,"')"].join('');
-        return jQuery.extend(true, {}, argsSettings, dSettings);
+        return jQuery.extend(true, {}, dSettings, argsSettings);
     },
 	render:function(type, args){
 		var	module = this,

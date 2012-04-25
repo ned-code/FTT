@@ -53,7 +53,9 @@ DescendantTreeProfile.prototype = {
 						sb._('<tr>');
 							sb._('<td><div class="jmb-dtp-body-info-avatar">');
 								sb._(module.avatar(ch));
-								sb._('<div id="edit-button" class="jmb-dtp-body-edit-button">&nbsp;</div>');
+                                if(parse.is_editable){
+								    sb._('<div id="edit-button" class="jmb-dtp-body-edit-button">&nbsp;</div>');
+                                }
 								if(parse.facebook_id != '0'){
 									sb._('<div class="jmb-dtp-facebook-icon">&nbsp;</div>');
 								}
@@ -75,7 +77,9 @@ DescendantTreeProfile.prototype = {
 							sb._('</td>');
 						sb._('</tr>');
 					sb._('</table>');
-					sb._('<div class="jmb-dtp-body-info-switch">')._('Show full profile')._('</div>');
+					if(parse.is_editable){
+                        sb._('<div class="jmb-dtp-body-info-switch">')._('Show full profile')._('</div>');
+                    }
 				sb._('</div>');
 				sb._('<div class="jmb-dtp-body-media">')
 					if(media!=null){

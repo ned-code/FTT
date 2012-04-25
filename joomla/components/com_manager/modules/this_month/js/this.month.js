@@ -352,9 +352,13 @@ JMBThisMonthObject.prototype = {
 
 		//events
 		jQuery(table).find('.jmb-this-month-content .person font').each(function(i,e){
+            var parent = jQuery(e).parent();
+            var id = jQuery(parent).attr('id');
+            var object = storage.usertree.pull[id];
+            var facebook_id = object.user.facebook_id;
 			storage.tooltip.render('view', {
-				gedcom_id:jQuery(e).parent().attr('id'),
-				target:jQuery(e).parent()
+				gedcom_id:id,
+				target:parent
 			});
 		});
 		jQuery(self.table).find('select[name="months"]').change(function(){

@@ -239,7 +239,9 @@ JMBFamiliesObject.prototype = {
 				sb._((object.user.is_mother_line&&fam_opt.mother.pencil)?fam_opt.mother.pencil:'#F5FAE6');
 			sb._(';">');
 				sb._('<div id="')._(gedcom_id)._('-view" type="imgContainer" class="jmb-families-parent-img">')._(module._avatar(object, 'parent', 1));
-					sb._('<div id="')._(gedcom_id)._('-edit" class="jmb-families-edit-button parent">&nbsp;</div>');
+                    if(get.is_editable){
+                        sb._('<div id="')._(gedcom_id)._('-edit" class="jmb-families-edit-button parent">&nbsp;</div>');
+                    }
 					if(facebook_id != '0'){
 						sb._('<div class="jmb-families-fb-icon parent" id="')._(facebook_id)._('">&nbsp;</div>');
 					}
@@ -284,8 +286,10 @@ JMBFamiliesObject.prototype = {
 				sb._((object.user.is_mother_line&&fam_opt.mother.pencil)?fam_opt.mother.pencil:'#F5FAE6');
 			sb._(';">');
 				sb._('<div id="')._(gedcom_id)._('-view" type="imgContainer" class="jmb-families-parent-img" style="border:2px solid #')._(bcolor)._(';">')._(module._avatar(object, 'parent', 1));
-					sb._('<div id="')._(gedcom_id)._('-edit" class="jmb-families-edit-button parent">&nbsp;</div>');
-					if(facebook_id != '0'){
+					if(get.is_editable){
+                        sb._('<div id="')._(gedcom_id)._('-edit" class="jmb-families-edit-button parent">&nbsp;</div>');
+                    }
+                    if(facebook_id != '0'){
 						sb._('<div class="jmb-families-fb-icon parent" id="')._(facebook_id)._('">&nbsp;</div>');
 					}
 					if(get.is_death){
@@ -324,7 +328,9 @@ JMBFamiliesObject.prototype = {
 				sb._((object.user.is_mother_line&&fam_opt.mother.pencil)?fam_opt.mother.pencil:'#F5FAE6');
 			sb._(';">');
 				sb._('<div id="')._(gedcom_id)._('-view" type="imgContainer" class="jmb-families-parent-img" style="border:2px solid #')._(bcolor)._('">')._(module._avatar(object, 'parent', 1));
-					sb._('<div id="')._(gedcom_id)._('-edit" class="jmb-families-edit-button parent">&nbsp;</div>');
+					if(get.is_editable){
+                        sb._('<div id="')._(gedcom_id)._('-edit" class="jmb-families-edit-button parent">&nbsp;</div>');
+                    }
 					if(facebook_id != '0'){
 						sb._('<div class="jmb-families-fb-icon parent" id="')._(facebook_id)._('">&nbsp;</div>');
 					}
@@ -367,8 +373,10 @@ JMBFamiliesObject.prototype = {
 				sb._((user.is_mother_line&&fam_opt.mother.pencil)?fam_opt.mother.pencil:'#F5FAE6');
 			sb._(';">');
 				sb._('<div id="')._(gedcom_id)._('-view" type="imgContainer" style="height:')._(Math.round(80*k))._('px;width:')._(Math.round(72*k))._('px;border:2px solid #')._(bcolor)._('" class="jmb-families-child-img">')._(module._avatar(object, 'child', k));	
-					sb._('<div id="')._(gedcom_id)._('-edit" class="')._(edit_button)._('">&nbsp;</div>');
-					if(facebook_id != '0'){
+					if(get.is_editable){
+                        sb._('<div id="')._(gedcom_id)._('-edit" class="')._(edit_button)._('">&nbsp;</div>');
+                    }
+                    if(facebook_id != '0'){
 						sb._('<div class="jmb-families-fb-icon child" id="')._(facebook_id)._('">&nbsp;</div>');
 					}
 					if(get.is_death){
@@ -446,16 +454,18 @@ JMBFamiliesObject.prototype = {
 			gedcom_id;
 		jQuery(cont).find('.jmb-families-edit-button').each(function(i,e){
 			gedcom_id = jQuery(e).attr('id').split('-')[0];
-			storage.tooltip.render('edit', {
-				gedcom_id:gedcom_id,
-				target:e,
-				offsetParent:document.body,
-				afterEditorClose:function(){
-                    storage.tooltip.cleaner(function(){
-                        module.render(module.now_id);
-                    });
-				}
-			});
+                storage.tooltip.render('edit', {
+                    button_edit:false,
+                    button_facebook:false,
+                    gedcom_id:gedcom_id,
+                    target:e,
+                    offsetParent:document.body,
+                    afterEditorClose:function(){
+                        storage.tooltip.cleaner(function(){
+                            module.render(module.now_id);
+                        });
+                    }
+                });
 		});
 	},
 	_facebook:function(cont){

@@ -39,6 +39,15 @@ class JMBUserTree {
 		} 
 		return null;
 	}
+    /**
+    *
+    */
+    protected function _getPlaces($event_id){
+        if(isset($this->_LocationsEventsList[$event_id])){
+            return $this->_LocationsEventsList[$event_id];
+        }
+        return null;
+    }
 	/**
 	*
 	*/
@@ -295,7 +304,8 @@ class JMBUserTree {
 		$is_father_line = ($user['is_self']||$user['is_descendant']||$user['is_father'])?1:0;
 		return array(
 			'gedcom_id'=>$user['gedcom_id'], 
-			'facebook_id'=>$user['facebook_id'], 
+			'facebook_id'=>$user['facebook_id'],
+            'creator'=>$user['creator'],
 			'gender'=>$user['gender'], 
 			'first_name'=>$user['first_name'],
 			'last_name'=>$user['last_name'],

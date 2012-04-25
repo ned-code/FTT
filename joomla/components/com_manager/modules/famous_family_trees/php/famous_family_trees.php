@@ -51,14 +51,14 @@ class JMBFamousFamily {
 	
 	public function setFamilies($args){
 		$args = json_decode($args);
-		$owner_id = $_SESSION['jmb']['gid'];
+        $session = JFactory::getSession();
+        $owner_id = $session->get('gedcom_id');
 		$tree_keepers = $this->_getTreeKeepers();
 		if(isset($tree_keepers[$owner_id])){
 			$permission = 'USER';
 		} else {
 			$permission = 'MEMBER';
-		}		
-		$session = JFactory::getSession();
+		}
 		$session->set('facebook_id', 0);
 		$session->set('gedcom_id', $args->Id);
 		$session->set('tree_id', $args->TreeId);

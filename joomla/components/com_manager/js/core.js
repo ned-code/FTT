@@ -118,6 +118,7 @@ storage.usertree.parse = function(object){
 				first_name = user.first_name;
 				return (nick!=null)?nick:first_name;
 		})(),
+        is_editable:(user.facebook_id == '0' || user.gedcom_id == storage.usertree.gedcom_id),
 		is_death:(function(){
 			return (user.is_alive)?0:1;
 		})(),
