@@ -21,7 +21,7 @@ class IndividualsList{
         */
         public function get($id, $lite=false){
         	if($id==null){ return null; }
-        	$sqlString = "SELECT indivs.id as id, indivs.fid as fid, indivs.sex as sex, names.first_name as first_name,names.middle_name as middle_name,names.last_name as last_name,names.nick as nick,link.tree_id as tree_id,link.type as permission
+        	$sqlString = "SELECT indivs.id as id, indivs.fid as fid, indivs.sex as sex, indivs.creator as creator, names.first_name as first_name,names.middle_name as middle_name,names.last_name as last_name,names.nick as nick,link.tree_id as tree_id,link.type as permission
         		FROM #__mb_individuals as indivs
         		LEFT JOIN #__mb_names as names ON indivs.id = names.gid
         		LEFT JOIN #__mb_tree_links as link ON indivs.id = link.individuals_id
@@ -32,20 +32,21 @@ class IndividualsList{
         	
         	$pers = new Individual(); 
         	$pers->Id = $rows[0]['id'];
-		$pers->FacebookId = $rows[0]['fid'];
-		$pers->Gender = $rows[0]['sex'];
-		$pers->FirstName = $rows[0]['first_name'];
-		$pers->MiddleName = $rows[0]['middle_name'];
-		$pers->LastName = $rows[0]['last_name'];
-		$pers->Nick = $rows[0]['nick'];
-		$pers->TreeId = $rows[0]['tree_id'];
-		$pers->Permission = $rows[0]['permission'];
+		    $pers->FacebookId = $rows[0]['fid'];
+		    $pers->Gender = $rows[0]['sex'];
+		    $pers->FirstName = $rows[0]['first_name'];
+		    $pers->MiddleName = $rows[0]['middle_name'];
+		    $pers->LastName = $rows[0]['last_name'];
+		    $pers->Nick = $rows[0]['nick'];
+		    $pers->TreeId = $rows[0]['tree_id'];
+		    $pers->Permission = $rows[0]['permission'];
+            $pers->Creator = $rows[0]['creator'];
 		
-		if(!$lite){
-			$pers->Birth = $this->events->getPersonEventsByType($pers->Id,'BIRT');
-			$pers->Death = $this->events->getPersonEventsByType($pers->Id,'DEAT');
-		}
-		return $pers;
+            if(!$lite){
+                $pers->Birth = $this->events->getPersonEventsByType($pers->Id,'BIRT');
+                $pers->Death = $this->events->getPersonEventsByType($pers->Id,'DEAT');
+            }
+            return $pers;
         }
                 
         /**
@@ -54,8 +55,8 @@ class IndividualsList{
         public function save($pers){
         	if($pers==null){ return false; }
         	//insert to individuals table;
-        	$sqlString = 'INSERT INTO #__mb_individuals (`id`, `fid`, `sex`,`create_time`) VALUES (NULL,?,?, NOW())'; 
-        	$this->ajax->setQuery($sqlString, $pers->FacebookId, $pers->Gender);
+        	$sqlString = 'INSERT INTO #__mb_individuals (`id`, `fid`, `sex`,`creator`,`create_time`) VALUES (NULL,?,?,?,NOW())';
+        	$this->ajax->setQuery($sqlString, $pers->FacebookId, $pers->Gender, $pers->Creator);
         	$this->ajax->query();
         	$id = $this->ajax->insertid();
         	//get params and insert to names table;
@@ -224,7 +225,7 @@ class IndividualsList{
         	return $rows;
         }
         public function getIndividualsList($tree_id, $owner_id, $gedcom_id = false){
-        	$sqlString = "SELECT DISTINCT ind.id as gedcom_id, ind.fid as facebook_id, ind.sex as gender, ind.last_login, ind.default_family,
+        	$sqlString = "SELECT DISTINCT ind.id as gedcom_id, ind.fid as facebook_id, ind.sex as gender, ind.last_login, ind.default_family, ind.creator,
         				name.first_name, name.middle_name, name.last_name, name.nick, 
         				links.type as permission, rel.relation,
         				f_line.is_self, f_line.is_spouse, f_line.is_descendant, f_line.is_father, f_line.is_mother FROM #__mb_individuals as ind 

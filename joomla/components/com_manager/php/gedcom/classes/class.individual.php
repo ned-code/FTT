@@ -5,6 +5,7 @@ class Individual{
 	public $Id;
 	public $FacebookId;
 	public $Gender;
+    public $Creator;
 	//names
 	public $FirstName;
 	public $MiddleName;
@@ -29,6 +30,7 @@ class Individual{
 		$this->Id = null;
 		$this->FacebookId = null;
 		$this->Gender = null;
+        $this->Creator = null;
 		$this->FirstName = null;
 		$this->MiddleName = null;
 		$this->LastName = null;
