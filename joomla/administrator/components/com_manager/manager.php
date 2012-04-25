@@ -69,24 +69,20 @@ $controller = new ManagerController( );
 
 # Perform the Request task
 $controller->execute( JRequest::getCmd('task'));
-$user = & JFactory::getUser();
-//if (!$user->authorize( 'com_manager', 'manage' )) {
-//	$mainframe->redirect( 'index.php', JText::_('ALERTNOTAUTH') );
-//}
 
-// Set the table directory
 JTable::addIncludePath(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_manager'.DS.'tables');
-
 
 # Redirect if set by the controller
 $controller->redirect(); 
-$user = & JFactory::getUser();
 
 JHTML::_('behavior.mootools');
 
-$document = &JFactory::getDocument();
 $document->addScript('components/com_manager/js/jquery.min.js');
 $document->addScript('components/com_manager/js/jquery-ui.min.js');
 $document->addScript('components/com_manager/js/jquery.form.js');
+
+$document->addStyleSheet('../components/com_manager/js/jquery.autocomplete.css');
+$document->addScript('../components/com_manager/js/jquery.autocomplete.min.js');
+
 $document->addCustomTag( '<script type="text/javascript">jQuery.noConflict();</script>' );
 ?>

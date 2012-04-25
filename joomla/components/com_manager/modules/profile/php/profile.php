@@ -1,11 +1,9 @@
 <?php
 class JMBProfile {
-	protected $db;
 	protected $host;
 	protected $relation;
 
 	function __construct(){
-		$this->db =& JFactory::getDBO();
 		$this->host = new Host('Joomla');
 	}
 	
@@ -137,7 +135,7 @@ class JMBProfile {
 		return $family;
 	}
 	
-	protected function createIndividual($request){
+	protected function createIndividual($request, $owner_id = '0'){
 		$individual = $this->host->gedcom->individuals->create();
 		$individual->FacebookId = '0';
 		$individual->Gender = $request['gender'];
@@ -145,9 +143,23 @@ class JMBProfile {
 		$individual->MiddleName = $request['middle_name'];
 		$individual->LastName = $request['last_name'];
 		$individual->Nick = $request['nick'];
+        $individual->Creator = $owner_id;
 		$individual->Id = $this->host->gedcom->individuals->save($individual);
 		return $individual;
 	}
+
+    protected function createEmptyIndividual($gender, $owner_id = '0'){
+        $individual = $this->host->gedcom->individuals->create();
+        $individual->FacebookId = '0';
+        $individual->Gender = $gender;
+        $individual->FirstName = 'unknown';
+        $individual->MiddleName = NULL;
+        $individual->LastName = NULL;
+        $individual->Nick = NULL;
+        $individual->Creator = $owner_id;
+        $individual->Id = $this->host->gedcom->individuals->save($individual);
+        return $individual;
+    }
 	
 	public function basic($user_id){				
 		// update user in db
@@ -276,7 +288,7 @@ class JMBProfile {
 		}
 
 		//add character
-		$individual = $this->createIndividual($request);
+		$individual = $this->createIndividual($request, $owner_id);
 		$this->host->usertree->link($tree_id, $individual->Id);
 		$this->updateIndividualEvents($individual, $request);
 		
@@ -284,11 +296,11 @@ class JMBProfile {
 			case "parent":
 				if($individual->Gender == "M"){
 					$sircar = $individual;
-					$spouse = $this->createIndividual(array('gender'=>'F','first_name'=>'','middle_name'=>'','last_name'=>'','nick'=>''));
+                    $spouse = $this->createEmptyIndividual('F', $owner_id);
 					$this->host->usertree->link($tree_id, $spouse->Id);
 					$this->host->gedcom->relation->set($tree_id, $owner_id, $spouse->Id);
 				} else {
-					$sircar = $this->createIndividual(array('gender'=>'M','first_name'=>'','middle_name'=>'','last_name'=>'','nick'=>''));
+					$sircar = $this->createEmptyIndividual('M', $owner_id);
 					$this->host->usertree->link($tree_id, $sircar->Id);
 					$spouse = $individual;
 					$this->host->gedcom->relation->set($tree_id, $owner_id, $sircar->Id);
@@ -307,9 +319,9 @@ class JMBProfile {
 			case "sibling":
 				$parents = $this->host->gedcom->individuals->getParents($member->Id);
 				if(empty($parents)){
-					$sircar = $this->createIndividual(array('gender'=>'M','first_name'=>'','middle_name'=>'','last_name'=>'','nick'=>''));
+					$sircar = $this->createEmptyIndividual('M', $owner_id);
 					$this->host->usertree->link($tree_id, $sircar->Id);
-					$spouse = $this->createIndividual(array('gender'=>'F','first_name'=>'','middle_name'=>'','last_name'=>'','nick'=>''));
+					$spouse = $this->createEmptyIndividual('F', $owner_id);
 					$this->host->usertree->link($tree_id, $spouse->Id);
 					$family = $this->createFamily($sircar, $spouse);
 					$this->host->gedcom->relation->set_relation($tree_id, $owner_id, array(array('individuals_id'=>$sircar->Id),array('individuals_id'=>$spouse->Id)));
@@ -335,12 +347,12 @@ class JMBProfile {
 				} else {
 					if($member->Gender=='M'){
 						$husb = $member;
-						$wife = $this->createIndividual(array('gender'=>'F','first_name'=>'','middle_name'=>'','last_name'=>'','nick'=>''));
+						$wife = $this->createEmptyIndividual('F', $owner_id);
 						$this->host->usertree->link($tree_id, $wife->Id);
 						$this->host->gedcom->relation->set($tree_id, $owner_id, $wife->Id);
 					} else {
 						$wife = $member;
-						$husb = $this->createIndividual(array('gender'=>'M','first_name'=>'','middle_name'=>'','last_name'=>'','nick'=>''));
+						$husb = $this->createEmptyIndividual('M', $owner_id);
 						$this->host->usertree->link($tree_id, $husb->Id);
 						$this->host->gedcom->relation->set($tree_id, $owner_id, $husb->Id);
 					}
