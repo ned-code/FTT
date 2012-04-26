@@ -1024,6 +1024,8 @@ JMBProfile.prototype = {
                     },
                     message = {
                         JMB_DELETE_CONFIRM:"Are you sure you want to delete the information about that user?",
+                        JMB_DELETE_USER_CONFIRM:"You are about to remove yourself from this family tree. Once this is done, you will not be able to view this family tree unless an existing member invites you back.",
+                        JMB_DELETE_TREE_CONFIRM:"You are about to remove yourself from this family tree. Since you are the only registered person, all members in this family tree will be completely deleted.",
                         JMB_DELETE_UNREGISTERED_MEMBER:('You are about to %% remove from your family tree.<br>Please select an option:').replace('%%', parse.name),
                         JMB_TITLE_UNLINK:'Leave my profile unchanged',
                         JMB_DESCR_UNLINK:'This process will keep your profile details intact. All names, dates and other info will remain visible by existing family members',
@@ -1073,12 +1075,31 @@ JMBProfile.prototype = {
 				html = jQuery(sb.result());
 				jQuery(module.box).find('div.jmb-dialog-profile-content').append(html);
                 jQuery(html).find('div.title span').click(function(){
-                    if(confirm(message.JMB_DELETE_CONFIRM)){
+                    var mes, method = 'deleteBranch';
+                    if(parse.gedcom_id != storage.usertree.gedcom_id){
+                        mes = message.JMB_DELETE_CONFIRM;
+                    } else if(storage.usertree.getUsersLength() == 1){
+                        mes = message.JMB_DELETE_TREE_CONFIRM;
+                        method = 'deleteTree';
+                    } else {
+                        mes = message.JMB_DELETE_USER_CONFIRM;
+                    }
+                    if(confirm(mes)){
                         var type = jQuery(this).parent().attr('id');
-                        var args = type+','+parse.gedcom_id;
+                        var args = type+','+parse.gedcom_id+','+method;
                         module._ajax('delete', args, function(res){
                             var json = jQuery.parseJSON(res.responseText);
-                            update_data(json);
+                            if(!json.deleted){
+                                update_data(json);
+                            } else {
+                                if(method == 'deletTree' || json.deleted.user){
+                                    window.location.reload()
+                                } else {
+                                    storage.usertree.deleted(json.deleted.objects);
+                                    storage.usertree.update(json.objects);
+                                    module.close();
+                                }
+                            }
                         });
                     }
                 });
@@ -1155,6 +1176,10 @@ JMBProfile.prototype = {
 		jQuery(module.box).append(cont);
 		module._initEditorHeaderButtons(cont, mode);
 	},
+    close:function(){
+        var module = this;
+        jQuery(module.box).dialog('close');
+    },
 	add:function(data){
 		var	module = this,
 			sb = host.stringBuffer(),

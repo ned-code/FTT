@@ -367,11 +367,11 @@ class JMBProfile {
 	}
 
     public function delete($args){
-        list($type,$gedcom_id) = explode(',', $args);
+        list($type,$gedcom_id,$method) = explode(',', $args);
         $session = JFactory::getSession();
         $owner_id = $session->get('gedcom_id');
         $tree_id = $session->get('tree_id');
-        $delete = false;
+        $deleted = false;
         switch($type){
             case "unlink":
                 $this->host->gedcom->individuals->unlink($tree_id, $gedcom_id);
@@ -386,10 +386,37 @@ class JMBProfile {
             break;
 
             case "delete":
-                $delete = true;
+                $deleted = true;
+                switch($method){
+                    case "deleteTree":
+                        $this->host->usertree->deleteTree($tree_id);
+                        $session->clear('gedcom_id');
+                        $session->clear('tree_id');
+                        $session->clear('permission');
+                        $session->clear('facebook_id');
+                        $session->set('alias', 'home');
+                    break;
+
+                    case "deleteBranch":
+                        $environment = $this->host->usertree->getUserEnvironment($gedcom_id);
+                        $this->host->usertree->deleteBranch($gedcom_id);
+                        if($owner_id == $gedcom_id){
+                            $session->clear('gedcom_id');
+                            $session->clear('tree_id');
+                            $session->clear('permission');
+                            $session->clear('facebook_id');
+                            $session->set('alias', 'home');
+                            $deleted = array('user'=>true);
+                        } else {
+                            $deleted = array('user'=>false);
+                        }
+                        $deleted['objects'] = array( array('gedcom_id'=>$gedcom_id) );
+                        $objects = $this->host->usertree->getUsers($tree_id, $owner_id, $environment);
+                    break;
+                }
             break;
         }
-        return json_encode(array('objects'=>$objects, 'delete'=>$delete));
+        return json_encode(array('objects'=>$objects, 'deleted'=>$deleted));
     }
 }
 

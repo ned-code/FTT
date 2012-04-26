@@ -72,6 +72,25 @@ storage.usertree.update = function(objects){
         }
     }
 }
+storage.usertree.deleted = function(objects){
+    for(var key in objects) {
+        var item = objects[key];
+        if (item) {
+            var gedcom_id = item.gedcom_id;
+            if (gedcom_id != null) {
+                delete storage.usertree.pull[gedcom_id];
+            }
+        }
+    }
+}
+storage.usertree.getUsersLength = function(){
+    var users = storage.usertree.users;
+    var count = 0;
+    for(var key in users){
+        count++;
+    }
+    return count;
+}
 storage.usertree.parse = function(object){
 	var	user = object.user,
 		families = object.families,

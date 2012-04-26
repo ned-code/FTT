@@ -527,7 +527,41 @@ class JMBUserTree {
 		$node['media'] = $this->_getMedia($id);
 		return $node;
 	}
-	
+
+    public function getUserEnvironment($gedcom_id){
+        $environment = array();
+        $parents = $this->gedcom->individuals->getParents($gedcom_id);
+        $families = $this->gedcom->families->getPersonFamilies($gedcom_id);
+        if(!empty($parents)){
+            $environment[] = $parents['husb'];
+            $environment[] = $parents['wife'];
+        }
+        if(!empty($families)){
+            foreach($families as $family){
+                $environment[] = $family->Spouse->Id;
+                $childrens = $this->gedcom->families->getFamilyChildrenIds($family->Id);
+                if(!empty($childrens)){
+                    foreach($childrens as $child){
+                        $environment[] = $child['gid'];
+                    }
+                }
+            }
+        }
+        return $environment;
+    }
+
+    public function getUsers($tree_id,$owner_id, $environment){
+        $this->_TreeId = $tree_id;
+        $this->_GedcomId = $owner_id;
+        $this->_init();
+
+        $nodes = array();
+        foreach($environment as $el){
+            $nodes[] = $this->getNode($el);
+        }
+        return $nodes;
+    }
+
 	/**
 	*
 	*/
@@ -669,6 +703,61 @@ class JMBUserTree {
 		$rows = $this->ajax->loadAssocList('facebook_id');
 		return ($rows!=null)?$rows:false;
 	}
+
+
+    protected function deleteUserFromDB($members){
+        $result = array_chunk($members, 25, true);
+        foreach($result as $res){
+            $sql_string = "DELETE FROM #__mb_individuals WHERE id IN (";
+            foreach($res as $el){
+                $sql_string .= "'".$el['id']."',";
+            }
+            $sql_string = substr($sql_string,0,-1).')';
+            $this->ajax->setQuery($sql_string);
+            $this->ajax->query();
+        }
+    }
+
+    protected function clearEmptyFamiliesInDB(){
+        $sql_string = "SELECT * FROM #__mb_families as f
+                        LEFT JOIN #__mb_childrens as c ON c.fid = f.id and isnull(gid)
+                        WHERE isnull(husb) or isnull(wife)";
+        $this->ajax->setQuery($sql_string);
+        $rows = $this->ajax->loadAssocList();
+        if(!empty($rows)){
+            $result = array_chunk($rows, 25, true);
+            foreach($result as $res){
+                $sql_string = "DELETE FROM #__mb_families WHERE id IN (";
+                foreach($res as $el){
+                    $sql_string .= "'".$el['id']."',";
+                }
+                $sql_string = substr($sql_string,0,-1).')';
+                $this->ajax->setQuery($sql_string);
+                $this->ajax->query();
+            }
+        }
+    }
+
+    public function deleteTree($tree_id){
+        $sql_string = "SELECT i.id FROM #__mb_individuals as i
+                        LEFT JOIN #__mb_tree_links as l ON l.individuals_id = i.id
+                        WHERE l.tree_id = ? ";
+        $this->ajax->setQuery($sql_string, $tree_id);
+        $members = $this->ajax->loadAssocList();
+        $this->deleteUserFromDB($members);
+
+        $sql_string = 'DELETE FROM #__mb_tree WHERE tree_id = ?';
+        $this->ajax->setQuery($sql_string, $tree_id);
+        $this->ajax->query();
+
+        $this->clearEmptyFamiliesInDB();
+    }
+
+    public function deleteBranch($gedcom_id){
+        $this->gedcom->individuals->delete($gedcom_id);
+        $this->clearEmptyFamiliesInDB();
+    }
+
 }
 
 ?>

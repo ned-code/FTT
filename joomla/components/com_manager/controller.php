@@ -227,8 +227,8 @@ class JMBController extends JController
         	$args = explode(',', $rows[0]['value']);
 
         	
-        	$sql = "UPDATE #__mb_tree_links SET `type`='USER' WHERE individuals_id =? AND tree_id=?";
-            $host->ajax->setQuery($sql, $args[0], $args[1]);
+        	$sql = "UPDATE #__mb_tree_links SET `type`='USER', `creator` = ? WHERE individuals_id =? AND tree_id=?";
+            $host->ajax->setQuery($sql, $args[0], $args[0], $args[1]);
             $host->ajax->query();
         	
         	$sql = "UPDATE #__mb_individuals SET `fid`=?,`change` = NOW(), `join_time`= NOW() WHERE id=?";

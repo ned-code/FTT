@@ -37,7 +37,7 @@ class IndividualsList{
         */
         public function get($id, $lite=false){
         	if($id==null){ return null; }
-        	$sqlString = "SELECT indivs.id as id, indivs.fid as fid, indivs.sex as sex, indivs.creator as creator, names.first_name as first_name,names.middle_name as middle_name,names.last_name as last_name,names.nick as nick,link.tree_id as tree_id,link.type as permission
+        	$sqlString = "SELECT indivs.id as id, indivs.fid as fid, indivs.sex as sex, indivs.creator, names.first_name as first_name,names.middle_name as middle_name,names.last_name as last_name,names.nick as nick,link.tree_id as tree_id,link.type as permission
         		FROM #__mb_individuals as indivs
         		LEFT JOIN #__mb_names as names ON indivs.id = names.gid
         		LEFT JOIN #__mb_tree_links as link ON indivs.id = link.individuals_id
@@ -241,7 +241,7 @@ class IndividualsList{
         	return $rows;
         }
         public function getIndividualsList($tree_id, $owner_id, $gedcom_id = false){
-        	$sqlString = "SELECT DISTINCT ind.id as gedcom_id, ind.fid as facebook_id, ind.sex as gender, ind.last_login, ind.default_family,
+        	$sqlString = "SELECT DISTINCT ind.id as gedcom_id, ind.fid as facebook_id, ind.sex as gender, ind.last_login, ind.default_family, ind.creator,
         				name.first_name, name.middle_name, name.last_name, name.nick, 
         				links.type as permission, rel.relation,
         				f_line.is_self, f_line.is_spouse, f_line.is_descendant, f_line.is_father, f_line.is_mother FROM #__mb_individuals as ind 

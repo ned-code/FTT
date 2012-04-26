@@ -225,14 +225,14 @@ class FamiliesList{
         *
         */
         public function getFamiliesList($tree_id, $gedcom_id = false){
-		$sqlString = "SELECT family.id as family_id, family.husb, family.wife 
+		$sqlString = "SELECT DISTINCT family.id as family_id, family.husb, family.wife
 				FROM #__mb_families as family
 				LEFT JOIN #__mb_tree_links as links ON links.individuals_id = family.husb OR links.individuals_id = family.wife";
 		if($gedcom_id){
 			$sqlString .= " WHERE links.tree_id = ? and links.individuals_id = ?";
 			$this->ajax->setQuery($sqlString, $tree_id, $gedcom_id);
 		} else {
-			$sqlString .= " WHERE links.tree_id = ? GROUP BY family.id";
+			$sqlString .= " WHERE links.tree_id = ?";
 			$this->ajax->setQuery($sqlString, $tree_id);
 		}
 		return $this->ajax->loadAssocList(array('husb','wife','F'=>'family_id'),'I');

@@ -83,8 +83,8 @@ class JMBInvitation {
 			$this->host->ajax->setQuery($sql_string, $args[0], $args[1]);
 			$this->host->ajax->query();
 			
-			$sql_string ="UPDATE  #__mb_tree_links SET  `type` = 'USER' WHERE  `tree_id` = ? AND `individuals_id` = ?";
-			$this->host->ajax->setQuery($sql_string, $individ->TreeId, $individ->Id);
+			$sql_string ="UPDATE  #__mb_tree_links SET  `type` = 'USER', `creator` = ? WHERE  `tree_id` = ? AND `individuals_id` = ?";
+			$this->host->ajax->setQuery($sql_string, $individ->Id, $individ->TreeId, $individ->Id);
 			$this->host->ajax->query();
 			return json_encode(array('success'=>true));
 		}

@@ -30,12 +30,17 @@ class JMBRelation {
 		return null;
 	}
 	
-	protected function get_spouse($gedcom_id){
-		$ind_key = 'I'.$gedcom_id;
-		if(isset($this->_FamiliesList[$ind_key])){
-			$family = $this->_FamiliesList[$ind_key][0];
-			return $family['wife'];
-		}
+	protected function get_spouses($gedcom_id){
+        $indKey = 'I'.$gedcom_id;
+        if(isset($this->_FamiliesList[$indKey])){
+            $families = $this->_FamiliesList[$indKey];
+            $spouses = array();
+            foreach($families as $family){
+                $spouses[] = $family['wife'];
+            }
+            return $spouses;
+        }
+
 		return null;
 	}
 	
@@ -126,11 +131,11 @@ class JMBRelation {
 		if($a_id == $b_id){
 			return 'self';
 		}
-		
-		$spouses = $this->individuals->getSpouses($a_id);
+
+		$spouses = $this->get_spouses($b_id);
 		if($spouses!=null){
 			foreach($spouses as $spouse){
-				if($spouse==$b_id){
+				if($spouse==$a_id){
 					return 'spouse';
 				}
 			}
@@ -230,7 +235,7 @@ class JMBRelation {
 	
 	public function check($tree_id, $gedcom_id){
 		$this->init($tree_id, $gedcom_id);
-		$sql_string = "DELETE FROM #__mb_relations WHERE tree_id = ? and from = ? and relation = 'unknown'";
+		$sql_string = "DELETE FROM #__mb_relations WHERE `tree_id` = ? and `from` = ? and relation = 'unknown'";
 		$this->ajax->setQuery($sql_string, $tree_id, $gedcom_id);
 		$this->ajax->query();
 		
