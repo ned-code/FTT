@@ -16,6 +16,22 @@ class IndividualsList{
             return $ind;
         }
 
+        public function clean($tree_id, $gedcom_id){
+            //change paremission
+            $sql_string = "UPDATE #__mb_tree_links SET `type` = 'MEMBER' WHERE tree_id = ? AND individuals_id = ?";
+            $this->ajax->setQuery($sql_string, $tree_id, $gedcom_id);
+            $this->ajax->query();
+            //clean user names
+            $user = $this->get($gedcom_id);
+            $user->FacebookId = '0';
+            $user->FirstName = 'unknown';
+            $user->MiddleName = NULL;
+            $user->LastName = NULL;
+            $user->Nick = NULL;
+            $this->update($user);
+            return $user;
+        }
+
         /**
         *
         */
@@ -60,7 +76,7 @@ class IndividualsList{
         	$this->ajax->query();
         	$id = $this->ajax->insertid();
         	//get params and insert to names table;
-        	$givn = (($pers->FirstName!='')?$pers->FirstName:'').' '.(($pers->MiddleName!='')?$pers->MiddleName:'');
+        	$givn = trim((($pers->FirstName!='')?$pers->FirstName:'').' '.(($pers->MiddleName!='')?$pers->MiddleName:''));
         	$sqlString = 'INSERT INTO #__mb_names (`gid`, `first_name`, `middle_name`, `last_name`, `prefix`, `givn`, `nick`, `surn_prefix`, `surname`, `suffix`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
         	$this->ajax->setQuery($sqlString, $id, $pers->FirstName, $pers->MiddleName, $pers->LastName, $pers->Prefix, $givn, $pers->Nick, $pers->SurnamePrefix, $pers->LastName, $pers->Suffix);
         	$this->ajax->query();
@@ -156,7 +172,7 @@ class IndividualsList{
         	if($fId==null){ return null; }
         	$this->ajax->setQuery('SELECT link.tree_id as id FROM #__mb_individuals as ind LEFT JOIN #__mb_tree_links as link ON ind.id = link.individuals_id  WHERE ind.fid=?', $fId);
         	$rows = $this->ajax->loadAssocList();
-        	return $rows[0]['id'];
+        	return (empty($rows))?null:$rows[0]['id'];
         }
         public function getFirstParent($id, $line=false, $first=false){
         	$parents = $this->getParents($id);
@@ -225,7 +241,7 @@ class IndividualsList{
         	return $rows;
         }
         public function getIndividualsList($tree_id, $owner_id, $gedcom_id = false){
-        	$sqlString = "SELECT DISTINCT ind.id as gedcom_id, ind.fid as facebook_id, ind.sex as gender, ind.last_login, ind.default_family, ind.creator,
+        	$sqlString = "SELECT DISTINCT ind.id as gedcom_id, ind.fid as facebook_id, ind.sex as gender, ind.last_login, ind.default_family,
         				name.first_name, name.middle_name, name.last_name, name.nick, 
         				links.type as permission, rel.relation,
         				f_line.is_self, f_line.is_spouse, f_line.is_descendant, f_line.is_father, f_line.is_mother FROM #__mb_individuals as ind 

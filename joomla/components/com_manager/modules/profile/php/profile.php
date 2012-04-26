@@ -367,19 +367,29 @@ class JMBProfile {
 	}
 
     public function delete($args){
-        list($type, $tree_id, $gedcom_id) = explode(',', $args);
+        list($type,$gedcom_id) = explode(',', $args);
+        $session = JFactory::getSession();
+        $owner_id = $session->get('gedcom_id');
+        $tree_id = $session->get('tree_id');
+        $delete = false;
         switch($type){
             case "unlink":
-                //$this->host->gedcom->individuals->unlink($tree_id, $gedcom_id);
+                $this->host->gedcom->individuals->unlink($tree_id, $gedcom_id);
+                $objects = $this->host->usertree->getUser($tree_id, $owner_id, $gedcom_id);
             break;
 
             case "delete_data":
+                $member = $this->host->gedcom->individuals->clean($tree_id, $gedcom_id);
+                $this->host->gedcom->events->deleteMemberEvents($member->Id);
+                $this->host->gedcom->media->deleteMemberMedias($member->Id);
+                $objects = $this->host->usertree->getUser($tree_id, $owner_id, $gedcom_id);
             break;
 
             case "delete":
+                $delete = true;
             break;
         }
-        return implode(',', array($type, $tree_id, $gedcom_id));
+        return json_encode(array('objects'=>$objects, 'delete'=>$delete));
     }
 }
 

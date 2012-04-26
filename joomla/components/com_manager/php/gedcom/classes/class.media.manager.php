@@ -136,6 +136,12 @@ class MediaList{
             $this->clearLinks($id);
             return true;
         }
+        public function deleteMemberMedias($gedcom_id){
+            $medias = $this->getMediaByGedId($gedcom_id);
+            foreach($medias as $media){
+                $this->delete($media->Id);
+            }
+        }
         public function getMediaList($tree_id, $gedcom_id = false){
         	$sql_string = "SELECT media.id as media_id, media.form, media.title, 
         				media.path, m_links.type, m_links.gid as gedcom_id,

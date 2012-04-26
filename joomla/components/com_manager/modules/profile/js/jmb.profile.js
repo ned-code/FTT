@@ -999,51 +999,49 @@ JMBProfile.prototype = {
 			more_options:function(){
 				sb.clear();
                 var functions ={
-                    getCellImage:function(){
-                        return ''
+                        getCellImage:function(){
+                            return ''
+                        },
+                        getCellText:function(title, description){
+                            var s = host.stringBuffer();
+                            s._('<div id="')._(title.id)._('" class="title"><span>')._(title.value)._('</span></div>');
+                            s._('<div class="description">')._(description)._('</div>');
+                            return s.result();
+                        },
+                        getRow:function(args){
+                            if(!args.visibility()) return '';
+                            var s = host.stringBuffer();
+                            s._('<tr>');
+                                s._('<td>');
+                                    s._(this.getCellImage());
+                                s._('</td>');
+                                s._('<td>');
+                                    s._(this.getCellText(args.title, args.description));
+                                s._('</td>');
+                            s._('</tr>');
+                            return s.result();
+                        }
                     },
-                    getCellText:function(title, description){
-                        var s = host.stringBuffer();
-                        s._('<div id="')._(title.id)._('" class="title"><span>')._(title.value)._('</span></div>');
-                        s._('<div class="description">')._(description)._('</div>');
-                        return s.result();
-                    },
-                    getRow:function(args){
-                        if(!args.visibility()) return '';
-                        var s = host.stringBuffer();
-                        s._('<tr>');
-                            s._('<td>');
-                                s._(this.getCellImage());
-                            s._('</td>');
-                            s._('<td>');
-                                s._(this.getCellText(args.title, args.description));
-                            s._('</td>');
-                        s._('</tr>');
-                        return s.result();
-                    },
-                    getDeleteUnregisteredMemberText:function(string){
-                        return string.replace('%%', parse.name);
-                    }
-                },
-                    deleteUnregisteredMember = functions.getDeleteUnregisteredMemberText('You are about to %% remove from your family tree.<br>Please select an option:'),
-                    titleUnlink = 'Leave my profile unchanged',
-                    descrUnlink = 'This process will keep your profile details intact. All names, dates and other info will remain visible by existing family members',
-                    titleDeleteData = 'Delete data',
-                    descrDeleteData = 'This process will wipe your profile clean. All names, dates and other info will be removed and replaced with "unknown"',
-                    titleDeleteAndRemove = 'Delete data and remove member',
-                    descrDeleteAndRemove = 'This process will completely remove your branch from this family tree. Note that family members with descendants cannot  be removed.';
-
-
+                    message = {
+                        JMB_DELETE_CONFIRM:"Are you sure you want to delete the information about that user?",
+                        JMB_DELETE_UNREGISTERED_MEMBER:('You are about to %% remove from your family tree.<br>Please select an option:').replace('%%', parse.name),
+                        JMB_TITLE_UNLINK:'Leave my profile unchanged',
+                        JMB_DESCR_UNLINK:'This process will keep your profile details intact. All names, dates and other info will remain visible by existing family members',
+                        JMB_TITLE_DELETE_DATA:'Delete data',
+                        JMB_DESCR_DELETE_DATA:'This process will wipe your profile clean. All names, dates and other info will be removed and replaced with "unknown"',
+                        JMB_TITLE_DELETE_AND_REMOVE:'Delete data and remove member',
+                        JMB_DESCR_DELETE_AND_REMOVE:'This process will completely remove your branch from this family tree. Note that family members with descendants cannot  be removed.'
+                    };
                 sb._('<div class="jmb-dialog-options-content">');
-                    sb._('<div class="option">')._(deleteUnregisteredMember)._('</div>');
+                    sb._('<div class="option">')._(message.JMB_DELETE_UNREGISTERED_MEMBER)._('</div>');
                     sb._('<div>');
                         sb._('<table>');
                             sb._(functions.getRow({
                                 title:{
                                     id:'unlink',
-                                    value:titleUnlink
+                                    value:message.JMB_TITLE_UNLINK
                                 },
-                                description:descrUnlink,
+                                description:message.JMB_DESCR_UNLINK,
                                 visibility:function(){
                                     return (storage.usertree.gedcom_id == parse.gedcom_id);
                                 }
@@ -1051,9 +1049,9 @@ JMBProfile.prototype = {
                             sb._(functions.getRow({
                                 title:{
                                     id:'delete_data',
-                                    value:titleDeleteData
+                                    value:message.JMB_TITLE_DELETE_DATA
                                 },
-                                description:descrDeleteData,
+                                description:message.JMB_DESCR_DELETE_DATA,
                                 visibility:function(){
                                     return true;
                                 }
@@ -1061,9 +1059,9 @@ JMBProfile.prototype = {
                             sb._(functions.getRow({
                                 title:{
                                     id:'delete',
-                                    value:titleDeleteAndRemove
+                                    value:message.JMB_TITLE_DELETE_AND_REMOVE
                                 },
-                                description:descrDeleteAndRemove,
+                                description:message.JMB_DESCR_DELETE_AND_REMOVE,
                                 visibility:function(){
                                     return true;
                                 }
@@ -1074,25 +1072,16 @@ JMBProfile.prototype = {
 
 				html = jQuery(sb.result());
 				jQuery(module.box).find('div.jmb-dialog-profile-content').append(html);
-                /*
-                 sb._('<div class="jmb-dialog-options-content" style="margin: 10px;">');
-                 sb._('<ul style="list-style: none outside none;">');
-                 if(parse.is_deletable){
-                 sb._('<li id="delete">');
-                 sb._('<div id="text"><div class="button"><span>Delete this person from your family tree.</span></div></div>');
-                 sb._('<div id="description"></div>');
-                 sb._('</li>');
-                 }
-                 sb._('</ul>');
-                 sb._('</div>');
-
-                jQuery(html).find('li#delete').click(function(){
-                    var args = 'unlink,85,11541'
-                    module._ajax('delete', args, function(res){
-                        console.log(res.responseText);
-                    })
+                jQuery(html).find('div.title span').click(function(){
+                    if(confirm(message.JMB_DELETE_CONFIRM)){
+                        var type = jQuery(this).parent().attr('id');
+                        var args = type+','+parse.gedcom_id;
+                        module._ajax('delete', args, function(res){
+                            var json = jQuery.parseJSON(res.responseText);
+                            update_data(json);
+                        });
+                    }
                 });
-                */
 			}
 		}
 	},

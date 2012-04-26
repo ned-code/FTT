@@ -51,6 +51,12 @@ class EventsList{
         	$this->ajax->setQuery('DELETE FROM #__mb_events WHERE id=?', $id);
         	$this->ajax->query();
         }
+        public function deleteMemberEvents($gedcom_id){
+            $events = $this->getPersonEvents($gedcom_id);
+            foreach($events as $event){
+                $this->delete($event->Id);
+            }
+        }
         public function setEventData($row){
         	$event = new Events();
         	$event->Id = $row['event_id'];
