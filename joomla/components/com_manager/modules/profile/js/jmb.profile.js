@@ -998,20 +998,101 @@ JMBProfile.prototype = {
 			},
 			more_options:function(){
 				sb.clear();
-                return;
-				sb._('<div class="jmb-dialog-options-content" style="margin: 10px;">');
-					sb._('<ul style="list-style: none outside none;">');
-                        if(parse.is_deletable){
-                            sb._('<li id="delete">');
-                                sb._('<div id="text"><div class="button"><span>Delete this person from your family tree.</span></div></div>');
-                                sb._('<div id="description"></div>');
-                            sb._('</li>');
-                        }
-			        sb._('</ul>');
-				sb._('</div>');				
+                var functions ={
+                    getCellImage:function(){
+                        return ''
+                    },
+                    getCellText:function(title, description){
+                        var s = host.stringBuffer();
+                        s._('<div id="')._(title.id)._('" class="title"><span>')._(title.value)._('</span></div>');
+                        s._('<div class="description">')._(description)._('</div>');
+                        return s.result();
+                    },
+                    getRow:function(args){
+                        if(!args.visibility()) return '';
+                        var s = host.stringBuffer();
+                        s._('<tr>');
+                            s._('<td>');
+                                s._(this.getCellImage());
+                            s._('</td>');
+                            s._('<td>');
+                                s._(this.getCellText(args.title, args.description));
+                            s._('</td>');
+                        s._('</tr>');
+                        return s.result();
+                    },
+                    getDeleteUnregisteredMemberText:function(string){
+                        return string.replace('%%', parse.name);
+                    }
+                },
+                    deleteUnregisteredMember = functions.getDeleteUnregisteredMemberText('You are about to %% remove from your family tree.<br>Please select an option:'),
+                    titleUnlink = 'Leave my profile unchanged',
+                    descrUnlink = 'This process will keep your profile details intact. All names, dates and other info will remain visible by existing family members',
+                    titleDeleteData = 'Delete data',
+                    descrDeleteData = 'This process will wipe your profile clean. All names, dates and other info will be removed and replaced with "unknown"',
+                    titleDeleteAndRemove = 'Delete data and remove member',
+                    descrDeleteAndRemove = 'This process will completely remove your branch from this family tree. Note that family members with descendants cannot  be removed.';
+
+
+                sb._('<div class="jmb-dialog-options-content">');
+                    sb._('<div class="option">')._(deleteUnregisteredMember)._('</div>');
+                    sb._('<div>');
+                        sb._('<table>');
+                            sb._(functions.getRow({
+                                title:{
+                                    id:'unlink',
+                                    value:titleUnlink
+                                },
+                                description:descrUnlink,
+                                visibility:function(){
+                                    return (storage.usertree.gedcom_id == parse.gedcom_id);
+                                }
+                            }));
+                            sb._(functions.getRow({
+                                title:{
+                                    id:'delete_data',
+                                    value:titleDeleteData
+                                },
+                                description:descrDeleteData,
+                                visibility:function(){
+                                    return true;
+                                }
+                            }));
+                            sb._(functions.getRow({
+                                title:{
+                                    id:'delete',
+                                    value:titleDeleteAndRemove
+                                },
+                                description:descrDeleteAndRemove,
+                                visibility:function(){
+                                    return true;
+                                }
+                            }));
+                        sb._('</table>');
+                    sb._('</div>');
+                sb._('</div>');
+
 				html = jQuery(sb.result());
 				jQuery(module.box).find('div.jmb-dialog-profile-content').append(html);
+                /*
+                 sb._('<div class="jmb-dialog-options-content" style="margin: 10px;">');
+                 sb._('<ul style="list-style: none outside none;">');
+                 if(parse.is_deletable){
+                 sb._('<li id="delete">');
+                 sb._('<div id="text"><div class="button"><span>Delete this person from your family tree.</span></div></div>');
+                 sb._('<div id="description"></div>');
+                 sb._('</li>');
+                 }
+                 sb._('</ul>');
+                 sb._('</div>');
 
+                jQuery(html).find('li#delete').click(function(){
+                    var args = 'unlink,85,11541'
+                    module._ajax('delete', args, function(res){
+                        console.log(res.responseText);
+                    })
+                });
+                */
 			}
 		}
 	},
@@ -1056,6 +1137,7 @@ JMBProfile.prototype = {
 	},
 	_clear:function(){
 		var module = this;
+        storage.tooltip.cleaner();
 		jQuery(module.container).remove();
 		module.editor_header_active_button = null;
 		module.editor_menu_active_button = null;

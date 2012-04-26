@@ -349,6 +349,7 @@ JMBTooltip.prototype = {
 		var module, btActive;
         module = this;
         btActive = module.btActive;
+        jQuery(module.lastBtActive.target).btOff();
         for(var key in btActive){
             var el = btActive[key];
             jQuery(el.target).btOff();

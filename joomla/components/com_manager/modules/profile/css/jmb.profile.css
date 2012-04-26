@@ -565,16 +565,36 @@
 }
 
 /**
-* delete button
+* more options
 */
-.jmb-dialog-options-content .button {
-    background: none repeat scroll 0 0 #999999;
-    border: 1px solid #000000;
-    border-radius: 5px 5px 5px 5px;
-    color: white;
+.jmb-dialog-options-content{
+    margin:10px;
+    font-family: Tahoma;
+    font-size:12px;
+    font-weight:normal;
+}
+.jmb-dialog-options-content table{
+    border:0px;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+.jmb-dialog-options-content td{
+    padding:5px;
+    border: 1px solid #000;
+}
+
+.jmb-dialog-options-content table .title{
+    color: #10B0F0;
+    margin: 3px;
+    font-weight: bold;
+}
+.jmb-dialog-options-content table .title span{
     cursor: pointer;
-    padding: 5px;
-    margin: 10px;
-    text-align: center;
-    width: 300px;
+}
+.jmb-dialog-options-content table .description{
+    color: #999999;
+    font-size: 10px;
+}
+.jmb-dialog-options-content .option{
+    text-align:center;
 }
