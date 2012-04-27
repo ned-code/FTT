@@ -7,6 +7,28 @@ function JMBThisMonthObject(obj){
 	this.json = {};
 	this.content = { table:null, birth:null, death:null, marr:null };
 	this.b_count = 0;
+    this.message = {
+        FTT_MOD_THIS_MONTH_HEADER:"Special Days in",
+        FTT_MOD_THIS_MONTH_BIRTHDAYS:"Birthdays",
+        FTT_MOD_THIS_MONTH_ANNIVERSARIES:"Anniversaries",
+        FTT_MOD_THIS_MONTH_REMEMBER:"We remember",
+        FTT_MOD_THIS_MONTH_ALL_YEARS:"All Years",
+        FTT_MOD_THIS_MONTH_BEFORE:"Before",
+        FTT_MOD_THIS_MONTH_AFTER:"After",
+        FTT_MOD_THIS_MONTH_HOWDO:"There are currently no %% associated with this month. How do i add some?",
+        FTT_MOD_THIS_MONTH_JANUARY:"January",
+        FTT_MOD_THIS_MONTH_FEBRUARY:"February",
+        FTT_MOD_THIS_MONTH_MARCH:"March",
+        FTT_MOD_THIS_MONTH_APRIL:"April",
+        FTT_MOD_THIS_MONTH_MAY:"May",
+        FTT_MOD_THIS_MONTH_JUNE:"June",
+        FTT_MOD_THIS_MONTH_JULY:"July",
+        FTT_MOD_THIS_MONTH_AUGUST:"August",
+        FTT_MOD_THIS_MONTH_SEPTEMBER:"September",
+        FTT_MOD_THIS_MONTH_OCTOBER:"October",
+        FTT_MOD_THIS_MONTH_NOVEMBER:"November",
+        FTT_MOD_THIS_MONTH_DECEMBER:"December"
+    }
 	
 	//objects
 	this.table = jQuery('<table cellpadding="0" cellspacing="0" width="100%"><tr><td><div class="jmb-this-month-header"></div></td></tr><tr><td><div class="jmb-this-month-body"></div></td></tr></table>');
@@ -138,11 +160,14 @@ JMBThisMonthObject.prototype = {
 	_createBody:function(json){
 		var self = this;
 		var c = self.content;
-		var lang = json.language;
+        var message = this.message;
+        var birthdays = message.FTT_MOD_THIS_MONTH_BIRTHDAYS;
+        var remembers = message.FTT_MOD_THIS_MONTH_REMEMBER;
+        var anniversaries = message.FTT_MOD_THIS_MONTH_ANNIVERSARIES;
 		c.table = self._createTableView();
-		c.birth = self._createEventTableView('jmb-this-month-birth', 'birthday', lang.BIRTHDAYS+':');
-		c.death = self._createEventTableView('jmb-this-month-death', 'deceased', lang.REMEMBER+':');
-		c.marr = self._createEventTableView('jmb-this-month-marr', 'marriage', lang.ANNIVERSARIES+':');
+		c.birth = self._createEventTableView('jmb-this-month-birth', 'birthday', birthdays+':');
+		c.death = self._createEventTableView('jmb-this-month-death', 'deceased', remembers+':');
+		c.marr = self._createEventTableView('jmb-this-month-marr', 'marriage', anniversaries+':');
 		jQuery(c.table[0].rows[0].cells[0]).append(c.birth);
 		jQuery(c.table[0].rows[2].cells[0]).append(c.death);
 		jQuery(c.table[0].rows[1].cells[0]).append(c.marr);
@@ -150,10 +175,27 @@ JMBThisMonthObject.prototype = {
 	},
 	_createMonthsSelect:function(json){
 		var sb = host.stringBuffer();
-		var lang = this.json.language;
-		var month_names = [ "JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE","JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER" ];
+		var message = this.message;
+		var monthNames = [  "JANUARY",
+                            "FEBRUARY",
+                            "MARCH",
+                            "APRIL",
+                            "MAY",
+                            "JUNE",
+                            "JULY",
+                            "AUGUST",
+                            "SEPTEMBER",
+                            "OCTOBER",
+                            "NOVEMBER",
+                            "DECEMBER"];
 		for(var i=0;i<12;i++){
-			sb._('<option ')._((i==json.settings.opt.month-1)?'selected':'')._(' value="')._(i+1)._('">')._(lang[month_names[i]])._('</option>')
+            var monthName = monthNames[i];
+            var monthLanguageName = message['FTT_MOD_THIS_MONTH_'+monthName];
+			sb._('<option ')
+                sb._((i==json.settings.opt.month-1)?'selected':'');
+                sb._(' value="')._(i+1)._('">');
+                    sb._(monthLanguageName);
+            sb._('</option>');
 		}
 		return sb.result();
 	},
@@ -162,19 +204,44 @@ JMBThisMonthObject.prototype = {
 		var sb = host.stringBuffer();
 		var sort_date = json.settings.split_event.year;
 		var sort_type = json.settings.split_event.type;
-		var lang = json.language;
+        var message = this.message;
+        var option = (function(){
+            return {
+                after:function(selected){
+                    sb._('<option ')._(selected?'selected':'')._(' value="1">')
+                        sb._(message.FTT_MOD_THIS_MONTH_AFTER);
+                        sb._(' ');
+                        sb._(sort_date);
+                    sb._('</option>');
+                },
+                before:function(selected){
+                    sb._('<option ')._(selected?'selected':'')._(' value="-1">');
+                        sb._(message.FTT_MOD_THIS_MONTH_BEFORE);
+                        sb._(' ');
+                        sb._(sort_date);
+                    sb._('</option>');
+                },
+                all:function(selected){
+                    sb._('<option ')._(selected?'selected':'')._(' value="0">');
+                        sb._(message.FTT_MOD_THIS_MONTH_ALL_YEARS);
+                        sb._(' ');
+                    sb._('</option>');
+                }
+            }
+        })();
+        sb.clear();
 		if(date < sort_date && sort_type == '-1'){
-			return sb._('<option value="1">')._(lang['AFTER'])._(' ')._(sort_date)._('</option><option selected value="-1">')._(lang['BEFORE'])._(' ')._(sort_date)._('</option><option value="0">')._(lang['ALLYEARS'])._(' ')._('</option>').result();
+            return sb._(option.after())._(option.before(true))._(option.all()).result();
 		} else if(date < sort_date && sort_type == '0'){
-			return sb._('<option value="1">')._(lang['AFTER'])._(' ')._(sort_date)._('</option><option value="-1">')._(lang['BEFORE'])._(' ')._(sort_date)._('</option><option selected value="0">')._(lang['ALLYEARS'])._(' ')._('</option>').result();
+            return sb._(option.after())._(option.before())._(option.all(true)).result();
 		} else if(date < sort_date && sort_type == '1'){
-			return sb._('<option selected value="1">')._(lang['AFTER'])._(' ')._(sort_date)._('</option><option value="-1">Before ')._(sort_date)._('</option><option value="0">')._(lang['ALLYEARS'])._(' ')._('</option>').result();
+            return sb._(option.after(true))._(option.before())._(option.all()).result();
 		} else if(date > sort_date && sort_type == '-1'){
-			return sb._('<option selected value="-1">')._(lang['BEFORE'])._(' ')._(sort_date)._('</option><option value="0">')._(lang['ALLYEARS'])._(' ')._('</option>').result();
+            return sb._(option.before(true))._(option.all()).result();
 		} else if(date > sort_date && sort_type == '0'){
-			return sb._('<option selected value="0">')._(lang['ALLYEARS'])._(' ')._('</option>').result();
+            return sb._(option.all(true)).result();
 		} else if(date > sort_date && sort_type == '1'){
-			return sb._('<option value="0">')._(lang['ALLYEARS'])._(' ')._('</option>').result();
+            return sb._(option.all()).result();
 		}
 	},
 	_setHEAD:function(json){
@@ -183,10 +250,16 @@ JMBThisMonthObject.prototype = {
 		var header_background_color = (self.type=='famous_family')?self.settings.colors.famous_header:self.settings.colors.family_header;
 		jQuery(header).css('background', '#'+header_background_color);
 		var sb = host.stringBuffer();
-		sb._('<span>')._(json.language['HEADER'])._('</span>: <select name="months">')._(this._createMonthsSelect(json))._('</select>');
+        var message = this.message;
+		sb._('<span>')._(message.FTT_MOD_THIS_MONTH_HEADER)._('</span>: <select name="months">')._(this._createMonthsSelect(json))._('</select>');
 		if(json.settings.opt.date<1900) sb._('<select name="sort">')._(this._createSortSelect(json))._('</select>');
 		jQuery(header).append(sb.result());
 	},
+    _getHowDoText:function(type){
+        var module = this,
+            message = module.message;
+        return message.FTT_MOD_THIS_MONTH_HOWDO.replace('%%', message[type]).split('.');
+    },
 	_setBIRTH:function(table, json){
 		var self = this;
 		var view = jQuery('.jmb-this-month-body').find('#jmb-this-month-birth table');
@@ -220,11 +293,11 @@ JMBThisMonthObject.prototype = {
 				jQuery(view).append(append);
 			});
 			if(self.b_count==0){
-				var howdo = self.json.language['HOWDO'].replace('%%',self.json.language['BIRTHDAYS']+' ').split('.');	
+				var howdo = self._getHowDoText('FTT_MOD_THIS_MONTH_BIRTHDATS');
 				self._setMessage(view, 'howToDo.html','#jmb-this-month-birth', ['<div class="message">',howdo[0],'<font color="#b6bad9">',howdo[1],'</font></div>'].join(''));
 			}
 		} else {
-			var howdo = self.json.language['HOWDO'].replace('%%',self.json.language['BIRTHDAYS']+' ').split('.');	
+            var howdo = self._getHowDoText('FTT_MOD_THIS_MONTH_BIRTHDATS');
 			self._setMessage(view, 'howToDo.html','#jmb-this-month-birth', ['<div class="message">',howdo[0],'<font color="#b6bad9">',howdo[1],'</font></div>'].join(''));
 		}
 	},
@@ -258,7 +331,7 @@ JMBThisMonthObject.prototype = {
 			});
 			
 		} else {
-			var howdo = self.json.language['HOWDO'].replace('%%',self.json.language['REMEMBER']+' ').split('.');	
+            var howdo = self._getHowDoText('FTT_MOD_THIS_MONTH_REMEMBER');
 			self._setMessage(view, 'howToDo.html','#jmb-this-month-death', ['<div class="message">',howdo[0],'<font color="#b6bad9">',howdo[1],'</font></div>'].join(''));
 		}
 	},
@@ -291,7 +364,7 @@ JMBThisMonthObject.prototype = {
 				
 			});
 		} else {
-			var howdo = self.json.language['HOWDO'].replace('%%',self.json.language['ANNIVERSARIES']+' ').split('.');	
+            var howdo = self._getHowDoText('FTT_MOD_THIS_MONTH_ANNIVERSARIES');
 			self._setMessage(view, 'howToDo.html','#jmb-this-month-marr', ['<div class="message">',howdo[0],'<font color="#b6bad9">',howdo[1],'</font></div>'].join(''));
 		}
 	},
@@ -320,6 +393,9 @@ JMBThisMonthObject.prototype = {
 		this._ajax("load", settings, function(req){
 			var json = jQuery.parseJSON(req.responseText);
 			module.json =  json;
+            if(json.language){
+                module.message = json.language;
+            }
 			module.json.members = storage.usertree.pull;
 			module.settings = storage.settings;
 			callback(json);
