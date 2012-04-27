@@ -1,114 +1,137 @@
-function JMBRecentVisitorsObject(obj){	
-	var parent = this;
-	var content = null;
-	var sb = host.stringBuffer();
-	var type = jQuery(document.body).attr('_type');
-	var alias = jQuery(document.body).attr('_alias');
-	var settings = storage.settings;
-	
-	var createBody = function(json){
-		var lang = json.lang;
-		var header_background_color = (type=='famous_family')?settings.colors.famous_header:settings.colors.family_header;
-		return jQuery('<div class="jmb-rv-header" style="background:#'+header_background_color+';"><span>'+lang['HEADER']+'</span></div><div class="jmb-rv-content"></div><div class="jmb-rv-button"><span>'+lang['SHOW']+'...</span></div>');
-	}
-	
-	var get_avatar = function(object){
-        return storage.usertree.avatar.get({
-            object:object,
-            width:32,
-            height:32
-        });
-	}
-	
-	var get_time = function(time){ 
-		var t = time.split(/[- :]/); 
-		return (t[0]!='0000'&&t[1]!='00'&&t[2]!='00')?new Date(t[0], t[1]-1, t[2], t[3], t[4], t[5]): false; 
-	}
-	
-	var get_difference = function(time, object){
-		var now = get_time(time);
-		var t   = get_time(object.last_login);
-		if(!now||!t) return 'unknown';
-		var dif = Math.round((now.getTime() - t.getTime())/1000);
-		var d = Math.floor(dif/86400);
-		var h = Math.floor(dif/3600%24);
-		var lang = parent.lang;
-		return (d!=0)?d+' '+lang['DAYS']+' '+h+' '+lang['HOURS']+' '+lang['AGO']:h+' '+lang['HOURS']+' '+lang['AGO'];
-	}
-	
-	var init_tipty_tooltip = function(time, object, container){
-		if(!object) return;
-		var 	st = host.stringBuffer(),
-			user = object.user,
-			name = [user.first_name, user.last_name].join(' '),
-			time = get_difference(time, user),
-			fallback = st._('<div>')._(name)._('</div>')._('<div>')._(time)._('</div>').result();
-		jQuery(container).tipsy({
-			gravity: 'sw',
-			html: true,
-			fallback: fallback
-		});
-	}
-	
-	var init_visitors = function(ul, json){	
-		var st = host.stringBuffer();
-		var objects = json.objects;
-		for(var key in objects){
-            var object = storage.usertree.pull[objects[key].gedcom_id];
-			var user = object.user
-			st.clear();
-			st._('<li id="')._(user.gedcom_id)._('" >');
-				st._('<div id="father_line" style="border: 2px solid #F5FAE6;">');
-					st._('<div id="mother_line" style="border: 2px solid #F5FAE6;">')
-						st._('<div class="avatar">')._(get_avatar(object))._('</div>');
-					st._('</div>');
-				sb._('</div>')
-			st._('</li>');
-			var html = st.result()
-			var li = jQuery(html);
-			jQuery(ul).append(li);
-			init_tipty_tooltip(json.time, object, li);
-		}
-	}
-
-    var setMiniTooltip = function(div, id){
-        storage.tooltip.render('view', {
-            gedcom_id:id,
-            target:div,
-            afterEditorClose:function(){
-                storage.tooltip.update();
+function JMBRecentVisitorsObject(obj){
+    var functions ={
+            createBody:function(json){
+                var header_background_color, st = host.stringBuffer();
+                if(type=='famous_family'){
+                    header_background_color = settings.colors.famous_header
+                } else {
+                    header_background_color = settings.colors.family_header;
+                }
+                st._('<div class="jmb-rv-header" style="background:#');
+                    st._(header_background_color);
+                st._(';">');
+                    st._('<span>')._(message.FTT_MOD_RECENT_VISITORS_HEADER)._('</span>');
+                st._('</div>');
+                st._('<div class="jmb-rv-content"></div>');
+                st._('<div class="jmb-rv-button">');
+                    st._('<span>')._(message.FTT_MOD_RECENT_VISITORS_SHOW)._('...</span>');
+                st._('</div>');
+                return jQuery(st.result());
+            },
+            get_avatar:function(object){
+                return storage.usertree.avatar.get({
+                    object:object,
+                    width:32,
+                    height:32
+                });
+            },
+            get_time:function(time){
+                var t = time.split(/[- :]/);
+                return (t[0]!='0000'&&t[1]!='00'&&t[2]!='00')?new Date(t[0], t[1]-1, t[2], t[3], t[4], t[5]): false;
+            },
+            get_difference:function(time, object){
+                var st = host.stringBuffer(),
+                    now = functions.get_time(time),
+                    lastLogin = functions.get_time(object.last_login),
+                    different,
+                    day,
+                    hour;
+                if(!now||!lastLogin) return 'unknown';
+                different = Math.round((now.getTime() - lastLogin.getTime())/1000);
+                day = Math.floor(different/86400);
+                hour = Math.floor(different/3600%24);
+                if(day!=0){
+                    st._(day)
+                    st._(message.FTT_MOD_RECENT_VISITORS_DAYS);
+                }
+                st._(hour);
+                st._(message.FTT_MOD_RECENT_VISITORS_HOURS);
+                st._(message.FTT_MOD_RECENT_VISITORS_AGO);
+                return st.result();
+            },
+            init_tipty_tooltip:function(time, object, container){
+                if(!object) return;
+                var 	st = host.stringBuffer(),
+                    user = object.user,
+                    name = [user.first_name, user.last_name].join(' '),
+                    time = functions.get_difference(time, user),
+                    fallback = st._('<div>')._(name)._('</div>')._('<div>')._(time)._('</div>').result();
+                jQuery(container).tipsy({
+                    gravity: 'sw',
+                    html: true,
+                    fallback: fallback
+                });
+            },
+            init_visitors:function(ul, json){
+                var st = host.stringBuffer();
+                var objects = json.objects;
+                for(var key in objects){
+                    var object = storage.usertree.pull[objects[key].gedcom_id];
+                    var user = object.user
+                    st.clear();
+                    st._('<li id="')._(user.gedcom_id)._('" >');
+                    st._('<div id="father_line" style="border: 2px solid #F5FAE6;">');
+                    st._('<div id="mother_line" style="border: 2px solid #F5FAE6;">')
+                    st._('<div class="avatar">')._(functions.get_avatar(object))._('</div>');
+                    st._('</div>');
+                    sb._('</div>')
+                    st._('</li>');
+                    var html = st.result()
+                    var li = jQuery(html);
+                    jQuery(ul).append(li);
+                    functions.init_tipty_tooltip(json.time, object, li);
+                }
+            },
+            setMiniTooltip:function(div, id){
+                storage.tooltip.render('view', {
+                    gedcom_id:id,
+                    target:div,
+                    afterEditorClose:function(){
+                        storage.tooltip.update();
+                    }
+                });
+            },
+            init_mini_profile:function(ul,json){
+                var li = jQuery(ul).find('li');
+                jQuery(li).each(function(i,e){
+                    var id = jQuery(e).attr('id');
+                    var div = jQuery(e).find('div.avatar');
+                    functions.setMiniTooltip(div, id);
+                });
+            },
+            render:function(callback){
+                parent.ajax('getRecentVisitors', null, function(res){
+                    var json = jQuery.parseJSON(res.responseText);
+                    if(json.error || json.objects.length == 0){
+                        storage.core.modulesPullObject.unset('JMBRecentVisitorsObject');
+                        return jQuery(obj).remove();
+                    }
+                    message = json.language;
+                    content = functions.createBody(json);
+                    var ul = jQuery('<ul></ul>');
+                    functions.init_visitors(ul, json);
+                    functions.init_mini_profile(ul, json);
+                    jQuery(content[1]).append(ul);
+                    jQuery(obj).append(content);
+                    if(callback) callback();
+                });
             }
-        });
-    }
+        },
+        message = {
+            //FTT_MOD_RECENT_VISITORS_HEADER:"Recent Visitors",
+            //FTT_MOD_RECENT_VISITORS_DAYS:"days",
+            //FTT_MOD_RECENT_VISITORS_HOURS:"hours",
+            //FTT_MOD_RECENT_VISITORS_AGO:"ago",
+            //FTT_MOD_RECENT_VISITORS_SHOW:"Show all"
+        },
+        parent = this,
+        content = null,
+        sb = host.stringBuffer(),
+        type = jQuery(document.body).attr('_type'),
+        alias = jQuery(document.body).attr('_alias'),
+        settings = storage.settings;
 
-	var init_mini_profile = function(ul,json){
-		var li = jQuery(ul).find('li');
-		jQuery(li).each(function(i,e){	
-			var id = jQuery(e).attr('id');
-			var div = jQuery(e).find('div.avatar');
-			setMiniTooltip(div, id);
-		});
-	}
-
-	var render = function(callback){
-		parent.ajax('getRecentVisitors', null, function(res){
-			var json = jQuery.parseJSON(res.responseText);
-			if(json.error || json.objects.length == 0){
-				storage.core.modulesPullObject.unset('JMBRecentVisitorsObject');
-				return jQuery(obj).remove();
-			}
-			parent.lang = json.lang;
-			content = createBody(json);
-			var ul = jQuery('<ul></ul>');
-			init_visitors(ul, json);
-			init_mini_profile(ul, json);
-			jQuery(content[1]).append(ul);	
-			jQuery(obj).append(content);
-			if(callback) callback();
-		});
-	}
-	
-	render(function(){
+	functions.render(function(){
 		storage.core.modulesPullObject.unset('JMBRecentVisitorsObject');
 	});
 	

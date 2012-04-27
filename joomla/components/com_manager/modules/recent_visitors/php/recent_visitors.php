@@ -25,7 +25,7 @@ class JMBRecentVisitors {
 		$time = date('Y-m-d H:i:s');
 		$last_login_users = $this->host->gedcom->individuals->getLastLoginMembers($tree_id);
 		return json_encode(array(
-			'lang'=>$language,
+			'language'=>$language,
 			'objects'=>$last_login_users,
 			'time'=>$time
 		));	

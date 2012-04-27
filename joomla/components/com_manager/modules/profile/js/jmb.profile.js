@@ -1239,6 +1239,7 @@ JMBProfile.prototype = {
 				module._dialog(module.addBox, {title:title, width:w, height:h});
 				jQuery(module.addBox).css({ background:"none", border:"none"});
 				jQuery(module.addBox).css('overflow', 'visible');
+                jQuery(module.addBox).parent().addClass('edit');
 				jQuery(module.addBox).append(container);
 				jQuery(container).append(cont);
                 module._ajaxForm({

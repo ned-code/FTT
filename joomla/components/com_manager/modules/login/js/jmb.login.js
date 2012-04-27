@@ -30,7 +30,7 @@ function JMBLogin(){
 					sb._('</tr>');
 				sb._('</table>');
 			sb._('</div>');
-			return jQuery(sb.result());
+            return jQuery(sb.result());
 		},
 		connect:function(){
 			var sb = host.stringBuffer();
