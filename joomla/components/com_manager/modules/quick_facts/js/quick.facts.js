@@ -3,6 +3,16 @@ function JMBQuickFactsObject(object){
 		settings = storage.settings,
 		type = jQuery(document.body).attr('_type'),
 		alias = jQuery(document.body).attr('_alias'),
+        message = {
+            //FTT_MOD_QUICK_FACTS_HEADER:"",
+            //FTT_MOD_QUICK_FACTS_NUMBER:"",
+            //FTT_MOD_QUICK_FACTS_YOUNGEST:"",
+            //FTT_MOD_QUICK_FACTS_OLDEST:"",
+            //FTT_MOD_QUICK_FACTS_EARLIEST:"",
+            //FTT_MOD_QUICK_FACTS_YEARS:"",
+            //FTT_MOD_QUICK_FACTS_LIVING:"",
+            //FTT_MOD_QUICK_FACTS_SHOW_MORE_STATS:""
+        },
 		json,
 		cont,
 		fn;
@@ -19,60 +29,72 @@ function JMBQuickFactsObject(object){
 		},
 		getNumberFamilyString:function(){ 
 			var sb = host.stringBuffer();
-			var lang = json.lang;
 			sb._('<font style="color:green;">')._(json.count)._('</font> ( ');
 				sb._(json.living)._(' ');
-				sb._(lang['LIVING'])._(' )'); 
+				sb._(message.FTT_MOD_QUICK_FACTS_LIVING)._(' )');
 			return sb.result();
 		},
 		getYoungestMemberString:function(){
 			if(json.youngest == null) return 'unknown';
 			var sb = host.stringBuffer();
-			var lang = json.lang;
 			sb._('<font id="')._(json.youngest.user.gedcom_id)._('" style="color:#');
 				sb._(settings.colors[json.youngest.user.gender])._(';">');
 					sb._(fn.getFullName(json.youngest.user));
 			sb._('</font> ( ');
 			sb._(fn.getTurn(json.youngest.user))._(' ')
-			sb._(lang['YEARS'])._(' )');
+			sb._(message.FTT_MOD_QUICK_FACTS_YEARS)._(' )');
 			return sb.result();
 		},
 		getOldestMemberString:function(){
 			if(json.oldest == null) return 'unknown';
 			var sb = host.stringBuffer();
-			var lang = json.lang;
 			sb._('<font id="')._(json.oldest.user.gedcom_id)._('" style="color:#');
 				sb._(settings.colors[json.oldest.user.gender]);
 			sb._(';">');
 				sb._(fn.getFullName(json.oldest.user));
 			sb._('</font> ( ');
 			sb._(fn.getTurn(json.oldest.user))._(' ');
-			sb._(lang['YEARS'])._(' )');	
+			sb._(message.FTT_MOD_QUICK_FACTS_YEARS)._(' )');
 			return sb.result();
 		},
 		create:function(){
-			var sb = host.stringBuffer();
-			var lang = json.lang;
-			var header_background_color = (type=='famous_family')?settings.colors.famous_header:settings.colors.family_header;
-			sb._('<div class="jmb_qf_header" style="background:#')._(header_background_color)._(';"><span>')._(lang['HEADER'])._('</span></div>');
+			var sb = host.stringBuffer(),
+			    htmlObject,
+                header_background_color;
+            if(type=='famous_family'){
+                header_background_color = settings.colors.famous_header;
+            } else {
+                header_background_color = settings.colors.family_header;
+            }
+			sb._('<div class="jmb_qf_header" style="background:#')._(header_background_color)._(';">');
+                    sb._('<span>')._(message.FTT_MOD_QUICK_FACTS_HEADER)._('</span>');
+            sb._('</div>');
 			sb._('<div class="jmb_qf_content">');
 				sb._('<div id="number_family_members" class="jmb_qf_item">');
-					sb._('<span class="jmb_qf_title">')._(lang['NUMBER'])._(':</span>');
+					sb._('<span class="jmb_qf_title">');
+                        sb._(message.FTT_MOD_QUICK_FACTS_NUMBER);
+                    sb._(':</span>');
 					sb._('<span class="jmb_qf_text">')._(fn.getNumberFamilyString())._('</span>');
 				sb._('</div>');
 				sb._('<div id="youngest_living_member" class="jmb_qf_item">');
-					sb._('<span class="jmb_qf_title">')._(lang['YOUNGEST'])._(':</span>');
+					sb._('<span class="jmb_qf_title">');
+                        sb._(message.FTT_MOD_QUICK_FACTS_YOUNGEST);
+                    sb._(':</span>');
 					sb._('<span class="jmb_qf_text">')._(fn.getYoungestMemberString())._('</span>');
 				sb._('</div>');
 				sb._('<div id="oldest_living_member" class="jmb_qf_item">');
-					sb._('<span class="jmb_qf_title">')._(lang['OLDEST'])._(':</span>');
+					sb._('<span class="jmb_qf_title">');
+                        sb._(message.FTT_MOD_QUICK_FACTS_OLDEST)
+                    sb._(':</span>');
 					sb._('<span class="jmb_qf_text">')._(fn.getOldestMemberString())._('</span>');
 				sb._('</div>');
 			sb._('</div>');
-			sb._('<div class="jmb_qf_button"><span>')._(lang['SHOW_MORE_STATS'])._('...</span></div>');
-			
-			var html = sb.result();
-			var htmlObject = jQuery(html);
+			sb._('<div class="jmb_qf_button">');
+                sb._('<span>');
+                    sb._(message.FTT_MOD_QUICK_FACTS_SHOW_MORE_STATS);
+                sb._('...</span>');
+            sb._('</div>');
+			htmlObject = jQuery(sb.result());
 			jQuery(object).append(htmlObject);
 			return htmlObject;
 		},
@@ -89,6 +111,7 @@ function JMBQuickFactsObject(object){
 		init:function(callback){
 			module._ajax('get', null, function(res){
 				json = jQuery.parseJSON(res.responseText);
+                message = json.language;
 				cont = fn.create();
 				fn.setMiniProfile(jQuery(cont).find('div#youngest_living_member'), json.youngest);
 				fn.setMiniProfile(jQuery(cont).find('div#oldest_living_member'), json.oldest);

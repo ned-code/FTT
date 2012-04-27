@@ -57,7 +57,7 @@ class JMBQuickFacts {
 		$language = $this->getLanguage();
 		
 		return json_encode(array(
-			'lang'=>$language,
+			'language'=>$language,
 			'user'=>$user,
 			'count'=>$count,
 			'living'=>$facts['living'],
