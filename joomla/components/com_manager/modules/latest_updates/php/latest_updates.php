@@ -82,15 +82,15 @@ class JMBLatestUpdates {
 		$family_deleted = $this->getUser($this->getFamilyMemberDeleted($tree_id, $gedcom_id), $usertree);
 		
 		$lang = $this->host->getLangList('latest_updates');
-		
+
 		return json_encode(array(
 			'language'=>$lang,
 			'data'=>array(
-				'PHOTO'=>$new_photo,
-				'REGISTER'=>$just_registered,
-				'PROFILE'=>$profile_change,
-				'ADDED'=>$family_added,
-				'DELETED'=>$family_deleted
+				'FTT_MOD_LATEST_UPDATES_NEW_PHOTO'=>$new_photo,
+				'FTT_MOD_LATEST_UPDATES_JUST_REGISTER'=>$just_registered,
+				'FTT_MOD_LATEST_UPDATES_PROFILE_CHANGES'=>$profile_change,
+				'FTT_MOD_LATEST_UPDATES_FAMILY_MEMBER_ADDED'=>$family_added,
+				'FTT_MOD_LATEST_UPDATES_FAMILY_MEMBER_DELETED'=>$family_deleted
 			)
 		));
 		

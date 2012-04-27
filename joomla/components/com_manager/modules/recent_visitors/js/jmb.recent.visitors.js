@@ -106,7 +106,9 @@ function JMBRecentVisitorsObject(obj){
                         storage.core.modulesPullObject.unset('JMBRecentVisitorsObject');
                         return jQuery(obj).remove();
                     }
-                    message = json.language;
+                    if(json.language){
+                        message = json.language;
+                    }
                     content = functions.createBody(json);
                     var ul = jQuery('<ul></ul>');
                     functions.init_visitors(ul, json);
@@ -118,11 +120,11 @@ function JMBRecentVisitorsObject(obj){
             }
         },
         message = {
-            //FTT_MOD_RECENT_VISITORS_HEADER:"Recent Visitors",
-            //FTT_MOD_RECENT_VISITORS_DAYS:"days",
-            //FTT_MOD_RECENT_VISITORS_HOURS:"hours",
-            //FTT_MOD_RECENT_VISITORS_AGO:"ago",
-            //FTT_MOD_RECENT_VISITORS_SHOW:"Show all"
+            FTT_MOD_RECENT_VISITORS_HEADER:"Recent Visitors",
+            FTT_MOD_RECENT_VISITORS_DAYS:"days",
+            FTT_MOD_RECENT_VISITORS_HOURS:"hours",
+            FTT_MOD_RECENT_VISITORS_AGO:"ago",
+            FTT_MOD_RECENT_VISITORS_SHOW:"Show all"
         },
         parent = this,
         content = null,

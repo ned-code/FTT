@@ -4,14 +4,14 @@ function JMBQuickFactsObject(object){
 		type = jQuery(document.body).attr('_type'),
 		alias = jQuery(document.body).attr('_alias'),
         message = {
-            //FTT_MOD_QUICK_FACTS_HEADER:"",
-            //FTT_MOD_QUICK_FACTS_NUMBER:"",
-            //FTT_MOD_QUICK_FACTS_YOUNGEST:"",
-            //FTT_MOD_QUICK_FACTS_OLDEST:"",
-            //FTT_MOD_QUICK_FACTS_EARLIEST:"",
-            //FTT_MOD_QUICK_FACTS_YEARS:"",
-            //FTT_MOD_QUICK_FACTS_LIVING:"",
-            //FTT_MOD_QUICK_FACTS_SHOW_MORE_STATS:""
+            FTT_MOD_QUICK_FACTS_HEADER:"Quick Facts",
+            FTT_MOD_QUICK_FACTS_NUMBER:"Number of family members",
+            FTT_MOD_QUICK_FACTS_YOUNGEST:"Youngest",
+            FTT_MOD_QUICK_FACTS_OLDEST:"Oldest",
+            FTT_MOD_QUICK_FACTS_EARLIEST:"Earliest document",
+            FTT_MOD_QUICK_FACTS_YEARS:"years",
+            FTT_MOD_QUICK_FACTS_LIVING:"living",
+            FTT_MOD_QUICK_FACTS_SHOW_MORE_STATS:"Show more stats"
         },
 		json,
 		cont,
@@ -111,7 +111,9 @@ function JMBQuickFactsObject(object){
 		init:function(callback){
 			module._ajax('get', null, function(res){
 				json = jQuery.parseJSON(res.responseText);
-                message = json.language;
+                if(json.language){
+                    message = json.language;
+                }
 				cont = fn.create();
 				fn.setMiniProfile(jQuery(cont).find('div#youngest_living_member'), json.youngest);
 				fn.setMiniProfile(jQuery(cont).find('div#oldest_living_member'), json.oldest);
