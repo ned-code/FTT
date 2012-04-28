@@ -41,12 +41,12 @@ function JMBRecentVisitorsObject(obj){
                 day = Math.floor(different/86400);
                 hour = Math.floor(different/3600%24);
                 if(day!=0){
-                    st._(day)
-                    st._(message.FTT_MOD_RECENT_VISITORS_DAYS);
+                    st._(day)._(' ')
+                    st._(message.FTT_MOD_RECENT_VISITORS_DAYS)._(' ');
                 }
-                st._(hour);
-                st._(message.FTT_MOD_RECENT_VISITORS_HOURS);
-                st._(message.FTT_MOD_RECENT_VISITORS_AGO);
+                st._(hour)._(' ');
+                st._(message.FTT_MOD_RECENT_VISITORS_HOURS)._(' ');
+                st._(message.FTT_MOD_RECENT_VISITORS_AGO)._(' ');
                 return st.result();
             },
             init_tipty_tooltip:function(time, object, container){

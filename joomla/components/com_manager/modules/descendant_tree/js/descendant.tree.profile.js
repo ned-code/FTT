@@ -41,7 +41,7 @@ DescendantTreeProfile.prototype = {
 	create:function(ch){
 		var	module = this,
 			sb = host.stringBuffer(),
-			language = module.parent.lang,
+			message = module.parent.message,
 			user = ch.user,
 			media = ch.media,
 			parse = storage.usertree.parse(ch),
@@ -64,21 +64,71 @@ DescendantTreeProfile.prototype = {
 								}
 							sb._('</div></td>');
 							sb._('<td>');
-								sb._('<div class="jmb-dtp-body-info-name"><span class="title">')._(language['NAME'])._(':</span>&nbsp;<span class="text">')._(parse.full_name)._('</span></div>');
-								sb._('<div class="jmb-dtp-body-info-born"><span class="title">')._(language['BORN'])._(':</span>&nbsp;<span class="text">')._(parse.date('birth'))._('</span></div>');
-								sb._('<div class="jmb-dtp-body-info-birthplace"><span class="title">')._(language['BIRTHPLACE'])._(':</span>&nbsp;<span class="text">')._((parse.place('birth')!='')?parse.place('birth').place_name:'')._('</span></div>');
+								sb._('<div class="jmb-dtp-body-info-name">');
+                                    sb._('<span class="title">');
+                                        sb._(message.FTT_MOD_DESCEDNATS_TREE_NAME);
+                                    sb._(':</span>');
+                                    sb._('&nbsp;');
+                                    sb._('<span class="text">')
+                                        sb._(parse.full_name);
+                                    sb._('</span>');
+                                sb._('</div>');
+								sb._('<div class="jmb-dtp-body-info-born">');
+                                    sb._('<span class="title">');
+                                        sb._(message.FTT_MOD_DESCEDNATS_TREE_BORN);
+                                    sb._(':</span>');
+                                    sb._('&nbsp;');
+                                    sb._('<span class="text">');
+                                        sb._(parse.date('birth'));
+                                    sb._('</span>');
+                                sb._('</div>');
+								sb._('<div class="jmb-dtp-body-info-birthplace">');
+                                    sb._('<span class="title">');
+                                        sb._(message.FTT_MOD_DESCEDNATS_TREE_BIRTHPLACE);
+                                    sb._(':</span>');
+                                    sb._('&nbsp;');
+                                    sb._('<span class="text">');
+                                        sb._((parse.place('birth')!='')?parse.place('birth').place_name:'');
+                                    sb._('</span>');
+                                sb._('</div>');
                                 if(parse.is_death){
-                                    sb._('<div class="jmb-dtp-body-info-born"><span class="title">')._('Death')._(':</span>&nbsp;<span class="text">')._(parse.date('death'))._('</span></div>');
-                                    sb._('<div class="jmb-dtp-body-info-birthplace"><span class="title">')._('Deathplace')._(':</span>&nbsp;<span class="text">')._((parse.place('death')!='')?parse.place('death').place_name:'')._('</span></div>');
+                                    sb._('<div class="jmb-dtp-body-info-born">');
+                                        sb._('<span class="title">');
+                                            sb._(message.FTT_MOD_DESCEDNATS_TREE_DEATH);
+                                        sb._(':</span>');
+                                        sb._('&nbsp;');
+                                        sb._('<span class="text">');
+                                            sb._(parse.date('death'));
+                                        sb._('</span>');
+                                    sb._('</div>');
+                                    sb._('<div class="jmb-dtp-body-info-birthplace">');
+                                        sb._('<span class="title">');
+                                            sb._(message.FTT_MOD_DESCEDNATS_TREE_DEATHPLACE);
+                                        sb._(':</span>');
+                                        sb._('&nbsp;');
+                                        sb._('<span class="text">');
+                                            sb._((parse.place('death')!='')?parse.place('death').place_name:'');
+                                        sb._('</span>');
+                                    sb._('</div>');
                                 }
                                 if(parse.relation){
-                                    sb._('<div class="jmb-dtp-body-info-relation"><span class="title">')._(language['RELATION'])._(':</span>&nbsp;<span class="text">')._(parse.relation)._('</span></div>');
+                                    sb._('<div class="jmb-dtp-body-info-relation">');
+                                        sb._('<span class="title">');
+                                            sb._(message.FTT_MOD_DESCEDNATS_TREE_RELATION);
+                                        sb._(':</span>');
+                                        sb._('&nbsp;');
+                                        sb._('<span class="text">');
+                                            sb._(parse.relation);
+                                        sb._('</span>');
+                                    sb._('</div>');
                                 }
 							sb._('</td>');
 						sb._('</tr>');
 					sb._('</table>');
 					if(parse.is_editable){
-                        sb._('<div class="jmb-dtp-body-info-switch">')._('Show full profile')._('</div>');
+                        sb._('<div class="jmb-dtp-body-info-switch">');
+                            sb._(message.FTT_MOD_DESCEDNATS_TREE_SHOW_FULL_PROFILE);
+                        sb._('</div>');
                     }
 				sb._('</div>');
 				sb._('<div class="jmb-dtp-body-media">')
@@ -95,11 +145,22 @@ DescendantTreeProfile.prototype = {
 						sb._('<tr>');
 							sb._('<td><div class="email">&nbsp;</div></td>');
 							sb._('<td>');
-								sb._('<div><span>')._(parse.name)._(' ')._('is not registered')._('.</span></div>');
-								sb._('<div><span class="send" style="color:blue;cursor:pointer" >Send invitation to ')._(parse.name)._('</span></div>');
+								sb._('<div>');
+                                    sb._('<span>');
+                                        sb._(parse.name);
+                                        sb._(' ');
+                                        sb._(message.FTT_MOD_DESCEDNATS_TREE_NOT_REGISTERD);
+                                    sb._('.</span>');
+                                sb._('</div>');
+								sb._('<div>');
+                                    sb._('<span class="send" style="color:blue;cursor:pointer" >');
+                                        sb._(message.FTT_MOD_DESCEDNATS_TREE_SEND_INVITE_TO);
+                                        sb._(' ');
+                                        sb._(parse.name);
+                                    sb._('</span>');
+                                sb._('</div>');
 							sb._('</td>');
 						sb._('</tr>');
-						
 					sb._('</table>');
 				sb._('</div>');
 			}

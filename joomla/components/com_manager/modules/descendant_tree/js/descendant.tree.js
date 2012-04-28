@@ -1,7 +1,27 @@
 function JMBDescendantTreeObject(obj){
 	var	module = this,
 		id = jQuery(obj).attr('id');
-		
+
+    module.message = {
+        FTT_MOD_DESCEDNATS_TREE_NAME:"Name",
+        FTT_MOD_DESCEDNATS_TREE_BORN:"Born",
+        FTT_MOD_DESCEDNATS_TREE_BIRTHPLACE:"Birthplace",
+        FTT_MOD_DESCEDNATS_TREE_DEATH:"Death",
+        FTT_MOD_DESCEDNATS_TREE_DEATHPLACE:"Deathplace",
+        FTT_MOD_DESCEDNATS_TREE_RELATION:"Relation",
+        FTT_MOD_DESCEDNATS_TREE_NOT_REGISTERD:"is not registred",
+        FTT_MOD_DESCEDNATS_TREE_EMAIL_INVITATION:"Click here to send %% an email invitation",
+        FTT_MOD_DESCEDNATS_TREE_SHOW_DESCENDANTS_OF:"Show descendants of",
+        FTT_MOD_DESCEDNATS_TREE_MOTHER:"Mother",
+        FTT_MOD_DESCEDNATS_TREE_FATHER:"Father",
+        FTT_MOD_DESCEDNATS_TREE_GRANDFATHER:"Grandfather",
+        FTT_MOD_DESCEDNATS_TREE_GRANDMOTHER:"Grandmother",
+        FTT_MOD_DESCEDNATS_TREE_GRANDPARENTS:"Grandparents",
+        FTT_MOD_DESCEDNATS_TREE_GREAT_GRANDPARENTS:"Great Grandparents",
+        FTT_MOD_DESCEDNATS_TREE_DESCENDANTS:"Descendants",
+        FTT_MOD_DESCEDNATS_TREE_SHOW_FULL_PROFILE:"Show full profile",
+        FTT_MOD_DESCEDNATS_TREE_SEND_INVITE_TO:"Send invitation to"
+    };
 	module.obj = obj;
 	module.baseurl = jQuery('body').attr('_baseurl');	
 	module.imgPath = module.baseurl+"components/com_manager/modules/descendant_tree/imgs/"
@@ -14,7 +34,6 @@ function JMBDescendantTreeObject(obj){
 	module.select = null;
     module.selected = null;
 	module.first = null;
-	module.lang = null;
 	module.tree = null;
 	module.render = 'mother';
 	module.checked = null;
@@ -44,7 +63,6 @@ JMBDescendantTreeObject.prototype = {
 		module.members = null;
 		module.select = null;
 		module.first = null;
-		module.lang = null;
 	},
 	overlay:function(){
 		var	module = this,
@@ -148,7 +166,9 @@ JMBDescendantTreeObject.prototype = {
 			json;
 		module.ajax('getTree', render, function(res){
 			json = jQuery.parseJSON(res.responseText);
-			module.lang = json.lang;
+            if(json.language){
+                module.message = json.language;
+            }
 			module.first = json.key;
 			module.members = storage.usertree.pull;
 			module.owner = storage.usertree.gedcom_id;
@@ -202,8 +222,14 @@ JMBDescendantTreeObject.prototype = {
 		var	module = this,
 			cont, 
 			modal,
-			box;
-		cont = jQuery('<div id="jmb_desc_buttons" class="jmb-desc-buttons"><div id="select" class="jmb-desc-button-select">&nbsp;</div><div id="home" class="jmb-desc-button-home">&nbsp;</div></div>');
+			box,
+            st;
+        st = host.stringBuffer();
+        st._('<div id="jmb_desc_buttons" class="jmb-desc-buttons">');
+        st._('<div id="select" class="jmb-desc-button-select">&nbsp;</div>');
+        st._('<div id="home" class="jmb-desc-button-home">&nbsp;</div>');
+        st._('</div>');
+		cont = jQuery(st.result());
 		return {
             close:function(){
                 if(box!=null){
@@ -232,7 +258,9 @@ JMBDescendantTreeObject.prototype = {
 			win:function(){
 				var sb = host.stringBuffer();
 				sb._('<div class="jmb-desc-select">');
-					sb._('<div class="jmb-desc-select-title"><span>Show descendants of:</span></div>');
+					sb._('<div class="jmb-desc-select-title"><span>')
+                        sb._(module.message.FTT_MOD_DESCEDNATS_TREE_SHOW_DESCENDANTS_OF);
+                    sb._(':</span></div>');
 					sb._('<div class="jmb-desc-select-content">');
 						sb._('<canvas id="canvas" height="200px" width="340px"></canvas>');
 					sb._('</div>');
@@ -245,7 +273,9 @@ JMBDescendantTreeObject.prototype = {
 					},
 					node:function(settings){
 						var node, sb = host.stringBuffer(), data_style;
-						sb._('<div id ="')._(settings.id)._('" class="node')._((settings.descendants)?' descendants':'')._('">');
+						sb._('<div id ="')._(settings.id)._('" class="node');
+                            sb._((settings.descendants)?' descendants':'');
+                        sb._('">');
 							if(settings.descendants){
 								sb._('<span style="position:relative;top:-5px;"><input ');
                                         sb._((settings.count==0)?'disabled="true"':'');
@@ -255,7 +285,9 @@ JMBDescendantTreeObject.prototype = {
 							sb._('<span class="title">');
 								if(settings.descendants){
 									sb._('<div class="text">')._(settings.title)._('</div>');
-                                    sb._('<div class="count">')._(settings.count+' Descendants')._('</div>');
+                                    sb._('<div class="count">');
+                                        sb._(settings.count+' '+module.message.FTT_MOD_DESCEDNATS_TREE_DESCENDANTS);
+                                    sb._('</div>');
 								} else {
 									sb._(settings.title);
 								}
@@ -319,7 +351,13 @@ JMBDescendantTreeObject.prototype = {
 								line(70, 150, 125);
 								this.node({
 									id:module.render,
-									title:(module.render=='mother')?'Mother':'father',
+                                    title:(function(){
+                                        if(module.render=='mother'){
+                                            return module.message.FTT_MOD_DESCEDNATS_TREE_MOTHER;
+                                        } else {
+                                            return module.message.FTT_MOD_DESCEDNATS_TREE_FATHER;
+                                        }
+                                    })(),
 									count:parent.count,
 									style:{
 										top:'90px',
@@ -332,7 +370,7 @@ JMBDescendantTreeObject.prototype = {
 								if(grandfather||grandmother){								
 									this.node({
 										id:'grandparents',
-										title:'Grandparents',
+										title:module.message.FTT_MOD_DESCEDNATS_TREE_GRANDPARENTS,
 										descendants:true,
 										count:(function(){
 											if(!grandmother&&!grandfather) return 0;
@@ -352,7 +390,7 @@ JMBDescendantTreeObject.prototype = {
 										line(195, 80, 25);
 										this.node({
 											id:'grandfather',
-											title:'Grandfather',
+											title:module.message.FTT_MOD_DESCEDNATS_TREE_GRANDFATHER,
 											style:{
 												top:'140px',
 												left:'100px'
@@ -360,7 +398,7 @@ JMBDescendantTreeObject.prototype = {
 										});
 										this.node({
 											id:'grandfatherparents',
-											title:'Great Grandparents',
+											title:module.message.FTT_MOD_DESCEDNATS_TREE_GREAT_GRANDPARENTS,
 											descendants:true,
 											count:(function(){
 												var parents = grandfather.parents;
@@ -386,7 +424,7 @@ JMBDescendantTreeObject.prototype = {
 										
 										this.node({
 											id:'grandmother',
-											title:'Grandmother',
+											title:module.message.FTT_MOD_DESCEDNATS_TREE_GRANDMOTHER,
 											style:{
 												top:'40px',
 												left:'100px'
@@ -395,7 +433,7 @@ JMBDescendantTreeObject.prototype = {
 										
 										this.node({
 											id:'grandmotherparents',
-											title:'Great Grandparents',
+											title:module.message.FTT_MOD_DESCEDNATS_TREE_GREAT_GRANDPARENTS,
 											descendants:true,
 											count:(function(){
 												var parents = grandmother.parents;

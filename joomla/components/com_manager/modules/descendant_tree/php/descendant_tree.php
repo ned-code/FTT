@@ -238,15 +238,15 @@ class JMBDescendantTree {
 		$usertree = $this->host->usertree->load($tree_id, $owner_id);
 
 		$this->owner_id = $owner_id;
-	
-		$lang = $this->host->getLangList('descendant_tree');
+
+        $language = $this->host->getLangList('descendant_tree');
 		
 		$key = $this->getFirstParent($owner_id, $usertree, $render);
 		$tree = $this->getDescendantsTree($owner_id, $usertree);
 		
 		$xml = $this->xml($key, $usertree);
 				
-		return json_encode(array('xml'=>$xml, 'tree'=>$tree, 'key'=>$key, 'lang'=>$lang));
+		return json_encode(array('xml'=>$xml, 'tree'=>$tree, 'key'=>$key, 'language'=>$language));
 	}
 	public function getTreeById($id){
 		$session = JFactory::getSession();
