@@ -3,6 +3,12 @@ function JMBFeedback(){
         sb = host.stringBuffer(),
         parent = jQuery('div#jmb_feedback_form'),
         path = "index.php/component/obsuggest/",
+        message = {
+            FTT_MOD_FEEDBACK_HEADER:"Have Your Say",
+            FTT_MOD_FEEDBACK_WELCOM:"Welcome to the %% for Family TreeTop. We've still got some work to do, but we're almost there! Please let us know what you think",
+            FTT_MOD_FEEDBACK_PUBLIC_BETA:"public beta",
+            FTT_MOD_FEEDBACK_LIKE:"Like whay you see? Pass the word along to your friends:"
+        },
         fn,
         likes;
 
@@ -51,27 +57,26 @@ function JMBFeedback(){
         }
     };
 
-    sb._('<div class="header"><span>Have Your Say</span></div>');
-    sb._('<div class="body">');
-        sb._('<div class="text">');
-            sb._("Welcome to the <font color='#99d9ea'><b>public");
-            sb._(" beta</b></font> for Family TreeTop");
-            sb._(" We've still got some work");
-            sb._(" to do, but we're almost");
-            sb._(" there! Please let us know");
-            sb._(" what you think");
+    module.ajax('get', null, function(json){
+        if(json.language){
+            message = json.language;
+        }
+        sb._('<div class="header"><span>')._(message.FTT_MOD_FEEDBACK_HEADER)._('</span></div>');
+            sb._('<div class="body">');
+                sb._('<div class="text">');
+                    sb._(message.FTT_MOD_FEEDBACK_WELCOM.replace("%%",'<font color="#99d9ea"></a>'+message.FTT_MOD_FEEDBACK_PUBLIC_BETA+'</font>'));
+                sb._('</div>');
+            sb._('<div class="buttons">')
+            sb._('</div>');
         sb._('</div>');
-        sb._('<div class="buttons">')
-        sb._('</div>');
-    sb._('</div>');
-    jQuery(parent).append(sb.result());
+        jQuery(parent).append(sb.result());
 
-    likes = jQuery(parent).find('.likes');
-    jQuery(parent).find('.body').append(likes);
-    jQuery(likes).show();
+        likes = jQuery(parent).find('.likes');
+        jQuery(likes).find('.message').text(message.FTT_MOD_FEEDBACK_LIKE);
+        jQuery(parent).find('.body').append(likes);
+        jQuery(likes).show();
 
-    module.ajax('get', null, function(r){
-        jQuery(r).each(function(i,el){
+        jQuery(json.buttons).each(function(i,el){
             var e = fn.parse(el);
             var div = jQuery("<div id='"+e.id+"'><span>"+e.name+"</span></div>");
             jQuery(parent).find("div.buttons").append(div);
