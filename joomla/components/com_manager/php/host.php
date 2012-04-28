@@ -282,6 +282,26 @@ class Host {
         return $this->config->getConfig();
 	}
 
+    public function getViews($moduleName){
+        $path = JPATH_ROOT.DS.'components'.DS.'com_manager'.DS.'modules'.DS.$moduleName.DS.'views'.DS;
+        $order = array("\r\n", "\n", "\r");
+        $replace = "";
+        $views = array();
+        if (is_dir($path)) {
+            if ($dh = opendir($path)) {
+                while (($file = readdir($dh)) !== false) {
+                    $filePath = $path.$file;
+                    if(is_file($filePath)){
+                        $fileName = explode('.', $file);
+                        $fileContent = file_get_contents($filePath);
+                        $views[$fileName[0]] = str_replace($order, $replace, $fileContent);
+                    }
+                }
+                closedir($dh);
+            }
+        }
+        return $views;
+    }
 }
 
 ?>

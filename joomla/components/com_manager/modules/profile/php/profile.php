@@ -418,6 +418,13 @@ class JMBProfile {
         }
         return json_encode(array('objects'=>$objects, 'deleted'=>$deleted));
     }
+
+    public function get(){
+        $views = $this->host->getViews('profile');
+        return json_encode(array(
+            'views' => $views
+        ));
+    }
 }
 
 ?>

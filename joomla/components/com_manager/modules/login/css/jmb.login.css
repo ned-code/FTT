@@ -26,9 +26,8 @@
 	position:relative;
 }
 .jmb-profile-cont div.settings div.button{
-	background: url("../imgs/arrows.png") no-repeat scroll 0 -21px black;
-	border-color: black #CCCCCC black black;
-	border-right: 1px solid #CCCCCC;
+	background: url("../imgs/arrows.png") no-repeat scroll 0 -21px #6B944E;
+	border-color: #6B944E;
 	border-style: solid;
 	border-width: 1px;
 	cursor: pointer;
