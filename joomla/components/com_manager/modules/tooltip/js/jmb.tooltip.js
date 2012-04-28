@@ -42,9 +42,34 @@ function JMBTooltip(){
 			}
 		}
 	};
+    module.message = {
+        FTT_MOD_TOOLTIPS_NAME:"Name",
+        FTT_MOD_TOOLTIPS_BORN:"Born",
+        FTT_MOD_TOOLTIPS_DECEASED:"Deceased",
+        FTT_MOD_TOOLTIPS_RELATION:"Relation",
+        FTT_MOD_TOOLTIPS_SHOW_FULL_PROFILE:"Show full profile",
+        FTT_MOD_TOOLTIPS_IS_NOT_REGISTERED:"is not registered.",
+        FTT_MOD_TOOLTIPS_CLICK_TO_SEND_EMAIL_INVITATION:"Click here to send %% an email invitation.",
+        FTT_MOD_TOOLTIPS_EDIT:"Edit this Profile",
+        FTT_MOD_TOOLTIPS_ADD:"Add",
+        FTT_MOD_TOOLTIPS_ADD_PARENT:"Parent",
+        FTT_MOD_TOOLTIPS_ADD_SPOUSE:"Spouse",
+        FTT_MOD_TOOLTIPS_ADD_BROTHER_OR_SISTER:"Brother or Sister",
+        FTT_MOD_TOOLTIPS_ADD_CHILD:"Child",
+        FTT_MOD_TOOLTIPS_ADD_SENT_INVITATION:"Send %% an invitions.",
+        FTT_MOD_TOOLTIPS_ADD_LINK:"Link with existing request."
+    }
     module.lastBtActive = false;
 	module.btActive = {};
 	module.path = "/components/com_manager/modules/tooltip/image/";
+
+
+    module._ajax('get', null, function(res){
+        var json = jQuery.parseJSON(res.responseText);
+        if(json.language){
+            module.message = json.language;
+        }
+    })
 }
 
 
@@ -54,9 +79,9 @@ JMBTooltip.prototype = {
 				callback(res);
 		})
 	},
-
 	_view:function(settings){
 		var	module = this,
+            message = module.message,
 			sb = host.stringBuffer(),
 			object = settings.object,
 			user = object.user,
@@ -86,23 +111,23 @@ JMBTooltip.prototype = {
 							sb._('</td>');
 							sb._('</div>');
 							sb._('<td class="jmb-tooltip-view-info-data">');
-								sb._('<div><span>Name:</span> <span class="text">')._(name)._('</span></div>');
+								sb._('<div><span>')._(message.FTT_MOD_TOOLTIPS_NAME)._(':</span> <span class="text">')._(name)._('</span></div>');
 								if(get.is_birth){
 									place = get.place('birth');
-									sb._('<div><span>Born:</span> <span class="text">')._(birthday)._((place.length!=0)?' ('+place.city+','+place.country+')':'')._('</span></div>');
+									sb._('<div><span>')._(message.FTT_MOD_TOOLTIPS_BORN)._(':</span> <span class="text">')._(birthday)._((place.length!=0)?' ('+place.city+','+place.country+')':'')._('</span></div>');
 								}
 								if(get.is_death){
 									place = get.place('death');
-									sb._('<div><span>Deceased:</span> <span class="text">')._(death)._((place.length!=0)?' ('+place.city+','+place.country+')':'')._('</span></div>');
+									sb._('<div><span>')._(message.FTT_MOD_TOOLTIPS_DECEASED)._(':</span> <span class="text">')._(death)._((place.length!=0)?' ('+place.city+','+place.country+')':'')._('</span></div>');
 								}
 								if(relation){
-									sb._('<div><span>Relation:</span> <span class="text">')._(relation)._('</span></div>');
+									sb._('<div><span>')._(message.FTT_MOD_TOOLTIPS_RELATION)._(':</span> <span class="text">')._(relation)._('</span></div>');
 								}
 							sb._('</td>');
 						sb._('</tr>');
 					sb._('</table>');
 					if(settings.button_edit){
-                        sb._('<div class="jmb-tooltip-view-switch"><span id="')._(get.getcom_id)._('">Show full profile</span></div>');
+                        sb._('<div class="jmb-tooltip-view-switch"><span id="')._(get.getcom_id)._('">')._(message.FTT_MOD_TOOLTIPS_SHOW_FULL_PROFILE)._('</span></div>');
                     }
 				sb._('</div>');
 				if(media!=null&&media.photos.length!=0){
@@ -117,8 +142,8 @@ JMBTooltip.prototype = {
 						sb._('<tr>');
 							sb._('<td><div class="jmb-tooltip-view-icon-email">&nbsp;</div></td>');
 							sb._('<td>');
-								sb._('<div><span>')._(name)._(' is not registered.</span></div>');
-								sb._('<div><span class="send" style="color:blue;cursor:pointer">Click here to send ')._(name)._(' an email invitation.</span></div>');
+								sb._('<div><span>')._(name)._(' ')._(message.FTT_MOD_TOOLTIPS_IS_NOT_REGISTERED)._('</span></div>');
+                                sb._('<div><span class="send" style="color:blue;cursor:pointer">')._(message.FTT_MOD_TOOLTIPS_CLICK_TO_SEND_EMAIL_INVITATION.replace('%%', name))._('</span></div>');
 							sb._('</td>');
 						sb._('</tr>');
 					sb._('</table>');
@@ -129,28 +154,29 @@ JMBTooltip.prototype = {
 	},
 	_edit:function(settings){
 		var	module = this,
+            message = module.message,
 			sb = host.stringBuffer(),
             gedcom_id = settings.gedcom_id,
             object = settings.object,
 			user = object.user,
 			get = storage.usertree.parse(object),
 			nick = get.nick;
-		
+
 		sb._("<div id='")._(gedcom_id)._("-tooltip-edit' class='jmb-profile-tooltip-container'>");
-			sb._("<div class='jmb-profile-tooltip-button-edit'><span>Edit this Profile</span></div>");
+			sb._("<div class='jmb-profile-tooltip-button-edit'><span>")._(message.FTT_MOD_TOOLTIPS_EDIT)._("</span></div>");
 			sb._("<div class='jmb-profile-tooltip-fieldset'><fieldset>");
-				sb._("<legend>Add:</legend>");
-				sb._("<div class='jmb-profile-tooltip-parent'><span>Parent</span></div>");
-				sb._("<div class='jmb-profile-tooltip-spouse'><span>Spouse</span></div>");
-				sb._("<div class='jmb-profile-tooltip-bs'><span>Brother or Sister</span></div>");
-				sb._("<div class='jmb-profile-tooltip-child'><span>Child</span></div>");
+				sb._("<legend>")._(message.FTT_MOD_TOOLTIPS_ADD)._(":</legend>");
+				sb._("<div class='jmb-profile-tooltip-parent'><span>")._(message.FTT_MOD_TOOLTIPS_ADD_PARENT)._("</span></div>");
+				sb._("<div class='jmb-profile-tooltip-spouse'><span>")._(message.FTT_MOD_TOOLTIPS_ADD_SPOUSE)._("</span></div>");
+				sb._("<div class='jmb-profile-tooltip-bs'><span>")._(message.FTT_MOD_TOOLTIPS_ADD_BROTHER_OR_SISTER)._("</span></div>");
+				sb._("<div class='jmb-profile-tooltip-child'><span>")._(message.FTT_MOD_TOOLTIPS_ADD_CHILD)._("</span></div>");
 			sb._('</fieldset></div>');
 			if(user.facebook_id==='0' && get.turns < 100 && get.is_alive){
 				sb._("<div class='jmb-profile-tooltip-send'>");
-					sb._('<div class="info"><span>')._(nick)._(' is not registered.</span></div>');
-					sb._('<div class="invitions"><span class="click">Send ')._(nick)._(' an invitions.</span></div>');
+					sb._('<div class="info"><span>')._(nick)._(' ')._(message.FTT_MOD_TOOLTIPS_IS_NOT_REGISTERED)._('</span></div>');
+					sb._('<div class="invitions"><span class="click">')._(message.FTT_MOD_TOOLTIPS_ADD_SENT_INVITATION.replace("%%", nick))._('</span></div>');
 					if(storage.notifications.is_accepted){
-						sb._('<div class="link"><span>Link with existing request.</span></div>');
+						sb._('<div class="link"><span>')._(message.FTT_MOD_TOOLTIPS_ADD_LINK)._('</span></div>');
 					}
 				sb._('</div>');
 			}
