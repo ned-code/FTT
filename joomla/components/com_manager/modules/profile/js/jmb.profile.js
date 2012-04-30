@@ -18,6 +18,7 @@ function JMBProfile(){
         FTT_MOD_PROFILE_EDITOR_EDIT_PHOTOS:"Photos",
         FTT_MOD_PROFILE_EDITOR_EDIT_MORE_OPTIONS:"More Options",
         FTT_MOD_PROFILE_EDITOR_SAVE:"Save",
+        FTT_MOD_PROFILE_EDITOR_CANCEL:"Cancel",
         FTT_MOD_PROFILE_EDITOR_FORM_GENDER:"Gender",
         FTT_MOD_PROFILE_EDITOR_FORM_GENDER_FEMALE:"Female",
         FTT_MOD_PROFILE_EDITOR_FORM_GENDER_MALE:"Male",
@@ -35,6 +36,8 @@ function JMBProfile(){
         FTT_MOD_PROFILE_EDITOR_FORM_TYPE:"Type",
         FTT_MOD_PROFILE_EDITOR_FORM_TYPE_MARRIAGE:"Marriage",
         FTT_MOD_PROFILE_EDITOR_FORM_DATE:"Date",
+        FTT_MOD_PROFILE_EDITOR_FORM_DAY:"Day",
+        FTT_MOD_PROFILE_EDITOR_FORM_MONTH:"Month",
         FTT_MOD_PROFILE_EDITOR_FORM_JAN:"January",
         FTT_MOD_PROFILE_EDITOR_FORM_FEB:"February",
         FTT_MOD_PROFILE_EDITOR_FORM_MAR:"March",
@@ -50,8 +53,12 @@ function JMBProfile(){
         FTT_MOD_PROFILE_EDITOR_FORM_UNKNOW:"Unknown",
         FTT_MOD_PROFILE_EDITOR_FORM_DIVORCE:"Divorced/Separated",
         FTT_MOD_PROFILE_EDITOR_FORM_LOCATION:"Location",
+        FTT_MOD_PROFILE_EDITOR_FORM_UNION:"Union",
         FTT_MOD_PROFILE_EDITOR_FORM_SHOW_CURRENT_PARTNER:"Show as current or latest partner",
         FTT_MOD_PROFILE_EDITOR_FORM_ADD_ANOTHER_UNION:"Add another union",
+        FTT_MOD_PROFILE_EDITOR_FORM_ADD_UNION:"Add union",
+        FTT_MOD_PROFILE_EDITOR_FORM_ADD_UNION_BASIC_INFO:"Basic Info",
+        FTT_MOD_PROFILE_EDITOR_FORM_ADD_UNION_UNION_EVENT:"Union Event",
         FTT_MOD_PROFILE_EDITOR_DELETE_CONFIRM:"Are you sure you want to delete the information about that user?",
         FTT_MOD_PROFILE_EDITOR_DELETE_USER_CONFIRM:"You are about to remove yourself from this family tree. Once this is done, you will not be able to view this family tree unless an existing member invites you back.",
         FTT_MOD_PROFILE_EDITOR_DELETE_TREE_CONFIRM:"You are about to remove yourself from this family tree. Since you are the only registered person, all members in this family tree will be completely deleted.",
@@ -107,6 +114,318 @@ function JMBProfile(){
                 }
             });
         },
+        setTitleMessage:function(form){
+            jQuery(form).find('div.title span').each(function(i, el){
+                var titleText = jQuery(el).text();
+                var valueText = module.message[titleText];
+                jQuery(el).text(valueText);
+            });
+        },
+        setTextObject:function(form){
+            jQuery(form).find('div.text').each(function(i,el){
+                var classList = jQuery(el).attr('class').split(" ");
+                var span = jQuery(el).find('span');
+                switch(classList[0]){
+                    case "gender":
+                        var options = jQuery(span).find('option');
+                        jQuery(options).each(function(i, el){
+                            var text = jQuery(el).text();
+                            jQuery(el).text(module.message[text]);
+                        });
+                        break;
+
+                    case "living":
+                        var options = jQuery(span).find('option');
+                        jQuery(options).each(function(i, el){
+                            var text = jQuery(el).text();
+                            jQuery(el).text(module.message[text]);
+                        });
+                    break;
+
+                    case "birth_date":
+                        var daysOptions = module.functions.getOptionsDays();
+                        var monthOptions = module.functions.getOptionsMonths();
+                        jQuery(span).html(module.functions.getReplaceMessage(span, 'FTT_MOD_PROFILE_EDITOR_FORM_UNKNOW'));
+                        jQuery(span).find('select[name="birth_days"]').append(daysOptions);
+                        jQuery(span).find('select[name="birth_months"]').append(monthOptions);
+                        break;
+
+                    case "death_date":
+                        var daysOptions = module.functions.getOptionsDays();
+                        var monthOptions = module.functions.getOptionsMonths();
+                        jQuery(span).html(module.functions.getReplaceMessage(span, 'FTT_MOD_PROFILE_EDITOR_FORM_UNKNOW'));
+                        jQuery(span).find('select[name="death_days"]').append(daysOptions);
+                        jQuery(span).find('select[name="death_months"]').append(monthOptions);
+                        break;
+
+                    case "marr_date":
+                        var daysOptions = module.functions.getOptionsDays();
+                        var monthOptions = module.functions.getOptionsMonths();
+                        jQuery(span).find('select[name="marr_days"]').append(daysOptions);
+                        jQuery(span).find('select[name="marr_months"]').append(monthOptions);
+                        break;
+                }
+            });
+        },
+        setTextValue:function(form){
+            jQuery(form).find('div.text').each(function(i, el){
+                var classList = jQuery(el).attr('class').split(" ");
+                var user = module.user;
+                var span = jQuery(el).find('span');
+                var parents = jQuery(span).parents('tr');
+                switch(classList[0]){
+                    case "avatar":
+                        var div =  jQuery(span).find('div.jmb-dialog-avatar');
+                        var width = jQuery(div).attr('width');
+                        var height = jQuery(div).attr('height');
+                        jQuery(div).css('width', width+'px').css('height', height+'px');
+                        var avatar = module.functions.getAvatar(module.gedcom_id, width, height);
+                        jQuery(div).html(avatar);
+                    break;
+
+                    case "spouse_avatar":
+                        var div =  jQuery(span).find('div.jmb-dialog-avatar');
+                        var width = jQuery(div).attr('width');
+                        var height = jQuery(div).attr('height');
+                        jQuery(div).css('width', width+'px').css('height', height+'px');
+                        var avatar = module.functions.getAvatar(module.spouse_id, width, height);
+                        jQuery(div).html(avatar);
+                    break;
+
+                    case "spouse_full_name":
+                        var spouse = module.functions.getParseUserInfo(module.spouse_id);
+                        jQuery(span).text(spouse.full_name);
+                    break;
+
+                    case "full_name":
+                        var full_name = user.full_name;
+                        if(full_name != ''){
+                            jQuery(span).text(user.full_name);
+                        } else {
+                            jQuery(parents[0]).hide();
+                        }
+                    break;
+
+                    case "know_as":
+                        var know_as = user.nick;
+                        if(know_as != ''){
+                            jQuery(span).text(user.nick);
+                        } else {
+                            jQuery(parents[0]).hide();
+                        }
+                    break;
+
+                    case "relation":
+                        var relation = user.relation;
+                        if(relation){
+                            jQuery(span).text(relation);
+                        } else {
+                            jQuery(parents[0]).hide();
+                        }
+                    break;
+
+                    case "spouse_birthday":
+                        var spouse = module.functions.getParseUserInfo(module.spouse_id);
+                        jQuery(span).text(spouse.date('birth'));
+                    break;
+
+                    case "birthday":
+                        var birthday = user.date('birth')
+                        if(birthday != ''){
+                            jQuery(span).text(birthday);
+                        } else {
+                            jQuery(parents[0]).hide();
+                        }
+                    break;
+
+                    case "spouse_birthplace":
+                        var spouse = module.functions.getParseUserInfo(module.spouse_id);
+                        var place = spouse.place('birth');
+                        var placeName = (place!='')?place.place_name:'';
+                        jQuery(span).text(placeName);
+                    break;
+
+                    case "birthplace":
+                        var place = user.place('birth');
+                        var placeName = (place!='')?place.place_name:'';
+                        if(placeName != ''){
+                            jQuery(span).text(placeName);
+                        } else {
+                            jQuery(parents[0]).hide();
+                        }
+                    break;
+
+                    case "deathday":
+                        var deathday = user.date('death');
+                        if(deathday != ''){
+                            jQuery(span).text(deathday);
+                        } else {
+                            jQuery(parents[0]).hide();
+                        }
+                    break;
+
+                    case "deathplace":
+                        var place = user.place('death');
+                        var placeName = (place!='')?place.place_name:'';
+                        if(placeName != ''){
+                            jQuery(span).text(placeName);
+                        } else {
+                            jQuery(parents[0]).hide();
+                        }
+                    break;
+
+                    case "gender":
+                        var gender = user.gender;
+                        var options = jQuery(span).find('option');
+                        jQuery(options).each(function(i, el){
+                            if(jQuery(el).val() == gender){
+                                jQuery(el).attr("selected", "selected");
+                            }
+                            var text = jQuery(el).text();
+                            jQuery(el).text(module.message[text]);
+                        });
+                    break;
+
+                    case "living":
+                        var is_alive = user.is_alive;
+                        var options = jQuery(span).find('option');
+                        jQuery(options).each(function(i, el){
+                            if(parseInt(jQuery(el).val()) == is_alive){
+                                jQuery(el).attr("selected", "selected");
+                            }
+                            var text = jQuery(el).text();
+                            jQuery(el).text(module.message[text]);
+                        });
+                    break;
+
+                    case "first_name":
+                        var first_name = user.first_name;
+                        var input = jQuery(span).find('input');
+                        jQuery(input).val(first_name);
+                    break;
+
+                    case "middle_name":
+                        var middle_name = user.middle_name;
+                        var input = jQuery(span).find('input');
+                        jQuery(input).val(middle_name);
+                    break;
+
+                    case "last_name":
+                        var last_name = user.last_name;
+                        var input = jQuery(span).find('input');
+                        jQuery(input).val(last_name);
+                    break;
+
+                    case "nick":
+                        var nick = user.nick;
+                        var input = jQuery(span).find('input');
+                        jQuery(input).val(nick);
+                    break;
+
+                    case "birth_date":
+                        var date = user.birth();
+                        var daysOptions = module.functions.getOptionsDays({
+                            date:date
+                        });
+                        var monthOptions = module.functions.getOptionsMonths({
+                            date:date
+                        });
+                        jQuery(span).html(module.functions.getReplaceMessage(span, 'FTT_MOD_PROFILE_EDITOR_FORM_UNKNOW'));
+                        jQuery(span).find('select[name="birth_days"]').append(daysOptions);
+                        jQuery(span).find('select[name="birth_months"]').append(monthOptions);
+                        jQuery(span).find('input[name="birth_year"]').val(user.birth('year'));
+                        if(module.functions.isNullDate(date)){
+                            jQuery(span).find('input[name="birth_option"]').attr('checked', true);
+                        }
+                    break;
+
+                    case "death_date":
+                        var date = user.death();
+                        var daysOptions = module.functions.getOptionsDays({
+                            date:date
+                        });
+                        var monthOptions = module.functions.getOptionsMonths({
+                            date:date
+                        });
+                        jQuery(span).html(module.functions.getReplaceMessage(span, 'FTT_MOD_PROFILE_EDITOR_FORM_UNKNOW'));
+                        jQuery(span).find('select[name="death_days"]').append(daysOptions);
+                        jQuery(span).find('select[name="death_months"]').append(monthOptions);
+                        jQuery(span).find('input[name="death_year"]').val(user.death('year'));
+                        if(module.functions.isNullDate(date)){
+                            jQuery(span).find('input[name="death_option"]').attr('checked', true);
+                        }
+                    break;
+
+                    case "marr_date":
+                        var date = user.marr();
+                        var daysOptions = module.functions.getOptionsDays({
+                            date:date
+                        });
+                        var monthOptions = module.functions.getOptionsMonths({
+                            date:date
+                        });
+                        jQuery(span).find('select[name="marr_days"]').append(daysOptions);
+                        jQuery(span).find('select[name="marr_months"]').append(monthOptions);
+                        jQuery(span).find('input[name="marr_year"]').val(user.death('year'));
+                        if(module.functions.isNullDate(date)){
+                            jQuery(span).find('input[name="marr_option"]').attr('checked', true);
+                        }
+                    break;
+
+                    case "deceased":
+                        var date = user.divorce(module.family_id, 'date', 2);
+                        if(date!=''){
+                            jQuery(span).find('input[name="marr_divorce_year"]').val(date);
+                            jQuery(span).find('input[name="deceased"]').attr('checked', true);
+                        }
+                    break;
+
+                    case "birth_place":
+                        jQuery(span).find('input[name="birth_city"]').val(user.place('birth', 'city'));
+                        jQuery(span).find('input[name="birth_state"]').val(user.place('birth', 'state'));
+                        jQuery(span).find('input[name="birth_country"]').val(user.place('birth', 'country'));
+                    break;
+
+                    case "death_place":
+                        jQuery(span).find('input[name="death_city"]').val(user.place('death', 'city'));
+                        jQuery(span).find('input[name="death_state"]').val(user.place('death', 'state'));
+                        jQuery(span).find('input[name="death_country"]').val(user.place('death', 'country'));
+                    break;
+
+                    case "marr_place":
+                        jQuery(span).find('input[name="marr_city"]').val(user.marr(module.family_id, 'place', 'city'));
+                        jQuery(span).find('input[name="marr_state"]').val(user.marr(module.family_id, 'place', 'state'));
+                        jQuery(span).find('input[name="marr_country"]').val(user.marr(module.family_id, 'place', 'country'));
+                    break;
+
+                    default:
+                        //empty
+                    break;
+                }
+            });
+        },
+        setLiving:function(form, living){
+            var divs = jQuery(form).find('div.death_date,div.death_place');
+            jQuery(divs).each(function(i, el){
+                var parents = jQuery(el).parents('tr');
+                if(living){
+                    jQuery(parents[0]).hide();
+                } else {
+                    jQuery(parents[0]).show();
+                }
+            });
+        },
+        setContent:function(form){
+            var contentBox = jQuery(module.box).find('div.jmb-dialog-profile-content');
+            jQuery(contentBox).html('');
+            jQuery(contentBox).append(form);
+        },
+        setAvatar:function(form, width, height, avatar){
+            if(typeof(avatar) == 'undefined'){
+                avatar = module.functions.getAvatar(module.gedcom_id, width, height);
+            }
+            jQuery(form).find('div.jmb-dialog-avatar').html(avatar);
+        },
         setGedcomId:function(gedcom_id){
             if(typeof(gedcom_id) != 'undefined'){
                 module.gedcom_id = gedcom_id;
@@ -117,6 +436,13 @@ function JMBProfile(){
                 module.object = storage.usertree.pull[gedcom_id];
             }
         },
+        setFamily:function(family){
+            module.spouse_id = family.spouse;
+            module.family_id = family.id;
+        },
+        setUserInfo:function(){
+            module.user = module.functions.getParseUserInfo();
+        },
         setEvents:function(events){
             if(typeof(events)!='undefined'){
                 module.events = events;
@@ -124,6 +450,82 @@ function JMBProfile(){
         },
         setActiveDialogButton:function(buttons, mode){
             jQuery(buttons).find('div[value="'+mode+'"]').addClass('active');
+        },
+        setDefaultFamily:function(view){
+            jQuery(view).find('input[name="current_partner"]').attr('checked', true);
+        },
+        setMessage:function(args){
+            var text = jQuery(args.object)[args.type]();
+            jQuery(args.object)[args.type](module.message[text]);
+        },
+        getAvatar:function(gedcom_id, width, height){
+            return storage.usertree.avatar.get({
+                object:storage.usertree.pull[gedcom_id],
+                width:width,
+                height:height
+            });
+        },
+        getDefAvatar:function(width, height, gender){
+            return storage.usertree.avatar.def({
+                object: module.object,
+                width:width,
+                height: height
+            }, gender);
+        },
+        getReplaceMessage:function(span , text){
+            return jQuery(span).html().replace(text, module.message[text]);
+        },
+        getDaysInMonth:function(args){
+            if(typeof(args) == 'undefined' || typeof(args.date) == 'undefined'){
+                return 31;
+            }
+            var date = args.date;
+            var month = date[1];
+            var year = (date[2]==null)?date[2]:0;
+            var month_days = [
+                [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
+                [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+            ];
+            if(month==null) return 31;
+            if(month<1 || month > 12) return 0;
+            return month_days[((year%4==0) && ((year%100!=0) || (year%400==0)))?1:0][month-1];
+        },
+        getOptionsDays:function(args){
+            var days = module.functions.getDaysInMonth(args);
+            var sb = host.stringBuffer();
+            sb._('<option value="0">')._(module.message.FTT_MOD_PROFILE_EDITOR_FORM_DAY)._('</option>');
+            for(var i = 1 ; i <= days ; i++ ){
+                if(typeof(args) != 'undefined' && typeof(args.date) != 'undefined' && args.date != ''){
+                    var date = args.date;
+                    if(date[0]!=null&&date[0]==i){
+                        sb._('<option SELECTED value="')._(i)._('">')._(i)._('</option>');
+                    } else {
+                        sb._('<option value="')._(i)._('">')._(i)._('</option>');
+                    }
+                } else {
+                    sb._('<option value="')._(i)._('">')._(i)._('</option>');
+                }
+            }
+            return jQuery(sb.result());
+        },
+        getOptionsMonths:function(args){
+            var months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+            var sb = host.stringBuffer();
+            sb._('<option value="0">')._(module.message.FTT_MOD_PROFILE_EDITOR_FORM_MONTH)._('</option>');
+            for(var i=1 ; i <= months.length ; i++ ){
+                var monthName = module.message['FTT_MOD_PROFILE_EDITOR_FORM_'+(months[i-1].toUpperCase())];
+                if(typeof(args) != 'undefined' && typeof(args.date) != 'undefined' && args.date != ''){
+                    var date = args.date;
+                    if(date[1]!=null&&date[1]==i){
+                        sb._('<option SELECTED value="')._(i)._('">')._(monthName)._('</option>');
+                    } else {
+                        sb._('<option value="')._(i)._('">')._(monthName)._('</option>');
+                    }
+                } else {
+                    sb._('<option value="')._(i)._('">')._(monthName)._('</option>');
+                }
+            }
+            return jQuery(sb.result());
         },
         getUcFirst:function(str){
             var f = str.charAt(0).toUpperCase();
@@ -149,13 +551,35 @@ function JMBProfile(){
             if(typeof(gedcom_id)!='undefined'){
                 var stObject = storage.usertree.pull[gedcom_id];
                 if(typeof(stObject)!='undefined'){
-                    storage.usertree.parse(stObject);
+                    return storage.usertree.parse(stObject);
                 } else {
                     return false;
                 }
             } else {
                 return storage.usertree.parse(module.object);
             }
+        },
+        getUnionsButtonText:function(){
+            var object = module.object;
+            var families = object.families;
+            if(families!=null&&families.length>0){
+                return module.message.FTT_MOD_PROFILE_EDITOR_FORM_ADD_ANOTHER_UNION;
+            } else {
+                return module.message.FTT_MOD_PROFILE_EDITOR_FORM_ADD_UNION;
+            }
+        },
+        initEventSelectLiving:function(form){
+            jQuery(form).find('select[name="living"]').change(function(){
+               var value = parseInt(jQuery(this).val());
+               module.functions.setLiving(form, value);
+            });
+        },
+        initEventSelectGender:function(form, width, height){
+            jQuery(form).find('select[name="gender"]').change(function(){
+                var value = jQuery(this).val();
+                var avatar = module.functions.getDefAvatar(width, height, value);
+                module.functions.setAvatar(form, width, height, avatar);
+            });
         },
         initHeader:function(cont, mode){
             this.setActiveDialogButton(cont, mode);
@@ -174,6 +598,17 @@ function JMBProfile(){
                 jQuery(span).text(module.message[text]);
             });
         },
+        isNullDate:function(date){
+            if(date!=''){
+                if(date[0]==null&&date[1]==null&&date[2]==null){
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return true;
+            }
+        },
         callEvents:function(){
             var events = module.events;
             for(var key in events){
@@ -190,7 +625,10 @@ function JMBProfile(){
         clearVariable:function(){
             module.gedcom_id = false;
             module.object = false;
+            module.user = false;
             module.events = false;
+            module.spouse_id = false;
+            module.family_id = false;
         }
     }
     module.box = jQuery('<div id="jmb:dialog" class="jmb-dialog-container"></div>');
@@ -210,7 +648,169 @@ function JMBProfile(){
 }
 JMBProfile.prototype = {
     render:function(id){
-        //console.log(id);
+        var module = this,
+            fn = module.functions,
+            sb = host.stringBuffer(),
+            form;
+        switch(id){
+            case "view_profile":
+                form = fn.getViewObject('dialogViewProfile');
+                fn.setTitleMessage(form);
+                fn.setTextValue(form);
+                fn.setAvatar(form, 135, 150)
+            break;
+
+            case "view_photos":
+                var media = module.object.media;
+                if(media!=null){
+                    form = storage.media.render(media.photos);
+                    storage.media.init(form);
+                }
+            break;
+
+            case "edit_basic":
+                form = fn.getViewObject('dialogEditBasic');
+                fn.setTitleMessage(form);
+                fn.setTextValue(form);
+                fn.setLiving(form, module.user.is_alive);
+                fn.setAvatar(form, 135, 150);
+                fn.initEventSelectLiving(form);
+                fn.initEventSelectGender(form, 135, 150);
+                fn.ajaxForm({
+                    target:jQuery(form).find('form'),
+                    method:'basic',
+                    args:module.gedcom_id,
+                    validate:{
+                        rules:{
+                            birth_year:{
+                                date:true
+                            }
+                        },
+                        messages:{
+                            birth_year:""
+                        }
+                    },
+                    success:function(res){
+                        //update_data(res);
+                    }
+                });
+            break;
+
+            case "edit_unions":
+                sb._('<div class="jmb-dialog-profile-content-unions">');
+                    sb._('<div class="jmb-dialog-profile-content-unions-add">');
+                        sb._('<input type="button" value="')._(fn.getUnionsButtonText())._('">');
+                    sb._('</div>');
+                sb._('</div>');
+                form = jQuery(sb.result());
+
+                var _fn = {
+                    setUnionEventMessage:function(view){
+                        module.functions.setMessage({
+                            object:jQuery(view).find('option[value="MARR"]'),
+                            type:'text'
+                        });
+                        fn.setMessage({
+                            object:jQuery(view).find('div#button input'),
+                            type:'val'
+                        });
+                        fn.setMessage({
+                            object:jQuery(view).find('span#unknown'),
+                            type:'text'
+                        });
+                        fn.setMessage({
+                            object:jQuery(view).find('span#divorce'),
+                            type:'text'
+                        });
+                        fn.setMessage({
+                            object:jQuery(view).find('input[type="submit"]'),
+                            type:'val'
+                        });
+                        fn.setMessage({
+                            object:jQuery(view).find('input[type="button"]'),
+                            type:'val'
+                        });
+                    },
+                    createAddFamilyBox:function(callback){
+                        var view = fn.getViewObject('dialogAddSpouse');
+                        jQuery(view).find('.jmb-profile-add-union-buttons input[type="button"]').click(function(){
+                            jQuery(view).remove();
+                            callback();
+                        });
+                        _fn.setUnionEventMessage(view);
+                        fn.setTitleMessage(view);
+                        fn.setTextObject(view);
+                        fn.setLiving(view, true);
+                        fn.initEventSelectLiving(view);
+                        jQuery(form).append(view);
+                        var args = '{"gedcom_id":"'+module.user.gedcom_id+'","method":"add"}';
+                        module.functions.ajaxForm({
+                            target:jQuery(view).find('form'),
+                            method:'union',
+                            args:args,
+                            success:function(res){
+                                //update_data(res);
+                                //module._clearContent();
+                                //subm.edit_unions();
+                                callback();
+                            }
+                        });
+                    },
+                    createFamilyBox:function(family){
+                        var view = fn.getViewObject('dialogEditUnions');
+                        fn.setFamily(family);
+                        fn.setTitleMessage(view);
+                        fn.setTextValue(view);
+                        if(module.user.default_family == family.id){
+                            fn.setDefaultFamily(view);
+                        }
+                        _fn.setUnionEventMessage(view);
+                        jQuery(form).append(view);
+                        var args = '{"gedcom_id":"'+module.gedcom_id+'","family_id":"'+module.family_id+'","method":"save"}';
+                        fn.ajaxForm({
+                            target:jQuery(view).find('form'),
+                            method:'union',
+                            args:args,
+                            success:function(res){
+                                //update_data(res);
+                            }
+                        });
+                    }
+                }
+
+                var activeAddFamilyBox = false;
+                jQuery(form).find('input[type="button"]').click(function(){
+                    if(activeAddFamilyBox) return false;
+                    activeAddFamilyBox = true;
+                    _fn.createAddFamilyBox(function(v){
+                        activeAddFamilyBox = false;
+                    });
+                    return false;
+                });
+
+                //set family
+                var families = module.object.families;
+                if(families!=null){
+                    for(key in families){
+                        if (!families.hasOwnProperty(key)) continue;
+                        if(key != 'length' && families[key].spouse != null){
+                            _fn.createFamilyBox(families[key]);
+                        }
+                    }
+                }
+            break;
+
+            case "edit_photos":
+            break;
+
+            case "more_options":
+            break;
+
+            default:
+                //empty
+            break;
+        }
+        fn.setContent(form);
     },
     mode:function(type){
         var module = this,
@@ -253,6 +853,7 @@ JMBProfile.prototype = {
 
         fn.setEvents(args.evets);
         fn.setObject(gedcom_id);
+        fn.setUserInfo();
 
         fn.createDialog(module.box, {
             title:fn.getParseUserInfo().full_name,

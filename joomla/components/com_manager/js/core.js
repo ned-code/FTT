@@ -139,18 +139,15 @@ storage.usertree.parse = function(object){
 		})(),
         is_editable:(user.facebook_id == '0' || user.gedcom_id == storage.usertree.gedcom_id),
         is_deletable:(user.creator == storage.usertree.gedcom_id || user.gedcom_id == storage.usertree.gedcom_id),
-		is_death:(function(){
-			return (user.is_alive)?0:1;
-		})(),
+        is_death:(function(){
+            var event = user['death'];
+            if(event!=null){
+                var date = event.date;
+                return ( date[0]!=null || date[1] != null || date[2] != null )?1:0;
+            }
+            return 0;
+        })(),
 		is_alive:user.is_alive,
-		is_birth:(function(){
-			var event = user['birth'];
-			if(event!=null){
-				var date = event.date;
-				return ( date[0]!=null || date[1] != null || date[2] != null )?1:0;
-			}
-			return 0;
-		})(),
 		is_married_event:function(id){
 			return (families[id]&&families[id].marriage!=null)?1:0;
 		},
@@ -165,14 +162,6 @@ storage.usertree.parse = function(object){
 		is_divorce_event:function(id){
 			return (families[id]&&families[id].divorce!=null)?1:0;
 		},
-		is_death:(function(){
-			var event = user['death'];
-			if(event!=null){
-				var date = event.date;
-				return ( date[0]!=null || date[1] != null || date[2] != null )?1:0;
-			}
-			return 0;
-		})(),
 		marr:function(id, type, sub){
 			var family = families[id];
             if(family){

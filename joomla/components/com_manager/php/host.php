@@ -294,7 +294,8 @@ class Host {
                     if(is_file($filePath)){
                         $fileName = explode('.', $file);
                         $fileContent = file_get_contents($filePath);
-                        $views[$fileName[0]] = str_replace($order, $replace, $fileContent);
+                        $views[$fileName[0]] = preg_replace('| +|', ' ', str_replace($order, $replace, $fileContent));
+
                     }
                 }
                 closedir($dh);

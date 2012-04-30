@@ -161,7 +161,7 @@ class JMBProfile {
         return $individual;
     }
 	
-	public function basic($user_id){				
+	public function basic($user_id){
 		// update user in db
 		$ind = $this->host->gedcom->individuals->get($user_id);
 		$this->updateIndividual($ind, $_REQUEST);
