@@ -1139,7 +1139,7 @@ JMBProfile.prototype = {
                     validate:false,
                     query:'{"method":"sibling","owner_id":"'+module.gedcom_id+'"}',
                     options:{
-                        title:module.message.FTT_MOD_PROFILE_EDITOR_FORM_ADDS_PARENT,
+                        title:module.message.FTT_MOD_PROFILE_EDITOR_FORM_ADDS_BROTHER_OR_SISTER,
                         width:475
                     }
                 }
