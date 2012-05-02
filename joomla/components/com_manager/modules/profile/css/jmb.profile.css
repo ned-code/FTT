@@ -8,6 +8,9 @@
 .ui-widget-content.edit{
 	background: #7F7F7F;
 }
+.ui-widget-content.add{
+    background: #7F7F7F;
+}
 .ui-widget-content.view{
 	background: #9a7423;
 }
@@ -452,11 +455,11 @@
 * add union
 */ 
 .jmb-profile-add-union {
-	background: none repeat scroll 0 0 #9A7423;
-	border-radius: 5px 5px 5px 5px;
-    	margin-top: 10px;
-    	padding: 3px 3px 3px;
-    	width: 500px;
+    background: none repeat scroll 0 0 #9A7423;
+    border-radius: 5px 5px 5px 5px;
+    overflow: hidden;
+    padding: 3px;
+    width: 500px;
 }
 .jmb-profile-add-union form {
 	background: none repeat scroll 0 0 #F1E4B0;

@@ -196,11 +196,13 @@ class JMBProfile {
 				//add spouse in db
 				$spouse = $this->host->gedcom->individuals->create();
 				$spouse->FacebookId = '0';
+                $spouse->Creator = $owner_id;
 				$spouse->Gender = $request['gender'];
 				$spouse->FirstName = ($request['first_name']!='')?$request['first_name']:'unknown';
 				$spouse->MiddleName = $request['middle_name'];
 				$spouse->LastName = $request['last_name'];
 				$spouse->Nick = $request['nick'];
+                $spouse->TreeId = $tree_id;
 				$spouse->Id = $this->host->gedcom->individuals->save($spouse);
 				$this->host->usertree->link($tree_id, $spouse->Id);
                 $this->host->gedcom->relation->set($tree_id, $owner_id, $spouse->Id);
@@ -421,8 +423,10 @@ class JMBProfile {
 
     public function get(){
         $views = $this->host->getViews('profile');
+        $language = $this->host->getLangList('profile');
         return json_encode(array(
-            'views' => $views
+            'views' => $views,
+            'language' => $language
         ));
     }
 }
