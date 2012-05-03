@@ -49,6 +49,7 @@ function JMBDescendantTreeObject(obj){
 		module.dhxTree.deleteChildItems(0);
 		module.render = res._line;
 		module.loadTree(module.dhxTree, res._line);
+        return true;
 	});
 	
 }

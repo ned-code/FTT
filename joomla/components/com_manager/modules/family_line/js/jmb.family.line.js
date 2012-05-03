@@ -135,7 +135,7 @@ function JMBFamilyLine(){
 		click:function(settings){
 			var icons = jQuery(cont).find('div.icon');
 			var titles = jQuery(cont).find('div.title');
-			jQuery(icons).click(function(){				
+			jQuery(icons).click(function(){
 				//var list = this.classList;
 				var list = jQuery(this).attr('class').split(/\s+/);
 				var type = (list[1]=='mother')?'father':'mother';
@@ -309,7 +309,15 @@ function JMBFamilyLine(){
 	//public
 	this.get = fn.get;
 	this.bind = function(name, callback){
-		objPull.bind(name, callback);
+        var clickActive = false;
+        objPull.bind(name, function(res){
+            if(clickActive) return false;
+            clickActive = true;
+            callback(res);
+            setTimeout(function(){
+                clickActive = false;
+            }, 1000);
+        });
 	}
 	this.init = function(page){
 		objPull.clear();
