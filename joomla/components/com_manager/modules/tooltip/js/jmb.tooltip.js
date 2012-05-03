@@ -199,7 +199,7 @@ JMBTooltip.prototype = {
 			
 		sb._('<ul style="width:')._(55*photos.length)._('px;">');
 		jQuery(photos).each(function(i,e){
-			sb._('<li>');
+			sb._('<li style="width:50px;height:50px;">');
             sb._( storage.usertree.photos.get({
                 image:e,
                 cache:cache,

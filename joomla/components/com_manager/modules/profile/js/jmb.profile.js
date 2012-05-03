@@ -855,11 +855,11 @@ JMBProfile.prototype = {
                             this.delete(li);
                             this.select(li);
                             if(media==null){
-                                storage.usertree.pull[parse.gedcom_id].media = {
+                                storage.usertree.pull[module.gedcom_id].media = {
                                     avatar:null,
                                     photos:[]
                                 }
-                                media = storage.usertree.pull[parse.gedcom_id].media;
+                                media = storage.usertree.pull[module.gedcom_id].media;
                             };
                             media.photos.push(res.image);
                         }
