@@ -279,7 +279,10 @@ JMBThisMonthObject.prototype = {
 					append;
 					
 				self.b_count++;
-				if(data.user.death!=null) return;
+				if(data.user.death!=null){
+                    self.b_count--;
+                    return;
+                }
 				
 				append = sb._('<tr><td><div class="date">')
 						._((date!=null&&date[0]!=null)?date[0]:'')._('</div></td><td><div class="img-')
