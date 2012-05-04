@@ -1076,7 +1076,20 @@ JMBProfile.prototype = {
                     module.functions.ajaxForm({
                         target:jQuery(args.form).find('form'),
                         method:'add',
-                        validate:args.validate,
+                        validate:{
+                            rules:{
+                                birth_year:{
+                                    date:true
+                                },
+                                first_name:{
+                                    required: true
+                                }
+                            },
+                            messages:{
+                                birth_year:"",
+                                first_name:""
+                            }
+                        },
                         args:args.query,
                         success:function(res){
                             var objects = res.objects;
