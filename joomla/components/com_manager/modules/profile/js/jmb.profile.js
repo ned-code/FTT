@@ -726,10 +726,14 @@ JMBProfile.prototype = {
                         rules:{
                             birth_year:{
                                 date:true
+                            },
+                            first_name:{
+                                required: true
                             }
                         },
                         messages:{
-                            birth_year:""
+                            birth_year:"",
+                            first_name:""
                         }
                     },
                     success:function(res){
