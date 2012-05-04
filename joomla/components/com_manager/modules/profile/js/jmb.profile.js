@@ -705,7 +705,7 @@ JMBProfile.prototype = {
             case "view_photos":
                 var media = module.object.media;
                 if(media!=null){
-                    form = storage.media.render(media.photos);
+                    form = jQuery(storage.media.render(media.photos));
                     storage.media.init(form);
                 }
             break;

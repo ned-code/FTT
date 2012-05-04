@@ -196,7 +196,6 @@ JMBTooltip.prototype = {
             sb = host.stringBuffer();
 		
 		if(!photos) return '';
-			
 		sb._('<ul style="width:')._(55*photos.length)._('px;">');
 		jQuery(photos).each(function(i,e){
 			sb._('<li style="width:50px;height:50px;">');
@@ -414,8 +413,10 @@ JMBTooltip.prototype = {
             module.closeOpenTooltip(settings);
 
             cont = module._create(settings);
+            storage.media.init(cont);
             jQuery(cont).hide();
             jQuery(document.body).append(cont);
+
 
             module._addBtActive(settings);
 

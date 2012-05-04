@@ -37,7 +37,7 @@ JMBInvitation.prototype = {
             height:90
         });
 	},
-      	get:function(object){
+    get:function(object){
 		var 	user = object.user;
 		return {
 			_month:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
@@ -64,7 +64,7 @@ JMBInvitation.prototype = {
 			}
 		}
 	},
-      	createDiv:function(object){
+    createDiv:function(object){
 		var	module = this, 
 			sb = host.stringBuffer(),
 			get = module.get(object),

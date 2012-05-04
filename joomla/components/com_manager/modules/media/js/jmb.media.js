@@ -3,7 +3,7 @@ function JMBMediaManager(){
 JMBMediaManager.prototype = {
 	getImage:function(image){
 		var sb = host.stringBuffer();
-		return sb._('<a href="')._(image.path)._('" rel="prettyPhoto[pp_gal]" title=""><img src="index.php?option=com_manager&task=getResizeImage&tree_id=')._(storage.usertree.tree_id)._('&id=')._(image.media_id)._('&w=100&h=100')._('" alt="" /></a>').result();
+		return sb._('<a href="')._(storage.baseurl+image.path.substr(1))._('" rel="prettyPhoto[pp_gal]" title=""><img src="index.php?option=com_manager&task=getResizeImage&tree_id=')._(storage.usertree.tree_id)._('&id=')._(image.media_id)._('&w=100&h=100')._('" alt="" /></a>').result();
 	},
 	getImageEdit:function(image){
 		var sb = host.stringBuffer();
