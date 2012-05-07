@@ -409,6 +409,7 @@ JMBThisMonthObject.prototype = {
 		var header = jQuery(self.table).find('.jmb-this-month-header');
 		var month = jQuery(header).find('select[name="months"]').val();
 		var sort = jQuery(header).find('select[name="sort"]').val();
+        self.b_count = 0;
 		self.load(month, sort, function(json){
 			jQuery(header).html('');
 			jQuery(self.content.table).remove();
