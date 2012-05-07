@@ -422,7 +422,10 @@ JMBTooltip.prototype = {
 
             settings.style.preHide = function(){
                 delete module.btActive[module._getId(settings)];
-                //jQuery(cont).remove();
+                setTimeout(function(){
+                    jQuery(cont).remove();
+                }, 1)
+
             }
             module._invitation(cont, settings);
             module.link_with_request(cont, settings);
