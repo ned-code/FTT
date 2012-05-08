@@ -8,19 +8,20 @@ JMBInvitation.prototype = {
 				callback(res);
 		})
 	},
-	ajaxForm:function(obj, method, args, beforeSubmit, success){
-		var url = [storage.baseurl,'/components/com_manager/php/ajax.php'].join('');
-		jQuery(obj).ajaxForm({
-			url:url,
+	ajaxForm:function(settings){
+        var validate_options = (settings.validate)?settings.validate:{};
+        jQuery(settings.target).validate(validate_options);
+		jQuery(settings.target).ajaxForm({
+			url:[storage.baseurl,'/components/com_manager/php/ajax.php'].join(''),
 			type:"POST",
-			data: { "module":"invitation","class":"JMBInvitation", "method":method, "args": args },
+			data: { "module":"invitation","class":"JMBInvitation", "method":settings.method, "args": settings.args },
 			dataType:"json",
 			target:jQuery(storage.iframe).attr('name'),
 			beforeSubmit:function(){
-				return beforeSubmit();	
+				return settings.beforeSubmit();
 			},
 			success:function(data){
-				success(data);
+				settings.success(data);
 			}
 		});
 	},
@@ -94,7 +95,7 @@ JMBInvitation.prototype = {
 						sb._('</td>');
 					sb._('</tr>');
 					sb._('<tr><td></td><td><div style="text-align:center;">or</div></td></tr>');
-					sb._('<tr><td><span class="title">Send Email:</span></td><td><input name="email" placeholder="Enter Email address"></td></tr>');
+					sb._('<tr><td><span class="title">Send Email:</span></td><td><input name="send_email" placeholder="Enter Email address"></td></tr>');
 				sb._('</table>');
 			sb._('</div>');
 			sb._('<div class="jmb-dialog-invition-send"><input type="submit" value="send"></div>');
@@ -122,7 +123,7 @@ JMBInvitation.prototype = {
 				select = jQuery('<select name="friends"><option value="default">Facebook Friend</option></select>');
 				jQuery(friends_div).append(select);
 				jQuery(res.data).each(function(i,friend){
-					if(friend.id in storage.usertree.users) return false;
+                    if(parseInt(friend.id) in storage.usertree.users) return false;
 					jQuery(select).append('<option value="'+friend.id+'">'+friend.name+'</option>');	
 				});
 				jQuery(select).change(function(){
@@ -147,18 +148,29 @@ JMBInvitation.prototype = {
 		});
 	},
 	send:function(form, json){
-		var	module = this,
-			email,
-			regexp = /^([a-zA-Z0-9])(([a-zA-Z0-9])*([\._\+-])*([a-zA-Z0-9]))*@(([a-zA-Z0-9\-])+(\.))+([a-zA-Z]{2,4})+$/,
-			result;
-		module.ajaxForm(form, 'sendInvitation', json.user.gedcom_id, function(){
-			email = jQuery(form).find('input[name="email"]').val();
-			result = regexp.test(email);
-			if(!result) alert('email not valid.')
-			return result;
-		}, function(json){
-			alert(json.message);
-			storage.overlay.hide();
-		});	
+		var	module = this;
+        module.ajaxForm({
+            target:form,
+            method: 'sendInvitation',
+            args: json.user.gedcom_id,
+            validate:{
+                rules:{
+                    send_email:{
+                        required: true,
+                        email: true
+                    }
+                },
+                messages:{
+                    send_email:""
+                }
+            },
+            beforeSubmit:function(){
+
+            },
+            success:function(){
+                alert(json.message);
+                storage.overlay.hide();
+            }
+        });
 	}
 }
