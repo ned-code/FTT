@@ -11,11 +11,31 @@ class JMBInvitation {
 	public function __construct(){
 		$this->host = new Host('Joomla');
 	}
+
+    protected function checkMailOnUse($mail, $tree_id){
+        $sql_string = "SELECT i.id, i.fid, u.email
+                        FROM #__mb_individuals AS i
+                        LEFT JOIN #__mb_tree_links l ON l.individuals_id = i.id
+                        LEFT JOIN #__jfbconnect_user_map AS map ON map.fb_user_id = i.fid
+                        LEFT JOIN #__users AS u ON u.id = map.j_user_id
+                        WHERE l.tree_id = ? AND i.fid !=0";
+        $this->host->ajax->setQuery($sql_string, $tree_id);
+        $rows = $this->host->ajax->loadAssocList();
+        if(!empty($rows)){
+            foreach($rows as $row){
+                if($row['email'] != NULL && $row['email'] == $mail){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 	/**
 	*
 	*/
 	public function sendInvitation($gedcom_id){
-		require_once("Mail.php");		
+        require_once("Mail.php");
 		$session = JFactory::getSession();
 		$facebook_id = $session->get('facebook_id');
 		$owner_id = $session->get('gedcom_id');
@@ -26,7 +46,11 @@ class JMBInvitation {
 
 
         $to = JRequest::getVar('send_email');
-		
+
+        if($this->checkMailOnUse($to, $tree_id)){
+            return json_encode(array('message'=>'This email is already being used in this tree.'));
+        }
+
 		$usertree = $this->host->usertree->load($tree_id, $owner_id);
 		$owner = $usertree[$owner_id];
 		$recipient = $usertree[$gedcom_id];

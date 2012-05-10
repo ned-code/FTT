@@ -251,8 +251,6 @@ class JMBController extends JController
 		    $host = new Host('joomla');
         	$session = JFactory::getSession();
             $token = $this->get_invitation_token();
-            $jfbcLibrary = JFBConnectFacebookLibrary::getInstance();
-            $me = $jfbcLibrary->api('/me');
 
         	$sql = "SELECT value FROM #__mb_variables WHERE belongs=?";
             $host->ajax->setQuery($sql, $token);
@@ -265,8 +263,8 @@ class JMBController extends JController
             $host->ajax->setQuery($sql, $args[0], $args[1]);
             $host->ajax->query();
         	
-        	$sql = "UPDATE #__mb_individuals SET `fid`=?,`change` = NOW(), `join_time`= NOW(),`email` = ?, `creator` = ?  WHERE id=?";
-            $host->ajax->setQuery($sql, $fid, $me['email'], $args[0], $args[0]);
+        	$sql = "UPDATE #__mb_individuals SET `fid`=?,`change` = NOW(), `join_time`= NOW(), `creator` = ?  WHERE id=?";
+            $host->ajax->setQuery($sql, $fid, $args[0], $args[0]);
             $host->ajax->query();
         	
         	$sql = "DELETE FROM #__mb_variables WHERE belongs=?";
