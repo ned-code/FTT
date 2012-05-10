@@ -91,15 +91,15 @@ class JMBImage {
         switch($file[0]){
             case "jpg":
             case "jpeg":
-                return @imagecreatefromjpeg($file[1]);
+                return imagecreatefromjpeg($file[1]);
             break;
 
             case "gif":
-                return @imagecreatefromgif($file[1]);
+                return imagecreatefromgif($file[1]);
             break;
 
             case "png":
-                return @imagecreatefrompng($file[1]);
+                return imagecreatefrompng($file[1]);
             break;
 
             default:
@@ -135,8 +135,10 @@ class JMBImage {
     }
 
     private function image($file){
+        ob_clean();
         $img = $this->imageCreateFromType($file);
         header("Content-type: image/".$file[0]);
+
         if(!$img){
             $img = @imagecreatetruecolor($this->dWidth, $this->dHeight);
             imagepng($img);
@@ -144,7 +146,6 @@ class JMBImage {
             exit;
         }
 
-        imagepng($img);
         $this->imageType($img, $file[0]);
         imagedestroy($img);
         exit;

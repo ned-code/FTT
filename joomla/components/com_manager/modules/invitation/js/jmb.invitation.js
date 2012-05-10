@@ -123,8 +123,8 @@ JMBInvitation.prototype = {
 				select = jQuery('<select name="friends"><option value="default">Facebook Friend</option></select>');
 				jQuery(friends_div).append(select);
 				jQuery(res.data).each(function(i,friend){
-                    if(parseInt(friend.id) in storage.usertree.users) return false;
-					jQuery(select).append('<option value="'+friend.id+'">'+friend.name+'</option>');	
+                    if(!storage.usertree.users || parseInt(friend.id) in storage.usertree.users) return false;
+                    jQuery(select).append('<option value="'+friend.id+'">'+friend.name+'</option>');
 				});
 				jQuery(select).change(function(){
 					option = jQuery(this).find(':selected');
@@ -149,6 +149,7 @@ JMBInvitation.prototype = {
 	},
 	send:function(form, json){
 		var	module = this;
+        var transportation = false;
         module.ajaxForm({
             target:form,
             method: 'sendInvitation',
@@ -165,11 +166,15 @@ JMBInvitation.prototype = {
                 }
             },
             beforeSubmit:function(){
-
+                if(transportation) return false;
+                storage.progressbar.loading();
+                transportation = true;
             },
-            success:function(){
+            success:function(json){
                 alert(json.message);
-                storage.overlay.hide();
+                storage.overlay.hide()
+                storage.progressbar.off();
+                transportation = false;
             }
         });
 	}
