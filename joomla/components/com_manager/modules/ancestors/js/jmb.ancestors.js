@@ -22,6 +22,7 @@ function JMBAncestorsObject(obj){
 	module.spouse = null;
 	module.nodes = null;
 	module.clickNode = null;
+    module.targetNode = null;
 
 	jQuery(home_button).click(function(){
 		if(module.user==null) return false;
@@ -90,7 +91,7 @@ JMBAncestorsObject.prototype = {
 				jQuery(label).find('.jit-node-arrow').click(function(){
 					id = parseInt(jQuery(this).attr('id'));
 					if(id!=0){
-						module.clickNode = jQuery(this).attr('clickedId');
+						module.targetNode = id;
 						module.st.onClick(id);
 					}
 				});
@@ -108,7 +109,12 @@ JMBAncestorsObject.prototype = {
 					button_facebook:false,
 					button_edit:false,
 					gedcom_id:node.id,
-					target:object
+					target:object,
+                    afterEditorClose:function(){
+                        storage.tooltip.cleaner(function(){
+                            module.render();
+                        });
+                    }
 				});
 			},
 			edit:function(){
@@ -117,7 +123,12 @@ JMBAncestorsObject.prototype = {
                     button_edit:false,
                     button_facebook:false,
                     gedcom_id:node.id,
-					target:object
+					target:object,
+                    afterEditorClose:function(){
+                        storage.tooltip.cleaner(function(){
+                            module.render();
+                        });
+                    }
 				});
 			},
 			facebook:function(){
@@ -212,8 +223,8 @@ JMBAncestorsObject.prototype = {
 				sb._('</tr>')
 			sb._('</table>');
 			//style="display:none;"
-			sb._('<div id="')._(prew(node.data.ftt_storage.prew))._('" clickedId="')._(node.data.ftt_storage.id)._('" class="jit-node-arrow left">&nbsp;</div>');
-			sb._('<div id="')._((node.data.ftt_storage.next?node.data.ftt_storage.next:0))._('" clickedId="')._(node.data.ftt_storage.id)._('" class="jit-node-arrow right">&nbsp;</div>');
+			sb._('<div id="')._(prew(node.data.ftt_storage.prew))._('" class="jit-node-arrow left">&nbsp;</div>');
+			sb._('<div id="')._((node.data.ftt_storage.next?node.data.ftt_storage.next:0))._('" class="jit-node-arrow right">&nbsp;</div>');
 		sb._('</div>');
 		sb._('</div></div>');
 		return sb.result();
@@ -426,15 +437,17 @@ JMBAncestorsObject.prototype = {
 			callback();
 		}
 	},
-	render:function(tree){
+	render:function(){
 		var	module = this,
 			st = module.st;
+        module.tree = module.getTree(module.user);
+
 		//load json data
-		st.loadJSON(tree);
+		st.loadJSON(module.tree);
 		//compute node positions and layout
 		st.compute();
 		//emulate a click on the root node.
-		st.onClick(st.root);
+		st.select(module.targetNode);
 	}
 }
 
