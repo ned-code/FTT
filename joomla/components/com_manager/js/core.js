@@ -139,6 +139,14 @@ storage.usertree.parse = function(object){
 		})(),
         is_editable:(user.facebook_id == '0' || user.gedcom_id == storage.usertree.gedcom_id),
         is_deletable:(user.creator == storage.usertree.gedcom_id || user.gedcom_id == storage.usertree.gedcom_id),
+        is_birth:(function(){
+            var event = user['birth'];
+            if(event != null){
+                var date = event.date;
+                return ( date[0]!=null || date[1] != null || date[2] != null )?1:0;
+            }
+            return 0;
+        })(),
         is_death:(function(){
             var event = user['death'];
             if(event!=null){
