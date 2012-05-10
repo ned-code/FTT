@@ -47,7 +47,6 @@ function JMBFamiliesObject(obj){
 	module.usertree = storage.usertree.pull;
 
     jQuery(module.parent).ready(function(){
-
         module.render(module.start_id);
         storage.core.modulesPullObject.unset('JMBFamiliesObject');
     });
@@ -136,7 +135,7 @@ JMBFamiliesObject.prototype = {
 			}
 		}
 		return count;	
-	},
+    },
 	_first:function(gedcom_id){
 		var	module = this;
 			object = module.usertree[gedcom_id],
@@ -388,12 +387,16 @@ JMBFamiliesObject.prototype = {
 				sb._('<div class="jmb-families-child-name">')._(module._getName(object))._('</div>');
 				sb._('<div class="jmb-families-child-date">')._((date.length!=0)?date:"....")._('</div>');
 			sb._('</div>');
-			if(module._childrensCount(families)!=0){
-				sb._('<div id="')._(gedcom_id)._('" class="')._(child_button_active)._('">&nbsp;</div>');
-			} else {
-				sb._('<div id="null" class="')._(child_button_unactive)._('">&nbsp;</div>');
-			}
-			
+
+            if(module.start_id == gedcom_id){
+                sb._('<div id="')._(gedcom_id)._('" class="')._(child_button_active)._('">&nbsp;</div>');
+            } else {
+                if(module._childrensCount(families)!=0){
+                    sb._('<div id="')._(gedcom_id)._('" class="')._(child_button_active)._('">&nbsp;</div>');
+                } else {
+                    sb._('<div id="null" class="')._(child_button_unactive)._('">&nbsp;</div>');
+                }
+            }
 			sb._('<div class="')._(arrow_class)._('" style="background:#')._(bcolor)._(';">&nbsp</div>');
 		return jQuery(sb.result());
 	},
