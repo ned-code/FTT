@@ -126,9 +126,7 @@ JMBTooltip.prototype = {
 							sb._('</td>');
 						sb._('</tr>');
 					sb._('</table>');
-					if(settings.button_edit){
-                        sb._('<div class="jmb-tooltip-view-switch"><span id="')._(get.getcom_id)._('">')._(message.FTT_MOD_TOOLTIPS_SHOW_FULL_PROFILE)._('</span></div>');
-                    }
+                    sb._('<div class="jmb-tooltip-view-switch"><span id="')._(get.getcom_id)._('">')._(message.FTT_MOD_TOOLTIPS_SHOW_FULL_PROFILE)._('</span></div>');
 				sb._('</div>');
 				if(media!=null&&media.photos.length!=0){
 					sb._('<div class="jmb-tooltip-view-images">');
