@@ -69,7 +69,7 @@ function JMBHeader(){
 					if(fn.get.is_iframe()){
 						src = "http://www.familytreetop.com/index.php/myfamily";
 					} else {
-						src = "http://apps.facebook.com/fmybranches/";
+						src = "http://apps.facebook.com/familytreetop/";
 					}
 					window.top.location.href = src;
 				});
