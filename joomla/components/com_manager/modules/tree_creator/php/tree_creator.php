@@ -77,7 +77,7 @@ class TreeCreator {
 		}
 	}
 	
-	protected function user($args, $facebook_id){
+	protected function user($args, $facebook_id, $tree_id){
 		$individual = $this->host->gedcom->individuals->create();
 		$individual->FacebookId = $facebook_id;
 		$individual->Gender = strtoupper($args->gender);
@@ -85,7 +85,10 @@ class TreeCreator {
 		$individual->MiddleName = $args->middle_name;
 		$individual->LastName = $args->last_name;
 		$individual->Nick = $args->nick;
+        $individual->TreeId = $tree_id;
 		$individual->Id = $this->host->gedcom->individuals->save($individual);
+        $individual->Creator  = $individual->Id;
+        $this->host->gedcom->individuals->update($individual);
 		$this->individuals_events($individual, get_object_vars($args));
 		return $individual;
 	}
@@ -93,32 +96,33 @@ class TreeCreator {
 	public function create_tree($args){
 		$session = JFactory::getSession();
 		$facebook_id = $session->get('facebook_id');
-		$args = json_decode($args);	
+		$args = json_decode($args);
+        $tree_name = $args->self->first_name." ".$args->self->last_name." Tree";
 
-		$self = $this->user($args->self, $facebook_id);
-		$mother = $this->user($args->mother, 0);
-		$father = $this->user($args->father, 0);
-		
+        //create tree
+        $sql_string = "INSERT INTO #__mb_tree (`id`, `name`) VALUES (NULL, ?)";
+        $this->db->setQuery($sql_string, $tree_name);
+        $this->db->query();
+        $tree_id = $this->db->insertid();
+
+		$self = $this->user($args->self, $facebook_id, $tree_id);
+		$mother = $this->user($args->mother, 0, $tree_id);
+		$father = $this->user($args->father, 0, $tree_id);
+
+
 		//create family;
 		$family = new Family();
 		$family->Sircar = $father;
 		$family->Spouse = $mother;
 		$family->Id = $this->host->gedcom->families->save($family);
-		
+
+        if(!$family->Id){
+            return false;
+        }
+
 		//addchild
 		$this->host->gedcom->families->addChild($family->Id, $self->Id);
-		
-		//create tree
-		$sql_string = "INSERT INTO #__mb_tree (`id`, `name`) VALUES (NULL, ?)";
-		$this->db->setQuery($sql_string, $self->FirstName.' '.$self->LastName.' Tree');
-		$this->db->query();
-		$tree_id = $this->db->insertid();
-		
-		//link users with tree
-		$sql_string = "INSERT INTO #__mb_tree_links (`individuals_id`, `tree_id`, `type`) VALUES (?, ?, 'OWNER'),(?, ?, 'MEMBER'),(?, ?, 'MEMBER')";
-		$this->db->setQuery($sql_string, $self->Id, $tree_id, $mother->Id, $tree_id, $father->Id, $tree_id);
-		$this->db->query();
-		
+
 		$session->set('gedcom_id', $self->Id);
 		$session->set('tree_id', $tree_id);
 		$session->set('permission', 'OWNER');

@@ -38,17 +38,20 @@ class FamiliesList{
         		$id1 = ($family->Sircar != null && $family->Sircar->Id) ? $family->Sircar->Id : '';
         		$id2 = ($family->Spouse != null && $family->Spouse->Id) ? $family->Spouse->Id : '';
 
-			if($family->Sircar != null){
-				if($family->Sircar->Gender == 'M'){ $husb = $id1; $wife = $id2;}else{$husb = $id2; $wife = $id1;}
-			}elseif($family->Spouse != null){
-				if($family->Spouse->Gender == 'F'){ $husb = $id1; $wife = $id2;}else{$husb = $id2; $wife = $id1;}
-			}else{
-			    $husb = NULL;
-			    $wife = NULL;
-			}
+                if($family->Sircar != null){
+                    if($family->Sircar->Gender == 'M'){ $husb = $id1; $wife = $id2;}else{$husb = $id2; $wife = $id1;}
+                }elseif($family->Spouse != null){
+                    if($family->Spouse->Gender == 'F'){ $husb = $id1; $wife = $id2;}else{$husb = $id2; $wife = $id1;}
+                }else{
+                    $husb = NULL;
+                    $wife = NULL;
                 }
-		$sqlString = "INSERT INTO #__mb_families (`id`, `husb`, `wife`,`type`) VALUES (NULL, ?, ?, ?)";
-		$this->ajax->setQuery($sqlString, $husb, $wife, $family->Type);
+            } else {
+                return false;
+            }
+
+            $sqlString = "INSERT INTO #__mb_families (`id`, `husb`, `wife`,`type`) VALUES (NULL, ?, ?, ?)";
+            $this->ajax->setQuery($sqlString, $husb, $wife, $family->Type);
         	$this->ajax->query();
         	return $this->ajax->insertid();
         }

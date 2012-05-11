@@ -71,8 +71,8 @@ class IndividualsList{
         public function save($pers){
         	if($pers==null){ return false; }
         	//insert to individuals table;
-        	$sqlString = 'INSERT INTO #__mb_individuals (`id`, `fid`, `sex`,`creator`,`create_time`) VALUES (NULL,?,?,?,NOW())';
-        	$this->ajax->setQuery($sqlString, $pers->FacebookId, $pers->Gender, $pers->Creator);
+        	$sqlString = 'INSERT INTO #__mb_individuals (`id`, `fid`, `sex`,`create_time`) VALUES (NULL,?,?,NOW())';
+        	$this->ajax->setQuery($sqlString, $pers->FacebookId, $pers->Gender);
         	$this->ajax->query();
         	$id = $this->ajax->insertid();
         	//get params and insert to names table;
@@ -92,7 +92,7 @@ class IndividualsList{
         public function update($pers){
         	if($pers&&$pers->Id){
         		//update to individuals table;
-        		$this->ajax->setQuery('UPDATE #__mb_individuals SET `sex`=?,`fid`=?, `change`=NOW() WHERE `id`=?', $pers->Gender,$pers->FacebookId,$pers->Id);
+        		$this->ajax->setQuery('UPDATE #__mb_individuals SET `sex`=?,`fid`=?,`creator`=?,`change`=NOW() WHERE `id`=?', $pers->Gender, $pers->FacebookId, $pers->Creator, $pers->Id);
         		$this->ajax->query();
         		//update to names table;
         		$givn = (($pers->FirstName!='')?$pers->FirstName:'').' '.(($pers->MiddleName!='')?$pers->MiddleName:'');
