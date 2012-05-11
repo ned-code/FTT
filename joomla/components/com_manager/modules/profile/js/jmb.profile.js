@@ -1024,7 +1024,7 @@ JMBProfile.prototype = {
             dialogBox = fn.getViewObject('dialogCont'),
             dialogButton = fn.getViewObject('dialogButton');
 
-        var gedcom_id = args.object.user.gedcom_id;
+        var gedcom_id = (typeof(args.gedcom_id)=='undefined')?args.object.user.gedcom_id:args.gedcom_id;
         fn.setGedcomId(/*args.gedcom_id*/gedcom_id);
 
         if(!module.gedcom_id) return false;
