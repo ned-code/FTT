@@ -968,6 +968,9 @@ JMBProfile.prototype = {
                         var args = type+','+module.gedcom_id+','+method;
                         module.functions.ajax('delete', args, function(res){
                             var json = jQuery.parseJSON(res.responseText);
+                            if(module.gedcom_id = storage.usertree.gedcom_id){
+                                window.location.reload();
+                            }
                             if(!json.deleted){
                                 module.update(json.objects);
                             } else {

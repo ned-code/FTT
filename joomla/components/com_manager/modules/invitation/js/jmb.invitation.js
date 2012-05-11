@@ -107,6 +107,7 @@ JMBInvitation.prototype = {
 		var	module = this,
 			div = this.createDiv(json),
 			form = jQuery(div).find('form'),
+            gedcom_id = json.user.gedcom_id,
 			friends_div,
 			select,
 			option,
@@ -139,8 +140,12 @@ JMBInvitation.prototype = {
                                 var json = jQuery.parseJSON(res.responseText);
                                 if(typeof(json.success) != 'undefined'){
                                     if(json.success){
-                                        var gedcom_id = json.user.gedcom_id;
-                                        module.sendRequestToInviteFacebookFriend(id, function () {
+                                        module.sendRequestToInviteFacebookFriend(id, function (r) {
+                                            if(r == null) {
+                                                jQuery(select).find('option[value="default"]').attr("selected", "selected");
+                                                storage.progressbar.off();
+                                                module.transportation = false;
+                                            }
                                             module.ajax('inviteFacebookFriend', id + ';' + gedcom_id, function (res) {
                                                 var json = jQuery.parseJSON(res.responseText);
                                                 if (typeof(json.success) !== 'undefined') {
@@ -151,6 +156,7 @@ JMBInvitation.prototype = {
                                                 jQuery(select).find('option[value="default"]').attr("selected", "selected");
                                                 storage.progressbar.off();
                                                 module.transportation = false;
+                                                storage.overlay.hide();
                                             });
                                         });
                                     } else {

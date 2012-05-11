@@ -374,9 +374,14 @@ class JMBProfile {
         $owner_id = $session->get('gedcom_id');
         $tree_id = $session->get('tree_id');
         $deleted = false;
+
+        $user = $this->host->gedcom->individuals->get($gedcom_id);
+        if($user->FacebookId != '0'){
+            $this->host->gedcom->individuals->unlink($tree_id, $gedcom_id);
+        }
+
         switch($type){
             case "unlink":
-                $this->host->gedcom->individuals->unlink($tree_id, $gedcom_id);
                 $objects = $this->host->usertree->getUser($tree_id, $owner_id, $gedcom_id);
             break;
 
@@ -397,6 +402,7 @@ class JMBProfile {
                         $session->clear('permission');
                         $session->clear('facebook_id');
                         $session->set('alias', 'home');
+                        $objects = array();
                     break;
 
                     case "deleteBranch":

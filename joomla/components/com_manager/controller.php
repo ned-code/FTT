@@ -209,6 +209,7 @@ class JMBController extends JController
 			case "first-page":
                 if($invitation_token && $facebook_id) return 'invitation';
 				if(!$facebook_id) return "login";
+                if($facebook_id && $user_data) return "myfamily";
 				return "first-page";
 			break;
 			
@@ -320,7 +321,6 @@ class JMBController extends JController
 
             $session = JFactory::getSession();
             if((bool)$canvas){
-                $session->set('alias', 'myfamily');
                 header('Location: https://www.facebook.com/dialog/oauth?client_id='.JMB_FACEBOOK_APPID.'&redirect_uri='.JURI::base().'index.php/myfamily');
                 exit;
             }
