@@ -99,7 +99,7 @@ JMBTooltip.prototype = {
 						sb._('<tr>');
 							sb._('<td class="jmb-tooltip-view-avatar">')
 							sb._('<div class="image">')._(module._avatar(settings));
-								if(settings.button_edit){
+								if(jQuery(document.body).attr('_type') != 'famous_family' && settings.button_edit){
 									sb._('<div class="jmb-tooltip-view-edit">&nbsp;</div>');
 								}
 								if(user.facebook_id!=='0'&&settings.button_facebook){
@@ -134,7 +134,7 @@ JMBTooltip.prototype = {
 					sb._('</div>');
 				}
 			sb._('</div>');
-			if(user.facebook_id==='0' && get.turns < 100 && get.is_alive){
+			if(jQuery(document.body).attr('_type') != 'famous_family' && user.facebook_id==='0' && get.turns < 100 && get.is_alive){
 				sb._('<div class="jmb-tooltip-view-send">');
 					sb._('<table>');			
 						sb._('<tr>');
@@ -272,25 +272,27 @@ JMBTooltip.prototype = {
 				}
 			});
 		});
-		offset = jQuery(cont).find('div.jmb-tooltip-view-edit').offset();
-		storage.tooltip.render('edit', {
-            sub_item:true,
-			gedcom_id:settings.gedcom_id,
-			target:jQuery(cont).find('div.jmb-tooltip-view-edit'),
-			preBuild:function(){
-				offset = jQuery('div.bt-content').find('div.jmb-tooltip-view-edit').offset();
-			},
-			preShow:function(box){
-				if(offset!=null){
-					jQuery(box).offset({top:offset.top + 20 , left:offset.left});
-				}
-			},
-            afterEditorClose:function(){
-                if(typeof(st.afterEditorClose)==='function'){
-                    st.afterEditorClose();
-                }
-             }
-		});
+        if(module.loginType != 'famous_family'){
+            offset = jQuery(cont).find('div.jmb-tooltip-view-edit').offset();
+            storage.tooltip.render('edit', {
+                sub_item:true,
+                gedcom_id:settings.gedcom_id,
+                target:jQuery(cont).find('div.jmb-tooltip-view-edit'),
+                preBuild:function(){
+                    offset = jQuery('div.bt-content').find('div.jmb-tooltip-view-edit').offset();
+                },
+                preShow:function(box){
+                    if(offset!=null){
+                        jQuery(box).offset({top:offset.top + 20 , left:offset.left});
+                    }
+                },
+                afterEditorClose:function(){
+                    if(typeof(st.afterEditorClose)==='function'){
+                        st.afterEditorClose();
+                    }
+                 }
+            });
+        }
 	},
 	_button_edit:function(cont, settings){
 		var	module = this,

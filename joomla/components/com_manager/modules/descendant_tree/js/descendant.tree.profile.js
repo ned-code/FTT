@@ -53,7 +53,7 @@ DescendantTreeProfile.prototype = {
 						sb._('<tr>');
 							sb._('<td><div class="jmb-dtp-body-info-avatar">');
 								sb._(module.avatar(ch));
-                                if(parse.is_editable){
+                                if(parse.is_editable && jQuery(document.body).attr('_type') != 'famous_family'){
 								    sb._('<div id="edit-button" class="jmb-dtp-body-edit-button">&nbsp;</div>');
                                 }
 								if(parse.facebook_id != '0'){
@@ -125,11 +125,9 @@ DescendantTreeProfile.prototype = {
 							sb._('</td>');
 						sb._('</tr>');
 					sb._('</table>');
-					if(parse.is_editable){
-                        sb._('<div class="jmb-dtp-body-info-switch">');
-                            sb._(message.FTT_MOD_DESCEDNATS_TREE_SHOW_FULL_PROFILE);
-                        sb._('</div>');
-                    }
+                    sb._('<div class="jmb-dtp-body-info-switch">');
+                        sb._(message.FTT_MOD_DESCEDNATS_TREE_SHOW_FULL_PROFILE);
+                    sb._('</div>');
 				sb._('</div>');
 				sb._('<div class="jmb-dtp-body-media">')
 					if(media!=null){
@@ -139,7 +137,7 @@ DescendantTreeProfile.prototype = {
 					}
 				sb._('</div>');
 			sb._('</div>');
-			if(parse.facebook_id=='0' && parse.is_alive && parse.turns < 120){
+			if(jQuery(document.body).attr('_type') != 'famous_family' && parse.facebook_id=='0' && parse.is_alive && parse.turns < 120){
 				sb._('<div class="jmb-dtp-footer">');
 					sb._('<table>');			
 						sb._('<tr>');

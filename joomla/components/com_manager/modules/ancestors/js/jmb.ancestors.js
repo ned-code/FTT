@@ -23,6 +23,7 @@ function JMBAncestorsObject(obj){
 	module.nodes = null;
 	module.clickNode = null;
     module.targetNode = null;
+    module.loginType = jQuery(document.body).attr('_type');
 
 	jQuery(home_button).click(function(){
 		if(module.user==null) return false;
@@ -195,7 +196,7 @@ JMBAncestorsObject.prototype = {
 				sb._('<tr>');
 					sb._('<td>');
 						sb._('<div id="')._(parse.gedcom_id)._('-view" class="photo">')._(module.avatar(object));
-							if(parse.is_editable){
+							if(module.loginType != 'famous_family' && parse.is_editable){
                                 sb._('<div id="')._(parse.gedcom_id)._('-edit" class="jit-edit-button">&nbsp;</div>');
                             }
                             if(parse.facebook_id != '0'){
