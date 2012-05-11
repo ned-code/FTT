@@ -1,5 +1,6 @@
 function JMBInvitation(){
 	this.path = "components/com_manager/modules/invitation/images/";
+    this.transportation = false;
 }
 
 JMBInvitation.prototype = {
@@ -110,46 +111,72 @@ JMBInvitation.prototype = {
 			select,
 			option,
 			id,
-			name,
-			data;
+			name;
 			
 		module.send(form, json);
 
 		storage.overlay.render({object:div, width:450, height:255});
 		storage.overlay.show();
-		FB.api('me/friends', function(res){
-			if(res.data){
-				friends_div = jQuery(div).find('#jmb_facebook_friends');
-				select = jQuery('<select name="friends"><option value="default">Facebook Friend</option></select>');
-				jQuery(friends_div).append(select);
-				jQuery(res.data).each(function(i,friend){
-                    if(!storage.usertree.users || parseInt(friend.id) in storage.usertree.users) return false;
-                    jQuery(select).append('<option value="'+friend.id+'">'+friend.name+'</option>');
-				});
-				jQuery(select).change(function(){
-					option = jQuery(this).find(':selected');
-					id = jQuery(option).val();
-					name = jQuery(option).text();
-					if(confirm('You want to send invitation in application to '+name)){
-						module.sendRequestToInviteFacebookFriend(id, function(){
-							module.ajax('inviteFacebookFriend', id+';'+json.user.gedcom_id, function(res){
-								var json = jQuery.parseJSON(res.responseText);
-								if(json.success){
-									alert('An invitation has been sent.');
-								}
-								storage.overlay.hide();
-							});	
-						});
-					} else {
-						jQuery(select).find('option[value="default"]').attr("selected", "selected");
-					}
-				});
-			}
-		});
+		FB.api('me/friends', function(res) {
+            if (!res.data) {
+            } else {
+                friends_div = jQuery(div).find('#jmb_facebook_friends');
+                select = jQuery('<select name="friends"><option value="default">Facebook Friend</option></select>');
+                jQuery(friends_div).append(select);
+                jQuery(res.data).each(function (i, friend) {
+                    if (!storage.usertree.users || parseInt(friend.id) in storage.usertree.users) return false;
+                    jQuery(select).append('<option value="' + friend.id + '">' + friend.name + '</option>');
+                });
+                jQuery(select).change(function () {
+                    option = jQuery(this).find(':selected');
+                    id = jQuery(option).val();
+                    name = jQuery(option).text();
+                    if(!module.transportation){
+                        if (confirm('You want to send invitation in application to ' + name)) {
+                            storage.progressbar.loading();
+                            module.transportation = true;
+                            module.ajax('checkFacebookIdOnUse', id, function(res){
+                                var json = jQuery.parseJSON(res.responseText);
+                                if(typeof(json.success) != 'undefined'){
+                                    if(json.success){
+                                        var gedcom_id = json.user.gedcom_id;
+                                        module.sendRequestToInviteFacebookFriend(id, function () {
+                                            module.ajax('inviteFacebookFriend', id + ';' + gedcom_id, function (res) {
+                                                var json = jQuery.parseJSON(res.responseText);
+                                                if (typeof(json.success) !== 'undefined') {
+                                                    alert('An invitation has been sent.');
+                                                } else {
+                                                    alert(json.message);
+                                                }
+                                                jQuery(select).find('option[value="default"]').attr("selected", "selected");
+                                                storage.progressbar.off();
+                                                module.transportation = false;
+                                            });
+                                        });
+                                    } else {
+                                        alert(json.message.replace('%%', name));
+                                        jQuery(select).find('option[value="default"]').attr("selected", "selected");
+                                        storage.progressbar.off();
+                                        module.transportation = false;
+                                    }
+                                } else {
+                                    jQuery(select).find('option[value="default"]').attr("selected", "selected");
+                                    storage.progressbar.off();
+                                    module.transportation = false;
+                                }
+                            });
+                        } else {
+                            jQuery(select).find('option[value="default"]').attr("selected", "selected");
+                        }
+                    } else {
+                        jQuery(select).find('option[value="default"]').attr("selected", "selected");
+                    }
+                });
+            }
+        });
 	},
 	send:function(form, json){
 		var	module = this;
-        var transportation = false;
         module.ajaxForm({
             target:form,
             method: 'sendInvitation',
@@ -166,15 +193,22 @@ JMBInvitation.prototype = {
                 }
             },
             beforeSubmit:function(){
-                if(transportation) return false;
+                if(module.transportation) return false;
                 storage.progressbar.loading();
-                transportation = true;
+                module.transportation = true;
             },
             success:function(json){
-                alert(json.message);
-                storage.overlay.hide()
-                storage.progressbar.off();
-                transportation = false;
+                if(typeof(json.success) != 'undefined'){
+                    alert(json.message);
+                    if(json.success){
+                        storage.overlay.hide()
+
+                    }
+                    storage.progressbar.off();
+                    module.transportation = false;
+                }
+
+
             }
         });
 	}

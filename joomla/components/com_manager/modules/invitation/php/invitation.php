@@ -12,14 +12,13 @@ class JMBInvitation {
 		$this->host = new Host('Joomla');
 	}
 
-    protected function checkMailOnUse($mail, $tree_id){
+    protected function checkMailOnUse($mail){
         $sql_string = "SELECT i.id, i.fid, u.email
                         FROM #__mb_individuals AS i
-                        LEFT JOIN #__mb_tree_links l ON l.individuals_id = i.id
                         LEFT JOIN #__jfbconnect_user_map AS map ON map.fb_user_id = i.fid
                         LEFT JOIN #__users AS u ON u.id = map.j_user_id
-                        WHERE l.tree_id = ? AND i.fid !=0";
-        $this->host->ajax->setQuery($sql_string, $tree_id);
+                        WHERE i.fid !=0";
+        $this->host->ajax->setQuery($sql_string);
         $rows = $this->host->ajax->loadAssocList();
         if(!empty($rows)){
             foreach($rows as $row){
@@ -31,34 +30,34 @@ class JMBInvitation {
         return false;
     }
 
+
 	/**
 	*
 	*/
 	public function sendInvitation($gedcom_id){
         require_once("Mail.php");
 		$session = JFactory::getSession();
-		$facebook_id = $session->get('facebook_id');
 		$owner_id = $session->get('gedcom_id');
         $tree_id = $session->get('tree_id');
 
         $jfbcLibrary = JFBConnectFacebookLibrary::getInstance();
         $me = $jfbcLibrary->api('/me');
 
+        $usertree = $this->host->usertree->load($tree_id, $owner_id);
+        $owner = $usertree[$owner_id];
+        $recipient = $usertree[$gedcom_id];
 
         $to = JRequest::getVar('send_email');
 
-        if($this->checkMailOnUse($to, $tree_id)){
-            return json_encode(array('message'=>'This email is already being used in this tree.'));
+        if($this->checkMailOnUse($to)){
+            $message = "Sorry, but ".$recipient['user']['first_name']." is a member of another family tree and multiple trees membership is disabled in beta-version of FamilyTreeTop.";
+            return json_encode(array('success'=>false,'message'=>$message));
         }
-
-		$usertree = $this->host->usertree->load($tree_id, $owner_id);
-		$owner = $usertree[$owner_id];
-		$recipient = $usertree[$gedcom_id];
 
         $relation = $this->host->gedcom->relation->get($tree_id, $gedcom_id, $owner_id);
 
 		#senders e-mail adress
-		if(!$to) return;
+		if(!$to) return false;
 		
 		$value = $recipient['user']['gedcom_id'].','.$tree_id;	
 		
@@ -103,18 +102,39 @@ class JMBInvitation {
 		$mail = $smtp->send($to, $headers, $mail_body);
 
 		if (PEAR::isError($mail)) {
-			return json_encode(array('message'=>'Message delivery failed...'));
+			return json_encode(array('success'=>false,'message'=>'Message delivery failed...'));
 			
 		} else {
-			return json_encode(array('message'=>'Message successfully sent!'));
+			return json_encode(array('success'=>true,'message'=>'Message successfully sent!'));
 		}
 	}
+
+    public function checkFacebookIdOnUse($facebook_id){
+        $sql_string = "SELECT i.id, i.fid, u.email
+                        FROM #__mb_individuals AS i
+                        LEFT JOIN #__jfbconnect_user_map AS map ON map.fb_user_id = i.fid
+                        LEFT JOIN #__users AS u ON u.id = map.j_user_id
+                        WHERE i.fid !=0";
+        $this->host->ajax->setQuery($sql_string);
+        $rows = $this->host->ajax->loadAssocList();
+        if(!empty($rows)){
+            foreach($rows as $row){
+                if($row['fid'] != null && $row['fid'] == $facebook_id){
+                    $message = "Sorry, but %% is a member of another family tree and multiple trees membership is disabled in beta-version of FamilyTreeTop.";
+                    return json_encode(array('success'=>false,'message'=>$message));
+                }
+            }
+        }
+        return json_encode(array('success'=>true));
+    }
+
+
 	
 	public function inviteFacebookFriend($args){
 		$args = explode(';', $args);
         $session = JFactory::getSession();
         $tree_id = $session->get('tree_id');
-		$individ = $this->host->gedcom->individuals->get($args[1]);
+        $individ = $this->host->gedcom->individuals->get($args[1]);
 		if($tree_id&&$tree_id==$individ->TreeId){
 			$sql_string ="UPDATE  #__mb_individuals SET  `fid` = ? WHERE  `id` = ?";
 			$this->host->ajax->setQuery($sql_string, $args[0], $args[1]);
