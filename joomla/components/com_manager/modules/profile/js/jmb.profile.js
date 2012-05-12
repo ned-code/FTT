@@ -957,7 +957,7 @@ JMBProfile.prototype = {
                     var mes, method = 'deleteBranch';
                     if(module.gedcom_id != storage.usertree.gedcom_id){
                         mes = module.message.FTT_MOD_PROFILE_EDITOR_DELETE_CONFIRM;
-                    } else if(storage.usertree.getUsersLength() == 1){
+                    } else if(storage.usertree.getUsersLength() == 0){
                         mes = module.message.FTT_MOD_PROFILE_EDITOR_DELETE_TREE_CONFIRM;
                         method = 'deleteTree';
                     } else {
@@ -968,7 +968,7 @@ JMBProfile.prototype = {
                         var args = type+','+module.gedcom_id+','+method;
                         module.functions.ajax('delete', args, function(res){
                             var json = jQuery.parseJSON(res.responseText);
-                            if(module.gedcom_id = storage.usertree.gedcom_id){
+                            if(module.gedcom_id == storage.usertree.gedcom_id){
                                 window.location.reload();
                             }
                             if(!json.deleted){
