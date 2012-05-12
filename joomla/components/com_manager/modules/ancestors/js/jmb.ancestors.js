@@ -27,7 +27,6 @@ function JMBAncestorsObject(obj){
 
 	jQuery(home_button).click(function(){
 		if(module.user==null) return false;
-		if(module.st.clickedNode.id == module.st.root) return false;
         module.st.select(module.st.root);
         return false;
 	})
@@ -434,6 +433,8 @@ JMBAncestorsObject.prototype = {
 		//emulate a click on the root node.
 		st.onClick(st.root);
 
+        module.targetNode = st.root;
+
 		if(callback){
 			callback();
 		}
@@ -441,6 +442,7 @@ JMBAncestorsObject.prototype = {
 	render:function(){
 		var	module = this,
 			st = module.st;
+
         module.tree = module.getTree(module.user);
 
 		//load json data
