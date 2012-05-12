@@ -319,6 +319,7 @@ JMBAncestorsObject.prototype = {
 		var	module = this,
 			st,
 			click;
+
 		//Create a new ST instance
 		st = new $jit.ST({
 			injectInto: 'jit',
@@ -431,7 +432,7 @@ JMBAncestorsObject.prototype = {
 		//compute node positions and layout
 		st.compute();
 		//emulate a click on the root node.
-		st.onClick(st.root);
+		st.select(st.root);
 
         module.targetNode = st.root;
 

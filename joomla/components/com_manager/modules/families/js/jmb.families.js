@@ -532,10 +532,9 @@ JMBFamiliesObject.prototype = {
 			info,
 			spouse = [],
 			i;
-		
-		if(module.cont!=null){
-			jQuery(module.parent).html('');
-		}
+
+        jQuery(module.parent).html('');
+
 		module.cont = cont;
 		module.now_id = gedcom_id;
 		
@@ -559,7 +558,9 @@ JMBFamiliesObject.prototype = {
 					jQuery(cont[3]).append(spouse[i]);
 				}
 				jQuery(cont[3]).addClass('active');
-				jQuery(cont[3]).scrollbar();
+				setTimeout(function(){
+                    jQuery(cont[3]).scrollbar();
+                }, 1);
 			} else {
 				jQuery(cont[3]).removeClass('active');
 			}		
