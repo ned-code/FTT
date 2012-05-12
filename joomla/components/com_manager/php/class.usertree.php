@@ -533,8 +533,12 @@ class JMBUserTree {
         $parents = $this->gedcom->individuals->getParents($gedcom_id);
         $families = $this->gedcom->families->getPersonFamilies($gedcom_id);
         if(!empty($parents)){
-            $environment[] = $parents['husb'];
-            $environment[] = $parents['wife'];
+            if(!empty($parents['husb'])){
+                $environment[] = $parents['husb'];
+            }
+            if(!empty($parents['wife'])){
+                $environment[] = $parents['wife'];
+            }
         }
         if(!empty($families)){
             foreach($families as $family){
@@ -757,6 +761,7 @@ class JMBUserTree {
         $this->gedcom->individuals->delete($gedcom_id);
         $this->clearEmptyFamiliesInDB();
     }
+
 
 }
 

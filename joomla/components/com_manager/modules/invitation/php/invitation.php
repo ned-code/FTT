@@ -68,15 +68,15 @@ class JMBInvitation {
        	$this->host->ajax->query();
 		
 		#recipient  
-		$from = "<familytreetop@gmail.com>";
+		$from = "<no-reply@familytreetop.com>";
 
 		#subject
 		$subject = "Family Treetop invitation.";  
 
 		$host = "ssl://smtp.gmail.com";
 		$port = "465";
-		$username = "familytreetop@gmail.com";
-		$password = "3d#@technology";
+		$username = "admin@familytreetop.com";
+		$password = "Famtr33!!";
 
         $mail_body = '<html>';
             $mail_body .= '<head>Family Treetop invitation.</head>';

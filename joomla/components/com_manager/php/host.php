@@ -303,6 +303,24 @@ class Host {
         }
         return $views;
     }
+
+    public function deleteJoomlaUser($facebook_id){
+        $sql_string = "SELECT * FROM #__jfbconnect_user_map as map WHERE fb_user_id = ?";
+        $this->ajax->setQuery($sql_string, $facebook_id);
+        $rows = $this->ajax->loadAssocList();
+
+        if(empty($rows)) return false;
+
+        $this->ajax->setQuery('DELETE FROM #__jfbconnect_user_map WHERE fb_user_id = ?', $facebook_id);
+        $this->ajax->query();
+
+        $this->ajax->setQuery('DELETE FROM #__users WHERE id = ?', $rows[0]['j_user_id']);
+        $this->ajax->query();
+
+        $this->ajax->setQuery('DELETE FROM #__user_usergroup_map WHERE user_id = ?', $rows[0]['j_user_id']);
+        $this->ajax->query();
+        return true;
+    }
 }
 
 ?>

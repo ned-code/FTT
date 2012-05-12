@@ -158,37 +158,35 @@ class JMBController extends JController
 		return $active->alias;
 	}
 
-    protected function set_invitation_token(){
+    protected function get_invitation_token($session){
         $token = JRequest::getVar('token');
-        if(!empty($token)){
-            $_SESSION['token'] = $token;
+        $c_token = $session->get('clear_token');
+        if(!isset($_COOKIE['token'])){
+             if(!empty($token)){
+                 setcookie('token', $token);
+             }
         }
-    }
-
-    protected function get_invitation_token(){
-        if(isset($_SESSION['token'])){
-            return $_SESSION['token'];
+        if($c_token){
+            $session->clear('clear_token');
+            setcookie('token', false);
+        }
+        if(isset($_COOKIE['token']) && $_COOKIE['token']){
+            return $_COOKIE['token'];
         }
         return false;
-    }
-
-    protected function clear_invitation_token(){
-        if(isset($_SESSION['token'])){
-            unset($_SESSION['token']);
-        }
     }
 
 	protected function get_alias($user_data, $facebook_id){
 		$session = JFactory::getSession();
 
-        $invitation_token = $this->get_invitation_token();
+        $invitation_token = $this->get_invitation_token($session);
 
 		$alias = $session->get('alias');
 		$login_method = $session->get('login_method');
 
-		switch($alias){
+        switch($alias){
 			case "invitation":
-				if(!$facebook_id) return "login";
+                if(!$invitation_token) return 'myfamily';
 				return "invitation";
 			break;
 			
@@ -201,20 +199,21 @@ class JMBController extends JController
 			break;
 		
 			case "login":
+                if($invitation_token) return "invitation";
 				if($facebook_id&&$user_data) return "myfamily";
 				if($facebook_id&&!$user_data) return "first-page";
 				return "login";
 			break;
 			
 			case "first-page":
-                if($invitation_token && $facebook_id) return 'invitation';
+                if($invitation_token) return 'invitation';
 				if(!$facebook_id) return "login";
                 if($facebook_id && $user_data) return "myfamily";
 				return "first-page";
 			break;
 			
 			case "myfamily":
-                if($invitation_token && $facebook_id) return 'invitation';
+                if($invitation_token) return 'invitation';
 				if(!empty($login_method)&&$login_method=="famous_family") {
 					return "myfamily";
 				}
@@ -224,6 +223,7 @@ class JMBController extends JController
 			break;
 			
 			default:
+                if($invitation_token) return "invitation";
 				if(!$facebook_id) return "login";
 				if(!$user_data) return "first-page";
 				return "myfamily";
@@ -235,6 +235,7 @@ class JMBController extends JController
         $session = JFactory::getSession();
         $alias = $this->get_alias($user_data, $facebook_id);
         $current_alias = $this->get_current_alias();
+
         if($alias != $current_alias){
             $this->location($alias);
         } else {
@@ -248,38 +249,7 @@ class JMBController extends JController
         exit;
     }
 
-	protected function invite($fid, $redirect=true){
-		    $host = new Host('joomla');
-        	$session = JFactory::getSession();
-            $token = $this->get_invitation_token();
 
-        	$sql = "SELECT value FROM #__mb_variables WHERE belongs=?";
-            $host->ajax->setQuery($sql, $token);
-            $rows = $host->ajax->loadAssocList();
-
-        	if($rows==null) $this->location('home');
-        	$args = explode(',', $rows[0]['value']);
-
-        	$sql = "UPDATE #__mb_tree_links SET `type`='USER' WHERE individuals_id =? AND tree_id=?";
-            $host->ajax->setQuery($sql, $args[0], $args[1]);
-            $host->ajax->query();
-        	
-        	$sql = "UPDATE #__mb_individuals SET `fid`=?,`change` = NOW(), `join_time`= NOW(), `creator` = ?  WHERE id=?";
-            $host->ajax->setQuery($sql, $fid, $args[0], $args[0]);
-            $host->ajax->query();
-        	
-        	$sql = "DELETE FROM #__mb_variables WHERE belongs=?";
-            $host->ajax->setQuery($sql, $token);
-            $host->ajax->query();
-
-            $this->clear_invitation_token();
-        	
-        	if($redirect){
-        		$session->set('alias', 'myfamily');
-        		$this->location('myfamily');
-        	}
-        	exit;
-        }
         
         protected function get_user_data($facebook_id){
         	if($facebook_id){
@@ -314,7 +284,6 @@ class JMBController extends JController
         	$task = JRequest::getVar('task');
         	$option = JRequest::getVar('option');
         	$canvas = JRequest::getVar('canvas');
-            $this->set_invitation_token();
 
         	if($option!='com_manager') exit();
         	if(strlen($task)!=0) return;
@@ -328,7 +297,8 @@ class JMBController extends JController
         	$host = new Host('joomla');
         	$jfb = JFBConnectFacebookLibrary::getInstance();
 
-            $facebook_id = $jfb->getUserId();
+            $me = $jfb->api('/me');
+            $facebook_id = $me['id'];
         	$user_data = $this->get_user_data($facebook_id);
 
             $alias = $this->check_location($user_data, $facebook_id);
@@ -336,7 +306,6 @@ class JMBController extends JController
             switch($alias){
                 case 'invitation':
                     $this->set_user_data($user_data);
-                    $this->invite($facebook_id);
                     break;
 
                 case 'first-page':
@@ -482,5 +451,3 @@ class JMBController extends JController
         }
 }
 ?>
-
-

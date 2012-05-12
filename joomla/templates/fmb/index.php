@@ -41,27 +41,30 @@ if($jfb_facebook_id){
 	$facebook_id = $session_facebook_id;
 }
 
+/*
+<!-- facebook meta tags -->
+<meta property="og:title" content="<?php echo $og_title; ?>" />
+<meta property="og:type" content="<?php echo $og_type; ?>" />
+<meta property="og:url" content="<?php echo $og_url; ?>" />
+<meta property="og:image" content="<?php echo $og_img; ?>" />
+<meta property="og:site_name" content="<?php echo $og_site_name; ?>" />
+<meta property="fb:app_id" content="<?php echo $fb_app_id; ?>" />
+<meta property="fb:admins" content="<?php echo $fb_admin_id; ?>"/>
+ */
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->language; ?>" lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>" >
 	<head>
 		<jdoc:include type="head" />
-		<!-- facebook meta tags -->
-		<meta property="og:title" content="<?php echo $og_title; ?>" />
-        	<meta property="og:type" content="<?php echo $og_type; ?>" />
-        	<meta property="og:url" content="<?php echo $og_url; ?>" />
-        	<meta property="og:image" content="<?php echo $og_img; ?>" />
-        	<meta property="og:site_name" content="<?php echo $og_site_name; ?>" />
-        	<meta property="fb:app_id" content="<?php echo $fb_app_id; ?>" />
-        	<meta property="fb:admins" content="<?php echo $fb_admin_id; ?>"/>
-        	<!-- joomla system stylesheet -->
-        	<link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/system/css/system.css?111" type="text/css" />
+      	    <!-- joomla system stylesheet -->
+            <link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/system/css/system.css?111" type="text/css" />
         	<!-- facebook script -->
         	<script src="http://connect.facebook.net/en_US/all.js?111"></script>
         	<!-- fmb template stylesheet -->
-                <link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/fmb/css/fmb.css?111" type="text/css"/>
-                <!-- fmb template script -->
-                <script type="text/javascript" src="<?php echo $this->baseurl ?>/templates/fmb/javascript/fmb.js"></script>
+            <link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/fmb/css/fmb.css?111" type="text/css"/>
+            <!-- fmb template script -->
+            <script type="text/javascript" src="<?php echo $this->baseurl ?>/templates/fmb/javascript/fmb.js"></script>
 	</head>
 	<body _alias="<?php echo $alias; ?>" _baseurl="<?php echo $base_url; ?>" _fb="<?php echo ($facebook_id)?$facebook_id:0; ?>" _type="<?php echo $login_method; ?>">
 		<div id="_content" class="content"> 

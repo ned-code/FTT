@@ -378,6 +378,7 @@ class JMBProfile {
         $user = $this->host->gedcom->individuals->get($gedcom_id);
         if($user->FacebookId != '0'){
             $this->host->gedcom->individuals->unlink($tree_id, $gedcom_id);
+            $this->host->deleteJoomlaUser($user->FacebookId);
         }
 
         switch($type){
