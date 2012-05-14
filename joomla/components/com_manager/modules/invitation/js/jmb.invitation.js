@@ -125,7 +125,9 @@ JMBInvitation.prototype = {
                 select = jQuery('<select name="friends"><option value="default">Facebook Friend</option></select>');
                 jQuery(friends_div).append(select);
                 jQuery(res.data).each(function (i, friend) {
-                    if (!storage.usertree.users || parseInt(friend.id) in storage.usertree.users) return false;
+                    if (!storage.usertree.users || parseInt(friend.id) in storage.usertree.users){
+                        return true;
+                    }
                     jQuery(select).append('<option value="' + friend.id + '">' + friend.name + '</option>');
                 });
                 jQuery(select).change(function () {
