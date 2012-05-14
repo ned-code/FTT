@@ -702,7 +702,7 @@ class JMBUserTree {
 	public function getMembers($tree_id){
 		$sql_string = "SELECT users.id as gedcom_id, users.fid as facebook_id FROM #__mb_tree_links as links
 				LEFT JOIN #__mb_individuals as users ON users.id = links.individuals_id 
-				WHERE links.tree_id = ? AND links.type != 'MEMBER'";
+				WHERE links.tree_id = ?";
 		$this->ajax->setQuery($sql_string, $tree_id);
 		$rows = $this->ajax->loadAssocList('facebook_id');
 		return ($rows!=null)?$rows:false;
