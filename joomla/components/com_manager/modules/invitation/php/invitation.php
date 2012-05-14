@@ -30,6 +30,17 @@ class JMBInvitation {
         return false;
     }
 
+    protected function checkMailOnInvite($mail){
+        $sql_string = "SELECT email FROM #__mb_variables WHERE email = ?";
+        $this->host->ajax->setQuery($sql_string, $mail);
+        $rows = $this->host->ajax->loadAssocList();
+        if(empty($rows)){
+          return false;
+        } else {
+          return true;
+        }
+    }
+
 
 	/**
 	*
@@ -53,6 +64,10 @@ class JMBInvitation {
             $message = "Sorry, but ".$recipient['user']['first_name']." is a member of another family tree and multiple trees membership is disabled in beta-version of FamilyTreeTop.";
             return json_encode(array('success'=>false,'message'=>$message));
         }
+        if($this->checkMailOnInvite($to)){
+            $message = "Invitation in this mail has been already sent.";
+            return json_encode(array('success'=>false, 'message'=>$message));
+        }
 
         $relation = $this->host->gedcom->relation->get($tree_id, $gedcom_id, $owner_id);
 
@@ -63,8 +78,8 @@ class JMBInvitation {
 		
 		$token = md5($value);
 
-		$sql_string = "INSERT INTO #__mb_variables (`id`,`belongs`,`value`) VALUES (NULL,?,?)";		
-		$this->host->ajax->setQuery($sql_string, $token, $value);
+		$sql_string = "INSERT INTO #__mb_variables (`id`,`belongs`,`value`,`email`) VALUES (NULL,?,?,?)";
+		$this->host->ajax->setQuery($sql_string, $token, $value, $to);
        	$this->host->ajax->query();
 		
 		#recipient  
@@ -139,10 +154,7 @@ class JMBInvitation {
 			$sql_string ="UPDATE  #__mb_individuals SET  `fid` = ? WHERE  `id` = ?";
 			$this->host->ajax->setQuery($sql_string, $args[0], $args[1]);
 			$this->host->ajax->query();
-			
-			$sql_string ="UPDATE  #__mb_tree_links SET  `type` = 'USER', `creator` = ? WHERE  `tree_id` = ? AND `individuals_id` = ?";
-			$this->host->ajax->setQuery($sql_string, $individ->Id, $individ->TreeId, $individ->Id);
-			$this->host->ajax->query();
+
 			return json_encode(array('success'=>true));
 		}
 	}

@@ -17,10 +17,6 @@ class IndividualsList{
         }
 
         public function clean($tree_id, $gedcom_id){
-            //change paremission
-            $sql_string = "UPDATE #__mb_tree_links SET `type` = 'MEMBER' WHERE tree_id = ? AND individuals_id = ?";
-            $this->ajax->setQuery($sql_string, $tree_id, $gedcom_id);
-            $this->ajax->query();
             //clean user names
             $user = $this->get($gedcom_id);
             $user->FacebookId = '0';

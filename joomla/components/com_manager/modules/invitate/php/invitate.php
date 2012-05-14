@@ -20,10 +20,6 @@ class JMBInvitateClass {
         if($rows==null) return false;
         $args = explode(',', $rows[0]['value']);
 
-        $sql = "UPDATE #__mb_tree_links SET `type`='USER' WHERE individuals_id =? AND tree_id=?";
-        $this->host->ajax->setQuery($sql, $args[0], $args[1]);
-        $this->host->ajax->query();
-
         $sql = "UPDATE #__mb_individuals SET `fid`=?,`change` = NOW(), `join_time`= NOW(), `creator` = ?  WHERE id=?";
         $this->host->ajax->setQuery($sql, $facebook_id, $args[0], $args[0]);
         $this->host->ajax->query();
