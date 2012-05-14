@@ -149,11 +149,14 @@ storage.usertree.parse = function(object){
         })(),
         is_death:(function(){
             var event = user['death'];
+            /*
             if(event!=null){
                 var date = event.date;
                 return ( date[0]!=null || date[1] != null || date[2] != null )?1:0;
             }
             return 0;
+            */
+            return (event!=null)?1:0;
         })(),
 		is_alive:user.is_alive,
 		is_married_event:function(id){
