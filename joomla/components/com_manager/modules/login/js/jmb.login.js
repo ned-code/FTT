@@ -119,9 +119,12 @@ function JMBLogin(){
 						jQuery(object).removeClass('active');
 					},
 					logout:function(){
+                        /*
 						FB.logout(function(){
 							window.location = storage.baseurl+'index.php?option=com_jfbconnect&task=logout&return=login';
 						});
+						*/
+                        jfbc.login.logout_button_click();
 					}
 				},
 				init:function(){
@@ -141,6 +144,7 @@ function JMBLogin(){
 		login:function(cont){
 			var json;
 			jQuery(cont).find('div.facebook span').click(function(){
+                /*
 				FB.login(function(response){
 					if(response.authResponse){
 						window.location = storage.baseurl+'index.php?option=com_jfbconnect&task=loginFacebookUser&return=myfamily';
@@ -148,6 +152,8 @@ function JMBLogin(){
 						alert('Login failed.')
 					}
 				});
+				*/
+                jfbc.login.login_custom();
 			});
 		},
 		click:function(cont){

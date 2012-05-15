@@ -846,6 +846,14 @@ JMBProfile.prototype = {
                     ["input[name='set']",'val']
                 ]);
                 var _fn = {
+                    setMedia:function(){
+                        storage.usertree.pull[module.gedcom_id].media = {
+                            avatar:null,
+                            photos:[],
+                            cache:[]
+                        }
+                        media = storage.usertree.pull[module.gedcom_id].media;
+                    },
                     add:function(res){
                         var li;
                         if(res!=null&&res.image){
@@ -856,22 +864,18 @@ JMBProfile.prototype = {
                                 li = jQuery(storage.media.getListItem(res.image, true));
                                 jQuery(form).find('.jmb-dialog-photos-content div.list ul').append(li);
                             }
-                            this.delete(li);
-                            this.select(li);
+                            _fn.delete(li);
+                            _fn.select(li);
                             if(media==null){
-                                storage.usertree.pull[module.gedcom_id].media = {
-                                    avatar:null,
-                                    photos:[]
-                                }
-                                media = storage.usertree.pull[module.gedcom_id].media;
+                                _fn.setMedia();
                             };
                             media.photos.push(res.image);
                         }
                     },
                     delete:function(li){
-                        jQuery(li).find('div#delete').click(function(){
+                        jQuery(li).find('div.delete').click(function(){
                             var clikItem = this;
-                            var id = jQuery(clickItem).attr('id');
+                            var id = jQuery(clikItem).attr('id');
                             var json = '{"method":"delete","media_id":"'+id+'"}';
                             module.functions.ajax('photo', json, function(res){
                                 jQuery(li).remove();
@@ -905,12 +909,11 @@ JMBProfile.prototype = {
                             var media_id = jQuery(module.select_photo).attr('id');
                             var args = '{"method":"set_avatar","media_id":"'+media_id+'","gedcom_id":"'+module.gedcom_id+'"}';
                             module.functions.ajax('photo', args, function(res){
-                                media.avatar = media.photos[module.user.getPhotoIndex(media_id)];
+                                media.avatar = media.photos[fn.getParseUserInfo(module.gedcom_id).getPhotoIndex(media_id)];
                                 module.user.avatar_id = media_id;
                                 jQuery(input).hide();
                             });
                             jQuery(input).hide();
-                            console.log(module);
                         });
                         jQuery(input).hide();
                     }

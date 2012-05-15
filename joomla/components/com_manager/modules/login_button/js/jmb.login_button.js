@@ -16,13 +16,16 @@ function JMBLoginButtonObject(obj){
 	cont = jQuery(sb.result());
 	jQuery(obj).append(cont);
 	jQuery(cont).find('.jmb-login-button').click(function(){
-		FB.login(function(response) {
+		/*
+        FB.login(function(response) {
 			if (response.authResponse) {
 				window.location = storage.baseurl+'index.php?option=com_jfbconnect&task=loginFacebookUser&return=myfamily';
 			} else {
 				//console.log('User cancelled login or did not fully authorize.');
 			}
 		}, {scope: 'email'});
+		*/
+        jfbc.login.login_custom();
 	});
 }
 
