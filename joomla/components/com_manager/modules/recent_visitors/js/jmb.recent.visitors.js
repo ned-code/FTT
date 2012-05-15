@@ -67,6 +67,7 @@ function JMBRecentVisitorsObject(obj){
                 var objects = json.objects;
                 for(var key in objects){
                     var object = storage.usertree.pull[objects[key].gedcom_id];
+                    if(typeof(object) == 'undefined') continue;
                     var user = object.user
                     st.clear();
                     st._('<li id="')._(user.gedcom_id)._('" >');

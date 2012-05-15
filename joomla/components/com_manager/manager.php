@@ -15,6 +15,9 @@ $controller = new JMBController( );
 # Perform the Request task
 $controller->execute(JRequest::getCmd('task'));
 
+#Autocreate Joomla User
+$controller->loginFacebookUser();
+
 # FTT permission get
 $controller->jmb();
 

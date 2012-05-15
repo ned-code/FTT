@@ -144,7 +144,6 @@ function JMBLogin(){
 		login:function(cont){
 			var json;
 			jQuery(cont).find('div.facebook span').click(function(){
-                /*
 				FB.login(function(response){
 					if(response.authResponse){
 						window.location = storage.baseurl+'index.php?option=com_jfbconnect&task=loginFacebookUser&return=myfamily';
@@ -152,8 +151,7 @@ function JMBLogin(){
 						alert('Login failed.')
 					}
 				});
-				*/
-                jfbc.login.login_custom();
+
 			});
 		},
 		click:function(cont){
@@ -225,10 +223,10 @@ function JMBLogin(){
 			var json, object;
 			fn.ajax('user', null, function(res){
 				json = jQuery.parseJSON(res.responseText);
+                settings.languages = json.languages;
+                settings.default_language = json.default_language;
 				if(json.usertree){
 					fn.set_global_data(json);
-					settings.languages = json.languages;
-					settings.default_language = json.default_language;
 					object = fn.get_data_user(json);
 					callback(object);
 					return true;
@@ -261,7 +259,6 @@ function JMBLogin(){
 					case "login":
 					case "first-page":
 					case "invitation":
-					case "myfamily":
 					case "famous-family":
                         if(!parseInt(fb_logged)){
                             cont = fn.connect();

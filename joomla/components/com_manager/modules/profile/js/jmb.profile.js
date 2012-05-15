@@ -972,7 +972,7 @@ JMBProfile.prototype = {
                         module.functions.ajax('delete', args, function(res){
                             var json = jQuery.parseJSON(res.responseText);
                             if(module.gedcom_id == storage.usertree.gedcom_id){
-                                window.location.reload();
+                                jfbc.login.logout_button_click();
                             }
                             if(!json.deleted){
                                 module.update(json.objects);

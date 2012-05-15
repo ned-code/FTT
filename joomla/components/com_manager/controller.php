@@ -176,7 +176,7 @@ class JMBController extends JController
         return false;
     }
 
-	protected function get_alias($user_data, $facebook_id){
+	protected function get_alias($user_data, $user){
 		$session = JFactory::getSession();
 
         $invitation_token = $this->get_invitation_token($session);
@@ -200,15 +200,15 @@ class JMBController extends JController
 		
 			case "login":
                 if($invitation_token) return "invitation";
-				if($facebook_id&&$user_data) return "myfamily";
-				if($facebook_id&&!$user_data) return "first-page";
+				if($user_data) return "myfamily";
+				if(!$user->guest&&!$user_data) return "first-page";
 				return "login";
 			break;
 			
 			case "first-page":
                 if($invitation_token) return 'invitation';
-				if(!$facebook_id) return "login";
-                if($facebook_id && $user_data) return "myfamily";
+				if($user->guest) return "login";
+                if($user_data) return "myfamily";
 				return "first-page";
 			break;
 			
@@ -217,23 +217,23 @@ class JMBController extends JController
 				if(!empty($login_method)&&$login_method=="famous_family") {
 					return "myfamily";
 				}
-				if(!$facebook_id) return "login";
+				if($user->guest) return "login";
 				if(!$user_data) return "first-page";
 				return "myfamily";			
 			break;
 			
 			default:
                 if($invitation_token) return "invitation";
-				if(!$facebook_id) return "login";
+				if($user->guest) return "login";
 				if(!$user_data) return "first-page";
 				return "myfamily";
 			break;
 		}
 	}
 
-	protected function check_location($user_data, $facebook_id){
+	protected function check_location($user_data, $user){
         $session = JFactory::getSession();
-        $alias = $this->get_alias($user_data, $facebook_id);
+        $alias = $this->get_alias($user_data, $user);
         $current_alias = $this->get_current_alias();
 
         if($alias != $current_alias){
@@ -296,12 +296,11 @@ class JMBController extends JController
 
         	$host = new Host('joomla');
         	$jfb = JFBConnectFacebookLibrary::getInstance();
-
-            $me = $jfb->api('/me');
-            $facebook_id = $me['id'];
+            $facebook_id = $jfb->getFbUserId();
         	$user_data = $this->get_user_data($facebook_id);
+            $user = JFactory::getUser();
 
-            $alias = $this->check_location($user_data, $facebook_id);
+            $alias = $this->check_location($user_data, $user);
 
             switch($alias){
                 case 'invitation':
@@ -449,5 +448,20 @@ class JMBController extends JController
         	echo 'ping!';
         	exit();
         }
+
+    public function loginFacebookUser(){
+        $app = JFactory::getApplication();
+        $jfbcLibrary = JFBConnectFacebookLibrary::getInstance();
+        $fbUserId = $jfbcLibrary->getFbUserId();
+
+        $user = JFactory::getUser();
+
+        if ($user->guest){
+            if (!$fbUserId){
+                return false;
+            }
+            $app->redirect(JRoute::_('index.php?option=com_jfbconnect&task=loginFacebookUser&return=myfamily'));
+        }
+    }
 }
 ?>

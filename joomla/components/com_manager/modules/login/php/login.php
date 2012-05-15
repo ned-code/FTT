@@ -15,7 +15,7 @@ class JMBLogin {
 	
 	protected function getUsertreeData(){
 		$session = JFactory::getSession();
-		
+
 		$tree_id = $session->get('tree_id');
 		$facebook_id = $session->get('facebook_id');
 		$gedcom_id = $session->get('gedcom_id');
@@ -48,6 +48,7 @@ class JMBLogin {
 		$notifications = $this->getNotifications($tree_id, $gedcom_id);
 		return json_encode(array('default_language'=>$lang, 'languages'=>$languages,'notifications'=>$notifications,'settings'=>$settings, 'usertree'=>$data));
 	}
+
 	public function famous($args){
 		if($args == 'logout'){			
 			$session = JFactory::getSession();

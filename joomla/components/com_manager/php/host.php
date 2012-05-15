@@ -319,6 +319,9 @@ class Host {
 
         $this->ajax->setQuery('DELETE FROM #__user_usergroup_map WHERE user_id = ?', $rows[0]['j_user_id']);
         $this->ajax->query();
+
+        $this->ajax->setQuery('DELETE FROM #__session WHERE userid = ?', $rows[0]['j_user_id']);
+        $this->ajax->query();
         return true;
     }
 }
