@@ -460,7 +460,13 @@ class JMBController extends JController
             if (!$fbUserId){
                 return false;
             }
-            $app->redirect(JRoute::_('index.php?option=com_jfbconnect&task=loginFacebookUser&return=myfamily'));
+            require_once (JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_jfbconnect' . DS . 'models' . DS . 'usermap.php');
+            $userMapModel = new JFBConnectModelUserMap();
+
+            $jUserId = $userMapModel->getJoomlaUserId($fbUserId);
+            if($jUserId == null){
+                $app->redirect(JRoute::_('index.php?option=com_jfbconnect&task=loginFacebookUser&return=myfamily'));
+            }
         }
     }
 }

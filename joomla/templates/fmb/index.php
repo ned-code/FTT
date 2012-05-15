@@ -8,15 +8,7 @@
  */
 // No direct access.
 defined('_JEXEC') or die;
-// facebook params
-$fb_app_id = '184962764872486';
-$fb_admin_id = '100001614066938';
 
-$og_title = 'FamilyTree-Top';
-$og_type = 'website';
-$og_url = 'http://www.familytreetop.com/';
-$og_img = '';
-$og_site_name = 'FamilyTree-Top';
 
 $app = JFactory::getApplication();
 $jfb = JFBConnectFacebookLibrary::getInstance();
@@ -42,6 +34,16 @@ if($jfb_facebook_id){
 }
 
 /*
+// facebook params
+$fb_app_id = '184962764872486';
+$fb_admin_id = '100001614066938';
+
+$og_title = 'FamilyTree-Top';
+$og_type = 'website';
+$og_url = 'http://www.familytreetop.com/';
+$og_img = '';
+$og_site_name = 'FamilyTree-Top';
+
 <!-- facebook meta tags -->
 <meta property="og:title" content="<?php echo $og_title; ?>" />
 <meta property="og:type" content="<?php echo $og_type; ?>" />
@@ -51,11 +53,16 @@ if($jfb_facebook_id){
 <meta property="fb:app_id" content="<?php echo $fb_app_id; ?>" />
 <meta property="fb:admins" content="<?php echo $fb_admin_id; ?>"/>
  */
-
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->language; ?>" lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>" >
-	<head>
+	<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# website: http://ogp.me/ns/website#">
+        <meta property="fb:app_id"      content="136695133059478" />
+        <meta property="og:type"        content="website" />
+        <meta property="og:url"         content="http://www.familytreetop.com" />
+        <meta property="og:title"       content="Family TreeTop" />
+        <meta property="og:image"       content="Family TreeTop" />
+        <meta property="og:description" content="Family TreeTop" />
 		<jdoc:include type="head" />
       	    <!-- joomla system stylesheet -->
             <link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/system/css/system.css?111" type="text/css" />
@@ -102,7 +109,7 @@ if($jfb_facebook_id){
 		</div>
         <script>
 			FB.init({
-				appId:"184962764872486", 
+				appId:"136695133059478",
 				status:true, 
 				cookie:true, 
 				xfbml:true,
