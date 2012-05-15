@@ -432,13 +432,16 @@ JMBAncestorsObject.prototype = {
 		//compute node positions and layout
 		st.compute();
 		//emulate a click on the root node.
-		st.select(st.root);
-
+        setTimeout(function(){
+            st.onClick(st.root, {
+                onComplete:function() {
+                    if(callback){
+                        callback();
+                    }
+                }
+            });
+        }, 1);
         module.targetNode = st.root;
-
-		if(callback){
-			callback();
-		}
 	},
 	render:function(){
 		var	module = this,
