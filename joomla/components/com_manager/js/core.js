@@ -100,9 +100,9 @@ storage.usertree.parse = function(object){
 	return {
 		gedcom_id:user.gedcom_id,
 		facebook_id:user.facebook_id,
-		first_name:(user.first_name!=null)?user.first_name:'',
+		first_name:(user.first_name!=null)?user.first_name.replace('@P.N.', ''):'',
 		middle_name:(user.middle_name!=null)?user.middle_name:'',
-		last_name:(user.last_name!=null)?user.last_name:'',
+		last_name:(user.last_name!=null)?user.last_name.replace('@N.N.', ''):'',
 		nick:(user.nick!=null)?user.nick:'',
 		gender:user.gender,
 		relation:(user.relation!=null)?user.relation:false,
@@ -126,15 +126,26 @@ storage.usertree.parse = function(object){
 			return [user.first_name,user.last_name].join(' ');
 		})(),
 		full_name:(function(){
-			var	first_name = user.first_name,
-				middle_name = user.middle_name,
-				last_name = user.last_name;
-				
+            var first_name,
+                middle_name,
+                last_name;
+
+            middle_name = user.middle_name;
+            if(user.first_name != null){
+                first_name = user.first_name.replace('@P.N.', '');
+            } else {
+                first_name = '';
+            }
+            if(user.last_name != null){
+                last_name = user.last_name.replace('@N.N.', '');
+            } else {
+                last_name = '';
+            }
 			return [first_name, middle_name, last_name].join(' ');
 		})(),
 		nick:(function(){
 			var	nick = user.nick,
-				first_name = user.first_name;
+				first_name = user.first_name.replace('@P.N.', '');
 				return (nick!=null)?nick:first_name;
 		})(),
         is_editable:(user.facebook_id == '0' || user.gedcom_id == storage.usertree.gedcom_id),
