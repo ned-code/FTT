@@ -628,6 +628,7 @@ $.fn.ajaxFormUnbind = function() {
  */
 $.fn.formToArray = function(semantic) {
 	var a = [];
+    var nPull = {};
 	if (this.length === 0) {
 		return a;
 	}
@@ -642,7 +643,7 @@ $.fn.formToArray = function(semantic) {
 	for(i=0, max=els.length; i < max; i++) {
 		el = els[i];
 		n = el.name;
-		if (!n) {
+		if (!n || n in nPull) {
 			continue;
 		}
 
@@ -662,7 +663,8 @@ $.fn.formToArray = function(semantic) {
 			}
 		}
 		else if (v !== null && typeof v != 'undefined') {
-			a.push({name: n, value: v});
+            a.push({name: n, value: v});
+            nPull[n] = true;
 		}
 	}
 
