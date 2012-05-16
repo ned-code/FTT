@@ -44,8 +44,9 @@ function JMBFamiliesObject(obj){
     module.loginType = jQuery(document.body).attr('_type');
 	module.settings = storage.settings;
 	module.colors = module.settings.colors;
-	module.start_id = storage.usertree.gedcom_id;
-	module.usertree = storage.usertree.pull;
+    module.usertree = storage.usertree.pull;
+	module.start_id = module._first(storage.usertree.gedcom_id);
+
 
     jQuery(module.parent).ready(function(){
         module.render(module.start_id);
@@ -126,30 +127,14 @@ JMBFamiliesObject.prototype = {
 		}
 		return childrens;
 	},
-	_childrensCount:function(families){
-		var	module = this,
-			count = 0;
-		for(var key in families){
-			if (!families.hasOwnProperty(key)) continue;
-			if(key!='length'&&families[key].childrens!=null){
-				count += families[key].childrens.length;
-			}
-		}
-		return count;	
-    },
 	_first:function(gedcom_id){
-		var	module = this;
-			object = module.usertree[gedcom_id],
-			families = object.families,
-			parents = object.parents;
-		if(families!=null&&module._childrensCount(families)!=0){
-			return gedcom_id;
-		} else {
-			if(parents.length!=0){
-				return module._parentId(parents);
-			}
-		}
-		return gedcom_id;
+        var module = this;
+        var object = module.usertree[gedcom_id];
+        var parent_key = module._checkParents(object.parents);
+        if(object.families == null){
+            return parent_key;
+        }
+        return gedcom_id;
 	},
 	_home:function(cont){
 		var	module = this;	
@@ -225,7 +210,8 @@ JMBFamiliesObject.prototype = {
 			facebook_id = object.user.facebook_id,
 			parents = object.parents,
 			get = storage.usertree.parse(object),
-			fam_opt = storage.family_line.get.opt();
+			fam_opt = storage.family_line.get.opt(),
+            parent_key;
 		sb._('<div>');
 			if(parent_key = module._checkParents(parents)){
 				sb._('<div  id="')._(parent_key)._('" class="jmb-families-button parent active">&nbsp;</div>');
@@ -388,15 +374,10 @@ JMBFamiliesObject.prototype = {
 				sb._('<div class="jmb-families-child-name">')._(module._getName(object))._('</div>');
 				sb._('<div class="jmb-families-child-date">')._((date.length!=0)?date:"....")._('</div>');
 			sb._('</div>');
-
-            if(module.start_id == gedcom_id){
+            if(families != null){
                 sb._('<div id="')._(gedcom_id)._('" class="')._(child_button_active)._('">&nbsp;</div>');
             } else {
-                if(module._childrensCount(families)!=0){
-                    sb._('<div id="')._(gedcom_id)._('" class="')._(child_button_active)._('">&nbsp;</div>');
-                } else {
-                    sb._('<div id="null" class="')._(child_button_unactive)._('">&nbsp;</div>');
-                }
+                sb._('<div id="null" class="')._(child_button_unactive)._('">&nbsp;</div>');
             }
 			sb._('<div class="')._(arrow_class)._('" style="background:#')._(bcolor)._(';">&nbsp</div>');
 		return jQuery(sb.result());
