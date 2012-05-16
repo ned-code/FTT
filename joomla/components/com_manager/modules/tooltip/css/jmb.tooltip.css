@@ -154,9 +154,11 @@
 
 .jmb-profile-tooltip-send div.invitions{
 	background: url("../image/cover_small.png") no-repeat scroll 0 -2px transparent;
+    margin-left:33px;
 }
 .jmb-profile-tooltip-send div.link{
 	background: url("../image/link.png") no-repeat scroll 0 0 transparent;
+    margin-left:33px;
 }
 .jmb-profile-tooltip-close {
 	cursor:pointer;
