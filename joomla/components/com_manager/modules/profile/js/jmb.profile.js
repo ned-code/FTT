@@ -303,7 +303,7 @@ function JMBProfile(){
                         var is_alive = user.is_alive;
                         var options = jQuery(span).find('option');
                         jQuery(options).each(function(i, el){
-                            if(parseInt(jQuery(el).val()) == is_alive){
+                            if(parseInt(jQuery(el).val()) == is_alive || user.turns > 120){
                                 jQuery(el).attr("selected", "selected");
                             }
                             var text = jQuery(el).text();
@@ -714,7 +714,7 @@ JMBProfile.prototype = {
                 form = fn.getViewObject('dialogEditBasic');
                 fn.setTitleMessage(form);
                 fn.setTextValue(form);
-                fn.setLiving(form, module.user.is_alive);
+                fn.setLiving(form, (module.user.is_alive && module.user.turns < 120));
                 fn.setAvatar(form, 135, 150);
                 fn.initEventSelectLiving(form);
                 fn.initEventSelectGender(form, 135, 150);

@@ -105,7 +105,7 @@ JMBTooltip.prototype = {
 								if(user.facebook_id!=='0'&&settings.button_facebook){
 									sb._('<div id="')._(user.facebook_id)._('" class="jmb-tooltip-view-facebook">&nbsp;</div>');
 								}	
-								if(get.is_death){
+								if(get.is_death || get.turns >= 120){
 									sb._('<div class="jmb-tooltip-view-death-marker">&nbsp;</div>');
 								}
 							sb._('</td>');
