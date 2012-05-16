@@ -274,6 +274,7 @@ function JMBFamilyLine(){
 						if(settings.pencil) sb._('<td><div class="icon father pencil">&nbsp;</div></td>');
 						if(settings.select) sb._('<td><div class="icon father select">&nbsp;</div></td>');
 						sb._('<td class="right"></td>');
+                        /*
 						sb._('<td class="options left">');
 							sb._('<div style="display:none" id="adopted">');
 								sb._('<select name="relation">');
@@ -285,6 +286,7 @@ function JMBFamilyLine(){
 						sb._('<td class="options right">');
 							sb._('<div id="button" class="icon settings">&nbsp;</div>');
 						sb._('</td>');
+						*/
 					sb._('</tr>');
 				sb._('</table>');
 			sb._('</div>');
