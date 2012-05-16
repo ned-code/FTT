@@ -81,7 +81,7 @@ function JMBLatestUpdatesObject(offsetParent){
 			sb._('</div>');
 			sb._('<div class="jmb-lu-content"></div>');
 			sb._('<div class="jmb-lu-button">');
-				sb._('<span>')._(message.FTT_MOD_LATEST_UPDATES_SHOW_ALL)._('...</span>');
+				//sb._('<span>')._(message.FTT_MOD_LATEST_UPDATES_SHOW_ALL)._('...</span>');
 			sb._('</div>');
 			return jQuery(sb.result());
 		}

@@ -89,11 +89,13 @@ function JMBQuickFactsObject(object){
 					sb._('<span class="jmb_qf_text">')._(fn.getOldestMemberString())._('</span>');
 				sb._('</div>');
 			sb._('</div>');
-			sb._('<div class="jmb_qf_button">');
+			/*
+            sb._('<div class="jmb_qf_button">');
                 sb._('<span>');
                     sb._(message.FTT_MOD_QUICK_FACTS_SHOW_MORE_STATS);
                 sb._('...</span>');
             sb._('</div>');
+            */
 			htmlObject = jQuery(sb.result());
 			jQuery(object).append(htmlObject);
 			return htmlObject;

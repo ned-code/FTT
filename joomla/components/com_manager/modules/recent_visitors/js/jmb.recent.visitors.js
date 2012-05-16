@@ -14,7 +14,7 @@ function JMBRecentVisitorsObject(obj){
                 st._('</div>');
                 st._('<div class="jmb-rv-content"></div>');
                 st._('<div class="jmb-rv-button">');
-                    st._('<span>')._(message.FTT_MOD_RECENT_VISITORS_SHOW)._('...</span>');
+                    //st._('<span>')._(message.FTT_MOD_RECENT_VISITORS_SHOW)._('...</span>');
                 st._('</div>');
                 return jQuery(st.result());
             },
