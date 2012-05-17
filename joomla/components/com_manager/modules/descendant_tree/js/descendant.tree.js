@@ -181,7 +181,7 @@ JMBDescendantTreeObject.prototype = {
 	},
 	loadTreeById:function(id){
 		var module = this;
-		if(typeof(id) != 'undefined' && module.checked != id){
+		//if(typeof(id) != 'undefined' && module.checked != id){
 			module.ajax('getTreeById', id, function(res){
 				module.select = null;
 				var json = jQuery.parseJSON(res.responseText);
@@ -189,7 +189,7 @@ JMBDescendantTreeObject.prototype = {
 				module.dhxTree.loadXMLString(json.xml);
 				module.dhxTree.openAllItems(0);
 			});		
-		}
+		//}
 	},
 	click:function(element){
 		var 	moudle, id, find;
@@ -316,6 +316,7 @@ JMBDescendantTreeObject.prototype = {
 							box.off();
                             module.checked = jQuery(div).find('input:checked').attr('id');
 							module.loadTreeById(module.checked);
+
 						});
 						//draw line
 						canvas = jQuery(div).find('canvas')[0];
