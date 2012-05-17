@@ -606,3 +606,18 @@
 .jmb-dialog-options-content .option{
     text-align:center;
 }
+.jmb-dialog-options-content .image{
+    height: 49px;
+    width: 67px;
+}
+.jmb-dialog-options-content .image.unlink{
+    background: url("../image/m_options_unlink.jpg") no-repeat scroll 0 0 transparent;
+}
+.jmb-dialog-options-content .image.remove{
+    background: url("../image/m_options_remove.jpg") no-repeat scroll 0 0 transparent;
+}
+.jmb-dialog-options-content .image.delete{
+    background: url("../image/m_options_delete.jpg") no-repeat scroll 0 0 transparent;
+}
+
+
