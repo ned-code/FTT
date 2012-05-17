@@ -6,7 +6,6 @@ function JMBThisMonthObject(obj){
 	this.settings = {};
 	this.json = {};
 	this.content = { table:null, birth:null, death:null, marr:null };
-	this.b_count = 0;
     this.message = {
         FTT_MOD_THIS_MONTH_HEADER:"Special Days in",
         FTT_MOD_THIS_MONTH_BIRTHDAYS:"Birthdays",
@@ -152,7 +151,7 @@ JMBThisMonthObject.prototype = {
 		return (n[0]='0')?n[1]:n;
 	},
 	_createTableView:function(){
-		return jQuery('<table><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table><div class="empty" style="display:none;"><div class="text">No events to show for this month</div><div class="button"><span>How do i add events?</span></div></div>');
+		return jQuery('<table><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table><div class="empty" style="display:none;"></div>');
 	},
 	_createEventTableView:function(id, type, title){
 		return jQuery(['<div id="',id,'"><div class="jmb-this-month-view ',type,'">',title,'</div><div class="jmb-this-month-content"><table></table></div></div>'].join(''));
@@ -277,14 +276,8 @@ JMBThisMonthObject.prototype = {
 					gender = data.user.gender,
 					color = self.settings.colors[gender],
 					append;
-					
-				self.b_count++;
-				if(data.user.death!=null){
-                    self.b_count--;
-                    return;
-                }
-				
-				append = sb._('<tr><td><div class="date">')
+
+                append = sb._('<tr><td><div class="date">')
 						._((date!=null&&date[0]!=null)?date[0]:'')._('</div></td><td><div class="img-')
 						._(gender)._('">&nbsp;</div></td><td><div id="')
 						._(ind_key)._('" class="person ')
@@ -295,13 +288,10 @@ JMBThisMonthObject.prototype = {
 				sb.clear();
 				jQuery(view).append(append);
 			});
-			if(self.b_count==0){
-				var howdo = self._getHowDoText('FTT_MOD_THIS_MONTH_BIRTHDATS');
-				self._setMessage(view, 'howToDo.html','#jmb-this-month-birth', ['<div class="message">',howdo[0],'<font color="#b6bad9">',howdo[1],'</font></div>'].join(''));
-			}
 		} else {
-            var howdo = self._getHowDoText('FTT_MOD_THIS_MONTH_BIRTHDATS');
-			self._setMessage(view, 'howToDo.html','#jmb-this-month-birth', ['<div class="message">',howdo[0],'<font color="#b6bad9">',howdo[1],'</font></div>'].join(''));
+            jQuery("#jmb-this-month-birth").remove();
+            //var howdo = self._getHowDoText('FTT_MOD_THIS_MONTH_BIRTHDATS');
+			//self._setMessage(view, 'howToDo.html','#jmb-this-month-birth', ['<div class="message">',howdo[0],'<font color="#b6bad9">',howdo[1],'</font></div>'].join(''));
 		}
 	},
 	_setDEATH:function(table, json){
@@ -332,10 +322,11 @@ JMBThisMonthObject.prototype = {
 				sb.clear();
 				jQuery(view).append(append);
 			});
-			
+
 		} else {
-            var howdo = self._getHowDoText('FTT_MOD_THIS_MONTH_REMEMBER');
-			self._setMessage(view, 'howToDo.html','#jmb-this-month-death', ['<div class="message">',howdo[0],'<font color="#b6bad9">',howdo[1],'</font></div>'].join(''));
+            jQuery('#jmb-this-month-death').remove();
+            //var howdo = self._getHowDoText('FTT_MOD_THIS_MONTH_REMEMBER');
+		    //self._setMessage(view, 'howToDo.html','#jmb-this-month-death', ['<div class="message">',howdo[0],'<font color="#b6bad9">',howdo[1],'</font></div>'].join(''));
 		}
 	},
 	_setMARR:function(table, json){
@@ -367,8 +358,9 @@ JMBThisMonthObject.prototype = {
 				
 			});
 		} else {
-            var howdo = self._getHowDoText('FTT_MOD_THIS_MONTH_ANNIVERSARIES');
-			self._setMessage(view, 'howToDo.html','#jmb-this-month-marr', ['<div class="message">',howdo[0],'<font color="#b6bad9">',howdo[1],'</font></div>'].join(''));
+            jQuery('#jmb-this-month-marr').remove();
+            //var howdo = self._getHowDoText('FTT_MOD_THIS_MONTH_ANNIVERSARIES');
+			//self._setMessage(view, 'howToDo.html','#jmb-this-month-marr', ['<div class="message">',howdo[0],'<font color="#b6bad9">',howdo[1],'</font></div>'].join(''));
 		}
 	},
 	_setNull:function(table){
@@ -376,10 +368,7 @@ JMBThisMonthObject.prototype = {
 		var empty = jQuery(table).parent().find('.empty')
 		jQuery(table).hide();
 		jQuery(empty).show();	
-		jQuery(empty).find('div.button span').click(function(){
-			host.getHelpWindow('thismonthhowdoiaddsome');
-			return false;
-		})
+		jQuery(empty).text('There are no events on record for the this month.');
 	},
 	_setMessage:function(view, hCode, target, message){
 		var mes = jQuery(message);
@@ -409,20 +398,39 @@ JMBThisMonthObject.prototype = {
 		var header = jQuery(self.table).find('.jmb-this-month-header');
 		var month = jQuery(header).find('select[name="months"]').val();
 		var sort = jQuery(header).find('select[name="sort"]').val();
-        self.b_count = 0;
 		self.load(month, sort, function(json){
 			jQuery(header).html('');
 			jQuery(self.content.table).remove();
 			self.render(json);
 		});
 	},
+    sort:function(events){
+        var birth = events.b;
+        var s_birth = [];
+        if(birth.length!=0){
+            for(var key in birth){
+                var object = birth[key];
+                var gedcom_id = object.gid;
+                var userdata = storage.usertree.pull[gedcom_id];
+                if(typeof(userdata) != 'undefined'){
+                    var user = userdata.user;
+                    if(user.death==null){
+                        s_birth.push({"gid":gedcom_id});
+                    }
+                }
+            }
+        }
+        events.b = s_birth;
+        return events;
+    },
 	render:function(json, callback){
 		var self = this;
 		var table = self._createBody(json);
+        json.events = self.sort(json.events);
 		jQuery(self.table).find('.jmb-this-month-body').append(table);
 		//set documents
 		self._setHEAD(json);
-		if(json.events.b.length!=0||json.events.d.length!=0||json.events.m!=null){
+		if(json.events.b.length!=0||json.events.d.length!=0||(json.events.m!=null&&json.events.m.length!=0)){
 			if(json.settings.event.birthdays == 'true') self._setBIRTH(table, json);
 			if(json.settings.event.deaths == 'true') self._setDEATH(table, json);
 			if(json.settings.event.anniversaries == 'true') self._setMARR(table,  json);
