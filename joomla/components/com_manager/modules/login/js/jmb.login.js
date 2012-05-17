@@ -67,7 +67,7 @@ function JMBLogin(){
 			}
 		},
 		menu:function(){
-			var module = this, menu, list, sb = host.stringBuffer();
+			var module = this, menu, list, sb = host.stringBuffer(), contEl;
 			sb._('<div class="menu">');
 				sb._('<div id="profile"><span>Profile</span></div>');
 				/*sb._('<div id="preferences"><span>Preferences</span></div>');*/
@@ -76,14 +76,20 @@ function JMBLogin(){
 			sb._('</div>');
 			menu = jQuery(sb.result());
 			return {
-				on:function(object){
-					jQuery(object).parent().append(menu);
-					this.init();
+				on:function(object, callback){
+					var m = this;
+                    jQuery(object).parent().append(menu);
+					m.init();
+                    jQuery(document.body).click(function(ev){
+                        m.off();
+                        callback();
+                    });
 					return this;
 				},
 				off:function(){
 					jQuery(menu).remove();
 					jQuery(menu).find('div').unbind();
+                    jQuery(document.body).unbind();
 					return this;
 				},
 				click:{
@@ -156,14 +162,20 @@ function JMBLogin(){
 		},
 		click:function(cont){
 			var menu = this.menu();
-			jQuery(cont).find('div.button').click(function(){
-				if(jQuery(this).hasClass('active')){
-					jQuery(this).removeClass('active');
-					menu.off();
+			jQuery(cont).click(function(){
+                var button = jQuery(this).find('div.button');
+				if(jQuery(button).hasClass('active')){
+                    jQuery(button).removeClass('active');
+                    menu.off();
+                    jQuery(document.body).unbind();
 				} else {
-					jQuery(this).addClass('active');
-					menu.on(this);
+					jQuery(button).addClass('active');
+					menu.on(button, function(){
+                        jQuery(button).removeClass('active');
+                        menu.off();
+                    });
 				}
+                return false;
 			});
 		},
 		setName:function(object, cont){
