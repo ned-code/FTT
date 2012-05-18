@@ -147,6 +147,8 @@ JMBInvitation.prototype = {
                                                 jQuery(select).find('option[value="default"]').attr("selected", "selected");
                                                 storage.progressbar.off();
                                                 module.transportation = false;
+                                                alert('Invitation has failed.')
+                                                return false;
                                             }
                                             module.ajax('inviteFacebookFriend', id + ';' + gedcom_id, function (res) {
                                                 var json = jQuery.parseJSON(res.responseText);
