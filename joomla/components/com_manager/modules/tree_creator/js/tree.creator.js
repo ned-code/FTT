@@ -65,7 +65,11 @@ function JMBTreeCreatorObject(parent){
 		},
 		body:function(){
 			var sb = host.stringBuffer();
-			sb._('<div id="button"><span>Connect to Family TreeTop</span></div>');
+			//sb._('<div id="button"><span>Connect to Family TreeTop</span></div>');
+
+            sb._('<div class="title"><span>Welcom to Family TreeTop</span></div>');
+            sb._('<div class="description"><span>Your first step is to create family tree or join  an existing family tree that was created by a relative.</span></div>')
+            sb._('<div id="button"><span>Click here to start</span></div>');
 			return jQuery(sb.result());
 		},
 		dialog_box:function(){

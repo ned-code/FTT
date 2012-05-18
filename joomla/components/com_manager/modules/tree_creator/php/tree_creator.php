@@ -18,10 +18,15 @@ class TreeCreator {
 		$f = get_object_vars(json_decode($friends));
 
 		foreach($rows as $row){
-			if(isset($f[$row['facebook_id']])){
+			/*
+            if(isset($f[$row['facebook_id']])){
 				$result[] = array('facebook_id'=>$row['facebook_id'],'gedcom_id'=>$row['gedcom_id'],'name'=>$f[$row['facebook_id']],'gender'=>$row['gender']);
-			}	
+			}
+			*/
+            $result[] = array('facebook_id'=>$row['facebook_id'],'gedcom_id'=>$row['gedcom_id'],'name'=>$f[$row['facebook_id']],'gender'=>$row['gender']);
 		}
+
+
 		return json_encode(array('result'=>$result));
 	}
 	

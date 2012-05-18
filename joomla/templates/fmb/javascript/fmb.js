@@ -51,7 +51,8 @@ function JMBTopMenuBar(){
 				case "login":
 					fn.sw(jQuery(cont).find('div#myfamily span'));
 				break;
-				
+
+                case "first-page":
 				case "myfamily":
 					if(type == 'famous_family'){
 						fn.sw(jQuery(cont).find('div#famous-family span'));
