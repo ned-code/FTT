@@ -75,6 +75,9 @@ function JMBLogin(){
 				sb._('<div id="logout"><span>Log Out</span></div>');
 			sb._('</div>');
 			menu = jQuery(sb.result());
+            if(storage.usertree.gedcom_id == null){
+                jQuery(menu).find('div#profile').remove();
+            }
 			return {
 				on:function(object, callback){
 					var m = this;
@@ -95,15 +98,17 @@ function JMBLogin(){
 				click:{
 					profile:function(obj){
                         var id = storage.usertree.gedcom_id;
-                        storage.profile.editor('edit', {
-                            gedcom_id:id,
-                            events:{
-                                afterEditorClose:function(){
-                                    jQuery(obj).removeClass('active');
-                                    storage.tooltip.update();
+                        if(id != null){
+                            storage.profile.editor('edit', {
+                                gedcom_id:id,
+                                events:{
+                                    afterEditorClose:function(){
+                                        jQuery(obj).removeClass('active');
+                                        storage.tooltip.update();
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
 					},
 					language:function(object){
 						if(!jQuery(object).hasClass('collapse')){
@@ -178,21 +183,13 @@ function JMBLogin(){
                 return false;
 			});
 		},
-		setName:function(object, cont){
-			var	box = jQuery(cont).find('div.login span'),parse;
-			parse = storage.usertree.parse(object);
-			jQuery(box).html(parse.name);		
+		setName:function(data, cont){
+			var	box = jQuery(cont).find('div.login span'), parse;
+			jQuery(box).html(data.name);
 		},
-		setAvatar:function(object ,cont){
-			var	box = jQuery(cont).find('div.avatar'),
-				image;
-
-            image = storage.usertree.avatar.get({
-                object:object,
-                width:22,
-                height:22
-            });
-			jQuery(box).html(image);
+		setAvatar:function(data ,cont){
+			var	box = jQuery(cont).find('div.avatar');
+			jQuery(box).html('<img width="22px" height="22px" src="http://graph.facebook.com/'+data.id+'/picture">');
 		},
 		getAvatar:function(object){
             return storage.usertree.avatar.get({
@@ -201,23 +198,6 @@ function JMBLogin(){
                 height:50
             });
 		},
-		famous:function(object){
-			var	sb = host.stringBuffer(), parse = storage.usertree.parse(object), htmlObject;
-			sb._('<div class="jmb-profile-famous-cont">');
-				sb._('<table>');
-					sb._('<tr><td><div class="text"><span>You logged in as:</span></div></td><td rowspan="3"><div class="avatar">')._(fn.getAvatar(object))._('</div></td></tr>');
-					sb._('<tr><td><div class="name"><span>')._(parse.name)._('</span></div></td></tr>');
-					sb._('<tr><td><div class="logout"><span>Exit this Family Trees</span></div></td></tr>');
-				sb._('</table>');
-			sb._('</div>');
-			htmlObject = jQuery(sb.result());
-			jQuery(htmlObject).find('div.logout span').click(function(){
-				fn.ajax('famous', 'logout', function(res){
-					window.location.reload();
-				});
-			});
-			jQuery('div.jmb-header-container').append(htmlObject);
-		},
 		set_global_data:function(json){
 			storage.usertree.gedcom_id = json.usertree.gedcom_id;
 			storage.usertree.facebook_id = json.usertree.facebook_id;
@@ -225,44 +205,63 @@ function JMBLogin(){
 			storage.usertree.permission = json.usertree.permission;
 			storage.usertree.users = json.usertree.users;
 			storage.usertree.pull = json.usertree.pull;
-			storage.notifications.init(json.notifications);
-			storage.settings = json.settings;
-		},
-		get_data_user:function(json){
-			return json.usertree.pull[json.usertree.gedcom_id];
 		},
 		user:function(callback){
 			var json, object;
 			fn.ajax('user', null, function(res){
-				json = jQuery.parseJSON(res.responseText);
+                json = jQuery.parseJSON(res.responseText);
                 settings.languages = json.languages;
                 settings.default_language = json.default_language;
-				if(json.usertree){
-					fn.set_global_data(json);
-					object = fn.get_data_user(json);
-					callback(object);
-					return true;
-				}
-				callback(false);
-				return false;
+                storage.notifications.init(json.notifications);
+                storage.settings = json.settings;
+                if(json.usertree){
+                    fn.set_global_data(json);
+                }
+                FB.api('me', function(data){
+                    if(data.error){
+                        callback(false);
+                    } else {
+                        callback(data);
+                    }
+                });
 			});
 		},
+        famous:function(){
+            if(storage.usertree.gedcom_id == null) return false;
+            var object = storage.usertree.pull[storage.usertree.gedcom_id];
+            var	sb = host.stringBuffer(), parse = storage.usertree.parse(object), htmlObject;
+            sb._('<div class="jmb-profile-famous-cont">');
+            sb._('<table>');
+            sb._('<tr><td><div class="text"><span>You logged in as:</span></div></td><td rowspan="3"><div class="avatar">')._(fn.getAvatar(object))._('</div></td></tr>');
+            sb._('<tr><td><div class="name"><span>')._(parse.name)._('</span></div></td></tr>');
+            sb._('<tr><td><div class="logout"><span>Exit this Family Trees</span></div></td></tr>');
+            sb._('</table>');
+            sb._('</div>');
+            htmlObject = jQuery(sb.result());
+            jQuery(htmlObject).find('div.logout span').click(function(){
+                fn.ajax('famous', 'logout', function(res){
+                    window.location.reload();
+                });
+            });
+            jQuery('div.jmb-header-container').append(htmlObject);
+        },
+        facebook:function(data){
+            var cont = fn.create();
+            fn.setName(data, cont);
+            fn.setAvatar(data, cont);
+            fn.click(cont);
+            jQuery(document.body).append(cont);
+        },
 		init:function(callback){
 			var cont;
-			fn.user(function(object){
+			fn.user(function(data){
 				fb_logged = jQuery(document.body).attr('_fb');
 				switch(alias){
                     case "myfamily":
-                        if(type=="famous_family" && object){
-                            fn.famous(object);
+                        if(type=="famous_family"){
+                            fn.famous();
                         } else {
-                            cont = fn.create();
-                            fn.setName(object, cont);
-                            fn.setAvatar(object, cont);
-                            if(!object.link){
-                                fn.click(cont);
-                            }
-                            jQuery(document.body).append(cont);
+                            fn.facebook(data);
                         }
                     break;
 
@@ -276,16 +275,9 @@ function JMBLogin(){
                             cont = fn.connect();
                             fn.login(cont);
                             jQuery(document.body).append(cont);
-                        } else if(object) {
-                            cont = fn.create();
-                            fn.setName(object, cont);
-                            fn.setAvatar(object, cont);
-                            if(!object.link){
-                                fn.click(cont);
-                            }
-                            jQuery(document.body).append(cont);
+                        } else if(data) {
+                            fn.facebook(data);
                         }
-                        
 					break;
 				}
 				callback();
