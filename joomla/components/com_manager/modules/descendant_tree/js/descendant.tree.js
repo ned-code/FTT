@@ -1,6 +1,6 @@
 function JMBDescendantTreeObject(obj){
 	var	module = this,
-		id = jQuery(obj).attr('id');
+	id = jQuery(obj).attr('id');
 
     module.message = {
         FTT_MOD_DESCEDNATS_TREE_NAME:"Name",
@@ -323,9 +323,9 @@ JMBDescendantTreeObject.prototype = {
 						ctx = canvas.getContext("2d");
 						
 						ctx.clearRect(0, 0, canvas.width, canvas.height);
-						ctx.strokeStyle = '#000000'; // ���� �������
-						ctx.fillStyle = '#000000'; // ���� �������
-						ctx.lineWidth = 1; // ������ �����
+						ctx.strokeStyle = '#000000';
+						ctx.fillStyle = '#000000';
+						ctx.lineWidth = 1;
 
 						line = function(x, y, length, hor){
 							ctx.save();
@@ -458,14 +458,18 @@ JMBDescendantTreeObject.prototype = {
 										jQuery(div).find('input').attr('checked', false);
 										jQuery(this).attr('checked', true);
 									});
-									if(module.checked!=null){
-										jQuery(div).find('input#'+module.checked).attr('checked', true);
+									if(module.first!=null){
+										jQuery(div).find('input#'+module.first).attr('checked', true);
 									}
 								} else {
 									box.off();
 								}
-							}
-						} 												
+							} else {
+                                box.off();
+                            }
+						} else {
+                            box.off();
+                        }
 					},
 					off:function(){
 						jQuery(div).remove();
