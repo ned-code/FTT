@@ -963,7 +963,7 @@ JMBProfile.prototype = {
                     var mes, method = 'deleteBranch';
                     if(module.gedcom_id != storage.usertree.gedcom_id){
                         mes = module.message.FTT_MOD_PROFILE_EDITOR_DELETE_CONFIRM;
-                    } else if(storage.usertree.getUsersLength() == 0){
+                    } else if(storage.usertree.getUsersLength() == 1){
                         mes = module.message.FTT_MOD_PROFILE_EDITOR_DELETE_TREE_CONFIRM;
                         method = 'deleteTree';
                     } else {

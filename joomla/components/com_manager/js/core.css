@@ -216,7 +216,7 @@ div.buttons span {
 .notifications_manager .data div.info div.user_box div.avatar{
 	border: 1px solid #000000;
 	height: 80px;
-    	width: 72px;
+    width: 80px;
 }
 .notifications_manager .data div.info div.user_box div.text{
 	font-weight:bold;

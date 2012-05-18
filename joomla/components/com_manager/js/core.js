@@ -578,7 +578,7 @@ storage.notifications.link = function(st){
 			sb._('<table>');
 				sb._('<tr>');
 					sb._('<td>');
-						sb._('<div class="avatar"><img src="index.php?option=com_manager&task=getResizeImage&fid=')._(args.me.id)._('&w=72&h=80"></div>');
+						sb._("<div class='avatar'><img src='http://graph.facebook.com/")._(args.me.id)._("/picture' width='80px' height='80px'></div>");
 					sb._('</td>');
 					sb._('<td valign="top">');
 						sb._('<table>');
@@ -789,7 +789,7 @@ storage.notifications.manager = function(){
 			sb._('<table>');
 				sb._('<tr>');
 					sb._('<td valign="top">');
-						sb._('<div class="avatar"><img src="index.php?option=com_manager&task=getResizeImage&fid=')._(facebook_id)._('&w=72&h=80"></div>');
+						sb._('<div class="avatar"><img width="80px" height="80px" src="http://graph.facebook.com/')._(facebook_id)._('/picture"></div>');
 					sb._('</td>');
 					sb._('<td>');
 						sb._('<table>');
