@@ -11,21 +11,17 @@ class TreeCreator {
 	public function verify_facebook_friends($friends){
 		$sql_string = "SELECT ind.id as gedcom_id, ind.fid as facebook_id, ind.sex as gender FROM #__mb_individuals as ind
 				LEFT JOIN #__mb_tree_links as link ON ind.id = link.individuals_id
-				WHERE ind.fid != 0 and link.type = 'OWNER'";
+				WHERE ind.fid != 0";// and link.type = 'OWNER'";
 		$this->db->setQuery($sql_string);
 		$rows = $this->db->loadAssocList();
 		$result = array();
 		$f = get_object_vars(json_decode($friends));
 
 		foreach($rows as $row){
-			/*
             if(isset($f[$row['facebook_id']])){
 				$result[] = array('facebook_id'=>$row['facebook_id'],'gedcom_id'=>$row['gedcom_id'],'name'=>$f[$row['facebook_id']],'gender'=>$row['gender']);
 			}
-			*/
-            $result[] = array('facebook_id'=>$row['facebook_id'],'gedcom_id'=>$row['gedcom_id'],'name'=>$f[$row['facebook_id']],'gender'=>$row['gender']);
 		}
-
 
 		return json_encode(array('result'=>$result));
 	}
@@ -102,7 +98,16 @@ class TreeCreator {
 		$session = JFactory::getSession();
 		$facebook_id = $session->get('facebook_id');
 		$args = json_decode($args);
+        $full_name = $args->self->first_name." ".$args->self->last_name;
         $tree_name = $args->self->first_name." ".$args->self->last_name." Tree";
+
+        $sql_string = "SELECT facebook_id FROM #__mb_notifications WHERE facebook_id = ?";
+        $this->db->setQuery($sql_string, $facebook_id);
+        $rows = $this->db->loadAssocList();
+        if($rows != null) {
+            $message = "You have already sent a request to ".$full_name." to join an existing Family Tree. Would you like to cancel this request and start again? ";
+            return json_encode(array('error'=> $message));
+        }
 
         //create tree
         $sql_string = "INSERT INTO #__mb_tree (`id`, `name`) VALUES (NULL, ?)";
@@ -137,16 +142,33 @@ class TreeCreator {
 	
 	public function send_request($args){
 		$std = json_decode($args);
+
 		$sql_string = "SELECT tree_id FROM #__mb_tree_links WHERE individuals_id = ?";
 		$this->db->setQuery($sql_string, $std->target->gedcom_id);
 		$rows = $this->db->loadAssocList();
 		if($rows == null) return json_encode(array('error'=>'target user not exists.'));
 		$tree_id = $rows[0]['tree_id'];
-		
-		$sql_string = "INSERT INTO #__mb_notifications (`id`, `tree_id`, `gedcom_id`, `data`, `status`) VALUES (NULL, ?, ?, ?, 0)";
-		$this->db->setQuery($sql_string, $tree_id, $std->target->gedcom_id, $args);
+
+        $sql_string = "SELECT facebook_id FROM #__mb_notifications WHERE facebook_id = ?";
+        $this->db->setQuery($sql_string, $std->target->facebook_id);
+        $rows = $this->db->loadAssocList();
+        if($rows != null) return json_encode(array('error'=>'Request already send.'));
+
+		$sql_string = "INSERT INTO #__mb_notifications (`id`, `tree_id`, `gedcom_id`,`facebook_id`,`data`, `status`) VALUES (NULL, ?, ?, ?, ?, 0)";
+		$this->db->setQuery($sql_string, $tree_id, $std->target->gedcom_id, $std->me->id ,$args);
 		$this->db->query();
 		return json_encode(array('success'=>true));
 	}
+
+    public function abortRequest(){
+        $session = JFactory::getSession();
+        $facebook_id = $session->get('facebook_id');
+
+        $sql_string = "DELETE FROM #__mb_notifications WHERE facebook_id = ?";
+        $this->db->setQuery($sql_string, $facebook_id);
+        $this->db->query();
+
+        return true;
+    }
 }
 ?>

@@ -28,7 +28,7 @@ JMBInvitation.prototype = {
 	},
 	sendRequestToInviteFacebookFriend:function(facebook_id, callback){
       		FB.ui({method: 'apprequests',
-      			message: 'Request to invitation in Family Tree Top application.',
+      			message: 'Request to invitation in Family Tree Top application. Link: '+storage.baseurl,
       			to: facebook_id
       		}, callback);
     },

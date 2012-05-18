@@ -493,6 +493,15 @@ function JMBTreeCreatorObject(parent){
 			jQuery(user_form).find('.finish_button').click(function(){
 				var query = fn.convert_to_string(module.args_pull);
 				fn.ajax('create_tree', query, function(res){
+                    var json = jQuery.parseJSON(res.responseText);
+                    if(json.error){
+                        if(confirm(json.error)){
+                            fn.ajax('abortRequest', null, function(){
+                                alert('Your request is removed, you can begin to create the tree.')
+                            });
+                        }
+                        return false;
+                    }
 					module.reload = true;
 					sb.clear();
 					sb._('<div class="video">');
