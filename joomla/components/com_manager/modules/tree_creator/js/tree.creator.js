@@ -43,7 +43,7 @@ function JMBTreeCreatorObject(parent){
 	}
 	
 	module.request_settings = {
-		width:510,
+		width:530,
 		height:450,
 		resizable: false,
 		draggable: false,
@@ -118,6 +118,7 @@ function JMBTreeCreatorObject(parent){
 			relations:function(){
 				var sb = host.stringBuffer();
 				sb._('<select name="relations">');
+                    sb._('<option value="">Select Relation</option>');
 					sb._('<option value="Father">Father</option>');
 					sb._('<option value="Mother">Mother</option>');
 					sb._('<option value="Brother">Brother</option>');
@@ -220,8 +221,9 @@ function JMBTreeCreatorObject(parent){
 			sb._('<table>');
 				if(args){
 					sb._('<tr style="height: 88px;">');
-						sb._('<td valign="top"><div class="facebook_avatar">')._(storage.usertree.avatar.def_image({ width:72, height:80 }, args.me.gender.substr(0, 1).toUpperCase() ))._('</div></td>');
-						sb._('<td valign="top"><span style="font-weight: bold;margin-left: 5px;">Gender:</span> ')._(fn.select.gender())._('</td>');
+						//sb._('<td valign="top"><div class="facebook_avatar">')._(storage.usertree.avatar.def_image({ width:72, height:80 }, args.me.gender.substr(0, 1).toUpperCase() ))._('</div></td>');
+                    sb._('<td valign="top"><div class="facebook_avatar">')._('<img width="80px" height="80px"  src="https://graph.facebook.com/')._(args.me.id)._('/picture">')._('</div></td>');
+                        sb._('<td valign="top"><span style="font-weight: bold;margin-left: 5px;">Gender:</span> ')._(fn.select.gender())._('</td>');
 					sb._('</tr>');
 				}
 				sb._('<tr>');
@@ -234,7 +236,7 @@ function JMBTreeCreatorObject(parent){
 				sb._('</tr>');
 				if(args){
 					sb._('<tr>');
-						sb._('<td><div class="title"><span>Know as:</span></div></td>');
+						sb._('<td><div class="title"><span>Known:</span></div></td>');
 						sb._('<td><div class="text"><input name="nick" type="text"></div></td>');
 					sb._('</tr>');
 				}
@@ -356,8 +358,8 @@ function JMBTreeCreatorObject(parent){
                 jQuery(request_form).find('select[name="gender"]').change(function(){
                     var gender = jQuery(this).val();
                     var avatarDiv = jQuery(request_form).find('div.facebook_avatar');
-                    jQuery(avatarDiv).html('');
-                    jQuery(avatarDiv).append(storage.usertree.avatar.def_image({ width:72, height:80 }, gender.toUpperCase()));
+                    //jQuery(avatarDiv).html('');
+                    //jQuery(avatarDiv).append(storage.usertree.avatar.def_image({ width:72, height:80 }, gender.toUpperCase()));
                 });
 				jQuery(option[(res.gender=='male')?1:0]).attr('selected', 'selected');
 				jQuery(module.dialog_box).dialog('close');
@@ -554,7 +556,8 @@ function JMBTreeCreatorObject(parent){
 							sb._('<tr>');
 								sb._('<td>');
 									sb._('<div class="avatar">');
-										sb._(storage.usertree.avatar.def_image({ width:50, height:50 }, el.gender.substr(0, 1).toUpperCase()))
+										//sb._(storage.usertree.avatar.def_image({ width:50, height:50 }, el.gender.substr(0, 1).toUpperCase()));
+                                        sb._('<img src="https://graph.facebook.com/')._(el.facebook_id)._('/picture">');
 									sb._('</div>');
 								sb._('</td>');
 								sb._('<td><div class="name">')._(el.name)._('</div></td>');
