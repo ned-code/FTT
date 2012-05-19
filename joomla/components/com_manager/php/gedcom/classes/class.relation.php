@@ -221,6 +221,9 @@ class JMBRelation {
 
 	public function set($tree_id, $gedcom_id, $target_id){
 		$this->init($tree_id, $gedcom_id);
+        $sql_string = "DELETE FROM #__mb_relations WHERE tree_id = ? AND `from` = ? AND `to` = ?";
+        $this->ajax->setQuery($sql_string, $tree_id, $gedcom_id, $target_id);
+        $this->ajax->query();
 		$relation =  $this->get_relation($target_id, $gedcom_id);		
 		$sql_string = "INSERT INTO #__mb_relations (`tree_id`, `from`, `to`, `relation`) VALUES (?, ?, ?, ?)";
 		$this->ajax->setQuery($sql_string, $tree_id, $gedcom_id, $target_id, ($relation)?$relation:'unknown');

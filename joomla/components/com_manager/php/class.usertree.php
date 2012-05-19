@@ -187,15 +187,6 @@ class JMBUserTree {
 	/**
 	*
 	*/
-	protected function z($event_id){
-		if(isset($this->_LocationsEventsList[$event_id])){
-			return $this->_LocationsEventsList[$event_id];
-		}
-		return null;
-	}
-	/**
-	*
-	*/
 	protected function _getMedia($gedcom_id){
 		if(isset($this->_MediaList[$gedcom_id])){
 			$media = $this->_MediaList[$gedcom_id];

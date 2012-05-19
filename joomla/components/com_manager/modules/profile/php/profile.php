@@ -170,6 +170,8 @@ class JMBProfile {
 		$session = JFactory::getSession();
 		$owner_id = $session->get('gedcom_id');
 		$tree_id = $session->get('tree_id');
+
+        $this->host->gedcom->relation->set($tree_id, $owner_id, $ind->Id);
         //get objects
         $objects = $this->host->usertree->getUser($tree_id, $owner_id, $ind->Id);
         return json_encode(array('objects'=>$objects));
