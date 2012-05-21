@@ -70,7 +70,6 @@ function JMBLogin(){
 			var module = this, menu, list, sb = host.stringBuffer(), contEl;
 			sb._('<div class="menu">');
 				sb._('<div id="profile"><span>Profile</span></div>');
-				/*sb._('<div id="preferences"><span>Preferences</span></div>');*/
 				sb._('<div id="language"><span>Language: ')._(this.getDefaultLang())._('</span></div>');
 				sb._('<div id="logout"><span>Log Out</span></div>');
 			sb._('</div>');
@@ -188,8 +187,10 @@ function JMBLogin(){
 			jQuery(box).html(data.name);
 		},
 		setAvatar:function(data ,cont){
-			var	box = jQuery(cont).find('div.avatar');
-			jQuery(box).html('<img width="22px" height="22px" src="http://graph.facebook.com/'+data.id+'/picture">');
+            if(typeof(data) != 'undefined'  && typeof(data.id) != 'undefined'){
+                var	box = jQuery(cont).find('div.avatar');
+                jQuery(box).html('<img width="22px" height="22px" src="http://graph.facebook.com/'+data.id+'/picture">');
+            }
 		},
 		getAvatar:function(object){
             return storage.usertree.avatar.get({
