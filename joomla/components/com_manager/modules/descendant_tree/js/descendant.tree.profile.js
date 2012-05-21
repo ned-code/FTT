@@ -88,7 +88,7 @@ DescendantTreeProfile.prototype = {
                                     sb._(':</span>');
                                     sb._('&nbsp;');
                                     sb._('<span class="text">');
-                                        sb._((parse.place('birth')!='')?parse.place('birth').place_name:'');
+                                        sb._(parse.getPlaceName('birth'));
                                     sb._('</span>');
                                 sb._('</div>');
                                 if(parse.is_death){
@@ -107,7 +107,7 @@ DescendantTreeProfile.prototype = {
                                         sb._(':</span>');
                                         sb._('&nbsp;');
                                         sb._('<span class="text">');
-                                            sb._((parse.place('death')!='')?parse.place('death').place_name:'');
+                                            sb._(parse.getPlaceName('death'));
                                         sb._('</span>');
                                     sb._('</div>');
                                 }

@@ -113,12 +113,12 @@ JMBTooltip.prototype = {
 							sb._('<td class="jmb-tooltip-view-info-data">');
 								sb._('<div><span>')._(message.FTT_MOD_TOOLTIPS_NAME)._(':</span> <span class="text">')._(name)._('</span></div>');
 								if(get.is_birth){
-									place = get.place('birth');
-									sb._('<div><span>')._(message.FTT_MOD_TOOLTIPS_BORN)._(':</span> <span class="text">')._(birthday)._((place.length!=0)?' ('+place.city+','+place.country+')':'')._('</span></div>');
+                                    place = get.getPlaceString('birth');
+									sb._('<div><span>')._(message.FTT_MOD_TOOLTIPS_BORN)._(':</span> <span class="text">')._(birthday)._(place)._('</span></div>');
 								}
 								if(get.is_death){
-									place = get.place('death');
-									sb._('<div><span>')._(message.FTT_MOD_TOOLTIPS_DECEASED)._(':</span> <span class="text">')._(death)._((place.length!=0)?' ('+place.city+','+place.country+')':'')._('</span></div>');
+                                    place = get.getPlaceString('death');
+									sb._('<div><span>')._(message.FTT_MOD_TOOLTIPS_DECEASED)._(':</span> <span class="text">')._(death)._(place)._('</span></div>');
 								}
 								if(relation){
 									sb._('<div><span>')._(message.FTT_MOD_TOOLTIPS_RELATION)._(':</span> <span class="text">')._(relation)._('</span></div>');

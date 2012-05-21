@@ -287,7 +287,36 @@ storage.usertree.parse = function(object){
 				}
 			}
 			return '';
-		}
+		},
+        getPlaceName:function(type){
+            var event = user[type];
+            if(event != null){
+                var place = (event.place != null && event.place.length != 0)?event.place[0]:null;
+                if(place!= null){
+                    var name = place.place_name;
+                    if(name != null && name != ''){
+                        return name;
+                    }
+                }
+            }
+            return '';
+        },
+        getPlaceString:function(type){
+            var event = user[type];
+            if(event != null){
+                var place = (event.place != null && event.place.length != 0)?event.place[0]:null;
+                if(place!= null){
+                    var city = place.city;
+                    var country = place.country;
+                    if(city != null && country != null){
+                        return '(' + city + ', ' + country + ')';
+                    } else if(city != null || country != null){
+                        return '(' + (city || country) + ')';
+                    }
+                }
+            }
+            return '';
+        }
 	}
 }
 storage.usertree.paths = {}
