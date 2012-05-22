@@ -338,8 +338,10 @@ function JMBTreeCreatorObject(parent){
 					if(response.error){
 						alert(response.error);
 						module.request_send = false;
+                        jQuery(form).dialog('close');
 						return false;
 					} else if(response.success){
+                        alert('Your request has been sent.  You will receive an email once '+ args.target.name +' has processed your request');
 						jQuery(form).dialog('close');
 						return true;
 					}
@@ -472,18 +474,23 @@ function JMBTreeCreatorObject(parent){
 			sb._('</div>');
 			return sb.result();
 		},
-		convert_to_string:function(args_pull){
-			var title = ['self','mother','father'];
-			var string = '{';
-			jQuery(args_pull).each(function(i, el){
-				string += '"'+title[i]+'":{'
-				for(var key in el){
-					string += '"'+key+'":"'+el[key]+'",';
-				}
-				string = string.substr(0, string.length -1);
-				string += '},';
-			});
-			return string.substr(0, string.length -1) + '}';
+		convert_to_string:function(args_pull, callback){
+            FB.api('me', function(fb){
+                var title = ['self','mother','father'];
+                var string = '{';
+                jQuery(args_pull).each(function(i, el){
+                    string += '"'+title[i]+'":{'
+                    for(var key in el){
+                        string += '"'+key+'":"'+el[key]+'",';
+                    }
+                    string = string.substr(0, string.length -1);
+                    string += '},';
+                });
+                string += '"facebook_id":"'+fb.id+'"';
+                string += '}';
+                callback(string);
+                //return string.substr(0, string.length -1) + '}';
+            });
 		},
 		finish_create:function(user_form){
 			var sb = host.stringBuffer();
@@ -493,39 +500,43 @@ function JMBTreeCreatorObject(parent){
 			sb._('<div class="finish_button"><span>Create Tree</span></div>');
 			jQuery(user_form).html(sb.result());
 			jQuery(user_form).find('.finish_button').click(function(){
-				var query = fn.convert_to_string(module.args_pull);
-				fn.ajax('create_tree', query, function(res){
-                    var json = jQuery.parseJSON(res.responseText);
-                    if(json.error){
-                        if(confirm(json.error)){
-                            fn.ajax('abortRequest', null, function(){
-                                alert('Your request is removed, you can begin to create the tree.')
-                            });
+				//var query = fn.convert_to_string(module.args_pull);
+                fn.convert_to_string(module.args_pull, function(query){
+                    fn.ajax('create_tree', query, function(res){
+                        var json = jQuery.parseJSON(res.responseText);
+                        if(json.error){
+                            if(confirm(json.error)){
+                                fn.ajax('abortRequest', null, function(){
+                                    alert('Your request is removed, you can begin to create the tree.')
+                                });
+                            } else {
+                                jQuery(user_form).dialog('close');
+                                return false;
+                            }
                         }
-                        return false;
-                    }
-					module.reload = true;
-					sb.clear();
-					sb._('<div class="video">');
-						sb._('<object id="scPlayer" class="embeddedObject" width="640" height="405" type="application/x-shockwave-flash" data="http://content.screencast.com/users/Fernando_Oliveira/folders/Default/media/6da2d84e-67f3-4a00-9ef8-7ba592f8aba3/scplayer.swf" style="width: 474.0740740740741px; height: 300px; ">');
-							sb._('<param name="movie" value="http://content.screencast.com/users/Fernando_Oliveira/folders/Default/media/6da2d84e-67f3-4a00-9ef8-7ba592f8aba3/scplayer.swf">');
-							sb._('<param name="quality" value="high">');
-							sb._('<param name="bgcolor" value="#FFFFFF">');
-							sb._('<param name="flashVars" value="thumb=http://content.screencast.com/users/Fernando_Oliveira/folders/Default/media/6da2d84e-67f3-4a00-9ef8-7ba592f8aba3/FirstFrame.png&amp;containerwidth=640&amp;containerheight=405&amp;autohide=true&amp;autostart=false&amp;loop=false&amp;showendscreen=true&amp;showsearch=false&amp;showstartscreen=true&amp;tocdoc=left&amp;xmp=sc.xmp&amp;advseek=true&amp;content=http://content.screencast.com/users/Fernando_Oliveira/folders/Default/media/6da2d84e-67f3-4a00-9ef8-7ba592f8aba3/ftt-green-button2.mp4&amp;blurover=false">');
-							sb._('<param name="allowFullScreen" value="true">');
-							sb._('<param name="scale" value="showall">');
-							sb._('<param name="allowScriptAccess" value="always">');
-							sb._('<param name="base" value="http://content.screencast.com/users/Fernando_Oliveira/folders/Default/media/6da2d84e-67f3-4a00-9ef8-7ba592f8aba3/">');
-							sb._('<iframe class="embeddedObject" type="text/html" frameborder="0" scrolling="no" style="overflow-x: hidden; overflow-y: hidden; width: 474.0740740740741px; height: 300px; " src="http://www.screencast.com/users/Fernando_Oliveira/folders/Default/media/6da2d84e-67f3-4a00-9ef8-7ba592f8aba3/embed" height="405" width="640"></iframe>');
-						sb._('</object>');
-					sb._('</div>');
-					sb._('<div class="switch_to_myfamily"><span>Switch to MyFamily</span></div>')
-					jQuery(user_form).html(sb.result());
-					jQuery(user_form).dialog('option', 'width', 500);
-					jQuery(user_form).find('.switch_to_myfamily').click(function(){
-						window.location.reload();
-					});
-				});
+                        module.reload = true;
+                        sb.clear();
+                        sb._('<div class="video">');
+                        sb._('<object id="scPlayer" class="embeddedObject" width="640" height="405" type="application/x-shockwave-flash" data="http://content.screencast.com/users/Fernando_Oliveira/folders/Default/media/6da2d84e-67f3-4a00-9ef8-7ba592f8aba3/scplayer.swf" style="width: 474.0740740740741px; height: 300px; ">');
+                        sb._('<param name="movie" value="http://content.screencast.com/users/Fernando_Oliveira/folders/Default/media/6da2d84e-67f3-4a00-9ef8-7ba592f8aba3/scplayer.swf">');
+                        sb._('<param name="quality" value="high">');
+                        sb._('<param name="bgcolor" value="#FFFFFF">');
+                        sb._('<param name="flashVars" value="thumb=http://content.screencast.com/users/Fernando_Oliveira/folders/Default/media/6da2d84e-67f3-4a00-9ef8-7ba592f8aba3/FirstFrame.png&amp;containerwidth=640&amp;containerheight=405&amp;autohide=true&amp;autostart=false&amp;loop=false&amp;showendscreen=true&amp;showsearch=false&amp;showstartscreen=true&amp;tocdoc=left&amp;xmp=sc.xmp&amp;advseek=true&amp;content=http://content.screencast.com/users/Fernando_Oliveira/folders/Default/media/6da2d84e-67f3-4a00-9ef8-7ba592f8aba3/ftt-green-button2.mp4&amp;blurover=false">');
+                        sb._('<param name="allowFullScreen" value="true">');
+                        sb._('<param name="scale" value="showall">');
+                        sb._('<param name="allowScriptAccess" value="always">');
+                        sb._('<param name="base" value="http://content.screencast.com/users/Fernando_Oliveira/folders/Default/media/6da2d84e-67f3-4a00-9ef8-7ba592f8aba3/">');
+                        sb._('<iframe class="embeddedObject" type="text/html" frameborder="0" scrolling="no" style="overflow-x: hidden; overflow-y: hidden; width: 474.0740740740741px; height: 300px; " src="http://www.screencast.com/users/Fernando_Oliveira/folders/Default/media/6da2d84e-67f3-4a00-9ef8-7ba592f8aba3/embed" height="405" width="640"></iframe>');
+                        sb._('</object>');
+                        sb._('</div>');
+                        sb._('<div class="switch_to_myfamily"><span>Switch to MyFamily</span></div>')
+                        jQuery(user_form).html(sb.result());
+                        jQuery(user_form).dialog('option', 'width', 500);
+                        jQuery(user_form).find('.switch_to_myfamily').click(function(){
+                            window.location.reload();
+                        });
+                    });
+                });
 			});
 		},
 		create_new_tree:function(e){

@@ -101,11 +101,14 @@ class TreeCreator {
         $full_name = $args->self->first_name." ".$args->self->last_name;
         $tree_name = $args->self->first_name." ".$args->self->last_name." Tree";
 
-        $sql_string = "SELECT facebook_id FROM #__mb_notifications WHERE facebook_id = ?";
-        $this->db->setQuery($sql_string, $facebook_id);
+        $sql_string = "SELECT gedcom_id, facebook_id FROM #__mb_notifications WHERE facebook_id = ?";
+        $this->db->setQuery($sql_string, $args->facebook_id);
         $rows = $this->db->loadAssocList();
         if($rows != null) {
-            $message = "You have already sent a request to ".$full_name." to join an existing Family Tree. Would you like to cancel this request and start again? ";
+            $gedcom_id = $rows[0]['gedcom_id'];
+            $user = $this->host->gedcom->individuals->get($gedcom_id);
+            $user_name = $user->FirstName. " " . $user->LastName;
+            $message = "You have already sent a request to ".$user_name." to join an existing Family Tree. Would you like to cancel this request and start again? ";
             return json_encode(array('error'=> $message));
         }
 
@@ -142,7 +145,6 @@ class TreeCreator {
 	
 	public function send_request($args){
 		$std = json_decode($args);
-
 		$sql_string = "SELECT tree_id FROM #__mb_tree_links WHERE individuals_id = ?";
 		$this->db->setQuery($sql_string, $std->target->gedcom_id);
 		$rows = $this->db->loadAssocList();
@@ -150,7 +152,7 @@ class TreeCreator {
 		$tree_id = $rows[0]['tree_id'];
 
         $sql_string = "SELECT facebook_id FROM #__mb_notifications WHERE facebook_id = ?";
-        $this->db->setQuery($sql_string, $std->target->facebook_id);
+        $this->db->setQuery($sql_string, $std->me->id);
         $rows = $this->db->loadAssocList();
         if($rows != null) return json_encode(array('error'=>'Request already send.'));
 
