@@ -356,6 +356,10 @@ class JMBController extends JController
         				$host->ajax->setQuery($sql_string, 1, $id);
                         $host->ajax->query();
         			} else if($status == 'deny'){
+                        $sql_string = "UPDATE #__mb_notifications SET `processed` = 1, `status` = ? WHERE `id` = ?";
+                        $host->ajax->setQuery($sql_string, 2, $id);
+                        $host->ajax->query();
+
         				$message = preg_replace('/%([0-9a-f]{2})/ie', 'chr(hexdec($1))', (string) JRequest::getVar('message'));
         				$data = json_decode(JRequest::getVar('data'));
         				
@@ -364,15 +368,23 @@ class JMBController extends JController
         				$me_name = explode(" ", $data->me->name);
         				#recipient  
         				$to = "<".$data->me->email.">";
-        				$from = "<familytreetop@gmail.com>";
+        				//$from = "<familytreetop@gmail.com>";
+                        $from = "<no-reply@familytreetop.com>";
 		
         				#subject
         				$subject = "Family Treetop invitation.";  
-        				
+
+                        /*
         				$host = "ssl://smtp.gmail.com";
         				$port = "465";
         				$username = "familytreetop@gmail.com";
         				$password = "3d#@technology";
+                        */
+
+                        $host = "ssl://smtp.gmail.com";
+                        $port = "465";
+                        $username = "admin@familytreetop.com";
+                        $password = "Famtr33!!";
 
         				#mail body 
                         $mail_body = '<html><head>Family TreeTop invitation.</head><body>';
@@ -384,7 +396,7 @@ class JMBController extends JController
                         $mail_body .= "<div style='margin-left:10px;'>".$message."</div>";
                         $mail_body .= '</body></html>';
 
-                        $headers = array ("MIME-Version"=> '1.0', "Content-type" => "text/html; charset=iso-8859-1",'From' => $from,'To' => $to,'Subject' => $subject);
+                        $headers = array ("MIME-Version"=> '1.0', "Content-type" => "text/html; charset=utf-8",'From' => $from,'To' => $to,'Subject' => $subject);
 
                         $smtp = Mail::factory('smtp',array ('host' => $host,'port' => $port,'auth' => true,'username' => $username,'password' => $password));
 
@@ -392,14 +404,9 @@ class JMBController extends JController
 
                         if (PEAR::isError($mail)) {
                             echo json_encode(array('message'=>'Message delivery failed...'));
-
                         } else {
                             echo json_encode(array('message'=>'Message successfully sent!'));
                         }
-
-                        $sql_string = "UPDATE #__mb_notifications SET `processed` = 1, `status` = ? WHERE `id` = ?";
-                        $host->ajax->setQuery($sql_string, 2, $id);
-                        $host->ajax->query();
                      }
         		break;
         		

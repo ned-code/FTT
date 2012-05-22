@@ -464,6 +464,13 @@ storage.notifications.pull = [];
 storage.notifications.confirmed = {};
 storage.notifications.denied = {};
 storage.notifications.not_confirmed = {};
+storage.notifications.getCount = function(st){
+    var count = 0;
+    for(var key in st){
+        count ++
+    }
+    return count;
+}
 storage.notifications.deny = function(id, json, object){
 	var	ntf = storage.notifications,
 		sb = host.stringBuffer(),
@@ -524,6 +531,10 @@ storage.notifications.deny = function(id, json, object){
 				delete ntf.not_confirmed[id];
 				ntf.denied[id] = object;
 				jQuery(box).dialog('close');
+                var count = storage.notifications.getCount(ntf.not_confirmed);
+                if(count == 0){
+                    jQuery('div.ftt_notifications_alert').remove();
+                }
 			}
 		});
 	});
@@ -911,6 +922,10 @@ storage.notifications.manager = function(){
 					delete ntf.not_confirmed[id];
 					ntf.confirmed[id] = object;
 					jQuery(dialog_box).dialog('close');
+                    var count = storage.notifications.getCount(ntf.not_confirmed);
+                    if(count == 0){
+                        jQuery('div.ftt_notifications_alert').remove();
+                    }
 				}
 			});
 		});
