@@ -355,6 +355,41 @@ class JMBController extends JController
         				$sql_string = "UPDATE #__mb_notifications SET `status` = ? WHERE `id` = ?";
         				$host->ajax->setQuery($sql_string, 1, $id);
                         $host->ajax->query();
+
+                        $data = json_decode(JRequest::getVar('data'));
+
+                        require_once("Mail.php");
+                        #recipient
+                        $to = "<".$data->me->email.">";
+
+                        $from = "<no-reply@familytreetop.com>";
+
+                        #subject
+                        $subject = "Family Treetop invitation.";
+
+                        $host = "ssl://smtp.gmail.com";
+                        $port = "465";
+                        $username = "admin@familytreetop.com";
+                        $password = "Pp9671111";
+
+                        #mail body
+                        $mail_body = '<html><head>Family TreeTop invitation.</head><body>';
+                        $mail_body .= "<div style='margin:10px;'>Dear ".$data->me->name.",</div>";
+                        $mail_body .= "<div style='margin:10px;'>".$data->target->name." has accepted your Family TreeTop invitation request.";
+                        $mail_body .= '</body></html>';
+
+                        $headers = array ("MIME-Version"=> '1.0', "Content-type" => "text/html; charset=utf-8",'From' => $from,'To' => $to,'Subject' => $subject);
+
+                        $smtp = Mail::factory('smtp',array ('host' => $host,'port' => $port,'auth' => true,'username' => $username,'password' => $password));
+
+                        $mail = $smtp->send($to, $headers, $mail_body);
+
+                        if (PEAR::isError($mail)) {
+                            echo json_encode(array('message'=>'Message delivery failed...'));
+                        } else {
+                            echo json_encode(array('message'=>'Message successfully sent!'));
+                        }
+
         			} else if($status == 'deny'){
                         $sql_string = "UPDATE #__mb_notifications SET `processed` = 1, `status` = ? WHERE `id` = ?";
                         $host->ajax->setQuery($sql_string, 2, $id);
@@ -365,26 +400,17 @@ class JMBController extends JController
         				
         				require_once("Mail.php");
         				$target_name = explode(" ", $data->target->name);
-        				$me_name = explode(" ", $data->me->name);
         				#recipient  
         				$to = "<".$data->me->email.">";
-        				//$from = "<familytreetop@gmail.com>";
                         $from = "<no-reply@familytreetop.com>";
 		
         				#subject
         				$subject = "Family Treetop invitation.";  
 
-                        /*
-        				$host = "ssl://smtp.gmail.com";
-        				$port = "465";
-        				$username = "familytreetop@gmail.com";
-        				$password = "3d#@technology";
-                        */
-
                         $host = "ssl://smtp.gmail.com";
                         $port = "465";
                         $username = "admin@familytreetop.com";
-                        $password = "Famtr33!!";
+                        $password = "Pp9671111";
 
         				#mail body 
                         $mail_body = '<html><head>Family TreeTop invitation.</head><body>';
@@ -426,7 +452,7 @@ class JMBController extends JController
         			
         			$i = $host->gedcom->individuals->get($gedcom_id);
         			$i->FacebookId = $facebook_id;
-        			$host->gedcom->individuals->update($i); 
+        			$host->gedcom->individuals->update($i);
         		break;
         	}
         	exit;

@@ -760,7 +760,7 @@ storage.notifications.link = function(st){
 		var pull = confirmed[selected];	
 		var args = jQuery.parseJSON(pull.data);
 		jQuery.ajax({
-			url:'index.php?option=com_manager&task=notifications&type=processed&facebook_id='+args.me.id+'&tree_id='+storage.usertree.tree+'&gedcom_id='+st.object.user.gedcom_id+'&request_id='+selected,
+			url:'index.php?option=com_manager&task=notifications&type=processed&facebook_id='+args.me.id+'&tree_id='+storage.usertree.tree_id+'&gedcom_id='+st.object.user.gedcom_id+'&request_id='+selected,
 			type:'GET',
 			complete:function(req, err){
 				jQuery(dialog_box).dialog('close');
@@ -915,6 +915,7 @@ storage.notifications.manager = function(){
 			jQuery.ajax({
 				url:'index.php?option=com_manager&task=notifications&type=request&status=accept&id='+id,
 				type:'GET',
+                data:'data='+object.data,
 				complete:function(req, err){
 					if(!ntf.is_accepted){
 						ntf.is_accepted = true;

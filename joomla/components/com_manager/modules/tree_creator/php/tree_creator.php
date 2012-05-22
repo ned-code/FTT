@@ -101,7 +101,7 @@ class TreeCreator {
         $full_name = $args->self->first_name." ".$args->self->last_name;
         $tree_name = $args->self->first_name." ".$args->self->last_name." Tree";
 
-        $sql_string = "SELECT gedcom_id, facebook_id FROM #__mb_notifications WHERE facebook_id = ?";
+        $sql_string = "SELECT gedcom_id, facebook_id FROM #__mb_notifications WHERE facebook_id = ? AND processed != 1";
         $this->db->setQuery($sql_string, $args->facebook_id);
         $rows = $this->db->loadAssocList();
         if($rows != null) {
@@ -151,7 +151,7 @@ class TreeCreator {
 		if($rows == null) return json_encode(array('error'=>'target user not exists.'));
 		$tree_id = $rows[0]['tree_id'];
 
-        $sql_string = "SELECT facebook_id FROM #__mb_notifications WHERE facebook_id = ?";
+        $sql_string = "SELECT facebook_id FROM #__mb_notifications WHERE facebook_id = ? AND processed != 1";
         $this->db->setQuery($sql_string, $std->me->id);
         $rows = $this->db->loadAssocList();
         if($rows != null) return json_encode(array('error'=>'Request already send.'));
@@ -159,6 +159,37 @@ class TreeCreator {
 		$sql_string = "INSERT INTO #__mb_notifications (`id`, `tree_id`, `gedcom_id`,`facebook_id`,`data`, `status`) VALUES (NULL, ?, ?, ?, ?, 0)";
 		$this->db->setQuery($sql_string, $tree_id, $std->target->gedcom_id, $std->me->id ,$args);
 		$this->db->query();
+
+        $sql_string = "SELECT u.email FROM #__users as u
+                        LEFT JOIN #__jfbconnect_user_map as m ON m.j_user_id = u.id
+                        WHERE m.fb_user_id = ?";
+        $this->db->setQuery($sql_string, $std->target->facebook_id);
+        $rows = $this->db->loadAssocList();
+
+        require_once("Mail.php");
+        $to = "<".$rows[0]['email'].">";
+        $from = "<no-reply@familytreetop.com>";
+
+        #subject
+        $subject = "Family Treetop invitation.";
+
+        $host = "ssl://smtp.gmail.com";
+        $port = "465";
+        $username = "admin@familytreetop.com";
+        $password = "Pp9671111";
+
+        #mail body
+        $mail_body = '<html><head>Family TreeTop Request.</head><body>';
+        $mail_body .= "<div style='margin:10px;'>Dear ". $std->target->name.",</div>";
+        $mail_body .= "<div style='margin:10px;'>".$std->me->name." send a request to add it to your family tree.";
+        $mail_body .= '</body></html>';
+
+        $headers = array ("MIME-Version"=> '1.0', "Content-type" => "text/html; charset=utf-8",'From' => $from,'To' => $to,'Subject' => $subject);
+
+        $smtp = Mail::factory('smtp',array ('host' => $host,'port' => $port,'auth' => true,'username' => $username,'password' => $password));
+
+        $mail = $smtp->send($to, $headers, $mail_body);
+
 		return json_encode(array('success'=>true));
 	}
 

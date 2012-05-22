@@ -91,7 +91,7 @@ class JMBInvitation {
 		$host = "ssl://smtp.gmail.com";
 		$port = "465";
 		$username = "admin@familytreetop.com";
-		$password = "Famtr33!!";
+		$password = "Pp9671111";
 
         $mail_body = '<html>';
             $mail_body .= '<head>Family Treetop invitation.</head>';
