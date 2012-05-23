@@ -76,7 +76,9 @@ function JMBTopMenuBar(){
 	
 	module.init = function(){
 		fn.init();
-	} 	
+	}
+
+
 }
 
 			

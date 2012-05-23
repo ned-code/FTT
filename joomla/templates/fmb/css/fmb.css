@@ -35,6 +35,23 @@ html, body {
 	padding-left: 17px;
 	margin-top:20px;
 }
+.footer div{
+    color: gray;
+    font-family: Tahoma;
+    font-size: 12px;
+    text-align: center;
+}
+.footer ul li{
+    cursor: pointer;
+    display: inline-block;
+    list-style: none outside none;
+    margin: 5px;
+
+}
+.footer ul li a {
+    text-decoration: none;
+    color: gray;
+}
 
 #container {
 	position:relative;
@@ -45,7 +62,7 @@ html, body {
 * FMB STYLESHHET - TOP MENU BAR
 */
 .jmb-top-menu-bar{
-	background: none repeat scroll 0 0 black;
+	background: none repeat scroll 0 0 #6B944E;
 	height: 30px;
 	left: 0;
 	position: absolute;
@@ -57,7 +74,7 @@ html, body {
 	height: 35px;
 	left: 0;
 	position: absolute;
-	top: 4px;
+	top: 0px;
 	width: 115px;
 }
 .jmb-top-menu-bar div.jmb-top-menu-bar-content{

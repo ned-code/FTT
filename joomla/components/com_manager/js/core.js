@@ -1310,7 +1310,7 @@ core.load = function(pages){
 			jQuery(cont).find('div.right').remove();
 		} else if(mode == 'standalone'){
 			jQuery(cont).css('max-width', '920px');
-			jQuery(cont).find('div.footer').remove();
+			//jQuery(cont).find('div.footer').remove();
 		}
 		jQuery.ajax({
 			url:'index.php?option=com_manager&task=getPageInfo&ids='+pages,

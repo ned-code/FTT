@@ -221,6 +221,15 @@ class JMBController extends JController
 				if(!$user_data) return "first-page";
 				return "myfamily";			
 			break;
+
+            case "about":
+            case "conditions":
+            case "privaci":
+            case "contact":
+            case "feedback":
+            case "help":
+                return $alias;
+            break;
 			
 			default:
                 if($invitation_token) return "invitation";
@@ -465,13 +474,6 @@ class JMBController extends JController
         	switch($alias){
         		case 'myfamily':
         			$session->set('login_method', 'myfamily');
-        		break;
-        		
-        		case 'famous-family':
-        			
-        		break;
-        		
-        		case 'home':
         		break;
         	}
         	exit;

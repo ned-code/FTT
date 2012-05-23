@@ -1,13 +1,5 @@
 function JMBDelete(button){
-	var self = this;
-	jQuery(button).click(function(){
-		if(!confirm('You sure you want to remove your tree?')) return false;
-		storage.core.modal(true);
-		self._ajax('delete', null, function(){
-			storage.core.modal(false);
-			window.location.reload();
-		});
-	});
+    console.log('module loaded');
 }
 
 JMBDelete.prototype = {

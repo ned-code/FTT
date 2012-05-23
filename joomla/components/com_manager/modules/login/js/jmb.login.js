@@ -206,6 +206,8 @@ function JMBLogin(){
 			storage.usertree.permission = json.usertree.permission;
 			storage.usertree.users = json.usertree.users;
 			storage.usertree.pull = json.usertree.pull;
+            storage.notifications.init(json.notifications);
+            storage.settings = json.settings;
 		},
 		user:function(callback){
 			var json, object;
@@ -213,8 +215,6 @@ function JMBLogin(){
                 json = jQuery.parseJSON(res.responseText);
                 settings.languages = json.languages;
                 settings.default_language = json.default_language;
-                storage.notifications.init(json.notifications);
-                storage.settings = json.settings;
                 if(json.usertree){
                     fn.set_global_data(json);
                 }
@@ -289,7 +289,7 @@ function JMBLogin(){
     if(window!=window.top){
         module.init = function(callback){
             host.callMethod("login", "JMBLogin", 'user', null, function(res){
-                json = jQuery.parseJSON(res.responseText);
+                var json = jQuery.parseJSON(res.responseText);
                 fn.set_global_data(json);
                 callback();
             });

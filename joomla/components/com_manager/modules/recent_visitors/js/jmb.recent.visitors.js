@@ -1,5 +1,11 @@
 function JMBRecentVisitorsObject(obj){
-    var functions ={
+    var parent = this,
+        content = null,
+        sb = host.stringBuffer(),
+        type = jQuery(document.body).attr('_type'),
+        alias = jQuery(document.body).attr('_alias'),
+        settings = storage.settings,
+        functions ={
             createBody:function(json){
                 var header_background_color, st = host.stringBuffer();
                 if(type=='famous_family'){
@@ -126,13 +132,7 @@ function JMBRecentVisitorsObject(obj){
             FTT_MOD_RECENT_VISITORS_HOURS:"hours",
             FTT_MOD_RECENT_VISITORS_AGO:"ago",
             FTT_MOD_RECENT_VISITORS_SHOW:"Show all"
-        },
-        parent = this,
-        content = null,
-        sb = host.stringBuffer(),
-        type = jQuery(document.body).attr('_type'),
-        alias = jQuery(document.body).attr('_alias'),
-        settings = storage.settings;
+        };
 
 	functions.render(function(){
 		storage.core.modulesPullObject.unset('JMBRecentVisitorsObject');

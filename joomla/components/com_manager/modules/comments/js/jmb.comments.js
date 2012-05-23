@@ -1,17 +1,25 @@
-function JMBComments(obj){
-	obj = jQuery('#'+obj);
-	var div = '<fb:comments num_posts="2" width="350"></fb:comments>';
-	jQuery(obj).append(div);
-	
-	FB.init({
-		appId: "184962764872486", 
-		status:true, 
-		cookie:true, 
-		xfbml:true
-	});
+function JMBCommentsObject(object){
+    var module = this,
+        alias = jQuery(document.body).attr('_alias');
+
+    if(alias == 'feedback'){
+        var iframe = '<iframe width="100%" height="500px"" align="middle" style="border: medium none;" src="http://www.familytreetop.com/index.php/component/obsuggest/18-report-a-problem"></iframe>';
+        jQuery(object).append(iframe);
+
+    } else {
+        module.ajax('get', alias, function(res){
+            console.log(res);
+        })
+    }
 }
 
-JMBComments.prototype = {
+JMBCommentsObject.prototype = {
+    ajax:function(func, params, callback){
+        host.callMethod("comments", "JMBComments", func, params, function(res){
+            var json = jQuery.parseJSON(res.responseText);
+            callback(json);
+        });
+    }
 }
 
 
