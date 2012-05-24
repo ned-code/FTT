@@ -6,9 +6,9 @@
     	position: relative;
 }
 #JMBHomeContainer .jmb-home-logo {
-	background: url("../imgs/jmbhomelogo.jpg") no-repeat scroll 0 0 transparent;
-	height: 668px;
-	width: 521px;
+    background: url("../imgs/jmbhomelogo.jpg") no-repeat scroll 0 0 transparent;
+    height: 494px;
+    width: 456px;
 }
 #JMBHomeContainer .jmb-home-body{
 	position: absolute;
