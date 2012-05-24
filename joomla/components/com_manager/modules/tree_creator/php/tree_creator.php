@@ -140,6 +140,7 @@ class TreeCreator {
 		$session->set('tree_id', $tree_id);
 		$session->set('permission', 'OWNER');
 		$session->set('alias', 'myfamily');
+        $session->set('active_tab', 'families');
 		return true;
 	}
 	

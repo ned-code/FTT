@@ -1244,7 +1244,7 @@ core.renderTabs = function(parent, pages){
     	
     	jQuery(pages).each(function(i,page){
     		var div = jQuery('<div id="'+(new Date()).valueOf()+'">'+page.page_info.title+'</div>');
-    		var li = jQuery('<li id="'+i+'"><a href="jmbtab_'+i+'" onclick="return false;"></a></li>');
+    		var li = jQuery('<li name="" id="'+i+'"><a href="jmbtab_'+i+'" onclick="return false;"></a></li>');
     		jQuery(li).find('a').append(div);
     		jQuery(ul).append(li);
     	});
@@ -1277,8 +1277,13 @@ core.renderTabs = function(parent, pages){
 		self.renderPage('#jmbtab', page);
 		jQuery(divs).show(); //Hide all tab content
 		return false;
-	});	
-	jQuery("ul.jmbtabs li:first").click(); //click first	
+	});
+    if(storage.activeTab == ''){
+        jQuery("ul.jmbtabs li:first").click(); //click first
+    } else {
+        jQuery('ul.jmbtabs li#2').click();
+    }
+
 }
 core.load = function(pages){
 	var self = this;
