@@ -17,7 +17,7 @@ function JMBTreeCreatorObject(parent){
 	module.title_count = 0;
 	module.dialog_settings = {
 		width:600,
-		height:400,
+		height:420,
 		title: 'Welcome to Family TreeTop',
 		resizable: false,
 		draggable: false,
@@ -599,7 +599,7 @@ function JMBTreeCreatorObject(parent){
 				sb._('<div class="tc_ftt_friends">');
 				sb._('</div>');
 				sb._('<div class="tc_footer">');
-					sb._('<div><span>if you are not related to anyone listed below, <span class="button">click here</span> to create new Family Tree</span></div>');
+					sb._('<div><span>If you are not related to anyone listed above, <span class="button">click here</span> to create new Family Tree period.</span></div>');
 				sb._('</div>');
 			sb._('</div>');
 			var html = jQuery(sb.result());
