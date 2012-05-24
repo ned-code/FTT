@@ -13,7 +13,7 @@ function JMBTreeCreatorObject(parent){
 	module.css_path = [storage.baseurl,storage.url,module.path,'css/'].join('');
 	module.female = 'female.png';
 	module.male = 'male.png';
-	module.titles = ['About Self','Your Mother','Your Father','Finish'];
+	module.titles = ['About Self','Your Mother','Your Father','Getting started'];
 	module.title_count = 0;
 	module.dialog_settings = {
 		width:600,
@@ -529,7 +529,7 @@ function JMBTreeCreatorObject(parent){
                         sb._('<iframe class="embeddedObject" type="text/html" frameborder="0" scrolling="no" style="overflow-x: hidden; overflow-y: hidden; width: 474.0740740740741px; height: 300px; " src="http://www.screencast.com/users/Fernando_Oliveira/folders/Default/media/6da2d84e-67f3-4a00-9ef8-7ba592f8aba3/embed" height="405" width="640"></iframe>');
                         sb._('</object>');
                         sb._('</div>');
-                        sb._('<div class="switch_to_myfamily"><span>Switch to MyFamily</span></div>')
+                        sb._('<div class="switch_to_myfamily"><span>Go to my Family Tree</span></div>')
                         jQuery(user_form).html(sb.result());
                         jQuery(user_form).dialog('option', 'width', 500);
                         jQuery(user_form).find('.switch_to_myfamily').click(function(){
