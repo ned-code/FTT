@@ -27,6 +27,17 @@ function JMBLoginButtonObject(obj){
 		*/
         jfbc.login.login_custom();
 	});
+
+    var setButtonPosition = function(){
+        var height = jQuery(window).height();
+        var size = (height / 2 - 150)  + 'px';
+        jQuery(cont).css('margin-top', size).css('margin-bottom', size);
+    }
+
+    jQuery(window).resize(function(){
+        setButtonPosition();
+    });
+    setButtonPosition();
 }
 
 JMBLoginButtonObject.prototype = {
