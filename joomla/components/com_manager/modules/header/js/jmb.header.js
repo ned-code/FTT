@@ -15,13 +15,7 @@ function JMBHeader(){
 	exists = {
 		"famous-family":true,
         "first-page":true,
-		"myfamily":true,
-        "about":true,
-        "conditions":true,
-        "privaci":true,
-        "contact":true,
-        "help":true,
-        "feedback":true
+		"myfamily":true
 	}
 	
 	fn = {
@@ -60,7 +54,6 @@ function JMBHeader(){
                     if(alias == 'myfamily'){
                         return 'myfamily'
                     }
-					return 'familytreetop';
 				}
 			}
 		},
