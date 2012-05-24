@@ -32,8 +32,10 @@ html, body {
 	padding-top: 46px;
 }
 .footer {
-	padding-left: 17px;
-	margin-top:20px;
+    bottom: 10px;
+    margin-top: 20px;
+    padding-left: 17px;
+    position: absolute;
 }
 .footer div{
     color: gray;
