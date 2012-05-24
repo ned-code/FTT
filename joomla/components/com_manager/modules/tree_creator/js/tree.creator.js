@@ -43,8 +43,8 @@ function JMBTreeCreatorObject(parent){
 	}
 	
 	module.request_settings = {
-		width:530,
-		height:450,
+		width:550,
+		height:470,
 		resizable: false,
 		draggable: false,
 		position: "top",
