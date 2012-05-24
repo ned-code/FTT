@@ -539,14 +539,25 @@ function JMBTreeCreatorObject(parent){
                 });
 			});
 		},
+        set_user_data:function(form, callback){
+          FB.api('me', function(me){
+            jQuery(form).find('div.avatar').html('<img width="135px" height="150px" src="https://graph.facebook.com/'+me.id+'/picture" />');
+            jQuery(form).find('input[name="first_name"]').val(me.first_name);
+            jQuery(form).find('input[name="last_name"]').val(me.last_name);
+            jQuery(form).find('select[name="gender"] option[value="'+me.gender[0]+'"]').attr('selected', 'selected');
+            callback();
+          });
+        },
 		create_new_tree:function(e){
 			var user_form = fn.user_form();
-			jQuery(module.dialog_box).dialog('close');
-			jQuery(user_form).dialog(module.create_tree_settings);
-			jQuery(user_form).parent().addClass('ftt_tree_creator');
-			jQuery(user_form).parent().css('top', '20px');
-			fn.set_title(user_form);
-			fn.user_form_events(user_form);
+            fn.set_user_data(user_form, function(){
+                jQuery(module.dialog_box).dialog('close');
+                jQuery(user_form).dialog(module.create_tree_settings);
+                jQuery(user_form).parent().addClass('ftt_tree_creator');
+                jQuery(user_form).parent().css('top', '20px');
+                fn.set_title(user_form);
+                fn.user_form_events(user_form);
+            });
 		},
 		set_facebook_friends:function(html){
 			var cont = jQuery(html).find('div.tc_ftt_friends');
