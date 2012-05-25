@@ -410,7 +410,7 @@ class JMBController extends JController
                         $from = "<no-reply@familytreetop.com>";
 
                         #subject
-                        $subject = "Family Treetop invitation.";
+                        $subject = "Family TreeTop – Request Approved";
 
                         $host = "ssl://smtp.gmail.com";
                         $port = "465";
@@ -418,10 +418,18 @@ class JMBController extends JController
                         $password = "Pp9671111";
 
                         #mail body
+                        $mail_body = '<html><head>Family TreeTop – Request Approved.</head><body>';
+                        $mail_body .= "<p>".$data->target->name." has approved your request to become a member of the family tree. You may login at www.FamilyTreeTop.com.</p>";
+                        $mail_body .= "<p>This is an automated message from Family TreeTop. Please do not respond to this email.</p>";
+                        $mail_body .= "Regards,<br>";
+                        $mail_body .= "The Family TreeTop Team";
+
+                        /*
                         $mail_body = '<html><head>Family TreeTop invitation.</head><body>';
                         $mail_body .= "<div style='margin:10px;'>Dear ".$data->me->name.",</div>";
                         $mail_body .= "<div style='margin:10px;'>".$data->target->name." has accepted your Family TreeTop invitation request.";
                         $mail_body .= '</body></html>';
+                        */
 
                         $headers = array ("MIME-Version"=> '1.0', "Content-type" => "text/html; charset=utf-8",'From' => $from,'To' => $to,'Subject' => $subject);
 

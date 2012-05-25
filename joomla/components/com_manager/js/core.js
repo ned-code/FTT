@@ -477,14 +477,14 @@ storage.notifications.deny = function(id, json, object){
 		box = jQuery('<div></div>');
 		cont = '';
 		
-	sb._('<div class="header"><span>The following message be sent to ')._(json.me.name)._('. You may edit the section shown yellow.</span></div>');
+	sb._('<div class="header"><span>The following message will be sent to ')._(json.me.name)._('. You may edit the section shown yellow.</span></div>');
 	sb._('<div class="deny_content">');
 		sb._('<div class="status"><div><span>Family TreeTop</span></div><div><span>Invition Request Status: <b>Denied</b></span></div></div>');
 		sb._('<div class="text">');
 			sb._('<div><span>Dear ')._(json.me.name)._(',</span></div>');
 			sb._('<div><span>')._(json.target.name)._(' has denied your Family TreeTop invitation request.');
 				sb._(' He does not  believe that you are member of his family. If you still think thay you are related to ');
-				sb._(json.target.name.split(' ')[0])._(', you may send him one last message to provide more information.');
+				sb._(json.target.name.split(' ')[0])._(', please contact him directly to sort it out.');
 			sb._('</span></div>');
 		sb._('</div>');
 		sb._('<div class="edit">');
@@ -504,7 +504,7 @@ storage.notifications.deny = function(id, json, object){
 	jQuery(box).append(cont);
 	jQuery(box).dialog({
 		width:600,
-		height:400,
+		height:450,
 		title: json.me.name+' Invition Request',
 		resizable: false,
 		draggable: false,
@@ -518,13 +518,16 @@ storage.notifications.deny = function(id, json, object){
 	jQuery(box).parent().addClass('notifications_deny');
 	jQuery(box).parent().css('top', '20px');
 
+    var deniedClicked = false;
 	jQuery(box).find('div.button').click(function(){
+        if(deniedClicked) return false;
+        deniedClicked = true;
 		var message = jQuery(cont).find('textarea').val();
 		jQuery.ajax({
 			url:'index.php?option=com_manager&task=notifications&type=request&status=deny&id='+id,
 			type:'POST',
 			data:'message='+encodeURIComponent(message)+'&data='+object.data,
-			complete:function(req, err){				
+			complete:function(req, err){
 				if(!ntf.is_denied){
 					ntf.is_denied = true;
 				}
@@ -786,7 +789,7 @@ storage.notifications.manager = function(){
 	settings = {
 		width:600,
 		height:400,
-		title: 'Invitations to Join Family Tree',
+		title: 'Invitation to Join Family Tree',
 		resizable: false,
 		draggable: false,
 		position: "top",
@@ -838,7 +841,7 @@ storage.notifications.manager = function(){
 								sb._('<td><div class="text"><span>')._(args.name)._('</span></div></td>');
 							sb._('</tr>');
 							sb._('<tr>');
-								sb._('<td><div class="title"><span>Know as:</span></div></td>');
+								sb._('<td><div class="title"><span>Known as:</span></div></td>');
 								sb._('<td><div class="text"><span>')._(args.nick)._('</span></div></td>');
 							sb._('</tr>');
 							sb._('<tr>');
@@ -885,7 +888,7 @@ storage.notifications.manager = function(){
 		var sb = host.stringBuffer();
 		var json = parse(object);
 		var html;
-		sb._('<div class="status"><span class="title">Status:</span><span class="value">Action Required</span></div>');
+		sb._('<div class="status"><span class="title">Status:</span>&nbsp;<span class="value">Action Required</span></div>');
 		sb._('<div class="prefix">')._(json.user_info.name)._(' is claiming to be your ')._(json.relation)._(' and would like to join your family tree.')._('</div>');
 		sb._('<div class="info">');
 			sb._('<table>');
@@ -911,7 +914,10 @@ storage.notifications.manager = function(){
 			sb._('<div id="deny" class="button"><div>Deny</div><div>Do not add ')._(json.user_info.name)._(' to my Family Tree</div></div>');
 		sb._('</div>');
 		html = jQuery(sb.result());
+        var acceptClicked = false;
 		jQuery(html).find('div#accept').click(function(){
+            if(acceptClicked) return false;
+            acceptClicked = true;
 			jQuery.ajax({
 				url:'index.php?option=com_manager&task=notifications&type=request&status=accept&id='+id,
 				type:'GET',
@@ -927,6 +933,7 @@ storage.notifications.manager = function(){
                     if(count == 0){
                         jQuery('div.ftt_notifications_alert').remove();
                     }
+                    alert('Approval message has been sent');
 				}
 			});
 		});
@@ -959,6 +966,8 @@ storage.notifications.manager = function(){
 	jQuery(dialog_box).append(cont);
 	
 	jQuery(cont).find('div.menu div').click(active);
+    jQuery(cont).find('div.menu div#not_confirmed').click();
+
 }
 storage.notifications.init = function(notifications){
 	var	ntf = storage.notifications,
