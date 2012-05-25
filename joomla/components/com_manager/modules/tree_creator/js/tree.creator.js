@@ -508,8 +508,8 @@ function JMBTreeCreatorObject(parent){
                             if(confirm(json.error)){
                                 fn.ajax('abortRequest', null, function(){
                                     alert('Your request is removed, you can begin to create the tree.');
-                                    return false;
                                 });
+                                return false;
                             } else {
                                 jQuery(user_form).dialog('close');
                                 return false;

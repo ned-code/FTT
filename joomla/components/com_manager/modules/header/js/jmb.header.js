@@ -15,7 +15,8 @@ function JMBHeader(){
 	exists = {
 		"famous-family":true,
         "first-page":true,
-		"myfamily":true
+		"myfamily":true,
+        "invitation":true
 	}
 	
 	fn = {

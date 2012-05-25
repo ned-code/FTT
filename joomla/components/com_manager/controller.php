@@ -215,6 +215,9 @@ class JMBController extends JController
 		$session = JFactory::getSession();
 
         $invitation_token = $this->get_invitation_token($session);
+        if($user->guest){
+            $invitation_token = false;
+        }
 
 		$alias = $session->get('alias');
 		$login_method = $session->get('login_method');
@@ -402,6 +405,9 @@ class JMBController extends JController
                         $host->ajax->query();
 
                         $data = json_decode(JRequest::getVar('data'));
+
+                        $session = JFactory::getSession();
+                        $session->set('active_tab', 'families');
 
                         require_once("Mail.php");
                         #recipient

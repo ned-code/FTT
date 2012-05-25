@@ -198,7 +198,7 @@ class TreeCreator {
         $session = JFactory::getSession();
         $facebook_id = $session->get('facebook_id');
 
-        $sql_string = "DELETE FROM #__mb_notifications WHERE facebook_id = ?";
+        $sql_string = "DELETE FROM #__mb_notifications WHERE facebook_id = ? AND processed = 0";
         $this->db->setQuery($sql_string, $facebook_id);
         $this->db->query();
 

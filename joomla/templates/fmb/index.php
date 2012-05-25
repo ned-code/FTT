@@ -103,6 +103,25 @@ $og_site_name = 'FamilyTree-Top';
                                 <?php endif; ?>
                         </td>
 					</tr>
+                    <tr>
+                        <td>
+                            <div style="display:none;" id="_bottom" class="footer">
+                                <div>
+                                    <ul>
+                                        <li><a style="color:black; font-weight: bold;" href="<?php echo $base_url; ?>">FamilyTreeTop.com</a></li>
+                                        <li><a href="<?php echo $base_url; ?>index.php/about">About</a></li>
+                                        <li><a href="<?php echo $base_url; ?>index.php/conditions">Tearms & Conditions</a></li>
+                                        <li><a href="<?php echo $base_url; ?>index.php/privaci">Privaci Policy</a></li>
+                                        <li><a href="<?php echo $base_url; ?>index.php/feedback">Provide Feedback</a></li>
+                                        <li><a href="<?php echo $base_url; ?>index.php/contact">Contact</a></li>
+                                        <li><a href="<?php echo $base_url; ?>index.php/help">Help</a></li>
+                                        <li style="position: relative;top: 12px;"><span id="siteseal"><script type="text/javascript" src="https://seal.godaddy.com/getSeal?sealID=QbddMchgFRTEtJe2vFw4hjBQe73woVFQRwgBDPdlnAbAKWNkzv7"></script></span></li>
+                                    </ul>
+                                </div>
+                                <div style="margin-top:15px;">© 2012 Family TreeTop</div>
+                            </div>
+                        </td>
+                    </tr>
 				</table>
 			</div>
             <?php
@@ -110,21 +129,7 @@ $og_site_name = 'FamilyTree-Top';
                     <div id="_bottom" class="footer"><?php if($alias=='myfamily'): ?><jdoc:include type="modules" name="footer" /><?php endif; ?></div>
                 */
             ?>
-            <div style="display:none;" id="_bottom" class="footer">
-                <div>
-                    <ul>
-                        <li><a style="color:black; font-weight: bold;" href="<?php echo $base_url; ?>">FamilyTreeTop.com</a></li>
-                        <li><a href="<?php echo $base_url; ?>index.php/about">About</a></li>
-                        <li><a href="<?php echo $base_url; ?>index.php/conditions">Tearms & Conditions</a></li>
-                        <li><a href="<?php echo $base_url; ?>index.php/privaci">Privaci Policy</a></li>
-                        <li><a href="<?php echo $base_url; ?>index.php/feedback">Provide Feedback</a></li>
-                        <li><a href="<?php echo $base_url; ?>index.php/contact">Contact</a></li>
-                        <li><a href="<?php echo $base_url; ?>index.php/help">Help</a></li>
-                        <li style="position: relative;top: 12px;"><span id="siteseal"><script type="text/javascript" src="https://seal.godaddy.com/getSeal?sealID=QbddMchgFRTEtJe2vFw4hjBQe73woVFQRwgBDPdlnAbAKWNkzv7"></script></span></li>
-                    </ul>
-                </div>
-                <div style="margin-top:15px;">© 2012 Family TreeTop</div>
-            </div>
+
         </div>
         <script>window.jQuery || document.write('<script src="<?php echo $this->baseurl ?>/templates/<?php echo $this->template; ?>/javascript/jquery.min.js"><\/script>')</script>
         <script>
