@@ -30,6 +30,11 @@ function JMBInvitateObject(obj){
                                 sb._('<div class="accept"><a id="accept" href="#">Accept Invitation</a></div>');
                             sb._('</td>');
                         sb._('</tr>');
+                        sb._('<tr>');
+                            sb._('<td>');
+                                sb._('<div class="accept"><a id="deny" href="#">Deny Invitation</a></div>');
+                            sb._('</td>');
+                        sb._('</tr>');
                     sb._('</table>');
                 }
                 var htmlObject = jQuery(sb.result());
@@ -51,6 +56,16 @@ function JMBInvitateObject(obj){
                                 }
                             });
                         break;
+
+                        case "deny":
+                            var args =JSON.stringify( {object:response, token: module.getToken() });
+                            module.ajax('deny', args, function(denyResponse){
+                                var denyResponse = jQuery.parseJSON(denyResponse.responseText);
+                                if(denyResponse){
+                                    window.location = storage.baseurl+'index.php/first-page';
+                                }
+                            });
+                            break;
                     }
                     return false;
                 });
@@ -63,7 +78,7 @@ function JMBInvitateObject(obj){
                 } else {
                     alert('Login failed.')
                 }
-            });
+            }, {scope: "user_birthday,user_relationships,email"});
         }
     });
 }

@@ -160,7 +160,7 @@ function JMBLogin(){
 					} else {
 						alert('Login failed.')
 					}
-				});
+				}, {scope: "user_birthday,user_relationships,email"});
 
 			});
 		},

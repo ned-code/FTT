@@ -161,17 +161,42 @@ class JMBController extends JController
     protected function get_invitation_token($session){
         $token = JRequest::getVar('token');
         $c_token = $session->get('clear_token');
-        if(!isset($_COOKIE['token'])){
-             if(!empty($token)){
+        $r = $this->checkInvitation();
+
+        if(!isset($_COOKIE['token']) || $r){
+            if($r || empty($token)){
+                $token = $r['belongs'];
+            }
+            if(!empty($token)){
                  setcookie('token', $token);
              }
         }
         if($c_token){
             $session->clear('clear_token');
             setcookie('token', false);
+            $_COOKIE['token'] = false;
         }
         if(isset($_COOKIE['token']) && $_COOKIE['token']){
             return $_COOKIE['token'];
+        }
+        return false;
+    }
+
+    protected function checkInvitation(){
+        $jfb = JFBConnectFacebookLibrary::getInstance();
+        $me = $jfb->api('/me');
+        if($me == null) return false;
+        $email = $me['email'];
+        $host = new Host('Joomla');
+
+        $sql_string = "SELECT email, belongs, value FROM #__mb_variables";
+        $host->ajax->setQuery($sql_string);
+        $rows = $host->ajax->loadAssocList();
+
+        foreach($rows as $row){
+            if($row['email'] == $email){
+                return $row;
+            }
         }
         return false;
     }
@@ -186,6 +211,7 @@ class JMBController extends JController
 
         switch($alias){
 			case "invitation":
+                if($user->guest) return 'home';
                 if(!$invitation_token) return 'myfamily';
 				return "invitation";
 			break;
@@ -201,7 +227,7 @@ class JMBController extends JController
 			case "login":
                 if($invitation_token) return "invitation";
 				if($user_data) return "myfamily";
-				if(!$user->guest&&!$user_data) return "first-page";
+				if(!$user->guest&&!$user_data) return "home";
 				return "login";
 			break;
 			
@@ -234,7 +260,7 @@ class JMBController extends JController
 			default:
                 if($invitation_token) return "invitation";
 				if($user->guest) return "login";
-				if(!$user_data) return "first-page";
+				if(!$user_data) return "home";
 				return "myfamily";
 			break;
 		}

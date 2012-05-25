@@ -58,5 +58,17 @@ class JMBInvitateClass {
         return $this->invite($opt->object->id, $opt->token);
     }
 
+    public function deny($args){
+        $opt = json_decode($args);
+        $sql_string = "DELETE FROM #__mb_variables WHERE belongs = ?";
+        $this->host->ajax->setQuery($sql_string, $opt->token);
+        $this->host->ajax->query();
+
+        $session = JFactory::getSession();
+        $session->set('clear_token', true);
+        $session->set('alias', 'first-page');
+        return json_encode(array('success'=>true));
+    }
+
 }
 ?>
