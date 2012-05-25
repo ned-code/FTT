@@ -106,7 +106,9 @@ class JMBInvitation {
                 $mail_body .= 'If you wish to contact '.$owner['user']['first_name'].', you may email him at '.$me['email'].'<br><br>';
 
                 $mail_body .= 'This is automated message from Family TreeTop. Please do not respond to this email.<br>';
-                $mail_body .= 'Click here to find out more about Family TreeTop.';
+                $mail_body .= 'Click <a href="http://www.facebook.com/profile.php?id='.$owner['user']['facebook_id'].'">here</a> to view '.$owner['user']['first_name'].' Facebook profile.<br><br>';
+                $mail_body .= 'Regards,<br> The Family TreeTop Team';
+                //$mail_body .= 'Click here to find out more about Family TreeTop.';
             $mail_body .= '</body>';
         $mail_body .= '</html>';
 		

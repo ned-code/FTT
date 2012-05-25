@@ -1,6 +1,7 @@
 function JMBInvitation(){
 	this.path = "components/com_manager/modules/invitation/images/";
     this.transportation = false;
+    this.dialogBox = false;
 }
 
 JMBInvitation.prototype = {
@@ -116,8 +117,25 @@ JMBInvitation.prototype = {
 			
 		module.send(form, json);
 
-		storage.overlay.render({object:div, width:450, height:255});
-		storage.overlay.show();
+		//storage.overlay.render({object:div, width:450, height:255});
+		//storage.overlay.show();
+
+        module.dialogBox = div;
+        jQuery(div).dialog({
+            width:450,
+            height:300,
+            //title: 'Family TreeTop',
+            resizable: false,
+            draggable: false,
+            position: "top",
+            closeOnEscape: false,
+            modal:true,
+            close:function(){
+
+            }
+        });
+        jQuery(div).parent().css('top', '40px');
+
 		FB.api('me/friends', function(res) {
             if (!res.data) {
             } else {
@@ -153,14 +171,15 @@ JMBInvitation.prototype = {
                                             module.ajax('inviteFacebookFriend', id + ';' + gedcom_id, function (res) {
                                                 var json = jQuery.parseJSON(res.responseText);
                                                 if (typeof(json.success) !== 'undefined') {
-                                                    alert('An invitation has been sent.');
+                                                    //alert('An invitation has been sent.');
                                                 } else {
                                                     alert(json.message);
                                                 }
                                                 jQuery(select).find('option[value="default"]').attr("selected", "selected");
                                                 storage.progressbar.off();
                                                 module.transportation = false;
-                                                storage.overlay.hide();
+                                                //storage.overlay.hide();
+                                                jQuery(module.dialogBox).dialog('close');
                                             });
                                         });
                                     } else {
@@ -211,8 +230,8 @@ JMBInvitation.prototype = {
                 if(typeof(json.success) != 'undefined'){
                     alert(json.message);
                     if(json.success){
-                        storage.overlay.hide()
-
+                        //storage.overlay.hide();
+                        jQuery(module.dialogBox).dialog('close');
                     }
                     storage.progressbar.off();
                     module.transportation = false;
