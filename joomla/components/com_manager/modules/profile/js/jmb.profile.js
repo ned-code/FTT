@@ -952,8 +952,13 @@ JMBProfile.prototype = {
 
             case "more_options":
                 form = fn.getViewObject('dialogMoreOptions');
+                var tr = jQuery(form).find('tr');
                 if(module.gedcom_id != storage.usertree.gedcom_id){
-                    jQuery(form).find('tr:first').remove();
+                    jQuery(tr[0]).remove();
+                }
+                if(storage.usertree.getUsersLength() == 1 && module.gedcom_id == storage.usertree.gedcom_id){
+                    jQuery(tr[0]).remove();
+                    jQuery(tr[1]).remove();
                 }
                 fn.setTitleMessage(form);
                 var span = jQuery(form).find('div.option span');
