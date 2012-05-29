@@ -78,8 +78,8 @@ class JMBInvitation {
 		
 		$token = md5($value);
 
-		$sql_string = "INSERT INTO #__mb_variables (`id`,`belongs`,`value`,`email`) VALUES (NULL,?,?,?)";
-		$this->host->ajax->setQuery($sql_string, $token, $value, $to);
+		$sql_string = "INSERT INTO #__mb_variables (`id`,`belongs`,`value`,`email`,`s_gedcom_id`) VALUES (NULL,?,?,?,?)";
+		$this->host->ajax->setQuery($sql_string, $token, $value, $to, $owner_id);
        	$this->host->ajax->query();
 		
 		#recipient  

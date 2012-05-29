@@ -34,7 +34,8 @@ class JMBInvitateClass {
         exit;
     }
 
-    public function checkUser($facebook_id){
+    public function checkUser($args){
+        $opt = json_decode($args);
         $sql_string = "SELECT i.id, i.fid, u.email
                         FROM #__mb_individuals AS i
                         LEFT JOIN #__jfbconnect_user_map AS map ON map.fb_user_id = i.fid
@@ -44,13 +45,25 @@ class JMBInvitateClass {
         $rows = $this->host->ajax->loadAssocList();
         if(!empty($rows)){
             foreach($rows as $row){
-                if($row['fid'] != null && $row['fid'] == $facebook_id){
+                if($row['fid'] != null && $row['fid'] == $opt->id){
                     $individual = $this->host->gedcom->individuals->get($row['id']);
                     return json_encode(array('success'=>true, 'user'=>$individual));
                 }
             }
         }
-        return json_encode(array('success'=>false));
+
+        $sql_string = "SELECT s_gedcom_id FROM #__mb_variables WHERE belongs = ?";
+        $this->host->ajax->setQuery($sql_string, $opt->token);
+        $rows = $this->host->ajax->loadAssocList();
+        $name = false;
+        if($rows != null){
+            $i = $this->host->gedcom->individuals->get($rows[0]['s_gedcom_id']);
+            $name = ($i->FirstName != null)?$i->FirstName:'';
+            $name .= ' ';
+            $name .= ($i->LastName != null)?$i->LastName:'';
+            $name = trim($name);
+        }
+        return json_encode(array('success'=>false, 'sender'=>$name));
     }
 
     public function accept($args){

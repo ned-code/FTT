@@ -3,7 +3,7 @@ function JMBInvitateObject(obj){
     var sb = host.stringBuffer();
     FB.api('me', function(response){
         if(!response.error){
-            module.ajax('checkUser', response.id, function(res){
+            module.ajax('checkUser', JSON.stringify( {id:response.id, token: module.getToken() }), function(res){
                 var json = jQuery.parseJSON(res.responseText);
                 if(json.success){
                     sb._('<div class="exist">');
@@ -15,7 +15,8 @@ function JMBInvitateObject(obj){
                     sb._('<table>');
                         sb._('<tr>');
                             sb._('<td>');
-                                sb._('<div class="text"><span>')._(response.name)._('</span></div>');
+                                sb._('<div class="text"><span>Hello ')._(response.name)._('</span></div>');
+                                sb._('<div class="text"><span>')._(json.sender)._(' has invited you to join this family tree.')._('</span></div>');
                             sb._('</td>');
                         sb._('</tr>');
                         sb._('<tr>');
