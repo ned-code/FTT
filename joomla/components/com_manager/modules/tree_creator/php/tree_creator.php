@@ -155,7 +155,7 @@ class TreeCreator {
         $sql_string = "SELECT facebook_id FROM #__mb_notifications WHERE facebook_id = ? AND processed != 1";
         $this->db->setQuery($sql_string, $std->me->id);
         $rows = $this->db->loadAssocList();
-        if($rows != null) return json_encode(array('error'=>'Request already send.'));
+        if($rows != null) return json_encode(array('error'=>'You already sent '.$std->target->name.' an Invitation Request. An email will be sent to you when '.$std->target->name.' makes a decision.'));
 
 		$sql_string = "INSERT INTO #__mb_notifications (`id`, `tree_id`, `gedcom_id`,`facebook_id`,`data`, `status`) VALUES (NULL, ?, ?, ?, ?, 0)";
 		$this->db->setQuery($sql_string, $tree_id, $std->target->gedcom_id, $std->me->id ,$args);

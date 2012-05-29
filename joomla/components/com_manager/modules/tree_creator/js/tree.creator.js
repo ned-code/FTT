@@ -341,7 +341,8 @@ function JMBTreeCreatorObject(parent){
                         jQuery(form).dialog('close');
 						return false;
 					} else if(response.success){
-                        alert('Your request has been sent.  You will receive an email once '+ args.target.name +' has processed your request');
+                        //alert('Your request has been sent.  You will receive an email once '+ args.target.name +' has processed your request');
+                        alert('Your request has been sent to '+args.target.name+'. An email will be sent to you when '+args.target.name+' makes a decision');
 						jQuery(form).dialog('close');
 						return true;
 					}
