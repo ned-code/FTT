@@ -178,7 +178,8 @@ class JMBController extends JController
             $_COOKIE['token'] = false;
         }
         if(isset($_COOKIE['token']) && $_COOKIE['token']){
-            $sql_string = "SELECT value value FROM #__mb_variables WHERE belongs =?";
+            /*
+            $sql_string = "SELECT value FROM #__mb_variables WHERE belongs =?";
             $host->ajax->setQuery($sql_string, $_COOKIE['token']);
             $rows = $host->ajax->loadAssocList();
             if($rows == null){
@@ -189,6 +190,8 @@ class JMBController extends JController
             } else {
                 return $_COOKIE['token'];
             }
+            */
+            return $_COOKIE['token'];
         }
         return false;
     }
@@ -230,6 +233,7 @@ class JMBController extends JController
 			break;
 			
 			case "home":
+                if($invitation_token) return 'invitation';
 				return "home";
 			break;
 			

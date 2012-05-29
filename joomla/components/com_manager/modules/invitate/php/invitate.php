@@ -62,6 +62,10 @@ class JMBInvitateClass {
             $name .= ' ';
             $name .= ($i->LastName != null)?$i->LastName:'';
             $name = trim($name);
+        } else {
+            $session = JFactory::getSession();
+            $session->set('clear_token', true);
+            $session->set('alias', 'first-page');
         }
         return json_encode(array('success'=>false, 'sender'=>$name));
     }
