@@ -70,13 +70,14 @@ function JMBProfile(){
         FTT_MOD_PROFILE_EDITOR_DELETE_CONFIRM:"Are you sure you want to delete the information about that user?",
         FTT_MOD_PROFILE_EDITOR_DELETE_USER_CONFIRM:"You are about to remove yourself from this family tree. Once this is done, you will not be able to view this family tree unless an existing member invites you back.",
         FTT_MOD_PROFILE_EDITOR_DELETE_TREE_CONFIRM:"You are about to remove yourself from this family tree. Since you are the only registered person, all members in this family tree will be completely deleted.",
-        FTT_MOD_PROFILE_EDITOR_DELETE_UNREGISTERED_MEMBER:"You are about to %% remove from your family tree.<br>Please select an option:",
+        FTT_MOD_PROFILE_EDITOR_DELETE_UNREGISTERED_MEMBER:"You are about to remove %% from your family tree.<br>Please select an option:",
         FTT_MOD_PROFILE_EDITOR_TITLE_UNLINK:'Leave my profile unchanged',
         FTT_MOD_PROFILE_EDITOR_DESCR_UNLINK:'This process will keep your profile details intact. All names, dates and other info will remain visible by existing family members',
         FTT_MOD_PROFILE_EDITOR_TITLE_DELETE_DATA:'Delete data',
         FTT_MOD_PROFILE_EDITOR_DESCR_DELETE_DATA:'This process will wipe your profile clean. All names, dates and other info will be removed and replaced with "unknown"',
         FTT_MOD_PROFILE_EDITOR_TITLE_DELETE_AND_REMOVE:'Delete data and remove member',
-        FTT_MOD_PROFILE_EDITOR_DESCR_DELETE_AND_REMOVE:'This process will completely remove your branch from this family tree. Note that family members with descendants cannot  be removed.'
+        FTT_MOD_PROFILE_EDITOR_DESCR_DELETE_AND_REMOVE:'This process will completely remove your branch from this family tree. Note that family members with descendants cannot  be removed.',
+        FTT_MOD_PROFILE_EDITOR_DELETE_FIRST_CONFIRM:"Since this family tree does not contain any other registered members, this action will completly delete this family tree. Do you want to delete your family tree?"
     };
     module.dialog_settings = {
         width:700,
@@ -951,50 +952,64 @@ JMBProfile.prototype = {
             break;
 
             case "more_options":
-                form = fn.getViewObject('dialogMoreOptions');
-                var tr = jQuery(form).find('tr');
-                if(module.gedcom_id != storage.usertree.gedcom_id){
-                    jQuery(tr[0]).remove();
-                }
-                if(storage.usertree.getUsersLength() == 1 && module.gedcom_id == storage.usertree.gedcom_id){
-                    jQuery(tr[0]).remove();
-                    jQuery(tr[1]).remove();
-                }
-                fn.setTitleMessage(form);
-                var span = jQuery(form).find('div.option span');
-                var text = jQuery(span).text();
-                jQuery(span).html(text.replace('%%', module.user.full_name));
-                jQuery(form).find('div.title span').click(function(){
-                    var mes, method = 'deleteBranch';
-                    if(module.gedcom_id != storage.usertree.gedcom_id){
-                        mes = module.message.FTT_MOD_PROFILE_EDITOR_DELETE_CONFIRM;
-                    } else if(storage.usertree.getUsersLength() == 1){
-                        mes = module.message.FTT_MOD_PROFILE_EDITOR_DELETE_TREE_CONFIRM;
-                        method = 'deleteTree';
-                    } else {
-                        mes = module.message.FTT_MOD_PROFILE_EDITOR_DELETE_USER_CONFIRM;
-                    }
-                    if(confirm(mes)){
-                        var type = jQuery(this).parent().attr('id');
-                        var args = type+','+module.gedcom_id+','+method;
-                        module.functions.ajax('delete', args, function(res){
-                            var json = jQuery.parseJSON(res.responseText);
-                            if(module.gedcom_id == storage.usertree.gedcom_id){
+                form = jQuery('<div class="delete-button">Delete Profile</div>')
+                jQuery(form).click(function(){
+                    if(storage.usertree.getUsersLength() == 1 &&
+                        module.gedcom_id == storage.usertree.gedcom_id){
+                        if(confirm(module.message.FTT_MOD_PROFILE_EDITOR_DELETE_FIRST_CONFIRM)){
+                            var args = 'delete,'+module.gedcom_id+',deleteTree';
+                            module.functions.ajax('delete', args, function(res){
                                 jfbc.login.logout_button_click();
-                            }
-                            if(!json.deleted){
-                                module.update(json.objects);
+                                return false;
+                            });
+                            return false;
+                        }{
+                            return false;
+                        }
+                    } else {
+                        var deleteOptions = fn.getViewObject('dialogMoreOptions');
+                        var tr = jQuery(deleteOptions).find('tr');
+                        fn.setTitleMessage(deleteOptions);
+                        var span = jQuery(deleteOptions).find('div.option span');
+                        var text = jQuery(span).text();
+                        jQuery(span).html(text.replace('%%', module.user.full_name));
+                        if(module.gedcom_id != storage.usertree.gedcom_id){
+                            jQuery(tr[0]).remove();
+                        }
+                        jQuery(form).parent().append(deleteOptions);
+                        jQuery(form).hide();
+                        jQuery(deleteOptions).find('div.title span').click(function(){
+                            var mes, method = 'deleteBranch';
+                            if(module.gedcom_id != storage.usertree.gedcom_id){
+                                mes = module.message.FTT_MOD_PROFILE_EDITOR_DELETE_CONFIRM;
                             } else {
-                                if(method == 'deletTree' || json.deleted.user){
-                                    window.location.reload()
-                                } else {
-                                    storage.usertree.deleted(json.deleted.objects);
-                                    storage.usertree.update(json.objects);
-                                    jQuery(module.box).dialog('close');
-                                }
+                                mes = module.message.FTT_MOD_PROFILE_EDITOR_DELETE_USER_CONFIRM;
                             }
+                            if(confirm(mes)){
+                                var type = jQuery(this).parent().attr('id');
+                                var args = type+','+module.gedcom_id+','+method;
+                                module.functions.ajax('delete', args, function(res){
+                                    var json = jQuery.parseJSON(res.responseText);
+                                    if(module.gedcom_id == storage.usertree.gedcom_id){
+                                        jfbc.login.logout_button_click();
+                                        return false;
+                                    }
+                                    if(!json.deleted){
+                                        module.update(json.objects);
+                                    } else {
+                                        storage.usertree.deleted(json.deleted.objects);
+                                        storage.usertree.update(json.objects);
+                                        jQuery(module.box).dialog('close');
+                                    }
+                                    return false;
+                                });
+                            }
+                            return false;
                         });
                     }
+
+
+
                 });
             break;
 

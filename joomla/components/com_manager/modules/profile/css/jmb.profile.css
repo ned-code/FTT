@@ -575,6 +575,17 @@
 /**
 * more options
 */
+.delete-button {
+    background: none repeat scroll 0 0 red;
+    border-radius: 5px 5px 5px 5px;
+    color: white;
+    cursor: pointer;
+    height: 30px;
+    line-height: 30px;
+    margin: 10px;
+    text-align: center;
+    width: 150px;
+}
 .jmb-dialog-options-content{
     margin:10px;
     font-family: Tahoma;

@@ -728,7 +728,7 @@ class JMBUserTree {
         $members = $this->ajax->loadAssocList();
         $this->deleteUserFromDB($members);
 
-        $sql_string = 'DELETE FROM #__mb_tree WHERE tree_id = ?';
+        $sql_string = 'DELETE FROM #__mb_tree WHERE id = ?';
         $this->ajax->setQuery($sql_string, $tree_id);
         $this->ajax->query();
 
