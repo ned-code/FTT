@@ -41,6 +41,40 @@ JMBNotifications.prototype = {
          });
          });
          */
+        var module = this,
+            sb = host.stringBuffer(),
+            html;
+
+        sb._('<div>');
+            sb._('<table>');
+                sb._('<tr>');
+                    sb._('<td>');
+                    sb._('</td>');
+                    sb._('<td>');
+                    sb._('</td>');
+                sb._('</tr>');
+                sb._('<tr>');
+                    sb._('<td>');
+                    sb._('</td>');
+                sb._('</tr>');
+            sb._('</table>');
+        sb._('</div>');
+        html = jQuery(sb.result());
+        jQuery(html).dialog({
+            width:600,
+            height:450,
+            title: json.me.name+' Invition Request',
+            resizable: false,
+            draggable: false,
+            position: "top",
+            closeOnEscape: false,
+            modal:true,
+            close:function(){
+
+            }
+        });
+        jQuery(html).parent().addClass('notifications_accept');
+        jQuery(html).parent().css('top', '40px');
     },
     onDenied:function(i, object, json, cont){
         var module = this,
