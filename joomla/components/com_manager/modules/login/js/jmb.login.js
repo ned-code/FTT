@@ -206,7 +206,7 @@ function JMBLogin(){
 			storage.usertree.permission = json.usertree.permission;
 			storage.usertree.users = json.usertree.users;
 			storage.usertree.pull = json.usertree.pull;
-            storage.notifications.init(json.notifications);
+            storage.notifications = json.notifications;
             storage.settings = json.settings;
 		},
 		user:function(callback){

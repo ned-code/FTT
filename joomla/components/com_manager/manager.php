@@ -94,6 +94,9 @@ $document->addScript('components/com_manager/modules/progressbar/js/jmb.progress
 //feedback
 $document->addStyleSheet('components/com_manager/modules/feedback/css/jmb.feedback.css?111');
 $document->addScript('components/com_manager/modules/feedback/js/jmb.feedback.js?111');
+//notifications
+$document->addStyleSheet('components/com_manager/modules/notifications/css/jmb.notifications.css?111');
+$document->addScript('components/com_manager/modules/notifications/js/jmb.notifications.js?111');
 ###############################################################################
 
 $document->addCustomTag('<script type="text/javascript">jQuery.noConflict();</script>');

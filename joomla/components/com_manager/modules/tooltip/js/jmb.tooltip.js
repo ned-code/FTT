@@ -173,9 +173,11 @@ JMBTooltip.prototype = {
 				sb._("<div class='jmb-profile-tooltip-send'>");
 					sb._('<div class="info"><span>')._(nick)._(' ')._(message.FTT_MOD_TOOLTIPS_IS_NOT_REGISTERED)._('</span></div>');
 					sb._('<div class="invitions"><span class="click">')._(message.FTT_MOD_TOOLTIPS_ADD_SENT_INVITATION.replace("%%", nick))._('</span></div>');
-					if(storage.notifications.is_accepted){
+					/*
+                    if(storage.notifications.is_accepted){
 						sb._('<div class="link"><span>')._(message.FTT_MOD_TOOLTIPS_ADD_LINK)._('</span></div>');
 					}
+					*/
 				sb._('</div>');
 			}
 			sb._("<div class='jmb-profile-tooltip-close'><a href='javascript:void(storage.tooltip.close());'><div>&nbsp;</div></a></div>");
@@ -428,7 +430,7 @@ JMBTooltip.prototype = {
 
             }
             module._invitation(cont, settings);
-            module.link_with_request(cont, settings);
+            //module.link_with_request(cont, settings);
             module._buttons(cont, settings);
 
             jQuery(settings.target).bt(settings.style);
