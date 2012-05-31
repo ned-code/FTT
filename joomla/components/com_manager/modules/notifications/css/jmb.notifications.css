@@ -281,3 +281,27 @@
     width: 150px;
 }
 
+.ui-dialog.notifications_accept{
+    background:#999999;
+    font-family:Tahoma;
+    font-size:12px;
+}
+.notifications_accept .ui-dialog-content {
+    background: none repeat scroll 0 0 #ffffff;
+    border: 1px solid #574F2E;
+    border-radius: 5px 5px 5px 5px;
+}
+.notifications_accept .user-header {
+    background: url("../images/facebook_icon.gif") no-repeat scroll 3px 2px #3B5998;
+    border: 1px solid #4C67A1;
+    height: 27px;
+}
+.notifications_accept .title {
+    color: gray;
+}
+.notifications_accept .text {
+    margin-left: 3px;
+}
+.notifications_accept .ui-dialog .ui-dialog-content {
+    overflow: visible;
+}

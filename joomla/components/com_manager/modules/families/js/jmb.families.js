@@ -572,14 +572,15 @@ JMBFamiliesObject.prototype = {
 			}
 		}	
 
-		module._arrows(module.parent);
-		module._view(module.parent);
-		module._edit(module.parent);
-		module._facebook(module.parent);
-        module._tooltips(module.parent);
-		module._win(module.parent);
-		module._home(module.parent);
-		
+            module._arrows(module.parent);
+            module._view(module.parent);
+            module._edit(module.parent);
+            module._facebook(module.parent);
+            module._tooltips(module.parent);
+            module._win(module.parent);
+            module._home(module.parent);
+
+
 		jQuery(module.parent).height(start_top + 200);
 		jQuery(module.parent).css('overflow', 'hidden');
 		

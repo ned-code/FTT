@@ -33,6 +33,7 @@ storage.fb.cookie = true;
 storage.fb.xfbml = true;
 storage.iframe = jQuery('<iframe id="ftt_iframe" name="ftt_iframe" style="display:none;position:absolute;left:-1000px;width:1px;height:1px">');
 storage.settings = null;
+storage.pages = null;
 
 //modules
 storage.login = {};
@@ -455,6 +456,24 @@ storage.usertree.photos.get = function(args){
     }
     return sb.result();
 }
+//form
+storage.form = {
+    dataTable:function(css, opt){
+        var sb = host.stringBuffer();
+        sb._('<table style="')._(css)._('" >');
+            for(var key in opt){
+                if (!opt.hasOwnProperty(key)) continue;
+                var el = opt[key];
+                sb._('<tr>');
+                    sb._('<td><div class="title"><span>')._(key)._('</span>:</div></td>');
+                    sb._('<td><div id="')._((el.id)?el.id:'')._('" style="')._((el.css)?el.css:'')._('" class="text"><span>')._((el.value)?el.value:'')._('</span></div>');
+                sb._('</tr>');
+            }
+        sb._('</table>');
+        return sb.result();
+    }
+}
+
 
 //ajax request
 storage.request = {};
@@ -770,6 +789,7 @@ core.load = function(pages){
 					if(err=='success'){
                         storage.ntf.init();
 						var json = jQuery.parseJSON(req.responseText);
+                        storage.pages = json.pages;
 						if(json.pages.length==1){
 							self.renderPage('#page', json.pages[0])
 						} else {

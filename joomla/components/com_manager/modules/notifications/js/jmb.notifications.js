@@ -14,8 +14,10 @@ JMBNotifications.prototype = {
         module.ntPull.splice(index, 1);
         return module.ntPull;
     },
+    familiesList:function(){
+
+    },
     onAccept:function(i, object, json, cont){
-        console.log('onAccept');
         /*
          var acceptClicked = false;
          jQuery(html).find('div#accept').click(function(){
@@ -41,28 +43,80 @@ JMBNotifications.prototype = {
          });
          });
          */
+        console.log(i, object, json, cont);
         var module = this,
-            sb = host.stringBuffer(),
+            fn = {},
             html;
 
-        sb._('<div>');
-            sb._('<table>');
-                sb._('<tr>');
-                    sb._('<td>');
-                    sb._('</td>');
-                    sb._('<td>');
-                    sb._('</td>');
-                sb._('</tr>');
-                sb._('<tr>');
-                    sb._('<td>');
-                    sb._('</td>');
-                sb._('</tr>');
-            sb._('</table>');
-        sb._('</div>');
-        html = jQuery(sb.result());
+        fn.createUserBox = function(){
+            var sb = host.stringBuffer();
+            sb._('<div class="user-header">&nbsp;</div>');
+            sb._('<div style="background: none repeat scroll 0 0 #E5E9F0;border: 1px solid #4C67A1;">')
+                sb._('<div style="background: none repeat scroll 0 0 white;border: 1px solid #D2D9E7;margin: 10px;padding: 5px;">');
+                    sb._('<div style="border: 1px solid #403E39;display: inline-block;margin: 5px;vertical-align: top;cursor:pointer;"><img width="50px" height="50px" src="http://graph.facebook.com/')._(json.me.id)._('/picture"></div>');
+                    sb._('<div style="display: inline-block;">');
+                        sb._(storage.form.dataTable('',{
+                            "Name": { id:"name", value:json.user_info.name },
+                            "Known As": { id:"knwon", value:json.user_info.nick },
+                            "Mother": { id:"mother", value:json.father_info.name },
+                            "Father": { id:"father", value:json.mother_info.name },
+                            "Relation": { id:"relation", value: json.relation},
+                            "Facebook": { id:"facebook", value: "<a href='"+json.me.link+"'>Click here to see Facebook profile</a>" }
+                        }));
+                    sb._('</div>');
+                sb._('</div>');
+            sb._('</div>');
+            return sb.result();
+        }
+
+        fn.createMessageBox = function(){
+            var sb = host.stringBuffer();
+            sb._('<div style="background: none repeat scroll 0 0 #ED1C24;border-radius: 3px 3px 3px 3px;color: white;height: 100%;margin: 5px;padding: 10px;width: 350px;">');
+                sb._('<p style="">');
+                    sb._('Before ')._(json.user_info.name)._(' can join your family tree, you must first identify ')._(json.user_info.gender=='m'?'him':'her')._(' profile in your family tree.');
+                sb._('</p>');
+                sb._('<ul style="list-style: none outside none;margin: 10px;">');
+                    sb._('<li>');
+                        sb._('<div>1. In the window below, use the blue navigator arrows to find ')._(json.user_info.name)._(' family. If ')._(json.user_info.name)._(' does not have a profile, you must create one.</div>');
+                    sb._('</li>');
+                    sb._('<li style="margin-top: 5px;">');
+                        sb._('<div>2. Drag ')._(json.user_info.name)._(' Facebook picture(show right) onto ')._(json.user_info.name)._(' profile picture(locate below).</div>')
+                    sb._('</li>');
+                sb._('</ul>');
+            sb._('</div>');
+            return sb.result();
+        }
+
+        fn.createFamiliesBox = function(){
+            return '<div class="familiesList"></div>';
+        }
+
+        fn.createDialogBox = function(){
+            var sb = host.stringBuffer();
+            sb._('<div>');
+                sb._('<table>');
+                    sb._('<tr>');
+                        sb._('<td style="width: 350px;">');
+                            sb._(fn.createMessageBox());
+                        sb._('</td>');
+                        sb._('<td>');
+                            sb._(fn.createUserBox());
+                        sb._('</td>');
+                    sb._('</tr>');
+                    sb._('<tr>');
+                        sb._('<td colspan="2">');
+                            sb._(fn.createFamiliesBox());
+                        sb._('</td>');
+                    sb._('</tr>');
+                sb._('</table>');
+            sb._('</div>');
+            return jQuery(sb.result());
+        }
+
+        html = fn.createDialogBox();
         jQuery(html).dialog({
-            width:600,
-            height:450,
+            width:800,
+            height:600,
             title: json.me.name+' Invition Request',
             resizable: false,
             draggable: false,
@@ -70,11 +124,34 @@ JMBNotifications.prototype = {
             closeOnEscape: false,
             modal:true,
             close:function(){
-
             }
         });
         jQuery(html).parent().addClass('notifications_accept');
-        jQuery(html).parent().css('top', '40px');
+        jQuery(html).parent().css('top', '0');
+        jQuery(html).css('height', 'auto');
+        core.renderPage(jQuery(html).find('div.familiesList'), storage.pages[2]);
+        jQuery(html).find('img').draggable({
+            zIndex:9999,
+            scroll:false,
+            helper:'clone',
+            start:function(e, ui){
+
+            },
+            stop:function(e, ui){
+                var object = document.elementFromPoint(ui.offset.left, ui.offset.top);
+                if(object){
+                    var classList = jQuery(object).attr('class').split(' ');
+                    if(classList[0] == 'jmb-families-avatar'){
+                        var id = jQuery(object).parent().attr('id').split('-')[0];
+                        var st = storage.usertree.pull[id];
+                        var p_user = storage.usertree.parse(st);
+                        if(confirm('Identify '+json.user_info.name+' with '+p_user.full_name)){
+
+                        }
+                    }
+                }
+            }
+        });
     },
     onDenied:function(i, object, json, cont){
         var module = this,
