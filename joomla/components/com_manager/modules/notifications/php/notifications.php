@@ -56,6 +56,61 @@ class JMBNotifications {
         }
     }
 
+    public function onLinked($args){
+        $std = json_decode($args);
+
+        $session = JFactory::getSession();
+        $tree_id = $session->get('tree_id');
+
+        $data = $std->json;
+        $gedcom_id = $std->object->user->gedcom_id;
+
+        $sql_string = "UPDATE #__mb_notifications SET `status` = 1, `processed` = 1 WHERE `id` = ?";
+        $this->host->ajax->setQuery($sql_string, $std->id);
+        $this->host->ajax->query();
+
+        $sql_string = "UPDATE #__mb_tree_links SET `type` = 'USER' WHERE `individuals_id` = ? AND `tree_id` = ?";
+        $this->host->ajax->setQuery($sql_string, $gedcom_id, $tree_id);
+        $this->host->ajax->query();
+
+        $i = $this->host->gedcom->individuals->get($gedcom_id);
+        $i->FacebookId = $std->json->me->id;
+        $this->host->gedcom->individuals->update($i);
+
+        require_once("Mail.php");
+        #recipient
+        $to = "<".$data->me->email.">";
+
+        $from = "<no-reply@familytreetop.com>";
+
+        #subject
+        $subject = "Family TreeTop – Request Approved";
+
+        $host = "ssl://smtp.gmail.com";
+        $port = "465";
+        $username = "admin@familytreetop.com";
+        $password = "Pp9671111";
+
+        #mail body
+        $mail_body = '<html><head>Family TreeTop – Request Approved.</head><body>';
+        $mail_body .= "<p>".$data->target->name." has approved your request to become a member of the family tree. You may login at www.FamilyTreeTop.com.</p>";
+        $mail_body .= "<p>This is an automated message from Family TreeTop. Please do not respond to this email.</p>";
+        $mail_body .= "Regards,<br>";
+        $mail_body .= "The Family TreeTop Team";
+
+        $headers = array ("MIME-Version"=> '1.0', "Content-type" => "text/html; charset=utf-8",'From' => $from,'To' => $to,'Subject' => $subject);
+
+        $smtp = Mail::factory('smtp',array ('host' => $host,'port' => $port,'auth' => true,'username' => $username,'password' => $password));
+
+        $mail = $smtp->send($to, $headers, $mail_body);
+
+        if (PEAR::isError($mail)) {
+            echo json_encode(array('message'=>'Message delivery failed...'));
+        } else {
+            echo json_encode(array('message'=>'Message successfully sent!'));
+        }
+
+    }
     /*
     public function notifications(){
         $host = new Host('Joomla');

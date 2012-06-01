@@ -674,19 +674,19 @@ core.appendFiles = function(module, type){
 	}		
 }
 
-core.initModule = function(object_name, div){
+core.initModule = function(object_name, div, popup){
 	var self = this;
     	if(typeof window[object_name]=='function'){
-    		new window[object_name](div);
+    		new window[object_name](div, popup);
     	}
         else {
         	setTimeout(function(){
-        		self.initModule(object_name, div);
+        		self.initModule(object_name, div, popup);
         	},1000);
         }
 }
 
-core.renderPage = function(parent, page){
+core.renderPage = function(parent, page, popup){
 	storage.family_line.init(page);
 	var self = this;
 	var grid = page.grid;
@@ -709,7 +709,7 @@ core.renderPage = function(parent, page){
 			
 			//init module;
 			core.modulesPullObject.insert(module.object_name);
-			self.initModule(module.object_name, div);	
+			self.initModule(module.object_name, div, popup);
 		}
 	}
     jQuery(parent).append(table);
@@ -754,7 +754,7 @@ core.renderTabs = function(parent, pages){
 		var id = jQuery(this).attr('id');
 		var page = pages[id];
 		
-		self.renderPage('#jmbtab', page);
+		self.renderPage('#jmbtab', page, false);
 		jQuery(divs).show(); //Hide all tab content
 		return false;
 	});
@@ -808,7 +808,7 @@ core.load = function(pages){
 						var json = jQuery.parseJSON(req.responseText);
                         storage.pages = json.pages;
 						if(json.pages.length==1){
-							self.renderPage('#page', json.pages[0])
+							self.renderPage('#page', json.pages[0], false)
 						} else {
 							self.renderTabs('#container', json.pages);
 						}

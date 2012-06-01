@@ -1,6 +1,10 @@
 function JMBNotifications(){
     this.ntPull = [];
     this.dialogBox = null;
+    this.acceptDialogBox = null;
+    this.acceptJson = null;
+    this.acceptId = null;
+    this.acceptIndex = null;
 }
 
 JMBNotifications.prototype = {
@@ -14,39 +18,113 @@ JMBNotifications.prototype = {
         module.ntPull.splice(index, 1);
         return module.ntPull;
     },
-    familiesList:function(){
+    onDrop:function(object){
+        var module = this,
+            id = jQuery(object).parent().attr('id').split('-')[0],
+            object = storage.usertree.pull[id],
+            user = storage.usertree.parse(object),
+            div = jQuery('<div></div>'),
+            json = module.acceptJson,
+            fn = {};
+
+        if(!user.is_alive){
+            storage.alert("This family member is deceased. Please select a living family member", function(){});
+            return false;
+        }
+
+        fn.createUserBox = function(){
+            var sb = host.stringBuffer();
+            sb._('<div class="user-header">&nbsp;</div>');
+            sb._('<div style="background: none repeat scroll 0 0 #E5E9F0;border: 1px solid #4C67A1;">')
+                sb._('<div style="background: none repeat scroll 0 0 white;border: 1px solid #D2D9E7;margin: 10px;padding: 5px;">');
+                    sb._('<div style="border: 1px solid #403E39;display: inline-block;margin: 5px;vertical-align: top;cursor:pointer;"><img width="50px" height="50px" src="http://graph.facebook.com/')._(json.me.id)._('/picture"></div>');
+                    sb._('<div style="display: inline-block;">');
+                        sb._(storage.form.dataTable('',{
+                            "Name": { id:"name", value:json.user_info.name },
+                            "Known As": { id:"knwon", value:json.user_info.nick },
+                            "Mother": { id:"mother", value:json.father_info.name },
+                            "Father": { id:"father", value:json.mother_info.name },
+                            "Relation": { id:"relation", value: json.relation},
+                            "Facebook": { id:"facebook", value: "<a href='"+json.me.link+"'>Click here to see Facebook profile</a>" }
+                        }));
+                    sb._('</div>');
+                sb._('</div>');
+            sb._('</div>');
+            return sb.result();
+        }
+
+        fn.createMemberBox = function(){
+            var sb = host.stringBuffer();
+            sb._('<div style="background: none repeat scroll 0 0 #E7E7E7;border: 1px solid #787878;margin-top: 5px;">')
+                sb._('<div style="background: none repeat scroll 0 0 white;border: 1px solid #d9d9d9;margin: 10px;padding: 5px;">');
+                    sb._('<div style="border: 1px solid #403E39;display: inline-block;margin: 5px;vertical-align: top;cursor:pointer;">');
+                        sb._(storage.usertree.avatar.get({
+                            object:object,
+                            width:50,
+                            height:50
+                        }));
+                    sb._('</div>');
+                    sb._('<div style="display: inline-block;">');
+                        sb._(storage.form.dataTable('',{
+                            "Name": { id:"name", value:user.full_name },
+                            "Known As": { id:"knwon", value:user.nick },
+                            "Mother": { id:"mother", value:'' },
+                            "Father": { id:"father", value:'' },
+                            "Relation": { id:"relation", value: user.relation}
+                        }));
+                    sb._('</div>');
+                sb._('</div>');
+            sb._('</div>');
+            return sb.result();
+        }
+
+        jQuery(div).append(fn.createUserBox());
+        jQuery(div).append('<div class="link-arrow">&nbsp;</div>');
+        jQuery(div).append(fn.createMemberBox());
+
+        var linked = false;
+        jQuery(div).dialog({
+            width:500,
+            minHeight:70,
+            title: 'Please review your selection',
+            resizable: false,
+            draggable: false,
+            position: "top",
+            closeOnEscape: false,
+            modal:true,
+            buttons:{
+                "Link this profile":function(){
+                    if(linked) return false;
+                    linked = true;
+                    var args = JSON.stringify({id:module.acceptId,object:object,json:json});
+                    module.ajax('onLinked', args, function(res){
+                        if(module.rem(module.acceptIndex).length == 0){
+                            jQuery('div.ftt_notifications_alert').remove();
+                        }
+                        jQuery(module.dialogBox).dialog('close');
+                        jQuery(module.acceptDialogBox).dialog('close');
+                        jQuery(div).dialog('close');
+                        linked = false;
+                        storage.usertree.pull[id].user.facebook_id = json.me.id;
+                    });
+                },
+                "Cancel":function(){
+                    jQuery(this).dialog("close");
+                }
+            }
+        });
+        jQuery(div).parent().addClass('notifications_link');
+        jQuery(div).parent().css('top', '0');
 
     },
     onAccept:function(i, object, json, cont){
-        /*
-         var acceptClicked = false;
-         jQuery(html).find('div#accept').click(function(){
-         if(acceptClicked) return false;
-         acceptClicked = true;
-         jQuery.ajax({
-         url:'index.php?option=com_manager&task=notifications&type=request&status=accept&id='+id,
-         type:'GET',
-         data:'data='+object.data,
-         complete:function(req, err){
-         if(!ntf.is_accepted){
-         ntf.is_accepted = true;
-         }
-         delete ntf.not_confirmed[id];
-         ntf.confirmed[id] = object;
-         jQuery(dialog_box).dialog('close');
-         var count = storage.notifications.getCount(ntf.not_confirmed);
-         if(count == 0){
-         jQuery('div.ftt_notifications_alert').remove();
-         }
-         alert('Approval message has been sent');
-         }
-         });
-         });
-         */
-        console.log(i, object, json, cont);
         var module = this,
             fn = {},
             html;
+
+        module.acceptJson = json;
+        module.acceptId = object.id;
+        module.acceptIndex = i;
 
         fn.createUserBox = function(){
             var sb = host.stringBuffer();
@@ -114,6 +192,7 @@ JMBNotifications.prototype = {
         }
 
         html = fn.createDialogBox();
+        module.acceptDialogBox = html;
         jQuery(html).dialog({
             width:800,
             height:600,
@@ -129,28 +208,11 @@ JMBNotifications.prototype = {
         jQuery(html).parent().addClass('notifications_accept');
         jQuery(html).parent().css('top', '0');
         jQuery(html).css('height', 'auto');
-        core.renderPage(jQuery(html).find('div.familiesList'), storage.pages[2]);
+        core.renderPage(jQuery(html).find('div.familiesList'), storage.pages[2], true);
         jQuery(html).find('img').draggable({
             zIndex:9999,
             scroll:false,
-            helper:'clone',
-            start:function(e, ui){
-
-            },
-            stop:function(e, ui){
-                var object = document.elementFromPoint(ui.offset.left, ui.offset.top);
-                if(object){
-                    var classList = jQuery(object).attr('class').split(' ');
-                    if(classList[0] == 'jmb-families-avatar'){
-                        var id = jQuery(object).parent().attr('id').split('-')[0];
-                        var st = storage.usertree.pull[id];
-                        var p_user = storage.usertree.parse(st);
-                        if(confirm('Identify '+json.user_info.name+' with '+p_user.full_name)){
-
-                        }
-                    }
-                }
-            }
+            helper:'clone'
         });
     },
     onDenied:function(i, object, json, cont){

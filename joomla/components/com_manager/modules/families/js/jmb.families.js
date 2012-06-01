@@ -1,8 +1,10 @@
-function JMBFamiliesObject(obj){
+function JMBFamiliesObject(obj, popup){
 	var	module = this,
 		json,
 		gedcom_id;
-		
+
+
+	module.popup = (typeof(popup) == 'undefined')?false:popup;
 	module.parent = obj;
 	module.path = storage.baseurl+"/components/com_manager/modules/families/";
 	module.cssPath = module.path+'css/';
@@ -225,7 +227,7 @@ JMBFamiliesObject.prototype = {
 				sb._((object.user.is_mother_line&&fam_opt.mother.pencil)?fam_opt.mother.pencil:'#F5FAE6');
 			sb._(';">');
 				sb._('<div id="')._(gedcom_id)._('-view" type="imgContainer" class="jmb-families-parent-img">')._(module._avatar(object, 'parent', 1));
-                    if(module.loginType != 'famous_family' && get.is_editable){
+                    if(module.loginType != 'famous_family' && get.is_editable && !module.popup){
                         sb._('<div id="')._(gedcom_id)._('-edit" class="jmb-families-edit-button parent">&nbsp;</div>');
                     }
 					if(facebook_id != '0'){
@@ -272,7 +274,7 @@ JMBFamiliesObject.prototype = {
 				sb._((object.user.is_mother_line&&fam_opt.mother.pencil)?fam_opt.mother.pencil:'#F5FAE6');
 			sb._(';">');
 				sb._('<div id="')._(gedcom_id)._('-view" type="imgContainer" class="jmb-families-parent-img" style="border:2px solid #')._(bcolor)._(';">')._(module._avatar(object, 'parent', 1));
-					if(module.loginType != 'famous_family' && get.is_editable){
+					if(module.loginType != 'famous_family' && get.is_editable && !module.popup){
                         sb._('<div id="')._(gedcom_id)._('-edit" class="jmb-families-edit-button parent">&nbsp;</div>');
                     }
                     if(facebook_id != '0'){
@@ -314,7 +316,7 @@ JMBFamiliesObject.prototype = {
 				sb._((object.user.is_mother_line&&fam_opt.mother.pencil)?fam_opt.mother.pencil:'#F5FAE6');
 			sb._(';">');
 				sb._('<div id="')._(gedcom_id)._('-view" type="imgContainer" class="jmb-families-parent-img" style="border:2px solid #')._(bcolor)._('">')._(module._avatar(object, 'parent', 1));
-					if(module.loginType != 'famous_family' && get.is_editable){
+					if(module.loginType != 'famous_family' && get.is_editable && !module.popup){
                         sb._('<div id="')._(gedcom_id)._('-edit" class="jmb-families-edit-button parent">&nbsp;</div>');
                     }
 					if(facebook_id != '0'){
@@ -359,7 +361,7 @@ JMBFamiliesObject.prototype = {
 				sb._((user.is_mother_line&&fam_opt.mother.pencil)?fam_opt.mother.pencil:'#F5FAE6');
 			sb._(';">');
 				sb._('<div id="')._(gedcom_id)._('-view" type="imgContainer" style="height:')._(Math.round(80*k))._('px;width:')._(Math.round(72*k))._('px;border:2px solid #')._(bcolor)._('" class="jmb-families-child-img">')._(module._avatar(object, 'child', k));	
-					if(module.loginType != 'famous_family' && get.is_editable){
+					if(module.loginType != 'famous_family' && get.is_editable && !module.popup){
                         sb._('<div id="')._(gedcom_id)._('-edit" class="')._(edit_button)._('">&nbsp;</div>');
                     }
                     if(facebook_id != '0'){
@@ -572,6 +574,16 @@ JMBFamiliesObject.prototype = {
 			}
 		}	
 
+        if(module.popup){
+            module._arrows(module.parent);
+            jQuery(module.parent).find('.jmb-families-avatar').each(function(i, el){
+                jQuery(el).droppable({
+                    drop: function(){
+                        storage.ntf.onDrop(this);
+                    }
+                });
+            });
+        } else {
             module._arrows(module.parent);
             module._view(module.parent);
             module._edit(module.parent);
@@ -579,7 +591,7 @@ JMBFamiliesObject.prototype = {
             module._tooltips(module.parent);
             module._win(module.parent);
             module._home(module.parent);
-
+        }
 
 		jQuery(module.parent).height(start_top + 200);
 		jQuery(module.parent).css('overflow', 'hidden');
