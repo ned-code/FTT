@@ -1,6 +1,23 @@
+
+
 //globl object storage
 storage = {};
 //function
+storage.alert = function(message, callback){
+    if(!message){
+        message = '';
+    }
+
+    jQuery('<div style="text-align: center;"></div>').text(message).dialog({
+        width:350,
+        minHeight:80,
+        resizable: false,
+        draggable: false,
+        closeOnEscape: false,
+        modal:true,
+        close:callback
+    });
+}
 
 storage.addEvent = function(pull, func){
 	pull[pull.length] = {};

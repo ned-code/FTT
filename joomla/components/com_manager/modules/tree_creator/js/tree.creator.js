@@ -302,8 +302,10 @@ function JMBTreeCreatorObject(parent){
                     if(confirm(module.initData.request)){
                         fn.ajax('abortRequest', null, function(){
                             module.initData.request = false;
-                            alert('Your request is removed, you can begin to create the tree.');
-                            fn.create_dialog_window();
+                            storage.alert('Your request is removed, you can begin to create the tree.', function(){
+                                fn.create_dialog_window();
+                            });
+
                         });
                         return false;
                     } else {
@@ -351,15 +353,16 @@ function JMBTreeCreatorObject(parent){
 				fn.ajax('send_request', fn.json_to_string(pull), function(res){
 					var response = jQuery.parseJSON(res.responseText);
 					if(response.error){
-						alert(response.error);
-						module.request_send = false;
-                        jQuery(form).dialog('close');
+						storage.alert(response.error, function(){
+                            module.request_send = false;
+                            jQuery(form).dialog('close');
+                        });
 						return false;
 					} else if(response.success){
-                        //alert('Your request has been sent.  You will receive an email once '+ args.target.name +' has processed your request');
                         module.initData.request = "You have already sent a request to "+args.target.name+" to join an existing Family Tree. Would you like to cancel this request and start again? ";
-                        alert('Your request has been sent to '+args.target.name+'. An email will be sent to you when '+args.target.name+' makes a decision');
-						jQuery(form).dialog('close');
+                        storage.alert('Your request has been sent to '+args.target.name+'. An email will be sent to you when '+args.target.name+' makes a decision', function(){
+                            jQuery(form).dialog('close');
+                        });
 						return true;
 					}
 				});
@@ -439,7 +442,7 @@ function JMBTreeCreatorObject(parent){
 			});
 			jQuery(user_form).find('div.next').click(function(){
 				if(!fn.verify_data(user_form)){
-					alert(module.error_message);
+                    storage.alert(module.error_message, function(){});
 					return false;
 				}
 				var args = {};
@@ -523,7 +526,7 @@ function JMBTreeCreatorObject(parent){
                         if(json.error){
                             if(confirm(json.error)){
                                 fn.ajax('abortRequest', null, function(){
-                                    alert('Your request is removed, you can begin to create the tree.');
+                                    storage.alert('Your request is removed, you can begin to create the tree.', function(){});
                                 });
                                 return false;
                             } else {
