@@ -159,15 +159,10 @@ class JMBController extends JController
 	}
 
     protected function get_invitation_token($session){
-        $host = new Host('Joomla');
         $token = JRequest::getVar('token');
         $c_token = $session->get('clear_token');
-        $r = $this->checkInvitation($host);
 
-        if(!isset($_COOKIE['token']) || $r){
-            if($r || empty($token)){
-                $token = $r['belongs'];
-            }
+        if(!isset($_COOKIE['token'])){
             if(!empty($token)){
                  setcookie('token', $token);
              }
@@ -178,38 +173,7 @@ class JMBController extends JController
             $_COOKIE['token'] = false;
         }
         if(isset($_COOKIE['token']) && $_COOKIE['token']){
-            /*
-            $sql_string = "SELECT value FROM #__mb_variables WHERE belongs =?";
-            $host->ajax->setQuery($sql_string, $_COOKIE['token']);
-            $rows = $host->ajax->loadAssocList();
-            if($rows == null){
-                $session->clear('clear_token');
-                setcookie('token', false);
-                $_COOKIE['token'] = false;
-                return false;
-            } else {
-                return $_COOKIE['token'];
-            }
-            */
             return $_COOKIE['token'];
-        }
-        return false;
-    }
-
-    protected function checkInvitation($host){
-        $jfb = JFBConnectFacebookLibrary::getInstance();
-        $me = $jfb->api('/me');
-        if($me == null) return false;
-        $email = $me['email'];
-
-        $sql_string = "SELECT email, belongs, value FROM #__mb_variables";
-        $host->ajax->setQuery($sql_string);
-        $rows = $host->ajax->loadAssocList();
-
-        foreach($rows as $row){
-            if($row['email'] == $email){
-                return $row;
-            }
         }
         return false;
     }
@@ -297,7 +261,8 @@ class JMBController extends JController
 	}
 
     protected function location($alias){
-        header('Location:'.JURI::base().'index.php/'.$alias);
+        $url = 'Location:'.JURI::base().'index.php/'.$alias;
+        header($url);
         exit;
     }
 
@@ -346,7 +311,7 @@ class JMBController extends JController
                 exit;
             }
 
-        	$host = new Host('joomla');
+            $host = new Host('joomla');
         	$jfb = JFBConnectFacebookLibrary::getInstance();
             $facebook_id = $jfb->getFbUserId();
         	$user_data = $this->get_user_data($facebook_id);

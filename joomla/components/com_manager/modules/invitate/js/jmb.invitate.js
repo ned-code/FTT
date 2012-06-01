@@ -5,11 +5,6 @@ function JMBInvitateObject(obj){
         if(!response.error){
             module.ajax('checkUser', JSON.stringify( {id:response.id, token: module.getToken() }), function(res){
                 var json = jQuery.parseJSON(res.responseText);
-                if(!json.sender){
-                    alert('This invitation link is no longer valid.');
-                    window.location.reload();
-                    return false;
-                }
                 if(json.success){
                     sb._('<div class="exist">');
                         sb._("You are currently logged into Facebook as " + response.name);
@@ -17,6 +12,11 @@ function JMBInvitateObject(obj){
                         sb._(" Click <a id='logout' href='#'>here</a> to log into Facebbok with a different account.");
                     sb._('</div>');
                 } else {
+                    if(!json.sender){
+                        alert('This invitation link is no longer valid.');
+                        window.location.reload();
+                        return false;
+                    }
                     sb._('<table>');
                         sb._('<tr>');
                             sb._('<td>');
