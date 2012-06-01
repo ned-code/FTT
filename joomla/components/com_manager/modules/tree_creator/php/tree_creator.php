@@ -8,24 +8,6 @@ class TreeCreator {
 		$this->db = new JMBAjax();
 	}
 
-	public function verify_facebook_friends($friends){
-		$sql_string = "SELECT ind.id as gedcom_id, ind.fid as facebook_id, ind.sex as gender FROM #__mb_individuals as ind
-				LEFT JOIN #__mb_tree_links as link ON ind.id = link.individuals_id
-				WHERE ind.fid != 0";// and link.type = 'OWNER'";
-		$this->db->setQuery($sql_string);
-		$rows = $this->db->loadAssocList();
-		$result = array();
-		$f = get_object_vars(json_decode($friends));
-
-		foreach($rows as $row){
-            if(isset($f[$row['facebook_id']])){
-				$result[] = array('facebook_id'=>$row['facebook_id'],'gedcom_id'=>$row['gedcom_id'],'name'=>$f[$row['facebook_id']],'gender'=>$row['gender']);
-			}
-		}
-
-		return json_encode(array('result'=>$result));
-	}
-	
 	protected function place_name($prefix, $args){
 		$place = array();
 		$place[] = $args[$prefix.'city'];
@@ -203,6 +185,51 @@ class TreeCreator {
         $this->db->query();
 
         return true;
+    }
+
+    private function verify_facebook_friends($friends){
+        $sql_string = "SELECT ind.id as gedcom_id, ind.fid as facebook_id, ind.sex as gender FROM #__mb_individuals as ind
+				LEFT JOIN #__mb_tree_links as link ON ind.id = link.individuals_id
+				WHERE ind.fid != 0";// and link.type = 'OWNER'";
+        $this->db->setQuery($sql_string);
+        $rows = $this->db->loadAssocList();
+        $friendsIdPull = array();
+        foreach($friends as $friend){
+            $friendsIdPull[$friend->id] = $friend;
+        }
+        $result = array();
+        if(!empty($rows)){
+            foreach($rows as $row){
+                $id = $row['facebook_id'];
+                if(isset($friendsIdPull[$id])){
+                    $friend = $friendsIdPull[$id];
+                    $result[] = array(
+                        'facebook_id'=>$friend->id,
+                        'name'=>$friend->name,
+                        'gedcom_id'=>$row['gedcom_id'],
+                        'gender'=>$row['gender'],
+                    );
+                }
+            }
+        }
+        return $result;
+    }
+
+    public function init($args){
+        $str = json_decode($args);
+        $verifyFriends = $this->verify_facebook_friends($str->friends);
+
+        $sql_string = "SELECT gedcom_id, facebook_id FROM #__mb_notifications WHERE facebook_id = ? AND processed != 1";
+        $this->db->setQuery($sql_string, $str->me->id);
+        $rows = $this->db->loadAssocList();
+        $message = false;
+        if($rows != null) {
+            $gedcom_id = $rows[0]['gedcom_id'];
+            $user = $this->host->gedcom->individuals->get($gedcom_id);
+            $user_name = $user->FirstName. " " . $user->LastName;
+            $message = "You have already sent a request to ".$user_name." to join an existing Family Tree. Would you like to cancel this request and start again? ";
+        }
+        return json_encode(array('verifyFriends'=>$verifyFriends,'request'=>$message));
     }
 }
 ?>

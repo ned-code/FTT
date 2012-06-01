@@ -8,7 +8,9 @@ function JMBTreeCreatorObject(parent){
 	module.request_pull = {};
 	module.reload = false;
 	module.request_send = false;
-	
+	module.initData = false;
+    module.fProfile = false;
+
 	module.path = 'modules/tree_creator/'
 	module.css_path = [storage.baseurl,storage.url,module.path,'css/'].join('');
 	module.female = 'female.png';
@@ -296,7 +298,20 @@ function JMBTreeCreatorObject(parent){
 		},
 		connect_to_family_treetop:function(body){
 			jQuery(body).click(function(){
-				fn.create_dialog_window();
+                if(module.initData.request){
+                    if(confirm(module.initData.request)){
+                        fn.ajax('abortRequest', null, function(){
+                            module.initData.request = false;
+                            alert('Your request is removed, you can begin to create the tree.');
+                            fn.create_dialog_window();
+                        });
+                        return false;
+                    } else {
+                        return false;
+                    }
+                } else {
+                    fn.create_dialog_window();
+                }
 			});
 		},
 		get_request_form_box_data:function(object){
@@ -342,6 +357,7 @@ function JMBTreeCreatorObject(parent){
 						return false;
 					} else if(response.success){
                         //alert('Your request has been sent.  You will receive an email once '+ args.target.name +' has processed your request');
+                        module.initData.request = "You have already sent a request to "+args.target.name+" to join an existing Family Tree. Would you like to cancel this request and start again? ";
                         alert('Your request has been sent to '+args.target.name+'. An email will be sent to you when '+args.target.name+' makes a decision');
 						jQuery(form).dialog('close');
 						return true;
@@ -354,24 +370,23 @@ function JMBTreeCreatorObject(parent){
 			var facebook_id = jQuery(target).attr('facebook_id');
 			var gedcom_id = jQuery(target).attr('gedcom_id');
 			var user_name = jQuery(target).attr('user_name');
-			FB.api('/me', function(res){
-				var args = {me:res, target:{name:user_name, facebook_id:facebook_id, gedcom_id:gedcom_id}};
-				var request_form = fn.request_form(args);				
-				var option = jQuery(request_form).find('select[name="gender"]').find('option');
-                jQuery(request_form).find('select[name="gender"]').change(function(){
-                    var gender = jQuery(this).val();
-                    var avatarDiv = jQuery(request_form).find('div.facebook_avatar');
+            var res = module.fProfile;
+			var args = {me:res, target:{name:user_name, facebook_id:facebook_id, gedcom_id:gedcom_id}};
+			var request_form = fn.request_form(args);
+			var option = jQuery(request_form).find('select[name="gender"]').find('option');
+            jQuery(request_form).find('select[name="gender"]').change(function(){
+                var gender = jQuery(this).val();
+                var avatarDiv = jQuery(request_form).find('div.facebook_avatar');
                     //jQuery(avatarDiv).html('');
                     //jQuery(avatarDiv).append(storage.usertree.avatar.def_image({ width:72, height:80 }, gender.toUpperCase()));
-                });
-				jQuery(option[(res.gender=='male')?1:0]).attr('selected', 'selected');
-				jQuery(module.dialog_box).dialog('close');
-				jQuery(request_form).dialog(module.request_settings);
-				jQuery(request_form).dialog('option', 'title', 'Family TreeTop - Invitation Request');
-				jQuery(request_form).parent().addClass('ftt_tree_creator');
-				jQuery(request_form).parent().css('top', '20px');
-				fn.request_form_event(request_form, args);
-			});
+            });
+			jQuery(option[(res.gender=='male')?1:0]).attr('selected', 'selected');
+			jQuery(module.dialog_box).dialog('close');
+			jQuery(request_form).dialog(module.request_settings);
+			jQuery(request_form).dialog('option', 'title', 'Family TreeTop - Invitation Request');
+			jQuery(request_form).parent().addClass('ftt_tree_creator');
+			jQuery(request_form).parent().css('top', '20px');
+			fn.request_form_event(request_form, args);
 		},
 		verify_date:function(prefix, user_form){
 			var day = jQuery(user_form).find('select[name="'+prefix+'day"]').val();
@@ -563,44 +578,33 @@ function JMBTreeCreatorObject(parent){
 		},
 		set_facebook_friends:function(html){
 			var cont = jQuery(html).find('div.tc_ftt_friends');
-			FB.api('/me/friends', function(response){
-				var data = response.data;
-				var query = '{';
-				for(var key in data){
-					query += '"'+data[key].id+'":"'+data[key].name+'",';
-				}
-				query = query.substr(0, query.length - 1)+'}';
-				fn.ajax('verify_facebook_friends', query, function(res){
-					var json = jQuery.parseJSON(res.responseText);
-					var ul = jQuery('<ul></ul>');
-					jQuery(json.result).each(function(i, el){
-						var li = jQuery('<li></li>');
-						var sb = host.stringBuffer();
-						sb._('<table>');
-							sb._('<tr>');
-								sb._('<td>');
-									sb._('<div class="avatar">');
-										//sb._(storage.usertree.avatar.def_image({ width:50, height:50 }, el.gender.substr(0, 1).toUpperCase()));
-                                        sb._('<img src="https://graph.facebook.com/')._(el.facebook_id)._('/picture">');
-									sb._('</div>');
-								sb._('</td>');
-								sb._('<td><div class="name">')._(el.name)._('</div></td>');
-								sb._('<td>');
-									sb._('<div class="request" user_name="')._(el.name)._('" facebook_id="')._(el.facebook_id)._('" gedcom_id="')._(el.gedcom_id)._('">');
-										sb._('<span>Request Invitation</span>');
-									sb._('</div>');
-								sb._('</td>');
-							sb._('</tr>');
-						sb._('</table>');
-						var html = sb.result();
-						jQuery(li).append(html);						
-						jQuery(ul).append(li);
-					});
-					jQuery(cont).append(ul);
-					jQuery(ul).find('div.request').click(fn.send_friend_request);
-				});
-			});
-			
+            var ul = jQuery('<ul></ul>');
+            var vFriends = module.initData.verifyFriends;
+            jQuery(vFriends).each(function(i, el){
+                var li = jQuery('<li></li>');
+                var sb = host.stringBuffer();
+                sb._('<table>');
+                    sb._('<tr>');
+                        sb._('<td>');
+                            sb._('<div class="avatar">');
+                                //sb._(storage.usertree.avatar.def_image({ width:50, height:50 }, el.gender.substr(0, 1).toUpperCase()));
+                                sb._('<img src="https://graph.facebook.com/')._(el.facebook_id)._('/picture">');
+                            sb._('</div>');
+                        sb._('</td>');
+                        sb._('<td><div class="name">')._(el.name)._('</div></td>');
+                        sb._('<td>');
+                            sb._('<div class="request" user_name="')._(el.name)._('" facebook_id="')._(el.facebook_id)._('" gedcom_id="')._(el.gedcom_id)._('">');
+                                sb._('<span>Request Invitation</span>');
+                            sb._('</div>');
+                        sb._('</td>');
+                    sb._('</tr>');
+                sb._('</table>');
+                var html = sb.result();
+                jQuery(li).append(html);
+                jQuery(ul).append(li);
+            });
+            jQuery(cont).append(ul);
+            jQuery(ul).find('div.request').click(fn.send_friend_request);
 		},
 		set_start_content:function(dialog_box){
 			var sb = host.stringBuffer();
@@ -620,15 +624,28 @@ function JMBTreeCreatorObject(parent){
 			fn.set_facebook_friends(html);
 			jQuery(dialog_box).append(html);
 		},
+        get_facebook_friends_string:function(callback){
+            FB.api('/me/friends', function(response){
+                callback(response);
+            });
+        },
 		init:function(){
-			var body = fn.body();
-			var dialog_box = fn.dialog_box();
-			module.body = body;
-			module.dialog_box = dialog_box;
-			jQuery(parent).append(body);
-			fn.connect_to_family_treetop(body);
-			fn.set_start_content(dialog_box);
-			
+            FB.api('me', function(me){
+                module.fProfile = me;
+                fn.get_facebook_friends_string(function(response){
+                    var args = JSON.stringify({me:module.fProfile, friends:response.data});
+                    fn.ajax('init', args, function(res){
+                        module.initData = jQuery.parseJSON(res.responseText);
+                        var body = fn.body();
+                        var dialog_box = fn.dialog_box();
+                        module.body = body;
+                        module.dialog_box = dialog_box;
+                        jQuery(parent).append(body);
+                        fn.connect_to_family_treetop(body);
+                        fn.set_start_content(dialog_box);
+                    });
+                });
+            });
 		}
 	}
 	

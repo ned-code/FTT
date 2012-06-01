@@ -83,22 +83,25 @@ class JMBThisMonth {
 	protected function sort($usertree, &$events){
 		$members = array();
 		foreach($events as $key => $event){
-			foreach($event as $k => $user){
-				if(sizeof($user)==3){
-					if(isset($usertree[$user['husb']])&&isset($usertree[$user['wife']])){
-						$members[$user['husb']] = $usertree[$user['husb']];
-						$members[$user['wife']] = $usertree[$user['wife']];
-					} else {
-						array_splice($events[$key],$k,1);
-					}
- 				} else {
-					if(isset($usertree[$user['gid']])){
-						$members[$user['gid']] = $usertree[$user['gid']];
-					} else {
-						array_splice($events[$key],$k,1);
-					}
-				}
-			}
+            $e_type = gettype($event);
+            if($e_type == 'array' || $e_type == 'object'){
+                foreach($event as $k => $user){
+                    if(sizeof($user)==3){
+                        if(isset($usertree[$user['husb']])&&isset($usertree[$user['wife']])){
+                            $members[$user['husb']] = $usertree[$user['husb']];
+                            $members[$user['wife']] = $usertree[$user['wife']];
+                        } else {
+                            array_splice($events[$key],$k,1);
+                        }
+                    } else {
+                        if(isset($usertree[$user['gid']])){
+                            $members[$user['gid']] = $usertree[$user['gid']];
+                        } else {
+                            array_splice($events[$key],$k,1);
+                        }
+                    }
+                }
+            }
 		}
 		return $members;
 	}

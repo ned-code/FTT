@@ -15,7 +15,9 @@ Host.prototype = {
 			//storage.request.del(key);
 			if(req.responseText.length!=0){
 				callback(req);
-			}
+			} else {
+                callback(false);
+            }
 		}
 	    });
 	    storage.request.add(xnr, key);

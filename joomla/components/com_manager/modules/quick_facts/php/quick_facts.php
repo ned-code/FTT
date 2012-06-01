@@ -18,25 +18,28 @@ class JMBQuickFacts {
 		$youngest_object = null;
 		$oldest = 0;
 		$oldest_object = null;
-		foreach($usertree as $object){
-			if($object['user']['death']===null){
-				$count++;
-				if($object['user']['birth']!==null){
-					$date = $object['user']['birth']['date'];
-					if(is_array($date)&&$date[2]!==null){
-						$turns = date('Y') - $date[2];
-						if($turns <= 150 && $turns > $oldest){
-							$oldest_object = $object;
-							$oldest = $turns;
-						}
-						if($turns < $youngest){
-							$youngest_object = $object;
-							$youngest = $turns;
-						}
-					}
-				}
-			}
-		}
+        $type = gettype($usertree);
+        if($type == 'array' || $type == 'object'){
+            foreach($usertree as $object){
+                if($object['user']['death']===null){
+                    $count++;
+                    if($object['user']['birth']!==null){
+                        $date = $object['user']['birth']['date'];
+                        if(is_array($date)&&$date[2]!==null){
+                            $turns = date('Y') - $date[2];
+                            if($turns <= 150 && $turns > $oldest){
+                                $oldest_object = $object;
+                                $oldest = $turns;
+                            }
+                            if($turns < $youngest){
+                                $youngest_object = $object;
+                                $youngest = $turns;
+                            }
+                        }
+                    }
+                }
+            }
+        }
 		return array('living'=>$count,'youngest'=>$youngest_object,'oldest'=>$oldest_object);
 	}
 	

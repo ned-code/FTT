@@ -212,6 +212,7 @@ function JMBLogin(){
 		user:function(callback){
 			var json, object;
 			fn.ajax('user', null, function(res){
+                if(!res) callback(false);
                 json = jQuery.parseJSON(res.responseText);
                 settings.languages = json.languages;
                 settings.default_language = json.default_language;
