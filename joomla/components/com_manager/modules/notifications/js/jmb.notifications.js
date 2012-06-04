@@ -28,7 +28,12 @@ JMBNotifications.prototype = {
             fn = {};
 
         if(!user.is_alive){
-            storage.alert("This family member is deceased. Please select a living family member", function(){});
+            storage.alert("This family member is deceased. Please select a living family member.", function(){});
+            return false;
+        }
+
+        if(user.facebook_id != 0){
+            storage.alert("This family member is registered. Please select another family member.", function(){});
             return false;
         }
 
