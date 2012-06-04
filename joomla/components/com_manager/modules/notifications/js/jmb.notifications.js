@@ -32,6 +32,26 @@ JMBNotifications.prototype = {
             return false;
         }
 
+        fn.getParentsString = function(t){
+            var st = storage.usertree.pull[id].parents;
+            if(st != null){
+                var parents = null, parent = null;
+                for(var key in st){
+                    if(!st.hasOwnProperty(key)) continue;
+                    parents = st[key];
+                    break;
+                }
+                parent = parents[t];
+                if(parent != null){
+                    var parent_id = parent.gedcom_id;
+                    var parent_object = storage.usertree.pull[parent_id];
+                    var parse = storage.usertree.parse(parent_object);
+                    return parse.full_name;
+                }
+            }
+            return '';
+        }
+
         fn.createUserBox = function(){
             var sb = host.stringBuffer();
             sb._('<div class="user-header">&nbsp;</div>');
@@ -68,8 +88,8 @@ JMBNotifications.prototype = {
                         sb._(storage.form.dataTable('',{
                             "Name": { id:"name", value:user.full_name },
                             "Known As": { id:"knwon", value:user.nick },
-                            "Mother": { id:"mother", value:'' },
-                            "Father": { id:"father", value:'' },
+                            "Mother": { id:"mother", value:fn.getParentsString('mother') },
+                            "Father": { id:"father", value:fn.getParentsString('father') },
                             "Relation": { id:"relation", value: user.relation}
                         }));
                     sb._('</div>');
