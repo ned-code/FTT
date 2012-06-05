@@ -60,7 +60,7 @@ JMBNotifications.prototype = {
         fn.createUserBox = function(){
             var sb = host.stringBuffer();
             sb._('<div class="user-header">&nbsp;</div>');
-            sb._('<div style="background: none repeat scroll 0 0 #E5E9F0;border: 1px solid #4C67A1;">')
+            sb._('<div id="facebook" style="background: none repeat scroll 0 0 #E5E9F0;border: 1px solid #4C67A1;">')
                 sb._('<div style="background: none repeat scroll 0 0 white;border: 1px solid #D2D9E7;margin: 10px;padding: 5px;">');
                     sb._('<div style="border: 1px solid #403E39;display: inline-block;margin: 5px;vertical-align: top;cursor:pointer;"><img width="50px" height="50px" src="http://graph.facebook.com/')._(json.me.id)._('/picture"></div>');
                     sb._('<div style="display: inline-block;">');
@@ -80,7 +80,7 @@ JMBNotifications.prototype = {
 
         fn.createMemberBox = function(){
             var sb = host.stringBuffer();
-            sb._('<div style="background: none repeat scroll 0 0 #E7E7E7;border: 1px solid #787878;margin-top: 5px;">')
+            sb._('<div id="target" style="background: none repeat scroll 0 0 #E7E7E7;border: 1px solid #787878;margin-top: 5px;">')
                 sb._('<div style="background: none repeat scroll 0 0 white;border: 1px solid #d9d9d9;margin: 10px;padding: 5px;">');
                     sb._('<div style="border: 1px solid #403E39;display: inline-block;margin: 5px;vertical-align: top;cursor:pointer;">');
                         sb._(storage.usertree.avatar.get({

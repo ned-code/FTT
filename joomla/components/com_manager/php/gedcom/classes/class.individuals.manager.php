@@ -228,7 +228,7 @@ class IndividualsList{
         	return $rows;
         }
         public function getLastLoginMembers($treeId){
-        	$sqlString = "SELECT ind.id as gedcom_id FROM #__mb_individuals as ind
+        	$sqlString = "SELECT DISTINCT ind.id as gedcom_id FROM #__mb_individuals as ind
         			LEFT JOIN #__mb_tree_links as links ON links.individuals_id = ind.id
         			WHERE links.tree_id = ? AND ind.fid != '0'
         			ORDER BY ind.last_login DESC";
