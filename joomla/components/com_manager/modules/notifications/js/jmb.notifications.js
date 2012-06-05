@@ -103,9 +103,26 @@ JMBNotifications.prototype = {
             return sb.result();
         }
 
+        fn.onMatchData = function(div){
+            var fTr = jQuery(div).find('div#facebook table tr');
+            var tTr = jQuery(div).find('div#target table tr');
+            for(var i = 0; i < 5 ; i++){
+                var fText = jQuery(fTr[i]).find('div.text span');
+                var tText = jQuery(tTr[i]).find('div.text span');
+                if(jQuery(fText).text() != jQuery(tText).text()){
+                    jQuery(fText).css({"background":"#fbced0"});
+                    jQuery(tText).css({"background":"#fbced0"});
+                } else {
+                    jQuery(fText).css({"background":"#cefbd1"});
+                    jQuery(tText).css({"background":"#cefbd1"});
+                }
+            }
+        }
+
         jQuery(div).append(fn.createUserBox());
         jQuery(div).append('<div class="link-arrow">&nbsp;</div>');
         jQuery(div).append(fn.createMemberBox());
+        fn.onMatchData(div);
 
         var linked = false;
         jQuery(div).dialog({
