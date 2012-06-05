@@ -39,7 +39,8 @@ class JMBDescendantTree {
 		$this->members[$user_id] = $object;
 		$user = $object['user'];
 		$img = ($user['gender'] == "M") ? 'male.png' : 'female.png';
-		$color = $this->color[$user['gender']];
+        $gender = $user['gender'] != null ? $user['gender'] : 'M';
+		$color = $this->color[$gender];
 		$flag = ($user['gedcom_id'] == $this->owner_id)?$this->user:""; 
 		$xml .= "<item id='";
 			$xml .= $user['gedcom_id'];
@@ -70,13 +71,14 @@ class JMBDescendantTree {
 		$spouse = ($family['spouse']!=null&&isset($usertree[$family['spouse']]))?$usertree[$family['spouse']]:false;
 		$childrens = $family['childrens'];
 		
-		$img = ($spouse['user']['gender'] == "M" )?"male-family.png":"fem-family.png" ;
+		$img = ($spouse['user']['gender'] != null && $spouse['user']['gender'] == "M"  )?"male-family.png":"fem-family.png" ;
 		if($spouse){
 			$spouse_color = $this->color[$spouse['user']['gender']];
 			$spouse_flag = ($spouse['user']['gedcom_id'] == $this->owner_id)?$this->user:"";
 			$this->members[$spouse['user']['gedcom_id']] = $spouse;
 		}
-		$sircar_color = $this->color[$sircar['user']['gender']];
+        $sircar_gender = $sircar['user']['gender'] != null ? $sircar['user']['gender'] : 'M';
+		$sircar_color = $this->color[$sircar_gender];
 		$sircar_flag = ($user_id == $this->owner_id)?$this->user:"";
 		
 		if($spouse){
