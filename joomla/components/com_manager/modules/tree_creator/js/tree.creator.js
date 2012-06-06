@@ -337,6 +337,20 @@ function JMBTreeCreatorObject(parent){
 			string = string.substr(0, string.length -1) + '}';
 			return string;
 		},
+        request_from_validate:function(form, callback){
+            var res = true;
+            jQuery(form).find('div.text input').each(function(i, el){
+                var val = jQuery(el).val();
+                if(jQuery(el).attr('name') != 'nick' && val == ''){
+                    res = false;
+                }
+            });
+            var relation = jQuery(form).find('select option:selected').val();
+            if(relation == ''){
+                res = false;
+            }
+            callback(res);
+        },
 		request_form_event:function(form, args){
 			jQuery(form).find('.button').click(function(){
 				if(module.request_send) return false;
@@ -350,22 +364,30 @@ function JMBTreeCreatorObject(parent){
 					father_info:fn.get_request_form_box_data(jQuery(form).find('.father_box')),
 					message:jQuery(form).find('div.message textarea').val()
 				};
-				fn.ajax('send_request', fn.json_to_string(pull), function(res){
-					var response = jQuery.parseJSON(res.responseText);
-					if(response.error){
-						storage.alert(response.error, function(){
-                            module.request_send = false;
-                            jQuery(form).dialog('close');
+                fn.request_from_validate(form, function(valid){
+                    if(valid){
+                        fn.ajax('send_request', fn.json_to_string(pull), function(res){
+                            var response = jQuery.parseJSON(res.responseText);
+                            if(response.error){
+                                storage.alert(response.error, function(){
+                                    module.request_send = false;
+                                    jQuery(form).dialog('close');
+                                });
+                                return false;
+                            } else if(response.success){
+                                module.initData.request = "You have already sent a request to "+args.target.name+" to join an existing Family Tree. Would you like to cancel this request and start again? ";
+                                storage.alert('Your request has been sent to '+args.target.name+'. An email will be sent to you when '+args.target.name+' makes a decision', function(){
+                                    jQuery(form).dialog('close');
+                                });
+                                return true;
+                            }
                         });
-						return false;
-					} else if(response.success){
-                        module.initData.request = "You have already sent a request to "+args.target.name+" to join an existing Family Tree. Would you like to cancel this request and start again? ";
-                        storage.alert('Your request has been sent to '+args.target.name+'. An email will be sent to you when '+args.target.name+' makes a decision', function(){
-                            jQuery(form).dialog('close');
-                        });
-						return true;
-					}
-				});
+                    } else {
+                        module.request_send = false;
+                        storage.alert("You must complete all of the field." ,function(){})
+                    }
+                });
+                return false;
 			});
 		},
 		send_friend_request:function(e){
