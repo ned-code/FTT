@@ -197,10 +197,10 @@ JMBNotifications.prototype = {
                 sb._('</p>');
                 sb._('<ul style="list-style: none outside none;margin: 10px;">');
                     sb._('<li>');
-                        sb._('<div>1. In the window below, use the blue navigator arrows to find ')._(json.user_info.name)._(' family. If ')._(json.user_info.name)._(' does not have a profile, you must create one.</div>');
+                        sb._('<div>1. In the window below, use the blue navigation arrows to find ')._(json.user_info.name)._(' family. If ')._(json.user_info.name)._(' does not have a profile, you must create one.</div>');
                     sb._('</li>');
                     sb._('<li style="margin-top: 5px;">');
-                        sb._('<div>2. Drag ')._(json.user_info.name)._(' Facebook picture(show right) onto ')._(json.user_info.name)._(' profile picture(locate below).</div>')
+                        sb._('<div>2. Drag ')._(json.user_info.name)._(' Facebook picture(shown right) onto ')._(json.user_info.name)._(' profile picture(located below).</div>')
                     sb._('</li>');
                 sb._('</ul>');
             sb._('</div>');
