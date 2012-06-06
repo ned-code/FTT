@@ -94,7 +94,7 @@ class JMBInvitation {
 		$password = "Pp9671111";
 
         $mail_body = '<html>';
-            $mail_body .= '<head>Family Treetop invitation.</head>';
+            //$mail_body .= '<head>Family Treetop invitation.</head>';
             $mail_body .= '<body>';
                 $mail_body .= '<br>Dear '.$recipient['user']['first_name'].',<br><br>';
                 $mail_body .= 'Your '.$relation.', '.$owner['user']['first_name'].' '.$owner['user']['last_name'];
@@ -102,13 +102,14 @@ class JMBInvitation {
                 $mail_body .= ' that can only be seen my members of your family.<br><br>';
 
                 $mail_body .= "<a href='http://www.familytreetop.com/index.php/invitation?token=".$token."'>Click here to accept this invitation</a><br><br>";
-                $mail_body .= 'Click <a href="http://www.facebook.com/profile.php?id='.$owner['user']['facebook_id'].'">here</a> to view '.$owner['user']['first_name'].' Facebook profile.<br><br>';
+                //$mail_body .= 'Click <a href="http://www.facebook.com/profile.php?id='.$owner['user']['facebook_id'].'">here</a> to view '.$owner['user']['first_name'].' Facebook profile.<br><br>';
+                $mail_body .= 'Click <a href="http://www.facebook.com/profile.php?id='.$owner['user']['facebook_id'].'">here</a> to view Facebook profile for '.$owner['user']['first_name'].'<br><br>';
 
                 $mail_body .= 'If you wish to contact '.$owner['user']['first_name'].', you may email him at '.$me['email'].'<br><br>';
 
                 $mail_body .= 'This is automated message from Family TreeTop. Please do not respond to this email.<br>';
-                $mail_body .= 'Regards,<br> The Family TreeTop Team';
-                //$mail_body .= 'Click here to find out more about Family TreeTop.';
+                $mail_body .= '<br>Regards,<br><br> The Family TreeTop Team<br>';
+                $mail_body .= '<a href="www.familytreetop.com">www.familytreetop.com</a>';
             $mail_body .= '</body>';
         $mail_body .= '</html>';
 		
