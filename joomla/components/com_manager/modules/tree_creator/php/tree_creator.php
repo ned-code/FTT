@@ -154,7 +154,7 @@ class TreeCreator {
         $from = "<no-reply@familytreetop.com>";
 
         #subject
-        $subject = "Family Treetop invitation.";
+        $subject = "Family Treetop - Request from ".$std->me->name;
 
         $host = "ssl://smtp.gmail.com";
         $port = "465";
@@ -162,9 +162,13 @@ class TreeCreator {
         $password = "Pp9671111";
 
         #mail body
-        $mail_body = '<html><head>Family TreeTop Request.</head><body>';
-        $mail_body .= "<div style='margin:10px;'>Dear ". $std->target->name.",</div>";
-        $mail_body .= "<div style='margin:10px;'>".$std->me->name." send a request to add it to your family tree.";
+        $mail_body = '<html><body>';
+            $mail_body .= "<div style='margin:10px;'>Dear ". $std->target->name.",</div>";
+            $mail_body .= "<div style='margin:10px;'>".$std->me->name." has requested membership in your family tree.</div>";
+            $mail_body .= "<div style='margin:10px;'>To view this request, please log into your family tree at <a href='www.familytreetop.com'>www.FamilyTreeTop.com</a></div>";
+            $mail_body .= "<div style='margin:10px;'>This is an automated email from Family TreeTop. Please do not reply to this message. Please click <a href='http://familytreetop.com/index.php/feedback'>here</a> to report any problems with Family TreeTop.</div>";
+            $mail_body .= "<div style='margin:10px;'>Regards,</div>";
+            $mail_body .= "<div style='margin:10px;'>The Family TreeTop Team<br><a href='www.familytreetop.com'>www.FamilyTreeTop.com</a></div>";
         $mail_body .= '</body></html>';
 
         $headers = array ("MIME-Version"=> '1.0', "Content-type" => "text/html; charset=utf-8",'From' => $from,'To' => $to,'Subject' => $subject);
