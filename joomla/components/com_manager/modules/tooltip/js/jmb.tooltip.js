@@ -49,7 +49,7 @@ function JMBTooltip(){
         FTT_MOD_TOOLTIPS_RELATION:"Relation",
         FTT_MOD_TOOLTIPS_SHOW_FULL_PROFILE:"Show full profile",
         FTT_MOD_TOOLTIPS_IS_NOT_REGISTERED:"is not registered.",
-        FTT_MOD_TOOLTIPS_CLICK_TO_SEND_EMAIL_INVITATION:"Click here to send %% an email invitation.",
+        FTT_MOD_TOOLTIPS_CLICK_TO_SEND_EMAIL_INVITATION:"Click here to send %% an invitation.",
         FTT_MOD_TOOLTIPS_EDIT:"Edit this Profile",
         FTT_MOD_TOOLTIPS_ADD:"Add",
         FTT_MOD_TOOLTIPS_ADD_PARENT:"Parent",
