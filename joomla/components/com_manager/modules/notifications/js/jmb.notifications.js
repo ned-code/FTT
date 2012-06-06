@@ -67,8 +67,8 @@ JMBNotifications.prototype = {
                         sb._(storage.form.dataTable('',{
                             "Name": { id:"name", value:json.user_info.name },
                             "Known As": { id:"knwon", value:json.user_info.nick },
-                            "Mother": { id:"mother", value:json.father_info.name },
-                            "Father": { id:"father", value:json.mother_info.name },
+                            "Mother": { id:"mother", value:json.mother_info.name },
+                            "Father": { id:"father", value:json.father_info.name },
                             "Relation": { id:"relation", value: json.relation},
                             "Facebook": { id:"facebook", value: "<a href='"+json.me.link+"'>Click here to see Facebook profile</a>" }
                         }));
@@ -236,7 +236,7 @@ JMBNotifications.prototype = {
         html = fn.createDialogBox();
         module.acceptDialogBox = html;
         jQuery(html).dialog({
-            width:800,
+            width:750,
             height:600,
             title: json.me.name+' Invition Request',
             resizable: false,
