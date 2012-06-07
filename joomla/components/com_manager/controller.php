@@ -310,13 +310,23 @@ class JMBController extends JController
                 header('Location: https://www.facebook.com/dialog/oauth?client_id='.JMB_FACEBOOK_APPID.'&redirect_uri='.JURI::base().'index.php/myfamily');
                 exit;
             }
+            $jfb = JFBConnectFacebookLibrary::getInstance();
+            $user = JFactory::getUser();
+            $me = $jfb->api('me');
+
+            if(!$user->guest){
+                $user_name = explode('_', $user->username);
+                if($user_name[1] != $me['id']){
+                    header('Location: '.JURI::base().'index.php?option=com_jfbconnect&task=logout&return=login');
+                    exit;
+                }
+            }
+
 
             $host = new Host('joomla');
-        	$jfb = JFBConnectFacebookLibrary::getInstance();
             $facebook_id = $jfb->getFbUserId();
         	$user_data = $this->get_user_data($facebook_id);
             $user = JFactory::getUser();
-
             $alias = $this->check_location($user_data, $user);
 
             switch($alias){

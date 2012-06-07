@@ -10,7 +10,7 @@ $pages = substr($pages, 0, strlen($pages)-1);
 
 $session = JFactory::getSession();
 $active_tab = $session->get('active_tab');
-$str ='<script>storage.core.load("'.$pages.'"); storage.activeTab = "'. $active_tab .'" </script>';
+$str ='<script>if(typeof(storage) != "undefined"){storage.core.load("'.$pages.'"); storage.activeTab = "'. $active_tab .'"}</script>';
 echo $str;
 
 ?>

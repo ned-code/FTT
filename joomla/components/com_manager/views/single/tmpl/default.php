@@ -33,7 +33,7 @@ jQuery(document).ready(function() {
     });
 });</script>";
 */
-$str ='<script>storage.core.load("'.$pages.'");</script>';
+$str ='<script>if(typeof(storage) != "undefined"){storage.core.load("'.$pages.'"); }</script>';
 
 echo $str;
 ?>

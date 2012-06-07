@@ -111,7 +111,7 @@ $og_site_name = 'FamilyTree-Top';
                                         <li><a style="color:black; font-weight: bold;" href="<?php echo $base_url; ?>">FamilyTreeTop.com</a></li>
                                         <li><a href="<?php echo $base_url; ?>index.php/about">About</a></li>
                                         <li><a href="<?php echo $base_url; ?>index.php/conditions">Tearms & Conditions</a></li>
-                                        <li><a href="<?php echo $base_url; ?>index.php/privaci">Privacy Policy</a></li>
+                                        <li><a href="<?php echo $base_url; ?>index.php/privacy">Privacy Policy</a></li>
                                         <li><a href="<?php echo $base_url; ?>index.php/feedback">Provide Feedback</a></li>
                                         <li><a href="<?php echo $base_url; ?>index.php/contact">Contact</a></li>
                                         <li><a href="<?php echo $base_url; ?>index.php/help">Help</a></li>
