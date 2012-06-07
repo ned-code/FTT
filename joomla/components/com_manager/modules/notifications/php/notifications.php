@@ -30,7 +30,7 @@ class JMBNotifications {
 
         $host = "ssl://smtp.gmail.com";
         $port = "465";
-        $username = "admin@familytreetop.com";
+        $username = "no-reply@familytreetop.com";
         $password = "Pp9671111";
 
         #mail body
@@ -88,7 +88,7 @@ class JMBNotifications {
 
         $host = "ssl://smtp.gmail.com";
         $port = "465";
-        $username = "admin@familytreetop.com";
+        $username = "no-reply@familytreetop.com";
         $password = "Pp9671111";
 
         #mail body
