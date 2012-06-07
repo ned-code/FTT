@@ -153,7 +153,7 @@ JMBInvitation.prototype = {
                     id = jQuery(option).val();
                     name = jQuery(option).text();
                     if(!module.transportation){
-                        if (confirm('You want to send invitation in application to ' + name)) {
+                        if (confirm('Would to like to invite '+ name +' to join your family tree?')) {
                             storage.progressbar.loading();
                             module.transportation = true;
                             module.ajax('checkFacebookIdOnUse', id, function(res){

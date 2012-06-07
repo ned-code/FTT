@@ -229,7 +229,7 @@
 }
 
 .ui-dialog.notifications_deny{
-    background:#999999;
+    background:#3F48CC;
     font-family:Tahoma;
     font-size:12px;
 }
@@ -282,7 +282,7 @@
 }
 
 .ui-dialog.notifications_accept{
-    background:#999999;
+    background:#3F48CC;
     font-family:Tahoma;
     font-size:12px;
 }
@@ -307,7 +307,7 @@
 }
 
 .ui-dialog.notifications_link{
-    background:#999999;
+    background:#3F48CC;
     font-family:Tahoma;
     font-size:12px;
 }

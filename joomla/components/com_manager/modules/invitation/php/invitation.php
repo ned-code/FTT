@@ -61,7 +61,7 @@ class JMBInvitation {
         $to = JRequest::getVar('send_email');
 
         if($this->checkMailOnUse($to)){
-            $message = "Sorry, but ".$recipient['user']['first_name']." is a member of another family tree and multiple trees membership is disabled in beta-version of FamilyTreeTop.";
+            $message = "Sorry, but ".$recipient['user']['first_name']." is already a member of Family TreeTop.";
             return json_encode(array('success'=>false,'message'=>$message));
         }
         if($this->checkMailOnInvite($to)){
@@ -138,7 +138,7 @@ class JMBInvitation {
         if(!empty($rows)){
             foreach($rows as $row){
                 if($row['fid'] != null && $row['fid'] == $facebook_id){
-                    $message = "Sorry, but %% is a member of another family tree and multiple trees membership is disabled in beta-version of FamilyTreeTop.";
+                    $message = "Sorry, but %% is already a member of Family TreeTop.";
                     return json_encode(array('success'=>false,'message'=>$message));
                 }
             }
