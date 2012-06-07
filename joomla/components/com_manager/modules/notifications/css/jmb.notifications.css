@@ -22,6 +22,10 @@
     font-weight: bold;
 }
 
+.ui-dialog.notifications .ui-dialog-titlebar-close span {
+
+}
+
 .ui-dialog.notifications {
     background: none repeat scroll 0 0 #3F48CC;
     font-family: Tahoma;
@@ -101,6 +105,9 @@
     background: none repeat scroll 0 0 #F0F5E7;
     border: 1px solid #999999;
     margin: 5px;
+}
+.notifications_manager .data div.info table{
+    margin: 0 auto;
 }
 .notifications_manager .data div.info div.user_box{
     background: none repeat scroll 0 0 white;

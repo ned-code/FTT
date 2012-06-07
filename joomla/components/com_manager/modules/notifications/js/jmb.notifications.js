@@ -431,12 +431,14 @@ JMBNotifications.prototype = {
                             sb._(add.parent('Mother'));
                         sb._('</td>');
                     sb._('</tr>');
-                    sb._('<tr>');
-                        sb._('<td colspan="2">');
-                            sb._('<div class="message_title">')._(json.user_info.name)._(' writes:</div>');
-                            sb._('<div class="message_text">')._(json.message)._('</div>');
-                        sb._('</td>');
-                    sb._('</tr>');
+                    if(json.message.length != 0){
+                        sb._('<tr>');
+                            sb._('<td colspan="2">');
+                                sb._('<div class="message_title">')._(json.user_info.name)._(' writes:</div>');
+                                sb._('<div class="message_text">')._(json.message)._('</div>');
+                            sb._('</td>');
+                        sb._('</tr>');
+                    }
                 sb._('</table>');
             sb._('</div>');
             sb._('<div class="click_items">');
