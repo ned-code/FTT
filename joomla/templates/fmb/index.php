@@ -111,7 +111,7 @@ $og_site_name = 'FamilyTree-Top';
                                         <li><a style="color:black; font-weight: bold;" href="<?php echo $base_url; ?>">FamilyTreeTop.com</a></li>
                                         <li><a href="<?php echo $base_url; ?>index.php/about">About</a></li>
                                         <li><a href="<?php echo $base_url; ?>index.php/conditions">Tearms & Conditions</a></li>
-                                        <li><a href="<?php echo $base_url; ?>index.php/privaci">Privaci Policy</a></li>
+                                        <li><a href="<?php echo $base_url; ?>index.php/privaci">Privacy Policy</a></li>
                                         <li><a href="<?php echo $base_url; ?>index.php/feedback">Provide Feedback</a></li>
                                         <li><a href="<?php echo $base_url; ?>index.php/contact">Contact</a></li>
                                         <li><a href="<?php echo $base_url; ?>index.php/help">Help</a></li>
@@ -167,6 +167,18 @@ $og_site_name = 'FamilyTree-Top';
                 });
             }
         </script>
+        <script type="text/javascript">
 
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-32469950-1']);
+            _gaq.push(['_trackPageview']);
+
+            (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+
+        </script>
     </body>
 </html>
