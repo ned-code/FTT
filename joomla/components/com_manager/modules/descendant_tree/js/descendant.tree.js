@@ -174,6 +174,7 @@ JMBDescendantTreeObject.prototype = {
 			module.members = storage.usertree.pull;
 			module.owner = storage.usertree.gedcom_id;
 			module.tree = json.tree;
+            dhxTree.deleteChildItems(0);
 			dhxTree.loadXMLString(json.xml);
 			dhxTree.openAllItems(0);
 			storage.core.modulesPullObject.unset('JMBDescendantTreeObject');
