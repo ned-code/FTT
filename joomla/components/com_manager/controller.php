@@ -297,6 +297,25 @@ class JMBController extends JController
         	$session->clear('facebook_id');
         }
 
+        protected function checkFacebookInvation($me){
+            $alias = $this->get_current_alias();
+            if($alias != 'invitation'){
+                $facebook_id = $me['id'];
+                $host = new Host('Joomla');
+
+                $sql_string = "SELECT belongs FROM #__mb_variables WHERE facebook_id = ?";
+                $host->ajax->setQuery($sql_string, $facebook_id);
+                $rows = $host->ajax->loadAssocList();
+
+                if(empty($rows)){
+                    return false;
+                } else {
+                    return $rows[0]['belongs'];
+                }
+            }
+            return false;
+        }
+
         public function jmb(){
         	$task = JRequest::getVar('task');
         	$option = JRequest::getVar('option');
@@ -322,12 +341,17 @@ class JMBController extends JController
                 }
             }
 
-
             $host = new Host('joomla');
             $facebook_id = $jfb->getFbUserId();
         	$user_data = $this->get_user_data($facebook_id);
             $user = JFactory::getUser();
             $alias = $this->check_location($user_data, $user);
+
+            $token = $this->checkFacebookInvation($me);
+            if($token){
+                header('Location: '.JURI::base().'index.php/invitation?token='.$token);
+                exit;
+            }
 
             switch($alias){
                 case 'invitation':

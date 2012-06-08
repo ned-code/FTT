@@ -41,6 +41,17 @@ class JMBInvitation {
         }
     }
 
+    protected function checkFacebookIdOnInvite($facebook_id){
+        $sql_string = "SELECT facebook_id FROM #__mb_variables WHERE facebook_id = ?";
+        $this->host->ajax->setQuery($sql_string, $facebook_id);
+        $rows = $this->host->ajax->loadAssocList();
+        if(empty($rows)){
+            return false;
+        } else {
+            return true;
+        }
+    }
+
 
 	/**
 	*
@@ -78,8 +89,8 @@ class JMBInvitation {
 		
 		$token = md5($value);
 
-		$sql_string = "INSERT INTO #__mb_variables (`id`,`belongs`,`value`,`email`,`s_gedcom_id`) VALUES (NULL,?,?,?,?)";
-		$this->host->ajax->setQuery($sql_string, $token, $value, $to, $owner_id);
+		$sql_string = "INSERT INTO #__mb_variables (`id`,`belongs`,`value`,`email`,`facebook_id`,`s_gedcom_id`) VALUES (NULL,?,?,?,?,?)";
+		$this->host->ajax->setQuery($sql_string, $token, $value, $to, 0, $owner_id);
        	$this->host->ajax->query();
 		
 		#recipient  
@@ -90,7 +101,7 @@ class JMBInvitation {
 
 		$host = "ssl://smtp.gmail.com";
 		$port = "465";
-		$username = "admin@familytreetop.com";
+		$username = "no-reply@familytreetop.com";
 		$password = "Pp9671111";
 
         $mail_body = '<html>';
@@ -143,20 +154,35 @@ class JMBInvitation {
                 }
             }
         }
+
+        if($this->checkFacebookIdOnInvite($facebook_id)){
+            $message = "Invitation to this facebook user has been already sent.";
+            return json_encode(array('success'=>false, 'message'=>$message));
+        }
+
         return json_encode(array('success'=>true));
     }
 
-
-	
 	public function inviteFacebookFriend($args){
 		$args = explode(';', $args);
         $session = JFactory::getSession();
         $tree_id = $session->get('tree_id');
+        $owner_id = $session->get('gedcom_id');
+
         $individ = $this->host->gedcom->individuals->get($args[1]);
+
 		if($tree_id&&$tree_id==$individ->TreeId){
-			$sql_string ="UPDATE  #__mb_individuals SET  `fid` = ? WHERE  `id` = ?";
-			$this->host->ajax->setQuery($sql_string, $args[0], $args[1]);
-			$this->host->ajax->query();
+            if($this->checkFacebookIdOnInvite($args[0])){
+                $message = "Invitation to this facebook user has been already sent.";
+                return json_encode(array('success'=>false, 'message'=>$message));
+            }
+
+            $value = $args[1].','.$tree_id;
+            $token = md5($value);
+
+            $sql_string = "INSERT INTO #__mb_variables (`id`,`belongs`,`value`,`email`,`facebook_id`,`s_gedcom_id`) VALUES (NULL,?,?,?,?,?)";
+            $this->host->ajax->setQuery($sql_string, $token, $value, 0, $args[0], $owner_id);
+            $this->host->ajax->query();
 
 			return json_encode(array('success'=>true));
 		}
