@@ -70,17 +70,6 @@
 .jmb-profile-cont div.settings div.menu div:hover span {
 	color:white;
 }
-.jmb-profile-cont div.settings div.menu ul{
-	list-style: none outside none;
-	margin-top: 3px;
-}
-.jmb-profile-cont div.settings div.menu ul li{
-	color: #153FC5;
-	cursor: pointer;
-	font-size: 11px;
-	line-height: 11px;
-	margin-left: 25px;
-}
 .jmb-profile-cont div.facebook {
 	background: url("../imgs/facebook-login-button.png") no-repeat scroll 0 0 transparent;
 	border: 1px solid white;
@@ -142,3 +131,17 @@
 	cursor: pointer;
 }
 
+.ui-dialog.language{
+    background: none repeat scroll 0 0 #999999;
+}
+.ftt-profile-language-list.ui-dialog-content{
+    background: none repeat scroll 0 0 white;
+    border: 1px solid #999999;
+    border-radius: 5px 5px 5px 5px;
+    cursor: pointer;
+    font-family: Tahoma;
+}
+.ftt-profile-language-list.ui-dialog-content ul{
+    list-style: none outside none;
+}
+.ftt-profile-language-list.ui-dialog-content ul li{}

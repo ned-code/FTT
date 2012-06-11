@@ -95,7 +95,7 @@ function JMBLogin(){
 					return this;
 				},
 				click:{
-					profile:function(obj){
+					profile:function(obj, callback){
                         var id = storage.usertree.gedcom_id;
                         if(id != null){
                             storage.profile.editor('edit', {
@@ -108,8 +108,35 @@ function JMBLogin(){
                                 }
                             });
                         }
+                        callback();
 					},
-					language:function(object){
+					language:function(object, callback){
+                        var langBox = jQuery('<div class="ftt-profile-language-list"></div>');
+                        jQuery(langBox).append(module.langList());
+                        jQuery(langBox).dialog({
+                            width:320,
+                            height:240,
+                            title: 'Language Select',
+                            resizable: false,
+                            draggable: false,
+                            position: "top",
+                            closeOnEscape: false,
+                            modal:true,
+                            close:function(){
+                                callback();
+                            }
+                        });
+                        jQuery(langBox).parent().addClass('language');
+                        jQuery(langBox).parent().css('top', '20px');
+                        jQuery(langBox).find('li').click(function(){
+                            if(confirm("Are you sure you want to set the language?")){
+                                fn.ajax('language', jQuery(this).attr('id'), function(res){
+                                    window.location.reload();
+                                });
+                            }
+                            return false;
+                        });
+                        /*
 						if(!jQuery(object).hasClass('collapse')){
 							list = module.langList();
 							jQuery(object).append(list);
@@ -127,23 +154,28 @@ function JMBLogin(){
 							jQuery(object).removeClass('collapse');
 						}
 						jQuery(object).removeClass('active');
+						*/
 					},
-					logout:function(){
+					logout:function(callback){
                         /*
 						FB.logout(function(){
 							window.location = storage.baseurl+'index.php?option=com_jfbconnect&task=logout&return=login';
 						});
 						*/
                         jfbc.login.logout_button_click();
+                        callback();
 					}
 				},
 				init:function(){
 					var _menu = this;
 					jQuery(menu).find('div').click(function(){
-						if(jQuery(this).hasClass('active')) return false;
+                        var div = this;
+						if(jQuery(div).hasClass('active')) return false;
 						jQuery(menu).find('div').removeClass('active');
-						jQuery(this).addClass('active');
-						_menu.click[jQuery(this).attr('id')](this);
+						jQuery(div).addClass('active');
+						_menu.click[jQuery(this).attr('id')](this, function(){
+                            jQuery(div).removeClass('active');
+                        });
 						return false;
 					});
 					return this;
