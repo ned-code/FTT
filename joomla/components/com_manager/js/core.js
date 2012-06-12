@@ -723,7 +723,9 @@ core.renderTabs = function(parent, pages){
     	jQuery(parent).append(div);
     	
     	jQuery(pages).each(function(i,page){
-    		var div = jQuery('<div id="'+(new Date()).valueOf()+'">'+page.page_info.title+'</div>');
+            var title = page.page_info.title.toUpperCase().split(' ');
+            var titleName = storage.langString['FTT_COMPONENT_'+title.join('_')];
+    		var div = jQuery('<div id="'+(new Date()).valueOf()+'">'+titleName+'</div>');
     		var li = jQuery('<li name="" id="'+i+'"><a href="jmbtab_'+i+'" onclick="return false;"></a></li>');
     		jQuery(li).find('a').append(div);
     		jQuery(ul).append(li);

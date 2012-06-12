@@ -42,11 +42,14 @@ class JMBLogin {
 		$tree_id = $session->get('tree_id');
 		
 		$languages = $this->host->getLanguages();
-		$data = $this->getUsertreeData();
+        $langString = $this->host->getComponentString();
+        $data = $this->getUsertreeData();
 		$settings = $this->getSystemSettings();
 		
 		$notifications = $this->getNotifications($tree_id, $gedcom_id);
-		return json_encode(array('default_language'=>$lang, 'languages'=>$languages,'notifications'=>$notifications,'settings'=>$settings, 'usertree'=>$data));
+
+
+		return json_encode(array('default_language'=>$lang, 'languages'=>$languages,'langString'=>$langString,'notifications'=>$notifications,'settings'=>$settings, 'usertree'=>$data));
 	}
 
 	public function famous($args){

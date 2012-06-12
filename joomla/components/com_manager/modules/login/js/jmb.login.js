@@ -240,6 +240,7 @@ function JMBLogin(){
 			storage.usertree.pull = json.usertree.pull;
             storage.notifications = json.notifications;
             storage.settings = json.settings;
+            storage.langString = json.langString;
 		},
 		user:function(callback){
 			var json, object;

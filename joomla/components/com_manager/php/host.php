@@ -278,6 +278,12 @@ class Host {
 		return $this->language->getLanguages();
 	}
 
+
+    public function getComponentString(){
+        return $this->language->getComponentString();
+    }
+
+
 	public function getConfig(){
         return $this->config->getConfig();
 	}
@@ -325,5 +331,4 @@ class Host {
         return true;
     }
 }
-
 ?>

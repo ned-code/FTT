@@ -168,7 +168,7 @@ class TreeCreator {
             $mail_body .= "<div style='margin:10px;'>To view this request, please log into your family tree at <a href='www.familytreetop.com'>www.FamilyTreeTop.com</a></div>";
             $mail_body .= "<div style='margin:10px;'>This is an automated email from Family TreeTop. Please do not reply to this message. Please click <a href='http://familytreetop.com/index.php/feedback'>here</a> to report any problems with Family TreeTop.</div>";
             $mail_body .= "<div style='margin:10px;'>Regards,</div>";
-            $mail_body .= "<div style='margin:10px;'>The Family TreeTop Team<br><a href='www.familytreetop.com'>www.FamilyTreeTop.com</a></div>";
+            $mail_body .= "<div style='margin:10px;'>The Family TreeTop Team<br><a href='http://familytreetop.com'>www.FamilyTreeTop.com</a></div>";
         $mail_body .= '</body></html>';
 
         $headers = array ("MIME-Version"=> '1.0', "Content-type" => "text/html; charset=utf-8",'From' => $from,'To' => $to,'Subject' => $subject);
