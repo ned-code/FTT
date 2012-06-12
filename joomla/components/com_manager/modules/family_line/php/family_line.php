@@ -41,7 +41,8 @@ class JMBFamilyLine {
 		$tree_id = $session->get('tree_id');
 		$permission = $session->get('permission');
 		$size = $this->size($tree_id, $gedcom_id);
-		return json_encode(array('size'=>$size));
+        $lang = $this->host->getLangList('family_line');
+		return json_encode(array('size'=>$size, 'language'=>$lang));
 	}
 }
 ?>

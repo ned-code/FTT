@@ -1,10 +1,17 @@
 function JMBFamilyLine(){
-	var	module = this,	
+	var	module = this,
+        loadData,
+        message,
 		cont,
 		fn,
 		objPull,
 		options,
 		alias;
+
+    message = {
+        FTT_MOD_FAMILY_LINE_MOTHER:"Mother",
+        FTT_MOD_FAMILY_LINE_FATHER:"Father"
+    }
 		
 	alias = jQuery(document.body).attr('_alias');
 		
@@ -270,8 +277,8 @@ function JMBFamilyLine(){
 						if(settings.select) sb._('<td><div class="icon mother select active">&nbsp;</div></td>');
 						if(settings.pencil) sb._('<td><div class="icon mother pencil">&nbsp;</div></td>');
 						if(settings.eye) sb._('<td><div class="icon mother eye active">&nbsp;</div></td>');
-						sb._('<td><div class="title mother"><span>Mother</span><div id="chart"><canvas width="21px" height="21px"></canvas></div></div></td>');
-						sb._('<td><div class="title father"><div id="chart"><canvas width="21px" height="21px"></canvas></div><span>Father</span></div></td>');
+						sb._('<td><div class="title mother"><span>')._(message.FTT_MOD_FAMILY_LINE_MOTHER)._('</span><div id="chart"><canvas width="21px" height="21px"></canvas></div></div></td>');
+						sb._('<td><div class="title father"><div id="chart"><canvas width="21px" height="21px"></canvas></div><span>')._(message.FTT_MOD_FAMILY_LINE_FATHER)._('</span></div></td>');
 						if(settings.eye) sb._('<td><div class="icon father eye active">&nbsp;</div></td>');
 						if(settings.pencil) sb._('<td><div class="icon father pencil">&nbsp;</div></td>');
 						if(settings.select) sb._('<td><div class="icon father select">&nbsp;</div></td>');
@@ -326,11 +333,20 @@ function JMBFamilyLine(){
 	this.init = function(page){
 		objPull.clear();
 		if(alias!='myfamily') return false;
-		fn.ajax('get',null, function(res){
-			var json = jQuery.parseJSON(res.responseText);
-			var title = page.page_info.title;
-			fn.init(options[title], json);
-		});
+        if(typeof(loadData) != 'undefined'){
+            var title = page.page_info.title;
+            fn.init(options[title], loadData);
+        } else {
+            fn.ajax('get',null, function(res){
+                var json = jQuery.parseJSON(res.responseText);
+                var title = page.page_info.title;
+                if(typeof(json.language)!='undefined'){
+                    message = json.language;
+                }
+                loadData = json;
+                fn.init(options[title], json);
+            });
+        }
 	};
 	
 	jQuery(window).resize(function() {
