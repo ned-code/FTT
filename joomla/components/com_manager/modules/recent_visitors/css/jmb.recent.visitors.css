@@ -7,7 +7,7 @@
 }
 .jmb-rv-header {
 	background: none repeat scroll 0 0 #DEEDAA;
-	border: 1px solid #999999;
+	border: 1px solid #D1DAEC;
 	height: 22px;
 	padding: 5px;
 }
@@ -20,7 +20,7 @@
 }
 .jmb-rv-content {
 	background: none repeat scroll 0 0 white;
-	border: 1px solid #999999;
+	border: 1px solid #D1DAEC;
     	margin-top: -1px;
 }
 .jmb-rv-content ul {

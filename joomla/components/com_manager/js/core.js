@@ -736,6 +736,10 @@ core.renderTabs = function(parent, pages){
     	
     	//When page loads...
 	jQuery(".tab_content").hide(); //Hide all content
+
+    var type = jQuery(document.body).attr('_type');
+    jQuery('ul.jmbtabs').addClass(type);
+    jQuery('.tab_content').addClass(type);
 			
 	//On Click Event
 	jQuery("ul.jmbtabs li").click(function() {

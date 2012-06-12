@@ -1,11 +1,23 @@
+.tab_content.famous_family #JMBThisMonthContainer{
+    border-color: #f0e2d9;
+}
+.tab_content.famous_family .jmb-this-month-header{
+    border-color: #f0e2d9;
+}
+.tab_content.myfamily #JMBThisMonthContainer{
+    border-color: #d1daec;
+}
+.tab_content.myfamily .jmb-this-month-header{
+    border-color: #d1daec;
+}
 #JMBThisMonthContainer{
-	border: 1px solid #999999;
+	border: 1px solid #d1daec;
 	margin: 10px;
 	background: none repeat scroll 0 0 #FFFFFF;
 }
 .jmb-this-month-header{
 	background: none repeat scroll 0 0 #DEEDAA;
-	border-bottom: 1px solid #999999;
+	border-bottom: 1px solid #d1daec;
 	height: 22px;
 	padding: 5px;
 }

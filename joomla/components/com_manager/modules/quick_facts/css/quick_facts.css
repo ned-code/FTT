@@ -1,3 +1,21 @@
+.tab_content.famous_family #JMBQuickFactsContainer{
+    border-color: #f0e2d9;
+}
+.tab_content.famous_family .jmb_qf_content{
+    border-color: #f0e2d9;
+}
+.tab_content.famous_family .jmb_qf_header{
+    border-color: #f0e2d9;
+}
+.tab_content.myfamily #JMBQuickFactsContainer{
+    border-color: #d1daec;
+}
+.tab_content.myfamily .jmb_qf_header{
+    border-color: #d1daec;
+}
+.tab_content.myfamily .jmb_qf_content{
+    border-color: #d1daec;
+}
 #JMBQuickFactsContainer {
 	font-family: Tahoma,sans-serif;
 	font-size: 11px;
@@ -7,7 +25,7 @@
 }
 .jmb_qf_header {
 	background: none repeat scroll 0 0 #DEEDAA;
-	border: 1px solid #999999;
+	border: 1px solid #D1DAEC;
 	height: 22px;
 	padding: 5px;
 }
@@ -20,7 +38,7 @@
 }
 .jmb_qf_content {
 	background: none repeat scroll 0 0 white;
-	border: 1px solid #999999;
+	border: 1px solid #D1DAEC;
 	margin-top: -1px;
 	padding: 5px;
 }
