@@ -856,7 +856,8 @@ JMBProfile.prototype = {
                         media = storage.usertree.pull[module.gedcom_id].media;
                     },
                     add:function(res){
-                        var li;
+                        var self = this;
+                        var li = null;
                         if(res!=null&&res.image){
                             if(jQuery(form).find('.jmb-dialog-photos-content').length==0){
                                 jQuery(form).append(storage.media.render([res.image], true));
@@ -865,15 +866,18 @@ JMBProfile.prototype = {
                                 li = jQuery(storage.media.getListItem(res.image, true));
                                 jQuery(form).find('.jmb-dialog-photos-content div.list ul').append(li);
                             }
-                            _fn.delete(li);
-                            _fn.select(li);
+
+                            self.onDelete(li);
+                            self.onSelect(li);
+
                             if(media==null){
-                                _fn.setMedia();
-                            };
+                                self.setMedia();
+                            }
+
                             media.photos.push(res.image);
                         }
                     },
-                    delete:function(li){
+                    onDelete:function(li){
                         jQuery(li).find('div.delete').click(function(){
                             var clikItem = this;
                             var id = jQuery(clikItem).attr('id');
@@ -893,7 +897,7 @@ JMBProfile.prototype = {
                             return false;
                         });
                     },
-                    select:function(li){
+                    onSelect:function(li){
                         jQuery(li).click(function(){
                             jQuery(form).find('div.jmb-dialog-photos-content li').removeClass('active');
                             jQuery(this).addClass('active');
@@ -925,8 +929,8 @@ JMBProfile.prototype = {
                 }
                 _fn.initButton();
                 jQuery(form).find('li').each(function(i, li){
-                    _fn.select(li);
-                    _fn.delete(li);
+                    _fn.onSelect(li);
+                    _fn.onDelete(li);
                 });
                 module.functions.ajaxForm({
                     target:jQuery(form).find('form'),

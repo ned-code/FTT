@@ -124,6 +124,8 @@ function JMBFamilyLine(){
 			init:function(object, total, data){
 				var sofar = 0, k;
 				if(data.length > 2) return false;
+                if(typeof(object) == 'undefined') return false;
+                if(!object.getContext) return false;
 				this._canvas = object;
 				this._context = object.getContext("2d");
 				this._total = total;
