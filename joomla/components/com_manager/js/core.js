@@ -792,7 +792,7 @@ core.load = function(pages){
         storage.ntf = new JMBNotifications();
 		
 		//init top menu bar
-
+        storage.topmenubar.init();
 
 
 		//set width

@@ -132,35 +132,7 @@ if($jfb_facebook_id){
                 tmb.init();
             }
 
-            /*
-            if(window == window.top){
-                jQuery('div.footer').show();
-                jQuery('div.footer a').click(function(){
-                    var link = jQuery(this).attr('href');
-                    var alias = link.split('/').pop();
-                    if(alias == '') return false;
-                    var dialogDiv = jQuery('<div></div>');
-                    jQuery(dialogDiv).dialog({
-                        width:700,
-                        height:500,
-                        title: 'Family TreeTop',
-                        resizable: false,
-                        draggable: false,
-                        position: "top",
-                        closeOnEscape: false,
-                        modal:true,
-                        close:function(){
-
-                        }
-                    });
-                    jQuery(dialogDiv).parent().addClass('jmb_footer_dialog');
-                    jQuery(dialogDiv).parent().css('top', '20px');
-                    jQuery(dialogDiv).append('<iframe style="border:none;" width="660px" height="440px" src="'+link+'"></iframe>');
-                    return false;
-                });
-
-            }
-            */
+            jQuery('.scsocialbuttons').remove();
         </script>
         <script type="text/javascript">
 
