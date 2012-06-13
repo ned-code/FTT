@@ -7,16 +7,16 @@ function JMBTopMenuBar(){
 	
 	fn = {
 		create:function(){
-			var sb = host.stringBuffer();
-			sb._('<div  class="jmb-top-menu-bar">');
-				sb._('<div class="jmb-top-menu-bar-logo">&nbsp;</div>');
-				sb._('<div class="jmb-top-menu-bar-content">');
-					sb._('<div id="myfamily" class="jmb-top-menu-bar-item"><span>My Family</span></div>');
-					sb._('<div id="famous-family" class="jmb-top-menu-bar-item"><span>Famous Families</span></div>');
-					sb._('<div id="home" class="jmb-top-menu-bar-item"><span>Home</span></div>');
-				sb._('</div>');
-			sb._('</div>');
-			return jQuery(sb.result());
+            var string = '';
+            string += '<div  class="jmb-top-menu-bar">';
+                string +='<div class="jmb-top-menu-bar-logo">&nbsp;</div>';
+                string +='<div class="jmb-top-menu-bar-content">';
+                    string +='<div id="myfamily" class="jmb-top-menu-bar-item"><span>My Family</span></div>';
+                    string +='<div id="famous-family" class="jmb-top-menu-bar-item"><span>Famous Families</span></div>';
+                    string +='<div id="home" class="jmb-top-menu-bar-item"><span>Home</span></div>';
+                string +='</div>';
+            string +='</div>';
+            return jQuery(string);
 		},
 		sw:function(object){
 			jQuery(cont).find('div.jmb-top-menu-bar-item span').removeClass('active');
@@ -33,7 +33,8 @@ function JMBTopMenuBar(){
 					type: "POST",
 					dataType: "json",
 					complete : function (req, err) {
-						window.location.reload();
+                        var bUrl = jQuery(document.body).attr('_baseurl');
+						window.location.href= bUrl+'index.php/'+id;
 					}
 				});
 			});
@@ -60,6 +61,9 @@ function JMBTopMenuBar(){
 						fn.sw(jQuery(cont).find('div#myfamily span'));
 					}
 				break;
+
+                default:
+                break;
 			}
 			
 		},

@@ -23,7 +23,9 @@ $jfb_facebook_id = $jfb->getUserId();
 $session_facebook_id = $session->get('facebook_id');
 
 //ftt vars
-$alias = $session->get('alias');
+$menu   = &JSite::getMenu();
+$active   = $menu->getActive();
+$alias = $active->alias;
 $login_method = $session->get('login_method');
 
 //update vars
@@ -33,26 +35,8 @@ if($jfb_facebook_id){
 	$facebook_id = $session_facebook_id;
 }
 
-/*
-// facebook params
-$fb_app_id = '184962764872486';
-$fb_admin_id = '100001614066938';
 
-$og_title = 'FamilyTree-Top';
-$og_type = 'website';
-$og_url = 'http://www.familytreetop.com/';
-$og_img = '';
-$og_site_name = 'FamilyTree-Top';
 
-<!-- facebook meta tags -->
-<meta property="og:title" content="<?php echo $og_title; ?>" />
-<meta property="og:type" content="<?php echo $og_type; ?>" />
-<meta property="og:url" content="<?php echo $og_url; ?>" />
-<meta property="og:image" content="<?php echo $og_img; ?>" />
-<meta property="og:site_name" content="<?php echo $og_site_name; ?>" />
-<meta property="fb:app_id" content="<?php echo $fb_app_id; ?>" />
-<meta property="fb:admins" content="<?php echo $fb_admin_id; ?>"/>
- */
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->language; ?>" lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>" >
@@ -142,6 +126,15 @@ $og_site_name = 'FamilyTree-Top';
             });
             if(window == window.top){
                 jQuery('div.footer').show();
+            }
+            if(typeof(storage) == 'undefined'){
+               var tmb = new JMBTopMenuBar();
+                tmb.init();
+            }
+
+            /*
+            if(window == window.top){
+                jQuery('div.footer').show();
                 jQuery('div.footer a').click(function(){
                     var link = jQuery(this).attr('href');
                     var alias = link.split('/').pop();
@@ -165,7 +158,9 @@ $og_site_name = 'FamilyTree-Top';
                     jQuery(dialogDiv).append('<iframe style="border:none;" width="660px" height="440px" src="'+link+'"></iframe>');
                     return false;
                 });
+
             }
+            */
         </script>
         <script type="text/javascript">
 

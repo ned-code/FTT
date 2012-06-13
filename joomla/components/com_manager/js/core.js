@@ -792,8 +792,9 @@ core.load = function(pages){
         storage.ntf = new JMBNotifications();
 		
 		//init top menu bar
-		storage.topmenubar.init();
-		
+
+
+
 		//set width
 		var mode = (window != window.top)?'facebook':'standalone';
 		var cont = jQuery("div.content");
