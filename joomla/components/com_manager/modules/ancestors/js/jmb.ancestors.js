@@ -1,4 +1,4 @@
-function JMBAncestorsObject(obj){
+function JMBAncestorsObject(obj, popup, callback){
 	var	module = this,
 		cont = jQuery('<div id="jit" class="jmb-ancestors-jit"></div>'),
 		home_button = jQuery('<div class="jmb-ancestors-home"></div>'),
@@ -59,11 +59,13 @@ function JMBAncestorsObject(obj){
 	module.usertree = storage.usertree.pull;
 	module.user = module.usertree[storage.usertree.gedcom_id];
 	module.tree = module.getTree(module.user);
-	setTimeout(function(){
-		module.init(function(){
-			storage.core.modulesPullObject.unset('JMBAncestorsObject');
-		});
-	}, 1);
+
+    module.init(function(){
+        storage.core.modulesPullObject.unset('JMBAncestorsObject');
+    });
+    core.destroy.set('ancestors', function(){
+
+    });
 }
 
 JMBAncestorsObject.prototype = {
@@ -432,15 +434,14 @@ JMBAncestorsObject.prototype = {
 		//compute node positions and layout
 		st.compute();
 		//emulate a click on the root node.
-        setTimeout(function(){
-            st.onClick(st.root, {
-                onComplete:function() {
-                    if(callback){
-                        callback();
-                    }
+        st.onClick(st.root, {
+            onComplete:function() {
+                if(callback){
+                    callback();
                 }
-            });
-        }, 1);
+            }
+        });
+
         module.targetNode = st.root;
 	},
 	render:function(){

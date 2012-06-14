@@ -676,7 +676,9 @@ function JMBProfile(){
     module.functions.clearVariable();
     module.functions.ajax('get', null, function(res){
         var json = jQuery.parseJSON(res.responseText);
-        module.views = json.views;
+        if(json.views){
+            module.views = json.views;
+        }
         if(json.language){
             module.message = json.language;
         }

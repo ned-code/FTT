@@ -633,6 +633,21 @@ core.modulesPullFunc = function(){
 }
 core.modulesPullObject = core.modulesPullFunc();
 
+core.destroy = {};
+core.destroy.pull = false;
+core.destroy.set = function(name, callback){
+    core.destroy.pull = {
+        name:name,
+        callback:callback
+    }
+}
+core.destroy.start = function(){
+    if(core.destroy.pull){
+        core.destroy.pull.callback();
+        core.destroy.pull = false;
+    }
+}
+
 core.createLayout = function(type){
 	var layout_type = {'single':1,'double':2,'triple':3};
 	var td_length = layout_type[type];
@@ -758,6 +773,7 @@ core.renderTabs = function(args){
 	jQuery("ul.jmbtabs li").click(function() {
 		if(jQuery(this).hasClass('active')) return false;
 		core.modulesPullObject.init(div);
+        core.destroy.start();
 		
 		//cleaner objects
 		storage.request.cleaner();
