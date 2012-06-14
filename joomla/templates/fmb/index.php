@@ -108,12 +108,6 @@ if($jfb_facebook_id){
                     </tr>
 				</table>
 			</div>
-            <?php
-                /*
-                    <div id="_bottom" class="footer"><?php if($alias=='myfamily'): ?><jdoc:include type="modules" name="footer" /><?php endif; ?></div>
-                */
-            ?>
-
         </div>
         <script>window.jQuery || document.write('<script src="<?php echo $this->baseurl ?>/templates/<?php echo $this->template; ?>/javascript/jquery.min.js"><\/script>')</script>
         <script>

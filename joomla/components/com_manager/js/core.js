@@ -674,24 +674,30 @@ core.appendFiles = function(module, type){
 	}		
 }
 
-core.initModule = function(object_name, div, popup){
-	var self = this;
+core.initModule = function(args){
+	var self = this,
+        object_name = args.name,
+        div = args.cont,
+        popup = args.popup;
     	if(typeof window[object_name]=='function'){
     		new window[object_name](div, popup);
     	}
         else {
         	setTimeout(function(){
-        		self.initModule(object_name, div, popup);
+        		self.initModule(args);
         	},1000);
         }
 }
 
-core.renderPage = function(parent, page, popup){
-	storage.family_line.init(page);
+core.renderPage = function(args){
 	var self = this;
+    var parent = args.selector;
+    var page = args.page;
+    var popup = args.popup;
 	var grid = page.grid;
 	var table = self.createLayout(page.page_info.layout_type);
 	var tds = jQuery(table).find('td');
+    storage.family_line.init(page);
 	jQuery(parent).html('');
 
 	for(var i = 0; i < grid.tdLength; i++){
@@ -709,13 +715,20 @@ core.renderPage = function(parent, page, popup){
 			
 			//init module;
 			core.modulesPullObject.insert(module.object_name);
-			self.initModule(module.object_name, div, popup);
+			//self.initModule(module.object_name, div, popup);
+			self.initModule({
+                name:module.object_name,
+                cont:div,
+                popup:popup
+            });
 		}
 	}
     jQuery(parent).append(table);
 }
-core.renderTabs = function(parent, pages){
+core.renderTabs = function(args){
 	var self = this;
+    var parent = args.selector;
+    var pages = args.pages;
 	var ul = jQuery('<ul class="jmbtabs"></ul>'); 
     	var div = jQuery('<div class="tab_container"></div>');
     	
@@ -760,7 +773,12 @@ core.renderTabs = function(parent, pages){
 		var id = jQuery(this).attr('id');
 		var page = pages[id];
 		
-		self.renderPage('#jmbtab', page, false);
+		//self.renderPage('#jmbtab', page, false);
+		self.renderPage({
+            selector:"#jmbtab",
+            page:page,
+            popup:false
+        });
 		jQuery(divs).show(); //Hide all tab content
 		return false;
 	});
@@ -815,9 +833,18 @@ core.load = function(pages){
 						var json = jQuery.parseJSON(req.responseText);
                         storage.pages = json.pages;
 						if(json.pages.length==1){
-							self.renderPage('#page', json.pages[0], false)
+							//self.renderPage('#page', json.pages[0], false)
+                            self.renderPage({
+                               selector:"#page",
+                               page:json.pages[0],
+                               popup:false
+                            });
 						} else {
-							self.renderTabs('#container', json.pages);
+							//self.renderTabs('#container', json.pages);
+							self.renderTabs({
+                                selector:"#container",
+                                pages:json.pages
+                            });
 						}
 					}
 				});

@@ -250,7 +250,11 @@ JMBNotifications.prototype = {
         jQuery(html).parent().addClass('notifications_accept');
         jQuery(html).parent().css('top', '0');
         jQuery(html).css('height', 'auto');
-        core.renderPage(jQuery(html).find('div.familiesList'), storage.pages[2], true);
+        core.renderPage({
+            selector:jQuery(html).find('div.familiesList'),
+            page:storage.pages[2],
+            popup:true
+        });
         jQuery(html).find('img').draggable({
             zIndex:9999,
             scroll:false,

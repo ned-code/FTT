@@ -167,14 +167,6 @@ function JMBFamilyLine(){
 				
 					case 'eye':
 						if(jQuery(this).hasClass('active')){
-							/*
-                            if(settings.pencil){
-								var pencil = jQuery(cont).find('div.icon.'+list[1]+'.pencil');
-								if(jQuery(pencil).hasClass('active')){
-									jQuery(pencil).click();
-								}
-							}
-							*/
 							jQuery(this).removeClass('active');
 							fn.overlay(titles, list[1]);
 						} else {
