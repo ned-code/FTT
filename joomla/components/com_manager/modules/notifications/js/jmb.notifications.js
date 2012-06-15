@@ -267,12 +267,12 @@ JMBNotifications.prototype = {
             box = jQuery('<div></div>');
             cont;
 
-        sb._('<div class="header"><span>The following message will be sent to ')._(json.me.name)._('. You may edit the section shown yellow.</span></div>');
+        sb._('<div class="header"><span>The following message will be sent to ')._(json.me.name)._('. You may edit the section shown in yellow.</span></div>');
         sb._('<div class="deny_content">');
             sb._('<div class="status"><div><span>Family TreeTop</span></div><div><span>Invition Request Status: <b>Denied</b></span></div></div>');
             sb._('<div class="text">');
                 sb._('<div><span>Dear ')._(json.me.name)._(',</span></div>');
-                sb._('<div><span>')._(json.target.name)._(' has denied your Family TreeTop invitation request.');
+                sb._('<div><span>')._(json.target.name)._(' > has denied your request to join his family tree.');
                     sb._(' He does not  believe that you are member of his family. If you still think thay you are related to ');
                     sb._(json.target.name.split(' ')[0])._(', please contact him directly to sort it out.');
                 sb._('</span></div>');
@@ -294,7 +294,7 @@ JMBNotifications.prototype = {
         jQuery(box).dialog({
             width:600,
             height:450,
-            title: json.me.name+' Invition Request',
+            title:'Invition Request: '+json.me.name,
             resizable: false,
             draggable: false,
             position: "top",
