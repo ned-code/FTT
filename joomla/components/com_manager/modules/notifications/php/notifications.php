@@ -81,7 +81,7 @@ class JMBNotifications {
         #recipient
         $to = "<".$data->me->email.">";
 
-        $from = "<no-reply@familytreetop.com>";
+        $from = "Family TreeTop <no-reply@familytreetop.com>";
 
         #subject
         $subject = "Family TreeTop – Request Approved";

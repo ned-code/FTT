@@ -151,7 +151,7 @@ class TreeCreator {
 
         require_once("Mail.php");
         $to = "<".$rows[0]['email'].">";
-        $from = "<no-reply@familytreetop.com>";
+        $from = "Family TreeTop <no-reply@familytreetop.com>";
 
         #subject
         $subject = "Family Treetop - Request from ".$std->me->name;
