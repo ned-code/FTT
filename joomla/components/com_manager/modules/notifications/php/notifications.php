@@ -36,9 +36,9 @@ class JMBNotifications {
         #mail body
         $mail_body = '<html><head>Family TreeTop invitation.</head><body>';
         $mail_body .= "<div style='margin:10px;'>Dear ".$data->me->name.",</div>";
-        $mail_body .= "<div style='margin:10px;'>".$data->target->name." has denied your Family TreeTop invitation request.";
+        $mail_body .= "<div style='margin:10px;'>".$data->target->name." has denied your request to join his family tree.";
         $mail_body .= " He does not  believe that you are member of his family. If you still think thay you are related to ";
-        $mail_body .= $target_name[0].", you may send him one last message to provide more information.</div>";
+        $mail_body .= $target_name[0].", please contact him directly to sort it out.</div>";
         $mail_body .= "<div style='margin-left:10px;'>".$target_name[0]." Writes:</div>";
         $mail_body .= "<div style='margin-left:10px;'>".$message."</div>";
         $mail_body .= '</body></html>';
