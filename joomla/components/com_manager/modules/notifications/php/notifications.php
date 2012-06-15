@@ -23,10 +23,10 @@ class JMBNotifications {
         $target_name = explode(" ", $data->target->name);
         #recipient
         $to = "<".$data->me->email.">";
-        $from = "<no-reply@familytreetop.com>";
+        $from = "Family TreeTop <no-reply@familytreetop.com>";
 
         #subject
-        $subject = "Family Treetop invitation.";
+        $subject = "Family TreeTop Invitation.";
 
         $host = "ssl://smtp.gmail.com";
         $port = "465";
