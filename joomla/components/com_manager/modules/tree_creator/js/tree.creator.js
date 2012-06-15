@@ -636,12 +636,12 @@ function JMBTreeCreatorObject(parent){
 			sb._('<div class="tc_content">');
 				sb._('<div class="tc_header">');
 					sb._('<div><span>Are You Related?</span></div>');
-					sb._('<div><span>Some of your Facebook friends are members of Family TreeTop. Are you related to any of the people listed below? If so, you many request an invitation to join their familytree.</span></div>');
+					sb._('<div><span>Some of your Facebook friends are members of Family TreeTop. Are you related to any of the people listed below? If so, you many request an invitation to join their family tree.</span></div>');
 				sb._('</div>');
 				sb._('<div class="tc_ftt_friends">');
 				sb._('</div>');
 				sb._('<div class="tc_footer">');
-					sb._('<div><span>If you are not related to anyone listed above, <span class="button">click here</span> to create new Family Tree period.</span></div>');
+					sb._('<div><span>If you are not related to anyone listed above, <span class="button">click here</span> to create new family tree period.</span></div>');
 				sb._('</div>');
 			sb._('</div>');
 			var html = jQuery(sb.result());
