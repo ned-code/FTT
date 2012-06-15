@@ -35,8 +35,15 @@ if($jfb_facebook_id){
 	$facebook_id = $session_facebook_id;
 }
 
-
-
+$user_agent = $_SERVER['HTTP_USER_AGENT'];
+if (stripos($user_agent, 'MSIE 6.0') !== false
+    //|| stripos($user_agent, 'MSIE 8.0') !== false
+    || stripos($user_agent, 'MSIE 7.0') !== false
+    ){
+    if($alias != 'ie'){
+        header ("Location: ".$base_url.'index.php/ie');
+    }
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->language; ?>" lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>" >
@@ -58,7 +65,7 @@ if($jfb_facebook_id){
             <script type="text/javascript" src="<?php echo $this->baseurl ?>/templates/fmb/javascript/fmb.js"></script>
 	</head>
 	<body _alias="<?php echo $alias; ?>" _baseurl="<?php echo $base_url; ?>" _fb="<?php echo ($facebook_id)?$facebook_id:0; ?>" _type="<?php echo $login_method; ?>">
-		<div id="_content" class="content"> 
+		<div id="_content" class="content">
 			<div class="header"></div>
 			<div class="main">
 				<table width="100%">
