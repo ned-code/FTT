@@ -170,6 +170,7 @@ JMBNotifications.prototype = {
 
         fn.createUserBox = function(){
             var sb = host.stringBuffer();
+            /*
             sb._('<div class="user-header">&nbsp;</div>');
             sb._('<div style="background: none repeat scroll 0 0 #E5E9F0;border: 1px solid #4C67A1;">')
                 sb._('<div style="background: none repeat scroll 0 0 white;border: 1px solid #D2D9E7;margin: 10px;padding: 5px;">');
@@ -187,10 +188,47 @@ JMBNotifications.prototype = {
                 sb._('</div>');
             sb._('</div>');
             return sb.result();
+            */
+            sb._('<div class="user-header">&nbsp;</div>');
+            sb._('<div style="background: none repeat scroll 0 0 #E5E9F0;border: 1px solid #4C67A1;">')
+                sb._('<div style="background: none repeat scroll 0 0 white;border: 1px solid #D2D9E7;margin: 10px;padding: 5px;">');
+                    sb._('<div style="border: 4px solid #ED1C24;cursor: pointer;display: inline-block;margin: 3px;vertical-align: top;"><img width="50px" height="50px" src="http://graph.facebook.com/')._(json.me.id)._('/picture"></div>');
+                    sb._('<div style="display: inline-block;height: 60px;">');
+                        sb._('<table>');
+                            sb._('<tr>');
+                                sb._('<td><div class="title"><span>Name</span></div></td>');
+                                sb._('<td><div class="text"><span>')._(json.user_info.name)._('</span></div></td>');
+                            sb._('</tr>');
+                            sb._('<tr>');
+                                sb._('<td><div class="title"><span>Known As</span></div></td>');
+                                sb._('<td><div class="text"><span>')._(json.user_info.nick)._('</span></div></td>');
+                            sb._('</tr>');
+                            sb._('<tr>');
+                                sb._('<td><div class="title"><span>Relation</span></div></td>');
+                                sb._('<td><div class="text"><span>')._(json.relation)._('</span></div></td>');
+                            sb._('</tr>');
+                        sb._('</table>');
+                    sb._('</div>');
+                    sb._('<div style="display: inline-block;height: 50px;margin-left: 10px;padding-top: 10px;">');
+                        sb._('<table>');
+                            sb._('<tr>');
+                                sb._('<td><div class="title"><span>Mother</span></div></td>');
+                                sb._('<td><div class="text"><span>')._(json.mother_info.name)._('</span></div></td>');
+                            sb._('</tr>');
+                            sb._('<tr>');
+                                sb._('<td><div class="title"><span>Father</span></div></td>');
+                                sb._('<td><div class="text"><span>')._(json.father_info.name)._('</span></div></td>');
+                            sb._('</tr>');
+                        sb._('</table>');
+                    sb._('</div>');
+                sb._('</div>');
+            sb._('</div>');
+            return sb.result();
         }
 
         fn.createMessageBox = function(){
             var sb = host.stringBuffer();
+            /*
             sb._('<div style="background: none repeat scroll 0 0 #ED1C24;border-radius: 3px 3px 3px 3px;color: white;height: 100%;margin: 5px;padding: 10px;width: 350px;">');
                 sb._('<p style="">');
                     sb._('Before ')._(json.user_info.name)._(' can join your family tree, you must first identify ')._(json.user_info.gender=='m'?'him':'her')._(' profile in your family tree.');
@@ -205,6 +243,13 @@ JMBNotifications.prototype = {
                 sb._('</ul>');
             sb._('</div>');
             return sb.result();
+            */
+            sb._('<div style="background: none repeat scroll 0 0 #ED1C24;border-radius: 3px 3px 3px 3px;color: white;height: 100%;margin: 5px;padding: 10px;width: 100px;text-align: center;">');
+                sb._('<div>Drag ')._(json.user_info.name)._(' Facebook picture onto ')._(json.user_info.name)._(' Profile picture.</div>');
+                sb._('<div><a id="help" style="color: yellow;" href="http://familytreetop.com/components/com_manager/help/ftt-help2/ftt-linking-profiles2.html">Show me how</a></div>');
+            sb._('</div>');
+            return sb.result();
+
         }
 
         fn.createFamiliesBox = function(){
@@ -213,13 +258,13 @@ JMBNotifications.prototype = {
 
         fn.createDialogBox = function(){
             var sb = host.stringBuffer();
-            sb._('<div>');
-                sb._('<table>');
-                    sb._('<tr>');
-                        sb._('<td style="width: 350px;">');
+            sb._('<div style="padding: 0;">');
+                sb._('<table style="border-collapse: collapse;">');
+                    sb._('<tr style="background: none repeat scroll 0 0 #9DCEFF;border: 1px solid #9398E2;">');
+                        sb._('<td>');
                             sb._(fn.createMessageBox());
                         sb._('</td>');
-                        sb._('<td>');
+                        sb._('<td style="width: 83%;">');
                             sb._(fn.createUserBox());
                         sb._('</td>');
                     sb._('</tr>');
@@ -234,6 +279,10 @@ JMBNotifications.prototype = {
         }
 
         html = fn.createDialogBox();
+        jQuery(html).find('a#help').click(function(){
+            window.open(jQuery(this).attr('href'));
+            return false;
+        });
         module.acceptDialogBox = html;
         jQuery(html).dialog({
             width:750,
