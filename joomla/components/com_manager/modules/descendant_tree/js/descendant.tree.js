@@ -320,8 +320,18 @@ JMBDescendantTreeObject.prototype = {
 
 						});
 						//draw line
-						canvas = jQuery(div).find('canvas')[0];
-						ctx = canvas.getContext("2d");
+						canvas = jQuery(div).find('canvas').get(0);
+                        if(!canvas.getContext){
+                            var c = document.createElement('canvas');
+                            c.id = "canvas";
+                            c.height="200";
+                            c.width="340";
+                            jQuery(canvas).after(c);
+                            jQuery(canvas).remove();
+                            canvas = c;
+                            window.G_vmlCanvasManager.initElement(canvas);
+                        }
+                        ctx = canvas.getContext("2d");
 						
 						ctx.clearRect(0, 0, canvas.width, canvas.height);
 						ctx.strokeStyle = '#000000';
