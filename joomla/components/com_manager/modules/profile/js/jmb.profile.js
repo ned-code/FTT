@@ -982,7 +982,7 @@ JMBProfile.prototype = {
                         if(module.gedcom_id != storage.usertree.gedcom_id){
                             jQuery(tr[0]).remove();
                         }
-                        jQuery(form).parent().append(deleteOptions);
+                        jQuery(form).after(deleteOptions);
                         jQuery(form).hide();
                         jQuery(deleteOptions).find('div.title span').click(function(){
                             var mes, method = 'deleteBranch';
