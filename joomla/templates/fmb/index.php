@@ -126,7 +126,11 @@ if (stripos($user_agent, 'MSIE 6.0') !== false
                 oauth: true
             });
             if(window == window.top){
-                jQuery('div.footer').show();
+                if(jQuery.browser.msie && parseInt(jQuery.browser.version) <= 7){
+                    jQuery('div.footer').hide();
+                } else {
+                    jQuery('div.footer').show();
+                }
             }
             if(typeof(storage) == 'undefined'){
                var tmb = new JMBTopMenuBar();
