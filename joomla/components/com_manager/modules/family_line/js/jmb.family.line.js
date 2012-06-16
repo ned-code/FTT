@@ -73,6 +73,9 @@ function JMBFamilyLine(){
 			},
 			bg:function(div){
 				var rgb = jQuery(div).css('backgroundColor');
+                if(jQuery.browser.msie){
+                    return rgb;
+                }
 				var parts = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
 				delete(parts[0]);
 				for (var i = 1; i <= 3; ++i) {
@@ -212,8 +215,11 @@ function JMBFamilyLine(){
 				},
 				bg:function(div){
 					var rgb = jQuery(div).css('backgroundColor');
+                    if(jQuery.browser.msie){
+                        return rgb;
+                    }
 					var parts = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
-					delete(parts[0]);
+                    delete(parts[0]);
 					for (var i = 1; i <= 3; ++i) {
 						parts[i] = parseInt(parts[i]).toString(16);
 						if (parts[i].length == 1) parts[i] = '0' + parts[i];
