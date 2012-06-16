@@ -49,7 +49,7 @@
 	padding: 3px 0 0 !important;
 }
 .jmb-tooltip-view-images ul li{
-	display: inline !important;
+	display: inline-block !important;
 }
 .jmb-tooltip-view-images img{
 	border: 1px solid #000000;
