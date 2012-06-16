@@ -595,12 +595,11 @@ JMBFamiliesObject.prototype = {
 
 		jQuery(module.parent).height(start_top + 200);
 		jQuery(module.parent).css('overflow', 'hidden');
-		
-		if(!module.clickItem){
+		if(!module.clickItem || jQuery.browser.msie){
             module.startAnimation(cont, childs);
 		} else {
 			module.animation(cont, childs);
-		}	
+		}
 	},
 	startAnimation:function(cont, childs){
 		jQuery(cont[0]).css({left:"-155px", visibility:"visible"}).animate({ "left":"+=275"},"slow");
@@ -631,12 +630,12 @@ JMBFamiliesObject.prototype = {
 					}, 1000, function(){
 						jQuery(clone).remove();
 						jQuery(el).css({opacity:0, visibility:"visible"}).animate({"opacity":1}, 250);
-						jQuery(cont[0]).css({left:"-155px", visibility:"visible"}).animate({ "left":"+=275"},"slow");
-						jQuery(cont[2]).css({left:"760px", visibility:"visible"}).animate({ "left":"-=365"},"slow");
-						jQuery(cont[3]).css({left:"760px", visibility:"visible"}).show().animate({ "left":"-=205"},"slow");
+						jQuery(cont[0]).css("left", "-155px").css("visibility", "visible").animate({ "left":"+=275"},"slow");
+						jQuery(cont[2]).css("left", "760px").css("visibility", "visible").animate({ "left":"-=365"},"slow");
+						jQuery(cont[3]).css("left", "760px").css("visibility", "visible").show().animate({ "left":"-=205"},"slow");
 						jQuery(childs).each(function(i, el){
 							if(jQuery(el).attr('id') != id){
-								jQuery(el).css({opacity:0, visibility:"visible"}).animate({"opacity":1}, 300*i);
+								jQuery(el).css("opacity", 0).css("visibility", "visible").animate({"opacity":1}, 300*i);
 							}
 						});
 						jQuery(module.parent).css('overflow', 'visible');
@@ -654,11 +653,11 @@ JMBFamiliesObject.prototype = {
 				left:"126px"
 			}, 1000, function(){
 				jQuery(clone).remove();
-				jQuery(cont[0]).css({visibility:"visible", opacity:0}).animate({ "opacity":1}, "slow");
-				jQuery(cont[2]).css({left:"760px", visibility:"visible"}).animate({ "left":"-=365"},"slow");
-				jQuery(cont[3]).css({left:"760px", visibility:"visible"}).show().animate({ "left":"-=205"},"slow");
+				jQuery(cont[0]).css("opacity", 0).css("visibility", "visible").animate({ "opacity":1}, "slow");
+				jQuery(cont[2]).css("left", "-155px").css("visibility", "visible").animate({ "left":"-=365"},"slow");
+				jQuery(cont[3]).css("left", "-155px").css("visibility", "visible").show().animate({ "left":"-=205"},"slow");
 				jQuery(childs).each(function(i, el){
-					jQuery(el).css({opacity:0, visibility:"visible"}).animate({"opacity":1}, 300*i);
+					jQuery(el).css("opacity", 0).css("visibility", "visible").animate({"opacity":1}, 300*i);
 				});
 				jQuery(module.parent).css('overflow', 'visible');
 			});
