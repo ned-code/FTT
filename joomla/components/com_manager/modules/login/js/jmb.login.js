@@ -156,7 +156,7 @@ function JMBLogin(){
 						jQuery(object).removeClass('active');
 						*/
 					},
-					logout:function(callback){
+					logout:function(object, callback){
                         /*
 						FB.logout(function(){
 							window.location = storage.baseurl+'index.php?option=com_jfbconnect&task=logout&return=login';
@@ -173,9 +173,10 @@ function JMBLogin(){
 						if(jQuery(div).hasClass('active')) return false;
 						jQuery(menu).find('div').removeClass('active');
 						jQuery(div).addClass('active');
-						_menu.click[jQuery(this).attr('id')](this, function(){
+                        var revert = function(){
                             jQuery(div).removeClass('active');
-                        });
+                        }
+						_menu.click[jQuery(this).attr('id')](this, revert);
 						return false;
 					});
 					return this;
