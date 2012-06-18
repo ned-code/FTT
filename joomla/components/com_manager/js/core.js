@@ -713,6 +713,7 @@ core.renderPage = function(args){
 	var table = self.createLayout(page.page_info.layout_type);
 	var tds = jQuery(table).find('td');
     storage.family_line.init(page);
+    jQuery(parent).unbind();
 	jQuery(parent).html('');
 
 	for(var i = 0; i < grid.tdLength; i++){

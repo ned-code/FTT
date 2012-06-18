@@ -156,5 +156,21 @@ if (stripos($user_agent, 'MSIE 6.0') !== false
                 // This hotfix makes older versions of jQuery UI drag-and-drop work in IE9
                 (function(jQuery){var a=jQuery.ui.mouse.prototype._mouseMove;jQuery.ui.mouse.prototype._mouseMove=function(b){if(jQuery.browser.msie&&document.documentMode>=9){b.button=1};a.apply(this,[b]);}}(jQuery));
         </script>
+        <script>
+            (function() {
+                var ua = navigator.userAgent,
+                    iStuff = ua.match(/iPhone/i) || ua.match(/iPad/i),
+                    typeOfCanvas = typeof HTMLCanvasElement,
+                    nativeCanvasSupport = (typeOfCanvas == 'object' || typeOfCanvas == 'function'),
+                    textSupport = nativeCanvasSupport
+                        && (typeof document.createElement('canvas').getContext('2d').fillText == 'function');
+                //I'm setting this based on the fact that ExCanvas provides text support for IE
+                //and that as of today iPhone/iPad current text support is lame
+                labelType = (!nativeCanvasSupport || (textSupport && !iStuff))? 'Native' : 'HTML';
+                nativeTextSupport = labelType == 'Native';
+                useGradients = nativeCanvasSupport;
+                animate = !(iStuff || !nativeCanvasSupport);
+            })();
+        </script>
     </body>
 </html>

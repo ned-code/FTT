@@ -91,7 +91,9 @@ JMBDescendantTreeObject.prototype = {
 			object;
 		object = jQuery('#'+id);
 		if(object.length!=0){
-			module.init(id);
+            setTimeout(function(){
+                module.init(id);
+            }, 1);
 		} else {
 			setTimeout(function(){
 				module.check(id);

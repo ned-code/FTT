@@ -60,9 +60,12 @@ function JMBAncestorsObject(obj, popup, callback){
 	module.user = module.usertree[storage.usertree.gedcom_id];
 	module.tree = module.getTree(module.user);
 
-    module.init(function(){
-        storage.core.modulesPullObject.unset('JMBAncestorsObject');
-    });
+    setTimeout(function(){
+        module.init(function(){
+            storage.core.modulesPullObject.unset('JMBAncestorsObject');
+        });
+    }, 1);
+
     core.destroy.set('ancestors', function(){
 
     });
