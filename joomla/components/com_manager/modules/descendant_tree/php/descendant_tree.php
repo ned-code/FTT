@@ -58,7 +58,7 @@ class JMBDescendantTree {
 		 	 			$xml .= $user['gedcom_id'];
 		 	 			$xml .= "' style='color:#";
 		 	 			$xml .= $color;
-		 	 			$xml .= ";'>";
+		 	 			$xml .= ";cursor:pointer;'>";
 		 	 			$xml .= $this->name($object);
 		 	 		$xml .= "</div>";
 		 	 	$xml .= "]]></itemtext>";
@@ -100,7 +100,7 @@ class JMBDescendantTree {
 		 	 	$xml .= $sircar['user']['gedcom_id'];
 		 	 	$xml .= "' style='color:#";
 		 	 	$xml .= $sircar_color;
-		 	 	$xml .= ";'>";
+		 	 	$xml .= ";cursor:pointer;'>";
 		 	 	$xml .= $this->name($sircar);
 		 	 $xml .="</div></td>";
 		 	 $xml .= "<td><span>&nbsp;+&nbsp;</span></td>";
@@ -110,7 +110,7 @@ class JMBDescendantTree {
 		 	 	$xml .= $spouse['user']['gedcom_id'];
 		 	 	$xml .= "' style='color:#";
 		 	 	$xml .= $spouse_color;
-		 	 	$xml .= ";'>";
+		 	 	$xml .= ";cursor:pointer;'>";
 		 	 	$xml .= $this->name($spouse);
 		 	 	$xml .= "</div></td>";
 		 	 $xml .= "</tr>";
@@ -134,7 +134,7 @@ class JMBDescendantTree {
 		 		$xml .= $sircar['user']['gedcom_id'];
 		 		$xml .= "' style='color:#";
 		 		$xml .= $sircar_color;
-		 		$xml .= ";'>";
+		 		$xml .= ";cursor:pointer;'>";
 		 		$xml .= $this->name($sircar);
 		 		$xml .= "</div>";
 		 	$xml .= "]]></itemtext>";	
