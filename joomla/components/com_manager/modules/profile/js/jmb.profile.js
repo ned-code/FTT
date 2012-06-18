@@ -727,15 +727,11 @@ JMBProfile.prototype = {
                     args:module.gedcom_id,
                     validate:{
                         rules:{
-                            birth_year:{
-                                date:true
-                            },
                             first_name:{
                                 required: true
                             }
                         },
                         messages:{
-                            birth_year:"",
                             first_name:""
                         }
                     },
