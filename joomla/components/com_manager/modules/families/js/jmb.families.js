@@ -654,8 +654,8 @@ JMBFamiliesObject.prototype = {
 			}, 1000, function(){
 				jQuery(clone).remove();
 				jQuery(cont[0]).css("opacity", 0).css("visibility", "visible").animate({ "opacity":1}, "slow");
-				jQuery(cont[2]).css("left", "-155px").css("visibility", "visible").animate({ "left":"-=365"},"slow");
-				jQuery(cont[3]).css("left", "-155px").css("visibility", "visible").show().animate({ "left":"-=205"},"slow");
+				jQuery(cont[2]).css("left", "760px").css("visibility", "visible").animate({ "left":"-=365"},"slow");
+				jQuery(cont[3]).css("left", "760px").css("visibility", "visible").show().animate({ "left":"-=205"},"slow");
 				jQuery(childs).each(function(i, el){
 					jQuery(el).css("opacity", 0).css("visibility", "visible").animate({"opacity":1}, 300*i);
 				});
