@@ -150,6 +150,17 @@ JMBTooltip.prototype = {
 		sb._('</div>');
 		return jQuery(sb.result());
 	},
+    isBothParentsExist:function(object){
+        var family = getFamily(object.parents);
+
+        return (family&&family.father&&family.mother)?true:false;
+
+        function getFamily (parents){
+            if(parents == null) return false;
+            for(var first in parents) break;
+            return parents[first];
+        }
+    },
 	_edit:function(settings){
 		var	module = this,
             message = module.message,
@@ -157,14 +168,16 @@ JMBTooltip.prototype = {
             gedcom_id = settings.gedcom_id,
             object = settings.object,
 			user = object.user,
-			get = storage.usertree.parse(object),
+            get = storage.usertree.parse(object),
 			nick = get.nick;
 
 		sb._("<div id='")._(gedcom_id)._("-tooltip-edit' class='jmb-profile-tooltip-container'>");
 			sb._("<div class='jmb-profile-tooltip-button-edit'><span>")._(message.FTT_MOD_TOOLTIPS_EDIT)._("</span></div>");
 			sb._("<div class='jmb-profile-tooltip-fieldset'><fieldset>");
 				sb._("<legend>")._(message.FTT_MOD_TOOLTIPS_ADD)._(":</legend>");
-				sb._("<div class='jmb-profile-tooltip-parent'><span>")._(message.FTT_MOD_TOOLTIPS_ADD_PARENT)._("</span></div>");
+                if(!module.isBothParentsExist(object)){
+                    sb._("<div class='jmb-profile-tooltip-parent'><span>")._(message.FTT_MOD_TOOLTIPS_ADD_PARENT)._("</span></div>");
+                }
 				sb._("<div class='jmb-profile-tooltip-spouse'><span>")._(message.FTT_MOD_TOOLTIPS_ADD_SPOUSE)._("</span></div>");
 				sb._("<div class='jmb-profile-tooltip-bs'><span>")._(message.FTT_MOD_TOOLTIPS_ADD_BROTHER_OR_SISTER)._("</span></div>");
 				sb._("<div class='jmb-profile-tooltip-child'><span>")._(message.FTT_MOD_TOOLTIPS_ADD_CHILD)._("</span></div>");
