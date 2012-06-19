@@ -287,7 +287,7 @@ JMBNotifications.prototype = {
         jQuery(html).dialog({
             width:750,
             height:600,
-            title: json.me.name+' Invition Request',
+            title: 'Invition Request: '+json.me.name,
             resizable: false,
             draggable: false,
             position: "top",
@@ -471,6 +471,7 @@ JMBNotifications.prototype = {
                 json = fn.parse(object),
                 add = fn.addBox(json);
 
+            jQuery(module.dialogBox).dialog({ title: "Invitation Request: "+json.user_info.name });
             sb._('<div class="status"><span class="title">Status:</span>&nbsp;<span class="value">Action Required</span></div>');
             sb._('<div class="prefix">')._(json.user_info.name)._(' is claiming to be your ')._(json.relation)._(' and would like to join your family tree.')._('</div>');
             sb._('<div class="info">');
