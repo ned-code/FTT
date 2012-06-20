@@ -293,9 +293,12 @@ class JMBUserTree {
 		$is_alive = ($death!=null)?false:true;
 		$is_mother_line = ($user['is_self']||$user['is_descendant']||$user['is_mother'])?1:0;
 		$is_father_line = ($user['is_self']||$user['is_descendant']||$user['is_father'])?1:0;
+
+        $facebook_id = ($user['facebook_id'] == null)?0:$user['facebook_id'];
+
 		return array(
 			'gedcom_id'=>$user['gedcom_id'], 
-			'facebook_id'=>$user['facebook_id'],
+			'facebook_id'=>$facebook_id,
             'creator'=>$user['creator'],
 			'gender'=>$user['gender'], 
 			'first_name'=>$user['first_name'],
