@@ -44,7 +44,12 @@ function JMBLogin(){
 			st._('<ul>');
 			jQuery(settings.languages).each(function(i,el){
 				if(parseInt(el.published)){
-					st._('<li id="')._(el.lang_code)._('">')._(el.title)._('</li>');	
+                    if(el.lang_code == settings.default_language){
+                        st._('<li style="background: yellow;" id="')._(el.lang_code)._('">')._(el.title)._('</li>');
+                    } else {
+                        st._('<li id="')._(el.lang_code)._('">')._(el.title)._('</li>');
+                    }
+
 				}
 			});
 			st._('</ul>');
