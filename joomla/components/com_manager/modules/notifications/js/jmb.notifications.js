@@ -5,6 +5,38 @@ function JMBNotifications(){
     this.acceptJson = null;
     this.acceptId = null;
     this.acceptIndex = null;
+    this.message = {
+        FTT_MOD_NOTIFICATIONS_FIRST_TEXT:"You have Invitation Request",
+        FTT_MOD_NOTIFICATIONS_FIRST_BUTTON_TEXT:"Click here to view it",
+        FTT_MOD_NOTIFICATIONS_MANAGER_TITLE:"Invitation to join Family Tree",
+        FTT_MOD_NOTIFICATIONS_MENU_NOT_CONFIRMED:"Not Confirmed",
+        FTT_MOD_NOTIFICATIONS_NC_TITLE:"Invitation Request:",
+        FTT_MOD_NOTIFICATIONS_NC_STATUS:"Status",
+        FTT_MOD_NOTIFICATIONS_NC_ACTION_REQUIRED:"Action Required",
+        FTT_MOD_NOTIFICATIONS_NC_MESSAGE_1:" is claiming to be your",
+        FTT_MOD_NOTIFICATIONS_NC_MESSAGE_2:" and would like to join your family tree.",
+        FTT_MOD_NOTIFICATIONS_NC_NAME:"Name",
+        FTT_MOD_NOTIFICATIONS_NC_KNOWN_AS:"Known as",
+        FTT_MOD_NOTIFICATIONS_NC_BORN:"Born",
+        FTT_MOD_NOTIFICATIONS_NC_FATHER:"Father",
+        FTT_MOD_NOTIFICATIONS_NC_MOTHER:"Mother",
+        FTT_MOD_NOTIFICATIONS_NC_WRITES:" writes",
+        FTT_MOD_NOTIFICATIONS_NC_ACCEPT:"Accept",
+        FTT_MOD_NOTIFICATIONS_NC_ACCEPT_MESSAGE:"Add %% to my Family Tree",
+        FTT_MOD_NOTIFICATIONS_NC_DENY:"Deny",
+        FTT_MOD_NOTIFICATIONS_NC_DENY_MESSAGE:"Do not add %% to my Family Tree",
+        FTT_MOD_NOTIFICATIONS_ACCEPT_DRAG:"Drag",
+        FTT_MOD_NOTIFICATIONS_ACCEPT_HELP:" Facebook picture onto %% Profile picture",
+        FTT_MOD_NOTIFICATIONS_ACCEPT_SHOW:"Show me how",
+        FTT_MOD_NOTIFICATIONS_ACCEPT_NAME:"Name",
+        FTT_MOD_NOTIFICATIONS_ACCEPT_KNOWN_AS:"Known As",
+        FTT_MOD_NOTIFICATIONS_ACCEPT_RELATION:"Relation",
+        FTT_MOD_NOTIFICATIONS_ACCEPT_MOTHER:"Mother",
+        FTT_MOD_NOTIFICATIONS_ACCEPT_FATHER:"Father",
+        FTT_MOD_NOTIFICATIONS_ACCEPT_FACEBOOK:"Facebook",
+        FTT_MOD_NOTIFICATIONS_ACCEPT_LINK_THIS_PROFILE:"Link this Profile",
+        FTT_MOD_NOTIFICATIONS_ACCEPT_CANCEL:"Cancel"
+    }
 }
 
 JMBNotifications.prototype = {
@@ -20,6 +52,7 @@ JMBNotifications.prototype = {
     },
     onDrop:function(object){
         var module = this,
+            msg = module.message,
             id = jQuery(object).parent().attr('id').split('-')[0],
             object = storage.usertree.pull[id],
             user = storage.usertree.parse(object),
@@ -65,12 +98,12 @@ JMBNotifications.prototype = {
                     sb._('<div style="border: 1px solid #403E39;display: inline-block;margin: 5px;vertical-align: top;cursor:pointer;"><img width="50px" height="50px" src="http://graph.facebook.com/')._(json.me.id)._('/picture"></div>');
                     sb._('<div style="display: inline-block;">');
                         sb._(storage.form.dataTable('',{
-                            "Name": { id:"name", value:json.user_info.name },
-                            "Known As": { id:"knwon", value:json.user_info.nick },
-                            "Mother": { id:"mother", value:json.mother_info.name },
-                            "Father": { id:"father", value:json.father_info.name },
-                            "Relation": { id:"relation", value: json.relation},
-                            "Facebook": { id:"facebook", value: "<a href='"+json.me.link+"'>Click here to see Facebook profile</a>" }
+                            name: {name:msg.FTT_MOD_NOTIFICATIONS_ACCEPT_NAME, id:"name", value:json.user_info.name },
+                            known: {name:msg.FTT_MOD_NOTIFICATIONS_ACCEPT_KNOWN_AS, id:"knwon", value:json.user_info.nick },
+                            mother: {name:msg.FTT_MOD_NOTIFICATIONS_ACCEPT_MOTHER, id:"mother", value:json.mother_info.name },
+                            father: {name:msg.FTT_MOD_NOTIFICATIONS_ACCEPT_FATHER, id:"father", value:json.father_info.name },
+                            relation: {name:msg.FTT_MOD_NOTIFICATIONS_ACCEPT_RELATION, id:"relation", value: json.relation},
+                            facebook: {name:msg.FTT_MOD_NOTIFICATIONS_ACCEPT_FACEBOOK, id:"facebook", value: "<a href='"+json.me.link+"'>Click here to see Facebook profile</a>" }
                         }));
                     sb._('</div>');
                 sb._('</div>');
@@ -91,11 +124,11 @@ JMBNotifications.prototype = {
                     sb._('</div>');
                     sb._('<div style="display: inline-block;">');
                         sb._(storage.form.dataTable('',{
-                            "Name": { id:"name", value:user.full_name },
-                            "Known As": { id:"knwon", value:user.nick },
-                            "Mother": { id:"mother", value:fn.getParentsString('mother') },
-                            "Father": { id:"father", value:fn.getParentsString('father') },
-                            "Relation": { id:"relation", value: user.relation}
+                            name: {name:msg.FTT_MOD_NOTIFICATIONS_ACCEPT_NAME, id:"name", value:user.full_name },
+                            known: {name:msg.FTT_MOD_NOTIFICATIONS_ACCEPT_KNOWN_AS, id:"knwon", value:user.nick },
+                            mother: {name:msg.FTT_MOD_NOTIFICATIONS_ACCEPT_MOTHER, id:"mother", value:fn.getParentsString('mother') },
+                            father: {name:msg.FTT_MOD_NOTIFICATIONS_ACCEPT_FATHER, id:"father", value:fn.getParentsString('father') },
+                            relation: {name:msg.FTT_MOD_NOTIFICATIONS_ACCEPT_RELATION, id:"relation", value: user.relation}
                         }));
                     sb._('</div>');
                 sb._('</div>');
@@ -125,6 +158,25 @@ JMBNotifications.prototype = {
         fn.onMatchData(div);
 
         var linked = false;
+        var btns = {};
+        btns[msg.FTT_MOD_NOTIFICATIONS_ACCEPT_LINK_THIS_PROFILE] = function(){
+            if(linked) return false;
+            linked = true;
+            var args = JSON.stringify({id:module.acceptId,object:object,json:json});
+            module.ajax('onLinked', args, function(res){
+                if(module.rem(module.acceptIndex).length == 0){
+                    jQuery('div.ftt_notifications_alert').remove();
+                }
+                jQuery(module.dialogBox).dialog('close');
+                jQuery(module.acceptDialogBox).dialog('close');
+                jQuery(div).dialog('close');
+                linked = false;
+                storage.usertree.pull[id].user.facebook_id = json.me.id;
+            });
+        }
+        btns[msg.FTT_MOD_NOTIFICATIONS_ACCEPT_CANCEL] = function(){
+            jQuery(this).dialog("close");
+        }
         jQuery(div).dialog({
             width:500,
             minHeight:70,
@@ -134,26 +186,7 @@ JMBNotifications.prototype = {
             position: "top",
             closeOnEscape: false,
             modal:true,
-            buttons:{
-                "Link this profile":function(){
-                    if(linked) return false;
-                    linked = true;
-                    var args = JSON.stringify({id:module.acceptId,object:object,json:json});
-                    module.ajax('onLinked', args, function(res){
-                        if(module.rem(module.acceptIndex).length == 0){
-                            jQuery('div.ftt_notifications_alert').remove();
-                        }
-                        jQuery(module.dialogBox).dialog('close');
-                        jQuery(module.acceptDialogBox).dialog('close');
-                        jQuery(div).dialog('close');
-                        linked = false;
-                        storage.usertree.pull[id].user.facebook_id = json.me.id;
-                    });
-                },
-                "Cancel":function(){
-                    jQuery(this).dialog("close");
-                }
-            }
+            buttons:btns
         });
         jQuery(div).parent().addClass('notifications_link');
         jQuery(div).parent().css('top', '0');
@@ -161,6 +194,7 @@ JMBNotifications.prototype = {
     },
     onAccept:function(i, object, json, cont){
         var module = this,
+            msg = module.message,
             fn = {},
             html;
 
@@ -170,25 +204,6 @@ JMBNotifications.prototype = {
 
         fn.createUserBox = function(){
             var sb = host.stringBuffer();
-            /*
-            sb._('<div class="user-header">&nbsp;</div>');
-            sb._('<div style="background: none repeat scroll 0 0 #E5E9F0;border: 1px solid #4C67A1;">')
-                sb._('<div style="background: none repeat scroll 0 0 white;border: 1px solid #D2D9E7;margin: 10px;padding: 5px;">');
-                    sb._('<div style="border: 1px solid #403E39;display: inline-block;margin: 5px;vertical-align: top;cursor:pointer;"><img width="50px" height="50px" src="http://graph.facebook.com/')._(json.me.id)._('/picture"></div>');
-                    sb._('<div style="display: inline-block;">');
-                        sb._(storage.form.dataTable('',{
-                            "Name": { id:"name", value:json.user_info.name },
-                            "Known As": { id:"knwon", value:json.user_info.nick },
-                            "Mother": { id:"mother", value:json.father_info.name },
-                            "Father": { id:"father", value:json.mother_info.name },
-                            "Relation": { id:"relation", value: json.relation},
-                            "Facebook": { id:"facebook", value: "<a href='"+json.me.link+"'>Click here to see Facebook profile</a>" }
-                        }));
-                    sb._('</div>');
-                sb._('</div>');
-            sb._('</div>');
-            return sb.result();
-            */
             sb._('<div class="user-header">&nbsp;</div>');
             sb._('<div style="background: none repeat scroll 0 0 #E5E9F0;border: 1px solid #4C67A1;">')
                 sb._('<div style="background: none repeat scroll 0 0 white;border: 1px solid #D2D9E7;margin: 10px;padding: 5px;">');
@@ -196,15 +211,15 @@ JMBNotifications.prototype = {
                     sb._('<div style="display: inline-block;height: 60px;">');
                         sb._('<table>');
                             sb._('<tr>');
-                                sb._('<td><div class="title"><span>Name</span></div></td>');
+                                sb._('<td><div class="title"><span>')._(msg.FTT_MOD_NOTIFICATIONS_ACCEPT_NAME)._('</span></div></td>');
                                 sb._('<td><div class="text"><span>')._(json.user_info.name)._('</span></div></td>');
                             sb._('</tr>');
                             sb._('<tr>');
-                                sb._('<td><div class="title"><span>Known As</span></div></td>');
+                                sb._('<td><div class="title"><span>')._(msg.FTT_MOD_NOTIFICATIONS_ACCEPT_KNOWN_AS)._('</span></div></td>');
                                 sb._('<td><div class="text"><span>')._(json.user_info.nick)._('</span></div></td>');
                             sb._('</tr>');
                             sb._('<tr>');
-                                sb._('<td><div class="title"><span>Relation</span></div></td>');
+                                sb._('<td><div class="title"><span>')._(msg.FTT_MOD_NOTIFICATIONS_ACCEPT_RELATION)._('</span></div></td>');
                                 sb._('<td><div class="text"><span>')._(json.relation)._('</span></div></td>');
                             sb._('</tr>');
                         sb._('</table>');
@@ -212,11 +227,11 @@ JMBNotifications.prototype = {
                     sb._('<div style="display: inline-block;height: 50px;margin-left: 10px;padding-top: 10px;">');
                         sb._('<table>');
                             sb._('<tr>');
-                                sb._('<td><div class="title"><span>Mother</span></div></td>');
+                                sb._('<td><div class="title"><span>')._(msg.FTT_MOD_NOTIFICATIONS_ACCEPT_MOTHER)._('</span></div></td>');
                                 sb._('<td><div class="text"><span>')._(json.mother_info.name)._('</span></div></td>');
                             sb._('</tr>');
                             sb._('<tr>');
-                                sb._('<td><div class="title"><span>Father</span></div></td>');
+                                sb._('<td><div class="title"><span>')._(msg.FTT_MOD_NOTIFICATIONS_ACCEPT_FATHER)._('</span></div></td>');
                                 sb._('<td><div class="text"><span>')._(json.father_info.name)._('</span></div></td>');
                             sb._('</tr>');
                         sb._('</table>');
@@ -228,25 +243,14 @@ JMBNotifications.prototype = {
 
         fn.createMessageBox = function(){
             var sb = host.stringBuffer();
-            /*
-            sb._('<div style="background: none repeat scroll 0 0 #ED1C24;border-radius: 3px 3px 3px 3px;color: white;height: 100%;margin: 5px;padding: 10px;width: 350px;">');
-                sb._('<p style="">');
-                    sb._('Before ')._(json.user_info.name)._(' can join your family tree, you must first identify ')._(json.user_info.gender=='m'?'him':'her')._(' profile in your family tree.');
-                sb._('</p>');
-                sb._('<ul style="list-style: none outside none;margin: 10px;">');
-                    sb._('<li>');
-                        sb._('<div>1. In the window below, use the blue navigation arrows to find ')._(json.user_info.name)._(' family. If ')._(json.user_info.name)._(' does not have a profile, you must create one.</div>');
-                    sb._('</li>');
-                    sb._('<li style="margin-top: 5px;">');
-                        sb._('<div>2. Drag ')._(json.user_info.name)._(' Facebook picture(shown right) onto ')._(json.user_info.name)._(' profile picture(located below).</div>')
-                    sb._('</li>');
-                sb._('</ul>');
-            sb._('</div>');
-            return sb.result();
-            */
             sb._('<div style="background: none repeat scroll 0 0 #ED1C24;border-radius: 3px 3px 3px 3px;color: white;height: 100%;margin: 5px;padding: 10px;width: 100px;text-align: center;">');
-                sb._('<div>Drag ')._(json.user_info.name)._(' Facebook picture onto ')._(json.user_info.name)._(' Profile picture.</div>');
-                sb._('<div><a id="help" style="color: yellow;" href="http://familytreetop.com/components/com_manager/help/ftt-help2/ftt-linking-profiles2.html">Show me how</a></div>');
+                sb._('<div>');
+                    sb._(msg.FTT_MOD_NOTIFICATIONS_ACCEPT_DRAG)._(' ')._(json.user_info.name);
+                    sb._(msg.FTT_MOD_NOTIFICATIONS_ACCEPT_HELP.replace("%%", json.user_info.name));
+                sb._('</div>');
+                sb._('<div><a id="help" style="color: yellow;" href="http://familytreetop.com/components/com_manager/help/ftt-help2/ftt-linking-profiles2.html">');
+                    sb._(msg.FTT_MOD_NOTIFICATIONS_ACCEPT_SHOW);
+                sb._('</a></div>');
             sb._('</div>');
             return sb.result();
 
@@ -375,6 +379,7 @@ JMBNotifications.prototype = {
     },
     manager:function(){
         var module = this,
+            message = module.message,
             fn = {},
             dialogBox = jQuery('<div class="notifications_manager"></div>');
 
@@ -383,7 +388,7 @@ JMBNotifications.prototype = {
             sb._('<table class="container">');
             sb._('<tr>');
             sb._('<td style="width:120px;" valign="top"><div class="menu">');
-            sb._('<div id="not_confirmed"><span>Not Confirmed</span></div>');
+            sb._('<div id="not_confirmed"><span>')._(message.FTT_MOD_NOTIFICATIONS_MENU_NOT_CONFIRMED)._('</span></div>');
             //sb._('<div id="confirmed"><span>Waiting for Link</span></div>');
             //sb._('<div id="denied"><span>Denied</span></div>');
             sb._('</div></td>');
@@ -419,15 +424,15 @@ JMBNotifications.prototype = {
                                 sb._('<td>');
                                     sb._('<table>');
                                         sb._('<tr>');
-                                            sb._('<td><div class="title"><span>Name:</span></div></td>');
+                                            sb._('<td><div class="title"><span>')._(message.FTT_MOD_NOTIFICATIONS_NC_NAME)._(':</span></div></td>');
                                             sb._('<td><div class="text"><span>')._(args.name)._('</span></div></td>');
                                         sb._('</tr>');
                                         sb._('<tr>');
-                                            sb._('<td><div class="title"><span>Known as:</span></div></td>');
+                                            sb._('<td><div class="title"><span>')._(message.FTT_MOD_NOTIFICATIONS_NC_KNOWN_AS)._(':</span></div></td>');
                                             sb._('<td><div class="text"><span>')._(args.nick)._('</span></div></td>');
                                         sb._('</tr>');
                                         sb._('<tr>');
-                                            sb._('<td><div class="title"><span>Born:</span></div></td>');
+                                            sb._('<td><div class="title"><span>')._(message.FTT_MOD_NOTIFICATIONS_NC_BORN)._(':</span></div></td>');
                                             sb._('<td><div class="text"><span>')._(fn.getPlaceString(args))._('</span></div></td>');
                                         sb._('</tr>');
                                         sb._('<tr>');
@@ -446,11 +451,11 @@ JMBNotifications.prototype = {
                     sb._('<div class="parent_box">');
                         sb._('<table>');
                             sb._('<tr>');
-                                sb._('<td>')._(name)._(':</td>');
+                                sb._('<td>')._(message["FTT_MOD_NOTIFICATIONS_NC_"+name.toUpperCase()])._(':</td>');
                                 sb._('<td><div class="text"><span>')._(name)._('</span></div></td>');
                             sb._('</tr>');
                             sb._('<tr>');
-                                sb._('<td>Born:</td>');
+                                sb._('<td>')._(message.FTT_MOD_NOTIFICATIONS_NC_BORN)._(':</td>');
                                 sb._('<td><div class="text">')._(fn.getPlaceString(args))._('</div></td>');
                             sb._('</tr>');
                         sb._('</table>');
@@ -471,9 +476,16 @@ JMBNotifications.prototype = {
                 json = fn.parse(object),
                 add = fn.addBox(json);
 
-            jQuery(module.dialogBox).dialog({ title: "Invitation Request: "+json.user_info.name });
-            sb._('<div class="status"><span class="title">Status:</span>&nbsp;<span class="value">Action Required</span></div>');
-            sb._('<div class="prefix">')._(json.user_info.name)._(' is claiming to be your ')._(json.relation)._(' and would like to join your family tree.')._('</div>');
+            jQuery(module.dialogBox).dialog({ title: message.FTT_MOD_NOTIFICATIONS_NC_TITLE+" "+json.user_info.name });
+            sb._('<div class="status"><span class="title">');
+                sb._(message.FTT_MOD_NOTIFICATIONS_NC_STATUS);
+                sb._(':</span>&nbsp;<span class="value">');
+                sb._(message.FTT_MOD_NOTIFICATIONS_NC_ACTION_REQUIRED)._('</span></div>');
+            sb._('<div class="prefix">')._(json.user_info.name);
+                sb._(message.FTT_MOD_NOTIFICATIONS_NC_MESSAGE_1);
+                sb._(json.relation);
+                sb._(message.FTT_MOD_NOTIFICATIONS_NC_MESSAGE_2)
+            sb._('</div>');
             sb._('<div class="info">');
                 sb._('<table>');
                     sb._('<tr>');
@@ -488,7 +500,7 @@ JMBNotifications.prototype = {
                     if(json.message.length != 0){
                         sb._('<tr>');
                             sb._('<td colspan="2">');
-                                sb._('<div class="message_title">')._(json.user_info.name)._(' writes:</div>');
+                                sb._('<div class="message_title">')._(json.user_info.name)._(message.FTT_MOD_NOTIFICATIONS_NC_WRITES)._(':</div>');
                                 sb._('<div class="message_text">')._(json.message)._('</div>');
                             sb._('</td>');
                         sb._('</tr>');
@@ -496,8 +508,14 @@ JMBNotifications.prototype = {
                 sb._('</table>');
             sb._('</div>');
             sb._('<div class="click_items">');
-                sb._('<div id="accept" class="button"><div>Accept</div><div>Add ')._(json.user_info.name)._(' to my Family Tree</div></div>');
-                sb._('<div id="deny" class="button"><div>Deny</div><div>Do not add ')._(json.user_info.name)._(' to my Family Tree</div></div>');
+                sb._('<div id="accept" class="button"><div>');
+                    sb._(message.FTT_MOD_NOTIFICATIONS_NC_ACCEPT);
+                    sb._('</div><div>')._(message.FTT_MOD_NOTIFICATIONS_NC_ACCEPT_MESSAGE.replace("%%", json.user_info.name));
+                sb._('</div></div>');
+                sb._('<div id="deny" class="button"><div>');
+                    sb._(message.FTT_MOD_NOTIFICATIONS_NC_DENY);
+                    sb._('</div><div>')._(message.FTT_MOD_NOTIFICATIONS_NC_DENY_MESSAGE.replace("%%", json.user_info.name));
+                sb._('</div></div>');
             sb._('</div>');
 
             html = jQuery(sb.result());
@@ -543,7 +561,7 @@ JMBNotifications.prototype = {
         jQuery(dialogBox).dialog({
             width:600,
             height:400,
-            title: 'Invitation to Join Family Tree',
+            title: message.FTT_MOD_NOTIFICATIONS_MANAGER_TITLE,
             resizable: false,
             draggable: false,
             position: "top",
@@ -578,9 +596,9 @@ JMBNotifications.prototype = {
             callback(module.ntPull);
         }
         fn.createMessageBox = function(){
-            var html, sb = host.stringBuffer();
+            var html, sb = host.stringBuffer(), message = module.message;
             sb._('<div class="ftt_notifications_alert">');
-            sb._('<div class="message"><div>You have Invitation Request</div><div class="button">Click here to view it</div></div>');
+            sb._('<div class="message"><div>')._(message.FTT_MOD_NOTIFICATIONS_FIRST_TEXT)._('</div><div class="button">')._(message.FTT_MOD_NOTIFICATIONS_FIRST_BUTTON_TEXT)._('</div></div>');
             sb._('</div>');
             html = jQuery(sb.result());
             jQuery(html).find('div.button').click(function(){
@@ -588,10 +606,19 @@ JMBNotifications.prototype = {
             });
             jQuery('div.main').append(html);
         }
-        fn.sort(function(pull){
-            if(pull.length != 0){
-                fn.createMessageBox();
-            }
-        });
+        setTimeout(function(){
+            module.ajax('getLanguageString', null, function(res){
+                var json = jQuery.parseJSON(res.responseText);
+                if(json){
+                    //module.message = json;
+                }
+                fn.sort(function(pull){
+                    if(pull.length != 0){
+                        fn.createMessageBox();
+                    }
+                });
+            });
+        }, 1);
+
     }
 }

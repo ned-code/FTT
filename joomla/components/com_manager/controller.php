@@ -413,6 +413,13 @@ class JMBController extends JController
         	exit();
         }
 
+    public function getLanguage(){
+        $host = new Host('Joomla');
+        $module_name = JRequest::getCmd('module_name');
+        echo json_encode($host->getLangList($module_name));
+        exit;
+    }
+
     public function loginFacebookUser(){
         $app = JFactory::getApplication();
         $jfbcLibrary = JFBConnectFacebookLibrary::getInstance();

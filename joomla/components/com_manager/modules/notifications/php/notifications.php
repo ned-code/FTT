@@ -111,5 +111,9 @@ class JMBNotifications {
         }
 
     }
+
+    public function getLanguageString(){
+        return json_encode($this->host->getLangList('notifications'));
+    }
 }
 ?>

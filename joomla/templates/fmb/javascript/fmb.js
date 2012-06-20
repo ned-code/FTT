@@ -1,19 +1,36 @@
 function JMBTopMenuBar(){
-	var module = this, fn, cont, alias, type, fb;
+	var module = this, fn, cont, alias, type, fb, message;
 	
 	type = jQuery(document.body).attr('_type');
 	alias = jQuery(document.body).attr('_alias');
 	fb = jQuery(document.body).attr('_fb');
+    message = {
+        FTT_MOD_TOPMENUBAR_MYFAMILY:"My Family",
+        FTT_MOD_TOPMENUBAR_FAMOUS_FAMILIES:"Famous Families",
+        FTT_MOD_TOPMENUBAR_HOME:"Home"
+    }
+
 	
 	fn = {
+        getLanguageString:function(callback){
+            jQuery.ajax({
+                url:"index.php?option=com_manager&task=getLanguage&module_name=topmenubar",
+                type:"GET",
+                dataType: "html",
+                complete : function (req, err) {
+                    var json = jQuery.parseJSON(req.responseText);
+                    callback(json);
+                }
+            });
+        },
 		create:function(){
             var string = '';
             string += '<div  class="jmb-top-menu-bar">';
                 string +='<div class="jmb-top-menu-bar-logo">&nbsp;</div>';
                 string +='<div class="jmb-top-menu-bar-content">';
-                    string +='<div id="myfamily" class="jmb-top-menu-bar-item"><span>My Family</span></div>';
-                    string +='<div id="famous-family" class="jmb-top-menu-bar-item"><span>Famous Families</span></div>';
-                    string +='<div id="home" class="jmb-top-menu-bar-item"><span>Home</span></div>';
+                    string +='<div id="myfamily" class="jmb-top-menu-bar-item"><span>'+message.FTT_MOD_TOPMENUBAR_MYFAMILY+'</span></div>';
+                    string +='<div id="famous-family" class="jmb-top-menu-bar-item"><span>'+message.FTT_MOD_TOPMENUBAR_FAMOUS_FAMILIES+'</span></div>';
+                    string +='<div id="home" class="jmb-top-menu-bar-item"><span>'+message.FTT_MOD_TOPMENUBAR_HOME+'</span></div>';
                 string +='</div>';
             string +='</div>';
             return jQuery(string);
@@ -69,12 +86,16 @@ function JMBTopMenuBar(){
 		},
 		init:function(){
 			if(window != window.top) return false;
-			
-			cont = fn.create();			
-			fn.click();
-			fn.activate();
-			
-			jQuery(document.body).append(cont);
+            fn.getLanguageString(function(lang){
+                if(lang){
+                    message = lang;
+                }
+                cont = fn.create();
+                fn.click();
+                fn.activate();
+
+                jQuery(document.body).append(cont);
+            });
 		}
 	}
 	

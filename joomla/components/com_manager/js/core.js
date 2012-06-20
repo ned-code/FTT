@@ -482,7 +482,7 @@ storage.form = {
                 if (!opt.hasOwnProperty(key)) continue;
                 var el = opt[key];
                 sb._('<tr>');
-                    sb._('<td><div class="title"><span>')._(key)._('</span>:</div></td>');
+                    sb._('<td><div class="title"><span>')._(el.name)._('</span>:</div></td>');
                     sb._('<td><div id="')._((el.id)?el.id:'')._('" style="')._((el.css)?el.css:'')._('" class="text"><span>')._((el.value)?el.value:'')._('</span></div>');
                 sb._('</tr>');
             }
