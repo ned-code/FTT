@@ -6,7 +6,17 @@ function JMBLogin(){
 		alias = '',
 		path = "/components/com_manager/modules/login/imgs/",
 		notifications,
-		fb_logged;
+		fb_logged,
+        msg;
+
+    msg = {
+        FTT_MOD_LOGIN_PROFILE:"Profile",
+        FTT_MOD_LOGIN_LANGUAGE:"Language",
+        FTT_MOD_LOGIN_LOGOUT:"Log Out",
+        FTT_MOD_LOGIN_CONNECT_WITH_FACEBOOK:"Connect With Facebook",
+        FTT_MOD_LOGIN_FF_LOGGED: "You logged in as",
+        FTT_MOD_LOGIN_FF_EXIT: "Exit this Family Trees"
+    }
 
 	//init vars
 	type = jQuery(document.body).attr('_type');
@@ -35,7 +45,7 @@ function JMBLogin(){
 		connect:function(){
 			var sb = host.stringBuffer();
 			sb._('<div class="jmb-profile-cont">');
-				sb._('<div class="facebook"><span>Connect With Facebook</span></div>');
+				sb._('<div class="facebook"><span>')._(msg.FTT_MOD_LOGIN_CONNECT_WITH_FACEBOOK)._('</span></div>');
 			sb._('</div>');
 			return jQuery(sb.result());
 		},
@@ -74,9 +84,9 @@ function JMBLogin(){
 		menu:function(){
 			var module = this, menu, list, sb = host.stringBuffer(), contEl;
 			sb._('<div class="menu">');
-				sb._('<div id="profile"><span>Profile</span></div>');
-				sb._('<div id="language"><span>Language: ')._(this.getDefaultLang())._('</span></div>');
-				sb._('<div id="logout"><span>Log Out</span></div>');
+				sb._('<div id="profile"><span>')._(msg.FTT_MOD_LOGIN_PROFILE)._('</span></div>');
+				sb._('<div id="language"><span>')._(msg.FTT_MOD_LOGIN_LANGUAGE)._(': ')._(this.getDefaultLang())._('</span></div>');
+				sb._('<div id="logout"><span>')._(msg.FTT_MOD_LOGIN_LOGOUT)._('</span></div>');
 			sb._('</div>');
 			menu = jQuery(sb.result());
             if(storage.usertree.gedcom_id == null){
@@ -141,32 +151,8 @@ function JMBLogin(){
                             }
                             return false;
                         });
-                        /*
-						if(!jQuery(object).hasClass('collapse')){
-							list = module.langList();
-							jQuery(object).append(list);
-							jQuery(object).addClass('collapse');
-							jQuery(list).find('li').click(function(){
-								if(confirm("Are you sure you want to set the language?")){
-									fn.ajax('language', jQuery(this).attr('id'), function(res){
-										window.location.reload();
-									});
-								}
-								return false;
-							});
-						} else {
-							jQuery(list).remove();
-							jQuery(object).removeClass('collapse');
-						}
-						jQuery(object).removeClass('active');
-						*/
 					},
 					logout:function(object, callback){
-                        /*
-						FB.logout(function(){
-							window.location = storage.baseurl+'index.php?option=com_jfbconnect&task=logout&return=login';
-						});
-						*/
                         jfbc.login.logout_button_click();
                         callback();
 					}
@@ -255,6 +241,7 @@ function JMBLogin(){
                 json = jQuery.parseJSON(res.responseText);
                 settings.languages = json.languages;
                 settings.default_language = json.default_language;
+                msg = json.msg;
                 if(json.usertree){
                     fn.set_global_data(json);
                 }
@@ -267,15 +254,16 @@ function JMBLogin(){
                 });
 			});
 		},
+
         famous:function(){
             if(storage.usertree.gedcom_id == null) return false;
             var object = storage.usertree.pull[storage.usertree.gedcom_id];
             var	sb = host.stringBuffer(), parse = storage.usertree.parse(object), htmlObject;
             sb._('<div class="jmb-profile-famous-cont">');
             sb._('<table>');
-            sb._('<tr><td><div class="text"><span>You logged in as:</span></div></td><td rowspan="3"><div class="avatar">')._(fn.getAvatar(object))._('</div></td></tr>');
+            sb._('<tr><td><div class="text"><span>')._(msg.FTT_MOD_LOGIN_FF_LOGGED)._(':</span></div></td><td rowspan="3"><div class="avatar">')._(fn.getAvatar(object))._('</div></td></tr>');
             sb._('<tr><td><div class="name"><span>')._(parse.name)._('</span></div></td></tr>');
-            sb._('<tr><td><div class="logout"><span>Exit this Family Trees</span></div></td></tr>');
+            sb._('<tr><td><div class="logout"><span>')._(msg.FTT_MOD_LOGIN_FF_EXIT)._('</span></div></td></tr>');
             sb._('</table>');
             sb._('</div>');
             htmlObject = jQuery(sb.result());

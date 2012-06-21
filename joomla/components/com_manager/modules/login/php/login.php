@@ -45,11 +45,12 @@ class JMBLogin {
         $langString = $this->host->getComponentString();
         $data = $this->getUsertreeData();
 		$settings = $this->getSystemSettings();
+        $msg = $language = $this->host->getLangList('login');
 		
 		$notifications = $this->getNotifications($tree_id, $gedcom_id);
 
 
-		return json_encode(array('default_language'=>$lang, 'languages'=>$languages,'langString'=>$langString,'notifications'=>$notifications,'settings'=>$settings, 'usertree'=>$data));
+		return json_encode(array('default_language'=>$lang,'msg'=>$msg,'languages'=>$languages,'langString'=>$langString,'notifications'=>$notifications,'settings'=>$settings, 'usertree'=>$data));
 	}
 
 	public function famous($args){
