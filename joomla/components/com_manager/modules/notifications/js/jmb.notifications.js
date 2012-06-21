@@ -25,6 +25,7 @@ function JMBNotifications(){
         FTT_MOD_NOTIFICATIONS_NC_ACCEPT_MESSAGE:"Add %% to my Family Tree",
         FTT_MOD_NOTIFICATIONS_NC_DENY:"Deny",
         FTT_MOD_NOTIFICATIONS_NC_DENY_MESSAGE:"Do not add %% to my Family Tree",
+        FTT_MOD_NOTIFICATIONS_ACCEPT_TITLE:"Invitation Request",
         FTT_MOD_NOTIFICATIONS_ACCEPT_DRAG:"Drag",
         FTT_MOD_NOTIFICATIONS_ACCEPT_HELP:" Facebook picture onto %% Profile picture",
         FTT_MOD_NOTIFICATIONS_ACCEPT_SHOW:"Show me how",
@@ -35,7 +36,20 @@ function JMBNotifications(){
         FTT_MOD_NOTIFICATIONS_ACCEPT_FATHER:"Father",
         FTT_MOD_NOTIFICATIONS_ACCEPT_FACEBOOK:"Facebook",
         FTT_MOD_NOTIFICATIONS_ACCEPT_LINK_THIS_PROFILE:"Link this Profile",
-        FTT_MOD_NOTIFICATIONS_ACCEPT_CANCEL:"Cancel"
+        FTT_MOD_NOTIFICATIONS_ACCEPT_CANCEL:"Cancel",
+        FTT_MOD_NOTIFICATIONS_DENY_TITLE:"Invitation Request",
+        FTT_MOD_NOTIFICATIONS_DENY_STATUS:"Invitation Request Stats",
+        FTT_MOD_NOTIFICATIONS_DENY_DENIED:"Denied",
+        FTT_MOD_NOTIFICATIONS_DENY_HEADER_1:"The following message will be sent to",
+        FTT_MOD_NOTIFICATIONS_DENY_HEADER_2:"You may edit the section shown in yellow",
+        FTT_MOD_NOTIFICATIONS_DENY_DEAR:"Dear",
+        FTT_MOD_NOTIFICATIONS_DENY_MESSAGE_1:"has denied your request to join his family tree",
+        FTT_MOD_NOTIFICATIONS_DENY_MESSAGE_2:"He does not  believe that you are member of his family. If you still think thay you are related to",
+        FTT_MOD_NOTIFICATIONS_DENY_MESSAGE_3:"please contact him directly to sort it out",
+        FTT_MOD_NOTIFICATIONS_DENY_HI:"Hi",
+        FTT_MOD_NOTIFICATIONS_DENY_SEND_MESSAGE:"I am not sure how we are related. Are you able to explain how you are connected to my family tree",
+        FTT_MOD_NOTIFICATIONS_DENY_SEND_THANKS:"Thanks",
+        FTT_MOD_NOTIFICATIONS_DENY_SEND_BUTTON:"Send Message"
     }
 }
 
@@ -291,7 +305,7 @@ JMBNotifications.prototype = {
         jQuery(html).dialog({
             width:750,
             height:600,
-            title: 'Invition Request: '+json.me.name,
+            title: msg.FTT_MOD_NOTIFICATIONS_ACCEPT_TITLE+': '+json.me.name,
             resizable: false,
             draggable: false,
             position: "top",
@@ -316,38 +330,39 @@ JMBNotifications.prototype = {
     },
     onDenied:function(i, object, json, cont){
         var module = this,
+            msg = module.message,
             sb = host.stringBuffer(),
             box = jQuery('<div></div>');
             cont;
 
-        sb._('<div class="header"><span>The following message will be sent to ')._(json.me.name)._('. You may edit the section shown in yellow.</span></div>');
+        sb._('<div class="header"><span>')._(msg.FTT_MOD_NOTIFICATIONS_DENY_HEADER_1)._(' ')._(json.me.name)._('. ')._(msg.FTT_MOD_NOTIFICATIONS_DENY_HEADER_2)._('.</span></div>');
         sb._('<div class="deny_content">');
-            sb._('<div class="status"><div><span>Family TreeTop</span></div><div><span>Invition Request Status: <b>Denied</b></span></div></div>');
+            sb._('<div class="status"><div><span>Family TreeTop</span></div><div><span>')._(msg.FTT_MOD_NOTIFICATIONS_DENY_STATUS)._(': <b>')._(msg.FTT_MOD_NOTIFICATIONS_DENY_DENIED)._('</b></span></div></div>');
             sb._('<div class="text">');
-                sb._('<div><span>Dear ')._(json.me.name)._(',</span></div>');
-                sb._('<div><span>')._(json.target.name)._(' > has denied your request to join his family tree.');
-                    sb._(' He does not  believe that you are member of his family. If you still think thay you are related to ');
-                    sb._(json.target.name.split(' ')[0])._(', please contact him directly to sort it out.');
+                sb._('<div><span>')._(msg.FTT_MOD_NOTIFICATIONS_DENY_DEAR)._(' ')._(json.me.name)._(',</span></div>');
+                sb._('<div><span>')._(json.target.name)._(' ')._(msg.FTT_MOD_NOTIFICATIONS_DENY_MESSAGE_1)._('.');
+                    sb._(' ')._(msg.FTT_MOD_NOTIFICATIONS_DENY_MESSAGE_2)._(' ');
+                    sb._(json.target.name.split(' ')[0])._(', ')._(msg.FTT_MOD_NOTIFICATIONS_DENY_MESSAGE_3)._('.');
                 sb._('</span></div>');
             sb._('</div>');
             sb._('<div class="edit">');
                 sb._('<div><span>')._(json.target.name.split(' ')[0])._(' Writes:</span></div>');
                 sb._('<div><textarea name="message">')
-                    sb._('Hi ')._(json.me.name.split(' ')[0])._(', \n\n');
-                    sb._('I am not sure how we are related. Are you able to explain how you are connected to my family tree?\n\n');
-                    sb._('Thanks,\n');
+                    sb._(msg.FTT_MOD_NOTIFICATIONS_DENY_HI)._(' ')._(json.me.name.split(' ')[0])._(', \n\n');
+                    sb._(msg.FTT_MOD_NOTIFICATIONS_DENY_SEND_MESSAGE)._('?\n\n');
+                    sb._(msg.FTT_MOD_NOTIFICATIONS_DENY_SEND_THANKS)._(',\n');
                     sb._(json.target.name);
                 sb._('</textarea></div>');
              sb._('</div>');
         sb._('</div>');
-        sb._('<div class="button"><span>Send Message</span></div>');
+        sb._('<div class="button"><span>')._(msg.FTT_MOD_NOTIFICATIONS_DENY_SEND_BUTTON)._('</span></div>');
 
         cont = sb.result();
         jQuery(box).append(cont);
         jQuery(box).dialog({
             width:600,
             height:450,
-            title:'Invition Request: '+json.me.name,
+            title:msg.FTT_MOD_NOTIFICATIONS_DENY_TITLE+': '+json.me.name,
             resizable: false,
             draggable: false,
             position: "top",
@@ -610,7 +625,7 @@ JMBNotifications.prototype = {
             module.ajax('getLanguageString', null, function(res){
                 var json = jQuery.parseJSON(res.responseText);
                 if(json){
-                    //module.message = json;
+                    module.message = json;
                 }
                 fn.sort(function(pull){
                     if(pull.length != 0){
