@@ -67,6 +67,7 @@ function JMBProfile(){
         FTT_MOD_PROFILE_EDITOR_FORM_ADDS_SPOUSE:"Add spouse",
         FTT_MOD_PROFILE_EDITOR_FORM_ADDS_BROTHER_OR_SISTER:"Add brother or sister",
         FTT_MOD_PROFILE_EDITOR_FORM_ADDS_CHILD:"Add child",
+        FTT_MOD_PROFILE_EDITOR_DELETE_BUTTON:"Delete Profile",
         FTT_MOD_PROFILE_EDITOR_DELETE_CONFIRM:"Are you sure you want to delete the information about that user?",
         FTT_MOD_PROFILE_EDITOR_DELETE_USER_CONFIRM:"You are about to remove yourself from this family tree. Once this is done, you will not be able to view this family tree unless an existing member invites you back.",
         FTT_MOD_PROFILE_EDITOR_DELETE_TREE_CONFIRM:"You are about to remove yourself from this family tree. Since you are the only registered person, all members in this family tree will be completely deleted.",
@@ -954,7 +955,7 @@ JMBProfile.prototype = {
             break;
 
             case "more_options":
-                form = jQuery('<div class="delete-button">Delete Profile</div>')
+                form = jQuery('<div class="delete-button">'+module.message.FTT_MOD_PROFILE_EDITOR_DELETE_BUTTON+'</div>')
                 jQuery(form).click(function(){
                     if(storage.usertree.getUsersLength() == 1 &&
                         module.gedcom_id == storage.usertree.gedcom_id){
