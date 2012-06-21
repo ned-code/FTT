@@ -45,7 +45,7 @@ class JMBLogin {
         $langString = $this->host->getComponentString();
         $data = $this->getUsertreeData();
 		$settings = $this->getSystemSettings();
-        $msg = $language = $this->host->getLangList('login');
+        $msg = $this->host->getLangList('login');
 		
 		$notifications = $this->getNotifications($tree_id, $gedcom_id);
 

@@ -1,7 +1,14 @@
 function JMBHomeObject(offsetParent){	
 	var	module = this,
-		fn;
-		
+		fn,
+        msg;
+
+    msg = {
+        FTT_MOD_HOME_WELCOME: "Welcome to Family TreeTop",
+        FTT_MOD_HOME_CONNECT_TO_FAMILY_TREE: "Connect to your Family Tree",
+        FTT_MOD_HOME_VIEW_FAMOUS_FAMILY: "View Famous Families"
+    }
+
 	fn = {
 		ajax:function(func, params, callback){
 			host.callMethod("home", "JMBHome", func, params, function(res){
@@ -15,9 +22,9 @@ function JMBHomeObject(offsetParent){
 					st._('<td><div class="jmb-home-logo">&nbsp;</div></td>');
 					st._('<td valign="top">');
 						st._('<div class="jmb-home-body">');
-							st._('<div class="title"><span>Welcome to Family TreeTop</span></div>');
-							st._('<div id="connect" class="button"><span>Connect to your Family Tree</span></div>');
-							st._('<div id="view" class="button"><span>View Famous Families</span></div>');
+							st._('<div class="title"><span>')._(msg.FTT_MOD_HOME_WELCOME)._('</span></div>');
+							st._('<div id="connect" class="button"><span>')._(msg.FTT_MOD_HOME_CONNECT_TO_FAMILY_TREE)._('</span></div>');
+							st._('<div id="view" class="button"><span>')._(msg.FTT_MOD_HOME_VIEW_FAMOUS_FAMILY)._('</span></div>');
 						st._('</div>');
 					st._('</td>');
 				st._('</tr>');
@@ -46,10 +53,14 @@ function JMBHomeObject(offsetParent){
 			});
 		},
 		init:function(parent){
-			var cont;
-			cont = fn.create();
-			fn.initButton(cont);
-			jQuery(parent).append(cont);
+            fn.ajax('get', null, function(res){
+                var cont;
+                msg = jQuery.parseJSON(res.responseText);
+                cont = fn.create();
+                fn.initButton(cont);
+                jQuery(parent).append(cont);
+            });
+
 		}
 	}
 	fn.init(offsetParent);

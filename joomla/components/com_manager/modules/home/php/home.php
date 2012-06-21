@@ -20,5 +20,9 @@ class JMBHome {
 		$session->set('alias', $args);
 		return true;
 	}
+
+    public function get(){
+        return json_encode($this->host->getLangList('home'));
+    }
 }
 ?>
