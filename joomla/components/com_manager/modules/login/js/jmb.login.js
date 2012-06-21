@@ -14,8 +14,10 @@ function JMBLogin(){
         FTT_MOD_LOGIN_LANGUAGE:"Language",
         FTT_MOD_LOGIN_LOGOUT:"Log Out",
         FTT_MOD_LOGIN_CONNECT_WITH_FACEBOOK:"Connect With Facebook",
+        FTT_MOD_LOGIN_LANGUAGE_DIALOG:"Language",
         FTT_MOD_LOGIN_FF_LOGGED: "You logged in as",
         FTT_MOD_LOGIN_FF_EXIT: "Exit this Family Trees"
+
     }
 
 	//init vars
@@ -131,7 +133,7 @@ function JMBLogin(){
                         jQuery(langBox).dialog({
                             width:320,
                             height:240,
-                            title: 'Language Select',
+                            title: msg.FTT_MOD_LOGIN_LANGUAGE_DIALOG,
                             resizable: false,
                             draggable: false,
                             position: "top",
