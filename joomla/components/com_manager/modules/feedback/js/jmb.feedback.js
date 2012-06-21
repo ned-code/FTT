@@ -7,7 +7,9 @@ function JMBFeedback(){
             FTT_MOD_FEEDBACK_HEADER:"Have Your Say",
             FTT_MOD_FEEDBACK_WELCOM:"Welcome to the %% for Family TreeTop. We've still got some work to do, but we're almost there! Please let us know what you think",
             FTT_MOD_FEEDBACK_PUBLIC_BETA:"public beta",
-            FTT_MOD_FEEDBACK_LIKE:"Like whay you see? Pass the word along to your friends:"
+            FTT_MOD_FEEDBACK_LIKE:"Like whay you see? Pass the word along to your friends:",
+            FTT_MOD_FEEDBACK_REPORT_A_PROBLEB:"Report a Problem",
+            FTT_MOD_FEEDBACK_SUBMIT_AN_IDEA:"Submit an Idea"
         },
         fn,
         likes;
@@ -54,8 +56,23 @@ function JMBFeedback(){
             jQuery(box).parent().addClass('jmb_feedback_dialog');
             jQuery(box).parent().css('top', '20px');
             callback(box);
+        },
+        button:function(id, name){
+            return jQuery("<div id='"+id+"'><span>"+name+"</span></div>");
+        },
+        buttonClick:function(button){
+            fn.click(button, function(ev){
+                fn.dialogOpen(function(box){
+                    var id = jQuery(ev).attr('id');
+                    var iframe = fn.iframe(id);
+                    jQuery(box).append(iframe);
+                });
+            });
+            return button;
         }
     };
+
+
 
     module.ajax('get', null, function(json){
         if(json.language){
@@ -76,18 +93,10 @@ function JMBFeedback(){
         jQuery(parent).find('.body').append(likes);
         jQuery(likes).show();
 
-        jQuery(json.buttons).each(function(i,el){
-            var e = fn.parse(el);
-            var div = jQuery("<div id='"+e.id+"'><span>"+e.name+"</span></div>");
-            jQuery(parent).find("div.buttons").append(div);
-            fn.click(div, function(ev){
-                fn.dialogOpen(function(box){
-                    var id = jQuery(ev).attr('id');
-                    var iframe = fn.iframe(id);
-                    jQuery(box).append(iframe);
-                });
-            });
-        });
+        var button1 = fn.buttonClick(fn.button("18-report-a-problem", message.FTT_MOD_FEEDBACK_REPORT_A_PROBLEB));
+        jQuery(parent).find("div.buttons").append(button1);
+        var button2 = fn.buttonClick(fn.button("19-submit-an-idea", message.FTT_MOD_FEEDBACK_SUBMIT_AN_IDEA));
+        jQuery(parent).find("div.buttons").append(button2);
     });
 }
 
