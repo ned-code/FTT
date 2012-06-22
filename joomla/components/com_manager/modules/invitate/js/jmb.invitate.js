@@ -1,7 +1,7 @@
 function JMBInvitateObject(obj){
     var module = this;
     var sb = host.stringBuffer();
-    FB.api('me', function(response){
+    FB.api('/me', function(response){
         if(!response.error){
             module.ajax('checkUser', JSON.stringify( {id:response.id, token: module.getToken() }), function(res){
                 var json = jQuery.parseJSON(res.responseText);

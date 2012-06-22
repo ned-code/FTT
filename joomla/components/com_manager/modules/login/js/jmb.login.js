@@ -247,7 +247,7 @@ function JMBLogin(){
                 if(json.usertree){
                     fn.set_global_data(json);
                 }
-                FB.api('me', function(data){
+                FB.api('/me', function(data){
                     if(data.error){
                         callback(false);
                     } else {
@@ -283,34 +283,39 @@ function JMBLogin(){
             fn.click(cont);
             jQuery(document.body).append(cont);
         },
+        createBox:function(data){
+            switch(alias){
+                case "myfamily":
+                    if(type=="famous_family"){
+                        fn.famous();
+                    } else {
+                        fn.facebook(data);
+                    }
+                    break;
+
+
+                case "home":
+                case "login":
+                case "first-page":
+                case "invitation":
+                case "famous-family":
+                    if(!parseInt(fb_logged)){
+                        cont = fn.connect();
+                        fn.login(cont);
+                        jQuery(document.body).append(cont);
+                    } else if(data) {
+                        fn.facebook(data);
+                    }
+                    break;
+            }
+        },
 		init:function(callback){
 			var cont;
 			fn.user(function(data){
 				fb_logged = jQuery(document.body).attr('_fb');
-				switch(alias){
-                    case "myfamily":
-                        if(type=="famous_family"){
-                            fn.famous();
-                        } else {
-                            fn.facebook(data);
-                        }
-                    break;
-
-
-					case "home":
-					case "login":
-					case "first-page":
-					case "invitation":
-					case "famous-family":
-                        if(!parseInt(fb_logged)){
-                            cont = fn.connect();
-                            fn.login(cont);
-                            jQuery(document.body).append(cont);
-                        } else if(data) {
-                            fn.facebook(data);
-                        }
-					break;
-				}
+                setTimeout(function(){
+                    fn.createBox(data)
+                }, 1);
 				callback();
 			});
 		}

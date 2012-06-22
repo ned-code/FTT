@@ -577,7 +577,7 @@ function JMBTreeCreatorObject(parent){
 			return sb.result();
 		},
 		convert_to_string:function(args_pull, callback){
-            FB.api('me', function(fb){
+            FB.api('/me', function(fb){
                 var title = ['self','mother','father'];
                 var string = '{';
                 jQuery(args_pull).each(function(i, el){
@@ -643,7 +643,7 @@ function JMBTreeCreatorObject(parent){
 			});
 		},
         set_user_data:function(form, callback){
-          FB.api('me', function(me){
+          FB.api('/me', function(me){
             jQuery(form).find('div.avatar').html('<img width="135px" height="150px" src="https://graph.facebook.com/'+me.id+'/picture" />');
             jQuery(form).find('input[name="first_name"]').val(me.first_name);
             jQuery(form).find('input[name="last_name"]').val(me.last_name);
@@ -716,7 +716,7 @@ function JMBTreeCreatorObject(parent){
             });
         },
 		init:function(){
-            FB.api('me', function(me){
+            FB.api('/me', function(me){
                 module.fProfile = me;
                 fn.get_facebook_friends_string(function(response){
                     var args = JSON.stringify({me:module.fProfile, friends:response.data});

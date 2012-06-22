@@ -136,7 +136,7 @@ JMBInvitation.prototype = {
         });
         jQuery(div).parent().css('top', '40px');
 
-		FB.api('me/friends', function(res) {
+		FB.api('/me/friends', function(res) {
             if (!res.data) {
             } else {
                 friends_div = jQuery(div).find('#jmb_facebook_friends');
