@@ -59,8 +59,8 @@ function JMBTreeCreatorObject(parent){
 	}
 
     module.msg = {
-        FTT_MOD_TREE_CREATOR_WELCOM: "Welcom to Family TreeTop",
-        FTT_MOD_TREE_CREATOR_WELCOM_MESSAGE: "Your first step is to create a family tree or join  an existing family tree that was created by a relative.",
+        FTT_MOD_TREE_CREATOR_WELCOM: "Welcome to Family TreeTop",
+        FTT_MOD_TREE_CREATOR_WELCOM_MESSAGE: "Ready to create your own family tree?",
         FTT_MOD_TREE_CREATOR_WELCOM_CLICK: "Click here to start",
         FTT_MOD_TREE_CREATOR_FEMALE: "Female",
         FTT_MOD_TREE_CREATOR_MALE: "Male",
