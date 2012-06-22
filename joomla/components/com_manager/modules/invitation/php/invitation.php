@@ -52,6 +52,16 @@ class JMBInvitation {
         }
     }
 
+    protected function checkFacebookIdOnRequest($facebook_id){
+        $sql_string = "SELECT facebook_id FROM #__mb_notifications WHERE facebook_id = ?";
+        $this->host->ajax->setQuery($sql_string, $facebook_id);
+        $rows = $this->host->ajax->loadAssocList();
+        if(empty($rows)){
+            return false;
+        } else {
+            return true;
+        }
+    }
 
 	/**
 	*
@@ -157,6 +167,11 @@ class JMBInvitation {
 
         if($this->checkFacebookIdOnInvite($facebook_id)){
             $message = "Invitation to this facebook user has been already sent.";
+            return json_encode(array('success'=>false, 'message'=>$message));
+        }
+
+        if($this->checkFacebookIdOnRequest($facebook_id)){
+            $message = "This user is waiting for confirmation of the request to invitation.";
             return json_encode(array('success'=>false, 'message'=>$message));
         }
 
