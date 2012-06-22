@@ -46,11 +46,11 @@
 	border-color: white #CCCCCC #CCCCCC;
 	border-style: solid;
 	border-width: 1px;
-	margin-left: -131px;
+	margin-left: -136px;
 	padding-left: 3px;
 	padding-bottom: 8px;
 	position: absolute;
-	width: 150px;
+	width: 155px;
 }
 .jmb-profile-cont div.settings div.menu div{
 	background: url("../imgs/list.png") no-repeat scroll 3px 3px transparent;
@@ -60,7 +60,7 @@
 }
 .jmb-profile-cont div.settings div.menu div span {
 	color: #153FC5;
-	font-size: 11px;
+	font-size: 14px;
 	margin-left: 15px;
 	cursor: pointer;
 }
