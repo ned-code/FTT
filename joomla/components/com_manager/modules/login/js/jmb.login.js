@@ -323,11 +323,23 @@ function JMBLogin(){
 
     if(window!=window.top){
         module.init = function(callback){
-            host.callMethod("login", "JMBLogin", 'user', null, function(res){
-                var json = jQuery.parseJSON(res.responseText);
-                fn.set_global_data(json);
-                callback();
-            });
+            if(alias == 'home' && 'famous-family') {
+                jQuery.ajax({
+                    url: 'index.php?option=com_manager&task=setLocation&alias=myfamily',
+                    type: "POST",
+                    dataType: "json",
+                    complete : function (req, err) {
+                        var bUrl = jQuery(document.body).attr('_baseurl');
+                        window.location.href= bUrl+'index.php/myfamily';
+                    }
+                });
+            } else {
+                host.callMethod("login", "JMBLogin", 'user', null, function(res){
+                    var json = jQuery.parseJSON(res.responseText);
+                    fn.set_global_data(json);
+                    callback();
+                });
+            }
         }
         return false;
     }
