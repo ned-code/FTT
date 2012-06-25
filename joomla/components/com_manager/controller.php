@@ -297,6 +297,7 @@ class JMBController extends JController
         	$session->clear('tree_id');
         	$session->clear('permission');
         	$session->clear('facebook_id');
+            $session->clear('login_method');
         }
 
         protected function checkFacebookInvation($me){
@@ -408,6 +409,10 @@ class JMBController extends JController
         		break;
         	}
         	exit;
+        }
+
+        public function clearFamousData(){
+            $this->clear_user_data();
         }
         
         public function timeout(){
