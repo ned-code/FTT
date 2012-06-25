@@ -15,7 +15,7 @@ function JMBTreeCreatorObject(parent){
 	module.css_path = [storage.baseurl,storage.url,module.path,'css/'].join('');
 	module.female = 'female.png';
 	module.male = 'male.png';
-	module.titles = ['About Self','Your Mother','Your Father','Getting started'];
+	module.titles = ['About Yourself','Your Mother','Your Father','Getting started'];
 	module.title_count = 0;
 	module.dialog_settings = {
 		width:600,
