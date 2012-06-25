@@ -261,6 +261,8 @@ class JMBController extends JController
 	}
 
     protected function location($alias){
+        //$host = new Host('joomla');
+        //$host->setAliasLog($alias);
         $url = 'Location:'.JURI::base().'index.php/'.$alias;
         header($url);
         exit;
@@ -329,6 +331,7 @@ class JMBController extends JController
                 header('Location: https://www.facebook.com/dialog/oauth?client_id='.JMB_FACEBOOK_APPID.'&redirect_uri='.JURI::base().'index.php/myfamily');
                 exit;
             }
+
             $jfb = JFBConnectFacebookLibrary::getInstance();
             $user = JFactory::getUser();
             $me = $jfb->api('me');
@@ -344,7 +347,6 @@ class JMBController extends JController
             $host = new Host('joomla');
             $facebook_id = $jfb->getFbUserId();
         	$user_data = $this->get_user_data($facebook_id);
-            $user = JFactory::getUser();
             $alias = $this->check_location($user_data, $user);
 
             $token = $this->checkFacebookInvation($me);

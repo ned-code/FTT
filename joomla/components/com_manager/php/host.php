@@ -330,5 +330,18 @@ class Host {
         $this->ajax->query();
         return true;
     }
+
+    public function setAliasLog($alias){
+        $user = JFactory::getUser();
+        $name = null;
+        if(!$user->guest){
+            $name = $user->username;
+        } else {
+            $name = "guest";
+        }
+
+        $this->ajax->setQuery('INSERT INTO #__mb_log (`id`,`alias`,`user_id`) VALUES (null, ?, ?)', $alias, $name);
+        $this->ajax->query();
+    }
 }
 ?>

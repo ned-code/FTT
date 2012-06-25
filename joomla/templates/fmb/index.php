@@ -48,19 +48,21 @@ if (stripos($user_agent, 'MSIE 6.0') !== false
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->language; ?>" lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>" >
 	<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# website: http://ogp.me/ns/website#">
+        <!--
         <meta property="fb:app_id"      content="136695133059478" />
         <meta property="og:type"        content="website" />
         <meta property="og:url"         content="http://www.familytreetop.com" />
         <meta property="og:title"       content="Family TreeTop" />
         <meta property="og:image"       content="Family TreeTop" />
         <meta property="og:description" content="Family TreeTop" />
+        -->
 		<jdoc:include type="head" />
       	    <!-- joomla system stylesheet -->
-            <link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/system/css/system.css?111" type="text/css" />
+            <link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/system/css/system.css" type="text/css" />
         	<!-- facebook script -->
         	<script src="http://connect.facebook.net/en_US/all.js?111"></script>
         	<!-- fmb template stylesheet -->
-            <link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/fmb/css/fmb.css?111" type="text/css"/>
+            <link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/fmb/css/fmb.css" type="text/css"/>
             <!-- fmb template script -->
             <script type="text/javascript" src="<?php echo $this->baseurl ?>/templates/fmb/javascript/fmb.js"></script>
 	</head>

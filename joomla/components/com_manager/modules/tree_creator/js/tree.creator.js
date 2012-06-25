@@ -119,7 +119,7 @@ function JMBTreeCreatorObject(parent){
                 sb._('<div>');
                 sb._('Want to see how it works?  Go to our <a id="famous" href="http://familytreetop.com/index.php/famous-family">Famous Families</a> directory and explore a famous family tree.');
                 sb._(' Your own family tree will have a similar layout.');
-                sb._('If you’re pressed for time, click <a target="_blank" href="http://screencast.com/t/kgymFc1Cg3oe">here</a> to see a quick video of Elvis’ family tree, which is still under development.</div>');
+                sb._('If you’re pressed for time, click <a id="screen" target="_blank" href="http://screencast.com/t/kgymFc1Cg3oe">here</a> to see a quick video of Elvis’ family tree, which is still under development.</div>');
                 sb._('<div><img src="http://familytreetop.com/zzzfiles/big-family-line-800.png"></div>');
             sb._('</div>');
 			return jQuery(sb.result());
@@ -354,10 +354,47 @@ function JMBTreeCreatorObject(parent){
                     dataType: "json",
                     complete : function (req, err) {
                         var bUrl = jQuery(document.body).attr('_baseurl');
-                        window.location.href= bUrl+'index.php/famous-family';
+                        if(window != window.top){
+                            window.parent.location.href= bUrl+'index.php/famous-family';
+                        } else {
+                            window.location.href = bUrl+'index.php/famous-family';
+                        }
                     }
                 });
                 return false;
+            });
+            jQuery(body).find('a#screen').click(function(){
+                    var st = host.stringBuffer();
+                    st._('<div class="video">');
+                        st._('<object id="scPlayer" class="embeddedObject" width="930" height="514" type="application/x-shockwave-flash" data="http://content.screencast.com/users/Fernando_Oliveira/folders/Jing/media/941aa11f-54f7-4ddb-9f25-665c2a630297/jingh264player.swf" style="width: 542px; height: 300px; ">');
+                            st._('<param name="movie" value="http://content.screencast.com/users/Fernando_Oliveira/folders/Jing/media/941aa11f-54f7-4ddb-9f25-665c2a630297/jingh264player.swf">');
+                            st._('<param name="quality" value="high">');
+                            st._('<param name="bgcolor" value="#FFFFFF">');
+                            st._('<param name="flashVars" value="thumb=http://content.screencast.com/users/Fernando_Oliveira/folders/Jing/media/941aa11f-54f7-4ddb-9f25-665c2a630297/FirstFrame.jpg&amp;containerwidth=930&amp;containerheight=514&amp;advseek=true&amp;content=http://content.screencast.com/users/Fernando_Oliveira/folders/Jing/media/941aa11f-54f7-4ddb-9f25-665c2a630297/2012-06-20_1131.mp4&amp;blurover=false">');
+                            st._('<param name="allowFullScreen" value="true">');
+                            st._('<param name="scale" value="showall">');
+                            st._('<param name="allowScriptAccess" value="always">');
+                            st._('<param name="base" value="http://content.screencast.com/users/Fernando_Oliveira/folders/Jing/media/941aa11f-54f7-4ddb-9f25-665c2a630297/">');
+                            st._('<iframe class="embeddedObject" type="text/html" frameborder="0" scrolling="no" style="overflow: hidden; width: 930px; height: 514px; " src="http://www.screencast.com/users/Fernando_Oliveira/folders/Jing/media/941aa11f-54f7-4ddb-9f25-665c2a630297/embed" height="514" width="930"></iframe>');
+                        st._('</object>');
+                    st._('</div>');
+                    var div = jQuery(st.result());
+                    jQuery(div).dialog({
+                        width:580,
+                        height:370,
+                        title: 'Help Video',
+                        resizable: false,
+                        draggable: false,
+                        position: "top",
+                        closeOnEscape: false,
+                        modal:true,
+                        close:function(){
+
+                        }
+                    });
+                    jQuery(div).parent().addClass('ftt_tree_creator');
+                    jQuery(div).parent().css('top', '20px');
+                    return false;
             });
 			jQuery(body).find('div#button span').click(function(){
                 if(module.initData.request){

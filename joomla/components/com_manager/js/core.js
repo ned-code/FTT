@@ -671,14 +671,14 @@ core.appendFiles = function(module, type){
 			switch(type){
 				case "js":
 					var script = document.createElement("script");
-					script.src = url+'/'+type+'/'+files[i]+'?'+(new Date()).valueOf();
+					script.src = url+'/'+type+'/'+files[i];
 					script.type="text/javascript";
 					head[0].appendChild(script);
 				break;
 				
 				case "css":
 					var link = document.createElement("link");
-					link.href = url+'/'+type+'/'+files[i]+'?'+(new Date()).valueOf();
+					link.href = url+'/'+type+'/'+files[i];
 					link.rel="stylesheet";
 					link.type="text/css";
 					head[0].appendChild(link);
