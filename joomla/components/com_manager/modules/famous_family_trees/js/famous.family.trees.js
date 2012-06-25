@@ -19,7 +19,7 @@ function JMBFamousFamilyTreesObject(obj){
 	var createBody = function(){
 		var sb = host.stringBuffer();
 		sb._('<div class="jmb-famous-family-body">');
-			sb._('<div class="jmb-famous-family-title"><span>Famous Family Trees</span></div>');
+			sb._('<div class="jmb-famous-family-title"><span>Select a Family Tree...</span></div>');
 			sb._('<div class="jmb-famous-family-content">&nbsp;</div>');
 		sb._('</div>');
 		return jQuery(sb.result());
