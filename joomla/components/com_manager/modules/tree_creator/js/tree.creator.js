@@ -117,9 +117,7 @@ function JMBTreeCreatorObject(parent){
             sb._('<div>');
                 sb._('<div>Still thinking about it?</div>');
                 sb._('<div>');
-                if(window == window.top){
-                    sb._('Want to see how it works?  Go to our <a id="famous" href="http://familytreetop.com/index.php/famous-family">Famous Families</a> directory and explore a famous family tree.');
-                }
+                sb._('Want to see how it works?  Go to our <a id="famous" href="http://familytreetop.com/index.php/famous-family">Famous Families</a> directory and explore a famous family tree.');
                 sb._(' Your own family tree will have a similar layout.');
                 sb._('If you’re pressed for time, click <a target="_blank" href="http://screencast.com/t/kgymFc1Cg3oe">here</a> to see a quick video of Elvis’ family tree, which is still under development.</div>');
                 sb._('<div><img src="http://familytreetop.com/zzzfiles/big-family-line-800.png"></div>');
