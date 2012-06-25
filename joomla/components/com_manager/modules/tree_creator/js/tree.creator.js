@@ -111,13 +111,13 @@ function JMBTreeCreatorObject(parent){
 			var sb = host.stringBuffer();
             sb._('<div>');
                 sb._('<div class="title"><span>')._(module.msg.FTT_MOD_TREE_CREATOR_WELCOM)._('</span></div>');
-                sb._('<div class="description"><span>')._(module.msg.FTT_MOD_TREE_CREATOR_WELCOM_MESSAGE)._('.</span></div>')
+                sb._('<div class="description"><span>')._(module.msg.FTT_MOD_TREE_CREATOR_WELCOM_MESSAGE)._('</span></div>')
                 sb._('<div id="button"><span>')._(module.msg.FTT_MOD_TREE_CREATOR_WELCOM_CLICK)._('</span></div>');
             sb._('</div>');
             sb._('<div>');
                 sb._('<div>Still thinking about it?</div>');
                 sb._('<div>');
-                sb._('Want to see how it works?  Go to our <a id="famous" href="http://familytreetop.com/index.php/famous-family">Famous Families</a> directory and explore a famous family tree.');
+                sb._('Want to see Family TreeTop in action?  Go to our <a id="famous" href="http://familytreetop.com/index.php/famous-family">Famous Families</a> directory and explore a famous family tree.');
                 sb._(' Your own family tree will have a similar layout.');
                 sb._('If you’re pressed for time, click <a id="screen" target="_blank" href="http://screencast.com/t/kgymFc1Cg3oe">here</a> to see a quick video of Elvis’ family tree, which is still under development.</div>');
                 sb._('<div><img src="http://familytreetop.com/zzzfiles/big-family-line-800.png"></div>');
@@ -382,7 +382,7 @@ function JMBTreeCreatorObject(parent){
                     jQuery(div).dialog({
                         width:580,
                         height:370,
-                        title: 'Help Video',
+                        title: 'Demo: Elvis Presley Family Tree',
                         resizable: false,
                         draggable: false,
                         position: "top",
@@ -647,7 +647,7 @@ function JMBTreeCreatorObject(parent){
                         if(json.error){
                             if(confirm(json.error)){
                                 fn.ajax('abortRequest', null, function(){
-                                    storage.alert('Your request is removed, you can begin to create the tree.', function(){});
+                                    storage.alert('Your request has been removed. Please start again.', function(){});
                                 });
                                 return false;
                             } else {
