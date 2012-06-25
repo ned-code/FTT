@@ -117,7 +117,7 @@ function JMBTreeCreatorObject(parent){
             sb._('<div>');
                 sb._('<div>Still thinking about it?</div>');
                 sb._('<div>');
-                sb._('Want to see Family TreeTop in action?  Go to our <a id="famous" href="http://familytreetop.com/index.php/famous-family">Famous Families</a> directory and explore a famous family tree ');
+                sb._('Want to see Family TreeTop in action?  Explore our <a id="famous" href="http://familytreetop.com/index.php/famous-family">Famous Families</a> directory  ');
                 sb._(' or click <a id="screen" target="_blank" href="http://screencast.com/t/kgymFc1Cg3oe">here</a> to see a quick video of Elvis’ family tree. Your own family tree will have a similar layout.</div>');
                 
                 sb._('<div><img src="http://familytreetop.com/zzzfiles/big-family-line-800.png"></div>');
