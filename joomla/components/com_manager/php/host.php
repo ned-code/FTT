@@ -370,6 +370,11 @@ class FamilyTreeTopHostLibrary {
         $active   = $menu->getActive();
         return $active->alias;
     }
+    public function setUserPermission($facebook_id, $permission){
+        $sqlString = "UPDATE #__mb_user_map SET `permission` = ? WHERE facebook_id = ?";
+        $this->ajax->setQuery($sqlString, $permission, $facebook_id);
+        $this->ajax->query();
+    }
 
     public function setUserMap($facebook_id, $tree_id, $gedcom_id, $login_type = 0){
         $sqlString = "UPDATE #__mb_user_map SET `tree_id` = ?, `gedcom_id` = ? , `login_type` = ? WHERE facebook_id = ?";

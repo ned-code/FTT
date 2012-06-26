@@ -60,7 +60,7 @@ class JMBNotifications {
         $std = json_decode($args);
 
         $userMap = $this->host->getUserMap();
-        $owner_id = $userMap['gedcom_id'];
+        $gedcom_id = $userMap['gedcom_id'];
         $tree_id = $userMap['tree_id'];
 
         $data = $std->json;

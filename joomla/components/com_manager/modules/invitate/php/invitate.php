@@ -31,6 +31,8 @@ class JMBInvitateClass {
         $this->host->ajax->query();
 
         $session->set('clear_token', true);
+        $this->host->setUserMap($facebook_id, $args[1], $args[0], 0);
+        $this->host->setUserPermission($facebook_id, 'USER');
         $this->host->setUserAlias($facebook_id, 'myfamily');
         return true;
         exit;
