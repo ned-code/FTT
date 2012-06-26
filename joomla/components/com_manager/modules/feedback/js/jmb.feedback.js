@@ -72,32 +72,42 @@ function JMBFeedback(){
         }
     };
 
-
-
-    module.ajax('get', null, function(json){
-        if(json.language){
-            message = json.language;
-        }
-        sb._('<div class="header"><span>')._(message.FTT_MOD_FEEDBACK_HEADER)._('</span></div>');
-            sb._('<div class="body">');
-                sb._('<div class="text">');
+    module.init = function(){
+        jQuery.ajax({
+            url: storage.baseurl+storage.url+'php/ajax.php',
+            type: "POST",
+            data: 'module=feedback&class=JMBFeedback&method=get&args=',
+            dataType: "html",
+            complete : function (req, err) {
+                //storage.request.del(key);
+                if(req.responseText.length!=0){
+                    var json = jQuery.parseJSON(req.responseText);
+                    if(json.language){
+                        message = json.language;
+                    }
+                    sb._('<div class="header"><span>')._(message.FTT_MOD_FEEDBACK_HEADER)._('</span></div>');
+                    sb._('<div class="body">');
+                    sb._('<div class="text">');
                     sb._(message.FTT_MOD_FEEDBACK_WELCOM.replace("%%",'<font color="#99d9ea"></a>'+message.FTT_MOD_FEEDBACK_PUBLIC_BETA+'</font>'));
-                sb._('</div>');
-            sb._('<div class="buttons">')
-            sb._('</div>');
-        sb._('</div>');
-        jQuery(parent).append(sb.result());
+                    sb._('</div>');
+                    sb._('<div class="buttons">')
+                    sb._('</div>');
+                    sb._('</div>');
+                    jQuery(parent).append(sb.result());
 
-        likes = jQuery(parent).find('.likes');
-        jQuery(likes).find('.message').text(message.FTT_MOD_FEEDBACK_LIKE);
-        jQuery(parent).find('.body').append(likes);
-        jQuery(likes).show();
+                    likes = jQuery(parent).find('.likes');
+                    jQuery(likes).find('.message').text(message.FTT_MOD_FEEDBACK_LIKE);
+                    jQuery(parent).find('.body').append(likes);
+                    jQuery(likes).show();
 
-        var button1 = fn.buttonClick(fn.button("18-report-a-problem", message.FTT_MOD_FEEDBACK_REPORT_A_PROBLEB));
-        jQuery(parent).find("div.buttons").append(button1);
-        var button2 = fn.buttonClick(fn.button("19-submit-an-idea", message.FTT_MOD_FEEDBACK_SUBMIT_AN_IDEA));
-        jQuery(parent).find("div.buttons").append(button2);
-    });
+                    var button1 = fn.buttonClick(fn.button("18-report-a-problem", message.FTT_MOD_FEEDBACK_REPORT_A_PROBLEB));
+                    jQuery(parent).find("div.buttons").append(button1);
+                    var button2 = fn.buttonClick(fn.button("19-submit-an-idea", message.FTT_MOD_FEEDBACK_SUBMIT_AN_IDEA));
+                    jQuery(parent).find("div.buttons").append(button2);
+                }
+            }
+        });
+    }
 }
 
 JMBFeedback.prototype = {

@@ -45,11 +45,9 @@ class JMBQuickFacts {
 	
 	public function get(){
 		//vars
-		$session = JFactory::getSession();
-		$facebook_id = $session->get('facebook_id');
-		$owner_id = $session->get('gedcom_id');
-        	$tree_id = $session->get('tree_id');
-        	$permission = $session->get('permission');
+        $userMap = $this->host->getUserMap();
+        $owner_id = $userMap['gedcom_id'];
+        $tree_id = $userMap['tree_id'];
 
 		$usertree = $this->host->usertree->load($tree_id, $owner_id);
 		

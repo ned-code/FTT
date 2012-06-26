@@ -875,7 +875,7 @@ core.renderTabs = function(args){
 
 core.load = function(pages){
 	var self = this;
-	jQuery(document.body).ready(function(){
+	jQuery('body').ready(function(){
         host = new Host();
 		storage.baseurl = jQuery('body').attr('_baseurl');
 		jQuery(document.body).append(storage.iframe);
@@ -911,6 +911,9 @@ core.load = function(pages){
         if(typeof(pages) == "object"){
             storage.login.init(function(){
                 storage.ntf.init();
+                storage.profile.init();
+                storage.tooltip.init();
+                storage.feedback.init();
                 storage.pages = pages;
                 if(storage.pages.length==1){
                     self.renderPage({
@@ -936,6 +939,9 @@ core.load = function(pages){
                     storage.login.init(function(){
                         if(err=='success'){
                             storage.ntf.init();
+                            storage.profile.init();
+                            storage.tooltip.init();
+                            storage.feedback.init();
                             var json = jQuery.parseJSON(req.responseText);
                             storage.pages = json.pages;
                             if(json.pages.length==1){

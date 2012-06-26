@@ -244,9 +244,11 @@ function JMBLogin(){
                 settings.languages = json.languages;
                 settings.default_language = json.default_language;
                 msg = json.msg;
+                /*
                 if(json.usertree){
                     fn.set_global_data(json);
                 }
+                */
                 FB.api('/me', function(data){
                     if(data.error){
                         callback(false);
@@ -277,6 +279,7 @@ function JMBLogin(){
             jQuery('div.jmb-header-container').append(htmlObject);
         },
         facebook:function(data){
+            if(!data) return false;
             var cont = fn.create();
             fn.setName(data, cont);
             fn.setAvatar(data, cont);
@@ -344,11 +347,9 @@ function JMBLogin(){
                     }
                 });
             } else {
-                storage.callMethod("login", "JMBLogin", 'user', null, function(res){
-                    var json = jQuery.parseJSON(res.responseText);
-                    fn.set_global_data(json);
+                setTimeout(function(){
                     callback();
-                });
+                }, 1);
             }
         }
         return false;

@@ -176,5 +176,43 @@ class JmbModelMulti extends JModel
                 return $activeTab;
             }
         }
+
+        protected function getUserMap(){
+            $host = &FamilyTreeTopHostLibrary::getInstance();
+            return $host->getUserMap();
+        }
+
+        public function getUserTree(){
+            $userMap = $this->getUserMap();
+            if(!$userMap) return false;
+            $host = &FamilyTreeTopHostLibrary::getInstance();
+            if(!empty($userMap['tree_id'])&&!empty($userMap['gedcom_id'])){
+                $usertree = $host->usertree->load($userMap['tree_id'], $userMap['gedcom_id']);
+                $users = $host->usertree->getMembers($userMap['tree_id']);
+                return array(
+                    'tree_id'=>$userMap['tree_id'],
+                    'facebook_id'=>$userMap['facebook_id'],
+                    'gedcom_id'=>$userMap['gedcom_id'],
+                    'permission'=>$userMap['permission'],
+                    'users'=>$users,
+                    'pull'=>$usertree
+                );
+            }
+            return false;
+        }
+
+        public function getNotifications(){
+            $userMap = $this->getUserMap();
+            if(!$userMap) return false;
+            $db =& JFactory::getDBO();
+            $sql_string = "SELECT id, data, status FROM #__mb_notifications WHERE tree_id = ".$userMap['tree_id']." AND gedcom_id = ".$userMap['gedcom_id']." AND processed = 0";
+            $db->setQuery($sql_string);
+            return $db->loadAssocList();
+        }
+
+        public function getLanguageStrings(){
+            $host = &FamilyTreeTopHostLibrary::getInstance();
+            return $host->getComponentString();
+        }
 }
 ?>

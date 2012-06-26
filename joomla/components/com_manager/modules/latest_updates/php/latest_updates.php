@@ -67,11 +67,9 @@ class JMBLatestUpdates {
 	
 	public function get(){
 		//vars
-		$session = JFactory::getSession();
-		$facebook_id = $session->get('facebook_id');
-		$gedcom_id = $session->get('gedcom_id');
-        	$tree_id = $session->get('tree_id');
-        	$permission = $session->get('permission');
+        $userMap = $this->host->getUserMap();
+        $gedcom_id = $userMap['gedcom_id'];
+        $tree_id = $userMap['tree_id'];
 
 		$usertree = $this->host->usertree->load($tree_id, $gedcom_id);
 		

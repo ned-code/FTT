@@ -71,7 +71,7 @@ function JMBHeader(){
 				jQuery(cont).find('div.jmb-header-expand').click(function(){
 					var src;
 					if(fn.get.is_iframe()){
-						src = "http://www.familytreetop.com/index.php/myfamily";
+						src = storage.baseurl+"index.php/myfamily";
 					} else {
 						src = "http://apps.facebook.com/familytreetop/";
 					}

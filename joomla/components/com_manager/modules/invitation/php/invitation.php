@@ -68,9 +68,9 @@ class JMBInvitation {
 	*/
 	public function sendInvitation($gedcom_id){
         require_once("Mail.php");
-		$session = JFactory::getSession();
-		$owner_id = $session->get('gedcom_id');
-        $tree_id = $session->get('tree_id');
+        $userMap = $this->host->getUserMap();
+        $owner_id = $userMap['gedcom_id'];
+        $tree_id = $userMap['tree_id'];
 
         $jfbcLibrary = JFBConnectFacebookLibrary::getInstance();
         $me = $jfbcLibrary->api('/me');
@@ -180,9 +180,9 @@ class JMBInvitation {
 
 	public function inviteFacebookFriend($args){
 		$args = explode(';', $args);
-        $session = JFactory::getSession();
-        $tree_id = $session->get('tree_id');
-        $owner_id = $session->get('gedcom_id');
+        $userMap = $this->host->getUserMap();
+        $owner_id = $userMap['gedcom_id'];
+        $tree_id = $userMap['tree_id'];
 
         $individ = $this->host->gedcom->individuals->get($args[1]);
 

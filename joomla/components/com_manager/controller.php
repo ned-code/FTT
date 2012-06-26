@@ -136,28 +136,6 @@ class JMBController extends JController
         exit;
     }
 
-	protected function check_user_in_system($fid){
-        	$db =& JFactory::getDBO();
-        	$sql = "SELECT link.individuals_id as gid, link.tree_id as tid, link.type FROM #__mb_tree_links as link LEFT JOIN #__mb_individuals as ind ON ind.id = link.individuals_id WHERE ind.fid='".$fid."'";
-        	$db->setQuery($sql);
-        	$rows = $db->loadAssocList();
-        	return ($rows!=null)?$rows[0]:false;
-    }
-
-    protected function update_login_time ($gid){
-        	$db =& JFactory::getDBO();
-        	$mysqldate = date('Y-m-d H:i:s');
-        	$sql = "UPDATE #__mb_individuals as ind SET last_login='".$mysqldate."' WHERE ind.id ='".$gid."'";
-        	$db->setQuery($sql);
-        	$db->query();
-    }
-	
-	protected function get_current_alias(){
-		$menu   = &JSite::getMenu();
-		$active   = $menu->getActive();
-		return $active->alias;
-	}
-
     protected function get_invitation_token($session){
         $token = JRequest::getVar('token');
         $c_token = $session->get('clear_token');
@@ -178,16 +156,21 @@ class JMBController extends JController
         return false;
     }
 
-	protected function get_alias($user_data, $user){
+	protected function get_alias($facebook_id){
 		$session = JFactory::getSession();
 
         $invitation_token = $this->get_invitation_token($session);
+
+        $host = &FamilyTreeTopHostLibrary::getInstance();
+        $user = JFactory::getUser();
+
+        $userMap = $host->getUserMap();
+
+        $alias = ($userMap)?$userMap['page']:'myfamily';
+
         if($user->guest){
             $invitation_token = false;
         }
-
-		$alias = $session->get('alias');
-		$login_method = $session->get('login_method');
 
         switch($alias){
 			case "invitation":
@@ -202,30 +185,28 @@ class JMBController extends JController
 			break;
 			
 			case "famous-family":
+                if($invitation_token) return 'invitation';
 				return "famous-family";
 			break;
 		
 			case "login":
                 if($invitation_token) return "invitation";
-				if($user_data) return "myfamily";
-				if(!$user->guest&&!$user_data) return "home";
+				if($userMap&&$userMap['tree_id']!=0) return "myfamily";
+				if(!$user->guest&&$userMap&&$userMap['tree_id']==0) return "home";
 				return "login";
 			break;
 			
 			case "first-page":
                 if($invitation_token) return 'invitation';
 				if($user->guest) return "login";
-                if($user_data) return "myfamily";
+                if($userMap&&$userMap['tree_id']!=0) return "myfamily";
 				return "first-page";
 			break;
 			
 			case "myfamily":
                 if($invitation_token) return 'invitation';
-				if(!empty($login_method)&&$login_method=="famous_family") {
-					return "myfamily";
-				}
 				if($user->guest) return "login";
-				if(!$user_data) return "first-page";
+				if($userMap&&$userMap['tree_id']==0) return "first-page";
 				return "myfamily";			
 			break;
 
@@ -241,22 +222,20 @@ class JMBController extends JController
 			default:
                 if($invitation_token) return "invitation";
 				if($user->guest) return "login";
-				if(!$user_data) return "home";
+				if($userMap&&$userMap['tree_id']==0) return "home";
 				return "myfamily";
 			break;
 		}
 	}
 
-	protected function check_location($user_data, $user){
-        $session = JFactory::getSession();
-        $alias = $this->get_alias($user_data, $user);
-        $current_alias = $this->get_current_alias();
-
+	protected function check_location($facebook_id){
+        $host = &FamilyTreeTopHostLibrary::getInstance();
+        $alias = $this->get_alias($facebook_id);
+        $current_alias = $host->getCurrentAlias();
         if($alias != $current_alias){
             $this->location($alias);
         } else {
-            $session->set('alias', $alias);
-            return $alias;
+            $host->setUserAlias($facebook_id, $alias);
         }
 	}
 
@@ -266,40 +245,9 @@ class JMBController extends JController
         exit;
     }
 
-
-        
-        protected function get_user_data($facebook_id){
-        	if($facebook_id){
-        		$link = $this->check_user_in_system($facebook_id);
-        		return ($link)?array('facebook_id'=>$facebook_id, 'gedcom_id'=>$link['gid'], 'tree_id'=>$link['tid'], 'permission'=>$link['type']):$link;
-        	} else {
-        		return false;
-        	}
-        }
-        
-        protected function set_user_data($user_data){
-        	if($user_data){
-        		$session = JFactory::getSession();
-        		$session->set('gedcom_id', $user_data['gedcom_id']);
-        		$session->set('tree_id', $user_data['tree_id']);
-        		$session->set('permission', $user_data['permission']);
-                $session->set('facebook_id', $user_data['facebook_id']);
-        		return true;
-        	}
-        	return false;
-        }
-        
-        protected function clear_user_data(){
-        	$session = JFactory::getSession();
-        	$session->clear('gedcom_id');
-        	$session->clear('tree_id');
-        	$session->clear('permission');
-        	$session->clear('facebook_id');
-            $session->clear('login_method');
-        }
-
         protected function checkFacebookInvation($me){
-            $alias = $this->get_current_alias();
+            $host = &FamilyTreeTopHostLibrary::getInstance();
+            $alias = $host->getCurrentAlias();
             if($alias != 'invitation'){
                 $facebook_id = $me['id'];
                 $host = &FamilyTreeTopHostLibrary::getInstance();
@@ -324,8 +272,6 @@ class JMBController extends JController
 
         	if($option!='com_manager') exit();
         	if(strlen($task)!=0) return;
-
-            $session = JFactory::getSession();
             if((bool)$canvas){
                 header('Location: https://www.facebook.com/dialog/oauth?client_id='.JMB_FACEBOOK_APPID.'&redirect_uri='.JURI::base().'index.php/myfamily');
                 exit;
@@ -343,68 +289,35 @@ class JMBController extends JController
                 }
             }
 
-            $host = &FamilyTreeTopHostLibrary::getInstance();
-            $facebook_id = $jfb->getFbUserId();
-        	$user_data = $this->get_user_data($facebook_id);
-            $alias = $this->check_location($user_data, $user);
-
             $token = $this->checkFacebookInvation($me);
             if($token){
                 header('Location: '.JURI::base().'index.php/invitation?token='.$token);
                 exit;
             }
 
-            switch($alias){
-                case 'invitation':
-                    $this->set_user_data($user_data);
-                    break;
-
-                case 'first-page':
-                    $this->clear_user_data();
-                    $session->set('facebook_id', $facebook_id);
-                    break;
-
-                case 'login':
-                case 'home':
-                    $this->set_user_data($user_data);
-                    break;
-
-                case 'famous-family':
-                    $this->set_user_data($user_data);
-                    break;
-
-                case 'myfamily':
-                    $login_method = $session->get('login_method');
-                    if(!empty($login_method)&&$login_method=='famous_family'){
-                        $gedcom_id = $session->get('gedcom_id');
-                        $tree_id = $session->get('tree_id');
-                        $permission = $session->get('permission');
-
-                        $session->set('settings', $host->getConfig());
-                        $host->gedcom->relation->check($tree_id, $gedcom_id);
-                        $host->usertree->saveFamilyLine($tree_id, $gedcom_id, $permission);
-                        $host->usertree->init($tree_id, $gedcom_id, $permission);
-                    } else {
-                        $this->set_user_data($user_data);
-                        $session->set('settings', $host->getConfig());
-                        $session->set('login_method', 'myfamily');
-                        $host->gedcom->relation->check($user_data['tree_id'],$user_data['gedcom_id']);
-                        $host->usertree->saveFamilyLine($user_data['tree_id'], $user_data['gedcom_id'], $user_data['permission']);
-                        $host->usertree->init($user_data['tree_id'], $user_data['gedcom_id'], $user_data['permission']);
-                        $this->update_login_time($user_data['gedcom_id']);
-                    }
-                    break;
-            }
+            $facebook_id = $jfb->getFbUserId();
+            $this->check_location($facebook_id);
         }
 
         public function setLocation(){
-        	$session = JFactory::getSession();
+            $host = &FamilyTreeTopHostLibrary::getInstance();
+            $jfbLib = JFBConnectFacebookLibrary::getInstance();
+            $facebook_id = $jfbLib->getFbUserId();
         	$alias = JRequest::getCmd('alias');
-        	$session->set('alias', $alias);
         	switch($alias){
         		case 'myfamily':
-        			$session->set('login_method', 'myfamily');
+                    $host->setUserAlias($facebook_id, 'myfamily');
+                    $data = $host->getIndividualsInSystem($facebook_id);
+                    if($data){
+                        $host->setUserMap($facebook_id, $data['tree_id'], $data['gedcom_id'], 0);
+                    } else {
+                        $host->setUserMap($facebook_id, 0, 0, 0);
+                    }
         		break;
+
+                default:
+                    $host->setUserAlias($facebook_id, $alias);
+                break;
         	}
         	exit;
         }
@@ -412,7 +325,7 @@ class JMBController extends JController
         public function clearFamousData(){
             $this->clear_user_data();
         }
-        
+
         public function timeout(){
         	echo 'ping!';
         	exit();

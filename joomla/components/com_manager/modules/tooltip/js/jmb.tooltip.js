@@ -63,13 +63,23 @@ function JMBTooltip(){
 	module.btActive = {};
 	module.path = "/components/com_manager/modules/tooltip/image/";
 
-
-    module._ajax('get', null, function(res){
-        var json = jQuery.parseJSON(res.responseText);
-        if(json.language){
-            module.message = json.language;
-        }
-    })
+    module.init = function(){
+        jQuery.ajax({
+            url: storage.baseurl+storage.url+'php/ajax.php',
+            type: "POST",
+            data: 'module=tooltip&class=JMBTooltip&method=get&args=',
+            dataType: "html",
+            complete : function (req, err) {
+                //storage.request.del(key);
+                if(req.responseText.length!=0){
+                    var json = jQuery.parseJSON(req.responseText);
+                    if(json.language){
+                        module.message = json.language;
+                    }
+                }
+            }
+        });
+    }
 }
 
 

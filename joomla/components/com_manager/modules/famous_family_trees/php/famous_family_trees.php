@@ -51,21 +51,10 @@ class JMBFamousFamily {
 	
 	public function setFamilies($args){
 		$args = json_decode($args);
-        $session = JFactory::getSession();
-        $owner_id = $session->get('gedcom_id');
-		$tree_keepers = $this->_getTreeKeepers();
-		if(isset($tree_keepers[$owner_id])){
-			$permission = 'USER';
-		} else {
-			$permission = 'MEMBER';
-		}
-		$session->set('facebook_id', 0);
-		$session->set('gedcom_id', $args->Id);
-		$session->set('tree_id', $args->TreeId);
-		$session->set('permission', $permission);
-		$session->set('alias', 'myfamily');
-		$session->set('login_method', 'famous_family');
-		
+        $jfbLib = JFBConnectFacebookLibrary::getInstance();
+        $facebook_id = $jfbLib->getFbUserId();
+        $this->host->setUserMap($facebook_id, $args->TreeId, $args->Id, 1);
+        $this->host->setUserAlias($facebook_id, 'myfamily');
 		return true;
 	}
 }

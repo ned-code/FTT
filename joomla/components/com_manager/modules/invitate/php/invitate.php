@@ -1,9 +1,11 @@
 <?php
 class JMBInvitateClass {
 	protected $host;
+    protected $jfg;
 	
 	public function __construct(){
 		$this->host = &FamilyTreeTopHostLibrary::getInstance();
+        $this->jfb = JFBConnectFacebookLibrary::getInstance();
 	}
 
     protected function invite($facebook_id, $token){
@@ -28,8 +30,8 @@ class JMBInvitateClass {
         $this->host->ajax->setQuery($sql, $token);
         $this->host->ajax->query();
 
-        $session->set('alias', 'myfamily');
         $session->set('clear_token', true);
+        $this->host->setUserAlias($facebook_id, 'myfamily');
         return true;
         exit;
     }
@@ -65,7 +67,8 @@ class JMBInvitateClass {
         } else {
             $session = JFactory::getSession();
             $session->set('clear_token', true);
-            $session->set('alias', 'first-page');
+            $facebook_id = $this->jfb->getFbUserId();
+            $this->host->setUserAlias($facebook_id, 'myfamily');
         }
         return json_encode(array('success'=>false, 'sender'=>$name));
     }
@@ -83,7 +86,8 @@ class JMBInvitateClass {
 
         $session = JFactory::getSession();
         $session->set('clear_token', true);
-        $session->set('alias', 'first-page');
+        $facebook_id = $this->jfb->getFbUserId();
+        $this->host->setUserAlias($facebook_id, 'first-page');
         return json_encode(array('success'=>true));
     }
 

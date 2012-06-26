@@ -113,12 +113,10 @@ class JMBThisMonth {
 	*/
 	public function load($args){		
 		//vars
-		$session = JFactory::getSession();
-		$facebook_id = $session->get('facebook_id');
-		$gedcom_id = $session->get('gedcom_id');
-        	$tree_id = $session->get('tree_id');
-        	$permission = $session->get('permission');
-        	
+        $userMap = $this->host->getUserMap();
+		$gedcom_id = $userMap['gedcom_id'];
+        $tree_id = $userMap['tree_id'];
+
 		$args = json_decode($args);
 
 		$month = $args->month;
@@ -127,14 +125,12 @@ class JMBThisMonth {
 		
 		//user info and global settings
 		$language = $this->getLanguage();
-		$usertree = $this->host->usertree->load($tree_id, $gedcom_id);
-		
+
 		if($sort != 'false'){ 
 			$this->settings['split_event']['type'] = $sort; 
 		}
 		$events = $this->getEvents($tree_id, $month, $render_type);
-		$members = $this->sort($usertree, $events);
-		
+
 		$this->settings['opt']['month'] = $month;
 		
 		return json_encode(array(

@@ -167,9 +167,9 @@ class JMBProfile {
 		$this->updateIndividual($ind, $_REQUEST);
 		$this->updateIndividualEvents($ind, $_REQUEST);
 		//update user tree
-		$session = JFactory::getSession();
-		$owner_id = $session->get('gedcom_id');
-		$tree_id = $session->get('tree_id');
+        $userMap = $this->host->getUserMap();
+        $owner_id = $userMap['gedcom_id'];
+        $tree_id = $userMap['tree_id'];
 
         $this->host->gedcom->relation->set($tree_id, $owner_id, $ind->Id);
         //get objects
@@ -180,9 +180,9 @@ class JMBProfile {
 	public function union($args){
 		$args = json_decode($args);
 		$request = $_REQUEST;
-		$session = JFactory::getSession();
-		$owner_id = $session->get('gedcom_id');
-		$tree_id = $session->get('tree_id');
+        $userMap = $this->host->getUserMap();
+        $owner_id = $userMap['gedcom_id'];
+        $tree_id = $userMap['tree_id'];
 		$data = false;
 		switch($args->method){
 			case "save":
@@ -275,10 +275,10 @@ class JMBProfile {
 		if(strlen($query) == 0){
 			return false;
 		}
-		
-		$session = JFactory::getSession();
-		$owner_id = $session->get('gedcom_id');
-		$tree_id = $session->get('tree_id');
+
+        $userMap = $this->host->getUserMap();
+        $owner_id = $userMap['gedcom_id'];
+        $tree_id = $userMap['tree_id'];
 
 		$request = $_REQUEST;
 		$sircar = null;
@@ -372,9 +372,9 @@ class JMBProfile {
 
     public function delete($args){
         list($type,$gedcom_id,$method) = explode(',', $args);
-        $session = JFactory::getSession();
-        $owner_id = $session->get('gedcom_id');
-        $tree_id = $session->get('tree_id');
+        $userMap = $this->host->getUserMap();
+        $owner_id = $userMap['gedcom_id'];
+        $tree_id = $userMap['tree_id'];
         $deleted = false;
 
         $user = $this->host->gedcom->individuals->get($gedcom_id);
@@ -400,11 +400,7 @@ class JMBProfile {
                 switch($method){
                     case "deleteTree":
                         $this->host->usertree->deleteTree($tree_id);
-                        $session->clear('gedcom_id');
-                        $session->clear('tree_id');
-                        $session->clear('permission');
-                        $session->clear('facebook_id');
-                        $session->set('alias', 'home');
+                        $this->host->deleteUserMap($user->FacebookId);
                         $objects = array();
                     break;
 
@@ -412,11 +408,7 @@ class JMBProfile {
                         $environment = $this->host->usertree->getUserEnvironment($gedcom_id);
                         $this->host->usertree->deleteBranch($gedcom_id);
                         if($owner_id == $gedcom_id){
-                            $session->clear('gedcom_id');
-                            $session->clear('tree_id');
-                            $session->clear('permission');
-                            $session->clear('facebook_id');
-                            $session->set('alias', 'home');
+                            $this->host->deleteUserMap($user->FacebookId);
                             $deleted = array('user'=>true);
                         } else {
                             $deleted = array('user'=>false);

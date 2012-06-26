@@ -7,14 +7,15 @@ class JMBHome {
 	}
 	
 	public function page($args){
-		$session = JFactory::getSession();
+        $jfb = JFBConnectFacebookLibrary::getInstance();
+        $facebook_id = $jfb->getFbUserId();
 		switch($args){
 			case 'myfamily':
-				$session->set('login_method', 'family_tree');
+                $this->host->setUserAlias($facebook_id, 'myfamily');
 			break;
 			
 			case 'famous-family':
-				$session->set('login_method', 'famous_family');
+                $this->host->setUserAlias($facebook_id, 'famous_family');
 			break;
 		}
 		$session->set('alias', $args);

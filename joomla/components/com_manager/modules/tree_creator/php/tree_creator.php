@@ -77,8 +77,8 @@ class TreeCreator {
 	}
 
 	public function create_tree($args){
-		$session = JFactory::getSession();
-		$facebook_id = $session->get('facebook_id');
+        $jfbLib = JFBConnectFacebookLibrary::getInstance();
+        $facebook_id = $jfbLib->getFbUserId();
 		$args = json_decode($args);
         $full_name = $args->self->first_name." ".$args->self->last_name;
         $tree_name = $args->self->first_name." ".$args->self->last_name." Tree";
@@ -117,12 +117,7 @@ class TreeCreator {
 
 		//addchild
 		$this->host->gedcom->families->addChild($family->Id, $self->Id);
-
-		$session->set('gedcom_id', $self->Id);
-		$session->set('tree_id', $tree_id);
-		$session->set('permission', 'OWNER');
-		$session->set('alias', 'myfamily');
-        $session->set('active_tab', 'families');
+		$this->host->getUserMap();
 		return true;
 	}
 	
@@ -181,8 +176,8 @@ class TreeCreator {
 	}
 
     public function abortRequest(){
-        $session = JFactory::getSession();
-        $facebook_id = $session->get('facebook_id');
+        $jfbLib = JFBConnectFacebookLibrary::getInstance();
+        $facebook_id = $jfbLib->getFbUserId();
 
         $sql_string = "DELETE FROM #__mb_notifications WHERE facebook_id = ? AND processed = 0";
         $this->db->setQuery($sql_string, $facebook_id);

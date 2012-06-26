@@ -354,5 +354,86 @@ class FamilyTreeTopHostLibrary {
         $this->ajax->setQuery('INSERT INTO #__mb_log (`id`,`alias`,`user_id`) VALUES (null, ?, ?)', $alias, $name);
         $this->ajax->query();
     }
+
+    public function getIndividualsInSystem($facebook_id){
+        $sqlString = "SELECT link.individuals_id as gedcom_id, link.tree_id as tree_id, link.type as permission
+                    FROM #__mb_tree_links as link
+                    LEFT JOIN #__mb_individuals as ind ON ind.id = link.individuals_id
+                    WHERE ind.fid=?";
+        $this->ajax->setQuery($sqlString, $facebook_id);
+        $data = $this->ajax->loadAssocList();
+        return (empty($data))?false:$data[0];
+    }
+
+    public function getCurrentAlias(){
+        $menu   = &JSite::getMenu();
+        $active   = $menu->getActive();
+        return $active->alias;
+    }
+
+    public function setUserMap($facebook_id, $tree_id, $gedcom_id, $login_type = 0){
+        $sqlString = "UPDATE #__mb_user_map SET `tree_id` = ?, `gedcom_id` = ? , `login_type` = ? WHERE facebook_id = ?";
+        $this->ajax->setQuery($sqlString, $tree_id, $gedcom_id, $login_type, $facebook_id);
+        $this->ajax->query();
+    }
+
+    public function deleteUserMap($facebook_id){
+        $this->ajax->setQuery("DELETE FROM #__mb_user_map WHERE facebook_id = ? ", $facebook_id);
+        $this->ajax->query();
+    }
+
+    public function setUserAlias($facebook_id, $alias){
+        $sqlString = "UPDATE #__mb_user_map SET `page` = ? WHERE facebook_id = ?";
+        $this->ajax->setQuery($sqlString, $alias, $facebook_id);
+        $this->ajax->query();
+    }
+
+    public function getUserMap(){
+        $jfbLib = JFBConnectFacebookLibrary::getInstance();
+        $facebook_id = $jfbLib->getFbUserId();
+
+        if(!$facebook_id) return false;
+
+        $sqlString = "SELECT facebook_id, user_id, tree_id, gedcom_id, permission, login_type, page, active FROM #__mb_user_map WHERE facebook_id = ?";
+        $this->ajax->setQuery($sqlString, $facebook_id);
+        $data = $this->ajax->loadAssocList();
+
+        if(empty($data)){
+            $indData = $this->getIndividualsInSystem($facebook_id);
+            $user = JFactory::getUser();
+            $page = $this->getCurrentAlias();
+            $sqlString = "INSERT INTO #__mb_user_map (`facebook_id`, `tree_id`, `gedcom_id`, `user_id`, `permission`, `login_type`, `page`, `active`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            if($indData){
+                $this->ajax->setQuery($sqlString, $facebook_id, $indData['tree_id'], $indData['gedcom_id'], $user->id, $indData['permission'], 0, $page, 0);
+                $this->ajax->query();
+                return array(
+                        'facebook_id' => $facebook_id,
+                        'user_id' => $user->id,
+                        'tree_id' => $indData['tree_id'],
+                        'gedcom_id' => $indData['gedcom_id'],
+                        'permission' => $indData['permission'],
+                        'login_type' => 0,
+                        'page' => $page,
+                        'active' => NULL
+                );
+            } else {
+                $this->ajax->setQuery($sqlString, $facebook_id, 0, 0, $user->id, 'GUEST', 0, $page, 0);
+                $this->ajax->query();
+                return array(
+                    'facebook_id' => $facebook_id,
+                    'user_id' => $user->id,
+                    'tree_id' => $indData['tree_id'],
+                    'gedcom_id' => $indData['gedcom_id'],
+                    'permission' => $indData['permission'],
+                    'login_type' => 0,
+                    'page' => $page,
+                    'active' => NULL
+                );
+            }
+
+        } else {
+            return $data[0];
+        }
+    }
 }
 ?>

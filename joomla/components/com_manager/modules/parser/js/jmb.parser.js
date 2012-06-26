@@ -23,7 +23,7 @@ function JMBParser(obj){
 
 JMBParser.prototype = {
 	_ajax:function(func, params, callback){
-        storage.callMethod("parser", "JMBParser", func, params, function(res){
+        host.callMethod("parser", "JMBParser", func, params, function(res){
     			callback(res);
   		})
  	},
@@ -364,8 +364,7 @@ JMBParser.prototype = {
               if (changeRedoList.sets[i].critical) { 
                     jQuery( "#dialog:ui-dialog" ).dialog( "destroy" );
                     jQuery('#dialog_form').remove();
-                    self.create_dialog(changeRedoList.sets[i], function (val){ 
-                    //�������� changeset �� ��������� �������������
+                    self.create_dialog(changeRedoList.sets[i], function (val){
                         if (val==changeRedoList.sets[i].value) {
                             changeRedoList.sets[i].value=changeRedoList.sets[i].value2;
                             changeRedoList.sets[i].value2=val;
@@ -566,7 +565,6 @@ JMBParser.prototype = {
         value : 'Merge this Family Record Now'
       }).appendTo('#merge_now');
       jQuery('#merge_now').bind('click',function(){
-        //�������� �� ������������ ������ � ������� ������
         
         var i=-1;
         function next_merge(){
@@ -708,7 +706,7 @@ JMBParser.prototype = {
 	  });
        
        jQuery('#new_value').bind('change click', function(){
-         jQuery('#new_value').disabled=true; ///��������
+         jQuery('#new_value').disabled=true;
        })
      
    //  while (jQuery('#dialog_form').dialog('isOpen')) {setTimeout(console.log('wait'), 5000);}

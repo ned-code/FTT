@@ -13,11 +13,11 @@ class JMBRecentVisitors {
 	/**
 	*
 	*/
-	public function getRecentVisitors(){		
-		$session = JFactory::getSession();
-		$facebook_id = $session->get('facebook_id');
-		$owner_id = $session->get('gedcom_id');
-        $tree_id = $session->get('tree_id');
+	public function getRecentVisitors(){
+        $userMap = $this->host->getUserMap();
+        $owner_id = $userMap['gedcom_id'];
+        $tree_id = $userMap['tree_id'];
+        $facebook_id = $userMap['facebook_id'];
 
 		if(!$facebook_id||!$owner_id) return json_encode(array('error'=>'not register user'));
 
