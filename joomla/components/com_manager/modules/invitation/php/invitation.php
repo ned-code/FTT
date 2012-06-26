@@ -53,7 +53,7 @@ class JMBInvitation {
     }
 
     protected function checkFacebookIdOnRequest($facebook_id){
-        $sql_string = "SELECT facebook_id FROM #__mb_notifications WHERE facebook_id = ?";
+        $sql_string = "SELECT facebook_id FROM #__mb_notifications WHERE facebook_id = ? AND processed == 0";
         $this->host->ajax->setQuery($sql_string, $facebook_id);
         $rows = $this->host->ajax->loadAssocList();
         if(empty($rows)){
