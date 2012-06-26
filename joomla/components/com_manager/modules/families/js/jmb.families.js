@@ -57,7 +57,7 @@ function JMBFamiliesObject(obj, popup){
 }
 JMBFamiliesObject.prototype = {
 	_ajax:function(func, params, callback){
-		host.callMethod("families", "JMBFamilies", func, params, function(res){
+        storage.callMethod("families", "JMBFamilies", func, params, function(res){
 				callback(res);
 		})
 	},

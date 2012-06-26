@@ -41,7 +41,7 @@ function JMBFamilyLine(){
 	//protected
 	fn = {
 		ajax:function(func, params, callback){
-			host.callMethod("family_line", "JMBFamilyLine", func, params, function(res){
+            storage.callMethod("family_line", "JMBFamilyLine", func, params, function(res){
 					callback(res);
 			});
 		},

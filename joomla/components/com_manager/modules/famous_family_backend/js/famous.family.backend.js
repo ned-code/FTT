@@ -304,7 +304,7 @@ function FamousFamilyBackend(obj){
 
 FamousFamilyBackend.prototype = {
 	ajax:function(func, params, callback){
-		host.callMethod("famous_family_backend", "JMBFamousFamilyBackend", func, params, function(res){
+        storage.callMethod("famous_family_backend", "JMBFamousFamilyBackend", func, params, function(res){
 				callback(res);
 		})
 	},

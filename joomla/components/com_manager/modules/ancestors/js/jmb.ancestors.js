@@ -73,7 +73,7 @@ function JMBAncestorsObject(obj, popup, callback){
 
 JMBAncestorsObject.prototype = {
 	ajax:function(func, params, callback){
-		host.callMethod("ancestors", "JMBAncestors", func, params, function(res){
+		storage.callMethod("ancestors", "JMBAncestors", func, params, function(res){
 				callback(res);
 		})
 	},

@@ -19,7 +19,7 @@ function JMBRegister(obj){
 
 JMBRegister.prototype = {
 	_ajax:function(func, params, callback){
-		host.callMethod("register", "JMBRegister", func, params, function(res){
+        storage.callMethod("register", "JMBRegister", func, params, function(res){
 				callback(res);
 		})
 	},

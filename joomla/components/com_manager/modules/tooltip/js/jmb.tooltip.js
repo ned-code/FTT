@@ -75,7 +75,7 @@ function JMBTooltip(){
 
 JMBTooltip.prototype = {
 	_ajax:function(func, params, callback){
-		host.callMethod("tooltip", "JMBTooltip", func, params, function(res){
+        storage.callMethod("tooltip", "JMBTooltip", func, params, function(res){
 				callback(res);
 		})
 	},

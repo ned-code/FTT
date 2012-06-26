@@ -165,7 +165,7 @@ function JMBQuickFactsObject(object){
 
 JMBQuickFactsObject.prototype = {
 	_ajax:function(func, params, callback){
-		host.callMethod("quick_facts", "JMBQuickFacts", func, params, function(res){
+        storage.callMethod("quick_facts", "JMBQuickFacts", func, params, function(res){
 				callback(res);
 		})
 	}

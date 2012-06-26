@@ -179,7 +179,7 @@ function JMBRecentVisitorsObject(obj){
 
 JMBRecentVisitorsObject.prototype = {
 	ajax:function(func, params, callback){
-		host.callMethod("recent_visitors", "JMBRecentVisitors", func, params, function(status){
+        storage.callMethod("recent_visitors", "JMBRecentVisitors", func, params, function(status){
 				callback(status);
 		})
 	}

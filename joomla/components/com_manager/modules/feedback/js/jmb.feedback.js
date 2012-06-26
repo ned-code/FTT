@@ -102,7 +102,7 @@ function JMBFeedback(){
 
 JMBFeedback.prototype = {
 	ajax:function(func, params, callback){
-		host.callMethod("feedback", "JMBFeedback", func, params, function(req){
+        storage.callMethod("feedback", "JMBFeedback", func, params, function(req){
             var text = req.responseText;
             if(text.length > 0){
                 var json = jQuery.parseJSON(text);

@@ -103,7 +103,7 @@ function JMBTreeCreatorObject(parent){
 	
 	fn = {
 		ajax:function(func, params, callback){
-			host.callMethod("tree_creator", "TreeCreator", func, params, function(res){
+            storage.callMethod("tree_creator", "TreeCreator", func, params, function(res){
 					callback(res);
 			})
 		},

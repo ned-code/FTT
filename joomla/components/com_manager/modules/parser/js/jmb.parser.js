@@ -23,7 +23,7 @@ function JMBParser(obj){
 
 JMBParser.prototype = {
 	_ajax:function(func, params, callback){
-  		host.callMethod("parser", "JMBParser", func, params, function(res){
+        storage.callMethod("parser", "JMBParser", func, params, function(res){
     			callback(res);
   		})
  	},
@@ -365,7 +365,7 @@ JMBParser.prototype = {
                     jQuery( "#dialog:ui-dialog" ).dialog( "destroy" );
                     jQuery('#dialog_form').remove();
                     self.create_dialog(changeRedoList.sets[i], function (val){ 
-                    //поменять changeset на выбранный пользователем
+                    //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ changeset пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                         if (val==changeRedoList.sets[i].value) {
                             changeRedoList.sets[i].value=changeRedoList.sets[i].value2;
                             changeRedoList.sets[i].value2=val;
@@ -566,7 +566,7 @@ JMBParser.prototype = {
         value : 'Merge this Family Record Now'
       }).appendTo('#merge_now');
       jQuery('#merge_now').bind('click',function(){
-        //проверку на корректность данных в таблице добавь
+        //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
         
         var i=-1;
         function next_merge(){
@@ -708,7 +708,7 @@ JMBParser.prototype = {
 	  });
        
        jQuery('#new_value').bind('change click', function(){
-         jQuery('#new_value').disabled=true; ///додумать
+         jQuery('#new_value').disabled=true; ///пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
        })
      
    //  while (jQuery('#dialog_form').dialog('isOpen')) {setTimeout(console.log('wait'), 5000);}

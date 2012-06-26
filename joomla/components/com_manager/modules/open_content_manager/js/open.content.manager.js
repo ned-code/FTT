@@ -52,7 +52,7 @@ OpenContentManager.prototype = {
 		document.onselectstart = function () { return false; };
 	},
 	_ajax:function(func, params, callback){
-		host.callMethod("open_content_manager", "FTTOpenContentManagerClass", func, params, function(req){
+        storage.callMethod("open_content_manager", "FTTOpenContentManagerClass", func, params, function(req){
 				callback(req);
 		});
 	},

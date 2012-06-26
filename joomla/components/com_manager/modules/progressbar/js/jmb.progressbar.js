@@ -13,7 +13,7 @@ function JMBProgressbarObject(){
 
 JMBProgressbarObject.prototype = {
 	ajax:function(func, params, callback){
-		host.callMethod("progressbar", "JMBProgressbarClass", func, params, function(res){
+        storage.callMethod("progressbar", "JMBProgressbarClass", func, params, function(res){
 			callback(res);
 		})
 	},

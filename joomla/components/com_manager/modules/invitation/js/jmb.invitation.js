@@ -6,7 +6,7 @@ function JMBInvitation(){
 
 JMBInvitation.prototype = {
 	ajax:function(func, params, callback){
-		host.callMethod("invitation", "JMBInvitation", func, params, function(res){
+        storage.callMethod("invitation", "JMBInvitation", func, params, function(res){
 				callback(res);
 		})
 	},

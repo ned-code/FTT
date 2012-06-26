@@ -1,5 +1,3 @@
-
-
 //globl object storage
 storage = {};
 //function
@@ -519,6 +517,74 @@ storage.request.cleaner = function(){
 	}
 	storage.request.pull.length = 0;
 }
+
+storage.callMethod = function(module, classname, method, args, callback){
+    var url = storage.baseurl+storage.url+'php/ajax.php';
+    var key = storage.request.key();
+    var xnr = jQuery.ajax({
+        url: url,
+        type: "POST",
+        data: 'module='+module+'&class='+classname+'&method='+method+'&args='+args,
+        dataType: "html",
+        complete : function (req, err) {
+            //storage.request.del(key);
+            if(req.responseText.length!=0){
+                callback(req);
+            } else {
+                callback(false);
+            }
+        }
+    });
+    storage.request.add(xnr, key);
+    return xnr;
+}
+
+storage.stringBuffer = function(){
+    return (function(){
+        var b = "";
+        this.length = 0;
+        return {
+            _:function(s){
+                if(arguments.length>1){
+                    var tmp="", l=arguments.length;
+                    switch(l){
+                        case 9: tmp=""+arguments[8]+tmp;
+                        case 8: tmp=""+arguments[7]+tmp;
+                        case 7: tmp=""+arguments[6]+tmp;
+                        case 6: tmp=""+arguments[5]+tmp;
+                        case 5: tmp=""+arguments[4]+tmp;
+                        case 4: tmp=""+arguments[3]+tmp;
+                        case 3: tmp=""+arguments[2]+tmp;
+                        case 2: {
+                            b+=""+arguments[0]+arguments[1]+tmp;
+                            break;
+                        }
+                        default: {
+                            var i=0;
+                            while(i<arguments.length){
+                                tmp += arguments[i++];
+                            }
+                            b += tmp;
+                        }
+                    }
+                } else {
+                    b += s;
+                }
+                this.length = b.length;
+                return this;
+            },
+            clear:function(){
+                b = "";
+                this.length = 0;
+                return this;
+            },
+            result:function(){
+                return b;
+            }
+        }
+    }).call(this)
+}
+
 //tabs
 storage.tabs = {};
 storage.tabs.activeTab = null;
@@ -806,10 +872,11 @@ core.renderTabs = function(args){
     }
 
 }
+
 core.load = function(pages){
 	var self = this;
 	jQuery(document.body).ready(function(){
-		host = new Host();
+        host = new Host();
 		storage.baseurl = jQuery('body').attr('_baseurl');
 		jQuery(document.body).append(storage.iframe);
 		//init global modules
@@ -828,7 +895,6 @@ core.load = function(pages){
 		
 		//init top menu bar
         storage.topmenubar.init();
-
 
 		//set width
 		var mode = (window != window.top)?'facebook':'standalone';

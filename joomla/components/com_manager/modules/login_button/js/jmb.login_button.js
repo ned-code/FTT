@@ -42,7 +42,7 @@ function JMBLoginButtonObject(obj){
 
 JMBLoginButtonObject.prototype = {
 	ajax:function(func, params, callback){
-		host.callMethod("login_button", "JMBLoginButtonClass", func, params, function(res){
+        storage.callMethod("login_button", "JMBLoginButtonClass", func, params, function(res){
 			callback(res);
 		})
 	}

@@ -101,7 +101,7 @@ function JMBThisMonthObject(obj){
 
 JMBThisMonthObject.prototype = {
 	_ajax:function(func, params, callback){
-		host.callMethod("this_month", "JMBThisMonth", func, params, function(req){
+        storage.callMethod("this_month", "JMBThisMonth", func, params, function(req){
 				callback(req);
 		})
 	},

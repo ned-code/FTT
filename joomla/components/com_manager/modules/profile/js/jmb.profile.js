@@ -98,7 +98,7 @@ function JMBProfile(){
     module.functions = {
         ajax:function(func, params, callback){
             //storage.progressbar.loading();
-            host.callMethod("profile", "JMBProfile", func, params, function(res){
+            storage.callMethod("profile", "JMBProfile", func, params, function(res){
                 callback(res);
                 //storage.progressbar.off();
             });

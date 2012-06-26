@@ -27,7 +27,7 @@ function JMBLogin(){
 	//init functions
 	fn = {
 		ajax:function(func, params, callback){
-			host.callMethod("login", "JMBLogin", func, params, function(res){
+            storage.callMethod("login", "JMBLogin", func, params, function(res){
 				callback(res);
 			});
 		},
@@ -344,7 +344,7 @@ function JMBLogin(){
                     }
                 });
             } else {
-                host.callMethod("login", "JMBLogin", 'user', null, function(res){
+                storage.callMethod("login", "JMBLogin", 'user', null, function(res){
                     var json = jQuery.parseJSON(res.responseText);
                     fn.set_global_data(json);
                     callback();

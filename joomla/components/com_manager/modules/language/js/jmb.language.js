@@ -39,7 +39,7 @@ function JMBLanguage(){
 
 JMBLanguage.prototype = {
 	ajax:function(func, params, callback){
-		host.callMethod("language", "JMBLanguage", func, params, function(res){
+        storage.callMethod("language", "JMBLanguage", func, params, function(res){
 				callback(res);
 		})
 	}

@@ -56,7 +56,7 @@ function JMBDescendantTreeObject(obj){
 
 JMBDescendantTreeObject.prototype = {
 	ajax:function(func, params, callback){
-		host.callMethod("descendant_tree", "JMBDescendantTree", func, params, function(res){
+        storage.callMethod("descendant_tree", "JMBDescendantTree", func, params, function(res){
 				callback(res);
 		})
 	},

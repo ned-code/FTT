@@ -91,7 +91,7 @@ function JMBInvitateObject(obj){
 
 JMBInvitateObject.prototype = {
 	ajax:function(func, params, callback){
-		host.callMethod("invitate", "JMBInvitateClass", func, params, function(res){
+        storage.callMethod("invitate", "JMBInvitateClass", func, params, function(res){
 				callback(res);
 		})
 	},

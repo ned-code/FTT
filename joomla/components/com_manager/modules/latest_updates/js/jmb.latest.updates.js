@@ -20,7 +20,7 @@ function JMBLatestUpdatesObject(offsetParent){
 	
 	fn = {
 		ajax:function(func, params, callback){
-			host.callMethod("latest_updates", "JMBLatestUpdates", func, params, function(res){
+            storage.callMethod("latest_updates", "JMBLatestUpdates", func, params, function(res){
 					callback(res);
 			})
 		},

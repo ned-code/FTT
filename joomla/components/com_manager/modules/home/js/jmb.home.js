@@ -11,7 +11,7 @@ function JMBHomeObject(offsetParent){
 
 	fn = {
 		ajax:function(func, params, callback){
-			host.callMethod("home", "JMBHome", func, params, function(res){
+            storage.callMethod("home", "JMBHome", func, params, function(res){
 					callback(res);
 			})
 		},

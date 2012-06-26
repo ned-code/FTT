@@ -55,7 +55,7 @@ function JMBNotifications(){
 
 JMBNotifications.prototype = {
 	ajax:function(func, params, callback){
-		host.callMethod("notifications", "JMBNotifications", func, params, function(req){
+        storage.callMethod("notifications", "JMBNotifications", func, params, function(req){
 				callback(req);
 		})
 	},
