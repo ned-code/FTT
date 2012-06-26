@@ -1,7 +1,9 @@
 <?php defined('_JEXEC') or die('Restricted access');
-//echo '<div id="pages"></div>';
+
+// id, layout_type, title;
 echo "<div id='container'>&nbsp;</div>";
 $controller = new JMBController();
+
 $pages = '';
 foreach($this->msg as $obj){
 	$pages .= $obj->id.'|';
@@ -13,5 +15,12 @@ $active_tab = $session->get('active_tab');
 $str ='<script>if(typeof(storage) != "undefined"){storage.core.load("'.$pages.'"); storage.activeTab = "'. $active_tab .'"}</script>';
 echo $str;
 
-?>
 
+$controller = new JMBController();
+
+$controller->getPageInfo();
+
+
+
+
+?>

@@ -18,23 +18,23 @@ class JmbViewMulti extends JView
                 
                 for($i=0;$i<sizeof($this->msg);$i++){
                 	$introtext[$i]['id'] = $this->msg[$i]->id;
-			$introtext[$i]['title'] = $this->msg[$i]->title;
-			switch($this->msg[$i]->layout_type){
-				case "single":
-					$content = "<table border='1' style='height:300px;'><tr><td style='width:200px'></td><td style='width:200px'></td><td style='width:200px'></td></tr></table>";
-				break;
-					
-				case "double":
-					$content = "<table border='1' style='height:300px;'><tr><td style='width:200px'></td><td style='width:200px'></td></tr></table>";
-				break;
-				
-				case "triple":
-					$content = "<table border='1' style='height:300px;'><tr><td style='width:200px'></td></tr></table>";
-				break;
-			}
-			$intotext[$i]['content'] = $content;
+                    $introtext[$i]['title'] = $this->msg[$i]->title;
+                    switch($this->msg[$i]->layout_type){
+                        case "single":
+                            $content = "<table border='1' style='height:300px;'><tr><td style='width:200px'></td><td style='width:200px'></td><td style='width:200px'></td></tr></table>";
+                        break;
+
+                        case "double":
+                            $content = "<table border='1' style='height:300px;'><tr><td style='width:200px'></td><td style='width:200px'></td></tr></table>";
+                        break;
+
+                        case "triple":
+                            $content = "<table border='1' style='height:300px;'><tr><td style='width:200px'></td></tr></table>";
+                        break;
+                    }
+                    $intotext[$i]['content'] = $content;
                 }
-	        $this->assignRef('introtext',$introtext);
+	            $this->assignRef('introtext',$introtext);
                 // Display the view
                 parent::display($tpl);
 	}

@@ -20,7 +20,7 @@ class JMBRegister {
 
 	public function __construct(){
 		$this->db =& JFactory::getDBO();
-		$this->host = new Host('Joomla');
+		$this->host = &FamilyTreeTopHostLibrary::getInstance();
 		$this->fb = $this->fbEnabled();
 	}
 	

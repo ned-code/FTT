@@ -3,7 +3,7 @@ class JMBLogin {
 	protected $host;
 	
 	public function __construct(){		
-		$this->host = new Host('Joomla');
+		$this->host = &FamilyTreeTopHostLibrary::getInstance();
 	}
 	
 	protected function getNotifications($tree_id, $gedcom_id){

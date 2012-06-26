@@ -23,7 +23,7 @@ class JMBDescendantTree {
 	}
 	
 	public function __construct(){
-		$this->host = new Host('Joomla');
+		$this->host = &FamilyTreeTopHostLibrary::getInstance();
 		$session = JFactory::getSession();
 		$settings = $session->get('settings');
 		$this->color = $settings['colors'];

@@ -27,7 +27,7 @@ $classname = JRequest::getVar('class');
 $method = JRequest::getVar('method');
 $arguments = JRequest::getVar('args');
 
-$host = new Host('Joomla');
+$host = &FamilyTreeTopHostLibrary::getInstance();
 
 echo $host->ajax->callMethod($modulename, $classname, $method, $arguments);
 

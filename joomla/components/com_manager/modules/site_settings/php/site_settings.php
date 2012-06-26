@@ -6,7 +6,7 @@ class SiteSettings {
 	*
 	*/
 	public function __construct(){
-		$this->host = new Host('Joomla');
+		$this->host = &FamilyTreeTopHostLibrary::getInstance();
 	}
 	
 	protected function getModuleNameByLangFile($language_file){

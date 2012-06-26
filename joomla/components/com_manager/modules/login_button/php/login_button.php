@@ -3,7 +3,7 @@ class JMBLoginButtonClass {
 	protected $host;
 	
 	public function __construct(){
-		$this->host = new Host('Joomla');
+		$this->host = &FamilyTreeTopHostLibrary::getInstance();
 	}
 	
 	public function setAccessToken($access_token){

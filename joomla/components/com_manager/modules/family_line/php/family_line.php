@@ -3,7 +3,7 @@ class JMBFamilyLine {
 	protected $host;
 	
 	public function __construct(){
-		$this->host = new Host('Joomla');
+		$this->host = &FamilyTreeTopHostLibrary::getInstance();
 		$this->db = new JMBAjax();
 	}
 

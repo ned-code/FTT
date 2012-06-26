@@ -99,7 +99,7 @@ class JMBController extends JController
         	ob_clean();
         	
         	$db =& JFactory::getDBO();
-        	$host = new Host('Joomla');
+        	$host = &FamilyTreeTopHostLibrary::getInstance();
         	$ids = explode('|', JRequest::getVar('ids'));
         	
         	$jpath_base_explode = explode('/', JPATH_BASE);
@@ -131,7 +131,7 @@ class JMBController extends JController
         }
 
 	public function getResizeImage(){
-        $host = new Host('Joomla');
+        $host = &FamilyTreeTopHostLibrary::getInstance();
         $host->images->getImage(JRequest::getVar('tree_id'),JRequest::getVar('id'), JRequest::getVar('fid'), JRequest::getVar('w'), JRequest::getVar('h'));
         exit;
     }
@@ -261,8 +261,6 @@ class JMBController extends JController
 	}
 
     protected function location($alias){
-        //$host = new Host('joomla');
-        //$host->setAliasLog($alias);
         $url = 'Location:'.JURI::base().'index.php/'.$alias;
         header($url);
         exit;
@@ -304,7 +302,7 @@ class JMBController extends JController
             $alias = $this->get_current_alias();
             if($alias != 'invitation'){
                 $facebook_id = $me['id'];
-                $host = new Host('Joomla');
+                $host = &FamilyTreeTopHostLibrary::getInstance();
 
                 $sql_string = "SELECT belongs FROM #__mb_variables WHERE facebook_id = ?";
                 $host->ajax->setQuery($sql_string, $facebook_id);
@@ -345,7 +343,7 @@ class JMBController extends JController
                 }
             }
 
-            $host = new Host('joomla');
+            $host = &FamilyTreeTopHostLibrary::getInstance();
             $facebook_id = $jfb->getFbUserId();
         	$user_data = $this->get_user_data($facebook_id);
             $alias = $this->check_location($user_data, $user);
@@ -421,7 +419,7 @@ class JMBController extends JController
         }
 
     public function getLanguage(){
-        $host = new Host('Joomla');
+        $host = &FamilyTreeTopHostLibrary::getInstance();
         $module_name = JRequest::getCmd('module_name');
         echo json_encode($host->getLangList($module_name));
         exit;

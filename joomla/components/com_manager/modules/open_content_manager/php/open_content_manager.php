@@ -5,7 +5,7 @@ class FTTOpenContentManagerClass {
         *
         */
         function __construct(){
-        	$this->host = new Host('Joomla'); 
+        	$this->host = &FamilyTreeTopHostLibrary::getInstance();
         }
 	
         public function search($id){

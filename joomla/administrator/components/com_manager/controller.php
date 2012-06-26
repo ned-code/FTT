@@ -15,7 +15,7 @@ class ManagerController extends JController
         function callMethod(){                    	
             ob_clean();
             require_once "../components/com_manager/php/host.php";
-            $host = new Host('joomla');
+            $host = &FamilyTreeTopHostLibrary::getInstance();
             echo $host->callMethod(JRequest::getVar('module'),JRequest::getVar('class'),JRequest::getVar('method'),JRequest::getVar('args'));
             die;
         }
@@ -26,7 +26,7 @@ class ManagerController extends JController
         function callHostMethod(){
             ob_clean();
              require_once "../components/com_manager/php/host.php";
-            $host = new Host('joomla');
+            $host = &FamilyTreeTopHostLibrary::getInstance();
             if((JRequest::getVar('module')!=null)){
                 $params = array(JRequest::getVar('module'),JRequest::getVar('args'));
             }else
@@ -346,7 +346,7 @@ class ManagerController extends JController
 
 	function host(){
             ob_clean();
-            $host = new Host('joomla');
+            $host = &FamilyTreeTopHostLibrary::getInstance();
             switch(JRequest::getVar('f')){
                     case 'createPage':
                             $page_name	=	JRequest::getVar('pageName');

@@ -8,7 +8,9 @@ require_once('gedcom/core.gedcom.php');
 require_once('gramps/core.gramps.php');
 
 //class
-class Host {
+class FamilyTreeTopHostLibrary {
+    private static $instance = null;
+
     private $modulesPath;
 
     public $ajax;
@@ -22,23 +24,32 @@ class Host {
     private $language;
     private $config;
 
-	/**
-	*
-	*/
-	public function __construct($type){
-            $this->modulesPath = $this->getModulesPath();
+    private function __construct( $directCall = true ) {
+        if ( $directCall ) {
+            return false;
+        }
+        $this->modulesPath = $this->getModulesPath();
 
-            $this->ajax = new JMBAjax();
+        $this->ajax = new JMBAjax();
 
-            $this->gedcom = new Gedcom($this->ajax);
-            $this->gramps = new Gramps($this->ajax, $this->gedcom);
-            $this->usertree = new JMBUserTree($this->ajax, $this->gedcom);
+        $this->gedcom = new Gedcom($this->ajax);
+        $this->gramps = new Gramps($this->ajax, $this->gedcom);
+        $this->usertree = new JMBUserTree($this->ajax, $this->gedcom);
 
-            $this->images = new JMBImage($this->gedcom);
+        $this->images = new JMBImage($this->gedcom);
 
-            $this->language = new JMBHostLanguage($this->ajax);
-            $this->config = new JMBHostConfig($this->ajax);
-	}
+        $this->language = new JMBHostLanguage($this->ajax);
+        $this->config = new JMBHostConfig($this->ajax);
+    }
+
+    public function &getInstance() {
+        if (null === self::$instance)
+        {
+            self::$instance = new self( false );
+        }
+
+        return self::$instance;
+    }
 
     private function getModulesPath(){
             return JPATH_ROOT."/components/com_manager/modules/";
