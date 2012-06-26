@@ -198,16 +198,17 @@ class JMBController extends JController
 			
 			case "first-page":
                 if($invitation_token) return 'invitation';
-				if($user->guest) return "login";
-                if($userMap&&$userMap['tree_id']!=0) return "myfamily";
-				return "first-page";
+				if($userMap&&$userMap['tree_id']!=0) return "myfamily";
+                if($user->guest) return "login";
+                return "first-page";
 			break;
 			
 			case "myfamily":
                 if($invitation_token) return 'invitation';
-				if($user->guest) return "login";
-				if($userMap&&$userMap['tree_id']==0) return "first-page";
-				return "myfamily";			
+                if($user->guest&&!$userMap) return "login";
+                if($user->guest&&$userMap['login_type']==0) return "login";
+                if($userMap&&$userMap['tree_id']==0) return "first-page";
+                return "myfamily";
 			break;
 
             case "about":
@@ -221,9 +222,9 @@ class JMBController extends JController
 			
 			default:
                 if($invitation_token) return "invitation";
-				if($user->guest) return "login";
 				if($userMap&&$userMap['tree_id']==0) return "home";
-				return "myfamily";
+                if($user->guest) return "login";
+                return "myfamily";
 			break;
 		}
 	}
@@ -235,7 +236,7 @@ class JMBController extends JController
         if($alias != $current_alias){
             $this->location($alias);
         } else {
-            $host->setUserAlias($facebook_id, $alias);
+            $host->setUserAlias($alias);
         }
 	}
 
@@ -306,17 +307,17 @@ class JMBController extends JController
         	$alias = JRequest::getCmd('alias');
         	switch($alias){
         		case 'myfamily':
-                    $host->setUserAlias($facebook_id, 'myfamily');
+                    $host->setUserAlias('myfamily');
                     $data = $host->getIndividualsInSystem($facebook_id);
                     if($data){
-                        $host->setUserMap($facebook_id, $data['tree_id'], $data['gedcom_id'], 0);
+                        $host->setUserMap($data['tree_id'], $data['gedcom_id'], 0);
                     } else {
-                        $host->setUserMap($facebook_id, 0, 0, 0);
+                        $host->setUserMap(0, 0, 0);
                     }
         		break;
 
                 default:
-                    $host->setUserAlias($facebook_id, $alias);
+                    $host->setUserAlias($alias);
                 break;
         	}
         	exit;

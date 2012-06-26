@@ -27,9 +27,9 @@ class JMBLogin {
             $this->host->setUserAlias($facebook_id, 'famous-family');
             $data = $this->host->getIndividualsInSystem($facebook_id);
             if($data){
-                $this->host->setUserMap($facebook_id, $data['tree_id'], $data['gedcom_id'], 0);
+                $this->host->setUserMap($data['tree_id'], $data['gedcom_id'], 0);
             } else {
-                $this->host->setUserMap($facebook_id, 0, 0, 0);
+                $this->host->setUserMap(0, 0, 0);
             }
 
 			return true;

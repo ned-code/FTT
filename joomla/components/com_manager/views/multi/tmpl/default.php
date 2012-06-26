@@ -11,7 +11,6 @@ foreach($this->msg as $obj){
 $pages = substr($pages, 0, strlen($pages)-1);
 
 
-
 ?>
 <script>
     var pageInfo = <?php echo json_encode($this->pageInfo); ?>;

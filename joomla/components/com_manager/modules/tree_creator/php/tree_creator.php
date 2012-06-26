@@ -118,9 +118,9 @@ class TreeCreator {
 		//addchild
 		$this->host->gedcom->families->addChild($family->Id, $self->Id);
 
-        $this->host->setUserMap($facebook_id, $tree_id, $self->Id, 0);
-        $this->host->setUserAlias($facebook_id, 'myfamily');
-        $this->host->setUserPermission($facebook_id, 'USER');
+        $this->host->setUserMap($tree_id, $self->Id, 0);
+        $this->host->setUserAlias('myfamily');
+        $this->host->setUserPermission('USER');
 		return true;
 	}
 	

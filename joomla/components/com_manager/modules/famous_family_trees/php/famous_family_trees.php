@@ -51,10 +51,8 @@ class JMBFamousFamily {
 	
 	public function setFamilies($args){
 		$args = json_decode($args);
-        $jfbLib = JFBConnectFacebookLibrary::getInstance();
-        $facebook_id = $jfbLib->getFbUserId();
-        $this->host->setUserMap($facebook_id, $args->TreeId, $args->Id, 1);
-        $this->host->setUserAlias($facebook_id, 'myfamily');
+        $this->host->setUserMap($args->TreeId, $args->Id, 1);
+        $this->host->setUserAlias('myfamily');
 		return true;
 	}
 }
