@@ -386,6 +386,7 @@ class JMBProfile {
         switch($type){
             case "unlink":
                 $objects = $this->host->usertree->getUser($tree_id, $owner_id, $gedcom_id);
+                $this->host->deleteUserMap($user->FacebookId);
             break;
 
             case "delete_data":
@@ -393,6 +394,7 @@ class JMBProfile {
                 $this->host->gedcom->events->deleteMemberEvents($member->Id);
                 $this->host->gedcom->media->deleteMemberMedias($member->Id);
                 $objects = $this->host->usertree->getUser($tree_id, $owner_id, $gedcom_id);
+                $this->host->deleteUserMap($user->FacebookId);
             break;
 
             case "delete":
@@ -415,6 +417,7 @@ class JMBProfile {
                         }
                         $deleted['objects'] = array( array('gedcom_id'=>$gedcom_id) );
                         $objects = $this->host->usertree->getUsers($tree_id, $owner_id, $environment);
+                        $this->host->deleteUserMap($user->FacebookId);
                     break;
                 }
             break;
