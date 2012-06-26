@@ -679,7 +679,7 @@ function JMBProfile(){
         jQuery.ajax({
             url: storage.baseurl+storage.url+'php/ajax.php',
             type: "POST",
-            data: 'module=tooltip&class=JMBTooltip&method=get&args=',
+            data: 'module=profile&class=JMBProfile&method=get&args=',
             dataType: "html",
             complete : function (req, err) {
                 //storage.request.del(key);
