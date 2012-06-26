@@ -6,7 +6,7 @@ function JMBNotifications(){
     this.acceptId = null;
     this.acceptIndex = null;
     this.message = {
-        FTT_MOD_NOTIFICATIONS_FIRST_TEXT:"You have Invitation Request",
+        FTT_MOD_NOTIFICATIONS_FIRST_TEXT:"You have an Invitation Request",
         FTT_MOD_NOTIFICATIONS_FIRST_BUTTON_TEXT:"Click here to view it",
         FTT_MOD_NOTIFICATIONS_MANAGER_TITLE:"Invitation to join Family Tree",
         FTT_MOD_NOTIFICATIONS_MENU_NOT_CONFIRMED:"Not Confirmed",
@@ -44,7 +44,7 @@ function JMBNotifications(){
         FTT_MOD_NOTIFICATIONS_DENY_HEADER_2:"You may edit the section shown in yellow",
         FTT_MOD_NOTIFICATIONS_DENY_DEAR:"Dear",
         FTT_MOD_NOTIFICATIONS_DENY_MESSAGE_1:"has denied your request to join his family tree",
-        FTT_MOD_NOTIFICATIONS_DENY_MESSAGE_2:"He does not  believe that you are member of his family. If you still think thay you are related to",
+        FTT_MOD_NOTIFICATIONS_DENY_MESSAGE_2:"He does not think that you are member of his family. If you still believe thay you are related to",
         FTT_MOD_NOTIFICATIONS_DENY_MESSAGE_3:"please contact him directly to sort it out",
         FTT_MOD_NOTIFICATIONS_DENY_HI:"Hi",
         FTT_MOD_NOTIFICATIONS_DENY_SEND_MESSAGE:"I am not sure how we are related. Are you able to explain how you are connected to my family tree",
