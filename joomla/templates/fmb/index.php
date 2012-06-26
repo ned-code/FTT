@@ -59,8 +59,6 @@ if (stripos($user_agent, 'MSIE 6.0') !== false
 		<jdoc:include type="head" />
       	    <!-- joomla system stylesheet -->
             <link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/system/css/system.css" type="text/css" />
-        	<!-- facebook script -->
-        	<script src="http://connect.facebook.net/en_US/all.js?111"></script>
         	<!-- fmb template stylesheet -->
             <link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/fmb/css/fmb.css" type="text/css"/>
             <!-- fmb template script -->
@@ -120,13 +118,6 @@ if (stripos($user_agent, 'MSIE 6.0') !== false
         </div>
         <script>window.jQuery || document.write('<script src="<?php echo $this->baseurl ?>/templates/<?php echo $this->template; ?>/javascript/jquery.min.js"><\/script>')</script>
         <script>
-            FB.init({
-                appId:"136695133059478",
-                status:true,
-                cookie:true,
-                xfbml:true,
-                oauth: true
-            });
             if(window == window.top){
                 if(jQuery.browser.msie && parseInt(jQuery.browser.version) <= 7){
                     jQuery('div.footer').hide();

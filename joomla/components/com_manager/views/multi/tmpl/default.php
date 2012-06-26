@@ -9,18 +9,13 @@ foreach($this->msg as $obj){
 	$pages .= $obj->id.'|';
 }
 $pages = substr($pages, 0, strlen($pages)-1);
-
-$session = JFactory::getSession();
-$active_tab = $session->get('active_tab');
-$str ='<script>if(typeof(storage) != "undefined"){storage.core.load("'.$pages.'"); storage.activeTab = "'. $active_tab .'"}</script>';
-echo $str;
-
-
-$controller = new JMBController();
-
-$controller->getPageInfo();
-
-
-
-
 ?>
+<script>
+    var pageInfo = <?php echo json_encode($this->pageInfo); ?>;
+    var activeTab = '<?php echo $this->activeTab; ?>';
+
+     if(typeof(storage != "undefined")){
+         storage.core.load(pageInfo);
+         storage.activeTab = activeTab;
+     }
+</script>

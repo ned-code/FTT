@@ -840,32 +840,54 @@ core.load = function(pages){
 			jQuery(cont).css('max-width', '920px');
 			//jQuery(cont).find('div.footer').remove();
 		}
-		jQuery.ajax({
-			url:'index.php?option=com_manager&task=getPageInfo&ids='+pages,
-			type:'GET',
-			complete:function(req, err){
-				storage.login.init(function(){
-					if(err=='success'){
-                        storage.ntf.init();
-						var json = jQuery.parseJSON(req.responseText);
-                        storage.pages = json.pages;
-						if(json.pages.length==1){
-							//self.renderPage('#page', json.pages[0], false)
-                            self.renderPage({
-                               selector:"#page",
-                               page:json.pages[0],
-                               popup:false
-                            });
-						} else {
-							//self.renderTabs('#container', json.pages);
-							self.renderTabs({
-                                selector:"#container",
-                                pages:json.pages
-                            });
-						}
-					}
-				});
-			}
-		});
+
+        //set object to pages variable
+        if(typeof(pages) == "object"){
+            storage.login.init(function(){
+                storage.ntf.init();
+                storage.pages = pages;
+                if(storage.pages.length==1){
+                    self.renderPage({
+                        selector:"#page",
+                        page:storage.pages[0],
+                        popup:false
+                    });
+                } else {
+                    self.renderTabs({
+                        selector:"#container",
+                        pages:storage.pages
+                    });
+                }
+            });
+        }
+
+        //set string to pages variable
+        if(typeof(pages) == "string"){
+            jQuery.ajax({
+                url:'index.php?option=com_manager&task=getPageInfo&ids='+pages,
+                type:'GET',
+                complete:function(req, err){
+                    storage.login.init(function(){
+                        if(err=='success'){
+                            storage.ntf.init();
+                            var json = jQuery.parseJSON(req.responseText);
+                            storage.pages = json.pages;
+                            if(json.pages.length==1){
+                                self.renderPage({
+                                    selector:"#page",
+                                    page:json.pages[0],
+                                    popup:false
+                                });
+                            } else {
+                                self.renderTabs({
+                                    selector:"#container",
+                                    pages:json.pages
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+        }
 	});
 }

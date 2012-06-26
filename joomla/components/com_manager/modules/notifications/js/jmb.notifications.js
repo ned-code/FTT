@@ -600,6 +600,11 @@ JMBNotifications.prototype = {
      },
     init:function(notifications){
         var module = this, fn = {};
+
+        if(jQuery(document.body).attr('_alias') != 'myfamily'){
+            return false;
+        }
+
         fn.sort = function(callback){
             var pull = storage.notifications;
             for(var key in pull){
