@@ -10,10 +10,14 @@
 defined('_JEXEC') or die;
 
 $app = JFactory::getApplication();
-
 $base_url = Juri::base();
-$host = &FamilyTreeTopHostLibrary::getInstance();
-$data = $host->getUserMap();
+if(class_exists('FamilyTreeTopHostLibrary')){
+    $host = &FamilyTreeTopHostLibrary::getInstance();
+    $data = $host->getUserMap();
+} else {
+    $data = false;
+}
+
 
 $facebook_id = ( $data ) ? $data['facebook_id'] : 0;
 $login_method = ( $data ) ? $data['login_type'] : '';
@@ -44,7 +48,7 @@ if (stripos($user_agent, 'MSIE 6.0') !== false
             <script type="text/javascript" src="<?php echo $this->baseurl ?>/templates/fmb/javascript/fmb.js"></script>
 	</head>
 	<body _alias="<?php echo $alias; ?>" _baseurl="<?php echo $base_url; ?>" _fb="<?php echo $facebook; ?>" _type="<?php echo $login_method; ?>">
-		<div id="_content" class="content">
+        <div id="_content" class="content">
 			<div class="header"></div>
 			<div class="main">
 				<table width="100%">
