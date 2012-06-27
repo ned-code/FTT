@@ -43,7 +43,7 @@ if (stripos($user_agent, 'MSIE 6.0') !== false
             <!-- fmb template script -->
             <script type="text/javascript" src="<?php echo $this->baseurl ?>/templates/fmb/javascript/fmb.js"></script>
 	</head>
-	<body _alias="<?php echo $alias; ?>" _baseurl="<?php echo $base_url; ?>" _fb="<?php echo $facebook_id; ?>" _type="<?php echo $login_method; ?>">
+	<body _alias="<?php echo $alias; ?>" _baseurl="<?php echo $base_url; ?>" _fb="<?php echo $facebook; ?>" _type="<?php echo $login_method; ?>">
 		<div id="_content" class="content">
 			<div class="header"></div>
 			<div class="main">
@@ -66,7 +66,17 @@ if (stripos($user_agent, 'MSIE 6.0') !== false
                                                     <div class="twitter"><a class="addthis_button_twitter at300b"></a></div>
                                                     <div class="email"><a class="addthis_button_email at300b"></a></div>
                                                 </div>
-                                                <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4f97ad88304db623"></script>
+                                                <script>
+                                                    if(window == window.top){
+                                                        (function(w){
+                                                            var head = document.getElementsByTagName("head");
+                                                            var script = document.createElement("script");
+                                                            script.src = "http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4f97ad88304db623";
+                                                            script.type="text/javascript";
+                                                            head[0].appendChild(script);
+                                                        })(window)
+                                                    }
+                                                </script>
                                             <!-- AddThis Button END -->
                                         </div>
                                     </div>
