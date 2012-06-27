@@ -2,13 +2,13 @@ function JMBRecentVisitorsObject(obj){
     var parent = this,
         content = null,
         sb = host.stringBuffer(),
-        type = jQuery(document.body).attr('_type'),
+        loggedByFamous = parseInt(jQuery(document.body).attr('_type')),
         alias = jQuery(document.body).attr('_alias'),
         settings = storage.settings,
         functions ={
             createBody:function(json){
                 var header_background_color, st = host.stringBuffer();
-                if(type=='famous_family'){
+                if(loggedByFamous){
                     header_background_color = settings.colors.famous_header
                 } else {
                     header_background_color = settings.colors.family_header;

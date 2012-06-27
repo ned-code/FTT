@@ -1,6 +1,6 @@
 function JMBLatestUpdatesObject(offsetParent){	
-	var	module = this,	
-		type = jQuery(document.body).attr('_type'),
+	var	module = this,
+        loggedByFamous = parseInt(jQuery(document.body).attr('_type')),
 		usertree = storage.usertree.pull,
 		settings = storage.settings,
         message = {
@@ -75,7 +75,7 @@ function JMBLatestUpdatesObject(offsetParent){
 		create:function(json){
 			var	sb = host.stringBuffer(), 
 				colors = settings.colors,
-				h_color = (type=="famous_family")?colors.famous_header:colors.family_header;			
+				h_color = (loggedByFamous)?colors.famous_header:colors.family_header;
 			sb._('<div class="jmb-lu-header" style="background:#'+h_color+';">');
 				sb._('<span>')._(message.FTT_MOD_LATEST_UPDATES_HEADER)._('</span>');
 			sb._('</div>');

@@ -4,13 +4,13 @@ function JMBHeader(){
 		cont,
 		parent, 
 		alias,
-		type,
+        loggedByFamous,
 		exists;
 
 	cont = jQuery('<div class="jmb-header-container"><div class="jmb-header-logo" style="display:none;">&nbsp;</div><div style="display:none;" class="jmb-header-expand">&nbsp;</div></div>');
 	parent = jQuery('div#.content div.header');	
 	alias = jQuery(document.body).attr('_alias');
-	type = jQuery(document.body).attr('_type');
+    loggedByFamous = parseInt(jQuery(document.body).attr('_type'));
 
 	exists = {
 		"famous-family":true,
@@ -46,7 +46,7 @@ function JMBHeader(){
 					if(fn.get.is_iframe()){
 						return (alias!='login')?'familytreetop':alias;
 					}
-					if(alias == 'myfamily' && type=='famous_family'){
+					if(alias == 'myfamily' && loggedByFamous){
 						return 'famous-family';
 					}
                     if(alias == 'famous-family'){
@@ -81,7 +81,7 @@ function JMBHeader(){
 		},
 		init:function(){
 			if(exists[alias]){
-				if(alias == 'myfamily' && type != 'famous_family'){
+				if(alias == 'myfamily' && !loggedByFamous){
 					this.show.expand();
 					this.click.expand();
 				}

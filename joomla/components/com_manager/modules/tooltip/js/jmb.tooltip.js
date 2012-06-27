@@ -109,7 +109,7 @@ JMBTooltip.prototype = {
 						sb._('<tr>');
 							sb._('<td class="jmb-tooltip-view-avatar">')
 							sb._('<div class="image">')._(module._avatar(settings));
-								if(jQuery(document.body).attr('_type') != 'famous_family' && settings.button_edit){
+								if(!parseInt(jQuery(document.body).attr('_type')) && settings.button_edit){
 									sb._('<div class="jmb-tooltip-view-edit">&nbsp;</div>');
 								}
 								if(user.facebook_id!=='0'&&settings.button_facebook){
@@ -144,7 +144,7 @@ JMBTooltip.prototype = {
 					sb._('</div>');
 				}
 			sb._('</div>');
-			if(jQuery(document.body).attr('_type') != 'famous_family' && user.facebook_id==='0' && get.turns < 100 && get.is_alive){
+			if(!parseInt(jQuery(document.body).attr('_type')) && user.facebook_id==='0' && get.turns < 100 && get.is_alive){
 				sb._('<div class="jmb-tooltip-view-send">');
 					sb._('<table>');			
 						sb._('<tr>');

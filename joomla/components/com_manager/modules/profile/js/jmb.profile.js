@@ -1083,7 +1083,7 @@ JMBProfile.prototype = {
             jQuery(box).parent().css('top', '40px');
             jQuery(box).html('');
             jQuery(box).append(dialogBox);
-            if(fn.getParseUserInfo().is_editable && jQuery(document.body).attr('_type') != 'famous_family'){
+            if(fn.getParseUserInfo().is_editable && !parseInt(jQuery(document.body).attr('_type'))){
                 jQuery(box).parent().find('.ui-dialog-titlebar').append(dialogButton);
                 fn.initHeader(dialogButton, type);
             }

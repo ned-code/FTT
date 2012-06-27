@@ -43,7 +43,7 @@ function JMBFamiliesObject(obj, popup){
 		});
 	});
 
-    module.loginType = jQuery(document.body).attr('_type');
+    module.loggedByFamous = parseInt(jQuery(document.body).attr('_type'));
 	module.settings = storage.settings;
 	module.colors = module.settings.colors;
     module.usertree = storage.usertree.pull;
@@ -227,7 +227,7 @@ JMBFamiliesObject.prototype = {
 				sb._((object.user.is_mother_line&&fam_opt.mother.pencil)?fam_opt.mother.pencil:'#F5FAE6');
 			sb._(';">');
 				sb._('<div id="')._(gedcom_id)._('-view" type="imgContainer" class="jmb-families-parent-img">')._(module._avatar(object, 'parent', 1));
-                    if(module.loginType != 'famous_family' && get.is_editable && !module.popup){
+                    if(!module.loggedByFamous && get.is_editable && !module.popup){
                         sb._('<div id="')._(gedcom_id)._('-edit" class="jmb-families-edit-button parent">&nbsp;</div>');
                     }
 					if(facebook_id != '0'){
@@ -274,7 +274,7 @@ JMBFamiliesObject.prototype = {
 				sb._((object.user.is_mother_line&&fam_opt.mother.pencil)?fam_opt.mother.pencil:'#F5FAE6');
 			sb._(';">');
 				sb._('<div id="')._(gedcom_id)._('-view" type="imgContainer" class="jmb-families-parent-img" style="border:2px solid #')._(bcolor)._(';">')._(module._avatar(object, 'parent', 1));
-					if(module.loginType != 'famous_family' && get.is_editable && !module.popup){
+					if(!module.loggedByFamous && get.is_editable && !module.popup){
                         sb._('<div id="')._(gedcom_id)._('-edit" class="jmb-families-edit-button parent">&nbsp;</div>');
                     }
                     if(facebook_id != '0'){
@@ -316,7 +316,7 @@ JMBFamiliesObject.prototype = {
 				sb._((object.user.is_mother_line&&fam_opt.mother.pencil)?fam_opt.mother.pencil:'#F5FAE6');
 			sb._(';">');
 				sb._('<div id="')._(gedcom_id)._('-view" type="imgContainer" class="jmb-families-parent-img" style="border:2px solid #')._(bcolor)._('">')._(module._avatar(object, 'parent', 1));
-					if(module.loginType != 'famous_family' && get.is_editable && !module.popup){
+					if(!module.loggedByFamous && get.is_editable && !module.popup){
                         sb._('<div id="')._(gedcom_id)._('-edit" class="jmb-families-edit-button parent">&nbsp;</div>');
                     }
 					if(facebook_id != '0'){
@@ -361,7 +361,7 @@ JMBFamiliesObject.prototype = {
 				sb._((user.is_mother_line&&fam_opt.mother.pencil)?fam_opt.mother.pencil:'#F5FAE6');
 			sb._(';">');
 				sb._('<div id="')._(gedcom_id)._('-view" type="imgContainer" style="height:')._(Math.round(80*k))._('px;width:')._(Math.round(72*k))._('px;border:2px solid #')._(bcolor)._('" class="jmb-families-child-img">')._(module._avatar(object, 'child', k));	
-					if(module.loginType != 'famous_family' && get.is_editable && !module.popup){
+					if(!module.loggedByFamous && get.is_editable && !module.popup){
                         sb._('<div id="')._(gedcom_id)._('-edit" class="')._(edit_button)._('">&nbsp;</div>');
                     }
                     if(facebook_id != '0'){

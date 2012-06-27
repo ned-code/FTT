@@ -9,31 +9,18 @@
 // No direct access.
 defined('_JEXEC') or die;
 
-
 $app = JFactory::getApplication();
-$jfb = JFBConnectFacebookLibrary::getInstance();
-$session = JFactory::getSession();
 
-//joomla vars
 $base_url = Juri::base();
+$host = &FamilyTreeTopHostLibrary::getInstance();
+$data = $host->getUserMap();
 
-//facebook vars
-$facebook_id = false;
-$jfb_facebook_id = $jfb->getUserId();
-$session_facebook_id = $session->get('facebook_id');
+$facebook_id = ( $data ) ? $data['facebook_id'] : 0;
+$login_method = ( $data ) ? $data['login_type'] : '';
 
-//ftt vars
 $menu   = &JSite::getMenu();
 $active   = $menu->getActive();
 $alias = $active->alias;
-$login_method = $session->get('login_method');
-
-//update vars
-if($jfb_facebook_id){
-	$facebook_id = $jfb_facebook_id;
-}else if(!empty($session_facebook_id)){
-	$facebook_id = $session_facebook_id;
-}
 
 $user_agent = $_SERVER['HTTP_USER_AGENT'];
 if (stripos($user_agent, 'MSIE 6.0') !== false
@@ -48,14 +35,6 @@ if (stripos($user_agent, 'MSIE 6.0') !== false
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->language; ?>" lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>" >
 	<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# website: http://ogp.me/ns/website#">
-        <!--
-        <meta property="fb:app_id"      content="136695133059478" />
-        <meta property="og:type"        content="website" />
-        <meta property="og:url"         content="http://www.familytreetop.com" />
-        <meta property="og:title"       content="Family TreeTop" />
-        <meta property="og:image"       content="Family TreeTop" />
-        <meta property="og:description" content="Family TreeTop" />
-        -->
 		<jdoc:include type="head" />
       	    <!-- joomla system stylesheet -->
             <link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/system/css/system.css" type="text/css" />
@@ -64,7 +43,7 @@ if (stripos($user_agent, 'MSIE 6.0') !== false
             <!-- fmb template script -->
             <script type="text/javascript" src="<?php echo $this->baseurl ?>/templates/fmb/javascript/fmb.js"></script>
 	</head>
-	<body _alias="<?php echo $alias; ?>" _baseurl="<?php echo $base_url; ?>" _fb="<?php echo ($facebook_id)?$facebook_id:0; ?>" _type="<?php echo $login_method; ?>">
+	<body _alias="<?php echo $alias; ?>" _baseurl="<?php echo $base_url; ?>" _fb="<?php echo $facebook_id; ?>" _type="<?php echo $login_method; ?>">
 		<div id="_content" class="content">
 			<div class="header"></div>
 			<div class="main">

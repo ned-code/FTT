@@ -30,11 +30,11 @@ class JmbViewMulti extends JView{
         $this->config = $host->getConfig();
 
         $userMap = $host->getUserMap();
-        if($userMap){
+        if($userMap&&$userMap['tree_id']!=0){
             $host->gedcom->relation->check($userMap['tree_id'],$userMap['gedcom_id']);
             $host->usertree->saveFamilyLine($userMap['tree_id'], $userMap['gedcom_id'], $userMap['permission']);
             $host->usertree->init($userMap['tree_id'], $userMap['gedcom_id'], $userMap['permission']);
-            if($userMap['login_type']){
+            if(!$userMap['login_type']){
                 $this->update_login_time($userMap['gedcom_id']);
             }
         }

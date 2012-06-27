@@ -2,7 +2,7 @@ function JMBThisMonthObject(obj){
 	//vars 
 	this.obj = obj;
 	this.alias = jQuery(document.body).attr('_alias');
-	this.type = jQuery(document.body).attr('_type');
+	this.loggedByFamous = parseInt(jQuery(document.body).attr('_type'));
 	this.settings = {};
 	this.json = {};
 	this.content = { table:null, birth:null, death:null, marr:null };
@@ -246,7 +246,7 @@ JMBThisMonthObject.prototype = {
 	_setHEAD:function(json){
 		var self = this;
 		var header = jQuery(this.table).find('.jmb-this-month-header');
-		var header_background_color = (self.type=='famous_family')?self.settings.colors.famous_header:self.settings.colors.family_header;
+		var header_background_color = (self.loggedByFamous)?self.settings.colors.famous_header:self.settings.colors.family_header;
 		jQuery(header).css('background', '#'+header_background_color);
 		var sb = host.stringBuffer();
         var message = this.message;

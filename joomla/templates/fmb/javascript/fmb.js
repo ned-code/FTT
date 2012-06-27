@@ -1,7 +1,7 @@
 function JMBTopMenuBar(){
-	var module = this, fn, cont, alias, type, fb, message;
-	
-	type = jQuery(document.body).attr('_type');
+	var module = this, fn, cont, alias, loggedByFamous, fb, message;
+
+    loggedByFamous = parseInt(jQuery(document.body).attr('_type'));
 	alias = jQuery(document.body).attr('_alias');
 	fb = jQuery(document.body).attr('_fb');
     message = {
@@ -72,7 +72,7 @@ function JMBTopMenuBar(){
 
                 case "first-page":
 				case "myfamily":
-					if(type == 'famous_family'){
+					if(loggedByFamous){
 						fn.sw(jQuery(cont).find('div#famous-family span'));
 					} else {
 						fn.sw(jQuery(cont).find('div#myfamily span'));

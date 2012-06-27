@@ -1,7 +1,7 @@
 function JMBQuickFactsObject(object){	
 	var	module = this,
 		settings = storage.settings,
-		type = jQuery(document.body).attr('_type'),
+        loggedByFamous = parseInt(jQuery(document.body).attr('_type')),
 		alias = jQuery(document.body).attr('_alias'),
         message = {
             FTT_MOD_QUICK_FACTS_HEADER:"Quick Facts",
@@ -61,7 +61,7 @@ function JMBQuickFactsObject(object){
 			var sb = host.stringBuffer(),
 			    htmlObject,
                 header_background_color;
-            if(type=='famous_family'){
+            if(loggedByFamous){
                 header_background_color = settings.colors.famous_header;
             } else {
                 header_background_color = settings.colors.family_header;

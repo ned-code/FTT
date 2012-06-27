@@ -2,7 +2,7 @@ function JMBLogin(){
 	var	module = this,
 		fn,
 		settings = {},
-		type = '',
+        loggedByFamous = false,
 		alias = '',
 		path = "/components/com_manager/modules/login/imgs/",
 		notifications,
@@ -21,7 +21,7 @@ function JMBLogin(){
     }
 
 	//init vars
-	type = jQuery(document.body).attr('_type');
+	loggedByFamous = parseInt(jQuery(document.body).attr('_type'));
 	alias = jQuery(document.body).attr('_alias');
 
 	//init functions
@@ -289,7 +289,7 @@ function JMBLogin(){
         createBox:function(data){
             switch(alias){
                 case "myfamily":
-                    if(type=="famous_family"){
+                    if(loggedByFamous){
                         fn.famous();
                     } else {
                         fn.facebook(data);
@@ -336,7 +336,7 @@ function JMBLogin(){
                         window.location.href= bUrl+'index.php/myfamily';
                     }
                 });
-            } else if(type == 'famous_family'){
+            } else if(loggedByFamous){
                 jQuery.ajax({
                     url: 'index.php?option=com_manager&task=clearFamousData',
                     type: "POST",

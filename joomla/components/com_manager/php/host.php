@@ -369,25 +369,25 @@ class FamilyTreeTopHostLibrary {
     public function getCurrentAlias(){
         $menu   = &JSite::getMenu();
         $active   = $menu->getActive();
-        return $active->alias;
+        return (is_object($active))?$active->alias:false;
     }
     public function setUserPermission($permission){
         $session =& JFactory::getSession();
-        $sqlString = "UPDATE #__mb_user_map SET `permission` = ? WHERE session_id = ?";
+        $sqlString = "UPDATE #__mb_user_map SET `permission` = ?, `time` = NOW() WHERE session_id = ?";
         $this->ajax->setQuery($sqlString, $permission, $session->getId());
         $this->ajax->query();
     }
 
     public function setUserMapFacebookId($facebook_id){
         $session =& JFactory::getSession();
-        $sqlString = "UPDATE #__mb_user_map SET `facebook_id` = ? WHERE session_id = ?";
+        $sqlString = "UPDATE #__mb_user_map SET `facebook_id` = ?, `time` = NOW() WHERE session_id = ?";
         $this->ajax->setQuery($sqlString, $facebook_id, $session->getId());
         $this->ajax->query();
     }
 
     public function setUserMap($tree_id, $gedcom_id, $login_type = 0){
         $session =& JFactory::getSession();
-        $sqlString = "UPDATE #__mb_user_map SET `tree_id` = ?, `gedcom_id` = ? , `login_type` = ? WHERE session_id = ?";
+        $sqlString = "UPDATE #__mb_user_map SET `tree_id` = ?, `gedcom_id` = ? , `login_type` = ?, `time` = NOW() WHERE session_id = ?";
         $this->ajax->setQuery($sqlString, $tree_id, $gedcom_id, $login_type, $session->getId());
         $this->ajax->query();
     }
@@ -399,7 +399,7 @@ class FamilyTreeTopHostLibrary {
 
     public function setUserAlias($alias){
         $session =& JFactory::getSession();
-        $sqlString = "UPDATE #__mb_user_map SET `page` = ? WHERE session_id = ?";
+        $sqlString = "UPDATE #__mb_user_map SET `page` = ?, `time` = NOW() WHERE session_id = ?";
         $this->ajax->setQuery($sqlString, $alias, $session->getId());
         $this->ajax->query();
     }

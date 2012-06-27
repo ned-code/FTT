@@ -832,9 +832,10 @@ core.renderTabs = function(args){
     	//When page loads...
 	jQuery(".tab_content").hide(); //Hide all content
 
-    var type = jQuery(document.body).attr('_type');
-    jQuery('ul.jmbtabs').addClass(type);
-    jQuery('.tab_content').addClass(type);
+    var loggedByFamous = parseInt(jQuery(document.body).attr('_type'));
+    var classByLogged = (loggedByFamous)? 'famous-family' : 'myfamily' ;
+    jQuery('ul.jmbtabs').addClass(classByLogged);
+    jQuery('.tab_content').addClass(classByLogged);
 			
 	//On Click Event
 	jQuery("ul.jmbtabs li").click(function() {
