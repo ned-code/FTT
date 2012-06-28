@@ -18,7 +18,7 @@ class JMBHome {
                 $this->host->setUserAlias($facebook_id, 'famous_family');
 			break;
 		}
-		$session->set('alias', $args);
+        $this->host->setUserAlias($facebook_id, $args);
 		return true;
 	}
 

@@ -237,25 +237,19 @@ function JMBLogin(){
             storage.langString = json.langString;
 		},
 		user:function(callback){
-			var json, object;
+			var json, object, user;
+            user = storage.usertree.user;
 			fn.ajax('user', null, function(res){
                 if(!res) callback(false);
                 json = jQuery.parseJSON(res.responseText);
                 settings.languages = json.languages;
                 settings.default_language = json.default_language;
                 msg = json.msg;
-                /*
-                if(json.usertree){
-                    fn.set_global_data(json);
+                if(user != null && typeof(user.id) != 'undefined'){
+                    callback(user);
+                } else {
+                    callback(false);
                 }
-                */
-                FB.api('/me', function(data){
-                    if(data.error){
-                        callback(false);
-                    } else {
-                        callback(data);
-                    }
-                });
 			});
 		},
 

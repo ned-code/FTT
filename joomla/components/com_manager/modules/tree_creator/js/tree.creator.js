@@ -615,7 +615,8 @@ function JMBTreeCreatorObject(parent){
 			return sb.result();
 		},
 		convert_to_string:function(args_pull, callback){
-            FB.api('/me', function(fb){
+            var user = storage.usertree.user;
+            if(user != null && typeof(user.id) != 'undefined'){
                 var title = ['self','mother','father'];
                 var string = '{';
                 jQuery(args_pull).each(function(i, el){
@@ -626,11 +627,16 @@ function JMBTreeCreatorObject(parent){
                     string = string.substr(0, string.length -1);
                     string += '},';
                 });
-                string += '"facebook_id":"'+fb.id+'"';
+                string += '"facebook_id":"'+user.id+'"';
                 string += '}';
                 callback(string);
+            }
+            /*
+            FB.api('/me', function(fb){
+
                 //return string.substr(0, string.length -1) + '}';
             });
+            */
 		},
 		finish_create:function(user_form){
 			var sb = host.stringBuffer();
@@ -681,6 +687,15 @@ function JMBTreeCreatorObject(parent){
 			});
 		},
         set_user_data:function(form, callback){
+          var user = storage.usertree.user;
+          if(user != null && typeof(user.id) != 'undefined'){
+              jQuery(form).find('div.avatar').html('<img width="135px" height="150px" src="https://graph.facebook.com/'+me.id+'/picture" />');
+              jQuery(form).find('input[name="first_name"]').val(user.first_name);
+              jQuery(form).find('input[name="last_name"]').val(user.last_name);
+              jQuery(form).find('select[name="gender"] option[value="'+user.gender[0]+'"]').attr('selected', 'selected');
+              callback();
+          }
+          /*
           FB.api('/me', function(me){
             jQuery(form).find('div.avatar').html('<img width="135px" height="150px" src="https://graph.facebook.com/'+me.id+'/picture" />');
             jQuery(form).find('input[name="first_name"]').val(me.first_name);
@@ -688,6 +703,7 @@ function JMBTreeCreatorObject(parent){
             jQuery(form).find('select[name="gender"] option[value="'+me.gender[0]+'"]').attr('selected', 'selected');
             callback();
           });
+          */
         },
 		create_new_tree:function(e){
 			var user_form = fn.user_form();
@@ -754,6 +770,24 @@ function JMBTreeCreatorObject(parent){
             });
         },
 		init:function(){
+            var user = storage.usertree.user;
+            if(user != null && typeof(user.id) != 'undefined'){
+                module.fProfile = user;
+                fn.get_facebook_friends_string(function(response){
+                    var args = JSON.stringify({me:module.fProfile, friends:response.data});
+                    fn.ajax('init', args, function(res){
+                        module.initData = jQuery.parseJSON(res.responseText);
+                        var body = fn.body();
+                        var dialog_box = fn.dialog_box();
+                        module.body = body;
+                        module.dialog_box = dialog_box;
+                        jQuery(parent).append(body);
+                        fn.connect_to_family_treetop(body);
+                        fn.set_start_content(dialog_box);
+                    });
+                });
+            }
+            /*
             FB.api('/me', function(me){
                 module.fProfile = me;
                 fn.get_facebook_friends_string(function(response){
@@ -770,6 +804,7 @@ function JMBTreeCreatorObject(parent){
                     });
                 });
             });
+            */
 		}
 	}
 	
