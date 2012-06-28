@@ -55,7 +55,7 @@ class JmbModelMulti extends JModel
 
         protected function _getContent(){
             $db =& JFactory::getDBO();
-            $sql_string = "SELECT content.id, content.layout_type, content.title, grid.json FROM #__mb_content as content LEFT JOIN jos_mb_modulesgrid as grid ON grid.page_id = content.id";
+            $sql_string = "SELECT content.id, content.layout_type, content.title, grid.json FROM #__mb_content as content LEFT JOIN #__mb_modulesgrid as grid ON grid.page_id = content.id";
             $db->setQuery($sql_string);
             return $db->loadAssocList();
         }

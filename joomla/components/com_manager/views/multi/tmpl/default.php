@@ -12,7 +12,6 @@ $pages = substr($pages, 0, strlen($pages)-1);
 ?>
 <script>
     (function(w){
-
         var pageInfo = <?php echo json_encode($this->pageInfo); ?>;
         var activeTab = '<?php echo $this->activeTab; ?>';
         var usertree = <?php echo json_encode($this->usertree); ?>;

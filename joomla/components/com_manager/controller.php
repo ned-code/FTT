@@ -110,7 +110,7 @@ class JMBController extends JController
         	$path = $jpath_base.DS.'components'.DS.'com_manager'.DS.'modules';
         	
         	//get all pages
-        	$sql_string = "SELECT content.id, content.layout_type, content.title, grid.json FROM #__mb_content as content LEFT JOIN jos_mb_modulesgrid as grid ON grid.page_id = content.id";
+        	$sql_string = "SELECT content.id, content.layout_type, content.title, grid.json FROM #__mb_content as content LEFT JOIN #__mb_modulesgrid as grid ON grid.page_id = content.id";
         	$db->setQuery($sql_string);
         	$content_table = $db->loadAssocList();
         	
