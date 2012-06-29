@@ -3,31 +3,18 @@
 class JMBDescendantTree {
 	protected $host;
 	protected $color;
+    protected $config;
 	protected $owner_id;
 	protected $members = array();
 	protected $user = "user='true'";
-	
-	protected function color(){
-		$config = $_SESSION['jmb']['config'];
-                $color = array();
-                foreach($config['color'] as $key => $element){
-                	switch($key){
-                	    case "female": $color['F'] = $element; break;
-                            case "male": $color['M'] = $element;  break;
-                            case "location": $color['L'] = $element; break;
-                            case "famous_header": $color['famous_header'] = $element; break;
-                            case "family_header": $color['family_header'] = $element; break;
-                	}
-                }
-                return $color;
-	}
-	
+
 	public function __construct(){
 		$this->host = &FamilyTreeTopHostLibrary::getInstance();
 		$session = JFactory::getSession();
 		$settings = $session->get('settings');
-		$this->color = $settings['colors'];
-	}
+		$this->config = $this->host->getConfig();
+        $this->color = $this->config['colors'];
+ 	}
 	
 	protected function name($object){
 		return str_replace('@N.N.', '', implode(' ', array($object['user']['first_name'],$object['user']['last_name']) ) );

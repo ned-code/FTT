@@ -157,7 +157,7 @@ JMBDescendantTreeObject.prototype = {
             if(module.selected!=null){
                 jQuery('div#'+module.selected+'[name="descendant-node"]').click();
             } else {
-                user = jQuery('div#'+module.owner+'[name="descendant-node"]');
+                user = jQuery(module.obj).find('div#'+module.owner+'[name="descendant-node"]');
                 jQuery(user[0]).click();
                 jQuery('div.containerTableStyle').scrollTop(0).scrollTop((jQuery(user[0]).offset().top - 300));
             }
