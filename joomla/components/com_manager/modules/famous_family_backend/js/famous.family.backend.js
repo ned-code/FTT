@@ -292,8 +292,7 @@ function FamousFamilyBackend(obj){
 	
 	var html_object = createBody();	
 	module.ajax('getFamousFamiliesTree',null, function(res){
-		//var json = jQuery.parseJSON(res.responseText);
-		var json = storage.getJSON(res.responseText);
+		var json = jQuery.parseJSON(res.responseText);
 		module.json = json;
 		createFamousFamiliesTree(html_object);
 	});
@@ -305,7 +304,7 @@ function FamousFamilyBackend(obj){
 
 FamousFamilyBackend.prototype = {
 	ajax:function(func, params, callback){
-        storage.callMethod("famous_family_backend", "JMBFamousFamilyBackend", func, params, function(res){
+        host.callMethod("famous_family_backend", "JMBFamousFamilyBackend", func, params, function(res){
 				callback(res);
 		})
 	},

@@ -134,7 +134,7 @@ class JMBFamousFamilyBackend {
 		$this->db->query();
 		$famous_family_id = $this->db->insertid();
 		
-		$rel = array('id'=>$ind->Id, 'first_name'=>$ind->FirstName, 'middle_name'=>$ind->MidleName, 'last_name'=>$ind->LastName);
+		$rel = array('id'=>$ind->Id, 'first_name'=>$ind->FirstName, 'middle_name'=>$ind->MiddleName, 'last_name'=>$ind->LastName);
 		
 		return json_encode(array('message'=>'Tree has successfully saved.', 'family'=>array('id'=>$famous_family_id, 'name'=>$tree_name, 'tree_id'=>$tree_id, 'individuals_id'=>$ind->Id, 'description'=>$description, 'permission'=>$permission,'relatives'=>array($rel))));	
 	}

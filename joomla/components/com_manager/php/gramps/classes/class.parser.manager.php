@@ -7,6 +7,15 @@ class ParserList{
         $this->ajax = $ajax;
         $this->gedcom = $gedcom;
 	}
+
+    protected function getPath(){
+        $jpath_base_explode = explode('/', JPATH_BASE);
+        if(end($jpath_base_explode) == 'administrator'){
+            array_pop($jpath_base_explode);
+        }
+        $jpath_base = implode('/', $jpath_base_explode);
+        return $jpath_base;
+    }
 	
 	protected function createTree($tree_name){
 		$this->ajax->setQuery("INSERT INTO #__mb_tree (`name`) VALUES( ? ) ", $tree_name);
@@ -85,7 +94,8 @@ class ParserList{
 	public function parse($tmpfname, $tree_name){ 
 		$sxe = simplexml_load_file($tmpfname);
 		$data = new Parser;   
-		$tree_id = $this->createTree($tree_name);     
+		$tree_id = $this->createTree($tree_name);
+
 		foreach($sxe->xpath('//person') as $item ){
 			$name = explode(" ", $item->name->first);
 			$nick = null;
@@ -154,7 +164,25 @@ class ParserList{
 			}    
 		}
 		return $data;  
-	} 
+	}
+    public function convert($gedfname, $treename){
+        $jpath = $this->getPath();
+        $tmpfname =tempnam($jpath."/components/com_manager/php/gramps/xml","xml");
+        chmod($tmpfname,0777);
+        $gramps = $jpath."/components/com_manager/gramps/src";
+        $script = $jpath."/components/com_manager/php/gramps/python/GedToXml.py";
+        $log = $jpath."/components/com_manager/php/gramps/log.txt";
+        $se ="python ".$script." ".$gramps." ".$gedfname." ".$tmpfname."  2>&1 ";
+        $cont= $se;
+        $s0 = exec($se, $sa, $sr);
+        $cont = $sa;
+        if ($sa[9]=='Done.') {
+            $res = $this->parse($tmpfname, $treename);
+        } else {
+            $res = $sa;
+        }
+        return $res;
+    }
 	/*
 	public function convert($gedfname){
 		$jpath = $this->core->core->getAbsoluePath(); 
