@@ -1,4 +1,4 @@
-function JMBAncestorsObject(obj, popup, callback){
+function JMBAncestorsObject(obj, popup){
 	var	module = this,
 		cont = jQuery('<div id="jit" class="jmb-ancestors-jit"></div>'),
 		home_button = jQuery('<div class="jmb-ancestors-home"></div>'),
@@ -24,6 +24,7 @@ function JMBAncestorsObject(obj, popup, callback){
 	module.clickNode = null;
     module.targetNode = null;
     module.loggedByFamous = parseInt(jQuery(document.body).attr('_type'));
+    module.prefix = 'jit'+((new Date()).valueOf());
 
 	jQuery(home_button).click(function(){
 		if(module.user==null) return false;
@@ -60,11 +61,22 @@ function JMBAncestorsObject(obj, popup, callback){
 	module.user = module.usertree[storage.usertree.gedcom_id];
 	module.tree = module.getTree(module.user);
 
-    setTimeout(function(){
-        module.init(function(){
-            storage.core.modulesPullObject.unset('JMBAncestorsObject');
-        });
-    }, 1);
+    jQuery(module.parent).ready(function(){
+        (function(){
+            var loader = function(){
+                if(jQuery('#jit').length != 0 && typeof($jit.ST) === 'function'){
+                    module.init(function(){
+                        storage.core.modulesPullObject.unset('JMBAncestorsObject');
+                    });
+                } else {
+                    setTimeout(function(){
+                        loader();
+                    }, 250)
+                }
+            }
+            loader();
+        })()
+    })
 
     core.destroy.set('ancestors', function(){
 
@@ -127,7 +139,7 @@ JMBAncestorsObject.prototype = {
 				storage.tooltip.render('edit', {
                     button_edit:false,
                     button_facebook:false,
-                    gedcom_id:node.id,
+                    gedcom_id:node.id.split('_')[1],
 					target:object,
                     afterEditorClose:function(){
                         storage.tooltip.cleaner(function(){
@@ -244,8 +256,17 @@ JMBAncestorsObject.prototype = {
 			get_parents_id,
 			set_data,
 			set_null_data,
-			set_ancestors;
-			
+			set_ancestors,
+            getPfexix;
+
+        getPfexix = function(){
+            var a = [];
+            for(var key in arguments){
+                if(arguments.hasOwnProperty(key)) a.push(arguments[key]);
+            }
+            return a.join('_');
+        }
+
 		get_parents = function(id){
 			if(id[0]==='_'||!usertree[id]) return false;
 			return usertree[id].parents;
@@ -267,7 +288,7 @@ JMBAncestorsObject.prototype = {
 				node;
 			
 			node = {
-				id: parse.gedcom_id,
+				id: getPfexix(module.prefix, parse.gedcom_id),
 				name: parse.name,
 				data:{
 					ftt_storage:{
@@ -286,7 +307,7 @@ JMBAncestorsObject.prototype = {
 		set_null_data = function(){
 			count++;
 			return {
-				id:'_'+count,
+				id: getPfexix('', module.prefix, count),
 				name:'',
 				data:{ ftt_storage:{ is_exist:false} },
 				children:[]
