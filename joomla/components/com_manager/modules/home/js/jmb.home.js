@@ -39,14 +39,14 @@ function JMBHomeObject(offsetParent){
 					case 'connect':
 						//ajax('myfamily');
 						fn.ajax('page', 'myfamily', function(res){
-							window.location.reload();	
+							window.location.href = storage.baseurl + 'index.php/myfamily';
 						});
 					break;
 					
 					case 'view':
 						//ajax('famous-family');
 						fn.ajax('page', 'famous-family', function(res){
-							window.location.reload();
+                            window.location.href = storage.baseurl + 'index.php/famous-family';
 						});
 					break;
 				}
