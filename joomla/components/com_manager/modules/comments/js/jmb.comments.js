@@ -16,7 +16,8 @@ function JMBCommentsObject(object){
 JMBCommentsObject.prototype = {
     ajax:function(func, params, callback){
         storage.callMethod("comments", "JMBComments", func, params, function(res){
-            var json = jQuery.parseJSON(res.responseText);
+            //var json = jQuery.parseJSON(res.responseText);
+            var json = storage.getJSON(res.responseText);
             callback(json);
         });
     }

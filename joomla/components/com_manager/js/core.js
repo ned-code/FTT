@@ -539,6 +539,15 @@ storage.callMethod = function(module, classname, method, args, callback){
     storage.request.add(xnr, key);
     return xnr;
 }
+storage.getJSON = function(str){
+    var json;
+    try {
+        json = jQuery.parseJSON(str);
+    } catch (e) {
+        return false;
+    }
+    return json;
+}
 
 storage.stringBuffer = function(){
     return (function(){

@@ -21,14 +21,14 @@ function JMBLanguage(){
 			var id = jQuery(this).parent().attr('id');
 			var lang_title = jQuery(this).attr('title');
 			module.ajax('setLanguage', id, function(res){
-				var json = jQuery.parseJSON(res.responseText);
 				window.location.reload();
 			});
 		});
 	}
 	
 	module.ajax('getLanguages', null, function(res){
-		var json = jQuery.parseJSON(res.responseText);
+		//var json = jQuery.parseJSON(res.responseText);
+		var json = storage.getJSON(res.responseText);
 		var body = createBody();
 		var ul = createLangIcons(json.languages);
 		setEventHandlerByClick(ul);

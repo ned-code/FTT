@@ -310,7 +310,8 @@ OpenContentManager.prototype = {
 	_loadPageInfo:function(pageIndex){
 		var module = this;
 		this._ajax('loadPageInfo', this.pageIndex, function(req){
-            var json = jQuery.parseJSON(req.responseText);
+            //var json = jQuery.parseJSON(req.responseText);
+            var json = storage.getJSON(req.responseText);
 			if(!json){
 				if(module.modules != undefined){
 					for(var i=0; i<module.modules.childNodes.length; i++){
@@ -451,7 +452,8 @@ OpenContentManager.prototype = {
 		this._ajax('getPageInfo', storage.obj.dhxTree.getSelectedItemId(), function(req){
 			var json, data, index, title, layoutType, div;
 			//get row
-			json = jQuery.parseJSON(req.responseText);
+			//json = jQuery.parseJSON(req.responseText);
+			json = storage.getJSON(req.responseText);
             data = json.data[0];
 			//get page params
 			index = data.id;

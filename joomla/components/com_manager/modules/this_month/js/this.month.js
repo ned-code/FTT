@@ -383,8 +383,9 @@ JMBThisMonthObject.prototype = {
 		var render = null;
 		var settings = ['{"month":"',month,'","sort":"',sort,'","render":"',render,'"}'].join('');
 		this._ajax("load", settings, function(req){
-			var json = jQuery.parseJSON(req.responseText);
-			module.json =  json;
+			//var json = jQuery.parseJSON(req.responseText);
+            var json = storage.getJSON(req.responseText);
+            module.json =  json;
             if(json.language){
                 module.message = json.language;
             }

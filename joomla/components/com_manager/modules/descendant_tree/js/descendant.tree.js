@@ -168,7 +168,8 @@ JMBDescendantTreeObject.prototype = {
 		var	module = this,
 			json;
 		module.ajax('getTree', render, function(res){
-			json = jQuery.parseJSON(res.responseText);
+			//json = jQuery.parseJSON(res.responseText);
+			json = storage.getJSON(res.responseText);
             if(json.language){
                 module.message = json.language;
             }
@@ -187,7 +188,8 @@ JMBDescendantTreeObject.prototype = {
 		//if(typeof(id) != 'undefined' && module.checked != id){
 			module.ajax('getTreeById', id, function(res){
 				module.select = null;
-				var json = jQuery.parseJSON(res.responseText);
+				//var json = jQuery.parseJSON(res.responseText);
+				var json = storage.getJSON(res.responseText);
 				module.dhxTree.deleteChildItems(0);
 				module.dhxTree.loadXMLString(json.xml);
 				module.dhxTree.openAllItems(0);

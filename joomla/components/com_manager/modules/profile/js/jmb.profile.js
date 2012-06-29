@@ -684,7 +684,8 @@ function JMBProfile(){
             complete : function (req, err) {
                 //storage.request.del(key);
                 if(req.responseText.length!=0){
-                    var json = jQuery.parseJSON(req.responseText);
+                    //var json = jQuery.parseJSON(req.responseText);
+                    var json = storage.getJSON(req.responseText);
                     if(json.views){
                         module.views = json.views;
                     }
@@ -1002,7 +1003,8 @@ JMBProfile.prototype = {
                                 var type = jQuery(this).parent().attr('id');
                                 var args = type+','+module.gedcom_id+','+method;
                                 module.functions.ajax('delete', args, function(res){
-                                    var json = jQuery.parseJSON(res.responseText);
+                                    //var json = jQuery.parseJSON(res.responseText);
+                                    var json = storage.getJSON(res.responseText);
                                     if(module.gedcom_id == storage.usertree.gedcom_id){
                                         jfbc.login.logout_button_click();
                                         return false;

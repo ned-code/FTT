@@ -4,7 +4,8 @@ function JMBInvitateObject(obj){
     FB.api('/me', function(response){
         if(!response.error){
             module.ajax('checkUser', JSON.stringify( {id:response.id, token: module.getToken() }), function(res){
-                var json = jQuery.parseJSON(res.responseText);
+                //var json = jQuery.parseJSON(res.responseText);
+                var json = storage.getJSON(res.responseText);
                 if(json.success){
                     sb._('<div class="exist">');
                         sb._("You are currently logged into Facebook as " + response.name);
@@ -56,7 +57,8 @@ function JMBInvitateObject(obj){
                         case "accept":
                             var args =JSON.stringify( {object:response, token: module.getToken() });
                             module.ajax('accept', args, function(acceptResponse){
-                                var parseAcceptResponse = jQuery.parseJSON(acceptResponse.responseText);
+                                //var parseAcceptResponse = jQuery.parseJSON(acceptResponse.responseText);
+                                var parseAcceptResponse = stirage.getJSON(acceptResponse.responseText);
                                 if(parseAcceptResponse){
                                     window.location = storage.baseurl+'index.php/myfamily';
                                 }
@@ -66,7 +68,8 @@ function JMBInvitateObject(obj){
                         case "deny":
                             var args =JSON.stringify( {object:response, token: module.getToken() });
                             module.ajax('deny', args, function(denyResponse){
-                                var denyResponse = jQuery.parseJSON(denyResponse.responseText);
+                                //var denyResponse = jQuery.parseJSON(denyResponse.responseText);
+                                var denyResponse = storage.getJSON(denyResponse.responseText);
                                 if(denyResponse){
                                     window.location = storage.baseurl+'index.php/first-page';
                                 }

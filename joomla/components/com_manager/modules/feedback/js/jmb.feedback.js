@@ -81,7 +81,8 @@ function JMBFeedback(){
             complete : function (req, err) {
                 //storage.request.del(key);
                 if(req.responseText.length!=0){
-                    var json = jQuery.parseJSON(req.responseText);
+                    //var json = jQuery.parseJSON(req.responseText);
+                    var json = storage.getJSON(req.responseText);
                     if(json.language){
                         message = json.language;
                     }
@@ -113,11 +114,9 @@ function JMBFeedback(){
 JMBFeedback.prototype = {
 	ajax:function(func, params, callback){
         storage.callMethod("feedback", "JMBFeedback", func, params, function(req){
-            var text = req.responseText;
-            if(text.length > 0){
-                var json = jQuery.parseJSON(text);
-                callback(json);
-            }
+            //var json = jQuery.parseJSON(text);
+            var json = storage.getJSON(text);
+            callback(json);
 		})
 	}	
 }

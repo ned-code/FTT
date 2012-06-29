@@ -33,7 +33,8 @@ function JMBRevokeRegistration(){
 JMBRevokeRegistration.prototype = {
 	ajax:function(func, params, callback){
 		host.callMethod("revoke_registration", "JMBRevokeRegistration", func, params, function(req){
-                var json = jQuery.parseJSON(req.responseText);
+                //var json = jQuery.parseJSON(req.responseText);
+                var json = storage.getJSON(req.responseText);
 				callback(json);
 		})
 	}	

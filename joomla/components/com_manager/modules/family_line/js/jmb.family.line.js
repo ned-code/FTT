@@ -340,7 +340,8 @@ function JMBFamilyLine(){
             fn.init(options[title], loadData);
         } else {
             fn.ajax('get',null, function(res){
-                var json = jQuery.parseJSON(res.responseText);
+                //var json = jQuery.parseJSON(res.responseText);
+                var json = storage.getJSON(res.responseText);
                 var title = page.page_info.title;
                 if(typeof(json.language)!='undefined'){
                     message = json.language;

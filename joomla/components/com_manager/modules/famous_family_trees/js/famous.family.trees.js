@@ -71,7 +71,8 @@ function JMBFamousFamilyTreesObject(obj){
 	this.Path = null;	
 
 	this.ajax('getFamilies', null, function(res){
-		var json = jQuery.parseJSON(res.responseText);
+		//var json = jQuery.parseJSON(res.responseText);
+		var json = storage.getJSON(res.responseText);
 		module.Path = json.path;
 		var body = createBody();
 		var ul = createItems(json);

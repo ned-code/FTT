@@ -72,7 +72,8 @@ function JMBTooltip(){
             complete : function (req, err) {
                 //storage.request.del(key);
                 if(req.responseText.length!=0){
-                    var json = jQuery.parseJSON(req.responseText);
+                    //var json = jQuery.parseJSON(req.responseText);
+                    var json = storage.getJSON(req.responseText);
                     if(json.language){
                         module.message = json.language;
                     }

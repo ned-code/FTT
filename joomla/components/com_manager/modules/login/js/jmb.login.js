@@ -241,7 +241,8 @@ function JMBLogin(){
             user = storage.usertree.user;
 			fn.ajax('user', null, function(res){
                 if(!res) callback(false);
-                json = jQuery.parseJSON(res.responseText);
+                //json = jQuery.parseJSON(res.responseText);
+                json = storage.getJSON(res.responseText);
                 settings.languages = json.languages;
                 settings.default_language = json.default_language;
                 msg = json.msg;

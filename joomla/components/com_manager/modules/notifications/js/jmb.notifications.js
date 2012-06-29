@@ -414,7 +414,8 @@ JMBNotifications.prototype = {
         }
 
         fn.parse = function(arg){
-            return (arg&&arg.data)?jQuery.parseJSON(arg.data):false;
+            //return (arg&&arg.data)?jQuery.parseJSON(arg.data):false;
+            return (arg&&arg.data)?storage.getJSON(arg.data):false;
         }
 
         fn.getPlaceString = function(args){
@@ -628,7 +629,8 @@ JMBNotifications.prototype = {
         }
         setTimeout(function(){
             module.ajax('getLanguageString', null, function(res){
-                var json = jQuery.parseJSON(res.responseText);
+                //var json = jQuery.parseJSON(res.responseText);
+                var json = storage.getJSON(res.responseText);
                 if(json){
                     module.message = json;
                 }

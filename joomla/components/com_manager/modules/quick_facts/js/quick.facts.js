@@ -112,7 +112,8 @@ function JMBQuickFactsObject(object){
 		},
 		init:function(callback){
 			module._ajax('get', null, function(res){
-				json = jQuery.parseJSON(res.responseText);
+				//json = jQuery.parseJSON(res.responseText);
+				json = storage.getJSON(res.responseText);
                 if(json.language){
                     message = json.language;
                 }

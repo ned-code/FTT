@@ -29,7 +29,7 @@ function JMBLatestUpdatesObject(offsetParent){
 		},
 		start:function(callback){
 			fn.ajax('get', null, function(res){
-				callback(jQuery.parseJSON(res.responseText));
+				callback(storage.getJSON(res.responseText));
 			});
 		},
 		content:function(json){

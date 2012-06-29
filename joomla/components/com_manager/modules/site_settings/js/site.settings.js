@@ -20,7 +20,8 @@ function SiteSettings(obj){
 	
 	module.ajax('getModules', null, function(res){
 		if(res&&res.responseText){
-			var json = jQuery.parseJSON(res.responseText);
+			//var json = jQuery.parseJSON(res.responseText);
+			var json = storage.getJSON(res.responseText);
 			module.moduleListRender(json.modules);
 		}
 	});
@@ -54,8 +55,9 @@ SiteSettings.prototype = {
 		var table = module.table;
 		module.ajax('getLanguages', module_name, function(res){
 			if(res&&res.responseText){
-				var json = jQuery.parseJSON(res.responseText);
-				jQuery(table).find('div#languages').html('');
+				//var json = jQuery.parseJSON(res.responseText);
+                var json = storage.getJSON(res.responseText);
+                jQuery(table).find('div#languages').html('');
 				jQuery(table).find('div#variables').html('');
 				if(json.success){
 					module.languageListRender(json.success.lang_files);
@@ -68,7 +70,8 @@ SiteSettings.prototype = {
 		var table = module.table;
 		module.ajax('getVariables', language, function(res){
 			if(res&&res.responseText){
-				var json = jQuery.parseJSON(res.responseText);
+				//var json = jQuery.parseJSON(res.responseText);
+                var json = storage.getJSON(res.responseText);
 				jQuery(table).find('div#variables').html('');
 				if(json.success){
 					module.variableListRender(json.success.variables, language);
@@ -81,8 +84,9 @@ SiteSettings.prototype = {
 		var json_string = module.getJsonString(object, language);
 		module.ajax('saveVatiables', json_string, function(res){
 			if(res&&res.responseText){
-				var json = jQuery.parseJSON(res.responseText);
-				if(json.result){
+				//var json = jQuery.parseJSON(res.responseText);
+                var json = storage.getJSON(res.responseText);
+                if(json.result){
 					alert('language variables saved successfully.')
 				}
 			}

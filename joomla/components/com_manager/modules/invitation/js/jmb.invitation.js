@@ -157,7 +157,8 @@ JMBInvitation.prototype = {
                             storage.progressbar.loading();
                             module.transportation = true;
                             module.ajax('checkFacebookIdOnUse', id, function(res){
-                                var json = jQuery.parseJSON(res.responseText);
+                                //var json = jQuery.parseJSON(res.responseText);
+                                var json = storage.getJSON(res.responseText);
                                 if(typeof(json.success) != 'undefined'){
                                     if(json.success){
                                         module.sendRequestToInviteFacebookFriend(id, function (r) {
@@ -169,7 +170,8 @@ JMBInvitation.prototype = {
                                                 return false;
                                             }
                                             module.ajax('inviteFacebookFriend', id + ';' + gedcom_id, function (res) {
-                                                var json = jQuery.parseJSON(res.responseText);
+                                                //var json = jQuery.parseJSON(res.responseText);
+                                                var json = storage.getJSON(res.responseText);
                                                 if (typeof(json.success) !== 'undefined') {
                                                     //alert('An invitation has been sent.');
                                                 } else {

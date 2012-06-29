@@ -466,7 +466,8 @@ function JMBTreeCreatorObject(parent){
                 fn.request_from_validate(form, function(valid){
                     if(valid){
                         fn.ajax('send_request', fn.json_to_string(pull), function(res){
-                            var response = jQuery.parseJSON(res.responseText);
+                            //var response = jQuery.parseJSON(res.responseText);
+                            var response = storage.getJSON(res.responseText);
                             if(response.error){
                                 storage.alert(response.error, function(){
                                     module.request_send = false;
@@ -649,7 +650,8 @@ function JMBTreeCreatorObject(parent){
 				//var query = fn.convert_to_string(module.args_pull);
                 fn.convert_to_string(module.args_pull, function(query){
                     fn.ajax('create_tree', query, function(res){
-                        var json = jQuery.parseJSON(res.responseText);
+                        //var json = jQuery.parseJSON(res.responseText);
+                        var json = storage.getJSON(res.responseText);
                         if(json.error){
                             if(confirm(json.error)){
                                 fn.ajax('abortRequest', null, function(){
@@ -776,7 +778,8 @@ function JMBTreeCreatorObject(parent){
                 fn.get_facebook_friends_string(function(response){
                     var args = JSON.stringify({me:module.fProfile, friends:response.data});
                     fn.ajax('init', args, function(res){
-                        module.initData = jQuery.parseJSON(res.responseText);
+                        //module.initData = jQuery.parseJSON(res.responseText);
+                        module.initData = storage.getJSON(res.responseText);
                         var body = fn.body();
                         var dialog_box = fn.dialog_box();
                         module.body = body;
