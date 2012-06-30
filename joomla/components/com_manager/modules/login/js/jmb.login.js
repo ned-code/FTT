@@ -268,7 +268,7 @@ function JMBLogin(){
             htmlObject = jQuery(sb.result());
             jQuery(htmlObject).find('div.logout span').click(function(){
                 fn.ajax('famous', 'logout', function(res){
-                    window.location.reload();
+                    window.location.href = storage.baseurl + 'index.php/famous-family'
                 });
             });
             jQuery('div.jmb-header-container').append(htmlObject);

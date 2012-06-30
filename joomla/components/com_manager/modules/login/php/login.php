@@ -22,17 +22,16 @@ class JMBLogin {
 
 	public function famous($args){
 		if($args == 'logout'){
-            $jfbLib = JFBConnectFacebookLibrary::getInstance();
-            $facebook_id = $jfbLib->getFbUserId();
-            $this->host->setUserAlias($facebook_id, 'famous-family');
-            $data = $this->host->getIndividualsInSystem($facebook_id);
-            if($data){
-                $this->host->setUserMap($data['tree_id'], $data['gedcom_id'], 0);
-            } else {
-                $this->host->setUserMap(0, 0, 0);
-            }
-
-			return true;
+		    $jfbLib = JFBConnectFacebookLibrary::getInstance();
+		    $facebook_id = $jfbLib->getFbUserId();
+		    $this->host->setUserAlias('famous-family');
+		    $data = $this->host->getIndividualsInSystem($facebook_id);
+		    if($data){
+			$this->host->setUserMap($data['tree_id'], $data['gedcom_id'], 0);
+		    } else {
+			$this->host->setUserMap(0, 0, 0);
+		    }
+		    return true;
 		}
 	}
 	public function language($lang_code){
