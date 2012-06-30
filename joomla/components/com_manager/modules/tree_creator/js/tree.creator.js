@@ -691,7 +691,7 @@ function JMBTreeCreatorObject(parent){
         set_user_data:function(form, callback){
           var user = storage.usertree.user;
           if(user != null && typeof(user.id) != 'undefined'){
-              jQuery(form).find('div.avatar').html('<img width="135px" height="150px" src="https://graph.facebook.com/'+me.id+'/picture" />');
+              jQuery(form).find('div.avatar').html('<img width="135px" height="150px" src="https://graph.facebook.com/'+user.id+'/picture" />');
               jQuery(form).find('input[name="first_name"]').val(user.first_name);
               jQuery(form).find('input[name="last_name"]').val(user.last_name);
               jQuery(form).find('select[name="gender"] option[value="'+user.gender[0]+'"]').attr('selected', 'selected');
