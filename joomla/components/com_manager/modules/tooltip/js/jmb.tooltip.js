@@ -490,9 +490,12 @@ JMBTooltip.prototype = {
         }
         if(typeof(args.button_edit) == 'undefined'){
             var sut = storage.usertree;
-            argsSettings.button_edit = (sut.pull[args.gedcom_id].user.facebook_id == '0' || sut.gedcom_id == args.gedcom_id);
+            if(sut.pull != null){
+            	    argsSettings.button_edit = (sut.pull[args.gedcom_id].user.facebook_id == '0' || sut.gedcom_id == args.gedcom_id);
+            }
         }
         return argsSettings;
+                
     },
     _getSettings:function(type, args){
         var module = this,
