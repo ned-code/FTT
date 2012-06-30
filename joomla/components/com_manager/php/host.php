@@ -412,8 +412,8 @@ class FamilyTreeTopHostLibrary {
 
         $sqlString = "SELECT facebook_id, session_id, user_id, tree_id, gedcom_id, permission, login_type, page, active FROM #__mb_user_map WHERE session_id = ?";
         $this->ajax->setQuery($sqlString, $session_id);
-
         $data = $this->ajax->loadAssocList();
+        
         $indData = $this->getIndividualsInSystem($facebook_id);
         $user = JFactory::getUser();
         $page = $this->getCurrentAlias();

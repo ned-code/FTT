@@ -103,7 +103,7 @@ function JMBFeedback(){
 
                     var button1 = fn.buttonClick(fn.button("18-report-a-problem", message.FTT_MOD_FEEDBACK_REPORT_A_PROBLEB));
                     jQuery(parent).find("div.buttons").append(button1);
-                    var button2 = fn.buttonClick(fn.button("19-submit-an-idea", message.FTT_MOD_FEEDBACK_SUBMIT_AN_IDEA));
+                    var button2 = fn.buttonClick(fn.button("16-submit-an-idea", message.FTT_MOD_FEEDBACK_SUBMIT_AN_IDEA));
                     jQuery(parent).find("div.buttons").append(button2);
                 }
             }
