@@ -9,6 +9,15 @@
 // No direct access.
 defined('_JEXEC') or die;
 
+function getAlias(){
+	$menu   = &JSite::getMenu();
+	$active   = $menu->getActive();
+	if(is_object($active)){
+		return $active->alias;
+	}
+	return false;
+}
+
 $app = JFactory::getApplication();
 $jfb = JFBConnectFacebookLibrary::getInstance();
 $base_url = Juri::base();
@@ -21,10 +30,8 @@ if(class_exists('FamilyTreeTopHostLibrary')){
 
 $facebook_id = ( $data ) ? $data['facebook_id'] : 0;
 $login_method = ( $data ) ? $data['login_type'] : '';
+$alias = getAlias();
 
-$menu   = &JSite::getMenu();
-$active   = $menu->getActive();
-$alias = $active->alias;
 
 $user_agent = $_SERVER['HTTP_USER_AGENT'];
 if (stripos($user_agent, 'MSIE 6.0') !== false

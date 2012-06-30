@@ -18,17 +18,8 @@ class JmbViewMulti extends JView{
             JError::raiseError(500, implode('<br />', $errors));
             return false;
         }
-
         $host = &FamilyTreeTopHostLibrary::getInstance();
-        $this->msg = $this->get('Msg');
-        $this->pageInfo = $this->get('PageInfo');
-        $this->activeTab = $this->get('ActiveTab');
-
-        $this->usertree = $this->get('UserTree');
-        $this->notifications = $this->get('Notifications');
-        $this->languageStrings = $this->get('LanguageStrings');
-        $this->config = $host->getConfig();
-
+        
         $userMap = $host->getUserMap();
         if($userMap&&$userMap['tree_id']!=0){
             $host->gedcom->relation->check($userMap['tree_id'],$userMap['gedcom_id']);
@@ -38,6 +29,17 @@ class JmbViewMulti extends JView{
                 $this->update_login_time($userMap['gedcom_id']);
             }
         }
+       
+        $this->msg = $this->get('Msg');
+        $this->pageInfo = $this->get('PageInfo');
+        $this->activeTab = $this->get('ActiveTab');
+
+        $this->usertree = $this->get('UserTree');
+        $this->notifications = $this->get('Notifications');
+        $this->languageStrings = $this->get('LanguageStrings');
+        $this->config = $host->getConfig();
+
+        
         parent::display($tpl);
     }
 }
