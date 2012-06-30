@@ -282,6 +282,17 @@ function JMBLogin(){
             jQuery(document.body).append(cont);
         },
         createBox:function(data){
+            if(loggedByFamous){
+                fn.famous();
+            }
+            if(!parseInt(fb_logged)){
+            	cont = fn.connect();
+                fn.login(cont);
+                jQuery(document.body).append(cont);
+            } else {
+                fn.facebook(data);
+            }
+            /*
             switch(alias){
                 case "myfamily":
                     if(loggedByFamous){
@@ -306,6 +317,7 @@ function JMBLogin(){
                     }
                     break;
             }
+            */
         },
 		init:function(callback){
 			var cont;
