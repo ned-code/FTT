@@ -58,7 +58,7 @@ function JMBInvitateObject(obj){
                             var args =JSON.stringify( {object:response, token: module.getToken() });
                             module.ajax('accept', args, function(acceptResponse){
                                 //var parseAcceptResponse = jQuery.parseJSON(acceptResponse.responseText);
-                                var parseAcceptResponse = stirage.getJSON(acceptResponse.responseText);
+                                var parseAcceptResponse = storage.getJSON(acceptResponse.responseText);
                                 if(parseAcceptResponse){
                                     window.location = storage.baseurl+'index.php/myfamily';
                                 }
