@@ -106,11 +106,9 @@ JMBAncestorsObject.prototype = {
 			arrow:function(){
 				sub = this;
 				jQuery(label).find('.jit-node-arrow').click(function(){
-					id = parseInt(jQuery(this).attr('id'));
-					if(id!=0){
-						module.targetNode = id;
-						module.st.onClick(id);
-					}
+					id = jQuery(this).attr('id');
+					module.targetNode = id;
+					module.st.onClick(id);
 				});
 			},
 			photo:function(){
@@ -125,7 +123,7 @@ JMBAncestorsObject.prototype = {
 				storage.tooltip.render('view', {
 					button_facebook:false,
 					button_edit:false,
-					gedcom_id:node.id,
+					gedcom_id:node.id.split('_')[1],
 					target:object,
                     afterEditorClose:function(){
                         storage.tooltip.cleaner(function(){
@@ -268,8 +266,8 @@ JMBAncestorsObject.prototype = {
         }
 
 		get_parents = function(id){
-			if(id[0]==='_'||!usertree[id]) return false;
-			return usertree[id].parents;
+			if(id[0]==='_'||!usertree[id.split('_')[1]]) return false;
+			return usertree[id.split('_')[1]].parents;
 		}
 		
 		get_parents_id = function(par){
@@ -300,7 +298,7 @@ JMBAncestorsObject.prototype = {
 				},
 				children:[]
 			}
-			module.objects[parse.gedcom_id] = { id:parse.gedcom_id, prew:(prew)?prew.id:false }
+			module.objects[getPfexix(module.prefix, parse.gedcom_id)] = { id:parse.gedcom_id, prew:(prew)?prew.id:false }
 			return node;
 		}
 		
