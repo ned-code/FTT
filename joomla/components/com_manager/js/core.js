@@ -65,6 +65,7 @@ storage.ntf = {};
 //usertree
 storage.usertree = {};
 storage.usertree.user = null;
+storage.usertree.friends = null;
 storage.usertree.gedcom_id = null;
 storage.usertree.facebook_id = null;
 storage.usertree.tree_id = null;

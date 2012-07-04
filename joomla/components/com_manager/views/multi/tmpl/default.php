@@ -2,7 +2,10 @@
 
 // id, layout_type, title;
 echo "<div id='container'>&nbsp;</div>";
-$controller = new JMBController();
+//$controller = new JMBController();
+$jfb = JFBConnectFacebookLibrary::getInstance();
+
+$friends = $jfb->api('/me/friends');
 
 $pages = '';
 foreach($this->msg as $obj){
@@ -18,6 +21,7 @@ $pages = substr($pages, 0, strlen($pages)-1);
         var langString = <?php echo json_encode($this->languageStrings); ?>;
         var notifications = <?php echo json_encode($this->notifications); ?>;
         var config = <?php echo json_encode($this->config); ?>;
+        var friends = <?php echo json_encode($friends); ?>;
 
         if(typeof(storage) != "undefined"){
             storage.core.load(pageInfo);
@@ -29,6 +33,7 @@ $pages = substr($pages, 0, strlen($pages)-1);
                 storage.usertree.tree_id = usertree.tree_id;
                 storage.usertree.permission = usertree.permission;
                 storage.usertree.users = usertree.users;
+                storage.usertree.friends = friends;
                 storage.usertree.pull = usertree.pull;
             }
             storage.notifications = notifications;

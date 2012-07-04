@@ -173,7 +173,7 @@ $user = $jfb->api('/me');
         <script>
             (function(w){
                 if(typeof(storage) != 'undefined'){
-                    storage.usertree.user = <?php echo json_encode($user); ?>
+                    storage.usertree.user = <?php echo json_encode($user); ?>;
                 }
             })(window)
         </script>

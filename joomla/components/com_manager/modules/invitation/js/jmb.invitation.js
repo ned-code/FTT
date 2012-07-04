@@ -105,106 +105,160 @@ JMBInvitation.prototype = {
 		return jQuery(sb.result());
 	},
 	render:function(json){
-		var	module = this,
-			div = this.createDiv(json),
-			form = jQuery(div).find('form'),
-            gedcom_id = json.user.gedcom_id,
-			friends_div,
-			select,
-			option,
-			id,
-			name;
-			
-		module.send(form, json);
+		var module = this,
+            v = {
+                elementDiv:false,
+                elementForm:false,
+                gedcom_id:false,
+                friendsList:false,
+                select:false,
+                option:{
+                    id:false,
+                    name:false
+                }
+            },
+            f = {
+                create:{
+                    dialogWindow:function(el){
+                        jQuery(el).dialog({
+                            width:450,
+                            height:300,
+                            //title: 'Family TreeTop',
+                            resizable: false,
+                            draggable: false,
+                            position: "top",
+                            closeOnEscape: false,
+                            modal:true,
+                            close:function(){
 
-		//storage.overlay.render({object:div, width:450, height:255});
-		//storage.overlay.show();
+                            }
+                        });
+                    },
+                    select:function(el){
+                        var parent = jQuery(el).find('#jmb_facebook_friends');
+                        var select = jQuery('<select name="friends"><option value="default">Facebook Friend</option></select>');
+                        jQuery(parent).append(select);
 
-        module.dialogBox = div;
-        jQuery(div).dialog({
-            width:450,
-            height:300,
-            //title: 'Family TreeTop',
-            resizable: false,
-            draggable: false,
-            position: "top",
-            closeOnEscape: false,
-            modal:true,
-            close:function(){
-
-            }
-        });
-        jQuery(div).parent().css('top', '40px');
-
-		FB.api('/me/friends', function(res) {
-            if (!res.data) {
-            } else {
-                friends_div = jQuery(div).find('#jmb_facebook_friends');
-                select = jQuery('<select name="friends"><option value="default">Facebook Friend</option></select>');
-                jQuery(friends_div).append(select);
-                jQuery(res.data).each(function (i, friend) {
-                    if (!storage.usertree.users || parseInt(friend.id) in storage.usertree.users){
-                        return true;
+                        var data = v.friendsList.data;
+                        jQuery(data).each(function(i, friend){
+                            if(!storage.usertree.users || parseInt(friend.id) in storage.usertree.users ) return true;
+                            jQuery(select).append('<option value="' + friend.id + '">' + friend.name + '</option>');
+                        });
+                        return select;
                     }
-                    jQuery(select).append('<option value="' + friend.id + '">' + friend.name + '</option>');
-                });
-                jQuery(select).change(function () {
-                    option = jQuery(this).find(':selected');
-                    id = jQuery(option).val();
-                    name = jQuery(option).text();
-                    if(!module.transportation){
-                        if (confirm('Would to like to invite '+ name +' to join your family tree?')) {
-                            storage.progressbar.loading();
-                            module.transportation = true;
-                            module.ajax('checkFacebookIdOnUse', id, function(res){
-                                //var json = jQuery.parseJSON(res.responseText);
-                                var json = storage.getJSON(res.responseText);
-                                if(typeof(json.success) != 'undefined'){
-                                    if(json.success){
-                                        module.sendRequestToInviteFacebookFriend(id, function (r) {
-                                            if(r == null) {
-                                                jQuery(select).find('option[value="default"]').attr("selected", "selected");
-                                                storage.progressbar.off();
-                                                module.transportation = false;
-                                                alert('Invitation has failed.')
-                                                return false;
-                                            }
-                                            module.ajax('inviteFacebookFriend', id + ';' + gedcom_id, function (res) {
-                                                //var json = jQuery.parseJSON(res.responseText);
-                                                var json = storage.getJSON(res.responseText);
-                                                if (typeof(json.success) !== 'undefined') {
-                                                    //alert('An invitation has been sent.');
-                                                } else {
-                                                    alert(json.message);
-                                                }
-                                                jQuery(select).find('option[value="default"]').attr("selected", "selected");
-                                                storage.progressbar.off();
-                                                module.transportation = false;
-                                                //storage.overlay.hide();
-                                                jQuery(module.dialogBox).dialog('close');
-                                            });
-                                        });
-                                    } else {
-                                        alert(json.message.replace('%%', name));
-                                        jQuery(select).find('option[value="default"]').attr("selected", "selected");
-                                        storage.progressbar.off();
-                                        module.transportation = false;
-                                    }
+                },
+                set:{
+                    ajaxForm:function(f){
+                        module.send(f, json);
+                    },
+                    dialogBox:function(el){
+                        module.dialogBox = el;
+                    },
+                    friendsList:function(){
+                        v.friendsList = storage.usertree.friends;
+                    }
+                },
+                get:{
+                    elementDiv:function(j){
+                        return module.createDiv(j);
+                    },
+                    elementForm:function(el){
+                        return jQuery(el).find('form');
+                    },
+                    gedcomId:function(j){
+                        return j.user.gedcom_id;
+                    }
+                },
+                event:{
+                    confirm:{
+                        invite:function(){
+                            if (confirm('Would to like to invite '+ v.option.name +' to join your family tree?')) {
+                                storage.progressbar.loading();
+                                module.transportation = true;
+                                f.send.checkFacebookIdOnUse();
+                            } else {
+                                f.event.select.defaultSelect();
+                            }
+                        }
+                    },
+                    select:{
+                        off:function(){
+                            f.event.select.defaultSelect();
+                            storage.progressbar.off();
+                            module.transportation = false;
+                        },
+                        defaultSelect:function(){
+                            jQuery(v.select).find('option[value="default"]').attr("selected", "selected");
+                        },
+                        change:function(){
+                            jQuery(v.select).change(function(){
+                                var option = jQuery(this).find(':selected');
+                                v.option.id = jQuery(option).val();
+                                v.option.name = jQuery(option).text();
+                                if(!module.transportation){
+                                    f.event.confirm.invite();
                                 } else {
-                                    jQuery(select).find('option[value="default"]').attr("selected", "selected");
-                                    storage.progressbar.off();
-                                    module.transportation = false;
+                                    f.event.select.defaultSelect();
                                 }
                             });
-                        } else {
-                            jQuery(select).find('option[value="default"]').attr("selected", "selected");
                         }
-                    } else {
-                        jQuery(select).find('option[value="default"]').attr("selected", "selected");
                     }
-                });
-            }
-        });
+                },
+                send:{
+                    checkFacebookIdOnUse:function(){
+                        module.ajax('checkFacebookIdOnUse', v.option.id, function(res){
+                            var json = storage.getJSON(res.responseText);
+                            if(typeof(json.success) != 'undefined'){
+                                if(json.success){
+                                    f.send.requestToInviteFacebookFriend();
+                                } else {
+                                    alert(json.message.replace('%%', name));
+                                    f.event.select.off();
+                                }
+                            } else {
+                                f.event.select.off();
+                            }
+                        });
+                    },
+                    requestToInviteFacebookFriend:function(){
+                        module.sendRequestToInviteFacebookFriend(v.option.id, function (r) {
+                            if(r == null) {
+                                f.event.select.off();
+                                alert('Invitation has failed.')
+                                return false;
+                            }
+                            f.send.inviteFacebookFriend();
+                        });
+                    },
+                    inviteFacebookFriend:function(){
+                        module.ajax('inviteFacebookFriend', v.option.id + ';' + v.gedcom_id, function (res) {
+                            var json = storage.getJSON(res.responseText);
+                            if (typeof(json.success) !== 'undefined') {
+                                alert('An invitation has been sent.');
+                            } else {
+                                alert(json.message);
+                            }
+                            f.event.select.off();
+                            jQuery(module.dialogBox).dialog('close');
+                        });
+                    }
+                }
+            };
+
+        v.gedcom_id = f.get.gedcomId(json);
+        v.elementDiv = f.get.elementDiv(json);
+        v.elementForm = f.get.elementForm(v.elementDiv);
+
+        f.set.dialogBox(v.elementDiv);
+        f.set.ajaxForm(v.elementForm);
+        f.set.friendsList();
+
+        f.create.dialogWindow(v.elementDiv);
+
+        if(typeof(v.friendsList) != 'undefined' && v.friendsList != null){
+            v.select = f.create.select(v.elementDiv);
+            f.event.select.change();
+        }
 	},
 	send:function(form, json){
 		var	module = this;
