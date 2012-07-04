@@ -133,7 +133,7 @@ JMBFamiliesObject.prototype = {
         var module = this;
         var object = module.usertree[gedcom_id];
         var parent_key = module._checkParents(object.parents);
-        if(object.families != null && parent_key){
+        if(parent_key && object.families == null){
             return parent_key;
         }
         return gedcom_id;
