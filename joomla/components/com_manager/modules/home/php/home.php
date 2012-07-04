@@ -15,7 +15,7 @@ class JMBHome {
 			break;
 			
 			case 'famous-family':
-                $this->host->setUserAlias('famous_family');
+                $this->host->setUserAlias('famous-family');
 			break;
 		}
         return true;

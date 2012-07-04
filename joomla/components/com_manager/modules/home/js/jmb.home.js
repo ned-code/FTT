@@ -37,14 +37,12 @@ function JMBHomeObject(offsetParent){
 				id = jQuery(this).attr('id');
 				switch(id){
 					case 'connect':
-						//ajax('myfamily');
 						fn.ajax('page', 'myfamily', function(res){
 							window.location.href = storage.baseurl + 'index.php/myfamily';
 						});
 					break;
 					
 					case 'view':
-						//ajax('famous-family');
 						fn.ajax('page', 'famous-family', function(res){
                             window.location.href = storage.baseurl + 'index.php/famous-family';
 						});
