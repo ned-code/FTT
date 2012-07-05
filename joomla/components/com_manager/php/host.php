@@ -289,7 +289,6 @@ class FamilyTreeTopHostLibrary {
 		return $this->language->getLanguages();
 	}
 
-
     public function getComponentString(){
         return $this->language->getComponentString();
     }
@@ -385,6 +384,13 @@ class FamilyTreeTopHostLibrary {
         $this->ajax->query();
     }
 
+    public function setUserLanguage($language){
+        $session =& JFactory::getSession();
+        $sqlString = "UPDATE #__mb_user_map SET `language` = ?, `time` = NOW() WHERE session_id = ?";
+        $this->ajax->setQuery($sqlString, $language, $session->getId());
+        $this->ajax->query();
+    }
+
     public function setUserMap($tree_id, $gedcom_id, $login_type = 0){
         $session =& JFactory::getSession();
         $sqlString = "UPDATE #__mb_user_map SET `tree_id` = ?, `gedcom_id` = ? , `login_type` = ?, `time` = NOW() WHERE session_id = ?";
@@ -406,11 +412,12 @@ class FamilyTreeTopHostLibrary {
 
     public function getUserMap(){
         $jfbLib = JFBConnectFacebookLibrary::getInstance();
-        $facebook_id = $jfbLib->getFbUserId();
+        $me = $jfbLib->api('/me');
+        $facebook_id = $me['id'];
         $session =& JFactory::getSession();
         $session_id = $session->getId();
 
-        $sqlString = "SELECT facebook_id, session_id, user_id, tree_id, gedcom_id, permission, login_type, page, active FROM #__mb_user_map WHERE session_id = ?";
+        $sqlString = "SELECT facebook_id, session_id, user_id, tree_id, gedcom_id, permission, login_type, page, language, active FROM #__mb_user_map WHERE session_id = ?";
         $this->ajax->setQuery($sqlString, $session_id);
         $data = $this->ajax->loadAssocList();
         
@@ -418,9 +425,10 @@ class FamilyTreeTopHostLibrary {
         $user = JFactory::getUser();
         $page = $this->getCurrentAlias();
         if(empty($data)){
-            $sqlString = "INSERT INTO #__mb_user_map (`facebook_id`,`session_id`,`tree_id`, `gedcom_id`, `user_id`, `permission`, `login_type`, `page`, `active`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ? )";
+            $language = $this->language->getLanguage($me['locale']);
+            $sqlString = "INSERT INTO #__mb_user_map (`facebook_id`,`session_id`,`tree_id`, `gedcom_id`, `user_id`, `permission`, `login_type`, `page`,`language`, `active`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
             if($indData){
-                $this->ajax->setQuery($sqlString, $facebook_id, $session_id, $indData['tree_id'], $indData['gedcom_id'], $user->id, $indData['permission'], 0, $page, 0);
+                $this->ajax->setQuery($sqlString, $facebook_id, $session_id, $indData['tree_id'], $indData['gedcom_id'], $user->id, $indData['permission'], 0, $page, $language, 0);
                 $this->ajax->query();
                 return array(
                         'facebook_id' => $facebook_id,
@@ -431,11 +439,12 @@ class FamilyTreeTopHostLibrary {
                         'permission' => $indData['permission'],
                         'login_type' => 0,
                         'page' => $page,
+                        'language' => $language,
                         'active' => NULL
                 );
             } else {
                 $facebook_id = (empty($facebook_id))?0:$facebook_id;
-                $this->ajax->setQuery($sqlString, $facebook_id, $session_id, 0, 0, $user->id, 'GUEST', 0, $page, 0);
+                $this->ajax->setQuery($sqlString, $facebook_id, $session_id, 0, 0, $user->id, 'GUEST', 0, $page, $language, 0);
                 $this->ajax->query();
                 return array(
                     'facebook_id' => $facebook_id,
@@ -446,6 +455,7 @@ class FamilyTreeTopHostLibrary {
                     'permission' => $indData['permission'],
                     'login_type' => 0,
                     'page' => $page,
+                    'language' => $language,
                     'active' => NULL
                 );
             }
@@ -462,6 +472,7 @@ class FamilyTreeTopHostLibrary {
                     'permission' => $indData['permission'],
                     'login_type' => 0,
                     'page' => $page,
+                    'language' => 'en-GB',
                     'active' => NULL
                 );
             } else {

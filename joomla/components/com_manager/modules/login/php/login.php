@@ -36,8 +36,9 @@ class JMBLogin {
 
 	public function user(){
 		$session = JFactory::getSession();
+        $user_map = $this->host->getUserMap();
 
-        $lang = $session->get('language');
+        $lang = $user_map['language'];
 		$languages = $this->host->getLanguages();
         $msg = $this->host->getLangList('login');
         $userInfo = $this->getUserInfo();
@@ -65,8 +66,7 @@ class JMBLogin {
 		}
 	}
 	public function language($lang_code){
-		$session = JFactory::getSession();
-		$session->set('language', $lang_code);
+		$this->host->setUserLanguage($lang_code);
 		return json_encode(array('success'=>$lang_code));
 	}
 }
