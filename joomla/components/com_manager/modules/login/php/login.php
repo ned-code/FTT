@@ -6,14 +6,41 @@ class JMBLogin {
 		$this->host = &FamilyTreeTopHostLibrary::getInstance();
 	}
 
+    protected function getUserInfo(){
+        $jfb = JFBConnectFacebookLibrary::getInstance();
+        $me = $jfb->api('/me');
+
+        if(!isset($me['id'])) return false;
+
+        $sys = $this->host->getIndividualsInSystem($me['id']);
+
+        if(!$sys) return false;
+
+        $result = $this->host->usertree->getUser($sys['tree_id'], $sys['gedcom_id'], $sys['gedcom_id']);
+        $pull = array();
+        foreach($result as $res){
+            $pull[$res['user']['gedcom_id']] = $res;
+        }
+
+        return array(
+            '_tmp' => array('me'=>$me, 'sys'=>$sys),
+            'tree_id'=>$sys['tree_id'],
+            'gedcom_id'=>$sys['gedcom_id'],
+            'facebook_id'=>$me['id'],
+            'pull'=>$pull
+        );
+    }
+
 	public function user(){
 		$session = JFactory::getSession();
 
         $lang = $session->get('language');
 		$languages = $this->host->getLanguages();
         $msg = $this->host->getLangList('login');
+        $userInfo = $this->getUserInfo();
 
 		return json_encode(array(
+            'data' => $userInfo,
             'default_language'=>$lang,
             'msg'=>$msg,
             'languages'=>$languages

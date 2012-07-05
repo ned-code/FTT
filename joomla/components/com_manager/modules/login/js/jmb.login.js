@@ -113,17 +113,25 @@ function JMBLogin(){
 				},
 				click:{
 					profile:function(obj, callback){
-                        var id = storage.usertree.gedcom_id;
-                        if(id != null){
-                            storage.profile.editor('edit', {
-                                gedcom_id:id,
-                                events:{
-                                    afterEditorClose:function(){
-                                        jQuery(obj).removeClass('active');
-                                        storage.tooltip.update();
+                        if(settings.user_data){
+                            var data = settings.user_data,
+                                gedcom_id = data.gedcom_id,
+                                tree_id = data.tree_id,
+                                pull = data.pull;
+                                storage.profile.editor('edit', {
+                                    gedcom_id:gedcom_id,
+                                    owner_id:gedcom_id,
+                                    tree_id:tree_id,
+                                    pull:pull,
+                                    events:{
+                                        afterEditorClose:function(p){
+                                            jQuery(obj).removeClass('active');
+                                            settings.user_data.pull = p;
+                                            storage.tooltip.update();
+
+                                        }
                                     }
-                                }
-                            });
+                                });
                         }
                         callback();
 					},
@@ -245,6 +253,7 @@ function JMBLogin(){
                 json = storage.getJSON(res.responseText);
                 settings.languages = json.languages;
                 settings.default_language = json.default_language;
+                settings.user_data = json.data;
                 msg = json.msg;
                 if(user != null && typeof(user.id) != 'undefined'){
                     callback(user);

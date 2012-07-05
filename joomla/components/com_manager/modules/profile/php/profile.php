@@ -161,15 +161,12 @@ class JMBProfile {
         return $individual;
     }
 	
-	public function basic($user_id){
-		// update user in db
-		$ind = $this->host->gedcom->individuals->get($user_id);
+	public function basic($args){
+        list($tree_id, $owner_id, $gedcom_id) = explode(',', $args);
+        // update user in db
+		$ind = $this->host->gedcom->individuals->get($gedcom_id);
 		$this->updateIndividual($ind, $_REQUEST);
 		$this->updateIndividualEvents($ind, $_REQUEST);
-		//update user tree
-        $userMap = $this->host->getUserMap();
-        $owner_id = $userMap['gedcom_id'];
-        $tree_id = $userMap['tree_id'];
 
         $this->host->gedcom->relation->set($tree_id, $owner_id, $ind->Id);
         //get objects
@@ -180,9 +177,8 @@ class JMBProfile {
 	public function union($args){
 		$args = json_decode($args);
 		$request = $_REQUEST;
-        $userMap = $this->host->getUserMap();
-        $owner_id = $userMap['gedcom_id'];
-        $tree_id = $userMap['tree_id'];
+        $owner_id = $args->owner_id;
+        $tree_id = $args->tree_id;
 		$data = false;
 		switch($args->method){
 			case "save":

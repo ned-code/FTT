@@ -79,17 +79,21 @@ storage.usertree.extend = function(def, sub){
 		}
 	}
 }
-storage.usertree.update = function(objects){
-    var pull = storage.usertree.pull;
+storage.usertree.update = function(objects, save){
+    var p = {};
     for(var key in objects) {
         var item = objects[key];
         if (item) {
             var gedcom_id = item.user.gedcom_id;
             if (gedcom_id != null) {
-                pull[gedcom_id] = item;
+                p[gedcom_id] = item;
             }
         }
     }
+    if(save){
+        storage.usertree.pull = p;
+    }
+    return p;
 }
 storage.usertree.deleted = function(objects){
     for(var key in objects) {

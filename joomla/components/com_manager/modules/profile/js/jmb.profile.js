@@ -446,9 +446,30 @@ function JMBProfile(){
                 module.gedcom_id = gedcom_id;
             }
         },
+        setPull:function(pull){
+            if(pull){
+                module.pull = pull;
+            } else {
+                module.pull = storage.usertree.pull;
+            }
+        },
+        setTreeId:function(tree_id){
+            if(tree_id){
+                module.tree_id = tree_id;
+            } else {
+                module.tree_id = storage.usertree.tree_id;
+            }
+        },
+        setOwnerId:function(owner_id){
+            if(owner_id){
+                module.owner_id = owner_id;
+            } else {
+                module.owner_id = storage.usertree.gedcom_id;
+            }
+        },
         setObject:function(gedcom_id){
-            if(typeof(storage.usertree.pull[gedcom_id]) != 'undefined'){
-                module.object = storage.usertree.pull[gedcom_id];
+            if(typeof(module.pull[gedcom_id]) != 'undefined'){
+                module.object = module.pull[gedcom_id];
             }
         },
         setFamily:function(family){
@@ -479,7 +500,7 @@ function JMBProfile(){
         },
         getAvatar:function(gedcom_id, width, height){
             return storage.usertree.avatar.get({
-                object:storage.usertree.pull[gedcom_id],
+                object:module.pull[gedcom_id],
                 width:width,
                 height:height
             });
@@ -582,7 +603,7 @@ function JMBProfile(){
         },
         getParseUserInfo:function(gedcom_id){
             if(typeof(gedcom_id)!='undefined'){
-                var stObject = storage.usertree.pull[gedcom_id];
+                var stObject = module.pull[gedcom_id];
                 if(typeof(stObject)!='undefined'){
                     return storage.usertree.parse(stObject);
                 } else {
@@ -645,7 +666,7 @@ function JMBProfile(){
         callEvents:function(){
             var events = module.events;
             for(var key in events){
-                events[key]();
+                events[key](module.pull);
             }
         },
         createDialog:function(box, args, callback){
@@ -656,6 +677,9 @@ function JMBProfile(){
             }
         },
         clearVariable:function(){
+            module.pull = false;
+            module.tree_id = false;
+            module.owner_id = false;
             module.gedcom_id = false;
             module.object = false;
             module.user = false;
@@ -700,8 +724,8 @@ function JMBProfile(){
 JMBProfile.prototype = {
     update:function(objects){
         var module = this;
-        storage.usertree.update(objects);
-        module.object = storage.usertree.pull[module.gedcom_id];
+        module.pull = storage.usertree.update(objects, (module.tree_id == storage.usertree.tree_id) );
+        module.object = module.pull[module.gedcom_id];
         module.user = module.functions.getParseUserInfo();
     },
     render:function(id){
@@ -736,7 +760,7 @@ JMBProfile.prototype = {
                 fn.ajaxForm({
                     target:jQuery(form).find('form'),
                     method:'basic',
-                    args:module.gedcom_id,
+                    args:[module.tree_id,module.owner_id,module.gedcom_id].join(','),
                     validate:{
                         rules:{
                             first_name:{
@@ -785,7 +809,7 @@ JMBProfile.prototype = {
                         fn.setLiving(view, true);
                         fn.initEventSelectLiving(view);
                         jQuery(form).append(view);
-                        var args = '{"gedcom_id":"'+module.user.gedcom_id+'","method":"add"}';
+                        var args = '{"tree_id":"'+module.tree_id+'","owner_id":"'+module.owner_id+'","gedcom_id":"'+module.user.gedcom_id+'","method":"add"}';
                         module.functions.ajaxForm({
                             target:jQuery(view).find('form'),
                             method:'union',
@@ -815,7 +839,7 @@ JMBProfile.prototype = {
                         }
                         _fn.setUnionEventMessage(view);
                         jQuery(form).append(view);
-                        var args = '{"gedcom_id":"'+module.gedcom_id+'","family_id":"'+module.family_id+'","method":"save"}';
+                        var args = '{"tree_id":"'+module.tree_id+'","owner_id":"'+module.owner_id+'","gedcom_id":"'+module.gedcom_id+'","family_id":"'+module.family_id+'","method":"save"}';
                         fn.ajaxForm({
                             target:jQuery(view).find('form'),
                             method:'union',
@@ -858,12 +882,15 @@ JMBProfile.prototype = {
                 ]);
                 var _fn = {
                     setMedia:function(){
-                        storage.usertree.pull[module.gedcom_id].media = {
+                        media = {
                             avatar:null,
                             photos:[],
                             cache:[]
                         }
-                        media = storage.usertree.pull[module.gedcom_id].media;
+                        if(storage.usertree.tree_id == module.tree_id){
+                            storage.usertree.pull[module.gedcom_id].media = media;
+                        }
+                        module.pull[module.gedcom_id].media = media;
                     },
                     add:function(res){
                         var self = this;
@@ -966,6 +993,10 @@ JMBProfile.prototype = {
             break;
 
             case "more_options":
+
+
+
+
                 form = jQuery('<div class="delete-button">'+module.message.FTT_MOD_PROFILE_EDITOR_DELETE_BUTTON+'</div>')
                 jQuery(form).click(function(){
                     if(storage.usertree.getUsersLength() == 1 &&
@@ -1069,9 +1100,16 @@ JMBProfile.prototype = {
             dialogButton = fn.getViewObject('dialogButton');
 
         var gedcom_id = (typeof(args.gedcom_id)=='undefined')?args.object.user.gedcom_id:args.gedcom_id;
-        fn.setGedcomId(/*args.gedcom_id*/gedcom_id);
+        var owner_id = (typeof(args.owner_id) != 'undefined' )? args.owner_id : false;
+        var tree_id = (typeof(args.tree_id) != 'undefined')?args.tree_id:false;
+        var pull = (typeof(args.pull) != 'undefined')?args.pull:false;
 
-        if(!module.gedcom_id) return false;
+        fn.setGedcomId(gedcom_id);
+        fn.setPull(pull);
+        fn.setTreeId(tree_id);
+        fn.setOwnerId(owner_id);
+
+        if(!module.gedcom_id || !module.tree_id || !module.pull) return false;
 
         fn.setEvents(args.events);
         fn.setObject(gedcom_id);
@@ -1097,7 +1135,10 @@ JMBProfile.prototype = {
         var module = this;
         var args = {};
         var gedcom_id = data.object.user.gedcom_id;
-        module.functions.setGedcomId(/*args.gedcom_id*/gedcom_id);
+        module.functions.setGedcomId(gedcom_id);
+        module.functions.setPull(false);
+        module.functions.setTreeId(false);
+        module.functions.setOwnerId(false);
         module.functions.setEvents(data.events);
         module.functions.setObject(gedcom_id);
         module.functions.setUserInfo();
