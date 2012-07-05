@@ -124,6 +124,9 @@ function JMBProfile(){
                 }
             });
         },
+        isOwner:function(){
+            return (module.gedcom_id == module.owner_id);
+        },
         setTitleMessage:function(form){
             jQuery(form).find('div.title span').each(function(i, el){
                 var titleText = jQuery(el).text();
@@ -467,6 +470,13 @@ function JMBProfile(){
                 module.owner_id = storage.usertree.gedcom_id;
             }
         },
+        setUsers:function(users){
+            if(users){
+                module.users = users;
+            } else {
+                module.users = storage.usertree.users;
+            }
+        },
         setObject:function(gedcom_id){
             if(typeof(module.pull[gedcom_id]) != 'undefined'){
                 module.object = module.pull[gedcom_id];
@@ -497,6 +507,14 @@ function JMBProfile(){
                 var text = jQuery(object)[el[1]]();
                 jQuery(object)[el[1]](module.message[text]);
             }
+        },
+        getUsersLength:function(){
+            var users = module.users;
+            var count = 0;
+            for(var key in users){
+                count++;
+            }
+            return count;
         },
         getAvatar:function(gedcom_id, width, height){
             return storage.usertree.avatar.get({
@@ -993,16 +1011,11 @@ JMBProfile.prototype = {
             break;
 
             case "more_options":
-
-
-
-
                 form = jQuery('<div class="delete-button">'+module.message.FTT_MOD_PROFILE_EDITOR_DELETE_BUTTON+'</div>')
                 jQuery(form).click(function(){
-                    if(storage.usertree.getUsersLength() == 1 &&
-                        module.gedcom_id == storage.usertree.gedcom_id){
+                    if(fn.getUsersLength() == 1 && fn.isOwner()){
                         if(confirm(module.message.FTT_MOD_PROFILE_EDITOR_DELETE_FIRST_CONFIRM)){
-                            var args = 'delete,'+module.gedcom_id+',deleteTree';
+                            var args = [module.tree_id, module.owner_id, module.gedcom_id, 'delete', 'deleteTree'].join(',');
                             module.functions.ajax('delete', args, function(res){
                                 jfbc.login.logout_button_click();
                                 return false;
@@ -1018,25 +1031,24 @@ JMBProfile.prototype = {
                         var span = jQuery(deleteOptions).find('div.option span');
                         var text = jQuery(span).text();
                         jQuery(span).html(text.replace('%%', module.user.full_name));
-                        if(module.gedcom_id != storage.usertree.gedcom_id){
+                        if(!fn.isOwner()){
                             jQuery(tr[0]).remove();
                         }
                         jQuery(form).after(deleteOptions);
                         jQuery(form).hide();
                         jQuery(deleteOptions).find('div.title span').click(function(){
                             var mes, method = 'deleteBranch';
-                            if(module.gedcom_id != storage.usertree.gedcom_id){
+                            if(module.gedcom_id != module.owner_id){
                                 mes = module.message.FTT_MOD_PROFILE_EDITOR_DELETE_CONFIRM;
                             } else {
                                 mes = module.message.FTT_MOD_PROFILE_EDITOR_DELETE_USER_CONFIRM;
                             }
                             if(confirm(mes)){
                                 var type = jQuery(this).parent().attr('id');
-                                var args = type+','+module.gedcom_id+','+method;
+                                var args = [module.tree_id, module.owner_id, module.gedcom_id, type, method].join(',');
                                 module.functions.ajax('delete', args, function(res){
-                                    //var json = jQuery.parseJSON(res.responseText);
                                     var json = storage.getJSON(res.responseText);
-                                    if(module.gedcom_id == storage.usertree.gedcom_id){
+                                    if(fn.isOwner()){
                                         jfbc.login.logout_button_click();
                                         return false;
                                     }
@@ -1044,7 +1056,7 @@ JMBProfile.prototype = {
                                         module.update(json.objects);
                                     } else {
                                         storage.usertree.deleted(json.deleted.objects);
-                                        storage.usertree.update(json.objects);
+                                        storage.usertree.update(json.objects, true);
                                         jQuery(module.box).dialog('close');
                                     }
                                     return false;
@@ -1103,11 +1115,13 @@ JMBProfile.prototype = {
         var owner_id = (typeof(args.owner_id) != 'undefined' )? args.owner_id : false;
         var tree_id = (typeof(args.tree_id) != 'undefined')?args.tree_id:false;
         var pull = (typeof(args.pull) != 'undefined')?args.pull:false;
+        var users = (typeof(args.users) != 'undefined')?args.users:false;
 
         fn.setGedcomId(gedcom_id);
         fn.setPull(pull);
         fn.setTreeId(tree_id);
         fn.setOwnerId(owner_id);
+        fn.setUsers(users);
 
         if(!module.gedcom_id || !module.tree_id || !module.pull) return false;
 
@@ -1139,6 +1153,7 @@ JMBProfile.prototype = {
         module.functions.setPull(false);
         module.functions.setTreeId(false);
         module.functions.setOwnerId(false);
+        module.functions.setUsers(false);
         module.functions.setEvents(data.events);
         module.functions.setObject(gedcom_id);
         module.functions.setUserInfo();

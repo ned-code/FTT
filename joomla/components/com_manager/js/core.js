@@ -86,12 +86,12 @@ storage.usertree.update = function(objects, save){
         if (item) {
             var gedcom_id = item.user.gedcom_id;
             if (gedcom_id != null) {
+                if(save){
+                    storage.usertree.pull[gedcom_id] = item;
+                }
                 p[gedcom_id] = item;
             }
         }
-    }
-    if(save){
-        storage.usertree.pull = p;
     }
     return p;
 }
@@ -105,14 +105,6 @@ storage.usertree.deleted = function(objects){
             }
         }
     }
-}
-storage.usertree.getUsersLength = function(){
-    var users = storage.usertree.users;
-    var count = 0;
-    for(var key in users){
-        count++;
-    }
-    return count;
 }
 storage.usertree.parse = function(object){
 	var	user = object.user,

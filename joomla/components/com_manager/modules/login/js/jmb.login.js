@@ -117,12 +117,14 @@ function JMBLogin(){
                             var data = settings.user_data,
                                 gedcom_id = data.gedcom_id,
                                 tree_id = data.tree_id,
+                                users = data.users,
                                 pull = data.pull;
                                 storage.profile.editor('edit', {
                                     gedcom_id:gedcom_id,
                                     owner_id:gedcom_id,
                                     tree_id:tree_id,
                                     pull:pull,
+                                    users:users,
                                     events:{
                                         afterEditorClose:function(p){
                                             jQuery(obj).removeClass('active');

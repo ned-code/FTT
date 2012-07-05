@@ -367,10 +367,7 @@ class JMBProfile {
 	}
 
     public function delete($args){
-        list($type,$gedcom_id,$method) = explode(',', $args);
-        $userMap = $this->host->getUserMap();
-        $owner_id = $userMap['gedcom_id'];
-        $tree_id = $userMap['tree_id'];
+        list($tree_id, $owner_id, $gedcom_id, $type, $method) = explode(',', $args);
         $deleted = false;
 
         $user = $this->host->gedcom->individuals->get($gedcom_id);

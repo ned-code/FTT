@@ -22,12 +22,15 @@ class JMBLogin {
             $pull[$res['user']['gedcom_id']] = $res;
         }
 
+        $users = $this->host->usertree->getMembers($sys['tree_id']);
+
         return array(
             '_tmp' => array('me'=>$me, 'sys'=>$sys),
             'tree_id'=>$sys['tree_id'],
             'gedcom_id'=>$sys['gedcom_id'],
             'facebook_id'=>$me['id'],
-            'pull'=>$pull
+            'pull'=>$pull,
+            'users'=>$users,
         );
     }
 
