@@ -91,9 +91,6 @@ function JMBLogin(){
 				sb._('<div id="logout"><span>')._(msg.FTT_MOD_LOGIN_LOGOUT)._('</span></div>');
 			sb._('</div>');
 			menu = jQuery(sb.result());
-            if(storage.usertree.gedcom_id == null){
-                jQuery(menu).find('div#profile').remove();
-            }
 			return {
 				on:function(object, callback){
 					var m = this;
@@ -235,23 +232,11 @@ function JMBLogin(){
                 height:50
             });
 		},
-		set_global_data:function(json){
-			storage.usertree.gedcom_id = json.usertree.gedcom_id;
-			storage.usertree.facebook_id = json.usertree.facebook_id;
-			storage.usertree.tree_id = json.usertree.tree_id;
-			storage.usertree.permission = json.usertree.permission;
-			storage.usertree.users = json.usertree.users;
-			storage.usertree.pull = json.usertree.pull;
-            storage.notifications = json.notifications;
-            storage.settings = json.settings;
-            storage.langString = json.langString;
-		},
 		user:function(callback){
 			var json, object, user;
             user = storage.usertree.user;
 			fn.ajax('user', null, function(res){
                 if(!res) callback(false);
-                //json = jQuery.parseJSON(res.responseText);
                 json = storage.getJSON(res.responseText);
                 settings.languages = json.languages;
                 settings.default_language = json.default_language;
@@ -303,32 +288,6 @@ function JMBLogin(){
             } else {
                 fn.facebook(data);
             }
-            /*
-            switch(alias){
-                case "myfamily":
-                    if(loggedByFamous){
-                        fn.famous();
-                    } else {
-                        fn.facebook(data);
-                    }
-                    break;
-
-
-                case "home":
-                case "login":
-                case "first-page":
-                case "invitation":
-                case "famous-family":
-                    if(!parseInt(fb_logged)){
-                        cont = fn.connect();
-                        fn.login(cont);
-                        jQuery(document.body).append(cont);
-                    } else if(data) {
-                        fn.facebook(data);
-                    }
-                    break;
-            }
-            */
         },
 		init:function(callback){
 			var cont;
