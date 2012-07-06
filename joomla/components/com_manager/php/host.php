@@ -420,12 +420,13 @@ class FamilyTreeTopHostLibrary {
         $sqlString = "SELECT facebook_id, session_id, user_id, tree_id, gedcom_id, permission, login_type, page, language, active FROM #__mb_user_map WHERE session_id = ?";
         $this->ajax->setQuery($sqlString, $session_id);
         $data = $this->ajax->loadAssocList();
-        
+
+        $language = $this->language->getLanguage($me['locale']);
+
         $indData = $this->getIndividualsInSystem($facebook_id);
         $user = JFactory::getUser();
         $page = $this->getCurrentAlias();
         if(empty($data)){
-            $language = $this->language->getLanguage($me['locale']);
             $sqlString = "INSERT INTO #__mb_user_map (`facebook_id`,`session_id`,`tree_id`, `gedcom_id`, `user_id`, `permission`, `login_type`, `page`,`language`, `active`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
             if($indData){
                 $this->ajax->setQuery($sqlString, $facebook_id, $session_id, $indData['tree_id'], $indData['gedcom_id'], $user->id, $indData['permission'], 0, $page, $language, 0);
@@ -476,6 +477,11 @@ class FamilyTreeTopHostLibrary {
                     'active' => NULL
                 );
             } else {
+                if($data[0]['permission'] == 'GUEST'&&$data[0]['facebook_id']!=0){
+                    $data[0]['language'] = $language;
+                    $this->setUserLanguage($language);
+                    $this->setUserPermission('MEMBER');
+                }
                 return $data[0];
             }
         }
