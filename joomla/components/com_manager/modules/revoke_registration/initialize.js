@@ -1,1 +1,0 @@
-{"container":"jmb_revoke_registration","object":"JMBRevokeRegistration"}

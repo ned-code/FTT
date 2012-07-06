@@ -1,1 +1,0 @@
-{"container":"content_manager","object":"ContentManager"}
