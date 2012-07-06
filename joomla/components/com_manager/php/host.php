@@ -24,6 +24,10 @@ class FamilyTreeTopHostLibrary {
     private $language;
     private $config;
 
+    private $sessionId;
+    private $user;
+    private $userLanguage;
+
     private function __construct( $directCall = true ) {
         if ( $directCall ) {
             return false;
@@ -40,6 +44,16 @@ class FamilyTreeTopHostLibrary {
 
         $this->language = new JMBHostLanguage($this->ajax);
         $this->config = new JMBHostConfig($this->ajax);
+
+        //
+        $session =& JFactory::getSession();
+        $jfbLib = JFBConnectFacebookLibrary::getInstance();
+
+        $this->sessionId = $session->getId();
+        $this->user = $jfbLib->api('/me');
+
+        $this->userLanguage = $this->language->getLanguage($this->user['locale']);
+        $this->userFacebookId = (empty($this->user['id']))?0:$this->user['id'];
     }
 
     public function &getInstance() {
@@ -54,106 +68,67 @@ class FamilyTreeTopHostLibrary {
     private function getModulesPath(){
             return JPATH_ROOT."/components/com_manager/modules/";
     }
-	
-	/**
-	*
-	*/
-        function getSettingsStructure($module){
-            $properties = $this->getJsonProperties($module);
-            return $properties[0]['structure'];
-        }
-        
-        /**
-        *
-        */
-        function getSettingsValues($module){
-            $properties = $this->getJsonProperties($module);
-            return $properties[0]['value'];
-        }
-        
-        /**
-        *
-        */
-        function setSettingsValues($module, $values){
-            $this->saveJsonProperties($module, $values);
-        }
-        
-        /**
-         *
-         * @param <string> $modulename
-         * @param <string> $classname
-         * @param <string> $method
-         * @param <string> $arguments
-         * @return <type>
-         *
-         */
-        function callMethod($modulename,$classname, $method, $arguments){
-            $args = explode("|", $arguments);
-            $modulePath = $this->modulesPath.$modulename."/php/".$modulename.".php";
-            if(!file_exists($modulePath)){
-            	    return;
-            }           
-            require_once($modulePath);
-            if($classname != null){
-                $obj = new $classname;
 
-                return call_user_func_array(array($obj, $method), $args);
-            }else
-                return call_user_func_array($method, $args);
+
+    /*
+    * ------------------------------------------------------------------------------------------
+    */
+    public function getSettingsStructure($module){
+        $properties = $this->getJsonProperties($module);
+        return $properties[0]['structure'];
+    }
+    public function getSettingsValues($module){
+        $properties = $this->getJsonProperties($module);
+        return $properties[0]['value'];
+    }
+    public function setSettingsValues($module, $values){
+        $this->saveJsonProperties($module, $values);
+    }
+    public function callMethod($modulename,$classname, $method, $arguments){
+        $args = explode("|", $arguments);
+        $modulePath = $this->modulesPath.$modulename."/php/".$modulename.".php";
+        if(!file_exists($modulePath)){
+            return;
         }
-        
-        /**
-        *
-        */
-        function getAbsoluteRootPath(){
+        require_once($modulePath);
+        if($classname != null){
+            $obj = new $classname;
+            return call_user_func_array(array($obj, $method), $args);
+        }else
+            return call_user_func_array($method, $args);
+    }
+    public function getAbsoluteRootPath(){
             return JPATH_ROOT;
+    }
+    public function getAbsoluePath(){
+        $jpath_base_explode = explode('/', JPATH_ROOT);
+        if(end($jpath_base_explode) == 'administrator'){
+            array_pop($jpath_base_explode);
         }
-        
-        public function getAbsoluePath(){
-        	$jpath_base_explode = explode('/', JPATH_ROOT);
-        	if(end($jpath_base_explode) == 'administrator'){
-        		array_pop($jpath_base_explode); 
-        	}
-        	return implode('/', $jpath_base_explode);
-        }
-        
-        /**
-        *
-        */
-        function getRootDirectory(){
-            return JURI::base(true);
-        }
-        
-        /**
-        *
-        */
-        function getModuleName($nameOrId){
-            $db = new JMBAjax();
-            $db->setQuery('SELECT name,id FROM #__mb_modules WHERE (name = "?" OR id="?")', $nameOrId, $nameOrId);
-              $rows = $db->loadAssocList();
-              if(isset($rows[0]['name']))
-                  return ($rows[0]['name']);
-              else
-                  return null;
-        }
-        
-        /**
-        *
-        */
-        function getModuleId($nameOrId){
-            $db = new JMBAjax();
-            $db->setQuery('SELECT name,id FROM #__mb_modules WHERE (name = "?" OR id="?")', $nameOrId, $nameOrId);
-              $rows = $db->loadAssocList();
-              if(isset($rows[0]['id']))
-                  return ($rows[0]['id']);
-              else
-                  return null;
-        }
-        
-        /**
-        *
-        */
-        function encodeProperties($array){
+        return implode('/', $jpath_base_explode);
+    }
+    public function getRootDirectory(){
+        return JURI::base(true);
+    }
+    public function getModuleName($nameOrId){
+        $db = new JMBAjax();
+        $db->setQuery('SELECT name,id FROM #__mb_modules WHERE (name = "?" OR id="?")', $nameOrId, $nameOrId);
+        $rows = $db->loadAssocList();
+        if(isset($rows[0]['name']))
+            return ($rows[0]['name']);
+        else
+            return null;
+     }
+    public function getModuleId($nameOrId){
+        $db = new JMBAjax();
+        $db->setQuery('SELECT name,id FROM #__mb_modules WHERE (name = "?" OR id="?")', $nameOrId, $nameOrId);
+        $rows = $db->loadAssocList();
+        if(isset($rows[0]['id']))
+            return ($rows[0]['id']);
+        else
+            return null;
+     }
+    public function encodeProperties($array){
             $json = '[';
             foreach($array as $property){
                 if($property->type != "select" && $property->type != "radio" && $property->type != "checkbox")
@@ -171,13 +146,8 @@ class FamilyTreeTopHostLibrary {
             $json = substr($json, 0, strlen($json)-1) . ']';
           
             return $json;
-        }
-
-         /**
-         * get module properties
-         *  @return <string> JSON encoded properies
-         */
-        function getJsonProperties($modulename){
+     }
+    public function getJsonProperties($modulename){
             $name = $this->getModuleName($modulename);
             if($name == null)
                 return null;
@@ -199,7 +169,7 @@ class FamilyTreeTopHostLibrary {
             $title = $db->loadAssocList();
             $ar = array ();
 
-            $titl;
+            $titl = new Object();
             $titl->type = "input";
             $titl->name = $title[0]['name'];
             $titl->value = $title[0]['value'];
@@ -214,12 +184,8 @@ class FamilyTreeTopHostLibrary {
             $rows[0]['value'] = $this->encodeProperties($values);
             //var_dump($rows[0]['value']);
             return $rows;
-        }
-        
-        /**
-        *
-        */
-        public function getSiteSettings($tab){
+    }
+    public function getSiteSettings($tab){
             if($tab == 'color'){
         	$sql = "SELECT name, value FROM #__mb_system_settings WHERE type='color'";
         	$db = new JMBAjax();
@@ -228,24 +194,15 @@ class FamilyTreeTopHostLibrary {
                 
 		return $s_array;
             }
-        }
-        
-        /**
-        *
-        */
-        public function sendSiteSettings($tab){
+    }
+    public function sendSiteSettings($tab){
             $resp = $this->getSiteSettings($tab);
             if($resp != null)
                 $resp = json_encode($resp);
             echo $resp;
 
-        }
-        
-          /**
-         * saves module properties
-         *  @params: modulename, properties JSON string
-         */
-        function saveJsonProperties($modulename, $properties_json){
+    }
+    public function saveJsonProperties($modulename, $properties_json){
             $db = new JMBAjax();
             $name = $this->getModuleName($modulename);
             $id = $this->getModuleId($modulename);
@@ -279,7 +236,12 @@ class FamilyTreeTopHostLibrary {
             $db->setQuery($req);
             $db->query();
                
-        }	
+    }
+    /*
+    * ------------------------------------------------------------------------------------------
+    */
+
+
 
 	public function getLangList($module_name){
 		return $this->language->getLangList($module_name);
@@ -371,30 +333,32 @@ class FamilyTreeTopHostLibrary {
         return (is_object($active))?$active->alias:false;
     }
     public function setUserPermission($permission){
-        $session =& JFactory::getSession();
         $sqlString = "UPDATE #__mb_user_map SET `permission` = ?, `time` = NOW() WHERE session_id = ?";
-        $this->ajax->setQuery($sqlString, $permission, $session->getId());
+        $this->ajax->setQuery($sqlString, $permission, $this->sessionId);
         $this->ajax->query();
     }
 
     public function setUserMapFacebookId($facebook_id){
-        $session =& JFactory::getSession();
         $sqlString = "UPDATE #__mb_user_map SET `facebook_id` = ?, `time` = NOW() WHERE session_id = ?";
-        $this->ajax->setQuery($sqlString, $facebook_id, $session->getId());
+        $this->ajax->setQuery($sqlString, $facebook_id, $this->sessionId);
         $this->ajax->query();
     }
 
     public function setUserLanguage($language){
-        $session =& JFactory::getSession();
         $sqlString = "UPDATE #__mb_user_map SET `language` = ?, `time` = NOW() WHERE session_id = ?";
-        $this->ajax->setQuery($sqlString, $language, $session->getId());
+        $this->ajax->setQuery($sqlString, $language, $this->sessionId);
         $this->ajax->query();
     }
 
     public function setUserMap($tree_id, $gedcom_id, $login_type = 0){
-        $session =& JFactory::getSession();
         $sqlString = "UPDATE #__mb_user_map SET `tree_id` = ?, `gedcom_id` = ? , `login_type` = ?, `time` = NOW() WHERE session_id = ?";
-        $this->ajax->setQuery($sqlString, $tree_id, $gedcom_id, $login_type, $session->getId());
+        $this->ajax->setQuery($sqlString, $tree_id, $gedcom_id, $login_type, $this->sessionId);
+        $this->ajax->query();
+    }
+
+    public function setUserAlias($alias){
+        $sqlString = "UPDATE #__mb_user_map SET `page` = ?, `time` = NOW() WHERE session_id = ?";
+        $this->ajax->setQuery($sqlString, $alias, $this->sessionId);
         $this->ajax->query();
     }
 
@@ -403,70 +367,54 @@ class FamilyTreeTopHostLibrary {
         $this->ajax->query();
     }
 
-    public function setUserAlias($alias){
-        $session =& JFactory::getSession();
-        $sqlString = "UPDATE #__mb_user_map SET `page` = ?, `time` = NOW() WHERE session_id = ?";
-        $this->ajax->setQuery($sqlString, $alias, $session->getId());
-        $this->ajax->query();
-    }
-
     public function getUserMap(){
-        $jfbLib = JFBConnectFacebookLibrary::getInstance();
-        $me = $jfbLib->api('/me');
-        $facebook_id = $me['id'];
-        $session =& JFactory::getSession();
-        $session_id = $session->getId();
-
         $sqlString = "SELECT facebook_id, session_id, user_id, tree_id, gedcom_id, permission, login_type, page, language, active FROM #__mb_user_map WHERE session_id = ?";
-        $this->ajax->setQuery($sqlString, $session_id);
+        $this->ajax->setQuery($sqlString, $this->sessionId);
         $data = $this->ajax->loadAssocList();
 
-        $language = $this->language->getLanguage($me['locale']);
-
-        $indData = $this->getIndividualsInSystem($facebook_id);
+        $indData = $this->getIndividualsInSystem($this->userFacebookId);
         $user = JFactory::getUser();
         $page = $this->getCurrentAlias();
         if(empty($data)){
             $sqlString = "INSERT INTO #__mb_user_map (`facebook_id`,`session_id`,`tree_id`, `gedcom_id`, `user_id`, `permission`, `login_type`, `page`,`language`, `active`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
             if($indData){
-                $this->ajax->setQuery($sqlString, $facebook_id, $session_id, $indData['tree_id'], $indData['gedcom_id'], $user->id, $indData['permission'], 0, $page, $language, 0);
+                $this->ajax->setQuery($sqlString, $this->userFacebookId, $this->sessionId, $indData['tree_id'], $indData['gedcom_id'], $user->id, $indData['permission'], 0, $page, $this->userLanguage, 0);
                 $this->ajax->query();
                 return array(
-                        'facebook_id' => $facebook_id,
-                        'session_id' => $session->getId(),
+                        'facebook_id' => $this->userFacebookId,
+                        'session_id' => $this->sessionId,
                         'user_id' => $user->id,
                         'tree_id' => $indData['tree_id'],
                         'gedcom_id' => $indData['gedcom_id'],
                         'permission' => $indData['permission'],
                         'login_type' => 0,
                         'page' => $page,
-                        'language' => $language,
+                        'language' => $this->userLanguage,
                         'active' => NULL
                 );
             } else {
-                $facebook_id = (empty($facebook_id))?0:$facebook_id;
-                $this->ajax->setQuery($sqlString, $facebook_id, $session_id, 0, 0, $user->id, 'GUEST', 0, $page, $language, 0);
+                $this->ajax->setQuery($sqlString, $this->userFacebookId, $this->sessionId, 0, 0, $user->id, 'GUEST', 0, $page, $this->userLanguage, 0);
                 $this->ajax->query();
                 return array(
-                    'facebook_id' => $facebook_id,
-                    'session_id' => $session_id,
+                    'facebook_id' => $this->userFacebookId,
+                    'session_id' => $this->sessionId,
                     'user_id' => $user->id,
                     'tree_id' => $indData['tree_id'],
                     'gedcom_id' => $indData['gedcom_id'],
                     'permission' => $indData['permission'],
                     'login_type' => 0,
                     'page' => $page,
-                    'language' => $language,
+                    'language' => $this->userLanguage,
                     'active' => NULL
                 );
             }
         } else {
-            if($facebook_id&&$data[0]['facebook_id']==0){
-                $this->setUserMapFacebookId($facebook_id);
+            if($this->userFacebookId&&$data[0]['facebook_id']==0){
+                $this->setUserMapFacebookId($this->userFacebookId);
                 $this->setUserMap($indData['tree_id'], $indData['gedcom_id'], $indData['permission']);
                 return array(
-                    'facebook_id' => $facebook_id,
-                    'session_id' => $session->getId(),
+                    'facebook_id' => $this->userFacebookId,
+                    'session_id' => $this->sessionId,
                     'user_id' => $user->id,
                     'tree_id' => $indData['tree_id'],
                     'gedcom_id' => $indData['gedcom_id'],
@@ -478,8 +426,8 @@ class FamilyTreeTopHostLibrary {
                 );
             } else {
                 if($data[0]['permission'] == 'GUEST'&&$data[0]['facebook_id']!=0){
-                    $data[0]['language'] = $language;
-                    $this->setUserLanguage($language);
+                    $data[0]['language'] = $this->userLanguage;
+                    $this->setUserLanguage($this->userLanguage);
                     $this->setUserPermission('MEMBER');
                 }
                 return $data[0];
