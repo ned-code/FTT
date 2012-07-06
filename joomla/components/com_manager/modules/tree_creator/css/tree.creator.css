@@ -1,35 +1,52 @@
 #JMBTreeCreatorContainer{
     font-family: Tahoma;
-    font-size: 18px;
+    font-size: 12px;
     font-weight: normal;
 }
 #JMBTreeCreatorContainer div.title {
+    margin: 30px 10px 10px;
     text-align: center;
-    color: rgb(69, 133, 31);
-    margin: 10px;
+}
+#JMBTreeCreatorContainer div.title span{
+    color: #45851F;
+    font-size: 24px;
 }
 #JMBTreeCreatorContainer div.description {
+    margin: 50px 10px 10px;
     text-align: center;
-    margin: 10px;
+}
+#JMBTreeCreatorContainer div.description span{
+    font-size: 18px;
 }
 
 #JMBTreeCreatorContainer div#button {
-    background: rgb(58, 127, 197);
-    border-radius: 5px;
-    width: 140px;
-
-    text-align: center;
-    height: 20px;
-    line-height: 20px;
-    margin: 0 auto;
+    background: none repeat scroll 0 0 #3A7FC5;
+    border-radius: 5px 5px 5px 5px;
     cursor: pointer;
+    height: 40px;
+    line-height: 40px;
+    margin: 20px auto 0;
+    text-align: center;
+    width: 220px;
 }
 
 #JMBTreeCreatorContainer div#button  span{
     color: white;
-    font-size: 12px;
+    font-size: 18px;
     font-weight: bold;
 }
+
+#JMBTreeCreatorContainer div.box {
+    margin-top: 30px;
+}
+#JMBTreeCreatorContainer div.box div.think{
+    font-weight: bold;
+}
+#JMBTreeCreatorContainer div.box div.text{}
+#JMBTreeCreatorContainer div.box div.image{
+    margin-top: 20px;
+}
+
 .ui-dialog.ui-widget.ftt_tree_creator {
 	background: none repeat scroll 0 0 #AAAAAA;
 }

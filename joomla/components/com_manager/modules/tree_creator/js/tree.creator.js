@@ -114,13 +114,13 @@ function JMBTreeCreatorObject(parent){
                 sb._('<div class="description"><span>')._(module.msg.FTT_MOD_TREE_CREATOR_WELCOM_MESSAGE)._('</span></div>')
                 sb._('<div id="button"><span>')._(module.msg.FTT_MOD_TREE_CREATOR_WELCOM_CLICK)._('</span></div>');
             sb._('</div>');
-            sb._('<div>');
-                sb._('<div>Still thinking about it?</div>');
-                sb._('<div>');
+            sb._('<div class="box">');
+                sb._('<div class="think">Still thinking about it?</div>');
+                sb._('<div class="text">');
                 sb._('Want to see Family TreeTop in action?  Explore our <a id="famous" href="http://familytreetop.com/index.php/famous-family">Famous Families</a> directory  ');
                 sb._(' or click <a id="screen" target="_blank" href="http://screencast.com/t/kgymFc1Cg3oe">here</a> to see a quick video of the Elvis Presley family tree. Your own family tree will have a similar layout.</div>');
                 
-                sb._('<div><img src="http://familytreetop.com/zzzfiles/big-family-line-800.png"></div>');
+                sb._('<div class="image"><img src="http://familytreetop.com/zzzfiles/big-family-line-800.png"></div>');
             sb._('</div>');
 			return jQuery(sb.result());
 		},
