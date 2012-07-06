@@ -1,0 +1,148 @@
+.jmb-profile-cont {
+	font-family: Tahoma,sans-serif;
+	font-size: 11px;
+	height: 30px;
+	right: 10px;
+	line-height: 28px;
+	margin:-3px;
+	position: absolute;
+	top: 0;
+    z-index: 1000;
+}
+.jmb-profile-cont div.avatar{
+	border: 1px solid #ccc;
+	height: 22px;
+    	margin-left: 3px;
+    	margin-top: 3px;
+    	width: 22px;
+}
+.jmb-profile-cont div.login {
+	margin-left: 3px;
+}
+.jmb-profile-cont div.login span {
+	color: #ccc;
+	font-weight: bold;
+}
+.jmb-profile-cont div.settings {
+	position:relative;
+}
+.jmb-profile-cont div.settings div.button{
+	background: url("../imgs/arrows.png") no-repeat scroll 0 -21px #6B944E;
+	border-color: #6B944E;
+	border-style: solid;
+	border-width: 1px;
+	cursor: pointer;
+	height: 22px;
+	margin-top: 3px;
+	width: 22px;
+}
+.jmb-profile-cont div.settings div.button.active {
+	background: url("../imgs/arrows.png") no-repeat scroll 0 0 white;
+	border-color: #CCCCCC #CCCCCC white;
+    	border-style: solid;
+    	border-width: 1px;
+}
+.jmb-profile-cont div.settings div.menu {
+	background: none repeat scroll 0 0 white;
+	border-color: white #CCCCCC #CCCCCC;
+	border-style: solid;
+	border-width: 1px;
+	margin-left: -136px;
+	padding-left: 3px;
+	padding-bottom: 8px;
+	position: absolute;
+	width: 155px;
+}
+.jmb-profile-cont div.settings div.menu div{
+	background: url("../imgs/list.png") no-repeat scroll 3px 3px transparent;
+	line-height: 16px;
+	margin-top: 5px;
+	margin-left: -3px;
+}
+.jmb-profile-cont div.settings div.menu div span {
+	color: #153FC5;
+	font-size: 14px;
+	margin-left: 15px;
+	cursor: pointer;
+}
+.jmb-profile-cont div.settings div.menu div:hover {
+	background:#627AAD;
+}
+.jmb-profile-cont div.settings div.menu div:hover span {
+	color:white;
+}
+.jmb-profile-cont div.facebook {
+	background: url("../imgs/facebook-login-button.png") no-repeat scroll 0 0 transparent;
+	border: 1px solid white;
+	height: 22px;
+	margin-left: 5px;
+	margin-top: 5px;
+	width: 154px;
+}
+.jmb-profile-cont div.facebook span {
+	color: white;
+	cursor: pointer;
+	font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
+	font-size: 10px;
+	font-weight: bold;
+	line-height: 20px;
+	margin-left: 26px;
+	text-decoration: none;
+}
+
+.jmb-profile-famous-cont {
+	background: none repeat scroll 0 0 white;
+	border: 1px solid #CCCCCC;
+	font-family: Calibri,Tahoma,sans-serif;
+	font-size: 12px;
+	height: 60px;
+	position: absolute;
+	right: 10px;
+	top: 5px;
+	width: 200px;
+    z-index: 1;
+}
+.jmb-profile-famous-cont table{
+	margin: 3px;
+	width: 100%;
+}
+.jmb-profile-famous-cont .text {
+	text-align: left;
+}
+.jmb-profile-famous-cont .text span{
+	
+}
+.jmb-profile-famous-cont .avatar {
+	border: 1px solid black;
+	height: 50px;
+    	width: 50px;
+}
+.jmb-profile-famous-cont .avatar img{}
+.jmb-profile-famous-cont .name {
+	text-align: center;
+}
+.jmb-profile-famous-cont .name span{
+	font-weight: bold;
+}
+.jmb-profile-famous-cont .logout {
+	text-align: center;
+}
+.jmb-profile-famous-cont .logout span{
+	color:#686fe3;
+	cursor: pointer;
+}
+
+.ui-dialog.language{
+    background: none repeat scroll 0 0 #999999;
+}
+.ftt-profile-language-list.ui-dialog-content{
+    background: none repeat scroll 0 0 white;
+    border: 1px solid #999999;
+    border-radius: 5px 5px 5px 5px;
+    cursor: pointer;
+    font-family: Tahoma;
+}
+.ftt-profile-language-list.ui-dialog-content ul{
+    list-style: none outside none;
+}
+.ftt-profile-language-list.ui-dialog-content ul li{}

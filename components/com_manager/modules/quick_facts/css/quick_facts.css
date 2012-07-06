@@ -1,0 +1,60 @@
+.tab_content.famous_family #JMBQuickFactsContainer{
+    border-color: #f0e2d9;
+}
+.tab_content.famous_family .jmb_qf_content{
+    border-color: #f0e2d9;
+}
+.tab_content.famous_family .jmb_qf_header{
+    border-color: #f0e2d9;
+}
+.tab_content.myfamily #JMBQuickFactsContainer{
+    border-color: #d1daec;
+}
+.tab_content.myfamily .jmb_qf_header{
+    border-color: #d1daec;
+}
+.tab_content.myfamily .jmb_qf_content{
+    border-color: #d1daec;
+}
+#JMBQuickFactsContainer {
+	font-family: Tahoma,sans-serif;
+	font-size: 11px;
+	font-weight: normal;
+	margin: 10px 10px 20px;
+	position: relative;
+}
+.jmb_qf_header {
+	background: none repeat scroll 0 0 #DEEDAA;
+	border: 1px solid #D1DAEC;
+	height: 22px;
+	padding: 5px;
+}
+.jmb_qf_header  span{
+	font-size: 13px;
+	font-weight: bold;
+	left: 38%;
+	position: absolute;
+	top: 8px;
+}
+.jmb_qf_content {
+	background: none repeat scroll 0 0 white;
+	border: 1px solid #D1DAEC;
+	margin-top: -1px;
+	padding: 5px;
+}
+.jmb_qf_item {
+	margin-top: 3px;
+}
+.jmb_qf_title {
+	font-weight: bold;
+}
+.jmb_qf_text {
+	margin-left: 5px;
+	cursor:pointer;
+}
+.jmb_qf_button {
+	color: blue;
+	cursor: pointer;
+    	position: absolute;
+    	right: 0;
+}

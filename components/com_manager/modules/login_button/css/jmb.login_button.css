@@ -1,0 +1,47 @@
+#JMBLoginButtonContainer{
+
+}
+.jmb-login-button-container{
+	width: 370px;
+    margin: 0 auto;
+	/*margin: 80px auto 0;*/
+}
+.jmb-login-button-title{
+	font-family: Calibri,Tahoma,sans-serif;
+	font-size: 18px;
+    	font-weight: bold;
+    	height: 50px;
+    	line-height: 43px;
+    	text-align: center;
+}
+.jmb-login-button{
+	background: url("../imgs/bgbt.png") repeat scroll 0 0 transparent;
+	border-radius: 5px 5px 5px 5px;
+	color: white;
+	cursor: pointer;
+	font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
+	font-size: 11px;
+	font-weight: bold;
+	height: 50px;
+	margin: 0 auto;
+	width: 200px;
+}
+.jmb-login-button-f{
+	display: inline-block;
+	font-size: 36px;
+	height: 50px;
+	line-height: 45px;
+	text-align: center;
+	width: 50px;
+}
+.jmb-login-button-body{
+	display: inline-block;
+	margin-top: 5px;
+}
+.jmb-login-button-u{
+	font-size: 18px;
+}
+.jmb-login-button-d span{
+	font-size: 10px;
+	margin-left: 5px;
+}

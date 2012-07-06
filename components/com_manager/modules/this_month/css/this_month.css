@@ -1,0 +1,127 @@
+.tab_content.famous_family #JMBThisMonthContainer{
+    border-color: #f0e2d9;
+}
+.tab_content.famous_family .jmb-this-month-header{
+    border-color: #f0e2d9;
+}
+.tab_content.myfamily #JMBThisMonthContainer{
+    border-color: #d1daec;
+}
+.tab_content.myfamily .jmb-this-month-header{
+    border-color: #d1daec;
+}
+#JMBThisMonthContainer{
+	border: 1px solid #d1daec;
+	margin: 10px;
+	background: none repeat scroll 0 0 #FFFFFF;
+}
+.jmb-this-month-header{
+	background: none repeat scroll 0 0 #DEEDAA;
+	border-bottom: 1px solid #d1daec;
+	height: 22px;
+	padding: 5px;
+}
+.jmb-this-month-header span {
+	font-family: Tahoma;
+	font-size: 13px;
+	font-weight: bold;
+}
+.jmb-this-month-header select {
+	border: 1px solid #999999;
+	font-family: Tahoma;
+	font-size: 12px;
+	padding: 3px;
+	margin-left: 3px;
+}
+.jmb-this-month-header select option {
+	padding-left: 5px;
+	width: 70px;
+}
+.jmb-this-month-body{
+	margin-left: 15px;
+	margin-right: 15px;
+	padding: 10px;
+}
+.jmb-this-month-view{
+	padding-left: 18px;
+	font-family: Tahoma;
+    	font-size: 12px;
+    	font-weight: bold;
+}
+.jmb-this-month-view.birthday{
+	background: url("../imgs/birthday.png") no-repeat scroll 0 0 transparent;
+}
+.jmb-this-month-view.marriage{
+	background: url("../imgs/union.png") no-repeat scroll 0 0 transparent;
+}
+.jmb-this-month-view.deceased{
+	background: url("../imgs/deceased.png") no-repeat scroll 0 0 transparent;
+}
+.jmb-this-month-content{
+	font-family: Tahoma;
+	font-size: 11px;
+	margin: 3px 3px 10px 10px;
+}
+.jmb-this-month-content .date{
+	background: url("../imgs/calendar.gif") no-repeat scroll 0 0 transparent;
+	height: 16px;
+	line-height: 20px;
+	margin: 0;
+	text-align: center;
+	width: 18px;
+}
+.jmb-this-month-content .person{
+
+}
+.jmb-this-month-content .img-M{
+	background: url("../imgs/male.png") repeat scroll 0 0 transparent;
+	height: 14px;
+	margin-right: 5px;
+	width: 14px;
+}
+.jmb-this-month-content .img-F{
+	background: url("../imgs/female.png") repeat scroll 0 0 transparent;
+	height: 14px;
+	margin-right: 5px;
+	width: 14px;
+}
+.jmb-this-month-content .anniversaries-start{
+	background: url("../imgs/family_o.png") repeat scroll 0 0 transparent;
+	height: 16px;
+    	margin-right: 3px;
+    	width: 37px;
+}
+.jmb-this-month-content .anniversaries-end{
+	background: url("../imgs/family_c.png") repeat scroll 0 0 transparent;
+	height: 16px;
+    	margin-left: 3px;
+    	width: 6px;
+}
+.jmb-this-month-content .person font{
+	cursor:pointer;
+}
+.jmb-this-month-content .message{
+	font-family: Tahoma;
+	font-size: 11px;
+	font-weight: bold;
+}
+
+.jmb-this-month-content .message font{
+	cursor:pointer;
+}
+#jmb-this-month-birth{}
+#jmb-this-month-death{}
+#jmb-this-month-marr{}
+.jmb-this-month-body .empty{
+	margin: 50px;
+	text-align: center;
+}
+.jmb-this-month-body .empty .text{
+	color: gray;
+}
+.jmb-this-month-body .empty .button{
+	color: #B6BAD9;
+} 
+.jmb-this-month-body .empty .button span{
+	cursor:pointer;
+} 

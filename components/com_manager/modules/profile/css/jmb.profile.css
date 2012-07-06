@@ -1,0 +1,634 @@
+/**
+* UI - DIALOG 
+*/
+.ui-widget-header {
+	background: none;
+	border:none;
+}
+.ui-widget-content.edit{
+	background: #7F7F7F;
+}
+.ui-widget-content.add{
+    background: #7F7F7F;
+}
+.ui-widget-content.view{
+	background: #9a7423;
+}
+.ui-dialog-title{
+	color:white;
+}
+.ui-dialog .ui-dialog-content {
+	/*overflow: visible;*/
+}
+.ui-widget-overlay {
+	background: #000000;
+	opacity: 0.8;
+}
+
+.jmb-dialog-container {
+	font-family: Tahoma;
+	font-size: 12px;
+	margin-top: 3px;
+	border-radius: 5px;
+	margin: 0 !important;
+	padding: 0 !important;
+}
+.jmb-dialog-interface-button {
+	color: #909293;
+	font-family: tahoma;
+	font-size: 14px;
+	position: absolute;
+	right: 50px;
+	top: 8px;
+}
+.jmb-dialog-interface-button div {
+	background: none repeat scroll 0 0 #DDDEDE;
+	border: 1px solid #EFEFEF;
+	border-radius: 3px 3px 3px 3px;
+	cursor: pointer;
+	display: inline-block;
+	margin-left: 5px;
+	padding: 3px;
+	text-align: center;
+	width: 60px;
+}
+.jmb-dialog-interface-button div.active {
+	background: none repeat scroll 0 0 #F8A13B;
+	border: 1px solid #FFB45C;
+	color: white;
+}
+.jmb-dialog-interface-button span {}
+/**
+* menu items
+*/
+.jmb-dialog-profile-menu-container{
+	border-right: 2px solid gray;
+	font-family: tahoma;
+	font-weight: bold;
+}
+.jmb-dialog-profile-menu-container ul{}
+.jmb-dialog-profile-menu-container li{
+	display:block;
+	background: none repeat scroll 0 0 #7F7F7F;
+	color: #000;
+	font-size: 14px;
+	margin: 5px;
+	height: 24px;
+	line-height: 24px;
+	text-align:center;
+	cursor:pointer;
+}
+.jmb-dialog-profile-menu-container li:hover{
+	background: #a0a0a0;
+}
+.jmb-dialog-profile-menu-container li.active{
+	background: #bebebe !important;
+}
+.jmb-dialog-profile-menu-container span{}
+/**
+* avatar
+*/
+/**
+.jmb-dialog-photo{
+	position:relative;
+	background: white;
+	border: 2px solid #000000;
+	border-radius: 3px 3px 3px 3px;
+	height: 150px;
+	margin: 5px 5px 5px 10px;
+	text-align: center;
+	width: 135px;
+}
+*/
+.jmb-dialog-avatar{
+    position:relative;
+    background: white;
+    border: 2px solid #000000;
+    border-radius: 3px 3px 3px 3px;
+    margin: 5px 5px 5px 10px;
+    text-align: center;
+}
+.jmb-dialog-photo-button {
+	margin: 10px;
+	width: 120px;
+}
+
+.jmb-dialog-photo-button-wrapper {
+	cursor: pointer;
+	display: inline-block;
+	overflow: hidden;
+	position: relative;
+}
+.jmb-dialog-photo-button-wrapper input {
+	cursor: pointer;
+	font-size: 100px;
+	height: 100%;
+	filter: alpha(opacity=1);
+	-moz-opacity: 0.01;
+	opacity: 0.01;
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+.jmb-dialog-photo-button-wrapper .jmb-dialog-photo-button2 {
+	background: none repeat scroll 0 0 #F1FDFE;
+	border: 1px solid #000000;
+	border-radius: 5px 5px 5px 5px;
+	cursor: pointer;
+	display: inline-block;
+	font-size: 11px;
+	font-weight: bold;
+	margin-left: 20px;
+	padding: 3px 10px;
+}
+.jmb-dialog-photo-context {
+	color: #00B22E;
+	font-family: tahoma;
+	font-size: 10px;
+	font-weight: normal;
+	margin-left: 17px;
+}
+/**
+* buttons
+*/
+.jmb-dialog-button-submit {
+	position: absolute;
+	right: 10px;
+	top: 10px;
+}
+.jmb-dialog-button-submit input {
+	border: 2px solid black !important;
+	border-radius: 5px 5px 5px 5px;
+	font-family: Tahoma;
+	font-size: 14px;
+	font-weight: bold;
+	margin: 3px;
+	width: 65px !important;
+	cursor:pointer;
+}
+/**
+* basic
+*/
+.jmb-dialog-profile-content-basic {
+    position:relative;
+	background: none repeat scroll 0 0 #7F7F7F;
+	border-radius: 5px 5px 5px 5px;
+	font-family: Tahoma;	
+	font-size: 12px;
+	margin: 10px;
+	padding: 5px;
+}
+.jmb-dialog-profile-content-basic .jmb-dialog-button-submit {
+	position:absolute;
+	top:1px;
+	right: 12px;
+}
+.jmb-dialog-profile-content-basic-body{
+	background: none repeat scroll 0 0 #F1E4B0;
+	border: 1px solid #473E1B;
+	border-radius: 5px 5px 5px 5px;
+	font-family: Tahoma !important;
+	font-size: 12px !important;
+	margin-top: 23px;
+	padding-bottom: 10px;
+	position: relative;
+}
+.jmb-dialog-profile-content-basic-body table span{
+	font-weight:bold;
+}
+.jmb-dialog-profile-content-basic-body table input[type="text"]{
+	border: 1px solid gray;
+	font-family: tahoma;
+	font-size: 12px;
+	height: 16px;
+	margin: 3px;
+	width: 210px;
+}
+.jmb-dialog-profile-content-basic-body table input[type="text"][placeholder]{
+	width:139px;
+}
+.jmb-dialog-profile-content-basic-body table select{
+	border: 1px solid #999999;
+	margin: 3px;
+	padding: 1px;
+	width: 80px;
+}
+/**
+* unions
+*/
+.jmb-dialog-profile-content-unions{
+	font-family: Tahoma;
+	font-size: 12px;
+	margin-top: 10px;
+	margin-left: 20px;
+}
+.jmb-dialog-profile-content-union{
+	background: none repeat scroll 0 0 #7F7F7F;
+	border-radius: 5px 5px 5px 5px;
+	width: 500px;
+	padding-top: 30px;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-bottom: 3px;
+	margin-top: 10px;
+}
+.jmb-dialog-profile-content-unions-header{
+	position: relative;
+	margin-top: -30px;
+}
+.jmb-dialog-profile-content-unions-header div.title.count{
+	position: absolute;
+	top: 1px;
+	left: 10px;
+	color: white;
+	font-weight: bold;
+	font-size: 20px;
+}
+.jmb-dialog-profile-content-unions-header div#current_partner{
+	color: white;
+	left: 95px;
+	position: absolute;
+	top: 5px;
+}
+.jmb-dialog-profile-content-unions-header div#current_partner input{
+	width: 13px !important;
+}
+.jmb-dialog-profile-content-unions-header div#button{
+	position: absolute;
+	top: 1px;
+	right: 0px;
+}
+.jmb-dialog-profile-content-unions-header input{
+	border: 2px solid black !important;
+	border-radius: 5px 5px 5px 5px;
+	font-family: Tahoma;
+	font-size: 14px;
+	font-weight: bold;
+	margin: 3px;
+	width: 65px !important;
+	cursor:pointer;
+}
+.jmb-dialog-profile-content-unions form {
+	background: none repeat scroll 0 0 #F1E4B0;
+	border: 1px solid #473E1B;
+	border-radius: 5px 5px 5px 5px;
+}
+.jmb-dialog-profile-content-unions  table#container {
+	 margin-bottom: 10px;
+	 margin-top: 30px;
+}
+.jmb-dialog-profile-content-unions  table span{
+	font-weight:bold;
+}
+.jmb-dialog-profile-content-unions  table input[type="text"] {
+	border: 1px solid gray;
+	font-family: tahoma;
+	font-size: 12px;
+	height: 16px;
+	margin: 3px;
+}
+.jmb-dialog-profile-content-unions  table select {
+	border: 1px solid #999999;
+	margin: 3px;
+	padding: 1px;
+	width: 80px;
+}
+
+
+.jmb-dialog-profile-content-unions-body{
+	margin: 5px;
+	margin-top: 30px;
+}
+.jmb-dialog-profile-content-unions-part{}
+.jmb-dialog-profile-content-unions-person{
+	display: inline-block;
+	margin-top: 10px;
+}
+.jmb-dialog-profile-content-unions-person table{
+	border-spacing: 0px;
+}
+.jmb-dialog-profile-content-unions-person .info{
+	background: white;
+	border: 1px solid #9A7423;
+	padding: 10px;
+	height: 60px;
+}
+.jmb-dialog-profile-content-unions-person .info .name{}
+.jmb-dialog-profile-content-unions-person .info .date{}
+.jmb-dialog-profile-content-unions-person .info .location{}
+.jmb-dialog-profile-content-unions-add{
+	width: 102px;
+	/*margin: 0 auto;*/
+	margin-top: 5px;
+}
+.jmb-dialog-profile-content-unions-add input{
+	border: 1px solid #000000;
+	border-radius: 5px 5px 5px 5px;
+	cursor: pointer;
+	font-family: Tahoma;
+	font-size: 12px;
+	font-weight: bold;
+	padding: 5px;	
+}
+
+.jmb-dialog-profile-content-union.add table input[type="text"]{
+	border: 1px solid gray;
+	font-family: tahoma;
+	font-size: 12px;
+	height: 16px;
+	margin: 3px;
+	width: 170px;
+}
+/**
+* photos
+*/
+.jmb-dialog-photos-content{
+	font-family: Tahoma,sans-serif;
+	font-size: 12px;
+	font-weight: normal;
+	margin: 5px;
+	position: relative;
+}
+.jmb-dialog-photos-content form {
+    display:inline-block;
+}
+.jmb-dialog-photos-content .buttons {
+	left: 0;
+	position: relative;
+	top: 0;
+}
+.jmb-dialog-photos-content .buttons .switch-avatar{
+	display: inline-block;
+    margin-left:3px;
+}
+.jmb-dialog-photos-content .buttons input[type="submit"]{
+	cursor: pointer;
+	height: 22px;
+	margin-left: 3px;
+	width: 55px;
+}
+.jmb-dialog-photos-content .list{
+	margin: 10px;
+}
+.jmb-dialog-photos-content .list ul li{
+	border: 1px solid white;
+	display: inline-block;
+	margin-left: 3px;
+}
+.jmb-dialog-photos-content .list ul li.active{
+	border:1px solid #000;
+}
+.jmb-dialog-photos-content .list .list-item{
+	border:1px solid white;
+	background: none repeat scroll 0 0 #E9E9E9;
+	height: 125px;
+	width: 110px;
+}
+.jmb-dialog-photos-content .list .list-item.active{
+	border:1px solid black;
+}
+.jmb-dialog-photos-content .list .list-item .header{
+	height: 20px;
+	line-height: 20px;
+	position: relative;
+	text-align: center;
+}
+.jmb-dialog-photos-content .list .list-item .header span{
+	color: #77807D;
+	font-weight: bold;
+}
+.jmb-dialog-photos-content .list .list-item .header .delete{
+	background: url("../image/delete.png") no-repeat scroll 0 0 transparent;
+	cursor: pointer;
+	height: 14px;
+	position: absolute;
+	right: 1px;
+	top: 3px;
+	width: 14px;
+}
+.jmb-dialog-photos-content .list .list-item .item{
+	text-align: center;
+	cursor:pointer;
+}
+/**
+* view profile
+*/
+.jmb-dialog-view-profile {
+	width: 510px;
+	background: none repeat scroll 0 0 #9A7423;
+	border-radius: 3px 3px 3px 3px;
+    	font-family: Tahoma;
+    	font-size: 12px;
+    	font-weight: normal;
+    	margin: 10px;
+    	padding: 5px;
+}
+.jmb-dialog-view-profile-content{
+	background: none repeat scroll 0 0 #F1E4B0;
+	border: 1px solid #473E1B;
+    	border-radius: 5px 5px 5px 5px;
+}
+.jmb-dialog-view-profile-content divrelation.title{
+	text-align: right;
+	width: 70px;
+}
+.jmb-dialog-view-profile-content div.title span {
+	color:gray;
+}
+.jmb-dialog-view-profile-content div.text span {
+	margin-left: 10px;
+}
+.jmb-dialog-view-profile-content div.list {
+	margin-bottom: 10px;
+	margin-left: 40px;
+}
+.jmb-dialog-view-profile-content div.list-header {
+	color: gray;
+	font-weight: bold;
+}
+.jmb-dialog-view-profile-content div.list-item {
+	font-weight:bold;
+	color: #3B5997;
+	margin-left: 15px;
+}
+/**
+* add union
+*/ 
+.jmb-profile-add-union {
+    background: none repeat scroll 0 0 #9A7423;
+    border-radius: 5px 5px 5px 5px;
+    overflow: hidden;
+    padding: 3px;
+    width: 500px;
+}
+.jmb-profile-add-union form {
+	background: none repeat scroll 0 0 #F1E4B0;
+	border: 1px solid #473E1B;
+	border-radius: 5px 5px 5px 5px;
+}
+.jmb-profile-add-union div.title {
+	margin-left:5px;
+	margin-top:5px;
+}
+.jmb-profile-add-union div.title span {
+	font-weight:bold;
+}
+.jmb-profile-add-union table {
+	margin-left:10px;
+}
+.jmb-profile-add-union .jmb-profile-add-union-buttons input{
+	border: 2px solid black !important;
+	border-radius: 5px 5px 5px 5px;
+	cursor: pointer;
+	font-family: Tahoma;
+	font-size: 14px;
+	font-weight: bold;
+	margin: 3px;
+	height: 22px;
+	width: 65px !important;
+}
+.jmb-profile-add-union input {
+	border: 1px solid gray;
+	font-family: tahoma;
+	font-size: 12px;
+	height: 16px;
+	margin: 3px;
+}
+.jmb-profile-add-union select {
+	border: 1px solid #999999;
+	margin: 3px;
+	padding: 1px;
+	width: 80px;
+}
+.jmb-profile-add-union .buttons {
+	position:absolute;
+	top:-35px;
+	right:5px;
+}
+.jmb-profile-add-union .buttons input{
+	border: 2px solid black !important;
+	border-radius: 5px 5px 5px 5px;
+	cursor: pointer;
+	font-family: Tahoma;
+	font-size: 14px;
+	font-weight: bold;
+	margin: 3px;
+	height: 22px;
+}
+/**
+* add parent,brother\sister,child
+*/ 
+.jmb-dialog-profile-add-parent {
+	font-family: Tahoma;
+	font-size: 12px;
+}
+.jmb-dialog-profile-add-parent form{
+	background: none repeat scroll 0 0 #F1E4B0;
+	border: 1px solid #473E1B;
+    	border-radius: 5px 5px 5px 5px;
+    	position:relative;
+}
+.jmb-dialog-profile-add-parent .buttons {
+	position:absolute;
+	top:-35px;
+	right:5px;
+    height:30px;
+}
+.jmb-dialog-profile-add-parent .buttons input{
+	border: 2px solid black !important;
+	border-radius: 5px 5px 5px 5px;
+	cursor: pointer;
+	font-family: Tahoma;
+	font-size: 14px;
+	font-weight: bold;
+	margin: 3px;
+	height: 22px;
+}
+.jmb-dialog-profile-add-parent span {
+	font-weight: bold;
+}
+.jmb-dialog-profile-add-parent select {
+	border: 1px solid #999999;
+	margin: 3px;
+	padding: 1px;
+	width: 80px;
+}
+.jmb-dialog-profile-add-parent input {
+	border: 1px solid gray;
+	font-family: tahoma;
+	font-size: 12px;
+	height: 16px;
+	margin: 3px;
+}
+/**
+* death marker
+*/
+.jmb-dialog-profile-death-marker{
+	background: url("../image/death_marker.png") no-repeat scroll -40px 0 transparent;
+	height: 10px;
+    	left: 0;
+    	position: absolute;
+    	top: 0;
+    	width: 10px;
+}
+
+/**
+* more options
+*/
+.delete-button {
+    background: none repeat scroll 0 0 red;
+    border-radius: 5px 5px 5px 5px;
+    color: white;
+    cursor: pointer;
+    height: 30px;
+    line-height: 30px;
+    margin: 10px;
+    text-align: center;
+    width: 150px;
+}
+.jmb-dialog-options-content{
+    margin:10px;
+    font-family: Tahoma;
+    font-size:12px;
+    font-weight:normal;
+}
+.jmb-dialog-options-content table{
+    border:0px;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+.jmb-dialog-options-content td{
+    padding:5px;
+    border: 1px solid #000;
+}
+
+.jmb-dialog-options-content table .title{
+    color: #10B0F0;
+    margin: 3px;
+    font-weight: bold;
+}
+.jmb-dialog-options-content table .title span{
+    cursor: pointer;
+}
+.jmb-dialog-options-content table .description{
+    color: #999999;
+    font-size: 10px;
+}
+.jmb-dialog-options-content .option{
+    text-align:center;
+}
+.jmb-dialog-options-content .image{
+    height: 49px;
+    width: 67px;
+}
+.jmb-dialog-options-content .image.unlink{
+    background: url("../image/m_options_unlink.jpg") no-repeat scroll 0 0 transparent;
+}
+.jmb-dialog-options-content .image.remove{
+    background: url("../image/m_options_remove.jpg") no-repeat scroll 0 0 transparent;
+}
+.jmb-dialog-options-content .image.delete{
+    background: url("../image/m_options_delete.jpg") no-repeat scroll 0 0 transparent;
+}
+
+

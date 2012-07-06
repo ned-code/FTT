@@ -1,0 +1,61 @@
+.tab_content.famous_family #JMBLatestUpdatesContainer{
+    border-color: #f0e2d9;
+}
+.tab_content.famous_family .jmb-lu-content{
+    border-color: #f0e2d9;
+}
+.tab_content.famous_family .jmb-lu-header{
+    border-color: #f0e2d9;
+}
+.tab_content.myfamily #JMBLatestUpdatesContainer{
+    border-color: #d1daec;
+}
+.tab_content.myfamily .jmb-lu-content{
+    border-color: #d1daec;
+}
+.tab_content.myfamily .jmb-lu-header{
+    border-color: #d1daec;
+}
+#JMBLatestUpdatesContainer {
+	font-family: Tahoma,sans-serif;
+	font-size: 11px;
+    	font-weight: normal;
+    	margin: 10px 10px 20px;
+    	position: relative;
+}
+.jmb-lu-header {
+	background: none repeat scroll 0 0 #DEEDAA;
+	border: 1px solid #D1DAEC;
+    	height: 22px;
+    	padding: 5px;
+}
+.jmb-lu-header span {
+	font-size: 13px;
+	font-weight: bold;
+	left: 35%;
+	position: absolute;
+	top: 8px;
+}
+.jmb-lu-content {
+	background: none repeat scroll 0 0 white;
+	border: 1px solid #D1DAEC;
+    	margin-top: -1px;
+    	padding: 5px;
+}
+.jmb-lu-button {
+	color: blue;
+	cursor: pointer;
+    	position: absolute;
+    	right: 0;
+}
+.jmb-lu-content ul li {
+	display: block;
+}
+.jmb-lu-content ul li div span.title {
+	font-weight: bold;
+}
+.jmb-lu-content ul li div span.value {
+	cursor:pointer;
+}
+
+
