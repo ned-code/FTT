@@ -15,7 +15,11 @@
 	right: 30px;
 	top: 90px;
 }
-#JMBHomeContainer .jmb-home-body .title{}
+#JMBHomeContainer .jmb-home-body .title{
+    color: #517b3e;
+    font-size: 24px;
+    font-weight: bold;
+}
 #JMBHomeContainer .jmb-home-body div.button{
 	border-radius: 5px 5px 5px 5px;
 	color: white;
@@ -26,14 +30,27 @@
 	padding: 5px;
 }
 #JMBHomeContainer .jmb-home-body div#connect.button{
-	background: #5c8e40;
+    background: none repeat scroll 0 0 #7092be;
+    margin-top: 30px;
+    text-align: center;
+}
+#JMBHomeContainer .jmb-home-body div#connect.button:hover{
+    background: #86aad9;
 }
 #JMBHomeContainer .jmb-home-body div#view.button{
 	background: #a96946;
+    text-align: center;
 }
-
-
-
+#JMBHomeContainer .jmb-home-body div#view.button:hover{
+    background: #d89775;
+}
+#JMBHomeContainer .jmb-home-body div#ipad{
+    background: url("../imgs/ipad.png") no-repeat scroll 0 0 transparent;
+    cursor: pointer;
+    height: 50px;
+    margin: 40px auto 0;
+    width: 101px;
+}
 
 
 

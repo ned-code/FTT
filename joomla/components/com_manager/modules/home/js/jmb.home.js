@@ -25,6 +25,7 @@ function JMBHomeObject(offsetParent){
 							st._('<div class="title"><span>')._(msg.FTT_MOD_HOME_WELCOME)._('</span></div>');
 							st._('<div id="connect" class="button"><span>')._(msg.FTT_MOD_HOME_CONNECT_TO_FAMILY_TREE)._('</span></div>');
 							st._('<div id="view" class="button"><span>')._(msg.FTT_MOD_HOME_VIEW_FAMOUS_FAMILY)._('</span></div>');
+                            st._('<div id="ipad" >&nbsp;</div>');
 						st._('</div>');
 					st._('</td>');
 				st._('</tr>');
