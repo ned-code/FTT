@@ -1,11 +1,6 @@
 <?php
 define('_JEXEC', 1);
 define('DS', DIRECTORY_SEPARATOR);
-define("JMB_FACEBOOK_APPID", "184962764872486");
-define("JMB_FACEBOOK_SECRET", "6b69574c9ddd50ce2661b3053cd4dc02");
-define("JMB_FACEBOOK_URL",  'http://www.familytreetop.com/');
-define("JMB_FACEBOOK_COOKIE",  true);
-
 $path = explode(DS, getcwd());
 $base_url_array = array();
 foreach($path as $key => $value){

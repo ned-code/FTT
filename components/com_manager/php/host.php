@@ -69,6 +69,14 @@ class FamilyTreeTopHostLibrary {
             return JPATH_ROOT."/components/com_manager/modules/";
     }
 
+    public function getBaseUrl(){
+        $path = explode(DS, JURI::base());
+        foreach($path as $key => $value){
+            if($value == 'components') break;
+            $base_url_array[] = $value;
+        }
+        return implode(DS, $base_url_array);
+    }
 
     /*
     * ------------------------------------------------------------------------------------------

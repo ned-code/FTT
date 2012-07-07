@@ -94,6 +94,10 @@ class JMBInvitation {
 
 		#senders e-mail adress
 		if(!$to) return false;
+
+        $views = $this->host->getViews('invitation');
+        $language = $this->host->getLangList('invitation');
+        $tpl = $views['invite'];
 		
 		$value = $recipient['user']['gedcom_id'].','.$tree_id;	
 		
@@ -114,26 +118,32 @@ class JMBInvitation {
 		$username = "no-reply@familytreetop.com";
 		$password = "Pp9671111";
 
-        $mail_body = '<html>';
-            //$mail_body .= '<head>Family Treetop invitation.</head>';
-            $mail_body .= '<body>';
-                $mail_body .= '<br>Dear '.$recipient['user']['first_name'].',<br><br>';
-                $mail_body .= 'Your '.$relation.', '.$owner['user']['first_name'].' '.$owner['user']['last_name'];
-                $mail_body .= ', has invited you to join your family tree on Family TreeTop. This is private space';
-                $mail_body .= ' that can only be seen my members of your family.<br><br>';
+        $dear = $recipient['user']['gender'] == "M"?$language['FTT_MOD_INVITATION_DEAR_MALE']:$language['FTT_MOD_INVITATION_DEAR_FEMALE'];
 
-                $mail_body .= "<a href='http://www.familytreetop.com/index.php/invitation?token=".$token."'>Click here to accept this invitation</a><br><br>";
-                //$mail_body .= 'Click <a href="http://www.facebook.com/profile.php?id='.$owner['user']['facebook_id'].'">here</a> to view '.$owner['user']['first_name'].' Facebook profile.<br><br>';
-                $mail_body .= 'Click <a href="http://www.facebook.com/profile.php?id='.$owner['user']['facebook_id'].'">here</a> to view Facebook profile for '.$owner['user']['first_name'].'<br><br>';
+        $tpl = str_replace('__MSG_DEAR__', $dear, $tpl);
+        $tpl = str_replace('__MSG_YOUR__', $language['FTT_MOD_INVITATION_YOUR'], $tpl);
+        $tpl = str_replace('__MSG_HAS_INVITED__', $language['FTT_MOD_INVITATION_HAS_INVITED'], $tpl);
+        $tpl = str_replace('__MSG_CLICK_HERE_TO_ACCEPT__', $language['FTT_MOD_INVITATION_CLICK_HERE_TO_ACCEPT'], $tpl);
+        $tpl = str_replace('__MSG_CLICK__', $language['FTT_MOD_INVITATION_CLICK'], $tpl);
+        $tpl = str_replace('__MSG_HERE__', $language['FTT_MOD_INVITATION_HERE'], $tpl);
+        $tpl = str_replace('__MSG_TO_VIEW_PROFILE__', $language['FTT_MOD_INVITATION_TO_VIEW_PROFILE'], $tpl);
+        $tpl = str_replace('__MSG_IF_YOU_WISH_TO_CONTACT__', $language['FTT_MOD_INVITATION_IF_YOU_WISH_TO_CONTACT'], $tpl);
+        $tpl = str_replace('__MSG_YOU_MAY_EMAIL_HIM_AT__', $language['FTT_MOD_INVITATION_YOU_MAY_EMAIL_HIM_AT'], $tpl);
+        $tpl = str_replace('__MSG_THIS_IS_AUTOMATED_MESSAGE__', $language['FTT_MOD_INVITATION_THIS_IS_AUTOMATED_MESSAGE'], $tpl);
+        $tpl = str_replace('__MSG_REGARDS__', $language['FTT_MOD_INVITATION_REGARS'], $tpl);
+        $tpl = str_replace('__MSG_THE_FAMILY_TREETOP_TEAM__', $language['FTT_MOD_INVITATION_THE_FAMILY_TREETOP_TEAM'], $tpl);
 
-                $mail_body .= 'If you wish to contact '.$owner['user']['first_name'].', you may email him at '.$me['email'].'<br><br>';
+        $tpl = str_replace('__RECIPIENT_FIRST_NAME__', $recipient['user']['first_name'], $tpl);
+        $tpl = str_replace('__RELATION__', $relation, $tpl);
+        $tpl = str_replace('__USER_NAME__', $owner['user']['first_name'].' '.$owner['user']['last_name'], $tpl);
+        $tpl = str_replace('__JPATH_BASE__', $this->host->getBaseUrl(), $tpl);
+        $tpl = str_replace('__TOKEN__', $token, $tpl);
+        $tpl = str_replace('__USER_FACEBOOK_ID__', $owner['user']['facebook_id'], $tpl);
+        $tpl = str_replace('__OWNER_FIRST_NAME__', $owner['user']['first_name'], $tpl);
+        $tpl = str_replace('__EMAIL__', $me['email'], $tpl);
 
-                $mail_body .= 'This is automated message from Family TreeTop. Please do not respond to this email.<br>';
-                $mail_body .= '<br>Regards,<br><br> The Family TreeTop Team<br>';
-                $mail_body .= '<a href="www.familytreetop.com">www.familytreetop.com</a>';
-            $mail_body .= '</body>';
-        $mail_body .= '</html>';
-		
+        $mail_body = $tpl;
+
 		$headers = array ("MIME-Version"=> '1.0', "Content-type" => "text/html; charset=utf-8",'From' => $from,'To' => $to,'Subject' => $subject);
         
 		$smtp = Mail::factory('smtp',array ('host' => $host,'port' => $port,'auth' => true,'username' => $username,'password' => $password));
