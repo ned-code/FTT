@@ -272,20 +272,21 @@ class JMBController extends JController
         	$canvas = JRequest::getVar('canvas');
 
         	if($option!='com_manager') exit();
-        	if(strlen($task)!=0) return;
-            if((bool)$canvas){
-                header('Location: https://www.facebook.com/dialog/oauth?client_id='.JMB_FACEBOOK_APPID.'&redirect_uri='.JURI::base().'index.php/myfamily');
-                exit;
-            }
-
+            $host = &FamilyTreeTopHostLibrary::getInstance();
             $jfb = JFBConnectFacebookLibrary::getInstance();
             $user = JFactory::getUser();
+
+        	if(strlen($task)!=0) return;
+            if((bool)$canvas){
+                header('Location: https://www.facebook.com/dialog/oauth?client_id='.$jfb->facebookAppId.'&redirect_uri='.JURI::base().'index.php/myfamily');
+                exit;
+            }
             $me = $jfb->api('me');
 
             if(!$user->guest){
                 $user_name = explode('_', $user->username);
                 if($user_name[1] != $me['id']){
-                    header('Location: '.JURI::base().'index.php?option=com_jfbconnect&task=logout&return=login');
+                    header('Location: '.$host->getBaseUrl().'index.php?option=com_jfbconnect&task=logout&return=login');
                     exit;
                 }
             }

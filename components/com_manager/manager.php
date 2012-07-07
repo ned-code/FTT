@@ -1,11 +1,4 @@
 <?php
-# Check to ensure this file is included in Joomla!
-defined('_JEXEC') or die( 'Restricted access' );
-define("JMB_FACEBOOK_APPID", "136695133059478");
-define("JMB_FACEBOOK_SECRET", "698d4395572d7e0f9c9d272230adbb0d");
-define("JMB_FACEBOOK_URL",  'http://www.familytreetop.com/');
-define("JMB_FACEBOOK_COOKIE",  true);
-
 # Require the com_content helper library
 require_once(JPATH_COMPONENT.DS.'controller.php'); 
 
