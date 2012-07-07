@@ -38,6 +38,7 @@ class JMBFamousFamily {
 	public function getFamilies(){
 		 $families = $this->_getFamilies();
 		 $result = array();
+
 		 foreach($families as $family){
 		 	 $ind = $this->host->gedcom->individuals->get($family['individuals_id']);
 		 	 $count = $this->host->gedcom->individuals->getIndividualsCount($family['tree_id']);
@@ -46,7 +47,8 @@ class JMBFamousFamily {
 		 	 $result[] = array('id'=>$family['id'],'name'=>$family['name'],'tree_id'=>$family['tree_id'],'individ'=>$ind,'descendants'=>$count,'living'=>$living,'avatar'=>$avatar);
 		 }
 		 $path = "";
-		 return json_encode(array('families'=>$result,'path'=>$path));
+            $language = $this->host->getLangList('famous_family_trees');
+		 return json_encode(array('families'=>$result,'path'=>$path, 'msg'=>$language));
 	}
 	
 	public function setFamilies($args){

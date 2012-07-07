@@ -1,6 +1,14 @@
 function JMBFamousFamilyTreesObject(obj){
 	var module = this;
 
+    module.msg = {
+        FTT_MOD_FAMOUS_FAMILY_SELECT_A_FAMILY_TREE: "Select a Family Tree",
+        FTT_MOD_FAMOUS_FAMILY_FAMILY_MEMBERS: "Family Members",
+        FTT_MOD_FAMOUS_FAMILY_LIVING: "Living",
+        FTT_MOD_FAMOUS_FAMILY_DESCENDANTS: "Descendants",
+        FTT_MOD_FAMOUS_FAMILY_LOGIN_AS: "Login as"
+    }
+
 	var getName = function(ind){
 		return [(ind.Nick!=null)?ind.Nick:ind.FirstName,(ind.LastName!=null)?ind.LastName:''].join(' ');	
 	}
@@ -19,7 +27,7 @@ function JMBFamousFamilyTreesObject(obj){
 	var createBody = function(){
 		var sb = host.stringBuffer();
 		sb._('<div class="jmb-famous-family-body">');
-			sb._('<div class="jmb-famous-family-title"><span>Select a Family Tree...</span></div>');
+			sb._('<div class="jmb-famous-family-title"><span>')._(module.msg.FTT_MOD_FAMOUS_FAMILY_SELECT_A_FAMILY_TREE)._('...</span></div>');
 			sb._('<div class="jmb-famous-family-content">&nbsp;</div>');
 		sb._('</div>');
 		return jQuery(sb.result());
@@ -32,16 +40,16 @@ function JMBFamousFamilyTreesObject(obj){
 				sb._('<div id="_info" class="jmb-famous-family-item-cell">')
 					sb._('<div class="jmb-famous-family-info-name"><span>')._(e.name)._('</span></div>');
 					sb._('<div class="jmb-famous-family-info-content">');
-						sb._('<div class="jmb-famous-family-info-title"><span>Family Members:</span></div>');
+						sb._('<div class="jmb-famous-family-info-title"><span>')._(module.msg.FTT_MOD_FAMOUS_FAMILY_FAMILY_MEMBERS)._(':</span></div>');
 						sb._('<div class="jmb-famous-family-info-counts">');
-							sb._('<div class="jmb-famous-family-info-living"><span>')._(e.living)._('</span> Living</div>');
-							sb._('<div class="jmb-famous-family-info-descendants"><span>')._(e.descendants)._('</span> Descendants</div>');
+							sb._('<div class="jmb-famous-family-info-living"><span>')._(e.living)._('</span> ')._(module.msg.FTT_MOD_FAMOUS_FAMILY_LIVING)._('</div>');
+							sb._('<div class="jmb-famous-family-info-descendants"><span>')._(e.descendants)._('</span> ')._(module.msg.FTT_MOD_FAMOUS_FAMILY_LOGIN_AS)._('</div>');
 						sb._('</div>');
 					sb._('</div>');
 				sb._('</div>');
 				sb._('<div id="_avatar" class="jmb-famous-family-item-cell">')._(getAvatar(e))._('</div>');
 				sb._('<div id="_login" class="jmb-famous-family-item-cell">')
-					sb._('<div><span>Login as:</span></div>');
+					sb._('<div><span>')._(module.msg.FTT_MOD_FAMOUS_FAMILY_LOGIN_AS)._(':</span></div>');
 					sb._('<div class="jmb-famous-family-login-name"><span>')._(getName(e.individ))._('</span></div>')
 				sb._('</div>');
 			sb._('</div>');
@@ -71,8 +79,10 @@ function JMBFamousFamilyTreesObject(obj){
 	this.Path = null;	
 
 	this.ajax('getFamilies', null, function(res){
-		//var json = jQuery.parseJSON(res.responseText);
 		var json = storage.getJSON(res.responseText);
+        if(typeof(json.msg) != 'undefined'){
+            module.msg = json.msg;
+        }
 		module.Path = json.path;
 		var body = createBody();
 		var ul = createItems(json);
