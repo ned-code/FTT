@@ -15,7 +15,6 @@ function JMBTreeCreatorObject(parent){
 	module.css_path = [storage.baseurl,storage.url,module.path,'css/'].join('');
 	module.female = 'female.png';
 	module.male = 'male.png';
-	module.titles = ['About Yourself','Your Mother','Your Father','Getting started'];
 	module.title_count = 0;
 	module.dialog_settings = {
 		width:600,
@@ -97,7 +96,29 @@ function JMBTreeCreatorObject(parent){
         FTT_MOD_TREE_CREATOR_FORM_YOU_FATHER : "You Father",
         FTT_MOD_TREE_CREATOR_FORM_YOU_MOTHER : "You Mother",
         FTT_MOD_TREE_CREATOR_FORM_MESSAGE: "Message",
-        FTT_MOD_TREE_CREATOR_FORM_SEND_REQUEST_TO: "Send Request to"
+        FTT_MOD_TREE_CREATOR_FORM_SEND_REQUEST_TO: "Send Request to",
+        FTT_MOD_TREE_CREATOR_BOX_STILL_THINK: "Still thinking about it",
+        FTT_MOD_TREE_CREATOR_BOX_TEXT_1: "Want to see Family TreeTop in action?  Explore our",
+        FTT_MOD_TREE_CREATOR_BOX_TEXT_2: "directory or click",
+        FTT_MOD_TREE_CREATOR_BOX_TEXT_3: "to see a quick video of the Elvis Presley family tree. Your own family tree will have a similar layout to see a quick video of the Elvis Presley family tree. Your own family tree will have a similar layout",
+        FTT_MOD_TREE_CREATOR_BOX_HERE: "here",
+        FTT_MOD_TREE_CREATOR_BOX_FAMOUS_FAMILY: "Famous Families",
+        FTT_MOD_TREE_CREATOR_TITLES_ABOUT_YOURSELF: "About Yourself",
+        FTT_MOD_TREE_CREATOR_TITLES_YOUR_MOTHER: "Your Mother",
+        FTT_MOD_TREE_CREATOR_TITLES_YOUR_FATHER: "Your Father",
+        FTT_MOD_TREE_CREATOR_TITLES_GETTING_STARTED: "Getting started",
+        FTT_MOD_TREE_CREATOR_DIALOG_TITLE_DEMO_ELVIS: "Demo: Elvis Presley Family Tree",
+        FTT_MOD_TREE_CREATOR_ALERT_ABORT_REQUEST : "Your request is removed, you can begin to create the tree.",
+        FTT_MOD_TREE_CREATOR_ALERT_ABORT_REQUEST_TRY_AGAIN: "Your request is removed, you can begin to create the tree.",
+        FTT_MOD_TREE_CREATOR_ALERT_ALREADY_SENT_REQUEST : "You have already sent a request to %% to join an existing Family Tree. Would you like to cancel this request and start again? ",
+        FTT_MOD_TREE_CREATOR_ALERT_SEND_REQUEST_TEXT_1: "Your request has been sent to %%.",
+        FTT_MOD_TREE_CREATOR_ALERT_SEND_REQUEST_TEXT_2: "An email will be sent to you when %% makes a decision.",
+        FTT_MOD_TREE_CREATOR_REQUEST_INVITATION_BUTTON : "Request Invitation",
+        FTT_MOD_TREE_CREATOR_START_ARE_YOU_RELATED: "Are You Related",
+        FTT_MOD_TREE_CREATOR_START_TEXT: "Some of your Facebook friends are members of Family TreeTop. Are you related to any of the people listed below? If so, you many request an invitation to join their family tree",
+        FTT_MOD_TREE_CREATOR_START_FOOTER_1: "If you are not related to anyone listed above",
+        FTT_MOD_TREE_CREATOR_START_FOOTER_2: "to create new family tree period",
+        FTT_MOD_TREE_CREATOR_START_CLICK_HERE: "click here"
     }
 
 	
@@ -115,11 +136,12 @@ function JMBTreeCreatorObject(parent){
                 sb._('<div id="button"><span>')._(module.msg.FTT_MOD_TREE_CREATOR_WELCOM_CLICK)._('</span></div>');
             sb._('</div>');
             sb._('<div class="box">');
-                sb._('<div class="think">Still thinking about it?</div>');
+
+
+                sb._('<div class="think">')._(module.msg.FTT_MOD_TREE_CREATOR_BOX_STILL_THINK)._('?</div>');
                 sb._('<div class="text">');
-                sb._('Want to see Family TreeTop in action?  Explore our <a id="famous" href="http://familytreetop.com/index.php/famous-family">Famous Families</a> directory  ');
-                sb._(' or click <a id="screen" target="_blank" href="http://screencast.com/t/kgymFc1Cg3oe">here</a> to see a quick video of the Elvis Presley family tree. Your own family tree will have a similar layout.</div>');
-                
+                sb._(module.msg.FTT_MOD_TREE_CREATOR_BOX_TEXT_1)._(' <a id="famous" href="http://familytreetop.com/index.php/famous-family">')._(module.msg.FTT_MOD_TREE_CREATOR_BOX_FAMOUS_FAMILY)._('</a> ')._(module.msg.FTT_MOD_TREE_CREATOR_BOX_TEXT_2);
+                sb._(' <a id="screen" target="_blank" href="http://screencast.com/t/kgymFc1Cg3oe">')._(module.msg.FTT_MOD_TREE_CREATOR_BOX_HERE)._('</a> ')._(module.msg.FTT_MOD_TREE_CREATOR_BOX_TEXT_3)._('.</div>');
                 sb._('<div class="image"><img src="http://familytreetop.com/zzzfiles/big-family-line-800.png"></div>');
             sb._('</div>');
 			return jQuery(sb.result());
@@ -382,7 +404,7 @@ function JMBTreeCreatorObject(parent){
                     jQuery(div).dialog({
                         width:580,
                         height:370,
-                        title: 'Demo: Elvis Presley Family Tree',
+                        title: module.msg.FTT_MOD_TREE_CREATOR_DIALOG_TITLE_DEMO_ELVIS,
                         resizable: false,
                         draggable: false,
                         position: "top",
@@ -401,7 +423,7 @@ function JMBTreeCreatorObject(parent){
                     if(confirm(module.initData.request)){
                         fn.ajax('abortRequest', null, function(){
                             module.initData.request = false;
-                            storage.alert('Your request is removed, you can begin to create the tree.', function(){
+                            storage.alert(module.msg.FTT_MOD_TREE_CREATOR_ALERT_ABORT_REQUEST, function(){
                                 fn.create_dialog_window();
                             });
 
@@ -466,7 +488,6 @@ function JMBTreeCreatorObject(parent){
                 fn.request_from_validate(form, function(valid){
                     if(valid){
                         fn.ajax('send_request', fn.json_to_string(pull), function(res){
-                            //var response = jQuery.parseJSON(res.responseText);
                             var response = storage.getJSON(res.responseText);
                             if(response.error){
                                 storage.alert(response.error, function(){
@@ -475,8 +496,11 @@ function JMBTreeCreatorObject(parent){
                                 });
                                 return false;
                             } else if(response.success){
-                                module.initData.request = "You have already sent a request to "+args.target.name+" to join an existing Family Tree. Would you like to cancel this request and start again? ";
-                                storage.alert('Your request has been sent to '+args.target.name+'. An email will be sent to you when '+args.target.name+' makes a decision', function(){
+                                module.initData.request = module.msg.FTT_MOD_TREE_CREATOR_ALERT_ALREADY_SENT_REQUEST.replace("%%", args.target.name);
+                                var alertMessage = [];
+                                alertMessage.push(module.msg.FTT_MOD_TREE_CREATOR_ALERT_SEND_REQUEST_TEXT_1.replace('%%', args.target.name));
+                                alertMessage.push(module.msg.FTT_MOD_TREE_CREATOR_ALERT_SEND_REQUEST_TEXT_2.replace('%%', args.target.name));
+                                storage.alert(alertMessage.join(''), function(){
                                     jQuery(form).dialog('close');
                                 });
                                 return true;
@@ -584,8 +608,27 @@ function JMBTreeCreatorObject(parent){
 			});
 			
 		},
+        get_title:function(c){
+            switch(c){
+                case 0:
+                    return module.msg.FTT_MOD_TREE_CREATOR_TITLES_ABOUT_YOURSELF;
+                break;
+                case 1:
+                    return module.msg.FTT_MOD_TREE_CREATOR_TITLES_YOUR_MOTHER;
+                break;
+                case 2:
+                    return module.msg.FTT_MOD_TREE_CREATOR_TITLES_YOUR_FATHER;
+                break;
+                case 3:
+                    return module.msg.FTT_MOD_TREE_CREATOR_TITLES_GETTING_STARTED;
+                break;
+                default:
+                    return '';
+                break;
+            }
+        },
 		set_title:function(user_form){
-			jQuery(user_form).dialog('option', 'title', module.titles[module.title_count]);
+			jQuery(user_form).dialog('option', 'title',fn.get_title(module.title_count));
 		},
 		clear_form:function(user_form){
 			jQuery(user_form).find('input').each(function(i, el){
@@ -632,12 +675,6 @@ function JMBTreeCreatorObject(parent){
                 string += '}';
                 callback(string);
             }
-            /*
-            FB.api('/me', function(fb){
-
-                //return string.substr(0, string.length -1) + '}';
-            });
-            */
 		},
 		finish_create:function(user_form){
 			var sb = host.stringBuffer();
@@ -647,15 +684,13 @@ function JMBTreeCreatorObject(parent){
 			sb._('<div class="finish_button"><span>Create Tree</span></div>');
 			jQuery(user_form).html(sb.result());
 			jQuery(user_form).find('.finish_button').click(function(){
-				//var query = fn.convert_to_string(module.args_pull);
-                fn.convert_to_string(module.args_pull, function(query){
+				fn.convert_to_string(module.args_pull, function(query){
                     fn.ajax('create_tree', query, function(res){
-                        //var json = jQuery.parseJSON(res.responseText);
                         var json = storage.getJSON(res.responseText);
                         if(json.error){
                             if(confirm(json.error)){
                                 fn.ajax('abortRequest', null, function(){
-                                    storage.alert('Your request has been removed. Please start again.', function(){});
+                                    storage.alert(module.msg.FTT_MOD_TREE_CREATOR_ALERT_ABORT_REQUEST_TRY_AGAIN, function(){});
                                 });
                                 return false;
                             } else {
@@ -697,15 +732,6 @@ function JMBTreeCreatorObject(parent){
               jQuery(form).find('select[name="gender"] option[value="'+user.gender[0]+'"]').attr('selected', 'selected');
               callback();
           }
-          /*
-          FB.api('/me', function(me){
-            jQuery(form).find('div.avatar').html('<img width="135px" height="150px" src="https://graph.facebook.com/'+me.id+'/picture" />');
-            jQuery(form).find('input[name="first_name"]').val(me.first_name);
-            jQuery(form).find('input[name="last_name"]').val(me.last_name);
-            jQuery(form).find('select[name="gender"] option[value="'+me.gender[0]+'"]').attr('selected', 'selected');
-            callback();
-          });
-          */
         },
 		create_new_tree:function(e){
 			var user_form = fn.user_form();
@@ -729,14 +755,13 @@ function JMBTreeCreatorObject(parent){
                     sb._('<tr>');
                         sb._('<td>');
                             sb._('<div class="avatar">');
-                                //sb._(storage.usertree.avatar.def_image({ width:50, height:50 }, el.gender.substr(0, 1).toUpperCase()));
                                 sb._('<img src="https://graph.facebook.com/')._(el.facebook_id)._('/picture">');
                             sb._('</div>');
                         sb._('</td>');
                         sb._('<td><div class="name">')._(el.name)._('</div></td>');
                         sb._('<td>');
                             sb._('<div class="request" user_name="')._(el.name)._('" facebook_id="')._(el.facebook_id)._('" gedcom_id="')._(el.gedcom_id)._('">');
-                                sb._('<span>Request Invitation</span>');
+                                sb._('<span>')._(module.msg.FTT_MOD_TREE_CREATOR_REQUEST_INVITATION_BUTTON)._('</span>');
                             sb._('</div>');
                         sb._('</td>');
                     sb._('</tr>');
@@ -748,17 +773,17 @@ function JMBTreeCreatorObject(parent){
             jQuery(cont).append(ul);
             jQuery(ul).find('div.request').click(fn.send_friend_request);
 		},
-		set_start_content:function(dialog_box){
+        set_start_content:function(dialog_box){
 			var sb = host.stringBuffer();
 			sb._('<div class="tc_content">');
 				sb._('<div class="tc_header">');
-					sb._('<div><span>Are You Related?</span></div>');
-					sb._('<div><span>Some of your Facebook friends are members of Family TreeTop. Are you related to any of the people listed below? If so, you many request an invitation to join their family tree.</span></div>');
+					sb._('<div><span>')._(module.msg.FTT_MOD_TREE_CREATOR_START_ARE_YOU_RELATED)._('?</span></div>');
+					sb._('<div><span>')._(module.msg.FTT_MOD_TREE_CREATOR_START_TEXT)._('.</span></div>');
 				sb._('</div>');
 				sb._('<div class="tc_ftt_friends">');
 				sb._('</div>');
 				sb._('<div class="tc_footer">');
-					sb._('<div><span>If you are not related to anyone listed above, <span class="button">click here</span> to create new family tree period.</span></div>');
+					sb._('<div><span>')._(module.msg.FTT_MOD_TREE_CREATOR_START_FOOTER_1)._(', <span class="button">')._(module.msg.FTT_MOD_TREE_CREATOR_START_CLICK_HERE)._('</span> ')._(module.msg.FTT_MOD_TREE_CREATOR_START_FOOTER_2)._('.</span></div>');
 				sb._('</div>');
 			sb._('</div>');
 			var html = jQuery(sb.result());
@@ -778,8 +803,10 @@ function JMBTreeCreatorObject(parent){
                 fn.get_facebook_friends_string(function(response){
                     var args = JSON.stringify({me:module.fProfile, friends:response.data});
                     fn.ajax('init', args, function(res){
-                        //module.initData = jQuery.parseJSON(res.responseText);
                         module.initData = storage.getJSON(res.responseText);
+                        if(typeof(module.initData.msg) != 'undefined'){
+                            module.msg = module.initData.msg;
+                        }
                         var body = fn.body();
                         var dialog_box = fn.dialog_box();
                         module.body = body;
@@ -790,40 +817,10 @@ function JMBTreeCreatorObject(parent){
                     });
                 });
             }
-            /*
-            FB.api('/me', function(me){
-                module.fProfile = me;
-                fn.get_facebook_friends_string(function(response){
-                    var args = JSON.stringify({me:module.fProfile, friends:response.data});
-                    fn.ajax('init', args, function(res){
-                        module.initData = jQuery.parseJSON(res.responseText);
-                        var body = fn.body();
-                        var dialog_box = fn.dialog_box();
-                        module.body = body;
-                        module.dialog_box = dialog_box;
-                        jQuery(parent).append(body);
-                        fn.connect_to_family_treetop(body);
-                        fn.set_start_content(dialog_box);
-                    });
-                });
-            });
-            */
 		}
 	}
 	
 	fn.init();
-    /*
-    var setButtonPosition = function(){
-        var height = jQuery(window).height();
-        var size = (height / 2 - 150)  + 'px';
-        jQuery('div#JMBTreeCreatorContainer').css('margin-top', size).css('margin-bottom', size);
-    }
-
-    jQuery(window).resize(function(){
-        setButtonPosition();
-    });
-    setButtonPosition();
-    */
 }
 
 

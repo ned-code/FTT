@@ -231,7 +231,8 @@ class TreeCreator {
             $user_name = $user->FirstName. " " . $user->LastName;
             $message = "You have already sent a request to ".$user_name." to join an existing Family Tree. Would you like to cancel this request and start again? ";
         }
-        return json_encode(array('verifyFriends'=>$verifyFriends,'request'=>$message));
+        $language = $this->host->getLangList('tree_creator');
+        return json_encode(array('verifyFriends'=>$verifyFriends,'request'=>$message,'msg'=>$language));
     }
 }
 ?>
