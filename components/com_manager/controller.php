@@ -246,11 +246,10 @@ class JMBController extends JController
         exit;
     }
 
-        protected function checkFacebookInvation($me){
+        protected function checkFacebookInvation($facebook_id){
             $host = &FamilyTreeTopHostLibrary::getInstance();
             $alias = $host->getCurrentAlias();
             if($alias != 'invitation'){
-                $facebook_id = $me['id'];
                 $host = &FamilyTreeTopHostLibrary::getInstance();
 
                 $sql_string = "SELECT belongs FROM #__mb_variables WHERE facebook_id = ?";
@@ -275,29 +274,29 @@ class JMBController extends JController
             $host = &FamilyTreeTopHostLibrary::getInstance();
             $jfb = JFBConnectFacebookLibrary::getInstance();
             $user = JFactory::getUser();
+            $facebook_id = $jfb->getFbUserId();
 
         	if(strlen($task)!=0) return;
             if((bool)$canvas){
                 header('Location: https://www.facebook.com/dialog/oauth?client_id='.$jfb->facebookAppId.'&redirect_uri='.JURI::base().'index.php/myfamily');
                 exit;
             }
-            $me = $jfb->api('me');
 
             if(!$user->guest){
                 $user_name = explode('_', $user->username);
-                if($user_name[1] != $me['id']){
+                if($user_name[1] != $facebook_id){
                     header('Location: '.$host->getBaseUrl().'index.php?option=com_jfbconnect&task=logout&return=login');
                     exit;
                 }
             }
 
-            $token = $this->checkFacebookInvation($me);
+            $token = $this->checkFacebookInvation($facebook_id);
             if($token){
                 header('Location: '.JURI::base().'index.php/invitation?token='.$token);
                 exit;
             }
 
-            $facebook_id = $jfb->getFbUserId();
+
             $this->check_location($facebook_id);
         }
 
