@@ -151,6 +151,10 @@ class TreeCreator {
         $to = "<".$rows[0]['email'].">";
         $from = "Family TreeTop <no-reply@familytreetop.com>";
 
+        $views = $this->host->getViews('invitation');
+        $language = $this->host->getLangList('invitation');
+        $tpl = $views['invite'];
+
         #subject
         $subject = "Family Treetop - Request from ".$std->me->name;
 
@@ -159,15 +163,22 @@ class TreeCreator {
         $username = "no-reply@familytreetop.com";
         $password = "Pp9671111";
 
-        #mail body
-        $mail_body = '<html><body>';
-            $mail_body .= "<div style='margin:10px;'>Dear ". $std->target->name.",</div>";
-            $mail_body .= "<div style='margin:10px;'>".$std->me->name." has requested membership in your family tree.</div>";
-            $mail_body .= "<div style='margin:10px;'>To view this request, please log into your family tree at <a href='http://familytreetop.com'>www.FamilyTreeTop.com</a></div>";
-            $mail_body .= "<div style='margin:10px;'>This is an automated email from Family TreeTop. Please do not reply to this message. Please click <a href='http://familytreetop.com/index.php/feedback'>here</a> to report any problems with Family TreeTop.</div>";
-            $mail_body .= "<div style='margin:10px;'>Regards,</div>";
-            $mail_body .= "<div style='margin:10px;'>The Family TreeTop Team<br><a href='http://familytreetop.com'>www.FamilyTreeTop.com</a></div>";
-        $mail_body .= '</body></html>';
+        $tpl = str_replace('__MSG_DEAR__', $language['FTT_MOD_TREE_CREATOR_MSG_DEAR'], $tpl);
+        $tpl = str_replace('__MSG_HAS_REQUESTED_MEMBERSHIP__', $language['FTT_MOD_TREE_CREATOR_MSG_HAS_REQUESTED_MEMBERSHIP'], $tpl);
+        $tpl = str_replace('__MSG_TO_VIEW_THIS_REQUEST__', $language['FTT_MOD_TREE_CREATOR_MSG_TO_VIEW_THIS_REQUEST'], $tpl);
+        $tpl = str_replace('__MSG_THIS_IS_AS_AUTOMATED__', $language['FTT_MOD_TREE_CREATOR_MSG_THIS_IS_AS_AUTOMATED'], $tpl);
+        $tpl = str_replace('__MSG_PLEASE_DO_NOT_REPLY_TO_THIS_MESSAGE__', $language['FTT_MOD_TREE_CREATOR_MSG_PLEASE_DO_NOT_REPLY_TO_THIS_MESSAGE'], $tpl);
+        $tpl = str_replace('__MSG_PLEASE_CLICK__', $language['FTT_MOD_TREE_CREATOR_MSG_PLEASE_CLICK'], $tpl);
+        $tpl = str_replace('__MSG_HERE__', $language['FTT_MOD_TREE_CREATOR_MSG_HERE'], $tpl);
+        $tpl = str_replace('__MSG_TO_REPORT_ANY_PROBLEMS__', $language['FTT_MOD_TREE_CREATOR_MSG_TO_REPORT_ANY_PROBLEMS'], $tpl);
+        $tpl = str_replace('__MSG_REGARDS__', $language['FTT_MOD_TREE_CREATOR_MSG_REGARDS'], $tpl);
+        $tpl = str_replace('__MSG_THE_FAMILY_TREETOP_TEAM__', $language['FTT_MOD_TREE_CREATOR_MSG_THE_FAMILY_TREETOP_TEAM'], $tpl);
+
+        $tpl = str_replace('%TARGET_NAME%', $std->target->name, $tpl);
+        $tpl = str_replace('%ME_NAME%', $std->me->name, $tpl);
+        $tpl = str_replace('%BASE_URL%', $this->host->getBaseUrl(), $tpl);
+
+        $mail_body = $tpl;
 
         $headers = array ("MIME-Version"=> '1.0', "Content-type" => "text/html; charset=utf-8",'From' => $from,'To' => $to,'Subject' => $subject);
 
