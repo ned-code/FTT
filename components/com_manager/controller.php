@@ -282,7 +282,7 @@ class JMBController extends JController
                 exit;
             }
 
-            if(!$user->guest){
+            if(!$user->guest && $facebook_id != null){
                 $user_name = explode('_', $user->username);
                 if($user_name[1] != $facebook_id){
                     header('Location: '.$host->getBaseUrl().'index.php?option=com_jfbconnect&task=logout&return=login');
@@ -295,7 +295,6 @@ class JMBController extends JController
                 header('Location: '.JURI::base().'index.php/invitation?token='.$token);
                 exit;
             }
-
 
             $this->check_location($facebook_id);
         }

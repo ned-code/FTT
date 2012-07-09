@@ -151,8 +151,8 @@ class TreeCreator {
         $to = "<".$rows[0]['email'].">";
         $from = "Family TreeTop <no-reply@familytreetop.com>";
 
-        $views = $this->host->getViews('invitation');
-        $language = $this->host->getLangList('invitation');
+        $views = $this->host->getViews('tree_creator');
+        $language = $this->host->getLangList('tree_creator');
         $tpl = $views['invite'];
 
         #subject
