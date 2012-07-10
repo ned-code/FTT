@@ -233,8 +233,7 @@ function JMBLogin(){
             });
 		},
 		user:function(callback){
-			var json, object, user;
-            user = storage.usertree.user;
+			var json, object;
 			fn.ajax('user', null, function(res){
                 if(!res) callback(false);
                 json = storage.getJSON(res.responseText);
@@ -242,11 +241,15 @@ function JMBLogin(){
                 settings.default_language = json.default_language;
                 settings.user_data = json.data;
                 msg = json.msg;
-                if(user != null && typeof(user.id) != 'undefined'){
-                    callback(user);
-                } else {
-                    callback(false);
-                }
+                FB.api('/me', function(res){
+                    storage.usertree.user = res;
+                    if(res != null && typeof(res.id) != 'undefined'){
+                        callback(res);
+                    } else {
+                        callback(false);
+                    }
+                });
+
 			});
 		},
 

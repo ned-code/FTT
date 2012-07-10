@@ -19,7 +19,6 @@ function getAlias(){
 }
 
 $app = JFactory::getApplication();
-$jfb = JFBConnectFacebookLibrary::getInstance();
 $base_url = Juri::base();
 if(class_exists('FamilyTreeTopHostLibrary')){
     $host = &FamilyTreeTopHostLibrary::getInstance();
@@ -42,8 +41,6 @@ if (stripos($user_agent, 'MSIE 6.0') !== false
         header ("Location: ".$base_url.'index.php/ie');
     }
 }
-
-$user = $jfb->api('/me');
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -169,13 +166,6 @@ $user = $jfb->api('/me');
                 useGradients = nativeCanvasSupport;
                 animate = !(iStuff || !nativeCanvasSupport);
             })();
-        </script>
-        <script>
-            (function(w){
-                if(typeof(storage) != 'undefined'){
-                    storage.usertree.user = <?php echo json_encode($user); ?>;
-                }
-            })(window)
         </script>
     </body>
 </html>

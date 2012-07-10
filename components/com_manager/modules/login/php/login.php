@@ -7,12 +7,12 @@ class JMBLogin {
 	}
 
     protected function getUserInfo(){
-        $jfb = JFBConnectFacebookLibrary::getInstance();
-        $me = $jfb->api('/me');
+        $userMap = $this->host->getUserMap();
+        $facebookId = ($userMap)?$userMap['facebook_id']:false;
 
-        if(!isset($me['id'])) return false;
+        if(empty($facebookId)) return false;
 
-        $sys = $this->host->getIndividualsInSystem($me['id']);
+        $sys = $this->host->getIndividualsInSystem($facebookId);
 
         if(!$sys) return false;
 
@@ -25,10 +25,9 @@ class JMBLogin {
         $users = $this->host->usertree->getMembers($sys['tree_id']);
 
         return array(
-            '_tmp' => array('me'=>$me, 'sys'=>$sys),
             'tree_id'=>$sys['tree_id'],
             'gedcom_id'=>$sys['gedcom_id'],
-            'facebook_id'=>$me['id'],
+            'facebook_id'=>$facebookId,
             'pull'=>$pull,
             'users'=>$users,
         );
