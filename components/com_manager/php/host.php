@@ -379,11 +379,16 @@ class FamilyTreeTopHostLibrary {
         return $id;
     }
 
+    protected function getUserProfileFields($facebookId, $fields = array('locale') ){
+        if(!$facebookId) return false;
+        return $this->jfbConnect->getUserProfile($facebookId, $fields);
+    }
+
     public function getUserMap(){
         $sessionId = $this->jSession->getId();
         $facebookId = $this->getUserId();
         $jUserId = $this->jUser->id;
-        $userProfileFields = $this->jfbConnect->getUserProfile($facebookId, array('locale'));
+        $userProfileFields = $this->getUserProfileFields($facebookId);
         $language = $this->language->getLanguage($userProfileFields['locale']);
 
         $sqlString = "SELECT facebook_id, session_id, user_id, tree_id, gedcom_id, permission, login_type, page, language, active FROM #__mb_user_map WHERE session_id = ?";

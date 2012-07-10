@@ -334,7 +334,6 @@ class JMBController extends JController
     }
 
     public function loginFacebookUser(){
-        return false;
         $app = JFactory::getApplication();
         $jfbcLibrary = JFBConnectFacebookLibrary::getInstance();
         $fbUserId = $jfbcLibrary->getFbUserId();
