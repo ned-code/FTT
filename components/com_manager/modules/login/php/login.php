@@ -6,8 +6,7 @@ class JMBLogin {
 		$this->host = &FamilyTreeTopHostLibrary::getInstance();
 	}
 
-    protected function getUserInfo(){
-        $userMap = $this->host->getUserMap();
+    protected function getUserInfo($userMap){
         $facebookId = ($userMap)?$userMap['facebook_id']:false;
 
         if(empty($facebookId)) return false;
@@ -34,13 +33,12 @@ class JMBLogin {
     }
 
 	public function user(){
-		$session = JFactory::getSession();
         $user_map = $this->host->getUserMap();
 
         $lang = $user_map['language'];
 		$languages = $this->host->getLanguages();
         $msg = $this->host->getLangList('login');
-        $userInfo = $this->getUserInfo();
+        $userInfo = $this->getUserInfo($user_map);
 
 		return json_encode(array(
             'data' => $userInfo,

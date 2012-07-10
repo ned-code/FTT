@@ -72,11 +72,13 @@ class JMBHostLanguage {
         return ( $p1 == $p2 );
     }
 
-    public function getLanguage($language_code){
-        $languages = $this->getLanguages('lang_code');
-        foreach($languages as $lang){
-            if($this->isLanguageExist($lang['lang_code'],  $language_code)){
-                return $lang['lang_code'];
+    public function getLanguage($language_code = false){
+        if($language_code){
+            $languages = $this->getLanguages('lang_code');
+            foreach($languages as $lang){
+                if($this->isLanguageExist($lang['lang_code'],  $language_code)){
+                    return $lang['lang_code'];
+                }
             }
         }
         $language = $this->getDefaultLanguage();

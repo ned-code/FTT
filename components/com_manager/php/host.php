@@ -371,12 +371,20 @@ class FamilyTreeTopHostLibrary {
         $this->ajax->query();
     }
 
+    protected function getUserId(){
+        $id = $this->jfbConnect->getUserId();
+        if(empty($id)){
+            return 0;
+        }
+        return $id;
+    }
+
     public function getUserMap(){
         $sessionId = $this->jSession->getId();
-        $me = $this->jfbConnect->api('/me');
-        $facebookId = $this->jfbConnect->getUserId();
+        $facebookId = $this->getUserId();
         $jUserId = $this->jUser->id;
-        $language = $this->language->getLanguage($me['locale']);
+        $userProfileFields = $this->jfbConnect->getUserProfile($facebookId, array('locale'));
+        $language = $this->language->getLanguage($userProfileFields['locale']);
 
         $sqlString = "SELECT facebook_id, session_id, user_id, tree_id, gedcom_id, permission, login_type, page, language, active FROM #__mb_user_map WHERE session_id = ?";
         $this->ajax->setQuery($sqlString, $sessionId);
@@ -391,7 +399,6 @@ class FamilyTreeTopHostLibrary {
                 $this->ajax->setQuery($sqlString, $facebookId, $sessionId, $indData['tree_id'], $indData['gedcom_id'], $jUserId, $indData['permission'], 0, $page, $language, 0);
                 $this->ajax->query();
                 return array(
-                        'me'=> $me,
                         'facebook_id' => $facebookId,
                         'session_id' => $sessionId,
                         'user_id' => $jUserId,
@@ -407,7 +414,6 @@ class FamilyTreeTopHostLibrary {
                 $this->ajax->setQuery($sqlString, $facebookId, $sessionId, 0, 0, $jUserId, 'GUEST', 0, $page, $language, 0);
                 $this->ajax->query();
                 return array(
-                    'me' => $me,
                     'facebook_id' => $facebookId,
                     'session_id' => $sessionId,
                     'user_id' => $jUserId,
@@ -425,7 +431,6 @@ class FamilyTreeTopHostLibrary {
                 $this->setUserMapFacebookId($facebookId);
                 $this->setUserMap($indData['tree_id'], $indData['gedcom_id'], $indData['permission']);
                 return array(
-                    'me' => $me,
                     'facebook_id' => $facebookId,
                     'session_id' => $sessionId,
                     'user_id' => $jUserId,
@@ -439,11 +444,10 @@ class FamilyTreeTopHostLibrary {
                 );
             } else {
                 if($data[0]['permission'] == 'GUEST'&&$data[0]['facebook_id']!=0){
-                    $data[0]['language'] = $jUserId;
-                    $this->setUserLanguage($jUserId);
+                    $data[0]['language'] = $language;
+                    $this->setUserLanguage($language);
                     $this->setUserPermission('MEMBER');
                 }
-                $data[0]['me'] = $me;
                 return $data[0];
             }
         }
