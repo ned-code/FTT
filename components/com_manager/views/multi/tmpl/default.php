@@ -20,6 +20,7 @@ $pages = substr($pages, 0, strlen($pages)-1);
         var config = <?php echo json_encode($this->config); ?>;
         var friends = <?php echo json_encode($this->friends); ?>;
         var usermap = <?php echo json_encode($this->usermap); ?>;
+        var app = <?php echo json_encode($this->app); ?>;
 
         if(typeof(storage) != "undefined"){
             if(usertree){
@@ -36,6 +37,7 @@ $pages = substr($pages, 0, strlen($pages)-1);
             storage.langString = langString;
             storage.usertree.usermap = usermap;
 
+            storage.app = app;
             storage.activeTab = activeTab;
             storage.core.load(pageInfo);
         }

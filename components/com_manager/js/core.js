@@ -1,5 +1,6 @@
 //globl object storage
 storage = {};
+storage.app = false;
 //function
 storage.alert = function(message, callback){
     if(!message){

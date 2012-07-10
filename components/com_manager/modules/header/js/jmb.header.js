@@ -73,7 +73,7 @@ function JMBHeader(){
 					if(fn.get.is_iframe()){
 						src = storage.baseurl+"index.php/myfamily";
 					} else {
-						src = "http://apps.facebook.com/familytreetop/";
+						src = storage.app.link;
 					}
 					window.top.location.href = src;
 				});

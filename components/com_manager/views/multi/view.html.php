@@ -67,6 +67,7 @@ class JmbViewMulti extends JView{
         $this->config = $host->getConfig();
         $this->friends = $host->jfbConnect->api('/me/friends');
         $this->usermap = $userMap;
+        $this->app = $host->jfbConnect->api($host->jfbConnect->facebookAppId);
 
         parent::display($tpl);
     }
