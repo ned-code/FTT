@@ -241,15 +241,16 @@ function JMBLogin(){
                 settings.default_language = json.default_language;
                 settings.user_data = json.data;
                 msg = json.msg;
-                FB.api('/me', function(res){
-                    storage.usertree.user = res;
-                    if(res != null && typeof(res.id) != 'undefined'){
-                        callback(res);
-                    } else {
-                        callback(false);
-                    }
-                });
-
+                setTimeout(function(){
+                    FB.api('/me', function(res){
+                        storage.usertree.user = res;
+                        if(res != null && typeof(res.id) != 'undefined'){
+                            callback(res);
+                        } else {
+                            callback(false);
+                        }
+                    });
+                }, 1);
 			});
 		},
 

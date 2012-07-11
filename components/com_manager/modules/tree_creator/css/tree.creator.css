@@ -115,6 +115,7 @@
 	 background: none repeat scroll 0 0 white;
 	 border-radius: 3px 3px 3px 3px;
 }
+/*
 .tree_create_user_form.ui-dialog-content.ui-widget-content{
 	overflow: visible;
 }
@@ -232,7 +233,7 @@
 }
 .tree_create_user_form .box div.title{}
 .tree_create_user_form .box div.value{}
-
+*/
 .tree_create_request_form.ui-dialog-content.ui-widget-content {
 	font-family:Tahoma;
 	font-size:12px;
@@ -313,37 +314,75 @@
 	margin: 10px auto 0;
 	width: 290px;
 }
-/*
-#JMBTreeCreatorContainer{
-	font-family: Calibri,Tahoma,sans-serif;
-	font-size: 12px;
-	font-weight: normal;
-	margin: 20px auto;
-	max-width: 650px;
+
+.ui-dialog.ui-widget.ftt-form-create-tree {
+    background: none repeat scroll 0 0 #91b152;
+    font-family: Tahoma;
+    font-size: 12px;
+    font-weight: normal;
 }
-#JMBTreeCreatorContainer fieldset{
-	margin-top: 10px;
-	padding: 5px;
+.ftt-form-create-tree .header {}
+.ftt-form-create-tree .header div {
+    display: inline-block;
 }
-#JMBTreeCreatorContainer legend{
-	font-weight: bold;
+.ftt-form-create-tree .header div.message {
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    margin: 5px 5px 5px 20px;
 }
-#JMBTreeCreatorContainer .button{
-	text-align:center;
-	background: none repeat scroll 0 0 #F1E4B0;
-	border: 2px solid #999999;
-	border-radius: 3px 3px 3px 3px;
-	cursor: pointer;
-	font-weight: bold;
-	height: 30px;
-	line-height: 30px;
-	margin-left: 65px;
-	width: 170px;
+.ftt-form-create-tree .header div.button {
+    position: relative;
+    top: -10px;
 }
-.jmb-tree-creator-body .button:hover{
-	background: #b5ab83;
+.ftt-form-create-tree .header div.button input{
+    background: none repeat scroll 0 0 #3F81D9;
+    border: 1px solid white;
+    border-radius: 5px 5px 5px 5px;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    min-height: 40px;
+    min-width: 40px;
 }
-#JMBTreeCreatorContainer .upload{}
-#JMBTreeCreatorContainer .upload .form{}
-#JMBTreeCreatorContainer .upload .result{}
-*/
+.ftt-form-create-tree .box {
+    width: 380px;
+}
+.ftt-form-create-tree .box .title {
+    color: white;
+    font-size: 16px;
+    margin: 3px;
+}
+.ftt-form-create-tree .box .data {
+    background: none repeat scroll 0 0 #F1E4B0;
+    border: 1px solid #4E4628;
+    border-radius: 3px 3px 3px 3px;
+    padding: 5px;
+}
+.ftt-form-create-tree .box .avatar {
+    border: 1px solid #000000;
+    height: 80px;
+    width: 72px;
+}
+.ftt-form-create-tree .box .text {}
+.ftt-form-create-tree .box .text input{
+    border: 1px solid #CFCDCD;
+    height: 20px;
+    line-height: 20px;
+    margin-left: 5px;
+}
+.tree_create_user_form .switch_to_myfamily {
+    background: url("bg_next.png") repeat scroll 0 0 transparent;
+    border: 1px solid white;
+    border-radius: 10px 10px 10px 10px;
+    color: white;
+    cursor: pointer;
+    height: 22px;
+    line-height: 22px;
+    text-align: center;
+    margin: 10px auto 0;
+    width: 125px;
+}
+.tree_create_user_form .video{
+
+}

@@ -52,76 +52,82 @@ class TreeCreator {
 		$this->host->gedcom->events->update($update_event);
 		return $event;
 	}
-	
-	protected function individuals_events(&$individual, $args){
-	 	$individual->Birth = $this->individual_event($individual->Id, 'BIRT', $args);
-		if($args['living']=='0'){
-			$individual->Death = $this->individual_event($individual->Id, 'DEAT', $args);	
-		}
-	}
-	
-	protected function user($args, $facebook_id, $tree_id){
+
+	protected function user($args, $gender, $facebook_id, $tree_id){
 		$individual = $this->host->gedcom->individuals->create();
-		$individual->FacebookId = $facebook_id;
-		$individual->Gender = strtoupper($args->gender);
-		$individual->FirstName = $args->first_name; 
-		$individual->MiddleName = $args->middle_name;
-		$individual->LastName = $args->last_name;
-		$individual->Nick = $args->nick;
+
+        $individual->FacebookId = $facebook_id;
+		$individual->Gender = $gender;
+		$individual->FirstName = $args['first_name'];
+		$individual->LastName = $args['last_name'];
         $individual->TreeId = $tree_id;
+
 		$individual->Id = $this->host->gedcom->individuals->save($individual);
         $individual->Creator  = $individual->Id;
         $this->host->gedcom->individuals->update($individual);
-		$this->individuals_events($individual, get_object_vars($args));
 		return $individual;
 	}
 
-	public function create_tree($args){
-        $jfbLib = JFBConnectFacebookLibrary::getInstance();
-        $facebook_id = $jfbLib->getFbUserId();
-		$args = json_decode($args);
-        $full_name = $args->self->first_name." ".$args->self->last_name;
-        $tree_name = $args->self->first_name." ".$args->self->last_name." Tree";
+    protected function getData($prefix){
+        return array(
+            'first_name' => JRequest::getVar($prefix.'first_name'),
+            'last_name' => JRequest::getVar($prefix.'last_name'),
+            'birth' => JRequest::getVar($prefix.'birth'),
+            'country' => JRequest::getVar($prefix.'country'),
+        );
+    }
 
+    protected function notificationExist($facebookId){
         $sql_string = "SELECT gedcom_id, facebook_id FROM #__mb_notifications WHERE facebook_id = ? AND processed != 1";
-        $this->db->setQuery($sql_string, $args->facebook_id);
+        $this->db->setQuery($sql_string, $facebookId);
         $rows = $this->db->loadAssocList();
-        if($rows != null) {
-            $gedcom_id = $rows[0]['gedcom_id'];
-            $user = $this->host->gedcom->individuals->get($gedcom_id);
-            $user_name = $user->FirstName. " " . $user->LastName;
+        return empty($rows)?false:$rows[0];
+    }
+
+	public function create_tree($gender){
+        $userMap = $this->host->getUserMap();
+        $userData = $this->getData('u_');
+        $faceebookId = $userMap['facebook_id'];
+
+        if($request = $this->notificationExist($faceebookId)){
+            $owner = $this->host->gedcom->individuals->get($request['gedcom_id']);
+            $user_name = $owner->FirstName. " " . $owner->LastName;
             $message = "You have already sent a request to ".$user_name." to join an existing Family Tree. Would you like to cancel this request and start again? ";
             return json_encode(array('error'=> $message));
         }
 
+        $userName = $userData['first_name']." ".$userData['last_name'];
+        $treeName = $userName." Tree";
+
+
         //create tree
         $sql_string = "INSERT INTO #__mb_tree (`id`, `name`) VALUES (NULL, ?)";
-        $this->db->setQuery($sql_string, $tree_name);
+        $this->db->setQuery($sql_string, $treeName);
         $this->db->query();
-        $tree_id = $this->db->insertid();
-
-		$self = $this->user($args->self, $facebook_id, $tree_id);
-		$mother = $this->user($args->mother, 0, $tree_id);
-		$father = $this->user($args->father, 0, $tree_id);
+        $treeId = $this->db->insertid();
 
 
-		//create family;
-		$family = new Family();
-		$family->Sircar = $father;
-		$family->Spouse = $mother;
-		$family->Id = $this->host->gedcom->families->save($family);
+        $self = $this->user($userData, $gender, $faceebookId, $treeId);
+        $mother = $this->user($this->getData('m_'), 'M', 0, $treeId);
+        $father = $this->user($this->getData('f_'), 'F', 0, $treeId);
+
+        //create family;
+        $family = new Family();
+        $family->Sircar = $father;
+        $family->Spouse = $mother;
+        $family->Id = $this->host->gedcom->families->save($family);
 
         if(!$family->Id){
             return false;
         }
 
-		//addchild
-		$this->host->gedcom->families->addChild($family->Id, $self->Id);
+        //addchild
+        $this->host->gedcom->families->addChild($family->Id, $self->Id);
 
-        $this->host->setUserMap($tree_id, $self->Id, 0);
+        $this->host->setUserMap($treeId, $self->Id, 0);
         $this->host->setUserAlias('myfamily');
         $this->host->setUserPermission('USER');
-		return true;
+        return true;
 	}
 	
 	public function send_request($args){
@@ -204,12 +210,15 @@ class TreeCreator {
         $sql_string = "SELECT ind.id as gedcom_id, ind.fid as facebook_id, ind.sex as gender FROM #__mb_individuals as ind
 				LEFT JOIN #__mb_tree_links as link ON ind.id = link.individuals_id
 				WHERE ind.fid != 0";// and link.type = 'OWNER'";
-        $this->db->setQuery($sql_string);
-        $rows = $this->db->loadAssocList();
+
+        $this->host->ajax->setQuery($sql_string);
+        $rows = $this->host->ajax->loadAssocList();
+
         $friendsIdPull = array();
         foreach($friends as $friend){
             $friendsIdPull[$friend->id] = $friend;
         }
+
         $result = array();
         if(!empty($rows)){
             foreach($rows as $row){

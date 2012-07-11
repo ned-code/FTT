@@ -167,6 +167,40 @@ if (stripos($user_agent, 'MSIE 6.0') !== false
                 animate = !(iStuff || !nativeCanvasSupport);
             })();
         </script>
+        <script>
+            (function($)
+            {
+                $(function()
+                {
+                    var placeholder_support = !!('placeholder' in document.createElement( 'input' ));
+                    if (!placeholder_support)
+                    {
+                        var body = $(document.body);
+                        $('input[placeholder]').each(function(){
+                            var tpl = '<div class="placeholder" style="position:absolute;overflow:hidden;white-space:nowrap"/>',
+                                th = $(this),
+                                position = th.offset(),
+                                height = th.height(),
+                                width = th.width(),
+                                placeholder = $(tpl).appendTo(body)
+                                    .css({
+                                        top: position.top,
+                                        left: position.left,
+                                        width: width,
+                                        height: height,
+                                        padding: ((th.innerHeight(true) - height) / 2) + 'px ' +  ((th.innerWidth(true) - width) / 2) + 'px '
+                                    })
+                                    .text(th.attr('placeholder'))
+                                    .addClass(th.attr('class'))
+                                ;
+
+                            placeholder.bind('click focus', function(){placeholder.hide();th.focus();});
+                            th.bind('blur', function(){if (th.val() == '') placeholder.show()});
+                        });
+                    }
+                });
+            }(jQuery));
+        </script>
     </body>
 </html>
 
