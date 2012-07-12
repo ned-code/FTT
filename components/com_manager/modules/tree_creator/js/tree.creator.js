@@ -1052,7 +1052,7 @@ function JMBTreeCreatorObject(parent){
                 switch(type){
                     case "user":
                         return {
-                            avatar: getAvatar(module.fProfile.id),
+                            avatar: getAvatar(module.fProfile.facebookId),
                             title: module.msg.FTT_MOD_TREE_CREATOR_FORM_YOU,
                             prefix: 'u_'
                         }
@@ -1135,7 +1135,7 @@ function JMBTreeCreatorObject(parent){
             function getArguments(){
                 var target = e.currentTarget;
                 return {
-                    me:module.fProfile,
+                    me:module.fProfile.facebookFields,
                     target:{
                         name:jQuery(target).attr('user_name'),
                         facebook_id:jQuery(target).attr('facebook_id'),

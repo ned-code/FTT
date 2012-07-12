@@ -38,6 +38,7 @@ class JMBLogin {
         $userInfo = $this->getUserInfo($user);
 
 		return json_encode(array(
+            'user' => $user,
             'data' => $userInfo,
             'default_language'=>$lang,
             'msg'=>$msg,

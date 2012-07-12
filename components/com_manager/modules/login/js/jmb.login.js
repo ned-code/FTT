@@ -220,9 +220,9 @@ function JMBLogin(){
 			jQuery(box).html(data.name);
 		},
 		setAvatar:function(data ,cont){
-            if(typeof(data) != 'undefined'  && typeof(data.id) != 'undefined'){
+            if(typeof(data) != 'undefined'  && typeof(data.facebookId) != 'undefined'){
                 var	box = jQuery(cont).find('div.avatar');
-                jQuery(box).html('<img width="22px" height="22px" src="http://graph.facebook.com/'+data.id+'/picture">');
+                jQuery(box).html('<img width="22px" height="22px" src="http://graph.facebook.com/'+data.facebookId+'/picture">');
             }
 		},
 		getAvatar:function(object){
@@ -241,16 +241,13 @@ function JMBLogin(){
                 settings.default_language = json.default_language;
                 settings.user_data = json.data;
                 msg = json.msg;
-                setTimeout(function(){
-                    FB.api('/me', function(res){
-                        storage.usertree.user = res;
-                        if(res != null && typeof(res.id) != 'undefined'){
-                            callback(res);
-                        } else {
-                            callback(false);
-                        }
-                    });
-                }, 1);
+
+                if(json.user.facebookId != 0){
+                    storage.usertree.user = json.user;
+                    callback(json.user);
+                } else {
+                    callback(false);
+                }
 			});
 		},
 
@@ -285,12 +282,12 @@ function JMBLogin(){
             if(loggedByFamous){
                 fn.famous();
             }
-            if(!parseInt(fb_logged)){
-            	cont = fn.connect();
+            if(data){
+                fn.facebook(data);
+            } else {
+                cont = fn.connect();
                 fn.login(cont);
                 jQuery(document.body).append(cont);
-            } else {
-                fn.facebook(data);
             }
         },
 		init:function(callback){

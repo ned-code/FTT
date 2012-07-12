@@ -27,15 +27,18 @@ class FTTUserLibrary {
         $this->facebookId = $this->_getUserId();
         $this->joomlaId = $this->joomla->id;
         $this->currentAlias = $this->_getCurrentAlias();
-        $this->facebookFields = $this->_getUserProfileFields($this->facebookId, array('id','email','name','first_name','last_name','gender','locale','link'));
+        $this->facebookFields = $this->_getUserProfileFields($this->facebookId);
         $this->language = $this->host->language->getLanguage($this->facebookFields['locale']);
-        $this->name = $this->facebookFields['name'];
+        $this->name = $this->_getUserName();
         $this->_setUserMap();
     }
 
-    protected function _getUserProfileFields($facebookId, $fields = array('locale') ){
+    protected function _getUserProfileFields($facebookId){
         if(!$facebookId) return false;
-        return $this->host->jfbConnect->getUserProfile($facebookId, $fields);
+        $fields = array(0 => 'first_name', 1 => 'last_name', 2 => 'email', 3 => 'name', 4 =>'locale');
+        $result = $this->host->jfbConnect->getUserProfile($facebookId, $fields);
+        $result['id'] = $facebookId;
+        return $result;
     }
 
     protected function _getUserId(){
@@ -82,6 +85,18 @@ class FTTUserLibrary {
         $this->page = $userMap['page'];
     }
 
+    protected function _getUserName(){
+        $facebookFieldName = $this->facebookFields['name'];
+        $joomlaName = $this->joomla->name;
+        if(!empty($facebookFieldName)){
+            return $facebookFieldName;
+        }
+        if(!empty($joomlaName)){
+            return $joomlaName;
+        }
+        return '';
+    }
+
     protected function _setUserMap(){
         $userMap = $this->_getUserMap();
         $userInSystem = $this->_getIndividualsInSystem($this->facebookId);
@@ -89,16 +104,17 @@ class FTTUserLibrary {
             if($this->facebookId && !$userMap['facebook_id']){
                 $this->facebookFields = $this->_getUserProfileFields($this->facebookId, array('id','email','name','first_name','last_name','gender','locale','link'));
                 $this->language = $this->host->language->getLanguage($this->facebookFields['locale']);
-                $this->name = $this->facebookFields['name'];
+                $this->name = $this->_getUserName();
                 $this->set($userInSystem['tree_id'], $userInSystem['gedcom_id'], $userInSystem['permission']);
                 $this->setMapFacebookId($this->facebookId);
                 $this->setLanguage($this->language);
+                $this->setPermission($userInSystem['permission']);
                 $this->_set(array(
                     'gedcom_id' =>$userInSystem['gedcom_id'],
                     'tree_id' =>$userInSystem['tree_id'],
                     'permission' =>$userInSystem['permission'],
                     'login_type'=>$userMap['login_type'],
-                    'language'=>$userMap['language'],
+                    'language'=>$this->language,
                     'page'=>$userMap['page']
                 ));
             } else {
@@ -152,6 +168,10 @@ class FTTUserLibrary {
 
     public function getJoomlaUser(){
         return $this->joomla;
+    }
+
+    public function getFaceebokFields(){
+
     }
 
     public function set($tree_id, $gedcom_id, $login_type = 0){
