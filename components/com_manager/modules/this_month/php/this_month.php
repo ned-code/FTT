@@ -113,9 +113,9 @@ class JMBThisMonth {
 	*/
 	public function load($args){		
 		//vars
-        $userMap = $this->host->getUserMap();
-		$gedcom_id = $userMap['gedcom_id'];
-        $tree_id = $userMap['tree_id'];
+        $user = $this->host->user->get();
+        $gedcom_id = $user->gedcomId;
+        $tree_id = $user->treeId;
 
 		$args = json_decode($args);
 

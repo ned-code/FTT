@@ -22,13 +22,13 @@ $app = JFactory::getApplication();
 $base_url = Juri::base();
 if(class_exists('FamilyTreeTopHostLibrary')){
     $host = &FamilyTreeTopHostLibrary::getInstance();
-    $data = $host->getUserMap();
+    $data = $host->user->get();
 } else {
     $data = false;
 }
 
-$facebook_id = ( $data ) ? $data['facebook_id'] : 0;
-$login_method = ( $data ) ? $data['login_type'] : '';
+$facebook_id = ( $data ) ? $data->facebookId : 0;
+$login_method = ( $data ) ? $data->loginType : '';
 $alias = getAlias();
 
 

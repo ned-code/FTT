@@ -14,10 +14,10 @@ class JMBRecentVisitors {
 	*
 	*/
 	public function getRecentVisitors(){
-        $userMap = $this->host->getUserMap();
-        $owner_id = $userMap['gedcom_id'];
-        $tree_id = $userMap['tree_id'];
-        $facebook_id = $userMap['facebook_id'];
+        $user = $this->host->user->get();
+        $owner_id = $user->gedcomId;
+        $tree_id = $user->treeId;
+        $facebook_id = $user->facebookId;
 
 		if(!$facebook_id||!$owner_id) return json_encode(array('error'=>'not register user'));
 

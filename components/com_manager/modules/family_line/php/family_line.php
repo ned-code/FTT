@@ -36,9 +36,9 @@ class JMBFamilyLine {
 	}
 	
 	public function get(){
-        $userMap = $this->host->getUserMap();
-        $gedcom_id = $userMap['gedcom_id'];
-        $tree_id = $userMap['tree_id'];
+        $user = $this->host->user->get();
+        $gedcom_id = $user->gedcomId;
+        $tree_id = $user->treeId;
 		$size = $this->size($tree_id, $gedcom_id);
         $lang = $this->host->getLangList('family_line');
 		return json_encode(array('size'=>$size, 'language'=>$lang));

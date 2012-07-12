@@ -272,9 +272,9 @@ class JMBProfile {
 			return false;
 		}
 
-        $userMap = $this->host->getUserMap();
-        $owner_id = $userMap['gedcom_id'];
-        $tree_id = $userMap['tree_id'];
+        $user = $this->host->user->get();
+        $owner_id = $user->gedcomId;
+        $tree_id = $user->treeId;
 
 		$request = $_REQUEST;
 		$sircar = null;
@@ -380,7 +380,7 @@ class JMBProfile {
         switch($type){
             case "unlink":
                 $objects = $this->host->usertree->getUser($tree_id, $owner_id, $gedcom_id);
-                $this->host->deleteUserMap($user->FacebookId);
+                $this->host->user->delete($user->FacebookId);
             break;
 
             case "delete_data":
@@ -388,7 +388,7 @@ class JMBProfile {
                 $this->host->gedcom->events->deleteMemberEvents($member->Id);
                 $this->host->gedcom->media->deleteMemberMedias($member->Id);
                 $objects = $this->host->usertree->getUser($tree_id, $owner_id, $gedcom_id);
-                $this->host->deleteUserMap($user->FacebookId);
+                $this->host->user->delete($user->FacebookId);
             break;
 
             case "delete":
@@ -396,7 +396,7 @@ class JMBProfile {
                 switch($method){
                     case "deleteTree":
                         $this->host->usertree->deleteTree($tree_id);
-                        $this->host->deleteUserMap($user->FacebookId);
+                        $this->host->user->delete($user->FacebookId);
                         $objects = array();
                     break;
 
@@ -404,14 +404,14 @@ class JMBProfile {
                         $environment = $this->host->usertree->getUserEnvironment($gedcom_id);
                         $this->host->usertree->deleteBranch($gedcom_id);
                         if($owner_id == $gedcom_id){
-                            $this->host->deleteUserMap($user->FacebookId);
+                            $this->host->user->delete($user->FacebookId);
                             $deleted = array('user'=>true);
                         } else {
                             $deleted = array('user'=>false);
                         }
                         $deleted['objects'] = array( array('gedcom_id'=>$gedcom_id) );
                         $objects = $this->host->usertree->getUsers($tree_id, $owner_id, $environment);
-                        $this->host->deleteUserMap($user->FacebookId);
+                        $this->host->user->delete($user->FacebookId);
                     break;
                 }
             break;

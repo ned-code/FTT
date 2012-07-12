@@ -156,23 +156,18 @@ class JMBController extends JController
         return false;
     }
 
-	protected function get_alias($userMap){
+	protected function get_alias($user){
 		$session = JFactory::getSession();
 
         $invitation_token = $this->get_invitation_token($session);
 
-        $host = &FamilyTreeTopHostLibrary::getInstance();
-        $guest = $host->jUser->guest;
-
-        $alias = ($userMap)?$userMap['page']:'myfamily';
-
-        if($guest){
+        if($user->guest){
             $invitation_token = false;
         }
 
-        switch($alias){
+        switch($user->page){
 			case "invitation":
-                if($guest) return 'home';
+                if($user->guest) return 'home';
                 if(!$invitation_token) return 'myfamily';
 				return "invitation";
 			break;
@@ -189,23 +184,22 @@ class JMBController extends JController
 		
 			case "login":
                 if($invitation_token) return "invitation";
-				if($userMap&&$userMap['tree_id']!=0) return "myfamily";
-				if(!$guest&&$userMap&&$userMap['tree_id']==0) return "home";
+                if($user->treeId != 0) return "myfamily";
+                if(!$user->guest && $user->treeId == 0) return "home";
 				return "login";
 			break;
 			
 			case "first-page":
                 if($invitation_token) return 'invitation';
-				if($userMap&&$userMap['tree_id']!=0) return "myfamily";
-                if($guest) return "login";
+                if($user->treeId!=0) return "myfamily";
+                if($user->guest && !$user->facebookId) return "login";
                 return "first-page";
 			break;
 			
 			case "myfamily":
                 if($invitation_token) return 'invitation';
-                if($guest&&!$userMap) return "login";
-                if($guest&&$userMap['login_type']==0) return "login";
-                if($userMap&&$userMap['tree_id']==0) return "first-page";
+                if($user->guest && !$user->facebookId) return "login";
+                if($user->treeId==0) return "first-page";
                 return "myfamily";
 			break;
 
@@ -215,26 +209,26 @@ class JMBController extends JController
             case "contact":
             case "feedback":
             case "help":
-                return $alias;
+                return $user->page;
             break;
 			
 			default:
                 if($invitation_token) return "invitation";
-				if($userMap&&$userMap['tree_id']==0) return "home";
-                if($guest) return "login";
+                if($user->treeId==0)return "home";
+                if($user->guest && !$user->facebookId) return "login";
                 return "myfamily";
 			break;
 		}
 	}
 
-	protected function check_location($userMap){
+	protected function check_location($user){
         $host = &FamilyTreeTopHostLibrary::getInstance();
-        $alias = $this->get_alias($userMap);
+        $alias = $this->get_alias($user);
         $current_alias = $host->getCurrentAlias();
         if($alias != $current_alias){
             $this->location($alias);
         } else {
-            $host->setUserAlias($alias);
+            $host->user->setAlias($alias);
         }
 	}
 
@@ -244,12 +238,12 @@ class JMBController extends JController
         exit;
     }
 
-        protected function checkFacebookInvation($userMap){
+        protected function checkFacebookInvation($user){
             $host = &FamilyTreeTopHostLibrary::getInstance();
             $alias = $host->getCurrentAlias();
             if($alias != 'invitation'){
                 $sql_string = "SELECT belongs FROM #__mb_variables WHERE facebook_id = ?";
-                $host->ajax->setQuery($sql_string, $userMap['facebook_id']);
+                $host->ajax->setQuery($sql_string, $user->facebookId);
                 $rows = $host->ajax->loadAssocList();
 
                 if(empty($rows)){
@@ -266,10 +260,12 @@ class JMBController extends JController
         	$option = JRequest::getVar('option');
         	$canvas = JRequest::getVar('canvas');
 
+
         	if($option!='com_manager') exit();
 
             $host = &FamilyTreeTopHostLibrary::getInstance();
-            $userMap = $host->getUserMap();
+            $user = $host->user->get();
+
 
         	if(strlen($task)!=0) return;
             if((bool)$canvas){
@@ -277,21 +273,22 @@ class JMBController extends JController
                 exit;
             }
 
-            if(!$host->jUser->guest){
-                $user_name = explode('_', $host->jUser->username);
-                if($user_name[1] != $userMap['facebook_id']){
+
+            if(!$host->user->getJoomlaUser()->guest){
+                $user_name = explode('_', $host->user->getJoomlaUser()->username);
+                if($user_name[1] != $user->facebookId){
                     header('Location: '.$host->getBaseUrl().'index.php?option=com_jfbconnect&task=logout&return=login');
                     exit;
                 }
             }
 
-            $token = $this->checkFacebookInvation($userMap);
+            $token = $this->checkFacebookInvation($user);
             if($token){
                 header('Location: '.JURI::base().'index.php/invitation?token='.$token);
                 exit;
             }
 
-            $this->check_location($userMap);
+            $this->check_location($user);
         }
 
         public function setLocation(){
@@ -301,17 +298,17 @@ class JMBController extends JController
         	$alias = JRequest::getCmd('alias');
         	switch($alias){
         		case 'myfamily':
-                    $host->setUserAlias('myfamily');
+                    $host->user->setAlias('myfamily');
                     $data = $host->getIndividualsInSystem($facebook_id);
                     if($data){
-                        $host->setUserMap($data['tree_id'], $data['gedcom_id'], 0);
+                        $host->user->set($data['tree_id'], $data['gedcom_id'], 0);
                     } else {
-                        $host->setUserMap(0, 0, 0);
+                        $host->user->set(0, 0, 0);
                     }
         		break;
 
                 default:
-                    $host->setUserAlias($alias);
+                    $host->user->setAlias($alias);
                 break;
         	}
         	exit;

@@ -53,8 +53,8 @@ class JMBFamousFamily {
 	
 	public function setFamilies($args){
 		$args = json_decode($args);
-        $this->host->setUserMap($args->TreeId, $args->Id, 1);
-        $this->host->setUserAlias('myfamily');
+        $this->host->user->set($args->TreeId, $args->Id, 1);
+        $this->host->user->setAlias('myfamily');
 		return true;
 	}
 }

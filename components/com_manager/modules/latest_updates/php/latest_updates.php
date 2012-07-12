@@ -67,9 +67,9 @@ class JMBLatestUpdates {
 	
 	public function get(){
 		//vars
-        $userMap = $this->host->getUserMap();
-        $gedcom_id = $userMap['gedcom_id'];
-        $tree_id = $userMap['tree_id'];
+        $user = $this->host->user->get();
+        $gedcom_id = $user->gedcomId;
+        $tree_id = $user->treeId;
 
 		$usertree = $this->host->usertree->load($tree_id, $gedcom_id);
 		

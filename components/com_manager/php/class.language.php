@@ -16,8 +16,8 @@ class JMBHostLanguage {
 
     protected function getLanguageCode(){
         $host = &FamilyTreeTopHostLibrary::getInstance();
-        $user_map = $host->getUserMap();
-        return $user_map['language'];
+        $user = $host->user->get();
+        return $user->language;
     }
 
     public function getComponentString(){

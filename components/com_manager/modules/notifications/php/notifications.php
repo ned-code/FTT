@@ -59,9 +59,9 @@ class JMBNotifications {
     public function onLinked($args){
         $std = json_decode($args);
 
-        $userMap = $this->host->getUserMap();
-        $gedcom_id = $userMap['gedcom_id'];
-        $tree_id = $userMap['tree_id'];
+        $user = $this->host->user->get();
+        $gedcom_id = $user->gedcomId;
+        $tree_id = $user->treeId;
 
         $data = $std->json;
         $gedcom_id = $std->object->user->gedcom_id;

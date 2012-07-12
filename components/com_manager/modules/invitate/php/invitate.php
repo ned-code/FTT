@@ -31,9 +31,9 @@ class JMBInvitateClass {
         $this->host->ajax->query();
 
         $session->set('clear_token', true);
-        $this->host->setUserMap($args[1], $args[0], 0);
-        $this->host->setUserPermission('USER');
-        $this->host->setUserAlias('myfamily');
+        $this->host->user->set($args[1], $args[0], 0);
+        $this->host->user->setPermission('USER');
+        $this->host->user->setAlias('myfamily');
         return true;
         exit;
     }
@@ -70,7 +70,7 @@ class JMBInvitateClass {
             $session = JFactory::getSession();
             $session->set('clear_token', true);
             $facebook_id = $this->jfb->getFbUserId();
-            $this->host->setUserAlias($facebook_id, 'myfamily');
+            $this->host->user->setAlias($facebook_id, 'myfamily');
         }
         return json_encode(array('success'=>false, 'sender'=>$name));
     }
@@ -89,7 +89,7 @@ class JMBInvitateClass {
         $session = JFactory::getSession();
         $session->set('clear_token', true);
         $facebook_id = $this->jfb->getFbUserId();
-        $this->host->setUserAlias($facebook_id, 'first-page');
+        $this->host->user->setAlias($facebook_id, 'first-page');
         return json_encode(array('success'=>true));
     }
 

@@ -85,9 +85,9 @@ class TreeCreator {
     }
 
 	public function create_tree($gender){
-        $userMap = $this->host->getUserMap();
+        $user = $this->host->user->get();
         $userData = $this->getData('u_');
-        $faceebookId = $userMap['facebook_id'];
+        $faceebookId = $user->facebookId;
 
         if($request = $this->notificationExist($faceebookId)){
             $owner = $this->host->gedcom->individuals->get($request['gedcom_id']);
@@ -124,9 +124,9 @@ class TreeCreator {
         //addchild
         $this->host->gedcom->families->addChild($family->Id, $self->Id);
 
-        $this->host->setUserMap($treeId, $self->Id, 0);
-        $this->host->setUserAlias('myfamily');
-        $this->host->setUserPermission('USER');
+        $this->host->user->set($treeId, $self->Id, 0);
+        $this->host->user->setAlias('myfamily');
+        $this->host->user->setPermission('USER');
         return true;
 	}
 	

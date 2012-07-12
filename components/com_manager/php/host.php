@@ -4,12 +4,14 @@ require_once('class.usertree.php');
 require_once('class.image.php');
 require_once('class.language.php');
 require_once('class.config.php');
+require_once('class.user.php');
 require_once('gedcom/core.gedcom.php');
 require_once('gramps/core.gramps.php');
 
 //class
 class FamilyTreeTopHostLibrary {
     private static $instance = null;
+    private $config;
 
     private $modulesPath;
 
@@ -21,13 +23,14 @@ class FamilyTreeTopHostLibrary {
 
     public $images;
 
-    private $language;
-    private $config;
+    public $language;
 
     public $jfbConnect;
     public $jSession;
 
-    public $jUser;
+
+    //public $jUser;
+    public $user;
 
     private function __construct( $directCall = true ) {
         if ( $directCall ) {
@@ -49,7 +52,11 @@ class FamilyTreeTopHostLibrary {
         $this->jSession =& JFactory::getSession();
         $this->jfbConnect = JFBConnectFacebookLibrary::getInstance();
 
-        $this->jUser = JFactory::getUser();
+        $this->user = new FTTUserLibrary($this);
+
+
+
+        //$this->jUser = JFactory::getUser();
     }
 
     public function &getInstance() {
@@ -307,6 +314,23 @@ class FamilyTreeTopHostLibrary {
         return true;
     }
 
+    public function getCurrentAlias(){
+        $menu   = &JSite::getMenu();
+        $active   = $menu->getActive();
+        return (is_object($active))?$active->alias:false;
+    }
+
+    public function getIndividualsInSystem($facebook_id){
+        if(empty($facebook_id)) return false;
+        $sqlString = "SELECT link.individuals_id as gedcom_id, link.tree_id as tree_id, link.type as permission
+                    FROM #__mb_tree_links as link
+                    LEFT JOIN #__mb_individuals as ind ON ind.id = link.individuals_id
+                    WHERE ind.fid=?";
+        $this->ajax->setQuery($sqlString, $facebook_id);
+        $data = $this->ajax->loadAssocList();
+        return (empty($data))?false:$data[0];
+    }
+    /*
     public function setAliasLog($alias){
         $user = JFactory::getUser();
         $name = null;
@@ -387,7 +411,7 @@ class FamilyTreeTopHostLibrary {
     public function getUserMap(){
         $sessionId = $this->jSession->getId();
         $facebookId = $this->getUserId();
-        $jUserId = $this->jUser->id;
+        $jUserId = $this->user->getJoomlaUser()->id;
         $userProfileFields = $this->getUserProfileFields($facebookId);
         $language = $this->language->getLanguage($userProfileFields['locale']);
 
@@ -457,5 +481,6 @@ class FamilyTreeTopHostLibrary {
             }
         }
     }
+    */
 }
 ?>

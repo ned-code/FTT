@@ -30,34 +30,34 @@ class JmbViewMulti extends JView{
         $this->languageStrings = false;
         $this->config = false;
         $this->friends = false;
-        
-        $userMap = $host->getUserMap();
 
-        if($userMap){
-            if($userMap['tree_id']!=0){
-                $host->gedcom->relation->check($userMap['tree_id'],$userMap['gedcom_id']);
-                $host->usertree->saveFamilyLine($userMap['tree_id'], $userMap['gedcom_id'], $userMap['permission']);
-                $host->usertree->init($userMap['tree_id'], $userMap['gedcom_id'], $userMap['permission']);
-                if(!$userMap['login_type']){
-                    $this->update_login_time($userMap['gedcom_id']);
+        $user = $host->user->get();
+
+        if($user){
+            if($user->treeId != 0){
+                $host->gedcom->relation->check($user->treeId,$user->gedcomId);
+                $host->usertree->saveFamilyLine($user->treeId, $user->gedcomId, $user->permission);
+                $host->usertree->init($user->treeId, $user->gedcomId, $user->permission);
+                if(!$user->loginType){
+                    $this->update_login_time($user->gedcomId);
                 }
             }
 
-            if(!empty($userMap['tree_id'])&&!empty($userMap['gedcom_id'])){
-                $usertree = $host->usertree->load($userMap['tree_id'], $userMap['gedcom_id']);
-                $users = $host->usertree->getMembers($userMap['tree_id']);
+            if(!empty($user->treeId)&&!empty($user->gedcomId)){
+                $usertree = $host->usertree->load($user->treeId, $user->gedcomId);
+                $users = $host->usertree->getMembers($user->treeId);
                 $this->usertree = array(
-                    'tree_id'=>$userMap['tree_id'],
-                    'facebook_id'=>$userMap['facebook_id'],
-                    'gedcom_id'=>$userMap['gedcom_id'],
-                    'permission'=>$userMap['permission'],
+                    'tree_id'=>$user->treeId,
+                    'facebook_id'=>$user->facebookId,
+                    'gedcom_id'=>$user->gedcomId,
+                    'permission'=>$user->permission,
                     'users'=>$users,
                     'pull'=>$usertree
                 );
             }
 
-            if($userMap['tree_id']!=0 && $userMap['gedcom_id'] != 0){
-                $sql_string = "SELECT id, data, status FROM #__mb_notifications WHERE tree_id = ".$userMap['tree_id']." AND gedcom_id = ".$userMap['gedcom_id']." AND processed = 0";
+            if($user->treeId!=0 && $user->gedcomId != 0){
+                $sql_string = "SELECT id, data, status FROM #__mb_notifications WHERE tree_id = ".$user->treeId." AND gedcom_id = ".$user->gedcomId." AND processed = 0";
                 $host->ajax->setQuery($sql_string);
                 $this->notifications = $host->ajax->loadAssocList();
             }
@@ -66,7 +66,7 @@ class JmbViewMulti extends JView{
         $this->languageStrings = $host->getComponentString();
         $this->config = $host->getConfig();
         $this->friends = $host->jfbConnect->api('/me/friends');
-        $this->usermap = $userMap;
+        $this->usermap = $user;
         $this->app = $host->jfbConnect->api($host->jfbConnect->facebookAppId);
 
         parent::display($tpl);

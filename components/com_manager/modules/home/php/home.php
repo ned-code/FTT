@@ -11,11 +11,11 @@ class JMBHome {
         $facebook_id = $jfb->getFbUserId();
 		switch($args){
 			case 'myfamily':
-                $this->host->setUserAlias('myfamily');
+                $this->host->user->setAlias('myfamily');
 			break;
 			
 			case 'famous-family':
-                $this->host->setUserAlias('famous-family');
+                $this->host->user->setAlias('famous-family');
 			break;
 		}
         return true;

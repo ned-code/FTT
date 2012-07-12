@@ -8,9 +8,9 @@ class JMBAncestors {
 	}
 	
 	public function get($indKey){
-        $userMap = $this->host->getUserMap();
-        $owner_id = $userMap['gedcom_id'];
-        $tree_id = $userMap['tree_id'];
+        $user = $this->host->user->get();
+        $owner_id = $user->gedcomId;
+        $tree_id = $user->treeId;
 
 		$usertree = $this->host->usertree->load($tree_id, $owner_id);
 		$user = $usertree[$owner_id];

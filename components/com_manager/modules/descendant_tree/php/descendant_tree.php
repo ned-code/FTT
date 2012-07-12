@@ -218,10 +218,10 @@ class JMBDescendantTree {
 		return $tree;
 	}
 	public function getTree($render){
-        $userMap = $this->host->getUserMap();
-        $owner_id = $userMap['gedcom_id'];
-        $tree_id = $userMap['tree_id'];
-        $permission = $userMap['permission'];
+        $user = $this->host->user->get();
+        $owner_id = $user->gedcomId;
+        $tree_id = $user->treeId;
+        $permission = $user->permission;
 
         $this->host->usertree->init($tree_id, $owner_id, $permission);
 		$usertree = $this->host->usertree->load($tree_id, $owner_id);
@@ -238,10 +238,10 @@ class JMBDescendantTree {
 		return json_encode(array('xml'=>$xml, 'tree'=>$tree, 'key'=>$key, 'language'=>$language));
 	}
 	public function getTreeById($id){
-        $userMap = $this->host->getUserMap();
-        $owner_id = $userMap['gedcom_id'];
-        $tree_id = $userMap['tree_id'];
-        $permission = $userMap['permission'];
+        $user = $this->host->user->get();
+        $owner_id = $user->gedcomId;
+        $tree_id = $user->treeId;
+        $permission = $user->permission;
 
         $this->host->usertree->init($tree_id, $owner_id, $permission);
 		$usertree = $this->host->usertree->load($tree_id, $owner_id);

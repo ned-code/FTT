@@ -16,7 +16,7 @@ class JMBAjax {
     }
 
     public function getQuery(){
-        return str_replace("#__", "jos_", $this->query);
+        return str_replace("#__", "qt4yn_", $this->query);
     }
 
     public function callMethod($modulename,$classname, $method, $arguments){
