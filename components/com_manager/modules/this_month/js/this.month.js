@@ -33,6 +33,7 @@ function JMBThisMonthObject(obj){
 
     module.month = false;
     module.sort = 1;
+    module.separator = 1900
 
     init(getThisMonth());
 
@@ -43,12 +44,12 @@ function JMBThisMonthObject(obj){
     }
     function init(month){
         ajax("load", month, function(data){
-            setMsg(data.msg);
-            setEarliestDateOfEvents()
-            render();
+            render(data);
         });
     }
-    function render(){
+    function render(data){
+        setMsg(data.msg);
+        setEarliestDateOfEvents()
         appendTable();
         setContent(getTableBody());
         setMonthSelectHandler();
@@ -58,8 +59,9 @@ function JMBThisMonthObject(obj){
         exit();
     }
     function reload(){
+        getSelectMonth()
         clear();
-        init(getSelectMonth());
+        init(module.month);
     }
     function exit(){
         storage.core.modulesPullObject.unset('JMBThisMonthObject');
@@ -85,7 +87,19 @@ function JMBThisMonthObject(obj){
         return typeof(storage.usertree.pull[id]) != 'undefined'
     }
     function isSort(){
-        return 1970 > module.earliestDate;
+        return module.separator > module.earliestDate;
+    }
+    function isMeetsTheRequirementsOf(year){
+        if(!year) return false;
+        if(isSort()){
+            switch(module.sort){
+                case 1: return year > module.separator;
+                case 0: return true;
+                case -1: return year < module.separator;
+                default: return false;
+            }
+        }
+        return true;
     }
     function setContent(t){
         setHeader(t);
@@ -97,14 +111,19 @@ function JMBThisMonthObject(obj){
         jQuery(module.table).find('select[name="months"]').change(reload);
     }
     function setSortSelectHandler(){
-        return false;
+        jQuery(module.table).find('select[name="sort"]').change(function(){
+            module.sort = parseInt(jQuery(this).val());
+            var data = module.data;
+            clear();
+            render(module.data = data);
+        });
     }
     function setHeader(t){
         var header = jQuery(module.table).find('.jmb-this-month-header');
         setHeaderBackground(header);
         var sb = storage.stringBuffer();
         sb._('<span>');
-            sb._(module.msg.FTT_MOD_THIS_MONTH_HEADER);
+            sb._(getMsg('HEADER'));
         sb._('</span>');
         sb._(getHeaderMonthSelect());
         if(isSort()){
@@ -121,7 +140,8 @@ function JMBThisMonthObject(obj){
         if(events = eventExist(type)){
             jQuery(events).each(function(i, data){
                 if(!memberExist(data.gedcom_id)) return false;
-                setUserEventContent(el, data, type);
+                if(!isMeetsTheRequirementsOf(data.event_year)) return false;
+                setUserTooltip(setUserEventContent(el, data, type));
             });
         } else {
             jQuery(selector).remove();
@@ -138,9 +158,19 @@ function JMBThisMonthObject(obj){
             sb._(getColor(getUserGender(user)))._('">');
             sb._(getUserName(user))._('</font> (turns ');
             sb._(getEventTurns(getUserEvent(user, type)))._(')</div></td></tr>');
-        jQuery(el).append(sb.result());
+        var tr = jQuery(sb.result());
+        jQuery(el).append(tr);
+        return jQuery(tr).find('div.person');
     }
-
+    function setUserTooltip(divs){
+        jQuery(divs).each(function(i, target){
+            var id = jQuery(target).attr('id');
+            storage.tooltip.render('view', {
+                gedcom_id:id,
+                target:target
+            });
+        });
+    }
     function setBirthdays(t){
         setUserContent(t, "birth", "#jmb-this-month-birth");
     }
@@ -153,7 +183,9 @@ function JMBThisMonthObject(obj){
         if(events = eventExist('marriage')){
             jQuery(events).each(function(i, data){
                 if(!memberExist(data.wife) || !memberExist(data.husb)) return false;
-                setMarriageContent(el, getFamilyData(data))
+                var family = getFamilyData(data);
+                if(!isMeetsTheRequirementsOf(getEventYear(family.event))) return false;
+                setUserTooltip(setMarriageContent(el, family));
             });
         } else {
             jQuery('#jmb-this-month-marr').remove();
@@ -171,7 +203,9 @@ function JMBThisMonthObject(obj){
             sb._(getColor(getUserGender(family.wife)))._('">');
             sb._(getUserName(family.wife))._('</font></div></td><td><div class="anniversaries-end">&nbsp;</div></td><td><div>(');
             sb._(getEventTurns(family.event))._(' years ago)</div></td></tr>');
-        jQuery(el).append(sb.result());
+        var tr = jQuery(sb.result());
+        jQuery(el).append(tr);
+        return jQuery(tr).find('div.person');
     }
     function setMsg(msg){
         for(var key in module.msg){
@@ -196,6 +230,13 @@ function JMBThisMonthObject(obj){
             }
         }
         return module.earliestDate = date;
+    }
+    function getMsg(n){
+        var t = 'FTT_MOD_THIS_MONTH_'+n;
+        if(typeof(module.msg[t]) != 'undefined'){
+            return module.msg[t];
+        }
+        return '';
     }
     function getEarliestDateOfEvent(e){
         var date = 9999;
@@ -255,9 +296,6 @@ function JMBThisMonthObject(obj){
     function getUserData(id){
         return storage.usertree.pull[id];
     }
-    function getUserGender(data){
-        return data.user.gender;
-    }
     function getUserName(data){
         return [data.user.first_name,data.user.middle_name,data.user.last_name].join(' ');
     }
@@ -269,6 +307,10 @@ function JMBThisMonthObject(obj){
     }
     function getUserEvent(data, type){
         return data.user[type];
+    }
+    function getEventYear(event){
+        var date = event.date;
+        return (date!=null&&date[2]!=null)?date[2]:false
     }
     function getEventDate(event){
         var date = event.date;
@@ -318,59 +360,29 @@ function JMBThisMonthObject(obj){
             ];
         }
         function getMonthName(i,n){
-            return module.msg['FTT_MOD_THIS_MONTH_'+n[i]];
+            return getMsg(n[i])
         }
     }
     function getHeaderSortSelect(){
         var sb = storage.stringBuffer();
-
-        /*
-        _createSortSelect:function(json){
-            var date = json.settings.opt.date;
-            var sb = host.stringBuffer();
-            var sort_date = json.settings.split_event.year;
-            var sort_type = json.settings.split_event.type;
-            var message = this.message;
-            var option = (function(){
-                return {
-                    after:function(selected){
-                        sb._('<option ')._(selected?'selected':'')._(' value="1">')
-                        sb._(message.FTT_MOD_THIS_MONTH_AFTER);
-                        sb._(' ');
-                        sb._(sort_date);
-                        sb._('</option>');
-                    },
-                    before:function(selected){
-                        sb._('<option ')._(selected?'selected':'')._(' value="-1">');
-                        sb._(message.FTT_MOD_THIS_MONTH_BEFORE);
-                        sb._(' ');
-                        sb._(sort_date);
-                        sb._('</option>');
-                    },
-                    all:function(selected){
-                        sb._('<option ')._(selected?'selected':'')._(' value="0">');
-                        sb._(message.FTT_MOD_THIS_MONTH_ALL_YEARS);
-                        sb._(' ');
-                        sb._('</option>');
-                    }
-                }
-            })();
-            sb.clear();
-            if(date < sort_date && sort_type == '-1'){
-                return sb._(option.after())._(option.before(true))._(option.all()).result();
-            } else if(date < sort_date && sort_type == '0'){
-                return sb._(option.after())._(option.before())._(option.all(true)).result();
-            } else if(date < sort_date && sort_type == '1'){
-                return sb._(option.after(true))._(option.before())._(option.all()).result();
-            } else if(date > sort_date && sort_type == '-1'){
-                return sb._(option.before(true))._(option.all()).result();
-            } else if(date > sort_date && sort_type == '0'){
-                return sb._(option.all(true)).result();
-            } else if(date > sort_date && sort_type == '1'){
-                return sb._(option.all()).result();
+        sb._('<select name="sort">');
+            sb._('<option ')._(getSelected(1))._(' value="1">')._(getMsg('AFTER'))._(' ')._(module.separator)._('</option>');
+            sb._('<option ')._(getSelected(0))._(' value="0">')._(getMsg('ALL_YEARS'))._('</option>');
+            sb._('<option ')._(getSelected(-1))._(' value="-1">')._(getMsg('BEFORE'))._(' ')._(module.separator)._('</option>');
+        sb._('</select>');
+        return sb.result();
+        function isSelect(n){
+            if(module.sort == n){
+                return true;
             }
-        },
-        */
+            return false;
+        }
+        function getSelected(n){
+            if(isSelect(n)){
+                return 'selected';
+            }
+            return '';
+        }
         return '';
     }
     function getTableBody(){
@@ -380,21 +392,21 @@ function JMBThisMonthObject(obj){
             rowIndex: 0,
             id: 'jmb-this-month-birth',
             type: 'birthday',
-            title: module.msg.FTT_MOD_THIS_MONTH_BIRTHDAYS
+            title: getMsg('BIRTHDAYS')
         });
         setContentInRow({
             table: table,
             rowIndex: 1,
             id: 'jmb-this-month-marr',
             type: 'marriage',
-            title: module.msg.FTT_MOD_THIS_MONTH_ANNIVERSARIES
+            title: getMsg('ANNIVERSARIES')
         });
         setContentInRow({
             table: table,
             rowIndex: 2,
             id: 'jmb-this-month-death',
             type: 'deceased',
-            title: module.msg.FTT_MOD_THIS_MONTH_REMEMBER
+            title: getMsg('REMEMBER')
         });
         jQuery(module.table).find('.jmb-this-month-body').append(table);
         return table;
