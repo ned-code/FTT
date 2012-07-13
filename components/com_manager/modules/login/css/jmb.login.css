@@ -18,6 +18,10 @@
 }
 .jmb-profile-cont div.login {
 	margin-left: 3px;
+    cursor: pointer;
+}
+.jmb-profile-cont div.login:hover {
+    background-color: #86af67;
 }
 .jmb-profile-cont div.login span {
 	color: #ccc;
@@ -35,6 +39,9 @@
 	height: 22px;
 	margin-top: 3px;
 	width: 22px;
+}
+.jmb-profile-cont div.settings div.button:hover{
+    background: url("../imgs/arrows.png") no-repeat scroll -22px -22px #86af67;
 }
 .jmb-profile-cont div.settings div.button.active {
 	background: url("../imgs/arrows.png") no-repeat scroll 0 0 white;
