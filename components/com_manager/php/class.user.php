@@ -205,7 +205,7 @@ class FTTUserLibrary {
         $this->host->ajax->setQuery($sqlString, $language, $this->sessionId);
         $this->host->ajax->query();
 
-        $this->language = $langauge;
+        $this->language = $language;
     }
 
     public function setAlias($alias){

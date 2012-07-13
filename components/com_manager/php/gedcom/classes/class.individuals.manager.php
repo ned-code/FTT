@@ -206,7 +206,7 @@ class IndividualsList{
         	return $rows;
         }
         public function getByEvent($treeId, $type, $month, $sort=false){
-        	$sqlString = "SELECT ind.id as gid
+        	$sqlString = "SELECT ind.id as gedcom_id, date.f_year as event_year
         			FROM #__mb_individuals as ind 
         			LEFT JOIN #__mb_tree_links as tree_links ON ind.id = tree_links.individuals_id
         			LEFT JOIN #__mb_events as event ON ind.id = event.individuals_id

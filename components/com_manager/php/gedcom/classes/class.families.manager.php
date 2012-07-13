@@ -182,15 +182,15 @@ class FamiliesList{
         *
         */
         public function getByEvent($treeId, $type, $month, $sort=false){
-        	$sqlString = "SELECT family.id, family.husb, family.wife 
+        	$sqlString = "SELECT family.id, family.husb, family.wife, date.f_year as event_year
 				FROM #__mb_families AS family
 				LEFT JOIN #__mb_tree_links AS tree_links ON family.husb = tree_links.individuals_id OR family.wife = tree_links.individuals_id
 				LEFT JOIN #__mb_events AS event ON family.id = event.families_id
 				LEFT JOIN #__mb_dates AS date ON event.id = date.events_id
 				WHERE tree_links.tree_id =?";
-        	$sqlString .= "AND event.type=?";
-        	$sqlString .= "AND date.f_month=?";
-        	if($sort[0]!='false'){
+        	$sqlString .= " AND event.type=?";
+        	$sqlString .= " AND date.f_month=?";
+        	if($sort){
         		$sqlString .= ((int)$sort[0]<0)?"AND date.f_year < ?":"AND date.f_year > ?";
         		$sqlString .= " GROUP BY family.id";
         		$sqlString .= ' ORDER BY  date.f_day ASC';
@@ -199,7 +199,7 @@ class FamiliesList{
         		$sqlString .= " GROUP BY family.id";
         		$sqlString .= ' ORDER BY  date.f_day ASC';
         		$this->ajax->setQuery($sqlString, $treeId, $type, $month);
-        	}     
+        	}
         	$rows = $this->ajax->loadAssocList();
         	return $rows;
         }

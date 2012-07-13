@@ -1,8 +1,42 @@
 <?php
 class JMBThisMonth {
-	/**
-	* Vars
-	*/
+    private $host;
+
+    public function __construct(){
+        $this->host = &FamilyTreeTopHostLibrary::getInstance();
+    }
+
+    protected function getLanguage(){
+        $lang = $this->host->getLangList('this_month');
+        if(!$lang) return false;
+        return $lang;
+    }
+
+    protected function getEvents($treeId, $month){
+        $birth = $this->host->gedcom->individuals->getByEvent($treeId, 'BIRT', $month);
+        $death = $this->host->gedcom->individuals->getByEvent($treeId, 'DEAT', $month);
+        $marr = $this->host->gedcom->families->getByEvent($treeId, 'MARR', $month);
+
+        return array('birth'=>$birth, 'death'=>$death, 'marriage'=>$marr);
+    }
+
+    public function load($month){
+        //vars
+        $user = $this->host->user->get();
+        $tree_id = $user->treeId;
+
+        //user info and global settings
+        $language = $this->getLanguage();
+        $events = $this->getEvents($tree_id, $month);
+
+        return json_encode(array(
+                'msg'=>$language,
+                'events'=>$events
+            )
+        );
+    }
+
+    /*
 	private $host;
 	private $settings = array(
 		'event'=>array(
@@ -20,16 +54,12 @@ class JMBThisMonth {
 			'date'=>null
 		)
 	);	
-	/**
-	* CONSTRUCTOR
-	*/
+
 	function __construct(){
         	$this->host = &FamilyTreeTopHostLibrary::getInstance();
         	$this->_parseSettings();
         }	
-        /**
-        * get module settings
-        */ 
+
         protected function _parseSettings(){
         	# get properties
         	$p = json_decode($this->host->getSettingsValues('this_month'), true);
@@ -57,17 +87,13 @@ class JMBThisMonth {
                 	}
                 }
         }
-	/**
-	*
-	*/
+
 	protected function getLanguage(){
 		$lang = $this->host->getLangList('this_month');
 		if(!$lang) return false;
 		return $lang;		
 	}
-	/**
-	*
-	*/
+
 	protected function getEvents($treeId, $month, $render_type){
 		$sort = array((int)$this->settings['split_event']['type'],$this->settings['split_event']['year']);
 	
@@ -77,9 +103,7 @@ class JMBThisMonth {
 		
 		return array('b'=>$birth,'d'=>$death,'m'=>$marr);
 	}
-	/**
-	*
-	*/
+
 	protected function sort($usertree, &$events){
 		$members = array();
 		foreach($events as $key => $event){
@@ -105,16 +129,10 @@ class JMBThisMonth {
 		}
 		return $members;
 	}
-	/**
-	* get json data about all user(with sort)
-	* @var $month numeric of month
-	* @var $sort get of how sort people(after,before or all)
-	* @return array json data
-	*/
+
 	public function load($args){		
 		//vars
         $user = $this->host->user->get();
-        $gedcom_id = $user->gedcomId;
         $tree_id = $user->treeId;
 
 		$args = json_decode($args);
@@ -140,6 +158,7 @@ class JMBThisMonth {
 			)
 		);
 	}
+    */
 	
 }
 ?>

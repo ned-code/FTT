@@ -1,4 +1,425 @@
 function JMBThisMonthObject(obj){
+    var module = this;
+
+    module.parent = obj;
+    module.msg = {
+        FTT_MOD_THIS_MONTH_HEADER:"Special Days in",
+        FTT_MOD_THIS_MONTH_BIRTHDAYS:"Birthdays",
+        FTT_MOD_THIS_MONTH_ANNIVERSARIES:"Anniversaries",
+        FTT_MOD_THIS_MONTH_REMEMBER:"We remember",
+        FTT_MOD_THIS_MONTH_ALL_YEARS:"All Years",
+        FTT_MOD_THIS_MONTH_BEFORE:"Before",
+        FTT_MOD_THIS_MONTH_AFTER:"After",
+        FTT_MOD_THIS_MONTH_HOWDO:"There are currently no %% associated with this month. How do i add some?",
+        FTT_MOD_THIS_MONTH_JANUARY:"January",
+        FTT_MOD_THIS_MONTH_FEBRUARY:"February",
+        FTT_MOD_THIS_MONTH_MARCH:"March",
+        FTT_MOD_THIS_MONTH_APRIL:"April",
+        FTT_MOD_THIS_MONTH_MAY:"May",
+        FTT_MOD_THIS_MONTH_JUNE:"June",
+        FTT_MOD_THIS_MONTH_JULY:"July",
+        FTT_MOD_THIS_MONTH_AUGUST:"August",
+        FTT_MOD_THIS_MONTH_SEPTEMBER:"September",
+        FTT_MOD_THIS_MONTH_OCTOBER:"October",
+        FTT_MOD_THIS_MONTH_NOVEMBER:"November",
+        FTT_MOD_THIS_MONTH_DECEMBER:"December"
+    }
+
+    module.tableString = '<table cellpadding="0" cellspacing="0" width="100%"><tr><td><div class="jmb-this-month-header"></div></td></tr><tr><td><div class="jmb-this-month-body"></div></td></tr></table>';
+
+    module.table = false;
+    module.data = false;
+    module.earliestDate = false;
+
+    module.month = false;
+    module.sort = 1;
+
+    init(getThisMonth());
+
+    function ajax(method,args,callback){
+        storage.callMethod("this_month", "JMBThisMonth", method, args, function(req){
+            callback(module.data = storage.getJSON(req.responseText));
+        })
+    }
+    function init(month){
+        ajax("load", month, function(data){
+            setMsg(data.msg);
+            setEarliestDateOfEvents()
+            render();
+        });
+    }
+    function render(){
+        appendTable();
+        setContent(getTableBody());
+        setMonthSelectHandler();
+        if(isSort()){
+            setSortSelectHandler();
+        }
+        exit();
+    }
+    function reload(){
+        clear();
+        init(getSelectMonth());
+    }
+    function exit(){
+        storage.core.modulesPullObject.unset('JMBThisMonthObject');
+    }
+    function clear(){
+        jQuery(module.table).remove();
+        jQuery(module.parent).html();
+        module.table = false;
+        module.data = false;
+        module.earliestDate = false;
+    }
+    function appendTable(){
+        jQuery(module.parent).append(getTable());
+    }
+    function eventExist(t){
+        var e = module.data.events;
+        if(e && typeof(e[t])!='undefined' && e[t] != null && e[t].length!=0){
+            return e[t];
+        }
+        return false;
+    }
+    function memberExist(id){
+        return typeof(storage.usertree.pull[id]) != 'undefined'
+    }
+    function isSort(){
+        return 1970 > module.earliestDate;
+    }
+    function setContent(t){
+        setHeader(t);
+        setBirthdays(t);
+        setMarriages(t);
+        setDeaths(t);
+    }
+    function setMonthSelectHandler(){
+        jQuery(module.table).find('select[name="months"]').change(reload);
+    }
+    function setSortSelectHandler(){
+        return false;
+    }
+    function setHeader(t){
+        var header = jQuery(module.table).find('.jmb-this-month-header');
+        setHeaderBackground(header);
+        var sb = storage.stringBuffer();
+        sb._('<span>');
+            sb._(module.msg.FTT_MOD_THIS_MONTH_HEADER);
+        sb._('</span>');
+        sb._(getHeaderMonthSelect());
+        if(isSort()){
+            sb._(getHeaderSortSelect())
+        }
+        jQuery(header).append(sb.result());
+    }
+    function setHeaderBackground(h){
+        jQuery(h).css('background', getHeaderColor());
+    }
+    function setUserContent(t, type, selector){
+        var el = jQuery('.jmb-this-month-body').find(selector+' table');
+        var events;
+        if(events = eventExist(type)){
+            jQuery(events).each(function(i, data){
+                if(!memberExist(data.gedcom_id)) return false;
+                setUserEventContent(el, data, type);
+            });
+        } else {
+            jQuery(selector).remove();
+        }
+    }
+    function setUserEventContent(el, data, type){
+        var user = getUserData(data.gedcom_id);
+        var sb = storage.stringBuffer();
+        sb._('<tr><td><div class="date">');
+            sb._(getEventDate(getUserEvent(user, type)))._('</div></td><td><div class="img-');
+            sb._(getUserData(user))._('">&nbsp;</div></td><td><div id="');
+            sb._(getUserGedcomId(user))._('" class="person ');
+            sb._(getUserGender(user))._('"><font color="');
+            sb._(getColor(getUserGender(user)))._('">');
+            sb._(getUserName(user))._('</font> (turns ');
+            sb._(getEventTurns(getUserEvent(user, type)))._(')</div></td></tr>');
+        jQuery(el).append(sb.result());
+    }
+
+    function setBirthdays(t){
+        setUserContent(t, "birth", "#jmb-this-month-birth");
+    }
+    function setDeaths(t){
+        setUserContent(t, "death", "#jmb-this-month-death");
+    }
+    function setMarriages(t){
+        var el = jQuery('.jmb-this-month-body').find('#jmb-this-month-marr table');
+        var events;
+        if(events = eventExist('marriage')){
+            jQuery(events).each(function(i, data){
+                if(!memberExist(data.wife) || !memberExist(data.husb)) return false;
+                setMarriageContent(el, getFamilyData(data))
+            });
+        } else {
+            jQuery('#jmb-this-month-marr').remove();
+        }
+    }
+    function setMarriageContent(el, family){
+        var sb = storage.stringBuffer();
+        sb._('<tr><td><div class="date">');
+            sb._(getEventDate(family.event));
+            sb._('</div></td><td><div class="anniversaries-start">&nbsp</div></td><td><div id="');
+            sb._(getUserGedcomId(family.husb))._('" class="person"><font color="');
+            sb._(getColor(getUserGender(family.husb)))._('">');
+            sb._(getUserName(family.husb))._('</font></div><div id="');
+            sb._(getUserGedcomId(family.wife))._('" class="person"><font color="');
+            sb._(getColor(getUserGender(family.wife)))._('">');
+            sb._(getUserName(family.wife))._('</font></div></td><td><div class="anniversaries-end">&nbsp;</div></td><td><div>(');
+            sb._(getEventTurns(family.event))._(' years ago)</div></td></tr>');
+        jQuery(el).append(sb.result());
+    }
+    function setMsg(msg){
+        for(var key in module.msg){
+            if(typeof(msg[key]) != 'undefined'){
+                module.msg[key] = msg[key];
+            }
+        }
+        return true;
+    }
+    function setContentInRow(settings){
+        jQuery(getTableCellByRow(settings.table,settings.rowIndex)).append(getCurrentEventTableView(settings.id, settings.type, settings.title));
+    }
+    function setEarliestDateOfEvents(){
+        var events = module.data.events;
+        var date = 9999;
+        for(var key in events){
+            if(events.hasOwnProperty(key)){
+                var earliestDate = getEarliestDateOfEvent(events[key]);
+                if(date > earliestDate){
+                    date = earliestDate;
+                }
+            }
+        }
+        return module.earliestDate = date;
+    }
+    function getEarliestDateOfEvent(e){
+        var date = 9999;
+        for(var k in e){
+            if(e.hasOwnProperty(k)){
+                var d = e[k].event_year;
+                if(date > d){
+                    date = d;
+                }
+            }
+        }
+        return date;
+    }
+    function getFamilyData(data){
+        var husb = getUserData(data.husb);
+        var wife = getUserData(data.wife);
+        var event = getMarriageEvent(data.id, husb, wife);
+        return {
+            husb:husb,
+            wife:wife,
+            event:event
+        }
+    }
+    function getMarriageEvent(id, husb, wife){
+        if(husb.families.length!=0){
+            for(var key in husb.families){
+                if(key!='length'&&key==id){
+                    return husb.families[key].marriage;
+                }
+            }
+        }
+        if(wife.families.length!=0){
+            for(var key in wife.families){
+                if(key!='length'&&key==id){
+                    return wife.families[key].marriage;
+                }
+            }
+        }
+        return false;
+    }
+    function getHeaderColor(){
+        var colors = storage.settings.colors;
+        var user = storage.usertree.user;
+        if(parseInt(user.loginType)){
+            return ['#',colors.famous_header].join('');
+        } else {
+            return ['#',colors.family_header].join('');
+        }
+    }
+    function getColor(gender){
+        var colors = storage.settings.colors;
+        if(typeof(gender) != 'undefined'){
+            return ['#',colors[gender]].join('');
+        }
+        return '';
+    }
+    function getUserData(id){
+        return storage.usertree.pull[id];
+    }
+    function getUserGender(data){
+        return data.user.gender;
+    }
+    function getUserName(data){
+        return [data.user.first_name,data.user.middle_name,data.user.last_name].join(' ');
+    }
+    function getUserGedcomId(data){
+        return data.user.gedcom_id;
+    }
+    function getUserGender(data){
+        return data.user.gender;
+    }
+    function getUserEvent(data, type){
+        return data.user[type];
+    }
+    function getEventDate(event){
+        var date = event.date;
+        return (date!=null&&date[0]!=null)?date[0]:''
+    }
+    function getEventTurns(event){
+        if(event.date==null) return '';
+        return (new Date()).getFullYear() - event.date[2];
+    }
+    function getHeaderMonthSelect(){
+        var sb = storage.stringBuffer();
+        var monthNames = getMonthNames();
+        sb._('<select name="months">')
+        for( var i = 0 ; i < 12 ; i++ ){
+            sb._('<option ')._(getSelected(i))._(' value="')._(getMonthValue(i))._('" >');
+                sb._(getMonthName(i, monthNames));
+            sb._('</option>');
+        }
+        sb._('</select>');
+        return sb.result();
+        function isSelected(i){
+            return i == module.month - 1;
+        }
+        function getMonthValue(i){
+            return i+1;
+        }
+        function getSelected(i){
+            if(isSelected(i)){
+                return 'selected';
+            }
+            return '';
+        }
+        function getMonthNames(){
+            return [
+                "JANUARY",
+                "FEBRUARY",
+                "MARCH",
+                "APRIL",
+                "MAY",
+                "JUNE",
+                "JULY",
+                "AUGUST",
+                "SEPTEMBER",
+                "OCTOBER",
+                "NOVEMBER",
+                "DECEMBER"
+            ];
+        }
+        function getMonthName(i,n){
+            return module.msg['FTT_MOD_THIS_MONTH_'+n[i]];
+        }
+    }
+    function getHeaderSortSelect(){
+        var sb = storage.stringBuffer();
+
+        /*
+        _createSortSelect:function(json){
+            var date = json.settings.opt.date;
+            var sb = host.stringBuffer();
+            var sort_date = json.settings.split_event.year;
+            var sort_type = json.settings.split_event.type;
+            var message = this.message;
+            var option = (function(){
+                return {
+                    after:function(selected){
+                        sb._('<option ')._(selected?'selected':'')._(' value="1">')
+                        sb._(message.FTT_MOD_THIS_MONTH_AFTER);
+                        sb._(' ');
+                        sb._(sort_date);
+                        sb._('</option>');
+                    },
+                    before:function(selected){
+                        sb._('<option ')._(selected?'selected':'')._(' value="-1">');
+                        sb._(message.FTT_MOD_THIS_MONTH_BEFORE);
+                        sb._(' ');
+                        sb._(sort_date);
+                        sb._('</option>');
+                    },
+                    all:function(selected){
+                        sb._('<option ')._(selected?'selected':'')._(' value="0">');
+                        sb._(message.FTT_MOD_THIS_MONTH_ALL_YEARS);
+                        sb._(' ');
+                        sb._('</option>');
+                    }
+                }
+            })();
+            sb.clear();
+            if(date < sort_date && sort_type == '-1'){
+                return sb._(option.after())._(option.before(true))._(option.all()).result();
+            } else if(date < sort_date && sort_type == '0'){
+                return sb._(option.after())._(option.before())._(option.all(true)).result();
+            } else if(date < sort_date && sort_type == '1'){
+                return sb._(option.after(true))._(option.before())._(option.all()).result();
+            } else if(date > sort_date && sort_type == '-1'){
+                return sb._(option.before(true))._(option.all()).result();
+            } else if(date > sort_date && sort_type == '0'){
+                return sb._(option.all(true)).result();
+            } else if(date > sort_date && sort_type == '1'){
+                return sb._(option.all()).result();
+            }
+        },
+        */
+        return '';
+    }
+    function getTableBody(){
+        var table = getTableView()[0];
+        setContentInRow({
+            table: table,
+            rowIndex: 0,
+            id: 'jmb-this-month-birth',
+            type: 'birthday',
+            title: module.msg.FTT_MOD_THIS_MONTH_BIRTHDAYS
+        });
+        setContentInRow({
+            table: table,
+            rowIndex: 1,
+            id: 'jmb-this-month-marr',
+            type: 'marriage',
+            title: module.msg.FTT_MOD_THIS_MONTH_ANNIVERSARIES
+        });
+        setContentInRow({
+            table: table,
+            rowIndex: 2,
+            id: 'jmb-this-month-death',
+            type: 'deceased',
+            title: module.msg.FTT_MOD_THIS_MONTH_REMEMBER
+        });
+        jQuery(module.table).find('.jmb-this-month-body').append(table);
+        return table;
+    }
+    function getTableCellByRow(t, index){
+        return t.rows[index].cells[0];
+    }
+    function getTableView(){
+        return jQuery('<table><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table><div class="empty" style="display:none;"></div>');
+    }
+    function getCurrentEventTableView(id, type, title){
+        return jQuery(['<div id="',id,'"><div class="jmb-this-month-view ',type,'">',title,'</div><div class="jmb-this-month-content"><table></table></div></div>'].join(''));
+    }
+    function getTable(){
+        return module.table = jQuery(module.tableString);
+    }
+    function getThisMonth(){
+        return module.month = ((new Date()).getMonth()+1);
+    }
+    function getSelectMonth(){
+        return module.month = jQuery(module.table).find('select[name="months"]').val();
+    }
+}
+/*
+function JMBThisMonthObject(obj){
 	//vars 
 	this.obj = obj;
 	this.alias = jQuery(document.body).attr('_alias');
@@ -6,6 +427,8 @@ function JMBThisMonthObject(obj){
 	this.settings = {};
 	this.json = {};
 	this.content = { table:null, birth:null, death:null, marr:null };
+
+
     this.message = {
         FTT_MOD_THIS_MONTH_HEADER:"Special Days in",
         FTT_MOD_THIS_MONTH_BIRTHDAYS:"Birthdays",
@@ -173,7 +596,7 @@ JMBThisMonthObject.prototype = {
 		return c.table;
 	},
 	_createMonthsSelect:function(json){
-		var sb = host.stringBuffer();
+		var sb = storage.stringBuffer();
 		var message = this.message;
 		var monthNames = [  "JANUARY",
                             "FEBRUARY",
@@ -459,4 +882,4 @@ JMBThisMonthObject.prototype = {
 		if(callback) callback();		
 	}
 }
-
+*/
