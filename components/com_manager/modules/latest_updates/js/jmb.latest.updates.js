@@ -73,15 +73,12 @@ function JMBLatestUpdatesObject(offsetParent){
             return ul;
 		},
 		create:function(json){
-			var	sb = host.stringBuffer(), 
-				colors = settings.colors,
-				h_color = (loggedByFamous)?colors.famous_header:colors.family_header;
-			sb._('<div class="jmb-lu-header" style="background:#'+h_color+';">');
+			var	sb = host.stringBuffer();
+			sb._('<div class="jmb-lu-header">');
 				sb._('<span>')._(message.FTT_MOD_LATEST_UPDATES_HEADER)._('</span>');
 			sb._('</div>');
 			sb._('<div class="jmb-lu-content"></div>');
 			sb._('<div class="jmb-lu-button">');
-				//sb._('<span>')._(message.FTT_MOD_LATEST_UPDATES_SHOW_ALL)._('...</span>');
 			sb._('</div>');
 			return jQuery(sb.result());
 		}

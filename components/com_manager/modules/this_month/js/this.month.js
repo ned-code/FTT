@@ -132,7 +132,7 @@ function JMBThisMonthObject(obj){
         jQuery(header).append(sb.result());
     }
     function setHeaderBackground(h){
-        jQuery(h).css('background', getHeaderColor());
+        //jQuery(h).css('background', getHeaderColor());
     }
     function setUserContent(t, type, selector){
         var el = jQuery('.jmb-this-month-body').find(selector+' table');

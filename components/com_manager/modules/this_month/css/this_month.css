@@ -3,12 +3,14 @@
 }
 .tab_content.famous_family .jmb-this-month-header{
     border-color: #f0e2d9;
+    background-color: #ecdace;
 }
 .tab_content.myfamily #JMBThisMonthContainer{
     border-color: #d1daec;
 }
 .tab_content.myfamily .jmb-this-month-header{
     border-color: #d1daec;
+    background-color: #cfd8eb;
 }
 #JMBThisMonthContainer{
 	border: 1px solid #d1daec;

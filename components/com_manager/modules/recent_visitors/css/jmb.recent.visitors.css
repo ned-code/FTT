@@ -1,3 +1,18 @@
+.tab_content.famous_family #JMBRecentVisitorsContainer{
+    border-color: #f0e2d9;
+}
+.tab_content.famous_family .jmb-rv-header{
+    border-color: #f0e2d9;
+    background-color: #ecdace;
+}
+.tab_content.myfamily #JMBRecentVisitorsContainer{
+    border-color: #d1daec;
+}
+.tab_content.myfamily .jmb-rv-header{
+    border-color: #d1daec;
+    background-color: #cfd8eb;
+}
+
 #JMBRecentVisitorsContainer {
 	font-family: Tahoma,sans-serif;
 	font-size: 11px;

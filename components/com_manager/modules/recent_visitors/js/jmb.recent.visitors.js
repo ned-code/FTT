@@ -7,20 +7,12 @@ function JMBRecentVisitorsObject(obj){
         settings = storage.settings,
         functions ={
             createBody:function(json){
-                var header_background_color, st = host.stringBuffer();
-                if(loggedByFamous){
-                    header_background_color = settings.colors.famous_header
-                } else {
-                    header_background_color = settings.colors.family_header;
-                }
-                st._('<div class="jmb-rv-header" style="background:#');
-                    st._(header_background_color);
-                st._(';">');
+                var st = storage.stringBuffer();
+                st._('<div class="jmb-rv-header" >');
                     st._('<span>')._(message.FTT_MOD_RECENT_VISITORS_HEADER)._('</span>');
                 st._('</div>');
                 st._('<div class="jmb-rv-content"></div>');
                 st._('<div class="jmb-rv-button">');
-                    //st._('<span>')._(message.FTT_MOD_RECENT_VISITORS_SHOW)._('...</span>');
                 st._('</div>');
                 return jQuery(st.result());
             },

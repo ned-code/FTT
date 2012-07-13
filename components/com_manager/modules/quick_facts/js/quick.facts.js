@@ -59,14 +59,8 @@ function JMBQuickFactsObject(object){
 		},
 		create:function(){
 			var sb = host.stringBuffer(),
-			    htmlObject,
-                header_background_color;
-            if(loggedByFamous){
-                header_background_color = settings.colors.famous_header;
-            } else {
-                header_background_color = settings.colors.family_header;
-            }
-			sb._('<div class="jmb_qf_header" style="background:#')._(header_background_color)._(';">');
+			    htmlObject;
+			sb._('<div class="jmb_qf_header" >');
                     sb._('<span>')._(message.FTT_MOD_QUICK_FACTS_HEADER)._('</span>');
             sb._('</div>');
 			sb._('<div class="jmb_qf_content">');
