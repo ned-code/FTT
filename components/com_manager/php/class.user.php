@@ -17,6 +17,7 @@ class FTTUserLibrary {
     private $loginType = 0;
     private $language = 'en-GB';
     private $page = 'home';
+    private $gender = 'M';
 
     public function __construct(&$host){
         $this->host = $host;
@@ -35,9 +36,8 @@ class FTTUserLibrary {
 
     protected function _getUserProfileFields($facebookId){
         if(!$facebookId) return false;
-        $fields = array(0 => 'first_name', 1 => 'last_name', 2 => 'email', 3 => 'name', 4 =>'locale');
-        $result = $this->host->jfbConnect->getUserProfile($facebookId, $fields);
-        $result['id'] = $facebookId;
+        $result = $this->host->jfbConnect->api('/'. $facebookId);
+        $this->gender = $result['gender'];
         return $result;
     }
 
@@ -153,6 +153,7 @@ class FTTUserLibrary {
             'facebookFields' => $this->facebookFields,
             'sessionId' => $this->sessionId,
             'name' => $this->name,
+            'gender' => $this->gender,
             'facebookId' => $this->facebookId,
             'joomlaId' => $this->joomlaId,
             'gedcomId' => $this->gedcomId,

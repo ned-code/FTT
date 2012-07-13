@@ -117,7 +117,7 @@ JMBNotifications.prototype = {
                             mother: {name:msg.FTT_MOD_NOTIFICATIONS_ACCEPT_MOTHER, id:"mother", value:json.mother_info.name },
                             father: {name:msg.FTT_MOD_NOTIFICATIONS_ACCEPT_FATHER, id:"father", value:json.father_info.name },
                             relation: {name:msg.FTT_MOD_NOTIFICATIONS_ACCEPT_RELATION, id:"relation", value: json.relation},
-                            facebook: {name:msg.FTT_MOD_NOTIFICATIONS_ACCEPT_FACEBOOK, id:"facebook", value: "<a href='"+json.me.link+"'>Click here to see Facebook profile</a>" }
+                            facebook: {name:msg.FTT_MOD_NOTIFICATIONS_ACCEPT_FACEBOOK, id:"facebook", value: "<a href='facebook.com/"+json.me.id+"'>Click here to see Facebook profile</a>" }
                         }));
                     sb._('</div>');
                 sb._('</div>');
@@ -428,8 +428,8 @@ JMBNotifications.prototype = {
             return {
                 user:function(){
                     var args = json.user_info;
-                    var link = json.me.linl;
-                    var facebook_id = json.me.id;
+                    var link = 'facebook.com/'+json.me.id;
+                    var facebook_id = json.me.link;
                     var sb = host.stringBuffer();
                     sb._('<div class="user_box">');
                         sb._('<table>');

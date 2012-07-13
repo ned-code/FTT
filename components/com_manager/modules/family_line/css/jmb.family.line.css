@@ -9,6 +9,15 @@
 	padding-bottom: 5px;
 	padding-top: 5px;
 }
+.jmb-family-line-container td:hover {
+     padding-top: 3px;
+}
+.jmb-family-line-container td:hover div.icon{
+    height: 23px;
+}
+.jmb-family-line-container td:hover div.title{
+    margin-top:2px;
+}
 .jmb-family-line-container td.left{
 	border-radius: 3px 0 0 3px;
 	height: 21px;

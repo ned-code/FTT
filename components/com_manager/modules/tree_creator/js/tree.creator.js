@@ -1077,7 +1077,7 @@ function JMBTreeCreatorObject(parent){
             }
         },
         sendRequest:function(){
-            setRequestForm(getArguments());
+            setRequestForm(getArguments(this));
             return true;
             function createDialogBox(form){
                 fn.closeDialogBox();
@@ -1090,6 +1090,29 @@ function JMBTreeCreatorObject(parent){
             function setRequestForm(args){
                 onClick(createDialogBox(getRequestForm(args)), args);
             }
+            function getRequestFormBoxData(object){
+                var pull = {};
+                jQuery(object).find('input, select').each(function(i, el){
+                    var name = jQuery(el).attr('name');
+                    var value = jQuery(el).attr('value');
+                    pull[name] = value;
+                });
+                return pull;
+            }
+            function getRequestFromValidate(form, callback){
+                var res = true;
+                jQuery(form).find('div.text input').each(function(i, el){
+                    var val = jQuery(el).val();
+                    if(jQuery(el).attr('name') != 'nick' && val == ''){
+                        res = false;
+                    }
+                });
+                var relation = jQuery(form).find('select option:selected').val();
+                if(relation == ''){
+                    res = false;
+                }
+                callback(res);
+            }
             function onClick(form , args){
                 jQuery(form).find('.button').click(function(){
                     if(module.request_send) return false;
@@ -1098,14 +1121,14 @@ function JMBTreeCreatorObject(parent){
                         me:args.me,
                         target: args.target,
                         relation:jQuery(form).find('select[name="relations"]').val(),
-                        user_info:fn.get_request_form_box_data(jQuery(form).find('.user_box')),
-                        mother_info:fn.get_request_form_box_data(jQuery(form).find('.mother_box')),
-                        father_info:fn.get_request_form_box_data(jQuery(form).find('.father_box')),
+                        user_info:getRequestFormBoxData(jQuery(form).find('.user_box')),
+                        mother_info:getRequestFormBoxData(jQuery(form).find('.mother_box')),
+                        father_info:getRequestFormBoxData(jQuery(form).find('.father_box')),
                         message:jQuery(form).find('div.message textarea').val()
                     };
-                    fn.request_from_validate(form, function(valid){
+                    getRequestFromValidate(form, function(valid){
                         if(valid){
-                            fn.ajax('send_request', fn.json_to_string(pull), function(res){
+                            fn.ajax('send_request', JSON.stringify(pull), function(res){
                                 var response = storage.getJSON(res.responseText);
                                 if(response.error){
                                     storage.alert(response.error, function(){
@@ -1132,8 +1155,7 @@ function JMBTreeCreatorObject(parent){
                     return false;
                 });
             }
-            function getArguments(){
-                var target = e.currentTarget;
+            function getArguments(target){
                 return {
                     me:module.fProfile.facebookFields,
                     target:{
@@ -1442,13 +1464,13 @@ function JMBTreeCreatorObject(parent){
                 return  module.body = jQuery(sb.result());
             }
             function isExistUser(u){
-                return u != null && typeof(u.id) != 'undefined';
+                return u != null && typeof(u.facebookId) != 'undefined';
             }
             function getUser(){
                 return module.fProfile = storage.usertree.user;
             }
             function getArguments(u,r){
-                return JSON.stringify({me:u, friends:r.data});
+                return JSON.stringify({me:u.facebookFields, friends:r.data});
             }
             function getJSON(d){
                 return module.initData = storage.getJSON(d.responseText);

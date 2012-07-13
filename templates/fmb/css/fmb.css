@@ -87,16 +87,20 @@ html, body {
 }
 
 .jmb-top-menu-bar div.jmb-top-menu-bar-content div.jmb-top-menu-bar-item{
-	/*background: url("../images/home.png") no-repeat scroll 0 2px transparent;*/
 	color: white;
 	display: inline-block;
 	margin: 5px;
 	font-weight:bold;
+    padding: 0 5px;
+    border-radius: 1px;
+}
+
+.jmb-top-menu-bar div.jmb-top-menu-bar-content div.jmb-top-menu-bar-item:hover{
+    background-color: #86af67;
 }
 
 .jmb-top-menu-bar div.jmb-top-menu-bar-content div.jmb-top-menu-bar-item span{
 	cursor: pointer;
-	margin-left: 18px;
 }
 
 .jmb-top-menu-bar div.jmb-top-menu-bar-content div.jmb-top-menu-bar-item span.active{
