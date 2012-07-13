@@ -88,7 +88,8 @@ function JMBLogin(){
 			sb._('<div class="menu">');
 				sb._('<div id="profile"><span>')._(msg.FTT_MOD_LOGIN_PROFILE)._('</span></div>');
 				sb._('<div id="language"><span>')._(msg.FTT_MOD_LOGIN_LANGUAGE)._(': ')._(this.getDefaultLang())._('</span></div>');
-				sb._('<div id="logout"><span>')._(msg.FTT_MOD_LOGIN_LOGOUT)._('</span></div>');
+				sb._('<div id="to_facebook"><span>')._('Return to Facebook')._('</span></div>');
+                sb._('<div id="logout"><span>')._(msg.FTT_MOD_LOGIN_LOGOUT)._('</span></div>');
 			sb._('</div>');
 			menu = jQuery(sb.result());
 			return {
@@ -161,6 +162,10 @@ function JMBLogin(){
                             return false;
                         });
 					},
+                    to_facebook:function(object, callback){
+                        window.top.location.href = storage.app.link;
+                        callback();
+                    },
 					logout:function(object, callback){
                         jfbc.login.logout_button_click();
                         callback();

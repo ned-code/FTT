@@ -81,8 +81,8 @@ function JMBHeader(){
 		},
 		init:function(){
 			if(exists[alias]){
-				if(alias == 'myfamily' && !loggedByFamous){
-					this.show.expand();
+				if(alias == 'myfamily' && !loggedByFamous && fn.get.is_iframe()){
+                    this.show.expand();
 					this.click.expand();
 				}
 				this.show.logo();
