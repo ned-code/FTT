@@ -79,22 +79,22 @@
 	color:white;
 }
 .jmb-profile-cont div.facebook {
-	background: url("../imgs/facebook-login-button.png") no-repeat scroll 0 0 transparent;
-	border: 1px solid white;
-	height: 22px;
-	margin-left: 5px;
-	margin-top: 5px;
-	width: 154px;
+    background: url("../imgs/facebook-login-button.png") no-repeat scroll 0 0 transparent;
+    border: 1px solid white;
+    height: 25px;
+    margin-left: 0;
+    margin-top: 4px;
+    width: 194px;
 }
 .jmb-profile-cont div.facebook span {
-	color: white;
-	cursor: pointer;
-	font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
-	font-size: 10px;
-	font-weight: bold;
-	line-height: 20px;
-	margin-left: 26px;
-	text-decoration: none;
+    color: white;
+    cursor: pointer;
+    font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 24px;
+    margin-left: 34px;
+    text-decoration: none;
 }
 
 .jmb-profile-famous-cont {
