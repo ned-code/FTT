@@ -5,6 +5,7 @@ function JMBNotifications(){
     this.acceptJson = null;
     this.acceptId = null;
     this.acceptIndex = null;
+    this.activeMenuItem = false;
     this.message = {
         FTT_MOD_NOTIFICATIONS_FIRST_TEXT:"You have an Invitation Request",
         FTT_MOD_NOTIFICATIONS_FIRST_BUTTON_TEXT:"Click here to view it",
@@ -547,6 +548,20 @@ JMBNotifications.prototype = {
             });
         }
 
+        fn.selectMenuItem = function(html, item){
+            if(typeof(item) == 'undefined'){
+                item = jQuery(html).find('div.item').first();
+            }
+            if(module.activeMenuItem == item) return false;
+            if(module.activeMenuItem){
+                jQuery(module.activeMenuItem).removeClass('active');
+                jQuery(module.activeMenuItem).find('span.click').remove();
+            }
+            jQuery(item).addClass('active');
+            jQuery(item).append('<span class="click">CLICK TO OPEN</span>');
+            module.activeMenuItem = item;
+        }
+
         fn.menu = function(cont){
             var pull = module.ntPull,
                 sb = host.stringBuffer(),
@@ -555,10 +570,14 @@ JMBNotifications.prototype = {
             sb._('<div class="users">');
             for(var key in pull){
                 var json = fn.parse(pull[key]);
-                sb._('<div id="')._(key)._('" class="')._(json.me.gender)._('"><span>')._(json.me.name)._('</span>')._((json.user_info.b_year!=''?'('+json.user_info.b_year+')':''))._('</div>');
+                sb._('<div id="')._(key)._('" class="item ')._(json.me.gender)._('"><span>')._(json.me.name)._('</span>')._((json.user_info.b_year!=''?'('+json.user_info.b_year+')':''))._('</div>');
             }
             sb._('</div>');
             html = jQuery(sb.result());
+            fn.selectMenuItem(html);
+            jQuery(html).find('div.item').mouseenter(function(){
+                fn.selectMenuItem(html, this);
+            });
             jQuery(html).find('div').click(function(e){
                 fn.onClick.apply(this, [e, cont])
             });

@@ -71,16 +71,30 @@
     margin: 10px;
     position: relative;
 }
-.notifications_manager .users div {
+.notifications_manager .users div.item {
     cursor:pointer;
+    padding: 3px;
+    margin:3px;
+    border: 1px solid #fff;
+}
+.notifications_manager .users div.item.active {
+    background-color:  #fff7d9;
+    border: 1px solid #ffc90e;
+}
+.notifications_manager .users span.click{
+    color: #E1AE00;
+    font-weight: bold;
+    margin: 0;
+    position: absolute;
+    right: 10px;
 }
 .notifications_manager .users .male {
     color:#0d04bd;
-    background: url("../images/male.png") no-repeat scroll 0 0 transparent;
+    background: url("../images/male.png") no-repeat scroll 3px 3px transparent;
 }
 .notifications_manager .users .female {
     color:#d51ad5;
-    background: url("../images/female.png") no-repeat scroll 0 0 transparent;
+    background: url("../images/female.png") no-repeat scroll 3px 3px transparent;
 }
 .notifications_manager .users span {
     margin-left: 17px;
