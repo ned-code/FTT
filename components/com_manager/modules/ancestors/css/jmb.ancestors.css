@@ -1,3 +1,16 @@
+.tab_content.famous_family .line-without-border{
+    border: 2px solid #f9f3f0;
+}
+.tab_content.myfamily .line-without-border{
+    border: 2px solid #f5f8fc
+}
+div#jit-label div.node .line-without-border.father{
+    border:2px solid #FFB76F;
+}
+div#jit-label div.node .line-without-border.mother{
+    border:2px solid #F4FF28;
+}
+
 #JMBAncestorsContainer{
 	position:relative;
 }

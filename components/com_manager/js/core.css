@@ -42,9 +42,11 @@ html ul.jmbtabs li.active, html ul.jmbtabs li.active a:hover  { /*--Makes sure t
 }
 html ul.jmbtabs.famous_family li.active, html ul.jmbtabs li.active a:hover {
     background-color: #f9f3f0;
+    border-bottom: 1px solid #f9f3f0;
 }
 html ul.jmbtabs.myfamily li.active, html ul.jmbtabs li.active a:hover {
     background-color: #f5f8fc;
+    border-bottom: 1px solid #f5f8fc;
 }
 
 .tab_container {

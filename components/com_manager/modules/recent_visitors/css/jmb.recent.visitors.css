@@ -5,18 +5,12 @@
     border-color: #f0e2d9;
     background-color: #ecdace;
 }
-.tab_content.famous_family .line-without-border {
-    border:2px solid white;
-}
 .tab_content.myfamily #JMBRecentVisitorsContainer{
     border-color: #d1daec;
 }
 .tab_content.myfamily .jmb-rv-header{
     border-color: #d1daec;
     background-color: #cfd8eb;
-}
-.tab_content.myfamily .line-without-border {
-    border:2px solid white;
 }
 
 #JMBRecentVisitorsContainer {
@@ -43,6 +37,9 @@
 	background: none repeat scroll 0 0 white;
 	border: 1px solid #D1DAEC;
     	margin-top: -1px;
+}
+.jmb-rv-content .line-without-border {
+    border:2px solid white;
 }
 .jmb-rv-content .line-without-border.father {
     border:2px solid #FFB76F;

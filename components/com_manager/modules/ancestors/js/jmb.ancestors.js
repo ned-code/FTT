@@ -40,20 +40,12 @@ function JMBAncestorsObject(obj, popup){
 			var label = el.label;
 			var user = (data.is_exist)?data.object.user:false;
 			if(!user) continue;
-			if(res._line == 'father' && parseInt(user.is_father_line)){
-				if(res._active){
-					jQuery(label).find('div#father_line').css('border', '2px solid '+res._background);	
-				} else {
-					jQuery(label).find('div#father_line').css('border', '2px solid #EDF0F8');
-				}
-			}
-			if(res._line == 'mother' && parseInt(user.is_mother_line)){
-				if(res._active){
-					jQuery(label).find('div#mother_line').css('border', '2px solid '+res._background);	
-				} else {
-					jQuery(label).find('div#mother_line').css('border', '2px solid #EDF0F8');
-				}
-			}
+            var selector = 'div#'+res._line+'_line';
+            if(res._active){
+                jQuery(label).find(selector).addClass(res._line);
+            } else {
+                jQuery(label).find(selector).removeClass(res._line);
+            }
 		}
 	});
 
@@ -199,12 +191,8 @@ JMBAncestorsObject.prototype = {
 			return year;			
 		}
 		
-		sb._('<div id="father_line" style="border:2px solid ')
-			._((fam_opt.father.pencil)?fam_opt.father.pencil:'#EDF0F8')
-		._('" >');
-		sb._('<div id="mother_line" style="border:2px solid ')
-			._((fam_opt.mother.pencil)?fam_opt.mother.pencil:'#EDF0F8')
-		._('" >');
+		sb._('<div id="father_line" class="line-without-border">')
+		sb._('<div id="mother_line" class="line-without-border">')
 		sb._('<div class="jit-node-item">');			
 			sb._('<table>');
 				sb._('<tr>');
