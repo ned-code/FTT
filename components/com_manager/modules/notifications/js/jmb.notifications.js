@@ -107,19 +107,21 @@ JMBNotifications.prototype = {
 
         fn.createUserBox = function(){
             var sb = host.stringBuffer();
-            sb._('<div class="user-header">&nbsp;</div>');
-            sb._('<div id="facebook" style="background: none repeat scroll 0 0 #E5E9F0;border: 1px solid #4C67A1;">')
-                sb._('<div style="background: none repeat scroll 0 0 white;border: 1px solid #D2D9E7;margin: 10px;padding: 5px;">');
-                    sb._('<div style="border: 1px solid #403E39;display: inline-block;margin: 5px;vertical-align: top;cursor:pointer;"><img width="50px" height="50px" src="http://graph.facebook.com/')._(json.me.id)._('/picture"></div>');
-                    sb._('<div style="display: inline-block;">');
-                        sb._(storage.form.dataTable('',{
-                            name: {name:msg.FTT_MOD_NOTIFICATIONS_ACCEPT_NAME, id:"name", value:json.user_info.name },
-                            known: {name:msg.FTT_MOD_NOTIFICATIONS_ACCEPT_KNOWN_AS, id:"knwon", value:json.user_info.nick },
-                            mother: {name:msg.FTT_MOD_NOTIFICATIONS_ACCEPT_MOTHER, id:"mother", value:json.mother_info.name },
-                            father: {name:msg.FTT_MOD_NOTIFICATIONS_ACCEPT_FATHER, id:"father", value:json.father_info.name },
-                            relation: {name:msg.FTT_MOD_NOTIFICATIONS_ACCEPT_RELATION, id:"relation", value: json.relation},
-                            facebook: {name:msg.FTT_MOD_NOTIFICATIONS_ACCEPT_FACEBOOK, id:"facebook", value: "<a href='facebook.com/"+json.me.id+"'>Click here to see Facebook profile</a>" }
-                        }));
+            sb._('<div class="userbox">');
+                sb._('<div class="user-header">&nbsp;</div>');
+                sb._('<div id="facebook" style="background: none repeat scroll 0 0 #E5E9F0;border: 1px solid #4C67A1;">')
+                    sb._('<div style="background: none repeat scroll 0 0 white;border: 1px solid #D2D9E7;margin: 10px;padding: 5px;">');
+                        sb._('<div style="border: 1px solid #403E39;display: inline-block;margin: 5px;vertical-align: top;cursor:pointer;"><img width="50px" height="50px" src="http://graph.facebook.com/')._(json.me.id)._('/picture"></div>');
+                        sb._('<div style="display: inline-block;">');
+                            sb._(storage.form.dataTable('',{
+                                name: {name:msg.FTT_MOD_NOTIFICATIONS_ACCEPT_NAME, id:"name", value:json.user_info.name },
+                                known: {name:msg.FTT_MOD_NOTIFICATIONS_ACCEPT_KNOWN_AS, id:"knwon", value:json.user_info.nick },
+                                mother: {name:msg.FTT_MOD_NOTIFICATIONS_ACCEPT_MOTHER, id:"mother", value:json.mother_info.name },
+                                father: {name:msg.FTT_MOD_NOTIFICATIONS_ACCEPT_FATHER, id:"father", value:json.father_info.name },
+                                relation: {name:msg.FTT_MOD_NOTIFICATIONS_ACCEPT_RELATION, id:"relation", value: json.relation},
+                                facebook: {name:msg.FTT_MOD_NOTIFICATIONS_ACCEPT_FACEBOOK, id:"facebook", value: "<a href='"+json.me.link+"'>Click here to see Facebook profile</a>" }
+                            }));
+                        sb._('</div>');
                     sb._('</div>');
                 sb._('</div>');
             sb._('</div>');
@@ -219,35 +221,42 @@ JMBNotifications.prototype = {
 
         fn.createUserBox = function(){
             var sb = host.stringBuffer();
-            sb._('<div class="user-header">&nbsp;</div>');
-            sb._('<div style="background: none repeat scroll 0 0 #E5E9F0;border: 1px solid #4C67A1;">')
-                sb._('<div style="background: none repeat scroll 0 0 white;border: 1px solid #D2D9E7;margin: 10px;padding: 5px;">');
-                    sb._('<div style="border: 4px solid #ED1C24;cursor: pointer;display: inline-block;margin: 3px;vertical-align: top;"><img width="50px" height="50px" src="http://graph.facebook.com/')._(json.me.id)._('/picture"></div>');
-                    sb._('<div style="display: inline-block;height: 60px;">');
+            sb._('<div class="userbox">');
+                sb._('<div class="user-header">&nbsp;</div>');
+                sb._('<div style="background: none repeat scroll 0 0 #E5E9F0;border: 1px solid #4C67A1;">')
+                    sb._('<div style="background: none repeat scroll 0 0 white;border: 1px solid #D2D9E7;margin: 10px;padding: 5px;">');
                         sb._('<table>');
                             sb._('<tr>');
-                                sb._('<td><div class="title"><span>')._(msg.FTT_MOD_NOTIFICATIONS_ACCEPT_NAME)._('</span></div></td>');
-                                sb._('<td><div class="text"><span>')._(json.user_info.name)._('</span></div></td>');
-                            sb._('</tr>');
-                            sb._('<tr>');
-                                sb._('<td><div class="title"><span>')._(msg.FTT_MOD_NOTIFICATIONS_ACCEPT_KNOWN_AS)._('</span></div></td>');
-                                sb._('<td><div class="text"><span>')._(json.user_info.nick)._('</span></div></td>');
-                            sb._('</tr>');
-                            sb._('<tr>');
-                                sb._('<td><div class="title"><span>')._(msg.FTT_MOD_NOTIFICATIONS_ACCEPT_RELATION)._('</span></div></td>');
-                                sb._('<td><div class="text"><span>')._(json.relation)._('</span></div></td>');
-                            sb._('</tr>');
-                        sb._('</table>');
-                    sb._('</div>');
-                    sb._('<div style="display: inline-block;height: 50px;margin-left: 10px;padding-top: 10px;">');
-                        sb._('<table>');
-                            sb._('<tr>');
-                                sb._('<td><div class="title"><span>')._(msg.FTT_MOD_NOTIFICATIONS_ACCEPT_MOTHER)._('</span></div></td>');
-                                sb._('<td><div class="text"><span>')._(json.mother_info.name)._('</span></div></td>');
-                            sb._('</tr>');
-                            sb._('<tr>');
-                                sb._('<td><div class="title"><span>')._(msg.FTT_MOD_NOTIFICATIONS_ACCEPT_FATHER)._('</span></div></td>');
-                                sb._('<td><div class="text"><span>')._(json.father_info.name)._('</span></div></td>');
+                                sb._('<td><div style="border: 4px solid red;cursor: pointer;"><img width="50px" height="50px" src="http://graph.facebook.com/')._(json.me.id)._('/picture"></div></td>');
+                                sb._('<td><div style="margin-left: 10px;">');
+                                    sb._('<table>');
+                                        sb._('<tr>');
+                                            sb._('<td><div class="title"><span>')._(msg.FTT_MOD_NOTIFICATIONS_ACCEPT_NAME)._(':</span></div></td>');
+                                            sb._('<td><div class="text"><span>')._(json.user_info.name)._('</span></div></td>');
+                                        sb._('</tr>');
+                                        sb._('<tr>');
+                                            sb._('<td><div class="title"><span>')._(msg.FTT_MOD_NOTIFICATIONS_ACCEPT_KNOWN_AS)._(':</span></div></td>');
+                                            sb._('<td><div class="text"><span>')._(json.user_info.nick)._('</span></div></td>');
+                                        sb._('</tr>');
+                                        sb._('<tr>');
+                                            sb._('<td><div class="title"><span>')._(msg.FTT_MOD_NOTIFICATIONS_ACCEPT_RELATION)._(':</span></div></td>');
+                                            sb._('<td><div class="text"><span>')._(json.relation)._('</span></div></td>');
+                                        sb._('</tr>');
+                                    sb._('</table>');
+                                sb._('</div></td>');
+                                sb._('<td><div style="background: none repeat scroll 0 0 #E5E9F0;height: 60px;margin-left: 20px;margin-right: 20px;width: 1px;">&nbsp;</div></td>');
+                                sb._('<td><div style="">');
+                                    sb._('<table>');
+                                        sb._('<tr>');
+                                            sb._('<td><div class="title"><span>')._(msg.FTT_MOD_NOTIFICATIONS_ACCEPT_MOTHER)._(':</span></div></td>');
+                                            sb._('<td><div class="text"><span>')._(json.mother_info.name)._('</span></div></td>');
+                                        sb._('</tr>');
+                                        sb._('<tr>');
+                                            sb._('<td><div class="title"><span>')._(msg.FTT_MOD_NOTIFICATIONS_ACCEPT_FATHER)._(':</span></div></td>');
+                                            sb._('<td><div class="text"><span>')._(json.father_info.name)._('</span></div></td>');
+                                        sb._('</tr>');
+                                    sb._('</table>');
+                                sb._('</div></td>');
                             sb._('</tr>');
                         sb._('</table>');
                     sb._('</div>');
