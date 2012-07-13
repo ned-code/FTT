@@ -27,7 +27,7 @@ ul.jmbtabs li a {
 	display: block;
 	font-size: 1.2em;
 	padding: 0 20px;
-	border: 1px solid #F5FAE6; /*--Gives the bevel look with a 1px white border inside the list item--*/
+	border: 1px solid none; /*--Gives the bevel look with a 1px white border inside the list item--*/
 	outline: none;
 }
 ul.jmbtabs li a:hover {

@@ -37,6 +37,65 @@ function JMBThisMonthObject(obj){
 
     init(getThisMonth());
 
+    /*
+
+     storage.family_line.bind('JMBThisMonthObject', function(res){
+     jQuery(self.obj).find('div.person').each(function(i,el){
+     var type = 'is_'+res._line+'_line';
+     var id = jQuery(el).attr('id');
+     var object = self.json.members[id];
+     var user = object.user;
+     switch(res._type){
+     case "pencil":
+     var font = jQuery(el).find('font');
+     if(parseInt(user.is_father_line)&&parseInt(user.is_mother_line)){
+     var opt = storage.family_line.get.opt();
+     if(opt.mother.pencil&&opt.father.pencil){
+     jQuery(font).addClass('jmb-familiy-line-bg');
+     } else {
+     jQuery(font).removeClass('jmb-familiy-line-bg');
+     if(opt.mother.pencil||opt.father.pencil){
+     if(opt[res._line].pencil){
+     jQuery(font).css('background-color', opt[res._line].pencil);
+     } else {
+     jQuery(font).css('background-color', (opt.mother.pencil)?opt.mother.pencil:opt.father.pencil);
+     }
+     } else {
+     jQuery(font).css('background-color', 'white');
+     }
+     }
+     } else {
+     if(parseInt(user[type])){
+     jQuery(font).css('background-color', res._background);
+     }
+     }
+     break;
+
+     case "eye":
+     var element = jQuery(el).parents('tr').filter(':first');
+     if(parseInt(user.is_father_line)&&parseInt(user.is_mother_line)){
+     var opt = [res.opt.mother.eye, res.opt.father.eye];
+     if(!opt[0]&&!opt[1]){
+     jQuery(element).hide();
+     } else if(opt[0]||opt[1]){
+     jQuery(element).show();
+     }
+     } else {
+     if(parseInt(user[type])){
+     if(res._active){
+     jQuery(element).show();
+     } else {
+     jQuery(element).hide();
+     }
+     }
+     }
+     break;
+     }
+     });
+     });
+
+     */
+
     function ajax(method,args,callback){
         storage.callMethod("this_month", "JMBThisMonth", method, args, function(req){
             callback(module.data = storage.getJSON(req.responseText));

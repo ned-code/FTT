@@ -69,8 +69,8 @@ function JMBRecentVisitorsObject(obj){
                     var user = object.user
                     st.clear();
                     st._('<li id="')._(user.gedcom_id)._('" >');
-                    st._('<div id="father_line" style="border: 2px solid #F5FAE6;">');
-                    st._('<div id="mother_line" style="border: 2px solid #F5FAE6;">')
+                    st._('<div id="father_line" class="line-without-border">');
+                    st._('<div id="mother_line" class="line-without-border">')
                     st._('<div class="avatar">')._(functions.get_avatar(object))._('</div>');
                     st._('</div>');
                     sb._('</div>')
@@ -142,8 +142,12 @@ function JMBRecentVisitorsObject(obj){
 			switch(res._type){
 				case "pencil":
 					if(parseInt(user[type])){
-						var bg_color = (res._active)?res._background:"#F5FAE6";
-						jQuery(el).find('div#'+res._line+'_line').css('border', '2px solid '+bg_color);		
+                        var div = jQuery(el).find('div#'+res._line+'_line');
+                        if(res._active){
+                            jQuery(div).addClass(res._line);
+                        } else {
+                            jQuery(div).removeClass(res._line);
+                        }
 					}
 				break;
 				
