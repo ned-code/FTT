@@ -140,6 +140,11 @@ JMBInvitation.prototype = {
                         jQuery(parent).append(select);
 
                         var data = v.friendsList.data;
+                        data.sort(function(a,b){
+                            var x = a.name.split(' ').pop().toLowerCase();
+                            var y = b.name.split(' ').pop().toLowerCase();
+                            return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+                        });
                         jQuery(data).each(function(i, friend){
                             if(!storage.usertree.users || parseInt(friend.id) in storage.usertree.users ) return true;
                             jQuery(select).append('<option value="' + friend.id + '">' + friend.name + '</option>');
