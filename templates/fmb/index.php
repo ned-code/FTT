@@ -9,6 +9,19 @@
 // No direct access.
 defined('_JEXEC') or die;
 
+function isFooterPage($alias){
+    switch($alias){
+        case "about":
+        case "conditions":
+        case "privacy":
+        case "feedback":
+        case "help":
+        case "contact":
+            return true;
+        default: return false;
+    }
+}
+
 function getAlias(){
 	$menu   = &JSite::getMenu();
 	$active   = $menu->getActive();
@@ -96,7 +109,7 @@ if (stripos($user_agent, 'MSIE 6.0') !== false
 					</tr>
                     <tr>
                         <td>
-                            <div style="display:none;" id="_bottom" class="footer">
+                            <div style="display:none;<?php echo (isFooterPage($alias))?'border-top: 1px solid gray;':''; ?>" id="_bottom" class="footer">
                                 <div style="left: 0; position: absolute;">
                                     <div><a style="color:black; font-weight: bold;" href="<?php echo $base_url; ?>">FamilyTreeTop.com</a></div>
                                     <div style="margin-top: 10px;"><span id="siteseal"><script type="text/javascript" src="https://seal.godaddy.com/getSeal?sealID=QbddMchgFRTEtJe2vFw4hjBQe73woVFQRwgBDPdlnAbAKWNkzv7"></script></span></div>

@@ -32,11 +32,12 @@ html, body {
 	padding-top: 46px;
 }
 .footer {
-    margin-top: 20px;
-    position: relative;
     color: gray;
     font-family: Tahoma;
     font-size: 12px;
+    margin-top: 20px;
+    padding-top: 10px;
+    position: relative;
     text-align: center;
 }
 .footer ul li{
