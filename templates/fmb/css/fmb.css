@@ -33,8 +33,7 @@ html, body {
 }
 .footer {
     margin-top: 20px;
-}
-.footer div{
+    position: relative;
     color: gray;
     font-family: Tahoma;
     font-size: 12px;

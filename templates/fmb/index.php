@@ -97,19 +97,23 @@ if (stripos($user_agent, 'MSIE 6.0') !== false
                     <tr>
                         <td>
                             <div style="display:none;" id="_bottom" class="footer">
-                                <div>
-                                    <ul>
-                                        <li><a style="color:black; font-weight: bold;" href="<?php echo $base_url; ?>">FamilyTreeTop.com</a></li>
-                                        <li><a href="<?php echo $base_url; ?>index.php/about">About</a></li>
-                                        <li><a href="<?php echo $base_url; ?>index.php/conditions">Terms & Conditions</a></li>
-                                        <li><a href="<?php echo $base_url; ?>index.php/privacy">Privacy Policy</a></li>
-                                        <li><a href="<?php echo $base_url; ?>index.php/feedback">Provide Feedback</a></li>
-                                        <li><a href="<?php echo $base_url; ?>index.php/contact">Contact</a></li>
-                                        <li><a href="<?php echo $base_url; ?>index.php/help">Help</a></li>
-                                        <li style="position: relative;top: 12px;"><span id="siteseal"><script type="text/javascript" src="https://seal.godaddy.com/getSeal?sealID=QbddMchgFRTEtJe2vFw4hjBQe73woVFQRwgBDPdlnAbAKWNkzv7"></script></span></li>
-                                    </ul>
+                                <div style="left: 0; position: absolute;">
+                                    <div><a style="color:black; font-weight: bold;" href="<?php echo $base_url; ?>">FamilyTreeTop.com</a></div>
+                                    <div style="margin-top: 10px;"><span id="siteseal"><script type="text/javascript" src="https://seal.godaddy.com/getSeal?sealID=QbddMchgFRTEtJe2vFw4hjBQe73woVFQRwgBDPdlnAbAKWNkzv7"></script></span></div>
                                 </div>
-                                <div style="margin-top:15px;">© 2012 Family TreeTop</div>
+                                <div style="right: 0; position: absolute;">
+                                    <div>
+                                        <ul>
+                                            <li><a href="<?php echo $base_url; ?>index.php/about">About</a></li>
+                                            <li><a href="<?php echo $base_url; ?>index.php/conditions">Terms & Conditions</a></li>
+                                            <li><a href="<?php echo $base_url; ?>index.php/privacy">Privacy Policy</a></li>
+                                            <li><a href="<?php echo $base_url; ?>index.php/feedback">Provide Feedback</a></li>
+                                            <li><a href="<?php echo $base_url; ?>index.php/contact">Contact</a></li>
+                                            <li><a href="<?php echo $base_url; ?>index.php/help">Help</a></li>
+                                        </ul>
+                                    </div>
+                                    <div style="margin-top:15px;">© 2012 Family TreeTop</div>
+                                </div>
                             </div>
                         </td>
                     </tr>
