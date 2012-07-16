@@ -430,7 +430,7 @@ JMBNotifications.prototype = {
 
         fn.getPlaceString = function(args){
             var year = (args.b_year!='')?'<span class="year">'+args.b_year+'</span>':'';
-            var place = (args.b_place!='')?'in <span class="place">'+args.b_place+'</span>':'';
+            var place = (args.b_place!='')?'- <span class="place">'+args.b_place+'</span>':'';
             return [year,place].join(' ');
         }
 
@@ -438,31 +438,29 @@ JMBNotifications.prototype = {
             return {
                 user:function(){
                     var args = json.user_info;
-                    var link = 'facebook.com/'+json.me.id;
-                    var facebook_id = json.me.link;
+                    var link = json.me.link;
+                    var facebook_id = json.me.id;
                     var sb = host.stringBuffer();
                     sb._('<div class="user_box">');
-                        sb._('<table>');
+                        sb._('<table style="margin-left: 10px;">');
                             sb._('<tr>');
-                                sb._('<td valign="top">');
-                                    sb._('<div class="avatar"><img width="80px" height="80px" src="http://graph.facebook.com/')._(facebook_id)._('/picture"></div>');
+                                sb._('<td style="width:50px;" valign="top">');
+                                    sb._('<div class="avatar"><img width="50px" height="50px" src="http://graph.facebook.com/')._(facebook_id)._('/picture"></div>');
+                                    sb._('<div style="width:50px; text-align: center;" ><div class="text"><span>')._(args.nick)._('</span></div></div>');
                                 sb._('</td>');
                                 sb._('<td>');
-                                    sb._('<table>');
+                                    sb._('<table style="margin-left: 10px;">');
                                         sb._('<tr>');
-                                            sb._('<td><div class="title"><span>')._(message.FTT_MOD_NOTIFICATIONS_NC_NAME)._(':</span></div></td>');
-                                            sb._('<td><div class="text"><span>')._(args.name)._('</span></div></td>');
+                                            sb._('<td><div class="title">&nbsp;</div></td>');
+                                            sb._('<td><div class="text"><span style="font-weight: bold;">')._(args.name)._('</span></div></td>');
                                         sb._('</tr>');
                                         sb._('<tr>');
-                                            sb._('<td><div class="title"><span>')._(message.FTT_MOD_NOTIFICATIONS_NC_KNOWN_AS)._(':</span></div></td>');
-                                            sb._('<td><div class="text"><span>')._(args.nick)._('</span></div></td>');
-                                        sb._('</tr>');
-                                        sb._('<tr>');
-                                            sb._('<td><div class="title"><span>')._(message.FTT_MOD_NOTIFICATIONS_NC_BORN)._(':</span></div></td>');
+                                            sb._('<td style="width:15px;"><div class="image birth">&nbsp;</div></td>');
                                             sb._('<td><div class="text"><span>')._(fn.getPlaceString(args))._('</span></div></td>');
                                         sb._('</tr>');
                                         sb._('<tr>');
-                                            sb._('<td colspan="2"><div class="link"><a href="')._(link)._('">www.facebook.com/')._(args.name)._('</a></div></td>');
+                                            sb._('<td style="width:15px;"><div class="image facebook">&nbsp;</div></td>');
+                                            sb._('<td ><div class="link"><a href="')._(link)._('">View Facebook Profile</a></div></td>');
                                         sb._('</tr>');
                                     sb._('</table>');
                                 sb._('</td>');
@@ -477,11 +475,11 @@ JMBNotifications.prototype = {
                     sb._('<div class="parent_box">');
                         sb._('<table>');
                             sb._('<tr>');
-                                sb._('<td>')._(message["FTT_MOD_NOTIFICATIONS_NC_"+name.toUpperCase()])._(':</td>');
-                                sb._('<td><div class="text"><span>')._(name)._('</span></div></td>');
+                                sb._('<td style="text-align: right; width: 50px;">')._(message["FTT_MOD_NOTIFICATIONS_NC_"+name.toUpperCase()])._(':</td>');
+                                sb._('<td><div class="text"><span style="font-weight: bold;">')._(name)._('</span></div></td>');
                             sb._('</tr>');
                             sb._('<tr>');
-                                sb._('<td>')._(message.FTT_MOD_NOTIFICATIONS_NC_BORN)._(':</td>');
+                                sb._('<td align="right"><div class="image birth">&nbsp;</div></td>');
                                 sb._('<td><div class="text">')._(fn.getPlaceString(args))._('</div></td>');
                             sb._('</tr>');
                         sb._('</table>');
@@ -503,10 +501,7 @@ JMBNotifications.prototype = {
                 add = fn.addBox(json);
 
             jQuery(module.dialogBox).dialog({ title: message.FTT_MOD_NOTIFICATIONS_NC_TITLE+" "+json.user_info.name });
-            sb._('<div class="status"><span class="title">');
-                sb._(message.FTT_MOD_NOTIFICATIONS_NC_STATUS);
-                sb._(':</span>&nbsp;<span class="value">');
-                sb._(message.FTT_MOD_NOTIFICATIONS_NC_ACTION_REQUIRED)._('</span></div>');
+
             sb._('<div class="prefix">')._(json.user_info.name);
                 sb._(message.FTT_MOD_NOTIFICATIONS_NC_MESSAGE_1);
                 sb._(json.relation);
@@ -534,16 +529,9 @@ JMBNotifications.prototype = {
                 sb._('</table>');
             sb._('</div>');
             sb._('<div class="click_items">');
-                sb._('<div id="accept" class="button"><div>');
-                    sb._(message.FTT_MOD_NOTIFICATIONS_NC_ACCEPT);
-                    sb._('</div><div>')._(message.FTT_MOD_NOTIFICATIONS_NC_ACCEPT_MESSAGE.replace("%%", json.user_info.name));
-                sb._('</div></div>');
-                sb._('<div id="deny" class="button"><div>');
-                    sb._(message.FTT_MOD_NOTIFICATIONS_NC_DENY);
-                    sb._('</div><div>')._(message.FTT_MOD_NOTIFICATIONS_NC_DENY_MESSAGE.replace("%%", json.user_info.name));
-                sb._('</div></div>');
+                sb._('<div id="accept" class="button"><div>')._(message.FTT_MOD_NOTIFICATIONS_NC_ACCEPT)._('</div></div>');
+                sb._('<div id="deny" class="button"><div>')._(message.FTT_MOD_NOTIFICATIONS_NC_DENY)._('</div></div>');
             sb._('</div>');
-
             html = jQuery(sb.result());
             jQuery(cont).find('div.data').append(html);
 

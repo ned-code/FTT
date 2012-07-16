@@ -113,64 +113,85 @@
 }
 .notifications_manager .data div.prefix {
     font-weight: bold;
-    padding: 30px 5px 10px;
+    margin-bottom: 10px;
+    margin-top: 10px;
 }
 .notifications_manager .data div.info {
-    background: none repeat scroll 0 0 #F0F5E7;
-    border: 1px solid #999999;
-    margin: 5px;
+    background: none repeat scroll 0 0 #CFDFB3;
+    border-radius: 5px 5px 5px 5px;
+    padding: 5px;
 }
 .notifications_manager .data div.info table{
     margin: 0 auto;
+    width: 100%;
 }
 .notifications_manager .data div.info div.user_box{
     background: none repeat scroll 0 0 white;
-    border: 1px solid #000000;
+    border: 1px solid white;
+    border-radius: 3px 3px 3px 3px;
+    padding: 5px;
+    width: 290px;
 }
 .notifications_manager .data div.info div.user_box div.avatar{
     border: 1px solid #000000;
-    height: 80px;
-    width: 80px;
+    height: 50px;
+    width: 50px;
+}
+.notifications_manager .data div.info div.image{
+    width: 15px;
+    height: 15px;
+}
+.notifications_manager .data div.info div.image.facebook{
+    background: url("../images/facebook_small.png") no-repeat scroll 0 0 transparent;
+}
+.notifications_manager .data div.info div.image.birth{
+    background: url("../images/birth.png") no-repeat scroll 0 0 transparent;
+}
+.notifications_manager .data div.info div.title{
+
 }
 .notifications_manager .data div.info div.user_box div.text{
-    font-weight:bold;
+
 }
 .notifications_manager .data div.info div.user_box div.link {
-    margin-top: 5px;
-    text-align: center;
+
 }
 .notifications_manager .data div.info div.user_box div.link a{
     color:#adb1e9;
-    font-size:10px;
 }
 .notifications_manager .data div.info div.message_title {
-    margin-left: 10px;
-    margin-right: 10px;
+    margin-left: 20px;
+    margin-right: 20px;
     margin-top: 10px;
 }
 .notifications_manager .data div.info div.message_text {
-    background: none repeat scroll 0 0 white;
-    border: 1px solid #000000;
+    background: none repeat scroll 0 0 #FFFCC1;
+    border: 1px solid #FFFCC1;
+    border-radius: 3px 3px 3px 3px;
     margin-bottom: 10px;
-    margin-left: 10px;
-    margin-right: 10px;
+    margin-left: 20px;
+    margin-right: 20px;
     padding: 10px;
 }
 .notifications_manager .data div.info div.parent_box{
     background: none repeat scroll 0 0 white;
-    border: 1px solid #000000;
-    margin-left: 5px;
-    margin-top: 5px;
+    border: 1px solid white;
+    border-radius: 3px 3px 3px 3px;
+    margin: 10px;
+    padding: 5px;
+    width: 190px;
 }
 .notifications_manager .data div.info div.parent_box div.text {
-    font-weight:bold;
+
 }
+
 .notifications_manager .data div.click_items {
-    margin: 0 auto;
-    width: 370px;
+    margin: 15px auto 0;
+    width: 180px;
 }
 .notifications_manager .data div.click_items div.button {
-    margin:3px;
+    display: inline-block;
+    margin: 3px;
 }
 .notifications_manager .data div.click_items div.button div{
     display:inline-block;
