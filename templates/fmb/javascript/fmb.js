@@ -7,7 +7,8 @@ function JMBTopMenuBar(){
     message = {
         FTT_MOD_TOPMENUBAR_MYFAMILY:"My Family",
         FTT_MOD_TOPMENUBAR_FAMOUS_FAMILIES:"Famous Families",
-        FTT_MOD_TOPMENUBAR_HOME:"Home"
+        FTT_MOD_TOPMENUBAR_HOME:"Home",
+        FTT_MOD_TOPMENUBAR_RETURN: "Return to Family TreeTop"
     }
 
 	
@@ -35,6 +36,21 @@ function JMBTopMenuBar(){
             string +='</div>';
             return jQuery(string);
 		},
+        getAliasUcFirst:function(a){
+            if(typeof(a) == 'undefined') return '';
+            var firstKey = a[0].toUpperCase();
+            var string = a.slice(1);
+            return [firstKey, string].join('');
+        },
+        footerView:function(){
+            var string = '';
+            string += '<div  class="jmb-top-menu-bar">';
+                string +='<div class="jmb-top-menu-bar-logo">&nbsp;</div>';
+                string +='<div class="jmb-top-menu-bar-title">Family TreeTop: <span>'+fn.getAliasUcFirst(alias)+'</span></div>';
+                string +='<div class="jmb-top-menu-bar-return">'+message.FTT_MOD_TOPMENUBAR_RETURN+'</div>';
+            string +='</div>';
+            return jQuery(string);
+        },
 		sw:function(object){
 			jQuery(cont).find('div.jmb-top-menu-bar-item span').removeClass('active');
 			jQuery(object).addClass('active');
@@ -55,6 +71,18 @@ function JMBTopMenuBar(){
 					}
 				});
 			});
+            jQuery(cont).find('div.jmb-top-menu-bar-return').click(function(){
+                var id = 'myfamily';
+                jQuery.ajax({
+                    url: 'index.php?option=com_manager&task=setLocation&alias='+id,
+                    type: "POST",
+                    dataType: "json",
+                    complete : function (req, err) {
+                        var bUrl = jQuery(document.body).attr('_baseurl');
+                        window.location.href= bUrl+'index.php/'+id;
+                    }
+                });
+            });
 		},
 		activate:function(){
 			switch(alias){
@@ -84,16 +112,37 @@ function JMBTopMenuBar(){
 			}
 			
 		},
+        setMessage:function(m){
+            if(typeof(m) == 'undefined') return false;
+            for (var key in message){
+                if(message.hasOwnProperty(key) && typeof(m[key]) != 'undefined'){
+                    message[key] = m[key];
+                }
+            }
+        },
+        isFooterLink:function(){
+            switch(alias){
+                case "about":
+                case "conditions":
+                case "privacy":
+                case "feedback":
+                case "help":
+                case "contact":
+                    return true;
+                default: return false;
+            }
+        },
 		init:function(){
 			if(window != window.top) return false;
             fn.getLanguageString(function(lang){
-                if(lang){
-                    message = lang;
+                fn.setMessage(lang);
+                if(fn.isFooterLink()){
+                    cont = fn.footerView();
+                } else {
+                    cont = fn.create();
+                    fn.activate();
                 }
-                cont = fn.create();
                 fn.click();
-                fn.activate();
-
                 jQuery(document.body).append(cont);
             });
 		}
