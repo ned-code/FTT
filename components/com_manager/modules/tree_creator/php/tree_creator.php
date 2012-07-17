@@ -8,50 +8,27 @@ class TreeCreator {
 		$this->db = new JMBAjax();
 	}
 
-	protected function place_name($prefix, $args){
-		$place = array();
-		$place[] = $args[$prefix.'city'];
-		$place[] = $args[$prefix.'state'];
-		$place[] = $args[$prefix.'country'];
-		$place_name = '';
-		foreach($place as $v){
-			if($v!=''){
-				$place_name .= $v;
-				$place_name .= ',';
-			}
-		}
-		return substr($place_name, 0, -1);
-	}
-	
-	protected function event($event, $prefix, $args){
-		$place_name = $this->place_name($prefix, $args);
-		$city = (strlen($args[$prefix.'city'])!=0)?$args[$prefix.'city']:null;
-		$state = (strlen($args[$prefix.'state'])!=0)?$args[$prefix.'state']:null;
-		$country = (strlen($args[$prefix.'country'])!=0)?$args[$prefix.'country']:null;
-		$event->From->Day = ($args[$prefix.'day']!=0)?$args[$prefix.'day']:null;
-		$event->From->Month = ($args[$prefix.'month']!=0)?$args[$prefix.'month']:null;
-		$event->From->Year = (strlen($args[$prefix.'year'])!=0)?$args[$prefix.'year']:null;
-		$event->Place = new Place();
-		$event->Place->Name = $place_name;
-		$location = new Location();
-		$location->City = $city;
-		$location->State = $state;
-		$location->Country = $country;
-		$event->Place->Locations[0] = $location;
-		return $event;
-	}
-	
-	protected function individual_event($user_id, $type, $args){
-		$event = new Events();
-		$event->IndKey = $user_id;
-		$event->DateType = 'EVO';
-		$event->Type = $type;
-		$event->Id = $this->host->gedcom->events->save($event);
-		$prefix = ($event->Type=='BIRT')?'b_':'d_';		
-		$update_event = $this->event($event, $prefix, $args);
-		$this->host->gedcom->events->update($update_event);
-		return $event;
-	}
+    protected function setUserEvent($individual, $args){
+        $year = (empty($args['birth']))?null:$args['birth'];
+        $country = (empty($args['country']))?null:$args['country'];
+
+        $event = new Events();
+        $event->IndKey = $individual->Id;
+        $event->DateType = 'EVO';
+        $event->Type = 'BIRT';
+        $event->Id = $this->host->gedcom->events->save($event);
+        $event->From->Year = $year;
+
+        $event->Place = new Place();
+        $event->Place->Name = $country;
+
+        $location = new Location();
+        $location->Country = $country;
+
+        $event->Place->Locations[0] = $location;
+
+        $this->host->gedcom->events->update($event);
+    }
 
 	protected function user($args, $gender, $facebook_id, $tree_id){
 		$individual = $this->host->gedcom->individuals->create();
@@ -65,6 +42,7 @@ class TreeCreator {
 		$individual->Id = $this->host->gedcom->individuals->save($individual);
         $individual->Creator  = $individual->Id;
         $this->host->gedcom->individuals->update($individual);
+        $this->setUserEvent($individual, $args);
 		return $individual;
 	}
 
