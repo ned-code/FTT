@@ -40,7 +40,7 @@ html ul.jmbtabs li.active, html ul.jmbtabs li.active a:hover  { /*--Makes sure t
 	background: #f5fae6;
 	border-bottom: 1px solid #F5FAE6; /*--Makes the active tab look like it's connected with its content--*/
 }
-html ul.jmbtabs.famous_family li.active, html ul.jmbtabs li.active a:hover {
+html ul.jmbtabs.famous-family li.active, html ul.jmbtabs li.active a:hover {
     background-color: #f9f3f0;
     border-bottom: 1px solid #f9f3f0;
 }
@@ -61,7 +61,7 @@ html ul.jmbtabs.myfamily li.active, html ul.jmbtabs li.active a:hover {
 	font-size: 1.2em;
 	background: #f5f8fc;
 }
-.tab_content.famous_family {
+.tab_content.famous-family {
     background: #f9f3f0;
 }
 .tab_content.myfamily {
