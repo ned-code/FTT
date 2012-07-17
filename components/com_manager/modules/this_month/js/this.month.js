@@ -149,12 +149,13 @@ function JMBThisMonthObject(obj){
         return module.separator > module.earliestDate;
     }
     function isMeetsTheRequirementsOf(year){
-        if(!year) return false;
+        var data = parseInt(year);
+        if(!data && data != 'NaN') return false;
         if(isSort()){
             switch(module.sort){
-                case 1: return year > module.separator;
+                case 1: return data > module.separator;
                 case 0: return true;
-                case -1: return year < module.separator;
+                case -1: return data < module.separator;
                 default: return false;
             }
         }
@@ -198,8 +199,8 @@ function JMBThisMonthObject(obj){
         var events;
         if(events = eventExist(type)){
             jQuery(events).each(function(i, data){
-                if(!memberExist(data.gedcom_id)) return false;
-                if(!isMeetsTheRequirementsOf(data.event_year)) return false;
+                if(!memberExist(data.gedcom_id)) return true;
+                if(!isMeetsTheRequirementsOf(data.event_year)) return true;
                 setUserTooltip(setUserEventContent(el, data, type));
             });
         } else {
@@ -241,9 +242,9 @@ function JMBThisMonthObject(obj){
         var events;
         if(events = eventExist('marriage')){
             jQuery(events).each(function(i, data){
-                if(!memberExist(data.wife) || !memberExist(data.husb)) return false;
+                if(!memberExist(data.wife) || !memberExist(data.husb)) return true;
                 var family = getFamilyData(data);
-                if(!isMeetsTheRequirementsOf(getEventYear(family.event))) return false;
+                if(!isMeetsTheRequirementsOf(getEventYear(family.event))) return true;
                 setUserTooltip(setMarriageContent(el, family));
             });
         } else {
@@ -301,8 +302,8 @@ function JMBThisMonthObject(obj){
         var date = 9999;
         for(var k in e){
             if(e.hasOwnProperty(k)){
-                var d = e[k].event_year;
-                if(date > d){
+                var d = parseInt(e[k].event_year);
+                if(d != 'NaN' && date > d){
                     date = d;
                 }
             }
