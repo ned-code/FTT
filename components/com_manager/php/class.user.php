@@ -19,6 +19,7 @@ class FTTUserLibrary {
     private $page = 'home';
     private $gender = 'M';
     private $token = 0;
+    private $birthday = '';
 
     public function __construct(&$host){
         $this->host = $host;
@@ -38,7 +39,10 @@ class FTTUserLibrary {
     protected function _getUserProfileFields($facebookId){
         if(!$facebookId) return false;
         $result = $this->host->jfbConnect->api('/'. $facebookId);
+        //$fields = $this->host->jfbConnect->getUserProfile($facebookId, array('birthday_date'));
+        //$this->birthday = $fields['birthday_date'];
         $this->gender = $result['gender'];
+        //$result['birthday'] = $fields['birthday_date'];
         return $result;
     }
 
@@ -170,6 +174,7 @@ class FTTUserLibrary {
             'guest'=> $this->joomla->guest,
             'token' => $this->token,
             'email' => $this->facebookFields['email']
+            //'birthday' => $this->birthday
         );
         return (object)$result;
     }
