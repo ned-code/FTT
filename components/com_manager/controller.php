@@ -136,35 +136,37 @@ class JMBController extends JController
         exit;
     }
 
-    protected function get_invitation_token($session){
-        $token = JRequest::getVar('token');
-        $c_token = $session->get('clear_token');
+    protected function getInvitationToken($user){
+        function getToken($user, $emailToken, $facebookToken){
+            if($emailToken){
+                return $emailToken;
+            }
+            if($facebookToken){
+                return $facebookToken;
+            }
+            if($user->token != 0){
+                return $user->token;
+            }
+            return false;
+        }
+        function getEmailToken(){
+            $token = JRequest::getVar('token');
+            return (empty($token))?false:$token;
+        }
+        $host = &FamilyTreeTopHostLibrary::getInstance();
+        $token = getToken($user, getEmailToken(), $this->checkFacebookInvation($user));
 
-        if(!isset($_COOKIE['token'])){
-            if(!empty($token)){
-                 setcookie('token', $token);
-             }
-        }
-        if($c_token){
-            $session->clear('clear_token');
-            setcookie('token', false);
-            $_COOKIE['token'] = false;
-        }
-        if(isset($_COOKIE['token']) && $_COOKIE['token']){
-            return $_COOKIE['token'];
-        }
-        return false;
+        if(!$token) return false;
+
+        $host->user->setToken($token);
+
+        if($user->guest) return false;
+
+        return $token;
     }
 
 	protected function get_alias($user){
-		$session = JFactory::getSession();
-
-        $invitation_token = $this->get_invitation_token($session);
-
-        if($user->guest){
-            $invitation_token = false;
-        }
-
+        $invitation_token = $this->getInvitationToken($user);
         switch($user->page){
 			case "invitation":
                 if($user->guest) return 'home';
@@ -239,6 +241,7 @@ class JMBController extends JController
     }
 
         protected function checkFacebookInvation($user){
+            if(!$user->facebookId) return false;
             $host = &FamilyTreeTopHostLibrary::getInstance();
             $alias = $host->getCurrentAlias();
             if($alias != 'invitation'){
@@ -273,19 +276,12 @@ class JMBController extends JController
                 exit;
             }
 
-
             if(!$host->user->getJoomlaUser()->guest){
                 $user_name = explode('_', $host->user->getJoomlaUser()->username);
                 if($user_name[1] != $user->facebookId){
                     header('Location: '.$host->getBaseUrl().'index.php?option=com_jfbconnect&task=logout&return=login');
                     exit;
                 }
-            }
-
-            $token = $this->checkFacebookInvation($user);
-            if($token){
-                header('Location: '.JURI::base().'index.php/invitation?token='.$token);
-                exit;
             }
 
             $this->check_location($user);

@@ -1,16 +1,14 @@
 <?php
 class JMBInvitateClass {
 	protected $host;
-    protected $jfg;
+    protected $user;
 	
 	public function __construct(){
 		$this->host = &FamilyTreeTopHostLibrary::getInstance();
-        $this->jfb = JFBConnectFacebookLibrary::getInstance();
+        $this->user = $this->host->user->get();
 	}
 
     protected function invite($facebook_id, $token){
-        $session = JFactory::getSession();
-
         if(!$token){
             return false;
         }
@@ -30,17 +28,16 @@ class JMBInvitateClass {
         $this->host->ajax->setQuery($sql, $token);
         $this->host->ajax->query();
 
-        $session->set('clear_token', true);
         $this->host->user->set($args[1], $args[0], 0);
         $this->host->user->setPermission('USER');
         $this->host->user->setAlias('myfamily');
+        $this->host->user->setToken(0);
         return true;
         exit;
     }
 
-    public function checkUser($args){
-        $opt = json_decode($args);
-        $sql_string = "SELECT i.id, i.fid, u.email
+    public function checkUser(){
+        $sql_string = "SELECT i.id, i.fid as facebook_id, u.email
                         FROM #__mb_individuals AS i
                         LEFT JOIN #__jfbconnect_user_map AS map ON map.fb_user_id = i.fid
                         LEFT JOIN #__users AS u ON u.id = map.j_user_id
@@ -49,47 +46,41 @@ class JMBInvitateClass {
         $rows = $this->host->ajax->loadAssocList();
         if(!empty($rows)){
             foreach($rows as $row){
-                if($row['fid'] != null && $row['fid'] == $opt->id){
+                if($row['facebook_id'] != null && $row['facebook_id'] == $this->user->facebookId){
                     $individual = $this->host->gedcom->individuals->get($row['id']);
                     return json_encode(array('success'=>true, 'user'=>$individual));
                 }
             }
         }
-
-        $sql_string = "SELECT s_gedcom_id FROM #__mb_variables WHERE belongs = ?";
-        $this->host->ajax->setQuery($sql_string, $opt->token);
-        $rows = $this->host->ajax->loadAssocList();
-        $name = false;
-        if($rows != null){
-            $i = $this->host->gedcom->individuals->get($rows[0]['s_gedcom_id']);
-            $name = ($i->FirstName != null)?$i->FirstName:'';
-            $name .= ' ';
-            $name .= ($i->LastName != null)?$i->LastName:'';
-            $name = trim($name);
-        } else {
-            $session = JFactory::getSession();
-            $session->set('clear_token', true);
-            $facebook_id = $this->jfb->getFbUserId();
-            $this->host->user->setAlias($facebook_id, 'myfamily');
+        if($this->user->token){
+            $sql_string = "SELECT s_gedcom_id FROM #__mb_variables WHERE belongs = ?";
+            $this->host->ajax->setQuery($sql_string, $this->user->token);
+            $rows = $this->host->ajax->loadAssocList();
+            if(!empty($rows)){
+                $i = $this->host->gedcom->individuals->get($rows[0]['s_gedcom_id']);
+                $name = ($i->FirstName != null)?$i->FirstName:'';
+                $name .= ' ';
+                $name .= ($i->LastName != null)?$i->LastName:'';
+                $name = trim($name);
+                return json_encode(array('success'=>false, 'sender'=>$name));
+            }
         }
-        return json_encode(array('success'=>false, 'sender'=>$name));
+        $this->host->user->setToken(0);
+        $this->host->user->setAlias($this->user->facebookId, 'first-page');
+        return json_encode(array('success'=>false, 'sender'=>false));
     }
 
-    public function accept($args){
-        $opt = json_decode($args);
-        return $this->invite($opt->object->id, $opt->token);
+    public function accept(){
+        return $this->invite($this->user->facebookId, $this->user->token);
     }
 
-    public function deny($args){
-        $opt = json_decode($args);
+    public function deny(){
         $sql_string = "DELETE FROM #__mb_variables WHERE belongs = ?";
-        $this->host->ajax->setQuery($sql_string, $opt->token);
+        $this->host->ajax->setQuery($sql_string, $this->user->token);
         $this->host->ajax->query();
 
-        $session = JFactory::getSession();
-        $session->set('clear_token', true);
-        $facebook_id = $this->jfb->getFbUserId();
-        $this->host->user->setAlias($facebook_id, 'first-page');
+        $this->host->user->setToken(0);
+        $this->host->user->setAlias($this->user->facebookId, 'first-page');
         return json_encode(array('success'=>true));
     }
 

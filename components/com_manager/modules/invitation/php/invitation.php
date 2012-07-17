@@ -72,9 +72,6 @@ class JMBInvitation {
         $owner_id = $user->gedcomId;
         $tree_id = $user->treeId;
 
-        $jfbcLibrary = JFBConnectFacebookLibrary::getInstance();
-        $me = $jfbcLibrary->api('/me');
-
         $usertree = $this->host->usertree->load($tree_id, $owner_id);
         $owner = $usertree[$owner_id];
         $recipient = $usertree[$gedcom_id];
@@ -140,7 +137,7 @@ class JMBInvitation {
         $tpl = str_replace('__TOKEN__', $token, $tpl);
         $tpl = str_replace('__USER_FACEBOOK_ID__', $owner['user']['facebook_id'], $tpl);
         $tpl = str_replace('__OWNER_FIRST_NAME__', $owner['user']['first_name'], $tpl);
-        $tpl = str_replace('__EMAIL__', $me['email'], $tpl);
+        $tpl = str_replace('__EMAIL__', $user->email, $tpl);
 
         $mail_body = $tpl;
 

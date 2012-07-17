@@ -18,6 +18,7 @@ class FTTUserLibrary {
     private $language = 'en-GB';
     private $page = 'home';
     private $gender = 'M';
+    private $token = 0;
 
     public function __construct(&$host){
         $this->host = $host;
@@ -67,7 +68,7 @@ class FTTUserLibrary {
     }
 
     protected function _getUserMap(){
-        $sqlString = "SELECT facebook_id, session_id, user_id, tree_id, gedcom_id, permission, login_type, page, language, active FROM #__mb_user_map WHERE session_id = ?";
+        $sqlString = "SELECT facebook_id, session_id, user_id, tree_id, gedcom_id, permission, login_type, page, language, token FROM #__mb_user_map WHERE session_id = ?";
         $this->host->ajax->setQuery($sqlString, $this->sessionId);
         $result = $this->host->ajax->loadAssocList();
         if(empty($result)){
@@ -83,6 +84,7 @@ class FTTUserLibrary {
         $this->loginType = $userMap['login_type'];
         $this->language = $userMap['language'];
         $this->page = $userMap['page'];
+        $this->token = $userMap['token'];
     }
 
     protected function _getUserName(){
@@ -115,14 +117,15 @@ class FTTUserLibrary {
                     'permission' =>$userInSystem['permission'],
                     'login_type'=>$userMap['login_type'],
                     'language'=>$this->language,
-                    'page'=>$userMap['page']
+                    'page'=>$userMap['page'],
+                    'token'=>$userMap['token']
                 ));
             } else {
                 $this->_set($userMap);
             }
             return true;
         }
-        $sqlString = "INSERT INTO #__mb_user_map (`facebook_id`,`session_id`,`tree_id`, `gedcom_id`, `user_id`, `permission`, `login_type`, `page`,`language`, `active`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
+        $sqlString = "INSERT INTO #__mb_user_map (`facebook_id`,`session_id`,`tree_id`, `gedcom_id`, `user_id`, `permission`, `login_type`, `page`,`language`, `token`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
         if($userInSystem){
             $this->host->ajax->setQuery($sqlString, $this->facebookId, $this->sessionId, $userInSystem['tree_id'], $userInSystem['gedcom_id'], $this->joomlaId, $userInSystem['permission'], 0, $this->currentAlias, $this->language, 0);
             $this->host->ajax->query();
@@ -132,7 +135,8 @@ class FTTUserLibrary {
                 'permission' =>$userInSystem['permission'],
                 'login_type'=>0,
                 'language'=>$this->language,
-                'page'=>$this->currentAlias
+                'page'=>$this->currentAlias,
+                'token'=>0
             ));
         } else {
             $this->host->ajax->setQuery($sqlString, $this->facebookId, $this->sessionId, 0, 0, $this->joomlaId, 'GUEST', 0, $this->currentAlias, $this->language, 0);
@@ -143,7 +147,8 @@ class FTTUserLibrary {
                 'permission' =>'GUEST',
                 'login_type'=>0,
                 'language'=>$this->language,
-                'page'=>$this->currentAlias
+                'page'=>$this->currentAlias,
+                'token'=>0
             ));
         }
     }
@@ -162,7 +167,9 @@ class FTTUserLibrary {
             'language' => $this->language,
             'loginType' => $this->loginType,
             'page' => $this->page,
-            'guest'=> $this->joomla->guest
+            'guest'=> $this->joomla->guest,
+            'token' => $this->token,
+            'email' => $this->facebookFields['email']
         );
         return (object)$result;
     }
@@ -217,6 +224,14 @@ class FTTUserLibrary {
         $this->page = $alias;
     }
 
+    public function setToken($token){
+        $sqlString = "UPDATE #__mb_user_map SET `token` = ?, `time` = NOW() WHERE session_id = ?";
+        $this->host->ajax->setQuery($sqlString, $token, $this->sessionId);
+        $this->host->ajax->query();
+
+        $this->token = $token;
+    }
+
     public function delete($facebook_id){
         $this->host->ajax->setQuery("DELETE FROM #__mb_user_map WHERE facebook_id = ? ", $facebook_id);
         $this->host->ajax->query();
@@ -230,6 +245,7 @@ class FTTUserLibrary {
         $this->loginType = 0;
         $this->language = 'en-GB';
         $this->page = 'home';
+        $this->token = 0;
     }
 }
 
