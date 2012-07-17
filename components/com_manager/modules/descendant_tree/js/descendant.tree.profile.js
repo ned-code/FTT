@@ -15,9 +15,9 @@ DescendantTreeProfile.prototype = {
 	clear:function(){
 		var	module = this;
         module.id = null;
-		jQuery(module.cont).html('');	
 		storage.tooltip.cleaner();
-	},
+        jQuery(module.cont).html('');
+    },
 	avatar:function(object){
         return storage.usertree.avatar.get({
             object:object,
