@@ -200,7 +200,7 @@ class JMBController extends JController
 			
 			case "myfamily":
                 if($invitation_token) return 'invitation';
-                if($user->guest && !$user->facebookId) return "login";
+                if($user->guest && !$user->facebookId && $user->loginType != 1) return "login";
                 if($user->treeId==0) return "first-page";
                 return "myfamily";
 			break;
