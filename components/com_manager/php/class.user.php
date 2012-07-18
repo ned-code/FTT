@@ -111,7 +111,7 @@ class FTTUserLibrary {
                 $this->facebookFields = $this->_getUserProfileFields($this->facebookId, array('id','email','name','first_name','last_name','gender','locale','link'));
                 $this->language = $this->host->language->getLanguage($this->facebookFields['locale']);
                 $this->name = $this->_getUserName();
-                $this->set($userInSystem['tree_id'], $userInSystem['gedcom_id'], $userInSystem['permission']);
+                $this->set($userInSystem['tree_id'], $userInSystem['gedcom_id'], 0);
                 $this->setMapFacebookId($this->facebookId);
                 $this->setLanguage($this->language);
                 $this->setPermission($userInSystem['permission']);
