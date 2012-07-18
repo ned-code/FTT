@@ -148,6 +148,13 @@ function JMBThisMonthObject(obj){
     function isSort(){
         return module.separator > module.earliestDate;
     }
+    function isNull(){
+        var e = module.data.events;
+        return getEvent('birth').length == 0 && getEvent('death').length == 0 && getEvent('marriage').length == 0;
+        function getEvent(t){
+            return (typeof(e) != 'undefined' && typeof(e[t]) != 'undefined' &&  e[t] != null)?e[t]:[];
+        }
+    }
     function isMeetsTheRequirementsOf(year){
         var data = parseInt(year);
         if(!data && data != 'NaN') return false;
@@ -162,10 +169,19 @@ function JMBThisMonthObject(obj){
         return true;
     }
     function setContent(t){
-        setHeader(t);
-        setBirthdays(t);
-        setMarriages(t);
-        setDeaths(t);
+        setHeader(t[0]);
+        if(isNull()){
+            setNull(t);
+        } else{
+            setBirthdays(t[0]);
+            setMarriages(t[0]);
+            setDeaths(t[0]);
+        }
+    }
+    function setNull(t){
+        jQuery(t[1]).text('There are no events on record for the this month.');
+        jQuery(t[0]).hide();
+        jQuery(t[1]).show();
     }
     function setMonthSelectHandler(){
         jQuery(module.table).find('select[name="months"]').change(reload);
@@ -446,29 +462,30 @@ function JMBThisMonthObject(obj){
         return '';
     }
     function getTableBody(){
-        var table = getTableView()[0];
+        var table = getTableView();
         setContentInRow({
-            table: table,
+            table: table[0],
             rowIndex: 0,
             id: 'jmb-this-month-birth',
             type: 'birthday',
             title: getMsg('BIRTHDAYS')
         });
         setContentInRow({
-            table: table,
+            table: table[0],
             rowIndex: 1,
             id: 'jmb-this-month-marr',
             type: 'marriage',
             title: getMsg('ANNIVERSARIES')
         });
         setContentInRow({
-            table: table,
+            table: table[0],
             rowIndex: 2,
             id: 'jmb-this-month-death',
             type: 'deceased',
             title: getMsg('REMEMBER')
         });
-        jQuery(module.table).find('.jmb-this-month-body').append(table);
+        jQuery(module.table).find('.jmb-this-month-body').append(table[0]);
+        jQuery(module.table).find('.jmb-this-month-body').append(table[1]);
         return table;
     }
     function getTableCellByRow(t, index){
