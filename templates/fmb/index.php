@@ -57,7 +57,7 @@ if (stripos($user_agent, 'MSIE 6.0') !== false
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->language; ?>" lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>" >
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $data->language; ?>" lang="<?php echo $data->language; ?>" dir="<?php echo $this->direction; ?>" >
 	<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# website: http://ogp.me/ns/website#">
 		<jdoc:include type="head" />
       	    <!-- joomla system stylesheet -->
