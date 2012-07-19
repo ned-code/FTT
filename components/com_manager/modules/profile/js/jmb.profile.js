@@ -166,6 +166,7 @@ function JMBProfile(){
                         jQuery(span).html(module.functions.getReplaceMessage(span, 'FTT_MOD_PROFILE_EDITOR_FORM_UNKNOW'));
                         jQuery(span).find('select[name="birth_days"]').append(daysOptions);
                         jQuery(span).find('select[name="birth_months"]').append(monthOptions);
+                        module.functions.setChangeDate(span, 'birth');
                         break;
 
                     case "death_date":
@@ -174,6 +175,7 @@ function JMBProfile(){
                         jQuery(span).html(module.functions.getReplaceMessage(span, 'FTT_MOD_PROFILE_EDITOR_FORM_UNKNOW'));
                         jQuery(span).find('select[name="death_days"]').append(daysOptions);
                         jQuery(span).find('select[name="death_months"]').append(monthOptions);
+                        module.functions.setChangeDate(span, 'daeth');
                         break;
 
                     case "marr_date":
@@ -181,6 +183,7 @@ function JMBProfile(){
                         var monthOptions = module.functions.getOptionsMonths();
                         jQuery(span).find('select[name="marr_days"]').append(daysOptions);
                         jQuery(span).find('select[name="marr_months"]').append(monthOptions);
+                        module.functions.setChangeDate(span, 'marr');
                         break;
                 }
             });
@@ -355,6 +358,7 @@ function JMBProfile(){
                         if(module.functions.isNullDate(date)){
                             jQuery(span).find('input[name="birth_option"]').attr('checked', true);
                         }
+                        module.functions.setChangeDate(span, 'birth');
                     break;
 
                     case "death_date":
@@ -372,6 +376,7 @@ function JMBProfile(){
                         if(module.functions.isNullDate(date)){
                             jQuery(span).find('input[name="death_option"]').attr('checked', true);
                         }
+                        module.functions.setChangeDate(span, 'death');
                     break;
 
                     case "marr_date":
@@ -388,6 +393,7 @@ function JMBProfile(){
                         if(module.functions.isNullDate(date)){
                             jQuery(span).find('input[name="marr_option"]').attr('checked', true);
                         }
+                        module.functions.setChangeDate(span, 'marr');
                     break;
 
                     case "deceased":
@@ -421,6 +427,56 @@ function JMBProfile(){
                     break;
                 }
             });
+        },
+        setChangeDate:function(span, prefix){
+            var event, objects = {};
+            setEvent(function(){
+                var args = {
+                    date : [0, getMonth(), getYear()]
+                }
+                var days = module.functions.getDaysInMonth(args);
+                var select = jQuery(span).find('select[name="'+prefix+'_days"]');
+                var value = parseInt(jQuery(select).val());
+                var options = jQuery(select).find('options');
+                jQuery(select).find('option').remove();
+                jQuery(select).append(module.functions.getOptionsDays(args));
+                if(days != options.length - 1 && value > days){
+                      jQuery(select).find('option[value="0"]').attr("selected", "selected");
+                } else {
+                    jQuery(select).find('option[value="'+value+'"]').attr("selected", "selected");
+                }
+            });
+            onChange(['months',"year"]);
+            return true;
+            function onChange(names){
+                for(var key in names){
+                    if(names.hasOwnProperty(key)){
+                        var name = names[key];
+                        var type = (name=="months")?"select":"input";
+                        var object = getObject(span, type, prefix, name);
+                        objects[type] = object;
+                        jQuery(object).change(event);
+                    }
+                }
+            }
+            function setEvent(callback){
+                event = callback;
+            }
+            function getYear(){
+                var year = parseInt(jQuery(objects['input']).val());
+                return ("NaN" !== year)?year:null;
+            }
+            function getMonth(){
+                var month = parseInt(jQuery(objects['select']).val());
+                return ("NaN" !== month)?month:null;
+            }
+            function getSelector(type, prefix, name){
+                return [type,'[name="', [prefix, name].join('_'),'"]'].join('');
+            }
+            function getObject(span, type, prefix, name){
+                return jQuery(span).find(getSelector(type, prefix, name));
+            }
+
         },
         setLiving:function(form, living){
             var divs = jQuery(form).find('div.death_date,div.death_place');
@@ -539,7 +595,7 @@ function JMBProfile(){
             }
             var date = args.date;
             var month = date[1];
-            var year = (date[2]==null)?date[2]:0;
+            var year = (date[2]!=null)?date[2]:0;
             var month_days = [
                 [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
                 [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
