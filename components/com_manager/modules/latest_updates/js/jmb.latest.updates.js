@@ -39,6 +39,7 @@ function JMBLatestUpdatesObject(offsetParent){
                 gedcom_id;
             for(var key in data){
                 if(data.hasOwnProperty(key)&&data[key]){
+                    var object = storage.usertree.pull[data[key][0]];
                     var color;
                     gedcom_id = data[key][0];
                     sb._('<li id="')._(gedcom_id)._('">');
@@ -50,7 +51,7 @@ function JMBLatestUpdatesObject(offsetParent){
                             sb._('<span style="color:#');
                                     sb._(data[key][2]?colors[data[key][2]]:'gray');
                             sb._('" class="value">');
-                                sb._(data[key][1]);
+                                sb._(storage.usertree.parse(object).name);
                             sb._('</span>');
                         sb._('</div>');
                     sb._('</li>');

@@ -139,25 +139,81 @@ storage.usertree.parse = function(object){
 			}
 		},
 		name:(function(){
-			return [user.first_name,user.last_name].join(' ');
+            return getFullName(getFirstName(user), getLastName(user));
+			function getName(u, t, r){
+                if(u[t] != null && u[t].length != 0){
+                    return user[t].replace(r, '');
+                }
+                return '';
+            }
+            function getFirstName(u){
+                return getName(u, 'first_name', '@P.N.');
+            }
+            function getLastName(u){
+                return getName(u, 'last_name', '@N.N.');
+            }
+            function getShortLastName(l){
+                if(l.length <= 22) return l;
+                var string = '';
+                for(var i = 0 ; i <= 22 ; i++){
+                    string += l[i];
+                }
+                string += '...';
+                return string;
+            }
+            function getFullName(first, last){
+                var fName = [first, last].join(' ');
+                if(fName.length > 25){
+                    return [(first.length!=0)?first[0]+'.':'', getShortLastName(last)].join('');
+                } else {
+                    return fName;
+                }
+            }
 		})(),
 		full_name:(function(){
-            var first_name,
-                middle_name,
-                last_name;
+            return getFullName(getFirstName(user), getMiddleName(user), getLastName(user));
+            function getName(u, t, r){
+                if(u[t] != null && u[t].length != 0){
+                    if(r){
+                        return user[t].replace(r, '');
+                    } else {
+                        return user[t];
+                    }
 
-            middle_name = user.middle_name;
-            if(user.first_name != null){
-                first_name = user.first_name.replace('@P.N.', '');
-            } else {
-                first_name = '';
+                }
+                return '';
             }
-            if(user.last_name != null){
-                last_name = user.last_name.replace('@N.N.', '');
-            } else {
-                last_name = '';
+            function getFirstName(u){
+               return getName(u, 'first_name', '@P.N.');
             }
-			return [first_name, middle_name, last_name].join(' ');
+            function getMiddleName(u){
+                return getName(u, 'middle_name', false);
+            }
+            function getLastName(u){
+                return getName(u, 'last_name', '@N.N.');
+            }
+            function getShortLastName(l){
+                if(l.length <= 22) return l;
+                var string = '';
+                for(var i = 0 ; i <= 22 ; i++){
+                    string += l[i];
+                }
+                string += '...';
+                return string;
+            }
+            function getInitials(first, middle){
+                var f = (first.length!=0)?first[0]+'.':'';
+                var m = (middle.length!=0)?middle[0]+'.':'';
+                return [f,m].join('');
+            }
+            function getFullName(first, middle, last){
+                var fName = [first,middle,last].join(' ');
+                if(fName.length > 25){
+                    return [getInitials(first, middle), getShortLastName(last)].join('');
+                } else {
+                    return fName;
+                }
+            }
 		})(),
 		nick:(function(){
 			var	nick = user.nick,

@@ -51,9 +51,9 @@ function JMBRecentVisitorsObject(obj){
                 if(!object) return;
                 var 	st = host.stringBuffer(),
                     user = object.user,
-                    name = [user.first_name, user.last_name].join(' '),
+                    parse = storage.usertree.parse(object);
                     time = functions.get_difference(time, user),
-                    fallback = st._('<div>')._(name)._('</div>')._('<div>')._(time)._('</div>').result();
+                    fallback = st._('<div>')._(parse.name)._('</div>')._('<div>')._(time)._('</div>').result();
                 jQuery(container).tipsy({
                     gravity: 'sw',
                     html: true,

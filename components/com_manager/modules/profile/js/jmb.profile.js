@@ -1173,6 +1173,7 @@ JMBProfile.prototype = {
         var pull = (typeof(args.pull) != 'undefined')?args.pull:false;
         var users = (typeof(args.users) != 'undefined')?args.users:false;
 
+
         fn.setGedcomId(gedcom_id);
         fn.setPull(pull);
         fn.setTreeId(tree_id);

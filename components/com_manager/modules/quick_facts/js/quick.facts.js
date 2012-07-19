@@ -24,9 +24,6 @@ function JMBQuickFactsObject(object){
 			if(date===null) return 'unknown';
 			return (new Date()).getFullYear() - date[2];
 		},
-		getFullName:function(user){
-			return [user.first_name,user.middle_name, user.last_name].join(' ');
-		},
 		getNumberFamilyString:function(){ 
 			var sb = host.stringBuffer();
 			sb._('<font style="color:green;">')._(json.count)._('</font> ( ');
@@ -39,7 +36,7 @@ function JMBQuickFactsObject(object){
 			var sb = host.stringBuffer();
 			sb._('<font id="')._(json.youngest.user.gedcom_id)._('" style="color:#');
 				sb._(settings.colors[json.youngest.user.gender])._(';">');
-					sb._(fn.getFullName(json.youngest.user));
+					sb._(storage.usertree.parse(json.youngest).full_name);
 			sb._('</font> ( ');
 			sb._(fn.getTurn(json.youngest.user))._(' ')
 			sb._(message.FTT_MOD_QUICK_FACTS_YEARS)._(' )');
@@ -51,7 +48,7 @@ function JMBQuickFactsObject(object){
 			sb._('<font id="')._(json.oldest.user.gedcom_id)._('" style="color:#');
 				sb._(settings.colors[json.oldest.user.gender]);
 			sb._(';">');
-				sb._(fn.getFullName(json.oldest.user));
+				sb._(storage.usertree.parse(json.oldest).full_name);
 			sb._('</font> ( ');
 			sb._(fn.getTurn(json.oldest.user))._(' ');
 			sb._(message.FTT_MOD_QUICK_FACTS_YEARS)._(' )');
