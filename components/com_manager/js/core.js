@@ -655,9 +655,25 @@ core.modulesPullFunc = function(){
 	var modal = core.modal();
 	core.modulesPull = { length:0 };
     core.activeModule = null;
+    core.pull = [];
 	return {
         getActiveModule:function(){
             return core.activeModule;
+        },
+        bind:function(call){
+            core.pull.push({
+                id: (new Date()).valueOf(),
+                callback: call
+            });
+        },
+        finish:function(){
+            for(var key in core.pull){
+                if(core.pull.hasOwnProperty(key)){
+                    core.pull[key].callback(core.pull[key]);
+                    delete core.pull[key];
+                }
+            }
+            core.pull = [];
         },
 		insert:function(name){
             core.activeModule = name;
@@ -671,6 +687,9 @@ core.modulesPullFunc = function(){
 				if(core.modulesPull.length<0){
 					core.modulesPull.length = 0;
 				}
+                if(core.modulesPull.length == 0){
+                    this.finish();
+                }
 			}
 		},
 		clear:function(){
@@ -777,9 +796,8 @@ core.initModule = function(args){
         	},1000);
         }
 }
-
 core.renderPage = function(args){
-	var self = this;
+   	var self = this;
     var parent = args.selector;
     var page = args.page;
     var popup = args.popup;

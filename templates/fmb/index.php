@@ -140,7 +140,13 @@ if (stripos($user_agent, 'MSIE 6.0') !== false
                     if(jQuery.browser.msie && parseInt(jQuery.browser.version) <= 7){
                         jQuery('div.footer').hide();
                     } else {
-                        jQuery('div.footer').show();
+                        if('undefined' === typeof(storage)){
+                            jQuery('div.footer').show();
+                        } else {
+                            storage.core.modulesPullObject.bind(function(object){
+                                jQuery('div.footer').show();
+                            });
+                        }
                     }
                 }
                 if(typeof(storage) == 'undefined'){
