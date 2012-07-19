@@ -41,6 +41,7 @@ $document->addScript('administrator/components/com_manager/js/jquery.form.js');
 $document->addScript('administrator/components/com_manager/js/jquery.validate.min.js');
 
 //core part
+$document->addScript('components/com_manager/js/async.js');
 $document->addScript('components/com_manager/js/core.js');
 $document->addScript('administrator/components/com_manager/js/MyBranchesManager.js');
 $document->addScript('administrator/components/com_manager/js/host.js');
