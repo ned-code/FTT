@@ -19,7 +19,7 @@ function JMBFamousFamilyTreesObject(obj){
 			return sb._('<img src="index.php?option=com_manager&task=getResizeImage&tree_id=')._(e.tree_id)._('&id=')._(e.avatar.Id)._('&w=50&h=50">').result();
 		} else {
 			var img_name = (e.individ.Gender=="M")?'male.png':'female.png';
-			var img_path  = sb._(module.Path)._("/components/com_manager/modules/famous_family_trees/imgs/")._(img_name).result();
+			var img_path  = sb._(storage.baseurl)._("/components/com_manager/modules/famous_family_trees/imgs/")._(img_name).result();
 			return sb.clear()._('<img class="jmb-families-avatar view" height="50px" width="50px" src="')._(img_path)._('">').result()
 		}
 	}
@@ -83,7 +83,6 @@ function JMBFamousFamilyTreesObject(obj){
         if(typeof(json.msg) != 'undefined'){
             module.msg = json.msg;
         }
-		module.Path = json.path;
 		var body = createBody();
 		var ul = createItems(json);
 		jQuery(body).find('.jmb-famous-family-content').append(ul);
