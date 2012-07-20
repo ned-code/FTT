@@ -250,6 +250,8 @@ JMBInvitation.prototype = {
                 }
             };
 
+        storage.tooltip.cleaner();
+
         v.gedcom_id = f.get.gedcomId(json);
         v.elementDiv = f.get.elementDiv(json);
         v.elementForm = f.get.elementForm(v.elementDiv);
