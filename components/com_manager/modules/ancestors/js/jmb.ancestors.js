@@ -186,7 +186,15 @@ JMBAncestorsObject.prototype = {
 			var city = (p.city!=null)?p.city:'';
 			var country = (p.country!=null)?p.country:'';
 			if(p.length!=0){
-				return year + ' ('+city+((country.length!=0)?','+country.substr(0, 3):'')+')';
+                if(city.length != 0 && country.length != 0){
+                    return year+' ('+city+','+country.substr(0,3)+')';
+                } else if(city.length == 0 && country.length != 0){
+                    return year+' ('+country.substr(0,3)+')';
+                } else if(city.length != 0 && country.length == 0){
+                    return year+' ('+city+')';
+                } else {
+                    return year;
+                }
 			}
 			return year;			
 		}
