@@ -253,12 +253,12 @@ JMBAncestorsObject.prototype = {
 			set_ancestors,
             getPfexix;
 
-        getPfexix = function(){
-            var a = [];
-            for(var key in arguments){
-                if(arguments.hasOwnProperty(key)) a.push(arguments[key]);
+        getPfexix = function(prf, id, count){
+            if('undefined' === typeof(count)){
+                return prf+'_'+id;
+            } else{
+                return prf+'_'+id+'_'+count;
             }
-            return a.join('_');
         }
 
 		get_parents = function(id){
@@ -309,7 +309,7 @@ JMBAncestorsObject.prototype = {
 		}
 						
 		set_ancestors = function(el){
-			var	ind = el.id,	
+			var	ind = el.id,
 				parents = get_parents(ind),
 				ids;
 			if(parents&&parents.length!=0){
@@ -320,19 +320,20 @@ JMBAncestorsObject.prototype = {
 					el.data.ftt_storage.next = ind;
 				}
 				if(ids[0]){
-					set_ancestors(el.children[0]);
+                    el.children[0] = set_ancestors(el.children[0]);
 				}
 				if(ids[1]){
-					set_ancestors(el.children[1]);
+                    el.children[1] = set_ancestors(el.children[1]);
 				}				
 			} else {
 				el.children.push(set_null_data());
 				el.children.push(set_null_data());
 			}
+            return el;
 		}
 		
-		tree = set_data(ch.user.gedcom_id);
-		set_ancestors(tree);
+		var userObject = set_data(ch.user.gedcom_id);
+		tree = set_ancestors(userObject);
 		return tree;
 	},
 	init:function(callback){
