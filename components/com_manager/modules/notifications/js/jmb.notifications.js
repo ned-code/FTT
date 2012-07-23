@@ -641,7 +641,11 @@ JMBNotifications.prototype = {
             jQuery(html).find('div.button').click(function(){
                 module.manager();
             });
-            jQuery('div.main').append(html);
+            if(window != window.top){
+                jQuery('div.main').append(html);
+            } else {
+                jQuery('div.jmb-header-container').parent().append(html);
+            }
         }
         setTimeout(function(){
             module.ajax('getLanguageString', null, function(res){

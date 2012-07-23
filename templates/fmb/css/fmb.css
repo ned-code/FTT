@@ -24,7 +24,9 @@ html, body {
 	max-width: 760px;
 	padding-top: 0;
 }
-.header {}
+.header {
+    position: relative;
+}
 .main {
 	position:relative;
 }
@@ -54,7 +56,6 @@ html, body {
 
 #container {
 	position:relative;
-	top: 10px;
     min-width: 760px;
 }
 
