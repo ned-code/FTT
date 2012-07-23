@@ -87,6 +87,7 @@ function JMBFamousFamilyTreesObject(obj){
 		var ul = createItems(json);
 		jQuery(body).find('.jmb-famous-family-content').append(ul);
 		jQuery(obj).append(body);
+        storage.core.modulesPullObject.unset('JMBFamousFamilyTreesObject');
 	})
 	
 }

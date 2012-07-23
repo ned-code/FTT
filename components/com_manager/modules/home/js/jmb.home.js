@@ -59,6 +59,7 @@ function JMBHomeObject(offsetParent){
                 cont = fn.create();
                 fn.initButton(cont);
                 jQuery(parent).append(cont);
+                storage.core.modulesPullObject.unset('JMBHomeObject');
             });
 
 		}
