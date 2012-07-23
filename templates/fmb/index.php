@@ -112,7 +112,7 @@ if (stripos($user_agent, 'MSIE 6.0') !== false
                             <div style="display:none;<?php echo (isFooterPage($alias))?'border-top: 1px solid gray;':''; ?>" id="_bottom" class="footer">
                                 <div style="left: 0; position: absolute;">
                                     <div><a style="color:black; font-weight: bold;" href="<?php echo $base_url; ?>">FamilyTreeTop.com</a></div>
-                                    <div style="margin-top: 10px;"><span id="siteseal"><script type="text/javascript" src="https://seal.godaddy.com/getSeal?sealID=QbddMchgFRTEtJe2vFw4hjBQe73woVFQRwgBDPdlnAbAKWNkzv7"></script></span></div>
+                                   <!-- <div style="margin-top: 10px;"><span id="siteseal"><script type="text/javascript" src="https://seal.godaddy.com/getSeal?sealID=QbddMchgFRTEtJe2vFw4hjBQe73woVFQRwgBDPdlnAbAKWNkzv7"></script></span></div>-->
                                 </div>
                                 <div style="right: 0; position: absolute;">
                                     <div>
@@ -125,7 +125,7 @@ if (stripos($user_agent, 'MSIE 6.0') !== false
                                             <li><a href="<?php echo $base_url; ?>index.php/help">Help</a></li>
                                         </ul>
                                     </div>
-                                    <div style="margin-top:15px;">© 2012 Family TreeTop</div>
+                                    <!--<div style="margin-top:15px;">© 2012 Family TreeTop</div>-->
                                 </div>
                             </div>
                         </td>
