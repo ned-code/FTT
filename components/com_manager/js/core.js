@@ -153,9 +153,9 @@ storage.usertree.parse = function(object){
                 return getName(u, 'last_name', '@N.N.');
             }
             function getShortLastName(l){
-                if(l.length <= 22) return l;
+                if(l.length <= 27) return l;
                 var string = '';
-                for(var i = 0 ; i <= 22 ; i++){
+                for(var i = 0 ; i <= 27 ; i++){
                     string += l[i];
                 }
                 string += '...';
@@ -163,7 +163,7 @@ storage.usertree.parse = function(object){
             }
             function getFullName(first, last){
                 var fName = [first, last].join(' ');
-                if(fName.length > 25){
+                if(fName.length > 30){
                     return [(first.length!=0)?first[0]+'.':'', getShortLastName(last)].join('');
                 } else {
                     return fName;
@@ -193,9 +193,9 @@ storage.usertree.parse = function(object){
                 return getName(u, 'last_name', '@N.N.');
             }
             function getShortLastName(l){
-                if(l.length <= 22) return l;
+                if(l.length <= 27) return l;
                 var string = '';
-                for(var i = 0 ; i <= 22 ; i++){
+                for(var i = 0 ; i <= 27 ; i++){
                     string += l[i];
                 }
                 string += '...';
@@ -208,7 +208,7 @@ storage.usertree.parse = function(object){
             }
             function getFullName(first, middle, last){
                 var fName = [first,middle,last].join(' ');
-                if(fName.length > 25){
+                if(fName.length > 30){
                     return [getInitials(first, middle), getShortLastName(last)].join('');
                 } else {
                     return fName;
