@@ -88,7 +88,7 @@ DescendantTreeProfile.prototype = {
                                     sb._(':</span>');
                                     sb._('&nbsp;');
                                     sb._('<span class="text">');
-                                        sb._(parse.getPlaceName('birth'));
+                                        sb._( parse.getPlaceName('birth'));
                                     sb._('</span>');
                                 sb._('</div>');
                                 if(parse.is_death){

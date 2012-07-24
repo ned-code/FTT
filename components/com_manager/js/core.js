@@ -367,7 +367,7 @@ storage.usertree.parse = function(object){
                 if(place!= null){
                     var name = place.place_name;
                     if(name != null && name != ''){
-                        return name;
+                        return name.split(',').join(', ');
                     }
                 }
             }
