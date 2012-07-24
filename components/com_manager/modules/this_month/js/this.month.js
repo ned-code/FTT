@@ -173,7 +173,7 @@ function JMBThisMonthObject(obj){
     }
     function isMeetsTheRequirementsOf(year){
         var data = parseInt(year);
-        if(!data && data != 'NaN') return false;
+        if(!data && data != 'NaN') return true;
         if(isSort()){
             switch(module.sort){
                 case 1: return data > module.separator;
@@ -183,6 +183,18 @@ function JMBThisMonthObject(obj){
             }
         }
         return true;
+    }
+    function isMemberDeathInBirthConent(gedcomId, type){
+        if('undefined' === typeof(gedcomId)){
+            return true;
+        } else if(type == 'birth'){
+            var object = storage.usertree.pull[gedcomId];
+            var user = object.user;
+            if('undefined' !== typeof(user.death) && user.death != null){
+                return true;
+            }
+        }
+        return false;
     }
     function setContent(t){
         setHeader(t[0]);
@@ -232,6 +244,7 @@ function JMBThisMonthObject(obj){
         if(events = eventExist(type)){
             jQuery(events).each(function(i, data){
                 if(!memberExist(data.gedcom_id)) return true;
+                if(isMemberDeathInBirthConent(data.gedcom_id, type)) return true;
                 if(!isMeetsTheRequirementsOf(data.event_year)) return true;
                 setUserTooltip(setUserEventContent(el, data, type));
             });
@@ -248,8 +261,8 @@ function JMBThisMonthObject(obj){
             sb._(getUserGedcomId(user))._('" class="person ');
             sb._(getUserGender(user))._('"><font color="');
             sb._(getColor(getUserGender(user)))._('">');
-            sb._(getUserName(user))._('</font> (turns ');
-            sb._(getEventTurns(getUserEvent(user, type)))._(')</div></td></tr>');
+            sb._(getUserName(user))._('</font>');
+            sb._(getMemberTurns(user, type))._('</div></td></tr>');
         var tr = jQuery(sb.result());
         jQuery(el).append(tr);
         return jQuery(tr).find('div.person');
@@ -315,7 +328,7 @@ function JMBThisMonthObject(obj){
         var date = 9999;
         for(var key in events){
             if(events.hasOwnProperty(key)){
-                var earliestDate = getEarliestDateOfEvent(events[key]);
+                var earliestDate = getEarliestDateOfEvent(key, events[key]);
                 if(date > earliestDate){
                     date = earliestDate;
                 }
@@ -330,13 +343,20 @@ function JMBThisMonthObject(obj){
         }
         return '';
     }
-    function getEarliestDateOfEvent(e){
+    function getEarliestDateOfEvent(type, data){
         var date = 9999;
-        for(var k in e){
-            if(e.hasOwnProperty(k)){
-                var d = parseInt(e[k].event_year);
+        for(var key in data){
+            if(data.hasOwnProperty(key)){
+                var gedcomId = data[key].gedcom_id;
+                var object = storage.usertree.pull[gedcomId];
+                var user = object.user;
+                var d = parseInt(data[key].event_year);
                 if(d != 'NaN' && date > d){
-                    date = d;
+                    if(type == 'birth' && user.death != null){
+
+                    } else {
+                        date = d;
+                    }
                 }
             }
         }
@@ -407,6 +427,22 @@ function JMBThisMonthObject(obj){
     function getEventDate(event){
         var date = event.date;
         return (date!=null&&date[0]!=null)?date[0]:''
+    }
+    function getMemberTurns(object, type){
+        if('undefined' === typeof(type)){
+            return '';
+        } else if(type == 'birth'){
+            return '(turns '+getEventTurns(getUserEvent(object, type))+')';
+        } else if(type == 'death'){
+            var birth = getUserEvent(object, 'birth');
+            var death = getUserEvent(object, 'death');
+            if(birth.date != null && death.date != null){
+                if(birth.date[2] != null && death.date[2] != null){
+                    return  '(turns '+ death.date[2] - birth.date[2]+')';
+                }
+            }
+        }
+        return '';
     }
     function getEventTurns(event){
         if(event.date==null) return '';

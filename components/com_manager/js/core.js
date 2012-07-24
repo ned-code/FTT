@@ -329,14 +329,18 @@ storage.usertree.parse = function(object){
 			return '';
 		},
 		turns:(function(){
-			var event = user['birth'];
-			if(event){
-				var date = event.date;
-				if(date&&date[2]!=null){
-					return (new Date()).getFullYear() - date[2];
-				}
-			} 
-			return 0;
+            var birth = user['birth'];
+            var death = user['death'];
+            if(birth != null && death != null){
+                var birthDate = birth.date;
+                var deathDate = death.date;
+                if(birthDate && deathDate){
+                    if(birthDate[2] != null && deathDate[2] != null){
+                        return deathDate[2] - birthDate[2];
+                    }
+                }
+            }
+            return 0;
 		})(),
 		date:function(event, sub){
 			var 	event = user[event],
