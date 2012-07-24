@@ -49,7 +49,7 @@ function JMBFamilyLine(){
 			align:function(type){
 				var top, left;
 				left = jQuery(window).width() / 2 - jQuery(cont).width() / 2;	
-				top = 40;
+				top = 56;
 				jQuery(cont).css('top', top).css('left', left);
 				return this;
 			}
