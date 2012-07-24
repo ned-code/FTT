@@ -45,7 +45,6 @@ function JMBTopMenuBar(){
         footerView:function(){
             var string = '';
             string += '<div  class="jmb-top-menu-bar">';
-                string +='<div class="jmb-top-menu-bar-logo">&nbsp;</div>';
                 string +='<div class="jmb-top-menu-bar-title">Family TreeTop: <span>'+fn.getAliasUcFirst(alias)+'</span></div>';
                 string +='<div class="jmb-top-menu-bar-return">'+message.FTT_MOD_TOPMENUBAR_RETURN+'</div>';
             string +='</div>';
@@ -132,12 +131,31 @@ function JMBTopMenuBar(){
                 default: return false;
             }
         },
+        setPosition:function(cont){
+            set(cont);
+            jQuery(window).resize(function(){
+                set(cont);
+            });
+            return false;
+            function set(c){
+                var position = jQuery('div.content').position();
+                var width = jQuery('div.content').width();
+                var diff = position.left + width - jQuery('.jmb-top-menu-bar-return').width();
+                jQuery(c).find('.jmb-top-menu-bar-title').css('left', position.left+'px');
+                jQuery(c).find('.jmb-top-menu-bar-return').css('left', diff+'px');
+            }
+
+        },
 		init:function(){
 			if(window != window.top) return false;
             fn.getLanguageString(function(lang){
                 fn.setMessage(lang);
                 if(fn.isFooterLink()){
                     cont = fn.footerView();
+                    jQuery(document.body).append(cont);
+                    fn.setPosition(cont);
+                    fn.click();
+                    return true;
                 } else {
                     cont = fn.create();
                     fn.activate();
