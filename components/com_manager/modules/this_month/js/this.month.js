@@ -22,7 +22,9 @@ function JMBThisMonthObject(obj){
         FTT_MOD_THIS_MONTH_SEPTEMBER:"September",
         FTT_MOD_THIS_MONTH_OCTOBER:"October",
         FTT_MOD_THIS_MONTH_NOVEMBER:"November",
-        FTT_MOD_THIS_MONTH_DECEMBER:"December"
+        FTT_MOD_THIS_MONTH_DECEMBER:"December",
+        FTT_MOD_THIS_MONTH_TURNS:"turns",
+        FTT_MOD_THIS_MONTH_YEARS_AGO:"years ago"
     }
 
     module.tableString = '<table cellpadding="0" cellspacing="0" width="100%"><tr><td><div class="jmb-this-month-header"></div></td></tr><tr><td><div class="jmb-this-month-body"></div></td></tr></table>';
@@ -306,8 +308,8 @@ function JMBThisMonthObject(obj){
             sb._(getUserName(family.husb))._('</font></div><div id="');
             sb._(getUserGedcomId(family.wife))._('" class="person"><font color="');
             sb._(getColor(getUserGender(family.wife)))._('">');
-            sb._(getUserName(family.wife))._('</font></div></td><td><div class="anniversaries-end">&nbsp;</div></td><td><div>(');
-            sb._(getEventTurns(family.event))._(' years ago)</div></td></tr>');
+            sb._(getUserName(family.wife))._('</font></div></td><td><div class="anniversaries-end">&nbsp;</div></td><td><div>');
+            sb._(getYearsAgo(family.event))._('</div></td></tr>');
         var tr = jQuery(sb.result());
         jQuery(el).append(tr);
         return jQuery(tr).find('div.person');
@@ -337,7 +339,7 @@ function JMBThisMonthObject(obj){
         return module.earliestDate = date;
     }
     function getMsg(n){
-        var t = 'FTT_MOD_THIS_MONTH_'+n;
+        var t = 'FTT_MOD_THIS_MONTH_'+n.toUpperCase();
         if(typeof(module.msg[t]) != 'undefined'){
             return module.msg[t];
         }
@@ -347,15 +349,22 @@ function JMBThisMonthObject(obj){
         var date = 9999;
         for(var key in data){
             if(data.hasOwnProperty(key)){
-                var gedcomId = data[key].gedcom_id;
-                var object = storage.usertree.pull[gedcomId];
-                var user = object.user;
-                var d = parseInt(data[key].event_year);
-                if(d != 'NaN' && date > d){
-                    if(type == 'birth' && user.death != null){
+                if('marriage' !== type){
+                    var gedcomId = data[key].gedcom_id;
+                    var object = storage.usertree.pull[gedcomId];
+                    var user = object.user;
+                    var d = parseInt(data[key].event_year);
+                    if(d != 'NaN' && date > d){
+                        if(type == 'birth' && user.death != null){
 
-                    } else {
-                        date = d;
+                        } else {
+                            date = d;
+                        }
+                    }
+                } else {
+                    var year = data[key].event_year;
+                    if(year != null && date > year){
+                        date = year;
                     }
                 }
             }
@@ -432,17 +441,24 @@ function JMBThisMonthObject(obj){
         if('undefined' === typeof(type)){
             return '';
         } else if(type == 'birth'){
-            return '(turns '+getEventTurns(getUserEvent(object, type))+')';
+            return  ' ('+getMsg('turns')+' '+getEventTurns(getUserEvent(object, type))+')';
         } else if(type == 'death'){
             var birth = getUserEvent(object, 'birth');
             var death = getUserEvent(object, 'death');
             if(birth.date != null && death.date != null){
                 if(birth.date[2] != null && death.date[2] != null){
-                    return  '(turns '+ death.date[2] - birth.date[2]+')';
+                    return  ' ('+getMsg('turns')+' '+ death.date[2] - birth.date[2]+')';
                 }
             }
         }
         return '';
+    }
+    function getYearsAgo(ev){
+        if('undefined' === ev || ev.date == null || ev.date[2] == null) return '';
+        return ' (' + getDate(ev.date[2]) + ' '+getMsg('years_ago')+')';
+        function getDate(d){
+            return (new Date()).getFullYear() - d;
+        }
     }
     function getEventTurns(event){
         if(event.date==null) return '';
