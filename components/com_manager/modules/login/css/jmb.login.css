@@ -10,7 +10,7 @@
     z-index: 1000;
 }
 .jmb-profile-cont div.avatar{
-	border: 1px solid #ccc;
+	border: 1px solid white;
 	height: 22px;
     	margin-left: 3px;
     	margin-top: 3px;
@@ -24,7 +24,7 @@
     background-color: #86af67;
 }
 .jmb-profile-cont div.login span {
-	color: #ccc;
+	color: white;
 	font-weight: bold;
 }
 .jmb-profile-cont div.settings {
