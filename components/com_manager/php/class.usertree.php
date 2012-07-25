@@ -14,6 +14,7 @@ class JMBUserTree {
     private $_FamiliesEventsList;
     private $_LocationsEventsList;
     private $_MediaList;
+    private $_LanguageList;
 	/**
 	*
 	*/
@@ -282,9 +283,25 @@ class JMBUserTree {
 		
 		$objects[$gedcom_id] = $node;
 	}
-	/**
-	*
-	*/
+
+    protected function _getUserRelation($rel, $gender){
+        $sp = explode(' ', $rel);
+        if(sizeof($sp) != 1){
+            return implode(' ', $sp);
+        } else {
+            if(isset($this->_LanguageList['FTT_COMPONENT_RELATION_'.strtoupper($rel)])){
+                if($rel == 'cousin'){
+                    $result = $this->_LanguageList['FTT_COMPONENT_RELATION_'.strtoupper($rel).'_'.strtoupper($gender)];
+                } else {
+                    $result = $this->_LanguageList['FTT_COMPONENT_RELATION_'.strtoupper($rel)];
+                }
+                return $result;
+            } else {
+                return $rel;
+            }
+        }
+    }
+
 	protected function _getUserInfo($gedcom_id){
 		$user = $this->_getIndividuals($gedcom_id);
 		$birth = $this->_getEvent($gedcom_id, 'BIRT');
@@ -305,7 +322,7 @@ class JMBUserTree {
 			'last_name'=>$user['last_name'],
 			'middle_name'=>$user['middle_name'], 
 			'nick'=>$user['nick'],
-			'relation'=>$user['relation'], 
+			'relation'=>$this->_getUserRelation($user['relation'], $user['gender']),
 			'permission'=>$user['permission'],
 			'last_login'=>$user['last_login'],
 			'birth'=>$birth,
@@ -332,6 +349,7 @@ class JMBUserTree {
 	*
 	*/
 	protected function _init($gedcom_id = false){
+        $host = &FamilyTreeTopHostLibrary::getInstance();
 		$this->_IndividualsList = $this->gedcom->individuals->getIndividualsList($this->_TreeId, $this->_GedcomId, $gedcom_id);
 		$this->_FamiliesList = $this->gedcom->families->getFamiliesList($this->_TreeId, $gedcom_id);
 		$this->_ChildrensList = $this->gedcom->families->getChildrensList($this->_TreeId, $gedcom_id);
@@ -339,6 +357,7 @@ class JMBUserTree {
 		$this->_FamiliesEventsList = $this->gedcom->events->getFamiliesEvenetsList($this->_TreeId, $gedcom_id);
 		$this->_LocationsEventsList = $this->gedcom->locations->getEventsLocationsList($this->_TreeId, $gedcom_id);
 		$this->_MediaList = $this->gedcom->media->getMediaList($this->_TreeId, $gedcom_id);
+        $this->_LanguageList = $host->getComponentString();
 	}
 	/**
 	*
