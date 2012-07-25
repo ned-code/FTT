@@ -102,11 +102,9 @@
 	border: 1px solid #CCCCCC;
 	font-family: Calibri,Tahoma,sans-serif;
 	font-size: 12px;
-	height: 60px;
 	position: absolute;
 	right: 10px;
 	top: 5px;
-	width: 200px;
     z-index: 1;
 }
 .jmb-profile-famous-cont table{
