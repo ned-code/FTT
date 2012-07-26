@@ -39,15 +39,12 @@ class FTTUserLibrary {
     protected function _getUserProfileFields($facebookId){
         if(!$facebookId) return false;
         $result = $this->host->jfbConnect->api('/'. $facebookId);
-        //$fields = $this->host->jfbConnect->getUserProfile($facebookId, array('birthday_date'));
-        //$this->birthday = $fields['birthday_date'];
         $this->gender = $result['gender'];
-        //$result['birthday'] = $fields['birthday_date'];
         return $result;
     }
 
     protected function _getUserId(){
-        $id = $this->host->jfbConnect->getUserId();
+        $id =  $this->host->jfbConnect->getFbUserId();
         if(empty($id)){
             return 0;
         }

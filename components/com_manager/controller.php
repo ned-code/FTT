@@ -329,6 +329,7 @@ class JMBController extends JController
     }
 
     public function loginFacebookUser(){
+        return false;
         $app = JFactory::getApplication();
         $jfbcLibrary = JFBConnectFacebookLibrary::getInstance();
         $fbUserId = $jfbcLibrary->getFbUserId();
@@ -343,8 +344,10 @@ class JMBController extends JController
             $userMapModel = new JFBConnectModelUserMap();
 
             $jUserId = $userMapModel->getJoomlaUserId($fbUserId);
+
             if($jUserId == null){
-                $app->redirect(JRoute::_('index.php?option=com_jfbconnect&task=loginFacebookUser&return=myfamily'));
+                $url = 'Location:'.JURI::base().'index.php?option=com_jfbconnect&task=loginFacebookUser&return=myfamily';
+                header($url);
             }
         }
     }

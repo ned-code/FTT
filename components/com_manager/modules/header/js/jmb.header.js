@@ -93,7 +93,7 @@ function JMBHeader(){
                 logo:function(class_name){
                     switch(class_name){
                         case "myfamily": return jQuery("<span>"+fn.get.msg('MY_FAMILY_PART1')+"</span><span>"+fn.get.msg('MY_FAMILY_PART2')+"</span>");
-                        case "famous-family": return jQuery("<span>"+fn.get.msg('FAMOUS_FAMILY_PART1')+"<</span><span>"+fn.get.msg('FAMOUS_FAMILY_PART2')+"<</span>");
+                        case "famous-family": return jQuery("<span>"+fn.get.msg('FAMOUS_FAMILY_PART1')+"</span><span>"+fn.get.msg('FAMOUS_FAMILY_PART2')+"</span>");
                         default: return "&nbsp;";
                     }
                 }

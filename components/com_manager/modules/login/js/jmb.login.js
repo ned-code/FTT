@@ -167,6 +167,7 @@ function JMBLogin(){
                         callback();
                     },
 					logout:function(object, callback){
+                        jfbcLogoutFacebook = true;
                         jfbc.login.logout_button_click();
                         callback();
 					}

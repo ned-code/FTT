@@ -226,7 +226,7 @@ function JMBTreeCreatorObject(parent){
             }
             function setContent(f){
                 jQuery(f).html('');
-                jQuery(f).dialog('option', 'width', 500);
+                jQuery(f).parent().dialog('option', 'width', 500);
                 jQuery(f).append(getVideoElement());
                 return f;
             }
