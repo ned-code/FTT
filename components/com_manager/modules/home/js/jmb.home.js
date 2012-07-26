@@ -51,11 +51,20 @@ function JMBHomeObject(offsetParent){
 				}
 			});
 		},
+        setMsg:function(m){
+            if('undefined' === typeof(m)) return false;
+            for(var key in msg){
+                if(typeof(m[key]) != 'undefined'){
+                    msg[key] = m[key];
+                }
+            }
+            return true;
+        },
 		init:function(parent){
             fn.ajax('get', null, function(res){
                 var cont;
                 //msg = jQuery.parseJSON(res.responseText);
-                msg = storage.getJSON(res.responseText);
+                msg = fn.setMsg(storage.getJSON(res.responseText));
                 cont = fn.create();
                 fn.initButton(cont);
                 jQuery(parent).append(cont);
