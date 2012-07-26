@@ -2,8 +2,9 @@
 	position: relative;
 	font-family: Calibri,Tahoma,sans-serif;
 	font-size: 21px;
-    	font-weight: normal;
-    	position: relative;
+    font-weight: normal;
+    position: relative;
+    text-align: center;
 }
 #JMBHomeContainer .jmb-home-logo {
     background: url("../imgs/jmbhomelogo.jpg") no-repeat scroll 0 0 transparent;
@@ -11,9 +12,7 @@
     width: 456px;
 }
 #JMBHomeContainer .jmb-home-body{
-	position: absolute;
-	right: 30px;
-	top: 90px;
+    margin-top: 100px;
 }
 #JMBHomeContainer .jmb-home-body .title{
     color: #517b3e;
@@ -46,7 +45,6 @@
 }
 #JMBHomeContainer .jmb-home-body div#ipad{
     background: url("../imgs/ipad.png") no-repeat scroll 0 0 transparent;
-    cursor: pointer;
     height: 50px;
     margin: 40px auto 0;
     width: 101px;

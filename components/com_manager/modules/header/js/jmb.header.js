@@ -46,6 +46,7 @@ function JMBHeader(){
                 }
             },
             msg:function(msg){
+                if('undefined' === typeof(msg)) return false;
                 for(var key in message){
                     if(typeof(msg[key]) != 'undefined'){
                         message[key] = msg[key];
