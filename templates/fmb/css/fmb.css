@@ -93,22 +93,22 @@ html, body {
     font-family: tahoma;
     font-size: 12px;
     font-weight: bold;
-    left: 130px;
+    left: 0;
     position: absolute;
-    top: 7px;
+    top: 8px;
 }
 .jmb-top-menu-bar .jmb-top-menu-bar-title span{
     color: yellow;
 }
 .jmb-top-menu-bar .jmb-top-menu-bar-return{
+    color: white;
+    cursor: pointer;
     font-family: tahoma;
     font-size: 12px;
     font-weight: bold;
     position: absolute;
-    right: 10px;
-    top: 7px;
-    color: white;
-    cursor: pointer;
+    right: 0;
+    top: 8px;
 }
 
 .jmb-top-menu-bar div.jmb-top-menu-bar-content div.jmb-top-menu-bar-item{
