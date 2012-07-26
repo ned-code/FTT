@@ -52,6 +52,23 @@ function JMBAncestorsObject(obj, popup){
 	module.usertree = storage.usertree.pull;
 	module.user = module.usertree[storage.usertree.gedcom_id];
 	module.tree = module.getTree(module.user);
+    module.nodeBackgound = (function(){
+        var rgb = jQuery('.tab_content').css('backgroundColor');
+        var hex = rgb.match(/^#[0-9a-f]{3,6}$/i);
+        var parts = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+        if(parts == null){
+            return rgb;
+        }
+        return _rgbToHex(parts);
+        function _rgbToHex(p){
+            delete(p[0]);
+            for (var i = 1; i <= 3; ++i) {
+                p[i] = parseInt(p[i]).toString(16);
+                if (p[i].length == 1) p[i] = '0' + p[i];
+            }
+            return '#' + p.join('');
+        }
+    })()
 
     jQuery(module.parent).ready(function(){
         (function(){
@@ -432,10 +449,10 @@ JMBAncestorsObject.prototype = {
 				}
 			},
 			onBeforePlotNode:function(node){
-				if(node.id in module.nodes /*&& module.nodes[node.id][0] == '_'*/){
+				if(node.id in module.nodes){
 					node.data.$color = "#C3C3C3"
 				} else {
-					node.data.$color = "#EDF0F8"
+					node.data.$color = module.nodeBackgound;
 				}
 			},
 			onBeforePlotLine:function(adj){	
