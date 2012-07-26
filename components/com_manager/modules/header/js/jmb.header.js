@@ -5,7 +5,8 @@ function JMBHeader(){
 		parent, 
 		alias,
         loggedByFamous,
-		exists;
+		exists,
+        message;
 
 	cont = jQuery('<div class="jmb-header-container"><div class="jmb-header-logo" style="display:none;">&nbsp;</div><div style="display:none;" class="jmb-header-expand">&nbsp;</div></div>');
 	parent = jQuery('div#.content div.header');	
@@ -18,7 +19,14 @@ function JMBHeader(){
 		"myfamily":true,
         "invitation":true
 	}
-	
+
+    message = {
+        FTT_COMPONENT_HEADER_MY_FAMILY_PART1:"My",
+        FTT_COMPONENT_HEADER_MY_FAMILY_PART2:"Family",
+        FTT_COMPONENT_HEADER_FAMOUS_FAMILY_PART1:"Famous",
+        FTT_COMPONENT_HEADER_FAMOUS_FAMILY_PART2:"Family"
+    }
+
 	fn = {
 		set:{
 			class_name:{
@@ -28,12 +36,35 @@ function JMBHeader(){
 				expand:function(class_name){
 					jQuery(cont).find('div.jmb-header-expand').addClass(class_name);
 				}
-			}
+			},
+            value:{
+                logo:function(class_name){
+                    var value = fn.get.value.logo(class_name);
+                    if('object' === typeof(value)){
+                        jQuery(cont).find('div.jmb-header-logo').append(value);
+                    }
+                }
+            },
+            msg:function(msg){
+                for(var key in message){
+                    if(typeof(msg[key]) != 'undefined'){
+                        message[key] = msg[key];
+                    }
+                }
+                return true;
+            }
 		},
 		get:{
 			is_iframe:function(){
 				return window != window.top;
 			},
+            msg:function(n){
+                var t = 'FTT_COMPONENT_HEADER_'+n.toUpperCase();
+                if(typeof(message[t]) != 'undefined'){
+                    return message[t];
+                }
+                return '';
+            },
 			class_name:{
 				expand:function(){
 					if(fn.get.is_iframe()){
@@ -56,7 +87,16 @@ function JMBHeader(){
                         return 'myfamily'
                     }
 				}
-			}
+			},
+            value:{
+                logo:function(class_name){
+                    switch(class_name){
+                        case "myfamily": return jQuery("<span>"+fn.get.msg('MY_FAMILY_PART1')+"</span><span>"+fn.get.msg('MY_FAMILY_PART2')+"</span>");
+                        case "famous-family": return jQuery("<span>"+fn.get.msg('FAMOUS_FAMILY_PART1')+"<</span><span>"+fn.get.msg('FAMOUS_FAMILY_PART2')+"<</span>");
+                        default: return "&nbsp;";
+                    }
+                }
+            }
 		},
 		show:{
 			expand:function(){
@@ -80,15 +120,17 @@ function JMBHeader(){
 			}
 		},
 		init:function(){
+            fn.set.msg(storage.langString);
 			if(exists[alias]){
 				if(alias == 'myfamily' && !loggedByFamous && fn.get.is_iframe()){
-                    this.show.expand();
-					this.click.expand();
+                    fn.show.expand();
+                    fn.click.expand();
 				}
-				this.show.logo();
+                fn.show.logo();
 			}
-			this.set.class_name.cont(fn.get.class_name.logo());
-			this.set.class_name.expand(fn.get.class_name.expand());
+            fn.set.class_name.cont(fn.get.class_name.logo());
+            fn.set.value.logo(fn.get.class_name.logo());
+            fn.set.class_name.expand(fn.get.class_name.expand());
 			jQuery(parent).append(cont);
 		}
 	}

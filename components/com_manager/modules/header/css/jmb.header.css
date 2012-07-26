@@ -29,11 +29,23 @@
 	top: 0;
 	width: 110px;
 }
+.jmb-header-logo span{
+    color: white;
+    display: block;
+    font-family: Tahoma;
+    font-size: 16px;
+    font-weight: bold;
+    margin-left: 45px;
+    margin-top: -4px;
+}
+.jmb-header-logo span:first-child{
+    font-size: 11px;
+}
 .jmb-header-container.myfamily .jmb-header-logo{
-	background: url("../imgs/myfamily.png") no-repeat scroll 0 0 transparent;
+	background: url("../imgs/myfamily_img.png") no-repeat scroll 0 0 transparent;
 }
 .jmb-header-container.famous-family .jmb-header-logo{
-	background: url("../imgs/famous-family.png") no-repeat scroll 0 0 transparent;
+	background: url("../imgs/famous-family_img.png") no-repeat scroll 0 0 transparent;
 }
 .jmb-header-container.familytreetop .jmb-header-logo{
 	background: url("../imgs/logo.png") no-repeat scroll 0 0 transparent;
