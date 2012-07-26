@@ -169,7 +169,7 @@ class JMBController extends JController
         $invitation_token = $this->getInvitationToken($user);
         switch($user->page){
 			case "invitation":
-                if($user->guest) return 'home';
+                if($user->guest) return 'login';
                 if(!$invitation_token) return 'myfamily';
 				return "invitation";
 			break;
@@ -276,6 +276,7 @@ class JMBController extends JController
                 exit;
             }
 
+            /*
             if(!$host->user->getJoomlaUser()->guest){
                 $user_name = explode('_', $host->user->getJoomlaUser()->username);
                 if($user_name[1] != $user->facebookId){
@@ -283,6 +284,7 @@ class JMBController extends JController
                     exit;
                 }
             }
+            */
 
             $this->check_location($user);
         }

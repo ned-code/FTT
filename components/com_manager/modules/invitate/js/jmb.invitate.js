@@ -3,7 +3,7 @@ function JMBInvitateObject(obj){
     var sb = host.stringBuffer();
     var user = storage.usertree.user;
 
-    if(user.guest){
+    if('undefined' !== typeof(user) && user.guest){
         FB.login(function(loginResponse){
             if(loginResponse.authResponse){
                 window.location = storage.baseurl+'index.php?option=com_jfbconnect&task=loginFacebookUser&return=invitation';
@@ -59,7 +59,7 @@ function JMBInvitateObject(obj){
                 switch(id){
                     case "logout":
                         FB.logout(function(){
-                            window.location = storage.baseurl+'index.php?option=com_jfbconnect&task=logout&return=invitation';
+                            window.location = storage.baseurl+'index.php?option=com_jfbconnect&task=logout&return=login';
                         });
                         break;
 
