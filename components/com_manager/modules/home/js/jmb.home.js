@@ -64,7 +64,7 @@ function JMBHomeObject(offsetParent){
             fn.ajax('get', null, function(res){
                 var cont;
                 //msg = jQuery.parseJSON(res.responseText);
-                msg = fn.setMsg(storage.getJSON(res.responseText));
+                fn.setMsg(storage.getJSON(res.responseText));
                 cont = fn.create();
                 fn.initButton(cont);
                 jQuery(parent).append(cont);
