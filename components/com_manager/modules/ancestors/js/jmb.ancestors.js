@@ -26,6 +26,10 @@ function JMBAncestorsObject(obj, popup){
     module.loggedByFamous = parseInt(jQuery(document.body).attr('_type'));
     module.prefix = 'jit'+((new Date()).valueOf());
 
+    module.msg = {
+        FTT_MOD_ANCESTORS_ADD_THIS_PERSON: "Add this person"
+    }
+
 	jQuery(home_button).click(function(){
 		if(module.user==null) return false;
         module.st.select(module.st.root);
@@ -98,6 +102,23 @@ JMBAncestorsObject.prototype = {
 				callback(res);
 		})
 	},
+    getMsg:function(n){
+        var module = this;
+        var t = 'FTT_MOD_ANCESTORS_'+n.toUpperCase();
+        if(typeof(module.msg[t]) != 'undefined'){
+            return module.msg[t];
+        }
+        return '';
+    },
+    setMsg:function(msg){
+        var module = this;
+        for(var key in module.msg){
+            if(typeof(msg[key]) != 'undefined'){
+                module.msg[key] = msg[key];
+            }
+        }
+        return true;
+    },
 	avatar:function(el){
         return storage.usertree.avatar.get({
             object:el,
@@ -162,6 +183,23 @@ JMBAncestorsObject.prototype = {
 					return false;
 				});
 			},
+            add:function(){
+                jQuery(label).find('a').click(function(){
+                    var id = jQuery(this).parent().attr('id');
+                    var add = storage.profile.add({
+                        object:storage.usertree.pull[id],
+                        events:{
+                            afterEditorClose:function(){
+                                storage.tooltip.cleaner(function(){
+                                    module.render();
+                                });
+                            }
+                        }
+                    });
+                    add.parent().init();
+                    return false;
+                });
+            },
 			init:function(){
 				sub = this;
 				if(node.id[0]!=='_'){
@@ -169,13 +207,33 @@ JMBAncestorsObject.prototype = {
 					sub.photo();
 					sub.edit();
 					sub.facebook();
-				}
+				} else {
+                    sub.add();
+                }
 			}
 		}
 	},
+    nullNode:function(node){
+        var module = this;
+        var sb = storage.stringBuffer();
+        sb._('<div id="')._(_getObject(node))._('" class="jit-node-item-question">');
+            sb._('<a href="/add_this_person" onclick="return false;">');
+                sb._(module.getMsg('add_this_person'));
+            sb._('</a>');
+        sb._('</div>');
+        return sb.result();
+        function _getObject(n){
+            var adj = n.adjacencies;
+            for(var key in adj){
+                if(adj.hasOwnProperty(key)){
+                    return key.split('_')[1];
+                }
+            }
+        }
+    },
 	node:function(label, node){
 		var	module = this,
-			sb = host.stringBuffer(),
+			sb = storage.stringBuffer(),
 			data = node.data.ftt_storage,
 			parse,
 			place,
@@ -183,7 +241,7 @@ JMBAncestorsObject.prototype = {
 			object,
 			fam_opt;
 			
-		if(!data.is_exist) return '<div class="jit-node-item-question">&nbsp;</div>';		
+		if(!data.is_exist) return module.nullNode(node);
 		parse = data.parse;
 		object = data.object;
 		fam_opt = storage.family_line.get.opt();

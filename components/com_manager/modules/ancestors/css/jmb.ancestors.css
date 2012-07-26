@@ -45,10 +45,14 @@ div#jit-label div.node{
 	width: 209px;
 }
 .jit-node-item-question {
-	background: url("../images/icon-question-mark.png") no-repeat scroll 50% 50% transparent;
 	height: 80px;
 	position: relative;
 	width: 209px;
+}
+.jit-node-item-question a{
+    left: 60px;
+    position: absolute;
+    top: 30px;
 }
 .jit-node-item table{
 	margin-left: -3px;
