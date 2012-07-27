@@ -258,7 +258,8 @@
 .tree_create_request_form input {
 	border: 1px solid #999999;
 	height: 17px;
-    	line-height: 17px;
+    line-height: 17px;
+    width: 134px;
 }
 .tree_create_request_form .relation {
 	text-align: center;
@@ -377,6 +378,7 @@
     height: 20px;
     line-height: 20px;
     margin-left: 5px;
+    width: 134px;
 }
 .tree_create_user_form .switch_to_myfamily {
     background: url("bg_next.png") repeat scroll 0 0 transparent;
