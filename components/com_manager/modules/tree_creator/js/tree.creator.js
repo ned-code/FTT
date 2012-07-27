@@ -37,7 +37,9 @@ function JMBTreeCreatorObject(parent){
 		closeOnEscape: false,
 		modal:true,
 		close:function(){
-			if(module.reload) window.location.reload();
+			if(module.reload) {
+                window.location.href = storage.baseurl + 'index.php/myfamily'
+            }
 			module.args_pull = [];
 			module.title_count = 0;
 		}	
@@ -217,6 +219,7 @@ function JMBTreeCreatorObject(parent){
             });
             return true;
             function onClick(f, c){
+                module.reload = true;
                 jQuery(f).find('.switch_to_myfamily').click(function(){
                     c();
                 });
