@@ -401,7 +401,7 @@ function JMBThisMonthObject(obj){
     }
     function getHeaderColor(){
         var colors = storage.settings.colors;
-        var user = storage.usertree.user;
+        var user = storage.usertree.usermap;
         if(parseInt(user.loginType)){
             return ['#',colors.famous_header].join('');
         } else {

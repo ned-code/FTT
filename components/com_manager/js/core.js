@@ -72,6 +72,7 @@ storage.usertree.facebook_id = null;
 storage.usertree.tree_id = null;
 storage.usertree.permission = null;
 storage.usertree.users = null;
+storage.usertree.usermap
 storage.usertree.pull = null;
 storage.usertree.extend = function(def, sub){
 	for (var key in sub){

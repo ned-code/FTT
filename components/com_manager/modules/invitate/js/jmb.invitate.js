@@ -1,7 +1,7 @@
 function JMBInvitateObject(obj){
     var module = this;
     var sb = host.stringBuffer();
-    var user = storage.usertree.user;
+    var user = storage.usertree.usermap;
 
     if('undefined' !== typeof(user) && user.guest){
         FB.login(function(loginResponse){

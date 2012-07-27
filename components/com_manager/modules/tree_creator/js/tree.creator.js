@@ -778,7 +778,7 @@ function JMBTreeCreatorObject(parent){
                 return u != null && typeof(u.facebookId) != 'undefined';
             }
             function getUser(){
-                return module.fProfile = storage.usertree.user;
+                return module.fProfile = storage.usertree.usermap;
             }
             function getArguments(u,r){
                 return JSON.stringify({me:u.facebookFields, friends:r.data});
