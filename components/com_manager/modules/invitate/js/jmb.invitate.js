@@ -14,7 +14,6 @@ function JMBInvitateObject(obj){
 
     module.ajax('checkUser', null, function(res){
         var json = storage.getJSON(res.responseText);
-
         module.setMsg(json.msg);
         if(json.success){
             sb._('<div class="exist">');
@@ -60,7 +59,8 @@ function JMBInvitateObject(obj){
             switch(id){
                 case "logout":
                     FB.logout(function(){
-                        window.location = storage.baseurl+'index.php?option=com_jfbconnect&task=logout&return=login';
+                        jfbcLogoutFacebook = true;
+                        jfbc.login.logout_button_click();
                     });
                     break;
 

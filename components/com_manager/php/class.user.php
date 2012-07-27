@@ -105,22 +105,33 @@ class FTTUserLibrary {
         $userInSystem = $this->_getIndividualsInSystem($this->facebookId);
         if($userMap){
             if($this->facebookId && !$userMap['facebook_id']){
-                $this->facebookFields = $this->_getUserProfileFields($this->facebookId, array('id','email','name','first_name','last_name','gender','locale','link'));
-                $this->language = $this->host->language->getLanguage($this->facebookFields['locale']);
-                $this->name = $this->_getUserName();
-                $this->set($userInSystem['tree_id'], $userInSystem['gedcom_id'], 0);
                 $this->setMapFacebookId($this->facebookId);
+                $this->setJoomlaId($this->joomlaId);
                 $this->setLanguage($this->language);
-                $this->setPermission($userInSystem['permission']);
-                $this->_set(array(
-                    'gedcom_id' =>$userInSystem['gedcom_id'],
-                    'tree_id' =>$userInSystem['tree_id'],
-                    'permission' =>$userInSystem['permission'],
-                    'login_type'=>$userMap['login_type'],
-                    'language'=>$this->language,
-                    'page'=>$userMap['page'],
-                    'token'=>$userMap['token']
-                ));
+                if($userInSystem){
+                    $this->set($userInSystem['tree_id'], $userInSystem['gedcom_id'], 0);
+                    $this->setPermission($userInSystem['permission']);
+                    $this->_set(array(
+                        'gedcom_id' =>$userInSystem['gedcom_id'],
+                        'tree_id' =>$userInSystem['tree_id'],
+                        'permission' =>$userInSystem['permission'],
+                        'login_type'=>$userMap['login_type'],
+                        'language'=>$this->language,
+                        'page'=>$userMap['page'],
+                        'token'=>$userMap['token']
+                    ));
+                } else {
+                    $this->_set(array(
+                        'gedcom_id' =>0,
+                        'tree_id' =>0,
+                        'permission' =>'GUEST',
+                        'login_type'=>$userMap['login_type'],
+                        'language'=>$this->language,
+                        'page'=>$userMap['page'],
+                        'token'=>$userMap['token']
+                    ));
+                }
+
             } else {
                 $this->_set($userMap);
             }
@@ -232,6 +243,12 @@ class FTTUserLibrary {
         $this->host->ajax->query();
 
         $this->token = $token;
+    }
+
+    public function setJoomlaId($id){
+        $sqlString = "UPDATE #__mb_user_map SET `user_id` = ?, `time` = NOW() WHERE session_id = ?";
+        $this->host->ajax->setQuery($sqlString, $id, $this->sessionId);
+        $this->host->ajax->query();
     }
 
     public function delete($facebook_id){
