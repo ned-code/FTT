@@ -86,9 +86,9 @@ function JMBLogin(){
 		menu:function(){
 			var module = this, menu, list, sb = host.stringBuffer(), contEl;
 			sb._('<div class="menu">');
-				if(storage.usertree.pull)
-                sb._('<div id="profile"><span>')._(msg.FTT_MOD_LOGIN_PROFILE)._('</span></div>');
-
+				if(storage.usertree.pull != null){
+                    sb._('<div id="profile"><span>')._(msg.FTT_MOD_LOGIN_PROFILE)._('</span></div>');
+                }
                 sb._('<div id="language"><span>')._(msg.FTT_MOD_LOGIN_LANGUAGE)._(': ')._(this.getDefaultLang())._('</span></div>');
 				sb._('<div id="to_facebook"><span>')._('Return to Facebook')._('</span></div>');
                 sb._('<div id="logout"><span>')._(msg.FTT_MOD_LOGIN_LOGOUT)._('</span></div>');
