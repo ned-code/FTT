@@ -14,6 +14,7 @@ class FamilyTreeTopHostLibrary {
     private $config;
 
     private $modulesPath;
+    private $baseurl;
 
     public $ajax;
 
@@ -37,6 +38,8 @@ class FamilyTreeTopHostLibrary {
             return false;
         }
         $this->modulesPath = $this->getModulesPath();
+        $this->baseurl = JURI::base();
+
 
         $this->ajax = new JMBAjax();
 
@@ -78,6 +81,10 @@ class FamilyTreeTopHostLibrary {
             if($value == 'components') break;
             $base_url_array[] = $value;
         }
+        if(end($base_url_array) != ""){
+            array_push($base_url_array, "");
+        }
+
         return implode(DS, $base_url_array);
     }
 

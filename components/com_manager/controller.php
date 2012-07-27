@@ -170,7 +170,8 @@ class JMBController extends JController
         switch($user->page){
 			case "invitation":
                 if($user->guest) return 'login';
-                if(!$invitation_token) return 'myfamily';
+                if(!$invitation_token &&  $user->treeId != 0) return "myfamily";
+                if(!$invitation_token && $user->treeId == 0) return "first-page";
 				return "invitation";
 			break;
 			
@@ -264,12 +265,10 @@ class JMBController extends JController
         	$option = JRequest::getVar('option');
         	$canvas = JRequest::getVar('canvas');
 
-
         	if($option!='com_manager') exit();
 
             $host = &FamilyTreeTopHostLibrary::getInstance();
             $user = $host->user->get();
-
 
         	if(strlen($task)!=0) return;
             if((bool)$canvas){
