@@ -9,7 +9,8 @@ function JMBInvitateObject(obj){
         FTT_MOD_INVITATE_HELLO: "Hello",
         FTT_MOD_INVITATE_HAS_INVITED_YOU: "has invited you to join this family tree.",
         FTT_MOD_INVITATE_ACCEPT: "Accept Invitation",
-        FTT_MOD_INVITATE_DENY: "Deny Invitation"
+        FTT_MOD_INVITATE_DENY: "Deny Invitation",
+        FTT_MOD_ALERT_INVITATION_LINK_NO_LONGER_VALID: "This invitation link is no longer valid."
     }
 
     module.ajax('checkUser', null, function(res){
@@ -22,7 +23,7 @@ function JMBInvitateObject(obj){
             sb._('</div>');
         } else {
             if(!json.sender){
-                storage.alert('This invitation link is no longer valid.');
+                storage.alert(module.getMsg('ALERT_INVITATION_LINK_NO_LONGER_VALID'));
                 window.location.href = storage.baseurl + 'index.php/first-page';
                 return false;
             }
