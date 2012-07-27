@@ -44,11 +44,14 @@ class JMBInvitateClass {
                         WHERE i.fid !=0";
         $this->host->ajax->setQuery($sql_string);
         $rows = $this->host->ajax->loadAssocList();
+
+        $language = $this->host->getLangList('invitate');
+
         if(!empty($rows)){
             foreach($rows as $row){
                 if($row['facebook_id'] != null && $row['facebook_id'] == $this->user->facebookId){
                     $individual = $this->host->gedcom->individuals->get($row['id']);
-                    return json_encode(array('success'=>true, 'user'=>$individual));
+                    return json_encode(array('success'=>true, 'user'=>$individual, 'msg'=>$language));
                 }
             }
         }
@@ -62,12 +65,13 @@ class JMBInvitateClass {
                 $name .= ' ';
                 $name .= ($i->LastName != null)?$i->LastName:'';
                 $name = trim($name);
-                return json_encode(array('success'=>false, 'sender'=>$name));
+                return json_encode(array('success'=>false, 'sender'=>$name, 'msg'=>$language));
             }
         }
         $this->host->user->setToken(0);
         $this->host->user->setAlias($this->user->facebookId, 'first-page');
-        return json_encode(array('success'=>false, 'sender'=>false));
+
+        return json_encode(array('success'=>false, 'sender'=>false, 'msg'=>$language));
     }
 
     public function accept(){
@@ -84,5 +88,8 @@ class JMBInvitateClass {
         return json_encode(array('success'=>true));
     }
 
+    public function get(){
+
+    }
 }
 ?>
