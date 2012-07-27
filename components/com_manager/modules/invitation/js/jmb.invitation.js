@@ -1,7 +1,30 @@
 function JMBInvitation(){
-	this.path = "components/com_manager/modules/invitation/images/";
-    this.transportation = false;
-    this.dialogBox = false;
+    var module = this;
+    module.path = "components/com_manager/modules/invitation/images/";
+    module.transportation = false;
+    module.dialogBox = false;
+    module.msg = {
+        FTT_MOD_INVITATION_HEADER: "Send Invitation",
+        FTT_MOD_INVITATION_NAME: "Name",
+        FTT_MOD_INVITATION_BORN: "Born",
+        FTT_MOD_INVITATION_RELATION: "Relation",
+        FTT_MOD_INVITATION_SELECT_FACEBOOK_FRIEND: "Facebook Friend",
+        FTT_MOD_INVITATION_SELECT_FROM_FACEBOOK_FRIENDS:"Select from Facebook friends",
+        FTT_MOD_INVITATION_OR: "or",
+        FTT_MOD_INVITATION_SEND_EMAIL: "Send Email",
+        FTT_MOD_INVITATION_SEND_BUTTON: "Send",
+        FTT_MOD_INVITATION_CONFIRM_LIKE_TO_INVITE: "Would to like to invite %% to join your family tree",
+        FTT_MOD_INVITATION_ALERT_INVITATION_HAS_FAILED: "Invitation has failed.",
+        FTT_MOD_INVITATION_ALERT_INVITATION_HAS_BEEN_SENT: "An invitation has been sent.",
+        FTT_MOD_INVITATION_ALERT_MESSAGE_DELIVERY_FAILED:"Message delivery failed...",
+        FTT_MOD_INVITATION_ALERT_MESSAGE_SUCCESSFULLY_SENT:"Message successfully sent!",
+        FTT_MOD_INVITATION_ALERT_SORRY_USER_ALREADY_A_MEMBER:"Sorry, but %% is already a member of Family TreeTop.",
+        FTT_MOD_INVITATION_ALERT_INVITATION_TO_THIS_FACEBOOK_USER_HAS_BEEN_SENT:"Invitation to this facebook user has been already sent.",
+        FTT_MOD_INVITATION_ALERT_INVITATION_TO_THIS_MAIL_HAS_BEEN_SENT : "Invitation in this mail has been already sent.",
+        FTT_MOD_INVITATION_ALERT_THIS_USER_WAITING_CONFIRMATION:"This user is waiting for confirmation of the request to invitation."
+    }
+    module.response = false;
+
 }
 
 JMBInvitation.prototype = {
@@ -27,6 +50,36 @@ JMBInvitation.prototype = {
 			}
 		});
 	},
+    init:function(){
+        var module = this;
+        jQuery.ajax({
+            url: storage.baseurl+storage.url+'php/ajax.php',
+            type: "POST",
+            data: 'module=invitation&class=JMBInvitation&method=get&args=',
+            dataType: "html",
+            complete : function (req, err) {
+                module.response = storage.getJSON(req.responseText);
+                module.setMsg(module.response.msg);
+            }
+        });
+    },
+    getMsg:function(n){
+        var module = this;
+        var t = 'FTT_MOD_INVITATION_'+n.toUpperCase();
+        if(typeof(module.msg[t]) != 'undefined'){
+            return module.msg[t];
+        }
+        return '';
+    },
+    setMsg:function(msg){
+        var module = this;
+        for(var key in module.msg){
+            if(typeof(msg[key]) != 'undefined'){
+                module.msg[key] = msg[key];
+            }
+        }
+        return true;
+    },
 	sendRequestToInviteFacebookFriend:function(facebook_id, callback){
       		FB.ui({method: 'apprequests',
                 message: 'To view this request, please log into Family TreeTop. Link: '+storage.baseurl,
@@ -72,17 +125,17 @@ JMBInvitation.prototype = {
 			sb = host.stringBuffer(),
 			get = module.get(object),
 			relation = get.relation;
-			
-		sb._('<div class="jmb-dialog-invition"><form id="jmb:send-invitation" method="post" target="iframe-profile">');
-			sb._('<div class="jmb-dialog-invition-header">Send Invitation</div>');
+
+        sb._('<div class="jmb-dialog-invition"><form id="jmb:send-invitation" method="post" target="iframe-profile">');
+			sb._('<div class="jmb-dialog-invition-header">')._(module.getMsg('header'))._('</div>');
 			sb._('<div class="jmb-profile-mini-info">');
 				sb._('<table>');
 					sb._('<tr>');
 						sb._('<td class="jmb-profile-mini-photo"><div>')._(module.avatar(object))._('</div></td>');
 						sb._('<td class="jmb-profile-mini-info-body">');
-							sb._('<div><span>Name:</span> ')._(get.full_name)._('</div>');
-							sb._('<div><span>Born:</span> ')._(get.date('birth'))._('</div>');
-							if(relation) sb._('<div><span>Relation:</span> ')._(relation)._('</div>');
+							sb._('<div><span>')._(module.getMsg('name'))._(':</span> ')._(get.full_name)._('</div>');
+							sb._('<div><span>')._(module.getMsg('born'))._(':</span> ')._(get.date('birth'))._('</div>');
+							if(relation) sb._('<div><span>')._(module.getMsg('relation'))._(':</span> ')._(relation)._('</div>');
 						sb._('</td>');
 					sb._('</tr>');
 				sb._('</table>');
@@ -90,17 +143,17 @@ JMBInvitation.prototype = {
 			sb._('<div class="jmb-dialog-invition-fields">');
 				sb._('<table>');
 					sb._('<tr>');
-						sb._('<td><span class="title">Select from Facebook friends:</span></td>');
+						sb._('<td><span class="title">')._(module.getMsg('select_from_facebook_friends'))._(':</span></td>');
 						sb._('<td>');
 							sb._('<div id="jmb_facebook_friends">');
 							sb._('</div>');
 						sb._('</td>');
 					sb._('</tr>');
-					sb._('<tr><td></td><td><div style="text-align:center;">or</div></td></tr>');
-					sb._('<tr><td><span class="title">Send Email:</span></td><td><input name="send_email" placeholder="Enter Email address"></td></tr>');
+					sb._('<tr><td></td><td><div style="text-align:center;">')._(module.getMsg('or'))._('</div></td></tr>');
+					sb._('<tr><td><span class="title">')._(module.getMsg('send_email'))._(':</span></td><td><input name="send_email" placeholder="Enter Email address"></td></tr>');
 				sb._('</table>');
 			sb._('</div>');
-			sb._('<div class="jmb-dialog-invition-send"><input type="submit" value="send"></div>');
+			sb._('<div class="jmb-dialog-invition-send"><input type="submit" value="')._(module.getMsg('send_button'))._('"></div>');
 		sb._('</form></div>');
 		return jQuery(sb.result());
 	},
@@ -136,7 +189,7 @@ JMBInvitation.prototype = {
                     },
                     select:function(el){
                         var parent = jQuery(el).find('#jmb_facebook_friends');
-                        var select = jQuery('<select name="friends"><option value="default">Facebook Friend</option></select>');
+                        var select = jQuery('<select name="friends"><option value="default">'+module.getMsg('select_facebook_friend')+'</option></select>');
                         jQuery(parent).append(select);
 
                         var data = v.friendsList.data;
@@ -177,7 +230,7 @@ JMBInvitation.prototype = {
                 event:{
                     confirm:{
                         invite:function(){
-                            if (confirm('Would to like to invite '+ v.option.name +' to join your family tree?')) {
+                            if(confirm(module.getMsg('confirm_like_to_invite').replace('%%', v.option.name)+'?')){
                                 storage.progressbar.loading();
                                 module.transportation = true;
                                 f.send.checkFacebookIdOnUse();
@@ -217,7 +270,7 @@ JMBInvitation.prototype = {
                                 if(json.success){
                                     f.send.requestToInviteFacebookFriend();
                                 } else {
-                                    alert(json.message.replace('%%', name));
+                                    storage.alert(module.getMsg(json.message).replace('%%', name));
                                     f.event.select.off();
                                 }
                             } else {
@@ -229,7 +282,7 @@ JMBInvitation.prototype = {
                         module.sendRequestToInviteFacebookFriend(v.option.id, function (r) {
                             if(r == null) {
                                 f.event.select.off();
-                                alert('Invitation has failed.')
+                                storage.alert(module.getMsg('alert_invitation_has_failed'));
                                 return false;
                             }
                             f.send.inviteFacebookFriend();
@@ -239,9 +292,9 @@ JMBInvitation.prototype = {
                         module.ajax('inviteFacebookFriend', v.option.id + ';' + v.gedcom_id, function (res) {
                             var json = storage.getJSON(res.responseText);
                             if (typeof(json.success) !== 'undefined') {
-                                alert('An invitation has been sent.');
+                                storage.alert(module.getMsg('alert_invitation_has_been_sent'));
                             } else {
-                                alert(json.message);
+                                storage.alert(module.getMsg(json.message));
                             }
                             f.event.select.off();
                             jQuery(module.dialogBox).dialog('close');
@@ -249,6 +302,12 @@ JMBInvitation.prototype = {
                     }
                 }
             };
+
+        if(!module.response){
+            setTimeout(function(){
+                module.render(json);
+            }, 1000);
+        }
 
         storage.tooltip.cleaner();
 
@@ -266,6 +325,8 @@ JMBInvitation.prototype = {
             v.select = f.create.select(v.elementDiv);
             f.event.select.change();
         }
+
+
 	},
 	send:function(form, json){
 		var	module = this;
@@ -291,9 +352,8 @@ JMBInvitation.prototype = {
             },
             success:function(json){
                 if(typeof(json.success) != 'undefined'){
-                    alert(json.message);
+                    storage.alert(module.getMsg(json.message));
                     if(json.success){
-                        //storage.overlay.hide();
                         jQuery(module.dialogBox).dialog('close');
                     }
                     storage.progressbar.off();

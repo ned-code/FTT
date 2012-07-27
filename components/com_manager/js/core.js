@@ -999,6 +999,7 @@ core.load = function(pages){
         if(typeof(pages) == "object"){
             storage.login.init(function(){
                 storage.ntf.init();
+                storage.invitation.init();
                 storage.profile.init();
                 storage.tooltip.init();
                 storage.feedback.init();

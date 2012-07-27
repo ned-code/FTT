@@ -79,11 +79,11 @@ class JMBInvitation {
         $to = JRequest::getVar('send_email');
 
         if($this->checkMailOnUse($to)){
-            $message = "Sorry, but ".$recipient['user']['first_name']." is already a member of Family TreeTop.";
+            $message = "ALERT_SORRY_USER_ALREADY_A_MEMBER";
             return json_encode(array('success'=>false,'message'=>$message));
         }
         if($this->checkMailOnInvite($to)){
-            $message = "Invitation in this mail has been already sent.";
+            $message = "ALERT_INVITATION_TO_THIS_MAIL_HAS_BEEN_SENT";
             return json_encode(array('success'=>false, 'message'=>$message));
         }
 
@@ -148,10 +148,10 @@ class JMBInvitation {
 		$mail = $smtp->send($to, $headers, $mail_body);
 
 		if (PEAR::isError($mail)) {
-			return json_encode(array('success'=>false,'message'=>'Message delivery failed...'));
+			return json_encode(array('success'=>false,'message'=>'ALERT_MESSAGE_DELIVERY_FAILED'));
 			
 		} else {
-			return json_encode(array('success'=>true,'message'=>'Message successfully sent!'));
+			return json_encode(array('success'=>true,'message'=>'ALERT_MESSAGE_SUCCESSFULLY_SENT'));
 		}
 	}
 
@@ -166,19 +166,19 @@ class JMBInvitation {
         if(!empty($rows)){
             foreach($rows as $row){
                 if($row['fid'] != null && $row['fid'] == $facebook_id){
-                    $message = "Sorry, but %% is already a member of Family TreeTop.";
+                    $message = "ALERT_SORRY_USER_ALREADY_A_MEMBER";
                     return json_encode(array('success'=>false,'message'=>$message));
                 }
             }
         }
 
         if($this->checkFacebookIdOnInvite($facebook_id)){
-            $message = "Invitation to this facebook user has been already sent.";
+            $message = "ALERT_INVITATION_TO_THIS_FACEBOOK_USER_HAS_BEEN_SENT";
             return json_encode(array('success'=>false, 'message'=>$message));
         }
 
         if($this->checkFacebookIdOnRequest($facebook_id)){
-            $message = "This user is waiting for confirmation of the request to invitation.";
+            $message = "ALERT_THIS_USER_WAITING_CONFIRMATION";
             return json_encode(array('success'=>false, 'message'=>$message));
         }
 
@@ -195,7 +195,7 @@ class JMBInvitation {
 
 		if($tree_id&&$tree_id==$individ->TreeId){
             if($this->checkFacebookIdOnInvite($args[0])){
-                $message = "Invitation to this facebook user has been already sent.";
+                $message = "ALERT_INVITATION_TO_THIS_FACEBOOK_USER_HAS_BEEN_SENT";
                 return json_encode(array('success'=>false, 'message'=>$message));
             }
 
@@ -209,5 +209,10 @@ class JMBInvitation {
 			return json_encode(array('success'=>true));
 		}
 	}
+
+    public function get(){
+        $language = $this->host->getLangList('invitation');
+        return json_encode(array('msg'=>$language));
+    }
 }
 ?>
