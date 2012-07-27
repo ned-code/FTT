@@ -1018,7 +1018,7 @@ core.load = function(pages){
         }
 
         //set string to pages variable
-        if(typeof(pages) == "string"){
+        if(typeof(pages) == "number"){
             jQuery.ajax({
                 url:'index.php?option=com_manager&task=getPageInfo&ids='+pages,
                 type:'GET',
