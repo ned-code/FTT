@@ -352,6 +352,7 @@ function JMBThisMonthObject(obj){
                 if('marriage' !== type){
                     var gedcomId = data[key].gedcom_id;
                     var object = storage.usertree.pull[gedcomId];
+                    if('undefined' === typeof(object)) break;
                     var user = object.user;
                     var d = parseInt(data[key].event_year);
                     if(d != 'NaN' && date > d){
