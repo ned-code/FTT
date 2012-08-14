@@ -339,6 +339,9 @@
 .notifications_accept .userbox img.ui-draggable.ui-draggable-dragging{
     border: 1px solid red;
 }
+.notifications_accept .userbox img.ui-draggable.ui-draggable-dragging.in{
+    border: 1px solid green;
+}
 .notifications_accept .user-header {
     background: url("../images/facebook_icon.gif") no-repeat scroll 3px 2px #3B5998;
     border: 1px solid #4C67A1;

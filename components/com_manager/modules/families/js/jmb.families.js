@@ -580,6 +580,12 @@ JMBFamiliesObject.prototype = {
                 jQuery(el).droppable({
                     drop: function(){
                         storage.ntf.onDrop(this);
+                    },
+                    over: function(){
+                        storage.ntf.onDropIn(this);
+                    },
+                    out: function(){
+                        storage.ntf.onDropOut(this);
                     }
                 });
             });

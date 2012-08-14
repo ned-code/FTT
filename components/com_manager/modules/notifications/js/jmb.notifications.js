@@ -65,6 +65,14 @@ JMBNotifications.prototype = {
         module.ntPull.splice(index, 1);
         return module.ntPull;
     },
+    onDropIn:function(object){
+        jQuery(object).parent().css('border', '2px solid green');
+        jQuery('img.ui-draggable.ui-draggable-dragging').addClass('in');
+    },
+    onDropOut:function(object){
+        jQuery(object).parent().css('border', '2px solid #000');
+        jQuery('img.ui-draggable.ui-draggable-dragging').removeClass('in');
+    },
     onDrop:function(object){
         var module = this,
             msg = module.message,
