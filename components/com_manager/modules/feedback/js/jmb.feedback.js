@@ -62,7 +62,8 @@ function JMBFeedback(){
         },
         buttonClick:function(button){
             fn.click(button, function(ev){
-                window.location.href = storage.baseurl+'index.php/feedback';
+                var id = jQuery(ev).attr('id');
+                window.location.href = storage.baseurl+'index.php/feedback/'+id;
                 /*
                 fn.dialogOpen(function(box){
                     var id = jQuery(ev).attr('id');
