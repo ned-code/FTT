@@ -267,7 +267,6 @@ class JMBController extends JController
         $facebookId = $user->facebookId;
 
         if(!$user->guest){
-
             if($facebookId != null && $facebookId != 0 && $username != null){
                 $name = explode('_', $username);
                 if($name[1] != $facebookId){

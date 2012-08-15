@@ -59,9 +59,26 @@ function JMBInvitateObject(obj){
             var id = jQuery(this).attr('id');
             switch(id){
                 case "logout":
+                    console.log(window.location.href);
+                    /*
                     FB.logout(function(){
                         jfbcLogoutFacebook = true;
                         jfbc.login.logout_button_click();
+                    });
+                    */
+                    FB.logout(function(){
+                        FB.login(function(response){
+                            if (response.authResponse) {
+                                jQuery.ajax({
+                                    url: 'index.php?option=com_jfbconnect&task=logout&return=login',
+                                    type: "POST",
+                                    dataType: "json",
+                                    complete : function(){
+                                        window.location.reload();
+                                    }
+                                });
+                            }
+                        });
                     });
                     break;
 
