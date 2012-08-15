@@ -167,6 +167,7 @@ class FTTUserLibrary {
 
     public function get(){
        $result = array(
+            'jUser' => $this->joomla,
             'facebookFields' => $this->facebookFields,
             'sessionId' => $this->sessionId,
             'name' => $this->name,

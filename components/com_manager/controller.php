@@ -202,7 +202,8 @@ class JMBController extends JController
 			
 			case "myfamily":
                 if($invitation_token) return 'invitation';
-                if($user->guest && !$user->facebookId && $user->loginType != 1) return "login";
+                if($user->guest) return "login";
+                if($user->facebookId == 0 && $user->loginType != 1) return "login";
                 if($user->treeId==0) return "first-page";
                 return "myfamily";
 			break;
@@ -260,6 +261,23 @@ class JMBController extends JController
             return false;
         }
 
+    protected function checkPermission($user){
+        $host = &FamilyTreeTopHostLibrary::getInstance();
+        $username = $user->jUser->username;
+        $facebookId = $user->facebookId;
+
+        if(!$user->guest){
+
+            if($facebookId != null && $facebookId != 0 && $username != null){
+                $name = explode('_', $username);
+                if($name[1] != $facebookId){
+                    header('Location: '.$host->getBaseUrl().'index.php?option=com_jfbconnect&task=logout&return=login');
+                    exit;
+                }
+            }
+        }
+        return true;
+    }
         public function jmb(){
         	$task = JRequest::getVar('task');
         	$option = JRequest::getVar('option');
@@ -276,16 +294,7 @@ class JMBController extends JController
                 exit;
             }
 
-            /*
-            if(!$host->user->getJoomlaUser()->guest){
-                $user_name = explode('_', $host->user->getJoomlaUser()->username);
-                if($user_name[1] != $user->facebookId){
-                    header('Location: '.$host->getBaseUrl().'index.php?option=com_jfbconnect&task=logout&return=login');
-                    exit;
-                }
-            }
-            */
-
+            $this->checkPermission($user);
             $this->check_location($user);
         }
 
