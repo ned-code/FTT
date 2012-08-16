@@ -5,6 +5,7 @@
     font-weight: normal;
     position: relative;
     text-align: center;
+    width: 760px;
 }
 #JMBHomeContainer .jmb-home-logo {
     background: url("../imgs/jmbhomelogo.jpg") no-repeat scroll 0 0 transparent;
