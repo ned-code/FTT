@@ -474,6 +474,14 @@ JMBTooltip.prototype = {
     _getDefaultSettings:function(type){
         return (type==='view')?this.viewSettings:this.editSettings;
     },
+    _getSettings:function(type, args){
+        var module = this,
+            dSettings = module._getDefaultSettings(type),
+            argsSettings = module._getArgsSettings(args);
+        argsSettings.type = type;
+        argsSettings.style.contentSelector = ["jQuery('#", args.gedcom_id, "-tooltip-", type,"')"].join('');
+        return jQuery.extend(true, {}, dSettings, argsSettings);
+    },
     _getArgsSettings:function(args){
         var argsSettings = args;
         if(!argsSettings.style){
@@ -496,14 +504,6 @@ JMBTooltip.prototype = {
         }
         return argsSettings;
                 
-    },
-    _getSettings:function(type, args){
-        var module = this,
-            dSettings = module._getDefaultSettings(type),
-            argsSettings = module._getArgsSettings(args);
-        argsSettings.type = type;
-        argsSettings.style.contentSelector = ["jQuery('#", args.gedcom_id, "-tooltip-", type,"')"].join('');
-        return jQuery.extend(true, {}, dSettings, argsSettings);
     },
 	render:function(type, args){
 		var	module = this,

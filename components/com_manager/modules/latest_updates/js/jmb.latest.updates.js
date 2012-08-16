@@ -32,6 +32,10 @@ function JMBLatestUpdatesObject(offsetParent){
 				callback(storage.getJSON(res.responseText));
 			});
 		},
+        clean:function(){
+            jQuery(cont).remove();
+            cont = null;
+        },
 		content:function(json){
             var sb = host.stringBuffer(),
                 colors = settings.colors,
@@ -63,6 +67,8 @@ function JMBLatestUpdatesObject(offsetParent){
                             target:li,
                             afterEditorClose:function(){
                                 storage.tooltip.update();
+                                fn.clean();
+                                fn.load();
                             }
                         });
                     } else {
@@ -82,21 +88,24 @@ function JMBLatestUpdatesObject(offsetParent){
 			sb._('<div class="jmb-lu-button">');
 			sb._('</div>');
 			return jQuery(sb.result());
-		}
-	
-	}
-	
-	fn.start(function(json){
-        if(json.language){
-            message = json.language;
+		},
+        load:function(){
+            fn.start(function(json){
+                if(json.language){
+                    message = json.language;
+                }
+                data = json.data;
+                cont = fn.create(json);
+                content = fn.content(json);
+                jQuery(cont[1]).append(content);
+                jQuery(offsetParent).append(cont);
+                fn.finish();
+            });
         }
-		data = json.data;
-		cont = fn.create(json);
-		content = fn.content(json);
-		jQuery(cont[1]).append(content);
-		jQuery(offsetParent).append(cont);
-		fn.finish();
-	});
+	}
+
+    fn.load();
+
 	
 	storage.family_line.bind('JMBLatestUpdatesObject', function(res){
 		if(res._type!= 'pencil') return false;
