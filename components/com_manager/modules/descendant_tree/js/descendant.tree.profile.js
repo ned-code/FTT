@@ -28,7 +28,7 @@ DescendantTreeProfile.prototype = {
 	image:function(img, media){
 		var sb = host.stringBuffer();
         var cache = (media!=null)?media.cache:false;
-        sb._('<a href="')._(img.path)._('" rel="prettyPhoto[pp_gal]" title="">');
+        sb._('<a href="')._(storage.baseurl + img.path)._('" rel="prettyPhoto[pp_gal]" title="">');
             sb._(storage.usertree.photos.image({
                 cache:cache,
                 width:50,
