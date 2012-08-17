@@ -44,11 +44,14 @@ function JMBAncestorsObject(obj, popup){
 			var label = el.label;
 			var user = (data.is_exist)?data.object.user:false;
 			if(!user) continue;
-            var selector = 'div#'+res._line+'_line';
-            if(res._active){
-                jQuery(label).find(selector).addClass(res._line);
-            } else {
-                jQuery(label).find(selector).removeClass(res._line);
+            var type = 'is_'+res._line+'_line';
+            if(user[type]){
+                var selector = 'div#'+res._line+'_line';
+                if(res._active){
+                    jQuery(label).find(selector).addClass(res._line);
+                } else {
+                    jQuery(label).find(selector).removeClass(res._line);
+                }
             }
 		}
 	});
