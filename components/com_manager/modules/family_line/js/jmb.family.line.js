@@ -45,6 +45,23 @@ function JMBFamilyLine(){
 					callback(res);
 			});
 		},
+        getMsg:function(n){
+            var module = this;
+            var t = 'FTT_MOD_FAMILY_LINE_'+n.toUpperCase();
+            if(typeof(message[t]) != 'undefined'){
+                return message[t];
+            }
+            return '';
+        },
+        setMsg:function(msg){
+            var module = this;
+            for(var key in message){
+                if(typeof(msg[key]) != 'undefined'){
+                    message[key] = msg[key];
+                }
+            }
+            return true;
+        },
 		set:{
 			align:function(type){
 				var top, left;
@@ -343,9 +360,7 @@ function JMBFamilyLine(){
                 //var json = jQuery.parseJSON(res.responseText);
                 var json = storage.getJSON(res.responseText);
                 var title = page.page_info.title;
-                if(typeof(json.language)!='undefined'){
-                    message = json.language;
-                }
+                fn.setMsg(json.language);
                 loadData = json;
                 fn.init(options[title], json);
             });
