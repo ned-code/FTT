@@ -448,7 +448,8 @@ function JMBThisMonthObject(obj){
             var death = getUserEvent(object, 'death');
             if(birth.date != null && death.date != null){
                 if(birth.date[2] != null && death.date[2] != null){
-                    return  ' ('+getMsg('turns')+' '+ death.date[2] - birth.date[2]+')';
+                    var num = death.date[2] - birth.date[2];
+                    return  ' ('+getMsg('turns')+' '+ num +')';
                 }
             }
         }
