@@ -136,7 +136,58 @@ class JMBController extends JController
         exit;
     }
 
+    /*
+    protected function checkFacebookInvation($user){
+        if(!$user->facebookId) return false;
+        $host = &FamilyTreeTopHostLibrary::getInstance();
+        $alias = $host->getCurrentAlias();
+        if($alias != 'invitation'){
+            $sql_string = "SELECT belongs FROM #__mb_variables WHERE facebook_id = ?";
+            $host->ajax->setQuery($sql_string, $user->facebookId);
+            $rows = $host->ajax->loadAssocList();
+
+            if(empty($rows)){
+                return false;
+            } else {
+                return $rows[0]['belongs'];
+            }
+        }
+        return false;
+    }
+
+    protected function checkMailInvitataion($user){
+        if($user->email) return false;
+        $host = &FamilyTreeTopHostLibrary::getInstance();
+        $alias = $host->getCurrentAlias();
+        if($alias != 'invitation'){
+            $sql_string = "SELECT belongs FROM #__mb_variables WHERE email = ?";
+            $host->ajax->setQuery($sql_string, $user->email);
+            $rows = $host->ajax->loadAssocList();
+
+            if(empty($rows)){
+                return false;
+            } else {
+                return $rows[0]['belongs'];
+            }
+
+        }
+        return false;
+    }
+
+    protected  function checkToken(){
+        $token = JRequest::getVar('token');
+        return (empty($token))?false:$token;
+    }
+
+    */
+
+
     protected function getInvitationToken($user){
+        if($user->token){
+            return $user->token;
+        }
+        return false;
+        /*
         function getToken($user, $emailToken, $facebookToken){
             if($emailToken){
                 return $emailToken;
@@ -163,6 +214,7 @@ class JMBController extends JController
         if($user->guest) return false;
 
         return $token;
+        */
     }
 
 	protected function get_alias($user){
@@ -243,23 +295,7 @@ class JMBController extends JController
         exit;
     }
 
-        protected function checkFacebookInvation($user){
-            if(!$user->facebookId) return false;
-            $host = &FamilyTreeTopHostLibrary::getInstance();
-            $alias = $host->getCurrentAlias();
-            if($alias != 'invitation'){
-                $sql_string = "SELECT belongs FROM #__mb_variables WHERE facebook_id = ?";
-                $host->ajax->setQuery($sql_string, $user->facebookId);
-                $rows = $host->ajax->loadAssocList();
 
-                if(empty($rows)){
-                    return false;
-                } else {
-                    return $rows[0]['belongs'];
-                }
-            }
-            return false;
-        }
 
     protected function checkPermission($user){
         $host = &FamilyTreeTopHostLibrary::getInstance();
