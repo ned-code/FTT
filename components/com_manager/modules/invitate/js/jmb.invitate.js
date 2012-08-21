@@ -1,4 +1,61 @@
 function JMBInvitateObject(obj){
+    var module = this,
+        user = storage.usertree.usermap,
+        fn = {};
+
+    module.msg = {
+        FTT_MOD_INVITATE_MESSAGE_YOU_LOGGED_INTO: "You are currently logged into Facebook as %%. This person is already registered in Family Tree Top.",
+        FTT_MOD_INVITATE_MESSAGE_CLICK_TO_LOG_INTO_FACEBOOK: "Click <a id='logout' href='#'>here</a> to log into Facebook with a different account.",
+        FTT_MOD_INVITATE_HELLO: "Hello",
+        FTT_MOD_INVITATE_HAS_INVITED_YOU: "has invited you to join this family tree.",
+        FTT_MOD_INVITATE_ACCEPT: "Accept Invitation",
+        FTT_MOD_INVITATE_DENY: "Deny Invitation",
+        FTT_MOD_ALERT_INVITATION_LINK_NO_LONGER_VALID: "This invitation link is no longer valid."
+    }
+
+    fn.checkUser = function(c){
+        module.ajax('checkUser', null, function(res){
+            var json = storage.getJSON(res.responseText);
+            module.setMsg(json.msg);
+            c(json);
+        });
+    }
+
+    fn.boxIfUserExist = function(){
+        var sb = storage.stringBuffer();
+        sb._('<div class="exist">');
+            sb._(module.getMsg('MESSAGE_YOU_LOGGED_INTO').replace('%%', user.name));
+            sb._(module.getMsg('MESSAGE_CLICK_TO_LOG_INTO_FACEBOOK'));
+        sb._('</div>');
+        return sb.result();
+    }
+
+    fn.boxInvitation = function(){
+        var sb = storage.stringBuffer();
+        sb._('<div>');
+            sb._('<div>Hello Pedro!</div>');
+            sb._('<div>');
+                sb._('Your cousin, Fernando Oliveira, has invited you to join your family tree on Family TreeTop. This is a private space that can only be seen by members of your family.');
+            sb._('</div>');
+            sb._('<div>');
+                sb._('<div>Accept Invitation</div>');
+                sb._('<div>No, thanks</div>');
+            sb._('</div>');
+        sb._('</div>');
+        sb._('<div></div>');
+        sb._('<div>');
+        sb._('Not sure? Click here to view the Facebook profile for Fernando. If you wish to contact Fernando, you may email him at a@a.com');
+        sb._('</div>');
+        return sb.result();
+    }
+
+    fn.boxFamily = function(){
+        var sb = storage.stringBuffer();
+
+
+    }
+
+    /*
     var module = this;
     var sb = host.stringBuffer();
     var user = storage.usertree.usermap;
@@ -59,13 +116,6 @@ function JMBInvitateObject(obj){
             var id = jQuery(this).attr('id');
             switch(id){
                 case "logout":
-                    console.log(window.location.href);
-                    /*
-                    FB.logout(function(){
-                        jfbcLogoutFacebook = true;
-                        jfbc.login.logout_button_click();
-                    });
-                    */
                     FB.logout(function(){
                         FB.login(function(response){
                             if (response.authResponse) {
@@ -103,6 +153,7 @@ function JMBInvitateObject(obj){
             return false;
         });
     });
+*/
 }
 
 JMBInvitateObject.prototype = {
