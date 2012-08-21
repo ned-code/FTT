@@ -75,7 +75,9 @@ class JMBInvitateClass {
     }
 
     public function accept(){
-        return $this->invite($this->user->facebookId, $this->user->token);
+        $facebookId = $this->user->facebookId;
+        $token = $this->user->token;
+        return $this->invite($facebookId, $token);
     }
 
     public function deny(){

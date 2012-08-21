@@ -180,7 +180,7 @@ class FTTUserLibrary {
     protected function _setUserMap(){
         $userMap = $this->_getUserMap();
         $sessionMap = $this->_getSessionMap();
-        if($sessionMap){
+        if($sessionMap || $userMap){
             if($userMap){
                 $this->updateSession();
                 $this->_set($userMap);
