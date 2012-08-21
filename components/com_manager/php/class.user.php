@@ -91,15 +91,15 @@ class FTTUserLibrary {
         $this->host->ajax->setQuery($sqlString.$byFacebookId, $this->facebookId);
         $responseByFacebook = $this->host->ajax->loadAssocList();
 
-        if($responseByFacebook){
-            return $responseByFacebook;
+        if(!empty($responseByFacebook)){
+            return $responseByFacebook[0]['belongs'];
         }
 
         $this->host->ajax->setQuery($sqlString.$byEmail, $this->facebookFields['email']);
         $responseByEmail = $this->host->ajax->loadAssocList();
 
-        if($responseByEmail){
-            return $responseByEmail;
+        if(!empty($responseByEmail)){
+            return $responseByEmail[0]['belongs'];
         }
 
         return 0;
@@ -148,6 +148,7 @@ class FTTUserLibrary {
     }
 
     protected function _getUserMap(){
+        if(!$this->joomlaId) return false;
         $sqlString = "SELECT facebook_id, session_id, user_id, tree_id, gedcom_id, permission, login_type, page, language, token FROM #__mb_user_map WHERE user_id = ?";
         $this->host->ajax->setQuery($sqlString, $this->joomlaId);
         $result = $this->host->ajax->loadAssocList();
@@ -177,117 +178,27 @@ class FTTUserLibrary {
     }
 
     protected function _setUserMap(){
-        $sessionMap = $this->_getSessionMap();
         $userMap = $this->_getUserMap();
-        $data = $this->data;
-
-        if($userMap){
-            // user_map
-            $this->updateSession();
-            $data['tree_id'] = $userMap['tree_id'];
-            $data['gedcom_id'] = $userMap['gedcom_id'];
-            $data['permission'] = $userMap['permission'];
-            $data['login_type'] = $userMap['login_type'];
-            $data['language'] = $userMap['language'];
-            $data['page'] = $userMap['page'];
-        } else {
-            if($sessionMap){
-                if($this->facebookId && !$sessionMap['facebook_id']){
+        $sessionMap = $this->_getSessionMap();
+        if($sessionMap){
+            if($userMap){
+                $this->updateSession();
+                $this->_set($userMap);
+            } else {
+                $this->_set($sessionMap);
+                if($this->facebookId && !$userMap['facebook_id']){
                     $this->setMapFacebookId($this->facebookId);
                     $this->setJoomlaId($this->joomlaId);
-                    $this->setLanguage($this->language);
+                    $this->set($this->treeId, $this->gedcomId, 0);
+                    $this->setPermission($this->permission);
                 }
-                //if exist tree_id and gedcom_id, set variables
-                if($data['tree_id'] && $data['gedcom_id']){
-                    $this->set($data['tree_id'], $data['gedcom_id'], 0);
-                    $this->setPermission($data['permission']);
-                }
-                //if token exist, set variable
-                if($data['token'] != 0){
-                    $this->setToken($data['token'], true);
-                }
-                if($data['page']){
-                    $data['page'] = $sessionMap['page'];
-                }
-            } else {
-                $this->_createMap();
             }
-        }
-
-        $this->_set(array(
-            'tree_id' =>$data['tree_id'],
-            'gedcom_id' =>$data['gedcom_id'],
-            'permission' =>$data['permission'],
-            'login_type'=>$data['login_type'],
-            'page'=>$data['page'],
-            'language'=>$data['language'],
-            'token'=>$data['token']
-        ));
-
-        /*
-        $userMap = $this->_getUserMap();
-        $userInSystem = $this->_getIndividualsInSystem($this->facebookId);
-        if($userMap){
-            if($this->facebookId && !$userMap['facebook_id']){
-                $this->setMapFacebookId($this->facebookId);
-                $this->setJoomlaId($this->joomlaId);
-                $this->setLanguage($this->language);
-                if($userInSystem){
-                    $this->set($userInSystem['tree_id'], $userInSystem['gedcom_id'], 0);
-                    $this->setPermission($userInSystem['permission']);
-                    $this->_set(array(
-                        'gedcom_id' =>$userInSystem['gedcom_id'],
-                        'tree_id' =>$userInSystem['tree_id'],
-                        'permission' =>$userInSystem['permission'],
-                        'login_type'=>$userMap['login_type'],
-                        'language'=>$this->language,
-                        'page'=>$userMap['page'],
-                        'token'=>$userMap['token']
-                    ));
-                } else {
-                    $this->_set(array(
-                        'gedcom_id' =>0,
-                        'tree_id' =>0,
-                        'permission' =>'GUEST',
-                        'login_type'=>$userMap['login_type'],
-                        'language'=>$this->language,
-                        'page'=>$userMap['page'],
-                        'token'=>$userMap['token']
-                    ));
-                }
-
-            } else {
-                $this->_set($userMap);
-            }
-            return true;
-        }
-        $sqlString = "INSERT INTO #__mb_user_map (`facebook_id`,`session_id`,`tree_id`, `gedcom_id`, `user_id`, `permission`, `login_type`, `page`,`language`, `token`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
-        if($userInSystem){
-            $this->host->ajax->setQuery($sqlString, $this->facebookId, $this->sessionId, $userInSystem['tree_id'], $userInSystem['gedcom_id'], $this->joomlaId, $userInSystem['permission'], 0, $this->currentAlias, $this->language, 0);
-            $this->host->ajax->query();
-            $this->_set(array(
-                'gedcom_id' =>$userInSystem['gedcom_id'],
-                'tree_id' =>$userInSystem['tree_id'],
-                'permission' =>$userInSystem['permission'],
-                'login_type'=>0,
-                'language'=>$this->language,
-                'page'=>$this->currentAlias,
-                'token'=>0
-            ));
         } else {
-            $this->host->ajax->setQuery($sqlString, $this->facebookId, $this->sessionId, 0, 0, $this->joomlaId, 'GUEST', 0, $this->currentAlias, $this->language, 0);
-            $this->host->ajax->query();
-            $this->_set(array(
-                'gedcom_id' =>0,
-                'tree_id' =>0,
-                'permission' =>'GUEST',
-                'login_type'=>0,
-                'language'=>$this->language,
-                'page'=>$this->currentAlias,
-                'token'=>0
-            ));
+            $this->_createMap();
         }
-        */
+        if($this->token == 0 && strlen($this->data['token']) > 1){
+            $this->setToken($this->data['token']);
+        }
     }
 
     public function get(){
@@ -386,7 +297,8 @@ class FTTUserLibrary {
     public function setToken($token, $user = false){
         $sqlString = "UPDATE #__mb_user_map SET `token` = ?, `time` = NOW() WHERE ";
         $sqlString .= ($user)?"user_id = ?":"session_id = ?";
-        $this->host->ajax->setQuery($sqlString, $token, ($user)?$this->joomlaId:$this->sessionId);
+        $id = ( $user )? $this->joomlaId : $this->sessionId ;
+        $this->host->ajax->setQuery($sqlString, $token, $id);
         $this->host->ajax->query();
 
         $this->token = $token;
