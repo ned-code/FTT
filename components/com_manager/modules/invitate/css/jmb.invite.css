@@ -1,39 +1,61 @@
 #JMBInvitateContainer{
     font-family: Tahoma;
     font-size: 12px;
-    margin: 10px;
-    text-align: center;
-}
-#JMBInvitateContainer div.exist{
-    font-size:18px;
 }
 
-#JMBInvitateContainer div.exist a{
-    color:#71d4ff;
-    text-decoration: none;
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
 }
-#JMBInvitateContainer table{
+.ftt-invitate-header {
+    background: none repeat scroll 0 0 #FFFFD2;
+    border-bottom: 1px solid #FFA46A;
+}
+.ftt-invitate-header-body {
+    max-width:760px;
     margin: 0 auto;
 }
-#JMBInvitateContainer table div.text{
-    font-weight: bold;
-    height: 20px;
+.ftt-invitate-hello {
+    padding-top: 20px;
 }
-#JMBInvitateContainer table a {
-    color: blue;
-    text-decoration: none;
+.ftt-invitate-message {
+    margin-top: 10px;
 }
-#JMBInvitateContainer div.accept {
-    border: 1px solid #999999;
+.ftt-invitate-buttons {
+    margin: 20px auto;
+    width: 350px;
+}
+.ftt-invitate-button {
+    border: 1px solid #000000;
     border-radius: 5px 5px 5px 5px;
-    font-size: 11px;
+    color: white;
+    cursor: pointer;
+    display: inline-block;
+    font-weight: bold;
     height: 30px;
-    line-height: 24px;
-    margin-top: 12px;
-    width: 200px;
-    margin: 0 auto;
-}
-#JMBInvitateContainer div.accept a {
-    color: blue;
+    line-height: 30px;
+    margin: 5px;
+    text-align: center;
     text-decoration: none;
+    width: 150px;
 }
+.ftt-invitate-button.accept {
+    background: #22b14c;
+}
+.ftt-invitate-button.deny {
+    background: #ed1c24;
+}
+.ftt-invitate-content {
+    margin: 10px;
+}
+.ftt-invitate-footer {
+    background: none repeat scroll 0 0 #FFFFD2;
+    border-bottom: 1px solid #FFA46A;
+    border-top: 1px solid #FFA46A;
+}
+.ftt-invitate-footer-body {
+    margin: 0 auto;
+    max-width: 760px;
+    padding: 20px;
+}
+

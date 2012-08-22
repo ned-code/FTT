@@ -36,6 +36,12 @@ class JMBInvitateClass {
         exit;
     }
 
+    protected function _getSenderEmail($user){
+        $sqlString = "SELECT id, name, email FROM #__users WHERE username = ?";
+        $this->host->ajax->setQuery($sqlString, 'fb_'. $user->FacebookId);
+        return $this->host->ajax->loadAssocList();
+    }
+
     public function checkUser(){
         $sql_string = "SELECT i.id, i.fid as facebook_id, u.email
                         FROM #__mb_individuals AS i
@@ -56,16 +62,20 @@ class JMBInvitateClass {
             }
         }
         if($this->user->token){
-            $sql_string = "SELECT s_gedcom_id FROM #__mb_variables WHERE belongs = ?";
+            $sql_string = "SELECT s_gedcom_id, value FROM #__mb_variables WHERE belongs = ?";
             $this->host->ajax->setQuery($sql_string, $this->user->token);
             $rows = $this->host->ajax->loadAssocList();
             if(!empty($rows)){
-                $i = $this->host->gedcom->individuals->get($rows[0]['s_gedcom_id']);
-                $name = ($i->FirstName != null)?$i->FirstName:'';
-                $name .= ' ';
-                $name .= ($i->LastName != null)?$i->LastName:'';
-                $name = trim($name);
-                return json_encode(array('success'=>false, 'sender'=>$name, 'msg'=>$language));
+                $opt = explode(',', $rows[0]['value']);
+                $user = $this->host->gedcom->individuals->get($rows[0]['s_gedcom_id']);
+                $family = $this->host->usertree->getUser($user->TreeId, $user->Id, $user->Id);
+                $data = array(
+                    'from' => $rows[0]['s_gedcom_id'],
+                    'to' => $opt[0],
+                    'relation' => $this->host->gedcom->relation->get($opt[1], $opt[0], $rows[0]['s_gedcom_id']),
+                    'sender_data' => $this->_getSenderEmail($user)
+                );
+                return json_encode(array('success'=>false, 'sender'=>$user, 'family'=>$family, 'data' => $data, 'msg'=>$language));
             }
         }
         $this->host->user->setToken(0);
