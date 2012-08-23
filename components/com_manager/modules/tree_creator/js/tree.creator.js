@@ -773,7 +773,7 @@ function JMBTreeCreatorObject(parent){
                         sb._('</a> ');
                         sb._(module.msg.FTT_MOD_TREE_CREATOR_BOX_TEXT_3);
                     sb._('.</div>');
-                    sb._('<div class="image"><img src="http://familytreetop.com/zzzfiles/big-family-line-800.png"></div>');
+                    sb._('<div class="image">&nbsp;</div>');
                 sb._('</div>');
                 return  module.body = jQuery(sb.result());
             }

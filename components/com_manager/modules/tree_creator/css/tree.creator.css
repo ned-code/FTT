@@ -45,6 +45,9 @@
 #JMBTreeCreatorContainer div.box div.text{}
 #JMBTreeCreatorContainer div.box div.image{
     margin-top: 20px;
+    width: 800px;
+    height: 75px;
+    background: url(big-family-line-800.png);
 }
 
 .ui-dialog.ui-widget.ftt_tree_creator {
