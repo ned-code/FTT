@@ -2,7 +2,9 @@
     font-family: Tahoma;
     font-size: 12px;
 }
-
+/**
+*  -----------------------------------------------
+*/
 table {
     border-collapse: collapse;
     border-spacing: 0;
@@ -46,7 +48,10 @@ table {
     background: #ed1c24;
 }
 .ftt-invitate-content {
-    margin: 10px;
+    margin: 10px auto;
+    max-width: 760px;
+    min-height: 400px;
+    position: relative;
 }
 .ftt-invitate-footer {
     background: none repeat scroll 0 0 #FFFFD2;
@@ -58,4 +63,102 @@ table {
     max-width: 760px;
     padding: 20px;
 }
-
+/**
+*  -----------------------------------------------
+*/
+.ftt-invite-sircar {
+    height: 260px;
+    width:155px;
+    position: absolute;
+}
+.ftt-invite-event {
+    position:absolute;
+    height:30px;
+    width:120px;
+}
+.ftt-invite-spouse {
+    height: 260px;
+    width:120px;
+    margin-left: 38px;
+    position: absolute;
+}
+.ftt-invite-spouse-div{
+    margin-bottom: 7px;
+    margin-left: 30px;
+}
+.ftt-invite-spouse-container {
+    border: 1px solid #F5FAE6;
+    max-height: 375px;
+    position:absolute;
+    width:175px;
+}
+.ftt-invite-parent-img {
+    background: white;
+    border: 2px solid #000000;
+    height: 120px;
+    position: relative;
+    width: 108px;
+}
+.ftt-invite-parent-name {
+    font-family: Tahoma;
+    font-size: 11px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    width: 112px;
+}
+.ftt-invite-parent-date {
+    font-family: Tahoma;
+    font-size: 11px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    width: 112px;
+}
+.ftt-invite-child {
+    position: absolute;
+}
+.ftt-invite-child-img {
+    background: white;
+    border:2px solid #000;
+    border: 2px solid #000000;
+    position: relative;
+}
+.ftt-invite-child-name {
+    font-family: Tahoma;
+    font-size: 11px;
+    height: 11px;
+    line-height: 11px;
+    text-align: center;
+}
+.ftt-invite-child-date {
+    font-family: Tahoma;
+    font-size: 11px;
+    height: 14px;
+    line-height: 14px;
+    text-align: center;
+}
+.ftt-invite-arrow-left {
+    background:#000000;
+    height: 1px;
+    left: 112px;
+    position: absolute;
+    top: 120px;
+    width: 38px;
+}
+.ftt-invite-arrow-right {
+     background:#000000;
+     height: 1px;
+     left: -36px;
+     position: absolute;
+     top: 120px;
+     width: 38px;
+}
+.ftt-invite-arrow-up {
+    background:#000000;
+    height: 28px;
+    left: 39px;
+    position: absolute;
+    top: -26px;
+    width: 1px;
+}

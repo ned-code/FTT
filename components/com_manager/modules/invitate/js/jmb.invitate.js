@@ -3,6 +3,21 @@ function JMBInvitateObject(obj){
         user = storage.usertree.usermap,
         fn = {};
 
+    module.imageSize = {
+        parent:{
+            width:108,
+            height:120
+        },
+        child:{
+            width:72,
+            height:80
+        }
+    }
+
+    module.borders = ['61c77f','a64751','5c63d3','d3c15c','705cd3'];
+    module.spouse_border = {};
+    module.childsPos = {};
+
     module.msg = {
         FTT_MOD_INVITATE_MESSAGE_YOU_LOGGED_INTO: "You are currently logged into Facebook as %%. This person is already registered in Family Tree Top.",
         FTT_MOD_INVITATE_MESSAGE_CLICK_TO_LOG_INTO_FACEBOOK: "Click <a id='logout' href='#'>here</a> to log into Facebook with a different account.",
@@ -111,7 +126,254 @@ function JMBInvitateObject(obj){
     }
 
     fn.boxFamily = function(json, object){
-        var sb = storage.stringBuffer();
+        if(json.family&&json.family.length==0) return false;
+        var cont = _create(),
+            family = _sort(json.family),
+            target = fn.getTarget(json),
+            spouses = _getSpouses(target.families, target.user.default_family),
+            childrens = _getChildrens(target.families),
+            spouse = [],
+            childs = [],
+            startTop,
+            rowLength,
+            leftDel,
+            index,
+            startLeft,
+            i;
+
+        jQuery(cont[0]).css({top:"50px",left:"120px"}).attr('id', target.user.gedcom_id).append(_sircar(target));
+
+        if(spouses.length != 0){
+            module.spouse_border[spouses[0][0]] = module.borders[0];
+            spouse[0] = _spouse(spouses[0], (spouses.length>1)?module.borders[0]:"000000");
+            jQuery(cont[2]).attr('id', spouses[0][1]).css({top:"50px",left:"395px"}).append(spouse[0]);
+            if(spouses.length > 1){
+                jQuery(cont[3]).css({top:(spouses.length>=3)?"30px":"75px",left:"555px"});
+                for(i = 1 ; i < spouses.length ; i ++){
+                    module.spouse_border[spouses[i][0]] = module.borders[i];
+                    spouse[i] = _former_spouse(spouses[i], module.borders[i]);
+                    jQuery(cont[3]).append(spouse[i]);
+                    jQuery(cont[3]).addClass('active');
+                    setTimeout(function(){
+                        jQuery(cont[3]).scrollbar();
+                    }, 1);
+                }
+            } else {
+                jQuery(cont[3]).removeClass('active');
+            }
+        } else {
+            jQuery(cont[3]).removeClass('active');
+        }
+
+        startTop = _getStartTop(spouses.length);
+        if(childrens.length!=0){
+            rowLength = _getLength(childrens.length);
+            leftDel = 100;
+            index = 0;
+            startLeft = 350 - 100*(rowLength/2);
+            for(i = 0 ; i < childrens.length ; i++){
+                if(index == rowLength){
+                    startTop += 185;
+                    index = 0;
+                    if((childrens.length-i)<rowLength){
+                        startLeft = 350 - 100*((childrens.length-i)/2);
+                    }
+                }
+                var pos = {top:startTop, left:startLeft+(index*leftDel)};
+                module.childsPos[childrens[i].gedcom_id] = pos;
+                childs[i] = _child(childrens[i], spouses.length, pos);
+                jQuery(object[1]).append(childs[i]);
+                index++;
+            }
+        }
+
+        jQuery(object[1]).height(startTop + 200);
+        jQuery(object[1]).append(cont);
+        jQuery(object[1]).find('div#'+target.user.gedcom_id).find('div[type="imgContainer"]').animatedBorder({size : 6, color : '#FFCC66'});
+
+        return true;
+        function _getLength(len){
+            var limit = 7;
+            var rows = Math.ceil(len/limit);
+            return Math.round(len/rows);
+        }
+        function _getStartTop(length){
+            if(length>=3){
+                return 450;
+            }
+            return 315;
+        }
+        function _getName(info){
+            if(info.nick.length > 12){
+                return info.nick.substr(0,6)+'...';
+            } else {
+                return info.nick;
+            }
+        }
+        function _getDate(info){
+            var b = info.birth('year');
+            if(b){
+                return b;
+            } else {
+                return '....';
+            }
+        }
+        function _getAvatar(object, type, k){
+            var size = _getImageSize_(type, k);
+            return storage.usertree.avatar.get({
+                object:object,
+                cssClass:"jmb-families-avatar view",
+                width:size.width,
+                height:size.height
+            });
+            function _getImageSize_(){
+                var	imageSize = module.imageSize,
+                    size = imageSize[type],
+                    width = Math.round(size.width*k),
+                    height = Math.round(size.height*k);
+                return {
+                    width: width,
+                    height: height
+                };
+            }
+        }
+        function _getSpouses(families, def){
+            if(families==null) return [];
+            var spouses = [], family, spouse;
+            for(var key in families){
+                if (!families.hasOwnProperty(key)) continue;
+                if(key!='length'){
+                    family = families[key];
+                    if(family.spouse!=null){
+                        spouse = [family.id, family.spouse];
+                        spouses.push(spouse);
+                    }
+                }
+            }
+            return spouses.sort(function(){
+                if(arguments[0][0] == def){
+                    return false;
+                } else {
+                    return true;
+                }
+            });
+        }
+        function _getChildrens(families){
+            var childrens = [], family, child;
+            for(var key in families){
+                if (!families.hasOwnProperty(key)) continue;
+                if(key!='length'){
+                    family = families[key];
+                    if(family.childrens!=null){
+                        for(var i = 0 ; i < family.childrens.length ; i ++){
+                            child = family.childrens[i];
+                            childrens.push(child);
+                        }
+                    }
+                }
+            }
+            return childrens;
+        }
+        function _sort(family){
+            if(family&&family.length == 0) return [];
+            var ar = {};
+            for(var k = 0 ; k <= family.length; k++){
+                var o = family[k];
+                if(o){
+                    var id = o.user.gedcom_id;
+                    ar[id] = o;
+                }
+            }
+            return ar;
+        }
+        function _create(){
+            var sb = storage.stringBuffer();
+            sb._('<div class="ftt-invite-sircar">&nbsp;</div>');
+            sb._('<div class="ftt-invite-event">&nbsp;</div>');
+            sb._('<div class="ftt-invite-spouse">&nbsp;</div>');
+            sb._('<div class="ftt-invite-spouse-container">&nbsp;</div>');
+            return jQuery(sb.result());
+        }
+        function _sircar(object){
+            var sb = storage.stringBuffer();
+            var gedcomId = object.user.gedcom_id;
+            var info = storage.usertree.parse(object);
+            sb._('<div>');
+                sb._('<div id="')._(gedcomId)._('-view" type="imgContainer" class="ftt-invite-parent-img">');
+                    sb._(_getAvatar(object, 'parent', 1));
+                sb._('</div>');
+            sb._('</div>');
+            sb._('<div>');
+                sb._('<div class="ftt-invite-parent-name">')._(_getName(info))._('</div>');
+                sb._('<div class="ftt-invite-parent-date">')._(_getDate(info))._('</div>');
+            sb._('</div>');
+            if(object.families!=null){
+                sb._('<div class="ftt-invite-arrow-left">&nbsp</div>');
+            }
+            return jQuery(sb.result());
+        }
+        function _spouse(spouse, bcolor){
+            var sb = storage.stringBuffer(),
+                gedcomId = spouse[1],
+                object = family[gedcomId],
+                info = storage.usertree.parse(object);
+            sb._('<div>');
+                sb._('<div id="')._(gedcomId)._('-view" type="imgContainer" class="ftt-invite-parent-img" style="border:2px solid #')._(bcolor)._(';">');
+                    sb._(_getAvatar(object, 'parent', 1));
+                sb._('</div>');
+            sb._('</div>');
+            sb._('<div>');
+                sb._('<div class="ftt-invite-parent-name">')._(_getName(info))._('</div>');
+                sb._('<div class="ftt-invite-parent-date">')._(_getDate(info))._('</div>');
+            sb._('</div>');
+            if(object.families!=null){
+                sb._('<div class="ftt-invite-arrow-right" style="background:#')._(bcolor)._(';">&nbsp</div>');
+            }
+            return jQuery(sb.result());
+        }
+        function _former_spouse(spouse, bcolor){
+            var sb = storage.stringBuffer(),
+                gedcomId = spouse[1],
+                object = family[gedcomId],
+                info = storage.usertree.parse(object);
+
+            sb._('<div id="')._(gedcomId)._('" class="ftt-invite-spouse-div">');
+                sb._('<div id="')._(gedcomId)._('-view" type="imgContainer" class="ftt-invite-parent-img" style="border:2px solid #')._(bcolor)._(';">');
+                    sb._(_getAvatar(object, 'parent', 1));
+                sb._('</div>');
+            sb._('</div>');
+            sb._('<div>');
+                sb._('<div class="ftt-invite-parent-name">')._(_getName(info))._('</div>');
+                sb._('<div class="ftt-invite-parent-date">')._(_getDate(info))._('</div>');
+            sb._('</div>');
+        }
+        function _child(child, len, position){
+            var sb = storage.stringBuffer(),
+                gedcomId = child.gedcom_id,
+                object = family[gedcomId],
+                bcolor = (len>1)?module.spouse_border[child.family_id]:"000000",
+                info = storage.usertree.parse(object);
+
+            sb._('<div id="');
+                sb._(gedcomId);
+                sb._('" class="ftt-invite-child" style="height:170px;top:');
+                    sb._(position.top);
+                sb._('px;left:');
+                    sb._(position.left);
+            sb._('px;">');
+                sb._('<div id="')._(gedcomId)._('-view" type="imgContainer" style="height:80px;width:72px;border:2px solid #');
+                    sb._(bcolor);
+                    sb._('" class="ftt-invite-child-img">');
+                    sb._(_getAvatar(object, 'child', 1));
+                sb._('</div>');
+                sb._('<div>');
+                    sb._('<div class="ftt-invite-child-name">')._(_getName(info))._('</div>');
+                    sb._('<div class="ftt-invite-child-date">')._(_getDate(info))._('</div>');
+                sb._('</div>');
+                sb._('<div class="ftt-invite-arrow-up" style="background:#')._(bcolor)._(';">&nbsp</div>');
+            sb._('</div>');
+            return jQuery(sb.result());
+        }
     }
 
     fn.handlerButtonClick = function(object){
@@ -137,6 +399,8 @@ function JMBInvitateObject(obj){
         var cont, object;
         if(json.success){
              cont = fn.boxIfUserExist(json);
+             jQuery(obj).append(cont);
+             return;
         } else {
             if(!json.sender){
                 storage.alert(module.getMsg('ALERT_INVITATION_LINK_NO_LONGER_VALID'));
@@ -151,108 +415,7 @@ function JMBInvitateObject(obj){
         jQuery(obj).append(object);
         fn.boxFamily(json, object);
         fn.handlerButtonClick(object)
-        console.log(json);
     });
-
-    /*
-    var module = this;
-    var sb = host.stringBuffer();
-    var user = storage.usertree.usermap;
-
-    module.msg = {
-        FTT_MOD_INVITATE_MESSAGE_YOU_LOGGED_INTO: "You are currently logged into Facebook as %%. This person is already registered in Family Tree Top.",
-        FTT_MOD_INVITATE_MESSAGE_CLICK_TO_LOG_INTO_FACEBOOK: "Click <a id='logout' href='#'>here</a> to log into Facebook with a different account.",
-        FTT_MOD_INVITATE_HELLO: "Hello",
-        FTT_MOD_INVITATE_HAS_INVITED_YOU: "has invited you to join this family tree.",
-        FTT_MOD_INVITATE_ACCEPT: "Accept Invitation",
-        FTT_MOD_INVITATE_DENY: "Deny Invitation",
-        FTT_MOD_ALERT_INVITATION_LINK_NO_LONGER_VALID: "This invitation link is no longer valid."
-    }
-
-    module.ajax('checkUser', null, function(res){
-        var json = storage.getJSON(res.responseText);
-        module.setMsg(json.msg);
-        if(json.success){
-            sb._('<div class="exist">');
-                sb._(module.getMsg('MESSAGE_YOU_LOGGED_INTO').replace('%%', user.name));
-                sb._(module.getMsg('MESSAGE_CLICK_TO_LOG_INTO_FACEBOOK'));
-            sb._('</div>');
-        } else {
-            if(!json.sender){
-                storage.alert(module.getMsg('ALERT_INVITATION_LINK_NO_LONGER_VALID'));
-                window.location.href = storage.baseurl + 'index.php/first-page';
-                return false;
-            }
-            sb._('<table>');
-                sb._('<tr>');
-                    sb._('<td>');
-                        sb._('<div class="text"><span>')._(module.getMsg('HELLO'))._(' ')._(user.name)._('</span></div>');
-                        sb._('<div class="text"><span>')._(json.sender)._(' ')._(module.getMsg('HAS_INVITED_YOU'))._('</span></div>');
-                    sb._('</td>');
-                sb._('</tr>');
-                sb._('<tr>');
-                    sb._('<td>');
-                        sb._('<div class="avatar">');
-                            sb._('<img src="http://graph.facebook.com/')._(user.facebookId)._('/picture?type=large">');
-                        sb._('</div>');
-                    sb._('</td>');
-                sb._('</tr>');
-                sb._('<tr>');
-                    sb._('<td>');
-                        sb._('<div class="accept"><a id="accept" href="#">')._(module.getMsg('ACCEPT'))._('</a></div>');
-                    sb._('</td>');
-                sb._('</tr>');
-                sb._('<tr>');
-                    sb._('<td>');
-                        sb._('<div class="accept"><a id="deny" href="#">')._(module.getMsg('DENY'))._('</a></div>');
-                    sb._('</td>');
-                sb._('</tr>');
-            sb._('</table>');
-        }
-        var htmlObject = jQuery(sb.result());
-        jQuery(obj).append(htmlObject);
-        jQuery(htmlObject).find('a').click(function(){
-            var id = jQuery(this).attr('id');
-            switch(id){
-                case "logout":
-                    FB.logout(function(){
-                        FB.login(function(response){
-                            if (response.authResponse) {
-                                jQuery.ajax({
-                                    url: 'index.php?option=com_jfbconnect&task=logout&return=login',
-                                    type: "POST",
-                                    dataType: "json",
-                                    complete : function(){
-                                        window.location.reload();
-                                    }
-                                });
-                            }
-                        });
-                    });
-                    break;
-
-                case "accept":
-                    module.ajax('accept', null, function(acceptResponse){
-                        var parseAcceptResponse = storage.getJSON(acceptResponse.responseText);
-                        if(parseAcceptResponse){
-                            window.location = storage.baseurl+'index.php/myfamily';
-                        }
-                    });
-                    break;
-
-                case "deny":
-                    module.ajax('deny', null, function(denyResponse){
-                        var denyResponse = storage.getJSON(denyResponse.responseText);
-                        if(denyResponse){
-                            window.location = storage.baseurl+'index.php/first-page';
-                        }
-                    });
-                    break;
-            }
-            return false;
-        });
-    });
-*/
 }
 
 JMBInvitateObject.prototype = {
