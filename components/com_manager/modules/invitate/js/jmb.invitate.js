@@ -28,6 +28,19 @@ function JMBInvitateObject(obj){
         FTT_MOD_ALERT_INVITATION_LINK_NO_LONGER_VALID: "This invitation link is no longer valid."
     }
 
+    fn.getObjectFirst = function(obj){
+        for (var key in obj){
+            if(obj.hasOwnProperty(key)){
+                return obj[key];
+            }
+        }
+    }
+
+    fn.getExistParent = function(obj){
+        return obj.father || obj.mother;
+    }
+
+
     fn.checkUser = function(c){
         module.ajax('checkUser', null, function(res){
             var json = storage.getJSON(res.responseText);
@@ -56,8 +69,19 @@ function JMBInvitateObject(obj){
     }
 
     fn.getTarget = function(json){
-        var target_id = json.data.to;
-        return fn.getObjectbyId(json.family, target_id);
+        var start_id = json.data.to;
+        var startObject =  fn.getObjectbyId(json.family, start_id);
+        if(startObject.families != null){
+            return startObject;
+        } else {
+            if(startObject.parents != null){
+                var family = fn.getObjectFirst(startObject.parents);
+                var existParent = fn.getExistParent(family);
+                return fn.getObjectbyId(json.family, existParent.gedcom_id);
+            } else {
+                return startObject;
+            }
+        }
     }
 
     fn.getSender = function(json){
@@ -75,6 +99,10 @@ function JMBInvitateObject(obj){
 
     fn.getFirstName = function(object){
         return object.user.first_name;
+    }
+
+    fn.getFacebookName = function(){
+        return storage.usertree.usermap.facebookFields.first_name;
     }
 
     fn.getFacebookProfileLink = function(object, text){
@@ -189,7 +217,7 @@ function JMBInvitateObject(obj){
 
         jQuery(object[1]).height(startTop + 200);
         jQuery(object[1]).append(cont);
-        jQuery(object[1]).find('div#'+target.user.gedcom_id).find('div[type="imgContainer"]').animatedBorder({size : 6, color : '#FFCC66'});
+        jQuery(object[1]).find('div#'+json.data.to).find('div[type="imgContainer"]').animatedBorder({size : 6, color : '#FFCC66'});
 
         return true;
         function _getLength(len){

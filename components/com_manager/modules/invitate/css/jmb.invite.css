@@ -130,6 +130,7 @@ table {
     height: 11px;
     line-height: 11px;
     text-align: center;
+    margin-top: 5px;
 }
 .ftt-invite-child-date {
     font-family: Tahoma;
