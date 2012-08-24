@@ -96,7 +96,7 @@ class JMBInvitation {
         $language = $this->host->getLangList('invitation');
         $tpl = $views['invite'];
 		
-		$value = $recipient['user']['gedcom_id'].','.$tree_id;	
+		$value = $gedcom_id.','.$tree_id;
 		
 		$token = md5($value);
 
