@@ -423,8 +423,17 @@ function JMBInvitateObject(obj){
         })
     }
 
+    fn.unset = function(){
+        var bottom = jQuery('div.footer');
+        var div = jQuery('<div class="ftt-invite-footer"></div>');
+        jQuery(bottom).parent().append(div);
+        jQuery(div).append(bottom);
+        storage.core.modulesPullObject.unset('JMBInvitateObject');
+    }
+
     fn.checkUser(function(json){
         var cont, object;
+        fn.unset();
         if(json.success){
              cont = fn.boxIfUserExist(json);
              jQuery(obj).append(cont);
