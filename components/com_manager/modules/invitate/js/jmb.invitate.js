@@ -128,7 +128,7 @@ function JMBInvitateObject(obj){
 
         sb._('<div class="ftt-invitate-header">');
             sb._('<div class="ftt-invitate-header-body">');
-                sb._('<div class="ftt-invitate-hello">Hello <span style="font-weight: bold;">')._(fn.getFirstName(target))._('</span>!</div>');
+                sb._('<div class="ftt-invitate-hello">Hello <span style="font-weight: bold;">')._(fn.getFacebookName(target))._('</span>!</div>');
                 sb._('<div class="ftt-invitate-message">');
                     sb._('Your ')._(fn.getRelation(json))._(', ')._(fn.getName(sender))._(', has invited you to join your family tree on <span style="font-weight: bold;">Family TreeTop</span>. This is a private space that can only be seen by members of your family.');
                 sb._('</div>');
