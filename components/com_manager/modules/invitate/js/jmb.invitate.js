@@ -449,6 +449,7 @@ function JMBInvitateObject(obj){
         }
         object = jQuery(cont);
         jQuery('.content').css('width', '100%').css('margin-top', '30px').css('max-width', 'none');
+        jQuery('div.right').hide();
         jQuery(obj).append(object);
         fn.boxFamily(json, object);
         fn.handlerButtonClick(object)
