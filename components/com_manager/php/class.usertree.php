@@ -576,16 +576,19 @@ class JMBUserTree {
 		
 		$nodes = array();
 		$node = $this->getNode($gedcom_id);
-		$nodes[] = $node;
 		if(!empty($node['parents'])){
-			foreach($node['parents'] as $family){
-				if($family!=='length'){
+			foreach($node['parents'] as $familyId => $family){
+				if($familyId !== 'length'){
 					if($family['father']!=null){
 						$nodes[] = $this->getNode($family['father']['gedcom_id']);
 					}
 					if($family['mother']!=null){
 						$nodes[] = $this->getNode($family['mother']['gedcom_id']);
 					}
+                    $childrens = $this->_getFamChildrens($familyId);
+                    foreach($childrens as $child){
+                        $nodes[] = $this->getNode($child['gedcom_id']);
+                    }
 				}
 			}	
 		}

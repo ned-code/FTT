@@ -85,8 +85,7 @@ function JMBInvitateObject(obj){
     }
 
     fn.getSender = function(json){
-        var target_id = json.data.from;
-        return fn.getObjectbyId(json.family, target_id);
+        return json.data.sender;
     }
 
     fn.getRelation = function(json){
@@ -121,6 +120,22 @@ function JMBInvitateObject(obj){
         }
     }
 
+    fn.getSenderName = function(sender){
+        return [sender.FirstName, sender.LastName].join(' ');
+    }
+
+    fn.getSenderFacebookLink = function(object, text){
+        var sb = storage.stringBuffer();
+        sb._('<a href="http://facebook.com/')._(object.FacebookId)._('">');
+        sb._(text);
+        sb._('</a>');
+        return sb.result();
+    }
+
+    fn.getFirstSenderName = function(sender){
+        return sender.FirstName;
+    }
+
     fn.boxInvitation = function(json){
         var sb = storage.stringBuffer();
         var target = fn.getTarget(json);
@@ -130,7 +145,7 @@ function JMBInvitateObject(obj){
             sb._('<div class="ftt-invitate-header-body">');
                 sb._('<div class="ftt-invitate-hello">Hello <span style="font-weight: bold;">')._(fn.getFacebookName(target))._('</span>!</div>');
                 sb._('<div class="ftt-invitate-message">');
-                    sb._('Your ')._(fn.getRelation(json))._(', ')._(fn.getName(sender))._(', has invited you to join your family tree on <span style="font-weight: bold;">Family TreeTop</span>. This is a private space that can only be seen by members of your family.');
+                    sb._('Your ')._(fn.getRelation(json))._(', ')._(fn.getSenderName(sender))._(', has invited you to join your family tree on <span style="font-weight: bold;">Family TreeTop</span>. This is a private space that can only be seen by members of your family.');
                 sb._('</div>');
                 sb._('<div class="ftt-invitate-buttons">');
                     sb._('<div class="ftt-invitate-button accept">Accept Invitation</div>');
@@ -141,11 +156,11 @@ function JMBInvitateObject(obj){
         sb._('<div class="ftt-invitate-content"></div>');
         sb._('<div class="ftt-invitate-footer">');
             sb._('<div class="ftt-invitate-footer-body">Not sure? Click ');
-                sb._(fn.getFacebookProfileLink(sender, 'here'));
+                sb._(fn.getSenderFacebookLink(sender, 'here'));
                 sb._(' to view the Facebook profile for ');
-                sb._(fn.getFirstName(sender));
+                sb._(fn.getFirstSenderName(sender));
                 sb._('. If you wish to contact ');
-                sb._(fn.getFirstName(sender));
+                sb._(fn.getFirstSenderName(sender));
                 sb._(', you may email him at ');
                 sb._(fn.getSenderEmail(json));
                 sb._('</div>');
