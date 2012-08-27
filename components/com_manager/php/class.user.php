@@ -63,14 +63,6 @@ class FTTUserLibrary {
 
     protected function _getToken(){
         if(!$this->facebookId) return 0;
-        function _getResult($r){
-            if(empty($r)){
-                return false;
-            } else {
-                return $r[0]['belongs'];
-            }
-        }
-
         $token = JRequest::getVar('token');
         if(!empty($token)){
             return $token;

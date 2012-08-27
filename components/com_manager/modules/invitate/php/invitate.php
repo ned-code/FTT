@@ -68,7 +68,7 @@ class JMBInvitateClass {
             if(!empty($rows)){
                 $opt = explode(',', $rows[0]['value']);
                 $user = $this->host->gedcom->individuals->get($rows[0]['s_gedcom_id']);
-                $family = $this->host->usertree->getUser($user->TreeId, $user->Id, $user->Id);
+                $family = $this->host->usertree->getUser($user->TreeId, $user->Id,  $opt[0]);
                 $data = array(
                     'from' => $rows[0]['s_gedcom_id'],
                     'to' => $opt[0],
