@@ -146,7 +146,7 @@ class FTTUserLibrary {
     }
 
     protected function _getUserMap(){
-        if(!$this->joomlaId) return false;
+        if(!$this->facebookId || !$this->joomlaId) return false;
         $sqlString = "SELECT facebook_id, session_id, user_id, tree_id, gedcom_id, permission, login_type, page, language, token, data FROM #__mb_user_map WHERE user_id = ?";
         $this->host->ajax->setQuery($sqlString, $this->joomlaId);
         $result = $this->host->ajax->loadAssocList();
@@ -170,6 +170,10 @@ class FTTUserLibrary {
 
     protected function _createMap(){
         $data = $this->incoming_data;
+        if(!$data['facebook_id'] || !$data['user_id']){
+            $data['facebook_id'] = 0;
+            $data['user_id'] = 0;
+        }
         $sqlString = "INSERT INTO #__mb_user_map (`facebook_id`,`session_id`,`tree_id`, `gedcom_id`, `user_id`, `permission`, `login_type`, `page`,`language`, `token`, `data`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
         $this->host->ajax->setQuery($sqlString, $data['facebook_id'], $data['session_id'], $data['tree_id'], $data['gedcom_id'], $data['user_id'], $data['permission'], $data['login_type'], $data['page'], $data['language'], $data['token'], ' ');
         $this->host->ajax->query();
@@ -189,11 +193,11 @@ class FTTUserLibrary {
                 }
                 $this->_set($userMap);
             } else {
-                if($this->facebookId){
+                if($this->facebookId != 0){
                     $this->setMapFacebookId($this->facebookId);
                     $this->setJoomlaId($this->joomlaId);
                 }
-                if($this->treeId){
+                if($this->treeId != 0){
                     $this->set($this->treeId, $this->gedcomId, 0);
                     $this->setPermission($this->permission);
                 }

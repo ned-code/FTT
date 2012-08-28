@@ -38,6 +38,8 @@ function JMBLoginButtonObject(obj){
         setButtonPosition();
     });
     setButtonPosition();
+
+    storage.core.modulesPullObject.unset('JMBLoginButtonObject');
 }
 
 JMBLoginButtonObject.prototype = {
