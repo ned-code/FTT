@@ -435,7 +435,11 @@ function JMBInvitateObject(obj){
                     window.location = storage.baseurl+'index.php/first-page';
                 }
             });
-        })
+        });
+        jQuery(object).find('a#logout').click(function(){
+            module.relogin();
+            return false;
+        });
     }
 
     fn.unset = function(){
@@ -452,6 +456,7 @@ function JMBInvitateObject(obj){
         if(json.success){
              cont = fn.boxIfUserExist(json);
              jQuery(obj).append(cont);
+             fn.handlerButtonClick(obj)
              return;
         } else {
             if(!json.sender){
@@ -478,6 +483,59 @@ JMBInvitateObject.prototype = {
 				callback(res);
 		})
 	},
+    login:function(token){
+        FB.login(function (response) {
+            if (response.status === 'connected') {
+                FB.getLoginStatus(function (response) {
+                    if (response.status === 'connected') {
+                        jQuery.ajax({
+                            url: jfbcBase + 'index.php?option=com_jfbconnect&task=loginFacebookUser&return=' + jfbcReturnUrl,
+                            type: "POST",
+                            global: false,
+                            dataType: "json",
+                            complete : function (req, err) {
+                                if(token.length > 1){
+                                    window.location = storage.baseurl + 'index.php/invitation?token='+token;
+                                } else {
+                                    window.location.reload();
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        }, {
+            scope:jfbcRequiredPermissions
+        });
+
+
+        // jfbc.login.login_custom();
+    },
+    logout:function(){
+        var module = this;
+        module.ajax('logout', null,function(res){
+            var token = res.responseText;
+            module.login(token);
+        });
+    },
+    relogin:function(){
+        var module = this;
+        if (jfbcLogoutFacebook) {
+            FB.getLoginStatus(function (response) {
+                if (response.status === 'connected') {
+                    FB.logout(function (response) {
+                        module.logout();
+                    });
+                }
+                else {
+                    module.logout();
+                }
+            });
+        }
+        else {
+            module.logout();
+        }
+    },
     getMsg:function(n){
         var module = this;
         var t = 'FTT_MOD_INVITATE_'+n.toUpperCase();

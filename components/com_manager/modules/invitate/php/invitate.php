@@ -103,8 +103,19 @@ class JMBInvitateClass {
         return json_encode(array('success'=>true));
     }
 
-    public function get(){
+    public function logout(){
+        $user = $this->host->user->get();
+        $this->host->user->clearToken();
+        // Setup the logout settings
+        $jfbcLibrary = JFBConnectFacebookLibrary::getInstance();
 
+        $fbClient = $jfbcLibrary->getFbClient();
+        $fbClient->destroySession();
+
+        $app = JFactory::getApplication();
+        $app->logout();
+
+        return $user->token;
     }
 }
 ?>

@@ -3,6 +3,7 @@
 class FTTUserLibrary {
     private $host;
     private $joomla;
+    private $incoming_data;
 
     private $sessionId;
     private $facebookFields;
@@ -20,6 +21,7 @@ class FTTUserLibrary {
     private $gender = 'M';
     private $token = 0;
     private $birthday = '';
+    private $data = ' ';
 
     public function __construct(&$host){
         $this->host = $host;
@@ -31,7 +33,7 @@ class FTTUserLibrary {
         $this->facebookFields = $this->_getUserProfileFields($this->facebookId);
         $this->language = $this->host->language->getLanguage($this->facebookFields['locale']);
         $this->name = $this->_getUserName();
-        $this->data = $this->_getData();
+        $this->incoming_data = $this->_getData();
         $this->_setUserMap();
     }
 
@@ -43,6 +45,7 @@ class FTTUserLibrary {
         $this->language = $param['language'];
         $this->page = $param['page'];
         $this->token = $param['token'];
+        $this->data = $param['data'];
     }
 
     protected function _getData(){
@@ -57,16 +60,19 @@ class FTTUserLibrary {
         $data['login_type'] = 0;
         $data['page'] = $this->currentAlias;
         $data['language'] = $this->language;
-        $data['token'] = $this->_getToken($userInSystem);
+        $data['token'] = $this->_getToken();
+        $data['data'] = ' ';
+        $this->_set($data);
         return $data;
     }
 
-    protected function _getToken($userInSystem){
-        if(!$this->facebookId || $userInSystem) return 0;
+    protected function _getToken(){
         $token = JRequest::getVar('token');
         if(!empty($token)){
             return $token;
         }
+
+        if(!$this->facebookId) return 0;
 
         $selectString = "SELECT token FROM #__mb_user_map WHERE user_id = ?";
         $this->host->ajax->setQuery($selectString, $this->joomlaId);
@@ -130,7 +136,7 @@ class FTTUserLibrary {
     }
 
     protected function _getSessionMap(){
-        $sqlString = "SELECT facebook_id, session_id, user_id, tree_id, gedcom_id, permission, login_type, page, language, token FROM #__mb_user_map WHERE session_id = ?";
+        $sqlString = "SELECT facebook_id, session_id, user_id, tree_id, gedcom_id, permission, login_type, page, language, token, data FROM #__mb_user_map WHERE session_id = ?";
         $this->host->ajax->setQuery($sqlString, $this->sessionId);
         $result = $this->host->ajax->loadAssocList();
         if(empty($result)){
@@ -141,7 +147,7 @@ class FTTUserLibrary {
 
     protected function _getUserMap(){
         if(!$this->joomlaId) return false;
-        $sqlString = "SELECT facebook_id, session_id, user_id, tree_id, gedcom_id, permission, login_type, page, language, token FROM #__mb_user_map WHERE user_id = ?";
+        $sqlString = "SELECT facebook_id, session_id, user_id, tree_id, gedcom_id, permission, login_type, page, language, token, data FROM #__mb_user_map WHERE user_id = ?";
         $this->host->ajax->setQuery($sqlString, $this->joomlaId);
         $result = $this->host->ajax->loadAssocList();
         if(empty($result)){
@@ -163,9 +169,9 @@ class FTTUserLibrary {
     }
 
     protected function _createMap(){
-        $data = $this->data;
-        $sqlString = "INSERT INTO #__mb_user_map (`facebook_id`,`session_id`,`tree_id`, `gedcom_id`, `user_id`, `permission`, `login_type`, `page`,`language`, `token`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
-        $this->host->ajax->setQuery($sqlString, $data['facebook_id'], $data['session_id'], $data['tree_id'], $data['gedcom_id'], $data['user_id'], $data['permission'], $data['login_type'], $data['page'], $data['language'], $data['token']);
+        $data = $this->incoming_data;
+        $sqlString = "INSERT INTO #__mb_user_map (`facebook_id`,`session_id`,`tree_id`, `gedcom_id`, `user_id`, `permission`, `login_type`, `page`,`language`, `token`, `data`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
+        $this->host->ajax->setQuery($sqlString, $data['facebook_id'], $data['session_id'], $data['tree_id'], $data['gedcom_id'], $data['user_id'], $data['permission'], $data['login_type'], $data['page'], $data['language'], $data['token'], ' ');
         $this->host->ajax->query();
     }
 
@@ -174,20 +180,33 @@ class FTTUserLibrary {
         $sessionMap = $this->_getSessionMap();
         if($sessionMap || $userMap){
             if($userMap){
-                $this->updateSession();
-                $this->_set($userMap);
-            } else {
-                $this->_set($sessionMap);
-                if($this->facebookId && !$userMap['facebook_id']){
-                    $this->setMapFacebookId($this->facebookId);
-                    $this->setJoomlaId($this->joomlaId);
+                if($this->treeId && $userMap['tree_id'] == 0){
                     $this->set($this->treeId, $this->gedcomId, 0);
                     $this->setPermission($this->permission);
                 }
+                if(strlen($this->token) > 1){
+                    $this->setToken($this->token, true);
+                }
+                $this->_set($userMap);
+            } else {
+                if($this->facebookId){
+                    $this->setMapFacebookId($this->facebookId);
+                    $this->setJoomlaId($this->joomlaId);
+                }
+                if($this->treeId){
+                    $this->set($this->treeId, $this->gedcomId, 0);
+                    $this->setPermission($this->permission);
+                }
+                if(strlen($this->token) > 1 && strlen($sessionMap['token']) == 1){
+                    $this->setToken($this->token);
+                    $sessionMap['token'] = $this->token;
+                }
+                $this->_set($sessionMap);
             }
-            if($this->token == 0 && strlen($this->data['token']) > 1 && $this->treeId == 0){
-                $this->setToken($this->data['token']);
+            if(strlen($sessionMap['token']) > 1 && $userMap){
+                $this->setToken($sessionMap['token'], true);
             }
+            $this->updateSession($userMap);
         } else {
             $this->_createMap();
         }
@@ -197,6 +216,7 @@ class FTTUserLibrary {
        $result = array(
             'jUser' => $this->joomla,
             'facebookFields' => $this->facebookFields,
+            'data' => $this->data,
             'sessionId' => $this->sessionId,
             'name' => $this->name,
             'gender' => $this->gender,
@@ -235,10 +255,12 @@ class FTTUserLibrary {
         $this->loginType = $login_type;
     }
 
-    public function updateSession(){
+    public function updateSession($userMap){
+        if(!$userMap) return false;
         $selectString = "SELECT session_id FROM #__mb_user_map WHERE session_id = ?";
         $this->host->ajax->setQuery($selectString, $this->sessionId);
         $result = $this->host->ajax->loadAssocList();
+
         if(!empty($result)){
             $deleteString = "DELETE FROM #__mb_user_map WHERE session_id = ? AND facebook_id = 0";
             $this->host->ajax->setQuery($deleteString, $this->sessionId);
@@ -303,6 +325,40 @@ class FTTUserLibrary {
         $this->host->ajax->query();
     }
 
+    public function setData($data, $user = false){
+        $sqlString = "UPDATE #__mb_user_map SET `data` = ?, `time` = NOW() WHERE ";
+        $sqlString .= ($user)?"user_id = ?":"session_id = ?";
+        if(is_array($data) || is_object($data)){
+            $convert_data = json_encode($data);
+        } else {
+            $convert_data = $data;
+        }
+        $this->host->ajax->setQuery($sqlString, $convert_data, ($user)?$this->joomlaId:$this->sessionId);
+        $this->host->ajax->query();
+
+        $this->data = $data;
+    }
+
+    public function clearData(){
+        if(!$this->joomlaId) return false;
+
+        $sqlString = "UPDATE #__mb_user_map SET `data` = '', `time` = NOW() WHERE user_id = ?";
+        $this->host->ajax->setQuery($sqlString, $this->joomlaId);
+        $this->host->ajax->query();
+
+        $this->data = '';
+    }
+
+    public function clearToken(){
+        if(!$this->joomlaId) return false;
+
+        $sqlString = "UPDATE #__mb_user_map SET `token` = '0', `time` = NOW() WHERE user_id = ?";
+        $this->host->ajax->setQuery($sqlString, $this->joomlaId);
+        $this->host->ajax->query();
+
+        $this->token = 0;
+    }
+
     public function delete($facebook_id){
         $this->host->ajax->setQuery("DELETE FROM #__mb_user_map WHERE facebook_id = ? ", $facebook_id);
         $this->host->ajax->query();
@@ -317,6 +373,7 @@ class FTTUserLibrary {
         $this->language = 'en-GB';
         $this->page = 'home';
         $this->token = 0;
+        $this->data = ' ';
     }
 }
 

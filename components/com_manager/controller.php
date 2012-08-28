@@ -183,6 +183,11 @@ class JMBController extends JController
 
 
     protected function getInvitationToken($user){
+        function _isInvitation($d){
+            $p = explode('?', $d);
+            $s = explode('=', $p[1]);
+            return $s[0] == 'token';
+        }
         $token = JRequest::getVar('token');
         if(!empty($token)){
             return $token;
@@ -190,6 +195,10 @@ class JMBController extends JController
 
         if($user->token){
             return $user->token;
+        }
+
+        if(strlen($user->data) > 1 && _isInvitation($user->data)){
+            return $user->data;
         }
         return false;
     }
@@ -205,17 +214,17 @@ class JMBController extends JController
 			break;
 			
 			case "home":
-                if($invitation_token) return 'invitation';
+                if($invitation_token && !$user->guest) return 'invitation';
 				return "home";
 			break;
 			
 			case "famous-family":
-                if($invitation_token) return 'invitation';
+                if($invitation_token && !$user->guest) return 'invitation';
 				return "famous-family";
 			break;
 		
 			case "login":
-                if($invitation_token) return "invitation";
+                if($invitation_token && !$user->guest) return "invitation";
                 if($user->treeId != 0) return "myfamily";
                 if(!$user->guest && $user->facebookId != 0) return "first-page";
                 if(!$user->guest && $user->treeId == 0) return "home";
@@ -223,14 +232,14 @@ class JMBController extends JController
 			break;
 			
 			case "first-page":
-                if($invitation_token) return 'invitation';
+                if($invitation_token && !$user->guest) return 'invitation';
                 if($user->treeId!=0) return "myfamily";
                 if($user->guest && !$user->facebookId) return "login";
                 return "first-page";
 			break;
 			
 			case "myfamily":
-                if($invitation_token) return 'invitation';
+                if($invitation_token && !$user->guest) return 'invitation';
                 if($user->guest && $user->loginType != 1) return "login";
                 if($user->facebookId == 0 && $user->loginType != 1) return "login";
                 if($user->treeId==0) return "first-page";
@@ -247,7 +256,7 @@ class JMBController extends JController
             break;
 			
 			default:
-                if($invitation_token) return "invitation";
+                if($invitation_token && !$user->guest) return "invitation";
                 if($user->treeId==0)return "home";
                 if($user->guest && !$user->facebookId) return "login";
                 return "myfamily";
@@ -321,13 +330,22 @@ class JMBController extends JController
                     $data = $host->getIndividualsInSystem($facebook_id);
                     if($data){
                         $host->user->set($data['tree_id'], $data['gedcom_id'], 0);
+                        $user = $host->user->get();
+                        if(strlen($user->token) > 1){
+                            $host->user->clearToken();
+                        }
                     } else {
                         $host->user->set(0, 0, 0);
                     }
         		break;
 
                 default:
+                    $data = $host->getIndividualsInSystem($facebook_id);
+                    $user = $host->user->get();
                     $host->user->setAlias($alias);
+                    if($data && $alias != 'invitation' && $user->treeId != 0 && strlen($user->token) > 1){
+                        $host->user->clearToken();
+                    }
                 break;
         	}
         	exit;
