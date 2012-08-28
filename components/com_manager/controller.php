@@ -183,38 +183,15 @@ class JMBController extends JController
 
 
     protected function getInvitationToken($user){
+        $token = JRequest::getVar('token');
+        if(!empty($token)){
+            return $token;
+        }
+
         if($user->token){
             return $user->token;
         }
         return false;
-        /*
-        function getToken($user, $emailToken, $facebookToken){
-            if($emailToken){
-                return $emailToken;
-            }
-            if($facebookToken){
-                return $facebookToken;
-            }
-            if($user->token != 0){
-                return $user->token;
-            }
-            return false;
-        }
-        function getEmailToken(){
-            $token = JRequest::getVar('token');
-            return (empty($token))?false:$token;
-        }
-        $host = &FamilyTreeTopHostLibrary::getInstance();
-        $token = getToken($user, getEmailToken(), $this->checkFacebookInvation($user));
-
-        if(!$token) return false;
-
-        $host->user->setToken($token);
-
-        if($user->guest) return false;
-
-        return $token;
-        */
     }
 
 	protected function get_alias($user){

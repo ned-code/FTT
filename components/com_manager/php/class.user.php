@@ -57,12 +57,12 @@ class FTTUserLibrary {
         $data['login_type'] = 0;
         $data['page'] = $this->currentAlias;
         $data['language'] = $this->language;
-        $data['token'] = $this->_getToken();
+        $data['token'] = $this->_getToken($userInSystem);
         return $data;
     }
 
-    protected function _getToken(){
-        if(!$this->facebookId) return 0;
+    protected function _getToken($userInSystem){
+        if(!$this->facebookId || $userInSystem) return 0;
         $token = JRequest::getVar('token');
         if(!empty($token)){
             return $token;
@@ -185,11 +185,11 @@ class FTTUserLibrary {
                     $this->setPermission($this->permission);
                 }
             }
+            if($this->token == 0 && strlen($this->data['token']) > 1 && $this->treeId == 0){
+                $this->setToken($this->data['token']);
+            }
         } else {
             $this->_createMap();
-        }
-        if($this->token == 0 && strlen($this->data['token']) > 1){
-            $this->setToken($this->data['token']);
         }
     }
 
