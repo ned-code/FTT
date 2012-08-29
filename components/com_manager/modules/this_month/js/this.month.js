@@ -443,15 +443,19 @@ function JMBThisMonthObject(obj){
             return '';
         } else if(type == 'birth'){
             return  ' ('+getMsg('turns')+' '+getEventTurns(getUserEvent(object, type))+')';
+
         } else if(type == 'death'){
+            /*
             var birth = getUserEvent(object, 'birth');
             var death = getUserEvent(object, 'death');
             if(birth.date != null && death.date != null){
                 if(birth.date[2] != null && death.date[2] != null){
                     var num = death.date[2] - birth.date[2];
-                    return  ' ('+getMsg('turns')+' '+ num +')';
+                    return '('+num+' '+getMsg('years_ago')+')';
                 }
             }
+            */
+            return '('+getEventTurns(getUserEvent(object, type))+' '+getMsg('years_ago')+')';
         }
         return '';
     }
