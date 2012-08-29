@@ -1,7 +1,27 @@
 .jmb-dialog-invition{
 	font-family: Calibri,Tahoma,sans-serif;
 	font-size: 12px;
-} 
+}
+.jmb-dialog-invition form {
+    margin-top: -10px;
+}
+.jmb-dialog-invition .ftt-invitation-progressbar {
+    background: none repeat scroll 0 0 white;
+    left: 0;
+    position: absolute;
+    top: 0;
+}
+.jmb-dialog-invition .ftt-invitation-progressbar div {
+    background: url("../images/progressbar.gif") no-repeat scroll 30px 30px transparent;
+    height: 130px;
+    line-height: 30px;
+    margin: 50px auto;
+    text-align: center;
+    width: 155px;
+}
+.jmb-dialog-invition .ftt-invitation-progressbar div span {
+    font-size: 18px;
+}
 .jmb-dialog-invition-header{
 	font-size: 14px;
 	font-weight: bold;

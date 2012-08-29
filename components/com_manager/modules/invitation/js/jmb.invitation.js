@@ -3,6 +3,7 @@ function JMBInvitation(){
     module.path = "components/com_manager/modules/invitation/images/";
     module.transportation = false;
     module.dialogBox = false;
+    module.progress = module.getProgressBar();
     module.msg = {
         FTT_MOD_INVITATION_HEADER: "Send Invitation",
         FTT_MOD_INVITATION_NAME: "Name",
@@ -21,9 +22,11 @@ function JMBInvitation(){
         FTT_MOD_INVITATION_ALERT_SORRY_USER_ALREADY_A_MEMBER:"Sorry, but %% is already a member of Family TreeTop.",
         FTT_MOD_INVITATION_ALERT_INVITATION_TO_THIS_FACEBOOK_USER_HAS_BEEN_SENT:"Invitation to this facebook user has been already sent.",
         FTT_MOD_INVITATION_ALERT_INVITATION_TO_THIS_MAIL_HAS_BEEN_SENT : "Invitation in this mail has been already sent.",
-        FTT_MOD_INVITATION_ALERT_THIS_USER_WAITING_CONFIRMATION:"This user is waiting for confirmation of the request to invitation."
+        FTT_MOD_INVITATION_ALERT_THIS_USER_WAITING_CONFIRMATION:"This user is waiting for confirmation of the request to invitation.",
+        FTT_MOD_INVITATION_PROCESSING_INVITATION: "Processing invitation"
     }
     module.response = false;
+    module.divObject = null;
 
 }
 
@@ -33,6 +36,26 @@ JMBInvitation.prototype = {
 				callback(res);
 		})
 	},
+    getProgressBar:function(){
+        var module = this,
+            div = false;
+        return {
+            init:function(){
+                div = jQuery('<div class="ftt-invitation-progressbar"><div><span>'+module.getMsg('PROCESSING_INVITATION')+'</span></div></div>');
+            },
+            on:function(){
+                if(!div) return false;
+                var h = jQuery(module.divObject).height() + 10;
+                var w = jQuery(module.divObject).width() + 10;
+                jQuery(module.divObject).append(div);
+                jQuery(div).css('height',h+'px').css('width', w+'px');
+            },
+            off:function(){
+                if(!div) return false;
+                jQuery(div).remove();
+            }
+        }
+    },
 	ajaxForm:function(settings){
         var validate_options = (settings.validate)?settings.validate:{};
         jQuery(settings.target).validate(validate_options);
@@ -231,7 +254,8 @@ JMBInvitation.prototype = {
                     confirm:{
                         invite:function(){
                             if(confirm(module.getMsg('confirm_like_to_invite').replace('%%', v.option.name)+'?')){
-                                storage.progressbar.loading();
+                                //storage.progressbar.loading();
+                                module.progress.on();
                                 module.transportation = true;
                                 f.send.checkFacebookIdOnUse();
                             } else {
@@ -242,7 +266,8 @@ JMBInvitation.prototype = {
                     select:{
                         off:function(){
                             f.event.select.defaultSelect();
-                            storage.progressbar.off();
+                            //storage.progressbar.off();
+                            module.progress.off()
                             module.transportation = false;
                         },
                         defaultSelect:function(){
@@ -309,6 +334,7 @@ JMBInvitation.prototype = {
             }, 1000);
         }
 
+        module.progress.init();
         storage.tooltip.cleaner();
 
         v.gedcom_id = f.get.gedcomId(json);
@@ -326,7 +352,7 @@ JMBInvitation.prototype = {
             f.event.select.change();
         }
 
-
+        module.divObject = v.elementDiv;
 	},
 	send:function(form, json){
 		var	module = this;
@@ -347,7 +373,8 @@ JMBInvitation.prototype = {
             },
             beforeSubmit:function(){
                 if(module.transportation) return false;
-                storage.progressbar.loading();
+                //storage.progressbar.loading();
+                module.progress.on();
                 module.transportation = true;
             },
             success:function(json){
@@ -356,7 +383,8 @@ JMBInvitation.prototype = {
                     if(json.success){
                         jQuery(module.dialogBox).dialog('close');
                     }
-                    storage.progressbar.off();
+                    //storage.progressbar.off();
+                    module.progress.off();
                     module.transportation = false;
                 }
 
