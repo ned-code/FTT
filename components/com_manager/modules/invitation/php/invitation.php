@@ -63,6 +63,22 @@ class JMBInvitation {
         }
     }
 
+    protected function getRelation($tree_id, $gedcom_id, $owner_id){
+        $relation = $this->host->gedcom->relation->get($tree_id, $gedcom_id, $owner_id);
+        $parts = explode(' ', $relation);
+        if(sizeof($parts) > 1 && is_numeric($parts[0][0])){
+            if($parts[1] == 'great'){
+                return $parts[1].' '.$parts[2];
+            } else if($parts[1] == 'cousin'){
+                return $parts[1];
+            } else {
+                return $relation;
+            }
+        } else {
+            return $relation;
+        }
+    }
+
 	/**
 	*
 	*/
@@ -87,7 +103,8 @@ class JMBInvitation {
             return json_encode(array('success'=>false, 'message'=>$message));
         }
 
-        $relation = $this->host->gedcom->relation->get($tree_id, $gedcom_id, $owner_id);
+        //$relation = $this->host->gedcom->relation->get($tree_id, $gedcom_id, $owner_id);
+        $relation = $this->getRelation($tree_id, $gedcom_id, $owner_id);
 
 		#senders e-mail adress
 		if(!$to) return false;
@@ -144,12 +161,12 @@ class JMBInvitation {
 		$headers = array ("MIME-Version"=> '1.0', "Content-type" => "text/html; charset=utf-8",'From' => $from,'To' => $to,'Subject' => $subject);
         
 		$smtp = Mail::factory('smtp',array ('host' => $host,'port' => $port,'auth' => true,'username' => $username,'password' => $password));
-
 		$mail = $smtp->send($to, $headers, $mail_body);
-
 		if (PEAR::isError($mail)) {
+            $sqlString = "DELETE FROM  #__mb_variables WHERE belongs = ?";
+            $this->host->ajax->setQuery($sqlString, $token);
+            $this->host->ajax->query();
 			return json_encode(array('success'=>false,'message'=>'ALERT_MESSAGE_DELIVERY_FAILED'));
-			
 		} else {
 			return json_encode(array('success'=>true,'message'=>'ALERT_MESSAGE_SUCCESSFULLY_SENT'));
 		}
