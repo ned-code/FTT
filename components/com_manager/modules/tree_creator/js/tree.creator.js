@@ -81,6 +81,8 @@ function JMBTreeCreatorObject(parent){
         FTT_MOD_TREE_CREATOR_RELATION_COUSIN : "Cousin",
         FTT_MOD_TREE_CREATOR_RELATION_GRANDMOTHER : "Grandmother",
         FTT_MOD_TREE_CREATOR_RELATION_GRANGFATHER : "Grandfather",
+        FTT_MOD_TREE_CREATOR_RELATION_GRANDSON: "Grandson",
+        FTT_MOD_TREE_CREATOR_RELATION_GRANDDAUGHTER : "Granddaughter",
         FTT_MOD_TREE_CREATOR_USERFORM_GENDER: "Gender",
         FTT_MOD_TREE_CREATOR_USERFORM_LIVING: "Living",
         FTT_MOD_TREE_CREATOR_USERFORM_NAME: "Name",
@@ -206,6 +208,8 @@ function JMBTreeCreatorObject(parent){
                 sb._('<option value="cousin">')._(module.msg.FTT_MOD_TREE_CREATOR_RELATION_COUSIN)._('</option>');
                 sb._('<option value="grandmother">')._(module.msg.FTT_MOD_TREE_CREATOR_RELATION_GRANDMOTHER)._('</option>');
                 sb._('<option value="grandfather">')._(module.msg.FTT_MOD_TREE_CREATOR_RELATION_GRANGFATHER)._('</option>');
+                sb._('<option value="grandson">')._(module.msg.FTT_MOD_TREE_CREATOR_RELATION_GRANDSON)._('</option>');
+                sb._('<option value="granddaughter">')._(module.msg.FTT_MOD_TREE_CREATOR_RELATION_GRANDDAUGHTER)._('</option>');
                 sb._('</select>');
                 return sb.result();
             }
