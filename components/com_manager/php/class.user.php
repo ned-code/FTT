@@ -35,6 +35,14 @@ class FTTUserLibrary {
         $this->name = $this->_getUserName();
         $this->incoming_data = $this->_getData();
         $this->_setUserMap();
+        $this->_clearCache();
+    }
+
+    protected function _clearCache(){
+        $timestamp = date("Y-m-d H:i:s", time() - 3600*24 );
+        $sqlString = "DELETE FROM #__mb_user_map WHERE time < ? AND facebook_id = 0";
+        $this->host->ajax->setQuery($sqlString, $timestamp);
+        $this->host->ajax->query();
     }
 
     protected function _set($param){
