@@ -52,8 +52,8 @@ function JMBInvitateObject(obj){
     fn.boxIfUserExist = function(json){
         var sb = storage.stringBuffer();
         sb._('<div class="exist">');
-            sb._(module.getMsg('MESSAGE_YOU_LOGGED_INTO').replace('%%', user.name));
-            sb._(module.getMsg('MESSAGE_CLICK_TO_LOG_INTO_FACEBOOK'));
+            sb._('<div>')._(module.getMsg('MESSAGE_YOU_LOGGED_INTO').replace('%%', user.name))._('</div>');
+            sb._('<div>')._(module.getMsg('MESSAGE_CLICK_TO_LOG_INTO_FACEBOOK'))._('</div>');
         sb._('</div>');
         return sb.result();
     }
@@ -442,6 +442,13 @@ function JMBInvitateObject(obj){
         });
     }
 
+    fn.setFooterPosition = function(obj){
+        var $box = jQuery(obj).find('div.exist');
+        var height = jQuery(window).height();
+        var size = (height / 2 - 150)  + 'px';
+        jQuery($box).css('margin-top', size).css('margin-bottom', size);
+    }
+
     fn.unset = function(){
         var bottom = jQuery('div.footer');
         var div = jQuery('<div class="ftt-invite-footer"></div>');
@@ -456,7 +463,11 @@ function JMBInvitateObject(obj){
         if(json.success){
              cont = fn.boxIfUserExist(json);
              jQuery(obj).append(cont);
-             fn.handlerButtonClick(obj)
+             fn.handlerButtonClick(obj);
+             fn.setFooterPosition(obj);
+            jQuery(window).resize(function(){
+                fn.setFooterPosition(obj);
+            });
              return;
         } else {
             if(!json.sender){

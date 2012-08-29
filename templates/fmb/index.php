@@ -167,6 +167,16 @@ if (stripos($user_agent, 'MSIE 6.0') !== false
                                 jQuery('div.footer').show();
                             });
                         }
+                        var setFooterPosition = function(){
+                            var $footer = jQuery('div.footer');
+                            var position = jQuery($footer).position();
+                            var height = jQuery($footer).height();
+                            if(position.top + height < jQuery(window).height()){
+                                console.log({'min':true ,pos:position});
+                            } else {
+                                console.log({'max':true ,pos:position});
+                            }
+                        }
                     }
                 }
                 if(typeof(storage) == 'undefined'){
