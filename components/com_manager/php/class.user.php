@@ -29,13 +29,45 @@ class FTTUserLibrary {
         $this->sessionId = $this->host->jSession->getId();
         $this->facebookId = $this->_getUserId();
         $this->joomlaId = $this->joomla->id;
+
+        $this->_checkUserPermission();
+
         $this->currentAlias = $this->_getCurrentAlias();
         $this->facebookFields = $this->_getUserProfileFields($this->facebookId);
-        $this->language = $this->host->language->getLanguage($this->facebookFields['locale']);
+        $this->language = $this->_getLanguage($this->facebookFields);
         $this->name = $this->_getUserName();
         $this->incoming_data = $this->_getData();
         $this->_setUserMap();
         $this->_clearCache();
+    }
+
+    protected function _checkUserPermission(){
+        if($this->joomlaId != 0 && $this->facebookId != 0){
+            $username = explode('_', $this->joomla->username);
+            if($this->facebookId != $username[1]){
+                $jfbcLibrary = $this->host->jfbConnect;
+                $fbClient = $jfbcLibrary->getFbClient();
+                $fbClient->destroySession();
+
+                $app = JFactory::getApplication();
+                $app->logout();
+
+                $this->facebookId = 0;
+                $this->joomlaId = 0;
+            }
+        } else if($this->joomlaId != 0 && $this->facebookId == 0){
+            $username = explode('_', $this->joomla->username);
+            $this->facebookId = $username[1];
+        }
+    }
+
+    protected function _getLanguage($fb){
+        if($fb){
+            $this->host->language->getLanguage($fb['locale']);
+        } else {
+            return $this->language;
+
+        }
     }
 
     protected function _clearCache(){
@@ -201,13 +233,13 @@ class FTTUserLibrary {
                 }
                 $this->_set($userMap);
             } else {
-                if($this->facebookId != 0){
+                if($this->facebookId != 0 && $this->joomlaId != 0){
                     $this->setMapFacebookId($this->facebookId);
                     $this->setJoomlaId($this->joomlaId);
-                }
-                if($this->treeId != 0){
-                    $this->set($this->treeId, $this->gedcomId, 0);
-                    $this->setPermission($this->permission);
+                    if($this->treeId != 0){
+                        $this->set($this->treeId, $this->gedcomId, 0);
+                        $this->setPermission($this->permission);
+                    }
                 }
                 if(strlen($this->token) > 1 && strlen($sessionMap['token']) == 1){
                     $this->setToken($this->token);
