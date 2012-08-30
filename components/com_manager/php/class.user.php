@@ -85,7 +85,7 @@ class FTTUserLibrary {
     }
 
     protected function getFacebookUserId($fb){
-        $id = $fb->getUser();
+        $id = $fb->getUser(false);
         if($id == 0 || $id == null){
             return 0;
         }
@@ -238,7 +238,7 @@ class FTTUserLibrary {
     }
 
     protected function checkUserInSystem($data, $user = false){
-        if($this->treeId != 0 && $data['tree_id'] == 0){
+        if($this->treeId != 0 && $data['tree_id'] == 0 && $this->joomlaId != 0){
             $this->set($this->treeId, $this->gedcomId, 0, $user);
             $this->setPermission($this->permission, $user);
         }
