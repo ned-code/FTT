@@ -97,7 +97,7 @@ class FTTUserLibrary {
         $id =  $this->getFacebookUserId($fb);
         if($this->joomlaId == 0 && $id != 0){
             $this->exitFromFacebbok();
-        } else if($this->id != 0 && $this->facebookId != $id){
+        } else if($id != 0 && $this->facebookId != $id){
             $this->exitFromFacebbok();
             $this->exitFromJoomla();
             $this->clear();
