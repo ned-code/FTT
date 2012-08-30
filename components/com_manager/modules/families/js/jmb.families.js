@@ -51,8 +51,23 @@ function JMBFamiliesObject(obj, popup){
 
 
     jQuery(module.parent).ready(function(){
-        module.render(module.start_id);
-        storage.core.modulesPullObject.unset('JMBFamiliesObject');
+        var load = function(){
+            module.render(module.start_id);
+            storage.core.modulesPullObject.unset('JMBFamiliesObject');
+        }
+        var reload = function (){
+            var object = jQuery('#JMBFamiliesContainer');
+            if(object.length != 0){
+                module.parent = object;
+                load();
+            } else {
+                setTimeout(function(){
+                    reload();
+                }, 250);
+            }
+        }
+
+
     });
 }
 JMBFamiliesObject.prototype = {
@@ -429,6 +444,7 @@ JMBFamiliesObject.prototype = {
 				target:e,
                 afterEditorClose:function(){
                     storage.tooltip.cleaner(function(){
+                        module.usertree = storage.usertree.pull;
                         module.render(module.now_id);
                     });
                 }
@@ -449,6 +465,7 @@ JMBFamiliesObject.prototype = {
                     offsetParent:document.body,
                     afterEditorClose:function(){
                         storage.tooltip.cleaner(function(){
+                            module.usertree = storage.usertree.pull;
                             module.render(module.now_id);
                         });
                     }
@@ -599,13 +616,16 @@ JMBFamiliesObject.prototype = {
             module._home(module.parent);
         }
 
-		jQuery(module.parent).height(start_top + 200);
-		jQuery(module.parent).css('overflow', 'hidden');
-		if(!module.clickItem || jQuery.browser.msie){
-            module.startAnimation(cont, childs);
-		} else {
-			module.animation(cont, childs);
-		}
+        setTimeout(function(){
+            jQuery(module.parent).height(start_top + 200);
+            jQuery(module.parent).css('overflow', 'hidden');
+            if(!module.clickItem || jQuery.browser.msie){
+                module.startAnimation(cont, childs);
+            } else {
+                module.animation(cont, childs);
+            }
+        }, 1);
+
 	},
 	startAnimation:function(cont, childs){
 		jQuery(cont[0]).css({left:"-155px", visibility:"visible"}).animate({ "left":"+=275"},"slow");

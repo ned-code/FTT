@@ -114,55 +114,57 @@ JMBDescendantTreeObject.prototype = {
 		dhxLayout.cells("b").hideHeader();
 		dhxLayout.cells("a").setWidth(380);
 		dhxLayout.cells("a").fixSize(true);
-		
-		dhxLayout.cells("b").attachObject(module.profile_container);		
 
-		dhxTree = dhxLayout.cells("a").attachTree();
-		dhxTree.setIconSize("16","16");
-		dhxTree.setSkin('dhx_skyblue');
-		dhxTree.setImagePath(module.imagePath);
+        setTimeout(function(){
+            dhxLayout.cells("b").attachObject(module.profile_container);
 
-		module.dhxLayout = dhxLayout;
-		module.dhxTree = dhxTree;
-		module.modal = module.overlay();
-		
-		
-		module.loadTree(dhxTree, module.render);		
-		
-		dhxTree.attachEvent("onXLE", function(tree,id){
-			var correct_style = function(item){
-				var	length = item.childsCount,
-					childs = item.childNodes,
-					offset = (item.span.childNodes[0].nodeName == 'DIV')?0:1;
-				if(length == 0) return false;
-				jQuery(childs).each(function(i, child){
-					if(offset){
-						jQuery(child.htmlNode).css('margin-left', '7px');
-					} else {
-						if(child.span.childNodes[0].nodeName == 'DIV'){
-							jQuery(child.span).css('padding-left', '10px');
-						}
-					}
-					correct_style(child);
-				});
-			}
-			correct_style(dhxTree._idpull[0].childNodes[0]);
+            dhxTree = dhxLayout.cells("a").attachTree();
+            dhxTree.setIconSize("16","16");
+            dhxTree.setSkin('dhx_skyblue');
+            dhxTree.setImagePath(module.imagePath);
 
-			jQuery('div[name="descendant-node"]').each(function(index, element){
-				jQuery(element).click(function(){
-					module.click(this);
-				});
-			});
+            module.dhxLayout = dhxLayout;
+            module.dhxTree = dhxTree;
+            module.modal = module.overlay();
 
-            if(module.selected!=null){
-                jQuery('div#'+module.selected+'[name="descendant-node"]').click();
-            } else {
-                user = jQuery(module.obj).find('div#'+module.owner+'[name="descendant-node"]');
-                jQuery(user[0]).click();
-                jQuery('div.containerTableStyle').scrollTop(0).scrollTop((jQuery(user[0]).offset().top - 300));
-            }
-			module.buttons.init();
-		});
+
+            module.loadTree(dhxTree, module.render);
+
+            dhxTree.attachEvent("onXLE", function(tree,id){
+                var correct_style = function(item){
+                    var	length = item.childsCount,
+                        childs = item.childNodes,
+                        offset = (item.span.childNodes[0].nodeName == 'DIV')?0:1;
+                    if(length == 0) return false;
+                    jQuery(childs).each(function(i, child){
+                        if(offset){
+                            jQuery(child.htmlNode).css('margin-left', '7px');
+                        } else {
+                            if(child.span.childNodes[0].nodeName == 'DIV'){
+                                jQuery(child.span).css('padding-left', '10px');
+                            }
+                        }
+                        correct_style(child);
+                    });
+                }
+                correct_style(dhxTree._idpull[0].childNodes[0]);
+
+                jQuery('div[name="descendant-node"]').each(function(index, element){
+                    jQuery(element).click(function(){
+                        module.click(this);
+                    });
+                });
+
+                if(module.selected!=null){
+                    jQuery('div#'+module.selected+'[name="descendant-node"]').click();
+                } else {
+                    user = jQuery(module.obj).find('div#'+module.owner+'[name="descendant-node"]');
+                    jQuery(user[0]).click();
+                    jQuery('div.containerTableStyle').scrollTop(0).scrollTop((jQuery(user[0]).offset().top - 300));
+                }
+                module.buttons.init();
+            });
+        }, 1);
 	},
 	loadTree:function(dhxTree, render){
 		var	module = this,
