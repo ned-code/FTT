@@ -241,6 +241,13 @@ class FTTUserLibrary {
         }
     }
 
+    protected function checkJoomlaUser($data){
+        if($this->joomlaId != 0 && $data['user_id'] == 0){
+            $this->setJoomlaId($this->joomlaId);
+            $this->setMapFacebookId($this->facebookId);
+        }
+    }
+
     protected function checkSession(){
         $selectString = "SELECT session_id FROM #__mb_user_map WHERE session_id = ?";
         $this->host->ajax->setQuery($selectString, $this->sessionId);
@@ -266,6 +273,7 @@ class FTTUserLibrary {
             $this->checkSession();
         } else {
             if($session){
+                $this->checkJoomlaUser($user);
                 $this->checkUserInSystem($user);
                 $this->checkToken($session);
             } else {
