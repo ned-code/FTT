@@ -95,7 +95,7 @@ class FTTUserLibrary {
     protected function checkUserPermission(){
         $fb =  $this->host->jfbConnect->getFbClient();
         $id =  $this->getFacebookUserId($fb);
-        if($id != 0 && $this->facebookId != $id){
+        if($id != 0 && $this->facebookId != 0 && $this->facebookId != $id){
             $this->exitFromJoomla();
             $this->clear();
         }
