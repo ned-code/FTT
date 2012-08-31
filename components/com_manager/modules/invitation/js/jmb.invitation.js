@@ -295,7 +295,7 @@ JMBInvitation.prototype = {
                                 if(json.success){
                                     f.send.requestToInviteFacebookFriend();
                                 } else {
-                                    storage.alert(module.getMsg(json.message).replace('%%', name));
+                                    storage.alert(module.getMsg(json.message).replace('%%', v.option.name));
                                     f.event.select.off();
                                 }
                             } else {
