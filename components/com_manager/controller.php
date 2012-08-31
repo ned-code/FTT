@@ -264,15 +264,38 @@ class JMBController extends JController
 		}
 	}
 
+    protected function checkUri(){
+        $menus = &JSite::getMenu();
+        $menu= $menus->getActive();
+        $alias = $menu->alias;
+        if($alias == 'invitation') return $alias;
+        $qry = explode('?', $menu->link);
+        $uri = explode('?', $_SERVER['REQUEST_URI']);
+        if(sizeof($uri) > 1){
+            if($uri[1] == $qry[1]){
+                return $alias;
+            }
+        } else {
+            $parts = explode(DS, $uri[0]);
+            $last = array_pop($parts);
+            if($alias == $last){
+                return $alias;
+            }
+        }
+        return false;
+    }
+
 	protected function check_location($user){
         $host = &FamilyTreeTopHostLibrary::getInstance();
         $alias = $this->get_alias($user);
-        $current_alias = $host->getCurrentAlias();
-        if($alias != $current_alias){
-            $this->location($alias);
-        } else {
-            $host->user->setAlias($alias);
+        if($current = $this->checkUri()){
+            if($current == $alias){
+                $host->user->setAlias($alias);
+                return true;
+            }
         }
+        $this->location($alias);
+        return false;
 	}
 
     protected function location($alias){
