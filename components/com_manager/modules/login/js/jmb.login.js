@@ -86,7 +86,7 @@ function JMBLogin(){
 		menu:function(){
 			var module = this, menu, list, sb = host.stringBuffer(), contEl;
 			sb._('<div class="menu">');
-				if(storage.usertree.pull != null){
+                if(settings.user_data && settings.user_data.pull.length != 0){
                     sb._('<div id="profile"><span>')._(msg.FTT_MOD_LOGIN_PROFILE)._('</span></div>');
                 }
                 sb._('<div id="language"><span>')._(msg.FTT_MOD_LOGIN_LANGUAGE)._(': ')._(this.getDefaultLang())._('</span></div>');

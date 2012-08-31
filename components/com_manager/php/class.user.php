@@ -265,15 +265,9 @@ class FTTUserLibrary {
     }
 
     protected function update($data){
-        $this->facebookId = $data['facebook_id'];
-        $this->joomlaId = $data['user_id'];
-        $this->gedcomId = $data['gedcom_id'];
-        $this->treeId = $data['tree_id'];
-        $this->permission = $data['permission'];
         $this->loginType = $data['login_type'];
         $this->language = $data['language'];
         $this->page = $data['page'];
-        $this->token = $data['token'];
         $this->data = $data['data'];
     }
 
