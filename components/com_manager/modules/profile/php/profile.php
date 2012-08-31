@@ -23,12 +23,20 @@ class JMBProfile {
 	}
 	
 	protected function updateIndividual($ind, $request){
+        $updateFamily = ($ind->Gender != $request['gender']);
 		$ind->Gender = $request['gender'];
 		$ind->FirstName = $request['first_name'];
 		$ind->MiddleName = $request['middle_name'];
 		$ind->LastName = $request['last_name'];
 		$ind->Nick = $request['nick'];
 		$this->host->gedcom->individuals->update($ind);
+
+        if($updateFamily){
+            $families = $this->host->gedcom->families->getPersonFamilies($ind->Id);
+            foreach ($families as $family){
+                $this->host->gedcom->families->update($family);
+            }
+        }
 	}
 	
 	protected function updateIndividualEvent($user_id, $event, $type, $request){
