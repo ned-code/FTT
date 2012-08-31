@@ -51,23 +51,8 @@ function JMBFamiliesObject(obj, popup){
 
 
     jQuery(module.parent).ready(function(){
-        var load = function(){
-            module.render(module.start_id);
-            storage.core.modulesPullObject.unset('JMBFamiliesObject');
-        }
-        var reload = function (){
-            var object = jQuery('#JMBFamiliesContainer');
-            if(object.length != 0){
-                module.parent = object;
-                load();
-            } else {
-                setTimeout(function(){
-                    reload();
-                }, 250);
-            }
-        }
-
-
+        module.render(module.start_id);
+        storage.core.modulesPullObject.unset('JMBFamiliesObject');
     });
 }
 JMBFamiliesObject.prototype = {
