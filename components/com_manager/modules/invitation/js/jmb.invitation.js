@@ -377,9 +377,10 @@ JMBInvitation.prototype = {
                 module.progress.on();
                 module.transportation = true;
             },
-            success:function(json){
-                if(typeof(json.success) != 'undefined'){
-                    storage.alert(module.getMsg(json.message));
+            success:function(resp){
+                if(typeof(resp.success) != 'undefined'){
+                    var user = storage.usertree.parse(json);
+                    storage.alert(module.getMsg(resp.message).replace('%%', user.name));
                     if(json.success){
                         jQuery(module.dialogBox).dialog('close');
                     }

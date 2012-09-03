@@ -63,20 +63,27 @@ class JMBInvitation {
         }
     }
 
-    protected function getRelation($tree_id, $gedcom_id, $owner_id){
-        $relation = $this->host->gedcom->relation->get($tree_id, $gedcom_id, $owner_id);
-        $parts = explode(' ', $relation);
-        if(sizeof($parts) > 1 && is_numeric($parts[0][0])){
-            if($parts[1] == 'great'){
-                return $parts[1].' '.$parts[2];
-            } else if($parts[1] == 'cousin'){
-                return $parts[1];
+    protected function getRelation($tree_id, $gedcom_id, $owner_id, $recipient){
+        $relation = $this->host->gedcom->relation->get($tree_id, $owner_id, $gedcom_id);
+        $matches = array();
+        preg_match( "/(\W|^)(self|spouse|father|mother|daughter|son|brother|sister|cousin|uncle|aunt|nephew|niece|grandmother|grandfather|granddaughter|grandson|great\sgrandfather|great\sgrandmother)(\W|$)/", $relation, $matches);
+
+        if(sizeof($matches) != 0 && trim($matches[0]) != ""){
+            $componentLanguage = $this->host->getLangList('component');
+            $match = trim($matches[0]);
+            if($match == "cousin"){
+                if(isset($componentLanguage["FTT_COMPONENT_RELATION_COUSIN_".$recipient['user']['gender']])){
+                    return $componentLanguage["FTT_COMPONENT_RELATION_COUSIN_".$recipient['user']['gender']];
+                }
             } else {
-                return $relation;
+                if(isset($componentLanguage["FTT_COMPONENT_RELATION_".strtoupper($match)])){
+                    return $componentLanguage["FTT_COMPONENT_RELATION_".strtoupper($match)];
+                }
             }
-        } else {
-            return $relation;
+
         }
+
+        return $relation;
     }
 
 	/**
@@ -104,7 +111,7 @@ class JMBInvitation {
         }
 
         //$relation = $this->host->gedcom->relation->get($tree_id, $gedcom_id, $owner_id);
-        $relation = $this->getRelation($tree_id, $gedcom_id, $owner_id);
+        $relation = $this->getRelation($tree_id, $gedcom_id, $owner_id, $recipient);
 
 		#senders e-mail adress
 		if(!$to) return false;

@@ -575,19 +575,27 @@ class JMBUserTree {
 		$this->_init();
 		
 		$nodes = array();
+        $ids = array();
 		$node = $this->getNode($gedcom_id);
+        $nodes[] = $node;
+        $ids[$gedcom_id] = true;
 		if(!empty($node['parents'])){
 			foreach($node['parents'] as $familyId => $family){
 				if($familyId !== 'length'){
-					if($family['father']!=null){
+					if($family['father']!=null && !isset($ids[$family['father']['gedcom_id']])){
+                        $ids[$family['father']['gedcom_id']] = true;
 						$nodes[] = $this->getNode($family['father']['gedcom_id']);
 					}
-					if($family['mother']!=null){
+					if($family['mother']!=null && !isset($ids[$family['mother']['gedcom_id']])){
+                        $ids[$family['mother']['gedcom_id']] = true;
 						$nodes[] = $this->getNode($family['mother']['gedcom_id']);
 					}
                     $childrens = $this->_getFamChildrens($familyId);
                     foreach($childrens as $child){
-                        $nodes[] = $this->getNode($child['gedcom_id']);
+                        if($child['gedcom_id'] != null && !isset($ids[$child['gedcom_id']])){
+                            $ids[$child['gedcom_id']] = true;
+                            $nodes[] = $this->getNode($child['gedcom_id']);
+                        }
                     }
 				}
 			}	
@@ -595,12 +603,14 @@ class JMBUserTree {
 		if(!empty($node['families'])){
 			foreach($node['families'] as $family){
 				if($family!=='length'){
-					if($family['spouse']!=null){
+					if($family['spouse']!=null && !isset($ids[$family['spouse']])){
+                        $ids[$family['spouse']] = true;
 						$nodes[] = $this->getNode($family['spouse']);
 					}
 					if(!empty($family['childrens'])){
 						foreach($family['childrens'] as $child){
-							if($child['gedcom_id']!=null){
+							if($child['gedcom_id']!=null && !isset($ids[$child['gedcom_id']])){
+                                $ids[$child['gedcom_id']] = true;
 								$nodes[] = $this->getNode($child['gedcom_id']);
 							}
 						}

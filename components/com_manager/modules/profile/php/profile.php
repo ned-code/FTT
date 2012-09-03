@@ -176,9 +176,9 @@ class JMBProfile {
 		$this->updateIndividual($ind, $_REQUEST);
 		$this->updateIndividualEvents($ind, $_REQUEST);
 
-        $this->host->gedcom->relation->set($tree_id, $owner_id, $ind->Id);
+        $this->host->gedcom->relation->set($tree_id, $owner_id, $gedcom_id);
         //get objects
-        $objects = $this->host->usertree->getUser($tree_id, $owner_id, $ind->Id);
+        $objects = $this->host->usertree->getUser($tree_id, $owner_id, $gedcom_id);
         return json_encode(array('objects'=>$objects));
 	}
 	
