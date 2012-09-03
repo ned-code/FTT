@@ -1060,8 +1060,14 @@ JMBProfile.prototype = {
                         }
                     },
                     success:function(res){
-                        _fn.add(res);
-                        jQuery(form).find('form').resetForm();
+                        if(res.error){
+                            storage.alert(res.message, function(){
+
+                            });
+                        } else {
+                            _fn.add(res);
+                            jQuery(form).find('form').resetForm();
+                        }
                     }
                 });
             break;

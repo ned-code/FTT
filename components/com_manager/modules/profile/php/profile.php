@@ -246,6 +246,19 @@ class JMBProfile {
                         case "jpg":
                         case "gif":
                         case "png":
+                            $medias = $this->host->gedcom->media->getMediaByGedId($args->gedcom_id);
+                            if(sizeof($medias) >= 20){
+                                return json_encode(array(
+                                    'error' => true,
+                                    'message' => 'Limit for image 20. You have 20 images, need delete photo for to upload new.'
+                                ));
+                            }
+                            if($_FILES["upload"]["size"] > 2097152){
+                                return json_encode(array(
+                                    'error' => true,
+                                    'message' => 'Limit for upload file is 2mb.'
+                                ));
+                            }
                             $media_id = $this->host->gedcom->media->save($args->gedcom_id, $_FILES["upload"]["tmp_name"], $_FILES["upload"]["name"], $_FILES['upload']['size']);
                             if($media_id) {
                                 $res = $this->host->gedcom->media->get($media_id);
