@@ -169,9 +169,9 @@ class JMBDescendantTree {
 		}
 		return null;
 	}
-	protected function getFirstParent($tree){
+	protected function getFirstParent($tree, $render){
         $count = array();
-        function _set_(&$c, $tree, $level){
+        function _set_(&$c, $tree, $level, $render = false){
             if($level == 3) return false;
             $id = $tree['id'];
             if(!isset($c[$id])){
@@ -180,16 +180,27 @@ class JMBDescendantTree {
                 if(!empty($parents)){
                     $father = $parents['father'];
                     $mother = $parents['mother'];
-                    if($father != null){
-                        _set_($c, $father, $level + 1);
-                    }
-                    if($mother != null){
-                        _set_($c, $mother, $level + 1);
+                    if($render == 'father' && $father != null){
+                        $father = $parents['father'];
+                        if($father != null){
+                            _set_($c, $father, $level + 1);
+                        }
+                    } else if($render == 'mother' &&  $mother != null ){
+                        if($mother != null){
+                            _set_($c, $mother, $level + 1);
+                        }
+                    } else {
+                        if($father != null){
+                            _set_($c, $father, $level + 1);
+                        }
+                        if($mother != null){
+                            _set_($c, $mother, $level + 1);
+                        }
                     }
                 }
             }
         }
-        _set_($count, $tree, 0);
+        _set_($count, $tree, 0, $render);
         $result = 0;
         $index = 0;
         foreach($count as $id => $cnt){
@@ -247,7 +258,7 @@ class JMBDescendantTree {
 
 		$tree = $this->getDescendantsTree($owner_id, $usertree);
         //$key = $this->getFirstParent($owner_id, $usertree, $render);
-        $key = $this->getFirstParent($tree);
+        $key = $this->getFirstParent($tree, $render);
 
 		$xml = $this->xml($key, $usertree);
 				
