@@ -187,6 +187,7 @@ JMBDescendantTreeObject.prototype = {
 	},
 	loadTreeById:function(id){
 		var module = this;
+        if(!id) return false;
 		//if(typeof(id) != 'undefined' && module.checked != id){
 			module.ajax('getTreeById', id, function(res){
 				module.select = null;
@@ -361,7 +362,7 @@ JMBDescendantTreeObject.prototype = {
 						
 						//create nodes
 						var parents = module.tree.parents;
-						if(parents.length!=0){
+						if(parents.father != null || parents.mother != null){
 							var parent = parents[module.render];
 							if(parent){
 								line(10, 100, 60);
@@ -480,7 +481,16 @@ JMBDescendantTreeObject.prototype = {
 										jQuery(div).find('input#'+module.first).attr('checked', true);
 									}
 								} else {
-									box.off();
+									//box.off();
+                                    jQuery(module.dhxTree.allTree).parent().append(div);
+                                    jQuery(div).find('input').click(function(){
+                                        module.first = jQuery(this).attr('id');
+                                        jQuery(div).find('input').attr('checked', false);
+                                        jQuery(this).attr('checked', true);
+                                    });
+                                    if(module.first!=null){
+                                        jQuery(div).find('input#'+module.first).attr('checked', true);
+                                    }
 								}
 							} else {
                                 box.off();
