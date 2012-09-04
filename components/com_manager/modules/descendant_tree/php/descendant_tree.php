@@ -169,21 +169,36 @@ class JMBDescendantTree {
 		}
 		return null;
 	}
-	protected function getFirstParent($id, $usertree, $render, $level=1){
-		if($level == 3){
-			return $id;
-		}
-		if(isset($usertree[$id])){
-			$object = $usertree[$id];
-			$parents = $this->getParents($object);
-			if($parents!=null){
-				$key = ($render=='mother')?0:1;
-				if($parents[$key]!=null){
-					return $this->getFirstParent($parents[$key]['gedcom_id'], $usertree, 'mother', $level + 1);
-				}
-			}
-			return $id;
-		}		
+	protected function getFirstParent($tree){
+        $count = array();
+        function _set_(&$c, $tree, $level){
+            if($level == 3) return false;
+            $id = $tree['id'];
+            if(!isset($c[$id])){
+                $c[$id] = $tree['count'];
+                $parents = $tree['parents'];
+                if(!empty($parents)){
+                    $father = $parents['father'];
+                    $mother = $parents['mother'];
+                    if($father != null){
+                        _set_($c, $father, $level + 1);
+                    }
+                    if($mother != null){
+                        _set_($c, $mother, $level + 1);
+                    }
+                }
+            }
+        }
+        _set_($count, $tree, 0);
+        $result = 0;
+        $index = 0;
+        foreach($count as $id => $cnt){
+            if($result < $cnt){
+                $result  = $cnt;
+                $index = $id;
+            }
+        }
+        return $index;
 	}
 	protected function getDescendantsCount($id, $usertree){
 		if(!isset($usertree[$id])) return 0;
@@ -229,10 +244,11 @@ class JMBDescendantTree {
 		$this->owner_id = $owner_id;
 
         $language = $this->host->getLangList('descendant_tree');
-		
-		$key = $this->getFirstParent($owner_id, $usertree, $render);
+
 		$tree = $this->getDescendantsTree($owner_id, $usertree);
-		
+        //$key = $this->getFirstParent($owner_id, $usertree, $render);
+        $key = $this->getFirstParent($tree);
+
 		$xml = $this->xml($key, $usertree);
 				
 		return json_encode(array('xml'=>$xml, 'tree'=>$tree, 'key'=>$key, 'language'=>$language));
