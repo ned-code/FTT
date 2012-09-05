@@ -89,7 +89,14 @@ function JMBInvitateObject(obj){
     }
 
     fn.getRelation = function(json){
-        return json.data.relation;
+        var relation = json.data.relation;
+        var relation = "6th cousin";
+        var arg = relation.split(" ");
+        var regExp = /(\W|^)(self|spouse|father|mother|daughter|son|brother|sister|cousin|uncle|aunt|nephew|niece|grandmother|grandfather|granddaughter|grandson|great\sgrandfather|great\sgrandmother)(\W|$)/;
+        if(arg.length == 1){
+            return relation;
+        }
+        return regExp.exec(relation)[0];
     }
 
     fn.getName = function(object){
@@ -126,7 +133,7 @@ function JMBInvitateObject(obj){
 
     fn.getSenderFacebookLink = function(object, text){
         var sb = storage.stringBuffer();
-        sb._('<a href="http://facebook.com/')._(object.FacebookId)._('">');
+        sb._('<a href="http://facebook.com/')._(object.FacebookId)._('" target="_blank">');
         sb._(text);
         sb._('</a>');
         return sb.result();
@@ -140,12 +147,13 @@ function JMBInvitateObject(obj){
         var sb = storage.stringBuffer();
         var target = fn.getTarget(json);
         var sender = fn.getSender(json);
+        console.log(json);
 
         sb._('<div class="ftt-invitate-header">');
             sb._('<div class="ftt-invitate-header-body">');
                 sb._('<div class="ftt-invitate-hello">Hello <span style="font-weight: bold;">')._(fn.getFacebookName(target))._('</span>!</div>');
                 sb._('<div class="ftt-invitate-message">');
-                    sb._('Your ')._(fn.getRelation(json))._(', ')._(fn.getSenderName(sender))._(', has invited you to join your family tree on <span style="font-weight: bold;">Family TreeTop</span>. This is a private space that can only be seen by members of your family.');
+                    sb._('Your ')._(fn.getRelation(json))._(', <span id="facebook" style="color:blue;cursor:pointer">')._(fn.getSenderFacebookLink(sender, fn.getSenderName(sender)))._('</span>, has invited you to join your family tree on <span style="font-weight: bold;">Family TreeTop</span>. This is a private space that can only be seen by members of your family.');
                 sb._('</div>');
                 sb._('<div class="ftt-invitate-buttons">');
                     sb._('<div class="ftt-invitate-button accept">Accept Invitation</div>');
@@ -208,7 +216,7 @@ function JMBInvitateObject(obj){
             jQuery(cont[3]).removeClass('active');
         }
 
-        startTop = _getStartTop(spouses.length);
+        startTop = _getStartTop(spouses.length) + 50;
         if(childrens.length!=0){
             rowLength = _getLength(childrens.length);
             leftDel = 100;

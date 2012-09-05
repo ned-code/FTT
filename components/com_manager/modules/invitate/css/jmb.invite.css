@@ -63,11 +63,17 @@ table {
 .ftt-invitate-button.accept {
     background: #22b14c;
 }
+.ftt-invitate-button.accept:hover {
+    background: #44994C;
+}
 .ftt-invitate-button.deny {
     background: #ed1c24;
 }
+.ftt-invitate-button.deny:hover {
+    background: #C41C24;
+}
 .ftt-invitate-content {
-    margin: 10px auto;
+    margin: 30px auto;
     max-width: 760px;
     min-height: 400px;
     position: relative;
