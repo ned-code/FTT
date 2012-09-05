@@ -67,6 +67,13 @@ if (stripos($user_agent, 'MSIE 6.0') !== false
             <link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/fmb/css/fmb.css" type="text/css"/>
             <!-- fmb template script -->
             <script type="text/javascript" src="<?php echo $this->baseurl ?>/templates/fmb/javascript/fmb.js"></script>
+            <!--[if lte IE 7]>
+                <style type="text/css">
+                    ul li {
+                        display: inline
+                    }
+                </style>
+            <![endif]-->
 	</head>
 	<body _alias="<?php echo $alias; ?>" _baseurl="<?php echo $base_url; ?>" _fb="<?php echo $facebook_id; ?>" _type="<?php echo $login_method; ?>">
         <div id="_content" class="content">
