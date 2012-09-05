@@ -51,6 +51,7 @@ if (stripos($user_agent, 'MSIE 6.0') !== false
     || stripos($user_agent, 'MSIE 7.0') !== false
     ){
     if($alias != 'ie'){
+        $host = $host->user->setAlias('ie');
         header ("Location: ".$base_url.'index.php/ie');
     }
 }

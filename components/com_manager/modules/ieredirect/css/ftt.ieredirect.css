@@ -1,0 +1,49 @@
+#JMBIeredirectContainer {
+    font-family: Tahoma;
+    font-size: 12px;
+    margin: 0 auto;
+    width: 760px;
+}
+#JMBIeredirectContainer .message1{
+    font-size: 18px;
+    text-align: center;
+    margin: 10px;
+}
+#JMBIeredirectContainer .message2{
+    font-size: 16px;
+    text-align: center;
+    margin: 5px;
+}
+#JMBIeredirectContainer ul{
+    margin: 40px 10px 10px;
+}
+#JMBIeredirectContainer ul li{
+    display: inline-block;
+}
+#JMBIeredirectContainer ul li a{
+    color: blue;
+    text-decoration: none;
+}
+#JMBIeredirectContainer .item{}
+#JMBIeredirectContainer .item .image{
+    height: 133px;
+    width: 184px;
+    cursor: pointer;
+}
+#JMBIeredirectContainer .item .image.chrome{
+    background: url("../imgs/gc.jpg") no-repeat scroll 0 0 transparent;
+}
+#JMBIeredirectContainer .item .image.safari{
+    background: url("../imgs/as.jpg") no-repeat scroll 0 0 transparent;
+}
+#JMBIeredirectContainer .item .image.firefox{
+    background: url("../imgs/mf.jpg") no-repeat scroll 0 0 transparent;
+}
+#JMBIeredirectContainer .item .image.ie{
+    background: url("../imgs/ie.jpg") no-repeat scroll 0 0 transparent;
+}
+#JMBIeredirectContainer .item .link{
+    text-align: center;
+}
+
+

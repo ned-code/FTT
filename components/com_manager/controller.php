@@ -252,9 +252,10 @@ class JMBController extends JController
             case "contact":
             case "feedback":
             case "help":
+            case "ie":
                 return $user->page;
             break;
-			
+
 			default:
                 if($invitation_token && !$user->guest) return "invitation";
                 if($user->treeId==0)return "home";
