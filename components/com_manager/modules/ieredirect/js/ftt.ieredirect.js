@@ -37,11 +37,13 @@ function JMBIeredirectObject(parent){
         sb._('<div class="message1">')._(fn.getMsg('message1'))._('.</div>');
         sb._('<div class="message2">')._(fn.getMsg('message2'))._(':</div>');
         sb._('<div>');
-            sb._('<ul>');
-                sb._('<li><div class="item"><div class="image chrome">&nbsp</div><div class="link"><a target="_blank" href="')._(url.chrome)._('">Chrome</a></div></div></li>');
-                sb._('<li><div class="item"><div class="image safari">&nbsp</div><div class="link"><a target="_blank" href="')._(url.safari)._('">Safari</a></div></div></li>');
-                sb._('<li><div class="item"><div class="image firefox">&nbsp</div><div class="link"><a target="_blank" href="')._(url.firefox)._('">Firefox</a></div></div></li>');
-                sb._('<li><div class="item"><div class="image ie">&nbsp</div><div class="link"><a target="_blank" href="')._(url.ie)._('">Internet Explorer 8+</a></div></div></li>');
+            sb._('<table>');
+                sb._('<tr>');
+                    sb._('<td><div class="item"><div class="image chrome">&nbsp</div><div class="link"><a target="_blank" href="')._(url.chrome)._('">Chrome</a></div></div></td>');
+                    sb._('<td><div class="item"><div class="image safari">&nbsp</div><div class="link"><a target="_blank" href="')._(url.safari)._('">Safari</a></div></div></td>');
+                    sb._('<td><div class="item"><div class="image firefox">&nbsp</div><div class="link"><a target="_blank" href="')._(url.firefox)._('">Firefox</a></div></div></td>');
+                    sb._('<td><div class="item"><div class="image ie">&nbsp</div><div class="link"><a target="_blank" href="')._(url.ie)._('">Internet Explorer 8+</a></div></div></td>');
+                sb._('</tr>');
             sb._('</ul>');
         sb._('</div>');
     sb._('</div>');
@@ -52,5 +54,7 @@ function JMBIeredirectObject(parent){
         return false;
     });
     jQuery(parent).append(object);
-
+    setTimeout(function(){
+        jQuery(parent).css('height', '400px');
+    }, 10);
 }

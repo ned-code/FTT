@@ -3,6 +3,7 @@
     font-size: 12px;
     margin: 0 auto;
     width: 760px;
+    height: 400px;
 }
 #JMBIeredirectContainer .message1{
     font-size: 18px;
@@ -14,13 +15,11 @@
     text-align: center;
     margin: 5px;
 }
-#JMBIeredirectContainer ul{
+#JMBIeredirectContainer table{
     margin: 40px 10px 10px;
 }
-#JMBIeredirectContainer ul li{
-    display: inline-block;
-}
-#JMBIeredirectContainer ul li a{
+
+#JMBIeredirectContainer table a{
     color: blue;
     text-decoration: none;
 }
