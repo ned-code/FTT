@@ -881,7 +881,7 @@ core.renderPage = function(args){
 			//append module div;
 			var div = jQuery('<div id="'+module.container_id+'"></div>');
 			jQuery(td).append(div);
-			
+
 			//init module;
 			core.modulesPullObject.insert(module.object_name);
 			//self.initModule(module.object_name, div, popup);
