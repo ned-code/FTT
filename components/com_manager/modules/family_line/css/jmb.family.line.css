@@ -91,6 +91,7 @@
 	height: 21px;
     	line-height: 21px;
     	position:relative;
+    width: 70px;
 }
 .jmb-family-line-container .title.mother.active{
 	background: none repeat scroll 0 0 #f4ff28;
@@ -105,9 +106,15 @@
 	top: -5px;
 }
 .jmb-family-line-container .title div#chart{
-	display:inline-block;
-	margin-left: 3px;
-	margin-right: 3px;
+    display: inline-block;
+    height: 27px;
+    margin-left: 3px;
+    margin-right: 3px;
+    width: 21px;
+}
+.jmb-family-line-container .title canvas{
+    height: 21px;
+    width: 21px;
 }
 .jmb-family-line-container .title.mother{
 	border-radius: 3px 0 0 3px;
