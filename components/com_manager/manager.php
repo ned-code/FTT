@@ -20,7 +20,7 @@ $controller->redirect();
 # include JS and CSS 
 $document =& JFactory::getDocument();
 
-$document->addStyleSheet('administrator/components/com_manager/js/jquery-ui.css');
+$document->addStyleSheet('administrator/components/com_manager/js/jquery-ui-1.8.23.custom.css');
 $document->addStyleSheet('components/com_manager/codebase/skins/dhtmlxlayout_dhx_skyblue.css');
 $document->addStyleSheet('components/com_manager/codebase/dhtmlxlayout.css');
 $document->addStyleSheet('components/com_manager/codebase/dhtmlxtree.css');
@@ -35,8 +35,8 @@ $document->addStyleSheet('administrator/components/com_manager/codebase/dhtmlxta
 $document->addScript('administrator/components/com_manager/codebase/dhtmlxtabbar.js');
 	
 //jquery Part
-$document->addScript('administrator/components/com_manager/js/jquery.min.js');
-$document->addScript('administrator/components/com_manager/js/jquery-ui.min.js');
+$document->addScript('administrator/components/com_manager/js/jquery-1.8.1.min.js');
+$document->addScript('administrator/components/com_manager/js/jquery-ui-1.8.23.custom.min.js');
 $document->addScript('administrator/components/com_manager/js/jquery.form.js');
 $document->addScript('administrator/components/com_manager/js/jquery.validate.min.js');
 

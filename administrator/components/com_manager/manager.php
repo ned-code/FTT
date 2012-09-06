@@ -8,7 +8,7 @@ require_once(JPATH_COMPONENT.DS.'controller.php');
 # include JS and CSS 
 $document =& JFactory::getDocument();
 
-$document->addStyleSheet('components/com_manager/js/jquery-ui.css');
+$document->addStyleSheet('components/com_manager/js/jquery-ui-1.8.23.custom.css');
 $document->addStyleSheet('components/com_manager/js/jquery-colorpicker.css');
 
 $document->addStyleSheet('components/com_manager/codebase/skins/dhtmlxlayout_dhx_skyblue.css');
@@ -77,8 +77,8 @@ $controller->redirect();
 
 JHTML::_('behavior.mootools');
 
-$document->addScript('components/com_manager/js/jquery.min.js');
-$document->addScript('components/com_manager/js/jquery-ui.min.js');
+$document->addScript('components/com_manager/js/jquery-1.8.1.min.js');
+$document->addScript('components/com_manager/js/jquery-ui-1.8.23.custom.min.js');
 $document->addScript('components/com_manager/js/jquery.form.js');
 
 $document->addStyleSheet('../components/com_manager/js/jquery.autocomplete.css');

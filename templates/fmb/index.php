@@ -141,7 +141,7 @@ if (stripos($user_agent, 'MSIE 6.0') !== false
 				</table>
 			</div>
         </div>
-        <script>window.jQuery || document.write('<script src="<?php echo $this->baseurl ?>/templates/<?php echo $this->template; ?>/javascript/jquery.min.js"><\/script>')</script>
+        <script>window.jQuery || document.write('<script src="<?php echo $this->baseurl ?>/templates/<?php echo $this->template; ?>/javascript/jquery-1.8.1.min.js"><\/script>')</script>
         <script>
             (function(w){
                 if(window == window.top){
