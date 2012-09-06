@@ -543,9 +543,7 @@ JMBFamiliesObject.prototype = {
 					jQuery(cont[3]).append(spouse[i]);
 				}
 				jQuery(cont[3]).addClass('active');
-				setTimeout(function(){
-                    jQuery(cont[3]).scrollbar();
-                }, 1);
+                jQuery(cont[3]).scrollbar();
 			} else {
 				jQuery(cont[3]).removeClass('active');
 			}		
@@ -601,15 +599,13 @@ JMBFamiliesObject.prototype = {
             module._home(module.parent);
         }
 
-        setTimeout(function(){
-            jQuery(module.parent).height(start_top + 200);
-            jQuery(module.parent).css('overflow', 'hidden');
-            if(!module.clickItem || jQuery.browser.msie){
-                module.startAnimation(cont, childs);
-            } else {
-                module.animation(cont, childs);
-            }
-        }, 1);
+        jQuery(module.parent).height(start_top + 200);
+        jQuery(module.parent).css('overflow', 'hidden');
+        if(!module.clickItem || jQuery.browser.msie){
+            module.startAnimation(cont, childs);
+        } else {
+            module.animation(cont, childs);
+        }
 
 	},
 	startAnimation:function(cont, childs){

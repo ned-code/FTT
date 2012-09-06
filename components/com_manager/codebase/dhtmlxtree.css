@@ -3,7 +3,7 @@
 			padding : 0px;
 			border : 0px;
 }
-.containerTableStyle { overflow : auto; position:relative; top:0; font-size : 12px; -khtml-user-select: none;}
+.containerTableStyle { overflow : auto;-webkit-overflow-scrolling: touch; position:relative; top:0; font-size : 12px; -khtml-user-select: none;}
 .containerTableStyleRTL span { direction: rtl; unicode-bidi: bidi-override;  }
 .containerTableStyleRTL { direction: rtl; overflow : auto; position:relative; top:0; font-size : 12px;}
 .standartTreeRow {	font-family : Verdana, Geneva, Arial, Helvetica, sans-serif; 	font-size : 12px; -moz-user-select: none;  }
@@ -133,4 +133,23 @@ body:nth-of-type(1) .dhxtree_dhx_skyblue span.standartTreeRow, body:nth-of-type(
 	font-size:12px;
 	font-family:Tahoma;
 	overflow:hidden;
+}
+
+
+.dhxtree_dhx_terrace .standartTreeRow, .dhxtree_dhx_terrace .standartTreeRow, .dhxtree_dhx_terrace .selectedTreeRow_lor, .dhxtree_dhx_terrace .selectedTreeRow{
+	font-family:Arial;
+	font-size:13px;
+	padding:3px 1px 4px 2px;
+}
+
+.dhxtree_dhx_terrace .standartTreeImage{ 
+	padding-left:3px 
+}
+.dhxtree_dhx_terrace .selectedTreeRow_lor, .dhxtree_dhx_terrace .selectedTreeRow{
+	background-color:transparent;
+	
+}
+.dhxtree_dhx_terrace span.selectedTreeRow_lor , .dhxtree_dhx_terrace span.selectedTreeRow{
+	background-color:#fff3a1;
+	color:black;
 }

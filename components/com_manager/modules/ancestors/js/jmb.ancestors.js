@@ -77,24 +77,22 @@ function JMBAncestorsObject(obj, popup){
         }
     })()
 
-    setTimeout(function(){
-        jQuery(module.parent).ready(function(){
-            (function(){
-                var loader = function(){
-                    if(jQuery('#jit').length != 0 && typeof($jit.ST) === 'function'){
-                        module.init(function(){
-                            storage.core.modulesPullObject.unset('JMBAncestorsObject');
-                        });
-                    } else {
-                        setTimeout(function(){
-                            loader();
-                        }, 250)
-                    }
+    jQuery(module.parent).ready(function(){
+        (function(){
+            var loader = function(){
+                if(jQuery('#jit').length != 0 && typeof($jit.ST) === 'function'){
+                    module.init(function(){
+                        storage.core.modulesPullObject.unset('JMBAncestorsObject');
+                    });
+                } else {
+                    setTimeout(function(){
+                        loader();
+                    }, 250)
                 }
-                loader();
-            })()
-        })
-    }, 1);
+            }
+            loader();
+        })()
+    })
 
 
     core.destroy.set('ancestors', function(){
