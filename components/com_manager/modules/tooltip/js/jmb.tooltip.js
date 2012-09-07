@@ -56,7 +56,7 @@ function JMBTooltip(){
         FTT_MOD_TOOLTIPS_ADD_SPOUSE:"Spouse",
         FTT_MOD_TOOLTIPS_ADD_BROTHER_OR_SISTER:"Brother or Sister",
         FTT_MOD_TOOLTIPS_ADD_CHILD:"Child",
-        FTT_MOD_TOOLTIPS_ADD_SENT_INVITATION:"Send %% an invitions.",
+        FTT_MOD_TOOLTIPS_ADD_SENT_INVITATION:"Send %% an invitation.",
         FTT_MOD_TOOLTIPS_ADD_LINK:"Link with existing request."
     }
     module.lastBtActive = false;
