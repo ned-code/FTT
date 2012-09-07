@@ -357,7 +357,7 @@ function JMBFamilyLine(){
             fn.init(options[title], loadData);
         } else {
             fn.ajax('get',null, function(res){
-                //var json = jQuery.parseJSON(res.responseText);
+                if(!res) return false;
                 var json = storage.getJSON(res.responseText);
                 var title = page.page_info.title;
                 fn.setMsg(json.language);

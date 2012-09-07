@@ -91,6 +91,7 @@ function JMBLatestUpdatesObject(offsetParent){
 		},
         load:function(){
             fn.start(function(json){
+                if(!json) return false;
                 if(json.language){
                     message = json.language;
                 }

@@ -587,8 +587,7 @@ storage.callMethod = function(module, classname, method, args, callback){
         data: 'module='+module+'&class='+classname+'&method='+method+'&args='+args,
         dataType: "html",
         complete : function (req, err) {
-            //storage.request.del(key);
-            if(req.responseText.length!=0){
+            if(err == "success"){
                 callback(req);
             } else {
                 callback(false);

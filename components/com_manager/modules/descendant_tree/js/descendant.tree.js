@@ -126,7 +126,6 @@ JMBDescendantTreeObject.prototype = {
         module.dhxTree = dhxTree;
         module.modal = module.overlay();
 
-
         module.loadTree(dhxTree, module.render);
 
         dhxTree.attachEvent("onXLE", function(tree,id){
@@ -168,7 +167,7 @@ JMBDescendantTreeObject.prototype = {
 		var	module = this,
 			json;
 		module.ajax('getTree', render, function(res){
-			//json = jQuery.parseJSON(res.responseText);
+            if(!res) return false;
 			json = storage.getJSON(res.responseText);
             if(json.language){
                 module.message = json.language;

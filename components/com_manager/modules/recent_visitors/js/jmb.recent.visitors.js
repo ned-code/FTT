@@ -100,7 +100,7 @@ function JMBRecentVisitorsObject(obj){
             },
             render:function(callback){
                 parent.ajax('getRecentVisitors', null, function(res){
-                    //var json = jQuery.parseJSON(res.responseText);
+                    if(!res) return false;
                     var json = storage.getJSON(res.responseText);
                     if(json.error || json.objects.length == 0){
                         storage.core.modulesPullObject.unset('JMBRecentVisitorsObject');

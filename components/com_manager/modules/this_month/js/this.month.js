@@ -121,6 +121,7 @@ function JMBThisMonthObject(obj){
     }
     function init(month){
         ajax("load", month, function(data){
+            if(!data) return false;
             render(data);
         });
     }
