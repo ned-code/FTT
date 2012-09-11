@@ -50,6 +50,7 @@ storage.fb.xfbml = true;
 storage.iframe = jQuery('<iframe id="ftt_iframe" name="ftt_iframe" style="display:none;position:absolute;left:-1000px;width:1px;height:1px">');
 storage.settings = null;
 storage.pages = null;
+storage.activeTable = null;
 
 //modules
 storage.login = {};
@@ -818,7 +819,7 @@ core.appendFiles = function(module, type){
 	var self = this;
 	var url = jQuery('body').attr('_baseurl')+'components/com_manager/modules/'+module.info.name;
 	var head = document.getElementsByTagName("head");
-	var files = module.files[type];
+    var files = module.files[type];
 	for(var i=0;i<files.length;i++){
 		if(!core.appendFilesPull[files[i]]){
 			switch(type){
@@ -841,20 +842,38 @@ core.appendFiles = function(module, type){
 		}
 	}		
 }
-
+core.includeFiles = function(pages){
+    var key, page, modules, moduleId, module;
+    for(key in pages){
+        if(pages.hasOwnProperty(key)){
+            page = pages[key];
+            modules = page.modules;
+            if(!modules) continue;
+            for(moduleId in modules){
+                if(modules.hasOwnProperty(moduleId)){
+                    module = modules[moduleId];
+                    if(!module) continue;
+                    core.appendFiles(module, 'css');
+                    core.appendFiles(module, 'js');
+                }
+            }
+        }
+    }
+}
 core.initModule = function(args){
 	var self = this,
         object_name = args.name,
         div = args.cont,
         popup = args.popup;
-    	if(typeof window[object_name]=='function'){
-    		new window[object_name](div, popup);
-    	}
-        else {
-        	setTimeout(function(){
-        		self.initModule(args);
-        	},1000);
-        }
+
+    if(typeof window[object_name]=='function'){
+        new window[object_name](div, popup);
+    }
+    else {
+        setTimeout(function(){
+            self.initModule(args);
+        }, 250);
+    }
 }
 core.renderPage = function(args){
    	var self = this;
@@ -865,58 +884,65 @@ core.renderPage = function(args){
 	var table = self.createLayout(page.page_info.layout_type);
 	var tds = jQuery(table).find('td');
     storage.family_line.init(page);
-    jQuery(parent).unbind();
-	jQuery(parent).html('');
 
-	for(var i = 0; i < grid.tdLength; i++){
-		var td = tds[i];
-		for(var j = 0; j < grid[i].divLength; j++){
-			var module_id = grid[i][j].id; 
-			var module = page.modules[module_id];
-			//append js files;
-			self.appendFiles(module, 'css');
-			self.appendFiles(module, 'js');
-			
-			//append module div;
-			var div = jQuery('<div id="'+module.container_id+'"></div>');
-			jQuery(td).append(div);
+    if(storage.activeTable != null){
+        jQuery(storage.activeTable).remove();
+        storage.activeTable = null;
+    }
+    storage.activeTable = table;
 
-			//init module;
-			core.modulesPullObject.insert(module.object_name);
-			//self.initModule(module.object_name, div, popup);
-			self.initModule({
+    jQuery(parent).append(table);
+
+    for(var i = 0; i < grid.tdLength; i++){
+        var td = tds[i];
+        for(var j = 0; j < grid[i].divLength; j++){
+            var module_id = grid[i][j].id;
+            var module = page.modules[module_id];
+
+            //append js files;
+            //self.appendFiles(module, 'css');
+            //self.appendFiles(module, 'js');
+
+            //append module div;
+            var div = jQuery('<div id="'+module.container_id+'"></div>');
+            jQuery(td).append(div);
+            //init module;
+            core.modulesPullObject.insert(module.object_name);
+
+            self.initModule({
                 name:module.object_name,
                 cont:div,
                 popup:popup
             });
-		}
-	}
-    jQuery(parent).append(table);
+        }
+    }
 }
 core.renderTabs = function(args){
 	var self = this;
     var parent = args.selector;
     var pages = args.pages;
 	var ul = jQuery('<ul class="jmbtabs"></ul>'); 
-    	var div = jQuery('<div class="tab_container"></div>');
+    var div = jQuery('<div class="tab_container"></div>');
+
+    core.includeFiles(pages);
+
+    jQuery(parent).append(ul);
+    jQuery(parent).append(div);
+
+    jQuery(pages).each(function(i,page){
+        var title = page.page_info.title.toUpperCase().split(' ');
+        var titleName = storage.langString['FTT_COMPONENT_'+title.join('_')];
+        var div = jQuery('<div id="'+(new Date()).valueOf()+'">'+titleName+'</div>');
+        var li = jQuery('<li name="" id="'+i+'"><a href="jmbtab_'+i+'" onclick="return false;"></a></li>');
+        jQuery(li).find('a').append(div);
+        jQuery(ul).append(li);
+    });
+
+    var divs = jQuery('<div id="jmbtab" class="tab_content">&nbsp;</div>');
+    jQuery(div).append(divs);
     	
-    	jQuery(parent).append(ul);
-    	jQuery(parent).append(div);
-    	
-    	jQuery(pages).each(function(i,page){
-            var title = page.page_info.title.toUpperCase().split(' ');
-            var titleName = storage.langString['FTT_COMPONENT_'+title.join('_')];
-    		var div = jQuery('<div id="'+(new Date()).valueOf()+'">'+titleName+'</div>');
-    		var li = jQuery('<li name="" id="'+i+'"><a href="jmbtab_'+i+'" onclick="return false;"></a></li>');
-    		jQuery(li).find('a').append(div);
-    		jQuery(ul).append(li);
-    	});
-    	
-    	var divs = jQuery('<div id="jmbtab" class="tab_content">&nbsp;</div>');	
-    	jQuery(div).append(divs);
-    	
-    	//When page loads...
-	jQuery(".tab_content").hide(); //Hide all content
+    //When page loads...
+	//jQuery(".tab_content").hide(); //Hide all content
 
     var loggedByFamous = parseInt(jQuery(document.body).attr('_type'));
     var classByLogged = (loggedByFamous)? 'famous-family' : 'myfamily' ;
@@ -927,7 +953,7 @@ core.renderTabs = function(args){
 	jQuery("ul.jmbtabs li").click(function() {
 		if(jQuery(this).hasClass('active')) return false;
 		core.modulesPullObject.init(div);
-        core.destroy.start();
+        //core.destroy.start();
 		
 		//cleaner objects
 		storage.request.cleaner();
@@ -938,18 +964,18 @@ core.renderTabs = function(args){
 		
 		jQuery("ul.jmbtabs li").removeClass("active"); //Remove any "active" class
 		jQuery(this).addClass("active"); //Add "active" class to selected tab
-		jQuery(divs).hide(); //Hide all tab content
-	
+		//jQuery(divs).hide(); //Hide all tab content
+
 		var id = jQuery(this).attr('id');
 		var page = pages[id];
-		
-		//self.renderPage('#jmbtab', page, false);
+
 		self.renderPage({
-            selector:"#jmbtab",
+            //selector:"#jmbtab",
+            selector:divs,
             page:page,
             popup:false
         });
-		jQuery(divs).show(); //Hide all tab content
+		//jQuery(divs).show(); //Show all tab content
 		return false;
 	});
     if(storage.activeTab == ''){

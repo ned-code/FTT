@@ -3,7 +3,7 @@ function JMBAncestorsObject(obj, popup){
 		cont = jQuery('<div id="jit" class="jmb-ancestors-jit"></div>'),
 		home_button = jQuery('<div class="jmb-ancestors-home"></div>'),
 		json, parse;
-		
+
 	jQuery(obj).append(cont);
 	jQuery(obj).append(home_button);
 

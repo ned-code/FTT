@@ -8,7 +8,7 @@ $pages = '';
 foreach($this->msg as $obj){
 	$pages .= $obj->id.'|';
 }
-$pages = substr($pages, 0, strlen($pages)-1);
+
 ?>
 <script>
     (function(w){

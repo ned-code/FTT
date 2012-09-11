@@ -1,6 +1,8 @@
 function JMBDescendantTreeObject(obj){
 	var	module = this,
-	id = jQuery(obj).attr('id');
+        id = jQuery(obj).attr('id');
+
+    jQuery(obj).attr('style', 'position:relative; height:400px;');
 
     module.message = {
         FTT_MOD_DESCEDNATS_TREE_NAME:"Name",
@@ -91,9 +93,7 @@ JMBDescendantTreeObject.prototype = {
 			object;
 		object = jQuery('#'+id);
 		if(object.length!=0){
-            setTimeout(function(){
-                module.init(id);
-            }, 1);
+            module.init(id);
 		} else {
 			setTimeout(function(){
 				module.check(id);
@@ -114,6 +114,7 @@ JMBDescendantTreeObject.prototype = {
 		dhxLayout.cells("b").hideHeader();
 		dhxLayout.cells("a").setWidth(380);
 		dhxLayout.cells("a").fixSize(true);
+
 
         dhxLayout.cells("b").attachObject(module.profile_container);
 
@@ -137,9 +138,11 @@ JMBDescendantTreeObject.prototype = {
                 jQuery(childs).each(function(i, child){
                     if(offset){
                         jQuery(child.htmlNode).css('margin-left', '7px');
+                        //jQuery(child.htmlNode).attr('style', 'margin-left:7px;');
                     } else {
                         if(child.span.childNodes[0].nodeName == 'DIV'){
                             jQuery(child.span).css('padding-left', '10px');
+                            //jQuery(child.span).attr('style', 'padding-left:10px;');
                         }
                     }
                     correct_style(child);
@@ -158,7 +161,10 @@ JMBDescendantTreeObject.prototype = {
             } else {
                 user = jQuery(module.obj).find('div#'+module.owner+'[name="descendant-node"]');
                 jQuery(user[0]).click();
-                jQuery('div.containerTableStyle').scrollTop(0).scrollTop((jQuery(user[0]).offset().top - 300));
+                var dtb = jQuery('div.containerTableStyle');
+                if(jQuery(dtb).length > 0){
+                    jQuery(dtb).scrollTop(0).scrollTop((jQuery(user[0]).offset().top - 300));
+                }
             }
             module.buttons.init();
         });

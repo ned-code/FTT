@@ -609,12 +609,20 @@ JMBFamiliesObject.prototype = {
 
 	},
 	startAnimation:function(cont, childs){
+        jQuery(cont[0]).css('left', '-155px').css("visibility", "visible").css('position', 'absoloute').animate({ "left":"+=275"},"slow");
+        jQuery(cont[2]).css('left', '760px').css("visibility", "visible").css('position', 'absoloute').animate({ "left":"-=365"},"slow");
+        jQuery(cont[3]).css('left', '760px').css("visibility", "visible").css('position', 'position').animate({ "left":"-=205"},"slow");
+        jQuery(childs).each(function(i, el){
+            jQuery(el).css("opacity", "0").css("visibility", "visible").css("position", "position").animate({"opacity":1}, 300*i);
+        });
+        /*
 		jQuery(cont[0]).css({left:"-155px", visibility:"visible"}).animate({ "left":"+=275"},"slow");
 		jQuery(cont[2]).css({left:"760px", visibility:"visible"}).animate({ "left":"-=365"},"slow");
 		jQuery(cont[3]).css({left:"760px", visibility:"visible"}).show().animate({ "left":"-=205"},"slow");
 		jQuery(childs).each(function(i, el){
 			jQuery(el).css({opacity:0, visibility:"visible"}).animate({"opacity":1}, 300*i);
 		});
+		*/
 	},
 	animation:function(cont, childs){
 		var	module = this, 
