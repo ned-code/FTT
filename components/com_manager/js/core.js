@@ -880,6 +880,7 @@ core.renderPage = function(args){
     var parent = args.selector;
     var page = args.page;
     var popup = args.popup;
+    var append = args.append;
 	var grid = page.grid;
 	var table = self.createLayout(page.page_info.layout_type);
 	var tds = jQuery(table).find('td');
@@ -900,8 +901,10 @@ core.renderPage = function(args){
             var module = page.modules[module_id];
 
             //append js files;
-            //self.appendFiles(module, 'css');
-            //self.appendFiles(module, 'js');
+            if(append){
+                self.appendFiles(module, 'css');
+                self.appendFiles(module, 'js');
+            }
 
             //append module div;
             var div = jQuery('<div id="'+module.container_id+'"></div>');
@@ -924,7 +927,7 @@ core.renderTabs = function(args){
 	var ul = jQuery('<ul class="jmbtabs"></ul>'); 
     var div = jQuery('<div class="tab_container"></div>');
 
-    core.includeFiles(pages);
+    //core.includeFiles(pages);
 
     jQuery(parent).append(ul);
     jQuery(parent).append(div);
@@ -1062,7 +1065,8 @@ core.load = function(pages){
                                 self.renderPage({
                                     selector:"#page",
                                     page:json.pages[0],
-                                    popup:false
+                                    popup:false,
+                                    append: true
                                 });
                             } else {
                                 self.renderTabs({

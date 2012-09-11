@@ -1,14 +1,25 @@
 <?php defined('_JEXEC') or die('Restricted access');
 
-// id, layout_type, title;
-echo "<div id='container'>&nbsp;</div>";
-//$controller = new JMBController();
+$info = $this->pageInfo;
+$url = JURI::base();
+$path = 'components/com_manager/modules/';
 
-$pages = '';
-foreach($this->msg as $obj){
-	$pages .= $obj->id.'|';
+foreach ($info as $page){
+    $modules = $page['modules'];
+    foreach ($modules as $module){
+        $name = $module['info']['name'];
+        $files = $module['files'];
+        $link = $url . $path . $name;
+        foreach($files['css'] as $cssName){
+            echo '<link rel="stylesheet" href="'. $link . '/css/' . $cssName .'" type="text/css" />';
+        }
+        foreach($files['js'] as $jsName){
+            echo '<script src="'. $link . '/js/' . $jsName .'" type="text/javascript"></script>';
+        }
+    }
 }
 
+echo "<div id='container'>&nbsp;</div>";
 ?>
 <script>
     (function(w){
