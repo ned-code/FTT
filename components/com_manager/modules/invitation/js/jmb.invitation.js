@@ -380,10 +380,11 @@ JMBInvitation.prototype = {
             success:function(resp){
                 if(typeof(resp.success) != 'undefined'){
                     var user = storage.usertree.parse(json);
-                    storage.alert(module.getMsg(resp.message).replace('%%', user.name));
-                    if(json.success){
-                        jQuery(module.dialogBox).dialog('close');
-                    }
+                    storage.alert(module.getMsg(resp.message).replace('%%', user.name), function(){
+                        if(resp.success){
+                            jQuery(module.dialogBox).dialog('close');
+                        }
+                    });
                     //storage.progressbar.off();
                     module.progress.off();
                     module.transportation = false;
