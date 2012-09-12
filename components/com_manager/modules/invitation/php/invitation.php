@@ -70,7 +70,6 @@ class JMBInvitation {
 
         if(sizeof($matches) != 0 && trim($matches[0]) != ""){
             $componentLanguage = $this->host->getLangList('component');
-            var_dump($componentLanguage);
             $match = trim($matches[0]);
             if($match == "cousin"){
                 if(isset($componentLanguage["FTT_COMPONENT_RELATION_COUSIN_".$recipient['user']['gender']])){
@@ -113,9 +112,6 @@ class JMBInvitation {
 
         //$relation = $this->host->gedcom->relation->get($tree_id, $gedcom_id, $owner_id);
         $relation = $this->getRelation($tree_id, $gedcom_id, $owner_id, $recipient);
-
-        var_dump($relation);
-        return false;
 
 		#senders e-mail adress
 		if(!$to) return false;
