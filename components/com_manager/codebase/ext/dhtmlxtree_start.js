@@ -1,20 +1,21 @@
-//v.3.5 build 120731
+//v.2.6 build 100722
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
-You allowed to use this component or parts of it under GPL terms
-To use it on other terms or get Professional edition of the component please contact us at sales@dhtmlx.com
+To use this component please contact sales@dhtmlx.com to obtain license
 */
-function dhtmlXTreeFromHTML(a){typeof a!="object"&&(a=document.getElementById(a));for(var b=a,l=b.id,e="",d=0;d<a.childNodes.length;d++)if(a.childNodes[d].nodeType=="1"){if(a.childNodes[d].tagName=="XMP")for(var j=a.childNodes[d],g=0;g<j.childNodes.length;g++)e+=j.childNodes[g].data;else a.childNodes[d].tagName.toLowerCase()=="ul"&&(e=dhx_li2trees(a.childNodes[d],[],0));break}a.innerHTML="";var c=new dhtmlXTreeObject(a,"100%","100%",0),k=[];for(b in c)k[b.toLowerCase()]=b;for(var f=a.attributes,h=
-0;h<f.length;h++)if(f[h].name.indexOf("set")==0||f[h].name.indexOf("enable")==0){var m=f[h].name;c[m]||(m=k[f[h].name]);c[m].apply(c,f[h].value.split(","))}if(typeof e=="object"){c.XMLloadingWarning=1;for(var i=0;i<e.length;i++)b=c.insertNewItem(e[i][0],e[i][3],e[i][1]),e[i][2]&&c._setCheck(b,e[i][2]);c.XMLloadingWarning=0;c.lastLoadedXMLId=0;c._redrawFrom(c)}else c.loadXMLString("<tree id='0'>"+e+"</tree>");window[l]=c;var n=a.getAttribute("oninit");n&&eval(n);return c}
-function dhx_init_trees(){for(var a=document.getElementsByTagName("div"),b=0;b<a.length;b++)a[b].className=="dhtmlxTree"&&dhtmlXTreeFromHTML(a[b])}
-function dhx_li2trees(a,b,l){for(var e=0;e<a.childNodes.length;e++){var d=a.childNodes[e];if(d.nodeType==1&&d.tagName.toLowerCase()=="li"){for(var j="",g=null,c=d.getAttribute("checked"),k=0;k<d.childNodes.length;k++){var f=d.childNodes[k];f.nodeType==3?j+=f.data:f.tagName.toLowerCase()!="ul"?j+=dhx_outer_html(f):g=f}b[b.length]=[l,j,c,d.id||b.length+1];g&&(b=dhx_li2trees(g,b,d.id||b.length))}}return b}
-function dhx_outer_html(a){if(a.outerHTML)return a.outerHTML;var b=document.createElement("DIV");b.appendChild(a.cloneNode(!0));return b=b.innerHTML}window.addEventListener?window.addEventListener("load",dhx_init_trees,!1):window.attachEvent&&window.attachEvent("onload",dhx_init_trees);
+function dhtmlXTreeFromHTML(obj){if (typeof(obj)!="object")
+ obj=document.getElementById(obj);var n=obj;var id=n.id;var cont="";for (var j=0;j<obj.childNodes.length;j++)if (obj.childNodes[j].nodeType=="1"){if (obj.childNodes[j].tagName=="XMP"){var cHead=obj.childNodes[j];for (var m=0;m<cHead.childNodes.length;m++)cont+=cHead.childNodes[m].data;}else if (obj.childNodes[j].tagName.toLowerCase()=="ul")
+ cont=dhx_li2trees(obj.childNodes[j],new Array(),0);break;};obj.innerHTML="";var t=new dhtmlXTreeObject(obj,"100%","100%",0);var z_all=new Array();for ( b in t )z_all[b.toLowerCase()]=b;var atr=obj.attributes;for (var a=0;a<atr.length;a++)if ((atr[a].name.indexOf("set")==0)||(atr[a].name.indexOf("enable")==0)){var an=atr[a].name;if (!t[an])an=z_all[atr[a].name];t[an].apply(t,atr[a].value.split(","));};if (typeof(cont)=="object"){t.XMLloadingWarning=1;for (var i=0;i<cont.length;i++){var n=t.insertNewItem(cont[i][0],cont[i][3],cont[i][1]);if (cont[i][2])t._setCheck(n,cont[i][2]);};t.XMLloadingWarning=0;t.lastLoadedXMLId=0;t._redrawFrom(t);}else
+ t.loadXMLString("<tree id='0'>"+cont+"</tree>");window[id]=t;var oninit = obj.getAttribute("oninit");if (oninit)eval(oninit);return t;};function dhx_init_trees(){var z=document.getElementsByTagName("div");for (var i=0;i<z.length;i++)if (z[i].className=="dhtmlxTree")dhtmlXTreeFromHTML(z[i])
+};function dhx_li2trees(tag,data,ind){for (var i=0;i<tag.childNodes.length;i++){var z=tag.childNodes[i];if ((z.nodeType==1)&&(z.tagName.toLowerCase()=="li")){var c="";var ul=null;var check=z.getAttribute("checked");for (var j=0;j<z.childNodes.length;j++){var zc=z.childNodes[j];if (zc.nodeType==3)c+=zc.data;else if (zc.tagName.toLowerCase()!="ul") c+=dhx_outer_html(zc);else ul=zc;};data[data.length]=[ind,c,check,(z.id||(data.length+1))];if (ul)data=dhx_li2trees(ul,data,(z.id||data.length));}};return data;};function dhx_outer_html(node){if (node.outerHTML)return node.outerHTML;var temp=document.createElement("DIV");temp.appendChild(node.cloneNode(true));temp=temp.innerHTML;return temp;};if (window.addEventListener)window.addEventListener("load",dhx_init_trees,false);else if (window.attachEvent)window.attachEvent("onload",dhx_init_trees);
 
-//v.3.5 build 120731
+
+
+
+//v.2.6 build 100722
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
-You allowed to use this component or parts of it under GPL terms
-To use it on other terms or get Professional edition of the component please contact us at sales@dhtmlx.com
+To use this component please contact sales@dhtmlx.com to obtain license
 */
