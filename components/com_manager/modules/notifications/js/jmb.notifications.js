@@ -66,7 +66,7 @@ JMBNotifications.prototype = {
         return module.ntPull;
     },
     onDropIn:function(object){
-        jQuery(object).parent().css('border', '2px solid green');
+        jQuery(object).parent().css('border', '2px solid #72FF5C');
         jQuery('img.ui-draggable.ui-draggable-dragging').addClass('in');
     },
     onDropOut:function(object){
