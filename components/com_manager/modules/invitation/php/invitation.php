@@ -63,7 +63,7 @@ class JMBInvitation {
         }
     }
 
-    protected function getRelation($tree_id, $gedcom_id, $owner_id, $recipient){
+    protected function getRelation($tree_id, $gedcom_id, $owner_id, $owner){
         $relation = $this->host->gedcom->relation->get($tree_id, $owner_id, $gedcom_id);
         $matches = array();
         preg_match( "/(\W|^)(self|spouse|father|mother|daughter|son|brother|sister|cousin|uncle|aunt|nephew|niece|grandmother|grandfather|granddaughter|grandson|great\sgrandfather|great\sgrandmother)(\W|$)/", $relation, $matches);
@@ -72,8 +72,8 @@ class JMBInvitation {
             $componentLanguage = $this->host->getLangList('component');
             $match = trim($matches[0]);
             if($match == "cousin"){
-                if(isset($componentLanguage["FTT_COMPONENT_RELATION_COUSIN_".$recipient['user']['gender']])){
-                    return $componentLanguage["FTT_COMPONENT_RELATION_COUSIN_".$recipient['user']['gender']];
+                if(isset($componentLanguage["FTT_COMPONENT_RELATION_COUSIN_".$owner['user']['gender']])){
+                    return $componentLanguage["FTT_COMPONENT_RELATION_COUSIN_".$owner['user']['gender']];
                 }
             } else {
                 if(isset($componentLanguage["FTT_COMPONENT_RELATION_".strtoupper($match)])){
@@ -111,7 +111,7 @@ class JMBInvitation {
         }
 
         //$relation = $this->host->gedcom->relation->get($tree_id, $gedcom_id, $owner_id);
-        $relation = $this->getRelation($tree_id, $gedcom_id, $owner_id, $recipient);
+        $relation = $this->getRelation($tree_id, $gedcom_id, $owner_id, $owner);
 
 		#senders e-mail adress
 		if(!$to) return false;
