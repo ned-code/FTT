@@ -223,7 +223,7 @@ function JMBProfile(){
                         if(full_name != ''){
                             jQuery(span).text(user.full_name);
                         } else {
-                            jQuery(parents[0]).hide();
+                            //jQuery(parents[0]).hide();
                         }
                     break;
 
@@ -232,7 +232,7 @@ function JMBProfile(){
                         if(know_as != ''){
                             jQuery(span).text(user.nick);
                         } else {
-                            jQuery(parents[0]).hide();
+                            //jQuery(parents[0]).hide();
                         }
                     break;
 
@@ -241,7 +241,7 @@ function JMBProfile(){
                         if(relation){
                             jQuery(span).text(relation);
                         } else {
-                            jQuery(parents[0]).hide();
+                            //jQuery(parents[0]).hide();
                         }
                     break;
 
@@ -255,7 +255,7 @@ function JMBProfile(){
                         if(birthday != ''){
                             jQuery(span).text(birthday);
                         } else {
-                            jQuery(parents[0]).hide();
+                            //jQuery(parents[0]).hide();
                         }
                     break;
 
@@ -272,7 +272,7 @@ function JMBProfile(){
                         if(placeName != ''){
                             jQuery(span).text(placeName);
                         } else {
-                            jQuery(parents[0]).hide();
+                            //jQuery(parents[0]).hide();
                         }
                     break;
 
@@ -281,7 +281,7 @@ function JMBProfile(){
                         if(deathday != ''){
                             jQuery(span).text(deathday);
                         } else {
-                            jQuery(parents[0]).hide();
+                            //jQuery(parents[0]).hide();
                         }
                     break;
 
@@ -291,7 +291,7 @@ function JMBProfile(){
                         if(placeName != ''){
                             jQuery(span).text(placeName);
                         } else {
-                            jQuery(parents[0]).hide();
+                            //jQuery(parents[0]).hide();
                         }
                     break;
 
@@ -807,6 +807,7 @@ JMBProfile.prototype = {
             fn = module.functions,
             sb = host.stringBuffer(),
             form;
+
         switch(id){
             case "view_profile":
                 form = fn.getViewObject('dialogViewProfile');
@@ -858,7 +859,6 @@ JMBProfile.prototype = {
                     sb._('</div>');
                 sb._('</div>');
                 form = jQuery(sb.result());
-
                 var _fn = {
                     setUnionEventMessage:function(view){
                         module.functions.setMessage(view,[
