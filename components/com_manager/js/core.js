@@ -405,7 +405,7 @@ storage.usertree.avatar = {}
 storage.usertree.avatar._type = function(object){
     var media = object.media;
     if(media!=null){
-        if(media.avatar!=null){
+        if(media.avatar!=null && media.avatar.media_id){
             return 'media';
         }
     }
