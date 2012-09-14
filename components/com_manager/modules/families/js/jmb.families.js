@@ -16,6 +16,7 @@ function JMBFamiliesObject(obj, popup){
     module.nameTooltip = [];
 	module.clickItem = false;
 	module.childsPos = {};
+    module.mask = {};
 	module.imageSize = {
 		parent:{
 			width:108,
@@ -132,7 +133,7 @@ JMBFamiliesObject.prototype = {
 	_first:function(gedcom_id){
         var module = this;
         var object = module.usertree[gedcom_id];
-        var parent_key = module._checkParents(object.parents);
+        var parent_key = module._checkParents(object);
         if(parent_key && object.families == null){
             return parent_key;
         }
@@ -177,10 +178,15 @@ JMBFamiliesObject.prototype = {
 		}
 		return '';
 	},
-	_checkParents:function(parents){
-		if(parents==null) return false;
-		var module = this, key, family, father, mother;
-		
+	_checkParents:function(object){
+        if(!object || object==null) return false;
+		var module = this, gedcomId, parents, key, family, father, mother;
+        gedcomId = object.user.gedcom_id;
+        if(module.clickItem && gedcomId == module.clickItem.targetId){
+            return module.clickItem.parentId;
+        }
+        parents = object.parents;
+        if(parents == null) return false;
 		for(key in parents){
 			if(key!='length'){
 				family = parents[key];
@@ -215,7 +221,7 @@ JMBFamiliesObject.prototype = {
 			fam_opt = storage.family_line.get.opt(),
             parent_key;
 		sb._('<div>');
-			if(parent_key = module._checkParents(parents)){
+			if(parent_key = module._checkParents(object)){
 				sb._('<div  id="')._(parent_key)._('" class="jmb-families-button parent active">&nbsp;</div>');
 			} else {
 				sb._('<div  id="null" class="jmb-families-button parent">&nbsp;</div>');
@@ -262,7 +268,7 @@ JMBFamiliesObject.prototype = {
 			fam_opt = storage.family_line.get.opt(),
 			parent_key;
 		sb._('<div>');
-			if(parent_key = module._checkParents(parents)){
+			if(parent_key = module._checkParents(object)){
 				sb._('<div  id="')._(parent_key)._('" class="jmb-families-button parent active">&nbsp;</div>');
 			} else {
 				sb._('<div  id="null" class="jmb-families-button parent">&nbsp;</div>');
@@ -385,22 +391,25 @@ JMBFamiliesObject.prototype = {
 		return jQuery(sb.result());
 	},
 	_arrows:function(cont){
-		var module = this, id;
+		var module = this;
 		jQuery(cont).find('.jmb-families-button').each(function(index, element){
 			jQuery(element).click(function(){
+                var id, isParent, object, prev;
 				if( (id = jQuery(this).attr('id')) == 'null'){
 					return false;
 				}
-				var is_parent = jQuery(this).hasClass('parent');
-				var object = is_parent?jQuery(element).parent().parent():jQuery(element).parent();
-				var clickItem = { 
-					object:object, 
-					is_parent:is_parent,
-					offset:jQuery(object).offset(),
-					position:jQuery(object).position()
-				}
-				module.clickItem = clickItem;
-				module.reload(id, jQuery(this).hasClass('parent'));
+                isParent = jQuery(this).hasClass('parent');
+                object = isParent?jQuery(element).parent().parent():jQuery(element).parent();
+                var clickItem = {
+                    parentId: module.now_id,
+                    targetId: jQuery(object).attr('id'),
+                    object:object,
+                    is_parent:isParent,
+                    offset:jQuery(object).offset(),
+                    position:jQuery(object).position()
+                }
+                module.clickItem = clickItem;
+                module.reload(id, jQuery(this).hasClass('parent'));
 			});
 		});
 	},
