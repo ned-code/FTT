@@ -145,10 +145,59 @@
     background: none repeat scroll 0 0 white;
     border: 1px solid #999999;
     border-radius: 5px 5px 5px 5px;
-    cursor: pointer;
     font-family: Tahoma;
 }
 .ftt-profile-language-list.ui-dialog-content ul{
     list-style: none outside none;
 }
-.ftt-profile-language-list.ui-dialog-content ul li{}
+.ftt-profile-language-list.ui-dialog-content ul li{
+    cursor: pointer;
+}
+.ftt-profile-language-list.ui-dialog-content ul li input{
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.ftt-profile-language-list.ui-dialog-content ul li div{
+    display: inline-block;
+}
+.ftt-profile-language-list.ui-dialog-content ul li div.flag{
+    height: 24px;
+    width: 24px;
+}
+.ftt-profile-language-list.ui-dialog-content ul li div.flag.en-GB{
+    background: url("../imgs/en-GB.png") no-repeat scroll 0 0 transparent;
+}
+.ftt-profile-language-list.ui-dialog-content ul li div.flag.ru-RU{
+    background: url("../imgs/ru-RU.png") no-repeat scroll 0 0 transparent;
+}
+.ftt-profile-language-list.ui-dialog-content ul li div.flag.pt-PT{
+    background: url("../imgs/pt-PT.png") no-repeat scroll 0 0 transparent;
+}
+.ftt-button-ok {
+    bottom: 10px;
+    left: 80px;
+    position: absolute;
+    width: 150px;
+}
+.ftt-button-ok input {
+    width: 150px;
+}
+.ftt-language-progressbar {
+    background: none repeat scroll 0 0 white;
+    height: 190px;
+    left: 3px;
+    position: absolute;
+    top: 3px;
+    width: 310px;
+}
+.ftt-language-progressbar div{
+    background: url("../imgs/progressbar.gif") no-repeat scroll 0 25px transparent;
+    height: 120px;
+    left: 100px;
+    position: absolute;
+    top: 40px;
+    width: 100px;
+}
+.ftt-language-progressbar div span{
+    margin-left:10px;
+}

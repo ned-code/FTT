@@ -57,14 +57,22 @@ function JMBLogin(){
 			jQuery(settings.languages).each(function(i,el){
 				if(parseInt(el.published)){
                     if(el.lang_code == settings.default_language){
-                        st._('<li style="background: yellow;" id="')._(el.lang_code)._('">')._(el.title)._('</li>');
+                        st._('<li>');
+                        st._('<div class="flag ')._(el.lang_code)._('">&nbsp;</div>');
+                        st._('<div><input name="country" type="radio" checked="checked" value="')._(el.lang_code)._('"></div>');
+                        st._('<div class="title">')._(el.title)._('</div>');
+                        st._('</li>');
                     } else {
-                        st._('<li id="')._(el.lang_code)._('">')._(el.title)._('</li>');
+                        st._('<li>');
+                            st._('<div class="flag ')._(el.lang_code)._('">&nbsp;</div>');
+                            st._('<div><input name="country" type="radio" value="')._(el.lang_code)._('"></div>');
+                            st._('<div class="title">')._(el.title)._('</div>');
+                        st._('</li>');
                     }
-
 				}
 			});
 			st._('</ul>');
+            st._('<div class="ftt-button-ok"><input type="button" value="OK"></div>');
 			var html = jQuery(st.result());	
 			return html;
 		},
@@ -155,14 +163,23 @@ function JMBLogin(){
                         });
                         jQuery(langBox).parent().addClass('language');
                         jQuery(langBox).parent().css('top', '20px');
-                        jQuery(langBox).find('li').click(function(){
+                        var selectRadioButton = function(){
+                            var input = jQuery(this).parent().find('input').attr('checked', 'checked');
+                        }
+                        jQuery(langBox).find('div.flag').click(selectRadioButton);
+                        jQuery(langBox).find('div.title').click(selectRadioButton);
+                        jQuery(langBox).find('div.ftt-button-ok input').click(function(){
                             if(confirm("Are you sure you want to set the language?")){
-                                fn.ajax('language', jQuery(this).attr('id'), function(res){
+                                var id = jQuery(langBox).find('input:checked').val();
+                                var prgb = jQuery('<div class="ftt-language-progressbar"><div><span>Loading...</span></div></div>');
+                                jQuery(langBox).append(prgb);
+                                fn.ajax('language', id, function(res){
+                                    //jQuery(prgb).remove();
                                     window.location.reload();
                                 });
                             }
                             return false;
-                        });
+                        })
 					},
                     to_facebook:function(object, callback){
                         window.top.location.href = storage.app.link;
