@@ -563,6 +563,7 @@ function JMBProfile(){
                 var text = jQuery(object)[el[1]]();
                 jQuery(object)[el[1]](module.message[text]);
             }
+            return view;
         },
         getUsersLength:function(){
             var users = module.users;
@@ -861,13 +862,13 @@ JMBProfile.prototype = {
                 form = jQuery(sb.result());
                 var _fn = {
                     setUnionEventMessage:function(view){
-                        module.functions.setMessage(view,[
+                        return module.functions.setMessage(view,[
                             ["option[value='MARR']",'text'],
-                            ["div#button input",'val'],
+                            ["div#button input#save",'val'],
                             ["span#unknown",'text'],
                             ["span#divorce",'text'],
-                            ["input[type='submit']",'val'],
-                            ["input[type='button']",'val']
+                            ["input#a_save",'val'],
+                            ["input#a_cancel",'val']
                         ]);
                     },
                     createAddFamilyBox:function(callback){
