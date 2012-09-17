@@ -886,11 +886,13 @@ core.renderPage = function(args){
 	var tds = jQuery(table).find('td');
     storage.family_line.init(page);
 
-    if(storage.activeTable != null){
+    if(storage.activeTable != null && !popup){
         jQuery(storage.activeTable).remove();
         storage.activeTable = null;
     }
-    storage.activeTable = table;
+    if(!popup){
+        storage.activeTable = table;
+    }
 
     jQuery(parent).append(table);
 
