@@ -334,8 +334,11 @@ class JMBController extends JController
             $user = $host->user->get();
 
         	if(strlen($task)!=0) return;
+
             if((bool)$canvas){
-                header('Location: https://www.facebook.com/dialog/oauth?client_id='.$host->jfbConnect->facebookAppId.'&redirect_uri='.JURI::base().'index.php/myfamily');
+                //header('Location: https://www.facebook.com/dialog/oauth?client_id='.$host->jfbConnect->facebookAppId.'&redirect_uri='.JURI::base());
+                $link = 'https://www.facebook.com/dialog/oauth?client_id='.$host->jfbConnect->facebookAppId.'&redirect_uri='.JURI::base();
+                echo("<script> top.location.href='" . $link . "'</script>");
                 exit;
             }
 
