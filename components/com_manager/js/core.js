@@ -220,7 +220,17 @@ storage.usertree.parse = function(object){
 		nick:(function(){
 			var	nick = user.nick,
 				first_name = user.first_name.replace('@P.N.', '');
-				return (nick!=null)?nick:first_name;
+                var name = (nick!=null)?nick:first_name;
+				if(name.length > 30){
+                    var string = '';
+                    for(var i = 0 ; i <= 27 ; i++){
+                        string += name[i];
+                    }
+                    string += '...';
+                    return string;
+                } else {
+                    return name;
+                }
 		})(),
         is_editable:(user.facebook_id == '0' || user.gedcom_id == storage.usertree.gedcom_id),
         is_deletable:(user.creator == storage.usertree.gedcom_id || user.gedcom_id == storage.usertree.gedcom_id),
