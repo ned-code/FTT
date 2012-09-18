@@ -95,7 +95,7 @@ JMBFamiliesObject.prototype = {
 	},
 	_spouses:function(families, def){
 		if(families==null) return [];
-		var spouses = [], family, spouse;
+		var module = this, spouses = [], family, spouse;
 		for(var key in families){
 			if (!families.hasOwnProperty(key)) continue;
 			if(key!='length'){
@@ -107,7 +107,7 @@ JMBFamiliesObject.prototype = {
 			}
 		}
 		return spouses.sort(function(){
-			if(arguments[0][0] == def){
+			if(arguments[0][0] == def && !module.clickItem.is_parent){
 				return false;
 			} else {
 				return true;
@@ -180,6 +180,55 @@ JMBFamiliesObject.prototype = {
 	},
 	_checkParents:function(object){
         if(!object || object==null) return false;
+        var module = this,
+            fn,
+            parents,
+            key,
+            family,
+            fatherId,
+            motherId,
+            fatherFamilyCount,
+            motherFamilyCount;
+
+        fn = {
+            getFamilyCount:function(family, id){
+                if(!id) return 0;
+                var families = object.families;
+                if(families != null){
+                    return families.length;
+                }
+                return 0;
+            }
+        }
+
+        parents = object.parents;
+        if(parents != null){
+            for(key in parents){
+                if(parents.hasOwnProperty(key)){
+                    if(key != 'length'){
+                        family = parents[key];
+                        fatherId = (family.father!= null && module.usertree[family.father.gedcom_id])?family.father.gedcom_id:false;
+                        motherId = (family.mother!= null && module.usertree[family.mother.gedcom_id])?family.mother.gedcom_id:false;
+                        fatherFamilyCount = fn.getFamilyCount(family, fatherId);
+                        motherFamilyCount = fn.getFamilyCount(family, motherId);
+                        if(fatherId && motherId){
+                            if(fatherFamilyCount == motherFamilyCount){
+                                return fatherId;
+                            } else if(fatherFamilyCount > motherFamilyCount){
+                                return fatherId;
+                            } else {
+                                motherId;
+                            }
+                        } else {
+                            return (fatherId)?fatherId:motherId;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+        /*
+        if(!object || object==null) return false;
 		var module = this, gedcomId, parents, key, family, father, mother;
         gedcomId = object.user.gedcom_id;
         if(module.clickItem && gedcomId == module.clickItem.targetId){
@@ -196,6 +245,7 @@ JMBFamiliesObject.prototype = {
 			}
 		}
 		return false;
+		*/
 	},
     _getName:function(object){
         var module = this,
