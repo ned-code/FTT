@@ -17,6 +17,7 @@ function JMBFamiliesObject(obj, popup){
 	module.clickItem = false;
 	module.childsPos = {};
     module.mask = {};
+    module.famId = 0;
 	module.imageSize = {
 		parent:{
 			width:108,
@@ -106,8 +107,9 @@ JMBFamiliesObject.prototype = {
 				}
 			}
 		}
+        def = (module.clickItem.is_parent)?module.famId:def;
 		return spouses.sort(function(){
-			if(arguments[0][0] == def && !module.clickItem.is_parent){
+			if(arguments[0][0] == def){
 				return false;
 			} else {
 				return true;
@@ -206,6 +208,7 @@ JMBFamiliesObject.prototype = {
             for(key in parents){
                 if(parents.hasOwnProperty(key)){
                     if(key != 'length'){
+                        module.famId = key;
                         family = parents[key];
                         fatherId = (family.father!= null && module.usertree[family.father.gedcom_id])?family.father.gedcom_id:false;
                         motherId = (family.mother!= null && module.usertree[family.mother.gedcom_id])?family.mother.gedcom_id:false;
