@@ -327,6 +327,7 @@ class JMBController extends JController
         	$task = JRequest::getVar('task');
         	$option = JRequest::getVar('option');
         	$canvas = JRequest::getVar('canvas');
+            $state = JRequest::getVar('state');
 
         	if($option!='com_manager') exit();
 
@@ -335,9 +336,8 @@ class JMBController extends JController
 
         	if(strlen($task)!=0) return;
 
-            if((bool)$canvas){
-                //header('Location: https://www.facebook.com/dialog/oauth?client_id='.$host->jfbConnect->facebookAppId.'&redirect_uri='.JURI::base());
-                $link = 'https://www.facebook.com/dialog/oauth?client_id='.$host->jfbConnect->facebookAppId.'&redirect_uri='.JURI::base();
+            if((bool)$canvas && !(bool)$state){
+                $link = 'https://www.facebook.com/dialog/oauth?client_id='.$host->jfbConnect->facebookAppId.'&redirect_uri=https://apps.facebook.com/dev-ftt&state=true';
                 echo("<script> top.location.href='" . $link . "'</script>");
                 exit;
             }
