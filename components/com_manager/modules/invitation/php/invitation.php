@@ -124,8 +124,8 @@ class JMBInvitation {
 		
 		$token = md5($value);
 
-		$sql_string = "INSERT INTO #__mb_variables (`id`,`belongs`,`value`,`email`,`facebook_id`,`s_gedcom_id`) VALUES (NULL,?,?,?,?,?)";
-		$this->host->ajax->setQuery($sql_string, $token, $value, $to, 0, $owner_id);
+		$sql_string = "INSERT INTO #__mb_variables (`id`,`language`,`belongs`,`value`,`email`,`facebook_id`,`s_gedcom_id`) VALUES (NULL,?,?,?,?,?,?)";
+		$this->host->ajax->setQuery($sql_string, $user->language, $token, $value, $to, 0, $owner_id);
        	$this->host->ajax->query();
 		
 		#recipient  
@@ -226,8 +226,8 @@ class JMBInvitation {
             $value = $args[1].','.$tree_id;
             $token = md5($value);
 
-            $sql_string = "INSERT INTO #__mb_variables (`id`,`belongs`,`value`,`email`,`facebook_id`,`s_gedcom_id`) VALUES (NULL,?,?,?,?,?)";
-            $this->host->ajax->setQuery($sql_string, $token, $value, 0, $args[0], $owner_id);
+            $sql_string = "INSERT INTO #__mb_variables (`id`,`language`,`belongs`,`value`,`email`,`facebook_id`,`s_gedcom_id`) VALUES (NULL,?,?,?,?,?,?)";
+            $this->host->ajax->setQuery($sql_string, $user->language, $token, $value, 0, $args[0], $owner_id);
             $this->host->ajax->query();
 
 			return json_encode(array('success'=>true));

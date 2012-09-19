@@ -20,6 +20,8 @@ function JMBLogin(){
 
     }
 
+    module.menu = null;
+
 	//init vars
 	loggedByFamous = parseInt(jQuery(document.body).attr('_type'));
 	alias = jQuery(document.body).attr('_alias');
@@ -51,12 +53,13 @@ function JMBLogin(){
 			sb._('</div>');
 			return jQuery(sb.result());
 		},
-		langList:function(){
+		langList:function(object){
 			var st = host.stringBuffer();
 			st._('<ul>');
 			jQuery(settings.languages).each(function(i,el){
 				if(parseInt(el.published)){
-                    if(el.lang_code == settings.default_language){
+                    var def = (object.def)?object.def:settings.default_language;
+                    if(el.lang_code == def){
                         st._('<li>');
                         st._('<div class="flag ')._(el.lang_code)._('">&nbsp;</div>');
                         st._('<div><input name="country" type="radio" checked="checked" value="')._(el.lang_code)._('"></div>');
@@ -103,6 +106,9 @@ function JMBLogin(){
 			sb._('</div>');
 			menu = jQuery(sb.result());
 			return {
+                viewLanguage:function(object ,c){
+                    this.click.language(object, c);
+                },
 				on:function(object, callback){
 					var m = this;
                     jQuery(object).parent().append(menu);
@@ -147,7 +153,7 @@ function JMBLogin(){
 					},
 					language:function(object, callback){
                         var langBox = jQuery('<div class="ftt-profile-language-list"></div>');
-                        jQuery(langBox).append(module.langList());
+                        jQuery(langBox).append(module.langList(object));
                         jQuery(langBox).dialog({
                             width:320,
                             height:240,
@@ -224,6 +230,7 @@ function JMBLogin(){
 		},
 		click:function(cont){
 			var menu = this.menu();
+            module.menu = menu;
 			jQuery(cont).click(function(){
                 var button = jQuery(this).find('div.button');
 				if(jQuery(button).hasClass('active')){

@@ -573,7 +573,7 @@ class JMBUserTree {
 		$this->_TreeId = $tree_id;
 		$this->_GedcomId = $owner_id;
 		$this->_init();
-		
+
 		$nodes = array();
         $ids = array();
 		$node = $this->getNode($gedcom_id);
@@ -618,6 +618,7 @@ class JMBUserTree {
 				}
 			}
 		}
+
 		return $nodes;		
 	}
 	

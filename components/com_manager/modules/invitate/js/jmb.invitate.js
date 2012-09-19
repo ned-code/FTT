@@ -69,19 +69,7 @@ function JMBInvitateObject(obj){
     }
 
     fn.getTarget = function(json){
-        var start_id = json.data.to;
-        var startObject =  fn.getObjectbyId(json.family, start_id);
-        if(startObject.families != null){
-            return startObject;
-        } else {
-            if(startObject.parents != null){
-                var family = fn.getObjectFirst(startObject.parents);
-                var existParent = fn.getExistParent(family);
-                return fn.getObjectbyId(json.family, existParent.gedcom_id);
-            } else {
-                return startObject;
-            }
-        }
+        return fn.getObjectbyId(json.family, json.data.target.Id);
     }
 
     fn.getSender = function(json){
@@ -147,7 +135,6 @@ function JMBInvitateObject(obj){
         var sb = storage.stringBuffer();
         var target = fn.getTarget(json);
         var sender = fn.getSender(json);
-        console.log(json);
 
         sb._('<div class="ftt-invitate-header">');
             sb._('<div class="ftt-invitate-header-body">');
@@ -484,9 +471,15 @@ function JMBInvitateObject(obj){
                 });
                 return false;
             } else {
+                if(json.data.language != storage.usertree.user.language){
+                    storage.login.menu.viewLanguage({def:json.data.language}, function(){
+    
+                    });
+                }
                 cont = fn.boxInvitation(json);
             }
         }
+
         object = jQuery(cont);
         jQuery('.content').css('width', '100%').css('margin-top', '30px').css('max-width', 'none');
         jQuery('div.right').hide();
