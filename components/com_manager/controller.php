@@ -337,7 +337,13 @@ class JMBController extends JController
         	if(strlen($task)!=0) return;
 
             if((bool)$canvas && !(bool)$state){
-                $link = 'https://www.facebook.com/dialog/oauth?client_id='.$host->jfbConnect->facebookAppId.'&redirect_uri=https://apps.facebook.com/dev-ftt&state=true';
+                $link = 'https://www.facebook.com/dialog/oauth?client_id='.$host->jfbConnect->facebookAppId.'&redirect_uri=https://apps.facebook.com/';
+                if($host->jfbConnect->facebookAppId == "136695133059478"){
+                    $link .= "familytreetop";
+                } else {
+                    $link .= "dev-ftt";
+                }
+                $link .= '&state=true';
                 echo("<script> top.location.href='" . $link . "'</script>");
                 exit;
             }
