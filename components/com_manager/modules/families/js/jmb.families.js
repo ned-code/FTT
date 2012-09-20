@@ -96,7 +96,7 @@ JMBFamiliesObject.prototype = {
 	},
 	_spouses:function(families, def){
 		if(families==null) return [];
-		var module = this, spouses = [], family, spouse;
+		var module = this, spouses = [], family, spouse, childrens = {}, childs, el, child;
 		for(var key in families){
 			if (!families.hasOwnProperty(key)) continue;
 			if(key!='length'){
@@ -105,9 +105,19 @@ JMBFamiliesObject.prototype = {
 					spouse = [family.id, family.spouse];
 					spouses.push(spouse);
 				}
+                childs = family.childrens;
+                for (el in childs){
+                    if(!childs.hasOwnProperty(el)) continue;
+                    child = childs[el];
+                    if(!childrens[child.gedcom_id]){
+                        childrens[child.gedcom_id] = child;
+                    }
+                }
 			}
 		}
-        def = (module.clickItem.is_parent)?module.famId:def;
+        if(storage.usertree.user.gedcomId in childrens){
+            def = (module.clickItem.is_parent)?module.famId:def;
+        }
 		return spouses.sort(function(){
 			if(arguments[0][0] == def){
 				return false;
