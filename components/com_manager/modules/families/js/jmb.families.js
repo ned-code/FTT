@@ -116,6 +116,8 @@ JMBFamiliesObject.prototype = {
 			}
 		}
         if(storage.usertree.user.gedcomId in childrens){
+            def = module.famId;
+        } else {
             def = (module.clickItem.is_parent)?module.famId:def;
         }
 		return spouses.sort(function(){
