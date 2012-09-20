@@ -143,17 +143,23 @@ function JMBFamilyLine(){
 				return sofar + thisvalue;
 			},
 			init:function(object, total, data){
-				var sofar = 0, k;
-				if(data.length > 2) return false;
-                if(typeof(object) == 'undefined') return false;
-                if(!object.getContext) return false;
-				this._canvas = object;
-				this._context = object.getContext("2d");
-				this._total = total;
-				k = total - data;
-				sofar = this.segment(data, sofar, 0);
-				this.segment(k, sofar, 1);
-			}
+                var self = this;
+                jQuery(object).ready(function(){
+                    if(G_vmlCanvasManager != undefined){
+                        G_vmlCanvasManager.initElement(object);
+                    }
+                    var sofar = 0, k;
+                    if(data.length > 2) return false;
+                    if(typeof(object) == 'undefined') return false;
+                    if(!object.getContext) return false;
+                    self._canvas = object;
+                    self._context = object.getContext("2d");
+                    self._total = total;
+                    k = total - data;
+                    sofar = self.segment(data, sofar, 0);
+                    self.segment(k, sofar, 1);
+                });
+		    }
 		},
 		overlay:function(titles, type){
 			var target = (type=='mother')?titles[0]:titles[1];
@@ -296,8 +302,8 @@ function JMBFamilyLine(){
 						if(settings.select) sb._('<td><div class="icon mother select active">&nbsp;</div></td>');
 						if(settings.pencil) sb._('<td><div class="icon mother pencil">&nbsp;</div></td>');
 						if(settings.eye) sb._('<td><div class="icon mother eye active">&nbsp;</div></td>');
-						sb._('<td><div class="title mother"><span>')._(message.FTT_MOD_FAMILY_LINE_MOTHER)._('</span><div id="chart"><canvas width="21px" height="21px"></canvas></div></div></td>');
-						sb._('<td><div class="title father"><div id="chart"><canvas width="21px" height="21px"></canvas></div><span>')._(message.FTT_MOD_FAMILY_LINE_FATHER)._('</span></div></td>');
+						sb._('<td><div class="title mother"><span>')._(message.FTT_MOD_FAMILY_LINE_MOTHER)._('</span><div id="chart"><canvas id="c_mother" width="21px" height="21px"></canvas></div></div></td>');
+						sb._('<td><div class="title father"><div id="chart"><canvas id="c_father" width="21px" height="21px"></canvas></div><span>')._(message.FTT_MOD_FAMILY_LINE_FATHER)._('</span></div></td>');
 						if(settings.eye) sb._('<td><div class="icon father eye active">&nbsp;</div></td>');
 						if(settings.pencil) sb._('<td><div class="icon father pencil">&nbsp;</div></td>');
 						if(settings.select) sb._('<td><div class="icon father select">&nbsp;</div></td>');

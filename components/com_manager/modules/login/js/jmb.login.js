@@ -220,12 +220,12 @@ function JMBLogin(){
 			jQuery(cont).find('div.facebook span').click(function(){
 				FB.login(function(response){
 					if(response.authResponse){
+                        storage.alert("You are now being logged in using your Facebook credentials", function(){});
 						window.location = storage.baseurl+'index.php?option=com_jfbconnect&task=loginFacebookUser&return=myfamily';
 					} else {
 						alert('Login failed.')
 					}
 				}, {scope: "user_birthday,user_relationships,email"});
-
 			});
 		},
 		click:function(cont){

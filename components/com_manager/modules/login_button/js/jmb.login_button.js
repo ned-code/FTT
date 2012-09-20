@@ -16,7 +16,15 @@ function JMBLoginButtonObject(obj){
 	cont = jQuery(sb.result());
 	jQuery(obj).append(cont);
 	jQuery(cont).find('.jmb-login-button').click(function(){
-        jfbc.login.login_custom();
+        //jfbc.login.login_custom();
+        FB.login(function(response){
+            if(response.authResponse){
+                storage.alert("You are now being logged in using your Facebook credentials", function(){});
+                window.location = storage.baseurl+'index.php?option=com_jfbconnect&task=loginFacebookUser&return=myfamily';
+            } else {
+                alert('Login failed.')
+            }
+        }, {scope: "user_birthday,user_relationships,email"});
 	});
 
     var setButtonPosition = function(){

@@ -20,6 +20,8 @@ $controller->redirect();
 # include JS and CSS 
 $document =& JFactory::getDocument();
 
+$document->addScript('components/com_manager/js/excanvas.js');
+
 $document->addStyleSheet('administrator/components/com_manager/js/jquery-ui-1.8.23.custom.css');
 $document->addStyleSheet('components/com_manager/codebase/skins/dhtmlxlayout_dhx_skyblue.css');
 $document->addStyleSheet('components/com_manager/codebase/dhtmlxlayout.css');
@@ -51,8 +53,6 @@ $document->addStyleSheet('components/com_manager/js/prettyPhoto.css');
 $document->addStyleSheet('components/com_manager/js/tipsy.css');
 $document->addStyleSheet('components/com_manager/js/scrollbar.css');
 $document->addStyleSheet('components/com_manager/js/animatedborder.css');
-$document->addScript('components/com_manager/js/excanvas.js');
-$document->addScript('components/com_manager/js/flashcanvas.js');
 $document->addScript('components/com_manager/js/jit.js');
 $document->addScript('components/com_manager/js/jquery.bt.js');
 $document->addScript('components/com_manager/js/jquery.prettyPhoto.js');
