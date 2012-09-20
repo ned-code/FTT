@@ -144,21 +144,16 @@ function JMBFamilyLine(){
 			},
 			init:function(object, total, data){
                 var self = this;
-                jQuery(object).ready(function(){
-                    if(G_vmlCanvasManager != undefined){
-                        G_vmlCanvasManager.initElement(object);
-                    }
-                    var sofar = 0, k;
-                    if(data.length > 2) return false;
-                    if(typeof(object) == 'undefined') return false;
-                    if(!object.getContext) return false;
-                    self._canvas = object;
-                    self._context = object.getContext("2d");
-                    self._total = total;
-                    k = total - data;
-                    sofar = self.segment(data, sofar, 0);
-                    self.segment(k, sofar, 1);
-                });
+                var sofar = 0, k;
+                if(data.length > 2) return false;
+                if(typeof(object) == 'undefined') return false;
+                if(!object.getContext) return false;
+                self._canvas = object;
+                self._context = object.getContext("2d");
+                self._total = total;
+                k = total - data;
+                sofar = self.segment(data, sofar, 0);
+                self.segment(k, sofar, 1);
 		    }
 		},
 		overlay:function(titles, type){
