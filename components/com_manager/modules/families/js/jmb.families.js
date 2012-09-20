@@ -115,7 +115,7 @@ JMBFamiliesObject.prototype = {
                 }
 			}
 		}
-        if(storage.usertree.user.gedcomId in childrens){
+        if(storage.usertree.gedcom_id in childrens){
             def = module.famId;
         } else {
             def = (module.clickItem.is_parent)?module.famId:def;
@@ -242,25 +242,6 @@ JMBFamiliesObject.prototype = {
             }
         }
         return false;
-        /*
-        if(!object || object==null) return false;
-		var module = this, gedcomId, parents, key, family, father, mother;
-        gedcomId = object.user.gedcom_id;
-        if(module.clickItem && gedcomId == module.clickItem.targetId){
-            return module.clickItem.parentId;
-        }
-        parents = object.parents;
-        if(parents == null) return false;
-		for(key in parents){
-			if(key!='length'){
-				family = parents[key];
-				father = (family.father!=null&&module.usertree[family.father.gedcom_id])?family.father.gedcom_id:false;
-				mother = (family.mother!=null&&module.usertree[family.mother.gedcom_id])?family.mother.gedcom_id:false;
-				return (mother)?mother:father;
-			}
-		}
-		return false;
-		*/
 	},
     _getName:function(object){
         var module = this,
@@ -689,14 +670,6 @@ JMBFamiliesObject.prototype = {
         jQuery(childs).each(function(i, el){
             jQuery(el).css("opacity", "0").css("visibility", "visible").css("position", "position").animate({"opacity":1}, 300*i);
         });
-        /*
-		jQuery(cont[0]).css({left:"-155px", visibility:"visible"}).animate({ "left":"+=275"},"slow");
-		jQuery(cont[2]).css({left:"760px", visibility:"visible"}).animate({ "left":"-=365"},"slow");
-		jQuery(cont[3]).css({left:"760px", visibility:"visible"}).show().animate({ "left":"-=205"},"slow");
-		jQuery(childs).each(function(i, el){
-			jQuery(el).css({opacity:0, visibility:"visible"}).animate({"opacity":1}, 300*i);
-		});
-		*/
 	},
 	animation:function(cont, childs){
 		var	module = this, 
