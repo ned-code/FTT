@@ -313,7 +313,7 @@ JMBFamiliesObject.prototype = {
 			sb._('</div></div>');
 			sb._('<div>');
 				sb._('<div class="jmb-families-parent-name">')._(module._getName(object))._('</div>');
-				sb._('<div class="jmb-families-parent-date">')._(get.birth('year'))._('</div>');
+				sb._('<div class="jmb-families-parent-date">')._(module._getDate(get))._('</div>');
 			sb._('</div>');
 			if(object.families!=null){
 				sb._('<div class="jmb-families-arrow-left">&nbsp</div>');
@@ -360,7 +360,7 @@ JMBFamiliesObject.prototype = {
 			sb._('</div></div>');
 			sb._('<div>');
 				sb._('<div class="jmb-families-parent-name">')._(module._getName(object))._('</div>');
-				sb._('<div class="jmb-families-parent-date">')._(get.birth('year'))._('</div>');
+				sb._('<div class="jmb-families-parent-date">')._(module._getDate(get))._('</div>');
 			sb._('</div>');
 			if(object.families!=null){
 				sb._('<div class="jmb-families-arrow-right" style="background:#')._(bcolor)._(';">&nbsp</div>');
@@ -402,7 +402,7 @@ JMBFamiliesObject.prototype = {
 			sb._('</div></div>');
 			sb._('<div>');
 				sb._('<div class="jmb-families-parent-name">')._(module._getName(object))._('</div>');
-				sb._('<div class="jmb-families-parent-date">')._(get.birth('year'))._('</div>');
+				sb._('<div class="jmb-families-parent-date">')._(module._getDate(get))._('</div>');
 			sb._('</div>');
 		sb._('</div>');
 		return jQuery(sb.result());
