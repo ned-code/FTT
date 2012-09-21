@@ -145,37 +145,22 @@ JMBFamiliesObject.prototype = {
 		return childrens;
 	},
     _sortByBirth:function(ch, p){
-        var module = this,
-            key = 0,
-            gedcom_id,
-            object,
-            parse,
-            birth,
-            childrens = [];
-        for(key in ch){
-            if(!ch.hasOwnProperty(key)) continue;
-            gedcom_id = ch[key].gedcom_id;
-            object = p[gedcom_id];
-            parse = storage.usertree.parse(object);
-            birth = parse.date('birth', 2);
-            childrens.push({
-                br: birth,
-                cl: ch[key]
-            });
+        var fn = {};
+        fn.getParseObjectDate = function(id){
+            var object = p[id];
+            var parse = storage.usertree.parse(object);
+            return parse.date("birth", 2);
         }
-        return childrens.sort(function(a,b){
-            if(a.br != 0 && b.br != 0){
-                var v = a.br - b.br;
-                if(v > 0){
-                    return a.ch;
-                } else {
-                    return b.ch;
-                }
+        return ch.sort(function(a,b){
+            var _a = fn.getParseObjectDate(a.gedcom_id);
+            var _b = fn.getParseObjectDate(b.gedcom_id);
+            if(_a != 0 && _b != 0){
+                return _a - _b;
             } else {
-                if(a.br == 0){
-                    return b.ch;
-                } else if(b.br == 0){
-                    return a.ch;
+                if(_a == 0){
+                    return 1;
+                } else {
+                    return -1;
                 }
             }
         });
