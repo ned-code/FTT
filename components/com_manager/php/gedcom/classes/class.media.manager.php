@@ -176,7 +176,12 @@ class MediaList{
             $result = array();
             foreach($names as $key => $value){
                 if(file_exists($path.$key)){
-                    $result[$names[$key]] = $key;
+                    $time = time() + 1 * 3600;
+                    if(filemtime($path.$key) < $time){
+                        $result[$names[$key]] = $key;
+                    } else {
+                        unlink($path.$key);
+                    }
                 }
                 $result['_tmp'][$names[$key]] = $key;
             }
