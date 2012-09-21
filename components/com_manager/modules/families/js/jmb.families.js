@@ -423,7 +423,6 @@ JMBFamiliesObject.prototype = {
 			arrow_class = (k!=1)?'jmb-families-arrow-up small':'jmb-families-arrow-up',
 			get = storage.usertree.parse(object),
 			fam_opt = storage.family_line.get.opt(),
-			date = get.birth('year'),
 			bcolor = (len>1)?module.spouse_border[child.family_id]:"000000";
 
 		sb._('<div id="')._(gedcom_id)._('" class="jmb-families-child" style="height:')._(Math.round(170*k))._('px;top:')._(position.top)._('px;left:')._(position.left)._('px;">');
@@ -447,7 +446,7 @@ JMBFamiliesObject.prototype = {
 			sb._('</div></div>');	
 			sb._('<div>');
 				sb._('<div class="jmb-families-child-name">')._(module._getName(object))._('</div>');
-				sb._('<div class="jmb-families-child-date">')._((date.length!=0)?date:"....")._('</div>');
+				sb._('<div class="jmb-families-child-date">')._(module._getDate(get))._('</div>');
 			sb._('</div>');
             if(families != null){
                 sb._('<div id="')._(gedcom_id)._('" class="')._(child_button_active)._('">&nbsp;</div>');
@@ -457,6 +456,20 @@ JMBFamiliesObject.prototype = {
 			sb._('<div class="')._(arrow_class)._('" style="background:#')._(bcolor)._(';">&nbsp</div>');
 		return jQuery(sb.result());
 	},
+    _getDate:function(get){
+        var b,d;
+        b = get.date('birth', 2);
+        d = get.date('death', 2);
+        if(b != 0 && d != 0){
+            return b + " - " +d;
+        } else if(b != 0 && d == 0){
+            return b;
+        } else if(b == 0 && d != 0){
+            return ".... - " +d;
+        } else {
+            return "....";
+        }
+    },
 	_arrows:function(cont){
 		var module = this;
 		jQuery(cont).find('.jmb-families-button').each(function(index, element){
