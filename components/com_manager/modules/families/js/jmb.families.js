@@ -125,7 +125,7 @@ JMBFamiliesObject.prototype = {
 				return false;
 			} else {
 				return true;
-			} 
+			}
 		});
 	},
 	_childrens:function(families){
@@ -144,6 +144,37 @@ JMBFamiliesObject.prototype = {
 		}
 		return childrens;
 	},
+    _sortByBirth:function(ch, p){
+        var module = this,
+            key = 0,
+            gedcom_id,
+            object,
+            parse,
+            birth,
+            childrens = [];
+        for(key in ch){
+            if(!ch.hasOwnProperty(key)) continue;
+            gedcom_id = ch[key].gedcom_id;
+            object = p[gedcom_id];
+            parse = storage.usertree.parse(object);
+            birth = parse.date('birth', 2);
+            childrens.push({
+                br: birth,
+                cl: ch[key]
+            });
+        }
+        return childrens.sort(function(a,b){
+            if(a.br != 0 && b.br != 0){
+                return a.br - b.br;
+            } else {
+                if(a.br == 0){
+                    return 1;
+                } else if(b.br == 0){
+                    return -1;
+                }
+            }
+        });
+    },
 	_first:function(gedcom_id){
         var module = this;
         var object = module.usertree[gedcom_id];
@@ -607,6 +638,7 @@ JMBFamiliesObject.prototype = {
 		}
 		
 		var start_top = module._start_top(spouses.length);
+        childrens = module._sortByBirth(childrens, storage.usertree.pull);
 		if(childrens.length!=0){
 			var row_length = module._length(childrens.length);
 			var left_del = 100;
