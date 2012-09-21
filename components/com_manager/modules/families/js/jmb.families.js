@@ -165,12 +165,17 @@ JMBFamiliesObject.prototype = {
         }
         return childrens.sort(function(a,b){
             if(a.br != 0 && b.br != 0){
-                return a.br - b.br;
+                var v = a.br - b.br;
+                if(v > 0){
+                    return a.ch;
+                } else {
+                    return b.ch;
+                }
             } else {
                 if(a.br == 0){
-                    return 1;
+                    return b.ch;
                 } else if(b.br == 0){
-                    return -1;
+                    return a.ch;
                 }
             }
         });
