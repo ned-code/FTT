@@ -114,6 +114,9 @@ function JMBProfile(){
                 target:jQuery(storage.iframe).attr('name'),
                 beforeSubmit:function(){
                     storage.progressbar.loading();
+                    if(typeof(settings.beforeSubmit) == "function"){
+                        settings.beforeSubmit();
+                    }
                     return true;
                 },
                 success:function(data){
@@ -950,6 +953,7 @@ JMBProfile.prototype = {
 
             case "edit_photos":
                 var media = module.object.media;
+                var preloader = jQuery("<div class='jmb-dialog-photos-preloader'><div>&nbsp;</div></div>");
                 form = fn.getViewObject('dialogEditPhotos');
                 module.functions.setMessage(form, [
                     ["input[type='submit']",'val'],
@@ -1060,10 +1064,12 @@ JMBProfile.prototype = {
                             required: ""
                         }
                     },
+                    beforeSubmit:function(){
+                        jQuery(form).append(preloader);
+                    },
                     success:function(res){
                         if(res.error){
                             storage.alert(res.message, function(){
-
                             });
                         } else {
                             _fn.add(res);

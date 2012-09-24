@@ -349,6 +349,23 @@
 	margin: 5px;
 	position: relative;
 }
+.jmb-dialog-photos-content .jmb-dialog-photos-preloader{
+    background-color: white;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+}
+.jmb-dialog-photos-content .jmb-dialog-photos-preloader div{
+    background: url("../image/progressbar.gif") no-repeat scroll 0 0 transparent;
+    height: 100px;
+    left: 75%;
+    position: absolute;
+    top: 70%;
+    width: 100px;
+}
 .jmb-dialog-photos-content form {
     display:inline-block;
 }
