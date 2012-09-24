@@ -241,7 +241,7 @@ class JMBProfile {
 				$image = false;
                 $name = explode('.', $_FILES["upload"]["name"]);
 				if($_FILES['upload']['size'] != 0){
-                    switch(end($name)){
+                    switch(strtolower(end($name))){
                         case "jpeg":
                         case "jpg":
                         case "gif":
