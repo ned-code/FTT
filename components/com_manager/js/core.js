@@ -3,11 +3,16 @@ storage = {};
 storage.app = false;
 //function
 storage.alert = function(message, callback){
+    var object = jQuery('<div style="text-align: center;"></div>');
     if(!message){
         message = '';
     }
-
-    jQuery('<div style="text-align: center;"></div>').text(message).dialog({
+    if(typeof(message) == "string"){
+        jQuery(object).text(message);
+    } else if(typeof(message) == "object"){
+        jQuery(object).append(message);
+    }
+    jQuery(object).dialog({
         width:350,
         minHeight:80,
         resizable: false,

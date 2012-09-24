@@ -220,7 +220,8 @@ function JMBLogin(){
 			jQuery(cont).find('div.facebook span').click(function(){
 				FB.login(function(response){
 					if(response.authResponse){
-                        storage.alert("You are now being logged in using your Facebook credentials", function(){});
+                        var div = jQuery("<div class='ftt-preloader-alert'><div>You are now being logged in using your Facebook credentials</div></div>");
+                        storage.alert(div, function(){});
 						window.location = storage.baseurl+'index.php?option=com_jfbconnect&task=loginFacebookUser&return=myfamily';
 					} else {
 						alert('Login failed.')

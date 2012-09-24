@@ -201,3 +201,12 @@
 .ftt-language-progressbar div span{
     margin-left:10px;
 }
+
+.ftt-preloader-alert {
+    background: url("../imgs/progressbar.gif") no-repeat scroll 105px 0 transparent;
+    height: 160px;
+}
+.ftt-preloader-alert div{
+    display: inline-block;
+    margin-top: 100px;
+}
