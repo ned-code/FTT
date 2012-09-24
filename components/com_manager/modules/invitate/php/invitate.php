@@ -125,7 +125,7 @@ class JMBInvitateClass {
                     'sender' => $user,
                     'target' => $target,
                     'from' => $rows[0]['s_gedcom_id'],
-                    'to' => $target->Id,
+                    'to' => $opt[0],
                     'relation' => $this->host->gedcom->relation->get($opt[1], $opt[0], $rows[0]['s_gedcom_id']),
                     'sender_data' => $this->_getSenderEmail($user)
                 );
