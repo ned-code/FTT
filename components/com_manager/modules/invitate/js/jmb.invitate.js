@@ -248,12 +248,18 @@ function JMBInvitateObject(obj){
                 return info.nick;
             }
         }
-        function _getDate(info){
-            var b = info.birth('year');
-            if(b){
+        function _getDate(get){
+            var b,d;
+            b = get.date('birth', 2);
+            d = get.date('death', 2);
+            if(b != 0 && d != 0){
+                return b + " - " +d;
+            } else if(b != 0 && d == 0){
                 return b;
+            } else if(b == 0 && d != 0){
+                return ".... - " +d;
             } else {
-                return '....';
+                return "....";
             }
         }
         function _getAvatar(object, type, k){
