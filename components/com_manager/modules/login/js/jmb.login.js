@@ -175,7 +175,7 @@ function JMBLogin(){
                         jQuery(langBox).find('div.flag').click(selectRadioButton);
                         jQuery(langBox).find('div.title').click(selectRadioButton);
                         jQuery(langBox).find('div.ftt-button-ok input').click(function(){
-                            if(confirm("Are you sure you want to set the language?")){
+                            //if(confirm("Are you sure you want to set the language?")){
                                 var id = jQuery(langBox).find('input:checked').val();
                                 var prgb = jQuery('<div class="ftt-language-progressbar"><div><span>Loading...</span></div></div>');
                                 jQuery(langBox).append(prgb);
@@ -183,7 +183,7 @@ function JMBLogin(){
                                     //jQuery(prgb).remove();
                                     window.location.reload();
                                 });
-                            }
+                            //}
                             return false;
                         })
 					},
