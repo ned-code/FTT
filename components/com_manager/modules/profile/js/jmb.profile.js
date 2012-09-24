@@ -284,7 +284,7 @@ function JMBProfile(){
                         if(deathday != ''){
                             jQuery(span).text(deathday);
                         } else {
-                            //jQuery(parents[0]).hide();
+                            jQuery(parents[0]).hide();
                         }
                     break;
 
@@ -294,7 +294,7 @@ function JMBProfile(){
                         if(placeName != ''){
                             jQuery(span).text(placeName);
                         } else {
-                            //jQuery(parents[0]).hide();
+                            jQuery(parents[0]).hide();
                         }
                     break;
 
