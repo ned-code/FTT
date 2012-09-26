@@ -1080,13 +1080,17 @@ JMBProfile.prototype = {
             break;
 
             case "more_options":
-                form = jQuery('<div class="delete-button">'+module.message.FTT_MOD_PROFILE_EDITOR_DELETE_BUTTON+'</div>')
+                form = jQuery('<div class="delete-button">'+module.message.FTT_MOD_PROFILE_EDITOR_DELETE_BUTTON+'</div>');
                 jQuery(form).click(function(){
                     if(fn.getUsersLength() == 1 && fn.isOwner()){
                         if(confirm(module.message.FTT_MOD_PROFILE_EDITOR_DELETE_FIRST_CONFIRM)){
                             var args = [module.tree_id, module.owner_id, module.gedcom_id, 'delete', 'deleteTree'].join(',');
                             module.functions.ajax('delete', args, function(res){
-                                jfbc.login.logout_button_click();
+                                FB.api({
+                                    method: 'Auth.revokeAuthorization'
+                                }, function(response){
+                                    window.location = storage.baseurl + 'index.php?option=com_jfbconnect&task=logout&return=home';
+                                });
                                 return false;
                             });
                             return false;
@@ -1118,7 +1122,11 @@ JMBProfile.prototype = {
                                 module.functions.ajax('delete', args, function(res){
                                     var json = storage.getJSON(res.responseText);
                                     if(fn.isOwner()){
-                                        jfbc.login.logout_button_click();
+                                        FB.api({
+                                            method: 'Auth.revokeAuthorization'
+                                        }, function(response){
+                                            window.location = storage.baseurl + 'index.php?option=com_jfbconnect&task=logout&return=home';
+                                        });
                                         return false;
                                     }
                                     if(!json.deleted){
@@ -1134,9 +1142,6 @@ JMBProfile.prototype = {
                             return false;
                         });
                     }
-
-
-
                 });
             break;
 
