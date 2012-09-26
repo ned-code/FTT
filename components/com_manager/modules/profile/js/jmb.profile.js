@@ -1068,6 +1068,7 @@ JMBProfile.prototype = {
                         jQuery(form).append(preloader);
                     },
                     success:function(res){
+                        jQuery(preloader).remove();
                         if(res.error){
                             storage.alert(res.message, function(){
                             });
