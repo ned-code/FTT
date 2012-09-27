@@ -122,7 +122,13 @@ function JMBTreeCreatorObject(parent){
         FTT_MOD_TREE_CREATOR_START_TEXT: "Some of your Facebook friends are members of Family TreeTop. Are you related to any of the people listed below? If so, you many request an invitation to join their family tree",
         FTT_MOD_TREE_CREATOR_START_FOOTER_1: "If you are not related to anyone listed above",
         FTT_MOD_TREE_CREATOR_START_FOOTER_2: "to create new family tree period",
-        FTT_MOD_TREE_CREATOR_START_CLICK_HERE: "click here"
+        FTT_MOD_TREE_CREATOR_START_CLICK_HERE: "click here",
+        FTT_MOD_TREE_CREATOR_CREATE_HEADER_MESSAGE : "Ready to create your family tree?<br>Complete all fields  and click here",
+        FTT_MOD_TREE_CREATOR_CREATE_HEADER_BUTTON : "GO",
+        FTT_MOD_TREE_CREATOR_CREATE_BOX_FIRSTNAME : "First Name",
+        FTT_MOD_TREE_CREATOR_CREATE_BOX_LASTNAME : "Last Name",
+        FTT_MOD_TREE_CREATOR_CREATE_BOX_YEAR_OF_BIRTH : "Year of Birth",
+        FTT_MOD_TREE_CREATOR_CREATE_BOX_COUNTRY : "Country"
     }
 
 	
@@ -333,8 +339,8 @@ function JMBTreeCreatorObject(parent){
             function getHeader(){
                 var sb = host.stringBuffer();
                 sb._('<div class="header">');
-                    sb._('<div class="message">Ready to create your family tree?<br>Complete all fields  and click here</div>');
-                    sb._('<div class="button"><input type="submit" value="GO"></div>');
+                    sb._('<div class="message">')._(module.msg.FTT_MOD_TREE_CREATOR_CREATE_HEADER_MESSAGE)._('</div>');
+                    sb._('<div class="button"><input type="submit" value="')._(module.msg.FTT_MOD_TREE_CREATOR_CREATE_HEADER_BUTTON)._('"></div>');
                 sb._('</div>');
                 return jQuery(sb.result());
             }
@@ -347,12 +353,12 @@ function JMBTreeCreatorObject(parent){
                         sb._('<table>');
                             sb._('<tr>');
                                 sb._('<td rowspan="2"><div class="avatar">')._(settings.avatar)._('</div></td>');
-                                sb._('<td valign="top"><div class="text"><input placeholder="First Name" name="')._(settings.prefix)._('first_name" type="text"></div></td>');
-                                sb._('<td valign="top"><div class="text"><input placeholder="Last Name" name="')._(settings.prefix)._('last_name" type="text"></div></td>');
+                                sb._('<td valign="top"><div class="text"><input placeholder="')._(module.msg.FTT_MOD_TREE_CREATOR_CREATE_BOX_FIRSTNAME)._('" name="')._(settings.prefix)._('first_name" type="text"></div></td>');
+                                sb._('<td valign="top"><div class="text"><input placeholder="')._(module.msg.FTT_MOD_TREE_CREATOR_CREATE_BOX_LASTNAME)._('" name="')._(settings.prefix)._('last_name" type="text"></div></td>');
                             sb._('</tr>');
                             sb._('<tr>');
-                                sb._('<td valign="top"><div class="text"><input placeholder="Year of Birth" name="')._(settings.prefix)._('birth" type="text"></div></td>');
-                                sb._('<td valign="top"><div class="text"><input placeholder="Country" name="')._(settings.prefix)._('country" type="text"></div></td>');
+                                sb._('<td valign="top"><div class="text"><input placeholder="')._(module.msg.FTT_MOD_TREE_CREATOR_CREATE_BOX_YEAR_OF_BIRTH)._('" name="')._(settings.prefix)._('birth" type="text"></div></td>');
+                                sb._('<td valign="top"><div class="text"><input placeholder="')._(module.msg.FTT_MOD_TREE_CREATOR_CREATE_BOX_COUNTRY)._('" name="')._(settings.prefix)._('country" type="text"></div></td>');
                             sb._('</tr>');
                         sb._('</table>');
                     sb._('</div>');
