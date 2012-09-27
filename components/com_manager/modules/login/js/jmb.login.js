@@ -217,11 +217,14 @@ function JMBLogin(){
 		},
 		login:function(cont){
 			var json;
-			jQuery(cont).find('div.facebook span').click(function(){
+            var div = jQuery("<div class='ftt-preloader-alert'><div>You are now being logged in using your Facebook credentials</div></div>");
+            jQuery(div).hide();
+            jQuery(document.body).append(div);
+            jQuery(cont).find('div.facebook span').click(function(){
 				FB.login(function(response){
 					if(response.authResponse){
-                        var div = jQuery("<div class='ftt-preloader-alert'><div>You are now being logged in using your Facebook credentials</div></div>");
                         storage.alert(div, function(){});
+                        jQuery(div).show();
 						window.location = storage.baseurl+'index.php?option=com_jfbconnect&task=loginFacebookUser&return=myfamily';
 					} else {
 						alert('Login failed.')

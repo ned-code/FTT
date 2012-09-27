@@ -2,6 +2,10 @@ function JMBLoginButtonObject(obj){
 	var	module = this,
 		sb = host.stringBuffer(),
 		cont = null;
+
+    var div = jQuery("<div class='ftt-preloader-alert'><div>You are now being logged in using your Facebook credentials</div></div>");
+    jQuery(div).hide();
+    jQuery(document.body).append(div);
 		
 	sb._('<div class="jmb-login-button-container">');
 		sb._('<div class="jmb-login-button-title"><span>You must be logged in to access your Family Tree</span></div>');
@@ -19,7 +23,8 @@ function JMBLoginButtonObject(obj){
         //jfbc.login.login_custom();
         FB.login(function(response){
             if(response.authResponse){
-                storage.alert("You are now being logged in using your Facebook credentials", function(){});
+                storage.alert(div, function(){});
+                jQuery(div).show();
                 window.location = storage.baseurl+'index.php?option=com_jfbconnect&task=loginFacebookUser&return=myfamily';
             } else {
                 alert('Login failed.')
