@@ -159,6 +159,21 @@ function JMBTreeCreatorObject(parent){
                 }
             });
         },
+        getMsg:function(n){
+            var t = 'FTT_MOD_TREE_CREATOR_'+n.toUpperCase();
+            if(typeof(module.msg[t]) != 'undefined'){
+                return module.msg[t];
+            }
+            return '';
+        },
+        setMsg:function(msg){
+            for(var key in module.msg){
+                if(typeof(msg[key]) != 'undefined'){
+                    module.msg[key] = msg[key];
+                }
+            }
+            return true;
+        },
         select:{
             days:function(prefix){
                 var sb = host.stringBuffer();
@@ -184,38 +199,38 @@ function JMBTreeCreatorObject(parent){
             gender:function(){
                 var sb = host.stringBuffer();
                 sb._('<select name="gender">');
-                sb._('<option value="f">')._(module.msg.FTT_MOD_TREE_CREATOR_FEMALE)._('</option>');
-                sb._('<option value="m">')._(module.msg.FTT_MOD_TREE_CREATOR_MALE)._('</option>');
+                sb._('<option value="f">')._(fn.getMsg('female'))._('</option>');
+                sb._('<option value="m">')._(fn.getMsg('male'))._('</option>');
                 sb._('</select>');
                 return sb.result();
             },
             living:function(){
                 var sb = host.stringBuffer();
                 sb._('<select name="living">');
-                sb._('<option value="1">')._(module.msg.FTT_MOD_TREE_CREATOR_YES)._('</option>');
-                sb._('<option value="0">')._(module.msg.FTT_MOD_TREE_CREATOR_NO)._('</option>');
+                sb._('<option value="1">')._(fn.getMsg('yes'))._('</option>');
+                sb._('<option value="0">')._(fn.getMsg('no'))._('</option>');
                 sb._('</select>');
                 return sb.result();
             },
             relations:function(){
                 var sb = host.stringBuffer();
                 sb._('<select name="relations">');
-                sb._('<option value="">')._(module.msg.FTT_MOD_TREE_CREATOR_RELATION)._('</option>');
-                sb._('<option value="father">')._(module.msg.FTT_MOD_TREE_CREATOR_RELATION_FATHER)._('</option>');
-                sb._('<option value="mother">')._(module.msg.FTT_MOD_TREE_CREATOR_RELATION_MOTHER)._('</option>');
-                sb._('<option value="brother">')._(module.msg.FTT_MOD_TREE_CREATOR_RELATION_BROTHER)._('</option>');
-                sb._('<option value="sister">')._(module.msg.FTT_MOD_TREE_CREATOR_RELATION_SISTER)._('</option>');
-                sb._('<option value="son">')._(module.msg.FTT_MOD_TREE_CREATOR_RELATION_SON)._('</option>');
-                sb._('<option value="daughter">')._(module.msg.FTT_MOD_TREE_CREATOR_RELATION_DAUGHTER)._('</option>');
-                sb._('<option value="uncle">')._(module.msg.FTT_MOD_TREE_CREATOR_RELATION_UNCLE)._('</option>');
-                sb._('<option value="niece">')._(module.msg.FTT_MOD_TREE_CREATOR_RELATION_NIECE)._('</option>');
-                sb._('<option value="nephew">')._(module.msg.FTT_MOD_TREE_CREATOR_RELATION_NEPHEW)._('</option>');
-                sb._('<option value="aunt">')._(module.msg.FTT_MOD_TREE_CREATOR_RELATION_AUNT)._('</option>');
-                sb._('<option value="cousin">')._(module.msg.FTT_MOD_TREE_CREATOR_RELATION_COUSIN)._('</option>');
-                sb._('<option value="grandmother">')._(module.msg.FTT_MOD_TREE_CREATOR_RELATION_GRANDMOTHER)._('</option>');
-                sb._('<option value="grandfather">')._(module.msg.FTT_MOD_TREE_CREATOR_RELATION_GRANGFATHER)._('</option>');
-                sb._('<option value="grandson">')._(module.msg.FTT_MOD_TREE_CREATOR_RELATION_GRANDSON)._('</option>');
-                sb._('<option value="granddaughter">')._(module.msg.FTT_MOD_TREE_CREATOR_RELATION_GRANDDAUGHTER)._('</option>');
+                sb._('<option value="">')._(fn.getMsg('relation'))._('</option>');
+                sb._('<option value="father">')._(fn.getMsg('relation_father'))._('</option>');
+                sb._('<option value="mother">')._(fn.getMsg('relation_mother'))._('</option>');
+                sb._('<option value="brother">')._(fn.getMsg('relation_brother'))._('</option>');
+                sb._('<option value="sister">')._(fn.getMsg('relation_sister'))._('</option>');
+                sb._('<option value="son">')._(fn.getMsg('relation_son'))._('</option>');
+                sb._('<option value="daughter">')._(fn.getMsg('relation_daughter'))._('</option>');
+                sb._('<option value="uncle">')._(fn.getMsg('relation_uncle'))._('</option>');
+                sb._('<option value="niece">')._(fn.getMsg('relation_niece'))._('</option>');
+                sb._('<option value="nephew">')._(fn.getMsg('relation_nephew'))._('</option>');
+                sb._('<option value="aunt">')._(fn.getMsg('relation_aunt'))._('</option>');
+                sb._('<option value="cousin">')._(fn.getMsg('relation_cousin'))._('</option>');
+                sb._('<option value="grandmother">')._(fn.getMsg('relation_grandmother'))._('</option>');
+                sb._('<option value="grandfather">')._(fn.getMsg('relation_grangfather'))._('</option>');
+                sb._('<option value="grandson">')._(fn.getMsg('relation_grandson'))._('</option>');
+                sb._('<option value="granddaughter">')._(fn.getMsg('relation_granddaughter'))._('</option>');
                 sb._('</select>');
                 return sb.result();
             }
@@ -339,8 +354,8 @@ function JMBTreeCreatorObject(parent){
             function getHeader(){
                 var sb = host.stringBuffer();
                 sb._('<div class="header">');
-                    sb._('<div class="message">')._(module.msg.FTT_MOD_TREE_CREATOR_CREATE_HEADER_MESSAGE)._('</div>');
-                    sb._('<div class="button"><input type="submit" value="')._(module.msg.FTT_MOD_TREE_CREATOR_CREATE_HEADER_BUTTON)._('"></div>');
+                    sb._('<div class="message">')._(fn.getMsg('create_header_message'))._('</div>');
+                    sb._('<div class="button"><input type="submit" value="')._(fn.getMsg('create_header_button'))._('"></div>');
                 sb._('</div>');
                 return jQuery(sb.result());
             }
@@ -353,12 +368,12 @@ function JMBTreeCreatorObject(parent){
                         sb._('<table>');
                             sb._('<tr>');
                                 sb._('<td rowspan="2"><div class="avatar">')._(settings.avatar)._('</div></td>');
-                                sb._('<td valign="top"><div class="text"><input placeholder="')._(module.msg.FTT_MOD_TREE_CREATOR_CREATE_BOX_FIRSTNAME)._('" name="')._(settings.prefix)._('first_name" type="text"></div></td>');
-                                sb._('<td valign="top"><div class="text"><input placeholder="')._(module.msg.FTT_MOD_TREE_CREATOR_CREATE_BOX_LASTNAME)._('" name="')._(settings.prefix)._('last_name" type="text"></div></td>');
+                                sb._('<td valign="top"><div class="text"><input placeholder="')._(fn.getMsg('create_box_firstname'))._('" name="')._(settings.prefix)._('first_name" type="text"></div></td>');
+                                sb._('<td valign="top"><div class="text"><input placeholder="')._(fn.getMsg('create_box_lastname'))._('" name="')._(settings.prefix)._('last_name" type="text"></div></td>');
                             sb._('</tr>');
                             sb._('<tr>');
-                                sb._('<td valign="top"><div class="text"><input placeholder="')._(module.msg.FTT_MOD_TREE_CREATOR_CREATE_BOX_YEAR_OF_BIRTH)._('" name="')._(settings.prefix)._('birth" type="text"></div></td>');
-                                sb._('<td valign="top"><div class="text"><input placeholder="')._(module.msg.FTT_MOD_TREE_CREATOR_CREATE_BOX_COUNTRY)._('" name="')._(settings.prefix)._('country" type="text"></div></td>');
+                                sb._('<td valign="top"><div class="text"><input placeholder="')._(fn.getMsg('create_box_year_of_birth'))._('" name="')._(settings.prefix)._('birth" type="text"></div></td>');
+                                sb._('<td valign="top"><div class="text"><input placeholder="')._(fn.getMsg('create_box_country'))._('" name="')._(settings.prefix)._('country" type="text"></div></td>');
                             sb._('</tr>');
                         sb._('</table>');
                     sb._('</div>');
@@ -377,7 +392,7 @@ function JMBTreeCreatorObject(parent){
                     case "user":
                         return {
                             avatar: getAvatar(module.fProfile.facebookId),
-                            title: module.msg.FTT_MOD_TREE_CREATOR_FORM_YOU,
+                            title: fn.getMsg('form_you'),
                             prefix: 'u_'
                         }
                     break;
@@ -385,7 +400,7 @@ function JMBTreeCreatorObject(parent){
                     case "mother":
                         return {
                             avatar: getAvatar('F'),
-                            title: module.msg.FTT_MOD_TREE_CREATOR_FORM_YOU_MOTHER,
+                            title: fn.getMsg('form_you_mother'),
                             prefix: 'm_'
                         }
                     break;
@@ -393,7 +408,7 @@ function JMBTreeCreatorObject(parent){
                     case "father":
                         return {
                             avatar: getAvatar('M'),
-                            title: module.msg.FTT_MOD_TREE_CREATOR_FORM_YOU_FATHER,
+                            title: fn.getMsg('form_you_father'),
                             prefix: 'f_'
                         }
                     break;
@@ -461,10 +476,10 @@ function JMBTreeCreatorObject(parent){
                                     });
                                     return false;
                                 } else if(response.success){
-                                    module.initData.request = module.msg.FTT_MOD_TREE_CREATOR_ALERT_ALREADY_SENT_REQUEST.replace("%%", args.target.name);
+                                    module.initData.request = fn.getMsg('alert_already_send_request').replace("%%", args.target.name);
                                     var alertMessage = [];
-                                    alertMessage.push(module.msg.FTT_MOD_TREE_CREATOR_ALERT_SEND_REQUEST_TEXT_1.replace('%%', args.target.name));
-                                    alertMessage.push(module.msg.FTT_MOD_TREE_CREATOR_ALERT_SEND_REQUEST_TEXT_2.replace('%%', args.target.name));
+                                    alertMessage.push(fn.getMsg('alert_send_request_text_1').replace('%%', args.target.name));
+                                    alertMessage.push(fn.getMsg('alert_send_request_text_2').replace('%%', args.target.name));
                                     storage.alert(alertMessage.join(''), function(){
                                         jQuery(form).dialog('close');
                                     });
@@ -495,11 +510,11 @@ function JMBTreeCreatorObject(parent){
                 if(args){
                     sb._('<tr style="height: 88px;">');
                     sb._('<td valign="top"><div class="facebook_avatar">')._('<img width="80px" height="80px"  src="https://graph.facebook.com/')._(args.me.id)._('/picture">')._('</div></td>');
-                    sb._('<td valign="top"><span style="font-weight: bold;margin-left: 5px;">')._(module.msg.FTT_MOD_TREE_CREATOR_USERFORM_GENDER)._(':</span> ')._(fn.select.gender())._('</td>');
+                    sb._('<td valign="top"><span style="font-weight: bold;margin-left: 5px;">')._(fn.getMsg('userform_gender'))._(':</span> ')._(fn.select.gender())._('</td>');
                     sb._('</tr>');
                 }
                 sb._('<tr>');
-                sb._('<td><div class="title"><span>')._(module.msg.FTT_MOD_TREE_CREATOR_USERFORM_NAME)._(':</span></div></td>');
+                sb._('<td><div class="title"><span>')._(fn.getMsg('userform_name'))._(':</span></div></td>');
                 if(args){
                     sb._('<td><div class="text"><input name="name" type="text" value="')._(args.me.name)._('"></div></td>');
                 } else{
@@ -508,16 +523,16 @@ function JMBTreeCreatorObject(parent){
                 sb._('</tr>');
                 if(args){
                     sb._('<tr>');
-                    sb._('<td><div class="title"><span>')._(module.msg.FTT_MOD_TREE_CREATOR_USERFORM_KNOWAS)._(':</span></div></td>');
+                    sb._('<td><div class="title"><span>')._(fn.getMsg('userform_knowas'))._(':</span></div></td>');
                     sb._('<td><div class="text"><input name="nick" type="text"></div></td>');
                     sb._('</tr>');
                 }
                 sb._('<tr>');
-                sb._('<td><div class="title"><span>')._(module.msg.FTT_MOD_TREE_CREATOR_USERFORM_BIRTHYEAR)._(':</span></div></td>');
+                sb._('<td><div class="title"><span>')._(fn.getMsg('userform_birthyear'))._(':</span></div></td>');
                 sb._('<td><div class="text"><input name="b_year" type="text"></div></td>');
                 sb._('</tr>');
                 sb._('<tr>');
-                sb._('<td><div  class="title"><span>')._(module.msg.FTT_MOD_TREE_CREATOR_USERFORM_BIRTHPLACE)._(':</span></div></td>');
+                sb._('<td><div  class="title"><span>')._(fn.getMsg('userform_birthplace'))._(':</span></div></td>');
                 sb._('<td><div class="text"><input name="b_place" type="text"></div></td>');
                 sb._('</tr>');
                 sb._('</table>');
@@ -532,13 +547,13 @@ function JMBTreeCreatorObject(parent){
                             sb._('<tr>');
                                 sb._('<td rowspan="2" valign="top">');
                                     sb._('<div class="box">');
-                                        sb._('<div class="box_title"><span>')._(module.msg.FTT_MOD_TREE_CREATOR_FORM_YOU)._('</span></div>');
+                                        sb._('<div class="box_title"><span>')._(fn.getMsg('form_you'))._('</span></div>');
                                         sb._('<div class="user_box">')._(getRequestFormBox(args))._('</div>');
                                     sb._('</div>');
                                 sb._('</td>');
                                 sb._('<td>');
                                     sb._('<div class="box">');
-                                        sb._('<div class="box_title"><span>')._(module.msg.FTT_MOD_TREE_CREATOR_FORM_YOU_MOTHER)._('</span></div>');
+                                        sb._('<div class="box_title"><span>')._(fn.getMsg('form_you_mother'))._('</span></div>');
                                         sb._('<div class="mother_box">')._(getRequestFormBox())._('</div>');
                                     sb._('</div>');
                                 sb._('</td>');
@@ -546,7 +561,7 @@ function JMBTreeCreatorObject(parent){
                             sb._('<tr>');
                                 sb._('<td>');
                                     sb._('<div class="box">');
-                                        sb._('<div class="box_title"><span>')._(module.msg.FTT_MOD_TREE_CREATOR_FORM_YOU_FATHER)._('</span></div>');
+                                        sb._('<div class="box_title"><span>')._(fn.getMsg('form_you_father'))._('</span></div>');
                                         sb._('<div class="father_box">')._(getRequestFormBox())._('</div>');
                                     sb._('</div>');
                                 sb._('</td>');
@@ -554,10 +569,10 @@ function JMBTreeCreatorObject(parent){
                         sb._('</table>');
                     sb._('</div>');
                     sb._('<div class="message">');
-                        sb._('<div class="title"><span>')._(module.msg.FTT_MOD_TREE_CREATOR_FORM_MESSAGE)._(':</span></div>');
+                        sb._('<div class="title"><span>')._(fn.getMsg('form_message'))._(':</span></div>');
                         sb._('<div class="text"><textarea></textarea></div>');
                     sb._('</div>');
-                    sb._('<div class="button"><span>')._(module.msg.FTT_MOD_TREE_CREATOR_FORM_SEND_REQUEST_TO)._(' ')._(args.target.name)._('</span></div>');
+                    sb._('<div class="button"><span>')._(fn.getMsg('form_send_request_to'))._(' ')._(args.target.name)._('</span></div>');
                 sb._('</div>');
                 return jQuery(sb.result());
             }
@@ -582,13 +597,13 @@ function JMBTreeCreatorObject(parent){
                 var sb = host.stringBuffer();
                 sb._('<div class="tc_content">');
                     sb._('<div class="tc_header">');
-                        sb._('<div><span>')._(module.msg.FTT_MOD_TREE_CREATOR_START_ARE_YOU_RELATED)._('?</span></div>');
-                        sb._('<div><span>')._(module.msg.FTT_MOD_TREE_CREATOR_START_TEXT)._('.</span></div>');
+                        sb._('<div><span>')._(fn.getMsg('start_are_you_related'))._('?</span></div>');
+                        sb._('<div><span>')._(fn.getMsg('start_text'))._('.</span></div>');
                     sb._('</div>');
                     sb._('<div class="tc_ftt_friends">');
                     sb._('</div>');
                     sb._('<div class="tc_footer">');
-                        sb._('<div><span>')._(module.msg.FTT_MOD_TREE_CREATOR_START_FOOTER_1)._(', <span class="button">')._(module.msg.FTT_MOD_TREE_CREATOR_START_CLICK_HERE)._('</span> ')._(module.msg.FTT_MOD_TREE_CREATOR_START_FOOTER_2)._('.</span></div>');
+                        sb._('<div><span>')._(fn.getMsg('start_footer_1'))._(', <span class="button">')._(fn.getMsg('start_click_here'))._('</span> ')._(fn.getMsg('start_footer_2'))._('.</span></div>');
                     sb._('</div>');
                 sb._('</div>');
                 return jQuery(sb.result());
@@ -610,7 +625,7 @@ function JMBTreeCreatorObject(parent){
                             sb._('<td><div class="name">')._(el.name)._('</div></td>');
                             sb._('<td>');
                                 sb._('<div class="request" user_name="')._(el.name)._('" facebook_id="')._(el.facebook_id)._('" gedcom_id="')._(el.gedcom_id)._('">');
-                                    sb._('<span>')._(module.msg.FTT_MOD_TREE_CREATOR_REQUEST_INVITATION_BUTTON)._('</span>');
+                                    sb._('<span>')._(fn.getMsg('request_invitation_button'))._('</span>');
                                 sb._('</div>');
                             sb._('</td>');
                         sb._('</tr>');
@@ -675,7 +690,7 @@ function JMBTreeCreatorObject(parent){
                 if(confirm(getRequest())){
                     fn.ajax('abortRequest', null, function(){
                         setRequest(false);
-                        storage.alert(module.msg.FTT_MOD_TREE_CREATOR_ALERT_ABORT_REQUEST, function(){
+                        storage.alert(fn.getMsg('alert_abort_request'), function(){
                             c(true);
                         });
                     });
@@ -730,7 +745,7 @@ function JMBTreeCreatorObject(parent){
                     jQuery(div).dialog({
                         width:580,
                         height:370,
-                        title: module.msg.FTT_MOD_TREE_CREATOR_DIALOG_TITLE_DEMO_ELVIS,
+                        title: fn.getMsg('dialog_title_demo_elvis'),
                         resizable: false,
                         draggable: false,
                         position: "top",
@@ -766,22 +781,22 @@ function JMBTreeCreatorObject(parent){
             function createBody(){
                 var sb = host.stringBuffer();
                 sb._('<div>');
-                    sb._('<div class="title"><span>')._(module.msg.FTT_MOD_TREE_CREATOR_WELCOM)._('</span></div>');
-                    sb._('<div class="description"><span>')._(module.msg.FTT_MOD_TREE_CREATOR_WELCOM_MESSAGE)._('</span></div>')
-                    sb._('<div id="button"><span>')._(module.msg.FTT_MOD_TREE_CREATOR_WELCOM_CLICK)._('</span></div>');
+                    sb._('<div class="title"><span>')._(fn.getMsg('welcom'))._('</span></div>');
+                    sb._('<div class="description"><span>')._(fn.getMsg('welcom_message'))._('</span></div>')
+                    sb._('<div id="button"><span>')._(fn.getMsg('welcom_click'))._('</span></div>');
                 sb._('</div>');
                 sb._('<div class="box">');
-                    sb._('<div class="think">')._(module.msg.FTT_MOD_TREE_CREATOR_BOX_STILL_THINK)._('?</div>');
+                    sb._('<div class="think">')._(fn.getMsg('box_still_think'))._('?</div>');
                     sb._('<div class="text">');
-                        sb._(module.msg.FTT_MOD_TREE_CREATOR_BOX_TEXT_1);
+                        sb._(fn.getMsg('box_text_1'));
                         sb._(' <a id="famous" href="http://familytreetop.com/index.php/famous-family">');
-                            sb._(module.msg.FTT_MOD_TREE_CREATOR_BOX_FAMOUS_FAMILY);
+                            sb._(fn.getMsg('box_famous_family'));
                         sb._('</a> ');
-                        sb._(module.msg.FTT_MOD_TREE_CREATOR_BOX_TEXT_2);
+                        sb._(fn.getMsg('box_text_2'));
                         sb._(' <a id="screen" target="_blank" href="http://screencast.com/t/kgymFc1Cg3oe">');
-                            sb._(module.msg.FTT_MOD_TREE_CREATOR_BOX_HERE);
+                            sb._(fn.getMsg('box_here'));
                         sb._('</a> ');
-                        sb._(module.msg.FTT_MOD_TREE_CREATOR_BOX_TEXT_3);
+                        sb._(fn.getMsg('box_text_3'));
                     sb._('.</div>');
                     sb._('<div class="image">&nbsp;</div>');
                 sb._('</div>');
