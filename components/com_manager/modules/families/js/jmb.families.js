@@ -294,10 +294,10 @@ JMBFamiliesObject.prototype = {
 				sb._('<div  id="null" class="jmb-families-button parent">&nbsp;</div>');
 			}
 			sb._('<div id="father_line" style="width:116px;border: 2px solid ')
-				sb._((object.user.is_father_line&&fam_opt.father.pencil)?fam_opt.father.pencil:'#F5FAE6');
+				sb._((object.user.is_father_line&&fam_opt.father&&fam_opt.father.pencil)?fam_opt.father.pencil:'#F5FAE6');
 			sb._(';">');
 			sb._('<div id="mother_line" style="width:112px;border: 2px solid ')
-				sb._((object.user.is_mother_line&&fam_opt.mother.pencil)?fam_opt.mother.pencil:'#F5FAE6');
+				sb._((object.user.is_mother_line&&fam_opt.mother&&fam_opt.mother.pencil)?fam_opt.mother.pencil:'#F5FAE6');
 			sb._(';">');
 				sb._('<div id="')._(gedcom_id)._('-view" type="imgContainer" class="jmb-families-parent-img">')._(module._avatar(object, 'parent', 1));
                     if(get.is_editable && !module.popup){
@@ -341,10 +341,10 @@ JMBFamiliesObject.prototype = {
 				sb._('<div  id="null" class="jmb-families-button parent">&nbsp;</div>');
 			}
 			sb._('<div id="father_line" style="width:116px;border: 2px solid ')
-				sb._((object.user.is_father_line&&fam_opt.father.pencil)?fam_opt.father.pencil:'#F5FAE6');
+				sb._((object.user.is_father_line&&fam_opt.father&&fam_opt.father.pencil)?fam_opt.father.pencil:'#F5FAE6');
 			sb._(';">');
 			sb._('<div id="mother_line" style="width:112px;border: 2px solid ')
-				sb._((object.user.is_mother_line&&fam_opt.mother.pencil)?fam_opt.mother.pencil:'#F5FAE6');
+				sb._((object.user.is_mother_line&&fam_opt.mother&&fam_opt.mother.pencil)?fam_opt.mother.pencil:'#F5FAE6');
 			sb._(';">');
 				sb._('<div id="')._(gedcom_id)._('-view" type="imgContainer" class="jmb-families-parent-img" style="border:2px solid #')._(bcolor)._(';">')._(module._avatar(object, 'parent', 1));
 					if(get.is_editable && !module.popup){
@@ -381,28 +381,21 @@ JMBFamiliesObject.prototype = {
 			get = storage.usertree.parse(object),
 			fam_opt = storage.family_line.get.opt();
 			
-		sb._('<div id="')._(gedcom_id)._('" class="jmb-families-spouse-div">');
-			sb._('<div id="father_line" style="width:116px;border: 2px solid ')
-				sb._((object.user.is_father_line&&fam_opt.father.pencil)?fam_opt.father.pencil:'#F5FAE6');
-			sb._(';">');
-			sb._('<div id="mother_line" style="width:112px;border: 2px solid ')
-				sb._((object.user.is_mother_line&&fam_opt.mother.pencil)?fam_opt.mother.pencil:'#F5FAE6');
-			sb._(';">');
-				sb._('<div id="')._(gedcom_id)._('-view" type="imgContainer" class="jmb-families-parent-img" style="border:2px solid #')._(bcolor)._('">')._(module._avatar(object, 'parent', 1));
-					if(get.is_editable && !module.popup){
-                        sb._('<div id="')._(gedcom_id)._('-edit" class="jmb-families-edit-button parent">&nbsp;</div>');
-                    }
-					if(facebook_id != '0'){
-						sb._('<div class="jmb-families-fb-icon parent" id="')._(facebook_id)._('">&nbsp;</div>');
-					}
-					if(get.is_death){
-						sb._('<div class="jmb-families-death-marker parent">&nbsp;</div>');
-					}
-				sb._('</div>');
-			sb._('</div></div>');
+		sb._('<div id="')._(gedcom_id)._('" class="jmb-families-former-spouse-div">');
+            sb._('<div id="')._(gedcom_id)._('-view" type="imgContainer" class="jmb-families-former-img" style="border:2px solid #')._(bcolor)._('">')._(module._avatar(object, 'parent', 0.5));
+                if(get.is_editable && !module.popup){
+                    sb._('<div id="')._(gedcom_id)._('-edit" class="jmb-families-edit-button former">&nbsp;</div>');
+                }
+                if(facebook_id != '0'){
+                    sb._('<div class="jmb-families-fb-icon former" id="')._(facebook_id)._('">&nbsp;</div>');
+                }
+                if(get.is_death){
+                    sb._('<div class="jmb-families-death-marker">&nbsp;</div>');
+                }
+            sb._('</div>');
 			sb._('<div>');
-				sb._('<div class="jmb-families-parent-name">')._(module._getName(object))._('</div>');
-				sb._('<div class="jmb-families-parent-date">')._(module._getDate(get))._('</div>');
+				sb._('<div class="jmb-families-parent-name former">')._(module._getName(object))._('</div>');
+				sb._('<div class="jmb-families-parent-date former">')._(module._getDate(get))._('</div>');
 			sb._('</div>');
 		sb._('</div>');
 		return jQuery(sb.result());
@@ -427,10 +420,10 @@ JMBFamiliesObject.prototype = {
 
 		sb._('<div id="')._(gedcom_id)._('" class="jmb-families-child" style="height:')._(Math.round(170*k))._('px;top:')._(position.top)._('px;left:')._(position.left)._('px;">');
 			sb._('<div id="father_line" style="border: 2px solid ')
-				sb._((user.is_father_line&&fam_opt.father.pencil)?fam_opt.father.pencil:'#F5FAE6');
+				sb._((user.is_father_line&&fam_opt.father&&fam_opt.father.pencil)?fam_opt.father.pencil:'#F5FAE6');
 			sb._(';">');
 			sb._('<div id="mother_line" style="border: 2px solid ')
-				sb._((user.is_mother_line&&fam_opt.mother.pencil)?fam_opt.mother.pencil:'#F5FAE6');
+				sb._((user.is_mother_line&&fam_opt.mother&&fam_opt.mother.pencil)?fam_opt.mother.pencil:'#F5FAE6');
 			sb._(';">');
 				sb._('<div id="')._(gedcom_id)._('-view" type="imgContainer" style="height:')._(Math.round(80*k))._('px;width:')._(Math.round(72*k))._('px;border:2px solid #')._(bcolor)._('" class="jmb-families-child-img">')._(module._avatar(object, 'child', k));	
 					if(get.is_editable && !module.popup){
@@ -625,7 +618,7 @@ JMBFamiliesObject.prototype = {
 			spouse[0] = module._spouse(spouses[0], (spouses.length>1)?module.borders[0]:"000000");
 			jQuery(cont[2]).attr('id', spouses[0][1]).css({top:"50px",left:"395px",visibility:"hidden"}).append(spouse[0]);
 			if(spouses.length > 1){
-				jQuery(cont[3]).css({top:(spouses.length>=3)?"30px":"75px",left:"555px",visibility:"hidden"});
+				jQuery(cont[3]).css({top:(spouses.length>=3)?"30px":"98px",left:"555px",visibility:"hidden"});
 				for(i = 1 ; i < spouses.length ; i ++){
 					module.spouse_border[spouses[i][0]] = module.borders[i];
 					spouse[i] = module._former_spouse(spouses[i], module.borders[i]);
