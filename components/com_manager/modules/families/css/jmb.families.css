@@ -43,7 +43,7 @@
 }
 .jmb-families-former-spouse-div {
     margin-bottom: 7px;
-    margin-left: 30px;
+    margin-left: 45px;
 }
 .jmb-families-former-img {
     background: none repeat scroll 0 0 white;
@@ -158,7 +158,6 @@ img.jmb-families-avatar.view{
 	top: -25px;
 }
 .jmb-families-arrow-left {
-	/*background: url("arrow.gif") no-repeat scroll 0 -27px transparent;*/
 	background:#000000;
 	height: 1px;
 	left: 114px;
@@ -167,7 +166,6 @@ img.jmb-families-avatar.view{
 	width: 38px;
 }
 .jmb-families-arrow-right {
-	/*background: url("arrow.gif") no-repeat scroll 0 -27px transparent;*/
 	background:#000000;
 	height: 1px;
 	left: -34px;
@@ -175,6 +173,25 @@ img.jmb-families-avatar.view{
 	top: 120px;
 	width: 38px;
 }
+
+.jmb-families-former-arrow-right {
+    background: none repeat scroll 0 0 #000000;
+    height: 1px;
+    left: 35px;
+    position: absolute;
+    top: 50px;
+    width: 10px;
+}
+.jmb-families-former-arrow-right.text {
+    background: none repeat scroll 0 0 transparent;
+    height: 20px;
+    left: 5px;
+    line-height: 20px;
+    position: absolute;
+    top: 40px;
+    width: 10px;
+}
+
 /**
 * ftt edit button
 */ 

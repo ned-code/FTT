@@ -276,6 +276,9 @@ JMBFamiliesObject.prototype = {
             return nick;
         }
     },
+    _getMerrageYear:function(r, id){
+        return r.marr(id, 'date', 2);
+    },
 	_sircar:function(gedcom_id){
 		var	module = this,
 			sb = host.stringBuffer(),
@@ -377,9 +380,7 @@ JMBFamiliesObject.prototype = {
 			object = usertree[gedcom_id],
 			gedcom_id = object.user.gedcom_id,
 			facebook_id = object.user.facebook_id,
-			parents = object.parents,
-			get = storage.usertree.parse(object),
-			fam_opt = storage.family_line.get.opt();
+			get = storage.usertree.parse(object);
 			
 		sb._('<div id="')._(gedcom_id)._('" class="jmb-families-former-spouse-div">');
             sb._('<div id="')._(gedcom_id)._('-view" type="imgContainer" class="jmb-families-former-img" style="border:2px solid #')._(bcolor)._('">')._(module._avatar(object, 'parent', 0.5));
@@ -397,6 +398,8 @@ JMBFamiliesObject.prototype = {
 				sb._('<div class="jmb-families-parent-name former">')._(module._getName(object))._('</div>');
 				sb._('<div class="jmb-families-parent-date former">')._(module._getDate(get))._('</div>');
 			sb._('</div>');
+            sb._('<div class="jmb-families-former-arrow-right" style="background:#')._(bcolor)._(';">&nbsp</div>');
+            sb._('<div class="jmb-families-former-arrow-right text" style="color:#')._(bcolor)._(';">')._(module._getMerrageYear(get, family_id))._('</div>');
 		sb._('</div>');
 		return jQuery(sb.result());
 	},
