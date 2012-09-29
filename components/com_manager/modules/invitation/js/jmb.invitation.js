@@ -104,10 +104,19 @@ JMBInvitation.prototype = {
         return true;
     },
 	sendRequestToInviteFacebookFriend:function(facebook_id, callback){
-      		FB.ui({method: 'apprequests',
+        /*
+      	FB.ui({method: 'apprequests',
                 message: 'To view this request, please log into Family TreeTop. Link: '+storage.baseurl,
       			to: facebook_id
       		}, callback);
+        */
+        FB.ui({
+            method: 'send',
+            name: 'Family TreeTop',
+            link: storage.baseurl,
+            to: facebook_id,
+            description: 'To view this request, please log into Family TreeTop. Link: '+storage.baseurl+'index.php/invitation'
+        }, callback);
     },
     avatar:function(object){
         return storage.usertree.avatar.get({
