@@ -257,8 +257,8 @@ JMBFamiliesObject.prototype = {
 		if(event!=null){
 			date = event.date;
 			place = event.place;
-			if(place != null){
-				location = place.country;
+			if(place != null && place[0].country != null){
+				location = place[0].country;
 			} else {
                 location = '';
             }
@@ -679,112 +679,6 @@ JMBFamiliesObject.prototype = {
 		return 315;
 	},
 	render:function(gedcom_id){
-        /*
-		var	module = this,
-			object = module.usertree[gedcom_id],
-			families = object.families,
-			cont = module._create(),
-			spouses = module._spouses(families, object.user.default_family),
-			childrens = module._childrens(families),
-			childs = [],
-			sircar, 
-			info,
-			spouse = [],
-			i;
-
-        jQuery(module.parent).html('');
-
-		module.cont = cont;
-		module.now_id = gedcom_id;
-		
-		jQuery(module.parent).append(cont);
-		
-		sircar = module._sircar(gedcom_id);
-		jQuery(cont[0]).css({top:"69px",left:"155px",visibility:"hidden"}).attr('id', gedcom_id).append(sircar);
-
-		if(spouses.length!=0){
-			info = module._info(object, spouses[0]);
-			jQuery(cont[1]).css({top:"175px", left:"312px",visibility:"hidden"}).append(info);
-			
-			module.spouse_border[spouses[0][0]] = module.borders[0];
-			spouse[0] = module._spouse(spouses[0], (spouses.length>1)?module.borders[0]:"000000");
-			jQuery(cont[2]).attr('id', spouses[0][1]).css({top:"69px",left:"430px",visibility:"hidden"}).append(spouse[0]);
-			if(spouses.length > 1){
-                jQuery(cont[3]).css({top:module._getTopFormerSpouseBox(spouses),left:"600px",visibility:"hidden"});
-                for(i = 1 ; i < spouses.length ; i ++){
-					module.spouse_border[spouses[i][0]] = module.borders[i];
-					spouse[i] = module._former_spouse(spouses[i], module.borders[i]);
-					jQuery(cont[3]).append(spouse[i]);
-				}
-				jQuery(cont[3]).addClass('active');
-                if(spouses.length > 3){
-                    jQuery(cont[3]).addClass('scroll');
-                }
-			} else {
-				jQuery(cont[3]).removeClass('active');
-			}		
-		} else {
-			jQuery(cont[3]).removeClass('active');
-		}
-		
-		var start_top = module._start_top(spouses.length);
-        childrens = module._sortByBirth(childrens, storage.usertree.pull);
-		if(childrens.length!=0){
-			var row_length = module._length(childrens.length);
-			var left_del = 100;
-			var index = 0;
-			var start_left = 350 - 100*(row_length/2);
-			for(i = 0 ; i < childrens.length ; i++){
-				if(index == row_length){
-					start_top += 185;
-					index = 0;
-					if((childrens.length-i)<row_length){
-						start_left = 350 - 100*((childrens.length-i)/2);
-					}
-				}
-				var pos = {top:start_top, left:start_left+(index*left_del)};
-				module.childsPos[childrens[i].gedcom_id] = pos;
-				childs[i] = module._child(childrens[i], spouses.length, pos);
-				jQuery(childs[i]).css("visibility","hidden");
-				jQuery(module.parent).append(childs[i]);
-				index++;
-			}
-		}	
-
-        if(module.popup){
-            module._arrows(module.parent);
-            jQuery(module.parent).find('.jmb-families-avatar').each(function(i, el){
-                jQuery(el).droppable({
-                    drop: function(){
-                        storage.ntf.onDrop(this);
-                    },
-                    over: function(){
-                        storage.ntf.onDropIn(this);
-                    },
-                    out: function(){
-                        storage.ntf.onDropOut(this);
-                    }
-                });
-            });
-        } else {
-            module._arrows(module.parent);
-            module._view(module.parent);
-            module._edit(module.parent);
-            module._facebook(module.parent);
-            module._tooltips(module.parent);
-            module._win(module.parent);
-            module._home(module.parent);
-        }
-
-        jQuery(module.parent).height(start_top + 200);
-        jQuery(module.parent).css('overflow', 'hidden');
-        if(!module.clickItem || jQuery.browser.msie){
-            module.startAnimation(cont, childs);
-        } else {
-            module.animation(cont, childs);
-        }
-        */
-
         var	module = this,
             cont = module._create(),
             object = module.usertree[gedcom_id],
