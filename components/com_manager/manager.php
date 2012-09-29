@@ -57,7 +57,7 @@ $document->addScript('components/com_manager/js/jit.js');
 $document->addScript('components/com_manager/js/jquery.bt.js');
 $document->addScript('components/com_manager/js/jquery.prettyPhoto.js');
 $document->addScript('components/com_manager/js/jquery.tipsy.js');
-$document->addScript('components/com_manager/js/jquery.scroll.min.js');
+$document->addScript('components/com_manager/js/jquery.scroll.js');
 $document->addScript('components/com_manager/js/jquery.ui.touch-punch.min.js');
 $document->addScript('components/com_manager/js/jquery.animatedborder.js');
 

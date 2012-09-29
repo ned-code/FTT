@@ -21,6 +21,7 @@
 	position:absolute;
 	height:30px;
 	width:120px;
+    text-align: center;
 }
 .jmb-families-spouse{
 	height: 260px;
@@ -32,19 +33,42 @@
 	margin-bottom: 7px;
 	margin-left: 30px;
 }
-.jmb-families-spouse-container{
-	border: 1px solid #F5FAE6;
-	max-height: 375px;
-	position:absolute;
-	width:175px;
+.jmb-families-former-sircar-container{
+    border: 1px solid #F5FAE6;
+    max-height: 240px;
+    position: absolute;
+    width: 130px;
 }
-.jmb-families-spouse-container.active{
+.jmb-families-former-sircar-container.scroll{
+    overflow-y: scroll;
+}
+.jmb-families-former-sircar-container.active{
 	border: 1px solid #c3c3c3;
 }
+.jmb-families-former-spouse-container{
+    border: 1px solid #F5FAE6;
+    max-height: 240px;
+    position: absolute;
+    width: 130px;
+}
+.jmb-families-former-spouse-container.scroll{
+    overflow-y: scroll;
+}
+.jmb-families-former-spouse-container.active{
+    border: 1px solid #c3c3c3;
+}
+
 .jmb-families-former-spouse-div {
     margin-bottom: 7px;
-    margin-left: 45px;
+    margin-top: 5px;
     position: relative;
+}
+.jmb-families-former-spouse-div.left{
+    margin-left: 45px;
+}
+.jmb-families-former-spouse-div.right{
+    padding-top: 0;
+    margin-left: 10px;
 }
 .jmb-families-former-img {
     background: none repeat scroll 0 0 white;
@@ -178,12 +202,29 @@ img.jmb-families-avatar.view{
 .jmb-families-former-arrow-right {
     background: none repeat scroll 0 0 #000000;
     height: 1px;
+    left: 58px;
+    position: absolute;
+    top: 40px;
+    width: 10px;
+}
+.jmb-families-former-arrow-right.text {
+    background: none repeat scroll 0 0 transparent;
+    height: 20px;
+    left: 71px;
+    line-height: 20px;
+    position: absolute;
+    top: 30px;
+    width: 10px;
+}
+.jmb-families-former-arrow-left {
+    background: none repeat scroll 0 0 #000000;
+    height: 1px;
     left: -10px;
     position: absolute;
     top: 35px;
     width: 10px;
 }
-.jmb-families-former-arrow-right.text {
+.jmb-families-former-arrow-left.text {
     background: none repeat scroll 0 0 transparent;
     height: 20px;
     left: -40px;

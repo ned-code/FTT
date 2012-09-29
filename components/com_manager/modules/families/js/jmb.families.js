@@ -28,7 +28,8 @@ function JMBFamiliesObject(obj, popup){
 			height:80
 		}
 	}
-	module.borders = ['61c77f','a64751','5c63d3','d3c15c','705cd3'];
+	module.borders = module._generateBorders(100);
+    module.border_iter = 0;
 	module.spouse_border = {};
 
 	storage.family_line.bind('JMBFamiliesObject', function(res){
@@ -63,6 +64,29 @@ JMBFamiliesObject.prototype = {
 				callback(res);
 		})
 	},
+    _generateBorders:function(n){
+        var retBorders = [];
+        var isBorders = {};
+        var getColor = function(){ return '#'+Math.floor(Math.random()*16777215).toString(16); }
+        for(var i = 0 ; i < n ; i++ ){
+            var color = getColor();
+            if(!isBorders[color]){
+                isBorders[color] = true;
+                retBorders.push(color);
+            } else {
+                i--;
+            }
+        }
+        return retBorders;
+    },
+    _getBorderColor:function(sp){
+        if(!sp) return "#000000";
+        var module = this,
+            color = module.borders[module.border_iter];
+        module.border_iter++;
+        module.spouse_border[sp[0]] = color;
+        return color;
+    },
 	_getImageSize:function(type, k){
 		var	module = this,
 			imageSize = module.imageSize,
@@ -94,9 +118,24 @@ JMBFamiliesObject.prototype = {
 			}
 		}
 	},
-	_spouses:function(families, def){
+    _getTopFormerSpouseBox:function(s){
+        var l = s.length;
+        switch(l){
+            case 2:
+                return '117px';
+                break;
+
+            default:
+                return '0';
+                break;
+        }
+    },
+	_spouses:function(object){
+        if(!object) return false;
+        var module = this,families, spouses = [], family, spouse, childrens = {}, childs, el, child, def;
+        families = object.families;
+        def = object.user.default_family;
 		if(families==null) return [];
-		var module = this, spouses = [], family, spouse, childrens = {}, childs, el, child;
 		for(var key in families){
 			if (!families.hasOwnProperty(key)) continue;
 			if(key!='length'){
@@ -120,7 +159,7 @@ JMBFamiliesObject.prototype = {
         } else {
             def = (module.clickItem.is_parent)?module.famId:def;
         }
-		return spouses.sort(function(){
+        return spouses.sort(function(){
 			if(arguments[0][0] == def){
 				return false;
 			} else {
@@ -128,21 +167,34 @@ JMBFamiliesObject.prototype = {
 			}
 		});
 	},
-	_childrens:function(families){
-		var childrens = [], family, child;
-		for(var key in families){
-			if (!families.hasOwnProperty(key)) continue;
-			if(key!='length'){
-				family = families[key];
-				if(family.childrens!=null){
-					for(var i = 0 ; i < family.childrens.length ; i ++){
-						child = family.childrens[i];
-						childrens.push(child);
-					}
-				}
-			}
-		}
+	_childrens:function(object, spouses){
+		var module = this, childrens = [], isChild = {};
+        getChilds(object);
+        if(spouses.length != 0){
+            getChilds(module.usertree[spouses[0][1]]);
+        }
 		return childrens;
+        function getChilds(object){
+            var families = object.families,
+                family,
+                child;
+            if(!families) return [];
+            for(var key in families){
+                if(!families.hasOwnProperty(key)) continue;
+                if(key !== 'length'){
+                    family = families[key];
+                    if(family.childrens != null){
+                        for(var i = 0 ; i < family.childrens.length ; i++){
+                            child = family.childrens[i];
+                            if(!isChild[child.gedcom_id]){
+                                isChild[child.gedcom_id] = true;
+                                childrens.push(child);
+                            }
+                        }
+                    }
+                }
+            }
+        }
 	},
     _sortByBirth:function(ch, p){
         var fn = {};
@@ -188,14 +240,16 @@ JMBFamiliesObject.prototype = {
 		sb._('<div class="jmb-families-sircar">&nbsp;</div>');
 		sb._('<div class="jmb-families-event">&nbsp;</div>');
 		sb._('<div class="jmb-families-spouse">&nbsp;</div>');
-		sb._('<div class="jmb-families-spouse-container">&nbsp;</div>');
+		sb._('<div class="jmb-families-former-spouse-container">&nbsp;</div>');
+		sb._('<div class="jmb-families-former-sircar-container">&nbsp;</div>');
 		sb._('<div class="home">&nbsp;</div>');
 		return jQuery(sb.result());
 	},
 	_info:function(object, spouse){
+        if(!spouse) return '';
 		var	module = this,
 			sb = host.stringBuffer(),
-			event = object.families[spouse[0]].event,
+			event = object.families[spouse[0]].marriage,
 			date,
 			place,
 			location = '';
@@ -205,11 +259,14 @@ JMBFamiliesObject.prototype = {
 			place = event.place;
 			if(place != null){
 				location = place.country;
-			}
+			} else {
+                location = '';
+            }
 			sb._('<div>');
-				sb._('<div>')._(date[2])._('</div>');
+				sb._('<div>')._((date[2]!=null)?date[2]:'')._('</div>');
 				sb._('<div>')._(location)._('</div>');
 			sb._('</div>');
+            return jQuery(sb.result());
 		}
 		return '';
 	},
@@ -349,7 +406,7 @@ JMBFamiliesObject.prototype = {
 			sb._('<div id="mother_line" style="width:112px;border: 2px solid ')
 				sb._((object.user.is_mother_line&&fam_opt.mother&&fam_opt.mother.pencil)?fam_opt.mother.pencil:'#F5FAE6');
 			sb._(';">');
-				sb._('<div id="')._(gedcom_id)._('-view" type="imgContainer" class="jmb-families-parent-img" style="border:2px solid #')._(bcolor)._(';">')._(module._avatar(object, 'parent', 1));
+				sb._('<div id="')._(gedcom_id)._('-view" type="imgContainer" class="jmb-families-parent-img" style="border:2px solid ')._(bcolor)._(';">')._(module._avatar(object, 'parent', 1));
 					if(get.is_editable && !module.popup){
                         sb._('<div id="')._(gedcom_id)._('-edit" class="jmb-families-edit-button parent">&nbsp;</div>');
                     }
@@ -366,12 +423,12 @@ JMBFamiliesObject.prototype = {
 				sb._('<div class="jmb-families-parent-date">')._(module._getDate(get))._('</div>');
 			sb._('</div>');
 			if(object.families!=null){
-				sb._('<div class="jmb-families-arrow-right" style="background:#')._(bcolor)._(';">&nbsp</div>');
+				sb._('<div class="jmb-families-arrow-right" style="background:')._(bcolor)._(';">&nbsp</div>');
 			}
 		sb._('</div>');		
 		return jQuery(sb.result());
 	},
-	_former_spouse:function(spouse, bcolor){
+	_former_spouse:function(spouse, bcolor, position){
 		var	module = this,
 			sb = host.stringBuffer(),
 			family_id = spouse[0],
@@ -382,8 +439,8 @@ JMBFamiliesObject.prototype = {
 			facebook_id = object.user.facebook_id,
 			get = storage.usertree.parse(object);
 			
-		sb._('<div id="')._(gedcom_id)._('" class="jmb-families-former-spouse-div">');
-            sb._('<div id="')._(gedcom_id)._('-view" type="imgContainer" class="jmb-families-former-img" style="border:2px solid #')._(bcolor)._('">')._(module._avatar(object, 'parent', 0.5));
+		sb._('<div id="')._(gedcom_id)._('" class="jmb-families-former-spouse-div ')._(position)._('">');
+            sb._('<div id="')._(gedcom_id)._('-view" type="imgContainer" class="jmb-families-former-img" style="border:2px solid ')._(bcolor)._('">')._(module._avatar(object, 'parent', 0.5));
                 if(get.is_editable && !module.popup){
                     sb._('<div id="')._(gedcom_id)._('-edit" class="jmb-families-edit-button former">&nbsp;</div>');
                 }
@@ -398,8 +455,8 @@ JMBFamiliesObject.prototype = {
 				sb._('<div class="jmb-families-parent-name former">')._(module._getName(object))._('</div>');
 				sb._('<div class="jmb-families-parent-date former">')._(module._getDate(get))._('</div>');
 			sb._('</div>');
-            sb._('<div class="jmb-families-former-arrow-right" style="background:#')._(bcolor)._(';">&nbsp</div>');
-            sb._('<div class="jmb-families-former-arrow-right text" style="color:#')._(bcolor)._(';">')._(module._getMerrageYear(get, family_id))._('</div>');
+            sb._('<div class="jmb-families-former-arrow-')._(position)._('" style="background:')._(bcolor)._(';">&nbsp</div>');
+            sb._('<div class="jmb-families-former-arrow-')._(position)._(' text" style="color:')._(bcolor)._(';">')._(module._getMerrageYear(get, family_id))._('</div>');
 		sb._('</div>');
 		return jQuery(sb.result());
 	},
@@ -419,7 +476,7 @@ JMBFamiliesObject.prototype = {
 			arrow_class = (k!=1)?'jmb-families-arrow-up small':'jmb-families-arrow-up',
 			get = storage.usertree.parse(object),
 			fam_opt = storage.family_line.get.opt(),
-			bcolor = (len>1)?module.spouse_border[child.family_id]:"000000";
+			bcolor = (len>1)?module.spouse_border[child.family_id]:"#000000";
 
 		sb._('<div id="')._(gedcom_id)._('" class="jmb-families-child" style="height:')._(Math.round(170*k))._('px;top:')._(position.top)._('px;left:')._(position.left)._('px;">');
 			sb._('<div id="father_line" style="border: 2px solid ')
@@ -428,7 +485,7 @@ JMBFamiliesObject.prototype = {
 			sb._('<div id="mother_line" style="border: 2px solid ')
 				sb._((user.is_mother_line&&fam_opt.mother&&fam_opt.mother.pencil)?fam_opt.mother.pencil:'#F5FAE6');
 			sb._(';">');
-				sb._('<div id="')._(gedcom_id)._('-view" type="imgContainer" style="height:')._(Math.round(80*k))._('px;width:')._(Math.round(72*k))._('px;border:2px solid #')._(bcolor)._('" class="jmb-families-child-img">')._(module._avatar(object, 'child', k));	
+				sb._('<div id="')._(gedcom_id)._('-view" type="imgContainer" style="height:')._(Math.round(80*k))._('px;width:')._(Math.round(72*k))._('px;border:2px solid ')._(bcolor)._('" class="jmb-families-child-img">')._(module._avatar(object, 'child', k));
 					if(get.is_editable && !module.popup){
                         sb._('<div id="')._(gedcom_id)._('-edit" class="')._(edit_button)._('">&nbsp;</div>');
                     }
@@ -449,9 +506,40 @@ JMBFamiliesObject.prototype = {
             } else {
                 sb._('<div id="null" class="')._(child_button_unactive)._('">&nbsp;</div>');
             }
-			sb._('<div class="')._(arrow_class)._('" style="background:#')._(bcolor)._(';">&nbsp</div>');
+			sb._('<div class="')._(arrow_class)._('" style="background:')._(bcolor)._(';">&nbsp</div>');
 		return jQuery(sb.result());
 	},
+    _setFormer:function(cont, spouses, position){
+        var module = this, i, spouse;
+        if(spouses.length != 0){
+            if(spouses.length > 1){
+                for( i = 1 ; i < spouses.length ; i++ ){
+                    spouse =  module._former_spouse(spouses[i], module._getBorderColor(spouses[i]), position);
+                    jQuery(cont).append(spouse);
+                }
+                jQuery(cont).addClass('active');
+                if(spouses.length > 3){
+                    jQuery(cont).addClass('scroll');
+                }
+            } else {
+                jQuery(cont).removeClass('active');
+            }
+        } else {
+            jQuery(cont).removeClass('active');
+        }
+    },
+    _setFormerBySircar:function(cont, spouses){
+        var module = this;
+        module._setFormer(cont[4], spouses, 'right');
+        jQuery(cont[4]).css({top:module._getTopFormerSpouseBox(spouses),left:"10px",visibility:"hidden"});
+    },
+    _setFormerBySpouse:function(cont, spouse){
+        var module = this,
+            object = module.usertree[spouse[1]],
+            spouses = module._spouses(object);
+        module._setFormer(cont[3], spouses, 'left');
+        jQuery(cont[3]).css({top:module._getTopFormerSpouseBox(spouses),left:"600px",visibility:"hidden"});
+    },
     _getDate:function(get){
         var b,d;
         b = get.date('birth', 2);
@@ -591,6 +679,7 @@ JMBFamiliesObject.prototype = {
 		return 315;
 	},
 	render:function(gedcom_id){
+        /*
 		var	module = this,
 			object = module.usertree[gedcom_id],
 			families = object.families,
@@ -611,24 +700,26 @@ JMBFamiliesObject.prototype = {
 		jQuery(module.parent).append(cont);
 		
 		sircar = module._sircar(gedcom_id);
-		jQuery(cont[0]).css({top:"50px",left:"120px",visibility:"hidden"}).attr('id', gedcom_id).append(sircar);
+		jQuery(cont[0]).css({top:"69px",left:"155px",visibility:"hidden"}).attr('id', gedcom_id).append(sircar);
 
 		if(spouses.length!=0){
 			info = module._info(object, spouses[0]);
-			jQuery(cont[1]).css({top:"155px", left:"275px",visibility:"hidden"}).append(info);
+			jQuery(cont[1]).css({top:"175px", left:"312px",visibility:"hidden"}).append(info);
 			
 			module.spouse_border[spouses[0][0]] = module.borders[0];
 			spouse[0] = module._spouse(spouses[0], (spouses.length>1)?module.borders[0]:"000000");
-			jQuery(cont[2]).attr('id', spouses[0][1]).css({top:"50px",left:"395px",visibility:"hidden"}).append(spouse[0]);
+			jQuery(cont[2]).attr('id', spouses[0][1]).css({top:"69px",left:"430px",visibility:"hidden"}).append(spouse[0]);
 			if(spouses.length > 1){
-				jQuery(cont[3]).css({top:(spouses.length>=3)?"30px":"98px",left:"555px",visibility:"hidden"});
-				for(i = 1 ; i < spouses.length ; i ++){
+                jQuery(cont[3]).css({top:module._getTopFormerSpouseBox(spouses),left:"600px",visibility:"hidden"});
+                for(i = 1 ; i < spouses.length ; i ++){
 					module.spouse_border[spouses[i][0]] = module.borders[i];
 					spouse[i] = module._former_spouse(spouses[i], module.borders[i]);
 					jQuery(cont[3]).append(spouse[i]);
 				}
 				jQuery(cont[3]).addClass('active');
-                jQuery(cont[3]).scrollbar();
+                if(spouses.length > 3){
+                    jQuery(cont[3]).addClass('scroll');
+                }
 			} else {
 				jQuery(cont[3]).removeClass('active');
 			}		
@@ -692,12 +783,102 @@ JMBFamiliesObject.prototype = {
         } else {
             module.animation(cont, childs);
         }
+        */
 
+        var	module = this,
+            cont = module._create(),
+            object = module.usertree[gedcom_id],
+            spouses = module._spouses(object),
+            childrens = module._childrens(object, spouses),
+            sircar,
+            info,
+            spouse,
+            childs = [];
+
+        jQuery(module.parent).html('');
+
+        module.cont = cont;
+        module.now_id = gedcom_id;
+
+        jQuery(module.parent).append(cont);
+
+        sircar = module._sircar(gedcom_id);
+        jQuery(cont[0]).css({top:"69px",left:"155px",visibility:"hidden"}).attr('id', gedcom_id).append(sircar);
+
+        if(spouses.length != 0){
+            info = module._info(object, spouses[0]);
+            jQuery(cont[1]).css({top:"175px", left:"312px",visibility:"hidden"}).append(info);
+
+            spouse = module._spouse(spouses[0], module._getBorderColor((spouses.length>1)?spouses[0]:false));
+            jQuery(cont[2]).attr('id', spouses[0][1]).css({top:"69px",left:"430px",visibility:"hidden"}).append(spouse[0]);
+        }
+
+        module._setFormerBySircar(cont, spouses);
+        module._setFormerBySpouse(cont, spouses[0]);
+
+        var start_top = module._start_top(spouses.length);
+        childrens = module._sortByBirth(childrens, storage.usertree.pull);
+        if(childrens.length!=0){
+            var row_length = module._length(childrens.length);
+            var left_del = 100;
+            var index = 0;
+            var start_left = 350 - 100*(row_length/2);
+            for(var i = 0 ; i < childrens.length ; i++){
+                if(index == row_length){
+                    start_top += 185;
+                    index = 0;
+                    if((childrens.length-i)<row_length){
+                        start_left = 350 - 100*((childrens.length-i)/2);
+                    }
+                }
+                var pos = {top:start_top, left:start_left+(index*left_del)};
+                module.childsPos[childrens[i].gedcom_id] = pos;
+                childs[i] = module._child(childrens[i], spouses.length, pos);
+                jQuery(childs[i]).css("visibility","hidden");
+                jQuery(module.parent).append(childs[i]);
+                index++;
+            }
+        }
+
+        if(module.popup){
+            module._arrows(module.parent);
+            jQuery(module.parent).find('.jmb-families-avatar').each(function(i, el){
+                jQuery(el).droppable({
+                    drop: function(){
+                        storage.ntf.onDrop(this);
+                    },
+                    over: function(){
+                        storage.ntf.onDropIn(this);
+                    },
+                    out: function(){
+                        storage.ntf.onDropOut(this);
+                    }
+                });
+            });
+        } else {
+            module._arrows(module.parent);
+            module._view(module.parent);
+            module._edit(module.parent);
+            module._facebook(module.parent);
+            module._tooltips(module.parent);
+            module._win(module.parent);
+            module._home(module.parent);
+        }
+
+        jQuery(module.parent).height(start_top + 200);
+        jQuery(module.parent).css('overflow', 'hidden');
+        if(!module.clickItem || jQuery.browser.msie){
+            module.startAnimation(cont, childs);
+        } else {
+            module.animation(cont, childs);
+        }
 	},
 	startAnimation:function(cont, childs){
-        jQuery(cont[0]).css('left', '-155px').css("visibility", "visible").css('position', 'absoloute').animate({ "left":"+=275"},"slow");
-        jQuery(cont[2]).css('left', '760px').css("visibility", "visible").css('position', 'absoloute').animate({ "left":"-=365"},"slow");
-        jQuery(cont[3]).css('left', '760px').css("visibility", "visible").css('position', 'position').animate({ "left":"-=205"},"slow");
+        jQuery(cont[0]).css('left', '-155px').css("visibility", "visible").css('position', 'absoloute').animate({ "left":"+=310"},"slow");
+        jQuery(cont[1]).css("opacity", "0").css("visibility", "visible").animate({"opacity":1}, "slow");
+        jQuery(cont[2]).css('left', '760px').css("visibility", "visible").css('position', 'absoloute').animate({ "left":"-=330"},"slow");
+        jQuery(cont[3]).css('left', '760px').css("visibility", "visible").css('position', 'absoloute').animate({ "left":"-=160"},"slow");
+        jQuery(cont[4]).css('left', '-155px').css("visibility", "visible").css('position', 'absoloute').animate({ "left":"+=165"},"slow");
         jQuery(childs).each(function(i, el){
             jQuery(el).css("opacity", "0").css("visibility", "visible").css("position", "position").animate({"opacity":1}, 300*i);
         });
@@ -723,9 +904,11 @@ JMBFamiliesObject.prototype = {
 					}, 1000, function(){
 						jQuery(clone).remove();
 						jQuery(el).css({opacity:0, visibility:"visible"}).animate({"opacity":1}, 250);
-						jQuery(cont[0]).css("left", "-155px").css("visibility", "visible").animate({ "left":"+=275"},"slow");
-						jQuery(cont[2]).css("left", "760px").css("visibility", "visible").animate({ "left":"-=365"},"slow");
-						jQuery(cont[3]).css("left", "760px").css("visibility", "visible").show().animate({ "left":"-=205"},"slow");
+						jQuery(cont[0]).css("left", "-155px").css("visibility", "visible").animate({ "left":"+=310"},"slow");
+                        jQuery(cont[1]).css("opacity", "0").css("visibility", "visible").animate({"opacity":1}, "slow");
+						jQuery(cont[2]).css("left", "760px").css("visibility", "visible").animate({ "left":"-=330"},"slow");
+						jQuery(cont[3]).css("left", "760px").css("visibility", "visible").show().animate({ "left":"-=160"},"slow");
+                        jQuery(cont[4]).css("left", "-155px").css("visibility", "visible").show().animate({ "left":"+=165"},"slow");
 						jQuery(childs).each(function(i, el){
 							if(jQuery(el).attr('id') != id){
 								jQuery(el).css("opacity", 0).css("visibility", "visible").animate({"opacity":1}, 300*i);
@@ -747,8 +930,10 @@ JMBFamiliesObject.prototype = {
 			}, 1000, function(){
 				jQuery(clone).remove();
 				jQuery(cont[0]).css("opacity", 0).css("visibility", "visible").animate({ "opacity":1}, "slow");
-				jQuery(cont[2]).css("left", "760px").css("visibility", "visible").animate({ "left":"-=365"},"slow");
-				jQuery(cont[3]).css("left", "760px").css("visibility", "visible").show().animate({ "left":"-=205"},"slow");
+                jQuery(cont[1]).css("opacity", "0").css("visibility", "visible").animate({"opacity":1}, "slow");
+				jQuery(cont[2]).css("left", "760px").css("visibility", "visible").animate({ "left":"-=330"},"slow");
+				jQuery(cont[3]).css("left", "760px").css("visibility", "visible").show().animate({ "left":"-=160"},"slow");
+                jQuery(cont[4]).css("left", "-155px").css("visibility", "visible").show().animate({ "left":"+=165"},"slow");
 				jQuery(childs).each(function(i, el){
 					jQuery(el).css("opacity", 0).css("visibility", "visible").animate({"opacity":1}, 300*i);
 				});
@@ -760,6 +945,7 @@ JMBFamiliesObject.prototype = {
 	reload:function(id, type){
 		var	module = this;
 		storage.tooltip.cleaner(function(){
+            module.border_iter = 0;
 			module.render(id);
 		});	
 	}
