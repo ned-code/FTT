@@ -130,7 +130,7 @@ JMBFamiliesObject.prototype = {
                 break;
         }
     },
-	_spouses:function(object){
+	_spouses:function(object, defaultFamily){
         if(!object) return false;
         var module = this,families, spouses = [], family, spouse, childrens = {}, childs, el, child, def;
         families = object.families;
@@ -154,10 +154,14 @@ JMBFamiliesObject.prototype = {
                 }
 			}
 		}
-        if(storage.usertree.gedcom_id in childrens){
-            def = module.famId;
+        if(typeof(defaultFamily) !== 'undefined'){
+            def = defaultFamily;
         } else {
-            def = (module.clickItem.is_parent)?module.famId:def;
+            if(storage.usertree.gedcom_id in childrens){
+                def = module.famId;
+            } else {
+                def = (module.clickItem.is_parent)?module.famId:def;
+            }
         }
         return spouses.sort(function(){
 			if(arguments[0][0] == def){
@@ -536,7 +540,7 @@ JMBFamiliesObject.prototype = {
     _setFormerBySpouse:function(cont, spouse){
         var module = this,
             object = module.usertree[spouse[1]],
-            spouses = module._spouses(object);
+            spouses = module._spouses(object, spouse[0]);
         module._setFormer(cont[3], spouses, 'left');
         jQuery(cont[3]).css({top:module._getTopFormerSpouseBox(spouses),left:"600px",visibility:"hidden"});
     },
