@@ -157,12 +157,8 @@ JMBFamiliesObject.prototype = {
 		}
         if(typeof(defaultFamily) !== 'undefined'){
             def = defaultFamily;
-        } else {
-            if(storage.usertree.gedcom_id in childrens){
-                def = module.famId;
-            } else {
-                def = (module.clickItem.is_parent)?module.famId:def;
-            }
+        } else if(storage.usertree.gedcom_id in childrens) {
+            def = module.famId;
         }
         return spouses.sort(function(){
 			if(arguments[0][0] == def){
