@@ -345,12 +345,15 @@ JMBFamiliesObject.prototype = {
 			sb = host.stringBuffer(),
 			usertree = module.usertree,
 			object = usertree[gedcom_id],
-			gedcom_id = object.user.gedcom_id,
-			facebook_id = object.user.facebook_id,
-			parents = object.parents,
+			gedcom_id = (object)?object.user.gedcom_id:false,
+			facebook_id = (object)?object.user.facebook_id:false,
+			parents = (object)?object.parents:false,
 			get = storage.usertree.parse(object),
 			fam_opt = storage.family_line.get.opt(),
             parent_key;
+
+        if('undefined' === typeof(object)) return '';
+
 		sb._('<div>');
 			if(parent_key = module._checkParents(object)){
 				sb._('<div  id="')._(parent_key)._('" class="jmb-families-button parent active">&nbsp;</div>');
@@ -392,12 +395,15 @@ JMBFamiliesObject.prototype = {
 			gedcom_id = spouse[1],
 			usertree = module.usertree,
 			object = usertree[gedcom_id],
-			gedcom_id = object.user.gedcom_id,
-			facebook_id = object.user.facebook_id,
-			parents = object.parents,
+			gedcom_id = (object)?object.user.gedcom_id:false,
+			facebook_id = (object)?object.user.facebook_id:false,
+			parents = (object)?object.parents:false,
 			get = storage.usertree.parse(object), 
 			fam_opt = storage.family_line.get.opt(),
 			parent_key;
+
+        if('undefined' === typeof(object)) return '';
+
 		sb._('<div>');
 			if(parent_key = module._checkParents(object)){
 				sb._('<div  id="')._(parent_key)._('" class="jmb-families-button parent active">&nbsp;</div>');
@@ -439,9 +445,11 @@ JMBFamiliesObject.prototype = {
 			gedcom_id = spouse[1],
 			usertree = module.usertree,
 			object = usertree[gedcom_id],
-			gedcom_id = object.user.gedcom_id,
-			facebook_id = object.user.facebook_id,
+			gedcom_id = (object)?object.user.gedcom_id:false,
+			facebook_id = (object)?object.user.facebook_id:false,
 			get = storage.usertree.parse(object);
+
+        if('undefined' === typeof(object)) return '';
 			
 		sb._('<div id="')._(gedcom_id)._('" class="jmb-families-former-spouse-div ')._(position)._('">');
             sb._('<div id="')._(gedcom_id)._('-view" type="imgContainer" class="jmb-families-former-img" style="border:2px solid ')._(bcolor)._('">')._(module._avatar(object, 'parent', 0.5));
