@@ -673,10 +673,7 @@ JMBFamiliesObject.prototype = {
 		return Math.round(len/rows);
 	},
 	_start_top:function(len){
-		if(len>=3){
-			return 450;
-		} 
-		return 315;
+		return 350;
 	},
 	render:function(gedcom_id){
         var	module = this,
@@ -716,13 +713,13 @@ JMBFamiliesObject.prototype = {
             var row_length = module._length(childrens.length);
             var left_del = 100;
             var index = 0;
-            var start_left = 350 - 100*(row_length/2);
+            var start_left = 375 - 100*(row_length/2);
             for(var i = 0 ; i < childrens.length ; i++){
                 if(index == row_length){
                     start_top += 185;
                     index = 0;
                     if((childrens.length-i)<row_length){
-                        start_left = 350 - 100*((childrens.length-i)/2);
+                        start_left = 375 - 100*((childrens.length-i)/2);
                     }
                 }
                 var pos = {top:start_top, left:start_left+(index*left_del)};
