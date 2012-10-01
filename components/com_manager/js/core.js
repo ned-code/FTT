@@ -115,7 +115,7 @@ storage.usertree.deleted = function(objects){
     }
 }
 storage.usertree.parse = function(object){
-	var	user = object.user,
+	var	user = (object)?object.user:false,
 		families = (object)?object.families:false,
 		media = (object)?object.media:false,
 		date_num = {"day":0,"month":1,"year":2},
