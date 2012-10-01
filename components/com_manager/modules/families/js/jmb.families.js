@@ -140,18 +140,19 @@ JMBFamiliesObject.prototype = {
 			if (!families.hasOwnProperty(key)) continue;
 			if(key!='length'){
 				family = families[key];
-				if(family.spouse!=null){
+				if(family.spouse!=null && 'undefined' !== typeof(module.usertree[family.spouse])){
 					spouse = [family.id, family.spouse];
 					spouses.push(spouse);
-				}
-                childs = family.childrens;
-                for (el in childs){
-                    if(!childs.hasOwnProperty(el)) continue;
-                    child = childs[el];
-                    if(!childrens[child.gedcom_id]){
-                        childrens[child.gedcom_id] = child;
+
+                    childs = family.childrens;
+                    for (el in childs){
+                        if(!childs.hasOwnProperty(el)) continue;
+                        child = childs[el];
+                        if(!childrens[child.gedcom_id] && 'undefined' !== typeof(module.usertree[child.gedcom_id])){
+                            childrens[child.gedcom_id] = child;
+                        }
                     }
-                }
+				}
 			}
 		}
         if(typeof(defaultFamily) !== 'undefined'){
