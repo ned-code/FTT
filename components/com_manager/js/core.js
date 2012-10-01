@@ -116,10 +116,11 @@ storage.usertree.deleted = function(objects){
 }
 storage.usertree.parse = function(object){
 	var	user = object.user,
-		families = object.families,
-		media = object.media,
+		families = (object)?object.families:false,
+		media = (object)?object.media:false,
 		date_num = {"day":0,"month":1,"year":2},
 		_month = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    if('undefined' === typeof(object)) return false;
 	return {
 		gedcom_id:user.gedcom_id,
 		facebook_id:user.facebook_id,
