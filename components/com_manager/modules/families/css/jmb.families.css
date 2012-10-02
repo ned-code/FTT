@@ -35,7 +35,7 @@
 }
 .jmb-families-former-sircar-container{
     border: 1px solid #F5FAE6;
-    max-height: 240px;
+    max-height: 200px;
     position: absolute;
     width: 130px;
 }
@@ -59,8 +59,8 @@
 }
 
 .jmb-families-former-spouse-div {
-    margin-bottom: 7px;
-    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-top: 0;
     position: relative;
 }
 .jmb-families-former-spouse-div.left{
@@ -141,6 +141,9 @@ img.jmb-families-avatar.view{
 	width: 112px;
 }
 .jmb-families-parent-name.former{
+    font-size: 9px;
+    height: 9px;
+    line-height: 9px;
     width: 54px;
 }
 .jmb-families-parent-date{
@@ -152,6 +155,9 @@ img.jmb-families-avatar.view{
 	width: 112px;
 }
 .jmb-families-parent-date.former{
+    font-size: 9px;
+    height: 9px;
+    line-height: 9px;
     width: 54px;
 }
 .jmb-families-child-name{
@@ -209,6 +215,7 @@ img.jmb-families-avatar.view{
 }
 .jmb-families-former-arrow-right.text {
     background: none repeat scroll 0 0 transparent;
+    font-size: 12px;
     height: 20px;
     left: 71px;
     line-height: 20px;
@@ -226,8 +233,9 @@ img.jmb-families-avatar.view{
 }
 .jmb-families-former-arrow-left.text {
     background: none repeat scroll 0 0 transparent;
+    font-size: 11px;
     height: 20px;
-    left: -40px;
+    left: -35px;
     line-height: 20px;
     position: absolute;
     top: 25px;

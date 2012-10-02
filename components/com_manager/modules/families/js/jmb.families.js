@@ -122,7 +122,7 @@ JMBFamiliesObject.prototype = {
         var l = s.length;
         switch(l){
             case 2:
-                return '117px';
+                return '69px';
                 break;
 
             default:
@@ -682,7 +682,7 @@ JMBFamiliesObject.prototype = {
 		return Math.round(len/rows);
 	},
 	_start_top:function(len){
-		return 350;
+		return 280;
 	},
 	render:function(gedcom_id){
         var	module = this,
@@ -703,14 +703,14 @@ JMBFamiliesObject.prototype = {
         jQuery(module.parent).append(cont);
 
         sircar = module._sircar(gedcom_id);
-        jQuery(cont[0]).css({top:"69px",left:"155px",visibility:"hidden"}).attr('id', gedcom_id).append(sircar);
+        jQuery(cont[0]).css({top:"21px",left:"155px",visibility:"hidden"}).attr('id', gedcom_id).append(sircar);
 
         if(spouses.length != 0){
             info = module._info(object, spouses[0]);
-            jQuery(cont[1]).css({top:"175px", left:"312px",visibility:"hidden"}).append(info);
+            jQuery(cont[1]).css({top:"113px", left:"312px",visibility:"hidden"}).append(info);
 
             spouse = module._spouse(spouses[0], module._getBorderColor((spouses.length>1)?spouses[0]:false));
-            jQuery(cont[2]).attr('id', spouses[0][1]).css({top:"69px",left:"430px",visibility:"hidden"}).append(spouse[0]);
+            jQuery(cont[2]).attr('id', spouses[0][1]).css({top:"21px",left:"430px",visibility:"hidden"}).append(spouse[0]);
         }
 
         module._setFormerBySircar(cont, spouses);
