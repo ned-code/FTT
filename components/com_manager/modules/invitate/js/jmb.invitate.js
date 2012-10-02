@@ -26,6 +26,7 @@ function JMBInvitateObject(obj){
         FTT_MOD_INVITATE_ACCEPT: "Accept Invitation",
         FTT_MOD_INVITATE_DENY: "No, thanks",
         FTT_MOD_INVITATE_ALERT_INVITATION_LINK_NO_LONGER_VALID: "This invitation link is no longer valid.",
+        FTT_MOD_INVITATE_YOUR : "Your",
         FTT_MOD_INVITATE_NOT_SURE : "Not Sure",
         FTT_MOD_INVITATE_CLICK : "Click",
         FTT_MOD_INVITATE_HERE : "here",
@@ -146,7 +147,7 @@ function JMBInvitateObject(obj){
             sb._('<div class="ftt-invitate-header-body">');
                 sb._('<div class="ftt-invitate-hello">')._(module.getMsg('hello'))._(' <span style="font-weight: bold;">')._(fn.getFacebookName(target))._('</span>!</div>');
                 sb._('<div class="ftt-invitate-message">');
-                    sb._('Your ')._(fn.getRelation(json))._(', <span id="facebook" style="color:blue;cursor:pointer">')._(fn.getSenderFacebookLink(sender, fn.getSenderName(sender)))._('</span>, ')._(module.getMsg('HAS_INVITED_YOU'));
+                    sb._(module.getMsg('YOUR'))._(' ')._(fn.getRelation(json))._(', <span id="facebook" style="color:blue;cursor:pointer">')._(fn.getSenderFacebookLink(sender, fn.getSenderName(sender)))._('</span>, ')._(module.getMsg('HAS_INVITED_YOU'));
                 sb._('</div>');
                 sb._('<div class="ftt-invitate-buttons">');
                     sb._('<div class="ftt-invitate-button accept">')._(module.getMsg('accept'))._('</div>');
