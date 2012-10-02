@@ -22,10 +22,16 @@ function JMBInvitateObject(obj){
         FTT_MOD_INVITATE_MESSAGE_YOU_LOGGED_INTO: "You are currently logged into Facebook as %%. This person is already registered in Family Tree Top.",
         FTT_MOD_INVITATE_MESSAGE_CLICK_TO_LOG_INTO_FACEBOOK: "Click <a id='logout' href='#'>here</a> to log into Facebook with a different account.",
         FTT_MOD_INVITATE_HELLO: "Hello",
-        FTT_MOD_INVITATE_HAS_INVITED_YOU: "has invited you to join this family tree.",
+        FTT_MOD_INVITATE_HAS_INVITED_YOU: "has invited you to join your family tree on <span style='font-weight: bold;'>Family TreeTop</span>. This is a private space that can only be seen by members of your family.",
         FTT_MOD_INVITATE_ACCEPT: "Accept Invitation",
-        FTT_MOD_INVITATE_DENY: "Deny Invitation",
-        FTT_MOD_INVITATE_ALERT_INVITATION_LINK_NO_LONGER_VALID: "This invitation link is no longer valid."
+        FTT_MOD_INVITATE_DENY: "No, thanks",
+        FTT_MOD_INVITATE_ALERT_INVITATION_LINK_NO_LONGER_VALID: "This invitation link is no longer valid.",
+        FTT_MOD_INVITATE_NOT_SURE : "Not Sure",
+        FTT_MOD_INVITATE_CLICK : "Click",
+        FTT_MOD_INVITATE_HERE : "here",
+        FTT_MOD_INVITATE_TO_VIEW_FACEBOOK_PROFILE_FOR : "to view the Facebook profile for",
+        FTT_MOD_INVITATE_IF_YOU_WISH_TO_CONTACT : "If you wish to contact",
+        FTT_MOD_INVITATE_YOU_MAY_EMAIL_HIM_AT : "you may email him at"
     }
 
     fn.getObjectFirst = function(obj){
@@ -138,25 +144,25 @@ function JMBInvitateObject(obj){
 
         sb._('<div class="ftt-invitate-header">');
             sb._('<div class="ftt-invitate-header-body">');
-                sb._('<div class="ftt-invitate-hello">Hello <span style="font-weight: bold;">')._(fn.getFacebookName(target))._('</span>!</div>');
+                sb._('<div class="ftt-invitate-hello">')._(module.getMsg('hello'))._(' <span style="font-weight: bold;">')._(fn.getFacebookName(target))._('</span>!</div>');
                 sb._('<div class="ftt-invitate-message">');
-                    sb._('Your ')._(fn.getRelation(json))._(', <span id="facebook" style="color:blue;cursor:pointer">')._(fn.getSenderFacebookLink(sender, fn.getSenderName(sender)))._('</span>, has invited you to join your family tree on <span style="font-weight: bold;">Family TreeTop</span>. This is a private space that can only be seen by members of your family.');
+                    sb._('Your ')._(fn.getRelation(json))._(', <span id="facebook" style="color:blue;cursor:pointer">')._(fn.getSenderFacebookLink(sender, fn.getSenderName(sender)))._('</span>, ')._(module.getMsg('HAS_INVITED_YOU'));
                 sb._('</div>');
                 sb._('<div class="ftt-invitate-buttons">');
-                    sb._('<div class="ftt-invitate-button accept">Accept Invitation</div>');
-                    sb._('<div class="ftt-invitate-button deny">No, thanks</div>');
+                    sb._('<div class="ftt-invitate-button accept">')._(module.getMsg('accept'))._('</div>');
+                    sb._('<div class="ftt-invitate-button deny">')._(module.getMsg('deny'))._('</div>');
                 sb._('</div>');
             sb._('</div>');
         sb._('</div>');
         sb._('<div class="ftt-invitate-content"></div>');
         sb._('<div class="ftt-invitate-footer">');
-            sb._('<div class="ftt-invitate-footer-body">Not sure? Click ');
-                sb._(fn.getSenderFacebookLink(sender, 'here'));
-                sb._(' to view the Facebook profile for ');
+        sb._('<div class="ftt-invitate-footer-body">')._(module.getMsg('not_sure'))._('? ')._(module.getMsg('click'))._(' ');
+                sb._(fn.getSenderFacebookLink(sender, module.getMsg('here')));
+                sb._(' ')._(module.getMsg('to_view_facebook_profile_for'))._(' ');
                 sb._(fn.getFirstSenderName(sender));
-                sb._('. If you wish to contact ');
+                sb._('. ')._(module.getMsg('if_you_wish_to_contact'))._(' ');
                 sb._(fn.getFirstSenderName(sender));
-                sb._(', you may email him at ');
+                sb._(', ')._(module.getMsg('you_may_email_him_at'))._(' ');
                 sb._(fn.getSenderEmail(json));
                 sb._('</div>');
         sb._('</div>');
