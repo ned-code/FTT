@@ -7,10 +7,10 @@
 	background: none repeat scroll 0 0 #C3C3C3;	
 	display: inline-block;
 	padding-bottom: 5px;
-	padding-top: 5px;
+	padding-top: 6px;
 }
 .jmb-family-line-container td:hover {
-     padding-top: 3px;
+     padding-top: 4px;
 }
 .jmb-family-line-container td:hover div.icon{
     height: 23px;
@@ -28,6 +28,9 @@
     border-top-right-radius: 5px;
 	height: 21px;
 	padding-right: 5px;
+}
+.jmb-family-line-container td.left:hover, .jmb-family-line-container td.right:hover{
+    padding-top: 6px;
 }
 .jmb-family-line-container td.options.left{
 	border-radius: 0 0 0 0;
