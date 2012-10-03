@@ -162,9 +162,9 @@ JMBFamiliesObject.prototype = {
         }
         return spouses.sort(function(){
 			if(arguments[0][0] == def){
-				return false;
+				return -1;
 			} else {
-				return true;
+				return 1;
 			}
 		});
 	},
