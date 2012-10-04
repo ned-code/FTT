@@ -104,13 +104,32 @@ JMBInvitation.prototype = {
         return true;
     },
 	sendRequestToInviteFacebookFriend:function(facebook_id, callback){
+        var module = this;
         FB.ui({
             method: 'send',
-            name: 'Family TreeTop',
-            link: storage.baseurl,
-            to: facebook_id,
-            description: 'To view this request, please log into Family TreeTop. Link: '+storage.baseurl+'index.php/invitation'
+            name: getName(),
+            link: getLink(),
+            to: getTo(),
+            picture: getPicture(),
+            description: getDescription()
         }, callback);
+        return true;
+        function getName(){
+            return 'Click HERE to see your invition';
+        }
+        function getTo(){
+            return facebook_id;
+        }
+        function getLink(){
+            return storage.baseurl+'index.php/invitation';
+        }
+        function getPicture(){
+            return storage.baseurl + 'components/com_manager/modules/invitation/images/ftt_invitation.png';
+        }
+        function getDescription(){
+            var sb = storage.stringBuffer();
+            return module.getMsg('HAS_INVITED');
+        }
     },
     avatar:function(object){
         return storage.usertree.avatar.get({
