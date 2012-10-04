@@ -546,8 +546,10 @@ JMBFamiliesObject.prototype = {
         var module = this,
             object = module.usertree[spouse[1]],
             spouses = module._spouses(object, spouse[0]);
-        module._setFormer(cont[3], spouses, 'left');
-        jQuery(cont[3]).css({top:module._getTopFormerSpouseBox(spouses),left:"600px",visibility:"hidden"});
+        if(spouses.length != 0){
+            module._setFormer(cont[3], spouses, 'left');
+            jQuery(cont[3]).css({top:module._getTopFormerSpouseBox(spouses),left:"600px",visibility:"hidden"});
+        }
     },
     _getDate:function(get){
         var b,d;
@@ -713,8 +715,11 @@ JMBFamiliesObject.prototype = {
             jQuery(cont[2]).attr('id', spouses[0][1]).css({top:"21px",left:"430px",visibility:"hidden"}).append(spouse[0]);
         }
 
-        module._setFormerBySircar(cont, spouses);
-        module._setFormerBySpouse(cont, spouses[0]);
+        if(spouses.length != 0){
+            module._setFormerBySircar(cont, spouses);
+            module._setFormerBySpouse(cont, spouses[0]);
+        }
+
 
         var start_top = module._start_top(spouses.length);
         childrens = module._sortByBirth(childrens, storage.usertree.pull);
