@@ -179,7 +179,11 @@ class JMBInvitation {
 		}
 	}
 
-    public function checkFacebookIdOnUse($facebook_id){
+    public function checkFacebookIdOnUse($args){
+        $args = explode(';', $args);
+        $facebook_id = $args[0];
+        $gedcom_id = $args[1];
+
         $sql_string = "SELECT i.id, i.fid, u.email
                         FROM #__mb_individuals AS i
                         LEFT JOIN #__jfbconnect_user_map AS map ON map.fb_user_id = i.fid
@@ -206,7 +210,16 @@ class JMBInvitation {
             return json_encode(array('success'=>false, 'message'=>$message));
         }
 
-        return json_encode(array('success'=>true));
+        $user = $this->host->user->get();
+        $owner_id = $user->gedcomId;
+        $tree_id = $user->treeId;
+
+        $usertree = $this->host->usertree->load($tree_id, $owner_id);
+        $owner = $usertree[$owner_id];
+
+        $relation = $this->getRelation($tree_id, $owner_id, $gedcom_id, $owner);
+
+        return json_encode(array('success'=>true, 'relation'=>$relation));
     }
 
 	public function inviteFacebookFriend($args){

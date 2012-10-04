@@ -5,6 +5,19 @@ function JMBInvitation(){
     module.dialogBox = false;
     module.progress = module.getProgressBar();
     module.msg = {
+        FTT_MOD_INVITATION_DEAR_MALE:"Dear",
+        FTT_MOD_INVITATION_DEAR_FEMALE:"Dear",
+        FTT_MOD_INVITATION_YOUR:"Your",
+        FTT_MOD_INVITATION_HAS_INVITED:"has invited you to join your family tree on Family TreeTop. This is a private space that can only be seen by members of your family",
+        FTT_MOD_INVITATION_CLICK_HERE_TO_ACCEPT:"Click here to view this invitation",
+        FTT_MOD_INVITATION_CLICK:"Click",
+        FTT_MOD_INVITATION_HERE:"here",
+        FTT_MOD_INVITATION_TO_VIEW_PROFILE:"to view Facebook profile for",
+        FTT_MOD_INVITATION_IF_YOU_WISH_TO_CONTACT:"If you wish to contact",
+        FTT_MOD_INVITATION_YOU_MAY_EMAIL_HIM_AT:"you may email him at",
+        FTT_MOD_INVITATION_THIS_IS_AUTOMATED_MESSAGE:"This is automated message from Family TreeTop. Please do not respond to this email",
+        FTT_MOD_INVITATION_REGARS:"Regards",
+        FTT_MOD_INVITATION_THE_FAMILY_TREETOP_TEAM:"The Family TreeTop Team",
         FTT_MOD_INVITATION_HEADER: "Send Invitation",
         FTT_MOD_INVITATION_NAME: "Name",
         FTT_MOD_INVITATION_BORN: "Born",
@@ -103,7 +116,7 @@ JMBInvitation.prototype = {
         }
         return true;
     },
-	sendRequestToInviteFacebookFriend:function(facebook_id, callback){
+	sendRequestToInviteFacebookFriend:function(facebook_id, rel, callback){
         var module = this;
         FB.ui({
             method: 'send',
@@ -128,7 +141,11 @@ JMBInvitation.prototype = {
         }
         function getDescription(){
             var sb = storage.stringBuffer();
-            return module.getMsg('HAS_INVITED');
+            var object = storage.usertree.pull[storage.usertree.gedcom_id];
+            var parse = storage.usertree.parse(object);
+            sb._(module.getMsg('your'))._(' ')._(rel)._(', ')._(parse.name)._(', ');
+            sb._(module.getMsg('HAS_INVITED'));
+            return sb.result();
         }
     },
     avatar:function(object){
@@ -311,11 +328,11 @@ JMBInvitation.prototype = {
                 },
                 send:{
                     checkFacebookIdOnUse:function(){
-                        module.ajax('checkFacebookIdOnUse', v.option.id, function(res){
+                        module.ajax('checkFacebookIdOnUse', v.option.id + ';' + v.gedcom_id, function(res){
                             var json = storage.getJSON(res.responseText);
                             if(typeof(json.success) != 'undefined'){
                                 if(json.success){
-                                    f.send.requestToInviteFacebookFriend();
+                                    f.send.requestToInviteFacebookFriend(json.relation);
                                 } else {
                                     storage.alert(module.getMsg(json.message).replace('%%', v.option.name));
                                     f.event.select.off();
@@ -325,8 +342,8 @@ JMBInvitation.prototype = {
                             }
                         });
                     },
-                    requestToInviteFacebookFriend:function(){
-                        module.sendRequestToInviteFacebookFriend(v.option.id, function (r) {
+                    requestToInviteFacebookFriend:function(rel){
+                        module.sendRequestToInviteFacebookFriend(v.option.id, rel, function (r) {
                             if(r == null) {
                                 f.event.select.off();
                                 storage.alert(module.getMsg('alert_invitation_has_failed'));
