@@ -1,5 +1,6 @@
 #JMBFamiliesContainer {
 	position:relative;
+    overflow: hidden;
 }
 .jmb-families-body{}
 #JMBFamiliesContainer .home{

@@ -771,7 +771,7 @@ JMBFamiliesObject.prototype = {
         }
 
         jQuery(module.parent).height(start_top + 200);
-        jQuery(module.parent).css('overflow', 'hidden');
+        //jQuery(module.parent).css('overflow', 'hidden');
         if(!module.clickItem || jQuery.browser.msie){
             module.startAnimation(cont, childs);
         } else {
@@ -819,7 +819,7 @@ JMBFamiliesObject.prototype = {
 								jQuery(el).css("opacity", 0).css("visibility", "visible").animate({"opacity":1}, 300*i);
 							}
 						});
-						jQuery(module.parent).css('overflow', 'visible');
+						//jQuery(module.parent).css('overflow', 'visible');
 					});
 				}
 			});
@@ -842,7 +842,7 @@ JMBFamiliesObject.prototype = {
 				jQuery(childs).each(function(i, el){
 					jQuery(el).css("opacity", 0).css("visibility", "visible").animate({"opacity":1}, 300*i);
 				});
-				jQuery(module.parent).css('overflow', 'visible');
+				//jQuery(module.parent).css('overflow', 'visible');
 			});
 		}
 		
