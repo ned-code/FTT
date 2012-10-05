@@ -132,7 +132,7 @@ JMBFamiliesObject.prototype = {
     },
 	_spouses:function(object, defaultFamily){
         if(!object) return false;
-        var module = this,families, spouses = [], family, spouse, childrens = {}, childs, el, child, def;
+        var module = this,families, spouses = [], family, spouse, childrens = {}, childs, el, child, def, object, parents;
         families = object.families;
         def = object.user.default_family;
 		if(families==null) return [];
@@ -158,7 +158,15 @@ JMBFamiliesObject.prototype = {
         if(typeof(defaultFamily) !== 'undefined'){
             def = defaultFamily;
         } else if(storage.usertree.gedcom_id in childrens) {
-            def = module.famId;
+            object = storage.usertree.pull[storage.usertree.gedcom_id];
+            parents = object.parents;
+            for(key in parents){
+                if(!parents.hasOwnProperty(key)) continue;
+                if(key != 'length'){
+                    def = key;
+                    break;
+                }
+            }
         }
         return spouses.sort(function(){
 			if(arguments[0][0] == def){
