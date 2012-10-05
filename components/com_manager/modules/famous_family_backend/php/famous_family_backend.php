@@ -51,7 +51,7 @@ class JMBFamousFamilyBackend {
 		$sql = "SELECT ind.id, name.first_name, name.middle_name, name.last_name  FROM #__mb_tree_links as links
 				LEFT JOIN #__mb_individuals as ind ON ind.id = links.individuals_id
 				LEFT JOIN #__mb_names as name ON name.gid = ind.id
-				WHERE links.type = 'USER' OR links.type = 'OWNER'";
+				WHERE ind.fid != '0'";
 		$this->db->setQuery($sql);
 		$rows = $this->db->loadAssocList();
 		return $rows;

@@ -131,13 +131,16 @@ class FTTUserLibrary {
     }
 
     protected function getCurrentAlias(){
-        $menu   = &JSite::getMenu();
-        $active   = $menu->getActive();
-        if(is_object($active)){
-            return $active->alias;
-        } else {
-            return false;
+        if(class_exists('JSite')){
+            $menu   = &JSite::getMenu();
+            $active   = $menu->getActive();
+            if(is_object($active)){
+                return $active->alias;
+            } else {
+                return false;
+            }
         }
+        return false;
     }
 
     protected function getGedcomId($userInSystem){
