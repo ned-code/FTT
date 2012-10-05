@@ -4,7 +4,7 @@ function Host(){
 
 Host.prototype = {
         callMethod:function(module, classname, method, args, callback){
-            var url = storage.baseurl+storage.url+'php/ajax.php';
+            var url = storage.get.baseurl()+storage.url+'php/ajax.php';
             var key = storage.request.key();
             var xnr = jQuery.ajax({
             	url: url,

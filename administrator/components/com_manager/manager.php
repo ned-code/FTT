@@ -85,4 +85,8 @@ $document->addStyleSheet('../components/com_manager/js/jquery.autocomplete.css')
 $document->addScript('../components/com_manager/js/jquery.autocomplete.min.js');
 
 $document->addCustomTag( '<script type="text/javascript">jQuery.noConflict();</script>' );
+
+$baseurl = Juri::base();
+
+$document->addCustomTag('<script>(function(s){ if("undefined" !== s){ storage.baseurl = "'.$baseurl.'";  } })(storage)</script>');
 ?>

@@ -5,7 +5,7 @@ storage.url = '/components/com_manager/';
 storage.baseurl = '';
 host = new Host();
 var date = new Date();
-        var id =  Math.floor(date.getTime() /1000);
+var id =  Math.floor(date.getTime() /1000);
 storage.session = id;
 
 storage.request = {};
@@ -34,6 +34,18 @@ storage.request.cleaner = function(){
 	}
 	storage.request.pull.length = 0;
 }
+
+
+storage.get = {
+    baseurl:function(){
+        var url =  storage.baseurl;
+        var parts = url.split('/');
+        var end = parts.splice(parts.length - 2 , 1 );
+        return parts.join('/');
+    }
+}
+
+
 
 dhtmlxEvent(window,"load",function(){
     var dhxLayoutParent, dhxLayout, dhxTree;
