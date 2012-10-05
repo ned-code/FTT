@@ -128,7 +128,7 @@ JMBInvitation.prototype = {
         }, callback);
         return true;
         function getName(){
-            return 'Click HERE to see your invition';
+            return module.getMsg('HERE_TO_ACCEPT');
         }
         function getTo(){
             return facebook_id;
