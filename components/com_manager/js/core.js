@@ -250,14 +250,29 @@ storage.usertree.parse = function(object){
         })(),
         is_death:(function(){
             var event = user['death'];
-            /*
-            if(event!=null){
+            var birth = user['birth'];
+            if(event != null){
                 var date = event.date;
-                return ( date[0]!=null || date[1] != null || date[2] != null )?1:0;
+                var place = event.place;
+                if(date != null){
+                    if(date[0] != null || date[1] != null || date[2] != null){
+                        return true;
+                    }
+                    if(place != null){
+                        return true;
+                    }
+                }
             }
-            return 0;
-            */
-            return (event!=null)?1:0;
+            if(birth != null){
+                var birthDate = birth.date;
+                if(birthDate != null && birthDate[2] != null){
+                    var year = (new Date()).getFullYear() - birthDate[2];
+                    if(year > 120){
+                        return true;
+                    }
+                }
+            }
+            return false;
         })(),
 		is_alive:user.is_alive,
 		is_married_event:function(id){
@@ -356,6 +371,11 @@ storage.usertree.parse = function(object){
                     if(birthDate[2] != null && deathDate[2] != null){
                         return deathDate[2] - birthDate[2];
                     }
+                }
+            } else if(birth != null){
+                var birthDate = birth.date;
+                if(birthDate && birthDate[2] != null){
+                    return (new Date()).getFullYear() - birthDate[2];
                 }
             }
             return 0;

@@ -27,7 +27,7 @@ class JMBQuickFacts {
                         $date = $object['user']['birth']['date'];
                         if(is_array($date)&&$date[2]!==null){
                             $turns = date('Y') - $date[2];
-                            if($turns <= 150 && $turns > $oldest){
+                            if($turns <= 120 && $turns > $oldest){
                                 $oldest_object = $object;
                                 $oldest = $turns;
                             }

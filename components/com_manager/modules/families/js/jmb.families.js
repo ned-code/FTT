@@ -378,7 +378,7 @@ JMBFamiliesObject.prototype = {
 					if(facebook_id != '0'){
 						sb._('<div class="jmb-families-fb-icon parent" id="')._(facebook_id)._('">&nbsp;</div>');
 					}
-					if(get.is_death){
+					if(get.is_death || get.turns > 120){
 						sb._('<div class="jmb-families-death-marker parent">&nbsp;</div>');
 					}
 				sb._('</div>');
@@ -428,7 +428,7 @@ JMBFamiliesObject.prototype = {
                     if(facebook_id != '0'){
 						sb._('<div class="jmb-families-fb-icon parent" id="')._(facebook_id)._('">&nbsp;</div>');
 					}
-					if(get.is_death){
+					if(get.is_death || get.turns > 120){
 						sb._('<div class="jmb-families-death-marker parent">&nbsp;</div>');
 					}
 				sb._('</div>');
@@ -464,7 +464,7 @@ JMBFamiliesObject.prototype = {
                 if(facebook_id != '0'){
                     sb._('<div class="jmb-families-fb-icon former" id="')._(facebook_id)._('">&nbsp;</div>');
                 }
-                if(get.is_death){
+                if(get.is_death || get.turns > 120){
                     sb._('<div class="jmb-families-death-marker">&nbsp;</div>');
                 }
             sb._('</div>');
@@ -509,7 +509,7 @@ JMBFamiliesObject.prototype = {
                     if(facebook_id != '0'){
 						sb._('<div class="jmb-families-fb-icon child" id="')._(facebook_id)._('">&nbsp;</div>');
 					}
-					if(get.is_death){
+					if(get.is_death || get.turns > 120){
 						sb._('<div class="jmb-families-death-marker parent">&nbsp;</div>');
 					}
 				sb._('</div>')
