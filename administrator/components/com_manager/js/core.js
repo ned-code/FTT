@@ -55,6 +55,26 @@ storage.getJSON = function(str){
     return json;
 }
 
+storage.callMethod = function(module, classname, method, args, callback){
+    var url = storage.baseurl+storage.url+'php/ajax.php';
+    var key = storage.request.key();
+    var xnr = jQuery.ajax({
+        url: url,
+        type: "POST",
+        data: 'module='+module+'&class='+classname+'&method='+method+'&args='+args,
+        dataType: "html",
+        complete : function (req, err) {
+            if(err == "success"){
+                callback(req);
+            } else {
+                callback(false);
+            }
+        }
+    });
+    storage.request.add(xnr, key);
+    return xnr;
+}
+
 dhtmlxEvent(window,"load",function(){
     var dhxLayoutParent, dhxLayout, dhxTree;
 	
