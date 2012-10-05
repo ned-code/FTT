@@ -45,7 +45,15 @@ storage.get = {
     }
 }
 
-
+storage.getJSON = function(str){
+    var json;
+    try {
+        json = jQuery.parseJSON(str);
+    } catch (e) {
+        return false;
+    }
+    return json;
+}
 
 dhtmlxEvent(window,"load",function(){
     var dhxLayoutParent, dhxLayout, dhxTree;
