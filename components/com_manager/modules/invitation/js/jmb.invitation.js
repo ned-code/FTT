@@ -143,7 +143,10 @@ JMBInvitation.prototype = {
             var sb = storage.stringBuffer();
             var object = storage.usertree.pull[storage.usertree.gedcom_id];
             var parse = storage.usertree.parse(object);
-            sb._(module.getMsg('your'))._(' ')._(rel)._(', ')._(parse.name)._(', ');
+            if(rel){
+                sb._(module.getMsg('your'))._(' ')._(rel)._(', ');
+            }
+            sb._(parse.name)._(', ');
             sb._(module.getMsg('HAS_INVITED'));
             return sb.result();
         }

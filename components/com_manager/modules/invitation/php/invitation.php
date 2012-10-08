@@ -142,7 +142,7 @@ class JMBInvitation {
         $dear = $recipient['user']['gender'] == "M"?$language['FTT_MOD_INVITATION_DEAR_MALE']:$language['FTT_MOD_INVITATION_DEAR_FEMALE'];
 
         $tpl = str_replace('__MSG_DEAR__', $dear, $tpl);
-        $tpl = str_replace('__MSG_YOUR__', $language['FTT_MOD_INVITATION_YOUR'], $tpl);
+        $tpl = str_replace('__MSG_YOUR__', ($relation)?$language['FTT_MOD_INVITATION_YOUR']:'', $tpl);
         $tpl = str_replace('__MSG_HAS_INVITED__', $language['FTT_MOD_INVITATION_HAS_INVITED'], $tpl);
         $tpl = str_replace('__MSG_CLICK_HERE_TO_ACCEPT__', $language['FTT_MOD_INVITATION_CLICK_HERE_TO_ACCEPT'], $tpl);
         $tpl = str_replace('__MSG_CLICK__', $language['FTT_MOD_INVITATION_CLICK'], $tpl);
@@ -155,7 +155,7 @@ class JMBInvitation {
         $tpl = str_replace('__MSG_THE_FAMILY_TREETOP_TEAM__', $language['FTT_MOD_INVITATION_THE_FAMILY_TREETOP_TEAM'], $tpl);
 
         $tpl = str_replace('__RECIPIENT_FIRST_NAME__', $recipient['user']['first_name'], $tpl);
-        $tpl = str_replace('__RELATION__', $relation, $tpl);
+        $tpl = str_replace('__RELATION__', ($relation)?$relation.",":'', $tpl);
         $tpl = str_replace('__USER_NAME__', $owner['user']['first_name'].' '.$owner['user']['last_name'], $tpl);
         $tpl = str_replace('__JPATH_BASE__', $this->host->getBaseUrl(), $tpl);
         $tpl = str_replace('__TOKEN__', $token, $tpl);
