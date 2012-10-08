@@ -38,7 +38,13 @@ function FamousFamilyBackend(obj){
 		sb._('</table>');
 		return jQuery(sb.result());
 	}
-	var getName = function(object){ return [object.first_name, object.middle_name, object.last_name].join(' ') }
+	var getName = function(object, user){
+        if('undefined' !== typeof(user)){
+            return [object.first_name, object.middle_name, object.last_name].join(' ');
+        } else {
+            return object.name;
+        }
+    }
 	var getTime = function(time){ 
 		var t = time.split(/[- :]/); 
 		return (t[0]!='0000'&&t[1]!='00'&&t[2]!='00')?new Date(t[0], t[1]-1, t[2], t[3], t[4], t[5]): false; 
@@ -175,7 +181,7 @@ function FamousFamilyBackend(obj){
 				sb._('<div>')
 					sb._('<select name="individuals_id">');
 						jQuery(object.relatives).each(function(i, ind){
-							sb._('<option value="')._(ind.id)._('">')._(getName(ind))._('</option>');
+							sb._('<option value="')._(ind.id)._('">')._(getName(ind, true))._('</option>');
 						});
 					sb._('</select>');
 				sb._('</div>');
@@ -219,7 +225,7 @@ function FamousFamilyBackend(obj){
 			st._('<form id="jmb_create_famous_family_keeper" method="post" target="iframe-famous-family">');
 				st._('<div class="jmb-famous-family-keeper-create">');
 					st._('<span>Select Keeper:</span>');
-					st._('<select name="individuals_id">');
+					st._('<select name="id">');
 						jQuery(module.json.keeper_list).each(function(i, keeper){
 							st._('<option value="')._(keeper.id)._('">')._(getName(keeper))._('</option>')
 						});
@@ -237,12 +243,12 @@ function FamousFamilyBackend(obj){
 			module.ajaxForm(keeperForm, 'createTreeKeepers', object.id, function(res){
 				if(res.keeper_info){
 					var keeper = res.keeper_info[0];
-					var individuals_id = keeper.individuals_id;
+					var joomla_id = keeper.user_id;
 					if(module.json.sort_families[object.id]){
 						if(!module.json.sort_families[object.id].keepers){
 							module.json.sort_families[object.id].keepers = {};
 						}
-						module.json.sort_families[object.id].keepers[individuals_id] = keeper;
+						module.json.sort_families[object.id].keepers[joomla_id] = keeper;
 					}
 					var time = res.time;
 					var table = jQuery(content[1]).find('table');
@@ -250,7 +256,7 @@ function FamousFamilyBackend(obj){
 					st._('<tr>');
 						st._('<td><div><span>')._(getName(keeper))._('</span></div></td>');
 						st._('<td><div><span>')._(getLastLogin(keeper, time))._('</span></div></td>');
-						st._('<td style="width:22px;"><div id="')._(individuals_id)._('" famous_family="')._(object.id)._('" class="delete"><span>&nbsp;</span></div></td>');
+						st._('<td style="width:22px;"><div id="')._(joomla_id)._('" famous_family="')._(object.id)._('" class="delete"><span>&nbsp;</span></div></td>');
 					st._('</tr>');
 					var tr = jQuery(st.result());
 					setDeletEventHandler(tr);

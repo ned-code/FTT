@@ -7,22 +7,32 @@ class JMBFamousFamilyBackend {
 		$this->host = &FamilyTreeTopHostLibrary::getInstance();
 		$this->db = new JMBAjax();
 	}
-	protected function getTreeKeeper($ind_key){
+	protected function getTreeKeeper($id){
+        /*
 		$sql_string = "SELECT keepers.id, keepers.famous_family, keepers.individuals_id, name.first_name, name.middle_name, name.last_name, ind.last_login FROM #__mb_tree_keepers as keepers
 				LEFT JOIN #__mb_individuals as ind ON ind.id = keepers.individuals_id
 				LEFT JOIN #__mb_names as name ON name.gid = keepers.individuals_id
 				WHERE ind.id = ?
 				";
-		$this->db->setQuery($sql_string, $ind_key);
+        */
+        $sql_string = "SELECT keeper.id, keeper.user_id, keeper.family_id, user.name, user.username, user.lastvisitDate as last_login FROM #__mb_tree_keepers as keeper
+                        LEFT JOIN #__users as user ON user.id = keeper.user_id
+                        WHERE user_id = ?";
+		$this->db->setQuery($sql_string, $id);
 		$rows = $this->db->loadAssocList();
 		if($rows == null) return false;
 		return $rows;
 	}
 	
 	protected function getTreeKeepers(){
+        /*
 		$sqlString = "SELECT keepers.id, keepers.famous_family, keepers.individuals_id, name.first_name, name.middle_name, name.last_name, ind.last_login FROM #__mb_tree_keepers as keepers
 				LEFT JOIN #__mb_individuals as ind ON ind.id = keepers.individuals_id
 				LEFT JOIN #__mb_names as name ON name.gid = keepers.individuals_id";
+        */
+        $sqlString = "SELECT keeper.id, keeper.user_id, keeper.family_id, user.name, user.username, user.lastvisitDate as last_login FROM #__mb_tree_keepers as keeper
+                      LEFT JOIN #__users as user ON user.id = keeper.user_id
+                        WHERE 1";
 		$this->db->setQuery($sqlString);
 		$rows = $this->db->loadAssocList();
 		if($rows == null) return array();
@@ -32,7 +42,7 @@ class JMBFamousFamilyBackend {
 	protected function sortKeepers($rows){
 		$result = array();
 		foreach($rows as $row){
-			$result[$row['famous_family']][$row['individuals_id']] = $row;
+			$result[$row['family_id']][$row['user_id']] = $row;
 		}
 		return $result;
 	}
@@ -48,10 +58,13 @@ class JMBFamousFamilyBackend {
 	}
 	
 	protected function getKeeperList(){
-		$sql = "SELECT ind.id, name.first_name, name.middle_name, name.last_name  FROM #__mb_tree_links as links
+		/*
+        $sql = "SELECT ind.id, name.first_name, name.middle_name, name.last_name  FROM #__mb_tree_links as links
 				LEFT JOIN #__mb_individuals as ind ON ind.id = links.individuals_id
 				LEFT JOIN #__mb_names as name ON name.gid = ind.id
 				WHERE ind.fid != '0'";
+        */
+        $sql = "SELECT id, name, username FROM #__users WHERE 1";
 		$this->db->setQuery($sql);
 		$rows = $this->db->loadAssocList();
 		return $rows;
@@ -152,21 +165,21 @@ class JMBFamousFamilyBackend {
 		return json_encode(array('message'=>'Tree data saved.'));
 	}
 	
-	public function createTreeKeepers($famous_family){
-		$individuals_id = $_POST['individuals_id'];
+	public function createTreeKeepers($family_id){
+		$joomla_id = JRequest::getVar('id');
 		//get individuals 
-		$sql_string = "SELECT id FROM #__mb_individuals WHERE id = ? LIMIT 1";
-		$this->db->setQuery($sql_string, $individuals_id);
+		$sql_string = "SELECT id FROM #__users WHERE id = ? LIMIT 1";
+		$this->db->setQuery($sql_string, $joomla_id);
 		$rows = $this->db->loadAssocList();
 		//check if keeper already added
-		$sql_string = "SELECT id FROM #__mb_tree_keepers WHERE individuals_id = ? AND famous_family = ?";
-		$this->db->setQuery($sql_string, $individuals_id, $famous_family);
+		$sql_string = "SELECT id FROM #__mb_tree_keepers WHERE user_id = ? AND family_id = ?";
+		$this->db->setQuery($sql_string, $joomla_id, $family_id);
 		$keeper = $this->db->loadAssocList();
 		if($rows!=null&&$keeper==null){
-			$this->db->setQuery("INSERT INTO #__mb_tree_keepers (`id`,`individuals_id`,`famous_family`) VALUES (NULL, ?, ?)", $individuals_id, $famous_family);
+			$this->db->setQuery("INSERT INTO #__mb_tree_keepers (`id`,`user_id`,`family_id`) VALUES (NULL, ?, ?)", $joomla_id, $family_id);
 			$this->db->query();
 			
-			$keeper_info = $this->getTreeKeeper($individuals_id);
+			$keeper_info = $this->getTreeKeeper($joomla_id);
 			$time = date('Y-m-d H:i:s');
 			return json_encode(array('message'=>'Keeper of the tree is added successfully.','keeper_info'=>$keeper_info, 'time'=>$time));
 		}
@@ -175,7 +188,7 @@ class JMBFamousFamilyBackend {
 	
 	public function deleteTreeKeeper($args){
 		$args = explode(';', $args);
-		$sql_string = "DELETE FROM #__mb_tree_keepers WHERE individuals_id = ? AND famous_family = ?";
+		$sql_string = "DELETE FROM #__mb_tree_keepers WHERE user_id = ? AND family_id = ?";
 		$this->db->setQuery($sql_string, $args[0], $args[1]);
 		$this->db->query();
 	}
