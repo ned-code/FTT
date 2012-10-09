@@ -170,6 +170,12 @@ function JMBInvitateObject(obj){
         return sb.result();
     }
 
+    fn.setGlobalData = function(json){
+        if(json.data && json.data.target && json.data.target.TreeId){
+            storage.usertree.tree_id = json.data.target.TreeId;
+        }
+    }
+
     fn.boxFamily = function(json, object){
         if(json.family&&json.family.length==0) return false;
         var cont = _create(),
@@ -492,11 +498,11 @@ function JMBInvitateObject(obj){
                 cont = fn.boxInvitation(json);
             }
         }
-
         object = jQuery(cont);
         jQuery('.content').css('width', '100%').css('margin-top', '30px').css('max-width', 'none');
         jQuery('div.right').hide();
         jQuery(obj).append(object);
+        fn.setGlobalData(json);
         fn.boxFamily(json, object);
         fn.handlerButtonClick(object)
     });
