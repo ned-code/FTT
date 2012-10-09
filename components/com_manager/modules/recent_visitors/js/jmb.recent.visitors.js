@@ -5,6 +5,7 @@ function JMBRecentVisitorsObject(obj){
         loggedByFamous = parseInt(jQuery(document.body).attr('_type')),
         alias = jQuery(document.body).attr('_alias'),
         settings = storage.settings,
+        ul,
         functions ={
             createBody:function(json){
                 var st = storage.stringBuffer();
@@ -98,9 +99,9 @@ function JMBRecentVisitorsObject(obj){
                     functions.setMiniTooltip(div, id);
                 });
             },
-            reload:function(content, u, json){
-                jQuery(u).remove();
-                var  ul= jQuery('<ul></ul>');
+            reload:function(content, json){
+                jQuery(ul).remove();
+                ul = jQuery('<ul></ul>');
                 functions.init_visitors(ul, json);
                 functions.init_mini_profile(ul, json);
                 jQuery(content[1]).append(ul);
@@ -118,13 +119,13 @@ function JMBRecentVisitorsObject(obj){
                         message = json.language;
                     }
                     content = functions.createBody(json);
-                    var ul = jQuery('<ul></ul>');
+                    ul = jQuery('<ul></ul>');
                     functions.init_visitors(ul, json);
                     functions.init_mini_profile(ul, json);
                     jQuery(content[1]).append(ul);
                     jQuery(obj).append(content);
                     storage.profile.bind("JMBRecentVisitorsObject", function(){
-                        functions.reload(content, ul, json);
+                        functions.reload(content, json);
                     });
                     if(callback) callback();
                 });
