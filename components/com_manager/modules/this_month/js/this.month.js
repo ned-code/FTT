@@ -39,6 +39,10 @@ function JMBThisMonthObject(obj){
 
     init(getThisMonth());
 
+    storage.profile.bind("JMBThisMonthObject", function(){
+        reload();
+    })
+
     storage.family_line.bind('JMBThisMonthObject', function(res){
         jQuery(module.table).find('div.person').each(function(i, el){
             if(isTypePencil(res)){

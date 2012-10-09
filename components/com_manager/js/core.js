@@ -998,7 +998,9 @@ core.renderTabs = function(args){
 		
 		//cleaner objects
 		storage.request.cleaner();
-		storage.tooltip.cleaner();
+		storage.profile.cleaner();
+        storage.tooltip.cleaner();
+
 
 		storage.tabs.activeTab = this;
 		storage.tabs.click();

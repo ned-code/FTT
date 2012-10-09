@@ -98,6 +98,14 @@ function JMBRecentVisitorsObject(obj){
                     functions.setMiniTooltip(div, id);
                 });
             },
+            reload:function(content, u, json){
+                jQuery(u).remove();
+                var  ul= jQuery('<ul></ul>');
+                functions.init_visitors(ul, json);
+                functions.init_mini_profile(ul, json);
+                jQuery(content[1]).append(ul);
+                jQuery(obj).append(content);
+            },
             render:function(callback){
                 parent.ajax('getRecentVisitors', null, function(res){
                     if(!res) return false;
@@ -115,6 +123,9 @@ function JMBRecentVisitorsObject(obj){
                     functions.init_mini_profile(ul, json);
                     jQuery(content[1]).append(ul);
                     jQuery(obj).append(content);
+                    storage.profile.bind("JMBRecentVisitorsObject", function(){
+                        functions.reload(content, ul, json);
+                    });
                     if(callback) callback();
                 });
             }

@@ -66,9 +66,8 @@ function JMBLatestUpdatesObject(offsetParent){
                             gedcom_id:gedcom_id,
                             target:li,
                             afterEditorClose:function(){
-                                storage.tooltip.update();
-                                fn.clean();
-                                fn.load();
+                                //fn.clean();
+                                //fn.load();
                             }
                         });
                     } else {
@@ -107,6 +106,10 @@ function JMBLatestUpdatesObject(offsetParent){
 
     fn.load();
 
+    storage.profile.bind("JMBLatestUpdatesObject", function(){
+        fn.clean();
+        fn.load();
+    });
 	
 	storage.family_line.bind('JMBLatestUpdatesObject', function(res){
 		if(res._type!= 'pencil') return false;

@@ -111,6 +111,12 @@ function JMBQuickFactsObject(object){
 				cont = fn.create();
 				fn.setMiniProfile(jQuery(cont).find('div#youngest_living_member'), json.youngest);
 				fn.setMiniProfile(jQuery(cont).find('div#oldest_living_member'), json.oldest);
+                storage.profile.bind("JMBQuickFactsObject", function(){
+                    jQuery(cont).remove();
+                    cont = fn.create();
+                    fn.setMiniProfile(jQuery(cont).find('div#youngest_living_member'), json.youngest);
+                    fn.setMiniProfile(jQuery(cont).find('div#oldest_living_member'), json.oldest);
+                });
 				callback();
 			});
 		}

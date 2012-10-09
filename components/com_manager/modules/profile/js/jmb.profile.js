@@ -769,6 +769,7 @@ function JMBProfile(){
         }
     }
     module.box = jQuery('<div id="jmb:dialog" class="jmb-dialog-container"></div>');
+    module.fnPull = {};
 
     //create iframe
     if(jQuery("#iframe-profile").length==0){
@@ -805,6 +806,23 @@ JMBProfile.prototype = {
         module.pull = storage.usertree.update(objects, (module.tree_id == storage.usertree.tree_id) );
         module.object = module.pull[module.gedcom_id];
         module.user = module.functions.getParseUserInfo();
+        module.do();
+    },
+    bind:function(n, c){
+        var module = this;
+        module.fnPull[n] = c;
+    },
+    cleaner:function(){
+        var module = this;
+        module.fnPull = {};
+    },
+    do:function(){
+        var module = this, key, pull;
+        pull = module.fnPull;
+        for(key in pull){
+            if(!pull.hasOwnProperty(key)) continue;
+            pull[key]();
+        }
     },
     render:function(id){
         var module = this,
