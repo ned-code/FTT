@@ -806,7 +806,7 @@ JMBProfile.prototype = {
         module.pull = storage.usertree.update(objects, (module.tree_id == storage.usertree.tree_id) );
         module.object = module.pull[module.gedcom_id];
         module.user = module.functions.getParseUserInfo();
-        module.do();
+        module.doCall();
     },
     bind:function(n, c){
         var module = this;
@@ -816,7 +816,7 @@ JMBProfile.prototype = {
         var module = this;
         module.fnPull = {};
     },
-    do:function(){
+    doCall:function(){
         var module = this, key, pull;
         pull = module.fnPull;
         for(key in pull){
