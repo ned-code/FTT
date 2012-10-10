@@ -13,6 +13,43 @@ class JMBQuickFacts {
 	}
 	
 	protected function getFacts($usertree){
+        $count = 0;
+        $youngest = 9999;
+        $youngest_object = null;
+        $oldest = 0;
+        $oldest_object = null;
+        $type = gettype($usertree);
+        if('array' == $type || 'object' == $type){
+            foreach($usertree as $object){
+                if(isset($object['user']) && $object['user']['death'] == null){
+                    $birth = $object['user']['birth'];
+                    if($birth != null){
+                       $date = $birth['date'];
+                       if($birth['date'] != null && $date[2] != null){
+                            $turns = date("Y") - $date[2];
+                            if($turns <= 120){
+                                $count++;
+                                if($turns > $oldest){
+                                    $oldest_object = $object;
+                                    $oldest = $turns;
+                                }
+                                if($turns < $youngest){
+                                    $youngest_object = $object;
+                                    $youngest = $turns;
+                                }
+                            }
+                       } else {
+                           $count++;
+                       }
+                    } else {
+                        $count++;
+                    }
+                }
+            }
+        }
+        return array('living'=>$count,'youngest'=>$youngest_object,'oldest'=>$oldest_object);
+
+        /*
 		$count = 0;
 		$youngest = 9999;
 		$youngest_object = null;
@@ -41,6 +78,7 @@ class JMBQuickFacts {
             }
         }
 		return array('living'=>$count,'youngest'=>$youngest_object,'oldest'=>$oldest_object);
+        */
 	}
 	
 	public function get(){
