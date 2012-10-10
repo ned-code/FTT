@@ -28,7 +28,7 @@ function JMBFamiliesObject(obj, popup){
 			height:80
 		}
 	}
-	module.borders = module._generateBorders(100);
+    module.borders = module._generateBorders(100);
     module.border_iter = 0;
 	module.spouse_border = {};
 
@@ -65,6 +65,49 @@ JMBFamiliesObject.prototype = {
 		})
 	},
     _generateBorders:function(n){
+        var retBorders = [],
+            isBorders = {},
+            each,
+            getColor,
+            setColor;
+
+        getColor = function(){ return '#'+Math.floor(Math.random()*16777215).toString(16); }
+        setColor = function(color){
+            if(!color){
+                color = getColor();
+            }
+            if(!isBorders[color]){
+                isBorders[color] = true;
+                retBorders.push(color);
+                return true;
+            } else {
+                return false;
+            }
+        }
+        each = function(start, end, callback){
+            var i, length;
+            if('object' === typeof(end)){
+                length = end.length;
+            } else if('string' === typeof(end)){
+                length = "0" + end;
+            } else if('number' === typeof(end)){
+                length = end;
+            }
+            for(i = start ; i < length ; i++){
+                if(!callback(i, end)){
+                    i--;
+                }
+            }
+        }
+        each(0, ["#3f48cc","#1d9441","#b97a57","#934293","#eab600","#00a2e8","#ed1c24","#7092be"], function(i, colors){
+            return setColor(colors[i]);
+        });
+        each(8, 100, function(i, length){
+            return setColor(false);
+        });
+
+        return retBorders;
+        /*
         var retBorders = [];
         var isBorders = {};
         var getColor = function(){ return '#'+Math.floor(Math.random()*16777215).toString(16); }
@@ -78,6 +121,7 @@ JMBFamiliesObject.prototype = {
             }
         }
         return retBorders;
+        */
     },
     _getBorderColor:function(sp){
         if(!sp) return "#000000";
