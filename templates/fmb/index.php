@@ -92,12 +92,6 @@ if (stripos($user_agent, 'MSIE 6.0') !== false
                                     <div id="jmb_feedback_form">
                                         <div style="display:none;" class="likes">
                                             <!-- AddThis Button BEGIN -->
-                                                <div class="addthis_toolbox addthis_default_style addthis_32x32_style">
-                                                    <div class="message"></div>
-                                                    <div class="facebook"><a class="addthis_button_facebook at300b"></a></div>
-                                                    <div class="twitter"><a class="addthis_button_twitter at300b"></a></div>
-                                                    <div class="email"><a class="addthis_button_email at300b"></a></div>
-                                                </div>
                                                 <script>
                                                     if(window == window.top){
                                                         (function(w){
@@ -109,6 +103,12 @@ if (stripos($user_agent, 'MSIE 6.0') !== false
                                                         })(window)
                                                     }
                                                 </script>
+                                                <div class="addthis_toolbox addthis_default_style addthis_32x32_style">
+                                                    <div class="message"></div>
+                                                    <div class="facebook"><a class="addthis_button_facebook at300b"></a></div>
+                                                    <div class="twitter"><a class="addthis_button_twitter at300b"></a></div>
+                                                    <div class="email"><a class="addthis_button_email at300b"></a></div>
+                                                </div>
                                             <!-- AddThis Button END -->
                                         </div>
                                     </div>
