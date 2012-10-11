@@ -261,7 +261,7 @@ class JMBUserTree {
                     }
 					if(!empty($family['childrens'])){
 						foreach($family['childrens'] as $child){
-							$this->_setUser($child['gedcom_id'], $objects, $level, false);
+							$this->_setUser($child['gedcom_id'], $objects, false, false);
 						}
 					}
 				}
