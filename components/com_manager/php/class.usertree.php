@@ -243,7 +243,7 @@ class JMBUserTree {
 		
 		$objects[$gedcom_id] = $node;
 		
-		if(!empty($node['parents'])){
+		if(!empty($node['parents']) || !$child){
 			foreach($node['parents'] as $family){
 				if($family!=='length'){
 					$this->_setUser($family['father']['gedcom_id'], $objects, $level);
@@ -254,11 +254,11 @@ class JMBUserTree {
 		if(!empty($node['families'])){
 			foreach($node['families'] as $family){
 				if($family!=='length'){
-                    if($this->_Permission!=='OWNER'&&$level>=3){
-						$this->_setUserSpouse($family['spouse'], $objects);
-					} else {
-						$this->_setUser($family['spouse'], $objects, $level + 1);
-					}
+                    if($level >= 3){
+                        $this->_setUserSpouse($family['spouse'], $objects);
+                    } else {
+                        $this->_setUser($family['spouse'], $objects, $level + 1, false);
+                    }
 					if(!empty($family['childrens'])){
 						foreach($family['childrens'] as $child){
 							$this->_setUser($child['gedcom_id'], $objects, $level, false);

@@ -243,7 +243,7 @@ JMBFamiliesObject.prototype = {
                     if(family.childrens != null){
                         for(var i = 0 ; i < family.childrens.length ; i++){
                             child = family.childrens[i];
-                            if(!isChild[child.gedcom_id]){
+                            if(!isChild[child.gedcom_id] && 'undefined' !== typeof(module.usertree[child.gedcom_id])){
                                 isChild[child.gedcom_id] = true;
                                 childrens.push(child);
                             }
@@ -257,6 +257,7 @@ JMBFamiliesObject.prototype = {
         var fn = {};
         fn.getParseObjectDate = function(id){
             var object = p[id];
+            if('undefined' === typeof(object)) return 0;
             var parse = storage.usertree.parse(object);
             return parse.date("birth", 2);
         }
@@ -405,7 +406,7 @@ JMBFamiliesObject.prototype = {
 			fam_opt = storage.family_line.get.opt(),
             parent_key;
 
-        if('undefined' === typeof(object)) return '';
+        if('undefined' === typeof(object)) return false;
 
 		sb._('<div>');
 			if(parent_key = module._checkParents(object)){
@@ -455,7 +456,7 @@ JMBFamiliesObject.prototype = {
 			fam_opt = storage.family_line.get.opt(),
 			parent_key;
 
-        if('undefined' === typeof(object)) return '';
+        if('undefined' === typeof(object)) return false;
 
 		sb._('<div>');
 			if(parent_key = module._checkParents(object)){
@@ -502,7 +503,7 @@ JMBFamiliesObject.prototype = {
 			facebook_id = (object)?object.user.facebook_id:false,
 			get = storage.usertree.parse(object);
 
-        if('undefined' === typeof(object)) return '';
+        if('undefined' === typeof(object)) return false;
 			
 		sb._('<div id="')._(gedcom_id)._('" class="jmb-families-former-spouse-div ')._(position)._('">');
             sb._('<div id="')._(gedcom_id)._('-view" type="imgContainer" class="jmb-families-former-img" style="border:2px solid ')._(bcolor)._('">')._(module._avatar(object, 'parent', 0.5));
@@ -532,16 +533,18 @@ JMBFamiliesObject.prototype = {
 			usertree = module.usertree,
 			gedcom_id = child.gedcom_id,
 			object = usertree[gedcom_id],
-			user = object.user,
-			families = object.families,
-			facebook_id = user.facebook_id,
+			user = (object)?object.user:false,
+			families = (object)?object.families:false,
+			facebook_id = (user)?user.facebook_id:false,
 			edit_button = (k!=1)?'jmb-families-edit-button child small':'jmb-families-edit-button child',
 			child_button_active = (k!=1)?'jmb-families-button childs active small':'jmb-families-button childs active',
 			child_button_unactive = (k!=1)?'jmb-families-button childs small':'jmb-families-button childs',
 			arrow_class = (k!=1)?'jmb-families-arrow-up small':'jmb-families-arrow-up',
-			get = storage.usertree.parse(object),
+			get = (object)?storage.usertree.parse(object):false,
 			fam_opt = storage.family_line.get.opt(),
 			bcolor = (len>1)?module.spouse_border[child.family_id]:"#000000";
+
+        if('undefined' === typeof(object)) return false;
 
 		sb._('<div id="')._(gedcom_id)._('" class="jmb-families-child" style="height:')._(Math.round(170*k))._('px;top:')._(position.top)._('px;left:')._(position.left)._('px;">');
 			sb._('<div id="father_line" style="border: 2px solid ')
@@ -580,7 +583,9 @@ JMBFamiliesObject.prototype = {
             if(spouses.length > 1){
                 for( i = 1 ; i < spouses.length ; i++ ){
                     spouse =  module._former_spouse(spouses[i], module._getBorderColor(spouses[i]), position);
-                    jQuery(cont).append(spouse);
+                    if(spouse){
+                        jQuery(cont).append(spouse);
+                    }
                 }
                 jQuery(cont).addClass('active');
                 if(spouses.length > 3){
@@ -761,14 +766,18 @@ JMBFamiliesObject.prototype = {
         jQuery(module.parent).append(cont);
 
         sircar = module._sircar(gedcom_id);
-        jQuery(cont[0]).css({top:"21px",left:"155px",visibility:"hidden"}).attr('id', gedcom_id).append(sircar);
+        if(sircar){
+            jQuery(cont[0]).css({top:"21px",left:"155px",visibility:"hidden"}).attr('id', gedcom_id).append(sircar);
+        }
 
         if(spouses.length != 0){
             info = module._info(object, spouses[0]);
             jQuery(cont[1]).css({top:"113px", left:"312px",visibility:"hidden"}).append(info);
 
             spouse = module._spouse(spouses[0], module._getBorderColor((spouses.length>1)?spouses[0]:false));
-            jQuery(cont[2]).attr('id', spouses[0][1]).css({top:"21px",left:"430px",visibility:"hidden"}).append(spouse[0]);
+            if(spouse){
+                jQuery(cont[2]).attr('id', spouses[0][1]).css({top:"21px",left:"430px",visibility:"hidden"}).append(spouse[0]);
+            }
         }
 
         if(spouses.length != 0){
@@ -795,9 +804,11 @@ JMBFamiliesObject.prototype = {
                 var pos = {top:start_top, left:start_left+(index*left_del)};
                 module.childsPos[childrens[i].gedcom_id] = pos;
                 childs[i] = module._child(childrens[i], spouses.length, pos);
-                jQuery(childs[i]).css("visibility","hidden");
-                jQuery(module.parent).append(childs[i]);
-                index++;
+                if(childs[i]){
+                    jQuery(childs[i]).css("visibility","hidden");
+                    jQuery(module.parent).append(childs[i]);
+                    index++;
+                }
             }
         }
 
