@@ -230,7 +230,7 @@ class JMBUserTree {
 	/**
 	*
 	*/	
-	protected function _setUser($gedcom_id, &$objects, $level=0){
+	protected function _setUser($gedcom_id, &$objects, $level=0, $child=false){
 		if(isset($objects[$gedcom_id])||empty($gedcom_id)){
 			return false;
 		}
@@ -243,7 +243,7 @@ class JMBUserTree {
 		
 		$objects[$gedcom_id] = $node;
 		
-		if(!empty($node['parents'])){
+		if(!empty($node['parents']) && !$child){
 			foreach($node['parents'] as $family){
 				if($family!=='length'){
 					$this->_setUser($family['father']['gedcom_id'], $objects, $level);
@@ -254,20 +254,24 @@ class JMBUserTree {
 		if(!empty($node['families'])){
 			foreach($node['families'] as $family){
 				if($family!=='length'){
-					if($this->_Permission!=='OWNER'&&$level>=3){
+                    $this->_setUserSpouse($family['spouse'], $objects);
+                    /*
+                    if($this->_Permission!=='OWNER'&&$level>=3){
 						$this->_setUserSpouse($family['spouse'], $objects);
 					} else {
 						$this->_setUser($family['spouse'], $objects, $level + 1);
 					}
+                    */
 					if(!empty($family['childrens'])){
 						foreach($family['childrens'] as $child){
-							$this->_setUser($child['gedcom_id'], $objects, $level);
+							$this->_setUser($child['gedcom_id'], $objects, $level, true);
 						}
 					}
 				}
 			}
 		}
 	}
+
 	/**
 	*
 	*/
