@@ -256,6 +256,8 @@ class JMBUserTree {
 				if($family!=='length'){
                     if($level >= 3){
                         $this->_setUserSpouse($family['spouse'], $objects);
+                    } else if($level == 0){
+                        $this->_setUser($family['spouse'], $objects, $level + 1);
                     } else {
                         $this->_setUser($family['spouse'], $objects, $level + 1, false);
                     }
