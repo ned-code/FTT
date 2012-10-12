@@ -46,7 +46,7 @@ class JMBInvitateClass {
         $objects = $this->host->usertree->getUser($user->TreeId, $user->Id, $gedcom_id);
         $sort = array();
         foreach($objects as $key => $object){
-            if(!empty($key)){
+            if($key != 'length' && $key != null){
                 $id = $object['user']['gedcom_id'];
                 $sort[$id] = $object;
             }
