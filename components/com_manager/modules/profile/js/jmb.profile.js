@@ -68,6 +68,7 @@ function JMBProfile(){
         FTT_MOD_PROFILE_EDITOR_FORM_ADDS_BROTHER_OR_SISTER:"Add brother or sister",
         FTT_MOD_PROFILE_EDITOR_FORM_ADDS_CHILD:"Add child",
         FTT_MOD_PROFILE_EDITOR_DELETE_BUTTON:"Delete Profile",
+        FTT_MOD_PROFILE_EDITOR_ADVANCED_BUTTON: "Advanced Options",
         FTT_MOD_PROFILE_EDITOR_DELETE_CONFIRM:"Are you sure you want to delete the information about that user?",
         FTT_MOD_PROFILE_EDITOR_DELETE_USER_CONFIRM:"You are about to remove yourself from this family tree. Once this is done, you will not be able to view this family tree unless an existing member invites you back.",
         FTT_MOD_PROFILE_EDITOR_DELETE_TREE_CONFIRM:"You are about to remove yourself from this family tree. Since you are the only registered person, all members in this family tree will be completely deleted.",
@@ -1099,8 +1100,37 @@ JMBProfile.prototype = {
             break;
 
             case "more_options":
-                form = jQuery('<div class="delete-button">'+module.message.FTT_MOD_PROFILE_EDITOR_DELETE_BUTTON+'</div>');
-                jQuery(form).click(function(){
+                form = jQuery('<div class="delete-button-container"><div class="delete-button">'+module.message.FTT_MOD_PROFILE_EDITOR_DELETE_BUTTON+'</div><div class="advanced-button">'+module.message.FTT_MOD_PROFILE_EDITOR_ADVANCED_BUTTON+'</div></div>');
+                var deleteFunc = function(args){
+                    return (function(args){
+                        module.functions.ajax('delete', args, function(res){
+                            var json = storage.getJSON(res.responseText);
+                            if(fn.isOwner()){
+                                FB.api({
+                                    method: 'Auth.revokeAuthorization'
+                                }, function(response){
+                                    window.location = storage.baseurl + 'index.php?option=com_jfbconnect&task=logout&return=home';
+                                });
+                                return false;
+                            }
+                            if(!json.deleted){
+                                module.update(json.objects);
+                            } else {
+                                storage.usertree.deleted(json.deleted.objects);
+                                storage.usertree.update(json.objects, true);
+                                jQuery(module.box).dialog('close');
+                            }
+                            return false;
+                        });
+                    })(args);
+                }
+                jQuery(form).find('.delete-button').click(function(){
+                    if(confirm(module.message.FTT_MOD_PROFILE_EDITOR_DELETE_CONFIRM)){
+                        var args = [module.tree_id, module.owner_id, module.gedcom_id, 'delete_data', 'deleteBranch'].join(',');
+                        deleteFunc(args);
+                    }
+                });
+                jQuery(form).find('.advanced-button').click(function(){
                     if(fn.getUsersLength() == 1 && fn.isOwner()){
                         if(confirm(module.message.FTT_MOD_PROFILE_EDITOR_DELETE_FIRST_CONFIRM)){
                             var args = [module.tree_id, module.owner_id, module.gedcom_id, 'delete', 'deleteTree'].join(',');
@@ -1138,25 +1168,7 @@ JMBProfile.prototype = {
                             if(confirm(mes)){
                                 var type = jQuery(this).parent().attr('id');
                                 var args = [module.tree_id, module.owner_id, module.gedcom_id, type, method].join(',');
-                                module.functions.ajax('delete', args, function(res){
-                                    var json = storage.getJSON(res.responseText);
-                                    if(fn.isOwner()){
-                                        FB.api({
-                                            method: 'Auth.revokeAuthorization'
-                                        }, function(response){
-                                            window.location = storage.baseurl + 'index.php?option=com_jfbconnect&task=logout&return=home';
-                                        });
-                                        return false;
-                                    }
-                                    if(!json.deleted){
-                                        module.update(json.objects);
-                                    } else {
-                                        storage.usertree.deleted(json.deleted.objects);
-                                        storage.usertree.update(json.objects, true);
-                                        jQuery(module.box).dialog('close');
-                                    }
-                                    return false;
-                                });
+                                deleteFunc(args);
                             }
                             return false;
                         });

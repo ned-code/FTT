@@ -592,6 +592,11 @@
 /**
 * more options
 */
+.delete-button-container {
+    left: 45%;
+    position: absolute;
+    top: 30%;
+}
 .delete-button {
     background: none repeat scroll 0 0 red;
     border-radius: 5px 5px 5px 5px;
@@ -602,6 +607,11 @@
     margin: 10px;
     text-align: center;
     width: 150px;
+}
+.advanced-button {
+    cursor: pointer;
+    text-align: center;
+    color: #10B0F0;
 }
 .jmb-dialog-options-content{
     margin:10px;
