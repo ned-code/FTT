@@ -323,7 +323,7 @@ function JMBInvitateObject(obj){
                     if(!_families.hasOwnProperty(_k)) continue;
                     if('length' !== _k){
                         _f = _families[_k];
-                        if(null != _f.spouse){
+                        if(null != _f.spouse && family[_f.spouse]){
                             _sp = [_f.id, _f.spouse];
                             _spouses.push(_sp);
                         }
@@ -486,7 +486,10 @@ function JMBInvitateObject(obj){
                 var _sb = storage.stringBuffer(),
                     _gedcomId = spouse[1],
                     _object = family[_gedcomId],
-                    _info = storage.usertree.parse(_object);
+                    _info = (object)?storage.usertree.parse(_object):false;
+
+                if(!_object) return ''
+
                 _sb._('<div>');
                     _sb._('<div id="')._(_gedcomId)._('-view" type="imgContainer" class="ftt-invite-parent-img" style="border:2px solid #')._(bcolor)._(';">');
                         _sb._(_getAvatar(_object, 'parent', 1));
