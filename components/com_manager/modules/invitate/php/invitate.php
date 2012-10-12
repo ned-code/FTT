@@ -168,5 +168,12 @@ class JMBInvitateClass {
 
         return $user->token;
     }
+
+    public function setInvitationLanguage($args){
+        $args = explode(',', $args);
+        $sql_string = "UPDATE  #__mb_variables SET  language = ? WHERE  belongs = ?";
+        $this->host->ajax->setQuery($sql_string, $args[0], $args[1]);
+        $this->host->ajax->query();
+    }
 }
 ?>

@@ -180,8 +180,10 @@ function JMBLogin(){
                                 var prgb = jQuery('<div class="ftt-language-progressbar"><div><span>Loading...</span></div></div>');
                                 jQuery(langBox).append(prgb);
                                 fn.ajax('language', id, function(res){
-                                    //jQuery(prgb).remove();
-                                    window.location.reload();
+                                    callback(id);
+                                    setTimeout(function(){
+                                        window.location.reload();
+                                    }, 1000)
                                 });
                             //}
                             return false;

@@ -612,8 +612,8 @@ function JMBInvitateObject(obj){
                 return false;
             } else {
                 if(json.data.language != storage.usertree.user.language){
-                    storage.login.menu.viewLanguage({def:json.data.language}, function(){
-    
+                    storage.login.menu.viewLanguage({def:json.data.language}, function(langauge){
+                        module.ajax('setInvitationLanguage', [langauge, storage.usertree.user.token].join(','), function(){})
                     });
                 }
                 cont = fn.boxInvitation(json);
