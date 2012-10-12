@@ -47,8 +47,8 @@ class JMBInvitateClass {
         $sort = array();
         foreach($objects as $key => $object){
             if($key != 'length'){
-                $gedcom_id = $object['user']['gedcom_id'];
-                $sort[$gedcom_id] = $object;
+                $id = $object['user']['gedcom_id'];
+                $sort[$id] = $object;
             }
         }
         if(isset($sort[$gedcom_id])){
