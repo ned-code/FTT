@@ -107,21 +107,6 @@ JMBFamiliesObject.prototype = {
         });
 
         return retBorders;
-        /*
-        var retBorders = [];
-        var isBorders = {};
-        var getColor = function(){ return '#'+Math.floor(Math.random()*16777215).toString(16); }
-        for(var i = 0 ; i < n ; i++ ){
-            var color = getColor();
-            if(!isBorders[color]){
-                isBorders[color] = true;
-                retBorders.push(color);
-            } else {
-                i--;
-            }
-        }
-        return retBorders;
-        */
     },
     _getBorderColor:function(sp){
         if(!sp) return "#000000";
@@ -321,7 +306,7 @@ JMBFamiliesObject.prototype = {
                 location = '';
             }
 			sb._('<div>');
-				sb._('<div>')._((date[2]!=null)?date[2]:'')._('</div>');
+				sb._('<div>')._((date!=null&&date[2]!=null)?date[2]:'')._('</div>');
 				sb._('<div>')._(location)._('</div>');
 			sb._('</div>');
             return jQuery(sb.result());

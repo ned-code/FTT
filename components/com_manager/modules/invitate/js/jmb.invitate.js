@@ -14,7 +14,8 @@ function JMBInvitateObject(obj){
         }
     }
 
-    module.borders = ['61c77f','a64751','5c63d3','d3c15c','705cd3'];
+    module.borders = module._generateBorders(100);
+    module.border_iter = 0;
     module.spouse_border = {};
     module.childsPos = {};
 
@@ -181,9 +182,11 @@ function JMBInvitateObject(obj){
         var cont = _create(),
             family = _sort(json.family),
             target = fn.getTarget(json),
-            spouses = _getSpouses(target.families, target.user.default_family),
+            sircar,
+            info,
+            spouse,
+            spouses = _getSpouses(target),
             childrens = _getChildrens(target.families),
-            spouse = [],
             childs = [],
             startTop,
             rowLength,
@@ -192,28 +195,24 @@ function JMBInvitateObject(obj){
             startLeft,
             i;
 
-        jQuery(cont[0]).css({top:"50px",left:"120px"}).attr('id', target.user.gedcom_id).append(_sircar(target));
+        sircar = _sircar(target);
+        if(sircar){
+            jQuery(cont[0]).css({top:"21px",left:"155px"}).attr('id', target.user.gedcom_id).append(sircar);
+        }
 
         if(spouses.length != 0){
-            module.spouse_border[spouses[0][0]] = module.borders[0];
-            spouse[0] = _spouse(spouses[0], (spouses.length>1)?module.borders[0]:"000000");
-            jQuery(cont[2]).attr('id', spouses[0][1]).css({top:"50px",left:"395px"}).append(spouse[0]);
-            if(spouses.length > 1){
-                jQuery(cont[3]).css({top:(spouses.length>=3)?"30px":"75px",left:"555px"});
-                for(i = 1 ; i < spouses.length ; i ++){
-                    module.spouse_border[spouses[i][0]] = module.borders[i];
-                    spouse[i] = _former_spouse(spouses[i], module.borders[i]);
-                    jQuery(cont[3]).append(spouse[i]);
-                    jQuery(cont[3]).addClass('active');
-                    setTimeout(function(){
-                        jQuery(cont[3]).scrollbar();
-                    }, 1);
-                }
-            } else {
-                jQuery(cont[3]).removeClass('active');
+            info = _info(target, spouses[0]);
+            jQuery(cont[1]).css({top:"113px", left:"312px"}).append(info);
+
+            spouse = _spouse(spouses[0], _getBorderColor(spouses.length>1?spouses[0]:false));
+            if(spouse){
+                jQuery(cont[2]).attr('id', spouses[0][1]).css({top:"21px",left:"430px"}).append(spouse);
             }
-        } else {
-            jQuery(cont[3]).removeClass('active');
+        }
+
+        if(spouses.length != 0){
+            //_setFormerBySircar(cont, spouses);
+            //_setFormerBySpouse(cont, spouses[0]);
         }
 
         startTop = _getStartTop(spouses.length) + 50;
@@ -243,193 +242,312 @@ function JMBInvitateObject(obj){
         jQuery(object[1]).find('div#'+json.data.to).find('div[type="imgContainer"]').animatedBorder({size : 6, color : '#FFCC66'});
 
         return true;
+        function _getBorderColor(sp){
+            return (function(sp){
+                if(!sp) return "#000000";
+                var _color = module.borders[module.border_iter];
+                module.border_iter++;
+                module.spouse_border[sp[0]] = _color;
+                return _color;
+            })(sp);
+        }
         function _getLength(len){
-            var limit = 7;
-            var rows = Math.ceil(len/limit);
-            return Math.round(len/rows);
+            return (function(len){
+                var _limit = 7;
+                var _rows = Math.ceil(len/_limit);
+                return Math.round(len/_rows);
+            })(len);
         }
         function _getStartTop(length){
-            if(length>=3){
-                return 450;
-            }
-            return 315;
+            return (function(length){
+                if(length>=3){
+                    return 450;
+                }
+                return 315;
+            })(length);
         }
         function _getName(info){
-            if(info.nick.length > 12){
-                return info.nick.substr(0,6)+'...';
-            } else {
-                return info.nick;
-            }
+            return (function(info){
+                if(!info) return '';
+                if(info.nick.length > 12){
+                    return info.nick.substr(0,6)+'...';
+                } else {
+                    return info.nick;
+                }
+            })(info);
         }
-        function _getDate(get){
-            var b,d;
-            b = get.date('birth', 2);
-            d = get.date('death', 2);
-            if(b != 0 && d != 0){
-                return b + " - " +d;
-            } else if(b != 0 && d == 0){
-                return b;
-            } else if(b == 0 && d != 0){
-                return ".... - " +d;
-            } else {
-                return "....";
-            }
+        function _getDate(info){
+            return (function(info){
+                if(!info) return '....';
+                var _b, _d;
+                _b = info.date('birth', 2);
+                _d = info.date('death', 2);
+                if(_b != 0 && _d != 0){
+                    return _b + " - " + _d;
+                } else if(_b != 0 && _d == 0){
+                    return _b;
+                } else if(_b == 0 && _d != 0){
+                    return ".... - " + _d;
+                } else {
+                    return "....";
+                }
+            })(info);
         }
         function _getAvatar(object, type, k){
-            var size = _getImageSize_(type, k);
-            return storage.usertree.avatar.get({
-                object:object,
-                cssClass:"jmb-families-avatar view",
-                width:size.width,
-                height:size.height
-            });
-            function _getImageSize_(){
-                var	imageSize = module.imageSize,
-                    size = imageSize[type],
-                    width = Math.round(size.width*k),
-                    height = Math.round(size.height*k);
-                return {
-                    width: width,
-                    height: height
-                };
-            }
-        }
-        function _getSpouses(families, def){
-            if(families==null) return [];
-            var spouses = [], family, spouse;
-            for(var key in families){
-                if (!families.hasOwnProperty(key)) continue;
-                if(key!='length'){
-                    family = families[key];
-                    if(family.spouse!=null){
-                        spouse = [family.id, family.spouse];
-                        spouses.push(spouse);
-                    }
+            return (function(object, type, k){
+                var _size = _getImageSize_(type, k);
+                return storage.usertree.avatar.get({
+                    object:object,
+                    cssClass:"jmb-families-avatar view",
+                    width:_size.width,
+                    height:_size.height
+                });
+                function _getImageSize_(){
+                    var	_imageSize = module.imageSize,
+                        _size_ = _imageSize[type],
+                        _width = Math.round(_size_.width*k),
+                        _height = Math.round(_size_.height*k);
+                    return {
+                        width: _width,
+                        height: _height
+                    };
                 }
-            }
-            return spouses.sort(function(){
-                if(arguments[0][0] == def){
-                    return false;
-                } else {
-                    return true;
-                }
-            });
+            })(object, type, k);
         }
-        function _getChildrens(families){
-            var childrens = [], family, child;
-            for(var key in families){
-                if (!families.hasOwnProperty(key)) continue;
-                if(key!='length'){
-                    family = families[key];
-                    if(family.childrens!=null){
-                        for(var i = 0 ; i < family.childrens.length ; i ++){
-                            child = family.childrens[i];
-                            childrens.push(child);
+        function _getSpouses(target){
+            return (function(target){
+                if(!target) return [];
+                var _families = target.families, _spouses = [], _k, _f, _sp, _def;
+                if(_families==null) return [];
+                for(_k in _families){
+                    if(!_families.hasOwnProperty(_k)) continue;
+                    if('length' !== _k){
+                        _f = _families[_k];
+                        if(null != _f.spouse){
+                            _sp = [_f.id, _f.spouse];
+                            _spouses.push(_sp);
                         }
                     }
                 }
-            }
-            return childrens;
+                _def = target.user.default_family;
+                return _spouses.sort(function(){
+                    if(arguments[0][0] == _def){
+                        return -1;
+                    } else {
+                        return 1;
+                    }
+                });
+            })(target);
+        }
+        function _getChildrens(families){
+            return (function(families){
+                var _childrens = [], _family, _child;
+                for(var _key in families){
+                    if (!families.hasOwnProperty(_key)) continue;
+                    if(_key!='length'){
+                        _family = families[_key];
+                        if(_family.childrens!=null){
+                            for(var _i = 0 ; _i < _family.childrens.length ; _i ++){
+                                _child = _family.childrens[_i];
+                                _childrens.push(_child);
+                            }
+                        }
+                    }
+                }
+                return _childrens;
+            })(families);
+        }
+        function _getTopFormerSpouseBox(s){
+            return (function(s){
+                var l = s.length;
+                switch(l){
+                    case 2:
+                        return '69px';
+                        break;
+
+                    default:
+                        return '0';
+                        break;
+                }
+            })(s);
         }
         function _sort(family){
-            if(family&&family.length == 0) return [];
-            var ar = {};
-            for(var k = 0 ; k <= family.length; k++){
-                var o = family[k];
-                if(o){
-                    var id = o.user.gedcom_id;
-                    ar[id] = o;
+            return (function(family){
+                if(family&&family.length == 0) return [];
+                var _ar = {};
+                for(var _k = 0 ; _k <= family.length; _k++){
+                    var _o = family[_k];
+                    if(_o){
+                        var _id = _o.user.gedcom_id;
+                        _ar[_id] = _o;
+                    }
                 }
-            }
-            return ar;
+                return _ar;
+            })(family);
+        }
+        function _setFormer(cont, spouses, position){
+            return (function(cont, spouses, position){
+                var _i, _sp;
+                if(spouses.length != 0){
+                    if(spouses.length > 1){
+                        for( _i = 1 ; _i < spouses.length ; _i++ ){
+                            _sp =  _former_spouse(spouses[_i], _getBorderColor(spouses[_i]), position);
+                            if(_sp){
+                                jQuery(cont).append(_sp);
+                            }
+                        }
+                        jQuery(cont).addClass('active');
+                        if(spouses.length > 3){
+                            jQuery(cont).addClass('scroll');
+                        }
+                    } else {
+                        jQuery(cont).removeClass('active');
+                    }
+                } else {
+                    jQuery(cont).removeClass('active');
+                }
+            })(cont, spouses, position);
+        }
+        function _setFormerBySircar(cont, spouses){
+            return (function(cont, spouses){
+                _setFormer(cont[4], spouses, 'right');
+                jQuery(cont[4]).css({top:_getTopFormerSpouseBox(spouses),left:"10px"});
+            })(cont, spouses);
+        }
+        function _setFormerBySpouse(cont, sp){
+            return (function(cont, sp){
+                var _object = family[sp[1]],
+                    _spouses = _getSpouses(_object, sp[0]);
+                if(_spouses.length != 0){
+                    _setFormer(cont[3], _spouses, 'left');
+                    jQuery(cont[3]).css({top:_getTopFormerSpouseBox(_spouses),left:"600px"});
+                }
+            })(cont, sp);
         }
         function _create(){
-            var sb = storage.stringBuffer();
-            sb._('<div class="ftt-invite-sircar">&nbsp;</div>');
-            sb._('<div class="ftt-invite-event">&nbsp;</div>');
-            sb._('<div class="ftt-invite-spouse">&nbsp;</div>');
-            sb._('<div class="ftt-invite-spouse-container">&nbsp;</div>');
-            return jQuery(sb.result());
+            return (function(){
+                var _sb = storage.stringBuffer();
+                _sb._('<div class="ftt-invite-sircar">&nbsp;</div>');
+                _sb._('<div class="ftt-invite-event">&nbsp;</div>');
+                _sb._('<div class="ftt-invite-spouse">&nbsp;</div>');
+                _sb._('<div class="ftt-invite-former-spouse-container">&nbsp;</div>');
+                _sb._('<div class="ftt-invite-former-sircar-container">&nbsp;</div>');
+                return jQuery(_sb.result());
+            })();
         }
         function _sircar(object){
-            var sb = storage.stringBuffer();
-            var gedcomId = object.user.gedcom_id;
-            var info = storage.usertree.parse(object);
-            sb._('<div>');
-                sb._('<div id="')._(gedcomId)._('-view" type="imgContainer" class="ftt-invite-parent-img">');
-                    sb._(_getAvatar(object, 'parent', 1));
-                sb._('</div>');
-            sb._('</div>');
-            sb._('<div>');
-                sb._('<div class="ftt-invite-parent-name">')._(_getName(info))._('</div>');
-                sb._('<div class="ftt-invite-parent-date">')._(_getDate(info))._('</div>');
-            sb._('</div>');
-            if(object.families!=null){
-                sb._('<div class="ftt-invite-arrow-left">&nbsp</div>');
-            }
-            return jQuery(sb.result());
+            return (function(object){
+                var _sb = storage.stringBuffer();
+                var _gedcomId = object.user.gedcom_id;
+                var _info = storage.usertree.parse(object);
+                _sb._('<div>');
+                    _sb._('<div id="')._(_gedcomId)._('-view" type="imgContainer" class="ftt-invite-parent-img">');
+                        _sb._(_getAvatar(object, 'parent', 1));
+                    _sb._('</div>');
+                _sb._('</div>');
+                _sb._('<div>');
+                    _sb._('<div class="ftt-invite-parent-name">')._(_getName(_info))._('</div>');
+                    _sb._('<div class="ftt-invite-parent-date">')._(_getDate(_info))._('</div>');
+                _sb._('</div>');
+                if(object.families!=null){
+                    _sb._('<div class="ftt-invite-arrow-left">&nbsp</div>');
+                }
+                return jQuery(_sb.result());
+            })(object);
+        }
+        function _info(object, spouse){
+            return (function(object, spouse){
+                if(!spouse) return '';
+                var _sb = host.stringBuffer(),
+                    _event = object.families[spouse[0]].marriage,
+                    _date,
+                    _place,
+                    _location = '';
+
+                if(_event!=null){
+                    _date = _event.date;
+                    _place = _event.place;
+                    if(_place != null && _place[0].country != null){
+                        _location = _place[0].country;
+                    } else {
+                        _location = '';
+                    }
+                    _sb._('<div>');
+                    _sb._('<div>')._((_date!=null&&_date[2]!=null)?_date[2]:'')._('</div>');
+                    _sb._('<div>')._(_location)._('</div>');
+                    _sb._('</div>');
+                    return jQuery(_sb.result());
+                }
+                return '';
+            })(object, spouse);
         }
         function _spouse(spouse, bcolor){
-            var sb = storage.stringBuffer(),
-                gedcomId = spouse[1],
-                object = family[gedcomId],
-                info = storage.usertree.parse(object);
-            sb._('<div>');
-                sb._('<div id="')._(gedcomId)._('-view" type="imgContainer" class="ftt-invite-parent-img" style="border:2px solid #')._(bcolor)._(';">');
-                    sb._(_getAvatar(object, 'parent', 1));
-                sb._('</div>');
-            sb._('</div>');
-            sb._('<div>');
-                sb._('<div class="ftt-invite-parent-name">')._(_getName(info))._('</div>');
-                sb._('<div class="ftt-invite-parent-date">')._(_getDate(info))._('</div>');
-            sb._('</div>');
-            if(object.families!=null){
-                sb._('<div class="ftt-invite-arrow-right" style="background:#')._(bcolor)._(';">&nbsp</div>');
-            }
-            return jQuery(sb.result());
+            return (function(spouse, bcolor){
+                var _sb = storage.stringBuffer(),
+                    _gedcomId = spouse[1],
+                    _object = family[_gedcomId],
+                    _info = storage.usertree.parse(_object);
+                _sb._('<div>');
+                    _sb._('<div id="')._(_gedcomId)._('-view" type="imgContainer" class="ftt-invite-parent-img" style="border:2px solid #')._(bcolor)._(';">');
+                        _sb._(_getAvatar(_object, 'parent', 1));
+                    _sb._('</div>');
+                _sb._('</div>');
+                _sb._('<div>');
+                    _sb._('<div class="ftt-invite-parent-name">')._(_getName(_info))._('</div>');
+                    _sb._('<div class="ftt-invite-parent-date">')._(_getDate(_info))._('</div>');
+                _sb._('</div>');
+                if(_object.families!=null){
+                    _sb._('<div class="ftt-invite-arrow-right" style="background:#')._(bcolor)._(';">&nbsp</div>');
+                }
+                return jQuery(_sb.result());
+            })(spouse, bcolor);
         }
         function _former_spouse(spouse, bcolor){
-            var sb = storage.stringBuffer(),
-                gedcomId = spouse[1],
-                object = family[gedcomId],
-                info = storage.usertree.parse(object);
+            return (function(spouse, bcolor){
+                var _sb = storage.stringBuffer(),
+                    _gedcomId = spouse[1],
+                    _object = family[_gedcomId],
+                    _info = storage.usertree.parse(_object);
 
-            sb._('<div id="')._(gedcomId)._('" class="ftt-invite-spouse-div">');
-                sb._('<div id="')._(gedcomId)._('-view" type="imgContainer" class="ftt-invite-parent-img" style="border:2px solid #')._(bcolor)._(';">');
-                    sb._(_getAvatar(object, 'parent', 1));
-                sb._('</div>');
-            sb._('</div>');
-            sb._('<div>');
-                sb._('<div class="ftt-invite-parent-name">')._(_getName(info))._('</div>');
-                sb._('<div class="ftt-invite-parent-date">')._(_getDate(info))._('</div>');
-            sb._('</div>');
+                _sb._('<div id="')._(_gedcomId)._('" class="ftt-invite-spouse-div">');
+                    _sb._('<div id="')._(_gedcomId)._('-view" type="imgContainer" class="ftt-invite-parent-img" style="border:2px solid #')._(bcolor)._(';">');
+                        _sb._(_getAvatar(_object, 'parent', 1));
+                    _sb._('</div>');
+                _sb._('</div>');
+                _sb._('<div>');
+                    _sb._('<div class="ftt-invite-parent-name">')._(_getName(_info))._('</div>');
+                    _sb._('<div class="ftt-invite-parent-date">')._(_getDate(_info))._('</div>');
+                _sb._('</div>');
+            })(spouse, bcolor);
         }
         function _child(child, len, position){
-            var sb = storage.stringBuffer(),
-                gedcomId = child.gedcom_id,
-                object = family[gedcomId],
-                bcolor = (len>1)?module.spouse_border[child.family_id]:"000000",
-                info = storage.usertree.parse(object);
+            return (function(child, len, position){
+                var _sb = storage.stringBuffer(),
+                    _gedcomId = child.gedcom_id,
+                    _object = family[_gedcomId],
+                    _bcolor = (len>1)?module.spouse_border[child.family_id]:"000000",
+                    _info = storage.usertree.parse(_object);
 
-            sb._('<div id="');
-                sb._(gedcomId);
-                sb._('" class="ftt-invite-child" style="height:170px;top:');
-                    sb._(position.top);
-                sb._('px;left:');
-                    sb._(position.left);
-            sb._('px;">');
-                sb._('<div id="')._(gedcomId)._('-view" type="imgContainer" style="height:80px;width:72px;border:2px solid #');
-                    sb._(bcolor);
-                    sb._('" class="ftt-invite-child-img">');
-                    sb._(_getAvatar(object, 'child', 1));
-                sb._('</div>');
-                sb._('<div>');
-                    sb._('<div class="ftt-invite-child-name">')._(_getName(info))._('</div>');
-                    sb._('<div class="ftt-invite-child-date">')._(_getDate(info))._('</div>');
-                sb._('</div>');
-                sb._('<div class="ftt-invite-arrow-up" style="background:#')._(bcolor)._(';">&nbsp</div>');
-            sb._('</div>');
-            return jQuery(sb.result());
+                _sb._('<div id="');
+                    _sb._(_gedcomId);
+                    _sb._('" class="ftt-invite-child" style="height:170px;top:');
+                    _sb._(position.top);
+                    _sb._('px;left:');
+                    _sb._(position.left);
+                _sb._('px;">');
+                _sb._('<div id="')._(_gedcomId)._('-view" type="imgContainer" style="height:80px;width:72px;border:2px solid #');
+                    _sb._(_bcolor);
+                    _sb._('" class="ftt-invite-child-img">');
+                    _sb._(_getAvatar(_object, 'child', 1));
+                _sb._('</div>');
+                _sb._('<div>');
+                    _sb._('<div class="ftt-invite-child-name">')._(_getName(_info))._('</div>');
+                    _sb._('<div class="ftt-invite-child-date">')._(_getDate(_info))._('</div>');
+                _sb._('</div>');
+                _sb._('<div class="ftt-invite-arrow-up" style="background:#')._(_bcolor)._(';">&nbsp</div>');
+                _sb._('</div>');
+                return jQuery(_sb.result());
+            })(child, len, position);
         }
     }
 
@@ -514,6 +632,50 @@ JMBInvitateObject.prototype = {
 				callback(res);
 		})
 	},
+    _generateBorders:function(n){
+        var retBorders = [],
+            isBorders = {},
+            each,
+            getColor,
+            setColor;
+
+        getColor = function(){ return '#'+Math.floor(Math.random()*16777215).toString(16); }
+        setColor = function(color){
+            if(!color){
+                color = getColor();
+            }
+            if(!isBorders[color]){
+                isBorders[color] = true;
+                retBorders.push(color);
+                return true;
+            } else {
+                return false;
+            }
+        }
+        each = function(start, end, callback){
+            var i, length;
+            if('object' === typeof(end)){
+                length = end.length;
+            } else if('string' === typeof(end)){
+                length = "0" + end;
+            } else if('number' === typeof(end)){
+                length = end;
+            }
+            for(i = start ; i < length ; i++){
+                if(!callback(i, end)){
+                    i--;
+                }
+            }
+        }
+        each(0, ["#3f48cc","#1d9441","#b97a57","#934293","#eab600","#00a2e8","#ed1c24","#7092be"], function(i, colors){
+            return setColor(colors[i]);
+        });
+        each(8, 100, function(i, length){
+            return setColor(false);
+        });
+
+        return retBorders;
+    },
     login:function(token){
         FB.login(function (response) {
             if (response.status === 'connected') {

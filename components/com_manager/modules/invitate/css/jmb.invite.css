@@ -100,6 +100,7 @@ table {
     position:absolute;
     height:30px;
     width:120px;
+    text-align: center;
 }
 .ftt-invite-spouse {
     height: 260px;
@@ -111,11 +112,29 @@ table {
     margin-bottom: 7px;
     margin-left: 30px;
 }
-.ftt-invite-spouse-container {
+.ftt-invite-former-sircar-container{
     border: 1px solid #F5FAE6;
-    max-height: 375px;
-    position:absolute;
-    width:175px;
+    max-height: 200px;
+    position: absolute;
+    width: 130px;
+}
+.ftt-invite-former-sircar-container.scroll{
+    overflow-y: scroll;
+}
+.ftt-invite-former-sircar-container.active{
+    border: 1px solid #c3c3c3;
+}
+.ftt-invite-former-spouse-container{
+    border: 1px solid #F5FAE6;
+    max-height: 240px;
+    position: absolute;
+    width: 130px;
+}
+.ftt-invite-former-spouse-container.scroll{
+    overflow-y: scroll;
+}
+.ftt-invite-former-spouse-container.active{
+    border: 1px solid #c3c3c3;
 }
 .ftt-invite-parent-img {
     background: white;
