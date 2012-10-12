@@ -254,7 +254,7 @@ class JMBUserTree {
 		if(!empty($node['families'])){
 			foreach($node['families'] as $family){
 				if($family!=='length'){
-                    if($level > 0){
+                    if($level > 1){
                         $this->_setUserSpouse($family['spouse'], $objects);
                     } else {
                         $this->_setUser($family['spouse'], $objects, $level + 1);
