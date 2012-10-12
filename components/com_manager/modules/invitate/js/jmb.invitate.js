@@ -211,7 +211,7 @@ function JMBInvitateObject(obj){
         }
 
         if(spouses.length != 0){
-            //_setFormerBySircar(cont, spouses);
+            _setFormerBySircar(cont, spouses);
             //_setFormerBySpouse(cont, spouses[0]);
         }
 
@@ -502,23 +502,26 @@ function JMBInvitateObject(obj){
                 return jQuery(_sb.result());
             })(spouse, bcolor);
         }
-        function _former_spouse(spouse, bcolor){
-            return (function(spouse, bcolor){
+        function _former_spouse(spouse, bcolor, position){
+            return (function(spouse, bcolor, position){
                 var _sb = storage.stringBuffer(),
                     _gedcomId = spouse[1],
                     _object = family[_gedcomId],
                     _info = storage.usertree.parse(_object);
-
-                _sb._('<div id="')._(_gedcomId)._('" class="ftt-invite-spouse-div">');
-                    _sb._('<div id="')._(_gedcomId)._('-view" type="imgContainer" class="ftt-invite-parent-img" style="border:2px solid #')._(bcolor)._(';">');
-                        _sb._(_getAvatar(_object, 'parent', 1));
+                _sb._('<div id="')._(_gedcomId)._('" class="ftt-invite-spouse-div ')._(position)._('">');
+                    _sb._('<div id="')._(_gedcomId)._('-view" type="imgContainer" class="ftt-invite-former-img" style="border:2px solid #')._(bcolor)._(';">');
+                        _sb._(_getAvatar(_object, 'parent', 0.5));
+                    _sb._('</div>');
+                    _sb._('<div>');
+                        _sb._('<div class="ftt-invite-parent-name former">')._(_getName(_info))._('</div>');
+                        _sb._('<div class="ftt-invite-parent-date former">')._(_getDate(_info))._('</div>');
+                    _sb._('</div>');
+                        _sb._('<div class="ftt-invite-former-arrow-')._(position)._('" style="background:')._(bcolor)._(';">&nbsp</div>');
+                        _sb._('<div class="ftt-invite-former-arrow-')._(position)._(' text" style="color:')._(bcolor)._(';">')._(_info.marr(spouse[0], 'date', 2))._('</div>');
                     _sb._('</div>');
                 _sb._('</div>');
-                _sb._('<div>');
-                    _sb._('<div class="ftt-invite-parent-name">')._(_getName(_info))._('</div>');
-                    _sb._('<div class="ftt-invite-parent-date">')._(_getDate(_info))._('</div>');
-                _sb._('</div>');
-            })(spouse, bcolor);
+                return jQuery(_sb.result());
+            })(spouse, bcolor, position);
         }
         function _child(child, len, position){
             return (function(child, len, position){
