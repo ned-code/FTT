@@ -93,7 +93,7 @@ function JMBProfile(){
             jQuery(this).dialog("destroy");
             jQuery(this).remove();
             module.functions.callEvents();
-            module.functions.clearVariable();
+            //module.functions.clearVariable();
         }
     };
     module.functions = {
@@ -1224,7 +1224,7 @@ JMBProfile.prototype = {
         var pull = (typeof(args.pull) != 'undefined')?args.pull:false;
         var users = (typeof(args.users) != 'undefined')?args.users:false;
 
-
+        fn.clearVariable();
         fn.setGedcomId(gedcom_id);
         fn.setPull(pull);
         fn.setTreeId(tree_id);
