@@ -45,9 +45,11 @@ class JMBInvitateClass {
     protected  function _getTarget($gedcom_id, $user){
         $objects = $this->host->usertree->getUser($user->TreeId, $user->Id, $gedcom_id);
         $sort = array();
-        foreach($objects as $object){
-            $id = $object['user']['gedcom_id'];
-            $sort[$id] = $object;
+        foreach($objects as $key => $object){
+            if(!empty($key)){
+                $id = $object['user']['gedcom_id'];
+                $sort[$id] = $object;
+            }
         }
         if(isset($sort[$gedcom_id])){
             $obj = $sort[$gedcom_id];
