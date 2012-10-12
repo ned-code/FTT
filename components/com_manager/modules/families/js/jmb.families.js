@@ -202,7 +202,7 @@ JMBFamiliesObject.prototype = {
             def = storage.usertree.gedcom_id;
         }
         return spouses.sort(function(){
-			if(arguments[0][0] == def){
+			if(arguments[0][1] == def){
 				return -1;
 			} else {
 				return 1;

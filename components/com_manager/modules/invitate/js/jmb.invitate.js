@@ -331,7 +331,7 @@ function JMBInvitateObject(obj){
                 }
                 _def = target.user.default_family;
                 return _spouses.sort(function(){
-                    if(arguments[0][0] == _def){
+                    if(arguments[0][1] == _def){
                         return -1;
                     } else {
                         return 1;
