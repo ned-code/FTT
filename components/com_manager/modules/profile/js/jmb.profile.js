@@ -250,6 +250,7 @@ function JMBProfile(){
                     break;
 
                     case "spouse_birthday":
+                        if(!spouse) return;
                         var spouse = module.functions.getParseUserInfo(module.spouse_id);
                         jQuery(span).text(spouse.date('birth'));
                     break;
@@ -963,7 +964,7 @@ JMBProfile.prototype = {
                 if(families!=null){
                     for(key in families){
                         if (!families.hasOwnProperty(key)) continue;
-                        if(key != 'length' && families[key].spouse != null){
+                        if(key != 'length' && families[key].spouse != null && storage.usertree.pull[families[key].spouse]){
                             _fn.createFamilyBox(families[key]);
                         }
                     }
