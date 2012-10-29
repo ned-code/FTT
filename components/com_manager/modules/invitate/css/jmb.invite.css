@@ -58,7 +58,8 @@ table {
     margin: 5px;
     text-align: center;
     text-decoration: none;
-    width: 150px;
+    min-width: 150px;
+    padding: 0 3px;
 }
 .ftt-invitate-button.accept {
     background: #22b14c;
