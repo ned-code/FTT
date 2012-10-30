@@ -34,20 +34,50 @@ class JMBFamousFamily {
 		}	
 		return $result;
 	}
+
+    protected function getLiving($usertree){
+        $count = 0;
+        $type = gettype($usertree);
+        if('array' == $type || 'object' == $type){
+            foreach($usertree as $object){
+                if(isset($object['user']) && $object['user']['death'] == null){
+                    $birth = $object['user']['birth'];
+                    if($birth != null){
+                        $date = $birth['date'];
+                        if($birth['date'] != null && $date[2] != null){
+                            $turns = date("Y") - $date[2];
+                            if($turns <= 120){
+                                $count++;
+                            }
+                        } else {
+                            $count++;
+                        }
+                    } else {
+                        $count++;
+                    }
+                }
+            }
+        }
+        return $count;
+    }
 	
 	public function getFamilies(){
 		 $families = $this->_getFamilies();
 		 $result = array();
 
 		 foreach($families as $family){
+             $tree_id = $family['tree_id'];
+             $owner_id = $family['individuals_id'];
+             $usertree = $this->host->usertree->load($tree_id, $owner_id);
+
+             $count = sizeof($usertree);
+             $living = $this->getLiving($usertree);
 		 	 $ind = $this->host->gedcom->individuals->get($family['individuals_id']);
-		 	 $count = $this->host->gedcom->individuals->getIndividualsCount($family['tree_id']);
-		 	 $living = $this->host->gedcom->individuals->getLivingIndividualsCount($family['tree_id']);
 		 	 $avatar = $this->host->gedcom->media->getAvatarImage($family['individuals_id']);
 		 	 $result[] = array('id'=>$family['id'],'name'=>$family['name'],'tree_id'=>$family['tree_id'],'individ'=>$ind,'descendants'=>$count,'living'=>$living,'avatar'=>$avatar);
 		 }
 		 $path = "";
-            $language = $this->host->getLangList('famous_family_trees');
+         $language = $this->host->getLangList('famous_family_trees');
 		 return json_encode(array('families'=>$result,'path'=>$path, 'msg'=>$language));
 	}
 	
