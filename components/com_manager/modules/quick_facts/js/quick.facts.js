@@ -18,11 +18,8 @@ function JMBQuickFactsObject(object){
 		fn;
 		
 	fn = {
-		getTurn:function(user){
-			var	birth = user.birth,
-				date = (birth!=null)?birth.date:null;
-			if(date===null) return 'unknown';
-			return (new Date()).getFullYear() - date[2];
+		getTurn:function(parse){
+            return parse.turns != 0 ? parse.turns : 'unknown';
 		},
 		getNumberFamilyString:function(){ 
 			var sb = host.stringBuffer();
@@ -33,24 +30,24 @@ function JMBQuickFactsObject(object){
 		},
 		getYoungestMemberString:function(){
 			if(json.youngest == null) return 'unknown';
-			var sb = host.stringBuffer();
-			sb._('<font id="')._(json.youngest.user.gedcom_id)._('" style="color:#');
-				sb._(settings.colors[json.youngest.user.gender])._(';">');
-					sb._(storage.usertree.parse(json.youngest).full_name);
+			var sb = host.stringBuffer(), parse = storage.usertree.parse(storage.usertree.pull[json.youngest.user.gedcom_id]);
+			sb._('<font id="')._(parse.gedcom_id)._('" style="color:#');
+				sb._(settings.colors[parse.gender])._(';">');
+					sb._(parse.full_name);
 			sb._('</font> ( ');
-			sb._(fn.getTurn(json.youngest.user))._(' ')
+			sb._(fn.getTurn(parse))._(' ')
 			sb._(message.FTT_MOD_QUICK_FACTS_YEARS)._(' )');
 			return sb.result();
 		},
 		getOldestMemberString:function(){
 			if(json.oldest == null) return 'unknown';
-			var sb = host.stringBuffer();
-			sb._('<font id="')._(json.oldest.user.gedcom_id)._('" style="color:#');
-				sb._(settings.colors[json.oldest.user.gender]);
+			var sb = host.stringBuffer(), parse = storage.usertree.parse(storage.usertree.pull[json.oldest.user.gedcom_id]);
+			sb._('<font id="')._(parse.gedcom_id)._('" style="color:#');
+				sb._(settings.colors[parse.gender]);
 			sb._(';">');
-				sb._(storage.usertree.parse(json.oldest).full_name);
+				sb._(parse.full_name);
 			sb._('</font> ( ');
-			sb._(fn.getTurn(json.oldest.user))._(' ');
+			sb._(fn.getTurn(parse))._(' ');
 			sb._(message.FTT_MOD_QUICK_FACTS_YEARS)._(' )');
 			return sb.result();
 		},
@@ -80,13 +77,6 @@ function JMBQuickFactsObject(object){
 					sb._('<span class="jmb_qf_text">')._(fn.getOldestMemberString())._('</span>');
 				sb._('</div>');
 			sb._('</div>');
-			/*
-            sb._('<div class="jmb_qf_button">');
-                sb._('<span>');
-                    sb._(message.FTT_MOD_QUICK_FACTS_SHOW_MORE_STATS);
-                sb._('...</span>');
-            sb._('</div>');
-            */
 			htmlObject = jQuery(sb.result());
 			jQuery(object).append(htmlObject);
 			return htmlObject;
