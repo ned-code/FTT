@@ -200,10 +200,10 @@ storage.usertree.parse = function(object){
             function getLastName(u){
                 return getName(u, 'last_name', '@N.N.');
             }
-            function getShortLastName(l){
-                if(l.length <= 27) return l;
+            function getShort(l, len){
+                if(l.length <= len) return l;
                 var string = '';
-                for(var i = 0 ; i <= 27 ; i++){
+                for(var i = 0 ; i <= len ; i++){
                     string += l[i];
                 }
                 string += '...';
@@ -217,7 +217,15 @@ storage.usertree.parse = function(object){
             function getFullName(first, middle, last){
                 var fName = [first,middle,last].join(' ');
                 if(fName.length > 30){
-                    return [getInitials(first, middle), getShortLastName(last)].join('');
+                    if(first.length != 0 && middle.length != 0 && last.length != 0){
+                        return [getInitials(first, middle), getShort(last, 27)].join('');
+                    } else if(first.length != 0 && last.length != 0) {
+                        return [getInitials(first, ''), getShort(last, 27)].join('');
+                    } else if(first.length != 0){
+                        return getShort(first, 15);
+                    } else {
+                        return getShort(fName, 15);
+                    }
                 } else {
                     return fName;
                 }
