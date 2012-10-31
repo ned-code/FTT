@@ -260,16 +260,7 @@ storage.usertree.parse = function(object){
             var event = user['death'];
             var birth = user['birth'];
             if(event != null){
-                var date = event.date;
-                var place = event.place;
-                if(date != null){
-                    if(date[0] != null || date[1] != null || date[2] != null){
-                        return true;
-                    }
-                    if(place != null){
-                        return true;
-                    }
-                }
+                return true;
             }
             if(birth != null){
                 var birthDate = birth.date;
