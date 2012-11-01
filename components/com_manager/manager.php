@@ -53,6 +53,7 @@ $document->addStyleSheet('components/com_manager/js/prettyPhoto.css');
 $document->addStyleSheet('components/com_manager/js/tipsy.css');
 $document->addStyleSheet('components/com_manager/js/scrollbar.css');
 $document->addStyleSheet('components/com_manager/js/animatedborder.css');
+$document->addStyleSheet('components/com_manager/js/tdfriendselector.css');
 $document->addScript('components/com_manager/js/jit.js');
 $document->addScript('components/com_manager/js/jquery.bt.js');
 $document->addScript('components/com_manager/js/jquery.prettyPhoto.js');
@@ -60,7 +61,7 @@ $document->addScript('components/com_manager/js/jquery.tipsy.js');
 $document->addScript('components/com_manager/js/jquery.scroll.js');
 $document->addScript('components/com_manager/js/jquery.ui.touch-punch.min.js');
 $document->addScript('components/com_manager/js/jquery.animatedborder.js');
-
+$document->addScript('components/com_manager/js/tdfriendselector.js');
 	
 
 ################################################################################

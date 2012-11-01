@@ -12,6 +12,139 @@ class JMBInvitation {
 		$this->host = &FamilyTreeTopHostLibrary::getInstance();
 	}
 
+    public function get(){
+        $language = $this->host->getLangList('invitation');
+        return json_encode(array('msg'=>$language));
+    }
+
+    public function check($args){
+        $args = explode(';', $args);
+        $facebook_id = $args[0];
+        $gedcom_id = $args[1];
+
+        if($this->checkFacebookIdOnUser($facebook_id)){
+            $message = "ALERT_SORRY_USER_ALREADY_A_MEMBER";
+            return json_encode(array('success'=>false,'message'=>$message));
+        }
+
+        if($this->checkFacebookIdOnInvite($facebook_id)){
+            $message = "ALERT_INVITATION_TO_THIS_FACEBOOK_USER_HAS_BEEN_SENT";
+            return json_encode(array('success'=>false, 'message'=>$message));
+        }
+
+        if($this->checkFacebookIdOnRequest($facebook_id)){
+            $message = "ALERT_THIS_USER_WAITING_CONFIRMATION";
+            return json_encode(array('success'=>false, 'message'=>$message));
+        }
+
+        $user = $this->host->user->get();
+        $owner_id = $user->gedcomId;
+        $tree_id = $user->treeId;
+
+        $usertree = $this->host->usertree->load($tree_id, $owner_id);
+        $owner = $usertree[$owner_id];
+
+        $relation = $this->getRelation($tree_id, $owner_id, $gedcom_id, $owner);
+
+        return json_encode(array('success'=>true, 'relation'=>$relation));
+    }
+
+    public function add($args){
+        $args = explode(';', $args);
+        $facebook_id = $args[0];
+        $gedcom_id = $args[1];
+
+        if($this->checkFacebookIdOnUser($facebook_id)){
+            $message = "ALERT_SORRY_USER_ALREADY_A_MEMBER";
+            return json_encode(array('success'=>false,'message'=>$message));
+        }
+
+        if($this->checkFacebookIdOnInvite($facebook_id)){
+            $message = "ALERT_INVITATION_TO_THIS_FACEBOOK_USER_HAS_BEEN_SENT";
+            return json_encode(array('success'=>false, 'message'=>$message));
+        }
+
+        if($this->checkFacebookIdOnRequest($facebook_id)){
+            $message = "ALERT_THIS_USER_WAITING_CONFIRMATION";
+            return json_encode(array('success'=>false, 'message'=>$message));
+        }
+
+        $user = $this->host->user->get();
+        $owner_id = $user->gedcomId;
+        $tree_id = $user->treeId;
+
+        $value = $gedcom_id . "," . $tree_id;
+        $token = md5($value);
+
+        $sql_string = "INSERT INTO #__mb_variables (`id`,`language`,`belongs`,`value`,`email`,`facebook_id`,`s_gedcom_id`) VALUES (NULL,?,?,?,?,?,?)";
+        $this->host->ajax->setQuery($sql_string, $user->language, $token, $value, 0,$facebook_id, $owner_id);
+        $this->host->ajax->query();
+
+        return json_encode(array('success'=>true));
+    }
+
+    protected function getRelation($tree_id, $gedcom_id, $owner_id, $owner){
+        $relation = $this->host->gedcom->relation->get($tree_id, $owner_id, $gedcom_id);
+        $matches = array();
+        preg_match( "/(\W|^)(self|spouse|father|mother|daughter|son|brother|sister|cousin|uncle|aunt|nephew|niece|grandmother|grandfather|granddaughter|grandson|great\sgrandfather|great\sgrandmother)(\W|$)/", $relation, $matches);
+
+        if(sizeof($matches) != 0 && trim($matches[0]) != ""){
+            $componentLanguage = $this->host->getLangList('component');
+            $match = trim($matches[0]);
+            if($match == "cousin"){
+                if(isset($componentLanguage["FTT_COMPONENT_RELATION_COUSIN_".$owner['user']['gender']])){
+                    return $componentLanguage["FTT_COMPONENT_RELATION_COUSIN_".$owner['user']['gender']];
+                }
+            } else {
+                if(isset($componentLanguage["FTT_COMPONENT_RELATION_".strtoupper($match)])){
+                    return $componentLanguage["FTT_COMPONENT_RELATION_".strtoupper($match)];
+                }
+            }
+
+        }
+        return $relation;
+    }
+
+    protected function checkFacebookIdOnUser($facebook_id){
+        $sql_string = "SELECT i.id, i.fid, u.email
+                        FROM #__mb_individuals AS i
+                        LEFT JOIN #__jfbconnect_user_map AS map ON map.fb_user_id = i.fid
+                        LEFT JOIN #__users AS u ON u.id = map.j_user_id
+                        WHERE i.fid !=0";
+        $this->host->ajax->setQuery($sql_string);
+        $rows = $this->host->ajax->loadAssocList();
+        if(!empty($rows)){
+            foreach($rows as $row){
+                if($row['fid'] != null && $row['fid'] == $facebook_id){
+                    return true;
+                }
+            }
+        }
+    }
+
+    protected function checkFacebookIdOnInvite($facebook_id){
+        $sql_string = "SELECT facebook_id FROM #__mb_variables WHERE facebook_id = ?";
+        $this->host->ajax->setQuery($sql_string, $facebook_id);
+        $rows = $this->host->ajax->loadAssocList();
+        if(empty($rows)){
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    protected function checkFacebookIdOnRequest($facebook_id){
+        $sql_string = "SELECT facebook_id FROM #__mb_notifications WHERE facebook_id = ? AND processed == 0";
+        $this->host->ajax->setQuery($sql_string, $facebook_id);
+        $rows = $this->host->ajax->loadAssocList();
+        if(empty($rows)){
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /*
     protected function checkMailOnUse($mail){
         $sql_string = "SELECT i.id, i.fid, u.email
                         FROM #__mb_individuals AS i
@@ -86,9 +219,6 @@ class JMBInvitation {
         return $relation;
     }
 
-	/**
-	*
-	*/
 	public function sendInvitation($gedcom_id){
         require_once("Mail.php");
         $user = $this->host->user->get();
@@ -251,5 +381,6 @@ class JMBInvitation {
         $language = $this->host->getLangList('invitation');
         return json_encode(array('msg'=>$language));
     }
+    */
 }
 ?>
