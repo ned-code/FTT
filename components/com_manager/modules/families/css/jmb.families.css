@@ -3,8 +3,9 @@
     overflow: hidden;
 }
 .jmb-families-body{}
+
 #JMBFamiliesContainer .home{
-	background: url("icon-home.png") no-repeat scroll 0 0 transparent;
+	background: url("../imgs/icon-home.png") no-repeat scroll 0 0 transparent;
 	cursor: pointer;
 	height: 16px;
 	position: absolute;
@@ -100,15 +101,15 @@
 	margin-top: 5px;
 }
 .jmb-families-button.parent.active{
-	background: url("vector-up2.gif") no-repeat scroll 0 0 transparent;
+	background: url("../imgs/vector-up2.gif") no-repeat scroll 0 0 transparent;
 	cursor: pointer;
 }
 .jmb-families-button.childs.active{
-	background: url("vector-down2.gif") no-repeat scroll 0 0 transparent;
+	background: url("../imgs/vector-down2.gif") no-repeat scroll 0 0 transparent;
 	cursor: pointer;
 }
 .jmb-families-button.childs.active.small {
-	background: url("vector-down2.gif") no-repeat scroll 0 0 transparent;
+	background: url("../imgs/vector-down2.gif") no-repeat scroll 0 0 transparent;
 	margin-left: 24px;
 	margin-top: 1px;
 } 
@@ -118,7 +119,7 @@
 }
 img.jmb-families-avatar.view{
 	/*cursor: url("magnify.png"), pointer;*/
-	cursor: url("cursor.png") 5 1, pointer;
+	cursor: url("../imgs/cursor.png") 5 1, pointer;
 }
 .jmb-families-parent-img{
 	background: white;
@@ -262,7 +263,7 @@ img.jmb-families-avatar.view{
 	border: 2px solid yellow;
 }
 .jmb-families-edit-button.hover {
-	background: url("edit.gif") no-repeat scroll 0 0 transparent;
+	background: url("../imgs/edit.gif") no-repeat scroll 0 0 transparent;
 	width: 18px;
 	height: 18px;
 }
@@ -308,7 +309,7 @@ img.jmb-families-avatar.view{
 * facebook icon
 */
 .jmb-families-fb-icon{
-	background:url("facebook_small.gif") no-repeat transparent;
+	background:url("../imgs/facebook_small.gif") no-repeat transparent;
 	border: 2px solid white;
 	cursor: pointer;
 	height: 9px;
@@ -318,7 +319,7 @@ img.jmb-families-avatar.view{
 .jmb-families-fb-icon.hover{
 	width:18px;
 	height:18px;
-	background:url("facebook.gif") no-repeat transparent;
+	background:url("../imgs/facebook.gif") no-repeat transparent;
 }
 .jmb-families-fb-icon:hover{
 	border: 2px solid yellow;
@@ -351,7 +352,7 @@ img.jmb-families-avatar.view{
 *
 */
 .jmb-families-death-marker {
-	background: url("death_marker.png") no-repeat scroll -40px 0 transparent;
+	background: url("../imgs/death_marker.png") no-repeat scroll -40px 0 transparent;
 	height: 10px;
     	left: 0;
     	position: absolute;
