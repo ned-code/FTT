@@ -4,6 +4,10 @@ $info = $this->pageInfo;
 $url = JURI::base();
 $path = 'components/com_manager/modules/';
 
+$builder = new FttFileBuilder();
+$cssObject = array();
+
+
 foreach ($info as $page){
     $modules = $page['modules'];
     foreach ($modules as $module){
@@ -11,13 +15,21 @@ foreach ($info as $page){
         $files = $module['files'];
         $link = $url . $path . $name;
         foreach($files['css'] as $cssName){
-            echo '<link rel="stylesheet" href="'. $link . '/css/' . $cssName .'" type="text/css" />';
+            //echo '<link rel="stylesheet" href="'. $link . '/css/' . $cssName .'" type="text/css" />';
+            $cssObject[] = $path . $name . "/css/" . $cssName;
         }
         foreach($files['js'] as $jsName){
             echo '<script src="'. $link . '/js/' . $jsName .'" type="text/javascript"></script>';
         }
     }
 }
+
+$builder->setCss($cssObject);
+$cssCode = $builder->cssCompile();
+
+echo "<style type='text/css'>";
+echo $cssCode;
+echo "</style>";
 
 echo "<div id='container'>&nbsp;</div>";
 ?>
