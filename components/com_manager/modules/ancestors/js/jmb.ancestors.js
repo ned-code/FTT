@@ -221,9 +221,11 @@ JMBAncestorsObject.prototype = {
         var module = this;
         var sb = storage.stringBuffer();
         sb._('<div id="')._(_getObject(node))._('" class="jit-node-item-question">');
-            sb._('<a href="/add_this_person" onclick="return false;">');
-                sb._(module.getMsg('add_this_person'));
-            sb._('</a>');
+            if(storage.usertree.permission != "GUEST"){
+                sb._('<a href="/add_this_person" onclick="return false;">');
+                    sb._(module.getMsg('add_this_person'));
+                sb._('</a>');
+            }
         sb._('</div>');
         return sb.result();
         function _getObject(n){
