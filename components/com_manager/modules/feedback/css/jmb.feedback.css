@@ -6,14 +6,22 @@
     border-radius: 5px;
 }
 div#jmb_feedback_form {
-    background: none repeat scroll 0 0 #A4B6DB;
-    color: white;
+    background: none repeat scroll 0 0 #ff7f27;
+    color: black;
     font-family: Tahoma;
     font-size: 12px;
-    margin: 5px;
+    /*margin: 5px;*/
     padding: 3px;
     width: 140px;
 }
+/*
+div#jmb_feedback_form {
+    padding: 20px;
+    width: 250px;
+    background: #ccc;
+    border: 1px solid #29216d;
+}
+*/
 div#jmb_feedback_form div.header {
     text-align: center;
     padding: 5px;
@@ -23,8 +31,8 @@ div#jmb_feedback_form div.header span {
     font-weight: bold;
 }
 div#jmb_feedback_form div.body {
-    background: none repeat scroll 0 0 #3B5998;
-
+    background: none repeat scroll 0 0 #f9eaca;
+    margin-left: 3px;
 }
 div#jmb_feedback_form div.body div.text {
     border-bottom: 1px solid white;

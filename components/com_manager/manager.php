@@ -93,6 +93,7 @@ $document->addScript('components/com_manager/js/jquery.scroll.js');
 $document->addScript('components/com_manager/js/jquery.ui.touch-punch.min.js');
 $document->addScript('components/com_manager/js/jquery.animatedborder.js');
 $document->addScript('components/com_manager/js/tdfriendselector.js');
+$document->addScript('components/com_manager/js/jquery.tabSlideOut.v1.3.js');
 
 
 ################################################################################
