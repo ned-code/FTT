@@ -240,6 +240,8 @@ class JMBProfile {
 			case "add":
 				$image = false;
                 $name = explode('.', $_FILES["upload"]["name"]);
+                //var_dump(array('name'=>$name, 'size'=>$_FILES['upload']['size']));
+                //exit;
 				if($_FILES['upload']['size'] != 0){
                     switch(strtolower(end($name))){
                         case "jpeg":

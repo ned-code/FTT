@@ -246,7 +246,13 @@ storage.usertree.parse = function(object){
                     return name;
                 }
 		})(),
-        is_editable:(user.facebook_id == '0' || user.gedcom_id == storage.usertree.gedcom_id),
+        is_editable:(function(){
+            if(storage.usertree.permission == "GUEST"){
+                return false;
+            } else {
+                return user.facebook_id == '0' || user.gedcom_id == storage.usertree.gedcom_id;
+            }
+        })(),
         is_deletable:(user.creator == storage.usertree.gedcom_id || user.gedcom_id == storage.usertree.gedcom_id),
         is_birth:(function(){
             var event = user['birth'];

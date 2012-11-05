@@ -15,6 +15,7 @@ class JMBUserTree {
     private $_LocationsEventsList;
     private $_MediaList;
     private $_LanguageList;
+
 	/**
 	*
 	*/
