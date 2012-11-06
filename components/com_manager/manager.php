@@ -43,7 +43,8 @@ $builder->setCss(array(
     'components/com_manager/modules/login/css/jmb.login.css',
     'components/com_manager/modules/progressbar/css/jmb.progressbar.css',
     'components/com_manager/modules/feedback/css/jmb.feedback.css',
-    'components/com_manager/modules/notifications/css/jmb.notifications.css'
+    'components/com_manager/modules/notifications/css/jmb.notifications.css',
+    'components/com_manager/modules/quick_tips/css/quick_tips.css'
 ));
 
 $cssCode = $builder->cssCompile();
@@ -128,6 +129,8 @@ $document->addScript('components/com_manager/modules/feedback/js/jmb.feedback.js
 //notifications
 //$document->addStyleSheet('components/com_manager/modules/notifications/css/jmb.notifications.css');
 $document->addScript('components/com_manager/modules/notifications/js/jmb.notifications.js');
+//quick tips
+$document->addScript('components/com_manager/modules/quick_tips/js/ftt.quick_tips.js');
 ###############################################################################
 
 $document->addCustomTag('<script type="text/javascript">jQuery.noConflict();</script>');

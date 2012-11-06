@@ -971,7 +971,59 @@ JMBProfile.prototype = {
 
                     return true;
                     function _getTarget(){
-                        return storage.usertree.pull[module.gedcom_id];
+                        var object = storage.usertree.pull[module.gedcom_id];
+                        var parentKey = _getParentKey_(object);
+                        if(parentKey && object.families == null){
+                            return storage.usertree.pull[parentKey];
+                        }
+                        return object;
+                        function _getParentKey_(o){
+                            if(!o || o == null) return false;
+                            var fn,
+                                parents,
+                                key,
+                                family,
+                                fatherId,
+                                motherId,
+                                fatherFamilyCount,
+                                motherFamilyCount;
+                            fn = {
+                                getFamilyCount:function(family, id){
+                                    if(!id) return 0;
+                                    var families = object.families;
+                                    if(families != null){
+                                        return families.length;
+                                    }
+                                    return 0;
+                                }
+                            }
+                            parents = object.parents;
+                            if(parents != null){
+                                for(key in parents){
+                                    if(parents.hasOwnProperty(key)){
+                                        if(key != 'length'){
+                                            family = parents[key];
+                                            fatherId = (family.father!= null && storage.usertree.pull[family.father.gedcom_id])?family.father.gedcom_id:false;
+                                            motherId = (family.mother!= null && storage.usertree.pull[family.mother.gedcom_id])?family.mother.gedcom_id:false;
+                                            fatherFamilyCount = fn.getFamilyCount(family, fatherId);
+                                            motherFamilyCount = fn.getFamilyCount(family, motherId);
+                                            if(fatherId && motherId){
+                                                if(fatherFamilyCount == motherFamilyCount){
+                                                    return fatherId;
+                                                } else if(fatherFamilyCount > motherFamilyCount){
+                                                    return fatherId;
+                                                } else {
+                                                    motherId;
+                                                }
+                                            } else {
+                                                return (fatherId)?fatherId:motherId;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            return false;
+                        }
                     }
                     function _getBorderColor(sp){
                         return (function(sp){
@@ -1088,43 +1140,6 @@ JMBProfile.prototype = {
                             }
                             return _childrens;
                         })(families);
-                    }
-                    function _getTopFormerSpouseBox(s){
-                        return (function(s){
-                            var l = s.length;
-                            switch(l){
-                                case 2:
-                                    return '69px';
-                                    break;
-
-                                default:
-                                    return '0';
-                                    break;
-                            }
-                        })(s);
-                    }
-                    function _setFormer(cont, spouses, position){
-                        return (function(cont, spouses, position){
-                            var _i, _sp;
-                            if(spouses.length != 0){
-                                if(spouses.length > 1){
-                                    for( _i = 1 ; _i < spouses.length ; _i++ ){
-                                        _sp =  _former_spouse(spouses[_i], _getBorderColor(spouses[_i]), position);
-                                        if(_sp){
-                                            jQuery(cont).append(_sp);
-                                        }
-                                    }
-                                    jQuery(cont).addClass('active');
-                                    if(spouses.length > 3){
-                                        jQuery(cont).addClass('scroll');
-                                    }
-                                } else {
-                                    jQuery(cont).removeClass('active');
-                                }
-                            } else {
-                                jQuery(cont).removeClass('active');
-                            }
-                        })(cont, spouses, position);
                     }
                     function _create(){
                         return (function(){

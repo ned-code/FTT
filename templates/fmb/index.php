@@ -86,10 +86,7 @@ if (stripos($user_agent, 'MSIE 6.0') !== false
 							<jdoc:include type="component" />
 						</td>
 						<td id="_right" valign="top">
-                            <div class="right">
-                                <?php if($alias=='myfamily'): ?>
-                                    <!--<jdoc:include type="modules" name="right" /></div>-->
-                                <?php endif; ?>
+                            <div class="right"></div>
                         </td>
 					</tr>
                     <tr>

@@ -1053,6 +1053,7 @@ core.load = function(pages){
         storage.progressbar = new JMBProgressbarObject();
         storage.feedback = new JMBFeedback();
         storage.ntf = new JMBNotifications();
+        storage.quickTips = new FTTQuickTipsObject();
 		
 		//init top menu bar
         storage.topmenubar.init();
@@ -1076,6 +1077,7 @@ core.load = function(pages){
                 storage.profile.init();
                 storage.tooltip.init();
                 storage.feedback.init();
+                storage.quickTips.init();
                 storage.pages = pages;
                 if(storage.pages.length==1){
                     self.renderPage({
@@ -1104,6 +1106,7 @@ core.load = function(pages){
                             storage.profile.init();
                             storage.tooltip.init();
                             storage.feedback.init();
+                            storage.quickTips.init();
                             var json = jQuery.parseJSON(req.responseText);
                             storage.pages = json.pages;
                             if(json.pages.length==1){
