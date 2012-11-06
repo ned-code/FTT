@@ -1,10 +1,10 @@
 <?php
 # Require the com_content helper library
-require_once(JPATH_COMPONENT.DS.'controller.php');
-require_once(JPATH_COMPONENT.DS.'php'.DS.'class.builder.php');
+require_once(JPATH_COMPONENT . DS . 'controller.php');
+require_once(JPATH_COMPONENT . DS . 'php' . DS . 'class.builder.php');
 
 # Create the controller
-$controller = new JMBController( );
+$controller = new JMBController();
 
 # Perform the Request task
 $controller->execute(JRequest::getCmd('task'));
@@ -16,7 +16,7 @@ $controller->loginFacebookUser();
 $controller->jmb();
 
 # Redirect if set by the controller
-$controller->redirect(); 
+$controller->redirect();
 
 # include JS and CSS 
 $document =& JFactory::getDocument();
@@ -56,7 +56,7 @@ $document->addScript('components/com_manager/js/excanvas.js');
 //$document->addStyleSheet('components/com_manager/codebase/dhtmlxlayout.css');
 //$document->addStyleSheet('components/com_manager/codebase/dhtmlxtree.css');
 //$document->addStyleSheet('components/com_manager/js/core.css');
-	
+
 //dhtmlx Part
 $document->addScript('components/com_manager/codebase/dhtmlxcontainer.js');
 $document->addScript('components/com_manager/codebase/dhtmlxcommon.js');
@@ -64,7 +64,7 @@ $document->addScript('components/com_manager/codebase/dhtmlxlayout.js');
 $document->addScript('components/com_manager/codebase/dhtmlxtree.js');
 //$document->addStyleSheet('administrator/components/com_manager/codebase/dhtmlxtabbar.css');
 $document->addScript('administrator/components/com_manager/codebase/dhtmlxtabbar.js');
-	
+
 //jquery Part
 $document->addScript('administrator/components/com_manager/js/jquery-1.8.1.min.js');
 $document->addScript('administrator/components/com_manager/js/jquery-ui-1.8.23.custom.min.js');
@@ -76,7 +76,6 @@ $document->addScript('components/com_manager/js/async.js');
 $document->addScript('components/com_manager/js/core.js');
 $document->addScript('components/com_manager/js/core.js');
 $document->addScript('administrator/components/com_manager/js/host.js');
-
 
 
 //include library

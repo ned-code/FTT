@@ -118,48 +118,50 @@ if (stripos($user_agent, 'MSIE 6.0') !== false
 				</table>
 			</div>
         </div>
-        <div class="slide-out-div">
-            <a class="handle" href="http://link-for-non-js-users.html">Content</a>
-            <div id="jmb_feedback_form">
-                <div style="display:none;" class="likes">
-                    <!-- AddThis Button BEGIN -->
-                    <script>
-                        if(window == window.top){
-                            (function(w){
-                                var head = document.getElementsByTagName("head");
-                                var script = document.createElement("script");
-                                script.src = "http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4f97ad88304db623";
-                                script.type="text/javascript";
-                                head[0].appendChild(script);
-                            })(window)
-                        }
-                    </script>
-                    <div class="addthis_toolbox addthis_default_style addthis_32x32_style">
-                        <div class="message"></div>
-                        <div class="facebook"><a class="addthis_button_facebook at300b"></a></div>
-                        <div class="twitter"><a class="addthis_button_twitter at300b"></a></div>
-                        <div class="email"><a class="addthis_button_email at300b"></a></div>
+        <?php if($alias=='myfamily'): ?>
+            <div class="slide-out-div">
+                <a class="handle" href="http://link-for-non-js-users.html">Content</a>
+                <div id="jmb_feedback_form">
+                    <div style="display:none;" class="likes">
+                        <!-- AddThis Button BEGIN -->
+                        <script>
+                            if(window == window.top){
+                                (function(w){
+                                    var head = document.getElementsByTagName("head");
+                                    var script = document.createElement("script");
+                                    script.src = "http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4f97ad88304db623";
+                                    script.type="text/javascript";
+                                    head[0].appendChild(script);
+                                })(window)
+                            }
+                        </script>
+                        <div class="addthis_toolbox addthis_default_style addthis_32x32_style">
+                            <div class="message"></div>
+                            <div class="facebook"><a class="addthis_button_facebook at300b"></a></div>
+                            <div class="twitter"><a class="addthis_button_twitter at300b"></a></div>
+                            <div class="email"><a class="addthis_button_email at300b"></a></div>
+                        </div>
+                        <!-- AddThis Button END -->
                     </div>
-                    <!-- AddThis Button END -->
                 </div>
             </div>
-        </div>
-        <script>
-            (function(w){
-                jQuery(".slide-out-div").tabSlideOut({
-                    tabHandle: '.handle',
-                    pathToTabImage: '../components/com_manager/modules/feedback/images/feedback.gif',
-                    imageHeight: '122px',
-                    imageWidth: '40px',
-                    tabLocation: 'left',
-                    speed: 300,
-                    action: 'click',
-                    topPos: '50px',
-                    leftPos: '20px',
-                    fixedPosition: false
-                });
-            })(window)
-        </script>
+            <script>
+                (function(w){
+                    jQuery(".slide-out-div").tabSlideOut({
+                        tabHandle: '.handle',
+                        pathToTabImage: '../components/com_manager/modules/feedback/images/feedback.gif',
+                        imageHeight: '279px',
+                        imageWidth: '40px',
+                        tabLocation: 'left',
+                        speed: 300,
+                        action: 'click',
+                        topPos: '50px',
+                        leftPos: '20px',
+                        fixedPosition: false
+                    });
+                })(window)
+            </script>
+        <?php endif; ?>
         <script>window.jQuery || document.write('<script src="<?php echo $this->baseurl ?>/templates/<?php echo $this->template; ?>/javascript/jquery-1.8.1.min.js"><\/script>')</script>
         <script>
             (function(w){

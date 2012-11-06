@@ -1,4 +1,4 @@
-function JMBFeedback(){
+function JMBFeedback() {
     var module = this,
         sb = host.stringBuffer(),
         parent = jQuery('div#jmb_feedback_form'),
@@ -12,44 +12,44 @@ function JMBFeedback(){
             FTT_MOD_FEEDBACK_SUBMIT_AN_IDEA:"Submit an Idea"
         },
         fn,
-        likes;
+        likes;1
 
     fn = {
-        parse:function(el){
+        parse:function (el) {
             var t = el.name.split(" ");
             var name = '';
             var id = el.id;
-            for(var i = 0; i < t.length ; i++){
-                if(t[i] != '-'){
-                    name += " "+t[i];
-                    id += "-"+t[i].toLowerCase();
+            for (var i = 0; i < t.length; i++) {
+                if (t[i] != '-') {
+                    name += " " + t[i];
+                    id += "-" + t[i].toLowerCase();
                 }
             }
             return { id:id, name:name };
         },
-        iframe:function(id){
+        iframe:function (id) {
             var st = host.stringBuffer();
             st._("<iframe style='border:none;' src='")._(storage.baseurl + path + id)._("' width='660' height='440' align='center'></iframe>");
             return jQuery(st.result());
         },
-        click:function(object, callback){
-            jQuery(object).click(function(){
+        click:function (object, callback) {
+            jQuery(object).click(function () {
                 callback(this);
                 return false;
             });
         },
-        dialogOpen:function(callback){
+        dialogOpen:function (callback) {
             var box = jQuery('<div class="jmb_feedback_dialog_box"></div>');
             jQuery(box).dialog({
                 width:700,
                 height:500,
-                title: 'Family TreeTop - Public Feedback',
-                resizable: false,
-                draggable: false,
-                position: "top",
-                closeOnEscape: false,
+                title:'Family TreeTop - Public Feedback',
+                resizable:false,
+                draggable:false,
+                position:"top",
+                closeOnEscape:false,
                 modal:true,
-                close:function(){
+                close:function () {
 
                 }
             });
@@ -57,42 +57,42 @@ function JMBFeedback(){
             jQuery(box).parent().css('top', '20px');
             callback(box);
         },
-        button:function(id, name){
-            return jQuery("<div id='"+id+"'><span>"+name+"</span></div>");
+        button:function (id, name) {
+            return jQuery("<div id='" + id + "'><span>" + name + "</span></div>");
         },
-        buttonClick:function(button){
-            fn.click(button, function(ev){
+        buttonClick:function (button) {
+            fn.click(button, function (ev) {
                 var id = jQuery(ev).attr('id');
-                window.location.href = storage.baseurl+'index.php/feedback/'+id;
+                window.location.href = storage.baseurl + 'index.php/feedback/' + id;
                 /*
-                fn.dialogOpen(function(box){
-                    var id = jQuery(ev).attr('id');
-                    var iframe = fn.iframe(id);
-                    jQuery(box).append(iframe);
-                });
-                */
+                 fn.dialogOpen(function(box){
+                 var id = jQuery(ev).attr('id');
+                 var iframe = fn.iframe(id);
+                 jQuery(box).append(iframe);
+                 });
+                 */
             });
             return button;
         }
     };
 
-    module.init = function(){
+    module.init = function () {
         jQuery.ajax({
-            url: storage.baseurl+storage.url+'php/ajax.php',
-            type: "POST",
-            data: 'module=feedback&class=JMBFeedback&method=get&args=',
-            dataType: "html",
-            complete : function (req, err) {
-                if(req.responseText.length!=0){
+            url:storage.baseurl + storage.url + 'php/ajax.php',
+            type:"POST",
+            data:'module=feedback&class=JMBFeedback&method=get&args=',
+            dataType:"html",
+            complete:function (req, err) {
+                if (req.responseText.length != 0) {
                     //var json = jQuery.parseJSON(req.responseText);
                     var json = storage.getJSON(req.responseText);
-                    if(json.language){
+                    if (json.language) {
                         message = json.language;
                     }
-                    sb._('<div class="header"><span>')._(message.FTT_MOD_FEEDBACK_HEADER)._('</span></div>');
+                    //sb._('<div class="header"><span>')._(message.FTT_MOD_FEEDBACK_HEADER)._('</span></div>');
                     sb._('<div class="body">');
                     sb._('<div class="text">');
-                    sb._(message.FTT_MOD_FEEDBACK_WELCOM.replace("%%",'<font color="#99d9ea"></a>'+message.FTT_MOD_FEEDBACK_PUBLIC_BETA+'</font>'));
+                    sb._(message.FTT_MOD_FEEDBACK_WELCOM.replace("%%", message.FTT_MOD_FEEDBACK_PUBLIC_BETA));
                     sb._('</div>');
                     sb._('<div class="buttons">')
                     sb._('</div>');
@@ -115,13 +115,13 @@ function JMBFeedback(){
 }
 
 JMBFeedback.prototype = {
-	ajax:function(func, params, callback){
-        storage.callMethod("feedback", "JMBFeedback", func, params, function(req){
+    ajax:function (func, params, callback) {
+        storage.callMethod("feedback", "JMBFeedback", func, params, function (req) {
             //var json = jQuery.parseJSON(text);
             var json = storage.getJSON(text);
             callback(json);
-		})
-	}	
+        })
+    }
 }
 
 

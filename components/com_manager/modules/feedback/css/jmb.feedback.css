@@ -1,19 +1,21 @@
-.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.jmb_feedback_dialog{
+.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.jmb_feedback_dialog {
     background: none repeat scroll 0 0 #9A7423;
 }
+
 .jmb_feedback_dialog_box.ui-dialog-content.ui-widget-content {
     background: white;
     border-radius: 5px;
 }
+
 div#jmb_feedback_form {
-    background: none repeat scroll 0 0 #ff7f27;
+    background: none repeat scroll 0 0 #f78127;
     color: black;
     font-family: Tahoma;
     font-size: 12px;
-    /*margin: 5px;*/
-    padding: 3px;
-    width: 140px;
+    width: 250px;
+    padding: 10px 0 10px 10px;
 }
+
 /*
 div#jmb_feedback_form {
     padding: 20px;
@@ -26,54 +28,72 @@ div#jmb_feedback_form div.header {
     text-align: center;
     padding: 5px;
 }
+
 div#jmb_feedback_form div.header span {
     color: #314A6C;
     font-weight: bold;
 }
+
 div#jmb_feedback_form div.body {
     background: none repeat scroll 0 0 #f9eaca;
-    margin-left: 3px;
 }
+
 div#jmb_feedback_form div.body div.text {
-    border-bottom: 1px solid white;
-    padding: 10px 5px;
+    font-family: Tahoma;
+    font-size: 12px;
+    font-weight: normal;
+    line-height: 18px;
+    padding: 10px;
 }
-div#jmb_feedback_form div.body div.buttons{
-    border-bottom: 1px solid white;
+
+div#jmb_feedback_form div.body div.buttons {
     bottom: 0;
-    padding: 10px 5px;
+    padding: 20px 5px;
     position: relative;
     right: 0;
 }
-div#jmb_feedback_form div.body div.buttons div{
+
+div#jmb_feedback_form div.body div.buttons div {
     background: none repeat scroll 0 0 white;
     border: 1px solid gray;
     border-radius: 5px 5px 5px 5px;
     margin: 3px;
     padding: 5px;
     text-align: center;
+    display: inline-block;
 }
-div#jmb_feedback_form div.body div.buttons span{
+
+div#jmb_feedback_form div.body div.buttons span {
     color: gray;
     cursor: pointer;
     font-size: 14px;
     font-weight: normal;
 }
+
 div#jmb_feedback_form div.body div.likes {
+    margin-bottom: 5px;
     padding: 10px 5px;
 }
-div#jmb_feedback_form div.body div.likes div{
+
+div#jmb_feedback_form div.body div.likes div {
     margin-top: 3px;
     display: inline-block;
     overflow: hidden;
 }
 
-div#jmb_feedback_form div.body div.likes div.facebook{
-    margin-left:5px;
+div#jmb_feedback_form div.body div.likes div.message {
+    display: block;
+    text-align: center;
+    width: 250px;
+    margin-bottom: 15px;
 }
 
-div#jmb_feedback_form div.body div.likes div.twitter{
+div#jmb_feedback_form div.body div.likes div.facebook {
+    margin-left: 60px;
 }
 
-div#jmb_feedback_form div.body div.likes div.email{
+div#jmb_feedback_form div.body div.likes div.twitter {
+}
+
+div#jmb_feedback_form div.body div.likes div.email {
 }
