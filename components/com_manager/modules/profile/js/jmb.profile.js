@@ -1,5 +1,65 @@
 function JMBProfile(){
     var	module = this;
+    module._generateBorders=function(n){
+        var retBorders = [],
+            isBorders = {},
+            each,
+            getColor,
+            setColor;
+
+        getColor = function(){ return '#'+Math.floor(Math.random()*16777215).toString(16); }
+        setColor = function(color){
+            if(!color){
+                color = getColor();
+            }
+            if(!isBorders[color]){
+                isBorders[color] = true;
+                retBorders.push(color);
+                return true;
+            } else {
+                return false;
+            }
+        }
+        each = function(start, end, callback){
+            var i, length;
+            if('object' === typeof(end)){
+                length = end.length;
+            } else if('string' === typeof(end)){
+                length = "0" + end;
+            } else if('number' === typeof(end)){
+                length = end;
+            }
+            for(i = start ; i < length ; i++){
+                if(!callback(i, end)){
+                    i--;
+                }
+            }
+        }
+        each(0, ["#3f48cc","#1d9441","#b97a57","#934293","#eab600","#00a2e8","#ed1c24","#7092be"], function(i, colors){
+            return setColor(colors[i]);
+        });
+        each(8, 100, function(i, length){
+            return setColor(false);
+        });
+
+        return retBorders;
+    }
+
+    module.imageSize = {
+        parent:{
+            width:108,
+            height:120
+        },
+        child:{
+            width:72,
+            height:80
+        }
+    }
+    module.borders = module._generateBorders(100);
+    module.border_iter = 0;
+    module.spouse_border = {};
+    module.childsPos = {};
+
     module.views = {};
     module.message = {
         FTT_MOD_PROFILE_EDITOR_VIEW:"View",
@@ -12,6 +72,7 @@ function JMBProfile(){
         FTT_MOD_PROFILE_EDITOR_VIEW_PROFILE_DEATHPLACE:"Deathplace",
         FTT_MOD_PROFILE_EDITOR_VIEW_PROFILE_RELATION:"Relation",
         FTT_MOD_PROFILE_EDITOR_VIEW_PHOTOS:"Photos",
+        FTT_MOD_PROFILE_EDITOR_VIEW_FAMILY:"Family",
         FTT_MOD_PROFILE_EDITOR_EDIT:"Edit",
         FTT_MOD_PROFILE_EDITOR_EDIT_BASIC:"Basic Details",
         FTT_MOD_PROFILE_EDITOR_EDIT_UNIONS:"Unions",
@@ -846,6 +907,356 @@ JMBProfile.prototype = {
                     form = jQuery(storage.media.render(media.photos));
                     storage.media.init(form);
                 }
+            break;
+
+            case "view_family":
+                var object = jQuery('<div style="margin-left: -125px;position: relative;"></div>');
+                (function(){
+                    var cont = _create(),
+                        family = storage.usertree.pull,
+                        target = _getTarget(),
+                        sircar,
+                        info,
+                        spouse,
+                        spouses = _getSpouses(target),
+                        childrens = _getChildrens(target.families),
+                        childs = [],
+                        startTop,
+                        rowLength,
+                        leftDel,
+                        index,
+                        startLeft,
+                        i;
+
+                    sircar = _sircar(target);
+                    if(sircar){
+                        jQuery(cont[0]).css({top:"21px",left:"155px"}).attr('id', target.user.gedcom_id).append(sircar);
+                    }
+
+                    if(spouses.length != 0){
+                        info = _info(target, spouses[0]);
+                        jQuery(cont[1]).css({top:"113px", left:"312px"}).append(info);
+
+                        spouse = _spouse(spouses[0], _getBorderColor(spouses.length>1?spouses[0]:false));
+                        if(spouse){
+                            jQuery(cont[2]).attr('id', spouses[0][1]).css({top:"21px",left:"430px"}).append(spouse);
+                        }
+                    }
+
+                    startTop = _getStartTop(spouses.length) + 50;
+                    if(childrens.length!=0){
+                        rowLength = _getLength(childrens.length);
+                        leftDel = 100;
+                        index = 0;
+                        startLeft = 350 - 100*(rowLength/2);
+                        for(i = 0 ; i < childrens.length ; i++){
+                            if(index == rowLength){
+                                startTop += 185;
+                                index = 0;
+                                if((childrens.length-i)<rowLength){
+                                    startLeft = 350 - 100*((childrens.length-i)/2);
+                                }
+                            }
+                            var pos = {top:startTop, left:startLeft+(index*leftDel)};
+                            module.childsPos[childrens[i].gedcom_id] = pos;
+                            childs[i] = _child(childrens[i], spouses.length, pos);
+                            jQuery(object).append(childs[i]);
+                            index++;
+                        }
+                    }
+
+                    jQuery(object).height(startTop + 200);
+                    jQuery(object).append(cont);
+                    jQuery(object).find('div#'+module.gedcom_id).find('div[type="imgContainer"]').animatedBorder({size : 6, color : '#FFCC66'});
+
+                    return true;
+                    function _getTarget(){
+                        return storage.usertree.pull[module.gedcom_id];
+                    }
+                    function _getBorderColor(sp){
+                        return (function(sp){
+                            if(!sp) return "#000000";
+                            var _color = module.borders[module.border_iter];
+                            module.border_iter++;
+                            module.spouse_border[sp[0]] = _color;
+                            return _color;
+                        })(sp);
+                    }
+                    function _getLength(len){
+                        return (function(len){
+                            var _limit = 7;
+                            var _rows = Math.ceil(len/_limit);
+                            return Math.round(len/_rows);
+                        })(len);
+                    }
+                    function _getStartTop(length){
+                        return 190;
+                        return (function(length){
+                            if(length>=3){
+                                return 450;
+                            }
+                            return 315;
+                        })(length);
+                    }
+                    function _getName(info){
+                        return (function(info){
+                            if(!info) return '';
+                            if(info.nick.length > 12){
+                                return info.nick.substr(0,6)+'...';
+                            } else {
+                                return info.nick;
+                            }
+                        })(info);
+                    }
+                    function _getDate(info){
+                        return (function(info){
+                            if(!info) return '....';
+                            var _b, _d;
+                            _b = info.date('birth', 2);
+                            _d = info.date('death', 2);
+                            if(_b != 0 && _d != 0){
+                                return _b + " - " + _d;
+                            } else if(_b != 0 && _d == 0){
+                                return _b;
+                            } else if(_b == 0 && _d != 0){
+                                return ".... - " + _d;
+                            } else {
+                                return "....";
+                            }
+                        })(info);
+                    }
+                    function _getAvatar(object, type, k){
+                        return (function(object, type, k){
+                            var _size = _getImageSize_(type, k);
+                            return storage.usertree.avatar.get({
+                                object:object,
+                                cssClass:"jmb-families-avatar view",
+                                width:_size.width,
+                                height:_size.height
+                            });
+                            function _getImageSize_(){
+                                var	_imageSize = module.imageSize,
+                                    _size_ = _imageSize[type],
+                                    _width = Math.round(_size_.width*k),
+                                    _height = Math.round(_size_.height*k);
+                                return {
+                                    width: _width,
+                                    height: _height
+                                };
+                            }
+                        })(object, type, k);
+                    }
+                    function _getSpouses(target){
+                        return (function(target){
+                            if(!target) return [];
+                            var _families = target.families, _spouses = [], _k, _f, _sp, _def;
+                            if(_families==null) return [];
+                            for(_k in _families){
+                                if(!_families.hasOwnProperty(_k)) continue;
+                                if('length' !== _k){
+                                    _f = _families[_k];
+                                    if(null != _f.spouse && family[_f.spouse]){
+                                        _sp = [_f.id, _f.spouse];
+                                        _spouses.push(_sp);
+                                    }
+                                }
+                            }
+                            _def = target.user.default_family;
+                            return _spouses.sort(function(){
+                                if(arguments[0][1] == _def){
+                                    return -1;
+                                } else {
+                                    return 1;
+                                }
+                            });
+                        })(target);
+                    }
+                    function _getChildrens(families){
+                        return (function(families){
+                            var _childrens = [], _family, _child;
+                            for(var _key in families){
+                                if (!families.hasOwnProperty(_key)) continue;
+                                if(_key!='length'){
+                                    _family = families[_key];
+                                    if(_family.childrens!=null){
+                                        for(var _i = 0 ; _i < _family.childrens.length ; _i ++){
+                                            _child = _family.childrens[_i];
+                                            _childrens.push(_child);
+                                        }
+                                    }
+                                }
+                            }
+                            return _childrens;
+                        })(families);
+                    }
+                    function _getTopFormerSpouseBox(s){
+                        return (function(s){
+                            var l = s.length;
+                            switch(l){
+                                case 2:
+                                    return '69px';
+                                    break;
+
+                                default:
+                                    return '0';
+                                    break;
+                            }
+                        })(s);
+                    }
+                    function _setFormer(cont, spouses, position){
+                        return (function(cont, spouses, position){
+                            var _i, _sp;
+                            if(spouses.length != 0){
+                                if(spouses.length > 1){
+                                    for( _i = 1 ; _i < spouses.length ; _i++ ){
+                                        _sp =  _former_spouse(spouses[_i], _getBorderColor(spouses[_i]), position);
+                                        if(_sp){
+                                            jQuery(cont).append(_sp);
+                                        }
+                                    }
+                                    jQuery(cont).addClass('active');
+                                    if(spouses.length > 3){
+                                        jQuery(cont).addClass('scroll');
+                                    }
+                                } else {
+                                    jQuery(cont).removeClass('active');
+                                }
+                            } else {
+                                jQuery(cont).removeClass('active');
+                            }
+                        })(cont, spouses, position);
+                    }
+                    function _create(){
+                        return (function(){
+                            var _sb = storage.stringBuffer();
+                            _sb._('<div class="ftt-profile-view-sircar">&nbsp;</div>');
+                            _sb._('<div class="ftt-profile-view-event">&nbsp;</div>');
+                            _sb._('<div class="ftt-profile-view-spouse">&nbsp;</div>');
+                            return jQuery(_sb.result());
+                        })();
+                    }
+                    function _sircar(object){
+                        return (function(object){
+                            var _sb = storage.stringBuffer();
+                            var _gedcomId = object.user.gedcom_id;
+                            var _info = storage.usertree.parse(object);
+                            _sb._('<div>');
+                            _sb._('<div id="')._(_gedcomId)._('-view" type="imgContainer" class="ftt-profile-view-parent-img">');
+                            _sb._(_getAvatar(object, 'parent', 1));
+                            _sb._('</div>');
+                            _sb._('</div>');
+                            _sb._('<div>');
+                            _sb._('<div class="ftt-profile-view-parent-name">')._(_getName(_info))._('</div>');
+                            _sb._('<div class="ftt-profile-view-parent-date">')._(_getDate(_info))._('</div>');
+                            _sb._('</div>');
+                            if(object.families!=null){
+                                _sb._('<div class="ftt-profile-view-arrow-left">&nbsp</div>');
+                            }
+                            return jQuery(_sb.result());
+                        })(object);
+                    }
+                    function _info(object, spouse){
+                        return (function(object, spouse){
+                            if(!spouse) return '';
+                            var _sb = host.stringBuffer(),
+                                _event = object.families[spouse[0]].marriage,
+                                _date,
+                                _place,
+                                _location = '';
+
+                            if(_event!=null){
+                                _date = _event.date;
+                                _place = _event.place;
+                                if(_place != null && _place[0].country != null){
+                                    _location = _place[0].country;
+                                } else {
+                                    _location = '';
+                                }
+                                _sb._('<div>');
+                                _sb._('<div>')._((_date!=null&&_date[2]!=null)?_date[2]:'')._('</div>');
+                                _sb._('<div>')._(_location)._('</div>');
+                                _sb._('</div>');
+                                return jQuery(_sb.result());
+                            }
+                            return '';
+                        })(object, spouse);
+                    }
+                    function _spouse(spouse, bcolor){
+                        return (function(spouse, bcolor){
+                            var _sb = storage.stringBuffer(),
+                                _gedcomId = spouse[1],
+                                _object = family[_gedcomId],
+                                _info = (object)?storage.usertree.parse(_object):false;
+
+                            if(!_object) return ''
+
+                            _sb._('<div>');
+                            _sb._('<div id="')._(_gedcomId)._('-view" type="imgContainer" class="ftt-profile-view-parent-img" style="border:2px solid #')._(bcolor)._(';">');
+                            _sb._(_getAvatar(_object, 'parent', 1));
+                            _sb._('</div>');
+                            _sb._('</div>');
+                            _sb._('<div>');
+                            _sb._('<div class="ftt-profile-view-parent-name">')._(_getName(_info))._('</div>');
+                            _sb._('<div class="ftt-profile-view-parent-date">')._(_getDate(_info))._('</div>');
+                            _sb._('</div>');
+                            if(_object.families!=null){
+                                _sb._('<div class="ftt-profile-view-arrow-right" style="background:#')._(bcolor)._(';">&nbsp</div>');
+                            }
+                            return jQuery(_sb.result());
+                        })(spouse, bcolor);
+                    }
+                    function _former_spouse(spouse, bcolor, position){
+                        return (function(spouse, bcolor, position){
+                            var _sb = storage.stringBuffer(),
+                                _gedcomId = spouse[1],
+                                _object = family[_gedcomId],
+                                _info = storage.usertree.parse(_object);
+                            _sb._('<div id="')._(_gedcomId)._('" class="ftt-profile-view-spouse-div ')._(position)._('">');
+                            _sb._('<div id="')._(_gedcomId)._('-view" type="imgContainer" class="ftt-profile-view-former-img" style="border:2px solid #')._(bcolor)._(';">');
+                            _sb._(_getAvatar(_object, 'parent', 0.5));
+                            _sb._('</div>');
+                            _sb._('<div>');
+                            _sb._('<div class="ftt-profile-view-parent-name former">')._(_getName(_info))._('</div>');
+                            _sb._('<div class="ftt-profile-view-parent-date former">')._(_getDate(_info))._('</div>');
+                            _sb._('</div>');
+                            _sb._('<div class="ftt-profile-view-former-arrow-')._(position)._('" style="background:')._(bcolor)._(';">&nbsp</div>');
+                            _sb._('<div class="ftt-profile-view-former-arrow-')._(position)._(' text" style="color:')._(bcolor)._(';">')._(_info.marr(spouse[0], 'date', 2))._('</div>');
+                            _sb._('</div>');
+                            _sb._('</div>');
+                            return jQuery(_sb.result());
+                        })(spouse, bcolor, position);
+                    }
+                    function _child(child, len, position){
+                        return (function(child, len, position){
+                            var _sb = storage.stringBuffer(),
+                                _gedcomId = child.gedcom_id,
+                                _object = family[_gedcomId],
+                                _bcolor = (len>1)?module.spouse_border[child.family_id]:"000000",
+                                _info = storage.usertree.parse(_object);
+
+                            _sb._('<div id="');
+                            _sb._(_gedcomId);
+                            _sb._('" class="ftt-profile-view-child" style="height:170px;top:');
+                            _sb._(position.top);
+                            _sb._('px;left:');
+                            _sb._(position.left);
+                            _sb._('px;">');
+                            _sb._('<div id="')._(_gedcomId)._('-view" type="imgContainer" style="height:80px;width:72px;border:2px solid #');
+                            _sb._(_bcolor);
+                            _sb._('" class="ftt-profile-view-child-img">');
+                            _sb._(_getAvatar(_object, 'child', 1));
+                            _sb._('</div>');
+                            _sb._('<div>');
+                            _sb._('<div class="ftt-profile-view-child-name">')._(_getName(_info))._('</div>');
+                            _sb._('<div class="ftt-profile-view-child-date">')._(_getDate(_info))._('</div>');
+                            _sb._('</div>');
+                            _sb._('<div class="ftt-profile-view-arrow-up" style="background:#')._(_bcolor)._(';">&nbsp</div>');
+                            _sb._('</div>');
+                            return jQuery(_sb.result());
+                        })(child, len, position);
+                    }
+                })()
+                form = object;
             break;
 
             case "edit_basic":
