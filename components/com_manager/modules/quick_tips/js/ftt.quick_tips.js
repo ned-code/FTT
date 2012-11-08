@@ -7,7 +7,8 @@ function FTTQuickTipsObject(){
 
     return {
         init:function(){
-            console.log("QuickTips Init");
+            return true;
+            //console.log("QuickTips Init");
         }
     }
 }

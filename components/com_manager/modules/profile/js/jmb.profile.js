@@ -910,7 +910,7 @@ JMBProfile.prototype = {
             break;
 
             case "view_family":
-                var object = jQuery('<div style="margin-left: -125px;position: relative;"></div>');
+                var object = jQuery('<div style="position: relative;"></div>');
                 (function(){
                     var cont = _create(),
                         family = storage.usertree.pull,
@@ -930,16 +930,16 @@ JMBProfile.prototype = {
 
                     sircar = _sircar(target);
                     if(sircar){
-                        jQuery(cont[0]).css({top:"21px",left:"155px"}).attr('id', target.user.gedcom_id).append(sircar);
+                        jQuery(cont[0]).css({top:"21px",left:"25px"}).attr('id', target.user.gedcom_id).append(sircar);
                     }
 
                     if(spouses.length != 0){
                         info = _info(target, spouses[0]);
-                        jQuery(cont[1]).css({top:"113px", left:"312px"}).append(info);
+                        jQuery(cont[1]).css({top:"113px", left:"180px"}).append(info);
 
                         spouse = _spouse(spouses[0], _getBorderColor(spouses.length>1?spouses[0]:false));
                         if(spouse){
-                            jQuery(cont[2]).attr('id', spouses[0][1]).css({top:"21px",left:"430px"}).append(spouse);
+                            jQuery(cont[2]).attr('id', spouses[0][1]).css({top:"21px",left:"300px"}).append(spouse);
                         }
                     }
 
@@ -948,13 +948,13 @@ JMBProfile.prototype = {
                         rowLength = _getLength(childrens.length);
                         leftDel = 100;
                         index = 0;
-                        startLeft = 350 - 100*(rowLength/2);
+                        startLeft = 250 - 100*(rowLength/2);
                         for(i = 0 ; i < childrens.length ; i++){
                             if(index == rowLength){
                                 startTop += 185;
                                 index = 0;
                                 if((childrens.length-i)<rowLength){
-                                    startLeft = 350 - 100*((childrens.length-i)/2);
+                                    startLeft = 250 - 100*((childrens.length-i)/2);
                                 }
                             }
                             var pos = {top:startTop, left:startLeft+(index*leftDel)};
@@ -978,7 +978,7 @@ JMBProfile.prototype = {
                         }
                         return object;
                         function _getParentKey_(o){
-                            if(!o || o == null) return false;
+                            if(!o || o==null) return false;
                             var fn,
                                 parents,
                                 key,
@@ -987,6 +987,7 @@ JMBProfile.prototype = {
                                 motherId,
                                 fatherFamilyCount,
                                 motherFamilyCount;
+
                             fn = {
                                 getFamilyCount:function(family, id){
                                     if(!id) return 0;
@@ -997,11 +998,13 @@ JMBProfile.prototype = {
                                     return 0;
                                 }
                             }
-                            parents = object.parents;
+
+                            parents = o.parents;
                             if(parents != null){
                                 for(key in parents){
                                     if(parents.hasOwnProperty(key)){
                                         if(key != 'length'){
+                                            module.famId = key;
                                             family = parents[key];
                                             fatherId = (family.father!= null && storage.usertree.pull[family.father.gedcom_id])?family.father.gedcom_id:false;
                                             motherId = (family.mother!= null && storage.usertree.pull[family.mother.gedcom_id])?family.mother.gedcom_id:false;
@@ -1099,23 +1102,63 @@ JMBProfile.prototype = {
                         })(object, type, k);
                     }
                     function _getSpouses(target){
-                        return (function(target){
-                            if(!target) return [];
-                            var _families = target.families, _spouses = [], _k, _f, _sp, _def;
-                            if(_families==null) return [];
-                            for(_k in _families){
-                                if(!_families.hasOwnProperty(_k)) continue;
-                                if('length' !== _k){
-                                    _f = _families[_k];
-                                    if(null != _f.spouse && family[_f.spouse]){
-                                        _sp = [_f.id, _f.spouse];
-                                        _spouses.push(_sp);
+                        return (function(t){
+                            if(!t) return [];
+                            var key,
+                                key2,
+                                key3,
+                                family,
+                                families,
+                                spouse,
+                                spouses,
+                                $spouses,
+                                child,
+                                childs,
+                                $childs,
+                                defFamily,
+                                object,
+                                parents;
+                            families = t.families;
+                            spouses = [];
+                            $spouses = [];
+                            childs = [];
+                            for(key in families){
+                                if(!families.hasOwnProperty(key)) continue;
+                                if("length" !== key){
+                                    family = families[key];
+                                    if(null !== family.spouse && storage.usertree.pull[family.spouse]){
+                                        if(!spouses[family.spouse]){
+                                            spouses[family.spouse] = family.spouse;
+                                            spouse = [family.id, family.spouse];
+                                            $spouses.push(spouse);
+                                        }
+                                    }
+                                    $childs = family.childrens;
+                                    for(key2 in $childs){
+                                        if($childs.hasOwnProperty(key2)){
+                                            child = $childs[key2];
+                                            if(!childs[child.gedcom_id] && "undefined" !== storage.usertree.pull[child.gedcom_id]){
+                                                childs[child.gedcom_id] = child.gedcom_id;
+                                            }
+                                        }
                                     }
                                 }
                             }
-                            _def = target.user.default_family;
-                            return _spouses.sort(function(){
-                                if(arguments[0][1] == _def){
+
+                            defFamily = t.user.default_family;
+                            if(module.gedcom_id in childs){
+                                object = storage.usertree.pull[module.gedcom_id];
+                                parents = object.parents;
+                                for(key3 in parents){
+                                    if(!parents.hasOwnProperty(key)) continue;
+                                    if(key != 'length'){
+                                        defFamily = key;
+                                        break;
+                                    }
+                                }
+                            }
+                            return $spouses.sort(function(){
+                                if(arguments[0][1] == defFamily || arguments[0][0] == defFamily){
                                     return -1;
                                 } else {
                                     return 1;
