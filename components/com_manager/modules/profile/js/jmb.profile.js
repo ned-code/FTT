@@ -1151,7 +1151,7 @@ JMBProfile.prototype = {
                                 parents = object.parents;
                                 for(key3 in parents){
                                     if(!parents.hasOwnProperty(key)) continue;
-                                    if(key != 'length'){
+                                    if(key3 != 'length'){
                                         defFamily = key3;
                                         break;
                                     }

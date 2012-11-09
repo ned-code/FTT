@@ -117,7 +117,6 @@ class JMBInvitateClass {
             if(!empty($rows)){
                 $opt = explode(',', $rows[0]['value']);
                 $user = $this->host->gedcom->individuals->get($rows[0]['s_gedcom_id']);
-                //$target = $this->host->gedcom->individuals->get($opt[0]);
                 $target = $this->_getTarget($opt[0], $user);
                 $family = $this->host->usertree->getUser($user->TreeId, $user->Id,  $target->Id);
                 $data = array(
@@ -129,7 +128,7 @@ class JMBInvitateClass {
                     'relation' => $this->host->gedcom->relation->get($opt[1], $opt[0], $rows[0]['s_gedcom_id']),
                     'sender_data' => $this->_getSenderEmail($user)
                 );
-                return json_encode(array('success'=>false, 'sender'=>$user, 'family'=>$family, 'data' => $data, 'msg'=>$language));
+                return json_encode(array('success'=>false, 'user' => $this->host->user->get(), 'sender'=>$user, 'family'=>$family, 'data' => $data, 'msg'=>$language));
             }
         }
         $this->host->user->setToken(0);

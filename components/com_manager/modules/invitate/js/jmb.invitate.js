@@ -614,6 +614,7 @@ function JMBInvitateObject(obj){
                 });
                 return false;
             } else {
+                storage.usertree.user = json.user;
                 if(json.data.language != storage.usertree.user.language){
                     storage.login.menu.viewLanguage({def:json.data.language}, function(langauge){
                         module.ajax('setInvitationLanguage', [langauge, storage.usertree.user.token].join(','), function(){})

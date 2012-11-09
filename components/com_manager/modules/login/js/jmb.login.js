@@ -342,25 +342,25 @@ function JMBLogin(){
 
     if(window!=window.top){
         module.init = function(callback){
-            if(alias == 'home' || alias == 'famous-family') {
+            function _ajax_ (url, callback){
                 jQuery.ajax({
-                    url: 'index.php?option=com_manager&task=setLocation&alias=myfamily',
+                    url: url,
                     type: "POST",
                     dataType: "json",
-                    complete : function (req, err) {
-                        var bUrl = jQuery(document.body).attr('_baseurl');
-                        window.location.href= bUrl+'index.php/myfamily';
-                    }
+                    complete : callback
+                });
+            }
+            function _redirect_ (){
+                var bUrl = jQuery(document.body).attr('_baseurl');
+                window.location.href= bUrl+'index.php/myfamily';
+            }
+            if(alias == 'home' || alias == 'famous-family') {
+                _ajax_("index.php?option=com_manager&task=setLocation&alias=myfamily" ,function(){
+                    _redirect_();
                 });
             } else if(loggedByFamous){
-                jQuery.ajax({
-                    url: 'index.php?option=com_manager&task=clearFamousData',
-                    type: "POST",
-                    dataType: "json",
-                    complete : function (req, err) {
-                        var bUrl = jQuery(document.body).attr('_baseurl');
-                        window.location.href= bUrl+'index.php/myfamily';
-                    }
+                _ajax_("index.php?option=com_manager&task=clearFamousData" ,function(){
+                    _redirect_();
                 });
             } else {
                 setTimeout(function(){
