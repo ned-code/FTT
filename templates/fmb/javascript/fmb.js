@@ -47,7 +47,7 @@ function JMBTopMenuBar() {
             string += '<div  class="jmb-top-menu-bar">';
             string += '<div style="max-width:760px; margin: 0 auto; position: relative;">';
             string += '<div class="jmb-top-menu-bar-title">Family TreeTop: <span>' + fn.getAliasUcFirst(alias) + '</span></div>';
-            string += '<div class="jmb-top-menu-bar-return">' + message.FTT_MOD_TOPMENUBAR_RETURN + '</div>';
+            string += '<div class="jmb-top-menu-bar-return"><span>' + message.FTT_MOD_TOPMENUBAR_RETURN + '</span></div>';
             string += '</div>';
             string += '</div>';
             return jQuery(string);
