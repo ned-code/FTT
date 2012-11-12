@@ -1,6 +1,11 @@
 <?php defined('_JEXEC') or die('Restricted access');
 
-$info = $this->pageInfo;
+function prior($pages){
+    $result = array($pages[0], $pages[2], $pages[1], $pages[3]);
+    return $result;
+}
+
+$info = prior($this->pageInfo);
 $url = JURI::base();
 $path = 'components/com_manager/modules/';
 
@@ -35,7 +40,7 @@ echo "<div id='container'>&nbsp;</div>";
 ?>
 <script>
     (function(w){
-        var pageInfo = <?php echo json_encode($this->pageInfo); ?>;
+        var pageInfo = <?php echo json_encode($info); ?>;
         var activeTab = '<?php echo $this->activeTab; ?>';
         var usertree = <?php echo json_encode($this->usertree); ?>;
         var langString = <?php echo json_encode($this->languageStrings); ?>;
