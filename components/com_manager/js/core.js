@@ -846,7 +846,7 @@ core.destroy.start = function(){
 core.createLayout = function(type){
 	var layout_type = {'single':1,'double':2,'triple':3};
 	var td_length = layout_type[type];
-	var table = jQuery('<table style="table-layout:fixed;" id="jmb_page_layout_table"  width="100%" height="100%"></table>');
+	var table = jQuery('<table style="table-layout:fixed;margin-top: -15px;" id="jmb_page_layout_table"  width="100%" height="100%"></table>');
 	var tr = jQuery('<tr class="jmb_layout_row"></tr>');
 	jQuery(table).append(tr);
 	for(var cell=1; cell<=td_length;cell++){
