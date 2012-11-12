@@ -247,6 +247,7 @@ function JMBThisMonthObject(obj){
     }
     function setUserContent(t, type, selector){
         var el = jQuery('.jmb-this-month-body').find(selector+' table');
+        var count = 0;
         var events;
         if(events = eventExist(type)){
             jQuery(events).each(function(i, data){
@@ -254,8 +255,12 @@ function JMBThisMonthObject(obj){
                 if(isMemberDeathInBirthConent(data.gedcom_id, type)) return true;
                 if(!isMeetsTheRequirementsOf(data.event_year)) return true;
                 setUserTooltip(setUserEventContent(el, data, type));
+                count++;
             });
         } else {
+            jQuery(selector).remove();
+        }
+        if(count == 0){
             jQuery(selector).remove();
         }
     }
@@ -291,6 +296,7 @@ function JMBThisMonthObject(obj){
     }
     function setMarriages(t){
         var el = jQuery('.jmb-this-month-body').find('#jmb-this-month-marr table');
+        var count = 0;
         var events;
         if(events = eventExist('marriage')){
             jQuery(events).each(function(i, data){
@@ -298,8 +304,12 @@ function JMBThisMonthObject(obj){
                 var family = getFamilyData(data);
                 if(!isMeetsTheRequirementsOf(getEventYear(family.event))) return true;
                 setUserTooltip(setMarriageContent(el, family));
+                count++;
             });
         } else {
+            jQuery('#jmb-this-month-marr').remove();
+        }
+        if(count == 0){
             jQuery('#jmb-this-month-marr').remove();
         }
     }
