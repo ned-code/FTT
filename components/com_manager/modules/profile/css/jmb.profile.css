@@ -69,7 +69,7 @@
 .jmb-dialog-profile-menu-container ul{}
 .jmb-dialog-profile-menu-container li{
 	display:block;
-	background: none repeat scroll 0 0 #7F7F7F;
+	background: none repeat scroll 0 0 #BEBEBE;
 	color: #000;
 	font-size: 14px;
 	margin: 5px;
@@ -82,7 +82,7 @@
 	background: #a0a0a0;
 }
 .jmb-dialog-profile-menu-container li.active{
-	background: #bebebe !important;
+	background: #F8A13B !important;
 }
 .jmb-dialog-profile-menu-container span{}
 /**
