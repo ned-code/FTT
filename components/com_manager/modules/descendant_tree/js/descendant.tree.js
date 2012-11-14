@@ -484,7 +484,6 @@ JMBDescendantTreeObject.prototype = {
 										jQuery(div).find('input#'+module.first).attr('checked', true);
 									}
 								} else {
-									//box.off();
                                     jQuery(module.dhxTree.allTree).parent().append(div);
                                     jQuery(div).find('input').click(function(){
                                         module.first = jQuery(this).attr('id');
