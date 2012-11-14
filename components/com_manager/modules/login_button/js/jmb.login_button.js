@@ -35,7 +35,8 @@ function JMBLoginButtonObject(obj){
     var setButtonPosition = function(){
         var height = jQuery(window).height();
         var size = (height / 2 - 150)  + 'px';
-        jQuery(cont).css('margin-top', size).css('margin-bottom', size);
+        //jQuery(cont).css('margin-top', size).css('margin-bottom', size);
+        jQuery(cont).css('margin', size+" auto");
     }
 
     jQuery(window).resize(function(){
