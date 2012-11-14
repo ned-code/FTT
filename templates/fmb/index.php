@@ -74,7 +74,6 @@ if (stripos($user_agent, 'MSIE 6.0') !== false
                     }
                 </style>
             <![endif]-->
-            <meta property="og:title" content="Family TreeTop" />
             <meta property="og:image" content="<?php echo $base_url; ?>components/com_manager/imgs/ftt_fb_icon.png" />
 	</head>
 	<body _alias="<?php echo $alias; ?>" _baseurl="<?php echo $base_url; ?>" _fb="<?php echo $facebook_id; ?>" _type="<?php echo $login_method; ?>">
