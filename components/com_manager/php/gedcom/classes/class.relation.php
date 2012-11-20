@@ -3,6 +3,7 @@ class JMBRelation {
 	private $ajax;
     private $families;
     private $individuals;
+    private $ownerId;
     private $_FamiliesList;
     private $_ChildrensList;
     private $_Relatives;
@@ -12,7 +13,18 @@ class JMBRelation {
         $this->families = $families;
         $this->individuals = $individuals;
     }
-	
+
+    protected function get_childrens($gedcom_id){
+        $ind_key = 'I'.$gedcom_id;
+        if(isset($this->_FamiliesList[$ind_key])){
+            $family_key = 'F'.$this->_FamiliesList[$ind_key][0]['family_id'];
+            if(isset($this->_ChildrensList[$family_key])){
+                return $this->_ChildrensList[$family_key];
+            }
+        }
+        return null;
+    }
+
 	protected function get_parents($gedcom_id){
 		$ind_key = 'I'.$gedcom_id;
 		if(isset($this->_ChildrensList[$ind_key])){
@@ -201,24 +213,6 @@ class JMBRelation {
 		$this->_Relatives = $this->individuals->getRelatives($tree_id);
 	}
 
-	public function set_relation($tree_id, $gedcom_id, $check){
-		$insert = array();
-		foreach($check as $rel){
-			$relation = $this->get_relation($rel['individuals_id'], $gedcom_id);
-			$insert[] = array('member'=>$rel, 'relation'=>($relation)?$relation:'unknown');
-		}
-		$result = array_chunk($insert, 25, true);
-		foreach($result as $res){
-			$sql = "INSERT INTO #__mb_relations (`tree_id`, `from`, `to`, `relation`) VALUES ";
-			foreach($res as $el){
-				$sql .= "('".$tree_id."','".$gedcom_id."','".$el['member']['individuals_id']."','".$el['relation']."'),";
-			}
-			$this->ajax->setQuery(substr($sql,0,-1));
-			$this->ajax->query();
-		}
-		return $insert;
-	}
-
 	public function set($tree_id, $gedcom_id, $target_id){
 		$this->init($tree_id, $gedcom_id);
         $sql_string = "DELETE FROM #__mb_relations WHERE tree_id = ? AND `from` = ? AND `to` = ?";
@@ -235,32 +229,142 @@ class JMBRelation {
 		$relation =  $this->get_relation($target_id, $gedcom_id);
 		return $relation;
 	}
-	
+
+    protected function _getLongRelation_($relation, $id, $gedcom_id){
+        $rel = $this->get_relation($id, $this->ownerId);
+        $ind = $this->individuals->get($id);
+        return $relation." of your ".$rel.", ".$ind->FirstName;
+    }
+
+    protected function _getAncestors_(&$relatives, $owner_id, $ids, $postfix = '', $level = 0){
+        $ancestors = array();
+        foreach($ids as $id => $value){
+            $parents = $this->get_parents(substr($id, 1));
+            foreach($parents as $el){
+                $index = "I".$el;
+                if(!empty($el)&&!isset($relatives[$index]) && $owner_id != $el){
+                    $relation = $this->get_relation($el, $owner_id);
+                    if(!empty($relation)){
+                        $rel = $relation.$postfix;
+                        $long_rel = $this->_getLongRelation_($relation, $owner_id, $el);
+                        $relatives[$index] = array("rel"=>$rel,"long_rel"=>$long_rel);
+                        $ancestors[$index] = $rel;
+                    }
+                }
+            }
+        }
+        if(!empty($ancestors)){
+            $this->_getAncestors_($relatives, $owner_id, $ancestors, $postfix, $level + 1);
+        }
+    }
+
+
+
+    protected function _getDescendants_(&$relatives, $owner_id, $ids, $postfix = '', $level = 0){
+        $descendants = array();
+        foreach($ids as $id => $value){
+            $childrens = $this->get_childrens(substr($id, 1));
+            foreach($childrens as $el){
+                if(!empty($el)&&!empty($el['gedcom_id'])){
+                    $gedcom_id = $el['gedcom_id'];
+                    $index = "I".$gedcom_id;
+                    if(!isset($relatives[$index]) && $owner_id != $gedcom_id){
+                        $relation = $this->get_relation($gedcom_id, $owner_id);
+                        if(!empty($relation)){
+                            $rel = $relation.$postfix;
+                            $long_rel = $this->_getLongRelation_($relation, $owner_id, $id);
+                            $relatives[$index] = array("rel"=>$rel,"long_rel"=>$long_rel);
+                            $descendants[$index] = $rel;
+                        }
+                    }
+                }
+            }
+        }
+        if(!empty($descendants)){
+            $this->_getDescendants_($relatives, $owner_id, $descendants, $postfix, $level + 1);
+        }
+    }
+
+    protected function _getSpouses_(&$relatives, $ids, $postfix, $check = false){
+        $result = array();
+        foreach($ids as $id){
+            $index = "I".$id;
+            if(!isset($relatives[$index])){
+                $relation = 'spouse'.(($check)?$postfix:'');
+                $long_rel = $this->_getLongRelation_($relation, $this->ownerId, $id);
+                $relatives[$index] = array("rel"=>$relation,"long_rel"=>$long_rel);
+                $srelatives = array();
+                $this->_getAncestors_($srelatives, $id, array($index => $relation), $postfix);
+                $this->_getDescendants_($srelatives, $id, $srelatives, $postfix);
+                $result[] = $srelatives;
+            }
+        }
+        foreach($result as $r){
+            $relatives = array_merge($relatives, $r);
+        }
+        return $relatives;
+    }
+
+    protected function _getChildrens_(&$relatives, $owner_id, $level = 0){
+        $index = "I".$owner_id;
+        $this->_getDescendants_($relatives, $owner_id, array($index => true), "", $level);
+    }
+
+    protected function _checkRelatives(&$relatives, $owner_id){
+        foreach($this->_Relatives as $rel){
+            $id = $rel['individuals_id'];
+            $index = "I".$id;
+            if(!isset($relatives[$index])){
+                $relation = $this->get_relation($id, $owner_id);
+                if(!empty($relation)){
+                    $long_rel = $this->_getLongRelation_($relation, $owner_id, $id);
+                    $relatives[$index] = array("rel"=>$relation,"long_rel"=>$long_rel);
+                }
+            }
+        }
+    }
+
+    protected function deleteFromDb($tree_id, $gedcom_id){
+        $sql_string = "DELETE FROM #__mb_relations WHERE `tree_id` = ? and `from` = ?";
+        $this->ajax->setQuery($sql_string, $tree_id, $gedcom_id);
+        $this->ajax->query();
+    }
+
+    protected function sendToDb($relatives, $tree_id, $gedcom_id){
+        $inserts = array();
+        foreach($relatives as $key => $value){
+            $inserts[] = array("indKey" => $key, "relations"=>$value);
+        }
+        $result = array_chunk($inserts, 25, true);
+        foreach($result as $res){
+            $sql = "INSERT INTO #__mb_relations (`tree_id`, `from`, `to`, `relation`, `long_relation`) VALUES ";
+            foreach($res as $el){
+                $indKey = substr($el['indKey'],1);
+                $relation = $el['relations']['rel'];
+                $long_relation = $el['relations']['long_rel'];
+                $sql .= "('".$tree_id."','".$gedcom_id."','".$indKey."','".$relation."','".$long_relation."'),";
+            }
+            $this->ajax->setQuery(substr($sql,0,-1));
+            $this->ajax->query();
+        }
+    }
+
 	public function check($tree_id, $gedcom_id){
-		$this->init($tree_id, $gedcom_id);
-		$sql_string = "DELETE FROM #__mb_relations WHERE `tree_id` = ? and `from` = ? and relation = 'unknown'";
-		$this->ajax->setQuery($sql_string, $tree_id, $gedcom_id);
-		$this->ajax->query();
-		
-		$sql_string = "SELECT rel.to as individuals_id, rel.relation FROM #__mb_relations as rel WHERE rel.tree_id = ? AND rel.from = ?";
-		$this->ajax->setQuery($sql_string, $tree_id, $gedcom_id);
-		$relations = $this->ajax->loadAssocList('individuals_id');
-		if($relations==null){
-			$check = $this->_Relatives;
-		} else {
-			if(sizeof($this->_Relatives) == sizeof($relations)){
-				return;
-			} else {
-				$check = array();
-				foreach($this->_Relatives as $rel){
-					$id = $rel['individuals_id'];
-					if(!isset($relations[$id])){
-						$check[] = $rel;
-					}
-				}
-			}
-		}
-		return $this->set_relation($tree_id, $gedcom_id, $check);
+        $this->ownerId = $gedcom_id;
+        $this->init($tree_id , $gedcom_id);
+
+        $this->deleteFromDb($tree_id, $gedcom_id);
+
+        $relatives = array();
+        $relatives["I".$gedcom_id] = array("rel"=>"self", "long_rel"=>"This is you");
+
+        $this->_getAncestors_($relatives, $gedcom_id, $relatives);
+        $this->_getDescendants_($relatives, $gedcom_id, $relatives);
+        $this->_getSpouses_($relatives, $this->get_spouses($gedcom_id), '-in-Law');
+        $this->_getChildrens_($relatives, $gedcom_id);
+        $this->_checkRelatives($relatives, $gedcom_id);
+
+        $this->sendToDb($relatives, $tree_id, $gedcom_id);
 	}
 }
 ?>
