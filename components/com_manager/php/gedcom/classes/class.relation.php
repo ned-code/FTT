@@ -257,6 +257,7 @@ class JMBRelation {
         }
         if(!empty($ancestors)){
             $this->_getAncestors_($relatives, $owner_id, $ancestors, $postfix, $level + 1);
+            $this->_getSpouses_($ancestors);
         }
     }
 
@@ -284,6 +285,7 @@ class JMBRelation {
         }
         if(!empty($descendants)){
             $this->_getDescendants_($relatives, $owner_id, $descendants, $postfix, $level + 1);
+            $this->_getSpouses_($descendants);
         }
     }
 
@@ -296,6 +298,8 @@ class JMBRelation {
                     $rel = "spouse";
                     $long_rel = $this->_getLongRelation_($rel, substr($id, 1), $spouse);
                     $relatives[$index] = array("rel"=>$rel,"long_rel"=>$long_rel);
+                    $this->_getAncestors_($relatives, $spouse, array($index =>array("rel"=>$rel,"long_rel"=>$long_rel)));
+                    $this->_getDescendants_($relatives, $spouse, array($index =>array("rel"=>$rel,"long_rel"=>$long_rel)));
                 }
             }
         }
@@ -374,12 +378,13 @@ class JMBRelation {
         $relatives = array();
         $relatives["I".$gedcom_id] = array("rel"=>"self", "long_rel"=>"This is you");
 
+        $this->_getSpouse_($relatives, $this->get_spouses($gedcom_id), '-in-Law');
         $this->_getAncestors_($relatives, $gedcom_id, $relatives);
         $this->_getDescendants_($relatives, $gedcom_id, $relatives);
-        $this->_getSpouse_($relatives, $this->get_spouses($gedcom_id), '-in-Law');
         $this->_getChildrens_($relatives, $gedcom_id);
         $this->_checkRelatives($relatives, $gedcom_id);
         $this->_getSpouses_($relatives);
+
 
         $this->sendToDb($relatives, $tree_id, $gedcom_id);
 	}
