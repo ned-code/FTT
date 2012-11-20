@@ -44,11 +44,13 @@ class JMBRelation {
 	
 	protected function get_spouses($gedcom_id){
         $indKey = 'I'.$gedcom_id;
+        $indGender = $this->get_gender($gedcom_id);
+        $type = ($indGender == "M")?"wife":"husb";
         if(isset($this->_FamiliesList[$indKey])){
             $families = $this->_FamiliesList[$indKey];
             $spouses = array();
             foreach($families as $family){
-                $spouses[] = $family['wife'];
+                $spouses[] = $family[$type];
             }
             return $spouses;
         }
@@ -285,7 +287,21 @@ class JMBRelation {
         }
     }
 
-    protected function _getSpouses_(&$relatives, $ids, $postfix, $check = false){
+    protected function _getSpouses_(&$relatives){
+        foreach($relatives as $id => $value){
+            $spouses = $this->get_spouses(substr($id, 1));
+            foreach($spouses as $spouse){
+                $index = "I".$spouse;
+                if(!isset($relatives[$index])){
+                    $rel = "spouse";
+                    $long_rel = $this->_getLongRelation_($rel, substr($id, 1), $spouse);
+                    $relatives[$index] = array("rel"=>$rel,"long_rel"=>$long_rel);
+                }
+            }
+        }
+    }
+
+    protected function _getSpouse_(&$relatives, $ids, $postfix, $check = false){
         $result = array();
         foreach($ids as $id){
             $index = "I".$id;
@@ -360,9 +376,10 @@ class JMBRelation {
 
         $this->_getAncestors_($relatives, $gedcom_id, $relatives);
         $this->_getDescendants_($relatives, $gedcom_id, $relatives);
-        $this->_getSpouses_($relatives, $this->get_spouses($gedcom_id), '-in-Law');
+        $this->_getSpouse_($relatives, $this->get_spouses($gedcom_id), '-in-Law');
         $this->_getChildrens_($relatives, $gedcom_id);
         $this->_checkRelatives($relatives, $gedcom_id);
+        $this->_getSpouses_($relatives);
 
         $this->sendToDb($relatives, $tree_id, $gedcom_id);
 	}
