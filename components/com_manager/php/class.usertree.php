@@ -86,6 +86,22 @@ class JMBUserTree {
 	*
 	*/
 	protected function _getChildrens($gedcom_id){
+        $childrens = array();
+        $indKey = "I".$gedcom_id;
+        if(isset($this->_FamiliesList[$indKey])){
+            $families = $this->_FamiliesList[$indKey];
+            foreach($families as $family){
+                $famKey = "F".$family['family_id'];
+                if(isset($this->_ChildrensList[$famKey])){
+                    $childs = $this->_ChildrensList[$famKey];
+                    foreach($childs as $child){
+                        $childrens[] = $child;
+                    }
+                }
+            }
+        }
+        return $childrens;
+        /*
 		$ind_key = 'I'.$gedcom_id;
 		if(isset($this->_FamiliesList[$ind_key])){
 			$family_key = 'F'.$this->_FamiliesList[$ind_key][0]['family_id'];
@@ -94,6 +110,7 @@ class JMBUserTree {
 			}
 		}
 		return null;
+        */
 	}
 	/**
 	*
