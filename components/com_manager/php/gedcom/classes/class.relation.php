@@ -387,7 +387,7 @@ class JMBRelation {
         $this->_getDescendants_($relatives, $gedcom_id, $ancestors);
         $this->_getSpouse_($relatives, $gedcom_id, '-in-Law');
         $this->_getSpouses_($relatives);
-        $this->_checkRelatives($relatives);
+        //$this->_checkRelatives($relatives);
         $this->sendToDb($relatives, $tree_id, $gedcom_id);
 	}
 }
