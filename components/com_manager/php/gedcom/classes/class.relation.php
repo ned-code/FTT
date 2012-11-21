@@ -241,6 +241,7 @@ class JMBRelation {
 
     protected function _getLongRelation_($relation, $id, $gedcom_id){
         $rel = $this->get_relation($id, $this->ownerId);
+        if(empty($rel)) return "";
         $ind = $this->individuals->get($id);
         return $relation." of your ".$rel.", ".$ind->FirstName;
     }
@@ -267,6 +268,7 @@ class JMBRelation {
         }
         $anc = array_merge($anc , $ancestors);
         if(!empty($ancestors)){
+            $this->_getSpouses_($ancestors);
             $this->_getAncestors_($relatives, $owner_id, $ancestors, $postfix, $anc);
         }
         return $anc;
@@ -298,6 +300,7 @@ class JMBRelation {
         }
         $dec = array_merge($dec , $descendants);
         if(!empty($descendants)){
+            $this->_getSpouses_($descendants);
             $this->_getDescendants_($relatives, $owner_id, $descendants, $postfix, $dec);
         }
         return $dec;
@@ -329,6 +332,8 @@ class JMBRelation {
                     $relation = "spouse";
                     $long_relation = $this->_getLongRelation_($relation , $gedcom_id, $spouse);
                     $relatives[$index] = array("rel"=>$relation, "long_rel"=>$long_relation);
+                    $ancestors = $this->_getAncestors_($relatives, $gedcom_id, array($index=>$relation));
+                    $this->_getDescendants_($relatives, $gedcom_id, $ancestors);
                 }
             }
         }
@@ -390,5 +395,22 @@ class JMBRelation {
         //$this->_checkRelatives($relatives);
         $this->sendToDb($relatives, $tree_id, $gedcom_id);
 	}
+
+    public function update($tree_id, $gedcom_id){
+        $this->ownerId = $gedcom_id;
+        $this->init($tree_id , $gedcom_id);
+
+        $this->deleteFromDb($tree_id, $gedcom_id);
+
+        $relatives = array();
+        $relatives["I".$gedcom_id] = array("rel"=>"self", "long_rel"=>"This is you");
+
+        $ancestors = $this->_getAncestors_($relatives, $gedcom_id, $relatives);
+        $this->_getDescendants_($relatives, $gedcom_id, $ancestors);
+        $this->_getSpouse_($relatives, $gedcom_id, '-in-Law');
+        $this->_getSpouses_($relatives);
+
+        $this->sendToDb($relatives, $tree_id, $gedcom_id);
+    }
 }
 ?>
