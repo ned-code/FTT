@@ -102,7 +102,7 @@ JMBTooltip.prototype = {
 			birthday = get.date('birth'),
 			death = get.date('death'),
 			relation = get.relation,
-            long_relation = get.long_relation;
+            long_relation = get.long_relation,
 			place;
 		sb._('<div id="')._(user.gedcom_id)._('-tooltip-view" class="jmb-tooltip-view-container">');
 			sb._('<div class="jmb-tooltip-view-content">');
