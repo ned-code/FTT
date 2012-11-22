@@ -432,14 +432,14 @@ class JMBRelation {
         return array($relation, $name);
     }
 
-    public function findRelations($user_id, &$relations){
+    public function findRelations($user_id, &$relations, &$un){
         $waves = array();
         $res = $this->getRelationsWaves($waves, array("I".$user_id=>null), $relations);
         if($res){
             $name = $this->getRelationLongName($res, $waves, $relations);
-            $relations["I".$user_id] = array("blood"=>0, "relation"=>$name[0], "long_relation"=>$name[1] );
+            $un["I".$user_id] = array("blood"=>0, "relation"=>$name[0], "long_relation"=>$name[1] );
         } else {
-            $relations["I".$user_id] = array("blood"=>0, "relation"=>"unknown", "long_relation"=>"unknown" );
+            $un["I".$user_id] = array("blood"=>0, "relation"=>"unknown", "long_relation"=>"unknown" );
         }
     }
 
@@ -460,8 +460,13 @@ class JMBRelation {
                 $unknowns[] = $user_id;
             }
         }
+
+        $un = array();
         foreach($unknowns as $user_id){
-            $this->findRelations($user_id, $relations);
+            $this->findRelations($user_id, $relations, $un);
+        }
+        foreach($un as $k => $v){
+            $relations[$k] = $v;
         }
         $this->sendToDb($relations, $tree_id, $gedcom_id);
 	}
