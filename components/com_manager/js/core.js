@@ -1054,8 +1054,7 @@ core.load = function(pages){
         storage.progressbar = new JMBProgressbarObject();
         storage.feedback = new JMBFeedback();
         storage.ntf = new JMBNotifications();
-        storage.quickTips = new FTTQuickTipsObject();
-		
+
 		//init top menu bar
         storage.topmenubar.init();
 
