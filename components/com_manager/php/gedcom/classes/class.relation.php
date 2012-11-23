@@ -268,6 +268,28 @@ class JMBRelation {
         $this->ajax->query();
     }
 
+    protected function findUnknownUsers($tree_id, $gedcom_id){
+        $sql_string = "SELECT rel.to as individuals_id, rel.relation FROM #__mb_relations as rel WHERE rel.tree_id = ? AND rel.from = ?";
+        $this->ajax->setQuery($sql_string, $tree_id, $gedcom_id);
+        $relations = $this->ajax->loadAssocList('individuals_id');
+        $check = array();
+        if($relations==null){
+            $check = $this->_Relatives;
+        } else {
+            if(sizeof($this->_Relatives) == sizeof($relations)){
+                return $check;
+            } else {
+                foreach($this->_Relatives as $rel){
+                    $id = $rel['individuals_id'];
+                    if(!isset($relations[$id])){
+                        $check[] = $rel;
+                    }
+                }
+            }
+        }
+        return $check;
+    }
+
     protected function sendToDb($relations, $tree_id, $gedcom_id){
         $inserts = array();
         foreach($relations as $key => $value){
@@ -446,11 +468,12 @@ class JMBRelation {
 	public function check($tree_id, $gedcom_id){
         $this->ownerId = $gedcom_id;
         $this->init($tree_id, $gedcom_id);
-        $this->deleteFromDb($tree_id, $gedcom_id);
+
+        $this->deleteUnknownFromDb($tree_id, $gedcom_id);
+        $relatives = $this->findUnknownUsers($tree_id, $gedcom_id);
 
         $relations = array();
         $unknowns = array();
-        $relatives = $this->_Relatives;
         foreach($relatives as $user){
             $user_id = $user['individuals_id'];
             $relation = $this->get_relation($user_id, $gedcom_id);
@@ -470,5 +493,34 @@ class JMBRelation {
         }
         $this->sendToDb($relations, $tree_id, $gedcom_id);
 	}
+
+    public function update($tree_id, $gedcom_id){
+        $this->ownerId = $gedcom_id;
+        $this->init($tree_id, $gedcom_id);
+
+        $this->deleteFromDb($tree_id, $gedcom_id);
+        $relatives = $this->_Relatives;
+
+        $relations = array();
+        $unknowns = array();
+        foreach($relatives as $user){
+            $user_id = $user['individuals_id'];
+            $relation = $this->get_relation($user_id, $gedcom_id);
+            if($relation){
+                $relations["I".$user_id] = array("blood"=>1,"relation"=>$relation, "long_relation"=>"");
+            } else {
+                $unknowns[] = $user_id;
+            }
+        }
+
+        $un = array();
+        foreach($unknowns as $user_id){
+            $this->findRelations($user_id, $relations, $un);
+        }
+        foreach($un as $k => $v){
+            $relations[$k] = $v;
+        }
+        $this->sendToDb($relations, $tree_id, $gedcom_id);
+    }
 }
 ?>
