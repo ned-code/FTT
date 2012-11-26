@@ -136,7 +136,7 @@ JMBTooltip.prototype = {
 									sb._('<div><span>')._(message.FTT_MOD_TOOLTIPS_RELATION)._(':</span> <span class="text">')._(relation)._('</span></div>');
 								}
                                 if(long_relation){
-                                    sb._('<div><span>')._(message.FTT_MOD_TOOLTIPS_RELATION)._(':</span> <span class="text">( ')._(long_relation)._(' )</span></div>');
+                                    sb._('<div><span class="text">( ')._(long_relation)._(' )</span></div>');
                                 }
 							sb._('</td>');
 						sb._('</tr>');
