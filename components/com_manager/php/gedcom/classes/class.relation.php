@@ -6,12 +6,24 @@ class JMBRelation {
     private $ownerId;
     private $_FamiliesList;
     private $_ChildrensList;
+    private $_IndividualsList;
     private $_Relatives;
 
     public function __construct(&$ajax, &$families, &$individuals){
         $this->ajax = $ajax;
         $this->families = $families;
         $this->individuals = $individuals;
+    }
+
+    protected function get_name($gedcom_id){
+        if(isset($this->_IndividualsList[$gedcom_id])){
+            $i = $this->_IndividualsList[$gedcom_id];
+            if(!empty($i)){
+                $pl = $i[0];
+                return trim(implode(" ", array($pl["first_name"], $pl["middle_name"], $pl["last_name"])));
+            }
+        }
+        return '';
     }
 
     protected function get_siblings($gedcom_id){
@@ -427,6 +439,7 @@ class JMBRelation {
             }
         }
         $name .= "of your ".$relations[$path[0]]["relation"];
+        $name .= ", ".$this->get_name(substr($path[0],1));
         return array($relation, $name);
     }
 

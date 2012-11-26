@@ -1077,7 +1077,6 @@ core.load = function(pages){
                 storage.profile.init();
                 storage.tooltip.init();
                 storage.feedback.init();
-                storage.quickTips.init();
                 storage.pages = pages;
                 if(storage.pages.length==1){
                     self.renderPage({
@@ -1106,7 +1105,6 @@ core.load = function(pages){
                             storage.profile.init();
                             storage.tooltip.init();
                             storage.feedback.init();
-                            storage.quickTips.init();
                             var json = jQuery.parseJSON(req.responseText);
                             storage.pages = json.pages;
                             if(json.pages.length==1){
