@@ -295,6 +295,20 @@ storage.usertree.parse = function(object){
 		is_divorce_event:function(id){
 			return (families[id]&&families[id].divorce!=null)?1:0;
 		},
+        family_line:(function(){
+            if(!user) return '';
+            var fl, ml;
+            fl = user.is_father_line;
+            ml = user.is_mother_line;
+            if(fl || ml){
+                if(fl && ml){
+                    return '';
+                } else {
+                    return (fl)?"(father side)":"(mother side)";
+                }
+            }
+            return '';
+        })(),
 		marr:function(id, type, sub){
 			var family = families[id];
             if(family){
