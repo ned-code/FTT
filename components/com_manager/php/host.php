@@ -5,7 +5,6 @@ require_once('class.image.php');
 require_once('class.language.php');
 require_once('class.config.php');
 require_once('class.user.php');
-require_once('class.family_line.php');
 require_once('gedcom/core.gedcom.php');
 require_once('gramps/core.gramps.php');
 
@@ -48,7 +47,6 @@ class FamilyTreeTopHostLibrary {
         $this->gedcom = new Gedcom($this->ajax);
         $this->gramps = new Gramps($this->ajax, $this->gedcom);
         $this->usertree = new JMBUserTree($this->ajax, $this->gedcom);
-        $this->familyLine = new FTTFamilyLine($this->ajax, $this->gedcom);
 
         $this->images = new JMBImage($this->gedcom);
 
