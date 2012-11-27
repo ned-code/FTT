@@ -266,7 +266,7 @@ class JMBRelation {
             $check = $this->_Relatives;
         } else {
             if(sizeof($this->_Relatives) == sizeof($relations)){
-                return $check;
+                return array();
             } else {
                 foreach($this->_Relatives as $rel){
                     $id = $rel['individuals_id'];
