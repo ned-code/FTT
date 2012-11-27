@@ -4,6 +4,7 @@ class JMBRelation {
     private $families;
     private $individuals;
     private $ownerId;
+    private $spouses;
     private $_FamiliesList;
     private $_ChildrensList;
     private $_IndividualsList;
@@ -436,6 +437,9 @@ class JMBRelation {
             $name .= $ambit[$next]["relation"]." ";
             if($i == 0){
                 $relation = $ambit[$next]["relation"];
+                if(isset($this->spouses[substr($path[0],1)])){
+                    $relation .= "-in-Law";
+                }
             }
         }
         $name .= "of your ".$relations[$path[0]]["relation"];
@@ -448,17 +452,26 @@ class JMBRelation {
         $res = $this->getRelationsWaves($waves, array("I".$user_id=>null), $relations);
         if($res){
             $name = $this->getRelationLongName($res, $waves, $relations);
-            $un["I".$user_id] = array("blood"=>0, "relation"=>$name[0], "long_relation"=>$name[1] );
+            $relation = $name[0];
+            $un["I".$user_id] = array("blood"=>0, "relation"=>$relation, "long_relation"=>$name[1] );
         } else {
             $un["I".$user_id] = array("blood"=>0, "relation"=>"unknown", "long_relation"=>"unknown" );
         }
     }
 	
 	protected function init($tree_id, $gedcom_id){
-		$this->_FamiliesList = $this->families->getFamiliesList($tree_id);
+        $this->_FamiliesList = $this->families->getFamiliesList($tree_id);
 		$this->_ChildrensList = $this->families->getChildrensList($tree_id);
 		$this->_IndividualsList = $this->individuals->getIndividualsList($tree_id, $gedcom_id);
 		$this->_Relatives = $this->individuals->getRelatives($tree_id);
+
+        $this->ownerId = $gedcom_id;
+        $this->spouses = array();
+
+        $spouses = $this->get_spouses($gedcom_id);
+        foreach($spouses as $spouse){
+            $this->spouses[$spouse] = true;
+        }
 	}
 
 	public function set($tree_id, $gedcom_id, $target_id){
@@ -497,7 +510,6 @@ class JMBRelation {
     }
 
 	public function check($tree_id, $gedcom_id){
-        $this->ownerId = $gedcom_id;
         $this->init($tree_id, $gedcom_id);
 
         $this->deleteUnknownFromDb($tree_id, $gedcom_id);
@@ -526,7 +538,6 @@ class JMBRelation {
 	}
 
     public function update($tree_id, $gedcom_id){
-        $this->ownerId = $gedcom_id;
         $this->init($tree_id, $gedcom_id);
 
         $this->deleteFromDb($tree_id, $gedcom_id);
