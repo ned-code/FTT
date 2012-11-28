@@ -31,7 +31,7 @@ foreach ($info as $page){
 
 $builder->setCss($cssObject);
 $builder->cssCompile("mini2.css");
-echo '<link type="text/css" href="/25/components/com_manager/mini/mini2.css" rel="stylesheet"></link>';
+echo '<link type="text/css" href="'.$url.'components/com_manager/mini/mini2.css" rel="stylesheet"></link>';
 echo "<div id='container'>&nbsp;</div>";
 ?>
 <script>
