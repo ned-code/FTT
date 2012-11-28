@@ -481,7 +481,11 @@ class JMBRelation {
         $this->ajax->query();
 		$relation =  $this->get_relation($target_id, $gedcom_id);		
 		$sql_string = "INSERT INTO #__mb_relations (`tree_id`, `from`, `to`, `relation`) VALUES (?, ?, ?, ?)";
-		$this->ajax->setQuery($sql_string, $tree_id, $gedcom_id, $target_id, ($relation)?$relation:'unknown');
+        $sql = "INSERT INTO #__mb_relations (`tree_id`, `from`, `to`, `blood`, `relation`, `long_relation`) VALUES (?, ?, ?, ?, ?, ?)";
+        $blood = ($relation)?1:0;
+        $rel = ($relation)?$relation:'unknown';
+        $long_rel = "";
+		$this->ajax->setQuery($sql_string, $tree_id, $gedcom_id, $target_id, 0, $rel, $long_rel);
 		$this->ajax->query();
 	}
 	
@@ -499,9 +503,13 @@ class JMBRelation {
         }
         $result = array_chunk($insert, 25, true);
         foreach($result as $res){
-            $sql = "INSERT INTO #__mb_relations (`tree_id`, `from`, `to`, `relation`) VALUES ";
+            $sql = "INSERT INTO #__mb_relations (`tree_id`, `from`, `to`, `blood`, `relation`, `long_relation`) VALUES ";
+            $indKey = $el['member']['individuals_id'];
+            $blood = ($relation)?1:0;
+            $relation = $el['relation'];
+            $long_relation = "";
             foreach($res as $el){
-                $sql .= "('".$tree_id."','".$gedcom_id."','".$el['member']['individuals_id']."','".$el['relation']."'),";
+                $sql .= "('".$tree_id."','".$gedcom_id."','".$indKey."', '".$blood."','".$relation."','".$long_relation."'),";
             }
             $this->ajax->setQuery(substr($sql,0,-1));
             $this->ajax->query();

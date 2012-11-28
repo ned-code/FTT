@@ -30,8 +30,6 @@ class FamilyTreeTopHostLibrary {
     public $jfbConnect;
     public $jSession;
 
-
-    //public $jUser;
     public $user;
 
     private function __construct( $directCall = true ) {
@@ -57,10 +55,6 @@ class FamilyTreeTopHostLibrary {
         $this->jfbConnect = JFBConnectFacebookLibrary::getInstance();
 
         $this->user = new FTTUserLibrary($this);
-
-
-
-        //$this->jUser = JFactory::getUser();
     }
 
     public function &getInstance() {
@@ -92,6 +86,7 @@ class FamilyTreeTopHostLibrary {
     /*
     * ------------------------------------------------------------------------------------------
     */
+    /*
     public function getSettingsStructure($module){
         $properties = $this->getJsonProperties($module);
         return $properties[0]['structure'];
@@ -256,6 +251,7 @@ class FamilyTreeTopHostLibrary {
             $db->query();
                
     }
+    */
     /*
     * ------------------------------------------------------------------------------------------
     */
