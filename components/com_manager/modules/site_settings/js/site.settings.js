@@ -2,7 +2,7 @@ function SiteSettings(obj){
 	var parent = obj
 	var module = this;
 	
-	var sb = host.stringBuffer();
+	var sb = storage.stringBuffer();
 	sb._('<table width="100%">');
 		sb._('<tr>');
 			sb._('<td style="width:210px;" valign="top"><div id="modules"></div></td>');
@@ -39,7 +39,7 @@ SiteSettings.prototype = {
 	},
 	getJsonString:function(object, language){
 		var inputs = jQuery(object).find('input');
-		var sb = host.stringBuffer();
+		var sb = storage.stringBuffer();
 		sb._('{"language_file":"')._(language)._('","variables":[')
 		jQuery(inputs).each(function(i,e){
 			sb._('{"name":"')._(jQuery(e).attr('name'))._('","value":"')._(jQuery(e).val())._('"}');				

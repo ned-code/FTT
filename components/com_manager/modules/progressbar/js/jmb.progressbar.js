@@ -1,6 +1,6 @@
 function JMBProgressbarObject(){
     var module = this,
-        sb = host.stringBuffer(),
+        sb = storage.stringBuffer(),
         divObject;
 
     sb._('<div class="jmb-progressbar-container"><span></span></div>');

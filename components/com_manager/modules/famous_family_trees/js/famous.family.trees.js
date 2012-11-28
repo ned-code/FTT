@@ -14,7 +14,7 @@ function JMBFamousFamilyTreesObject(obj){
 	}
 	
 	var getAvatar = function(e){
-		var sb = host.stringBuffer();
+		var sb = storage.stringBuffer();
 		if(e.avatar){
 			return sb._('<img src="index.php?option=com_manager&task=getResizeImage&tree_id=')._(e.tree_id)._('&id=')._(e.avatar.Id)._('&w=50&h=50">').result();
 		} else {
@@ -25,7 +25,7 @@ function JMBFamousFamilyTreesObject(obj){
 	}
 	
 	var createBody = function(){
-		var sb = host.stringBuffer();
+		var sb = storage.stringBuffer();
 		sb._('<div class="jmb-famous-family-body">');
 			sb._('<div class="jmb-famous-family-title"><span>')._(module.msg.FTT_MOD_FAMOUS_FAMILY_SELECT_A_FAMILY_TREE)._('...</span></div>');
 			sb._('<div class="jmb-famous-family-content">&nbsp;</div>');
@@ -34,7 +34,7 @@ function JMBFamousFamilyTreesObject(obj){
 	}
 	
 	var createItem = function(e){
-		var sb = host.stringBuffer();
+		var sb = storage.stringBuffer();
 		sb._('<li id="')._(e.tree_id)._('" class="jmb-famous-family-item">');
 			sb._('<div class="jmb-famous-family-item-content">');
 				sb._('<div id="_info" class="jmb-famous-family-item-cell">')

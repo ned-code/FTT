@@ -37,7 +37,7 @@ function JMBLatestUpdatesObject(offsetParent){
             cont = null;
         },
 		content:function(json){
-            var sb = host.stringBuffer(),
+            var sb = storage.stringBuffer(),
                 colors = settings.colors,
                 ul = jQuery('<ul></ul>'),
                 gedcom_id;
@@ -79,7 +79,7 @@ function JMBLatestUpdatesObject(offsetParent){
             return ul;
 		},
 		create:function(json){
-			var	sb = host.stringBuffer();
+			var	sb = storage.stringBuffer();
 			sb._('<div class="jmb-lu-header">');
 				sb._('<span>')._(message.FTT_MOD_LATEST_UPDATES_HEADER)._('</span>');
 			sb._('</div>');

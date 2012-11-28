@@ -26,7 +26,7 @@ DescendantTreeProfile.prototype = {
         });
 	},
 	image:function(img, media){
-		var sb = host.stringBuffer();
+		var sb = storage.stringBuffer();
         var cache = (media!=null)?media.cache:false;
         sb._('<a href="')._(storage.baseurl + img.path)._('" rel="prettyPhoto[pp_gal]" title="">');
             sb._(storage.usertree.photos.image({
@@ -40,7 +40,7 @@ DescendantTreeProfile.prototype = {
 	},
 	create:function(ch){
 		var	module = this,
-			sb = host.stringBuffer(),
+			sb = storage.stringBuffer(),
 			message = module.parent.message,
 			user = ch.user,
 			media = ch.media,

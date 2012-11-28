@@ -289,7 +289,7 @@ function JMBFamilyLine(){
 				jQuery(cont).remove();
 				cont = null;
 			}
-			var sb = host.stringBuffer();
+			var sb = storage.stringBuffer();
 			sb._('<div class="jmb-family-line-container">');
 				sb._('<table cellspacing="0">');
 					sb._('<tr>');
@@ -303,19 +303,6 @@ function JMBFamilyLine(){
 						if(settings.pencil) sb._('<td><div class="icon father pencil">&nbsp;</div></td>');
 						if(settings.select) sb._('<td><div class="icon father select">&nbsp;</div></td>');
 						sb._('<td class="right"></td>');
-                        /*
-						sb._('<td class="options left">');
-							sb._('<div style="display:none" id="adopted">');
-								sb._('<select name="relation">');
-									sb._('<option value="biological">Biological</option>');
-									sb._('<option value="adopted">Adopted</option>');
-								sb._('</select>');
-							sb._('</div>');
-						sb._('</td>');
-						sb._('<td class="options right">');
-							sb._('<div id="button" class="icon settings">&nbsp;</div>');
-						sb._('</td>');
-						*/
 					sb._('</tr>');
 				sb._('</table>');
 			sb._('</div>');

@@ -1,7 +1,7 @@
 function JMBRecentVisitorsObject(obj){
     var parent = this,
         content = null,
-        sb = host.stringBuffer(),
+        sb = storage.stringBuffer(),
         loggedByFamous = parseInt(jQuery(document.body).attr('_type')),
         alias = jQuery(document.body).attr('_alias'),
         settings = storage.settings,
@@ -29,7 +29,7 @@ function JMBRecentVisitorsObject(obj){
                 return (t[0]!='0000'&&t[1]!='00'&&t[2]!='00')?new Date(t[0], t[1]-1, t[2], t[3], t[4], t[5]): false;
             },
             get_difference:function(time, object){
-                var st = host.stringBuffer(),
+                var st = storage.stringBuffer(),
                     now = functions.get_time(time),
                     lastLogin = functions.get_time(object.last_login),
                     different,
@@ -50,7 +50,7 @@ function JMBRecentVisitorsObject(obj){
             },
             init_tipty_tooltip:function(time, object, container){
                 if(!object) return;
-                var 	st = host.stringBuffer(),
+                var 	st = storage.stringBuffer(),
                     user = object.user,
                     parse = storage.usertree.parse(object);
                     time = functions.get_difference(time, user),
@@ -62,7 +62,7 @@ function JMBRecentVisitorsObject(obj){
                 });
             },
             init_visitors:function(ul, json){
-                var st = host.stringBuffer();
+                var st = storage.stringBuffer();
                 var objects = json.objects;
                 for(var key in objects){
                     var object = storage.usertree.pull[objects[key].gedcom_id];

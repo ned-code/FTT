@@ -28,7 +28,7 @@ JMBParser.prototype = {
   		})
  	},
    _ajaxForm:function(obj, method, args, beforeSubmit, success){
-		var sb = host.stringBuffer();
+		var sb = storage.stringBuffer();
 		var url = sb._('index.php?option=com_manager&task=callMethod&module=parser&class=JMBParser&method=')._(method)._('&args=')._(args).result();
         jQuery(obj).ajaxForm({
 			url:url,
@@ -212,7 +212,7 @@ JMBParser.prototype = {
         })   
     }, 
 	getPersonsById:function(idFirst, idSecond, callback){
-		var sb = host.stringBuffer();		
+		var sb = storage.stringBuffer();
 		sb._(idFirst);
 		sb._(';');
 		sb._(idSecond);
@@ -237,7 +237,7 @@ JMBParser.prototype = {
      
      self.log('COMPARE id: '+firstPerson.Id+' '+secondPerson.Id);
     
-       var sb = host.stringBuffer();
+       var sb = storage.stringBuffer();
       // jQuery('#jmb_parser').append(firstPerson.FirstName);
 //       jQuery('#jmb_parser').append(secondPerson.FirstName); 
 	   var changeUndoList = new Object();

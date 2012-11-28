@@ -1,11 +1,13 @@
 <?php
-class FttFileBuilder {
+class FamilyTreeTopBuilderLibrary {
     private $sPath;
     private $wPath;
+    private $miniPath = "components/com_manager/mini";
 
     private $css;
+    private $js;
 
-    protected function getCssPath($path){
+    protected function getPath($path){
         $parts = explode('/', $path);
         $result = array();
         $flag = false;
@@ -22,10 +24,10 @@ class FttFileBuilder {
         return implode('/', $result);
     }
 
-    protected function getCssUrl($url, $file){
+    protected function getUrl($url, $file){
         preg_match("/url[\s]*\([\s]*(?<url>[^\)]*)[\s]*\)[\s]*/", $url, $matches);
         $basePath = $this->wPath;
-        $cssPath = $this->getCssPath($file);
+        $cssPath = $this->getPath($file);
         $path = $basePath.$cssPath;
         $parts = explode('/', $matches[1]);
         if(!preg_match("/http:|https:/", $parts[0])){
@@ -53,7 +55,11 @@ class FttFileBuilder {
         $this->css = $css;
     }
 
-    public function cssCompile(){
+    public function setJs($js){
+        $this->js = $js;
+    }
+
+    public function cssCompile($name){
         $css = $this->css;
         $string = '';
         if(gettype($css) != 'array') return '';
@@ -62,10 +68,23 @@ class FttFileBuilder {
             preg_match_all('/url\((.*?)\)/i', $text, $urls, PREG_PATTERN_ORDER);
             for ($i = 0; $i < count($urls[0]); $i++) {
                 $url = $urls[0][$i];
-                $text = str_replace($url, $this->getCssUrl($url, $file), $text);
+                $text = str_replace($url, $this->getUrl($url, $file), $text);
             }
             $string .= $text;
         }
-        return $string;
+        file_put_contents($this->sPath . DS . $this->miniPath . DS . $name, $string);
+        return true;
+    }
+
+    public function jsCompile(){
+        $js = $this->js;
+        if(gettype($js) != 'array') return '';
+        $string = "";
+        foreach($js as $file){
+            $string .= file_get_contents($this->sPath . DS . $file);
+            $string .= "\n";
+        }
+        file_put_contents($this->sPath . DS . $this->miniPath . DS . "mini.js", $string);
+        return true;
     }
 }

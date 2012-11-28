@@ -1,7 +1,7 @@
 function JMBRevokeRegistration(){
     var module = this,
         parent = jQuery('.jmb-revoke-registration-container'),
-        sb = host.stringBuffer(),
+        sb = storage.stringBuffer(),
         html;
     sb._('<div class="ui-widget">');
         sb._('<label for="tags">Enter the user name: </label>');

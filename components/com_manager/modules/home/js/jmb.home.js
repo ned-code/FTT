@@ -16,7 +16,7 @@ function JMBHomeObject(offsetParent){
 			})
 		},
 		create:function(){
-			var st = host.stringBuffer();
+			var st = storage.stringBuffer();
 			st._('<table width="100%">');
 				st._('<tr>');
 					st._('<td><div class="jmb-home-logo">&nbsp;</div></td>');

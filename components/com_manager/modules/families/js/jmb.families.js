@@ -279,7 +279,7 @@ JMBFamiliesObject.prototype = {
 		});
 	},
 	_create:function(){
-		var	sb = host.stringBuffer();
+		var	sb = storage.stringBuffer();
 		sb._('<div class="jmb-families-sircar">&nbsp;</div>');
 		sb._('<div class="jmb-families-event">&nbsp;</div>');
 		sb._('<div class="jmb-families-spouse">&nbsp;</div>');
@@ -291,7 +291,7 @@ JMBFamiliesObject.prototype = {
 	_info:function(object, spouse){
         if(!spouse) return '';
 		var	module = this,
-			sb = host.stringBuffer(),
+			sb = storage.stringBuffer(),
 			event = object.families[spouse[0]].marriage,
 			date,
 			place,
@@ -381,7 +381,7 @@ JMBFamiliesObject.prototype = {
     },
 	_sircar:function(gedcom_id){
 		var	module = this,
-			sb = host.stringBuffer(),
+			sb = storage.stringBuffer(),
 			usertree = module.usertree,
 			object = usertree[gedcom_id],
 			gedcom_id = (object)?object.user.gedcom_id:false,
@@ -429,7 +429,7 @@ JMBFamiliesObject.prototype = {
 	},
 	_spouse:function(spouse, bcolor){
 		var	module = this,
-			sb = host.stringBuffer(),
+			sb = storage.stringBuffer(),
 			family_id = spouse[0],
 			gedcom_id = spouse[1],
 			usertree = module.usertree,
@@ -479,7 +479,7 @@ JMBFamiliesObject.prototype = {
 	},
 	_former_spouse:function(spouse, bcolor, position){
 		var	module = this,
-			sb = host.stringBuffer(),
+			sb = storage.stringBuffer(),
 			family_id = spouse[0],
 			gedcom_id = spouse[1],
 			usertree = module.usertree,
@@ -514,7 +514,7 @@ JMBFamiliesObject.prototype = {
 	_child:function(child, len, position){
 		var	module = this,
 			k = 1,
-			sb = host.stringBuffer(),
+			sb = storage.stringBuffer(),
 			usertree = module.usertree,
 			gedcom_id = child.gedcom_id,
 			object = usertree[gedcom_id],
@@ -699,7 +699,7 @@ JMBFamiliesObject.prototype = {
     _tooltips:function(cont){
         var module = this,
             pull = module.nameTooltip,
-            sb = host.stringBuffer();
+            sb = storage.stringBuffer();
         jQuery(pull).each(function(i, el){
             var parse = storage.usertree.parse(el);
             var div = jQuery(cont).find('div#'+parse.gedcom_id).find('.jmb-families-child-name,.jmb-families-parent-name');

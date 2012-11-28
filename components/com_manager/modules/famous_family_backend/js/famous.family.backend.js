@@ -19,7 +19,7 @@ function FamousFamilyBackend(obj){
 		jQuery(modal).hide();
 	}
  	var createBody = function(){
-		var sb = host.stringBuffer();
+		var sb = storage.stringBuffer();
 		sb._('<table width="100%" cellspacing="0" cellpadding="0">');
 			sb._('<tr><td colspan="2"><div class="jmb-famous-family-backend-header"><span>Famous Family Trees - Administration</span></div></td></tr>');
 			sb._('<tr>');
@@ -81,7 +81,7 @@ function FamousFamilyBackend(obj){
 	}
 	var gedcomIndividualsSelect = function(res, html){
 		var box = jQuery(html).find('.jmb-famous-family-backend-content');
-		var sb = host.stringBuffer();
+		var sb = storage.stringBuffer();
 		sb._('<form id="jmb_famous_indiv" method="post" target="iframe-famous-family">');
 			sb._('<div class="jmb-famous-individual">');
 				sb._('<select name="individuals_id">');
@@ -110,7 +110,7 @@ function FamousFamilyBackend(obj){
 	}
 	var createNewContent = function(html){
 		var box = jQuery(html).find('.jmb-famous-family-backend-content');
-		var sb = host.stringBuffer();
+		var sb = storage.stringBuffer();
 		jQuery(box).html('');
 		//create html
 		sb._('<form id="jmb_create_famous_family" method="post" target="iframe-famous-family">');
@@ -167,7 +167,7 @@ function FamousFamilyBackend(obj){
 	var createContent = function(id, html_object){
 		var object = module.json.sort_families[id];
 		var box = jQuery(html_object).find('.jmb-famous-family-backend-content');
-		var sb = host.stringBuffer();
+		var sb = storage.stringBuffer();
 		jQuery(box).html('');
 		//create html
 		sb._('<form id="jmb_create_famous_family" method="post" target="iframe-famous-family">');
@@ -221,7 +221,7 @@ function FamousFamilyBackend(obj){
 		jQuery(content).find('select[name="individuals_id"] option[value="'+object.individuals_id+'"]').attr('selected', 'selected');
 		setSelectOption(content, object.permission);
 		jQuery(content).find('.jmb-famous-family-backend-content-keepers-add').click(function(){
-			var st = host.stringBuffer();
+			var st = storage.stringBuffer();
 			st._('<form id="jmb_create_famous_family_keeper" method="post" target="iframe-famous-family">');
 				st._('<div class="jmb-famous-family-keeper-create">');
 					st._('<span>Select Keeper:</span>');
@@ -252,7 +252,7 @@ function FamousFamilyBackend(obj){
 					}
 					var time = res.time;
 					var table = jQuery(content[1]).find('table');
-					var st = host.stringBuffer();
+					var st = storage.stringBuffer();
 					st._('<tr>');
 						st._('<td><div><span>')._(getName(keeper))._('</span></div></td>');
 						st._('<td><div><span>')._(getLastLogin(keeper, time))._('</span></div></td>');
@@ -315,7 +315,7 @@ FamousFamilyBackend.prototype = {
 		})
 	},
 	ajaxForm:function(obj, method, args, success){
-		var sb = host.stringBuffer();
+		var sb = storage.stringBuffer();
 		var url = sb._('index.php?option=com_manager&task=callMethod&module=famous_family_backend&class=JMBFamousFamilyBackend&method=')._(method)._('&args=')._(args).result();
 		jQuery(obj).ajaxForm({
 			url:url,

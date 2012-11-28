@@ -458,7 +458,7 @@ function JMBInvitateObject(obj){
         function _info(object, spouse){
             return (function(object, spouse){
                 if(!spouse) return '';
-                var _sb = host.stringBuffer(),
+                var _sb = storage.stringBuffer(),
                     _event = object.families[spouse[0]].marriage,
                     _date,
                     _place,

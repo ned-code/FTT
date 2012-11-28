@@ -9,7 +9,7 @@ $info = prior($this->pageInfo);
 $url = JURI::base();
 $path = 'components/com_manager/modules/';
 
-$builder = new FttFileBuilder();
+$builder = new FamilyTreeTopBuilderLibrary();
 $cssObject = array();
 
 
@@ -30,12 +30,8 @@ foreach ($info as $page){
 }
 
 $builder->setCss($cssObject);
-$cssCode = $builder->cssCompile();
-
-echo "<style type='text/css'>";
-echo $cssCode;
-echo "</style>";
-
+$builder->cssCompile("mini2.css");
+echo '<link type="text/css" href="/25/components/com_manager/mini/mini2.css" rel="stylesheet"></link>';
 echo "<div id='container'>&nbsp;</div>";
 ?>
 <script>

@@ -236,7 +236,7 @@ JMBDescendantTreeObject.prototype = {
 			modal,
 			box,
             st;
-        st = host.stringBuffer();
+        st = storage.stringBuffer();
         st._('<div id="jmb_desc_buttons" class="jmb-desc-buttons">');
         st._('<div id="select" class="jmb-desc-button-select">&nbsp;</div>');
         st._('<div id="home" class="jmb-desc-button-home">&nbsp;</div>');
@@ -268,7 +268,7 @@ JMBDescendantTreeObject.prototype = {
 				}
 			},
 			win:function(){
-				var sb = host.stringBuffer();
+				var sb = storage.stringBuffer();
 				sb._('<div class="jmb-desc-select">');
 					sb._('<div class="jmb-desc-select-title"><span>')
                         sb._(module.message.FTT_MOD_DESCEDNATS_TREE_SHOW_DESCENDANTS_OF);
@@ -284,7 +284,7 @@ JMBDescendantTreeObject.prototype = {
 						return div;
 					},
 					node:function(settings){
-						var node, sb = host.stringBuffer(), data_style;
+						var node, sb = storage.stringBuffer(), data_style;
 						sb._('<div id ="')._(settings.id)._('" class="node');
                             sb._((settings.descendants)?' descendants':'');
                         sb._('">');

@@ -672,7 +672,7 @@ function JMBProfile(){
             return month_days[((year%4==0) && ((year%100!=0) || (year%400==0)))?1:0][month-1];
         },
         getOptionsSpouse:function(){
-            var sb = host.stringBuffer();
+            var sb = storage.stringBuffer();
             var families = module.object.families;
             if(families != null){
                 for(var key in families){
@@ -687,7 +687,7 @@ function JMBProfile(){
         },
         getOptionsDays:function(args){
             var days = module.functions.getDaysInMonth(args);
-            var sb = host.stringBuffer();
+            var sb = storage.stringBuffer();
             sb._('<option value="0">')._(module.message.FTT_MOD_PROFILE_EDITOR_FORM_DAY)._('</option>');
             for(var i = 1 ; i <= days ; i++ ){
                 if(typeof(args) != 'undefined' && typeof(args.date) != 'undefined' && args.date != ''){
@@ -705,7 +705,7 @@ function JMBProfile(){
         },
         getOptionsMonths:function(args){
             var months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-            var sb = host.stringBuffer();
+            var sb = storage.stringBuffer();
             sb._('<option value="0">')._(module.message.FTT_MOD_PROFILE_EDITOR_FORM_MONTH)._('</option>');
             for(var i=1 ; i <= months.length ; i++ ){
                 var monthName = module.message['FTT_MOD_PROFILE_EDITOR_FORM_'+(months[i-1].toUpperCase())];
@@ -890,7 +890,7 @@ JMBProfile.prototype = {
     render:function(id){
         var module = this,
             fn = module.functions,
-            sb = host.stringBuffer(),
+            sb = storage.stringBuffer(),
             form;
 
         switch(id){
@@ -1216,7 +1216,7 @@ JMBProfile.prototype = {
                     function _info(object, spouse){
                         return (function(object, spouse){
                             if(!spouse) return '';
-                            var _sb = host.stringBuffer(),
+                            var _sb = storage.stringBuffer(),
                                 _event = object.families[spouse[0]].marriage,
                                 _date,
                                 _place,

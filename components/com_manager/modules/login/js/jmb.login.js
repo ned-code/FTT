@@ -34,7 +34,7 @@ function JMBLogin(){
 			});
 		},
 		create:function(){
-			var sb = host.stringBuffer();
+			var sb = storage.stringBuffer();
 			sb._('<div class="jmb-profile-cont">');
 				sb._('<table>');
 					sb._('<tr>');
@@ -47,14 +47,14 @@ function JMBLogin(){
             return jQuery(sb.result());
 		},
 		connect:function(){
-			var sb = host.stringBuffer();
+			var sb = storage.stringBuffer();
 			sb._('<div class="jmb-profile-cont">');
 				sb._('<div class="facebook"><span>')._(msg.FTT_MOD_LOGIN_CONNECT_WITH_FACEBOOK)._('</span></div>');
 			sb._('</div>');
 			return jQuery(sb.result());
 		},
 		langList:function(object){
-			var st = host.stringBuffer();
+			var st = storage.stringBuffer();
 			st._('<ul>');
 			jQuery(settings.languages).each(function(i,el){
 				if(parseInt(el.published)){
@@ -95,7 +95,7 @@ function JMBLogin(){
 			}
 		},
 		menu:function(){
-			var module = this, menu, list, sb = host.stringBuffer(), contEl;
+			var module = this, menu, list, sb = storage.stringBuffer(), contEl;
 			sb._('<div class="menu">');
                 if(settings.user_data && settings.user_data.pull.length != 0){
                     sb._('<div id="profile"><span>')._(msg.FTT_MOD_LOGIN_PROFILE)._('</span></div>');
@@ -292,7 +292,7 @@ function JMBLogin(){
         famous:function(){
             if(storage.usertree.gedcom_id == null) return false;
             var object = storage.usertree.pull[storage.usertree.gedcom_id];
-            var	sb = host.stringBuffer(), parse = storage.usertree.parse(object), htmlObject;
+            var	sb = storage.stringBuffer(), parse = storage.usertree.parse(object), htmlObject;
             sb._('<div class="jmb-profile-famous-cont">');
             sb._('<table>');
             sb._('<tr><td><div class="text"><span>')._(msg.FTT_MOD_LOGIN_FF_LOGGED)._(':</span></div></td><td rowspan="3"><div class="avatar">')._(fn.getAvatar(object))._('</div></td></tr>');

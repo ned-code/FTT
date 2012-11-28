@@ -93,7 +93,7 @@ JMBTooltip.prototype = {
 	_view:function(settings){
 		var	module = this,
             message = module.message,
-			sb = host.stringBuffer(),
+			sb = storage.stringBuffer(),
 			object = settings.object,
 			user = object.user,
 			media = object.media,
@@ -179,7 +179,7 @@ JMBTooltip.prototype = {
 	_edit:function(settings){
 		var	module = this,
             message = module.message,
-			sb = host.stringBuffer(),
+			sb = storage.stringBuffer(),
             gedcom_id = settings.gedcom_id,
             object = settings.object,
 			user = object.user,
@@ -221,7 +221,7 @@ JMBTooltip.prototype = {
             media = object.media,
             photos = (media!=null)?media.photos:false,
             cache = (media!=null)?media.cache:false,
-            sb = host.stringBuffer();
+            sb = storage.stringBuffer();
 		
 		if(!photos) return '';
 		sb._('<ul style="width:')._(55*photos.length)._('px;">');

@@ -1,6 +1,6 @@
 function JMBFeedback() {
     var module = this,
-        sb = host.stringBuffer(),
+        sb = storage.stringBuffer(),
         parent = jQuery('div#jmb_feedback_form'),
         path = "index.php/component/obsuggest/",
         message = {
@@ -28,7 +28,7 @@ function JMBFeedback() {
             return { id:id, name:name };
         },
         iframe:function (id) {
-            var st = host.stringBuffer();
+            var st = storage.stringBuffer();
             st._("<iframe style='border:none;' src='")._(storage.baseurl + path + id)._("' width='660' height='440' align='center'></iframe>");
             return jQuery(st.result());
         },

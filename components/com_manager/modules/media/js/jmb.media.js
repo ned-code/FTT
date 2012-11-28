@@ -2,15 +2,15 @@ function JMBMediaManager(){
 }
 JMBMediaManager.prototype = {
 	getImage:function(image){
-		var sb = host.stringBuffer();
+		var sb = storage.stringBuffer();
 		return sb._('<a href="')._(storage.baseurl+image.path.substr(1))._('" rel="prettyPhoto[pp_gal]" title=""><img src="index.php?option=com_manager&task=getResizeImage&tree_id=')._(storage.usertree.tree_id)._('&id=')._(image.media_id)._('&w=100&h=100')._('" alt="" /></a>').result();
 	},
 	getImageEdit:function(image){
-		var sb = host.stringBuffer();
+		var sb = storage.stringBuffer();
 		return sb._('<img src="index.php?option=com_manager&task=getResizeImage&tree_id=')._(storage.usertree.tree_id)._('&id=')._(image.media_id)._('&w=100&h=100')._('" alt="" />').result();
 	},
 	getListItem:function(image, edit){
-		var self = this, sb = host.stringBuffer();
+		var self = this, sb = storage.stringBuffer();
 		sb._('<li id="')._(image.media_id)._('">') 
 			sb._('<div class="list-item">');
 				if(edit){
@@ -24,7 +24,7 @@ JMBMediaManager.prototype = {
 		return sb.result();
 	},
 	render:function(photos, edit){
-		var self = this,sb = host.stringBuffer();
+		var self = this,sb = storage.stringBuffer();
 		sb._('<div class="jmb-dialog-photos-content">');
 			sb._('<div class="list">');
 				sb._('<ul>');

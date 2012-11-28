@@ -20,7 +20,7 @@ $controller->redirect();
 
 # include JS and CSS 
 $document =& JFactory::getDocument();
-$builder = new FttFileBuilder();
+$builder = new FamilyTreeTopBuilderLibrary();
 
 $builder->setCss(array(
     'administrator/components/com_manager/js/jquery-ui-1.8.23.custom.css',
@@ -45,9 +45,49 @@ $builder->setCss(array(
     'components/com_manager/modules/feedback/css/jmb.feedback.css',
     'components/com_manager/modules/notifications/css/jmb.notifications.css'
 ));
+$builder->cssCompile("mini.css");
+//$document->addStyleDeclaration($cssCode);
+/*
+$builder->setJs(array(
+    'components/com_manager/js/excanvas.js',
+    'components/com_manager/codebase/dhtmlxcontainer.js',
+    'components/com_manager/codebase/dhtmlxcommon.js',
+    'components/com_manager/codebase/dhtmlxlayout.js',
+    'components/com_manager/codebase/dhtmlxtree.js',
+    'administrator/components/com_manager/codebase/dhtmlxtabbar.js',
+    'administrator/components/com_manager/js/jquery-1.8.1.min.js',
+    'administrator/components/com_manager/js/jquery-ui-1.8.23.custom.min.js',
+    'administrator/components/com_manager/js/jquery.form.js',
+    'administrator/components/com_manager/js/jquery.validate.min.js',
+    'components/com_manager/js/async.js',
+    'components/com_manager/js/core.js',
+    //'administrator/components/com_manager/js/host.js',
+    'components/com_manager/js/jit.js',
+    'components/com_manager/js/jquery.bt.js',
+    'components/com_manager/js/jquery.prettyPhoto.js',
+    'components/com_manager/js/jquery.tipsy.js',
+    'components/com_manager/js/jquery.scroll.js',
+    'components/com_manager/js/jquery.ui.touch-punch.min.js',
+    'components/com_manager/js/jquery.animatedborder.js',
+    'components/com_manager/js/tdfriendselector.js',
+    'components/com_manager/js/jquery.tabSlideOut.v1.3.js',
+    'components/com_manager/modules/overlay/js/jmb.overlay.js',
+    'components/com_manager/modules/header/js/jmb.header.js',
+    'components/com_manager/modules/profile/js/jmb.profile.js',
+    'components/com_manager/modules/tooltip/js/jmb.tooltip.js',
+    'components/com_manager/modules/media/js/jmb.media.js',
+    'components/com_manager/modules/invitation/js/jmb.invitation.js',
+    'components/com_manager/modules/family_line/js/jmb.family.line.js',
+    'components/com_manager/modules/login/js/jmb.login.js',
+    'components/com_manager/modules/progressbar/js/jmb.progressbar.js',
+    'components/com_manager/modules/feedback/js/jmb.feedback.js',
+    'components/com_manager/modules/notifications/js/jmb.notifications.js'
+));
+$jsPath = $builder->jsCompile();
+*/
 
-$cssCode = $builder->cssCompile();
-$document->addStyleDeclaration($cssCode);
+$document->addStyleSheet('components/com_manager/mini/mini.css');
+//$document->addScript('components/com_manager/mini/mini.js');
 
 $document->addScript('components/com_manager/js/excanvas.js');
 
@@ -73,7 +113,6 @@ $document->addScript('administrator/components/com_manager/js/jquery.validate.mi
 
 //core part
 $document->addScript('components/com_manager/js/async.js');
-$document->addScript('components/com_manager/js/core.js');
 $document->addScript('components/com_manager/js/core.js');
 $document->addScript('administrator/components/com_manager/js/host.js');
 
@@ -131,5 +170,4 @@ $document->addScript('components/com_manager/modules/notifications/js/jmb.notifi
 ###############################################################################
 
 $document->addCustomTag('<script type="text/javascript">jQuery.noConflict();</script>');
-
 ?>

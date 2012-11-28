@@ -22,7 +22,7 @@ function JMBQuickFactsObject(object){
             return parse.turns != 0 ? parse.turns : 'unknown';
 		},
 		getNumberFamilyString:function(){ 
-			var sb = host.stringBuffer();
+			var sb = storage.stringBuffer();
 			sb._('<font style="color:green;">')._(json.count)._('</font> ( ');
 				sb._(json.living)._(' ');
 				sb._(message.FTT_MOD_QUICK_FACTS_LIVING)._(' )');
@@ -30,7 +30,7 @@ function JMBQuickFactsObject(object){
 		},
 		getYoungestMemberString:function(){
 			if(json.youngest == null) return 'unknown';
-			var sb = host.stringBuffer(), parse = storage.usertree.parse(storage.usertree.pull[json.youngest.user.gedcom_id]);
+			var sb = storage.stringBuffer(), parse = storage.usertree.parse(storage.usertree.pull[json.youngest.user.gedcom_id]);
 			sb._('<font id="')._(parse.gedcom_id)._('" style="color:#');
 				sb._(settings.colors[parse.gender])._(';">');
 					sb._(parse.full_name);
@@ -41,7 +41,7 @@ function JMBQuickFactsObject(object){
 		},
 		getOldestMemberString:function(){
 			if(json.oldest == null) return 'unknown';
-			var sb = host.stringBuffer(), parse = storage.usertree.parse(storage.usertree.pull[json.oldest.user.gedcom_id]);
+			var sb = storage.stringBuffer(), parse = storage.usertree.parse(storage.usertree.pull[json.oldest.user.gedcom_id]);
 			sb._('<font id="')._(parse.gedcom_id)._('" style="color:#');
 				sb._(settings.colors[parse.gender]);
 			sb._(';">');
@@ -52,7 +52,7 @@ function JMBQuickFactsObject(object){
 			return sb.result();
 		},
 		create:function(){
-			var sb = host.stringBuffer(),
+			var sb = storage.stringBuffer(),
 			    htmlObject;
 			sb._('<div class="jmb_qf_header" >');
                     sb._('<span>')._(message.FTT_MOD_QUICK_FACTS_HEADER)._('</span>');

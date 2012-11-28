@@ -1,6 +1,6 @@
 function JMBLoginButtonObject(obj){
 	var	module = this,
-		sb = host.stringBuffer(),
+		sb = storage.stringBuffer(),
 		cont = null;
 
     var div = jQuery("<div class='ftt-preloader-alert'><div>You are now being logged in using your Facebook credentials</div></div>");

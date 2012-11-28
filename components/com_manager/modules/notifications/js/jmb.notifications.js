@@ -114,7 +114,7 @@ JMBNotifications.prototype = {
         }
 
         fn.createUserBox = function(){
-            var sb = host.stringBuffer();
+            var sb = storage.stringBuffer();
             sb._('<div class="userbox">');
                 sb._('<div class="user-header">&nbsp;</div>');
                 sb._('<div id="facebook" style="background: none repeat scroll 0 0 #E5E9F0;border: 1px solid #4C67A1;">')
@@ -137,7 +137,7 @@ JMBNotifications.prototype = {
         }
 
         fn.createMemberBox = function(){
-            var sb = host.stringBuffer();
+            var sb = storage.stringBuffer();
             sb._('<div id="target" style="background: none repeat scroll 0 0 #E7E7E7;border: 1px solid #787878;margin-top: 5px;">')
                 sb._('<div style="background: none repeat scroll 0 0 white;border: 1px solid #d9d9d9;margin: 10px;padding: 5px;">');
                     sb._('<div style="border: 1px solid #403E39;display: inline-block;margin: 5px;vertical-align: top;cursor:pointer;">');
@@ -228,7 +228,7 @@ JMBNotifications.prototype = {
         module.acceptIndex = i;
 
         fn.createUserBox = function(){
-            var sb = host.stringBuffer();
+            var sb = storage.stringBuffer();
             sb._('<div class="userbox">');
                 sb._('<div class="user-header">&nbsp;</div>');
                 sb._('<div style="background: none repeat scroll 0 0 #E5E9F0;border: 1px solid #4C67A1;">')
@@ -274,7 +274,7 @@ JMBNotifications.prototype = {
         }
 
         fn.createMessageBox = function(){
-            var sb = host.stringBuffer();
+            var sb = storage.stringBuffer();
             sb._('<div style="background: none repeat scroll 0 0 #ED1C24;border-radius: 3px 3px 3px 3px;color: white;height: 100%;margin: 5px;padding: 10px;width: 100px;text-align: center;">');
                 sb._('<div>');
                     sb._(msg.FTT_MOD_NOTIFICATIONS_ACCEPT_DRAG)._(' ')._(json.user_info.name);
@@ -293,7 +293,7 @@ JMBNotifications.prototype = {
         }
 
         fn.createDialogBox = function(){
-            var sb = host.stringBuffer();
+            var sb = storage.stringBuffer();
             sb._('<div style="padding: 0;">');
                 sb._('<table style="border-collapse: collapse;">');
                     sb._('<tr style="background: none repeat scroll 0 0 #9DCEFF;border: 1px solid #9398E2;">');
@@ -349,7 +349,7 @@ JMBNotifications.prototype = {
     onDenied:function(i, object, json, cont){
         var module = this,
             msg = module.message,
-            sb = host.stringBuffer(),
+            sb = storage.stringBuffer(),
             box = jQuery('<div></div>');
             cont;
 
@@ -417,7 +417,7 @@ JMBNotifications.prototype = {
             dialogBox = jQuery('<div class="notifications_manager"></div>');
 
         fn.createContentBox = function(callback){
-            var sb = host.stringBuffer();
+            var sb = storage.stringBuffer();
             sb._('<table class="container">');
             sb._('<tr>');
             sb._('<td style="width:120px;" valign="top"><div class="menu">');
@@ -448,7 +448,7 @@ JMBNotifications.prototype = {
                     var args = json.user_info;
                     var link = json.me.link;
                     var facebook_id = json.me.id;
-                    var sb = host.stringBuffer();
+                    var sb = storage.stringBuffer();
                     sb._('<div class="user_box">');
                         sb._('<table style="margin-left: 10px;">');
                             sb._('<tr>');
@@ -479,7 +479,7 @@ JMBNotifications.prototype = {
                 },
                 parent:function(name){
                     var args = (name == "Father")?json.father_info:json.mother_info;
-                    var sb = host.stringBuffer();
+                    var sb = storage.stringBuffer();
                     sb._('<div class="parent_box">');
                         sb._('<table>');
                             sb._('<tr>');
@@ -504,7 +504,7 @@ JMBNotifications.prototype = {
                 id = jQuery(this).attr('id'),
                 pull = module.ntPull,
                 object = pull[id],
-                sb = host.stringBuffer(),
+                sb = storage.stringBuffer(),
                 json = fn.parse(object),
                 add = fn.addBox(json);
 
@@ -569,7 +569,7 @@ JMBNotifications.prototype = {
 
         fn.menu = function(cont){
             var pull = module.ntPull,
-                sb = host.stringBuffer(),
+                sb = storage.stringBuffer(),
                 html;
 
             sb._('<div class="users">');
@@ -641,7 +641,7 @@ JMBNotifications.prototype = {
             callback(module.ntPull);
         }
         fn.createMessageBox = function(){
-            var html, sb = host.stringBuffer(), message = module.message;
+            var html, sb = storage.stringBuffer(), message = module.message;
             sb._('<div class="ftt_notifications_alert">');
             sb._('<div class="message"><div>')._(message.FTT_MOD_NOTIFICATIONS_FIRST_TEXT)._('</div><div class="button">')._(message.FTT_MOD_NOTIFICATIONS_FIRST_BUTTON_TEXT)._('</div></div>');
             sb._('</div>');
