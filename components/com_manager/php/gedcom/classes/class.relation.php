@@ -447,7 +447,11 @@ class JMBRelation {
                 $relation = $ambit[$next]["relation"];
             }
         }
-        $name .= "of your ".$relations[$path[0]]["relation"];
+        if(isset($relations[$path[0]])){
+            $name .= "of your ".$relations[$path[0]]["relation"];
+        } else if(isset($this->_Relations[substr($path[0], 1)])){
+            $name .= "of your ".$this->_Relations[substr($path[0], 1)][0]["relation"];
+        }
         $name .= ", ".$this->get_name(substr($path[0],1));
         if($this->isRelInLaw($relations, $path[0]) || $this->isRelInLaw($this->_Relations, substr($path[0], 1), true)){
             $in_law = 1;
