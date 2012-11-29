@@ -9,6 +9,7 @@ class JMBRelation {
     private $_ChildrensList;
     private $_IndividualsList;
     private $_Relatives;
+    private $_Relations;
 
     public function __construct(&$ajax, &$families, &$individuals){
         $this->ajax = $ajax;
@@ -257,22 +258,16 @@ class JMBRelation {
         $this->ajax->query();
     }
 
-    protected function findUnknownUsers($tree_id, $gedcom_id){
-        $sql_string = "SELECT rel.to as individuals_id, rel.relation FROM #__mb_relations as rel WHERE rel.tree_id = ? AND rel.from = ?";
-        $this->ajax->setQuery($sql_string, $tree_id, $gedcom_id);
-        $relations = $this->ajax->loadAssocList('individuals_id');
+    protected function findUnknownUsers(){
+        $relations = $this->_Relations;
         $check = array();
-        if($relations==null){
-            $check = $this->_Relatives;
+        if(sizeof($this->_Relatives) == sizeof($relations)){
+            return array();
         } else {
-            if(sizeof($this->_Relatives) == sizeof($relations)){
-                return array();
-            } else {
-                foreach($this->_Relatives as $rel){
-                    $id = $rel['individuals_id'];
-                    if(!isset($relations[$id])){
-                        $check[] = $rel;
-                    }
+            foreach($this->_Relatives as $rel){
+                $id = $rel['individuals_id'];
+                if(!isset($relations[$id])){
+                    $check[] = $rel;
                 }
             }
         }
@@ -286,13 +281,14 @@ class JMBRelation {
         }
         $result = array_chunk($inserts, 25, true);
         foreach($result as $res){
-            $sql = "INSERT INTO #__mb_relations (`tree_id`, `from`, `to`, `blood`, `relation`, `long_relation`) VALUES ";
+            $sql = "INSERT INTO #__mb_relations (`tree_id`, `from`, `to`, `blood`, `in_law`, `relation`, `long_relation`) VALUES ";
             foreach($res as $el){
                 $indKey = substr($el['indKey'],1);
                 $relation = $el['relations']['relation'];
                 $long_relation = $el['relations']['long_relation'];
                 $blood = $el['relations']['blood'];
-                $sql .= "('".$tree_id."','".$gedcom_id."','".$indKey."', '".$blood."','".$relation."','".$long_relation."'),";
+                $in_law = $el['relations']['in_law'];
+                $sql .= "('".$tree_id."','".$gedcom_id."','".$indKey."', '".$blood."', '".$in_law."','".$relation."','".$long_relation."'),";
             }
             $this->ajax->setQuery(substr($sql,0,-1));
             $this->ajax->query();
@@ -358,7 +354,8 @@ class JMBRelation {
                 $waves["W".$level] = array();
             }
             $waves["W".$level]["I".$user_id] = true;
-            if(array_key_exists("I".$user_id, $relatives)){
+
+            if(array_key_exists("I".$user_id, $relatives) || (array_key_exists($user_id, $this->_Relations) && $this->_Relations[$user_id][0]["blood"])){
                 $ret[] = array("id"=>$user_id, "level"=>$level);
             }
             foreach($ambit as $k => $v){
@@ -421,6 +418,17 @@ class JMBRelation {
         return $shortPath;
     }
 
+    protected function isRelInLaw($rel, $id, $flag = false){
+        if(array_key_exists($id, $rel)){
+            if($flag){
+                return $rel[$id][0]["in_law"];
+            } else {
+                return $rel[$id]["in_law"];
+            }
+        }
+        return false;
+    }
+
     protected function getRelationLongName($res, $waves, &$relations){
         $paths = array();
         foreach($res as $el){
@@ -437,14 +445,16 @@ class JMBRelation {
             $name .= $ambit[$next]["relation"]." ";
             if($i == 0){
                 $relation = $ambit[$next]["relation"];
-                if(isset($this->spouses[substr($path[0],1)])){
-                    $relation .= "-in-Law";
-                }
             }
         }
         $name .= "of your ".$relations[$path[0]]["relation"];
         $name .= ", ".$this->get_name(substr($path[0],1));
-        return array($relation, $name);
+        if($this->isRelInLaw($relations, $path[0]) || $this->isRelInLaw($this->_Relations, substr($path[0], 1), true)){
+            $in_law = 1;
+        } else {
+            $in_law = 0;
+        }
+        return array($relation, $name, $in_law);
     }
 
     protected function findRelations($user_id, &$relations, &$un){
@@ -453,9 +463,10 @@ class JMBRelation {
         if($res){
             $name = $this->getRelationLongName($res, $waves, $relations);
             $relation = $name[0];
-            $un["I".$user_id] = array("blood"=>0, "relation"=>$relation, "long_relation"=>$name[1] );
+            $in_law = $name[2];
+            $un["I".$user_id] = array("blood"=>0, "in_law" =>$in_law, "relation"=>$relation, "long_relation"=>$name[1]);
         } else {
-            $un["I".$user_id] = array("blood"=>0, "relation"=>"unknown", "long_relation"=>"unknown" );
+            $un["I".$user_id] = array("blood"=>0, "in_law"=>0, "relation"=>"unknown", "long_relation"=>"unknown" );
         }
     }
 	
@@ -464,6 +475,11 @@ class JMBRelation {
 		$this->_ChildrensList = $this->families->getChildrensList($tree_id);
 		$this->_IndividualsList = $this->individuals->getIndividualsList($tree_id, $gedcom_id);
 		$this->_Relatives = $this->individuals->getRelatives($tree_id);
+
+        $sql_string = "SELECT rel.to as individuals_id, rel.relation, rel.blood as blood, rel.in_law as in_law FROM #__mb_relations as rel WHERE rel.tree_id = ? AND rel.from = ? and rel.relation != 'unknown'";
+        $this->ajax->setQuery($sql_string, $tree_id, $gedcom_id);
+        $this->_Relations = $this->ajax->loadAssocList('individuals_id');
+
 
         $this->ownerId = $gedcom_id;
         $this->spouses = array();
@@ -504,11 +520,11 @@ class JMBRelation {
         $result = array_chunk($insert, 25, true);
         foreach($result as $res){
             $sql = "INSERT INTO #__mb_relations (`tree_id`, `from`, `to`, `blood`, `relation`, `long_relation`) VALUES ";
-            $indKey = $el['member']['individuals_id'];
-            $blood = ($relation)?1:0;
-            $relation = $el['relation'];
-            $long_relation = "";
             foreach($res as $el){
+                $indKey = $el['member']['individuals_id'];
+                $blood = ($relation)?1:0;
+                $relation = $el['relation'];
+                $long_relation = "";
                 $sql .= "('".$tree_id."','".$gedcom_id."','".$indKey."', '".$blood."','".$relation."','".$long_relation."'),";
             }
             $this->ajax->setQuery(substr($sql,0,-1));
@@ -521,7 +537,7 @@ class JMBRelation {
         $this->init($tree_id, $gedcom_id);
 
         $this->deleteUnknownFromDb($tree_id, $gedcom_id);
-        $relatives = $this->findUnknownUsers($tree_id, $gedcom_id);
+        $relatives = $this->findUnknownUsers();
 
         $relations = array();
         $unknowns = array();
@@ -529,7 +545,8 @@ class JMBRelation {
             $user_id = $user['individuals_id'];
             $relation = $this->get_relation($user_id, $gedcom_id);
             if($relation){
-                $relations["I".$user_id] = array("blood"=>1,"relation"=>$relation, "long_relation"=>"");
+                $in_law = isset($this->spouses[$user_id])?1:0;
+                $relations["I".$user_id] = array("blood"=>1, "in_law" => $in_law, "relation"=>$relation, "long_relation"=>"");
             } else {
                 $unknowns[] = $user_id;
             }
@@ -549,7 +566,7 @@ class JMBRelation {
         $this->init($tree_id, $gedcom_id);
 
         $this->deleteFromDb($tree_id, $gedcom_id);
-        $relatives = $this->_Relatives;
+        $relatives = $this->findUnknownUsers();
 
         $relations = array();
         $unknowns = array();
@@ -557,7 +574,8 @@ class JMBRelation {
             $user_id = $user['individuals_id'];
             $relation = $this->get_relation($user_id, $gedcom_id);
             if($relation){
-                $relations["I".$user_id] = array("blood"=>1,"relation"=>$relation, "long_relation"=>"");
+                $in_law = isset($this->spouses[$user_id])?1:0;
+                $relations["I".$user_id] = array("blood"=>1, "in_law" => $in_law, "relation"=>$relation, "long_relation"=>"");
             } else {
                 $unknowns[] = $user_id;
             }
