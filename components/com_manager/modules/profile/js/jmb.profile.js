@@ -128,7 +128,7 @@ function JMBProfile(){
         FTT_MOD_PROFILE_EDITOR_FORM_ADDS_SPOUSE:"Add spouse",
         FTT_MOD_PROFILE_EDITOR_FORM_ADDS_BROTHER_OR_SISTER:"Add brother or sister",
         FTT_MOD_PROFILE_EDITOR_FORM_ADDS_CHILD:"Add child",
-        FTT_MOD_PROFILE_EDITOR_DELETE_BUTTON:"Delete Profile",
+        FTT_MOD_PROFILE_EDITOR_DELETE_BUTTON:"Delete my Profile",
         FTT_MOD_PROFILE_EDITOR_ADVANCED_BUTTON: "Advanced Options",
         FTT_MOD_PROFILE_EDITOR_DELETE_CONFIRM:"Are you sure you want to delete the information about that user?",
         FTT_MOD_PROFILE_EDITOR_DELETE_USER_CONFIRM:"You are about to remove yourself from this family tree. Once this is done, you will not be able to view this family tree unless an existing member invites you back.",
