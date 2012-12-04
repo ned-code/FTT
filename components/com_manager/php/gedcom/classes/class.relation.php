@@ -615,19 +615,35 @@ class JMBRelation {
     }
 
     protected function getConnection($gedcom_id, &$waves){
+        $paths = array();
         if(isset($waves["I".$gedcom_id])){
             $object = $waves["I".$gedcom_id];
+            $level = $object['level'];
+            $lastId = "I".$gedcom_id;
+            $paths[] = array("id"=>$lastId, "level"=>$level);
+            for($i = $level - 1; $i >= 0 ; $i--){
+                $wave = $waves["W".$i];
+                $ambit = $waves[$lastId]['ambit'];
+                foreach($wave as $id => $flag){
+                    foreach($ambit as $k => $v){
+                        if($id == $k){
+                            $paths[] = array("id"=>$k, "level"=>$i);
+                            $lastId = $k;
+                        }
+                    }
+                }
+            }
         }
-        return false;
+
+        return array_reverse($paths);
     }
 
 	public function check($tree_id, $gedcom_id){
         $this->init($tree_id, $gedcom_id);
 
+        /*
         $waves = array();
         $this->getRelationsWaves($waves, array("I".$gedcom_id=>null));
-
-        /*
         $conn = $this->getConnection("221", $waves);
 
         echo "<script>";
@@ -637,7 +653,6 @@ class JMBRelation {
 
         exit;
         */
-
 
         $this->deleteUnknownFromDb($tree_id, $gedcom_id);
         $relatives = $this->findUnknownUsers();
