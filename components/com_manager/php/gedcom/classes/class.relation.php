@@ -252,6 +252,74 @@ class JMBRelation {
         $this->ajax->query();
     }
 
+	protected function init($tree_id, $gedcom_id){
+        $this->_FamiliesList = $this->families->getFamiliesList($tree_id);
+		$this->_ChildrensList = $this->families->getChildrensList($tree_id);
+		$this->_IndividualsList = $this->individuals->getIndividualsList($tree_id, $gedcom_id);
+		$this->_Relatives = $this->individuals->getRelatives($tree_id);
+
+        $sql_string = "SELECT rel.to as individuals_id, rel.relation, rel.blood as blood, rel.in_law as in_law FROM #__mb_relations as rel WHERE rel.tree_id = ? AND rel.from = ? and rel.relation != 'unknown'";
+        $this->ajax->setQuery($sql_string, $tree_id, $gedcom_id);
+        $this->_Relations = $this->ajax->loadAssocList('individuals_id');
+
+
+        $this->ownerId = $gedcom_id;
+        $this->spouses = array();
+
+        $spouses = $this->get_spouses($gedcom_id);
+        foreach($spouses as $spouse){
+            $this->spouses[$spouse] = true;
+        }
+	}
+
+	public function set($tree_id, $gedcom_id, $target_id){
+		$this->init($tree_id, $gedcom_id);
+        $sql_string = "DELETE FROM #__mb_relations WHERE tree_id = ? AND `from` = ? AND `to` = ?";
+        $this->ajax->setQuery($sql_string, $tree_id, $gedcom_id, $target_id);
+        $this->ajax->query();
+		$relation =  $this->get_relation($target_id, $gedcom_id);		
+		$sql_string = "INSERT INTO #__mb_relations (`tree_id`, `from`, `to`, `relation`) VALUES (?, ?, ?, ?)";
+        $sql = "INSERT INTO #__mb_relations (`tree_id`, `from`, `to`, `blood`, `relation`, `long_relation`) VALUES (?, ?, ?, ?, ?, ?)";
+        $blood = ($relation)?1:0;
+        $rel = ($relation)?$relation:'unknown';
+        $long_rel = "";
+		$this->ajax->setQuery($sql_string, $tree_id, $gedcom_id, $target_id, 0, $rel, $long_rel);
+		$this->ajax->query();
+	}
+	
+	public function get($tree_id, $gedcom_id, $target_id){
+		$this->init($tree_id, $gedcom_id);
+		$relation =  $this->get_relation($target_id, $gedcom_id);
+		return $relation;
+	}
+
+    public function set_relation($tree_id, $gedcom_id, $check){
+        $insert = array();
+        foreach($check as $rel){
+            $relation = $this->get_relation($rel['individuals_id'], $gedcom_id);
+            $insert[] = array('member'=>$rel, 'relation'=>($relation)?$relation:'unknown');
+        }
+        $result = array_chunk($insert, 25, true);
+        foreach($result as $res){
+            $sql = "INSERT INTO #__mb_relations (`tree_id`, `from`, `to`, `blood`, `relation`, `long_relation`) VALUES ";
+            foreach($res as $el){
+                $indKey = $el['member']['individuals_id'];
+                $blood = ($relation)?1:0;
+                $relation = $el['relation'];
+                $long_relation = "";
+                $sql .= "('".$tree_id."','".$gedcom_id."','".$indKey."', '".$blood."','".$relation."','".$long_relation."'),";
+            }
+            $this->ajax->setQuery(substr($sql,0,-1));
+            $this->ajax->query();
+        }
+        return $insert;
+    }
+
+    /*
+      * ------------------------------
+      */
+
+    /*
     protected function deleteUnknownFromDb($tree_id, $gedcom_id){
         $sql_string = "DELETE FROM #__mb_relations WHERE `tree_id` = ? and `from` = ? and relation = 'unknown'";
         $this->ajax->setQuery($sql_string, $tree_id, $gedcom_id);
@@ -358,6 +426,7 @@ class JMBRelation {
             if(array_key_exists("I".$user_id, $relatives) || (array_key_exists($user_id, $this->_Relations) && $this->_Relations[$user_id][0]["blood"])){
                 $ret[] = array("id"=>$user_id, "level"=>$level);
             }
+
             foreach($ambit as $k => $v){
                 $wave[$k] = $v;
             }
@@ -473,72 +542,102 @@ class JMBRelation {
             $un["I".$user_id] = array("blood"=>0, "in_law"=>0, "relation"=>"unknown", "long_relation"=>"unknown" );
         }
     }
-	
-	protected function init($tree_id, $gedcom_id){
-        $this->_FamiliesList = $this->families->getFamiliesList($tree_id);
-		$this->_ChildrensList = $this->families->getChildrensList($tree_id);
-		$this->_IndividualsList = $this->individuals->getIndividualsList($tree_id, $gedcom_id);
-		$this->_Relatives = $this->individuals->getRelatives($tree_id);
-
-        $sql_string = "SELECT rel.to as individuals_id, rel.relation, rel.blood as blood, rel.in_law as in_law FROM #__mb_relations as rel WHERE rel.tree_id = ? AND rel.from = ? and rel.relation != 'unknown'";
-        $this->ajax->setQuery($sql_string, $tree_id, $gedcom_id);
-        $this->_Relations = $this->ajax->loadAssocList('individuals_id');
+    */
+    /*
+      * ------------------------------
+      */
 
 
-        $this->ownerId = $gedcom_id;
-        $this->spouses = array();
-
-        $spouses = $this->get_spouses($gedcom_id);
-        foreach($spouses as $spouse){
-            $this->spouses[$spouse] = true;
-        }
-	}
-
-	public function set($tree_id, $gedcom_id, $target_id){
-		$this->init($tree_id, $gedcom_id);
-        $sql_string = "DELETE FROM #__mb_relations WHERE tree_id = ? AND `from` = ? AND `to` = ?";
-        $this->ajax->setQuery($sql_string, $tree_id, $gedcom_id, $target_id);
-        $this->ajax->query();
-		$relation =  $this->get_relation($target_id, $gedcom_id);		
-		$sql_string = "INSERT INTO #__mb_relations (`tree_id`, `from`, `to`, `relation`) VALUES (?, ?, ?, ?)";
-        $sql = "INSERT INTO #__mb_relations (`tree_id`, `from`, `to`, `blood`, `relation`, `long_relation`) VALUES (?, ?, ?, ?, ?, ?)";
-        $blood = ($relation)?1:0;
-        $rel = ($relation)?$relation:'unknown';
-        $long_rel = "";
-		$this->ajax->setQuery($sql_string, $tree_id, $gedcom_id, $target_id, 0, $rel, $long_rel);
-		$this->ajax->query();
-	}
-	
-	public function get($tree_id, $gedcom_id, $target_id){
-		$this->init($tree_id, $gedcom_id);
-		$relation =  $this->get_relation($target_id, $gedcom_id);
-		return $relation;
-	}
-
-    public function set_relation($tree_id, $gedcom_id, $check){
-        $insert = array();
-        foreach($check as $rel){
-            $relation = $this->get_relation($rel['individuals_id'], $gedcom_id);
-            $insert[] = array('member'=>$rel, 'relation'=>($relation)?$relation:'unknown');
-        }
-        $result = array_chunk($insert, 25, true);
-        foreach($result as $res){
-            $sql = "INSERT INTO #__mb_relations (`tree_id`, `from`, `to`, `blood`, `relation`, `long_relation`) VALUES ";
-            foreach($res as $el){
-                $indKey = $el['member']['individuals_id'];
-                $blood = ($relation)?1:0;
-                $relation = $el['relation'];
-                $long_relation = "";
-                $sql .= "('".$tree_id."','".$gedcom_id."','".$indKey."', '".$blood."','".$relation."','".$long_relation."'),";
+    protected function getRelationsWaves(&$waves, $users, $level = 0){
+        if(empty($users)) return false;
+        $wave = array();
+        foreach($users as $key => $value){
+            if(isset($waves[$key])) continue;
+            $user_id = substr($key, 1);
+            $ambit = array();
+            //set parents
+            $parents = $this->get_parents($user_id);
+            if(!empty($parents)){
+                foreach($parents as $pair){
+                    if($pair[0] != null && $pair[0] != $user_id){
+                        $ambit["I".$pair[0]] = array("id"=>$pair[0], "relation"=>"father");
+                    }
+                    if($pair[1] != null && $pair[1] != $user_id){
+                        $ambit["I".$pair[1]] = array("id"=>$pair[1], "relation"=>"mother");
+                    }
+                }
             }
-            $this->ajax->setQuery(substr($sql,0,-1));
-            $this->ajax->query();
+
+            //set childrens
+            $childrens = $this->get_childrens($user_id);
+            if(!empty($childrens)){
+                foreach($childrens as $child){
+                    if(isset($child['gedcom_id']) && $user_id == $child['gedcom_id']) continue;
+                    $childId = $child['gedcom_id'];
+                    $childGender = $this->get_gender($childId);
+                    $childRelation = ($childGender == "F")?"daughter":"son";
+                    $ambit["I".$childId] = array("id"=>$childId, "relation"=>$childRelation);
+                }
+            }
+
+            //set spouses
+            $spouses = $this->get_spouses($user_id);
+            if(!empty($spouses)){
+                foreach($spouses as $spouse){
+                    if($user_id == $spouse) continue;
+                    $ambit["I".$spouse] = array("id"=>$spouse, "relation"=>"spouse");
+                }
+            }
+
+            //set siblings
+            $siblings = $this->get_siblings($user_id);
+            if(!empty($siblings)){
+                foreach($siblings as $sibling){
+                    if(isset($sibling['gedcom_id']) && $user_id == $sibling['gedcom_id']) continue;
+                    $siblId = $sibling['gedcom_id'];
+                    $siblGender = $this->get_gender($siblId);
+                    $siblRelation = ($siblGender == "F")?"brother":"sister";
+                    $ambit["I".$siblId] = array("id"=>$siblId, "relation"=>$siblRelation);
+                }
+            }
+
+            $waves["I".$user_id] = array("level"=>$level, "ambit"=>$ambit);
+            if(!isset($waves["W".$level])){
+                $waves["W".$level] = array();
+            }
+            $waves["W".$level]["I".$user_id] = true;
+
+            foreach($ambit as $k => $v){
+                $wave[$k] = $v;
+            }
         }
-        return $insert;
+        return $this->getRelationsWaves($waves, $wave, $level + 1);
+    }
+
+    protected function getConnection($gedcom_id, &$waves){
+        if(isset($waves["I".$gedcom_id])){
+            $object = $waves["I".$gedcom_id];
+        }
+        return false;
     }
 
 	public function check($tree_id, $gedcom_id){
         $this->init($tree_id, $gedcom_id);
+
+        $waves = array();
+        $this->getRelationsWaves($waves, array("I".$gedcom_id=>null));
+
+        /*
+        $conn = $this->getConnection("221", $waves);
+
+        echo "<script>";
+            echo "window._a = ".json_encode($waves).";\n";
+            echo "window._b = ".json_encode($conn).";\n";
+        echo "</script>";
+
+        exit;
+        */
+
 
         $this->deleteUnknownFromDb($tree_id, $gedcom_id);
         $relatives = $this->findUnknownUsers();
@@ -556,6 +655,7 @@ class JMBRelation {
             }
         }
 
+        /*
         $un = array();
         foreach($unknowns as $user_id){
             $this->findRelations($user_id, $relations, $un);
@@ -563,36 +663,13 @@ class JMBRelation {
         foreach($un as $k => $v){
             $relations[$k] = $v;
         }
+        */
+
         $this->sendToDb($relations, $tree_id, $gedcom_id);
 	}
 
     public function update($tree_id, $gedcom_id){
-        $this->init($tree_id, $gedcom_id);
 
-        $this->deleteFromDb($tree_id, $gedcom_id);
-        $relatives = $this->findUnknownUsers();
-
-        $relations = array();
-        $unknowns = array();
-        foreach($relatives as $user){
-            $user_id = $user['individuals_id'];
-            $relation = $this->get_relation($user_id, $gedcom_id);
-            if($relation){
-                $in_law = isset($this->spouses[$user_id])?1:0;
-                $relations["I".$user_id] = array("blood"=>1, "in_law" => $in_law, "relation"=>$relation, "long_relation"=>"");
-            } else {
-                $unknowns[] = $user_id;
-            }
-        }
-
-        $un = array();
-        foreach($unknowns as $user_id){
-            $this->findRelations($user_id, $relations, $un);
-        }
-        foreach($un as $k => $v){
-            $relations[$k] = $v;
-        }
-        $this->sendToDb($relations, $tree_id, $gedcom_id);
     }
 }
 ?>
