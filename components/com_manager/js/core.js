@@ -146,6 +146,24 @@
                     }
                 }
             },
+            connection:function(){
+                var conn, key, object, ret = '';
+                if(conn = user.connection){
+                   if(conn.length > 2){
+                       for(key in conn){
+                           if(!conn.hasOwnProperty(key)||key==0) continue;
+                           object = storage.usertree.pull[conn[key].id];
+                           ret += object.user.first_name;
+                           ret += "(";
+                           ret += object.user.relation;
+                           ret += ")";
+                           ret += " > ";
+                       }
+                       ret = ret.substr(0, ret.length - 3);
+                   }
+                }
+                return ret;
+            },
             name:(function(){
                 return getFullName(getFirstName(user), getLastName(user));
                 function getName(u, t, r){

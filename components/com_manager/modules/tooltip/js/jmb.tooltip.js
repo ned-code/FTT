@@ -102,6 +102,7 @@ JMBTooltip.prototype = {
 			birthday = get.date('birth'),
 			death = get.date('death'),
 			relation = get.relation,
+            connection = get.connection(),
 			place;
 		sb._('<div id="')._(user.gedcom_id)._('-tooltip-view" class="jmb-tooltip-view-container">');
 			sb._('<div class="jmb-tooltip-view-content">');
@@ -134,6 +135,9 @@ JMBTooltip.prototype = {
 								if(relation){
 									sb._('<div><span>')._(message.FTT_MOD_TOOLTIPS_RELATION)._(':</span> <span class="text">')._(relation)._(get.family_line)._('</span></div>');
 								}
+                                if(connection.length != 0){
+                                    sb._('<div><span>Connection:</span> <span class="text">')._(connection)._('</span></div>');
+                                }
 							sb._('</td>');
 						sb._('</tr>');
 					sb._('</table>');
