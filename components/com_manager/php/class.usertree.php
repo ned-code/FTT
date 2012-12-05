@@ -342,7 +342,7 @@ class JMBUserTree {
 			'middle_name'=>$user['middle_name'], 
 			'nick'=>$user['nick'],
 			'relation'=>$this->_getUserRelation($user['relation'], $user['gender']),
-            'long_relation'=>$user['long_relation'],
+            'connection'=>json_decode($user['connection']),
 			'permission'=>$user['permission'],
 			'last_login'=>$user['last_login'],
 			'birth'=>$birth,

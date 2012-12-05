@@ -258,10 +258,9 @@ class JMBRelation {
 		$this->_IndividualsList = $this->individuals->getIndividualsList($tree_id, $gedcom_id);
 		$this->_Relatives = $this->individuals->getRelatives($tree_id);
 
-        $sql_string = "SELECT rel.to as individuals_id, rel.relation, rel.blood as blood, rel.in_law as in_law FROM #__mb_relations as rel WHERE rel.tree_id = ? AND rel.from = ? and rel.relation != 'unknown'";
+        $sql_string = "SELECT rel.to as individuals_id, rel.relation, rel.blood, rel.in_law, rel.connection, rel.time FROM #__mb_relations as rel WHERE rel.tree_id = ? AND rel.from = ?";
         $this->ajax->setQuery($sql_string, $tree_id, $gedcom_id);
         $this->_Relations = $this->ajax->loadAssocList('individuals_id');
-
 
         $this->ownerId = $gedcom_id;
         $this->spouses = array();
@@ -272,26 +271,28 @@ class JMBRelation {
         }
 	}
 
-	public function set($tree_id, $gedcom_id, $target_id){
+    public function get($tree_id, $gedcom_id, $target_id){
+        $this->init($tree_id, $gedcom_id);
+        $relation =  $this->get_relation($target_id, $gedcom_id);
+        return $relation;
+    }
+
+
+    public function set($tree_id, $gedcom_id, $target_id){
 		$this->init($tree_id, $gedcom_id);
         $sql_string = "DELETE FROM #__mb_relations WHERE tree_id = ? AND `from` = ? AND `to` = ?";
         $this->ajax->setQuery($sql_string, $tree_id, $gedcom_id, $target_id);
         $this->ajax->query();
 		$relation =  $this->get_relation($target_id, $gedcom_id);		
 		$sql_string = "INSERT INTO #__mb_relations (`tree_id`, `from`, `to`, `relation`) VALUES (?, ?, ?, ?)";
-        $sql = "INSERT INTO #__mb_relations (`tree_id`, `from`, `to`, `blood`, `relation`, `long_relation`) VALUES (?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO #__mb_relations (`tree_id`, `from`, `to`, `blood`, `relation`, `connection`) VALUES (?, ?, ?, ?, ?, ?)";
         $blood = ($relation)?1:0;
         $rel = ($relation)?$relation:'unknown';
-        $long_rel = "";
-		$this->ajax->setQuery($sql_string, $tree_id, $gedcom_id, $target_id, 0, $rel, $long_rel);
+        $connection = "";
+		$this->ajax->setQuery($sql_string, $tree_id, $gedcom_id, $target_id, 0, $rel, $connection);
 		$this->ajax->query();
 	}
 	
-	public function get($tree_id, $gedcom_id, $target_id){
-		$this->init($tree_id, $gedcom_id);
-		$relation =  $this->get_relation($target_id, $gedcom_id);
-		return $relation;
-	}
 
     public function set_relation($tree_id, $gedcom_id, $check){
         $insert = array();
@@ -301,13 +302,13 @@ class JMBRelation {
         }
         $result = array_chunk($insert, 25, true);
         foreach($result as $res){
-            $sql = "INSERT INTO #__mb_relations (`tree_id`, `from`, `to`, `blood`, `relation`, `long_relation`) VALUES ";
+            $sql = "INSERT INTO #__mb_relations (`tree_id`, `from`, `to`, `blood`, `relation`, `connection`) VALUES ";
             foreach($res as $el){
                 $indKey = $el['member']['individuals_id'];
                 $blood = ($relation)?1:0;
                 $relation = $el['relation'];
-                $long_relation = "";
-                $sql .= "('".$tree_id."','".$gedcom_id."','".$indKey."', '".$blood."','".$relation."','".$long_relation."'),";
+                $connection = "";
+                $sql .= "('".$tree_id."','".$gedcom_id."','".$indKey."', '".$blood."','".$relation."','".$connection."'),";
             }
             $this->ajax->setQuery(substr($sql,0,-1));
             $this->ajax->query();
@@ -315,15 +316,14 @@ class JMBRelation {
         return $insert;
     }
 
-    /*
-      * ------------------------------
-      */
-
-    /*
     protected function deleteUnknownFromDb($tree_id, $gedcom_id){
-        $sql_string = "DELETE FROM #__mb_relations WHERE `tree_id` = ? and `from` = ? and relation = 'unknown'";
+        $sql_string = "DELETE FROM #__mb_relations WHERE `tree_id` = ? and `from` = ? and relation = 'unknown' and DATE_ADD(time, INTERVAL 1 HOUR) < NOW()";
         $this->ajax->setQuery($sql_string, $tree_id, $gedcom_id);
         $this->ajax->query();
+
+        $sql_string = "SELECT rel.to as individuals_id, rel.relation, rel.blood, rel.in_law, rel.connection, rel.time FROM #__mb_relations as rel WHERE rel.tree_id = ? AND rel.from = ?";
+        $this->ajax->setQuery($sql_string, $tree_id, $gedcom_id);
+        $this->_Relations = $this->ajax->loadAssocList('individuals_id');
     }
 
     protected function findUnknownUsers(){
@@ -349,204 +349,19 @@ class JMBRelation {
         }
         $result = array_chunk($inserts, 25, true);
         foreach($result as $res){
-            $sql = "INSERT INTO #__mb_relations (`tree_id`, `from`, `to`, `blood`, `in_law`, `relation`, `long_relation`) VALUES ";
+            $sql = "INSERT INTO #__mb_relations (`tree_id`, `from`, `to`, `blood`, `in_law`, `relation`, `connection`, `time`) VALUES ";
             foreach($res as $el){
                 $indKey = substr($el['indKey'],1);
                 $relation = $el['relations']['relation'];
-                $long_relation = $el['relations']['long_relation'];
+                $connection = $el['relations']['connection'];
                 $blood = $el['relations']['blood'];
                 $in_law = $el['relations']['in_law'];
-                $sql .= "('".$tree_id."','".$gedcom_id."','".$indKey."', '".$blood."', '".$in_law."','".$relation."','".$long_relation."'),";
+                $sql .= "('".$tree_id."','".$gedcom_id."','".$indKey."', '".$blood."', '".$in_law."','".$relation."','".$connection."', NOW()),";
             }
             $this->ajax->setQuery(substr($sql,0,-1));
             $this->ajax->query();
         }
     }
-
-    protected function getRelationsWaves(&$waves, $users, &$relatives, $level = 0){
-        if(empty($users)) return false;
-        $wave = array();
-        $ret = array();
-        foreach($users as $key => $value){
-            if(isset($waves[$key])) continue;
-            $user_id = substr($key, 1);
-            $ambit = array();
-            //set parents
-            $parents = $this->get_parents($user_id);
-            if(!empty($parents)){
-                foreach($parents as $pair){
-                    if($pair[0] != null && $pair[0] != $user_id){
-                        $ambit["I".$pair[0]] = array("id"=>$pair[0], "relation"=>"father");
-                    }
-                    if($pair[1] != null && $pair[1] != $user_id){
-                        $ambit["I".$pair[1]] = array("id"=>$pair[1], "relation"=>"mother");
-                    }
-                }
-            }
-
-            //set childrens
-            $childrens = $this->get_childrens($user_id);
-            if(!empty($childrens)){
-                foreach($childrens as $child){
-                    if(isset($child['gedcom_id']) && $user_id == $child['gedcom_id']) continue;
-                    $childId = $child['gedcom_id'];
-                    $childGender = $this->get_gender($childId);
-                    $childRelation = ($childGender == "F")?"daughter":"son";
-                    $ambit["I".$childId] = array("id"=>$childId, "relation"=>$childRelation);
-                }
-            }
-
-            //set spouses
-            $spouses = $this->get_spouses($user_id);
-            if(!empty($spouses)){
-                foreach($spouses as $spouse){
-                    if($user_id == $spouse) continue;
-                    $ambit["I".$spouse] = array("id"=>$spouse, "relation"=>"spouse");
-                }
-            }
-
-            //set siblings
-            $siblings = $this->get_siblings($user_id);
-            if(!empty($siblings)){
-                foreach($siblings as $sibling){
-                    if(isset($sibling['gedcom_id']) && $user_id == $sibling['gedcom_id']) continue;
-                    $siblId = $sibling['gedcom_id'];
-                    $siblGender = $this->get_gender($siblId);
-                    $siblRelation = ($siblGender == "F")?"brother":"sister";
-                    $ambit["I".$siblId] = array("id"=>$siblId, "relation"=>$siblRelation);
-                }
-            }
-
-            $waves["I".$user_id] = array("level"=>$level, "ambit"=>$ambit);
-            if(!isset($waves["W".$level])){
-                $waves["W".$level] = array();
-            }
-            $waves["W".$level]["I".$user_id] = true;
-
-            if(array_key_exists("I".$user_id, $relatives) || (array_key_exists($user_id, $this->_Relations) && $this->_Relations[$user_id][0]["blood"])){
-                $ret[] = array("id"=>$user_id, "level"=>$level);
-            }
-
-            foreach($ambit as $k => $v){
-                $wave[$k] = $v;
-            }
-        }
-        if(!empty($ret)) return $ret;
-        return $this->getRelationsWaves($waves, $wave, $relatives, $level + 1);
-    }
-
-    protected function getMatch($waves, $i, $lastId){
-        $wave = $waves["W".$i];
-        foreach($wave as $index => $v){
-            $object = $waves[$index];
-            $ambit = $object['ambit'];
-            foreach($ambit as $key => $el){
-                if($key == $lastId){
-                    return $index;
-                }
-            }
-        }
-    }
-
-    protected function getPath($el, $waves){
-        $result = array();
-        $lastId = "I".$el['id'];
-        $length = $el['level'] - 1;
-        $result[] = $lastId;
-        for($i = $length; $i >= 0 ; $i--){
-            $result[] = $this->getMatch($waves, $i, $lastId);
-            $lastId = end($result);
-        }
-        asort($result);
-        return $result;
-    }
-
-    protected function getParsePath($p1, $p2){
-        $l1 = $this->lowest_common_ancestor($p1[0], $this->ownerId);
-        $l2 = $this->lowest_common_ancestor($p2[0], $this->ownerId);
-        if($l1[0] > $l2[0]){
-            return $p1;
-        } else {
-            return $p2;
-        }
-    }
-
-    protected function getShortPath($paths){
-        $shortIndex = 9999;
-        $shortPath = array();
-        foreach($paths as $path){
-            if($shortIndex > sizeof($path)){
-                $shortPath = $path;
-                $shortIndex = sizeof($path);
-            } else if($shortIndex == sizeof($path)){
-                $parsePath = $this->getParsePath($shortPath,$path);
-                $shortIndex = sizeof($parsePath);
-                $shortPath = $parsePath;
-            }
-        }
-        return $shortPath;
-    }
-
-    protected function isRelInLaw($rel, $id, $flag = false){
-        if(array_key_exists($id, $rel)){
-            if($flag){
-                return $rel[$id][0]["in_law"];
-            } else {
-                return $rel[$id]["in_law"];
-            }
-        }
-        return false;
-    }
-
-    protected function getRelationLongName($res, $waves, &$relations){
-        $paths = array();
-        foreach($res as $el){
-            $paths[] = $this->getPath($el, $waves);
-        }
-        $path = $this->getShortPath($paths);
-        $name = "";
-        $relation = "";
-        for($i = 0 ; $i < sizeof($path) - 1; $i++){
-            $index = $path[$i];
-            $next = $path[$i+1];
-            $object = $waves[$index];
-            $ambit = $object["ambit"];
-            $name .= $ambit[$next]["relation"]." ";
-            if($i == 0){
-                $relation = $ambit[$next]["relation"];
-            }
-        }
-        if(isset($relations[$path[0]])){
-            $name .= "of your ".$relations[$path[0]]["relation"];
-        } else if(isset($this->_Relations[substr($path[0], 1)])){
-            $name .= "of your ".$this->_Relations[substr($path[0], 1)][0]["relation"];
-        }
-        $name .= ", ".$this->get_name(substr($path[0],1));
-        if($this->isRelInLaw($relations, $path[0]) || $this->isRelInLaw($this->_Relations, substr($path[0], 1), true)){
-            $in_law = 1;
-        } else {
-            $in_law = 0;
-        }
-        return array($relation, $name, $in_law);
-    }
-
-    protected function findRelations($user_id, &$relations, &$un){
-        $waves = array();
-        $res = $this->getRelationsWaves($waves, array("I".$user_id=>null), $relations);
-        if($res){
-            $name = $this->getRelationLongName($res, $waves, $relations);
-            $relation = $name[0];
-            $in_law = $name[2];
-            $un["I".$user_id] = array("blood"=>0, "in_law" =>$in_law, "relation"=>$relation, "long_relation"=>$name[1]);
-        } else {
-            $un["I".$user_id] = array("blood"=>0, "in_law"=>0, "relation"=>"unknown", "long_relation"=>"unknown" );
-        }
-    }
-    */
-    /*
-      * ------------------------------
-      */
-
 
     protected function getRelationsWaves(&$waves, $users, $level = 0){
         if(empty($users)) return false;
@@ -620,14 +435,14 @@ class JMBRelation {
             $object = $waves["I".$gedcom_id];
             $level = $object['level'];
             $lastId = "I".$gedcom_id;
-            $paths[] = array("id"=>$lastId, "level"=>$level);
+            $paths[] = array("id"=>substr($lastId,1), "level"=>$level);
             for($i = $level - 1; $i >= 0 ; $i--){
                 $wave = $waves["W".$i];
                 $ambit = $waves[$lastId]['ambit'];
                 foreach($wave as $id => $flag){
                     foreach($ambit as $k => $v){
                         if($id == $k){
-                            $paths[] = array("id"=>$k, "level"=>$i);
+                            $paths[] = array("id"=>substr($k,1), "level"=>$i);
                             $lastId = $k;
                         }
                     }
@@ -638,21 +453,72 @@ class JMBRelation {
         return array_reverse($paths);
     }
 
+    protected function getSpouseInLawRelation($relation){
+        preg_match( "/(\W|^)(daughter|son|brother|sister|cousin|uncle|aunt|nephew|niece|granddaughter|grandson)(\W|$)/", $relation, $matches);
+        if(sizeof($matches) != 0 && trim($matches[0]) != ""){
+            $match = trim($matches[0]);
+            switch($match){
+                case "daughter":
+                    return "son-in-law";
+                case "son":
+                    return "daughter-in-law";
+                case "brother":
+                    return "sister-in-law";
+                case "sister":
+                    return "brother-in-law";
+                case "cousin":
+                    return "cousin-in-law";
+                case "uncle":
+                    return "aunt-in-law";
+                case "aunt":
+                    return "aunt-in-law";
+                case "nephew":
+                    return "niece-in-law";
+                case "niece":
+                    return "nephew-in-law";
+                case "granddaughter":
+                    return "grandson-in-law";
+                case "grandson":
+                    return "granddaughter-in-law";
+                default:
+                    return false;
+            }
+        }
+        return false;
+    }
+
+    protected function getNotBloodRelation($user_id, $relations){
+        $childrens = $this->get_childrens($user_id);
+        if(!empty($childrens)){
+            foreach($childrens as $child){
+                $childId = $child["gedcom_id"];
+                if(array_key_exists("I".$childId, $relations) || array_key_exists($childId, $this->_Relations)){
+                    if(array_key_exists($childId, $this->spouses) && array_key_exists($user_id, $this->_IndividualsList)){
+                        $ind = $this->_IndividualsList[$user_id];
+                        $gender = $ind[0]["gender"];
+                        return ($gender=="F")?"mother-in-law":"father-in-law";
+                    }
+                }
+            }
+        }
+        $spouses = $this->get_spouses($user_id);
+        if(!empty($spouses)){
+            foreach($spouses as $spouse){
+                if(array_key_exists("I".$spouse, $relations)){
+                    return $this->getSpouseInLawRelation($relations["I".$spouse]["relation"]);
+                } else if(array_key_exists($spouse, $this->_Relations)){
+                    return $this->getSpouseInLawRelation($this->_Relations[$spouse][0]["relation"]);
+                }
+            }
+        }
+        return false;
+    }
+
 	public function check($tree_id, $gedcom_id){
         $this->init($tree_id, $gedcom_id);
 
-        /*
         $waves = array();
         $this->getRelationsWaves($waves, array("I".$gedcom_id=>null));
-        $conn = $this->getConnection("221", $waves);
-
-        echo "<script>";
-            echo "window._a = ".json_encode($waves).";\n";
-            echo "window._b = ".json_encode($conn).";\n";
-        echo "</script>";
-
-        exit;
-        */
 
         $this->deleteUnknownFromDb($tree_id, $gedcom_id);
         $relatives = $this->findUnknownUsers();
@@ -663,23 +529,22 @@ class JMBRelation {
             $user_id = $user['individuals_id'];
             $relation = $this->get_relation($user_id, $gedcom_id);
             if($relation){
-                $in_law = isset($this->spouses[$user_id])?1:0;
-                $relations["I".$user_id] = array("blood"=>1, "in_law" => $in_law, "relation"=>$relation, "long_relation"=>"");
+                $conn = $this->getConnection($user_id, $waves);
+                $relations["I".$user_id] = array("blood"=>1, "in_law" => 0, "relation"=>$relation, "connection"=>json_encode($conn));
             } else {
                 $unknowns[] = $user_id;
             }
         }
 
-        /*
-        $un = array();
         foreach($unknowns as $user_id){
-            $this->findRelations($user_id, $relations, $un);
+            $relation = $this->getNotBloodRelation($user_id, $relations);
+            if($relation){
+                $conn = $this->getConnection($user_id, $waves);
+                $relations["I".$user_id] = array("blood"=>0, "in_law" => 1, "relation"=>$relation, "connection"=>json_encode($conn));
+            } else {
+                $relations["I".$user_id] = array("blood"=>0, "in_law" => 0, "relation"=>"unknown", "connection"=>"");
+            }
         }
-        foreach($un as $k => $v){
-            $relations[$k] = $v;
-        }
-        */
-
         $this->sendToDb($relations, $tree_id, $gedcom_id);
 	}
 
