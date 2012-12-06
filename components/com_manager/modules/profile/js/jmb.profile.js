@@ -73,6 +73,7 @@ function JMBProfile(){
         FTT_MOD_PROFILE_EDITOR_VIEW_PROFILE_RELATION:"Relation",
         FTT_MOD_PROFILE_EDITOR_VIEW_PHOTOS:"Photos",
         FTT_MOD_PROFILE_EDITOR_VIEW_FAMILY:"Family",
+        FTT_MOD_PROFILE_EDITOR_VIEW_RELATION_MAPPER:"Relation Mapper",
         FTT_MOD_PROFILE_EDITOR_EDIT:"Edit",
         FTT_MOD_PROFILE_EDITOR_EDIT_BASIC:"Basic Details",
         FTT_MOD_PROFILE_EDITOR_EDIT_UNIONS:"Unions",
@@ -1315,6 +1316,21 @@ JMBProfile.prototype = {
                     }
                 })()
                 form = object;
+            break;
+
+            case "view_relation_mapper":
+                (function(module){
+                    console.log('view_relation_mapper');
+                    var $fn = {
+                        getTree:function(object){
+                            var conn = object.user.connection;
+                            console.log(conn);
+                        }
+                    },
+                        $object = module.pull[module.gedcom_id],
+                        $tree = $fn.getTree($object);
+                    console.log(module);
+                })(this);
             break;
 
             case "edit_basic":
