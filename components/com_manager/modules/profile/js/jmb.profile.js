@@ -1320,19 +1320,94 @@ JMBProfile.prototype = {
 
             case "view_relation_mapper":
                 (function(module){
-                    console.log('view_relation_mapper');
                     var $fn = {
+                        createNode:function(id, data){
+                            return {
+                                id:"FTTRelationMapperNodeId_"+id,
+                                name:"FTTRelationMapperNodeName_"+id,
+                                data:data,
+                                children:[]
+                            }
+                        },
+                        createTree:function(conn, vertex){
+                            var setNodes =function(el, conn, pos, iter){
+                                if("undefined" !== typeof(conn[pos + iter])){
+                                    var p = pos + iter;
+                                    var o = conn[p];
+                                    var node = $fn.createNode(o.id);
+                                    setNodes(node, conn, p, iter);
+                                    el.children.push(node);
+                                }
+                            }
+                            var start = $fn.createNode(vertex[0], {});
+                            setNodes(start, conn, vertex[1], -1);
+                            setNodes(start, conn, vertex[1], 1);
+                            return start;
+                        },
+                        createLabel:function(node){
+                            var id = node.id.split("_")[1];
+                            var object = module.pull[id];
+                            var parse = storage.usertree.parse(object);
+                            return '<div style="text-align:center;width:150px;height:20px;">'+parse.name+"("+parse.relation+")"+"</div>";
+                        },
+                        getVertex:function(conn){
+                            var vertex = [conn[0].id, 0];
+                            for(var key in conn){
+                                if(!conn.hasOwnProperty(key)) continue;
+                                var stream = conn[key].stream;
+                                if(stream == 3){
+                                    var el = conn[parseInt(key)+1];
+                                    vertex = [el.id, key]
+                                }
+                            }
+                            return vertex;
+                        },
                         getTree:function(object){
                             var conn = object.user.connection;
-                            console.log(conn);
+                            var vertex = $fn.getVertex(conn);
+                            return $fn.createTree(conn, vertex);
                         },
                         setTree:function(tree){
+                            var st = new $jit.ST({
+                                injectInto: 'ftt_relation_mapper_viz',
+                                transition: $jit.Trans.Quart.easeInOut,
+                                levelDistance: 50,
+                                //offsetX:240,
+                                offsetY:0,
+                                Node: {
+                                    height: 20,
+                                    width: 200,
+                                    align:"center",
+                                    type: 'rectangle',
+                                    color: '#aaa',
+                                    overridable: true
+                                },
+                                Edge: {
+                                    type: 'bezier',
+                                    overridable: true
+                                },
+                                onCreateLabel: function(label, node){
+                                    label.id = node.id;
+                                    label.innerHTML = $fn.createLabel(node);
 
+                                }
+                            });
+                            st.loadJSON(tree);
+                            st.compute();
+                            st.onClick(st.root);
+                            st.switchPosition("top", "replot", {
+                                onComplete: function(){
+
+                                }
+                            });
                         }
                     },
                         $object = module.pull[module.gedcom_id],
                         $tree = $fn.getTree($object);
-                    console.log(module);
+                        form = jQuery('<div id="ftt_relation_mapper_viz" style="width:500px;height:400px;margin-left: 20px;"></div>');
+                        setTimeout(function(){
+                            $fn.setTree($tree);
+                        }, 1);
                 })(this);
             break;
 

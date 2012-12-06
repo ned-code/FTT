@@ -376,10 +376,10 @@ class JMBRelation {
             if(!empty($parents)){
                 foreach($parents as $pair){
                     if($pair[0] != null && $pair[0] != $user_id){
-                        $ambit["I".$pair[0]] = array("id"=>$pair[0], "relation"=>"father");
+                        $ambit["I".$pair[0]] = array("id"=>$pair[0], "relation"=>"father", "stream"=>4);
                     }
                     if($pair[1] != null && $pair[1] != $user_id){
-                        $ambit["I".$pair[1]] = array("id"=>$pair[1], "relation"=>"mother");
+                        $ambit["I".$pair[1]] = array("id"=>$pair[1], "relation"=>"mother", "stream"=>4);
                     }
                 }
             }
@@ -392,7 +392,7 @@ class JMBRelation {
                     $childId = $child['gedcom_id'];
                     $childGender = $this->get_gender($childId);
                     $childRelation = ($childGender == "F")?"daughter":"son";
-                    $ambit["I".$childId] = array("id"=>$childId, "relation"=>$childRelation);
+                    $ambit["I".$childId] = array("id"=>$childId, "relation"=>$childRelation, "stream"=>3);
                 }
             }
 
@@ -401,7 +401,7 @@ class JMBRelation {
             if(!empty($spouses)){
                 foreach($spouses as $spouse){
                     if($user_id == $spouse) continue;
-                    $ambit["I".$spouse] = array("id"=>$spouse, "relation"=>"spouse");
+                    $ambit["I".$spouse] = array("id"=>$spouse, "relation"=>"spouse", "stream"=>2);
                 }
             }
 
@@ -413,7 +413,7 @@ class JMBRelation {
                     $siblId = $sibling['gedcom_id'];
                     $siblGender = $this->get_gender($siblId);
                     $siblRelation = ($siblGender == "F")?"brother":"sister";
-                    $ambit["I".$siblId] = array("id"=>$siblId, "relation"=>$siblRelation);
+                    $ambit["I".$siblId] = array("id"=>$siblId, "relation"=>$siblRelation, "stream"=>1);
                 }
             }
 
@@ -436,14 +436,14 @@ class JMBRelation {
             $object = $waves["I".$gedcom_id];
             $level = $object['level'];
             $lastId = "I".$gedcom_id;
-            $paths[] = array("id"=>substr($lastId,1), "level"=>$level);
+            $paths[] = array("id"=>substr($lastId,1), "level"=>$level, "stream"=>0);
             for($i = $level - 1; $i >= 0 ; $i--){
                 $wave = $waves["W".$i];
                 $ambit = $waves[$lastId]['ambit'];
                 foreach($wave as $id => $flag){
                     foreach($ambit as $k => $v){
                         if($id == $k){
-                            $paths[] = array("id"=>substr($k,1), "level"=>$i);
+                            $paths[] = array("id"=>substr($k,1), "level"=>$i, "stream"=>$v['stream']);
                             $lastId = $k;
                         }
                     }
