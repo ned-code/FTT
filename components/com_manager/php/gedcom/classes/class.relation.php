@@ -206,43 +206,44 @@ class JMBRelation {
 
 		if($a_level == 0){
 			$rel = ($gender=="M")?'father':'mother';	
-			return $this->aggrandize_relationship($rel, $b_level);
+			return array($this->aggrandize_relationship($rel, $b_level), $lca);
 		}
 		
 		if($b_level == 0){
 			$rel = ($gender=="M")?'son':'daughter';
-			return $this->aggrandize_relationship($rel, $a_level);
+			return array($this->aggrandize_relationship($rel, $a_level), $lca);
 		}
 		
 		if($a_level == $b_level){
 			switch($a_level){
 				case 1:
-					return ($gender=="M")?'brother':'sister';
+                    $ret = ($gender=="M")?'brother':'sister';
+					return array($ret, $lca);
 				break;
 				
 				case 2:
-					return 'cousin';
+					return array('cousin', $lca);
 				break;
 				
 				default:
-					return $this->ordinal_suffix($a_level - 2).' cousin';
+					return array($this->ordinal_suffix($a_level - 2).' cousin', $lca);
 				break;
 			}
 		}
 		
 		if($a_level == 1){
 			$rel = ($gender=="M")?'uncle':'aunt';
-			return $this->aggrandize_relationship($rel, $b_level, 1);
+			return array($this->aggrandize_relationship($rel, $b_level, 1), $lca);
 		}
 		
 		if($b_level == 1){
 			$rel = ($gender=="M")?'nephew':'niece';
-			return $this->aggrandize_relationship($rel, $a_level, 1);
+			return array($this->aggrandize_relationship($rel, $a_level, 1), $lca);
 		}
 		
 		$cous_ord = min($a_level, $b_level) - 1;
 		$cous_gen = abs($a_level - $b_level);
-		return $this->ordinal_suffix($cous_ord).' cousin '.$this->format_plural($cous_gen, 'time', 'times').' removed';
+		return array($this->ordinal_suffix($cous_ord).' cousin '.$this->format_plural($cous_gen, 'time', 'times').' removed', $lca);
 		
 	}
 
@@ -274,7 +275,7 @@ class JMBRelation {
     public function get($tree_id, $gedcom_id, $target_id){
         $this->init($tree_id, $gedcom_id);
         $relation =  $this->get_relation($target_id, $gedcom_id);
-        return $relation;
+        return $relation[0];
     }
 
 
@@ -286,8 +287,8 @@ class JMBRelation {
 		$relation =  $this->get_relation($target_id, $gedcom_id);		
 		$sql_string = "INSERT INTO #__mb_relations (`tree_id`, `from`, `to`, `relation`) VALUES (?, ?, ?, ?)";
         $sql = "INSERT INTO #__mb_relations (`tree_id`, `from`, `to`, `blood`, `relation`, `connection`) VALUES (?, ?, ?, ?, ?, ?)";
-        $blood = ($relation)?1:0;
-        $rel = ($relation)?$relation:'unknown';
+        $blood = ($relation[0])?1:0;
+        $rel = ($relation[0])?$relation[0]:'unknown';
         $connection = "";
 		$this->ajax->setQuery($sql_string, $tree_id, $gedcom_id, $target_id, 0, $rel, $connection);
 		$this->ajax->query();
@@ -298,7 +299,7 @@ class JMBRelation {
         $insert = array();
         foreach($check as $rel){
             $relation = $this->get_relation($rel['individuals_id'], $gedcom_id);
-            $insert[] = array('member'=>$rel, 'relation'=>($relation)?$relation:'unknown');
+            $insert[] = array('member'=>$rel[0], 'relation'=>($relation)?$relation:'unknown');
         }
         $result = array_chunk($insert, 25, true);
         foreach($result as $res){
@@ -449,7 +450,6 @@ class JMBRelation {
                 }
             }
         }
-
         return array_reverse($paths);
     }
 
@@ -530,7 +530,9 @@ class JMBRelation {
             $relation = $this->get_relation($user_id, $gedcom_id);
             if($relation){
                 $conn = $this->getConnection($user_id, $waves);
-                $relations["I".$user_id] = array("blood"=>1, "in_law" => 0, "relation"=>$relation, "connection"=>json_encode($conn));
+                $lca = (gettype($relation) == "string")?0:$relation[1];
+                $rel = (gettype($relation) == "string")?$relation:$relation[0];
+                $relations["I".$user_id] = array("blood"=>1, "in_law" => 0, "relation"=>$rel, 'lowest_common_acestor'=>$lca, "connection"=>json_encode($conn));
             } else {
                 $unknowns[] = $user_id;
             }

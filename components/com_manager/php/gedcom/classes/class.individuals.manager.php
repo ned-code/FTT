@@ -239,7 +239,7 @@ class IndividualsList{
         public function getIndividualsList($tree_id, $owner_id, $gedcom_id = false){
         	$sqlString = "SELECT DISTINCT ind.id as gedcom_id, ind.fid as facebook_id, ind.sex as gender, ind.last_login, ind.default_family, ind.creator,
         				name.first_name, name.middle_name, name.last_name, name.nick, 
-        				links.type as permission, rel.relation, rel.connection,
+        				links.type as permission, rel.relation, rel.connection, rel.blood, rel.in_law,
         				f_line.is_self, f_line.is_spouse, f_line.is_descendant, f_line.is_father, f_line.is_mother FROM #__mb_individuals as ind 
 				LEFT JOIN #__mb_names as name ON name.gid = ind.id
 				LEFT JOIN #__mb_tree_links as links ON links.individuals_id = ind.id

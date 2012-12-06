@@ -343,6 +343,8 @@ class JMBUserTree {
 			'nick'=>$user['nick'],
 			'relation'=>$this->_getUserRelation($user['relation'], $user['gender']),
             'connection'=>json_decode($user['connection']),
+            'blood'=>$user['blood'],
+            'in_law'=>$user['in_law'],
 			'permission'=>$user['permission'],
 			'last_login'=>$user['last_login'],
 			'birth'=>$birth,

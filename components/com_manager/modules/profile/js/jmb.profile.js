@@ -1325,6 +1325,9 @@ JMBProfile.prototype = {
                         getTree:function(object){
                             var conn = object.user.connection;
                             console.log(conn);
+                        },
+                        setTree:function(tree){
+
                         }
                     },
                         $object = module.pull[module.gedcom_id],
