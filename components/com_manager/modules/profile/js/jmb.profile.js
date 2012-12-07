@@ -1331,8 +1331,8 @@ JMBProfile.prototype = {
                         },
                         createTree:function(conn, vertex){
                             var setNodes =function(el, conn, pos, iter){
-                                if("undefined" !== typeof(conn[pos + iter])){
-                                    var p = pos + iter;
+                                var p = parseInt(pos) + parseInt(iter);
+                                if("undefined" !== typeof(conn[p])){
                                     var o = conn[p];
                                     var node = $fn.createNode(o.id);
                                     setNodes(node, conn, p, iter);
@@ -1348,7 +1348,7 @@ JMBProfile.prototype = {
                             var id = node.id.split("_")[1];
                             var object = module.pull[id];
                             var parse = storage.usertree.parse(object);
-                            return '<div style="text-align:center;width:150px;height:20px;">'+parse.name+"("+parse.relation+")"+"</div>";
+                            return '<div style="text-align:center;width:200px;height:20px;">'+parse.name+"("+parse.relation+")"+"</div>";
                         },
                         getVertex:function(conn){
                             var vertex = [conn[0].id, 0];
@@ -1356,8 +1356,9 @@ JMBProfile.prototype = {
                                 if(!conn.hasOwnProperty(key)) continue;
                                 var stream = conn[key].stream;
                                 if(stream == 3){
-                                    var el = conn[parseInt(key)+1];
-                                    vertex = [el.id, key]
+                                    var index = parseInt(key) + 1;
+                                    var el = conn[index];
+                                    vertex = [el.id, index]
                                 }
                             }
                             return vertex;
@@ -1368,12 +1369,13 @@ JMBProfile.prototype = {
                             return $fn.createTree(conn, vertex);
                         },
                         setTree:function(tree){
+                            console.log(tree);
                             var st = new $jit.ST({
                                 injectInto: 'ftt_relation_mapper_viz',
                                 transition: $jit.Trans.Quart.easeInOut,
                                 levelDistance: 50,
                                 //offsetX:240,
-                                offsetY:0,
+                                offsetY:160,
                                 Node: {
                                     height: 20,
                                     width: 200,
