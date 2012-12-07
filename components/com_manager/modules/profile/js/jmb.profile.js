@@ -1372,7 +1372,6 @@ JMBProfile.prototype = {
                             return tree[0].length;
                         },
                         setTree:function(tree){
-                            console.log(tree);
                             var st = new $jit.ST({
                                 injectInto: 'ftt_relation_mapper_viz',
                                 transition: $jit.Trans.Quart.easeInOut,

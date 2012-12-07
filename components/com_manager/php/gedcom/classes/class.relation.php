@@ -327,6 +327,16 @@ class JMBRelation {
         $this->_Relations = $this->ajax->loadAssocList('individuals_id');
     }
 
+    protected function deleteRelationsFromDb($tree_id, $gedcom_id){
+        $sql_string = "DELETE FROM #__mb_relations WHERE `tree_id` = ? and `from` = ? and DATE_ADD(time, INTERVAL 1 HOUR) < NOW()";
+        $this->ajax->setQuery($sql_string, $tree_id, $gedcom_id);
+        $this->ajax->query();
+
+        $sql_string = "SELECT rel.to as individuals_id, rel.relation, rel.blood, rel.in_law, rel.connection, rel.time FROM #__mb_relations as rel WHERE rel.tree_id = ? AND rel.from = ?";
+        $this->ajax->setQuery($sql_string, $tree_id, $gedcom_id);
+        $this->_Relations = $this->ajax->loadAssocList('individuals_id');
+    }
+
     protected function findUnknownUsers(){
         $relations = $this->_Relations;
         $check = array();
@@ -520,7 +530,7 @@ class JMBRelation {
         $waves = array();
         $this->getRelationsWaves($waves, array("I".$gedcom_id=>null));
 
-        $this->deleteUnknownFromDb($tree_id, $gedcom_id);
+        $this->deleteRelationsFromDb($tree_id, $gedcom_id);
         $relatives = $this->findUnknownUsers();
 
         $relations = array();
