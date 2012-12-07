@@ -347,7 +347,7 @@ class JMBProfile {
 					$spouse = $this->createEmptyIndividual('F', $owner_id);
 					$this->host->usertree->link($tree_id, $spouse->Id);
 					$family = $this->createFamily($sircar, $spouse);
-					$this->host->gedcom->relation->set_relation($tree_id, $owner_id, array(array('individuals_id'=>$sircar->Id),array('individuals_id'=>$spouse->Id)));
+					$this->host->gedcom->relation->set_relation($tree_id, $owner_id, array($sircar->Id,$spouse->Id));
 					$this->host->gedcom->families->addChild($family->Id, $member->Id);
 				} else {
 					$family = $this->host->gedcom->families->get($parents['familyId']);
