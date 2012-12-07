@@ -1335,8 +1335,8 @@ JMBProfile.prototype = {
                                 if("undefined" !== typeof(conn[p])){
                                     var o = conn[p];
                                     var node = $fn.createNode(o.id);
-                                    setNodes(node, conn, p, iter);
                                     el.children.push(node);
+                                    setNodes(node, conn, p, iter);
                                 }
                             }
                             var start = $fn.createNode(vertex[0], {});
@@ -1366,7 +1366,10 @@ JMBProfile.prototype = {
                         getTree:function(object){
                             var conn = object.user.connection;
                             var vertex = $fn.getVertex(conn);
-                            return $fn.createTree(conn, vertex);
+                            return [conn,vertex,$fn.createTree(conn, vertex)];
+                        },
+                        getLevelToShow:function(tree){
+                            return tree[0].length;
                         },
                         setTree:function(tree){
                             console.log(tree);
@@ -1376,6 +1379,7 @@ JMBProfile.prototype = {
                                 levelDistance: 50,
                                 //offsetX:240,
                                 offsetY:160,
+                                levelsToShow: $fn.getLevelToShow(tree),
                                 Node: {
                                     height: 20,
                                     width: 200,
@@ -1394,7 +1398,7 @@ JMBProfile.prototype = {
 
                                 }
                             });
-                            st.loadJSON(tree);
+                            st.loadJSON(tree[2]);
                             st.compute();
                             st.onClick(st.root);
                             st.switchPosition("top", "replot", {
