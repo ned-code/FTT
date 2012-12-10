@@ -147,17 +147,23 @@
                 }
             },
             connection:function(){
-                var conn, key, object, ret = '';
+                var conn, key, object, rel,n_rel, ret = '';
                 if(conn = user.connection){
                    if(conn.length > 2){
                        for(key in conn){
                            if(!conn.hasOwnProperty(key)||key==0) continue;
                            object = storage.usertree.pull[conn[key].id];
-                           ret += object.user.first_name;
-                           ret += "(";
-                           ret += object.user.relation;
-                           ret += ")";
-                           ret += " > ";
+                           rel = object.user.relation;
+                           n_rel = object.user.n_relation;
+                           if(n_rel == 2){
+                               continue;
+                           } else {
+                               ret += object.user.first_name;
+                               ret += "(";
+                               ret += rel;
+                               ret += ")";
+                               ret += " > ";
+                           }
                        }
                        ret = ret.substr(0, ret.length - 3);
                    }

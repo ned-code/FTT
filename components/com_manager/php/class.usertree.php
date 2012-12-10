@@ -345,6 +345,7 @@ class JMBUserTree {
             'connection'=>json_decode($user['connection']),
             'blood'=>$user['blood'],
             'in_law'=>$user['in_law'],
+            'n_relation'=>$user['n_relation'],
 			'permission'=>$user['permission'],
 			'last_login'=>$user['last_login'],
 			'birth'=>$birth,
