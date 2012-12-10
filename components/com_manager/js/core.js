@@ -147,28 +147,34 @@
                 }
             },
             connection:function(){
-                var conn, key, object, rel,n_rel, ret = '';
-                if(conn = user.connection){
-                   if(conn.length > 2){
-                       for(key in conn){
-                           if(!conn.hasOwnProperty(key)||key==0) continue;
-                           object = storage.usertree.pull[conn[key].id];
-                           rel = object.user.relation;
-                           n_rel = object.user.n_relation;
-                           if(n_rel == 2){
-                               continue;
-                           } else {
-                               ret += object.user.first_name;
-                               ret += "(";
-                               ret += rel;
-                               ret += ")";
-                               ret += " > ";
-                           }
+                var conn = [], cn, key, object, n_rel, sizeof, rel, ret = [];
+                if(cn = user.connection){
+                   for(key in cn){
+                       if(!cn.hasOwnProperty(key)) continue;
+                       object = storage.usertree.pull[cn[key].id];
+                       n_rel = object.user.n_relation;
+                       if(n_rel != 1 && n_rel != 3){
+                           conn.push(object);
                        }
-                       ret = ret.substr(0, ret.length - 3);
                    }
                 }
-                return ret;
+                if(conn.length > 1){
+                    sizeof = conn.length - 1;
+                    for(key in conn){
+                        object = conn[key];
+                        rel = object.user.relation;
+                        if(key == sizeof){
+                            ret.pop();
+                            ret.push(" <b>+</b> <font color='orange'>" + object.user.first_name + "</font>");
+                        } else {
+                            ret.push(object.user.first_name);
+                            ret.push(" (<font color='gray'>" + rel + "</font>) ");
+                            ret.push("<b>></b> ");
+                        }
+
+                    }
+                }
+                return ret.join("");
             },
             name:(function(){
                 return getFullName(getFirstName(user), getLastName(user));
@@ -327,7 +333,7 @@
                     if(fl && ml){
                         return '';
                     } else {
-                        return (fl)?"(father side)":"(mother side)";
+                        return (fl)?" (father side) ":" (mother side) ";
                     }
                 }
                 return '';

@@ -181,14 +181,14 @@ class JMBRelation {
 
 	protected function get_relation($a_id, $b_id){
 		if($a_id == $b_id){
-			return array('self', 0);
+			return array('self', 1);
 		}
 
 		$spouses = $this->get_spouses($b_id);
 		if($spouses!=null){
 			foreach($spouses as $spouse){
 				if($spouse==$a_id){
-					return array('spouse', 1);
+					return array('spouse', 2);
 				}
 			}
 		}
@@ -207,28 +207,28 @@ class JMBRelation {
 		if($a_level == 0){
 			$rel = ($gender=="M")?'father':'mother';
             $srel = $this->aggrandize_relationship($rel, $b_level);
-			return array($srel[0], 2 + $srel[1]);
+			return array($srel[0], 3 + $srel[1]);
 		}
 		
 		if($b_level == 0){
 			$rel = ($gender=="M")?'son':'daughter';
             $srel = $this->aggrandize_relationship($rel, $a_level);
-			return array($srel[0], 3 + $srel[1]);
+			return array($srel[0], 4 + $srel[1]);
 		}
 		
 		if($a_level == $b_level){
 			switch($a_level){
 				case 1:
                     $ret = ($gender=="M")?'brother':'sister';
-					return array($ret, 4);
+					return array($ret, 5);
 				break;
 				
 				case 2:
-					return array('cousin', 5);
+					return array('cousin', 6);
 				break;
 				
 				default:
-					return array($this->ordinal_suffix($a_level - 2).' cousin', 5);
+					return array($this->ordinal_suffix($a_level - 2).' cousin', 6);
 				break;
 			}
 		}
@@ -236,18 +236,18 @@ class JMBRelation {
 		if($a_level == 1){
 			$rel = ($gender=="M")?'uncle':'aunt';
             $srel = $this->aggrandize_relationship($rel, $b_level, 1);
-			return array($srel[0], 6 + $srel[1]);
+			return array($srel[0], 7 + $srel[1]);
 		}
 		
 		if($b_level == 1){
 			$rel = ($gender=="M")?'nephew':'niece';
             $srel = $this->aggrandize_relationship($rel, $a_level, 1);
-			return array($srel[0], 7 + $srel[1]);
+			return array($srel[0], 8 + $srel[1]);
 		}
 		
 		$cous_ord = min($a_level, $b_level) - 1;
 		$cous_gen = abs($a_level - $b_level);
-		return array($this->ordinal_suffix($cous_ord).' cousin '.$this->format_plural($cous_gen, 'time', 'times').' removed', 5);
+		return array($this->ordinal_suffix($cous_ord).' cousin '.$this->format_plural($cous_gen, 'time', 'times').' removed', 9);
 		
 	}
 
