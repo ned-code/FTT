@@ -165,7 +165,12 @@
                         rel = object.user.relation;
                         if(key == sizeof){
                             ret.pop();
-                            ret.push(" <b>+</b> <font color='orange'>" + object.user.first_name + "</font>");
+                            if(object.user.blood){
+                                ret.push(" <b>+</b> ");
+                            } else {
+                                ret.push(" <b>></b> ");
+                            }
+                            ret.push("<font color='orange'>" + object.user.first_name + "</font>");
                         } else {
                             ret.push(object.user.first_name);
                             ret.push(" (<font color='gray'>" + rel + "</font>) ");
