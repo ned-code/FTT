@@ -1334,12 +1334,12 @@ JMBProfile.prototype = {
                                 var p = parseInt(pos) + parseInt(iter);
                                 if("undefined" !== typeof(conn[p])){
                                     var o = conn[p];
-                                    var node = $fn.createNode(o.id);
+                                    var node = $fn.createNode(o.id,{conn:conn, id:o.id});
                                     el.children.push(node);
                                     setNodes(node, conn, p, iter);
                                 }
                             }
-                            var start = $fn.createNode(vertex[0], {});
+                            var start = $fn.createNode(vertex[0], {conn:conn, id:vertex[0]});
                             setNodes(start, conn, vertex[1], -1);
                             setNodes(start, conn, vertex[1], 1);
                             return start;
@@ -1395,6 +1395,15 @@ JMBProfile.prototype = {
                                     label.id = node.id;
                                     label.innerHTML = $fn.createLabel(node);
 
+                                },
+                                onBeforePlotNode: function(node){
+                                    var last = node.data.conn.pop();
+                                    console.log(node);
+                                    if(parseInt(node.data.id) === parseInt(last.id)){
+                                        node.data.$color = "#FFC90E";
+                                    } else {
+                                        node.data.$color = "#EFE4B0";
+                                    }
                                 }
                             });
                             st.loadJSON(tree[2]);
@@ -1409,6 +1418,7 @@ JMBProfile.prototype = {
                     },
                         $object = module.pull[module.gedcom_id],
                         $tree = $fn.getTree($object);
+                        if(module.gedcom_id == storage.usertree.gedcom_id) return false;
                         form = jQuery('<div id="ftt_relation_mapper_viz" style="width:500px;height:400px;margin-left: 20px;"></div>');
                         setTimeout(function(){
                             $fn.setTree($tree);
@@ -1765,7 +1775,11 @@ JMBProfile.prototype = {
         var lis = jQuery(menu).find('li');
         jQuery(lis).each(function(i,el){
             var text = jQuery(el).text();
-            jQuery(el).text(module.message[text]);
+            if(text == "FTT_MOD_PROFILE_EDITOR_VIEW_RELATION_MAPPER" && module.gedcom_id == storage.usertree.gedcom_id){
+               jQuery(el).remove();
+            } else {
+               jQuery(el).text(module.message[text]);
+            }
         });
         //click events
         var activeMenuItem = null;
