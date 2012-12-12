@@ -22,6 +22,7 @@ class FTTUserLibrary {
     private $token = 0;
     private $birthday = '';
     private $data = ' ';
+    private $family = array();
 
     public function __construct(&$host){
         $this->host = $host;
@@ -34,6 +35,8 @@ class FTTUserLibrary {
         $this->checkUserPermission();
 
         $this->token = $this->getToken();
+
+
 
         $this->process();
     }
@@ -71,6 +74,8 @@ class FTTUserLibrary {
         $this->gender = $this->getGender();
         $this->language = $this->getLangauge();
 
+        $this->family = $this->getFamily($this->facebookId);
+
         $userInSystem = $this->_getIndividualsInSystem($this->facebookId);
 
         $this->gedcomId = $this->getGedcomId($userInSystem);
@@ -82,6 +87,15 @@ class FTTUserLibrary {
         $this->loginType = 0;
         $this->birthday = '';
         $this->data = ' ';
+    }
+
+    protected function getFamily($facebook_id){
+        if(!$facebook_id) return array();
+        $fql = "SELECT name, birthday, profile_id, relationship FROM family WHERE profile_id = ".$facebook_id;
+        return $this->host->jfbConnect->rest(array(
+            'method' => 'fql.query',
+            'query' => $fql
+        ));
     }
 
     protected function getFacebookUserId($fb){
@@ -319,7 +333,8 @@ class FTTUserLibrary {
             'page' => $this->page,
             'guest'=> $this->user->guest,
             'token' => $this->token,
-            'email' => $this->facebookFields['email']
+            'email' => $this->facebookFields['email'],
+            'family' => $this->family
         );
         return (object)$result;
     }

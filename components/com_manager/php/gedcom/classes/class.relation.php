@@ -546,9 +546,9 @@ class JMBRelation {
             $relation = $this->getNotBloodRelation($user_id, $relations);
             if($relation){
                 $conn = $this->getConnection($user_id, $waves);
-                $relations["I".$user_id] = array("blood"=>0, "in_law" => 1, "relation"=>$relation, "connection"=>json_encode($conn));
+                $relations["I".$user_id] = array("blood"=>0, "in_law" => 1, "relation"=>$relation, "n_relation"=>0, "connection"=>json_encode($conn));
             } else {
-                $relations["I".$user_id] = array("blood"=>0, "in_law" => 0, "relation"=>"unknown", "connection"=>"");
+                $relations["I".$user_id] = array("blood"=>0, "in_law" => 0, "relation"=>"unknown", "n_relation"=>0, "connection"=>"");
             }
         }
         $this->sendToDb($relations, $tree_id, $gedcom_id);
