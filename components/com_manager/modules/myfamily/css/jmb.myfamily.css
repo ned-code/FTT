@@ -1,0 +1,42 @@
+.tab_content.famous-family .ftt-myfamily-container{
+    border-color: #f0e2d9;
+}
+.tab_content.famous-family .ftt-myfamily-header{
+    border-color: #f0e2d9;
+    background-color: #ecdace;
+}
+.tab_content.myfamily .ftt-myfamily-container{
+    border-color: #d1daec;
+}
+.tab_content.myfamily .ftt-myfamily-header{
+    border-color: #d1daec;
+    background-color: #cfd8eb;
+}
+.ftt-myfamily-container {
+    border: 1px solid #d1daec;
+    margin: 10px;
+    background: none repeat scroll 0 0 #FFFFFF;
+    position: relative;
+    font-size: 12px;
+    font-family: Tahoma;
+    font-weight: normal;
+}
+.ftt-myfamily-header {
+    background: none repeat scroll 0 0 #DEEDAA;
+    border-bottom: 1px solid #d1daec;
+    height: 22px;
+    padding: 5px;
+}
+.ftt-myfamily-header span{
+    font-family: Tahoma;
+    font-size: 13px;
+    font-weight: bold;
+    position: absolute;
+    left: 43%;
+    top: 8px;
+}
+.ftt-myfamily-content {
+    padding: 10px;
+}
+
+
