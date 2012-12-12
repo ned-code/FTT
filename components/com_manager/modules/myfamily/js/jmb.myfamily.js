@@ -30,27 +30,47 @@ function JMBMyfamilyObject(parent){
             var sb = storage.stringBuffer();
             sb._('<div class="ftt-myfamily-container">');
                 sb._('<div class="ftt-myfamily-header"><span>')._($fn.getMsg("header_title"))._('</span></div>');
-                sb._('<div class="ftt-myfamily-content">TEST TEST TEST</div>')
+                sb._('<div class="ftt-myfamily-content"></div>')
             sb._('</div>');
-            return sb.result();
+            return jQuery(sb.result());
+        },
+        getFamilyList:function(callback){
+            FB.getLoginStatus(function(status){
+                if(status.status == "connected"){
+                    FB.api({
+                            method: 'fql.query',
+                            query: 'SELECT name, birthday, profile_id, relationship FROM family WHERE profile_id ='+storage.usertree.facebook_id
+                        },function(response) {
+                            callback(response);
+                        }
+                    );
+                } else {
+                    callback(false);
+                }
+
+            });
         },
         bindProfile:function(callback){
             storage.profile.bind($moduleName, function(){
                 callback
-            });
-        },
-        getFamilyList:function(callback){
-            FB.api({
-                method: 'fql.query',
-                query: "SELECT name, birthday, profile_id, relationship FROM family WHERE profile_id = "+storage.usertree.facebook_id
-            }, function(response){
-                callback(response);
             });
         }
     }
 
     $cont = $fn.create();
     jQuery(parent).append($cont);
+
+    $fn.getFamilyList(function(response){
+        if(!response) return false;
+        var ul = jQuery('<ul></ul>');
+        for(var key in response){
+            if(!response.hasOwnProperty(key)) continue;
+            var object = response[key];
+            var li = jQuery('<li id="'+object.profile_id+'">'+object.name+'('+object.relationship+')</li>');
+            jQuery(ul).append(li);
+        }
+        jQuery($cont).find(".ftt-myfamily-content").append(ul);
+    });
     $fn.exit();
 }
 

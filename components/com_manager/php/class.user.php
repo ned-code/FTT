@@ -90,12 +90,16 @@ class FTTUserLibrary {
     }
 
     protected function getFamily($facebook_id){
+        return array();
+        /*
         if(!$facebook_id) return array();
+        $fb =  $this->host->jfbConnect->getFbClient();
         $fql = "SELECT name, birthday, profile_id, relationship FROM family WHERE profile_id = ".$facebook_id;
-        return $this->host->jfbConnect->rest(array(
+        return $fb->api(array(
             'method' => 'fql.query',
             'query' => $fql
         ));
+        */
     }
 
     protected function getFacebookUserId($fb){
