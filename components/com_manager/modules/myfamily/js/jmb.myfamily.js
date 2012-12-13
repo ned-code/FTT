@@ -86,10 +86,12 @@ function JMBMyfamilyObject(parent){
                 if(!response.hasOwnProperty(key)) continue;
                 var object = response[key];
                 relations[object.uid] = object.relationship;
-                var tr = jQuery('<tr id="'+object.uid+'"><div class="ftt-myfamily-list-item-load">&nbsp;</div></tr>')
+                var tr = jQuery('<tr id="'+object.uid+'"><td><div class="ftt-myfamily-list-item-load">&nbsp;</div></td></tr>')
                 jQuery(table).append(tr);
                 FB.api("/"+object.uid+"/feed", function(feed){
-                    if(feed.data.length == 0) return false;
+                    if(feed.data.length == 0){
+                        jQuery(tr).find('div.ftt-myfamily-list-item-load').parent().remove();
+                    }
                     var data = feed.data[0],
                         sb = storage.stringBuffer(),
                         facebook_id = data.from.id,
@@ -105,7 +107,7 @@ function JMBMyfamilyObject(parent){
                     sb._('<td><div class="ftt-myfamily-list-item-relation">')._(relation)._('</div></td>');
                     sb._('<td><div class="ftt-myfamily-list-item-avatar">')._(storage.usertree.avatar.facebook(facebook_id, 50, 50))._('</div></td>');
                     sb._('<td><div class="ftt-myfamily-list-item-text">')._(data.story)._('</div></td>');
-                    jQuery(tr).find('div.ftt-myfamily-list-item-load').remove();
+                    jQuery(tr).find('div.ftt-myfamily-list-item-load').parent().remove();
                     jQuery(tr).append(sb.result());
                 });
             }
