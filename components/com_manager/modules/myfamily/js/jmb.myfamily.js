@@ -55,7 +55,6 @@ function JMBMyfamilyObject(parent){
             sb._('</div>');
             return jQuery(sb.result());
         },
-
         bindProfile:function(callback){
             storage.profile.bind($moduleName, function(){
                 callback
@@ -90,7 +89,8 @@ function JMBMyfamilyObject(parent){
                 jQuery(table).append(tr);
                 FB.api("/"+object.uid+"/feed", function(feed){
                     if(feed.data.length == 0){
-                        jQuery(tr).find('div.ftt-myfamily-list-item-load').parent().remove();
+                        jQuery(tr).remove();
+                        return false;
                     }
                     var data = feed.data[0],
                         sb = storage.stringBuffer(),

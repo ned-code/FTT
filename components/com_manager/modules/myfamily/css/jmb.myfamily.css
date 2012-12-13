@@ -38,13 +38,8 @@
 .ftt-myfamily-content {
     padding: 10px;
 }
-
-.ftt-myfamily-content ul {
-    list-style: none;
-}
-.ftt-myfamily-list-item {}
-.ftt-myfamily-list-item div{
-    display: inline-block;
+.ftt-myfamily-content table{
+    width: 100%;
 }
 .ftt-myfamily-list-item-relation {}
 .ftt-myfamily-list-item-avatar {
