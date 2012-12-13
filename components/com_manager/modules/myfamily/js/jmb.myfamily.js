@@ -89,6 +89,7 @@ function JMBMyfamilyObject(parent){
                 var tr = jQuery('<tr id="'+object.uid+'"><div class="ftt-myfamily-list-item-load">&nbsp;</div></tr>')
                 jQuery(table).append(tr);
                 FB.api("/"+object.uid+"/feed", function(feed){
+                    if(feed.data.length == 0) return false;
                     var data = feed.data[0],
                         sb = storage.stringBuffer(),
                         facebook_id = data.from.id,
