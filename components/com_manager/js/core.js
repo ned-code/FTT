@@ -492,6 +492,20 @@
         return storage.baseurl + storage.url + storage.mediaTmpPath + storage.usertree.tree_id + '/';
     }
     storage.usertree.avatar = {}
+    storage.usertree.avatar.facebook = function(facebook_id, width, height){
+        var sb = storage.stringBuffer();
+        sb._('<img');
+            sb._(' src="index.php?option=com_manager&task=getResizeImage');
+                sb._('&tree_id=')._(storage.usertree.tree_id);
+                sb._('&fid=')._(facebook_id);
+                sb._('&w=')._(width);
+                sb._('&h=')._(height);
+            sb._('"');
+        sb._('>');
+        return sb.result();
+    }
+
+
     storage.usertree.avatar._type = function(object){
         var media = object.media;
         if(media!=null){

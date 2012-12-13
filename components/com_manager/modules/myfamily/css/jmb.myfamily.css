@@ -42,6 +42,26 @@
 .ftt-myfamily-content ul {
     list-style: none;
 }
-
+.ftt-myfamily-list-item {}
+.ftt-myfamily-list-item div{
+    display: inline-block;
+}
+.ftt-myfamily-list-item-relation {}
+.ftt-myfamily-list-item-avatar {
+    height: 50px;
+    margin-left: 5px;
+    margin-right: 5px;
+    width: 50px;
+}
+.ftt-myfamily-list-item-avatar img{
+    border-radius: 5px;
+}
+.ftt-myfamily-list-item-text {}
+.ftt-myfamily-list-item-load {
+    background: url(imgs/fbpb.gif) no-repeat scroll 0 0 transparent;
+    height: 32px;
+    margin: 0 auto;
+    width: 32px;
+}
 
 
