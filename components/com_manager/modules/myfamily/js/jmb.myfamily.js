@@ -3,7 +3,7 @@
         var $module = this,
             $moduleName = "JMBMyfamilyObject",
             $msg = {
-                FTT_MOD_MYFAMILY_HEADER_TITLE: "My Family"
+                FTT_MOD_MYFAMILY_HEADER_TITLE: "My Family on Facebook"
             },
             $fn = {};
 
