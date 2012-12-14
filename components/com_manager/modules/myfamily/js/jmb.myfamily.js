@@ -32,6 +32,25 @@
                         if(response.error_code){
                             $fn.getFamilyList(callback);
                         } else {
+                            if(!response){
+                                callback(false);
+                            }
+                            var family =[], stack = {};
+
+                            var st = storage.usertree.users;
+                            for(var key in st){
+                                if(!st.hasOwnProperty(key) || key == storage.usertree.facebook_id || key in stack) continue;
+                                var el = st[key][0];
+                                var object = storage.usertree.pull[el.gedcom_id];
+                                var parse = storage.usertree.parse(object);
+                                family.push({uid:parse.facebook_id, relationship:parse.relation, name:parse.name});
+                                stack[parse.facebook_id] = true;
+                            }
+                            for(var key in response){
+                                if(!st.hasOwnProperty(key) || key == storage.usertree.facebook_id || key in stack) continue;
+                                family.push(response[key]);
+                                stack[response[key].uid] = true;
+                            }
                             callback(response);
                         }
                     }
@@ -92,15 +111,15 @@
         $module.data.relations = {};
         $module.data.trs = {};
 
-        $fn.getFamilyList(function(response){
+        $fn.getFamilyList(function(family){
             var table, key, facebook_id, tr;
-            if(!response) return $fn.exit();
+            if(!family) return $fn.exit();
             table = $fn.createTable();
             jQuery($module.data.cont).find(".ftt-myfamily-content").append(table);
-            for(var key in response){
-                if(!response.hasOwnProperty(key)) continue;
-                facebook_id = response[key].uid;
-                $module.data.relations[facebook_id] = response[key].relationship;
+            for(var key in family){
+                if(!family.hasOwnProperty(key)) continue;
+                facebook_id = family[key].uid;
+                $module.data.relations[facebook_id] = family[key].relationship;
                 $module.data.trs[facebook_id] = $fn.createTr(facebook_id);
                 jQuery(table).append($module.data.trs[facebook_id]);
                 $fn.getFeed(facebook_id, function(feed, facebook_id){
