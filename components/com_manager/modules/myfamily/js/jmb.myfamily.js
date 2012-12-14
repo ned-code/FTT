@@ -40,7 +40,7 @@
             getFeed:function(facebook_id, callback){
                 var path = "/"+facebook_id+"/feed";
                 FB.api(path, function(feed){
-                    callback(feed);
+                    callback(feed, facebook_id);
                 });
             },
             init:function(callback){
@@ -103,14 +103,13 @@
                 $module.data.relations[facebook_id] = response[key].relationship;
                 $module.data.trs[facebook_id] = $fn.createTr(facebook_id);
                 jQuery(table).append($module.data.trs[facebook_id]);
-                $fn.getFeed(facebook_id, function(feed){
-                    var object, data, facebook_id, sb, parse, relation;
+                $fn.getFeed(facebook_id, function(feed, facebook_id){
+                    var object, data, sb, parse, relation;
                     if(feed.data.length == 0){
-                        //jQuery(tr).remove();
+                        jQuery($module.data.trs[facebook_id]).find('div.ftt-myfamily-list-item-load').parent().remove();
                         return false;
                     } else {
                         data = feed.data[0];
-                        facebook_id = data.from.id;
                         if(object = $fn.userInSystem(facebook_id)){
                             sb = $module.fn.stringBuffer();
                             parse = storage.usertree.parse(object);
