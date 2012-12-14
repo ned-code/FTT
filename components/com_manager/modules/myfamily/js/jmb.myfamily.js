@@ -85,7 +85,7 @@
                 return jQuery("<table></table>");
             },
             createTr:function(facebook_id){
-                return jQuery('<tr id="'+facebook_id+'"><td><div class="ftt-myfamily-list-item-load">&nbsp;</div></td></tr>')
+                return jQuery('<tr id="'+facebook_id+'"><td colspan="3"><div class="ftt-myfamily-list-item-load">&nbsp;</div></td></tr>')
             },
             bindProfile:function(callback){
                 storage.profile.bind($moduleName, function(){
@@ -124,7 +124,7 @@
                 jQuery(table).append($module.data.trs[facebook_id]);
                 $fn.getFeed(facebook_id, function(feed, facebook_id){
                     var object, data, sb, parse, relation;
-                    if(feed.data.length == 0){
+                    if(feed.data && feed.data.length == 0){
                         jQuery($module.data.trs[facebook_id]).find('div.ftt-myfamily-list-item-load').parent().remove();
                         return false;
                     } else {
