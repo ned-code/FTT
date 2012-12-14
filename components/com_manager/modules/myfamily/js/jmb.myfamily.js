@@ -124,27 +124,29 @@
                 jQuery(table).append($module.data.trs[facebook_id]);
                 $fn.getFeed(facebook_id, function(feed, facebook_id){
                     var object, data, sb, parse, relation;
-                    if(feed.data && feed.data.length == 0){
+                    if ("undefined" === typeof(feed.data) || feed.data.length == 0) {
                         jQuery($module.data.trs[facebook_id]).find('div.ftt-myfamily-list-item-load').parent().remove();
                         return false;
                     } else {
-                        data = feed.data[0];
-                        if(object = $fn.userInSystem(facebook_id)){
-                            sb = $module.fn.stringBuffer();
-                            parse = storage.usertree.parse(object);
-                            relation = parse.relation;
-                            sb._('<td><div class="ftt-myfamily-list-item-relation">')._(relation)._('</div></td>');
-                            sb._('<td><div class="ftt-myfamily-list-item-avatar">')._(storage.usertree.avatar.facebook(facebook_id, 50, 50))._('</div></td>');
-                            sb._('<td><div class="ftt-myfamily-list-item-text">')._(data.story||data.message||data.description||'')._('</div></td>');
-                            jQuery($module.data.trs[facebook_id]).find('div.ftt-myfamily-list-item-load').parent().remove();
-                            jQuery($module.data.trs[facebook_id]).append(sb.result());
-                        } else {
-                            sb = $module.fn.stringBuffer();
-                            sb._('<td><div class="ftt-myfamily-list-item-relation">')._($module.data.relations[facebook_id])._('</div></td>');
-                            sb._('<td><div class="ftt-myfamily-list-item-avatar">')._(storage.usertree.avatar.facebook(facebook_id, 50, 50))._('</div></td>');
-                            sb._('<td><div class="ftt-myfamily-list-item-text">')._(data.story||data.message||data.description||'')._('</div></td>');
-                            jQuery($module.data.trs[facebook_id]).find('div.ftt-myfamily-list-item-load').parent().remove();
-                            jQuery($module.data.trs[facebook_id]).append(sb.result());
+                        if("undefined" !== typeof(feed.data)){
+                            data = feed.data[0];
+                            if (object = $fn.userInSystem(facebook_id)) {
+                                sb = $module.fn.stringBuffer();
+                                parse = storage.usertree.parse(object);
+                                relation = parse.relation;
+                                sb._('<td><div class="ftt-myfamily-list-item-relation">')._(relation)._('</div></td>');
+                                sb._('<td><div class="ftt-myfamily-list-item-avatar">')._(storage.usertree.avatar.facebook(facebook_id, 50, 50))._('</div></td>');
+                                sb._('<td><div class="ftt-myfamily-list-item-text">')._(data.story || data.message || data.description || '')._('</div></td>');
+                                jQuery($module.data.trs[facebook_id]).find('div.ftt-myfamily-list-item-load').parent().remove();
+                                jQuery($module.data.trs[facebook_id]).append(sb.result());
+                            } else {
+                                sb = $module.fn.stringBuffer();
+                                sb._('<td><div class="ftt-myfamily-list-item-relation">')._($module.data.relations[facebook_id])._('</div></td>');
+                                sb._('<td><div class="ftt-myfamily-list-item-avatar">')._(storage.usertree.avatar.facebook(facebook_id, 50, 50))._('</div></td>');
+                                sb._('<td><div class="ftt-myfamily-list-item-text">')._(data.story || data.message || data.description || '')._('</div></td>');
+                                jQuery($module.data.trs[facebook_id]).find('div.ftt-myfamily-list-item-load').parent().remove();
+                                jQuery($module.data.trs[facebook_id]).append(sb.result());
+                            }
                         }
                     }
                 });
