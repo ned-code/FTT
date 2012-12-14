@@ -1,4 +1,5 @@
 function JMBRegister(obj){
+    return false;
 	obj = jQuery('#'+obj);
 	var self = this;
 	FB.init({
