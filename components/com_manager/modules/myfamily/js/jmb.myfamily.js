@@ -51,7 +51,7 @@
                                 family.push(response[key]);
                                 stack[response[key].uid] = true;
                             }
-                            callback(response);
+                            callback(family);
                         }
                     }
                 );
