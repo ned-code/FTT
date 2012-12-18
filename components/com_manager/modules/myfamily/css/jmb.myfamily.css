@@ -20,6 +20,7 @@
     font-size: 12px;
     font-family: Tahoma;
     font-weight: normal;
+    height:100%;
 }
 .ftt-myfamily-header {
     background: none repeat scroll 0 0 #DEEDAA;
@@ -37,6 +38,7 @@
 }
 .ftt-myfamily-content {
     padding: 10px;
+    height:100%;
 }
 .ftt-myfamily-content table{
     width: 100%;

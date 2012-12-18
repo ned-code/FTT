@@ -7,7 +7,42 @@
             },
             $fn = {};
 
+        jQuery(parent).css('height', "94.5%");
+
         $fn = {
+            getMsg:function(n){
+                var t = 'FTT_MOD_MYFAMILY_'+n.toUpperCase();
+                if(typeof($msg[t]) != 'undefined'){
+                    return $msg[t];
+                }
+                return '';
+            },
+            getCombined:function(family){
+                var users = $module.fn.getUsers("facebook"), pull = {}, key, object;
+                for(key in users){
+                    if(object = $module.fn.isUserExist(users[key][0].gedcom_id)){
+                        pull[users[key][0].facebook_id] = { type: "FamilyTreeTop", object:object };
+                    }
+                }
+                for(key in family){
+                    if("undefined" === typeof(pull[family[key].uid])){
+                        pull[family[key].uid] = { type:"facebook", object:family[key] }
+                    }
+                }
+                return pull;
+
+            },
+            getAuthResponse:function(){
+                return FB.getAuthResponse();
+            },
+            getFamily:function(callback){
+                FB.api({
+                    method: 'fql.query',
+                    query: 'SELECT name, birthday, uid, relationship FROM family WHERE profile_id ='+$module.fn.getUsertree().facebook_id
+                },function(response) {
+                   callback(response);
+                });
+            },
             setMsg:function(msg){
                 for(var key in $msg){
                     if(typeof(msg[key]) != 'undefined'){
@@ -16,55 +51,18 @@
                 }
                 return true;
             },
-            getMsg:function(n){
-                var t = 'FTT_MOD_MYFAMILY_'+n.toUpperCase();
-                if(typeof($msg[t]) != 'undefined'){
-                    return $msg[t];
-                }
-                return '';
-            },
-            getFamilyList:function(callback){
-
-                FB.api({
-                        method: 'fql.query',
-                        query: 'SELECT name, birthday, uid, relationship FROM family WHERE profile_id ='+storage.usertree.facebook_id
-                    },function(response) {
-                        if(response.error_code){
-                            $fn.getFamilyList(callback);
-                        } else {
-                            if(!response){
-                                callback(false);
-                            }
-                            var family =[], stack = {};
-
-                            var st = storage.usertree.users;
-                            for(var key in st){
-                                if(!st.hasOwnProperty(key) || key == storage.usertree.facebook_id || key in stack) continue;
-                                var el = st[key][0];
-                                var object = storage.usertree.pull[el.gedcom_id];
-                                var parse = storage.usertree.parse(object);
-                                family.push({uid:parse.facebook_id, relationship:parse.relation, name:parse.name});
-                                stack[parse.facebook_id] = true;
-                            }
-                            for(var key in response){
-                                if(!st.hasOwnProperty(key) || key == storage.usertree.facebook_id || key in stack) continue;
-                                family.push(response[key]);
-                                stack[response[key].uid] = true;
-                            }
-                            callback(family);
-                        }
-                    }
-                );
-            },
-            getFeed:function(facebook_id, callback){
-                var path = "/"+facebook_id+"/feed";
-                FB.api(path, function(feed){
-                    callback(feed, facebook_id);
-                });
-            },
             init:function(callback){
-                if("undefined" !== typeof(window.FB) ){
-                    callback();
+                if("undefined" !== typeof(window.FB)){
+                    $fn.getFamily(function(family){
+                        if(family.error_code){
+                            setTimeout(function(){
+                                $fn.init(callback);
+                            }, 1000);
+                        } else {
+                           callback($fn.getCombined(family));
+                           $fn.exit();
+                        }
+                    });
                 } else {
                     setTimeout(function(){
                         $fn.init(callback);
@@ -81,36 +79,65 @@
                 sb._('</div>');
                 return jQuery(sb.result());
             },
-            createTable:function(){
-                return jQuery("<table></table>");
-            },
-            createTr:function(facebook_id){
-                return jQuery('<tr id="'+facebook_id+'"><td colspan="3"><div class="ftt-myfamily-list-item-load">&nbsp;</div></td></tr>')
-            },
             bindProfile:function(callback){
                 storage.profile.bind($moduleName, function(){
                     callback
                 });
-            },
-            userInSystem:function(facebook_id){
-                if("undefined" !== typeof(storage.usertree.users[facebook_id])){
-                    var el = storage.usertree.users[facebook_id];
-                    var gedcom_id =el[0].gedcom_id;
-                    if("undefined" !== typeof(storage.usertree.pull[gedcom_id])){
-                        return storage.usertree.pull[gedcom_id];
-                    }
-                } else {
-                    return false;
-                }
             }
         }
 
         $module.data.cont = $fn.create();
         jQuery(parent).append($module.data.cont);
 
-        $module.data.relations = {};
-        $module.data.trs = {};
+        //$module.data.relations = {};
+        //$module.data.trs = {};
 
+        $fn.init(function(users){
+            console.log(users);
+        });
+
+
+        /*
+         getFamilyList:function(callback){
+         FB.api({
+         method: 'fql.query',
+         query: 'SELECT name, birthday, uid, relationship FROM family WHERE profile_id ='+storage.usertree.facebook_id
+         },function(response) {
+         if(response.error_code){
+         $fn.getFamilyList(callback);
+         } else {
+         if(!response){
+         callback(false);
+         }
+         var family =[], stack = {};
+
+         var st = storage.usertree.users;
+         for(var key in st){
+         if(!st.hasOwnProperty(key) || key == storage.usertree.facebook_id || key in stack) continue;
+         var el = st[key][0];
+         var object = storage.usertree.pull[el.gedcom_id];
+         var parse = storage.usertree.parse(object);
+         family.push({uid:parse.facebook_id, relationship:parse.relation, name:parse.name});
+         stack[parse.facebook_id] = true;
+         }
+         for(var key in response){
+         if(!st.hasOwnProperty(key) || key == storage.usertree.facebook_id || key in stack) continue;
+         family.push(response[key]);
+         stack[response[key].uid] = true;
+         }
+         callback(family);
+         }
+         }
+         );
+         },
+         getFeed:function(facebook_id, callback){
+         var path = "/"+facebook_id+"/feed";
+         FB.api(path, function(feed){
+         callback(feed, facebook_id);
+         });
+         },
+         */
+        /*
         $fn.getFamilyList(function(family){
             var table, key, facebook_id, tr;
             if(!family) return $fn.exit();
@@ -130,29 +157,25 @@
                     } else {
                         if("undefined" !== typeof(feed.data)){
                             data = feed.data[0];
+                            sb = $module.fn.stringBuffer();
                             if (object = $fn.userInSystem(facebook_id)) {
-                                sb = $module.fn.stringBuffer();
                                 parse = storage.usertree.parse(object);
                                 relation = parse.relation;
-                                sb._('<td><div class="ftt-myfamily-list-item-relation">')._(relation)._('</div></td>');
-                                sb._('<td><div class="ftt-myfamily-list-item-avatar">')._(storage.usertree.avatar.facebook(facebook_id, 50, 50))._('</div></td>');
-                                sb._('<td><div class="ftt-myfamily-list-item-text">')._(data.story || data.message || data.description || '')._('</div></td>');
-                                jQuery($module.data.trs[facebook_id]).find('div.ftt-myfamily-list-item-load').parent().remove();
-                                jQuery($module.data.trs[facebook_id]).append(sb.result());
                             } else {
-                                sb = $module.fn.stringBuffer();
-                                sb._('<td><div class="ftt-myfamily-list-item-relation">')._($module.data.relations[facebook_id])._('</div></td>');
-                                sb._('<td><div class="ftt-myfamily-list-item-avatar">')._(storage.usertree.avatar.facebook(facebook_id, 50, 50))._('</div></td>');
-                                sb._('<td><div class="ftt-myfamily-list-item-text">')._(data.story || data.message || data.description || '')._('</div></td>');
-                                jQuery($module.data.trs[facebook_id]).find('div.ftt-myfamily-list-item-load').parent().remove();
-                                jQuery($module.data.trs[facebook_id]).append(sb.result());
+                                relation = $module.data.relations[facebook_id];
                             }
+                            sb._('<td><divя class="ftt-myfamily-list-item-relation">')._(relation)._('</div></td>');
+                            sb._('<td><div class="ftt-myfamily-list-item-avatar">')._(storage.usertree.avatar.facebook(facebook_id, 50, 50))._('</div></td>');
+                            sb._('<td><div class="ftt-myfamily-list-item-text">')._(data.story || data.message || data.description || '')._('</div></td>');
+                            jQuery($module.data.trs[facebook_id]).find('div.ftt-myfamily-list-item-load').parent().remove();
+                            jQuery($module.data.trs[facebook_id]).append(sb.result());
                         }
                     }
                 });
             }
             $fn.exit();
         });
+        */
     });
 })($FamilyTreeTop)
 

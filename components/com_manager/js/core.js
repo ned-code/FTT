@@ -1195,7 +1195,7 @@
  * FamilyTreeTop Object
  */
 (function(w){
-    var $ftt = {};
+    var $ftt = {}, fn;
     w.$FamilyTreeTop = $ftt;
 
     $ftt.global = {
@@ -1203,7 +1203,19 @@
         path: "components/com_manager/"
     }
 
-    $ftt.dev = {
+    fn = {
+        getUsers:function(){
+            return storage.usertree.users;
+        },
+        getUsersPull:function(){
+            return storage.usertree.pull;
+        },
+        getUsertree:function(){
+            return storage.usertree;
+        }
+    }
+
+   $ftt.dev = {
         __debug__:false,
         message:function(value){
             if(this.__debug__){
@@ -1297,6 +1309,46 @@
     }
 
     $ftt.fn = {
+        getJSON:function(str){
+            var json;
+            try {
+                json = jQuery.parseJSON(str);
+            } catch (e) {
+                return false;
+            }
+            return json;
+        },
+        getUsers:function(type){
+            if("undefined" === type){
+                type = "gedcom";
+            }
+            if("facebook" === type){
+                return fn.getUsers();
+            } else if("gedcom" === type){
+                return fn.getUsersPull();
+            }
+            return false;
+        },
+        getUsertree:function(){
+            return fn.getUsertree();
+        },
+        isUserExist:function(id, type){
+            if("undefined" === type) {
+                type = "gedcom";
+            }
+            var usertree = fn.getUsertree(), gedcom_id;
+            if("facebook" === type && "undefined" !== usertree.users[id]){
+                gedcom_id = usertree.users[id][0].gedcom_id;
+            } else if("gedcom" === type){
+                gedcom_id = id;
+            } else {
+                return false;
+            }
+            if("undefined" !== usertree.pull[gedcom_id]){
+                return usertree.pull[gedcom_id];
+            }
+            return false;
+        },
         callMethod:function(module, classname, method, args, callback){
             var xnr = jQuery.ajax({
                 url: $ftt.global.base + $ftt.global.path + "php/ajax.php",
@@ -1333,15 +1385,6 @@
                 modal:true,
                 close:callback
             });
-        },
-        getJSON:function(str){
-            var json;
-            try {
-                json = jQuery.parseJSON(str);
-            } catch (e) {
-                return false;
-            }
-            return json;
         },
         stringBuffer:function(){
             var b = "";
