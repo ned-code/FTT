@@ -1428,6 +1428,9 @@
                     return b;
                 }
             }
+        },
+        parse:function(object){
+            return storage.usertree.parse(object);
         }
     }
 })(window);
