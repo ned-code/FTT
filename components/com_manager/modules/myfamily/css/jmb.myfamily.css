@@ -20,7 +20,6 @@
     font-size: 12px;
     font-family: Tahoma;
     font-weight: normal;
-    height:100%;
 }
 .ftt-myfamily-header {
     background: none repeat scroll 0 0 #DEEDAA;
@@ -37,23 +36,44 @@
     top: 8px;
 }
 .ftt-myfamily-content {
-    padding: 10px;
-    height:100%;
+
 }
 .ftt-myfamily-content table{
     width: 100%;
+    border-collapse: collapse;
 }
-.ftt-myfamily-list-item-relation {}
+.ftt-myfamily-content table tr {
+    background: none repeat scroll 0 0 #F1F3F7;
+    border-bottom: 1px solid #DCDEE2;
+    border-top: 1px solid #DCDEE2;
+    cursor:pointer;
+}
+.ftt-myfamily-content table tr.active {
+    background: none repeat scroll 0 0 #d8deea;
+    border-bottom: 1px solid #adb4c7;
+    border-top: 1px solid #adb4c7;
+}
+.ftt-myfamily-list-item-relation {
+    min-width: 40px;
+    text-align: center;
+}
 .ftt-myfamily-list-item-avatar {
     height: 50px;
-    margin-left: 5px;
-    margin-right: 5px;
+    margin: 10px;
     width: 50px;
 }
 .ftt-myfamily-list-item-avatar img{
     border-radius: 5px;
 }
-.ftt-myfamily-list-item-text {}
+.ftt-myfamily-list-item-text {
+    font-size: 11px;
+    text-align: left;
+    margin: 3px;
+}
+.ftt-myfamily-list-item-author {
+    font-size: 11px;
+    font-weight: bold;
+}
 .ftt-myfamily-list-item-load {
     background: url(imgs/fbpb.gif) no-repeat scroll 0 0 transparent;
     height: 32px;

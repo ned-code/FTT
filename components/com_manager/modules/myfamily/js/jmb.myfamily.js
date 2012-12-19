@@ -7,8 +7,6 @@
             },
             $fn = {};
 
-        jQuery(parent).css('height', "94.5%");
-
         $fn = {
             getMsg:function(n){
                 var t = 'FTT_MOD_MYFAMILY_'+n.toUpperCase();
@@ -21,7 +19,7 @@
                 var users = $module.fn.getUsers("facebook"), pull = {}, key, object;
                 for(key in users){
                     if(object = $module.fn.isUserExist(users[key][0].gedcom_id)){
-                        pull[users[key][0].facebook_id] = { type: "FamilyTreeTop", object:object };
+                        pull[users[key][0].facebook_id] = { type: "gedcom", object:object };
                     }
                 }
                 for(key in family){
@@ -38,14 +36,6 @@
                     callback(r);
                 });
             },
-            getFeed:function(facebook_id, callback, level){
-                if("undefined" === level){
-                    level = 0;
-                }
-                FB.api("/"+facebook_id+"/feed", function(response){
-                    callback(response);
-                });
-            },
             getAuthResponse:function(){
                 return FB.getAuthResponse();
             },
@@ -57,6 +47,34 @@
                    callback(response);
                 });
             },
+            getRelation:function(data, el){
+                if("undefined" !== typeof(data)){
+                    if("facebook" === data.type){
+                        return data.object.relationship;
+                    } else if("gedcom" === data.type){
+                        return $module.fn.parse(data.object).relation;
+                    }
+                }
+                return '';
+            },
+            getName:function(data, el){
+                var facebook_id = el.id.split("_")[0];
+                if(facebook_id in data){
+                    var user = data[facebook_id];
+                    if("facebook" === user.type){
+                        return user.object.name;
+                    } else if("gedcom" === user.type){
+                        var parse = $module.fn.parse(user.object);
+                        return parse.name;
+                    }
+                } else {
+                    return el.from.name;
+                }
+                return "unknown";
+            },
+            getMessage:function(el){
+                return el.story || el.message || el.description || el.name || '';
+            },
             setMsg:function(msg){
                 for(var key in $msg){
                     if(typeof(msg[key]) != 'undefined'){
@@ -64,6 +82,15 @@
                     }
                 }
                 return true;
+            },
+            each:function(arr, callback){
+                for(var key in arr){
+                    if(!arr.hasOwnProperty(key)) continue;
+                    callback(key, arr[key]);
+                }
+            },
+            click:function(el){
+                console.log(el);
             },
             init:function(callback){
                 if("undefined" !== typeof(window.FB)){
@@ -100,16 +127,47 @@
             }
         }
 
+        $module.data.parent = parent;
         $module.data.cont = $fn.create();
-        jQuery(parent).append($module.data.cont);
 
-        $module.data.relations = {};
-        $module.data.items = {};
+        jQuery($module.data.parent).append($module.data.cont);
+
         $module.data.table = null;
-        $module.data.lastTr = null;
+        $module.data.activeItem = null;
+        $module.data.items = {};
 
         $fn.init(function(users){
-            var key, el, facebook_id, parse;
+            $fn.getHome(function(home){
+                $module.data.table = jQuery("<table></table>");
+                jQuery($module.data.parent).find(".ftt-myfamily-content").append($module.data.table);
+                $fn.each(home.data, function(i, el){
+                    var facebook_id = el.id.split("_")[0], sb = $module.fn.stringBuffer();
+                    if(facebook_id in users){
+                        sb._('<tr id="')._(facebook_id)._('">');
+                            sb._('<td><div class="ftt-myfamily-list-item-relation">')._($fn.getRelation(users[facebook_id], el))._('</div></td>');
+                            sb._('<td><div class="ftt-myfamily-list-item-avatar">')._(storage.usertree.avatar.facebook(facebook_id, 50, 50))._('</div></td>');
+                            sb._('<td style="vertical-align: top;" ><div class="ftt-myfamily-list-item-text"><span class="ftt-myfamily-list-item-author">')._($fn.getName(users, el))._('</span> ')._($fn.getMessage(el))._('</div></td>');
+                        sb._("</tr>");
+                        $module.data.items[facebook_id] = jQuery(sb.result());
+                        jQuery($module.data.items[facebook_id]).click(function(){
+                            if($module.data.activeItem == this) return false;
+                            if(null !== $module.data.activeItem){
+                                jQuery($module.data.activeItem).removeClass("active");
+                            }
+                            jQuery(this).addClass("active");
+                            $module.data.activeItem = this;
+                            $fn.click(this);
+                            return false;
+                        });
+                        jQuery($module.data.table).append($module.data.items[facebook_id]);
+                    }
+                });
+            });
+        });
+
+        /*
+        $fn.init(function(users){
+            var key, el, facebook_id, parse, access_token;
             $module.data.table = jQuery("<table></table>");
             jQuery(parent).find(".ftt-myfamily-content").append($module.data.table);
             for(key in users){
@@ -122,12 +180,14 @@
                     facebook_id = parse.facebook_id;
                     $module.data.relations[facebook_id] = parse.relation;
                 }
-                $module.data.lastTr = jQuery("<tr><td colspan='3'><div class='ftt-myfamily-list-item-load'></div></td></tr>");
+                $module.data.lastTr = jQuery("<tr id='"+facebook_id+"'><td colspan='3'><div class='ftt-myfamily-list-item-load'></div></td></tr>");
                 $module.data.items[facebook_id] = $module.data.lastTr;
                 jQuery($module.data.table).append($module.data.lastTr);
-                $fn.getFeed(facebook_id, function(feed){
+                access_token = $fn.getAuthResponse().accessToken;
+                $fn.getFeed(facebook_id, access_token, function(feed, facebook_id){
                     var object, data, sb, parse, relation;
                     if ("undefined" === typeof(feed.data) || feed.data.length == 0) {
+                        jQuery($module.data.items[facebook_id]).find('div.ftt-myfamily-list-item-load').parent().remove();
                         return false;
                     } else {
                         if("undefined" !== typeof(feed.data)){
@@ -136,7 +196,7 @@
                             relation = $module.data.relations[facebook_id];
                             sb._('<td><divя class="ftt-myfamily-list-item-relation">')._(relation)._('</div></td>');
                             sb._('<td><div class="ftt-myfamily-list-item-avatar">')._(storage.usertree.avatar.facebook(facebook_id, 50, 50))._('</div></td>');
-                            sb._('<td><div class="ftt-myfamily-list-item-text">')._(data.story || data.message || data.description || '')._('</div></td>');
+                            sb._('<td><div class="ftt-myfamily-list-item-text">')._(data.story || data.message || data.description || data.name || '')._('</div></td>');
                             jQuery($module.data.items[facebook_id]).find('div.ftt-myfamily-list-item-load').parent().remove();
                             jQuery($module.data.items[facebook_id]).append(sb.result());
                         }
@@ -144,6 +204,7 @@
                 });
             }
         });
+        */
     });
 })($FamilyTreeTop)
 
