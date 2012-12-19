@@ -89,8 +89,25 @@
                     callback(key, arr[key]);
                 }
             },
-            click:function(el){
-                console.log(el);
+            click:function(object){
+                var id = jQuery(object).attr("id");
+                var settings = jQuery.extend(true, {}, $module.data.btSettings, {
+                    contentSelector:["jQuery('#", id, "-tip-myfamily')"].join('')
+                });
+                jQuery(object).bt(settings);
+                jQuery(object).btOn();
+            },
+            tip:function(facebook_id, el){
+                //console.log(facebook_id, el);
+                var sb = $module.fn.stringBuffer();
+                sb._("<div id='"+el.id+"-tip-myfamily' class='ftt-myfamily-tip' style='display:none;'>");
+                    sb._('<div class="ftt-myfamily-tip-title"><a href="')._(el.link)._('">')._(el.name || "title")._('</a></div>');
+                    sb._('<div class="ftt-myfamily-tip-icon"><img src="')._(el.picture)._('"></div>');
+                    sb._('<div class="ftt-myfamily-tip-message">')._(el.message || "message")._('</div>');
+                    sb._('<div class="ftt-myfamily-tip-comments">&nbsp;</div>');
+                sb._("</div>");
+                $module.data.tips[facebook_id] = jQuery(sb.result());
+                jQuery(document.body).append($module.data.tips[facebook_id]);
             },
             init:function(callback){
                 if("undefined" !== typeof(window.FB)){
@@ -135,6 +152,22 @@
         $module.data.table = null;
         $module.data.activeItem = null;
         $module.data.items = {};
+        $module.data.events = {};
+        $module.data.tips = {};
+        $module.data.btSettings = {
+            trigger: 'none',
+            fill: '#F7F7F7',
+            strokeStyle: '#B7B7B7',
+            spikeLength: 10,
+            spikeGirth: 10,
+            padding: 8,
+            cornerRadius: 0,
+            closeWhenOthersOpen: true,
+            cssStyles: {
+                fontFamily: '"lucida grande",tahoma,verdana,arial,sans-serif',
+                fontSize: '11px'
+            }
+        }
 
         $fn.init(function(users){
             $fn.getHome(function(home){
@@ -143,13 +176,14 @@
                 $fn.each(home.data, function(i, el){
                     var facebook_id = el.id.split("_")[0], sb = $module.fn.stringBuffer();
                     if(facebook_id in users){
-                        sb._('<tr id="')._(facebook_id)._('">');
+                        sb._('<tr id="')._(el.id)._('">');
                             sb._('<td><div class="ftt-myfamily-list-item-relation">')._($fn.getRelation(users[facebook_id], el))._('</div></td>');
                             sb._('<td><div class="ftt-myfamily-list-item-avatar">')._(storage.usertree.avatar.facebook(facebook_id, 50, 50))._('</div></td>');
                             sb._('<td style="vertical-align: top;" ><div class="ftt-myfamily-list-item-text"><span class="ftt-myfamily-list-item-author">')._($fn.getName(users, el))._('</span> ')._($fn.getMessage(el))._('</div></td>');
                         sb._("</tr>");
-                        $module.data.items[facebook_id] = jQuery(sb.result());
-                        jQuery($module.data.items[facebook_id]).click(function(){
+                        $module.data.items[el.id] = jQuery(sb.result());
+                        $module.data.events[el.id] = el;
+                        jQuery($module.data.items[el.id]).click(function(){
                             if($module.data.activeItem == this) return false;
                             if(null !== $module.data.activeItem){
                                 jQuery($module.data.activeItem).removeClass("active");
@@ -159,7 +193,8 @@
                             $fn.click(this);
                             return false;
                         });
-                        jQuery($module.data.table).append($module.data.items[facebook_id]);
+                        jQuery($module.data.table).append($module.data.items[el.id]);
+                        $fn.tip(facebook_id, el)
                     }
                 });
             });
