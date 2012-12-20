@@ -83,4 +83,24 @@
     width: 32px;
 }
 
+.ftt-myfamily-tip {
+    width: 360px;
+    height: auto;
+}
+.ftt-myfamily-tip-title {
+    font-size: 12px;
+    font-weight: bold;
+    margin: 10px;
+    text-align: center;
+}
+.ftt-myfamily-tip-title a {
+    text-decoration: none;
+}
+.ftt-myfamily-tip-icon {
+    margin: 10px auto;
+    width: 320px;
+    text-align: center;
+}
+.ftt-myfamily-tip-message {}
+.ftt-myfamily-tip-comments {}
 

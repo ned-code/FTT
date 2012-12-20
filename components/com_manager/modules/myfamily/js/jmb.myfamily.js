@@ -92,22 +92,33 @@
             click:function(object){
                 var id = jQuery(object).attr("id");
                 var settings = jQuery.extend(true, {}, $module.data.btSettings, {
-                    contentSelector:["jQuery('#", id, "-tip-myfamily')"].join('')
+                    contentSelector:["jQuery('#", id, "-tip-myfamily')"].join(''),
+                    preBuild:function(){
+                        $module.data.activeItem = object;
+                    },
+                    preHide:function(){
+                        jQuery($module.data.tips[id]).remove();
+                        jQuery($module.data.items[id]).removeClass("active");
+                    }
                 });
-                jQuery(object).bt(settings);
-                jQuery(object).btOn();
+                console.log($module.data.events[id])
+                $fn.tip(id, function(){
+                    jQuery(object).bt(settings);
+                    jQuery(object).btOn();
+                });
             },
-            tip:function(facebook_id, el){
-                //console.log(facebook_id, el);
+            tip:function(id, callback){
+                var el = $module.data.events[id];
                 var sb = $module.fn.stringBuffer();
                 sb._("<div id='"+el.id+"-tip-myfamily' class='ftt-myfamily-tip' style='display:none;'>");
-                    sb._('<div class="ftt-myfamily-tip-title"><a href="')._(el.link)._('">')._(el.name || "title")._('</a></div>');
-                    sb._('<div class="ftt-myfamily-tip-icon"><img src="')._(el.picture)._('"></div>');
-                    sb._('<div class="ftt-myfamily-tip-message">')._(el.message || "message")._('</div>');
+                    sb._('<div class="ftt-myfamily-tip-title"><a href="')._(el.link || "#")._('">')._(el.name || "")._('</a></div>');
+                    sb._('<div class="ftt-myfamily-tip-icon"><img src="')._(el.picture || "")._('"></div>');
+                    sb._('<div class="ftt-myfamily-tip-message">')._(el.message || "")._('</div>');
                     sb._('<div class="ftt-myfamily-tip-comments">&nbsp;</div>');
                 sb._("</div>");
-                $module.data.tips[facebook_id] = jQuery(sb.result());
-                jQuery(document.body).append($module.data.tips[facebook_id]);
+                $module.data.tips[el.id] = jQuery(sb.result());
+                jQuery(document.body).append($module.data.tips[el.id]);
+                jQuery($module.data.tips[el.id]).ready(callback);
             },
             init:function(callback){
                 if("undefined" !== typeof(window.FB)){
@@ -132,8 +143,8 @@
             create:function(){
                 var sb = storage.stringBuffer();
                 sb._('<div class="ftt-myfamily-container">');
-                sb._('<div class="ftt-myfamily-header"><span>')._($fn.getMsg("header_title"))._('</span></div>');
-                sb._('<div class="ftt-myfamily-content"></div>')
+                    sb._('<div class="ftt-myfamily-header"><span>')._($fn.getMsg("header_title"))._('</span></div>');
+                    sb._('<div class="ftt-myfamily-content"></div>')
                 sb._('</div>');
                 return jQuery(sb.result());
             },
@@ -162,6 +173,7 @@
             spikeGirth: 10,
             padding: 8,
             cornerRadius: 0,
+            width: 360,
             closeWhenOthersOpen: true,
             cssStyles: {
                 fontFamily: '"lucida grande",tahoma,verdana,arial,sans-serif',
@@ -185,61 +197,15 @@
                         $module.data.events[el.id] = el;
                         jQuery($module.data.items[el.id]).click(function(){
                             if($module.data.activeItem == this) return false;
-                            if(null !== $module.data.activeItem){
-                                jQuery($module.data.activeItem).removeClass("active");
-                            }
                             jQuery(this).addClass("active");
-                            $module.data.activeItem = this;
                             $fn.click(this);
                             return false;
                         });
                         jQuery($module.data.table).append($module.data.items[el.id]);
-                        $fn.tip(facebook_id, el)
                     }
                 });
             });
         });
-
-        /*
-        $fn.init(function(users){
-            var key, el, facebook_id, parse, access_token;
-            $module.data.table = jQuery("<table></table>");
-            jQuery(parent).find(".ftt-myfamily-content").append($module.data.table);
-            for(key in users){
-                el = users[key];
-                if("facebook" === el.type){
-                    facebook_id = el.object.uid;
-                    $module.data.relations[facebook_id] = el.object.relationship;
-                } else if("gedcom" === el.type){
-                    parse = $module.fn.parse(el.object);
-                    facebook_id = parse.facebook_id;
-                    $module.data.relations[facebook_id] = parse.relation;
-                }
-                $module.data.lastTr = jQuery("<tr id='"+facebook_id+"'><td colspan='3'><div class='ftt-myfamily-list-item-load'></div></td></tr>");
-                $module.data.items[facebook_id] = $module.data.lastTr;
-                jQuery($module.data.table).append($module.data.lastTr);
-                access_token = $fn.getAuthResponse().accessToken;
-                $fn.getFeed(facebook_id, access_token, function(feed, facebook_id){
-                    var object, data, sb, parse, relation;
-                    if ("undefined" === typeof(feed.data) || feed.data.length == 0) {
-                        jQuery($module.data.items[facebook_id]).find('div.ftt-myfamily-list-item-load').parent().remove();
-                        return false;
-                    } else {
-                        if("undefined" !== typeof(feed.data)){
-                            data = feed.data[0];
-                            sb = $module.fn.stringBuffer();
-                            relation = $module.data.relations[facebook_id];
-                            sb._('<td><divя class="ftt-myfamily-list-item-relation">')._(relation)._('</div></td>');
-                            sb._('<td><div class="ftt-myfamily-list-item-avatar">')._(storage.usertree.avatar.facebook(facebook_id, 50, 50))._('</div></td>');
-                            sb._('<td><div class="ftt-myfamily-list-item-text">')._(data.story || data.message || data.description || data.name || '')._('</div></td>');
-                            jQuery($module.data.items[facebook_id]).find('div.ftt-myfamily-list-item-load').parent().remove();
-                            jQuery($module.data.items[facebook_id]).append(sb.result());
-                        }
-                    }
-                });
-            }
-        });
-        */
     });
 })($FamilyTreeTop)
 
