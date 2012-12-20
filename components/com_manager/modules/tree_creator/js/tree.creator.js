@@ -176,7 +176,7 @@ function JMBTreeCreatorObject(parent){
         },
         select:{
             days:function(prefix){
-                var sb = host.stringBuffer();
+                var sb = storage.stringBuffer();
                 sb._('<select name="')._(prefix)._('day">');
                 sb._('<option value="0">Day</option>');
                 for(var i = 1; i <= 31; i++){
@@ -187,7 +187,7 @@ function JMBTreeCreatorObject(parent){
             },
             month:function(prefix){
                 var months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-                var sb = host.stringBuffer();
+                var sb = storage.stringBuffer();
                 sb._('<select name="')._(prefix)._('month">');
                 sb._('<option value="0">Month</option>');
                 for(var i = 0; i <= 11; i++){
@@ -197,7 +197,7 @@ function JMBTreeCreatorObject(parent){
                 return sb.result();
             },
             gender:function(){
-                var sb = host.stringBuffer();
+                var sb = storage.stringBuffer();
                 sb._('<select name="gender">');
                 sb._('<option value="f">')._(fn.getMsg('female'))._('</option>');
                 sb._('<option value="m">')._(fn.getMsg('male'))._('</option>');
@@ -205,7 +205,7 @@ function JMBTreeCreatorObject(parent){
                 return sb.result();
             },
             living:function(){
-                var sb = host.stringBuffer();
+                var sb = storage.stringBuffer();
                 sb._('<select name="living">');
                 sb._('<option value="1">')._(fn.getMsg('yes'))._('</option>');
                 sb._('<option value="0">')._(fn.getMsg('no'))._('</option>');
@@ -213,7 +213,7 @@ function JMBTreeCreatorObject(parent){
                 return sb.result();
             },
             relations:function(){
-                var sb = host.stringBuffer();
+                var sb = storage.stringBuffer();
                 sb._('<select name="relations">');
                 sb._('<option value="">')._(fn.getMsg('relation'))._('</option>');
                 sb._('<option value="father">')._(fn.getMsg('relation_father'))._('</option>');
@@ -259,7 +259,7 @@ function JMBTreeCreatorObject(parent){
                 return f;
             }
             function getVideoElement(){
-                var sb = host.stringBuffer();
+                var sb = storage.stringBuffer();
                 sb._('<div class="video">');
                     sb._('<object id="scPlayer" class="embeddedObject" width="640" height="405" type="application/x-shockwave-flash" data="http://content.screencast.com/users/Fernando_Oliveira/folders/Default/media/6da2d84e-67f3-4a00-9ef8-7ba592f8aba3/scplayer.swf" style="width: 474.0740740740741px; height: 300px; ">');
                     sb._('<param name="movie" value="http://content.screencast.com/users/Fernando_Oliveira/folders/Default/media/6da2d84e-67f3-4a00-9ef8-7ba592f8aba3/scplayer.swf">');
@@ -352,7 +352,7 @@ function JMBTreeCreatorObject(parent){
                 return jQuery('<div><form id="create_tree" method="post" target="ftt_iframe"></form></div>');
             }
             function getHeader(){
-                var sb = host.stringBuffer();
+                var sb = storage.stringBuffer();
                 sb._('<div class="header">');
                     sb._('<div class="message">')._(fn.getMsg('create_header_message'))._('</div>');
                     sb._('<div class="button"><input type="submit" value="')._(fn.getMsg('create_header_button'))._('"></div>');
@@ -361,7 +361,7 @@ function JMBTreeCreatorObject(parent){
             }
             function getBox(type){
                 var settings = getSettings(type);
-                var sb = host.stringBuffer();
+                var sb = storage.stringBuffer();
                 sb._('<div class="box ')._(type)._('">');
                     sb._('<div class="title">')._(settings.title)._('</div>');
                     sb._('<div class="data">');
@@ -505,7 +505,7 @@ function JMBTreeCreatorObject(parent){
                 }
             }
             function getRequestFormBox(args){
-                var sb = host.stringBuffer();
+                var sb = storage.stringBuffer();
                 sb._('<table>');
                 if(args){
                     sb._('<tr style="height: 88px;">');
@@ -539,7 +539,7 @@ function JMBTreeCreatorObject(parent){
                 return sb.result();
             }
             function getRequestForm(args){
-                var sb = host.stringBuffer();
+                var sb = storage.stringBuffer();
                 sb._('<div class="tree_create_request_form">');
                     sb._('<div class="relation">')._(args.target.name)._(' is your: ')._(fn.select.relations())._('</div>');
                     sb._('<div class="data">');
@@ -594,7 +594,7 @@ function JMBTreeCreatorObject(parent){
                 return module.dialog_box;
             }
             function getContent(){
-                var sb = host.stringBuffer();
+                var sb = storage.stringBuffer();
                 sb._('<div class="tc_content">');
                     sb._('<div class="tc_header">');
                         sb._('<div><span>')._(fn.getMsg('start_are_you_related'))._('?</span></div>');
@@ -614,7 +614,7 @@ function JMBTreeCreatorObject(parent){
                 var vFriends = module.initData.verifyFriends;
                 jQuery(vFriends).each(function(i, el){
                     var li = jQuery('<li></li>');
-                    var sb = host.stringBuffer();
+                    var sb = storage.stringBuffer();
                     sb._('<table>');
                         sb._('<tr>');
                             sb._('<td>');
@@ -727,7 +727,7 @@ function JMBTreeCreatorObject(parent){
             }
             function onClickToScreen(c){
                 jQuery(body).find('a#screen').click(function(){
-                    var st = host.stringBuffer();
+                    var st = storage.stringBuffer();
                     st._('<div class="video">');
                     st._('<object id="scPlayer" class="embeddedObject" width="930" height="514" type="application/x-shockwave-flash" data="http://content.screencast.com/users/Fernando_Oliveira/folders/Jing/media/941aa11f-54f7-4ddb-9f25-665c2a630297/jingh264player.swf" style="width: 542px; height: 300px; ">');
                     st._('<param name="movie" value="http://content.screencast.com/users/Fernando_Oliveira/folders/Jing/media/941aa11f-54f7-4ddb-9f25-665c2a630297/jingh264player.swf">');
@@ -779,7 +779,7 @@ function JMBTreeCreatorObject(parent){
                 fn.start(b);
             }
             function createBody(){
-                var sb = host.stringBuffer();
+                var sb = storage.stringBuffer();
                 sb._('<div>');
                     sb._('<div class="title"><span>')._(fn.getMsg('welcom'))._('</span></div>');
                     sb._('<div class="description"><span>')._(fn.getMsg('welcom_message'))._('</span></div>')

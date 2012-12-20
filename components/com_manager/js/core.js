@@ -1333,7 +1333,7 @@
             return fn.getUsertree();
         },
         isUserExist:function(id, type){
-            if("undefined" === type) {
+            if("undefined" === typeof(type)) {
                 type = "gedcom";
             }
             var usertree = fn.getUsertree(), gedcom_id;
