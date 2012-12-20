@@ -113,7 +113,7 @@
                 sb._("<div id='"+el.id+"-tip-myfamily' class='ftt-myfamily-tip' style='display:none;'>");
                     sb._('<div class="ftt-myfamily-tip-title"><a href="')._(el.link || "#")._('">')._(el.name || "")._('</a></div>');
                     sb._('<div class="ftt-myfamily-tip-icon"><img src="')._(el.picture || "")._('"></div>');
-                    sb._('<div class="ftt-myfamily-tip-message">')._(el.message || "")._('</div>');
+                    sb._('<div class="ftt-myfamily-tip-message">')._( el.story || el.message || "")._('</div>');
                     sb._('<div class="ftt-myfamily-tip-comments">&nbsp;</div>');
                 sb._("</div>");
                 $module.data.tips[el.id] = jQuery(sb.result());
