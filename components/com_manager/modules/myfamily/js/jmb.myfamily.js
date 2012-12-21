@@ -89,7 +89,7 @@
                 return sb.result();
             },
             getTitle:function(el){
-                return el.name || $fn.getMsg("click_here") ;
+                return el.name || (el.link)?$fn.getMsg("click_here"):"" ;
             },
             setMsg:function(msg){
                 for(var key in $msg){
@@ -129,7 +129,6 @@
             },
             tip:function(id, callback){
                 var el = $module.data.events[id];
-                console.log(el);
                 var sb = $module.fn.stringBuffer();
                 sb._("<div id='")._(el.id)._("-tip-myfamily' class='ftt-myfamily-tip' style='display:none;'>");
                     sb._('<div class="ftt-myfamily-tip-title"><a href="')._($fn.getLink(el))._('">')._($fn.getTitle(el))._('</a></div>');
