@@ -1760,7 +1760,7 @@ JMBProfile.prototype = {
         }
         fn.setContent(form);
     },
-    mode:function(type){
+    mode:function(type, line){
         var module = this,
             fn = module.functions,
             menu = fn.getViewObject('dialogMenu'+fn.getUcFirst(type));
@@ -1790,7 +1790,11 @@ JMBProfile.prototype = {
             module.render(jQuery(this).attr('id'));
             return false;
         });
-        jQuery(menu).find('li').first().click();
+        if("undefined" !== typeof(line) && "number" === typeof(line)){
+            jQuery(menu).find('li:nth-child('+line+')').click();
+        } else {
+            jQuery(menu).find('li').first().click();
+        }
     },
     editor:function(type, args){
         var module = this,
@@ -1833,7 +1837,7 @@ JMBProfile.prototype = {
             }
         });
 
-        module.mode(type);
+        module.mode(type, args.line);
     },
     add:function(data){
         var module = this;

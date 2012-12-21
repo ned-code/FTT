@@ -110,7 +110,14 @@
                 }
             },
             clickToRelation:function(object){
-
+                var id = jQuery(object).attr('id');
+                var obj = $module.fn.isUserExist(id);
+                if(obj){
+                    storage.profile.editor('view', {
+                        object:obj,
+                        line:4
+                    });
+                }
             },
             click:function(object){
                 var id = jQuery(object).attr("id");
