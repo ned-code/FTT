@@ -51,9 +51,10 @@
             getRelation:function(data, el){
                 if("undefined" !== typeof(data)){
                     if("facebook" === data.type){
-                        return data.object.relationship;
+                        return '<span id="'+el.id+'" class="_facebook">'+data.object.relationship+"</span>";
                     } else if("gedcom" === data.type){
-                        return $module.fn.parse(data.object).relation;
+                        var parse = $module.fn.parse(data.object);
+                        return '<span id="'+parse.gedcom_id+'" class="_gedcom">'+parse.relation+'</span>';
                     }
                 }
                 return '';
@@ -107,6 +108,9 @@
                     if(!arr.hasOwnProperty(key)) continue;
                     callback(key, arr[key]);
                 }
+            },
+            clickToRelation:function(object){
+
             },
             click:function(object){
                 var id = jQuery(object).attr("id");
@@ -223,6 +227,10 @@
                             if(jQuery(this).hasClass("active")) return false;
                             jQuery(this).addClass("active");
                             $fn.click(this);
+                            return false;
+                        });
+                        jQuery($module.data.items[el.id]).find('.ftt-myfamily-list-item-relation span._gedcom').click(function(){
+                            $fn.clickToRelation(this);
                             return false;
                         });
                         jQuery($module.data.table).append($module.data.items[el.id]);

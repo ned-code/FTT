@@ -57,6 +57,10 @@
     min-width: 40px;
     text-align: center;
 }
+.ftt-myfamily-list-item-relation span._gedcom {
+    color: blue;
+    font-weight: bold;
+}
 .ftt-myfamily-list-item-avatar {
     height: 50px;
     margin: 10px;
