@@ -3,7 +3,8 @@
         var $module = this,
             $moduleName = "JMBMyfamilyObject",
             $msg = {
-                FTT_MOD_MYFAMILY_HEADER_TITLE: "My Family on Facebook"
+                FTT_MOD_MYFAMILY_HEADER_TITLE: "My Family on Facebook",
+                FTT_MOD_MYFAMILY_CLICK_HERE: "Click here"
             },
             $fn = {};
 
@@ -73,7 +74,22 @@
                 return "unknown";
             },
             getMessage:function(el){
-                return el.story || el.message || el.description || el.name || '';
+                return el.story || el.message || el.description || '';
+            },
+            getLink:function(el){
+                return el.link || "#" ;
+            },
+            getPicture:function(el){
+                var sb = $module.fn.stringBuffer();
+                if("undefined" !== typeof(el.picture)){
+                    sb._('<img src="')._(el.picture)._('">');
+                } else {
+                    sb._("");
+                }
+                return sb.result();
+            },
+            getTitle:function(el){
+                return el.name || $fn.getMsg("click_here") ;
             },
             setMsg:function(msg){
                 for(var key in $msg){
@@ -82,6 +98,9 @@
                     }
                 }
                 return true;
+            },
+            isImageExist:function(el){
+                return ("undefined" !== typeof(el.picture));
             },
             each:function(arr, callback){
                 for(var key in arr){
@@ -101,24 +120,30 @@
                         jQuery($module.data.items[id]).removeClass("active");
                     }
                 });
-                console.log($module.data.events[id])
                 $fn.tip(id, function(){
+                    jQuery($module.data.tips[id]).find("img").unbind();
                     jQuery(object).bt(settings);
                     jQuery(object).btOn();
+                    return false;
                 });
             },
             tip:function(id, callback){
                 var el = $module.data.events[id];
+                console.log(el);
                 var sb = $module.fn.stringBuffer();
-                sb._("<div id='"+el.id+"-tip-myfamily' class='ftt-myfamily-tip' style='display:none;'>");
-                    sb._('<div class="ftt-myfamily-tip-title"><a href="')._(el.link || "#")._('">')._(el.name || "")._('</a></div>');
-                    sb._('<div class="ftt-myfamily-tip-icon"><img src="')._(el.picture || "")._('"></div>');
-                    sb._('<div class="ftt-myfamily-tip-message">')._( el.story || el.message || "")._('</div>');
+                sb._("<div id='")._(el.id)._("-tip-myfamily' class='ftt-myfamily-tip' style='display:none;'>");
+                    sb._('<div class="ftt-myfamily-tip-title"><a href="')._($fn.getLink(el))._('">')._($fn.getTitle(el))._('</a></div>');
+                    sb._('<div class="ftt-myfamily-tip-icon">')._($fn.getPicture(el))._('</div>');
+                    sb._('<div class="ftt-myfamily-tip-message">')._($fn.getMessage(el))._('</div>');
                     sb._('<div class="ftt-myfamily-tip-comments">&nbsp;</div>');
                 sb._("</div>");
                 $module.data.tips[el.id] = jQuery(sb.result());
                 jQuery(document.body).append($module.data.tips[el.id]);
-                jQuery($module.data.tips[el.id]).ready(callback);
+                if($fn.isImageExist(el)){
+                    jQuery($module.data.tips[el.id]).find("img").bind("load", callback);
+                } else {
+                    setTimeout(callback, 1)
+                }
             },
             init:function(callback){
                 if("undefined" !== typeof(window.FB)){
@@ -196,7 +221,7 @@
                         $module.data.items[el.id] = jQuery(sb.result());
                         $module.data.events[el.id] = el;
                         jQuery($module.data.items[el.id]).click(function(){
-                            if($module.data.activeItem == this) return false;
+                            if(jQuery(this).hasClass("active")) return false;
                             jQuery(this).addClass("active");
                             $fn.click(this);
                             return false;
