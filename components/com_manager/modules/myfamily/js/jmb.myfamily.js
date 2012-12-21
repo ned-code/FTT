@@ -113,6 +113,7 @@
                 var id = jQuery(object).attr('id');
                 var obj = $module.fn.isUserExist(id);
                 if(obj){
+                    jQuery($module.data.activeItem).btOff();
                     storage.profile.editor('view', {
                         object:obj,
                         line:4
