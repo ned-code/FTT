@@ -1760,7 +1760,7 @@ JMBProfile.prototype = {
         }
         fn.setContent(form);
     },
-    mode:function(type, line){
+    mode:function(type, start){
         var module = this,
             fn = module.functions,
             menu = fn.getViewObject('dialogMenu'+fn.getUcFirst(type));
@@ -1790,8 +1790,8 @@ JMBProfile.prototype = {
             module.render(jQuery(this).attr('id'));
             return false;
         });
-        if("undefined" !== typeof(line) && "number" === typeof(line)){
-            jQuery(menu).find('li:nth-child('+line+')').click();
+        if("undefined" !== typeof(start) && "string" === typeof(start)){
+            jQuery(menu).find('li#'+start).click();
         } else {
             jQuery(menu).find('li').first().click();
         }
@@ -1837,7 +1837,7 @@ JMBProfile.prototype = {
             }
         });
 
-        module.mode(type, args.line);
+        module.mode(type, args.start);
     },
     add:function(data){
         var module = this;

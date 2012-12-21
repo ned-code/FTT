@@ -116,7 +116,7 @@
                     jQuery($module.data.activeItem).btOff();
                     storage.profile.editor('view', {
                         object:obj,
-                        line:4
+                        start:"view_relation_mapper"
                     });
                 }
             },
