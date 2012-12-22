@@ -1,5 +1,5 @@
 (function($ftt){
-    $ftt.module.create("MOD_MYFAMILY", function(name, parent, ajax){
+    $ftt.module.create("MOD_MYFAMILY", function(name, parent){
         var $module = this,
             $moduleName = "JMBMyfamilyObject",
             $msg = {
@@ -7,6 +7,29 @@
                 FTT_MOD_MYFAMILY_CLICK_HERE: "Click here"
             },
             $fn = {};
+
+        $module.data.parent = parent;
+        $module.data.cont = null;
+        $module.data.table = null;
+        $module.data.activeItem = null;
+        $module.data.items = {};
+        $module.data.events = {};
+        $module.data.tips = {};
+        $module.data.btSettings = {
+            trigger: 'none',
+            fill: '#F7F7F7',
+            strokeStyle: '#B7B7B7',
+            spikeLength: 10,
+            spikeGirth: 10,
+            padding: 8,
+            cornerRadius: 0,
+            width: 360,
+            closeWhenOthersOpen: true,
+            cssStyles: {
+                fontFamily: '"lucida grande",tahoma,verdana,arial,sans-serif',
+                fontSize: '11px'
+            }
+        }
 
         $fn = {
             getMsg:function(n){
@@ -17,9 +40,9 @@
                 return '';
             },
             getCombined:function(family){
-                var users = $module.fn.getUsers("facebook"), pull = {}, key, object;
+                var users = $module.fn.getUsers(), pull = {}, key, object;
                 for(key in users){
-                    if(object = $module.fn.isUserExist(users[key][0].gedcom_id)){
+                    if(object = $module.fn.getUser(users[key][0].gedcom_id)){
                         pull[users[key][0].facebook_id] = { type: "gedcom", object:object };
                     }
                 }
@@ -28,23 +51,28 @@
                         pull[family[key].uid] = { type:"facebook", object:family[key] }
                     }
                 }
+                $module.dev.message("getCombined", pull);
                 return pull;
 
             },
             getHome:function(callback){
                 var auth = FB.getAuthResponse();
-                FB.api("/me/home?access_token="+auth.accessToken, function(r){
+                FB.api("/me/home?limit=100&access_token="+auth.accessToken, function(r){
+                    $module.dev.message("getHome", r);
                     callback(r);
                 });
             },
             getAuthResponse:function(){
-                return FB.getAuthResponse();
+                var auth = FB.getAuthResponse();
+                $module.dev.message("getAuthResponse", auth);
+                return auth;
             },
             getFamily:function(callback){
                 FB.api({
                     method: 'fql.query',
                     query: 'SELECT name, birthday, uid, relationship FROM family WHERE profile_id ='+$module.fn.getUsertree().facebook_id
                 },function(response) {
+                   $module.dev.message("getFamily", response);
                    callback(response);
                 });
             },
@@ -111,7 +139,7 @@
             },
             clickToRelation:function(object){
                 var id = jQuery(object).attr('id');
-                var obj = $module.fn.isUserExist(id);
+                var obj = $module.fn.getUser(id);
                 if(obj){
                     jQuery($module.data.activeItem).btOff();
                     storage.profile.editor('view', {
@@ -191,31 +219,8 @@
             }
         }
 
-        $module.data.parent = parent;
         $module.data.cont = $fn.create();
-
         jQuery($module.data.parent).append($module.data.cont);
-
-        $module.data.table = null;
-        $module.data.activeItem = null;
-        $module.data.items = {};
-        $module.data.events = {};
-        $module.data.tips = {};
-        $module.data.btSettings = {
-            trigger: 'none',
-            fill: '#F7F7F7',
-            strokeStyle: '#B7B7B7',
-            spikeLength: 10,
-            spikeGirth: 10,
-            padding: 8,
-            cornerRadius: 0,
-            width: 360,
-            closeWhenOthersOpen: true,
-            cssStyles: {
-                fontFamily: '"lucida grande",tahoma,verdana,arial,sans-serif',
-                fontSize: '11px'
-            }
-        }
 
         $fn.init(function(users){
             $fn.getHome(function(home){
@@ -246,19 +251,12 @@
                 });
             });
         });
+
+        return this;
     });
 })($FamilyTreeTop)
 
 function JMBMyfamilyObject(parent){
-    $FamilyTreeTop.module.init("MOD_MYFAMILY", parent, this.ajax);
-}
-
-
-JMBMyfamilyObject.prototype = {
-    ajax:function(method,args,callback){
-        storage.callMethod("myfamily", "FTTMyFamily", method, args, function(req){
-            callback(req.responseText);
-        })
-    }
+    $FamilyTreeTop.module.init("MOD_MYFAMILY", parent);
 }
 

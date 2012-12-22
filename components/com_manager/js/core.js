@@ -1195,7 +1195,7 @@
  * FamilyTreeTop Object
  */
 (function(w){
-    var $ftt = {}, fn;
+    var $ftt = {};
     w.$FamilyTreeTop = $ftt;
 
     $ftt.global = {
@@ -1203,29 +1203,18 @@
         path: "components/com_manager/"
     }
 
-    fn = {
-        getUsers:function(){
-            return storage.usertree.users;
-        },
-        getUsersPull:function(){
-            return storage.usertree.pull;
-        },
-        getUsertree:function(){
-            return storage.usertree;
-        }
-    }
-
    $ftt.dev = {
         __debug__:false,
-        message:function(value){
+        message:function(){
             if(this.__debug__){
-                console.log(value);
+                console.log(arguments);
             }
             return false;
         }
     }
 
     $ftt.module = {
+        active:{},
         type:{},
         system:{},
         normal:{},
@@ -1267,6 +1256,7 @@
                 if(module.isExist(type, name)){
                     delete module.type[name];
                     delete module[type][name];
+                    delete module.active[name];
                     return true;
                 }
             }
@@ -1277,7 +1267,7 @@
             if(module.isTypeExist(name)){
                 var type = module.type[name];
                 if(module.isExist(type, name)){
-                    module[type][name].object.apply({ fn:$ftt.fn, data:module[type][name].data, dev:$ftt.dev }, arguments);
+                    module.active[name] = module[type][name].object.apply({ fn:$ftt.fn, data:module[type][name].data, dev:$ftt.dev }, arguments);
                     return true;
                 }
             }
@@ -1285,58 +1275,24 @@
         }
     }
 
-    $ftt.request = {
-        pull:[],
-        add:function(object, key){
-            this.pull.push({id:key, value:object});
-        },
-        del:function(key){
-            for(var index in this.pull){
-                if(!this.pull.hasOwnProperty(index)) continue;
-                if(index == this.pull[index].id){
-                    delete this.pull[index];
-                    return true;
-                }
-            }
-        },
-        clean:function(){
-            for(var index in this.pull){
-                if(!this.pull.hasOwnProperty(index)) continue;
-                this.pull[index].object.abort();
-                delete this.pull[index];
-            }
-        }
-    }
-
     $ftt.fn = {
-        getJSON:function(str){
-            var json;
-            try {
-                json = jQuery.parseJSON(str);
-            } catch (e) {
-                return false;
-            }
-            return json;
+        //delete
+        parse:function(object){
+            return storage.usertree.parse(object);
         },
-        getUsers:function(type){
-            if("undefined" === type){
-                type = "gedcom";
-            }
-            if("facebook" === type){
-                return fn.getUsers();
-            } else if("gedcom" === type){
-                return fn.getUsersPull();
-            }
-            return false;
-        },
+        //delete
         getUsertree:function(){
-            return fn.getUsertree();
+            return storage.usertree;
         },
-        isUserExist:function(id, type){
+        getUsers:function(){
+            return storage.usertree.users;
+        },
+        //delete
+        getUser:function(id, type){
             if("undefined" === typeof(type)) {
                 type = "gedcom";
             }
-            var usertree = fn.getUsertree(), gedcom_id;
+            var usertree = $ftt.fn.getUsertree(), gedcom_id;
             if("facebook" === type && "undefined" !== usertree.users[id]){
                 gedcom_id = usertree.users[id][0].gedcom_id;
             } else if("gedcom" === type){
@@ -1349,7 +1305,8 @@
             }
             return false;
         },
-        callMethod:function(module, classname, method, args, callback){
+        //delete
+        call:function(module, classname, method, args, callback){
             var xnr = jQuery.ajax({
                 url: $ftt.global.base + $ftt.global.path + "php/ajax.php",
                 type: "POST",
@@ -1363,8 +1320,22 @@
                     }
                 }
             });
-            $ftt.request(xnr, "XNR_"+(new Date()).valueOf())
+            $ftt.request.add(xnr, "XNR_"+(new Date()).valueOf())
             return xnr;
+        },
+        //delete
+        json:function(str){
+            var json;
+            try {
+                json = jQuery.parseJSON(str);
+            } catch (e) {
+                return false;
+            }
+            return json;
+        },
+        //adatat
+        mod:function(name){
+            return $ftt.module.get(name);
         },
         alert:function(message, callback){
             var object = jQuery('<div style="text-align: center;"></div>');
@@ -1428,9 +1399,46 @@
                     return b;
                 }
             }
-        },
-        parse:function(object){
-            return storage.usertree.parse(object);
         }
     }
 })(window);
+
+
+(function($ftt){
+    $ftt.module.create("MOD_SYS_AJAX", function(){
+        var $module = this;
+        $module.data.arguments = arguments;
+        /*
+         $ftt.request = {
+         pull:[],
+         add:function(object, key){
+         this.pull.push({id:key, value:object});
+         },
+         del:function(key){
+         for(var index in this.pull){
+         if(!this.pull.hasOwnProperty(index)) continue;
+         if(index == this.pull[index].id){
+         delete this.pull[index];
+         return true;
+         }
+         }
+         },
+         clean:function(){
+         for(var index in this.pull){
+         if(!this.pull.hasOwnProperty(index)) continue;
+         this.pull[index].object.abort();
+         delete this.pull[index];
+         }
+         }
+         }
+         */
+        return this;
+    }, true);
+})($FamilyTreeTop);
+
+
+(function($ftt){
+    $ftt.module.create("MOD_SYS_USERTREE", function(){
+        return this;
+    }, true);
+})($FamilyTreeTop);
