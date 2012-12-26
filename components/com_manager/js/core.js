@@ -1323,6 +1323,9 @@
             $ftt.request.add(xnr, "XNR_"+(new Date()).valueOf())
             return xnr;
         },
+        /*
+        *
+         */
         //delete
         json:function(str){
             var json;
@@ -1334,8 +1337,12 @@
             return json;
         },
         //adatat
-        mod:function(name){
-            return $ftt.module.get(name);
+        mod:function(name, normal){
+            var name = "MOD_"+(("undefined" !== typeof(normal))?"":"SYS_")+name.toUpperCase();
+            if("undefined" !== typeof($ftt.module.active[name])){
+                return $ftt.module.active[name];
+            }
+            return false;
         },
         alert:function(message, callback){
             var object = jQuery('<div style="text-align: center;"></div>');
@@ -1407,32 +1414,60 @@
 (function($ftt){
     $ftt.module.create("MOD_SYS_AJAX", function(){
         var $module = this;
+
         $module.data.arguments = arguments;
-        /*
-         $ftt.request = {
-         pull:[],
-         add:function(object, key){
-         this.pull.push({id:key, value:object});
-         },
-         del:function(key){
-         for(var index in this.pull){
-         if(!this.pull.hasOwnProperty(index)) continue;
-         if(index == this.pull[index].id){
-         delete this.pull[index];
-         return true;
-         }
-         }
-         },
-         clean:function(){
-         for(var index in this.pull){
-         if(!this.pull.hasOwnProperty(index)) continue;
-         this.pull[index].object.abort();
-         delete this.pull[index];
-         }
-         }
-         }
-         */
-        return this;
+
+        var request = {
+            pull:{},
+            add:function(object){
+                var rq = this, pull = rq.pull, key;
+                key = "XNR_"+(new Date()).valueOf();
+                pull[key] = object;
+                return key;
+            },
+            del:function(key){
+                var pull = this.pull;
+                if("undefined" !== typeof(pull[key])){
+                    if("function" === typeof(pull[key].abort)){
+                        pull[key].abort();
+                    }
+                    delete pull[key];
+                    return true;
+                }
+                return false;
+            },
+            clean:function(){
+                var rq = this, pull = rq.pull, key;
+                for(key in pull){
+                    if(!pull.hasOwnProperty(key)) continue;
+                    rq.del(key);
+                }
+                return true;
+            }
+        }
+        return {
+            clean:function(){
+                request.clean();
+            },
+            call:function(module, classname, method, args, callback){
+                var xnr, xnrSettings;
+                xnrSettings = {
+                    //url: $ftt.global.base + $ftt.global.path + "php/ajax.php",
+                    url: "http://dev.familytreetop.com/25/" + $ftt.global.path + "php/ajax.php",
+                    type: "POST",
+                    data: 'module='+module+'&class='+classname+'&method='+method+'&args='+args,
+                    dataType: "json",
+                    complete: function(req, err){
+                        if(err == "success"){
+                            callback($ftt.fn.json(req.responseText));
+                        } else {
+                            callback(false);
+                        }
+                    }
+                }
+                request.add(jQuery.ajax(xnrSettings));
+            }
+        }
     }, true);
 })($FamilyTreeTop);
 
