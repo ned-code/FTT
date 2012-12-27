@@ -57,7 +57,7 @@
             },
             getHome:function(callback){
                 var auth = FB.getAuthResponse();
-                FB.api("/me/home?limit=100&access_token="+auth.accessToken, function(r){
+                FB.api("/me/home?&limit=100&access_token="+auth.accessToken, function(r){
                     $module.dev.message("getHome", r);
                     callback(r);
                 });
@@ -70,7 +70,7 @@
             getFamily:function(callback){
                 FB.api({
                     method: 'fql.query',
-                    query: 'SELECT name, birthday, uid, relationship FROM family WHERE profile_id ='+$module.fn.getUsertree().facebook_id
+                    query: 'SELECT name, birthday, uid, relationship FROM family WHERE profile_id =me()'
                 },function(response) {
                    $module.dev.message("getFamily", response);
                    callback(response);
@@ -224,6 +224,8 @@
 
         $fn.init(function(users){
             $fn.getHome(function(home){
+                //console.log(home);
+                $module.data.Data = home;
                 $module.data.table = jQuery("<table></table>");
                 jQuery($module.data.parent).find(".ftt-myfamily-content").append($module.data.table);
                 $fn.each(home.data, function(i, el){

@@ -29,7 +29,7 @@ function JMBLoginButtonObject(obj){
             } else {
                 alert('Login failed.')
             }
-        }, {scope: "user_birthday,user_relationships,email,read_stream"});
+        }, {scope: jfbcRequiredPermissions});
 	});
 
     var setButtonPosition = function(){

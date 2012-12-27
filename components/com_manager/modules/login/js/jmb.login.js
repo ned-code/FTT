@@ -231,7 +231,7 @@ function JMBLogin(){
 					} else {
 						alert('Login failed.')
 					}
-				}, {scope: "user_birthday,user_relationships,email,read_stream"});
+				}, {scope: jfbcRequiredPermissions});
 			});
 		},
 		click:function(cont){
