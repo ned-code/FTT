@@ -224,8 +224,6 @@
 
         $fn.init(function(users){
             $fn.getHome(function(home){
-                console.log(home);
-                $module.data.Data = home;
                 $module.data.table = jQuery("<table></table>");
                 jQuery($module.data.parent).find(".ftt-myfamily-content").append($module.data.table);
                 $fn.each(home.data, function(i, el){

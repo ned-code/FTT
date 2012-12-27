@@ -412,6 +412,7 @@ class JMBRelation {
             }
 
             //set siblings
+            /*
             $siblings = $this->get_siblings($user_id);
             if(!empty($siblings)){
                 foreach($siblings as $sibling){
@@ -422,6 +423,7 @@ class JMBRelation {
                     $ambit["I".$siblId] = array("id"=>$siblId, "relation"=>$siblRelation, "stream"=>1);
                 }
             }
+            */
 
             $waves["I".$user_id] = array("level"=>$level, "ambit"=>$ambit);
             if(!isset($waves["W".$level])){
