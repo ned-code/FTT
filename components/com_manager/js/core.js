@@ -1450,8 +1450,7 @@
                 request.clean();
             },
             call:function(module, classname, method, args, callback){
-                var xnr, xnrSettings;
-                xnrSettings = {
+                var xnrSettings = {
                     //url: $ftt.global.base + $ftt.global.path + "php/ajax.php",
                     url: "http://dev.familytreetop.com/25/" + $ftt.global.path + "php/ajax.php",
                     type: "POST",
@@ -1471,9 +1470,55 @@
     }, true);
 })($FamilyTreeTop);
 
+(function($ftt){
+    $ftt.module.create("MOD_SYS_SETTINGS", function(){
+        var $module = this;
+        $module.data.arguments = arguments;
+        return {
+            set:function(){}
+        }
+    }, true);
+})($FamilyTreeTop);
+
+(function($ftt){
+    $ftt.module.create("MOD_SYS_RENDER", function(){
+        var $module = this,
+            fn = {
+                getSettings:function(df, st){
+                    return jQuery.extend(true, {}, df, st);
+                }
+            };
+
+        $module.data.arguments = arguments;
+        $module.data.settings = {}
+
+        return {
+            set:function(settings){
+
+            },
+            init:function(){}
+        };
+    }, true);
+})($FamilyTreeTop);
 
 (function($ftt){
     $ftt.module.create("MOD_SYS_USERTREE", function(){
-        return this;
+        var $module = this;
+        $module.data.arguments = arguments;
+        return {
+            set:function(){},
+            parse:function(object){
+                console.log(object);
+            }
+        }
+    }, true);
+})($FamilyTreeTop);
+
+(function($ftt){
+    $ftt.module.create("MOD_SYS_USERMAP", function(){
+        var $module = this;
+        $module.data.arguments = arguments;
+        return {
+        }
     }, true);
 })($FamilyTreeTop);

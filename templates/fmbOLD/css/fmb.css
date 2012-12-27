@@ -71,7 +71,7 @@ html, body {
 	width: 100%;
 }
 .jmb-top-menu-bar-logo{
-	background: url("../img/ftt_logo.png") no-repeat scroll 0 0 transparent;
+	background: url("../images/ftt_logo.png") no-repeat scroll 0 0 transparent;
 	height: 35px;
 	left: 0;
 	position: absolute;
@@ -101,7 +101,7 @@ html, body {
     color: yellow;
 }
 .jmb-top-menu-bar .jmb-top-menu-bar-return{
-    background: url("../img/arrow_left.png") no-repeat scroll 0 3px transparent;
+    background: url("../images/arrow_left.png") no-repeat scroll 0 3px transparent;
     cursor: pointer;
     position: absolute;
     right: 0;

@@ -1398,7 +1398,7 @@ JMBProfile.prototype = {
                                 },
                                 onBeforePlotNode: function(node){
                                     var last = node.data.conn.pop();
-                                    if(parseInt(node.data.id) === parseInt(last.id)){
+                                    if("undefined" !== typeof(last) && parseInt(node.data.id) === parseInt(last.id)){
                                         node.data.$color = "#FFC90E";
                                     } else {
                                         node.data.$color = "#EFE4B0";

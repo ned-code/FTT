@@ -17,6 +17,9 @@
     	margin-top: 3px;
     	width: 22px;
 }
+.jmb-profile-cont div.avatar img{
+    vertical-align: top;
+}
 .jmb-profile-cont div.login {
 	margin-left: 3px;
     cursor: pointer;
