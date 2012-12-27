@@ -56,7 +56,7 @@
 
             },
             getHome:function(callback){
-                var auth = FB.getAuthResponse();
+                var auth = $fn.getAuthResponse();
                 FB.api("/me/home?&limit=100&access_token="+auth.accessToken, function(r){
                     $module.dev.message("getHome", r);
                     callback(r);
@@ -224,7 +224,7 @@
 
         $fn.init(function(users){
             $fn.getHome(function(home){
-                //console.log(home);
+                console.log(home);
                 $module.data.Data = home;
                 $module.data.table = jQuery("<table></table>");
                 jQuery($module.data.parent).find(".ftt-myfamily-content").append($module.data.table);
