@@ -66,7 +66,10 @@
 	font-family: tahoma;
 	font-weight: bold;
 }
-.jmb-dialog-profile-menu-container ul{}
+.jmb-dialog-profile-menu-container ul{
+    padding: 0;
+    margin: 0;
+}
 .jmb-dialog-profile-menu-container li{
 	display:block;
 	background: none repeat scroll 0 0 #BEBEBE;
