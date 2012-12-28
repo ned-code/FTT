@@ -1348,7 +1348,7 @@ JMBProfile.prototype = {
                             var id = node.id.split("_")[1];
                             var object = module.pull[id];
                             var parse = storage.usertree.parse(object);
-                            return '<div style="text-align:center;width:200px;height:20px;">'+parse.name+"("+parse.relation+")"+"</div>";
+                            return '<div style="text-align:center;width:160px;height:40px;"><div style="height:20px;">'+parse.name+"</div><div style='height:20px;'>("+parse.relation+")</div>"+"</div>";
                         },
                         getVertex:function(conn){
                             var vertex = [conn[0].id, 0];
@@ -1380,8 +1380,8 @@ JMBProfile.prototype = {
                                 offsetY:160,
                                 levelsToShow: $fn.getLevelToShow(tree),
                                 Node: {
-                                    height: 20,
-                                    width: 200,
+                                    height: 40,
+                                    width: 160,
                                     align:"center",
                                     type: 'rectangle',
                                     color: '#aaa',
