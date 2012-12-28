@@ -1330,25 +1330,42 @@ JMBProfile.prototype = {
                             }
                         },
                         createTree:function(conn, vertex){
-                            var setNodes =function(el, conn, pos, iter){
+                            var setNodes =function(el, prev, conn, pos, iter){
                                 var p = parseInt(pos) + parseInt(iter);
+                                if("undefined" !== conn[p] && conn.length == p + 1){
+                                    var target = conn[p];
+                                    var object = storage.usertree.pull[target.id];
+                                    if(parseInt(object.user.in_law)){
+                                        var node = $fn.createNode(target.id,{conn:conn, id:target.id, in_law:true});
+                                        prev.children.push(node);
+                                        return true;
+                                    }
+                                }
                                 if("undefined" !== typeof(conn[p])){
                                     var o = conn[p];
-                                    var node = $fn.createNode(o.id,{conn:conn, id:o.id});
+                                    var node = $fn.createNode(o.id,{conn:conn, id:o.id, in_law:false});
                                     el.children.push(node);
-                                    setNodes(node, conn, p, iter);
+                                    setNodes(node, el, conn, p, iter);
                                 }
                             }
-                            var start = $fn.createNode(vertex[0], {conn:conn, id:vertex[0]});
-                            setNodes(start, conn, vertex[1], -1);
-                            setNodes(start, conn, vertex[1], 1);
+                            var start = $fn.createNode(vertex[0], {conn:conn, id:vertex[0], in_law:false});
+                            setNodes(start, start, conn, vertex[1], -1);
+                            setNodes(start, start, conn, vertex[1], 1);
                             return start;
                         },
                         createLabel:function(node){
+                            var sb = storage.stringBuffer();
                             var id = node.id.split("_")[1];
                             var object = module.pull[id];
                             var parse = storage.usertree.parse(object);
-                            return '<div style="text-align:center;width:160px;height:40px;"><div style="height:20px;">'+parse.name+"</div><div style='height:20px;'>("+parse.relation+")</div>"+"</div>";
+                            sb._('<div class="ftt-relation-mapper-node">');
+                            if(node.data.in_law){
+                                sb._('<div class="ftt-relation-mapper-node-plus">&nbsp;</div>');
+                            }
+                                sb._('<div class="ftt-relation-mapper-node-name">')._(parse.name)._('</div>');
+                                sb._('<div class="ftt-relation-mapper-node-relation">')._(parse.relation)._('</div>');
+                            sb._('</div>');
+                            return sb.result();
                         },
                         getVertex:function(conn){
                             var vertex = [conn[0].id, 0];
@@ -1375,7 +1392,7 @@ JMBProfile.prototype = {
                             var st = new $jit.ST({
                                 injectInto: 'ftt_relation_mapper_viz',
                                 transition: $jit.Trans.Quart.easeInOut,
-                                levelDistance: 50,
+                                levelDistance: 30,
                                 //offsetX:240,
                                 offsetY:160,
                                 levelsToShow: $fn.getLevelToShow(tree),
@@ -1402,6 +1419,11 @@ JMBProfile.prototype = {
                                         node.data.$color = "#FFC90E";
                                     } else {
                                         node.data.$color = "#EFE4B0";
+                                    }
+                                },
+                                onBeforePlotLine:function(adj){
+                                    if(adj.nodeTo.data.in_law){
+                                        adj.data.$color = "#FFFFFF";
                                     }
                                 }
                             });

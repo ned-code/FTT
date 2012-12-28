@@ -381,11 +381,11 @@ class JMBRelation {
             $parents = $this->get_parents($user_id);
             if(!empty($parents)){
                 foreach($parents as $pair){
-                    if($pair[0] != null && $pair[0] != $user_id){
-                        $ambit["I".$pair[0]] = array("id"=>$pair[0], "relation"=>"father", "stream"=>4);
-                    }
                     if($pair[1] != null && $pair[1] != $user_id){
                         $ambit["I".$pair[1]] = array("id"=>$pair[1], "relation"=>"mother", "stream"=>4);
+                    }
+                    if($pair[0] != null && $pair[0] != $user_id){
+                        $ambit["I".$pair[0]] = array("id"=>$pair[0], "relation"=>"father", "stream"=>4);
                     }
                 }
             }
@@ -444,15 +444,17 @@ class JMBRelation {
             $object = $waves["I".$gedcom_id];
             $level = $object['level'];
             $lastId = "I".$gedcom_id;
+            $lastLevel = $level;
             $paths[] = array("id"=>substr($lastId,1), "level"=>$level, "stream"=>0);
             for($i = $level - 1; $i >= 0 ; $i--){
                 $wave = $waves["W".$i];
                 $ambit = $waves[$lastId]['ambit'];
                 foreach($wave as $id => $flag){
                     foreach($ambit as $k => $v){
-                        if($id == $k){
+                        if($id == $k && $i != $lastLevel){
                             $paths[] = array("id"=>substr($k,1), "level"=>$i, "stream"=>$v['stream']);
                             $lastId = $k;
+                            $lastLevel = $i;
                         }
                     }
                 }

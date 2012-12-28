@@ -843,3 +843,22 @@
     top: 25px;
     width: 10px;
 }
+/**
+* RELATION MAPPER
+*/
+.ftt-relation-mapper-node {
+    text-align: center;
+    width: 160px;
+    height: 40px;
+}
+.ftt-relation-mapper-node-name, .ftt-relation-mapper-node-relation {
+    height: 20px;
+}
+.ftt-relation-mapper-node-plus {
+    background: url(image/plus.png);
+    height: 24px;
+    left: -15px;
+    position: absolute;
+    top: 8px;
+    width: 24px;
+}
