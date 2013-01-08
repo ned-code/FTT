@@ -247,8 +247,9 @@ class JMBRelation {
 		
 		$cous_ord = min($a_level, $b_level) - 1;
 		$cous_gen = abs($a_level - $b_level);
-		return array($this->ordinal_suffix($cous_ord).' cousin '.$this->format_plural($cous_gen, 'time', 'times').' removed', 9);
-		
+		//return array($this->ordinal_suffix($cous_ord).' cousin '.$this->format_plural($cous_gen, 'time', 'times').' removed', 9);
+		return array($this->ordinal_suffix($cous_ord).' cousin '.$cous_gen.'R', 9);
+
 	}
 
     protected function deleteFromDb($tree_id, $gedcom_id){
