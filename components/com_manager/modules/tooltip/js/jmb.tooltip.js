@@ -122,7 +122,8 @@ JMBTooltip.prototype = {
 								}
 							sb._('</td>');
 							sb._('</div>');
-							sb._('<td class="jmb-tooltip-view-info-data">');
+							/*
+                            sb._('<td class="jmb-tooltip-view-info-data">');
 								sb._('<div><span>')._(message.FTT_MOD_TOOLTIPS_NAME)._(':</span> <span class="text">')._(name)._('</span></div>');
 								if(get.is_birth){
                                     place = get.getPlaceString('birth');
@@ -139,6 +140,41 @@ JMBTooltip.prototype = {
                                     sb._('<div><span>Connection:</span> <span class="text">')._(connection)._('</span></div>');
                                 }
 							sb._('</td>');
+                            */
+                            sb._('<td class="jmb-tooltip-view-info-data">');
+                                sb._('<table>');
+                                    sb._('<tr>');
+                                        sb._('<td><div class="name">&nbsp;</div></td>');
+                                        sb._('<td><span class="text">')._(name)._('</span></td>');
+                                    sb._('</tr>');
+                                    if(get.is_birth){
+                                        place = get.getPlaceString('birth');
+                                        sb._('<tr>');
+                                            sb._('<td><div class="born">&nbsp;</div></td>');
+                                            sb._('<td><span class="text">')._(birthday)._(place)._('</span></td>');
+                                        sb._('</tr>');
+                                    }
+                                    if(get.is_death){
+                                        place = get.getPlaceString('death');
+                                        sb._('<tr>');
+                                            sb._('<td><div class="deceased">&nbsp;</div></td>');
+                                            sb._('<td><span class="text">')._(death)._(place)._('</span></td>');
+                                        sb._('</tr>');
+                                    }
+                                    if(relation){
+                                        sb._('<tr>');
+                                            sb._('<td><div class="relation">&nbsp;</div></td>');
+                                            sb._('<td><span class="text"><font color="blue">')._(relation)._("</font>")._(get.family_line)._('</span></td>');
+                                        sb._('</tr>');
+                                    }
+                                    if(connection.length != 0){
+                                        sb._('<tr>');
+                                            sb._('<td><div class="connection">&nbsp;</div></td>');
+                                            sb._('<td><span class="text">')._(connection)._('</span></td>');
+                                        sb._('</tr>');
+                                    }
+                                sb._('</table>');
+                            sb._('</td>');
 						sb._('</tr>');
 					sb._('</table>');
                     sb._('<div class="jmb-tooltip-view-switch"><span id="')._(get.gedcom_id)._('">')._(message.FTT_MOD_TOOLTIPS_SHOW_FULL_PROFILE)._('</span></div>');
