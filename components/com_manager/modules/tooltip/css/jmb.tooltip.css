@@ -10,6 +10,7 @@
 }
 .jmb-tooltip-view-info{
 	position:relative;
+    margin: 3px;
 }
 .jmb-tooltip-view-avatar{
 	width: 100px;
@@ -21,6 +22,7 @@
 	height: 90px;
 	margin-left: 5px;
 	width: 81px;
+    margin: 3px;
 }
 .jmb-tooltip-view-info-data{
 	font-family: Tahoma;
@@ -71,15 +73,40 @@
 	margin-left: 3px;
 }
 .jmb-tooltip-view-send{
-	background: none repeat scroll 0 0 white;
 	margin-bottom: 5px;
-    	margin-left: 5px;
-    	margin-right: 5px;
-    	padding: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+    padding: 10px;
 }
 .jmb-tooltip-view-send span{
-	margin-left: 5px;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
 }
+.jmb-tooltip-view-send-invit-button {
+    background: none repeat scroll 0 0 #5972A7;
+    color: white;
+    font-family: lucida grande,tahoma,verdana,arial,sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+    line-height: 20px;
+    text-align: center;
+    width: 97px;
+}
+.jmb-tooltip-view-send-invit-button div.upper{
+    border: 1px solid #29447F;
+}
+.jmb-tooltip-view-send-invit-button div.text{
+    border-top: 1px solid #8A9CC2;
+    cursor: pointer;
+    height: 22px;
+    width: 95px;
+}
+.jmb-tooltip-view-send-invit-button div.line{
+    height: 1px;
+    background: white;
+}
+
 .jmb-tooltip-view-icon-email{
 	background: url("../image/email.png") no-repeat scroll 0 0 transparent;
 	cursor: pointer;
@@ -251,8 +278,12 @@
 .jmb-tooltip-view-switch {
 	margin: 3px;
 	position: absolute;
-    	right: 0;
-    	top: 0;
+    right: 0;
+    top: 0;
+    background: url(/image/show_full_profile.png);
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
 }
 .jmb-tooltip-view-switch span {
 	color: blue;

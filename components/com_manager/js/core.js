@@ -142,7 +142,7 @@
                 }
             },
             connection:function(){
-                var conn = [], cn, key, object, n_rel, sizeof, rel, ret = [];
+                var conn = [], cn, key, object, n_rel, sizeof, rel, ret = [], colors = {F:["#FFEAF1","#FF77A4"],M:["#ECECFF","#5C9ADE"]};
                 if(cn = user.connection){
                    for(key in cn){
                        if(!cn.hasOwnProperty(key)) continue;
@@ -161,15 +161,15 @@
                         if(key == sizeof){
                             ret.pop();
                             if(parseInt(object.user.blood)){
-                                ret.push(" <b>></b> ");
+                                ret.push(" > ");
                             } else {
-                                ret.push(" <b>+</b> ");
+                                ret.push(" + ");
                             }
-                            ret.push("<font color='orange'>" + object.user.first_name + "</font>");
+                            ret.push("<span style='color:"+colors[object.user.gender][1]+";'><b>" + object.user.first_name + "</b></span>");
                         } else {
-                            ret.push(object.user.first_name);
-                            ret.push(" (<font color='gray'>" + rel + "</font>) ");
-                            ret.push("<b>></b> ");
+                            ret.push("<span style='color: blue;'>"+object.user.first_name+"</span>");
+                            ret.push(" (" + rel + ") ");
+                            ret.push("> ");
                         }
 
                     }

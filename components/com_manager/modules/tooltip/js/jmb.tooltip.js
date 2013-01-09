@@ -57,11 +57,13 @@ function JMBTooltip(){
         FTT_MOD_TOOLTIPS_ADD_BROTHER_OR_SISTER:"Brother or Sister",
         FTT_MOD_TOOLTIPS_ADD_CHILD:"Child",
         FTT_MOD_TOOLTIPS_ADD_SENT_INVITATION:"Send %% an invitation.",
-        FTT_MOD_TOOLTIPS_ADD_LINK:"Link with existing request."
+        FTT_MOD_TOOLTIPS_ADD_LINK:"Link with existing request.",
+        FTT_MOD_TOOLTIPS_INVITE_TO_JOIN:"Invite to join"
     }
     module.lastBtActive = false;
 	module.btActive = {};
 	module.path = "/components/com_manager/modules/tooltip/image/";
+    module.colors = {F:["#FFEAF1","#FF77A4"],M:["#ECECFF","#5C9ADE"]};
 
     module.init = function(){
         jQuery.ajax({
@@ -105,47 +107,29 @@ JMBTooltip.prototype = {
             connection = get.connection(),
 			place;
 		sb._('<div id="')._(user.gedcom_id)._('-tooltip-view" class="jmb-tooltip-view-container">');
-			sb._('<div class="jmb-tooltip-view-content">');
+			sb._('<div class="jmb-tooltip-view-content" style="background: ')._(module.colors[user.gender][0])._(';">');
 				sb._('<div class="jmb-tooltip-view-info">');
 					sb._('<table>');
 						sb._('<tr>');
 							sb._('<td class="jmb-tooltip-view-avatar">')
-							sb._('<div class="image">')._(module._avatar(settings));
-								if(!parseInt(jQuery(document.body).attr('_type')) && settings.button_edit){
-									sb._('<div class="jmb-tooltip-view-edit">&nbsp;</div>');
-								}
-								if(user.facebook_id!=='0'&&settings.button_facebook){
-									sb._('<div id="')._(user.facebook_id)._('" class="jmb-tooltip-view-facebook">&nbsp;</div>');
-								}	
-								if(get.is_death || get.turns >= 120){
-									sb._('<div class="jmb-tooltip-view-death-marker">&nbsp;</div>');
-								}
-							sb._('</td>');
-							sb._('</div>');
-							/*
-                            sb._('<td class="jmb-tooltip-view-info-data">');
-								sb._('<div><span>')._(message.FTT_MOD_TOOLTIPS_NAME)._(':</span> <span class="text">')._(name)._('</span></div>');
-								if(get.is_birth){
-                                    place = get.getPlaceString('birth');
-									sb._('<div><span>')._(message.FTT_MOD_TOOLTIPS_BORN)._(':</span> <span class="text">')._(birthday)._(place)._('</span></div>');
-								}
-								if(get.is_death){
-                                    place = get.getPlaceString('death');
-									sb._('<div><span>')._(message.FTT_MOD_TOOLTIPS_DECEASED)._(':</span> <span class="text">')._(death)._(place)._('</span></div>');
-								}
-								if(relation){
-									sb._('<div><span>')._(message.FTT_MOD_TOOLTIPS_RELATION)._(':</span> <span class="text"><font color="blue">')._(relation)._("</font>")._(get.family_line)._('</span></div>');
-								}
-                                if(connection.length != 0){
-                                    sb._('<div><span>Connection:</span> <span class="text">')._(connection)._('</span></div>');
-                                }
-							sb._('</td>');
-                            */
+                                sb._('<div class="image">')._(module._avatar(settings));
+                                    if(!parseInt(jQuery(document.body).attr('_type')) && settings.button_edit){
+                                        sb._('<div class="jmb-tooltip-view-edit">&nbsp;</div>');
+                                    }
+                                    if(user.facebook_id!=='0'&&settings.button_facebook){
+                                        sb._('<div id="')._(user.facebook_id)._('" class="jmb-tooltip-view-facebook">&nbsp;</div>');
+                                    }
+                                    if(get.is_death || get.turns >= 120){
+                                        sb._('<div class="jmb-tooltip-view-death-marker">&nbsp;</div>');
+                                    }
+
+                                sb._('</div>');
+                            sb._('</td>');
                             sb._('<td class="jmb-tooltip-view-info-data">');
                                 sb._('<table>');
                                     sb._('<tr>');
                                         sb._('<td><div class="name">&nbsp;</div></td>');
-                                        sb._('<td><span class="text">')._(name)._('</span></td>');
+                                        sb._('<td><span class="text" style="color:')._(module.colors[user.gender][1])._('; font-weight: bold;">')._(name)._('</span></td>');
                                     sb._('</tr>');
                                     if(get.is_birth){
                                         place = get.getPlaceString('birth');
@@ -177,26 +161,27 @@ JMBTooltip.prototype = {
                             sb._('</td>');
 						sb._('</tr>');
 					sb._('</table>');
-                    sb._('<div class="jmb-tooltip-view-switch"><span id="')._(get.gedcom_id)._('">')._(message.FTT_MOD_TOOLTIPS_SHOW_FULL_PROFILE)._('</span></div>');
+                    sb._('<div id="')._(get.gedcom_id)._('" class="jmb-tooltip-view-switch">&nbsp;</div>');
 				sb._('</div>');
 				if(media!=null&&media.photos.length!=0){
-					sb._('<div class="jmb-tooltip-view-images">');
+					sb._('<div class="jmb-tooltip-view-images" style="background: ')._(module.colors[user.gender][0])._(';">');
 						sb._(module._images(settings));
 					sb._('</div>');
 				}
 			sb._('</div>');
 			if(!parseInt(jQuery(document.body).attr('_type')) && user.facebook_id==='0' && get.turns < 100 && get.is_alive){
-				sb._('<div class="jmb-tooltip-view-send">');
-					sb._('<table>');			
-						sb._('<tr>');
-							sb._('<td><div class="jmb-tooltip-view-icon-email">&nbsp;</div></td>');
-							sb._('<td>');
-								sb._('<div><span>')._(name)._(' ')._(message.FTT_MOD_TOOLTIPS_IS_NOT_REGISTERED)._('</span></div>');
-                                sb._('<div><span class="send" style="color:blue;cursor:pointer">')._(message.FTT_MOD_TOOLTIPS_CLICK_TO_SEND_EMAIL_INVITATION.replace('%%', name))._('</span></div>');
-							sb._('</td>');
-						sb._('</tr>');
-					sb._('</table>');
-				sb._('</div>')
+                sb._('<div class="jmb-tooltip-view-send">');
+                    sb._('<table style="width: 100%;">');
+                        sb._('<tr>');
+                            sb._('<td style="width: 70%; text-align: center;">');
+                                sb._('<span>')._(get.nick)._(' ')._(message.FTT_MOD_TOOLTIPS_IS_NOT_REGISTERED)._('</span>');
+                            sb._('</td>');
+                            sb._('<td style="width: 30%;">');
+                                sb._('<div class ="jmb-tooltip-view-send-invit-button"><div class="upper"><div class="text">')._(message.FTT_MOD_TOOLTIPS_INVITE_TO_JOIN)._('</div></div><div class="line">&nbsp;</div></div>');
+                            sb._('</td>');
+                        sb._('</tr>');
+                    sb._('</table>');
+                sb._('</div>');
 			}
 		sb._('</div>');
 		return jQuery(sb.result());
@@ -326,7 +311,7 @@ JMBTooltip.prototype = {
 			var id = jQuery(this).attr('id');
 			window.open('http://www.facebook.com/profile.php?id='+id,'new','width=320,height=240,toolbar=1');
 		});
-		jQuery(cont).find('div.jmb-tooltip-view-switch span').click(function(){
+		jQuery(cont).find('div.jmb-tooltip-view-switch').click(function(){
 			storage.profile.editor('view', {
 				object:object,
 				events:{
@@ -414,7 +399,7 @@ JMBTooltip.prototype = {
 	_invitation:function(cont, settings){
 		var class_name;
 		switch(settings.type){
-			case "view": class_name = '.jmb-tooltip-view-send .send'; break;
+			case "view": class_name = '.jmb-tooltip-view-send .jmb-tooltip-view-send-invit-button'; break;
 			case "edit": class_name = '.jmb-profile-tooltip-send span.click'; break;
 			default: return;
 		}
@@ -523,7 +508,7 @@ JMBTooltip.prototype = {
         return jQuery.extend(true, {}, dSettings, argsSettings);
     },
     _getArgsSettings:function(args){
-        var argsSettings = args;
+        var module = this, argsSettings = args, usertree = storage.usertree, object = (usertree.pull!=null)?usertree.pull[args.gedcom_id]:false;
         if(!argsSettings.style){
             argsSettings.style = {};
         }
@@ -537,10 +522,13 @@ JMBTooltip.prototype = {
             argsSettings.style.preShow = args.preShow;
         }
         if(typeof(args.button_edit) == 'undefined'){
-            var sut = storage.usertree;
-            if(sut.pull != null){
-            	    argsSettings.button_edit = (sut.pull[args.gedcom_id].user.facebook_id == '0' || sut.gedcom_id == args.gedcom_id);
+            if(usertree.pull != null){
+            	    argsSettings.button_edit = (object.user.facebook_id == '0' || usertree.gedcom_id == args.gedcom_id);
             }
+        }
+        if(object){
+            argsSettings.style.fill = module.colors[object.user.gender][1];
+            argsSettings.style.strokeStyle = module.colors[object.user.gender][1];
         }
         return argsSettings;
                 

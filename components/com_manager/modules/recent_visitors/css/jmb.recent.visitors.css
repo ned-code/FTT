@@ -49,6 +49,7 @@
 }
 .jmb-rv-content ul {
 	margin: 10px;
+    padding: 0;
 }
 .jmb-rv-content ul li{
 	display: inline-block;
