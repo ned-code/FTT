@@ -1,5 +1,5 @@
 (function($ftt){
-    $ftt.module.create("MOD_MYFAMILY", function(name, parent){
+    $ftt.module.create("MOD_MYFAMILY", function(name, parent, ajax){
         var $module = this,
             $moduleName = "JMBMyfamilyObject",
             $msg = {
@@ -32,6 +32,10 @@
         }
 
         $fn = {
+            getType:function(){
+                var type = jQuery(document.body).attr("_type");
+                return parseInt(type);
+            },
             getMsg:function(n){
                 var t = 'FTT_MOD_MYFAMILY_'+n.toUpperCase();
                 if(typeof($msg[t]) != 'undefined'){
@@ -219,44 +223,58 @@
             }
         }
 
-        $module.data.cont = $fn.create();
-        jQuery($module.data.parent).append($module.data.cont);
-
-        $fn.init(function(users){
-            $fn.getHome(function(home){
-                $module.data.table = jQuery("<table></table>");
-                jQuery($module.data.parent).find(".ftt-myfamily-content").append($module.data.table);
-                $fn.each(home.data, function(i, el){
-                    var facebook_id = el.id.split("_")[0], sb = $module.fn.stringBuffer();
-                    if(facebook_id in users){
-                        sb._('<tr id="')._(el.id)._('">');
+        if($fn.getType() == 0){
+            $module.data.cont = $fn.create();
+            jQuery($module.data.parent).append($module.data.cont);
+            $fn.init(function(users){
+                $fn.getHome(function(home){
+                    $module.data.table = jQuery("<table></table>");
+                    jQuery($module.data.parent).find(".ftt-myfamily-content").append($module.data.table);
+                    $fn.each(home.data, function(i, el){
+                        var facebook_id = el.id.split("_")[0], sb = $module.fn.stringBuffer();
+                        if(facebook_id in users){
+                            sb._('<tr id="')._(el.id)._('">');
                             sb._('<td><div class="ftt-myfamily-list-item-relation">')._($fn.getRelation(users[facebook_id], el))._('</div></td>');
                             sb._('<td><div class="ftt-myfamily-list-item-avatar">')._(storage.usertree.avatar.facebook(facebook_id, 50, 50))._('</div></td>');
                             sb._('<td style="vertical-align: top;" ><div class="ftt-myfamily-list-item-text"><span class="ftt-myfamily-list-item-author">')._($fn.getName(users, el))._('</span> ')._($fn.getMessage(el))._('</div></td>');
-                        sb._("</tr>");
-                        $module.data.items[el.id] = jQuery(sb.result());
-                        $module.data.events[el.id] = el;
-                        jQuery($module.data.items[el.id]).click(function(){
-                            if(jQuery(this).hasClass("active")) return false;
-                            jQuery(this).addClass("active");
-                            $fn.click(this);
-                            return false;
-                        });
-                        jQuery($module.data.items[el.id]).find('.ftt-myfamily-list-item-relation span._gedcom').click(function(){
-                            $fn.clickToRelation(this);
-                            return false;
-                        });
-                        jQuery($module.data.table).append($module.data.items[el.id]);
-                    }
+                            sb._("</tr>");
+                            $module.data.items[el.id] = jQuery(sb.result());
+                            $module.data.events[el.id] = el;
+                            jQuery($module.data.items[el.id]).click(function(){
+                                if(jQuery(this).hasClass("active")) return false;
+                                jQuery(this).addClass("active");
+                                $fn.click(this);
+                                return false;
+                            });
+                            jQuery($module.data.items[el.id]).find('.ftt-myfamily-list-item-relation span._gedcom').click(function(){
+                                $fn.clickToRelation(this);
+                                return false;
+                            });
+                            jQuery($module.data.table).append($module.data.items[el.id]);
+                        }
+                    });
                 });
             });
-        });
+        } else {
+            ajax('get', null, function(res){
+                $fn.exit();
+                jQuery(parent).append('<div class="ftt-myfamily-wiki-content"><iframe style="height: 500px;width: 100%;" src="'+res[0].link+'"></iframe><div class="ftt-myfamily-show"><a target="_blank" href="'+res[0].link+'">&nbsp;</a></div></div>');
+            });
+        }
+
 
         return this;
     });
 })($FamilyTreeTop)
 
 function JMBMyfamilyObject(parent){
-    $FamilyTreeTop.module.init("MOD_MYFAMILY", parent);
+    $FamilyTreeTop.module.init("MOD_MYFAMILY", parent, this._ajax);
+}
+JMBMyfamilyObject.prototype = {
+    _ajax:function(func, params, callback){
+        storage.callMethod("myfamily", "FTTMyFamily", func, params, function(res){
+            callback(storage.getJSON(res.responseText));
+        })
+    }
 }
 

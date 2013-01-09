@@ -107,3 +107,18 @@
 .ftt-myfamily-tip-message {}
 .ftt-myfamily-tip-comments {}
 
+.ftt-myfamily-wiki-content{
+    margin: 10px;
+    position: relative;
+}
+.ftt-myfamily-show {
+    background: url(imgs/show.png) no-repeat scroll 0 0 transparent;
+    position: absolute;
+    right: 15px;
+    top: 3px;
+}
+.ftt-myfamily-show a {
+    height: 24px;
+    width: 24px;
+    display: block;
+}
