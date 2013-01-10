@@ -1383,7 +1383,7 @@ JMBProfile.prototype = {
                         getTree:function(object){
                             var conn = object.user.connection;
                             var vertex = $fn.getVertex(conn);
-                            return [conn,vertex,$fn.createTree(conn, vertex)];
+                            return [conn, vertex, $fn.createTree(conn, vertex)];
                         },
                         getLevelToShow:function(tree){
                             return tree[0].length;
@@ -1396,9 +1396,10 @@ JMBProfile.prototype = {
                                 //offsetX:240,
                                 offsetY:160,
                                 levelsToShow: $fn.getLevelToShow(tree),
+                                constrained: false,
                                 Node: {
-                                    height: 40,
-                                    width: 160,
+                                    height: 28,
+                                    width: 120,
                                     align:"center",
                                     type: 'rectangle',
                                     color: '#aaa',
@@ -1411,7 +1412,6 @@ JMBProfile.prototype = {
                                 onCreateLabel: function(label, node){
                                     label.id = node.id;
                                     label.innerHTML = $fn.createLabel(node);
-
                                 },
                                 onBeforePlotNode: function(node){
                                     var last = node.data.conn.pop();
@@ -1432,9 +1432,9 @@ JMBProfile.prototype = {
                             st.onClick(st.root);
                             st.switchPosition("top", "replot", {
                                 onComplete: function(){
-
                                 }
                             });
+                            console.log(st);
                         }
                     },
                         $object = module.pull[module.gedcom_id],

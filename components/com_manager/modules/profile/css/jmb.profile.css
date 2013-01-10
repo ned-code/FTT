@@ -848,17 +848,19 @@
 */
 .ftt-relation-mapper-node {
     text-align: center;
-    width: 160px;
+    width: 120px;
     height: 40px;
 }
 .ftt-relation-mapper-node-name, .ftt-relation-mapper-node-relation {
-    height: 20px;
+    font-size: 11px;
+    height: 15px;
+    line-height: 13px;
 }
 .ftt-relation-mapper-node-plus {
     background: url(image/plus.png);
     height: 24px;
-    left: -15px;
+    left: -14px;
     position: absolute;
-    top: 8px;
+    top: 2px;
     width: 24px;
 }
