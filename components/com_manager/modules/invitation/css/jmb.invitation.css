@@ -73,3 +73,10 @@
 	padding-top: 10px;
     	vertical-align: top;
 }
+
+#TDFriendSelector .TDFriendSelector_dialog .TDFriendSelector_searchContainer #TDFriendSelector_searchField {
+    display: block;
+    margin: 0 auto;
+    width: 120px;
+    float: none;
+}

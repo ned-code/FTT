@@ -34,8 +34,12 @@ function JMBInvitation(){
         FTT_MOD_INVITATION_ALERT_THIS_USER_WAITING_CONFIRMATION:"This user is waiting for confirmation of the request to invitation.",
         FTT_MOD_INVITATION_PROCESSING_INVITATION:"Processing invitation",
         FTT_MOD_INVITATION_TD_SELECT_YOUR_FRIENDS:"Select this person...",
-        FTT_MOD_INVITATION_TD_INVITE_TO_APP:"Then you can invite them to join your family tree",
+        FTT_MOD_INVITATION_TD_LOCATE:"Locate ",
+        FTT_MOD_INVITATION_TD_INVITE_TO_APP:"Then you can invite %% to join your family tree",
+        FTT_MOD_INVITATION_TD_HIM:" him ",
+        FTT_MOD_INVITATION_TD_HER:" her ",
         FTT_MOD_INVITATION_TD_FRIENDS_SELECTED:"friends selected",
+        FTT_MOD_INVITATION_TD_SEARCH_FRIEND:"Search friend",
         FTT_MOD_INVITATION_TD_PREVIOUS:"Previous",
         FTT_MOD_INVITATION_TD_NEXT:"Next",
         FTT_MOD_INVITATION_TD_PAGE:"Page",
@@ -80,8 +84,8 @@ function JMBInvitation(){
                         sb._('<div class="TDFriendSelector_content">');
                             sb._('<p>')._(mod.getMsg('TD_INVITE_TO_APP'))._('.</p>');
                             sb._('<div class="TDFriendSelector_searchContainer TDFriendSelector_clearfix">');
-                                sb._('<div class="TDFriendSelector_selectedCountContainer"><span class="TDFriendSelector_selectedCount">0</span> / <span class="TDFriendSelector_selectedCountMax">0</span> ')._(mod.getMsg('TD_FRIENDS_SELECTED'))._('</div>');
-                                sb._('<input type="text" placeholder="Search friends" id="TDFriendSelector_searchField" />');
+                                //sb._('<div class="TDFriendSelector_selectedCountContainer"><span class="TDFriendSelector_selectedCount">0</span> / <span class="TDFriendSelector_selectedCountMax">0</span> ')._(mod.getMsg('TD_FRIENDS_SELECTED'))._('</div>');
+                                sb._('<input type="text" placeholder="')._(mod.getMsg("TD_SEARCH_FRIEND"))._('" id="TDFriendSelector_searchField" />');
                             sb._('</div>');
                             sb._('<div class="TDFriendSelector_friendsContainer"></div>');
                         sb._('</div>');
@@ -170,6 +174,9 @@ function JMBInvitation(){
             var mod = this;
             module.data = json;
             TDFriendSelector.init();
+            var p = jQuery(module.tdCont).find(".TDFriendSelector_content p");
+            jQuery(p).text(jQuery(p).text().replace("%%", mod.getMsg(json.user.gender=="M"?"TD_HIM":"TD_HER")));
+            jQuery(module.tdCont).find(".TDFriendSelector_header").text(mod.getMsg("TD_LOCATE")+storage.usertree.parse(json).full_name);
             var selector = TDFriendSelector.newInstance({
                 maxSelection             : 1,
                 friendsPerPage           : 5,
