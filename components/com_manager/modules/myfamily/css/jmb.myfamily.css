@@ -35,6 +35,29 @@
     left: 35%;
     top: 8px;
 }
+
+.ftt-myfamily-header-update {
+    float: right;
+    font-family: lucida grande,tahoma;
+    font-size: 10px;
+    position: relative;
+    top: -2px;
+}
+.ftt-myfamily-header-update-button {
+    background: url(imgs/update.png) no-repeat scroll 0 0 transparent;
+    height: 27px;
+    width: 27px;
+    cursor: pointer;
+}
+.ftt-myfamily-header-update-text {
+    margin-left: 5px;
+    color: #5475B8;
+}
+.ftt-myfamily-header-update-text-title {
+    font-weight: bold;
+}
+.ftt-myfamily-header-update-text-count {}
+
 .ftt-myfamily-content {
 
 }
@@ -43,7 +66,7 @@
     border-collapse: collapse;
 }
 .ftt-myfamily-content table tr {
-    background: none repeat scroll 0 0 #F1F3F7;
+    background: none repeat scroll 0 0 white;
     border-bottom: 1px solid #DCDEE2;
     border-top: 1px solid #DCDEE2;
     cursor:pointer;
@@ -59,7 +82,6 @@
 }
 .ftt-myfamily-list-item-relation span._gedcom {
     color: blue;
-    font-weight: bold;
 }
 .ftt-myfamily-list-item-avatar {
     height: 50px;
@@ -85,6 +107,14 @@
     height: 32px;
     margin: 0 auto;
     width: 32px;
+}
+.ftt-myfamily-list-item-time {
+    color: gray;
+    float: right;
+    font-family: lucida grande,tahoma;
+    font-size: 9px;
+    font-weight: bold;
+    margin-right: 10px;
 }
 
 .ftt-myfamily-tip {

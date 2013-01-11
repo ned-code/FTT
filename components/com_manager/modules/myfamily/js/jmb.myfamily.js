@@ -80,6 +80,16 @@
                    callback(response);
                 });
             },
+            getUpdateTime:function(time){
+                if("undefined" === typeof(time)) return '';
+                var updated_time = new Date(time);
+                var now_time = new Date();
+                var different = Math.round((now_time.getTime() - updated_time.getTime())/1000);
+                var day = Math.floor(different/86400);
+                var hour = Math.floor(different/3600%24);
+                var mints = Math.floor(different/60%60);
+                return [(day)?day + " days ":"", (hour)?hour + " hours ":"", (mints)?mints+" minutes ":"", "ago"].join("");
+            },
             getRelation:function(data, el){
                 if("undefined" !== typeof(data)){
                     if("facebook" === data.type){
@@ -206,12 +216,68 @@
                     }, 1000);
                 }
             },
+            render:function(){
+                $fn.init(function(users){
+                    $fn.getHome(function(home){
+                        $module.data.table = jQuery('<table id="ftt_myfamily_data"></table>');
+                        jQuery($module.data.parent).find(".ftt-myfamily-content").append($module.data.table);
+                        $fn.each(home.data, function(i, el){
+                            var facebook_id = el.id.split("_")[0], sb = $module.fn.stringBuffer();
+                            if(facebook_id in users){
+                                sb._('<tr id="')._(el.id)._('">');
+                                sb._('<td><div class="ftt-myfamily-list-item-relation">')._($fn.getRelation(users[facebook_id], el))._('</div></td>');
+                                sb._('<td><div class="ftt-myfamily-list-item-avatar">')._(storage.usertree.avatar.facebook(facebook_id, 50, 50))._('</div></td>');
+                                sb._('<td style="vertical-align: top;" >');
+                                sb._('<div class="ftt-myfamily-list-item-text"><span class="ftt-myfamily-list-item-author">')._($fn.getName(users, el))._('</span> ')._($fn.getMessage(el))._('</div>');
+                                sb._('<div class="ftt-myfamily-list-item-time">')._($fn.getUpdateTime(el.updated_time))._('</div>');
+                                sb._('</td>');
+                                sb._("</tr>");
+                                $module.data.items[el.id] = jQuery(sb.result());
+                                $module.data.events[el.id] = el;
+                                jQuery($module.data.items[el.id]).click(function(){
+                                    if(jQuery(this).hasClass("active")) return false;
+                                    jQuery(this).addClass("active");
+                                    $fn.click(this);
+                                    return false;
+                                });
+                                jQuery($module.data.items[el.id]).find('.ftt-myfamily-list-item-relation span._gedcom').click(function(){
+                                    $fn.clickToRelation(this);
+                                    return false;
+                                });
+                                jQuery($module.data.table).append($module.data.items[el.id]);
+                            }
+                        });
+                        $module.data.interval = 0;
+                        $module.data.timerActive = false;
+                        $module.data.timer = window.setInterval(function(){
+                            $module.data.interval++;
+                            jQuery($module.data.cont).find('.ftt-myfamily-header-update-text-count').text($module.data.interval+" mins ago");
+                        }, 1000*60);
+                    });
+                });
+            },
             exit:function(){ storage.core.modulesPullObject.unset($moduleName); return 0; },
             reload:function(){ console.log("reload") },
             create:function(){
                 var sb = storage.stringBuffer();
                 sb._('<div class="ftt-myfamily-container">');
-                    sb._('<div class="ftt-myfamily-header"><span>')._($fn.getMsg("header_title"))._('</span></div>');
+                    sb._('<div class="ftt-myfamily-header"><span>')._($fn.getMsg("header_title"))._('</span>');
+                        sb._('<div class="ftt-myfamily-header-update">');
+                            sb._('<table>');
+                                sb._('<tr>');
+                                    sb._('<td>');
+                                        sb._('<div class="ftt-myfamily-header-update-button">&nbsp;</div>');
+                                    sb._('</td>');
+                                    sb._('<td>');
+                                        sb._('<div class="ftt-myfamily-header-update-text">');
+                                            sb._('<div class="ftt-myfamily-header-update-text-title">Updated:</div>');
+                                            sb._('<div class="ftt-myfamily-header-update-text-count">0 mins ago</div>');
+                                        sb._('</div>');
+                                    sb._('</td>');
+                                sb._('</tr>');
+                            sb._('</table>');
+                        sb._('</div>');
+                    sb._('</div>');
                     sb._('<div class="ftt-myfamily-content"></div>')
                 sb._('</div>');
                 return jQuery(sb.result());
@@ -226,34 +292,14 @@
         if($fn.getType() == 0){
             $module.data.cont = $fn.create();
             jQuery($module.data.parent).append($module.data.cont);
-            $fn.init(function(users){
-                $fn.getHome(function(home){
-                    $module.data.table = jQuery("<table></table>");
-                    jQuery($module.data.parent).find(".ftt-myfamily-content").append($module.data.table);
-                    $fn.each(home.data, function(i, el){
-                        var facebook_id = el.id.split("_")[0], sb = $module.fn.stringBuffer();
-                        if(facebook_id in users){
-                            sb._('<tr id="')._(el.id)._('">');
-                            sb._('<td><div class="ftt-myfamily-list-item-relation">')._($fn.getRelation(users[facebook_id], el))._('</div></td>');
-                            sb._('<td><div class="ftt-myfamily-list-item-avatar">')._(storage.usertree.avatar.facebook(facebook_id, 50, 50))._('</div></td>');
-                            sb._('<td style="vertical-align: top;" ><div class="ftt-myfamily-list-item-text"><span class="ftt-myfamily-list-item-author">')._($fn.getName(users, el))._('</span> ')._($fn.getMessage(el))._('</div></td>');
-                            sb._("</tr>");
-                            $module.data.items[el.id] = jQuery(sb.result());
-                            $module.data.events[el.id] = el;
-                            jQuery($module.data.items[el.id]).click(function(){
-                                if(jQuery(this).hasClass("active")) return false;
-                                jQuery(this).addClass("active");
-                                $fn.click(this);
-                                return false;
-                            });
-                            jQuery($module.data.items[el.id]).find('.ftt-myfamily-list-item-relation span._gedcom').click(function(){
-                                $fn.clickToRelation(this);
-                                return false;
-                            });
-                            jQuery($module.data.table).append($module.data.items[el.id]);
-                        }
-                    });
-                });
+            $fn.render();
+            jQuery($module.data.cont).find('.ftt-myfamily-header-update-button').click(function(){
+                if($module.data.timerActive) return false;
+                $module.data.timerActive = true;
+                jQuery($module.data.cont).find('table#ftt_myfamily_data').remove();
+                jQuery($module.data.cont).find('.ftt-myfamily-header-update-text-count').text("0 mins ago");
+                clearInterval($module.data.timer);
+                $fn.render();
             });
         } else {
             ajax('get', null, function(res){
@@ -262,6 +308,9 @@
             });
         }
 
+        storage.addEvent(storage.tabs, function(){
+            clearInterval($module.data.timer);
+        });
 
         return this;
     });
