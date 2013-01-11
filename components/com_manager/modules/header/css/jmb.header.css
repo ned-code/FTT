@@ -2,7 +2,7 @@
 	position: relative;
 }
 .jmb-header-container.myfamily{
-	background: none repeat scroll 0 0 #7092be;
+	background: none repeat scroll 0 0 #455093;
 	border-radius: 2px 2px 2px 2px;
     	height: 45px;
 }
@@ -37,6 +37,8 @@
     font-weight: bold;
     margin-left: 45px;
     margin-top: -4px;
+    position: relative;
+    top: -6px;
 }
 .jmb-header-logo span:first-child{
     font-size: 11px;
