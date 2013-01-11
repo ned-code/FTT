@@ -5,12 +5,18 @@
     border-color: #f0e2d9;
     background-color: #ecdace;
 }
+.tab_content.famous-family .ftt-myfamily-header span {
+    color: #A06546;
+}
 .tab_content.myfamily .ftt-myfamily-container{
     border-color: #d1daec;
 }
 .tab_content.myfamily .ftt-myfamily-header{
     border-color: #d1daec;
     background-color: #cfd8eb;
+}
+.tab_content.myfamily .ftt-myfamily-header span {
+    color: #455093;
 }
 .ftt-myfamily-container {
     border: 1px solid #d1daec;

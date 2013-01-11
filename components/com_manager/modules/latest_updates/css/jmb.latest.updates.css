@@ -8,6 +8,9 @@
     border-color: #f0e2d9;
     background-color: #ecdace;
 }
+.tab_content.famous-family .jmb-lu-header span {
+    color: #A06546;
+}
 .tab_content.myfamily #JMBLatestUpdatesContainer{
     border-color: #d1daec;
 }
@@ -17,6 +20,9 @@
 .tab_content.myfamily .jmb-lu-header{
     border-color: #d1daec;
     background-color: #cfd8eb;
+}
+.tab_content.myfamily .jmb-lu-header span {
+    color: #455093;
 }
 #JMBLatestUpdatesContainer {
 	font-family: Tahoma,sans-serif;

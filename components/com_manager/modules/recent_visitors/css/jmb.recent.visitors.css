@@ -5,6 +5,9 @@
     border-color: #f0e2d9;
     background-color: #ecdace;
 }
+.tab_content.famous-family .jmb-rv-header span {
+    color: #A06546;
+}
 .tab_content.myfamily #JMBRecentVisitorsContainer{
     border-color: #d1daec;
 }
@@ -12,7 +15,9 @@
     border-color: #d1daec;
     background-color: #cfd8eb;
 }
-
+.tab_content.myfamily .jmb-rv-header span {
+    color: #455093;
+}
 #JMBRecentVisitorsContainer {
 	font-family: Tahoma,sans-serif;
 	font-size: 11px;

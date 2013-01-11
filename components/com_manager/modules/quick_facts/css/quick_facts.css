@@ -8,12 +8,18 @@
     border-color: #f0e2d9;
     background-color: #ecdace;
 }
+.tab_content.famous-family .jmb_qf_header span {
+    color: #A06546;
+}
 .tab_content.myfamily #JMBQuickFactsContainer{
     border-color: #d1daec;
 }
 .tab_content.myfamily .jmb_qf_header{
     border-color: #d1daec;
     background-color: #cfd8eb;
+}
+.tab_content.myfamily .jmb_qf_header span {
+    color: #455093;
 }
 .tab_content.myfamily .jmb_qf_content{
     border-color: #d1daec;
