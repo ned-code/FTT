@@ -233,13 +233,15 @@ function JMBThisMonthObject(obj){
         var header = jQuery(module.table).find('.jmb-this-month-header');
         setHeaderBackground(header);
         var sb = storage.stringBuffer();
-        sb._('<span>');
-            sb._(getMsg('HEADER'));
-        sb._('</span>');
-        sb._(getHeaderMonthSelect());
-        if(isSort()){
-            sb._(getHeaderSortSelect())
-        }
+        sb._('<div style="display: table; margin: 0 auto; min-width: 100px;">');
+            sb._('<span>');
+                sb._(getMsg('HEADER'));
+            sb._('</span>');
+            sb._(getHeaderMonthSelect());
+            if(isSort()){
+                sb._(getHeaderSortSelect())
+            }
+        sb._('</div>');
         jQuery(header).append(sb.result());
     }
     function setHeaderBackground(h){
