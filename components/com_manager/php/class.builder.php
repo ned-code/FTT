@@ -1,4 +1,7 @@
 <?php
+
+require_once ("lib/jsmin.php");
+
 class FamilyTreeTopBuilderLibrary {
     private $sPath;
     private $wPath;
@@ -76,15 +79,16 @@ class FamilyTreeTopBuilderLibrary {
         return true;
     }
 
-    public function jsCompile(){
-        $js = $this->js;
-        if(gettype($js) != 'array') return '';
-        $string = "";
-        foreach($js as $file){
-            $string .= file_get_contents($this->sPath . DS . $file);
-            $string .= "\n";
+    public function jsCompile($name){
+        $filePath = $this->sPath . DS . $this->miniPath . DS . $name;
+        if(!file_exists($filePath)){
+            $js = $this->js;
+            if(gettype($js) != 'array') return '<script type="text/javascript"></script>';
+            $jsString = '';
+            foreach($js as $file){
+                $jsString .= JSMin::minify(file_get_contents($this->sPath . DS . $file));
+            }
+            file_put_contents($filePath, $jsString);
         }
-        file_put_contents($this->sPath . DS . $this->miniPath . DS . "mini.js", $string);
-        return true;
     }
 }

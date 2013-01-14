@@ -46,8 +46,7 @@ $builder->setCss(array(
     'components/com_manager/modules/notifications/css/jmb.notifications.css'
 ));
 $builder->cssCompile("mini.css");
-//$document->addStyleDeclaration($cssCode);
-/*
+
 $builder->setJs(array(
     'components/com_manager/js/excanvas.js',
     'components/com_manager/codebase/dhtmlxcontainer.js',
@@ -83,12 +82,13 @@ $builder->setJs(array(
     'components/com_manager/modules/feedback/js/jmb.feedback.js',
     'components/com_manager/modules/notifications/js/jmb.notifications.js'
 ));
-$jsPath = $builder->jsCompile();
-*/
+$jsPath = $builder->jsCompile("mini.js");
 
 $document->addStyleSheet('components/com_manager/mini/mini.css');
-//$document->addScript('components/com_manager/mini/mini.js');
+$document->addScript('components/com_manager/mini/mini.js');
+$document->addCustomTag('<script type="text/javascript">jQuery.noConflict();</script>');
 
+/*
 $document->addScript('components/com_manager/js/excanvas.js');
 
 //$document->addStyleSheet('administrator/components/com_manager/js/jquery-ui-1.8.23.custom.css');
@@ -168,6 +168,7 @@ $document->addScript('components/com_manager/modules/feedback/js/jmb.feedback.js
 //$document->addStyleSheet('components/com_manager/modules/notifications/css/jmb.notifications.css');
 $document->addScript('components/com_manager/modules/notifications/js/jmb.notifications.js');
 ###############################################################################
+*/
 
-$document->addCustomTag('<script type="text/javascript">jQuery.noConflict();</script>');
+
 ?>

@@ -280,7 +280,7 @@
 	position: absolute;
     right: 0;
     top: 0;
-    background: url(/image/show_full_profile.png);
+    background: url(image/show_full_profile.png);
     width: 24px;
     height: 24px;
     cursor: pointer;
