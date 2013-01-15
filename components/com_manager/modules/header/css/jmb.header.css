@@ -24,10 +24,8 @@
 	-o-user-select: none;
 	user-select: none;
 	height: 40px;
-	left: 0;
-	position: absolute;
-	top: 0;
 	width: 110px;
+    float: left;
 }
 .jmb-header-logo span{
     color: white;
@@ -64,11 +62,16 @@
 	user-select: none;
 	cursor: pointer;
 	height: 40px;
-	position: absolute;
-	right: 5px;
 	text-decoration: none;
-	top: 2px;
 	width: 40px;
+    float: right;
+}
+
+.jmb-header-family-line {
+    display: block;
+    height: 32px;
+    margin: 0 auto;
+    max-width: 256px;
 }
 .jmb-header-expand.familytreetop{
 	background: url("../imgs/expand.png") no-repeat scroll -40px 0 transparent;

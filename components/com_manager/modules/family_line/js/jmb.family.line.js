@@ -297,8 +297,8 @@ function JMBFamilyLine(){
 						if(settings.select) sb._('<td><div class="icon mother select active">&nbsp;</div></td>');
 						if(settings.pencil) sb._('<td><div class="icon mother pencil">&nbsp;</div></td>');
 						if(settings.eye) sb._('<td><div class="icon mother eye active">&nbsp;</div></td>');
-						sb._('<td><div class="title mother"><span>')._(message.FTT_MOD_FAMILY_LINE_MOTHER)._('</span><div id="chart"><canvas id="c_mother" width="21px" height="21px"></canvas></div></div></td>');
-						sb._('<td><div class="title father"><div id="chart"><canvas id="c_father" width="21px" height="21px"></canvas></div><span>')._(message.FTT_MOD_FAMILY_LINE_FATHER)._('</span></div></td>');
+						sb._('<td><div class="title mother"><div class="text"><span>')._(message.FTT_MOD_FAMILY_LINE_MOTHER)._('</span></div><div id="chart"><canvas id="c_mother" width="21px" height="21px"></canvas></div></div></td>');
+						sb._('<td><div class="title father"><div id="chart"><canvas id="c_father" width="21px" height="21px"></canvas></div><div class="text"><span>')._(message.FTT_MOD_FAMILY_LINE_FATHER)._('</span></div></div></td>');
 						if(settings.eye) sb._('<td><div class="icon father eye active">&nbsp;</div></td>');
 						if(settings.pencil) sb._('<td><div class="icon father pencil">&nbsp;</div></td>');
 						if(settings.select) sb._('<td><div class="icon father select">&nbsp;</div></td>');
@@ -307,9 +307,10 @@ function JMBFamilyLine(){
 				sb._('</table>');
 			sb._('</div>');
 			cont =  jQuery(sb.result());
-			jQuery(document.body).append(cont);
+			jQuery(".jmb-header-family-line").append(cont);
+            jQuery(".jmb-header-family-line").show();
 			fn.click(settings);
-			fn.set.align();
+			//fn.set.align();
 			fn.draw.init(jQuery(cont).find('div.mother canvas')[0], json.size[0], json.size[1]);
 			fn.draw.init(jQuery(cont).find('div.father canvas')[0], json.size[0], json.size[2]);
 			
@@ -354,10 +355,6 @@ function JMBFamilyLine(){
             });
         }
 	};
-	
-	jQuery(window).resize(function() {
-		fn.set.align();
-	});
 }
 
 

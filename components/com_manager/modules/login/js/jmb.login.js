@@ -221,7 +221,7 @@ function JMBLogin(){
 			var json;
             var div = jQuery("<div class='ftt-preloader-alert'><div>You are now being logged in using your Facebook credentials</div></div>");
             jQuery(div).hide();
-            jQuery(document.body).append(div);
+            jQuery("#_profile").append(div);
             jQuery(cont).find('div.facebook span').click(function(){
 				FB.login(function(response){
 					if(response.authResponse){
@@ -314,7 +314,7 @@ function JMBLogin(){
             fn.setName(data, cont);
             fn.setAvatar(data, cont);
             fn.click(cont);
-            jQuery(document.body).append(cont);
+            jQuery("#_profile").append(cont);
         },
         createBox:function(data){
             if(loggedByFamous){
@@ -323,9 +323,9 @@ function JMBLogin(){
             if(data){
                 fn.facebook(data);
             } else {
-                cont = fn.connect();
+                var cont = fn.connect();
                 fn.login(cont);
-                jQuery(document.body).append(cont);
+                jQuery("#_profile").append(cont);
             }
         },
 		init:function(callback){

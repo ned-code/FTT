@@ -1,8 +1,9 @@
 html, body {
 	width: 100%;
-	margin: 0px;       
+	margin: 0px;
+
 }
-	
+
 #pages {
 	width: 980px;
 	position: relative;
@@ -15,14 +16,11 @@ html, body {
     padding: 0;
 }
 .content {
-	background: none repeat scroll 0 0 #FFFFFF;
-	border: 0 solid;
-	color: #333333;
-	font-family: Calibri,Tahoma;
-	font-size: 12px;
-	margin: 50px auto 0;
-	max-width: 760px;
-	padding-top: 0;
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: medium none;
+    margin: 20px auto 0;
+    max-width: 760px;
+    line-height: 1.28;
 }
 .header {
     position: relative;
@@ -57,6 +55,12 @@ html, body {
 #container {
 	position:relative;
     min-width: 760px;
+    font-size: 11px;
+    font-family: 'lucida grande',tahoma,verdana,arial,sans-serif;
+    color: #333;
+    line-height: 1.28;
+    text-align: left;
+    direction: ltr;
 }
 
 /**
@@ -65,29 +69,40 @@ html, body {
 .jmb-top-menu-bar{
 	background: none repeat scroll 0 0 #6B944E;
 	height: 30px;
-	left: 0;
-	position: absolute;
-	top: 0;
-	width: 100%;
 }
-.jmb-top-menu-bar-logo{
+.jmb-top-menu-bar .jmb-top-menu-bar-logo{
 	background: url("../img/ftt_logo.png") no-repeat scroll 0 0 transparent;
 	height: 35px;
-	left: 0;
-	position: absolute;
-	top: 0px;
 	width: 115px;
+    float: left;
 }
-.jmb-top-menu-bar div.jmb-top-menu-bar-content{
+.jmb-top-menu-bar .jmb-top-menu-bar-content{
 	border-left: 1px solid #CCCCCC;
-	font-family: Calibri,Tahoma,sans-serif;
-	font-weight: bold;
-	left: 120px;
-	position: absolute;
-	top: 0;
-    height: 30px;
+	height: 30px;
+    float: left;
 }
 
+.jmb-top-menu-bar div.jmb-top-menu-bar-content div.jmb-top-menu-bar-item{
+	color: white;
+	display: inline-block;
+	margin: 5px;
+	font-weight:bold;
+    padding: 0 5px;
+    border-radius: 1px;
+}
+/* header items */
+.jmb-top-menu-bar .jmb-top-menu-bar-content .jmb-top-menu-bar-item:hover{
+    background-color: #86af67;
+}
+
+.jmb-top-menu-bar .jmb-top-menu-bar-content .jmb-top-menu-bar-item span{
+	cursor: pointer;
+}
+
+.jmb-top-menu-bar .jmb-top-menu-bar-content .jmb-top-menu-bar-item span.active{
+	color:gold;
+}
+/* haeder after footer links */
 .jmb-top-menu-bar .jmb-top-menu-bar-title{
     color: white;
     font-family: tahoma;
@@ -116,24 +131,8 @@ html, body {
     line-height: 16px;
     margin-left: 19px;
 }
+/* profile */
 
-.jmb-top-menu-bar div.jmb-top-menu-bar-content div.jmb-top-menu-bar-item{
-	color: white;
-	display: inline-block;
-	margin: 5px;
-	font-weight:bold;
-    padding: 0 5px;
-    border-radius: 1px;
-}
-
-.jmb-top-menu-bar div.jmb-top-menu-bar-content div.jmb-top-menu-bar-item:hover{
-    background-color: #86af67;
-}
-
-.jmb-top-menu-bar div.jmb-top-menu-bar-content div.jmb-top-menu-bar-item span{
-	cursor: pointer;
-}
-
-.jmb-top-menu-bar div.jmb-top-menu-bar-content div.jmb-top-menu-bar-item span.active{
-	color:gold;
+.jmb-top-menu-bar #_profile {
+    float: right;
 }

@@ -5,7 +5,7 @@
             jQuery('div.footer').hide();
         } else {
             if('undefined' === typeof(storage)){
-                var alias = '<?php echo $alias; ?>';
+                var alias = jQuery(document.body).attr("_alias");
                 if('feedback' === alias){
                     jQuery('form#adminForm').ready(function(){
                         jQuery('form#adminForm').find('h2').remove();
@@ -42,16 +42,19 @@
 })(window);
 // feedback slide-out
 (function(w){
-    jQuery(".slide-out-div").tabSlideOut({
-        tabHandle: '.handle',
-        pathToTabImage: '../components/com_manager/modules/feedback/images/feedback.gif',
-        imageHeight: '279px',
-        imageWidth: '40px',
-        tabLocation: 'left',
-        speed: 300,
-        action: 'click',
-        topPos: '50px',
-        leftPos: '20px',
-        fixedPosition: false
-    });
+    var alias = jQuery(document.body).attr("_alias");
+    if(alias == "myfamily"){
+        jQuery(".slide-out-div").tabSlideOut({
+            tabHandle: '.handle',
+            pathToTabImage: '../components/com_manager/modules/feedback/images/feedback.gif',
+            imageHeight: '279px',
+            imageWidth: '40px',
+            tabLocation: 'left',
+            speed: 300,
+            action: 'click',
+            topPos: '50px',
+            leftPos: '20px',
+            fixedPosition: false
+        });
+    }
 })(window);

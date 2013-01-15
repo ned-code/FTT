@@ -1,7 +1,8 @@
 .jmb-family-line-container{
-	position: absolute;
 	font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
 	font-size:11px;
+    position: relative;
+    top: -13px;
 }
 .jmb-family-line-container td{
 	background: none repeat scroll 0 0 #C3C3C3;	
@@ -103,17 +104,19 @@
 	background: none repeat scroll 0 0 #ffb76f;
 }
 .jmb-family-line-container .title span {
-	margin-left: 3px;
-	margin-right: 3px;
-	position: relative;
-	top: -5px;
+    margin-left: 7px;
+    margin-right: 7px;
 }
 .jmb-family-line-container .title div#chart{
-    display: inline-block;
-    height: 27px;
-    margin-left: 3px;
-    margin-right: 3px;
+    float: left;
+    height: 21px;
     width: 21px;
+}
+.jmb-family-line-container .title .text{
+    float: left;
+    height: 21px;
+    text-align: center;
+    width: 48px;
 }
 .jmb-family-line-container .title canvas{
     height: 21px;

@@ -1,13 +1,12 @@
 .jmb-profile-cont {
-	font-family: Tahoma,sans-serif;
-	font-size: 11px;
-	height: 30px;
-	right: 10px;
-	line-height: 28px;
-	margin:-3px;
-	position: absolute;
-	top: 0;
-    z-index: 1000;
+    position:relative;
+    font-size: 11px;
+    font-family: 'lucida grande',tahoma,verdana,arial,sans-serif;
+    color: #333;
+    line-height: 1.28;
+    text-align: left;
+    direction: ltr;
+    margin-right: 3px;
 }
 
 .jmb-profile-cont div.avatar{
@@ -86,7 +85,7 @@
     border: 1px solid white;
     height: 25px;
     margin-left: 0;
-    margin-top: 4px;
+    margin-top: 1px;
     width: 194px;
 }
 .jmb-profile-cont div.facebook span {

@@ -8,7 +8,7 @@ function JMBHeader(){
 		exists,
         message;
 
-	cont = jQuery('<div class="jmb-header-container"><div class="jmb-header-logo" style="display:none;">&nbsp;</div><div style="display:none;" class="jmb-header-expand">&nbsp;</div></div>');
+	cont = jQuery('<div class="jmb-header-container"><div class="jmb-header-logo" style="display:none;">&nbsp;</div><div style="display:none;" class="jmb-header-family-line">&nbsp;</div><div style="display:none;" class="jmb-header-expand">&nbsp;</div></div>');
 	parent = jQuery('div.content div.header');
 	alias = jQuery(document.body).attr('_alias');
     loggedByFamous = parseInt(jQuery(document.body).attr('_type'));
