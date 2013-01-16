@@ -37,6 +37,7 @@ $builder->setCss(array(
     'components/com_manager/modules/overlay/css/jmb.overlay.css',
     'components/com_manager/modules/header/css/jmb.header.css',
     'components/com_manager/modules/profile/css/jmb.profile.css',
+    'components/com_manager/modules/profile_editor/css/ftt.profile_editor.css',
     'components/com_manager/modules/tooltip/css/jmb.tooltip.css',
     'components/com_manager/modules/invitation/css/jmb.invitation.css',
     'components/com_manager/modules/family_line/css/jmb.family.line.css',

@@ -91,16 +91,43 @@
                     jQuery("#_content").css("overflow", "hidden");
                     jQuery(".header").animate({"left":settings.width}, "slow");
                     jQuery(".main").animate({"left":settings.width}, "slow");
+                },
+                append: function(object){
+                    jQuery(div).find(".ftt-profile-editor-slide-content").append(object);
                 }
             }
+        }
+
+        $module.fn.box = function(){
+            var box = this, fn;
+            fn = {
+                create: function(){
+                    var sb = $module.fn.stringBuffer();
+                    sb._('<div class="ftt-profile-editor-box">');
+                        sb._('<div class="ftt-profile-editor-box-header">');
+                            sb._('<div class="ftt-profile-editor-box-header-title"><span>Basic Info</span></div>');
+                            sb._('<div class="ftt-profile-editor-box-header-buttons">');
+                                sb._('<div class="edit"><a href="javascript:void(0)">Edit</a></div>')
+                            sb._('</div>');
+                        sb._('</div>');
+                        sb._('<div class="ftt-profile-editor-box-content"></div>');
+                    sb._('</div>');
+                    return jQuery(sb.result());
+                }
+            }
+            return fn.create();
         }
 
         return {
             editor:function(settings){
                 $module.data.slide = $module.fn.slide();
                 $module.data.slide.init();
+
+                var box = $module.fn.box("test", 0);
+                $module.data.slide.append(box);
             },
             close:function(){
+                if(!$module.data.slide) return;
                 $module.data.slide.close();
             }
         }

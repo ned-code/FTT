@@ -16,7 +16,7 @@
     height: 30px;
 }
 .ftt-profile-editor-slide-header-button {
-    background: url(../imgs/button_arrow.png) no-repeat scroll 5px 3px #5A96C0;
+    background: url(imgs/button_arrow.png) no-repeat scroll 5px 3px #5A96C0;
     border: 1px solid #145072;
     border-radius: 6px 6px 6px 6px;
     color: white;
@@ -34,3 +34,52 @@
     border: 1px solid #456F9A;
     height: 91%;
 }
+/*
+* BOX
+*/
+.ftt-profile-editor-box {
+    background: none repeat scroll 0 0 white;
+    border: 1px solid #C4CDE0;
+    border-radius: 2px 2px 2px 2px;
+    margin: 5px;
+    min-height: 80px;
+}
+.ftt-profile-editor-box-header {
+    background: none repeat scroll 0 0 #F1F1F1;
+    border-bottom: 1px solid #D3D3D3;
+    margin: 4px;
+    min-height: 40px;
+}
+.ftt-profile-editor-box-header-title {
+    background: url(imgs/box_title.png) no-repeat scroll 0 0 transparent;
+    float: left;
+    height: 30px;
+    margin: 5px 5px 5px 15px;
+}
+.ftt-profile-editor-box-header-title span{
+    font-weight: bold;
+    line-height: 30px;
+    margin-left: 34px;
+}
+.ftt-profile-editor-box-header-buttons {
+    float: right;
+    margin: 5px;
+}
+.ftt-profile-editor-box-header-buttons div {
+    background: none repeat scroll 0 0 white;
+    border: 1px solid #A6A6A6;
+    border-radius: 2px 2px 2px 2px;
+    display: inline-block;
+    padding: 5px;
+}
+
+.ftt-profile-editor-box-header-buttons div.edit {
+    background: url(imgs/pencil.png) no-repeat scroll 5px 7px transparent;
+    padding: 5px 5px 5px 20px;
+}
+.ftt-profile-editor-box-header-buttons div a {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+}
+.ftt-profile-editor-box-content {}
