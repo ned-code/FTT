@@ -85,6 +85,10 @@ $jsPath = $builder->jsCompile("mini.js");
 $document->addStyleSheet('components/com_manager/mini/mini.css');
 $document->addScript('components/com_manager/mini/mini.js');
 $document->addScript('components/com_manager/js/core.js');
+
+$document->addStyleSheet('components/com_manager/modules/profile_editor/css/ftt.profile_editor.css');
+$document->addScript('components/com_manager/modules/profile_editor/js/ftt.profile_editor.js');
+
 $document->addCustomTag('<script type="text/javascript">jQuery.noConflict();</script>');
 
 ?>

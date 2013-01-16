@@ -526,7 +526,7 @@ JMBTooltip.prototype = {
             	    argsSettings.button_edit = (object.user.facebook_id == '0' || usertree.gedcom_id == args.gedcom_id);
             }
         }
-        if(object){
+        if(object && args.type == "view"){
             argsSettings.style.fill = module.colors[object.user.gender][1];
             argsSettings.style.strokeStyle = module.colors[object.user.gender][1];
         }
