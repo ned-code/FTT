@@ -1241,9 +1241,11 @@
                 if(!module.isExist(type, name)){
                     module.type[name] = type;
                     module[type][name] = { object:value, data:{}, init:function(){ module.init(name); } };
-                    if("undefined" !== typeof(system)){
-                        module[type][name].init();
-                    }
+                    jQuery(document.body).ready(function(){
+                        if("undefined" !== typeof(system)){
+                            module[type][name].init();
+                        }
+                    });
                     return true;
                 }
             }

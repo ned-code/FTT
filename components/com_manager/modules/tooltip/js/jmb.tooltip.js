@@ -502,12 +502,12 @@ JMBTooltip.prototype = {
     _getSettings:function(type, args){
         var module = this,
             dSettings = module._getDefaultSettings(type),
-            argsSettings = module._getArgsSettings(args);
+            argsSettings = module._getArgsSettings(args, type);
         argsSettings.type = type;
         argsSettings.style.contentSelector = ["jQuery('#", args.gedcom_id, "-tooltip-", type,"')"].join('');
         return jQuery.extend(true, {}, dSettings, argsSettings);
     },
-    _getArgsSettings:function(args){
+    _getArgsSettings:function(args, type){
         var module = this, argsSettings = args, usertree = storage.usertree, object = (usertree.pull!=null)?usertree.pull[args.gedcom_id]:false;
         if(!argsSettings.style){
             argsSettings.style = {};
@@ -526,7 +526,7 @@ JMBTooltip.prototype = {
             	    argsSettings.button_edit = (object.user.facebook_id == '0' || usertree.gedcom_id == args.gedcom_id);
             }
         }
-        if(object && args.type == "view"){
+        if(object && type == "view"){
             argsSettings.style.fill = module.colors[object.user.gender][1];
             argsSettings.style.strokeStyle = module.colors[object.user.gender][1];
         }

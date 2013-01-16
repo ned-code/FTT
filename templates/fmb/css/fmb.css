@@ -16,6 +16,7 @@ html, body {
     padding: 0;
 }
 .content {
+    position: relative;
     background: none repeat scroll 0 0 #FFFFFF;
     border: medium none;
     margin: 20px auto 0;
