@@ -1,12 +1,13 @@
 ul.jmbtabs {
-	margin: 0 !important;
-	padding: 0 !important;
+	margin-top: 20px;
+    margin-bottom: 0px;
+    padding: 0;
 	float: left;
 	list-style: none;
 	height: 32px; /*--Set height of tabs--*/
 	border-bottom: 1px solid #999;
 	border-left: 1px solid #999;
-	width: 100%;
+	width: 99%;
 }
 ul.jmbtabs li {
 	float: left;
@@ -53,7 +54,8 @@ html ul.jmbtabs.myfamily li.active, html ul.jmbtabs li.active a:hover {
 	border: 1px solid #999;
 	border-top: none;
 	clear: both;
-	float: left; width: 100%;
+	float: left;
+    width: 99%;
 	background: #fff;
 	position: relative;
 }

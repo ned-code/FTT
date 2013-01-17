@@ -4,7 +4,7 @@
 .ftt-profile-editor-slide {
     background: none repeat scroll 0 0 #769EC5;
     position: absolute;
-    top: 50px;
+    top: 0px;
     font-size: 11px;
     font-family: 'lucida grande',tahoma,verdana,arial,sans-serif;
     color: #333;
@@ -32,7 +32,12 @@
     margin: 5px;
     background: none repeat scroll 0 0 #EDEDED;
     border: 1px solid #456F9A;
-    height: 91%;
+    position: relative;
+}
+.ftt-profile-editor-slide-content ul {
+    list-style: none outside none;
+    margin: 0;
+    padding: 0;
 }
 /*
 * BOX
@@ -82,4 +87,54 @@
     color: black;
     font-weight: bold;
 }
-.ftt-profile-editor-box-content {}
+.ftt-profile-editor-box-content {
+    margin: 4px;
+}
+.ftt-profile-editor-box-content-element-title {
+    color: #878086;
+}
+.ftt-profile-editor-box-content-element-text {
+    color: #35223E;
+    margin-left: 5px;
+}
+/*
+* FACEBOOK BOX
+*/
+.ftt-profile-editor-facebook-box {
+    background: none repeat scroll 0 0 white;
+    border: 1px solid #C4CDE0;
+    margin: 5px;
+    width: 200px;
+}
+.ftt-profile-editor-facebook-box-title {
+    background: none repeat scroll 0 0 #3B5999;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+}
+.ftt-profile-editor-facebook-box-content {
+    margin: 0 auto;
+    width: 120px;
+}
+.ftt-profile-editor-facebook-box-content ul li div {
+    height: 20px;
+    padding-left: 22px;
+}
+.ftt-profile-editor-facebook-box-content-timeline {
+    background: url(imgs/facebook_box_elements.png) no-repeat scroll 0 0 transparent;
+}
+.ftt-profile-editor-facebook-box-content-about {
+    background: url(imgs/facebook_box_elements.png) no-repeat scroll 0 -21px transparent;
+}
+.ftt-profile-editor-facebook-box-content-likes {
+    background: url(imgs/facebook_box_elements.png) no-repeat scroll 0 -42px transparent;
+}
+.ftt-profile-editor-facebook-box-content-following {
+    background: url(imgs/facebook_box_elements.png) no-repeat scroll 0 -65px transparent;
+}
+.ftt-profile-editor-facebook-box-content-send_message {
+    background: url(imgs/facebook_box_elements.png) no-repeat scroll 0 -88px transparent;
+}
