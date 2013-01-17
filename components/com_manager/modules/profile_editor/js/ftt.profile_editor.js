@@ -296,8 +296,470 @@
         * FAMILY
          */
         $module.fn.family = function(){
+            var object = jQuery('<div style="position: relative; width: 500px; margin: 0 auto;"></div>');
+            (function(){
+                var cont = _create(),
+                    borders = _generateBorders(100),
+                    border_iter = 0,
+                    spouse_border = {},
+                    childPos = {},
+                    imageSize = {
+                        parent:{
+                            width:108,
+                            height:120
+                        },
+                        child:{
+                            width:72,
+                            height:80
+                        }
+                    },
+                    family = storage.usertree.pull,
+                    famId,
+                    target = _getTarget(),
+                    sircar,
+                    info,
+                    spouse,
+                    spouses = _getSpouses(target),
+                    childrens = _getChildrens(target.families),
+                    childs = [],
+                    startTop,
+                    rowLength,
+                    leftDel,
+                    index,
+                    startLeft,
+                    i;
 
-            return "";
+                sircar = _sircar(target);
+                if(sircar){
+                    jQuery(cont[0]).css({top:"21px",left:"25px"}).attr('id', target.user.gedcom_id).append(sircar);
+                }
+
+                if(spouses.length != 0){
+                    info = _info(target, spouses[0]);
+                    jQuery(cont[1]).css({top:"113px", left:"180px"}).append(info);
+
+                    spouse = _spouse(spouses[0], _getBorderColor(spouses.length>1?spouses[0]:false));
+                    if(spouse){
+                        jQuery(cont[2]).attr('id', spouses[0][1]).css({top:"21px",left:"300px"}).append(spouse);
+                    }
+                }
+
+                startTop = _getStartTop(spouses.length) + 50;
+                if(childrens.length!=0){
+                    rowLength = _getLength(childrens.length);
+                    leftDel = 100;
+                    index = 0;
+                    startLeft = 250 - 100*(rowLength/2);
+                    for(i = 0 ; i < childrens.length ; i++){
+                        if(index == rowLength){
+                            startTop += 185;
+                            index = 0;
+                            if((childrens.length-i)<rowLength){
+                                startLeft = 250 - 100*((childrens.length-i)/2);
+                            }
+                        }
+                        var pos = {top:startTop, left:startLeft+(index*leftDel)};
+                        childPos[childrens[i].gedcom_id] = pos;
+                        childs[i] = _child(childrens[i], spouses.length, pos);
+                        jQuery(object).append(childs[i]);
+                        index++;
+                    }
+                }
+
+                jQuery(object).height(startTop + 200);
+                jQuery(object).append(cont);
+                jQuery(object).find('div#'+$module.data.gedcom_id).find('div[type="imgContainer"]').animatedBorder({size : 6, color : '#FFCC66'});
+
+                return true;
+                function _generateBorders(n){
+                    var retBorders = [],
+                        isBorders = {},
+                        each,
+                        getColor,
+                        setColor;
+
+                    getColor = function(){ return '#'+Math.floor(Math.random()*16777215).toString(16); }
+                    setColor = function(color){
+                        if(!color){
+                            color = getColor();
+                        }
+                        if(!isBorders[color]){
+                            isBorders[color] = true;
+                            retBorders.push(color);
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                    each = function(start, end, callback){
+                        var i, length;
+                        if('object' === typeof(end)){
+                            length = end.length;
+                        } else if('string' === typeof(end)){
+                            length = "0" + end;
+                        } else if('number' === typeof(end)){
+                            length = end;
+                        }
+                        for(i = start ; i < length ; i++){
+                            if(!callback(i, end)){
+                                i--;
+                            }
+                        }
+                    }
+                    each(0, ["#3f48cc","#1d9441","#b97a57","#934293","#eab600","#00a2e8","#ed1c24","#7092be"], function(i, colors){
+                        return setColor(colors[i]);
+                    });
+                    each(8, 100, function(i, length){
+                        return setColor(false);
+                    });
+
+                    return retBorders;
+                }
+                function _getTarget(){
+                    var object = storage.usertree.pull[$module.data.gedcom_id];
+                    var parentKey = _getParentKey_(object);
+                    if(parentKey && object.families == null){
+                        return storage.usertree.pull[parentKey];
+                    }
+                    return object;
+                    function _getParentKey_(o){
+                        if(!o || o==null) return false;
+                        var fn,
+                            parents,
+                            key,
+                            family,
+                            fatherId,
+                            motherId,
+                            fatherFamilyCount,
+                            motherFamilyCount;
+
+                        fn = {
+                            getFamilyCount:function(family, id){
+                                if(!id) return 0;
+                                var families = object.families;
+                                if(families != null){
+                                    return families.length;
+                                }
+                                return 0;
+                            }
+                        }
+
+                        parents = o.parents;
+                        if(parents != null){
+                            for(key in parents){
+                                if(parents.hasOwnProperty(key)){
+                                    if(key != 'length'){
+                                        famId = key;
+                                        family = parents[key];
+                                        fatherId = (family.father!= null && storage.usertree.pull[family.father.gedcom_id])?family.father.gedcom_id:false;
+                                        motherId = (family.mother!= null && storage.usertree.pull[family.mother.gedcom_id])?family.mother.gedcom_id:false;
+                                        fatherFamilyCount = fn.getFamilyCount(family, fatherId);
+                                        motherFamilyCount = fn.getFamilyCount(family, motherId);
+                                        if(fatherId && motherId){
+                                            if(fatherFamilyCount == motherFamilyCount){
+                                                return fatherId;
+                                            } else if(fatherFamilyCount > motherFamilyCount){
+                                                return fatherId;
+                                            } else {
+                                                motherId;
+                                            }
+                                        } else {
+                                            return (fatherId)?fatherId:motherId;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        return false;
+                    }
+                }
+                function _getBorderColor(sp){
+                    return (function(sp){
+                        if(!sp) return "#000000";
+                        var _color = borders[border_iter];
+                        border_iter++;
+                        spouse_border[sp[0]] = _color;
+                        return _color;
+                    })(sp);
+                }
+                function _getLength(len){
+                    return (function(len){
+                        var _limit = 7;
+                        var _rows = Math.ceil(len/_limit);
+                        return Math.round(len/_rows);
+                    })(len);
+                }
+                function _getStartTop(length){
+                    return 190;
+                    return (function(length){
+                        if(length>=3){
+                            return 450;
+                        }
+                        return 315;
+                    })(length);
+                }
+                function _getName(info){
+                    return (function(info){
+                        if(!info) return '';
+                        if(info.nick.length > 12){
+                            return info.nick.substr(0,6)+'...';
+                        } else {
+                            return info.nick;
+                        }
+                    })(info);
+                }
+                function _getDate(info){
+                    return (function(info){
+                        if(!info) return '....';
+                        var _b, _d;
+                        _b = info.date('birth', 2);
+                        _d = info.date('death', 2);
+                        if(_b != 0 && _d != 0){
+                            return _b + " - " + _d;
+                        } else if(_b != 0 && _d == 0){
+                            return _b;
+                        } else if(_b == 0 && _d != 0){
+                            return ".... - " + _d;
+                        } else {
+                            return "....";
+                        }
+                    })(info);
+                }
+                function _getAvatar(object, type, k){
+                    return (function(object, type, k){
+                        var _size = _getImageSize_(type, k);
+                        return storage.usertree.avatar.get({
+                            object:object,
+                            cssClass:"jmb-families-avatar view",
+                            width:_size.width,
+                            height:_size.height
+                        });
+                        function _getImageSize_(){
+                            var	_imageSize = imageSize,
+                                _size_ = _imageSize[type],
+                                _width = Math.round(_size_.width*k),
+                                _height = Math.round(_size_.height*k);
+                            return {
+                                width: _width,
+                                height: _height
+                            };
+                        }
+                    })(object, type, k);
+                }
+                function _getSpouses(target){
+                    return (function(t){
+                        if(!t) return [];
+                        var key,
+                            key2,
+                            key3,
+                            family,
+                            families,
+                            spouse,
+                            spouses,
+                            $spouses,
+                            child,
+                            childs,
+                            $childs,
+                            defFamily,
+                            object,
+                            parents;
+                        families = t.families;
+                        spouses = [];
+                        $spouses = [];
+                        childs = [];
+                        for(key in families){
+                            if(!families.hasOwnProperty(key)) continue;
+                            if("length" !== key){
+                                family = families[key];
+                                if(null !== family.spouse && storage.usertree.pull[family.spouse]){
+                                    if(!spouses[family.spouse]){
+                                        spouses[family.spouse] = family.spouse;
+                                        spouse = [family.id, family.spouse];
+                                        $spouses.push(spouse);
+                                    }
+                                }
+                                $childs = family.childrens;
+                                for(key2 in $childs){
+                                    if($childs.hasOwnProperty(key2)){
+                                        child = $childs[key2];
+                                        if(!childs[child.gedcom_id] && "undefined" !== storage.usertree.pull[child.gedcom_id]){
+                                            childs[child.gedcom_id] = child.gedcom_id;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        defFamily = t.user.default_family;
+                        if($module.data.gedcom_id in childs){
+                            object = storage.usertree.pull[$module.data.gedcom_id];
+                            parents = object.parents;
+                            for(key3 in parents){
+                                if(!parents.hasOwnProperty(key)) continue;
+                                if(key3 != 'length'){
+                                    defFamily = key3;
+                                    break;
+                                }
+                            }
+                        }
+                        return $spouses.sort(function(){
+                            if(arguments[0][1] == defFamily || arguments[0][0] == defFamily){
+                                return -1;
+                            } else {
+                                return 1;
+                            }
+                        });
+                    })(target);
+                }
+                function _getChildrens(families){
+                    return (function(families){
+                        var _childrens = [], _family, _child;
+                        for(var _key in families){
+                            if (!families.hasOwnProperty(_key)) continue;
+                            if(_key!='length'){
+                                _family = families[_key];
+                                if(_family.childrens!=null){
+                                    for(var _i = 0 ; _i < _family.childrens.length ; _i ++){
+                                        _child = _family.childrens[_i];
+                                        _childrens.push(_child);
+                                    }
+                                }
+                            }
+                        }
+                        return _childrens;
+                    })(families);
+                }
+                function _create(){
+                    return (function(){
+                        var _sb = storage.stringBuffer();
+                        _sb._('<div class="ftt-profile-view-sircar">&nbsp;</div>');
+                        _sb._('<div class="ftt-profile-view-event">&nbsp;</div>');
+                        _sb._('<div class="ftt-profile-view-spouse">&nbsp;</div>');
+                        return jQuery(_sb.result());
+                    })();
+                }
+                function _sircar(object){
+                    return (function(object){
+                        var _sb = storage.stringBuffer();
+                        var _gedcomId = object.user.gedcom_id;
+                        var _info = storage.usertree.parse(object);
+                        _sb._('<div>');
+                        _sb._('<div id="')._(_gedcomId)._('-view" type="imgContainer" class="ftt-profile-view-parent-img">');
+                        _sb._(_getAvatar(object, 'parent', 1));
+                        _sb._('</div>');
+                        _sb._('</div>');
+                        _sb._('<div>');
+                        _sb._('<div class="ftt-profile-view-parent-name">')._(_getName(_info))._('</div>');
+                        _sb._('<div class="ftt-profile-view-parent-date">')._(_getDate(_info))._('</div>');
+                        _sb._('</div>');
+                        if(object.families!=null){
+                            _sb._('<div class="ftt-profile-view-arrow-left">&nbsp</div>');
+                        }
+                        return jQuery(_sb.result());
+                    })(object);
+                }
+                function _info(object, spouse){
+                    return (function(object, spouse){
+                        if(!spouse) return '';
+                        var _sb = storage.stringBuffer(),
+                            _event = object.families[spouse[0]].marriage,
+                            _date,
+                            _place,
+                            _location = '';
+
+                        if(_event!=null){
+                            _date = _event.date;
+                            _place = _event.place;
+                            if(_place != null && _place[0].country != null){
+                                _location = _place[0].country;
+                            } else {
+                                _location = '';
+                            }
+                            _sb._('<div>');
+                            _sb._('<div>')._((_date!=null&&_date[2]!=null)?_date[2]:'')._('</div>');
+                            _sb._('<div>')._(_location)._('</div>');
+                            _sb._('</div>');
+                            return jQuery(_sb.result());
+                        }
+                        return '';
+                    })(object, spouse);
+                }
+                function _spouse(spouse, bcolor){
+                    return (function(spouse, bcolor){
+                        var _sb = storage.stringBuffer(),
+                            _gedcomId = spouse[1],
+                            _object = family[_gedcomId],
+                            _info = (object)?storage.usertree.parse(_object):false;
+
+                        if(!_object) return ''
+
+                        _sb._('<div>');
+                        _sb._('<div id="')._(_gedcomId)._('-view" type="imgContainer" class="ftt-profile-view-parent-img" style="border:2px solid #')._(bcolor)._(';">');
+                        _sb._(_getAvatar(_object, 'parent', 1));
+                        _sb._('</div>');
+                        _sb._('</div>');
+                        _sb._('<div>');
+                        _sb._('<div class="ftt-profile-view-parent-name">')._(_getName(_info))._('</div>');
+                        _sb._('<div class="ftt-profile-view-parent-date">')._(_getDate(_info))._('</div>');
+                        _sb._('</div>');
+                        if(_object.families!=null){
+                            _sb._('<div class="ftt-profile-view-arrow-right" style="background:#')._(bcolor)._(';">&nbsp</div>');
+                        }
+                        return jQuery(_sb.result());
+                    })(spouse, bcolor);
+                }
+                function _former_spouse(spouse, bcolor, position){
+                    return (function(spouse, bcolor, position){
+                        var _sb = storage.stringBuffer(),
+                            _gedcomId = spouse[1],
+                            _object = family[_gedcomId],
+                            _info = storage.usertree.parse(_object);
+                        _sb._('<div id="')._(_gedcomId)._('" class="ftt-profile-view-spouse-div ')._(position)._('">');
+                        _sb._('<div id="')._(_gedcomId)._('-view" type="imgContainer" class="ftt-profile-view-former-img" style="border:2px solid #')._(bcolor)._(';">');
+                        _sb._(_getAvatar(_object, 'parent', 0.5));
+                        _sb._('</div>');
+                        _sb._('<div>');
+                        _sb._('<div class="ftt-profile-view-parent-name former">')._(_getName(_info))._('</div>');
+                        _sb._('<div class="ftt-profile-view-parent-date former">')._(_getDate(_info))._('</div>');
+                        _sb._('</div>');
+                        _sb._('<div class="ftt-profile-view-former-arrow-')._(position)._('" style="background:')._(bcolor)._(';">&nbsp</div>');
+                        _sb._('<div class="ftt-profile-view-former-arrow-')._(position)._(' text" style="color:')._(bcolor)._(';">')._(_info.marr(spouse[0], 'date', 2))._('</div>');
+                        _sb._('</div>');
+                        _sb._('</div>');
+                        return jQuery(_sb.result());
+                    })(spouse, bcolor, position);
+                }
+                function _child(child, len, position){
+                    return (function(child, len, position){
+                        var _sb = storage.stringBuffer(),
+                            _gedcomId = child.gedcom_id,
+                            _object = family[_gedcomId],
+                            _bcolor = (len>1)?spouse_border[child.family_id]:"000000",
+                            _info = storage.usertree.parse(_object);
+
+                        _sb._('<div id="');
+                        _sb._(_gedcomId);
+                        _sb._('" class="ftt-profile-view-child" style="height:170px;top:');
+                        _sb._(position.top);
+                        _sb._('px;left:');
+                        _sb._(position.left);
+                        _sb._('px;">');
+                        _sb._('<div id="')._(_gedcomId)._('-view" type="imgContainer" style="height:80px;width:72px;border:2px solid #');
+                        _sb._(_bcolor);
+                        _sb._('" class="ftt-profile-view-child-img">');
+                        _sb._(_getAvatar(_object, 'child', 1));
+                        _sb._('</div>');
+                        _sb._('<div>');
+                        _sb._('<div class="ftt-profile-view-child-name">')._(_getName(_info))._('</div>');
+                        _sb._('<div class="ftt-profile-view-child-date">')._(_getDate(_info))._('</div>');
+                        _sb._('</div>');
+                        _sb._('<div class="ftt-profile-view-arrow-up" style="background:#')._(_bcolor)._(';">&nbsp</div>');
+                        _sb._('</div>');
+                        return jQuery(_sb.result());
+                    })(child, len, position);
+                }
+            })()
+            return object;
         }
 
         /*
