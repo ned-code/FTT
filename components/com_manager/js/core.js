@@ -1541,19 +1541,35 @@
                 sb._('<div class="ftt-media-photos-container"></div>');
                 return jQuery(sb.result());
             },
-            createPhotoElement: function(title, src, view){
+            createPhotoElement: function(src, view, facebook){
                 var sb = $module.fn.stringBuffer();
                 sb._('<div class="ftt-media-photos-item">');
                     sb._('<div class="ftt-media-photos-item-image">');
                         sb._('<a href="')._(view)._('" rel="prettyPhoto[pp_gal]" title="" >');
-                            sb._('<img src="')._(src)._('" >');
+                            sb._('<img style="width:');
+                                sb._($module.data.settings.size[0]);
+                                sb._('px; height:');
+                                sb._($module.data.settings.size[1]);
+                                sb._('px;" src="');
+                            sb._(src)._('" >');
                         sb._('</a>');
                     sb._('</div>');
+                    if(facebook){
+                        sb._('<div class="ftt-media-photos-item-facebook"><a target="_blank" href="')._(facebook)._('"></a></div>');
+                    } else {
+                        sb._('<div class="ftt-media-photos-item-close">&nbsp;</div>');
+                    }
                 sb._('</div>');
                 return jQuery(sb.result());
             },
             createFacebookPhotos: function(photos){
-                return '';
+                var items = [];
+                for(var key in photos){
+                    if(!photos.hasOwnProperty(key)) continue;
+                    var photo = photos[key];
+                    items.push(fn.createPhotoElement(photo.source, photo.source, photo.link))
+                }
+                return items;
             },
             createGedcomPhotos: function(media){
                 if(media == null || media.photos.length == 0) return "";
@@ -1568,7 +1584,7 @@
                     } else {
                        src = fn.getGedcomImagePath(el);
                     }
-                    items.push(fn.createPhotoElement(el.title, src, fn.getGedcomImageRealPath(el)));
+                    items.push(fn.createPhotoElement(src, fn.getGedcomImageRealPath(el), false));
                 }
                 return items;
             },

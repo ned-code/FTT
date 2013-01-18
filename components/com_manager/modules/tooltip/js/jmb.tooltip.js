@@ -312,6 +312,7 @@ JMBTooltip.prototype = {
 			window.open('http://www.facebook.com/profile.php?id='+id,'new','width=320,height=240,toolbar=1');
 		});
 		jQuery(cont).find('div.jmb-tooltip-view-switch').click(function(){
+            /*
 			storage.profile.editor('view', {
 				object:object,
 				events:{
@@ -322,7 +323,11 @@ JMBTooltip.prototype = {
 					}
 				}
 			});
-		});
+			*/
+            $FamilyTreeTop.fn.mod("PROFILE_EDITOR").editor({
+                gedcom_id: object.user.gedcom_id
+            });
+        });
         if(module.loginType != 'famous_family'){
             offset = jQuery(cont).find('div.jmb-tooltip-view-edit').offset();
             storage.tooltip.render('edit', {
@@ -372,6 +377,7 @@ JMBTooltip.prototype = {
 			});
 		});
 		jQuery(cont).find('.jmb-profile-tooltip-button-edit').click(function(){
+            /*
 			storage.profile.editor('edit', {
 				object:object,
 				events:{
@@ -382,7 +388,11 @@ JMBTooltip.prototype = {
 					}
 				}
 			});
-		});
+			*/
+            $FamilyTreeTop.fn.mod("PROFILE_EDITOR").editor({
+                gedcom_id: object.user.gedcom_id
+            });
+        });
 	},
 	_buttons:function(cont, settings){
 		var	module = this;		

@@ -779,7 +779,7 @@
                 create: function(callback){
                     FB.api('/'+$module.data.parse.facebook_id+'/photos', function(resp){
                         callback($FamilyTreeTop.fn.mod("PHOTOS").render({
-                            facebook: resp,
+                            facebook: resp.data,
                             gedcom: $module.data.object.media
                         }));
                     });

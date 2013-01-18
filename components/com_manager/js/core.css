@@ -132,4 +132,35 @@ div.buttons span {
     width: 108px;
 }
 
+.ftt-media-photos-item-facebook {
+    background: url(images/facebook.png) no-repeat scroll 0 0 transparent;
+    border-radius: 3px 3px 3px 3px;
+    bottom: 3px;
+    height: 18px;
+    position: absolute;
+    right: 3px;
+    visibility: hidden;
+    width: 18px;
+}
+.ftt-media-photos-item-facebook  a{
+    text-decoration: none;
+    width: 18px;
+    height: 18px;
+    display: block;
+}
+.ftt-media-photos-item:hover .ftt-media-photos-item-facebook {
+    visibility: visible;
+}
+.ftt-media-photos-item-close {
+    background: url(images/close.png) no-repeat scroll 0 0 transparent;
+    height: 9px;
+    position: absolute;
+    right: 3px;
+    top: 3px;
+    visibility: hidden;
+    width: 9px;
+}
+.ftt-media-photos-item:hover .ftt-media-photos-item-close {
+    visibility: visible;
+}
 
