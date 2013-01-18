@@ -117,4 +117,19 @@ div.buttons span {
 	min-width:33%; 
 	height:100%;
 }
+/**
+* PHOTOS
+*/
+.ftt-media-photos-container {}
+.ftt-media-photos-item {
+    border: 1px solid #ACB7C5;
+    border-radius: 1px 1px 1px 1px;
+    cursor: pointer;
+    display: inline-block;
+    height: 120px;
+    margin: 3px;
+    position: relative;
+    width: 108px;
+}
+
 

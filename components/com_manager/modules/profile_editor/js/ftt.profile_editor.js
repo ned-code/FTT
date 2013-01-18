@@ -240,7 +240,14 @@
                 },
                 appendContent: function(cont, st){
                     if("undefined"===typeof(st.content)) return false;
-                    jQuery(cont).find(".ftt-profile-editor-box-content").append(st.content);
+                    if("function" === typeof(st.content)){
+                        st.content(function(content){
+                            jQuery(cont).find(".ftt-profile-editor-box-content").append(content);
+                        });
+                    } else if("object" === typeof(st.content)){
+                        jQuery(cont).find(".ftt-profile-editor-box-content").append(st.content);
+                    }
+
                 }
             }
             return fn.createBox(settings);
@@ -766,8 +773,20 @@
         * PHOTOS
          */
         $module.fn.photos = function(){
+            var fn;
 
-            return "";
+            fn = {
+                create: function(callback){
+                    FB.api('/'+$module.data.parse.facebook_id+'/photos', function(resp){
+                        callback($FamilyTreeTop.fn.mod("PHOTOS").render({
+                            facebook: resp,
+                            gedcom: $module.data.object.media
+                        }));
+                    });
+                }
+            }
+
+            return fn.create;
         }
 
         /*

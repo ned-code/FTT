@@ -18,7 +18,7 @@
 .ftt-profile-editor-slide-header-button {
     background: url(imgs/button_arrow.png) no-repeat scroll 5px 3px #5A96C0;
     border: 1px solid #145072;
-    border-radius: 6px 6px 6px 6px;
+    border-radius: 15px 15px 15px 15px;
     color: white;
     margin: 3px;
     padding: 5px 0 5px 30px;
@@ -27,6 +27,7 @@
 .ftt-profile-editor-slide-header-button a {
     text-decoration: none;
     color: white;
+    font-weight: bold;
 }
 .ftt-profile-editor-slide-content {
     margin: 5px;

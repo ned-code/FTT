@@ -1524,3 +1524,92 @@
         }
     }, true);
 })($FamilyTreeTop);
+
+(function($ftt){
+    $ftt.module.create("MOD_SYS_PHOTOS", function(){
+        var $module = this, fn;
+        $module.data.arguments = arguments;
+        $module.data.baseurl = jQuery(document.body).attr("_baseurl");
+        $module.data.tmpPath = "components/com_manager/media/tmp/";
+        $module.data.mediaPath = "components/com_manager/media/";
+        $module.data.settings = {
+            size:["108","120"]
+        }
+        fn = {
+            create: function(){
+                var sb = $module.fn.stringBuffer();
+                sb._('<div class="ftt-media-photos-container"></div>');
+                return jQuery(sb.result());
+            },
+            createPhotoElement: function(title, src, view){
+                var sb = $module.fn.stringBuffer();
+                sb._('<div class="ftt-media-photos-item">');
+                    sb._('<div class="ftt-media-photos-item-image">');
+                        sb._('<a href="')._(view)._('" rel="prettyPhoto[pp_gal]" title="" >');
+                            sb._('<img src="')._(src)._('" >');
+                        sb._('</a>');
+                    sb._('</div>');
+                sb._('</div>');
+                return jQuery(sb.result());
+            },
+            createFacebookPhotos: function(photos){
+                return '';
+            },
+            createGedcomPhotos: function(media){
+                if(media == null || media.photos.length == 0) return "";
+                var photos = media.photos;
+                var items = [];
+                for( var key in photos ){
+                    if(!photos.hasOwnProperty(key)) continue;
+                    var el = photos[key];
+                    var src = "";
+                    if(media.cache[el.media_id] && media.cache[el.media_id][$module.data.settings.size.join("_")]){
+                       src = fn.getGedcomImageCachePath(media, el);
+                    } else {
+                       src = fn.getGedcomImagePath(el);
+                    }
+                    items.push(fn.createPhotoElement(el.title, src, fn.getGedcomImageRealPath(el)));
+                }
+                return items;
+            },
+            getGedcomImageCachePath: function(media, el){
+                return $module.data.baseurl + $module.data.tmpPath + storage.usertree.tree_id + '/' + media.cache[el.media_id][$module.data.settings.size.join("_")];
+            },
+            getGedcomImageRealPath : function(el){
+                return $module.data.baseurl + el.path;
+            },
+            getGedcomImagePath: function(el){
+                var sb = $module.fn.stringBuffer();
+                sb._("index.php?option=com_manager");
+                    sb._("&task=getResizeImage");
+                    sb._("&tree_id=")._(storage.usertree.tree_id);
+                    sb._("&id=")._(el.media_id);
+                    sb._("&w=")._($module.data.settings.size[0]);
+                    sb._("&h=")._($module.data.settings.size[1]);
+                return sb.result();
+            },
+            init: function(cont){
+                jQuery(cont).find('a[rel^="prettyPhoto"]').prettyPhoto({
+                    social_tools:''
+                });
+                return cont;
+            }
+        }
+
+        return {
+            render: function(settings){
+                var cont = fn.create();
+                if("undefined" !== settings.gedcom){
+                    jQuery(cont).append(fn.createGedcomPhotos(settings.gedcom));
+                }
+                if("undefined" !== settings.facebook){
+                    jQuery(cont).append(fn.createFacebookPhotos(settings.facebook));
+                }
+                setTimeout(function(){
+                    fn.init(cont);
+                }, 1);
+                return cont;
+            }
+        }
+    }, true);
+})($FamilyTreeTop);
