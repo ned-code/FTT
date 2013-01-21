@@ -86,26 +86,26 @@
                         return a.prms.level - b.prms.level;
                     });
                 },
-                createFacebookBox:function(){
-                    var sb = $module.fn.stringBuffer();
+                createFacebookBox:function(username){
+                    var sb = $module.fn.stringBuffer(), link = "http://www.facebook.com/" + username;
                     sb._('<div class="ftt-profile-editor-facebook-box">');
                         sb._('<div class="ftt-profile-editor-facebook-box-title"><span>facebook</span></div>');
                         sb._('<div class="ftt-profile-editor-facebook-box-content">');
                             sb._('<ul style="margin: 10px;">');
                                 sb._('<li><div class="ftt-profile-editor-facebook-box-content-timeline">');
-                                    sb._('<a style="text-decoration: none;" id="timeline" href="javascript:void(0)">Timeline</a>');
+                                    sb._('<a target="_blank" style="text-decoration: none;" id="timeline" href="')._(link)._('">Timeline</a>');
                                 sb._('</div></li>')
                                 sb._('<li><div class="ftt-profile-editor-facebook-box-content-about">');
-                                    sb._('<a style="text-decoration: none;" id="about" href="javascript:void(0)">About</a>');
+                                    sb._('<a target="_blank" style="text-decoration: none;" id="about" href="')._(link)._('/info">About</a>');
                                 sb._('</div></li>');
                                 sb._('<li><div class="ftt-profile-editor-facebook-box-content-likes">');
-                                    sb._('<a style="text-decoration: none;" id="likes" href="javascript:void(0)">Likes</a>');
+                                    sb._('<a target="_blank" style="text-decoration: none;" id="likes" href="')._(link)._('/favorites">Likes</a>');
                                 sb._('</div></li>');
                                 sb._('<li><div class="ftt-profile-editor-facebook-box-content-following">');
-                                    sb._('<a style="text-decoration: none;" id="following" href="javascript:void(0)">Following</a>');
+                                    sb._('<a target="_blank" style="text-decoration: none;" id="following" href="')._(link)._('/following">Following</a>');
                                 sb._('</div></li>')
                                 sb._('<li><div class="ftt-profile-editor-facebook-box-content-send_message">');
-                                    sb._('<a style="text-decoration: none;" id="send_message" href="javascript:void(0)">Send message</a>');
+                                    sb._('<a target="_blank" style="text-decoration: none;" id="send_message" href="')._(link)._('">Send message</a>');
                                 sb._('</div></li>');
                             sb._('</ul>');
                         sb._('</div>');
@@ -152,11 +152,14 @@
                 },
                 appendFacebook:function(ul){
                     if($module.data.parse && $module.data.parse.facebook_id != "0"){
-                        var li = jQuery(ul).find('li[id="0"]');
-                        var table = jQuery('<table><tr><td style="vertical-align: top; width: 100%;"></td><td style="width: 200px;"></td></tr></table>');
-                        jQuery(table[0].rows[0].cells[1]).append(fn.createFacebookBox())
-                        jQuery(table[0].rows[0].cells[0]).append(jQuery(li).find('div').first());
-                        jQuery(li).append(table);
+                        var facebook_id = $module.data.parse.facebook_id;
+                        FB.api('/'+facebook_id, function(response){
+                            var li = jQuery(ul).find('li[id="0"]');
+                            var table = jQuery('<table><tr><td style="vertical-align: top; width: 100%;"></td><td style="width: 200px;"></td></tr></table>');
+                            jQuery(table[0].rows[0].cells[1]).append(fn.createFacebookBox(response.username));
+                            jQuery(table[0].rows[0].cells[0]).append(jQuery(li).find('div').first());
+                            jQuery(li).append(table);
+                        });
                         //createUnregisterBox
                     }
                 }
