@@ -105,7 +105,7 @@
                                     sb._('<a target="_blank" style="text-decoration: none;" id="following" href="')._(link)._('/following">Following</a>');
                                 sb._('</div></li>')
                                 sb._('<li><div class="ftt-profile-editor-facebook-box-content-send_message">');
-                                    sb._('<a target="_blank" style="text-decoration: none;" id="send_message" href="')._(link)._('">Send message</a>');
+                                    sb._('<a id="send_message" style="text-decoration: none;" id="send_message" href="javascript:void(0);">Send message</a>');
                                 sb._('</div></li>');
                             sb._('</ul>');
                         sb._('</div>');
@@ -156,12 +156,29 @@
                         FB.api('/'+facebook_id, function(response){
                             var li = jQuery(ul).find('li[id="0"]');
                             var table = jQuery('<table><tr><td style="vertical-align: top; width: 100%;"></td><td style="width: 200px;"></td></tr></table>');
-                            jQuery(table[0].rows[0].cells[1]).append(fn.createFacebookBox(response.username));
+                            var box = fn.createFacebookBox(response.username);
+                            jQuery(box).find("a#send_message").click(function(){
+                                fn.sendMessage(function(r){
+                                    console.log(r);
+                                });
+                            });
+                            jQuery(table[0].rows[0].cells[1]).append(box);
                             jQuery(table[0].rows[0].cells[0]).append(jQuery(li).find('div').first());
                             jQuery(li).append(table);
                         });
                         //createUnregisterBox
                     }
+                },
+                sendMessage:function(callback){
+                    var facebook_id = $module.data.parse.facebook_id;
+                    FB.ui({
+                        method:'send',
+                        name: "Family Tree Top",
+                        link: "https://apps.facebook.com/"+ storage.app.namespace,
+                        to: facebook_id,
+                        picture: storage.baseurl + 'components/com_manager/modules/invitation/images/ftt_invitation.png',
+                        description: storage.app.description
+                    }, callback);
                 }
             }
 
