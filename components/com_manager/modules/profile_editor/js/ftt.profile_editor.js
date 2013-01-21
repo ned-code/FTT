@@ -173,7 +173,7 @@
                     var facebook_id = $module.data.parse.facebook_id;
                     FB.ui({
                         method:'send',
-                        name: "Family Tree Top",
+                        name: "Family TreeTop",
                         link: "https://apps.facebook.com/"+ storage.app.namespace,
                         to: facebook_id,
                         picture: storage.baseurl + 'components/com_manager/modules/invitation/images/ftt_invitation.png',
@@ -183,7 +183,7 @@
             }
 
             settings = {
-                width: 720
+                width: jQuery("#_content").width()
             };
 
             div = jQuery(fn.createSlide());

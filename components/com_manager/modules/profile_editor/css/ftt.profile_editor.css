@@ -61,6 +61,7 @@
     float: left;
     height: 30px;
     margin: 5px 5px 5px 15px;
+    font-size: 14px;
 }
 .ftt-profile-editor-box-header-title span{
     font-weight: bold;
@@ -93,10 +94,12 @@
 }
 .ftt-profile-editor-box-content-element-title {
     color: #878086;
+    font-size: 12px;
 }
 .ftt-profile-editor-box-content-element-text {
     color: #35223E;
     margin-left: 5px;
+    font-size: 12px;
 }
 /*
 * FACEBOOK BOX
