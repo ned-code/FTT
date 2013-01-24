@@ -8,6 +8,7 @@
             },
             $fn = {};
 
+        $module.data.facebook_id = storage.usertree.facebook_id;
         $module.data.parent = parent;
         $module.data.cont = null;
         $module.data.table = null;
@@ -223,7 +224,7 @@
                         jQuery($module.data.parent).find(".ftt-myfamily-content").append($module.data.table);
                         $fn.each(home.data, function(i, el){
                             var facebook_id = el.id.split("_")[0], sb = $module.fn.stringBuffer();
-                            if(facebook_id in users){
+                            if(facebook_id in users && facebook_id != $module.data.facebook_id ){
                                 sb._('<tr id="')._(el.id)._('">');
                                 sb._('<td><div class="ftt-myfamily-list-item-relation">')._($fn.getRelation(users[facebook_id], el))._('</div></td>');
                                 sb._('<td><div class="ftt-myfamily-list-item-avatar">')._(storage.usertree.avatar.facebook(facebook_id, 50, 50))._('</div></td>');

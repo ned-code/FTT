@@ -198,8 +198,8 @@
                     jQuery(div).animate({"left":"-="+(settings.width)+"px"}, "slow", function(){
                         jQuery(div).remove();
                     });
-                    jQuery(".header").animate({"left":"0px"}, "slow");
-                    jQuery(".main").animate({"left":"0px"}, "slow");
+                    //jQuery(".header").animate({"left":"0px"}, "slow");
+                    //jQuery(".main").animate({"left":"0px"}, "slow");
                     working = false;
                     $module.data.slide = false;
                     $module.fn.echo();
@@ -213,8 +213,8 @@
                 init: function(){
                     jQuery("#_content").append(div);
                     jQuery(div).animate({"left":"0px"}, "slow");
-                    jQuery(".header").animate({"left":settings.width}, "slow");
-                    jQuery(".main").animate({"left":settings.width}, "slow");
+                    //jQuery(".header").animate({"left":settings.width}, "slow");
+                    //jQuery(".main").animate({"left":settings.width}, "slow");
                 }
             }
         }

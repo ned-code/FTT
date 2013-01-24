@@ -59,12 +59,14 @@
 	-moz-user-select: none;
 	-ms-user-select: none;
 	-o-user-select: none;
-	user-select: none;
-	cursor: pointer;
-	height: 40px;
-	text-decoration: none;
-	width: 40px;
+    cursor: pointer;
     float: right;
+    height: 40px;
+    left: -4px;
+    position: relative;
+    text-decoration: none;
+    top: -29px;
+    width: 40px;
 }
 
 .jmb-header-family-line {
