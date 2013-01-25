@@ -150,15 +150,21 @@ div.buttons span {
 }
 .ftt-media-photos-item:hover .ftt-media-photos-item-facebook {
     visibility: visible;
+    -webkit-transition: opacity 100ms linear;
+    -moz-transition: opacity 100ms linear;
+    -o-transition: opacity 100ms linear;
+    transition: opacity 100ms linear;
 }
 .ftt-media-photos-item-close {
-    background: url(images/close.png) no-repeat scroll 0 0 transparent;
-    height: 9px;
+    background: url(images/close.png) no-repeat scroll 0 -32px transparent;
+    height: 15px;
     position: absolute;
     right: 3px;
     top: 3px;
     visibility: hidden;
-    width: 9px;
+    width: 15px;
+    opacity: 0.5;
+    filter: alpha(opacity=50);
 }
 .ftt-media-photos-item:hover .ftt-media-photos-item-close {
     visibility: visible;

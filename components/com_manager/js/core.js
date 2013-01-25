@@ -1556,8 +1556,6 @@
                     sb._('</div>');
                     if(facebook){
                         sb._('<div class="ftt-media-photos-item-facebook"><a target="_blank" href="')._(facebook)._('"></a></div>');
-                    } else {
-                        sb._('<div class="ftt-media-photos-item-close">&nbsp;</div>');
                     }
                 sb._('</div>');
                 return jQuery(sb.result());
@@ -1625,6 +1623,18 @@
                     fn.init(cont);
                 }, 1);
                 return cont;
+            }
+        }
+    }, true);
+})($FamilyTreeTop);
+
+(function($ftt){
+    $ftt.module.create("MOD_SYS_AVATAR", function(){
+        var $module = this;
+        $module.data.arguments = arguments;
+        return {
+            get: function(settings){
+
             }
         }
     }, true);

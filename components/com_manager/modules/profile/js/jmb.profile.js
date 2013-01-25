@@ -895,6 +895,7 @@ JMBProfile.prototype = {
             form;
 
         switch(id){
+            /*
             case "view_profile":
                 form = fn.getViewObject('dialogViewProfile');
                 fn.setTitleMessage(form);
@@ -1446,6 +1447,7 @@ JMBProfile.prototype = {
                         }, 1);
                 })(this);
             break;
+            */
 
             case "edit_basic":
                 form = fn.getViewObject('dialogEditBasic');
@@ -1853,10 +1855,12 @@ JMBProfile.prototype = {
             jQuery(box).parent().css('top', '40px');
             jQuery(box).html('');
             jQuery(box).append(dialogBox);
+            /*
             if(fn.getParseUserInfo().is_editable){
                 jQuery(box).parent().find('.ui-dialog-titlebar').append(dialogButton);
                 fn.initHeader(dialogButton, type);
             }
+            */
         });
 
         module.mode(type, args.start);

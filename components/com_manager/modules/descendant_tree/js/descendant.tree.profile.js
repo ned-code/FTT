@@ -200,7 +200,8 @@ DescendantTreeProfile.prototype = {
 	editor:function(html, object){
         var module = this;
 		jQuery(html).find('.jmb-dtp-body-info-switch').click(function(){
-			storage.profile.editor('view', {
+			/*
+            storage.profile.editor('view', {
 				object:object,
 				events:{
 					afterEditorClose:function(obj){
@@ -212,6 +213,10 @@ DescendantTreeProfile.prototype = {
 					}
 				}
 			});
+			*/
+            $FamilyTreeTop.fn.mod("PROFILE_EDITOR").editor({
+                gedcom_id: object.user.gedcom_id
+            });
 		});
 	},
 	photo:function(html){

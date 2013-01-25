@@ -78,6 +78,7 @@
     border-radius: 2px 2px 2px 2px;
     display: inline-block;
     padding: 5px;
+    margin-left: 3px;
 }
 
 .ftt-profile-editor-box-header-buttons div.edit {

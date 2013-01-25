@@ -377,7 +377,6 @@ JMBTooltip.prototype = {
 			});
 		});
 		jQuery(cont).find('.jmb-profile-tooltip-button-edit').click(function(){
-            /*
 			storage.profile.editor('edit', {
 				object:object,
 				events:{
@@ -388,10 +387,6 @@ JMBTooltip.prototype = {
 					}
 				}
 			});
-			*/
-            $FamilyTreeTop.fn.mod("PROFILE_EDITOR").editor({
-                gedcom_id: object.user.gedcom_id
-            });
         });
 	},
 	_buttons:function(cont, settings){

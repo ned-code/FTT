@@ -198,9 +198,6 @@
                     jQuery(div).animate({"left":"-="+(settings.width)+"px"}, "slow", function(){
                         jQuery(div).remove();
                     });
-                    //jQuery(".header").animate({"left":"0px"}, "slow");
-                    //jQuery(".main").animate({"left":"0px"}, "slow");
-                    working = false;
                     $module.data.slide = false;
                     $module.fn.echo();
                 },
@@ -213,8 +210,6 @@
                 init: function(){
                     jQuery("#_content").append(div);
                     jQuery(div).animate({"left":"0px"}, "slow");
-                    //jQuery(".header").animate({"left":settings.width}, "slow");
-                    //jQuery(".main").animate({"left":settings.width}, "slow");
                 }
             }
         }
@@ -283,10 +278,10 @@
                     var p = $module.data.parse;
                     return [p.date('birth'), " ", p.getPlaceString('birth')].join("");
                 },
-                line: function(title, text, check){
+                line: function(id, title, text, check){
                     if("undefined" !== typeof(check) && !check) return "";
                     var sb = $module.fn.stringBuffer();
-                    sb._('<tr>');
+                    sb._('<tr id="')._(id)._('">');
                         sb._('<td><div class="ftt-profile-editor-box-content-element-title"><span>')._(title)._('</span></div></td>');
                         sb._('<td><div class="ftt-profile-editor-box-content-element-text"><span>')._(text)._('</span></div></td>');
                     sb._('</tr>');
@@ -295,28 +290,41 @@
                 avatar: function(){
                     return storage.usertree.avatar.get({
                         object: $module.data.object,
-                        width:81,
-                        height:90
+                        width:108,
+                        height:120
                     });
                 },
+                update: function(){},
                 create: function(){
                     var sb = $module.fn.stringBuffer();
                     sb._('<div>');
                         sb._('<div style="display: inline-block; vertical-align: top; margin:5px;">')._(fn.avatar())._('</div>');
-                        sb._('<div style="display: inline-block; vertical-align: top; margin: 5px;">');
-                            sb._('<table>');
-                                sb._(fn.line("Full Name:", $module.data.parse.full_name));
-                                sb._(fn.line("Know As:", $module.data.parse.nick));
-                                sb._(fn.line("Born:", fn.event("birth"), $module.data.parse.is_birth));
-                                sb._(fn.line("Death:", fn.event("death"), $module.data.parse.is_death));
-                                sb._(fn.line("Relation:", $module.data.parse.relation));
-                            sb._('</table>');
-                        sb._('</div>');
+                        sb._(fn.createInfoElement());
                     sb._('</div>');
                     return jQuery(sb.result());
+                },
+                createInfoElement: function(){
+                    var sb = $module.fn.stringBuffer();
+                    sb._('<div style="display: inline-block; vertical-align: top; margin: 5px;">');
+                        sb._('<table>');
+                            sb._(fn.line('name', "Full Name:", $module.data.parse.full_name));
+                            sb._(fn.line('know_as', "Know As:", $module.data.parse.nick));
+                            sb._(fn.line('born', "Born:", fn.event("birth"), $module.data.parse.is_birth));
+                            sb._(fn.line('death', "Death:", fn.event("death"), $module.data.parse.is_death));
+                            sb._(fn.line('relation', "Relation:", $module.data.parse.relation));
+                        sb._('</table>');
+                    sb._('</div>');
+                    return sb.result();
                 }
             }
-            return fn.create();
+            return {
+                onClick:function(){
+                    storage.profile.editor('edit', {
+                        object:$module.data.object
+                    });
+                },
+                render:fn.create
+            };
         }
 
         /*
@@ -957,12 +965,16 @@
         return {
             editor:function(settings){
                 if($module.data.slide) return false;
+
+                storage.tooltip.cleaner();
+
                 //data
                 $module.data.gedcom_id = settings.gedcom_id;
                 $module.data.object = $module.fn.getObject($module.data.gedcom_id);
                 $module.data.parse = $module.fn.parse($module.data.object);
 
                 if(!$module.data.object) return false;
+                $module.data.basic = $module.fn.basic();
 
                 // create slide with info module structure
                 $module.data.slide = $module.fn.slide();
@@ -976,12 +988,10 @@
                                 id: "edit",
                                 name: "Edit",
                                 className: "edit",
-                                onClick:function(){
-                                    console.log("basic info edit!");
-                                }
+                                onClick:$module.data.basic.onClick
                             }
                         ],
-                        content: $module.fn.basic($module.data.gedcom_id)
+                        content: $module.data.basic.render($module.data.gedcom_id)
                     },
                     {
                         id: "family",
@@ -994,15 +1004,7 @@
                         id: "photos",
                         name: "Photos",
                         level: 2,
-                        buttons: [
-                            {
-                                id: "add",
-                                name: "Add Photo",
-                                onClick:function(){
-                                    console.log("added new photo!");
-                                }
-                            }
-                        ],
+                        buttons: [],
                         content: $module.fn.photos()
                     },
                     {
