@@ -136,7 +136,7 @@ dhtmlxEvent(window,"load",function(){
     dhxTree.setIconSize("16","16")
     dhxTree.setSkin('dhx_skyblue');
     var manager = new MyBranchesManager();    
-    dhxTree.setImagePath("components/com_manager/codebase/imgs/csh_bluebooks_custom/");
+    dhxTree.setImagePath("../components/com_manager/codebase/imgs/csh_bluebooks_custom/");
     dhxTree.loadXML(manager.getComManagerXMLTree());
     storage.obj.dhxLayoutParent = dhxLayoutParent;
     storage.obj.dhxLayout = dhxLayout;
