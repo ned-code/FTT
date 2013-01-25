@@ -70,6 +70,20 @@ class FamilyTreeTopHostLibrary {
             return JPATH_ROOT."/components/com_manager/modules/";
     }
 
+    public function callMethod($modulename,$classname, $method, $arguments){
+        $args = explode("|", $arguments);
+        $modulePath = $this->modulesPath.$modulename."/php/".$modulename.".php";
+        if(!file_exists($modulePath)){
+            return;
+        }
+        require_once($modulePath);
+        if($classname != null){
+            $obj = new $classname;
+            return call_user_func_array(array($obj, $method), $args);
+        }else
+            return call_user_func_array($method, $args);
+    }
+
     /*
     * ------------------------------------------------------------------------------------------
     */
