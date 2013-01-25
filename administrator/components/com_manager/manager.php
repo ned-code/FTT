@@ -8,21 +8,21 @@ require_once(JPATH_COMPONENT.DS.'controller.php');
 # include JS and CSS 
 $document =& JFactory::getDocument();
 
-$document->addStyleSheet('components/com_manager/js/jquery-ui-1.8.23.custom.css');
-$document->addStyleSheet('components/com_manager/js/jquery-colorpicker.css');
+$document->addStyleSheet('../components/com_manager/js/jquery-ui-1.8.23.custom.css');
+//$document->addStyleSheet('../components/com_manager/js/jquery-colorpicker.css');
 
-$document->addStyleSheet('components/com_manager/codebase/skins/dhtmlxlayout_dhx_skyblue.css');
-$document->addStyleSheet('components/com_manager/codebase/skins/dhtmlxform_dhx_skyblue.css');
-$document->addStyleSheet('components/com_manager/codebase/dhtmlxlayout.css');
-$document->addStyleSheet('components/com_manager/codebase/dhtmlxtree.css');
-$document->addStyleSheet('components/com_manager/codebase/dhtmlxtabbar.css');
+$document->addStyleSheet('../components/com_manager/codebase/skins/dhtmlxlayout_dhx_skyblue.css');
+$document->addStyleSheet('../components/com_manager/codebase/skins/dhtmlxform_dhx_skyblue.css');
+$document->addStyleSheet('../components/com_manager/codebase/dhtmlxlayout.css');
+$document->addStyleSheet('../components/com_manager/codebase/dhtmlxtree.css');
+$document->addStyleSheet('../components/com_manager/codebase/dhtmlxtabbar.css');
 
-$document->addScript('components/com_manager/codebase/dhtmlxcontainer.js');
-$document->addScript('components/com_manager/codebase/dhtmlxcommon.js');
-$document->addScript('components/com_manager/codebase/dhtmlxlayout.js');
-$document->addScript('components/com_manager/codebase/dhtmlxtree.js');
-$document->addScript('components/com_manager/codebase/dhtmlxform.js');
-$document->addScript('components/com_manager/codebase/dhtmlxtabbar.js');
+$document->addScript('../components/com_manager/codebase/dhtmlxcontainer.js');
+$document->addScript('../components/com_manager/codebase/dhtmlxcommon.js');
+$document->addScript('../components/com_manager/codebase/dhtmlxlayout.js');
+$document->addScript('../components/com_manager/codebase/dhtmlxtree.js');
+$document->addScript('../components/com_manager/codebase/dhtmlxform.js');
+$document->addScript('../components/com_manager/codebase/dhtmlxtabbar.js');
 
 $css_code = 'html, body {
 	    	width: 100%;
@@ -77,12 +77,12 @@ $controller->redirect();
 
 JHTML::_('behavior.mootools');
 
-$document->addScript('components/com_manager/js/jquery-1.8.1.min.js');
-$document->addScript('components/com_manager/js/jquery-ui-1.8.23.custom.min.js');
-$document->addScript('components/com_manager/js/jquery.form.js');
+$document->addScript('../components/com_manager/js/jquery-1.8.1.min.js');
+$document->addScript('../components/com_manager/js/jquery-ui-1.8.23.custom.min.js');
+$document->addScript('../components/com_manager/js/jquery.form.js');
 
-$document->addStyleSheet('../components/com_manager/js/jquery.autocomplete.css');
-$document->addScript('../components/com_manager/js/jquery.autocomplete.min.js');
+//$document->addStyleSheet('../components/com_manager/js/jquery.autocomplete.css');
+//$document->addScript('../components/com_manager/js/jquery.autocomplete.min.js');
 
 $document->addCustomTag( '<script type="text/javascript">jQuery.noConflict();</script>' );
 
