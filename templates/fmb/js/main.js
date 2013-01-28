@@ -43,18 +43,24 @@
 // feedback slide-out
 (function(w){
     var alias = jQuery(document.body).attr("_alias");
-    if(alias == "myfamily"){
-        jQuery(".slide-out-div").tabSlideOut({
-            tabHandle: '.handle',
-            pathToTabImage: '../components/com_manager/modules/feedback/images/feedback.gif',
-            imageHeight: '279px',
-            imageWidth: '40px',
-            tabLocation: 'left',
-            speed: 300,
-            action: 'click',
-            topPos: '50px',
-            leftPos: '20px',
-            fixedPosition: false
-        });
+    if(window != window.top ){
+        jQuery(".slide-out-div").remove();
+    } else {
+        if(alias == "myfamily"){
+            jQuery(".slide-out-div").tabSlideOut({
+                tabHandle: '.handle',
+                pathToTabImage: '../components/com_manager/modules/feedback/images/feedback.gif',
+                imageHeight: '279px',
+                imageWidth: '40px',
+                tabLocation: 'left',
+                speed: 300,
+                action: 'click',
+                topPos: '50px',
+                leftPos: '20px',
+                fixedPosition: false
+            });
+        }
     }
 })(window);
+
+FB.Canvas.setSize();
