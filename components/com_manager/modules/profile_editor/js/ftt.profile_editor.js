@@ -220,6 +220,7 @@
             var box = this, fn;
             fn = {
                 createButton:function(st){
+                    if("undefined" !== typeof(st.check) && !st.check) return false;
                     var sb = $module.fn.stringBuffer();
                     sb._('<div');
                         sb._(("undefined"!==typeof(st.id))?' id="'+st.id+'" ':"");
@@ -231,10 +232,12 @@
                 },
                 createButtons:function(buttons){
                     if(!buttons) return [];
-                    var btns = [];
+                    var btns = [], bt;
                     for(var key in buttons){
                         if(!buttons.hasOwnProperty(key)) continue;
-                        btns.push(fn.createButton(buttons[key]));
+                        if(bt = fn.createButton(buttons[key])){
+                            btns.push(bt);
+                        }
                     }
                     return btns;
                 },
@@ -988,6 +991,7 @@
                                 id: "edit",
                                 name: "Edit",
                                 className: "edit",
+                                check: ($module.data.parse.facebook_id == 0),
                                 onClick:$module.data.basic.onClick
                             }
                         ],
