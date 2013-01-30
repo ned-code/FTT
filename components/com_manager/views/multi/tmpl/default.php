@@ -19,7 +19,6 @@ foreach ($info as $page){
         $files = $module['files'];
         $link = $url . $path . $name;
         foreach($files['css'] as $cssName){
-            //echo '<link rel="stylesheet" href="'. $link . '/css/' . $cssName .'" type="text/css" />';
             $cssObject[] = $path . $name . "/css/" . $cssName;
         }
         foreach($files['js'] as $jsName){
@@ -115,9 +114,11 @@ echo '<link type="text/css" href="'.$url.'components/com_manager/mini/mini2.css"
         var friends = <?php echo json_encode($this->friends); ?>;
         var usermap = <?php echo json_encode($this->usermap); ?>;
         var app = <?php echo json_encode($this->app); ?>;
+        var mobile = <?php echo json_encode($this->mobile); ?>
 
         if(typeof(storage) != "undefined"){
             if(usertree){
+                storage.usertree.mobile = mobile;
                 storage.usertree.gedcom_id = usertree.gedcom_id;
                 storage.usertree.facebook_id = usertree.facebook_id;
                 storage.usertree.tree_id = usertree.tree_id;

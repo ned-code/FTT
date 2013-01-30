@@ -36,8 +36,6 @@ class FTTUserLibrary {
 
         $this->token = $this->getToken();
 
-
-
         $this->process();
     }
 

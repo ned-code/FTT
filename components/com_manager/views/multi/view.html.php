@@ -30,6 +30,7 @@ class JmbViewMulti extends JView{
         $this->languageStrings = false;
         $this->config = false;
         $this->friends = false;
+        $this->mobile = $host->mobile;
 
         $user = $host->user->get();
 
