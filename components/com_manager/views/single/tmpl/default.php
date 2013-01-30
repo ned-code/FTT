@@ -3,8 +3,13 @@
 $pages = $this->msg->id;
 
 ?>
-<div id="page"></div>
-
+<div id="_header"></div>
+<div id="_content" class="content">
+    <div class="header"></div>
+    <div class="main">
+        <div id="page"></div>
+    </div>
+</div>
 <script>
     (function(w){
         var pages = <?php echo $pages; ?>;

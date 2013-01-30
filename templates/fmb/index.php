@@ -76,80 +76,10 @@ if (stripos($user_agent, 'MSIE 6.0') !== false
 <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
 <![endif]-->
 <!-- CONTENT START -->
-<div id="_header"></div>
-<div id="_content" class="content">
-    <div class="header"></div>
-    <div class="main">
-        <table width="100%">
-            <tr>
-                <td id="_main" valign="top">
-                    <div id="fb-root"></div>
-                    <jdoc:include type="component" />
-                </td>
-                <td id="_right" valign="top">
-                    <div class="right"></div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div style="display:none;<?php echo (isFooterPage($alias))?'border-top: 1px solid gray;':''; ?>" id="_bottom" class="footer">
-                        <div style="left: 0; position: absolute;">
-                            <div><a style="color:black; font-weight: bold;" href="<?php echo $base_url; ?>">FamilyTreeTop.com</a></div>
-                            <!-- <div style="margin-top: 10px;"><span id="siteseal"><script type="text/javascript" src="https://seal.godaddy.com/getSeal?sealID=QbddMchgFRTEtJe2vFw4hjBQe73woVFQRwgBDPdlnAbAKWNkzv7"></script></span></div>-->
-                        </div>
-                        <div style="right: 0; position: absolute;">
-                            <div>
-                                <ul>
-                                    <li><a href="<?php echo $base_url; ?>index.php/about">About</a></li>
-                                    <li><a href="<?php echo $base_url; ?>index.php/conditions">Terms & Conditions</a></li>
-                                    <li><a href="<?php echo $base_url; ?>index.php/privacy">Privacy Policy</a></li>
-                                    <li><a href="<?php echo $base_url; ?>index.php/feedback">Provide Feedback</a></li>
-                                    <li><a href="<?php echo $base_url; ?>index.php/contact">Contact</a></li>
-                                    <li><a href="<?php echo $base_url; ?>index.php/help">Help</a></li>
-                                </ul>
-                            </div>
-                            <!--<div style="margin-top:15px;">© 2012 Family TreeTop</div>-->
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        </table>
-    </div>
-</div>
-<!-- CONTENT END -->
-<?php if($alias=='myfamily'): ?>
-<div class="slide-out-div">
-    <a class="handle" href="http://link-for-non-js-users.html">Content</a>
-    <div id="jmb_feedback_form">
-        <div style="display:none;" class="likes">
-            <!-- AddThis Button BEGIN -->
-            <script>
-                if(window == window.top){
-                    (function(w){
-                        var head = document.getElementsByTagName("head");
-                        var script = document.createElement("script");
-                        script.src = "http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4f97ad88304db623";
-                        script.type="text/javascript";
-                        head[0].appendChild(script);
-                    })(window)
-                }
-            </script>
-            <div class="addthis_toolbox addthis_default_style addthis_32x32_style">
-                <div class="message"></div>
-                <div class="facebook"><a class="addthis_button_facebook at300b"></a></div>
-                <div class="twitter"><a class="addthis_button_twitter at300b"></a></div>
-                <div class="email"><a class="addthis_button_email at300b"></a></div>
-            </div>
-            <!-- AddThis Button END -->
-        </div>
-    </div>
-</div>
-<?php endif; ?>
-<!-- SCRIPTS -->
+<jdoc:include type="component" />
 <!--
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 -->
-<div id="_root" style="display:none;"></div>
 <script>window.jQuery || document.write('<script src="<?php echo $this->baseurl; ?>/components/com_manager/js/jquery-1.8.1.min.js"><\/script>')</script>
 <script>window.jQuery.ui || document.write('<script src="<?php echo $this->baseurl; ?>/components/com_manager/js/jquery-ui-1.8.23.custom.min.js"><\/script>')</script>
 <script src="<?php echo $this->baseurl; ?>/templates/<?php echo $this->template; ?>/js/fmb.js"></script>

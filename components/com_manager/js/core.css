@@ -1,3 +1,54 @@
+/*
+* FamilyTreeTop content
+*/
+.content {
+    position: relative;
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: medium none;
+    margin: 20px auto 0;
+    max-width: 760px;
+    line-height: 1.28;
+}
+.header {
+    position: relative;
+}
+.main {
+    position:relative;
+}
+#container {
+    position:relative;
+    min-width: 760px;
+    font-size: 11px;
+    font-family: 'lucida grande',tahoma,verdana,arial,sans-serif;
+    color: #333;
+    line-height: 1.28;
+    text-align: left;
+    direction: ltr;
+}
+.footer {
+    margin-top: 10px;
+    font-size: 11px;
+    font-family: 'lucida grande',tahoma,verdana,arial,sans-serif;
+    color: #333;
+    line-height: 1.28;
+    text-align: left;
+    direction: ltr;
+}
+.footer ul {
+    list-style: none outside none;
+    margin: 0;
+    padding: 0;
+}
+.footer ul li{
+    display: inline-block;
+    margin-left: 5px;
+}
+.footer a {
+    text-decoration: none;
+}
+/*
+* FamilyTreeTop Tab
+*/
 ul.jmbtabs {
 	margin-top: 20px;
     margin-bottom: 0px;
@@ -49,12 +100,10 @@ html ul.jmbtabs.myfamily li.active, html ul.jmbtabs li.active a:hover {
     background-color: #f5f8fc;
     border-bottom: 1px solid #f5f8fc;
 }
-
 .tab_container {
 	border: 1px solid #999;
 	border-top: none;
 	clear: both;
-	float: left;
     width: 99%;
 	background: #fff;
 	position: relative;
