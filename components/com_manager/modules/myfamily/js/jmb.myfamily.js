@@ -157,9 +157,14 @@
                 var obj = $module.fn.getUser(id);
                 if(obj){
                     jQuery($module.data.activeItem).btOff();
+                    /*
                     storage.profile.editor('view', {
                         object:obj,
                         start:"view_relation_mapper"
+                    });
+                    */
+                    $FamilyTreeTop.fn.mod("PROFILE_EDITOR").editor({
+                        gedcom_id: obj.user.gedcom_id
                     });
                 }
             },
