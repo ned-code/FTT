@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+        <layout title="Mobile">
+                <message>Mobile</message>
+        </layout>
+        <fields
+                name="request"
+                addfieldpath="/administrator/components/com_manager/models/fields"
+        >
+                <fieldset name="request">
+                        <field
+                                name="id"
+                                multiple="true"
+                                type="mobile"
+                                label="Mobile"
+                                description="Mobile"
+                        />
+                </fieldset>
+        </fields>
+</metadata>

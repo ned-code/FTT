@@ -243,8 +243,13 @@ class JMBController extends JController
                 if($user->guest && $user->loginType != 1) return "login";
                 if($user->facebookId == 0 && $user->loginType != 1) return "login";
                 if($user->treeId==0) return "first-page";
+                if($user->mobile) return "mobile";
                 return "myfamily";
 			break;
+
+            case "mobile":
+                return "mobile";
+            break;
 
             case "about":
             case "conditions":

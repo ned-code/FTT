@@ -32,6 +32,7 @@ function JMBTopMenuBar() {
                     string += '<div id="myfamily" class="jmb-top-menu-bar-item"><span>' + message.FTT_MOD_TOPMENUBAR_MYFAMILY + '</span></div>';
                     string += '<div id="famous-family" class="jmb-top-menu-bar-item"><span>' + message.FTT_MOD_TOPMENUBAR_FAMOUS_FAMILIES + '</span></div>';
                     string += '<div id="home" class="jmb-top-menu-bar-item"><span>' + message.FTT_MOD_TOPMENUBAR_HOME + '</span></div>';
+                    string += '<div id="mobile" class="jmb-top-menu-bar-item"><span>#MOBILE</span></div>';
                 string += '</div>';
                 string += '<div id="_profile"></div>';
             string += '</div>';

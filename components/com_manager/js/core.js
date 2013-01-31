@@ -1498,7 +1498,7 @@
             set:function(settings){
 
             },
-            init:function(){}
+            render:function(type, settings){}
         };
     }, true);
 })($FamilyTreeTop);

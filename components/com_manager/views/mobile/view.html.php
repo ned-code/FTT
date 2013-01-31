@@ -4,7 +4,7 @@ defined('_JEXEC') or die( 'Restricted access' );
 
 jimport( 'joomla.application.component.view');
 
-class JmbViewMulti extends JView{
+class JmbViewMobile extends JView{
     protected function update_login_time ($gedcom_id){
         $db =& JFactory::getDBO();
         $mysqldate = date('Y-m-d H:i:s');
@@ -70,8 +70,6 @@ class JmbViewMulti extends JView{
         $this->friends = $host->jfbConnect->api('/me/friends');
         $this->usermap = $user;
         $this->app = $host->jfbConnect->api($host->jfbConnect->facebookAppId);
-
-
 
         parent::display($tpl);
     }

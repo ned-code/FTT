@@ -29,6 +29,8 @@ foreach ($info as $page){
 $builder->setCss($cssObject);
 $builder->cssCompile("mini2.css");
 echo '<link type="text/css" href="'.$url.'components/com_manager/mini/mini2.css" rel="stylesheet"></link>';
+
+
 ?>
 <div id="_header"></div>
 <div id="_content" class="content">
@@ -82,11 +84,50 @@ echo '<link type="text/css" href="'.$url.'components/com_manager/mini/mini2.css"
 </div>
 <script>
     (function(w){
-        var alias = jQuery(document.body).attr("_alias");
-        if(window != window.top ){
+        var setData = function(){
+            var data = {
+                pageInfo:<?php echo json_encode($info); ?>,
+                activeTab:'<?php echo $this->activeTab; ?>',
+                usertree:<?php echo json_encode($this->usertree); ?>,
+                langString:<?php echo json_encode($this->languageStrings); ?>,
+                notifications:<?php echo json_encode($this->notifications); ?>,
+                config:<?php echo json_encode($this->config); ?>,
+                friends:<?php echo json_encode($this->friends); ?>,
+                usermap:<?php echo json_encode($this->usermap); ?>,
+                app:<?php echo json_encode($this->app); ?>,
+                alias: jQuery(document.body).attr("_alias")
+            }
+
+            if(typeof(storage) != "undefined"){
+                if(data.usertree){
+                    storage.usertree.mobile = data.mobile;
+                    storage.usertree.gedcom_id = data.usertree.gedcom_id;
+                    storage.usertree.facebook_id = data.usertree.facebook_id;
+                    storage.usertree.tree_id = data.usertree.tree_id;
+                    storage.usertree.permission = data.usertree.permission;
+                    storage.usertree.users = data.usertree.users;
+                    storage.usertree.friends = data.friends;
+                    storage.usertree.pull = data.usertree.pull;
+                }
+                storage.notifications = data.notifications;
+                storage.settings = data.config;
+                storage.langString = data.langString;
+                storage.usertree.usermap = data.usermap;
+
+                storage.app = data.app;
+                storage.activeTab = data.activeTab;
+            }
+            return data;
+        }
+
+        var data = setData();
+
+        if(w != w.top){
+            jQuery("#_header").remove();
+            jQuery(".footer").remove();
             jQuery(".slide-out-div").remove();
         } else {
-            if(alias == "myfamily"){
+            if(data.alias == "myfamily"){
                 jQuery(".slide-out-div").tabSlideOut({
                     tabHandle: '.handle',
                     pathToTabImage: '../components/com_manager/modules/feedback/images/feedback.gif',
@@ -101,40 +142,7 @@ echo '<link type="text/css" href="'.$url.'components/com_manager/mini/mini2.css"
                 });
             }
         }
-    })(window);
-</script>
-<script>
-    (function(w){
-        var pageInfo = <?php echo json_encode($info); ?>;
-        var activeTab = '<?php echo $this->activeTab; ?>';
-        var usertree = <?php echo json_encode($this->usertree); ?>;
-        var langString = <?php echo json_encode($this->languageStrings); ?>;
-        var notifications = <?php echo json_encode($this->notifications); ?>;
-        var config = <?php echo json_encode($this->config); ?>;
-        var friends = <?php echo json_encode($this->friends); ?>;
-        var usermap = <?php echo json_encode($this->usermap); ?>;
-        var app = <?php echo json_encode($this->app); ?>;
-        var mobile = <?php echo json_encode($this->mobile); ?>
 
-        if(typeof(storage) != "undefined"){
-            if(usertree){
-                storage.usertree.mobile = mobile;
-                storage.usertree.gedcom_id = usertree.gedcom_id;
-                storage.usertree.facebook_id = usertree.facebook_id;
-                storage.usertree.tree_id = usertree.tree_id;
-                storage.usertree.permission = usertree.permission;
-                storage.usertree.users = usertree.users;
-                storage.usertree.friends = friends;
-                storage.usertree.pull = usertree.pull;
-            }
-            storage.notifications = notifications;
-            storage.settings = config;
-            storage.langString = langString;
-            storage.usertree.usermap = usermap;
-
-            storage.app = app;
-            storage.activeTab = activeTab;
-            storage.core.load(pageInfo);
-        }
+        storage.core.load(data.pageInfo);
     })(window)
 </script>
