@@ -47,7 +47,7 @@
     text-decoration: none;
 }
 /*
-* FamilyTreeTop Tab
+* FamilyTreeTop Tab Navigation
 */
 ul.jmbtabs {
 	margin-top: 20px;
@@ -100,6 +100,53 @@ html ul.jmbtabs.myfamily li.active, html ul.jmbtabs li.active a:hover {
     background-color: #f5f8fc;
     border-bottom: 1px solid #f5f8fc;
 }
+/*
+* FamilyTreeTop Mobile Navigation
+*/
+.ftt-mobile-navigation {
+    background: url(mobile_nav_background.png) repeat-x transparent;
+    height: 50px;
+    list-style: none outside none;
+    margin: 0;
+    padding: 0;
+}
+.ftt-mobile-navigation .ftt-mobile-navigation-item {
+    display: inline-block;
+    position: relative;
+}
+.ftt-mobile-navigation .ftt-mobile-navigation-item div.active {
+    background: none repeat scroll 0 0 yellow;
+    border-radius: 5px 5px 5px 5px;
+    height: 43px;
+    left: 3px;
+    opacity: 0.3;
+    position: absolute;
+    top: 3px;
+    width: 43px;
+}
+.ftt-mobile-navigation .ftt-mobile-navigation-item div {
+    height: 49px;
+    width: 49px;
+    cursor: pointer;
+}
+.ftt-mobile-navigation .ftt-mobile-navigation-item div.MobMyFamily {
+    background: url(mobile_navigation.png) no-repeat -5px 0px transparent;
+}
+.ftt-mobile-navigation .ftt-mobile-navigation-item div.MobCalendar {
+    background: url(mobile_navigation.png) no-repeat -55px 0px transparent;
+}
+.ftt-mobile-navigation .ftt-mobile-navigation-item div.MobFamilyMembers {
+    background: url(mobile_navigation.png) no-repeat -100px 0px transparent;
+}
+.ftt-mobile-navigation .ftt-mobile-navigation-item div.MobFamilies {
+    background: url(mobile_navigation.png) no-repeat -150px 0px transparent;
+}
+.ftt-mobile-navigation .ftt-mobile-navigation-item div.MobDescendants {
+    background: url(mobile_navigation.png) no-repeat -200px 0px transparent;
+}
+/**
+* FamilyTreeTop Content
+*/
 .tab_container {
 	border: 1px solid #999;
 	border-top: none;

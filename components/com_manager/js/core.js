@@ -1110,24 +1110,29 @@
             storage.media = new JMBMediaManager();
             storage.invitation = new JMBInvitation();
             storage.tooltip = new JMBTooltip();
-            storage.topmenubar = new JMBTopMenuBar();
+            //storage.topmenubar = new JMBTopMenuBar();
             storage.family_line = new JMBFamilyLine();
             storage.progressbar = new JMBProgressbarObject();
             storage.feedback = new JMBFeedback();
             storage.ntf = new JMBNotifications();
 
             //init top menu bar
-            storage.topmenubar.init();
+            var init = function(){
+                if($FamilyTreeTop.fn.mod("TOPMENUBAR")){
+                    $FamilyTreeTop.fn.mod("TOPMENUBAR").init("full");
+                } else {
+                    setTimeout(init, 250);
+                }
+            }
+            init();
 
             //set width
             var mode = (window != window.top)?'facebook':'standalone';
             var cont = jQuery("div.content");
             if(mode == 'facebook'){
                 jQuery(cont).css('max-width', '760px');
-                jQuery(cont).find('div.right').remove();
             } else if(mode == 'standalone'){
                 jQuery(cont).css('max-width', '920px');
-                //jQuery(cont).find('div.footer').remove();
             }
 
             //set object to pages variable
@@ -1278,57 +1283,6 @@
     }
 
     $ftt.fn = {
-        //delete
-        parse:function(object){
-            return storage.usertree.parse(object);
-        },
-        //delete
-        getUsertree:function(){
-            return storage.usertree;
-        },
-        getUsers:function(){
-            return storage.usertree.users;
-        },
-        //delete
-        getUser:function(id, type){
-            if("undefined" === typeof(type)) {
-                type = "gedcom";
-            }
-            var usertree = $ftt.fn.getUsertree(), gedcom_id;
-            if("facebook" === type && "undefined" !== usertree.users[id]){
-                gedcom_id = usertree.users[id][0].gedcom_id;
-            } else if("gedcom" === type){
-                gedcom_id = id;
-            } else {
-                return false;
-            }
-            if("undefined" !== usertree.pull[gedcom_id]){
-                return usertree.pull[gedcom_id];
-            }
-            return false;
-        },
-        //delete
-        call:function(module, classname, method, args, callback){
-            var xnr = jQuery.ajax({
-                url: $ftt.global.base + $ftt.global.path + "php/ajax.php",
-                type: "POST",
-                data: 'module='+module+'&class='+classname+'&method='+method+'&args='+args,
-                dataType: "html",
-                complete : function (req, err) {
-                    if(err == "success"){
-                        callback(req);
-                    } else {
-                        callback(false);
-                    }
-                }
-            });
-            $ftt.request.add(xnr, "XNR_"+(new Date()).valueOf())
-            return xnr;
-        },
-        /*
-        *
-         */
-        //delete
         json:function(str){
             var json;
             try {
@@ -1338,7 +1292,6 @@
             }
             return json;
         },
-        //adatat
         mod:function(name, normal){
             var name = "MOD_"+(("undefined" !== typeof(normal))?"":"SYS_")+name.toUpperCase();
             if("undefined" !== typeof($ftt.module.active[name])){
@@ -1412,7 +1365,6 @@
     }
 })(window);
 
-
 (function($ftt){
     $ftt.module.create("MOD_SYS_AJAX", function(){
         var $module = this;
@@ -1472,58 +1424,116 @@
     }, true);
 })($FamilyTreeTop);
 
-(function($ftt){
-    $ftt.module.create("MOD_SYS_SETTINGS", function(){
-        var $module = this;
-        $module.data.arguments = arguments;
-        return {
-            set:function(){}
-        }
-    }, true);
-})($FamilyTreeTop);
-
-(function($ftt){
+(function($, $ftt){
     $ftt.module.create("MOD_SYS_RENDER", function(){
         var $module = this,
             fn = {
-                getSettings:function(df, st){
-                    return jQuery.extend(true, {}, df, st);
+                createMobileViewContainer: function(p){
+                    var sb = $module.fn.stringBuffer();
+                    sb._('<div id="')._(p.container_id)._('"></div>');
+                    return $(sb.result());
+                },
+                createFullViewContainer: function(){},
+                initModule: function(type, param){
+                    var container, modName;
+                    if(type == "mobile"){
+                        container = fn.createMobileViewContainer(param);
+                        modName = "MOD_" + param.info.name.toUpperCase();
+                        $("#_content").html("").append(container);
+                        if($FamilyTreeTop.module.get(modName)){
+                            $FamilyTreeTop.module.init(modName, container, $FamilyTreeTop.fn.mod("ajax"));
+                        }
+                    }
+                },
+                initModules: function(type, setting){
+                    var modules = setting.modules;
+                    for(var id in modules){
+                        if(!modules.hasOwnProperty(id)) continue;
+                        var module = modules[id];
+                        fn.initModule(type, module);
+                    }
+                },
+                mobileRender:function(settings){
+                    $FamilyTreeTop.fn.mod("topmenubar").init("mobile");
+                    $FamilyTreeTop.fn.mod("navigation").init("mobile", settings, function(el, setting){
+                        fn.initModules("mobile", setting);
+                    });
                 }
             };
 
         $module.data.arguments = arguments;
-        $module.data.settings = {}
+        $module.data.settings = {};
+        $module.data.type = null;
 
         return {
-            set:function(settings){
-
+            set:function(type, settings){
+                $module.data.type = type;
+                $module.data.settings = settings;
             },
-            render:function(type, settings){}
+            init:function(){
+                if($module.data.type == "mobile"){
+                    fn.mobileRender($module.data.settings);
+                } else {
+                    return false;
+                }
+            }
         };
     }, true);
-})($FamilyTreeTop);
+})(jQuery, $FamilyTreeTop);
 
-(function($ftt){
-    $ftt.module.create("MOD_SYS_USERTREE", function(){
-        var $module = this;
+(function($, $ftt){
+    $ftt.module.create("MOD_SYS_NAVIGATION", function(){
+        var $module = this,
+            fn = {
+                createMobileNavigationActive:function(){
+                    return $('<div class="active"></div>');
+                },
+                createMobileNavigation:function(st){
+                    var sb = $module.fn.stringBuffer();
+                    sb._('<ul class="ftt-mobile-navigation">');
+                        for(var key in st){
+                            if(!st.hasOwnProperty(key)) continue;
+                            var el = st[key];
+                            sb._('<li ');
+                                sb._(' id="')._(el.page_info.id)._('" ');
+                                sb._('class="ftt-mobile-navigation-item"');
+                            sb._(' >');
+                                sb._('<div class="')._(el.page_info.title)._('">&nbsp;</div>');
+                            sb._('</li>');
+                            $module.data.liSettings[el.page_info.id] = el;
+                        }
+                    sb._('</ul>');
+                    return $(sb.result());
+                },
+                renderMobileNavigation:function(settings, callback){
+                    var nav = fn.createMobileNavigation(settings);
+                    $("#_nav").append(nav);
+                    $(nav).find('li').click(function(){
+                        if($module.data.activeItem){
+                            $($module.data.activeItem).remove();
+                        }
+                        var activeItem = fn.createMobileNavigationActive();
+                        $(this).append(activeItem);
+                        $module.data.activeItem = activeItem;
+                        callback(this, $module.data.liSettings[$(this).attr("id")]);
+                    });
+                },
+                renderTabNavigation:function(){}
+            };
+
         $module.data.arguments = arguments;
+        $module.data.activeItem = false;
+        $module.data.liSettings = {};
+
         return {
-            set:function(){},
-            parse:function(object){
-                console.log(object);
+            init: function(type, settings, callback){
+                if(type == "mobile"){
+                    fn.renderMobileNavigation(settings, callback);
+                }
             }
-        }
+        };
     }, true);
-})($FamilyTreeTop);
-
-(function($ftt){
-    $ftt.module.create("MOD_SYS_USERMAP", function(){
-        var $module = this;
-        $module.data.arguments = arguments;
-        return {
-        }
-    }, true);
-})($FamilyTreeTop);
+})(jQuery, $FamilyTreeTop);
 
 (function($ftt){
     $ftt.module.create("MOD_SYS_PHOTOS", function(){
@@ -1623,18 +1633,6 @@
                     fn.init(cont);
                 }, 1);
                 return cont;
-            }
-        }
-    }, true);
-})($FamilyTreeTop);
-
-(function($ftt){
-    $ftt.module.create("MOD_SYS_AVATAR", function(){
-        var $module = this;
-        $module.data.arguments = arguments;
-        return {
-            get: function(settings){
-
             }
         }
     }, true);

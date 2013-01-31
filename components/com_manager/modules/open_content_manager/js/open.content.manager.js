@@ -454,15 +454,17 @@ OpenContentManager.prototype = {
 			//get row
 			//json = jQuery.parseJSON(req.responseText);
 			json = storage.getJSON(req.responseText);
-            data = json.data[0];
-			//get page params
-			index = data.id;
-			title = data.title;
-			layoutType = data.layoutType;
-			//create page title
-			div = jQuery('<div class="ocmPageTitle">'+title+'</div>');
-			jQuery(parent).append(div);
-			self._changeLayoutType(index, title, layoutType);
+            if(json.data.length > 0){
+                data = json.data[0];
+                //get page params
+                index = data.id;
+                title = data.title;
+                layoutType = data.layoutType;
+                //create page title
+                div = jQuery('<div class="ocmPageTitle">'+title+'</div>');
+                jQuery(parent).append(div);
+                self._changeLayoutType(index, title, layoutType);
+            }
 		});		
 	},
 	/**

@@ -22,16 +22,15 @@ foreach ($info as $page){
     }
 }
 
-if(sizeof($cssobject) > 0){
-    $builder->setCss($cssObject);
-    $builder->cssCompile("mini2.css");
-    echo '<link type="text/css" href="'.$url.'components/com_manager/mini/mini2.css" rel="stylesheet"></link>';
-}
+$builder->setCss($cssObject);
+$builder->cssCompile("mini2.css");
+echo '<link type="text/css" href="'.$url.'components/com_manager/mini/mini2.css" rel="stylesheet"></link>';
+
 ?>
-<div>HEADER</div>
-<div>NAVIGATION</div>
-<div>MODULE</div>
-<div>FOOTER</div>
+<div id="_header"></div>
+<div id="_nav"></div>
+<div id="_content"></div>
+<div id="_footer"></div>
 <script>
     (function(w){
         var setData = function(){
@@ -72,6 +71,15 @@ if(sizeof($cssobject) > 0){
 
         var data = setData();
 
-        //storage.core.load(data.pageInfo);
+        var init = function(info){
+            if($FamilyTreeTop.fn.mod("RENDER")){
+                $FamilyTreeTop.fn.mod("RENDER").set("mobile", info);
+            } else {
+                setTimeout(function(){
+                    init(info);
+                }, 250);
+            }
+        }
+        init(data.pageInfo);
     })(window)
 </script>

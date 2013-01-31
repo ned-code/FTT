@@ -1,162 +1,175 @@
-function JMBTopMenuBar() {
-    var module = this, fn, cont, alias, loggedByFamous, fb, message;
+(function($, $ftt){
+    $ftt.module.create("MOD_SYS_TOPMENUBAR", function(){
+        var $module = this,
+            fn = {
+               getMsg:function(n){
+                   var t = 'FTT_MOD_TOPMENUBAR_'+n.toUpperCase();
+                   if(typeof($module.data.msg[t]) != 'undefined'){
+                       return $module.data.msg[t];
+                   }
+                   return '';
+               },
+               getAliasUcFirst:function (a) {
+                   if (typeof(a) == 'undefined') return '';
+                   var firstKey = a[0].toUpperCase();
+                   var string = a.slice(1);
+                   return [firstKey, string].join('');
+               },
+               getLanguageString:function (callback) {
+                   jQuery.ajax({
+                       url:"index.php?option=com_manager&task=getLanguage&module_name=topmenubar",
+                       type:"GET",
+                       dataType:"html",
+                       complete:function (req, err) {
+                           var json = jQuery.parseJSON(req.responseText);
+                           callback(json);
+                       }
+                   });
+               },
+               setMsg:function(msg){
+                   for(var key in $module.data.msg){
+                       if(typeof(msg[key]) != 'undefined'){
+                           $module.data.msg[key] = msg[key];
+                       }
+                   }
+                   return true;
+               },
+               setActiveElement:function(cont){
+                   switch ($module.data.alias) {
+                       case "home":
+                           fn.onSwitch(cont, $(cont).find('div#home span'));
+                           break;
 
-    loggedByFamous = parseInt(jQuery(document.body).attr('_type'));
-    alias = jQuery(document.body).attr('_alias');
-    fb = jQuery(document.body).attr('_fb');
-    message = {
-        FTT_MOD_TOPMENUBAR_MYFAMILY:"My Family",
-        FTT_MOD_TOPMENUBAR_FAMOUS_FAMILIES:"Famous Families",
-        FTT_MOD_TOPMENUBAR_HOME:"Home",
-        FTT_MOD_TOPMENUBAR_RETURN:"Return to Family TreeTop"
-    }
+                       case "famous-family":
+                           fn.onSwitch(cont, $(cont).find('div#famous-family span'));
+                           break;
 
+                       case "login":
+                           fn.onSwitch(cont, $(cont).find('div#myfamily span'));
+                           break;
 
-    fn = {
-        getLanguageString:function (callback) {
-            jQuery.ajax({
-                url:"index.php?option=com_manager&task=getLanguage&module_name=topmenubar",
-                type:"GET",
-                dataType:"html",
-                complete:function (req, err) {
-                    var json = jQuery.parseJSON(req.responseText);
-                    callback(json);
-                }
-            });
-        },
-        create:function () {
-            var string = '';
-            string += '<div  class="jmb-top-menu-bar">';
-                string += '<div class="jmb-top-menu-bar-logo">&nbsp;</div>';
-                string += '<div class="jmb-top-menu-bar-content">';
-                    string += '<div id="myfamily" class="jmb-top-menu-bar-item"><span>' + message.FTT_MOD_TOPMENUBAR_MYFAMILY + '</span></div>';
-                    string += '<div id="famous-family" class="jmb-top-menu-bar-item"><span>' + message.FTT_MOD_TOPMENUBAR_FAMOUS_FAMILIES + '</span></div>';
-                    string += '<div id="home" class="jmb-top-menu-bar-item"><span>' + message.FTT_MOD_TOPMENUBAR_HOME + '</span></div>';
-                    string += '<div id="mobile" class="jmb-top-menu-bar-item"><span>#MOBILE</span></div>';
-                string += '</div>';
-                string += '<div id="_profile"></div>';
-            string += '</div>';
-            return jQuery(string);
-        },
-        getAliasUcFirst:function (a) {
-            if (typeof(a) == 'undefined') return '';
-            var firstKey = a[0].toUpperCase();
-            var string = a.slice(1);
-            return [firstKey, string].join('');
-        },
-        footerView:function () {
-            var string = '';
-            string += '<div  class="jmb-top-menu-bar">';
-                string += '<div style="max-width:760px; margin: 0 auto; position: relative;">';
-                    string += '<div class="jmb-top-menu-bar-title">Family TreeTop: <span>' + fn.getAliasUcFirst(alias) + '</span></div>';
-                    string += '<div class="jmb-top-menu-bar-return"><span>' + message.FTT_MOD_TOPMENUBAR_RETURN + '</span></div>';
-                string += '</div>';
-            string += '</div>';
-            return jQuery(string);
-        },
-        sw:function (object) {
-            jQuery(cont).find('div.jmb-top-menu-bar-item span').removeClass('active');
-            jQuery(object).addClass('active');
+                       case "first-page":
+                       case "myfamily":
+                           if ($module.data.loggedByFamous) {
+                               fn.onSwitch(cont, $(cont).find('div#famous-family span'));
+                           } else {
+                               fn.onSwitch(cont, $(cont).find('div#myfamily span'));
+                           }
+                           break;
 
-        },
-        click:function () {
-            var id;
-            jQuery(cont).find('div.jmb-top-menu-bar-item span').click(function () {
-                id = jQuery(this).parent().attr('id');
-                fn.sw(this);
-                jQuery.ajax({
-                    url:'index.php?option=com_manager&task=setLocation&alias=' + id,
-                    type:"POST",
-                    dataType:"json",
-                    complete:function (req, err) {
-                        var bUrl = jQuery(document.body).attr('_baseurl');
-                        window.location.href = bUrl + 'index.php/' + id;
+                       default:
+                           break;
+                   }
+               },
+               isFooterLink:function () {
+                    switch ($module.data.alias) {
+                        case "about":
+                        case "conditions":
+                        case "privacy":
+                        case "feedback":
+                        case "help":
+                        case "contact":
+                            return true;
+                        default:
+                            return false;
                     }
-                });
-            });
-            jQuery(cont).find('div.jmb-top-menu-bar-return').click(function () {
-                var id = 'myfamily';
-                jQuery.ajax({
-                    url:'index.php?option=com_manager&task=setLocation&alias=' + id,
-                    type:"POST",
-                    dataType:"json",
-                    complete:function (req, err) {
-                        var bUrl = jQuery(document.body).attr('_baseurl');
-                        window.location.href = bUrl + 'index.php/' + id;
-                    }
-                });
-            });
-        },
-        activate:function () {
-            switch (alias) {
-                case "home":
-                    fn.sw(jQuery(cont).find('div#home span'));
-                    break;
+               },
+               createFooterMenu:function(isFooterLink){
+                   if(!isFooterLink) return "";
+                   var sb = $module.fn.stringBuffer();
+                   sb._('<div style="max-width:760px; margin: 0 auto; position: relative;">');
+                   sb._('<div class="jmb-top-menu-bar-title">Family TreeTop: <span>')._(fn.getAliasUcFirst($module.data.alias))._('</span></div>');
+                   sb._('<div class="jmb-top-menu-bar-return"><span>')._(fn.getMsg("return"))._('</span></div>');
+                   sb._('</div>');
+                   return sb.result();
+               },
+               createContentMenu:function(isFooterLink){
+                   if($module.data.type != "full" || isFooterLink) return "";
+                   var sb = $module.fn.stringBuffer();
+                   sb._('<div class="jmb-top-menu-bar-content">');
+                        sb._('<div id="myfamily" class="jmb-top-menu-bar-item"><span>')._(fn.getMsg('myfamily'))._('</span></div>');
+                        sb._('<div id="famous-family" class="jmb-top-menu-bar-item"><span>')._(fn.getMsg('famous_families'))._('</span></div>');
+                        sb._('<div id="home" class="jmb-top-menu-bar-item"><span>')._(fn.getMsg('home'))._('</span></div>');
+                        sb._('<div id="mobile" class="jmb-top-menu-bar-item"><span>#MOBILE</span></div>');
+                   sb._('</div>');
+                   return sb.result();
+               },
+               create:function(){
+                   var sb = $module.fn.stringBuffer(),
+                        isFooterLink = fn.isFooterLink();
+                   sb._('<div  class="jmb-top-menu-bar">');
+                        sb._('<div class="jmb-top-menu-bar-logo">&nbsp;</div>');
+                        sb._(fn.createContentMenu(isFooterLink));
+                        sb._(fn.createFooterMenu(isFooterLink));
+                        sb._('<div id="_profile"></div>');
+                   sb._('</div>');
+                   return $(sb.result());
+               },
+               append:function(o){
+                   $("#_header").append(o);
+               },
+               onSwitch:function(cont, object){
+                   jQuery(cont).find('div.jmb-top-menu-bar-item span').removeClass('active');
+                   jQuery(object).addClass('active');
+               },
+               onClick:function(cont){
+                   var id;
+                   jQuery(cont).find('div.jmb-top-menu-bar-item span').click(function () {
+                       id = jQuery(this).parent().attr('id');
+                       fn.onSwitch(cont, this);
+                       jQuery.ajax({
+                           url:'index.php?option=com_manager&task=setLocation&alias=' + id,
+                           type:"POST",
+                           dataType:"json",
+                           complete:function (req, err) {
+                               var bUrl = $(document.body).attr('_baseurl');
+                               window.location.href = bUrl + 'index.php/' + id;
+                           }
+                       });
+                   });
+                   jQuery(cont).find('div.jmb-top-menu-bar-return').click(function () {
+                       var id = 'myfamily';
+                       jQuery.ajax({
+                           url:'index.php?option=com_manager&task=setLocation&alias=' + id,
+                           type:"POST",
+                           dataType:"json",
+                           complete:function (req, err) {
+                               var bUrl = $(document.body).attr('_baseurl');
+                               window.location.href = bUrl + 'index.php/' + id;
+                           }
+                       });
+                   });
+               }
+            };
 
-                case "famous-family":
-                    fn.sw(jQuery(cont).find('div#famous-family span'));
-                    break;
-
-                case "login":
-                    fn.sw(jQuery(cont).find('div#myfamily span'));
-                    break;
-
-                case "first-page":
-                case "myfamily":
-                    if (loggedByFamous) {
-                        fn.sw(jQuery(cont).find('div#famous-family span'));
-                    } else {
-                        fn.sw(jQuery(cont).find('div#myfamily span'));
-                    }
-                    break;
-
-                default:
-                    break;
-            }
-
-        },
-        setMessage:function (m) {
-            if (typeof(m) == 'undefined') return false;
-            for (var key in message) {
-                if (message.hasOwnProperty(key) && typeof(m[key]) != 'undefined') {
-                    message[key] = m[key];
-                }
-            }
-        },
-        isFooterLink:function () {
-            switch (alias) {
-                case "about":
-                case "conditions":
-                case "privacy":
-                case "feedback":
-                case "help":
-                case "contact":
-                    return true;
-                default:
-                    return false;
-            }
-        },
-        init:function () {
-            if (window != window.top) return false;
-            fn.getLanguageString(function (lang) {
-                fn.setMessage(lang);
-                if (fn.isFooterLink()) {
-                    cont = fn.footerView();
-                    jQuery("div#_header").append(cont);
-                    fn.click();
-                    return true;
-                } else {
-                    cont = fn.create();
-                    fn.activate();
-                }
-                fn.click();
-                jQuery("div#_header").append(cont);
-            });
+        $module.data.arguments = arguments;
+        $module.data.settings = {};
+        $module.data.msg = {
+            FTT_MOD_TOPMENUBAR_MYFAMILY:"My Family",
+            FTT_MOD_TOPMENUBAR_FAMOUS_FAMILIES:"Famous Families",
+            FTT_MOD_TOPMENUBAR_HOME:"Home",
+            FTT_MOD_TOPMENUBAR_RETURN:"Return to Family TreeTop"
         }
-    }
+        $module.data.alias = $(document.body).attr("_alias");
+        $module.data.loggetByFamous = parseInt($(document.body).attr('_type'));
+        $module.data.type = "full";
+        $module.data.content = [];
 
-    module.init = function () {
-        fn.init();
-    }
-}
+        return {
+            init:function(type){
+               if(type == "facebook") return false;
+               fn.getLanguageString(function(msg){
+                   $module.data.type = type;
+                   $module.data.content = fn.create();
+                   fn.setMsg(msg);
+                   fn.append($module.data.content);
+                   fn.onClick($module.data.content);
+                   fn.setActiveElement($module.data.content);
+               });
+            }
+        };
+    }, true);
+})(jQuery, $FamilyTreeTop);
+
 		
+

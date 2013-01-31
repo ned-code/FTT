@@ -18,9 +18,11 @@
 .tab_content.myfamily .ftt-myfamily-header span {
     color: #3b5998;
 }
+.tab_content .ftt-myfamily-container {
+    margin: 10px;
+}
 .ftt-myfamily-container {
     border: 1px solid #d1daec;
-    margin: 10px;
     background: none repeat scroll 0 0 #FFFFFF;
     position: relative;
     font-size: 12px;
@@ -28,7 +30,7 @@
     font-weight: normal;
 }
 .ftt-myfamily-header {
-    background: none repeat scroll 0 0 #DEEDAA;
+    background: none repeat scroll 0 0 #d1daec;
     border-bottom: 1px solid #d1daec;
     height: 22px;
     padding: 5px;

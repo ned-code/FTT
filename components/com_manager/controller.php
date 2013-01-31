@@ -265,6 +265,7 @@ class JMBController extends JController
                 if($invitation_token && !$user->guest) return "invitation";
                 if($user->treeId==0)return "home";
                 if($user->guest && !$user->facebookId) return "login";
+                if($user->mobile) return "mobile";
                 return "myfamily";
 			break;
 		}

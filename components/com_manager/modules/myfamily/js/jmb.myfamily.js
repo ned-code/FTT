@@ -45,9 +45,9 @@
                 return '';
             },
             getCombined:function(family){
-                var users = $module.fn.getUsers(), pull = {}, key, object;
+                var users = storage.usertree.users, pull = {}, key, object;
                 for(key in users){
-                    if(object = $module.fn.getUser(users[key][0].gedcom_id)){
+                    if(object = storage.usertree.pull[users[key][0].gedcom_id]){
                         pull[users[key][0].facebook_id] = { type: "gedcom", object:object };
                     }
                 }
@@ -96,7 +96,7 @@
                     if("facebook" === data.type){
                         return '<span id="'+el.id+'" class="_facebook">'+data.object.relationship+"</span>";
                     } else if("gedcom" === data.type){
-                        var parse = $module.fn.parse(data.object);
+                        var parse = storage.usertree.parse(data.object);
                         return '<span id="'+parse.gedcom_id+'" class="_gedcom">'+parse.relation+'</span>';
                     }
                 }
@@ -109,7 +109,7 @@
                     if("facebook" === user.type){
                         return user.object.name;
                     } else if("gedcom" === user.type){
-                        var parse = $module.fn.parse(user.object);
+                        var parse = storage.usertree.parse(user.object);
                         return parse.name;
                     }
                 } else {
@@ -154,7 +154,7 @@
             },
             clickToRelation:function(object){
                 var id = jQuery(object).attr('id');
-                var obj = $module.fn.getUser(id);
+                var obj = storage.usertree.pull[id];
                 if(obj){
                     jQuery($module.data.activeItem).btOff();
                     /*

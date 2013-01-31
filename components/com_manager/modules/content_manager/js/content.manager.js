@@ -1,5 +1,4 @@
 function ContentManager(obj){
-	obj = jQuery('#'+obj);
 	//vars
         var div;
 
@@ -83,7 +82,7 @@ ContentManager.prototype = {
 			if(page_name == null || page_name.length ==  0) return;
 			var tr = self.addRow({
 				name:page_name,
-				layoutType:'double'
+				layoutType:'single'
 			});
 			self._ajax('createPage',page_name,function(req){
 				var id = jQuery.trim(req.responseText);

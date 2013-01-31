@@ -23,10 +23,11 @@ html, body {
 .jmb-top-menu-bar{
 	background: none repeat scroll 0 0 #6B944E;
 	height: 30px;
+    width: 100%;
 }
 .jmb-top-menu-bar .jmb-top-menu-bar-logo{
 	background: url("../img/ftt_logo.png") no-repeat scroll 0 0 transparent;
-	height: 35px;
+	height: 30px;
 	width: 115px;
     float: left;
 }
