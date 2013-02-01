@@ -1456,7 +1456,6 @@
                     var container, modName;
                     container = fn.createMobileViewContainer(param);
                     modName = "MOD_" + param.info.name.toUpperCase();
-                    console.log(modName);
                     $(object).append(container);
                     if($FamilyTreeTop.module.get(modName)){
                         $FamilyTreeTop.module.init(modName, container, $FamilyTreeTop.fn.mod("ajax"), type, false);
@@ -1472,6 +1471,7 @@
                     storage.profile = new JMBProfile();
                     storage.tooltip = new JMBTooltip();
                     storage.family_line = new JMBFamilyLine();
+                    storage.media = new JMBMediaManager();
 
                     storage.profile.init();
                     storage.tooltip.init();
@@ -1485,6 +1485,7 @@
                     storage.profile = new JMBProfile();
                     storage.tooltip = new JMBTooltip();
                     storage.family_line = new JMBFamilyLine();
+                    storage.media = new JMBMediaManager();
 
                     storage.profile.init();
                     storage.tooltip.init();
