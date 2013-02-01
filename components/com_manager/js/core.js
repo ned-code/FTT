@@ -1194,7 +1194,13 @@
         });
     }
 })(window);
+/*
+(function($, $ftt){
+ $ftt.module.create("MOD_", function(name, parent, ajax, renderType, popup){
 
+ });
+ })(jQuery, $FamilyTreeTop);
+ */
 
 /**
  * FamilyTreeTop Object
@@ -1365,7 +1371,7 @@
     }
 })(window);
 
-(function($ftt){
+(function($, $ftt){
     $ftt.module.create("MOD_SYS_AJAX", function(){
         var $module = this;
 
@@ -1405,8 +1411,7 @@
             },
             call:function(module, classname, method, args, callback){
                 var xnrSettings = {
-                    //url: $ftt.global.base + $ftt.global.path + "php/ajax.php",
-                    url: "http://dev.familytreetop.com/25/" + $ftt.global.path + "php/ajax.php",
+                    url: $ftt.global.base + $ftt.global.path + "php/ajax.php",
                     type: "POST",
                     data: 'module='+module+'&class='+classname+'&method='+method+'&args='+args,
                     dataType: "json",
@@ -1418,11 +1423,11 @@
                         }
                     }
                 }
-                request.add(jQuery.ajax(xnrSettings));
+                request.add($.ajax(xnrSettings));
             }
         }
     }, true);
-})($FamilyTreeTop);
+})(jQuery, $FamilyTreeTop);
 
 (function($, $ftt){
     $ftt.module.create("MOD_SYS_RENDER", function(){
@@ -1434,29 +1439,36 @@
                     return $(sb.result());
                 },
                 createFullViewContainer: function(){},
-                initModule: function(type, param){
+                initModule: function(type, content, param){
                     var container, modName;
                     if(type == "mobile"){
                         container = fn.createMobileViewContainer(param);
                         modName = "MOD_" + param.info.name.toUpperCase();
-                        $("#_content").html("").append(container);
+                        $(content).html("").append(container);
                         if($FamilyTreeTop.module.get(modName)){
-                            $FamilyTreeTop.module.init(modName, container, $FamilyTreeTop.fn.mod("ajax"));
+                            $FamilyTreeTop.module.init(modName, container, $FamilyTreeTop.fn.mod("ajax"), type, false);
                         }
                     }
                 },
-                initModules: function(type, setting){
+                initModules: function(type, content, setting){
                     var modules = setting.modules;
                     for(var id in modules){
                         if(!modules.hasOwnProperty(id)) continue;
                         var module = modules[id];
-                        fn.initModule(type, module);
+                        fn.initModule(type, content, module);
                     }
                 },
                 mobileRender:function(settings){
-                    $FamilyTreeTop.fn.mod("topmenubar").init("mobile");
+                    storage.profile = new JMBProfile();
+                    storage.tooltip = new JMBTooltip();
+                    storage.family_line = new JMBFamilyLine();
+
+                    storage.profile.init();
+                    storage.tooltip.init();
+
+                    $FamilyTreeTop.fn.mod("topmenubar").init("full");
                     $FamilyTreeTop.fn.mod("navigation").init("mobile", settings, function(el, setting){
-                        fn.initModules("mobile", setting);
+                        fn.initModules("mobile", "#_content", setting);
                     });
                 }
             };
@@ -1471,6 +1483,7 @@
                 $module.data.settings = settings;
             },
             init:function(){
+                $FamilyTreeTop.global.base = $(document.body).attr("_baseurl");
                 if($module.data.type == "mobile"){
                     fn.mobileRender($module.data.settings);
                 } else {

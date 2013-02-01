@@ -18,13 +18,15 @@
 .tab_content.myfamily .jmb-this-month-header span {
     color: #3b5998;
 }
+.tab_content #JMBThisMonthContainer{
+    margin: 10px;
+}
 #JMBThisMonthContainer{
 	border: 1px solid #d1daec;
-	margin: 10px;
 	background: none repeat scroll 0 0 #FFFFFF;
 }
 .jmb-this-month-header{
-	background: none repeat scroll 0 0 #DEEDAA;
+	background: none repeat scroll 0 0 #cfd8eb;
 	border-bottom: 1px solid #d1daec;
 	height: 22px;
 	padding: 5px;

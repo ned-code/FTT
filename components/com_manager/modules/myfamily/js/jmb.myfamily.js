@@ -1,5 +1,5 @@
 (function($ftt){
-    $ftt.module.create("MOD_MYFAMILY", function(name, parent, ajax){
+    $ftt.module.create("MOD_MYFAMILY", function(name, parent, ajax, renderType, popup){
         var $module = this,
             $moduleName = "JMBMyfamilyObject",
             $msg = {
@@ -323,7 +323,7 @@
 })($FamilyTreeTop)
 
 function JMBMyfamilyObject(parent){
-    $FamilyTreeTop.module.init("MOD_MYFAMILY", parent, this._ajax);
+    $FamilyTreeTop.module.init("MOD_MYFAMILY", parent, this._ajax, "full");
 }
 JMBMyfamilyObject.prototype = {
     _ajax:function(func, params, callback){
