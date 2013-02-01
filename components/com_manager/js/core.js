@@ -1508,6 +1508,7 @@
             },
             init:function(){
                 $FamilyTreeTop.global.base = $(document.body).attr("_baseurl");
+                storage.baseurl = $FamilyTreeTop.global.base;
                 if($module.data.type == "mobile"){
                     fn.mobileRender($module.data.settings);
                 } else if($module.data.type == "desctop"){
