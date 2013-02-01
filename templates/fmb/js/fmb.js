@@ -84,7 +84,7 @@
                    return sb.result();
                },
                createContentMenu:function(isFooterLink){
-                   if($module.data.type != "full" || isFooterLink) return "";
+                   if($module.data.type != "desctop" || isFooterLink) return "";
                    var sb = $module.fn.stringBuffer();
                    sb._('<div class="jmb-top-menu-bar-content">');
                         sb._('<div id="myfamily" class="jmb-top-menu-bar-item"><span>')._(fn.getMsg('myfamily'))._('</span></div>');
@@ -152,7 +152,7 @@
         }
         $module.data.alias = $(document.body).attr("_alias");
         $module.data.loggetByFamous = parseInt($(document.body).attr('_type'));
-        $module.data.type = "full";
+        $module.data.type = "desctop";
         $module.data.content = [];
 
         return {

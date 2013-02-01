@@ -145,6 +145,42 @@ html ul.jmbtabs.myfamily li.active, html ul.jmbtabs li.active a:hover {
     background: url(mobile_navigation.png) no-repeat -200px 0px transparent;
 }
 /**
+* FamilyTreeTop Content Container
+*/
+.ftt-table-content {
+    width: 100%;
+    height: 100%;
+    table-layout:fixed;
+}
+.ftt-table-content tr {
+    margin: 0 auto;
+}
+.ftt-table-desctop {
+    margin-top: -15px;
+}
+.ftt-table-mobile {}
+.ftt-table-tablet {}
+.ftt-table-cell-single{
+    margin:0 auto;
+    width:100%;
+    max-width:100%;
+    min-width:100%;
+    height:100%;
+}
+.ftt-table-cell-double{
+    width:50%;
+    max-width:50%;
+    margin:0 auto;
+    min-width:50%;
+    height:100%;
+}
+.ftt-table-cell-triple{
+    width:33%;
+    max-width:33%;
+    min-width:33%;
+    height:100%;
+}
+/**
 * FamilyTreeTop Content
 */
 .tab_container {
@@ -168,6 +204,7 @@ html ul.jmbtabs.myfamily li.active, html ul.jmbtabs li.active a:hover {
 #jmbtab{
 	min-height:400px;
 }
+
 .jmb-core-overlay {
 	background: url("loading.gif") no-repeat scroll 50% 50% transparent;
 	position: absolute;
@@ -185,33 +222,6 @@ div.buttons span {
 	cursor: pointer;
     	font-size: 14px;
     	font-weight: bold;
-}
-
-.jmb_layout_row {
-	margin:0 auto;
-}
-.jmb_layout_row div {
-	/*text-align:center;*/
-}
-.jmb_layout_cell_single{
-	margin:0 auto;
- 	width:100%; 
-	max-width:100%; 
-	min-width:100%; 
-	height:100%;
-}
-.jmb_layout_cell_double{
-	width:50%; 
-	max-width:50%;
-	margin:0 auto;
-	min-width:50%; 
-	height:100%;
-}
-.jmb_layout_cell_triple{
- 	width:33%; 
-	max-width:33%; 
-	min-width:33%; 
-	height:100%;
 }
 /**
 * PHOTOS

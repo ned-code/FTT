@@ -886,6 +886,8 @@
             $fn.render(module.start_id);
             storage.core.modulesPullObject.unset('JMBFamiliesObject');
         });
+
+        return this;
     });
 })(jQuery, $FamilyTreeTop);
 

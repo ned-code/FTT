@@ -599,6 +599,8 @@
         function getSelectMonth(){
             return module.month = jQuery(module.table).find('select[name="months"]').val();
         }
+
+        return this;
     });
 })(jQuery, $FamilyTreeTop);
 

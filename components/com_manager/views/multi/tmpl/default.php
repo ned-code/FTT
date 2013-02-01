@@ -143,6 +143,17 @@ echo '<link type="text/css" href="'.$url.'components/com_manager/mini/mini2.css"
             }
         }
 
-        storage.core.load(data.pageInfo);
+        //storage.core.load(data.pageInfo);
+        var init = function(info){
+            if($FamilyTreeTop.fn.mod("RENDER")){
+                $FamilyTreeTop.fn.mod("RENDER").set("desctop", data.pageInfo);
+            } else {
+                setTimeout(function(){
+                    init(info);
+                }, 250);
+            }
+        }
+        init(data.pageInfo);
+
     })(window)
 </script>

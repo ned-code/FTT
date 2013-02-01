@@ -1198,6 +1198,7 @@
 (function($, $ftt){
  $ftt.module.create("MOD_", function(name, parent, ajax, renderType, popup){
 
+    return this;
  });
  })(jQuery, $FamilyTreeTop);
  */
@@ -1433,30 +1434,38 @@
     $ftt.module.create("MOD_SYS_RENDER", function(){
         var $module = this,
             fn = {
+                createPageContainer: function(grid, type, content, callback){
+                    var table = $('<table class="ftt-table-content ftt-table-'+type+'"></table>'), tr = $("<tr></tr>");
+                    $(table).append(tr);
+                    for(var rows = 0 ; rows < grid.tdLength ; rows++){
+                        var row = [grid[rows], $('<td></td>')];
+                        $(row[1]).addClass("ftt-table-cell-"+(["single","double","triple"][grid.tdLength]));
+                        $(tr).append(row[1]);
+                        for(var cells = 0; cells < row[0].divLength; cells++ ){
+                            callback(row[1], row[0][cells]);
+                        }
+                    }
+                    $(content).html("").append(table);
+                },
                 createMobileViewContainer: function(p){
                     var sb = $module.fn.stringBuffer();
                     sb._('<div id="')._(p.container_id)._('"></div>');
                     return $(sb.result());
                 },
-                createFullViewContainer: function(){},
-                initModule: function(type, content, param){
+                initModule: function(type, object, param){
                     var container, modName;
-                    if(type == "mobile"){
-                        container = fn.createMobileViewContainer(param);
-                        modName = "MOD_" + param.info.name.toUpperCase();
-                        $(content).html("").append(container);
-                        if($FamilyTreeTop.module.get(modName)){
-                            $FamilyTreeTop.module.init(modName, container, $FamilyTreeTop.fn.mod("ajax"), type, false);
-                        }
+                    container = fn.createMobileViewContainer(param);
+                    modName = "MOD_" + param.info.name.toUpperCase();
+                    $(object).append(container);
+                    if($FamilyTreeTop.module.get(modName)){
+                        $FamilyTreeTop.module.init(modName, container, $FamilyTreeTop.fn.mod("ajax"), type, false);
                     }
                 },
                 initModules: function(type, content, setting){
-                    var modules = setting.modules;
-                    for(var id in modules){
-                        if(!modules.hasOwnProperty(id)) continue;
-                        var module = modules[id];
-                        fn.initModule(type, content, module);
-                    }
+                    var modules = setting.modules, grid = setting.grid;
+                    fn.createPageContainer(grid, type, content, function(object, mod){
+                        fn.initModule(type, object, modules[mod.id]);
+                    });
                 },
                 mobileRender:function(settings){
                     storage.profile = new JMBProfile();
@@ -1466,9 +1475,15 @@
                     storage.profile.init();
                     storage.tooltip.init();
 
-                    $FamilyTreeTop.fn.mod("topmenubar").init("full");
+                    $FamilyTreeTop.fn.mod("topmenubar").init("desctop");
                     $FamilyTreeTop.fn.mod("navigation").init("mobile", settings, function(el, setting){
                         fn.initModules("mobile", "#_content", setting);
+                    });
+                },
+                desctopRender:function(settings){
+                    $FamilyTreeTop.fn.mod("topmenubar").init("desctop");
+                    $FamilyTreeTop.fn.mod("navigation").init("desctop", settings, function(el, setting){
+                        fn.initModules("desctop", "#jmbtab", setting);
                     });
                 }
             };
@@ -1486,6 +1501,8 @@
                 $FamilyTreeTop.global.base = $(document.body).attr("_baseurl");
                 if($module.data.type == "mobile"){
                     fn.mobileRender($module.data.settings);
+                } else if($module.data.type == "desctop"){
+                    fn.desctopRender($module.data.settings);
                 } else {
                     return false;
                 }
@@ -1531,17 +1548,65 @@
                         callback(this, $module.data.liSettings[$(this).attr("id")]);
                     });
                 },
-                renderTabNavigation:function(){}
+                renderTabNavigation:function(settings, callback){
+                    var ul = $('<ul class="jmbtabs"></ul>');
+                    var div = $('<div class="tab_container"></div>');
+                    $("#container").append(ul).append(div);
+
+                    $(settings).each(function (i, page) {
+                        var title = page.page_info.title.toUpperCase().split(' ');
+                        var titleName = storage.langString['FTT_COMPONENT_' + title.join('_')];
+                        var div = $('<div id="' + (new Date()).valueOf() + '">' + titleName + '</div>');
+                        var li = $('<li name="" id="' + i + '"><a href="jmbtab_' + i + '" onclick="return false;"></a></li>');
+                        $(li).find('a').append(div);
+                        $(ul).append(li);
+                    });
+
+                    var divs = $('<div id="jmbtab" class="tab_content">&nbsp;</div>');
+                    $(div).append(divs);
+
+                    var loggedByFamous = parseInt($(document.body).attr('_type'));
+                    var classByLogged = (loggedByFamous) ? 'famous-family' : 'myfamily';
+                    $('ul.jmbtabs').addClass(classByLogged);
+                    $('.tab_content').addClass(classByLogged);
+
+                    jQuery("ul.jmbtabs li").click(function(){
+                        fn.onTabClick(this, settings, callback)
+                    });
+
+                    if (storage.activeTab == '') {
+                        jQuery("ul.jmbtabs li:first").click();
+                    } else {
+                        jQuery('ul.jmbtabs li#2').click();
+                    }
+                },
+                onTabClick:function(object, settings, callback){
+                    if (jQuery(this).hasClass('active')) return false;
+
+                    $ftt.fn.mod("ajax").clean();
+
+                    jQuery("ul.jmbtabs li").removeClass("active");
+                    jQuery(object).addClass("active");
+
+                    var id = jQuery(object).attr('id');
+
+                    callback(object, settings[id]);
+                    return false;
+                }
             };
 
         $module.data.arguments = arguments;
         $module.data.activeItem = false;
         $module.data.liSettings = {};
+        $module.data.settings = {};
 
         return {
             init: function(type, settings, callback){
+                $module.data.settings = settings;
                 if(type == "mobile"){
                     fn.renderMobileNavigation(settings, callback);
+                } else if(type == "desctop"){
+                    fn.renderTabNavigation(settings, callback);
                 }
             }
         };
