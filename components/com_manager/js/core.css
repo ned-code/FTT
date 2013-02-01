@@ -154,6 +154,7 @@ html ul.jmbtabs.myfamily li.active, html ul.jmbtabs li.active a:hover {
 }
 .ftt-table-content tr {
     margin: 0 auto;
+    vertical-align: top;
 }
 .ftt-table-desctop {
     margin-top: -15px;

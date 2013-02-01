@@ -1436,16 +1436,16 @@
             fn = {
                 createPageContainer: function(grid, type, content, callback){
                     var table = $('<table class="ftt-table-content ftt-table-'+type+'"></table>'), tr = $("<tr></tr>");
+                    $(content).html("").append(table);
                     $(table).append(tr);
                     for(var rows = 0 ; rows < grid.tdLength ; rows++){
                         var row = [grid[rows], $('<td></td>')];
-                        $(row[1]).addClass("ftt-table-cell-"+(["single","double","triple"][grid.tdLength]));
+                        $(row[1]).addClass("ftt-table-cell-"+(["zero","single","double","triple"][grid.tdLength]));
                         $(tr).append(row[1]);
                         for(var cells = 0; cells < row[0].divLength; cells++ ){
                             callback(row[1], row[0][cells]);
                         }
                     }
-                    $(content).html("").append(table);
                 },
                 createMobileViewContainer: function(p){
                     var sb = $module.fn.stringBuffer();
@@ -1456,6 +1456,7 @@
                     var container, modName;
                     container = fn.createMobileViewContainer(param);
                     modName = "MOD_" + param.info.name.toUpperCase();
+                    console.log(modName);
                     $(object).append(container);
                     if($FamilyTreeTop.module.get(modName)){
                         $FamilyTreeTop.module.init(modName, container, $FamilyTreeTop.fn.mod("ajax"), type, false);
@@ -1481,6 +1482,13 @@
                     });
                 },
                 desctopRender:function(settings){
+                    storage.profile = new JMBProfile();
+                    storage.tooltip = new JMBTooltip();
+                    storage.family_line = new JMBFamilyLine();
+
+                    storage.profile.init();
+                    storage.tooltip.init();
+
                     $FamilyTreeTop.fn.mod("topmenubar").init("desctop");
                     $FamilyTreeTop.fn.mod("navigation").init("desctop", settings, function(el, setting){
                         fn.initModules("desctop", "#jmbtab", setting);

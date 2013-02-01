@@ -606,5 +606,5 @@
 
 
 function JMBThisMonthObject(parent, popuup){
-    $FamilyTreeTop.module.init("MOD_THIS_MONTH", parent, $FamilyTreeTop.fn.mod("ajax"), "full", popup);
+    $FamilyTreeTop.module.init("MOD_THIS_MONTH", parent, $FamilyTreeTop.fn.mod("ajax"), "desctop", popup);
 }

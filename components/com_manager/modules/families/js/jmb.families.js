@@ -893,5 +893,5 @@
 
 
 function JMBFamiliesObject(obj, popup){
-    $FamilyTreeTop.module.init("MOD_FAMILIES", obj, $FamilyTreeTop.fn.mod("ajax"), "full", popup);
+    $FamilyTreeTop.module.init("MOD_FAMILIES", obj, $FamilyTreeTop.fn.mod("ajax"), "desctop", popup);
 }

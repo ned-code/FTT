@@ -1,4 +1,12 @@
-function JMBQuickFactsObject(object){	
+(function($, $ftt){
+    $ftt.module.create("MOD_QUICK_FACTS", function(name, parent, ajax, renderType, popup){
+
+        return this;
+    });
+})(jQuery, $FamilyTreeTop);
+
+
+function JMBQuickFactsObject(object){
 	var	module = this,
 		settings = storage.settings,
         loggedByFamous = parseInt(jQuery(document.body).attr('_type')),

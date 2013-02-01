@@ -1,4 +1,11 @@
-function JMBLatestUpdatesObject(offsetParent){	
+(function($, $ftt){
+    $ftt.module.create("MOD_LATEST_UPDATES", function(name, parent, ajax, renderType, popup){
+
+        return this;
+    });
+})(jQuery, $FamilyTreeTop);
+
+function JMBLatestUpdatesObject(offsetParent){
 	var	module = this,
         loggedByFamous = parseInt(jQuery(document.body).attr('_type')),
 		usertree = storage.usertree.pull,
