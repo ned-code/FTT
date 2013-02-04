@@ -1,3 +1,10 @@
+(function($, $ftt){
+    $ftt.module.create("MOD_ANCESTORS", function(name, parent, ajax, renderType, popup){
+
+        return this;
+    });
+})(jQuery, $FamilyTreeTop);
+
 function JMBAncestorsObject(obj, popup){
 	var	module = this,
 		cont = jQuery('<div id="jit" class="jmb-ancestors-jit"></div>'),

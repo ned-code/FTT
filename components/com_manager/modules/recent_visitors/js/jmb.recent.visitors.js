@@ -11,7 +11,7 @@
                 ajax:function(func, params, callback){
                     ajax.call("recent_visitors", "JMBRecentVisitors", func, params, function(status){
                         callback(status);
-                    })
+                    });
                 },
                 createBody:function(json){
                     var st = storage.stringBuffer();
