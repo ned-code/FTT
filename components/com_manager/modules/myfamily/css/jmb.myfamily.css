@@ -52,7 +52,7 @@
     top: -2px;
 }
 .ftt-myfamily-header-update-button {
-    background: url(imgs/update.png) no-repeat scroll 0 0 transparent;
+    background: url(../imgs/update.png) no-repeat scroll 0 0 transparent;
     height: 27px;
     width: 27px;
     cursor: pointer;

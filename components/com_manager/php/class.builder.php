@@ -62,33 +62,49 @@ class FamilyTreeTopBuilderLibrary {
         $this->js = $js;
     }
 
-    public function cssCompile($name){
+    public function cssCompile($name, $mini){
         $css = $this->css;
-        $string = '';
-        if(gettype($css) != 'array') return '';
-        foreach($css as $file){
-            $text =  "\n" . file_get_contents($this->sPath . DS . $file);
-            preg_match_all('/url\((.*?)\)/i', $text, $urls, PREG_PATTERN_ORDER);
-            for ($i = 0; $i < count($urls[0]); $i++) {
-                $url = $urls[0][$i];
-                $text = str_replace($url, $this->getUrl($url, $file), $text);
+        if($mini){
+            $filePath = $this->sPath . DS . $this->miniPath . DS . $name;
+            //if(!file_exists($filePath)){
+                $string = '';
+                if(gettype($css) != 'array') return '';
+                foreach($css as $file){
+                    $text =  "\n" . file_get_contents($this->sPath . DS . $file);
+                    preg_match_all('/url\((.*?)\)/i', $text, $urls, PREG_PATTERN_ORDER);
+                    for ($i = 0; $i < count($urls[0]); $i++) {
+                        $url = $urls[0][$i];
+                        $text = str_replace($url, $this->getUrl($url, $file), $text);
+                    }
+                    $string .= $text;
+                }
+                file_put_contents($this->sPath . DS . $this->miniPath . DS . $name, $string);
+            //}
+        } else {
+            foreach($css as $file){
+                $document =& JFactory::getDocument();
+                $document->addStyleSheet($file);
             }
-            $string .= $text;
         }
-        file_put_contents($this->sPath . DS . $this->miniPath . DS . $name, $string);
-        return true;
     }
 
-    public function jsCompile($name){
-        $filePath = $this->sPath . DS . $this->miniPath . DS . $name;
-        if(!file_exists($filePath)){
-            $js = $this->js;
-            if(gettype($js) != 'array') return '<script type="text/javascript"></script>';
-            $jsString = '';
-            foreach($js as $file){
-                $jsString .= JSMin::minify(file_get_contents($this->sPath . DS . $file));
+    public function jsCompile($name, $mini){
+        $js = $this->js;
+        if($mini){
+            $filePath = $this->sPath . DS . $this->miniPath . DS . $name;
+            if(!file_exists($filePath)){
+                if(gettype($js) != 'array') return '<script type="text/javascript"></script>';
+                $jsString = '';
+                foreach($js as $file){
+                    $jsString .= JSMin::minify(file_get_contents($this->sPath . DS . $file));
+                }
+                file_put_contents($filePath, $jsString);
             }
-            file_put_contents($filePath, $jsString);
+        } else {
+            foreach($js as $file){
+                $document =& JFactory::getDocument();
+                $document->addScript($file);
+            }
         }
     }
 }

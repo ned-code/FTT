@@ -46,7 +46,9 @@ $builder->setCss(array(
     'components/com_manager/modules/feedback/css/jmb.feedback.css',
     'components/com_manager/modules/notifications/css/jmb.notifications.css'
 ));
-$builder->cssCompile("mini.css");
+$builder->cssCompile("mini.css", true);
+
+$document->addScript('components/com_manager/js/familytreetop.js');
 
 $builder->setJs(array(
     'components/com_manager/js/excanvas.js',
@@ -69,9 +71,11 @@ $builder->setJs(array(
     'components/com_manager/js/jquery.animatedborder.js',
     'components/com_manager/js/tdfriendselector.js',
     'components/com_manager/js/jquery.tabSlideOut.v1.3.js',
+    'components/com_manager/js/core.js',
     'components/com_manager/modules/overlay/js/jmb.overlay.js',
     'components/com_manager/modules/header/js/jmb.header.js',
     'components/com_manager/modules/profile/js/jmb.profile.js',
+    'components/com_manager/modules/profile_editor/js/ftt.profile_editor.js',
     'components/com_manager/modules/tooltip/js/jmb.tooltip.js',
     'components/com_manager/modules/media/js/jmb.media.js',
     'components/com_manager/modules/invitation/js/jmb.invitation.js',
@@ -81,14 +85,10 @@ $builder->setJs(array(
     'components/com_manager/modules/feedback/js/jmb.feedback.js',
     'components/com_manager/modules/notifications/js/jmb.notifications.js'
 ));
-$jsPath = $builder->jsCompile("mini.js");
+$jsPath = $builder->jsCompile("mini.js", false);
 
 $document->addStyleSheet('components/com_manager/mini/mini.css');
-$document->addScript('components/com_manager/mini/mini.js');
-$document->addScript('components/com_manager/js/core.js');
-
-$document->addStyleSheet();
-$document->addScript('components/com_manager/modules/profile_editor/js/ftt.profile_editor.js');
+//$document->addScript('components/com_manager/mini/mini.js');
 
 $document->addCustomTag('<script type="text/javascript">jQuery.noConflict();</script>');
 

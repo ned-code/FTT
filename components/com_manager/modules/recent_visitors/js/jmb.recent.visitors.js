@@ -148,8 +148,6 @@
             storage.core.modulesPullObject.unset('JMBRecentVisitorsObject');
         });
 
-        // family line part
-
         storage.family_line.bind('JMBRecentVisitorsObject', function(res){
             jQuery(content[1]).find('li').each(function(i, el){
                 var type = 'is_'+res._line+'_line';

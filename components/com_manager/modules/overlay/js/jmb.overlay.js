@@ -1,3 +1,4 @@
+/*
 function JMBOverlay(){
 	this.settings = {	
 		parent:document.body,
@@ -93,7 +94,7 @@ JMBOverlay.prototype = {
 		jQuery(set.parent).append(this.overlay);
 	}	
 }
-
+*/
 
 
 

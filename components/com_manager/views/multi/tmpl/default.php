@@ -19,18 +19,13 @@ foreach ($info as $page){
         $files = $module['files'];
         $link = $url . $path . $name;
         foreach($files['css'] as $cssName){
-            $cssObject[] = $path . $name . "/css/" . $cssName;
+            echo '<link type="text/css" href="'.$path . $name . "/css/" . $cssName.'" rel="stylesheet"></link>';
         }
         foreach($files['js'] as $jsName){
             echo '<script src="'. $link . '/js/' . $jsName .'" type="text/javascript"></script>';
         }
     }
 }
-$builder->setCss($cssObject);
-$builder->cssCompile("mini2.css");
-echo '<link type="text/css" href="'.$url.'components/com_manager/mini/mini2.css" rel="stylesheet"></link>';
-
-
 ?>
 <div id="_header"></div>
 <div id="_content" class="content">
