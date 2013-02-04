@@ -54,8 +54,8 @@ div#jit-label div.node{
     top: 30px;
 }
 .jit-node-item table{
-	margin-left: -3px;
-	margin-top: -3px;
+	margin-left: -1px;
+	margin-top: -1px;
 }
 .jit-node-item .photo{
 	background: none repeat scroll 0 0 white;
