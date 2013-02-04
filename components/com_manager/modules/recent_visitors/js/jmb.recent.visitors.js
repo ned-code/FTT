@@ -89,11 +89,11 @@
                     }
                 },
                 setMiniTooltip:function(div, id){
-                    storage.tooltip.render('view', {
+                    module.fn.mod("tooltip").render('view', {
                         gedcom_id:id,
                         target:div,
                         afterEditorClose:function(){
-                            storage.tooltip.update();
+                            module.fn.mod("tooltip").update();
                         }
                     });
                 },

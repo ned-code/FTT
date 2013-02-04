@@ -15,7 +15,7 @@ DescendantTreeProfile.prototype = {
 	clear:function(){
 		var	module = this;
         module.id = null;
-		storage.tooltip.cleaner();
+        module.fn.mod("tooltip").cleaner();
         jQuery(module.cont).html('');
     },
 	avatar:function(object){
@@ -183,13 +183,13 @@ DescendantTreeProfile.prototype = {
 		return html;
 	},
 	edit:function(html, object){
-		var	module = this;		
-		storage.tooltip.render('edit', {
+		var	module = this;
+        module.fn.mod("tooltip").render('edit', {
 			offsetParent:document.body,
 			target:jQuery(html).find('div#edit-button'),
 			gedcom_id:object.user.gedcom_id,
 			afterEditorClose:function(){
-                storage.tooltip.cleaner(function(){
+                module.fn.mod("tooltip").cleaner(function(){
                     var p = module.parent;
                     p.selected = module.id;
                     p.loadTreeById((p.checked!=null)?p.checked:p.first);
@@ -205,7 +205,7 @@ DescendantTreeProfile.prototype = {
 				object:object,
 				events:{
 					afterEditorClose:function(obj){
-                        storage.tooltip.cleaner(function(){
+                    $FamilyTreeTop.fn.mod("tooltip").cleaner(function(){
                             var p = module.parent;
                             p.selected = module.id;
                             p.loadTreeById((p.checked!=null)?p.checked:p.first);

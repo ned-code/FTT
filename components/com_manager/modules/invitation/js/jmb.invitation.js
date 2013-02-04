@@ -194,7 +194,7 @@ function JMBInvitation(){
                     });
                 }
             });
-            storage.tooltip.close();
+            $FamilyTreeTop.fn.mod("tooltip").close();
             selector.showFriendSelector();
         }
     }

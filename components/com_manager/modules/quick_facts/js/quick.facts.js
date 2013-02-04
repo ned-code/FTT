@@ -89,11 +89,11 @@
             },
             setMiniProfile:function(target, object){
                 if(object == null) return false;
-                storage.tooltip.render('view', {
+                module.fn.mod("tooltip").render('view', {
                     gedcom_id:object.user.gedcom_id,
                     target:target,
                     afterEditorClose:function(){
-                        storage.tooltip.update();
+                        module.fn.mod("tooltip").update();
                     }
                 });
             },

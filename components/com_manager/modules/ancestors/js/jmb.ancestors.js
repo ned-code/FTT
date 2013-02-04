@@ -57,13 +57,13 @@
                                 $(label).find('.jit-edit-button').removeClass('hover');
                                 $(label).find('.jit-facebook-icon').removeClass('hover');
                             });
-                        storage.tooltip.render('view', {
+                        module.fn.mod("tooltip").render('view', {
                             button_facebook:false,
                             button_edit:false,
                             gedcom_id:node.id.split('_')[1],
                             target:object,
                             afterEditorClose:function(){
-                                storage.tooltip.cleaner(function(){
+                                module.fn.mod("tooltip").cleaner(function(){
                                     $fn.render();
                                 });
                             }
@@ -71,13 +71,13 @@
                     },
                     edit:function(){
                         object = $(label).find('.jit-edit-button');
-                        storage.tooltip.render('edit', {
+                        module.fn.mod("tooltip").render('edit', {
                             button_edit:false,
                             button_facebook:false,
                             gedcom_id:node.id.split('_')[1],
                             target:object,
                             afterEditorClose:function(){
-                                storage.tooltip.cleaner(function(){
+                                module.fn.mod("tooltip").cleaner(function(){
                                     $fn.render();
                                 });
                             }
@@ -97,7 +97,7 @@
                                 object:storage.usertree.pull[id],
                                 events:{
                                     afterEditorClose:function(){
-                                        storage.tooltip.cleaner(function(){
+                                        module.fn.mod("tooltip").cleaner(function(){
                                             $fn.render();
                                         });
                                     }

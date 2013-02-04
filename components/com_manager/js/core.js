@@ -1241,7 +1241,7 @@
             clean:function(){
                 request.clean();
             },
-            call:function(module, classname, method, args, callback){
+            call:function(module, classname, method, args, callback, mandatory){
                 var xnrSettings = {
                     url: $ftt.global.base + $ftt.global.path + "php/ajax.php",
                     type: "POST",
@@ -1255,7 +1255,11 @@
                         }
                     }
                 }
-                request.add($.ajax(xnrSettings));
+                if("undefined" !== typeof(mandatory)){
+                    $.ajax(xnrSettings)
+                } else {
+                    request.add($.ajax(xnrSettings));
+                }
             }
         }
     }, true);
@@ -1315,12 +1319,11 @@
                      */
 
                     storage.profile = new JMBProfile();
-                    storage.tooltip = new JMBTooltip();
                     storage.family_line = new JMBFamilyLine();
 
                     storage.profile.init();
-                    storage.tooltip.init();
 
+                    $FamilyTreeTop.fn.mod("tooltip").init();
                     $FamilyTreeTop.fn.mod("topmenubar").init("desctop");
                     $FamilyTreeTop.fn.mod("navigation").init("mobile", settings, function(el, setting){
                         fn.initModules("mobile", "#_content", setting);
@@ -1328,12 +1331,11 @@
                 },
                 desctopRender:function(settings){
                     storage.profile = new JMBProfile();
-                    storage.tooltip = new JMBTooltip();
                     storage.family_line = new JMBFamilyLine();
 
                     storage.profile.init();
-                    storage.tooltip.init();
 
+                    $FamilyTreeTop.fn.mod("tooltip").init();
                     $FamilyTreeTop.fn.mod("topmenubar").init("desctop");
                     $FamilyTreeTop.fn.mod("header").init("desctop");
                     $FamilyTreeTop.fn.mod("navigation").init("desctop", settings, function(el, setting){

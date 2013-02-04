@@ -143,7 +143,7 @@ function JMBLogin(){
                                         afterEditorClose:function(p){
                                             jQuery(obj).removeClass('active');
                                             settings.user_data.pull = p;
-                                            storage.tooltip.update();
+                                            module.fn.mod("tooltip").update();
 
                                         }
                                     }

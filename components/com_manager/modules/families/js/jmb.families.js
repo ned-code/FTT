@@ -215,7 +215,7 @@
             _home:function(cont){
                 $(cont).find('div.home').click(function(){
                     module.clickItem = false;
-                    storage.tooltip.cleaner(function(){
+                    module.fn.mod("tooltip").cleaner(function(){
                         $fn.render(module.start_id);
                     });
                 });
@@ -581,14 +581,14 @@
                     gedcom_id;
                 $(cont).find('.jmb-families-avatar.view').each(function(i,e){
                     gedcom_id = $(e).parent().attr('id').split('-')[0];
-                    storage.tooltip.render('view', {
+                    module.fn.mod("tooltip").render('view', {
                         button_facebook:false,
                         button_edit:false,
                         offsetParent:document.body,
                         gedcom_id:gedcom_id,
                         target:e,
                         afterEditorClose:function(){
-                            storage.tooltip.cleaner(function(){
+                            module.fn.mod("tooltip").cleaner(function(){
                                 module.usertree = storage.usertree.pull;
                                 $fn.render(module.now_id);
                             });
@@ -601,14 +601,14 @@
                     gedcom_id;
                 $(cont).find('.jmb-families-edit-button').each(function(i,e){
                     gedcom_id = $(e).attr('id').split('-')[0];
-                    storage.tooltip.render('edit', {
+                    module.fn.mod("tooltip").render('edit', {
                         button_edit:false,
                         button_facebook:false,
                         gedcom_id:gedcom_id,
                         target:e,
                         offsetParent:document.body,
                         afterEditorClose:function(){
-                            storage.tooltip.cleaner(function(){
+                            module.fn.mod("tooltip").cleaner(function(){
                                 module.usertree = storage.usertree.pull;
                                 $fn.render(module.now_id);
                             });
@@ -825,7 +825,7 @@
 
             },
             reload:function(id, type){
-                storage.tooltip.cleaner(function(){
+                module.fn.mod("tooltip").cleaner(function(){
                     module.border_iter = 0;
                     $fn.render(id);
                 });

@@ -294,8 +294,8 @@
         function setUserTooltip(divs){
             jQuery(divs).each(function(i, target){
                 var id = jQuery(target).attr('id');
-                if("undefined" !== typeof(storage.tooltip.render)){
-                    storage.tooltip.render('view', {
+                if("undefined" !== typeof(module.fn.mod("tooltip"))){
+                    module.fn.mod("tooltip").render('view', {
                         gedcom_id:id,
                         target:target
                     });

@@ -1826,7 +1826,7 @@ JMBProfile.prototype = {
             dialogBox = fn.getViewObject('dialogCont'),
             dialogButton = fn.getViewObject('dialogButton');
 
-         storage.tooltip.cleaner();
+        $FamilyTreeTop.fn.mod("tooltip").cleaner();
 
         var gedcom_id = (typeof(args.gedcom_id)=='undefined')?args.object.user.gedcom_id:args.gedcom_id;
         var owner_id = (typeof(args.owner_id) != 'undefined' )? args.owner_id : false;

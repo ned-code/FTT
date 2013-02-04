@@ -63,7 +63,7 @@
                         var li = jQuery(sb.result());
                         sb.clear();
                         if(gedcom_id != null){
-                            storage.tooltip.render('view', {
+                            module.fn.mod("tooltip").render('view', {
                                 gedcom_id:gedcom_id,
                                 target:li,
                                 afterEditorClose:function(){

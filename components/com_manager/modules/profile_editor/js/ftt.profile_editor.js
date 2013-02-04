@@ -19,9 +19,9 @@
         * FUNCTIONS
          */
         $module.fn.ajax = function(f, p, c){
-            storage.callMethod("myfamily", "FTTProfileEditor", f, p, function(res){
-                c(storage.getJSON(res.responseText));
-            })
+            $module.fn.mod("ajax").call("myfamily", "FTTProfileEditor", f, p, function(res){
+                c(res);
+            });
         }
 
         $module.fn.extend = function(def, set){
@@ -969,7 +969,7 @@
             editor:function(settings){
                 if($module.data.slide) return false;
 
-                storage.tooltip.cleaner();
+                $module.fn.mod("tooltip").cleaner();
 
                 //data
                 $module.data.gedcom_id = settings.gedcom_id;
