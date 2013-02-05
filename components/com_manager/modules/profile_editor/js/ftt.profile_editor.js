@@ -19,7 +19,7 @@
         * FUNCTIONS
          */
         $module.fn.ajax = function(f, p, c){
-            $module.fn.mod("ajax").call("myfamily", "FTTProfileEditor", f, p, function(res){
+            $module.fn.call("myfamily", "FTTProfileEditor", f, p, function(res){
                 c(res);
             });
         }

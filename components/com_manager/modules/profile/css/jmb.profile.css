@@ -1,6 +1,4 @@
-/**
-* UI - DIALOG 
-*/
+/*
 .ui-widget-header {
 	background: none;
 	border:none;
@@ -17,9 +15,7 @@
 .ui-dialog-title{
 	color:white;
 }
-.ui-dialog .ui-dialog-content {
-	/*overflow: visible;*/
-}
+
 .ui-widget-overlay {
 	background: #000000;
 	opacity: 0.8;
@@ -58,9 +54,7 @@
 	color: white;
 }
 .jmb-dialog-interface-button span {}
-/**
-* menu items
-*/
+
 .jmb-dialog-profile-menu-container{
 	border-right: 2px solid gray;
 	font-family: tahoma;
@@ -88,21 +82,7 @@
 	background: #F8A13B !important;
 }
 .jmb-dialog-profile-menu-container span{}
-/**
-* avatar
-*/
-/**
-.jmb-dialog-photo{
-	position:relative;
-	background: white;
-	border: 2px solid #000000;
-	border-radius: 3px 3px 3px 3px;
-	height: 150px;
-	margin: 5px 5px 5px 10px;
-	text-align: center;
-	width: 135px;
-}
-*/
+
 .jmb-dialog-avatar{
     position:relative;
     background: white;
@@ -151,9 +131,7 @@
 	font-weight: normal;
 	margin-left: 17px;
 }
-/**
-* buttons
-*/
+
 .jmb-dialog-button-submit {
 	position: absolute;
 	right: 10px;
@@ -169,9 +147,7 @@
 	width: 65px !important;
 	cursor:pointer;
 }
-/**
-* basic
-*/
+
 .jmb-dialog-profile-content-basic {
     position:relative;
 	background: none repeat scroll 0 0 #7F7F7F;
@@ -216,9 +192,7 @@
 	padding: 1px;
 	width: 80px;
 }
-/**
-* unions
-*/
+
 .jmb-dialog-profile-content-unions{
 	font-family: Tahoma;
 	font-size: 12px;
@@ -321,7 +295,7 @@
 .jmb-dialog-profile-content-unions-person .info .location{}
 .jmb-dialog-profile-content-unions-add{
 	width: 102px;
-	/*margin: 0 auto;*/
+
 	margin-top: 5px;
 }
 .jmb-dialog-profile-content-unions-add input{
@@ -342,9 +316,7 @@
 	margin: 3px;
 	width: 170px;
 }
-/**
-* photos
-*/
+
 .jmb-dialog-photos-content{
 	font-family: Tahoma,sans-serif;
 	font-size: 12px;
@@ -430,9 +402,7 @@
 	text-align: center;
 	cursor:pointer;
 }
-/**
-* view profile
-*/
+
 .jmb-dialog-view-profile {
 	width: 510px;
 	background: none repeat scroll 0 0 #9A7423;
@@ -471,9 +441,7 @@
 	color: #3B5997;
 	margin-left: 15px;
 }
-/**
-* add union
-*/ 
+
 .jmb-profile-add-union {
     background: none repeat scroll 0 0 #9A7423;
     border-radius: 5px 5px 5px 5px;
@@ -535,9 +503,7 @@
 	margin: 3px;
 	height: 22px;
 }
-/**
-* add parent,brother\sister,child
-*/ 
+
 .jmb-dialog-profile-add-parent {
 	font-family: Tahoma;
 	font-size: 12px;
@@ -580,9 +546,7 @@
 	height: 16px;
 	margin: 3px;
 }
-/**
-* death marker
-*/
+
 .jmb-dialog-profile-death-marker{
 	background: url("../image/death_marker.png") no-repeat scroll -40px 0 transparent;
 	height: 10px;
@@ -592,9 +556,6 @@
     	width: 10px;
 }
 
-/**
-* more options
-*/
 .delete-button-container {
     left: 45%;
     position: absolute;
@@ -661,9 +622,6 @@
     background: url("../image/m_options_delete.jpg") no-repeat scroll 0 0 transparent;
 }
 
-/**
-* view family
-*/
 .ftt-profile-view-sircar {
     height: 260px;
     width:155px;
@@ -843,9 +801,7 @@
     top: 25px;
     width: 10px;
 }
-/**
-* RELATION MAPPER
-*/
+
 .ftt-relation-mapper-node {
     text-align: center;
     width: 120px;
@@ -863,4 +819,219 @@
     position: absolute;
     top: 2px;
     width: 24px;
+}
+*/
+
+.jmb-profile-cont {
+    position:relative;
+    font-size: 11px;
+    font-family: 'lucida grande',tahoma,verdana,arial,sans-serif;
+    color: #333;
+    line-height: 1.28;
+    text-align: left;
+    direction: ltr;
+    margin-right: 3px;
+}
+
+.jmb-profile-cont div.avatar{
+    border: 1px solid white;
+    height: 22px;
+    margin-left: 3px;
+    margin-top: 3px;
+    width: 22px;
+}
+.jmb-profile-cont div.avatar img{
+    vertical-align: top;
+}
+.jmb-profile-cont div.login {
+    margin-left: 3px;
+    cursor: pointer;
+}
+.jmb-profile-cont div.login:hover {
+    background-color: #86af67;
+}
+.jmb-profile-cont div.login span {
+    color: white;
+    font-weight: bold;
+}
+.jmb-profile-cont div.settings {
+    position:relative;
+}
+.jmb-profile-cont div.settings div.button{
+    background: url("../imgs/arrows.png") no-repeat scroll 0 -21px #6B944E;
+    border-color: #6B944E;
+    border-style: solid;
+    border-width: 1px;
+    cursor: pointer;
+    height: 22px;
+    margin-top: 3px;
+    width: 22px;
+}
+.jmb-profile-cont div.settings div.button:hover{
+    background: url("../imgs/arrows.png") no-repeat scroll -22px -22px #86af67;
+}
+.jmb-profile-cont div.settings div.button.active {
+    background: url("../imgs/arrows.png") no-repeat scroll 0 0 white;
+    border-color: #CCCCCC #CCCCCC white;
+    border-style: solid;
+    border-width: 1px;
+}
+.jmb-profile-cont div.settings div.menu {
+    background: none repeat scroll 0 0 white;
+    border-color: white #CCCCCC #CCCCCC;
+    border-style: solid;
+    border-width: 1px;
+    margin-left: -153px;
+    padding: 10px;
+    position: absolute;
+    width: 155px;
+}
+.jmb-profile-cont div.settings div.menu div{
+    background: url("../imgs/list.png") no-repeat scroll 3px 3px transparent;
+    line-height: 16px;
+    margin-top: 5px;
+    margin-left: -3px;
+}
+.jmb-profile-cont div.settings div.menu div span {
+    color: #153FC5;
+    font-size: 14px;
+    margin-left: 15px;
+    cursor: pointer;
+}
+.jmb-profile-cont div.settings div.menu div:hover {
+    background:#627AAD;
+}
+.jmb-profile-cont div.settings div.menu div:hover span {
+    color:white;
+}
+.jmb-profile-cont div.facebook {
+    background: url("../imgs/facebook-login-button.png") no-repeat scroll 0 0 transparent;
+    border: 1px solid white;
+    height: 25px;
+    margin-left: 0;
+    margin-top: 1px;
+    width: 194px;
+}
+.jmb-profile-cont div.facebook span {
+    color: white;
+    cursor: pointer;
+    font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 24px;
+    margin-left: 34px;
+    text-decoration: none;
+}
+
+.jmb-profile-famous-cont {
+    background: none repeat scroll 0 0 white;
+    border: 1px solid #CCCCCC;
+    font-family: Calibri,Tahoma,sans-serif;
+    font-size: 12px;
+    position: absolute;
+    right: 10px;
+    top: 5px;
+    z-index: 1;
+}
+.jmb-profile-famous-cont table{
+    margin: 3px;
+    width: 100%;
+}
+.jmb-profile-famous-cont .text {
+    text-align: left;
+}
+.jmb-profile-famous-cont .text span{
+
+}
+.jmb-profile-famous-cont .avatar {
+    border: 1px solid black;
+    height: 50px;
+    width: 50px;
+}
+.jmb-profile-famous-cont .avatar img{}
+.jmb-profile-famous-cont .name {
+    text-align: center;
+}
+.jmb-profile-famous-cont .name span{
+    font-weight: bold;
+}
+.jmb-profile-famous-cont .logout {
+    text-align: center;
+}
+.jmb-profile-famous-cont .logout span{
+    color:#686fe3;
+    cursor: pointer;
+}
+
+.ui-dialog.language{
+    background: none repeat scroll 0 0 #999999;
+}
+.ftt-profile-language-list.ui-dialog-content{
+    background: none repeat scroll 0 0 white;
+    border: 1px solid #999999;
+    border-radius: 5px 5px 5px 5px;
+    font-family: Tahoma;
+}
+.ftt-profile-language-list.ui-dialog-content ul{
+    list-style: none outside none;
+}
+.ftt-profile-language-list.ui-dialog-content ul li{
+    cursor: pointer;
+}
+.ftt-profile-language-list.ui-dialog-content ul li input{
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.ftt-profile-language-list.ui-dialog-content ul li div{
+    display: inline-block;
+}
+.ftt-profile-language-list.ui-dialog-content ul li div.flag{
+    height: 24px;
+    width: 24px;
+}
+.ftt-profile-language-list.ui-dialog-content ul li div.flag.en-GB{
+    background: url("../imgs/en-GB.png") no-repeat scroll 0 0 transparent;
+}
+.ftt-profile-language-list.ui-dialog-content ul li div.flag.ru-RU{
+    background: url("../imgs/ru-RU.png") no-repeat scroll 0 0 transparent;
+}
+.ftt-profile-language-list.ui-dialog-content ul li div.flag.pt-PT{
+    background: url("../imgs/pt-PT.png") no-repeat scroll 0 0 transparent;
+}
+.ftt-button-ok {
+    bottom: 10px;
+    left: 80px;
+    position: absolute;
+    width: 150px;
+}
+.ftt-button-ok input {
+    width: 150px;
+}
+.ftt-language-progressbar {
+    background: none repeat scroll 0 0 white;
+    height: 190px;
+    left: 3px;
+    position: absolute;
+    top: 3px;
+    width: 310px;
+}
+.ftt-language-progressbar div{
+    background: url("../imgs/progressbar.gif") no-repeat scroll 0 25px transparent;
+    height: 120px;
+    left: 100px;
+    position: absolute;
+    top: 40px;
+    width: 100px;
+}
+.ftt-language-progressbar div span{
+    margin-left:10px;
+}
+
+.ftt-preloader-alert {
+    background: url("../imgs/progressbar.gif") no-repeat scroll 105px 0 transparent;
+    height: 160px;
+}
+.ftt-preloader-alert div{
+    display: inline-block;
+    margin-top: 100px;
 }

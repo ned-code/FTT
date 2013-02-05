@@ -134,17 +134,6 @@ foreach ($info as $page){
                 });
             }
         }
-
-        var init = function(info){
-            if($FamilyTreeTop.fn.mod("RENDER")){
-                $FamilyTreeTop.fn.mod("RENDER").set("desctop", info);
-            } else {
-                setTimeout(function(){
-                    init(info);
-                }, 250);
-            }
-        }
-        init(data.pageInfo);
-
+        $FamilyTreeTop.fn.mod("RENDER").set("desctop", data.pageInfo);
     })(window)
 </script>

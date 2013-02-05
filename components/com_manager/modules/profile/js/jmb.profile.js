@@ -1,5 +1,379 @@
 (function($, $ftt){
     $ftt.module.create("MOD_SYS_PROFILE", function(){
+        var	module = this,
+            fn,
+            settings = {},
+            loggedByFamous = false,
+            alias = '',
+            path = "/components/com_manager/modules/login/imgs/",
+            notifications,
+            fb_logged,
+            msg;
+
+        msg = {
+            FTT_MOD_LOGIN_PROFILE:"Profile",
+            FTT_MOD_LOGIN_LANGUAGE:"Language",
+            FTT_MOD_LOGIN_LOGOUT:"Log Out",
+            FTT_MOD_LOGIN_CONNECT_WITH_FACEBOOK:"Connect With Facebook",
+            FTT_MOD_LOGIN_LANGUAGE_DIALOG:"Language",
+            FTT_MOD_LOGIN_FF_LOGGED: "You logged in as",
+            FTT_MOD_LOGIN_FF_EXIT: "Exit this Family Trees"
+
+        }
+
+        module.menu = null;
+
+        //init vars
+        loggedByFamous = parseInt($(document.body).attr('_type'));
+        alias = $(document.body).attr('_alias');
+
+        //init functions
+        fn = {
+            ajax:function(func, params, callback){
+                module.fn.call("profile", "JMBProfile", func, params, function(res){
+                    callback(res);
+                }, true);
+            },
+            create:function(){
+                var sb = storage.stringBuffer();
+                sb._('<div class="jmb-profile-cont">');
+                sb._('<table>');
+                sb._('<tr>');
+                sb._('<td><div class="avatar"></div></td>');
+                sb._('<td><div class="login"><span></span></div></td>');
+                sb._('<td><div class="settings"><div class="button"></div></div></td>');
+                sb._('</tr>');
+                sb._('</table>');
+                sb._('</div>');
+                return $(sb.result());
+            },
+            connect:function(){
+                var sb = module.fn.stringBuffer();
+                sb._('<div class="jmb-profile-cont">');
+                sb._('<div class="facebook"><span>')._(msg.FTT_MOD_LOGIN_CONNECT_WITH_FACEBOOK)._('</span></div>');
+                sb._('</div>');
+                return $(sb.result());
+            },
+            langList:function(object){
+                var st = module.fn.stringBuffer();
+                st._('<ul>');
+                $(settings.languages).each(function(i,el){
+                    if(parseInt(el.published)){
+                        var def = (object.def)?object.def:settings.default_language;
+                        if(el.lang_code == def){
+                            st._('<li>');
+                            st._('<div class="flag ')._(el.lang_code)._('">&nbsp;</div>');
+                            st._('<div><input name="country" type="radio" checked="checked" value="')._(el.lang_code)._('"></div>');
+                            st._('<div class="title">')._(el.title)._('</div>');
+                            st._('</li>');
+                        } else {
+                            st._('<li>');
+                            st._('<div class="flag ')._(el.lang_code)._('">&nbsp;</div>');
+                            st._('<div><input name="country" type="radio" value="')._(el.lang_code)._('"></div>');
+                            st._('<div class="title">')._(el.title)._('</div>');
+                            st._('</li>');
+                        }
+                    }
+                });
+                st._('</ul>');
+                st._('<div class="ftt-button-ok"><input type="button" value="OK"></div>');;
+                return $(st.result());
+            },
+            getDefaultLang:function(){
+                var lang = settings.languages;
+                for(var key in lang){
+                    var l = lang[key];
+                    if(settings.default_language!=null){
+                        if(l.lang_code == settings.default_language){
+                            return l.title;
+                        }
+                    } else {
+                        if(parseInt(l.def)){
+                            return l.title;
+                        }
+                    }
+                }
+            },
+            menu:function(){
+                var menu, list, sb = module.fn.stringBuffer(), contEl;
+                sb._('<div class="menu">');
+                if(settings.user_data && settings.user_data.pull.length != 0){
+                    sb._('<div id="profile"><span>')._(msg.FTT_MOD_LOGIN_PROFILE)._('</span></div>');
+                }
+                sb._('<div id="language"><span>')._(msg.FTT_MOD_LOGIN_LANGUAGE)._(': ')._(this.getDefaultLang())._('</span></div>');
+                sb._('<div id="to_facebook"><span>')._('Return to Facebook')._('</span></div>');
+                sb._('<div id="logout"><span>')._(msg.FTT_MOD_LOGIN_LOGOUT)._('</span></div>');
+                sb._('</div>');
+                menu = $(sb.result());
+                return {
+                    viewLanguage:function(object ,c){
+                        this.click.language(object, c);
+                    },
+                    on:function(object, callback){
+                        var m = this;
+                        $(object).parent().append(menu);
+                        m.init();
+                        $(document.body).click(function(ev){
+                            m.off();
+                            callback();
+                        });
+                        return this;
+                    },
+                    off:function(){
+                        $(menu).remove();
+                        $(menu).find('div').unbind();
+                        $(document.body).unbind();
+                        return this;
+                    },
+                    click:{
+                        profile:function(obj, callback){
+                            if(settings.user_data){
+                                var data = settings.user_data,
+                                    gedcom_id = data.gedcom_id,
+                                    tree_id = data.tree_id,
+                                    users = data.users,
+                                    pull = data.pull;
+                                /*
+                                storage.profile.editor('edit', {
+                                    gedcom_id:gedcom_id,
+                                    owner_id:gedcom_id,
+                                    tree_id:tree_id,
+                                    pull:pull,
+                                    users:users,
+                                    events:{
+                                        afterEditorClose:function(p){
+                                            $(obj).removeClass('active');
+                                            settings.user_data.pull = p;
+                                            module.fn.mod("tooltip").update();
+
+                                        }
+                                    }
+                                });
+                                */
+                            }
+                            callback();
+                        },
+                        language:function(object, callback){
+                            var langBox = $('<div class="ftt-profile-language-list"></div>');
+                            $(langBox).append(fn.langList(object));
+                            $(langBox).dialog({
+                                width:320,
+                                height:240,
+                                title: msg.FTT_MOD_LOGIN_LANGUAGE_DIALOG,
+                                resizable: false,
+                                draggable: false,
+                                position: "top",
+                                closeOnEscape: false,
+                                modal:true,
+                                close:function(){
+                                    callback();
+                                }
+                            });
+                            $(langBox).parent().addClass('language');
+                            $(langBox).parent().css('top', '20px');
+                            var selectRadioButton = function(){
+                                var input = $(this).parent().find('input').attr('checked', 'checked');
+                            }
+                            $(langBox).find('div.flag').click(selectRadioButton);
+                            $(langBox).find('div.title').click(selectRadioButton);
+                            $(langBox).find('div.ftt-button-ok input').click(function(){
+                                var id = $(langBox).find('input:checked').val();
+                                var prgb = $('<div class="ftt-language-progressbar"><div><span>Loading...</span></div></div>');
+                                $(langBox).append(prgb);
+                                fn.ajax('language', id, function(json){
+                                    callback(id);
+                                    setTimeout(function(){
+                                        window.location.reload();
+                                    }, 1000)
+                                });
+                                return false;
+                            })
+                        },
+                        to_facebook:function(object, callback){
+                            window.top.location.href = storage.app.link;
+                            callback();
+                        },
+                        logout:function(object, callback){
+                            jfbcLogoutFacebook = true;
+                            jfbc.login.logout_button_click();
+                            callback();
+                        }
+                    },
+                    init:function(){
+                        var _menu = this;
+                        $(menu).find('div').click(function(){
+                            var div = this;
+                            if($(div).hasClass('active')) return false;
+                            $(menu).find('div').removeClass('active');
+                            $(div).addClass('active');
+                            var revert = function(){
+                                $(div).removeClass('active');
+                            }
+                            _menu.click[$(this).attr('id')](this, revert);
+                            return false;
+                        });
+                        return this;
+                    }
+                }
+
+            },
+            login:function(cont){
+                var json;
+                var div = $("<div class='ftt-preloader-alert'><div>You are now being logged in using your Facebook credentials</div></div>");
+                $(div).hide();
+                $("#_profile").append(div);
+                $(cont).find('div.facebook span').click(function(){
+                    FB.login(function(response){
+                        if(response.authResponse){
+                            storage.alert(div, function(){});
+                            $(div).show();
+                            window.location = storage.baseurl+'index.php?option=com_jfbconnect&task=loginFacebookUser&return=myfamily';
+                        } else {
+                            alert('Login failed.')
+                        }
+                    }, {scope: jfbcRequiredPermissions});
+                });
+            },
+            click:function(cont){
+                var menu = this.menu();
+                module.menu = menu;
+                $(cont).click(function(){
+                    var button = $(this).find('div.button');
+                    if($(button).hasClass('active')){
+                        $(button).removeClass('active');
+                        menu.off();
+                        $(document.body).unbind();
+                    } else {
+                        $(button).addClass('active');
+                        menu.on(button, function(){
+                            $(button).removeClass('active');
+                            menu.off();
+                        });
+                    }
+                    return false;
+                });
+            },
+            setName:function(data, cont){
+                var	box = $(cont).find('div.login span'), parse;
+                $(box).html(data.name);
+            },
+            setAvatar:function(data ,cont){
+                if(typeof(data) != 'undefined'  && typeof(data.facebookId) != 'undefined'){
+                    var	box = $(cont).find('div.avatar');
+                    $(box).html('<img width="22px" height="22px" src="http://graph.facebook.com/'+data.facebookId+'/picture">');
+                }
+            },
+            getAvatar:function(object){
+                return storage.usertree.avatar.get({
+                    object:object,
+                    width:50,
+                    height:50
+                });
+            },
+            user:function(callback){
+                var json, object;
+                fn.ajax('user', null, function(json){
+                    if(!json) callback(false);
+                    settings.languages = json.languages;
+                    settings.default_language = json.default_language;
+                    settings.user_data = json.data;
+                    msg = json.msg;
+
+                    if(json.user.facebookId != 0){
+                        storage.usertree.user = json.user;
+                        callback(json.user);
+                    } else {
+                        callback(false);
+                    }
+                });
+            },
+            famous:function(){
+                if(storage.usertree.gedcom_id == null) return false;
+                var object = storage.usertree.pull[storage.usertree.gedcom_id];
+                var	sb = storage.stringBuffer(), parse = storage.usertree.parse(object), htmlObject;
+                sb._('<div class="jmb-profile-famous-cont">');
+                sb._('<table>');
+                sb._('<tr><td><div class="text"><span>')._(msg.FTT_MOD_LOGIN_FF_LOGGED)._(':</span></div></td><td rowspan="3"><div class="avatar">')._(fn.getAvatar(object))._('</div></td></tr>');
+                sb._('<tr><td><div class="name"><span>')._(parse.name)._('</span></div></td></tr>');
+                sb._('<tr><td><div class="logout"><span>')._(msg.FTT_MOD_LOGIN_FF_EXIT)._('</span></div></td></tr>');
+                sb._('</table>');
+                sb._('</div>');
+                htmlObject = $(sb.result());
+                $(htmlObject).find('div.logout span').click(function(){
+                    fn.ajax('famous', 'logout', function(res){
+                        window.location.href = storage.baseurl + 'index.php/famous-family'
+                    });
+                });
+                $('div.jmb-header-container').append(htmlObject);
+            },
+            facebook:function(data){
+                if(!data) return false;
+                var cont = fn.create();
+                fn.setName(data, cont);
+                fn.setAvatar(data, cont);
+                fn.click(cont);
+                $("#_profile").append(cont);
+            },
+            createBox:function(data){
+                if(loggedByFamous){
+                    fn.famous();
+                }
+                if(data){
+                    fn.facebook(data);
+                } else {
+                    var cont = fn.connect();
+                    fn.login(cont);
+                    $("#_profile").append(cont);
+                }
+            },
+            init:function(renderType){
+                fn.user(function(data){
+                    fb_logged = $(document.body).attr('_fb');
+                    setTimeout(function(){
+                        fn.createBox(data)
+                    }, 1);
+                });
+            }
+        }
+
+        if(window!=window.top){
+            module.init = function(callback){
+                function _ajax_ (url, callback){
+                    $.ajax({
+                        url: url,
+                        type: "POST",
+                        dataType: "json",
+                        complete : callback
+                    });
+                }
+                function _redirect_ (){
+                    var bUrl = $(document.body).attr('_baseurl');
+                    window.location.href= bUrl+'index.php/myfamily';
+                }
+                if(alias == 'home' || alias == 'famous-family') {
+                    _ajax_("index.php?option=com_manager&task=setLocation&alias=myfamily" ,function(){
+                        _redirect_();
+                    });
+                } else if(loggedByFamous){
+                    _ajax_("index.php?option=com_manager&task=clearFamousData" ,function(){
+                        _redirect_();
+                    });
+                } else {
+                    setTimeout(function(){
+                        callback();
+                    }, 1);
+                }
+            }
+            return false;
+        } else {
+            module.init = fn.init;
+        }
+        return this;
+    }, true);
+})(jQuery, $FamilyTreeTop);
+/*
+(function($, $ftt){
+    $ftt.module.create("MOD_SYS_PROFILE", function(){
         var	module = this;
         module._generateBorders=function(n){
             var retBorders = [],
@@ -1286,12 +1660,6 @@
                     jQuery(box).parent().css('top', '40px');
                     jQuery(box).html('');
                     jQuery(box).append(dialogBox);
-                    /*
-                     if(fn.getParseUserInfo().is_editable){
-                     jQuery(box).parent().find('.ui-dialog-titlebar').append(dialogButton);
-                     fn.initHeader(dialogButton, type);
-                     }
-                     */
                 });
 
                 this.mode(type, args.start);
@@ -1437,3 +1805,4 @@
         };
     }, true);
 })(jQuery, $FamilyTreeTop);
+*/

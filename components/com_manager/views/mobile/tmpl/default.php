@@ -65,16 +65,6 @@ foreach ($info as $page){
         }
 
         var data = setData();
-
-        var init = function(info){
-            if($FamilyTreeTop.fn.mod("RENDER")){
-                $FamilyTreeTop.fn.mod("RENDER").set("mobile", info);
-            } else {
-                setTimeout(function(){
-                    init(info);
-                }, 250);
-            }
-        }
-        init(data.pageInfo);
+        $FamilyTreeTop.fn.mod("RENDER").set("mobile", data.pageInfo);
     })(window)
 </script>

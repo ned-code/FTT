@@ -40,17 +40,7 @@ foreach ($info as $page){
             storage.langString = langString;
             storage.settings = config;
 
-            //storage.core.load(pages);
-            var init = function(info){
-                if($FamilyTreeTop.fn.mod("RENDER")){
-                    $FamilyTreeTop.fn.mod("RENDER").set("desctop", info);
-                } else {
-                    setTimeout(function(){
-                        init(info);
-                    }, 250);
-                }
-            }
-            init(pageInfo);
+            $FamilyTreeTop.fn.mod("RENDER").set("desctop", pageInfo);
         }
     })(window)
 </script>

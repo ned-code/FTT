@@ -1313,6 +1313,7 @@
                      */
                     $FamilyTreeTop.fn.mod("tooltip").init();
                     $FamilyTreeTop.fn.mod("topmenubar").init("desctop");
+                    $FamilyTreeTop.fn.mod("profile").init("mobile");
                     $FamilyTreeTop.fn.mod("navigation").init("mobile", settings, function(el, setting){
                         fn.initModules("mobile", "#_content", setting);
                     });
@@ -1320,6 +1321,7 @@
                 desctopRender:function(settings){
                     $FamilyTreeTop.fn.mod("tooltip").init();
                     $FamilyTreeTop.fn.mod("topmenubar").init("desctop");
+                    $FamilyTreeTop.fn.mod("profile").init("desctop");
                     $FamilyTreeTop.fn.mod("header").init("desctop");
                     $FamilyTreeTop.fn.mod("navigation").init("desctop", settings, function(el, setting){
                         if(el){
@@ -1446,7 +1448,7 @@
         $module.data.arguments = arguments;
         $module.data.activeItem = false;
         $module.data.liSettings = {};
-        $module.data.settings = {};
+        $module.data.settings = false;
 
         return {
             init: function(type, settings, callback){

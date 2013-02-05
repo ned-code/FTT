@@ -58,11 +58,9 @@
                 if(!module.isExist(type, name)){
                     module.type[name] = type;
                     module[type][name] = { object:value, data:{}, init:function(){ module.init(name); } };
-                    jQuery(document.body).ready(function(){
-                        if("undefined" !== typeof(system)){
-                            module[type][name].init();
-                        }
-                    });
+                    if("undefined" !== typeof(system)){
+                        module[type][name].init();
+                    }
                     return true;
                 }
             }
@@ -108,8 +106,17 @@
             var name = "MOD_"+(("undefined" !== typeof(normal))?"":"SYS_")+name.toUpperCase();
             if("undefined" !== typeof($ftt.module.active[name])){
                 return $ftt.module.active[name];
+            } else {
+                return {
+                    error:true,
+                    init:function(){
+                        console.log(name+" module doesn't exist", arguments);
+                    }
+                }
             }
-            return false;
+        },
+        call:function(module, classname, method, args, callback, mandatory){
+            $FamilyTreeTop.fn.mod("ajax").call(module, classname, method, args, callback, mandatory);
         },
         alert:function(message, callback){
             var object = jQuery('<div style="text-align: center;"></div>');
