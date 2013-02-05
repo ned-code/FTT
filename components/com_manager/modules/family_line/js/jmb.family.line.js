@@ -322,7 +322,7 @@
         }
         objPull = fn.pull();
         return {
-            get: function(){ return fn.get; },
+            get: fn.get,
             bind: function(name, callback){
                 var clickActive = false;
                 objPull.bind(name, function(res){

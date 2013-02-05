@@ -1298,20 +1298,11 @@
                 },
                 mobileRender:function(settings){
                     /*
-                     storage.header = new JMBHeader();
-                     storage.overlay = new JMBOverlay();
-                     storage.login = new JMBLogin();
-                     storage.profile = new JMBProfile();
-                     storage.media = new JMBMediaManager();
                      storage.invitation = new JMBInvitation();
-                     storage.tooltip = new JMBTooltip();
-                     //storage.topmenubar = new JMBTopMenuBar();
-                     storage.family_line = new JMBFamilyLine();
-                     storage.progressbar = new JMBProgressbarObject();
                      storage.feedback = new JMBFeedback();
                      storage.ntf = new JMBNotifications();
                      */
-                    $FamilyTreeTop.fn.mod("tooltip").init();
+                    $FamilyTreeTop.fn.mod("tooltip").init("desctop");
                     $FamilyTreeTop.fn.mod("topmenubar").init("desctop");
                     $FamilyTreeTop.fn.mod("profile").init("mobile");
                     $FamilyTreeTop.fn.mod("navigation").init("mobile", settings, function(el, setting){
@@ -1319,7 +1310,8 @@
                     });
                 },
                 desctopRender:function(settings){
-                    $FamilyTreeTop.fn.mod("tooltip").init();
+                    $FamilyTreeTop.fn.mod("feedback").init("desctop");
+                    $FamilyTreeTop.fn.mod("tooltip").init("desctop");
                     $FamilyTreeTop.fn.mod("topmenubar").init("desctop");
                     $FamilyTreeTop.fn.mod("profile").init("desctop");
                     $FamilyTreeTop.fn.mod("header").init("desctop");

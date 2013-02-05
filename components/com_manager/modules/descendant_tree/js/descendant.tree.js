@@ -68,7 +68,7 @@
                 dhxTree = dhxLayout.cells("a").attachTree();
                 dhxTree.setIconSize("16","16");
                 dhxTree.setSkin('dhx_skyblue');
-                dhxTree.setImagePath(module.imagePath);
+                dhxTree.setImagePath($FamilyTreeTop.global.base+module.imagePath);
 
                 module.dhxLayout = dhxLayout;
                 module.dhxTree = dhxTree;
@@ -490,9 +490,8 @@
             FTT_MOD_DESCEDNATS_TREE_SEND_INVITE_TO:"Send invitation to"
         };
         module.obj = parent;
-        module.baseurl = $('body').attr('_baseurl');
-        module.imgPath = module.baseurl+"components/com_manager/modules/descendant_tree/imgs/"
-        module.imagePath = module.baseurl+"components/com_manager/codebase/imgs/csh_bluebooks_custom/";
+        module.imgPath = "components/com_manager/modules/descendant_tree/imgs/"
+        module.imagePath = "components/com_manager/codebase/imgs/csh_bluebooks_custom/";
         module.profile_container = $('<div id="jmb_desc_profile_cont"></div>')[0];
         module.dhxLayout = null;
         module.dhxTree = null;

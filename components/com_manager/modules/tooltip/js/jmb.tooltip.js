@@ -490,7 +490,7 @@
             }
         }
         return {
-            init: function(){
+            init: function(renderType){
                 module.fn.mod("ajax").call("tooltip", "JMBTooltip", "get", null, function(json){
                     if(json&&json.language){
                         module.message = json.language;
