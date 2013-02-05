@@ -117,8 +117,7 @@
                     functions.ajax('getRecentVisitors', null, function(json){
                         if(!json) return false;
                         if(json.error || json.objects.length == 0){
-                            storage.core.modulesPullObject.unset('JMBRecentVisitorsObject');
-                            return jQuery(obj).remove();
+                            return jQuery(parent).remove();
                         }
                         if(json.language){
                             message = json.language;
@@ -129,11 +128,6 @@
                         functions.init_mini_profile(ul, json);
                         jQuery(content[1]).append(ul);
                         jQuery(parent).append(content);
-                        /*
-                        storage.profile.bind("JMBRecentVisitorsObject", function(){
-                            functions.reload(content, json);
-                        });
-                        */
                         if(callback) callback();
                     });
                 }

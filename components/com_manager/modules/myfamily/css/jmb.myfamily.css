@@ -150,7 +150,7 @@
     position: relative;
 }
 .ftt-myfamily-show {
-    background: url(imgs/show.png) no-repeat scroll 0 0 transparent;
+    background: url(../imgs/show.png) no-repeat scroll 0 0 transparent;
     position: absolute;
     right: 15px;
     top: 3px;

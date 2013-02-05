@@ -297,10 +297,10 @@
                 $fn.render();
             });
         } else {
-            ajax('get', null, function(res){
+            ajax.call("myfamily", "FTTMyFamily", "get", null, function(res){
                 $fn.exit();
                 jQuery(parent).append('<div class="ftt-myfamily-wiki-content"><iframe style="height: 500px;width: 100%;" src="'+res[0].link+'"></iframe><div class="ftt-myfamily-show"><a target="_blank" href="'+res[0].link+'">&nbsp;</a></div></div>');
-            });
+            })
         }
 
         storage.addEvent(storage.tabs, function(){
@@ -310,15 +310,3 @@
         return this;
     });
 })($FamilyTreeTop)
-
-function JMBMyfamilyObject(parent){
-    $FamilyTreeTop.module.init("MOD_MYFAMILY", parent, this._ajax, "full");
-}
-JMBMyfamilyObject.prototype = {
-    _ajax:function(func, params, callback){
-        storage.callMethod("myfamily", "FTTMyFamily", func, params, function(res){
-            callback(storage.getJSON(res.responseText));
-        })
-    }
-}
-
