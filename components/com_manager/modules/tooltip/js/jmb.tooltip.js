@@ -369,7 +369,7 @@
                     default: return;
                 }
                 $(cont).find(class_name).click(function(){
-                    storage.invitation.render(settings.object);
+                    $FamilyTreeTop.fn.mod("invitation").render(settings.object);
                 });
             },
             link_with_request:function(cont, settings){

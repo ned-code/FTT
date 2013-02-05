@@ -178,7 +178,7 @@ DescendantTreeProfile.prototype = {
             }
         }
 		jQuery(html).find('div.jmb-dtp-footer .send').click(function(){
-			storage.invitation.render(ch);
+            $FamilyTreeTop.fn.mod("invitation").render(ch);
 		}); 
 		return html;
 	},

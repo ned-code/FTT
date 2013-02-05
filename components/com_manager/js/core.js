@@ -1299,9 +1299,9 @@
                 mobileRender:function(settings){
                     /*
                      storage.invitation = new JMBInvitation();
-                     storage.feedback = new JMBFeedback();
                      storage.ntf = new JMBNotifications();
                      */
+                    $FamilyTreeTop.fn.mod("invitation").init("desctop");
                     $FamilyTreeTop.fn.mod("tooltip").init("desctop");
                     $FamilyTreeTop.fn.mod("topmenubar").init("desctop");
                     $FamilyTreeTop.fn.mod("profile").init("mobile");
@@ -1311,6 +1311,7 @@
                 },
                 desctopRender:function(settings){
                     $FamilyTreeTop.fn.mod("feedback").init("desctop");
+                    $FamilyTreeTop.fn.mod("invitation").init("desctop");
                     $FamilyTreeTop.fn.mod("tooltip").init("desctop");
                     $FamilyTreeTop.fn.mod("topmenubar").init("desctop");
                     $FamilyTreeTop.fn.mod("profile").init("desctop");
