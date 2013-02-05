@@ -1322,8 +1322,12 @@
                     $FamilyTreeTop.fn.mod("topmenubar").init("desctop");
                     $FamilyTreeTop.fn.mod("header").init("desctop");
                     $FamilyTreeTop.fn.mod("navigation").init("desctop", settings, function(el, setting){
-                        $FamilyTreeTop.fn.mod("family_line").init(setting);
-                        fn.initModules("desctop", "#jmbtab", setting);
+                        if(el){
+                            $FamilyTreeTop.fn.mod("family_line").init(setting);
+                            fn.initModules("desctop", "#jmbtab", setting);
+                        } else {
+                            fn.initModules("desctop", "#page", setting);
+                        }
                     });
                 }
             };
@@ -1389,6 +1393,9 @@
                         callback(this, $module.data.liSettings[$(this).attr("id")]);
                     });
                 },
+                renderSinglePageNavigation:function(settings, callback){
+                    callback(false, settings[0]);
+                },
                 renderTabNavigation:function(settings, callback){
                     var ul = $('<ul class="jmbtabs"></ul>');
                     var div = $('<div class="tab_container"></div>');
@@ -1447,7 +1454,12 @@
                 if(type == "mobile"){
                     fn.renderMobileNavigation(settings, callback);
                 } else if(type == "desctop"){
-                    fn.renderTabNavigation(settings, callback);
+                    if(settings.length > 1){
+                        fn.renderTabNavigation(settings, callback);
+                    } else if(settings.length == 1){
+                        fn.renderSinglePageNavigation(settings, callback);
+                    }
+                    return false;
                 }
             }
         };

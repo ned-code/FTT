@@ -9,9 +9,6 @@ $info = prior($this->pageInfo);
 $url = JURI::base();
 $path = 'components/com_manager/modules/';
 
-$builder = new FamilyTreeTopBuilderLibrary();
-$cssObject = array();
-
 foreach ($info as $page){
     $modules = $page['modules'];
     foreach ($modules as $module){
