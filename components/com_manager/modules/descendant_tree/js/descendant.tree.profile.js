@@ -53,7 +53,7 @@ DescendantTreeProfile.prototype = {
 						sb._('<tr>');
 							sb._('<td><div class="jmb-dtp-body-info-avatar">');
 								sb._(module.avatar(ch));
-                                if(parse.is_editable && !parseInt(jQuery(document.body).attr('_type'))){
+                                if(parse.is_editable && !parseInt($FamilyTreeTop.global.loginType)){
 								    sb._('<div id="edit-button" class="jmb-dtp-body-edit-button">&nbsp;</div>');
                                 }
 								if(parse.facebook_id != '0'){
@@ -137,7 +137,7 @@ DescendantTreeProfile.prototype = {
 					}
 				sb._('</div>');
 			sb._('</div>');
-			if(!parseInt(jQuery(document.body).attr('_type')) && parse.facebook_id=='0' && parse.is_alive && parse.turns < 120){
+			if(!parseInt($FamilyTreeTop.global.loginType) && parse.facebook_id=='0' && parse.is_alive && parse.turns < 120){
 				sb._('<div class="jmb-dtp-footer">');
 					sb._('<table>');			
 						sb._('<tr>');

@@ -188,7 +188,7 @@
                 sb._('<tr>');
                 sb._('<td>');
                 sb._('<div id="')._(parse.gedcom_id)._('-view" class="photo">')._($fn.avatar(object));
-                if(!module.loggedByFamous && parse.is_editable){
+                if(!$FamilyTreeTop.global.loginType && parse.is_editable){
                     sb._('<div id="')._(parse.gedcom_id)._('-edit" class="jit-edit-button">&nbsp;</div>');
                 }
                 if(parse.facebook_id != '0'){
@@ -476,7 +476,6 @@
         module.nodes = null;
         module.clickNode = null;
         module.targetNode = null;
-        module.loggedByFamous = parseInt($(document.body).attr('_type'));
         module.prefix = 'jit'+((new Date()).valueOf());
 
         module.msg = {

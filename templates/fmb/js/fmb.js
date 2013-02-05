@@ -35,7 +35,7 @@
                    return true;
                },
                setActiveElement:function(cont){
-                   switch ($module.data.alias) {
+                   switch ($FamilyTreeTop.global.alias) {
                        case "home":
                            fn.onSwitch(cont, $(cont).find('div#home span'));
                            break;
@@ -62,7 +62,7 @@
                    }
                },
                isFooterLink:function () {
-                    switch ($module.data.alias) {
+                    switch ($FamilyTreeTop.global.alias) {
                         case "about":
                         case "conditions":
                         case "privacy":
@@ -78,7 +78,7 @@
                    if(!isFooterLink) return "";
                    var sb = $module.fn.stringBuffer();
                    sb._('<div style="max-width:760px; margin: 0 auto; position: relative;">');
-                   sb._('<div class="jmb-top-menu-bar-title">Family TreeTop: <span>')._(fn.getAliasUcFirst($module.data.alias))._('</span></div>');
+                   sb._('<div class="jmb-top-menu-bar-title">Family TreeTop: <span>')._(fn.getAliasUcFirst($FamilyTreeTop.global.alias))._('</span></div>');
                    sb._('<div class="jmb-top-menu-bar-return"><span>')._(fn.getMsg("return"))._('</span></div>');
                    sb._('</div>');
                    return sb.result();
@@ -122,7 +122,7 @@
                            type:"POST",
                            dataType:"json",
                            complete:function (req, err) {
-                               var bUrl = $(document.body).attr('_baseurl');
+                               var bUrl = $FamilyTreeTop.global.base;
                                window.location.href = bUrl + 'index.php/' + id;
                            }
                        });
@@ -134,7 +134,7 @@
                            type:"POST",
                            dataType:"json",
                            complete:function (req, err) {
-                               var bUrl = $(document.body).attr('_baseurl');
+                               var bUrl = $FamilyTreeTop.global.base;
                                window.location.href = bUrl + 'index.php/' + id;
                            }
                        });
@@ -150,7 +150,6 @@
             FTT_MOD_TOPMENUBAR_HOME:"Home",
             FTT_MOD_TOPMENUBAR_RETURN:"Return to Family TreeTop"
         }
-        $module.data.alias = $(document.body).attr("_alias");
         $module.data.loggetByFamous = parseInt($(document.body).attr('_type'));
         $module.data.type = "desctop";
         $module.data.content = [];

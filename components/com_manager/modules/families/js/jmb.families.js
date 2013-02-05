@@ -860,7 +860,6 @@
         module.border_iter = 0;
         module.spouse_border = {};
 
-        module.loggedByFamous = parseInt($(document.body).attr('_type'));
         module.settings = storage.settings;
         module.colors = module.settings.colors;
         module.usertree = storage.usertree.pull;

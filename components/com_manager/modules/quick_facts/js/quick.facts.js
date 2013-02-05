@@ -2,8 +2,6 @@
     $ftt.module.create("MOD_QUICK_FACTS", function(name, parent, ajax, renderType, popup){
         var	module = this,
             settings = storage.settings,
-            loggedByFamous = parseInt(jQuery(document.body).attr('_type')),
-            alias = jQuery(document.body).attr('_alias'),
             message = {
                 FTT_MOD_QUICK_FACTS_HEADER:"Quick Facts",
                 FTT_MOD_QUICK_FACTS_NUMBER:"Number of family members",

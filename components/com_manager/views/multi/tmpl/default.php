@@ -5,6 +5,17 @@ function prior($pages){
     return $result;
 }
 
+function _getAlias(){
+    $menu   = &JSite::getMenu();
+    $active   = $menu->getActive();
+    if(is_object($active)){
+        return $active->alias;
+    }
+    return false;
+}
+
+$alias = _getAlias();
+
 $info = prior($this->pageInfo);
 $url = JURI::base();
 $path = 'components/com_manager/modules/';
@@ -87,7 +98,8 @@ foreach ($info as $page){
                 friends:<?php echo json_encode($this->friends); ?>,
                 usermap:<?php echo json_encode($this->usermap); ?>,
                 app:<?php echo json_encode($this->app); ?>,
-                alias: jQuery(document.body).attr("_alias")
+                alias: '<?php echo $alias; ?>',
+                baseurl: '<?php echo $url; ?>'
             }
 
             if(typeof(storage) != "undefined"){
@@ -134,6 +146,9 @@ foreach ($info as $page){
                 });
             }
         }
+        $FamilyTreeTop.global.base = data.baseurl;
+        $FamilyTreeTop.global.alias = data.alias;
+        $FamilyTreeTop.global.loginType = parseInt(data.usermap.loginType);
         $FamilyTreeTop.fn.mod("RENDER").set("desctop", data.pageInfo);
     })(window)
 </script>

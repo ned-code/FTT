@@ -3,8 +3,6 @@
         var module = this,
             content = null,
             sb = storage.stringBuffer(),
-            loggedByFamous = parseInt(jQuery(document.body).attr('_type')),
-            alias = jQuery(document.body).attr('_alias'),
             settings = storage.settings,
             ul,
             functions ={

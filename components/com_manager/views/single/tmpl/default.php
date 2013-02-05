@@ -1,5 +1,14 @@
 <?php defined('_JEXEC') or die('Restricted access');
+function _getAlias(){
+    $menu   = &JSite::getMenu();
+    $active   = $menu->getActive();
+    if(is_object($active)){
+        return $active->alias;
+    }
+    return false;
+}
 
+$alias = _getAlias();
 $info = $this->pageInfo;
 $url = JURI::base();
 $path = 'components/com_manager/modules/';
@@ -33,6 +42,8 @@ foreach ($info as $page){
         var app = <?php echo json_encode($this->app); ?>;
         var langString = <?php echo json_encode($this->languageStrings); ?>;
         var config = <?php echo json_encode($this->config); ?>;
+        var alias = '<?php echo $alias; ?>';
+        var baseurl = '<?php echo $url; ?>';
 
         if('undefined' !== typeof(storage)){
             storage.usertree.usermap = usermap;
@@ -40,6 +51,9 @@ foreach ($info as $page){
             storage.langString = langString;
             storage.settings = config;
 
+            $FamilyTreeTop.global.base = baseurl;
+            $FamilyTreeTop.global.alias = alias;
+            $FamilyTreeTop.global.loginType = parseInt(usermap.loginType);
             $FamilyTreeTop.fn.mod("RENDER").set("desctop", pageInfo);
         }
     })(window)

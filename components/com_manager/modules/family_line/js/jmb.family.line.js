@@ -6,15 +6,12 @@
             cont,
             fn,
             objPull,
-            options,
-            alias;
+            options;
 
         message = {
             FTT_MOD_FAMILY_LINE_MOTHER:"Mother",
             FTT_MOD_FAMILY_LINE_FATHER:"Father"
         }
-
-        alias = jQuery(document.body).attr('_alias');
 
         options = {
             "Bulletin Board":{
@@ -42,7 +39,7 @@
         //protected
         fn = {
             ajax:function(func, params, callback){
-                storage.callMethod("family_line", "JMBFamilyLine", func, params, function(res){
+                module.fn.call("family_line", "JMBFamilyLine", func, params, function(res){
                     callback(res);
                 });
             },
@@ -325,7 +322,7 @@
         }
         objPull = fn.pull();
         return {
-            get: fn.get,
+            get: function(){ return fn.get; },
             bind: function(name, callback){
                 var clickActive = false;
                 objPull.bind(name, function(res){
@@ -339,14 +336,13 @@
             },
             init: function(page){
                 objPull.clear();
-                if(alias!='myfamily') return false;
+                if($FamilyTreeTop.global.alias!='myfamily') return false;
                 if(typeof(loadData) != 'undefined'){
                     var title = page.page_info.title;
                     fn.init(options[title], loadData);
                 } else {
-                    fn.ajax('get',null, function(res){
-                        if(!res) return false;
-                        var json = storage.getJSON(res.responseText);
+                    fn.ajax('get',null, function(json){
+                        if(!json) return false;
                         var title = page.page_info.title;
                         fn.setMsg(json.language);
                         loadData = json;

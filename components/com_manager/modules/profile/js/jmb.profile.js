@@ -3,8 +3,6 @@
         var	module = this,
             fn,
             settings = {},
-            loggedByFamous = false,
-            alias = '',
             path = "/components/com_manager/modules/login/imgs/",
             notifications,
             fb_logged,
@@ -22,10 +20,6 @@
         }
 
         module.menu = null;
-
-        //init vars
-        loggedByFamous = parseInt($(document.body).attr('_type'));
-        alias = $(document.body).attr('_alias');
 
         //init functions
         fn = {
@@ -315,7 +309,7 @@
                 $("#_profile").append(cont);
             },
             createBox:function(data){
-                if(loggedByFamous){
+                if($FamilyTreeTop.global.loginType){
                     fn.famous();
                 }
                 if(data){
@@ -347,14 +341,14 @@
                     });
                 }
                 function _redirect_ (){
-                    var bUrl = $(document.body).attr('_baseurl');
+                    var bUrl = $FamilyTreeTop.global.base;
                     window.location.href= bUrl+'index.php/myfamily';
                 }
-                if(alias == 'home' || alias == 'famous-family') {
+                if($FamilyTreeTop.global.alias == 'home' || $FamilyTreeTop.global.alias == 'famous-family') {
                     _ajax_("index.php?option=com_manager&task=setLocation&alias=myfamily" ,function(){
                         _redirect_();
                     });
-                } else if(loggedByFamous){
+                } else if($FamilyTreeTop.global.loginType){
                     _ajax_("index.php?option=com_manager&task=clearFamousData" ,function(){
                         _redirect_();
                     });

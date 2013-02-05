@@ -34,7 +34,7 @@
 
         $fn = {
             getType:function(){
-                var type = jQuery(document.body).attr("_type");
+                var type = storage.usertree.usermap.loginType;
                 return parseInt(type);
             },
             getMsg:function(n){
@@ -299,13 +299,11 @@
         } else {
             ajax.call("myfamily", "FTTMyFamily", "get", null, function(res){
                 $fn.exit();
-                jQuery(parent).append('<div class="ftt-myfamily-wiki-content"><iframe style="height: 500px;width: 100%;" src="'+res[0].link+'"></iframe><div class="ftt-myfamily-show"><a target="_blank" href="'+res[0].link+'">&nbsp;</a></div></div>');
-            })
+                if(res.length != 0){
+                    jQuery(parent).append('<div class="ftt-myfamily-wiki-content"><iframe style="height: 500px;width: 100%;" src="'+res[0].link+'"></iframe><div class="ftt-myfamily-show"><a target="_blank" href="'+res[0].link+'">&nbsp;</a></div></div>');
+                }
+            });
         }
-
-        storage.addEvent(storage.tabs, function(){
-            clearInterval($module.data.timer);
-        });
 
         return this;
     });

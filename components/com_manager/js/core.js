@@ -484,7 +484,7 @@
     }
     storage.usertree.paths = {}
     storage.usertree.paths.getMediaTmp = function(){
-        return storage.baseurl + storage.url + storage.mediaTmpPath + storage.usertree.tree_id + '/';
+        return $FamilyTreeTop.global.base + storage.url + storage.mediaTmpPath + storage.usertree.tree_id + '/';
     }
     storage.usertree.avatar = {}
     storage.usertree.avatar.facebook = function(facebook_id, width, height){
@@ -514,7 +514,7 @@
         return 'default';
     }
     storage.usertree.avatar.def_image = function(settings, gender){
-        var pathImage = [storage.baseurl,storage.url,'js/images/',(gender=="F")?"female_big.png":"male_big.png"].join("");
+        var pathImage = [$FamilyTreeTop.global.base,storage.url,'js/images/',(gender=="F")?"female_big.png":"male_big.png"].join("");
         var sb = storage.stringBuffer();
         sb._('<img');
         sb._(' class="')._( (settings.cssClass)? settings.cssClass : '' )._('"');
@@ -1344,8 +1344,6 @@
                 $module.data.settings = settings;
             },
             init:function(){
-                $FamilyTreeTop.global.base = $(document.body).attr("_baseurl");
-                storage.baseurl = $FamilyTreeTop.global.base;
                 if($module.data.type == "mobile"){
                     fn.mobileRender($module.data.settings);
                 } else if($module.data.type == "desctop"){

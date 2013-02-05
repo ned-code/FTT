@@ -4,15 +4,8 @@
             fn,
             cont,
             parent,
-            alias,
-            loggedByFamous,
             exists,
             message;
-
-        cont = $('<div class="jmb-header-container"><div class="jmb-header-logo" style="display:none;">&nbsp;</div><div style="display:none;" class="jmb-header-family-line">&nbsp;</div><div style="display:none;" class="jmb-header-expand">&nbsp;</div></div>');
-        parent = $('div.content div.header');
-        alias = $(document.body).attr('_alias');
-        loggedByFamous = parseInt($(document.body).attr('_type'));
 
         exists = {
             "famous-family":true,
@@ -77,15 +70,15 @@
                     },
                     logo:function(){
                         if(fn.get.is_iframe()){
-                            return (alias!='login')?'familytreetop':alias;
+                            return ($FamilyTreeTop.global.alias!='login')?'familytreetop':$FamilyTreeTop.global.alias;
                         }
-                        if(alias == 'myfamily' && loggedByFamous){
+                        if($FamilyTreeTop.global.alias == 'myfamily' && parseInt(storage.usertree.usermap.loginType)){
                             return 'famous-family';
                         }
-                        if(alias == 'famous-family'){
+                        if($FamilyTreeTop.global.alias == 'famous-family'){
                             return 'famous-family';
                         }
-                        if(alias == 'myfamily'){
+                        if($FamilyTreeTop.global.alias == 'myfamily'){
                             return 'myfamily'
                         }
                     }
@@ -123,8 +116,8 @@
             },
             init:function(){
                 fn.set.msg(storage.langString);
-                if(exists[alias]){
-                    if(alias == 'myfamily' && !loggedByFamous && fn.get.is_iframe()){
+                if(exists[$FamilyTreeTop.global.alias]){
+                    if($FamilyTreeTop.global.alias == 'myfamily' && !parseInt(storage.usertree.usermap.loginType) && fn.get.is_iframe()){
                         fn.show.expand();
                         fn.click.expand();
                     }
@@ -140,6 +133,8 @@
 
         return {
             init:function(renderType){
+                cont = $('<div class="jmb-header-container"><div class="jmb-header-logo" style="display:none;">&nbsp;</div><div style="display:none;" class="jmb-header-family-line">&nbsp;</div><div style="display:none;" class="jmb-header-expand">&nbsp;</div></div>');
+                parent = $('div.content div.header');
                 fn.init();
             }
         };

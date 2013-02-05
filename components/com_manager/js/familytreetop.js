@@ -17,6 +17,8 @@
 
     $ftt.global = {
         base: "",
+        alias: "",
+        loginType: 0,
         path: "components/com_manager/"
     }
 
