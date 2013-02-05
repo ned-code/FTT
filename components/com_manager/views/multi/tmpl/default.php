@@ -138,10 +138,9 @@ foreach ($info as $page){
             }
         }
 
-        //storage.core.load(data.pageInfo);
         var init = function(info){
             if($FamilyTreeTop.fn.mod("RENDER")){
-                $FamilyTreeTop.fn.mod("RENDER").set("desctop", data.pageInfo);
+                $FamilyTreeTop.fn.mod("RENDER").set("desctop", info);
             } else {
                 setTimeout(function(){
                     init(info);

@@ -40,6 +40,7 @@ class JmbViewSingle extends JView
         $this->app = $host->jfbConnect->api($host->jfbConnect->facebookAppId);
         $this->config = $host->getConfig();
         $this->languageStrings = $host->getComponentString();
+        $this->pageInfo = $this->get('PageInfo');
 
         // Display the view
         parent::display($tpl);

@@ -1196,6 +1196,7 @@
 })(window);
 
 
+
 (function($, $ftt){
     $ftt.module.create("MOD_SYS_AJAX", function(){
         var $module = this;
@@ -1361,17 +1362,17 @@
                 createMobileNavigation:function(st){
                     var sb = $module.fn.stringBuffer();
                     sb._('<ul class="ftt-mobile-navigation">');
-                        for(var key in st){
-                            if(!st.hasOwnProperty(key)) continue;
-                            var el = st[key];
-                            sb._('<li ');
-                                sb._(' id="')._(el.page_info.id)._('" ');
-                                sb._('class="ftt-mobile-navigation-item"');
-                            sb._(' >');
-                                sb._('<div class="')._(el.page_info.title)._('">&nbsp;</div>');
-                            sb._('</li>');
-                            $module.data.liSettings[el.page_info.id] = el;
-                        }
+                    for(var key in st){
+                        if(!st.hasOwnProperty(key)) continue;
+                        var el = st[key];
+                        sb._('<li ');
+                        sb._(' id="')._(el.page_info.id)._('" ');
+                        sb._('class="ftt-mobile-navigation-item"');
+                        sb._(' >');
+                        sb._('<div class="')._(el.page_info.title)._('">&nbsp;</div>');
+                        sb._('</li>');
+                        $module.data.liSettings[el.page_info.id] = el;
+                    }
                     sb._('</ul>');
                     return $(sb.result());
                 },
@@ -1472,19 +1473,19 @@
             createPhotoElement: function(src, view, facebook){
                 var sb = $module.fn.stringBuffer();
                 sb._('<div class="ftt-media-photos-item">');
-                    sb._('<div class="ftt-media-photos-item-image">');
-                        sb._('<a href="')._(view)._('" rel="prettyPhoto[pp_gal]" title="" >');
-                            sb._('<img style="width:');
-                                sb._($module.data.settings.size[0]);
-                                sb._('px; height:');
-                                sb._($module.data.settings.size[1]);
-                                sb._('px;" src="');
-                            sb._(src)._('" >');
-                        sb._('</a>');
-                    sb._('</div>');
-                    if(facebook){
-                        sb._('<div class="ftt-media-photos-item-facebook"><a target="_blank" href="')._(facebook)._('"></a></div>');
-                    }
+                sb._('<div class="ftt-media-photos-item-image">');
+                sb._('<a href="')._(view)._('" rel="prettyPhoto[pp_gal]" title="" >');
+                sb._('<img style="width:');
+                sb._($module.data.settings.size[0]);
+                sb._('px; height:');
+                sb._($module.data.settings.size[1]);
+                sb._('px;" src="');
+                sb._(src)._('" >');
+                sb._('</a>');
+                sb._('</div>');
+                if(facebook){
+                    sb._('<div class="ftt-media-photos-item-facebook"><a target="_blank" href="')._(facebook)._('"></a></div>');
+                }
                 sb._('</div>');
                 return jQuery(sb.result());
             },
@@ -1506,9 +1507,9 @@
                     var el = photos[key];
                     var src = "";
                     if(media.cache[el.media_id] && media.cache[el.media_id][$module.data.settings.size.join("_")]){
-                       src = fn.getGedcomImageCachePath(media, el);
+                        src = fn.getGedcomImageCachePath(media, el);
                     } else {
-                       src = fn.getGedcomImagePath(el);
+                        src = fn.getGedcomImagePath(el);
                     }
                     items.push(fn.createPhotoElement(src, fn.getGedcomImageRealPath(el), false));
                 }
@@ -1523,11 +1524,11 @@
             getGedcomImagePath: function(el){
                 var sb = $module.fn.stringBuffer();
                 sb._("index.php?option=com_manager");
-                    sb._("&task=getResizeImage");
-                    sb._("&tree_id=")._(storage.usertree.tree_id);
-                    sb._("&id=")._(el.media_id);
-                    sb._("&w=")._($module.data.settings.size[0]);
-                    sb._("&h=")._($module.data.settings.size[1]);
+                sb._("&task=getResizeImage");
+                sb._("&tree_id=")._(storage.usertree.tree_id);
+                sb._("&id=")._(el.media_id);
+                sb._("&w=")._($module.data.settings.size[0]);
+                sb._("&h=")._($module.data.settings.size[1]);
                 return sb.result();
             },
             init: function(cont){

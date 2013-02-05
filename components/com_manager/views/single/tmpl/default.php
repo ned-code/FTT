@@ -1,7 +1,5 @@
 <?php defined('_JEXEC') or die('Restricted access');
 
-$pages = $this->msg->id;
-
 ?>
 <div id="_header"></div>
 <div id="_content" class="content">
@@ -12,7 +10,7 @@ $pages = $this->msg->id;
 </div>
 <script>
     (function(w){
-        var pages = <?php echo $pages; ?>;
+        var pageInfo = <?php echo json_encode($this->pageInfo); ?>;
         var usermap = <?php echo json_encode($this->usermap); ?>;
         var app = <?php echo json_encode($this->app); ?>;
         var langString = <?php echo json_encode($this->languageStrings); ?>;
@@ -24,7 +22,17 @@ $pages = $this->msg->id;
             storage.langString = langString;
             storage.settings = config;
 
-            storage.core.load(pages);
+            //storage.core.load(pages);
+            var init = function(info){
+                if($FamilyTreeTop.fn.mod("RENDER")){
+                    $FamilyTreeTop.fn.mod("RENDER").set("desctop", info);
+                } else {
+                    setTimeout(function(){
+                        init(info);
+                    }, 250);
+                }
+            }
+            init(pageInfo);
         }
     })(window)
 </script>
