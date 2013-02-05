@@ -7,9 +7,9 @@
 
         $fn = {
             ajax:function(func, params, callback){
-                storage.callMethod("ancestors", "JMBAncestors", func, params, function(res){
+                ajax.call("ancestors", "JMBAncestors", func, params, function(res){
                     callback(res);
-                })
+                });
             },
             getMsg:function(n){
                 var t = 'FTT_MOD_ANCESTORS_'+n.toUpperCase();
@@ -151,7 +151,7 @@
                 if(!data.is_exist) return $fn.nullNode(node);
                 parse = data.parse;
                 object = data.object;
-                fam_opt = storage.family_line.get.opt();
+                fam_opt = $FamilyTreeTop.fn.mod("family_line").get.opt();
 
                 prew = function(){
                     var	id = node.data.ftt_storage.prew,
@@ -489,7 +489,7 @@
             return false;
         })
 
-        storage.family_line.bind('JMBAncestorsObject', function(res){
+        $FamilyTreeTop.fn.mod("family_line").bind('JMBAncestorsObject', function(res){
             var nodes = module.nodePull;
             for(var index in nodes){
                 var el = nodes[index];

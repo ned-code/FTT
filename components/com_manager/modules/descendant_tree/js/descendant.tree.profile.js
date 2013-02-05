@@ -15,7 +15,7 @@ DescendantTreeProfile.prototype = {
 	clear:function(){
 		var	module = this;
         module.id = null;
-        module.fn.mod("tooltip").cleaner();
+        $FamilyTreeTop.fn.mod("tooltip").cleaner();
         jQuery(module.cont).html('');
     },
 	avatar:function(object){
@@ -167,7 +167,7 @@ DescendantTreeProfile.prototype = {
 		html = jQuery(sb.result());
 		jQuery(module.cont).append(html);
         if(media!=null){
-            storage.media.init(html);
+            $FamilyTreeTop.fn.mod("media").init(html);
             if(media.photos.length > 24){
                 var parentHeight = jQuery(module.cont).parent().height();
                 var bodyHeight = jQuery(html).find("div.jmb-dtp-body-info").height();
@@ -184,7 +184,7 @@ DescendantTreeProfile.prototype = {
 	},
 	edit:function(html, object){
 		var	module = this;
-        module.fn.mod("tooltip").render('edit', {
+        $FamilyTreeTop.fn.mod("tooltip").render('edit', {
 			offsetParent:document.body,
 			target:jQuery(html).find('div#edit-button'),
 			gedcom_id:object.user.gedcom_id,
@@ -200,20 +200,6 @@ DescendantTreeProfile.prototype = {
 	editor:function(html, object){
         var module = this;
 		jQuery(html).find('.jmb-dtp-body-info-switch').click(function(){
-			/*
-            storage.profile.editor('view', {
-				object:object,
-				events:{
-					afterEditorClose:function(obj){
-                    $FamilyTreeTop.fn.mod("tooltip").cleaner(function(){
-                            var p = module.parent;
-                            p.selected = module.id;
-                            p.loadTreeById((p.checked!=null)?p.checked:p.first);
-                        });
-					}
-				}
-			});
-			*/
             $FamilyTreeTop.fn.mod("PROFILE_EDITOR").editor({
                 gedcom_id: object.user.gedcom_id
             });

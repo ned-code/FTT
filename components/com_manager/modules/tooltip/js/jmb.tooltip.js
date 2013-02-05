@@ -311,6 +311,7 @@
                 }
             },
             _button_edit:function(cont, settings){
+                return false;
                 var	st = settings,
                     object = settings.object,
                     divs,
@@ -336,6 +337,7 @@
                     });
                 });
                 $(cont).find('.jmb-profile-tooltip-button-edit').click(function(){
+                    return false;
                     storage.profile.editor('edit', {
                         object:object,
                         events:{

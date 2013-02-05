@@ -107,12 +107,14 @@
 
         fn.load();
 
+        /*
         storage.profile.bind("JMBLatestUpdatesObject", function(){
             fn.clean();
             fn.load();
         });
+        */
 
-        storage.family_line.bind('JMBLatestUpdatesObject', function(res){
+        $FamilyTreeTop.fn.mod("family_line").bind('JMBLatestUpdatesObject', function(res){
             if(res._type!= 'pencil') return false;
             jQuery(content).find('li').each(function(i, el){
                 var type = 'is_'+res._line+'_line';
@@ -121,7 +123,7 @@
                 var user = object.user;
                 var span = jQuery(el).find('span.value');
                 if(parseInt(user.is_father_line)&&parseInt(user.is_mother_line)){
-                    var opt = storage.family_line.get.opt();
+                    var opt = $FamilyTreeTop.fn.mod("family_line").get.opt();
                     if(opt.mother.pencil&&opt.father.pencil){
                         jQuery(span).addClass('jmb-familiy-line-bg');
                     } else {

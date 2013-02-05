@@ -157,12 +157,6 @@
                 var obj = storage.usertree.pull[id];
                 if(obj){
                     jQuery($module.data.activeItem).btOff();
-                    /*
-                    storage.profile.editor('view', {
-                        object:obj,
-                        start:"view_relation_mapper"
-                    });
-                    */
                     $FamilyTreeTop.fn.mod("PROFILE_EDITOR").editor({
                         gedcom_id: obj.user.gedcom_id
                     });
@@ -287,11 +281,6 @@
                     sb._('<div class="ftt-myfamily-content"></div>')
                 sb._('</div>');
                 return jQuery(sb.result());
-            },
-            bindProfile:function(callback){
-                storage.profile.bind($moduleName, function(){
-                    callback
-                });
             }
         }
 

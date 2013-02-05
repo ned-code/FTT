@@ -1,3 +1,13 @@
+/*
+ (function($, $ftt){
+ $ftt.module.create("MOD_", function(name, parent, ajax, renderType, popup){
+
+ return this;
+ });
+ })(jQuery, $FamilyTreeTop);
+ */
+
+
 /**
  * FamilyTreeTop Object
  */

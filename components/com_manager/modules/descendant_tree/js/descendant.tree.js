@@ -510,8 +510,8 @@
 
         $fn.check(id);
 
-        storage.family_line.bind('JMBDescendantTreeObject', function(res){
-            $fn.buttons.close();
+        $FamilyTreeTop.fn.mod("family_line").bind('JMBDescendantTreeObject', function(res){
+            module.buttons.close();
             $fn.clear();
             module.dhxTree.deleteChildItems(0);
             module.render = res._line;

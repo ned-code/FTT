@@ -1194,14 +1194,7 @@
         });
     }
 })(window);
-/*
-(function($, $ftt){
- $ftt.module.create("MOD_", function(name, parent, ajax, renderType, popup){
 
-    return this;
- });
- })(jQuery, $FamilyTreeTop);
- */
 
 (function($, $ftt){
     $ftt.module.create("MOD_SYS_AJAX", function(){
@@ -1317,12 +1310,6 @@
                      storage.feedback = new JMBFeedback();
                      storage.ntf = new JMBNotifications();
                      */
-
-                    storage.profile = new JMBProfile();
-                    storage.family_line = new JMBFamilyLine();
-
-                    storage.profile.init();
-
                     $FamilyTreeTop.fn.mod("tooltip").init();
                     $FamilyTreeTop.fn.mod("topmenubar").init("desctop");
                     $FamilyTreeTop.fn.mod("navigation").init("mobile", settings, function(el, setting){
@@ -1330,15 +1317,11 @@
                     });
                 },
                 desctopRender:function(settings){
-                    storage.profile = new JMBProfile();
-                    storage.family_line = new JMBFamilyLine();
-
-                    storage.profile.init();
-
                     $FamilyTreeTop.fn.mod("tooltip").init();
                     $FamilyTreeTop.fn.mod("topmenubar").init("desctop");
                     $FamilyTreeTop.fn.mod("header").init("desctop");
                     $FamilyTreeTop.fn.mod("navigation").init("desctop", settings, function(el, setting){
+                        $FamilyTreeTop.fn.mod("family_line").init(setting);
                         fn.initModules("desctop", "#jmbtab", setting);
                     });
                 }

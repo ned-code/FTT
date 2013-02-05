@@ -7,9 +7,9 @@
 
         $fn = {
             _ajax:function(func, params, callback){
-                ajax.callMethod("families", "JMBFamilies", func, params, function(res){
+                ajax.call("families", "JMBFamilies", func, params, function(res){
                     callback(res);
-                })
+                });
             },
             _generateBorders:function(n){
                 var retBorders = [],
@@ -326,7 +326,7 @@
                     facebook_id = (object)?object.user.facebook_id:false,
                     parents = (object)?object.parents:false,
                     get = storage.usertree.parse(object),
-                    fam_opt = ("undefined" !== typeof(storage.family_line.get))?storage.family_line.get.opt(): false,
+                    fam_opt = $FamilyTreeTop.fn.mod("family_line").get.opt(),
                     parent_key;
 
                 if('undefined' === typeof(object)) return false;
@@ -375,7 +375,7 @@
                     facebook_id = (object)?object.user.facebook_id:false,
                     parents = (object)?object.parents:false,
                     get = storage.usertree.parse(object),
-                    fam_opt = storage.family_line.get.opt(),
+                    fam_opt = $FamilyTreeTop.fn.mod("family_line").get.opt(),
                     parent_key;
 
                 if('undefined' === typeof(object)) return false;
@@ -461,7 +461,7 @@
                     child_button_unactive = (k!=1)?'jmb-families-button childs small':'jmb-families-button childs',
                     arrow_class = (k!=1)?'jmb-families-arrow-up small':'jmb-families-arrow-up',
                     get = (object)?storage.usertree.parse(object):false,
-                    fam_opt = storage.family_line.get.opt(),
+                    fam_opt = $FamilyTreeTop.fn.mod("family_line").get.opt(),
                     bcolor = (len>1)?module.spouse_border[child.family_id]:"#000000";
 
                 if('undefined' === typeof(object)) return false;
@@ -866,21 +866,21 @@
         module.usertree = storage.usertree.pull;
         module.start_id = $fn._first(storage.usertree.gedcom_id);
 
-        if("undefined" !== typeof(storage.family_line.bind)){
-            storage.family_line.bind('JMBFamiliesObject', function(res){
-                var divs = $(module.cont).parent().find('div.jmb-families-sircar,div.jmb-families-spouse,div.jmb-families-child');
-                $(divs).each(function(i, el){
-                    var id = $(el).attr('id');
-                    var object = module.usertree[id];
-                    var user = object.user;
-                    var bg_color = (res._active)?res._background:"#F5FAE6";
-                    var type = 'is_'+res._line+'_line';
-                    if(parseInt(user[type])){
-                        $(el).find('div#'+res._line+'_line').css('border', '2px solid '+bg_color);
-                    }
-                });
+
+        $FamilyTreeTop.fn.mod("family_line").bind('JMBFamiliesObject', function(res){
+            var divs = $(module.cont).parent().find('div.jmb-families-sircar,div.jmb-families-spouse,div.jmb-families-child');
+            $(divs).each(function(i, el){
+                var id = $(el).attr('id');
+                var object = module.usertree[id];
+                var user = object.user;
+                var bg_color = (res._active)?res._background:"#F5FAE6";
+                var type = 'is_'+res._line+'_line';
+                if(parseInt(user[type])){
+                    $(el).find('div#'+res._line+'_line').css('border', '2px solid '+bg_color);
+                }
             });
-        }
+        });
+
 
         $(module.parent).ready(function(){
             $fn.render(module.start_id);

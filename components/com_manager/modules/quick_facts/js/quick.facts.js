@@ -107,12 +107,14 @@
                     cont = fn.create();
                     fn.setMiniProfile(jQuery(cont).find('div#youngest_living_member'), json.youngest);
                     fn.setMiniProfile(jQuery(cont).find('div#oldest_living_member'), json.oldest);
+                    /*
                     storage.profile.bind("JMBQuickFactsObject", function(){
                         jQuery(cont).remove();
                         cont = fn.create();
                         fn.setMiniProfile(jQuery(cont).find('div#youngest_living_member'), json.youngest);
                         fn.setMiniProfile(jQuery(cont).find('div#oldest_living_member'), json.oldest);
                     });
+                    */
                     callback();
                 });
             }
@@ -122,7 +124,7 @@
             storage.core.modulesPullObject.unset('JMBQuickFactsObject');
         });
 
-        storage.family_line.bind('JMBQuickFactsObject', function(res){
+        $FamilyTreeTop.fn.mod("family_line").bind('JMBQuickFactsObject', function(res){
             if(res._type != 'pencil') return false;
             var usertree = {}
             usertree[json.youngest.user.gedcom_id] = json.youngest;
@@ -132,7 +134,7 @@
                 var id = jQuery(el).attr('id');
                 var user =  usertree[id].user;
                 if(parseInt(user.is_father_line)&&parseInt(user.is_mother_line)){
-                    var opt = storage.family_line.get.opt();
+                    var opt = $FamilyTreeTop.fn.mod("family_line").get.opt();
                     if(opt.mother.pencil&&opt.father.pencil){
                         jQuery(el).addClass('jmb-familiy-line-bg');
                     } else {

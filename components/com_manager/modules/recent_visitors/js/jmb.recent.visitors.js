@@ -129,9 +129,11 @@
                         functions.init_mini_profile(ul, json);
                         jQuery(content[1]).append(ul);
                         jQuery(parent).append(content);
+                        /*
                         storage.profile.bind("JMBRecentVisitorsObject", function(){
                             functions.reload(content, json);
                         });
+                        */
                         if(callback) callback();
                     });
                 }
@@ -148,7 +150,7 @@
             storage.core.modulesPullObject.unset('JMBRecentVisitorsObject');
         });
 
-        storage.family_line.bind('JMBRecentVisitorsObject', function(res){
+        $FamilyTreeTop.fn.mod("family_line").bind('JMBRecentVisitorsObject', function(res){
             jQuery(content[1]).find('li').each(function(i, el){
                 var type = 'is_'+res._line+'_line';
                 var id = jQuery(el).attr('id');
