@@ -19,30 +19,30 @@
 .jmb-family-line-container td:hover div.title{
     margin-top:2px;
 }
-.jmb-family-line-container td.left{
-	border-radius: 3px 0 0 3px;
-	height: 21px;
-	padding-left: 3px;
+.jmb-family-line-container .left{
+    border-radius: 3px 0 0 3px;
+    padding-bottom: 26px;
+    padding-left: 3px;
 }
-.jmb-family-line-container td.right{
+.jmb-family-line-container .right{
     border-bottom-right-radius: 5px;
     border-top-right-radius: 5px;
-	height: 21px;
-	padding-right: 5px;
+    padding-bottom: 26px;
+    padding-right: 5px;
 }
-.jmb-family-line-container td.left:hover, .jmb-family-line-container td.right:hover{
+.jmb-family-line-container .left:hover, .jmb-family-line-container .right:hover{
     padding-top: 6px;
 }
-.jmb-family-line-container td.options.left{
+.jmb-family-line-container .options.left{
 	border-radius: 0 0 0 0;
 	margin-left: 2px;
 	padding-left: 0;
 }
-.jmb-family-line-container td.options.right{
+.jmb-family-line-container .options.right{
 	border-radius: 0 3px 3px 0;
 	padding-right: 5px;
 }
-.jmb-family-line-container td.options select{
+.jmb-family-line-container .options select{
 	border: 1px solid #ACACAC;
 	font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
 	font-size: 11px;
@@ -116,7 +116,7 @@
     float: left;
     height: 21px;
     text-align: center;
-    width: 48px;
+    width: 45px;
 }
 .jmb-family-line-container .title canvas{
     height: 21px;

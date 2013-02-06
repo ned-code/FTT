@@ -40,13 +40,13 @@
                     switch(id){
                         case 'connect':
                             fn.ajax('page', 'myfamily', function(res){
-                                window.location.href = storage.baseurl + 'index.php/myfamily';
+                                window.location.href = $FamilyTreeTop.global.base + 'index.php/myfamily';
                             });
                             break;
 
                         case 'view':
                             fn.ajax('page', 'famous-family', function(res){
-                                window.location.href = storage.baseurl + 'index.php/famous-family';
+                                window.location.href = $FamilyTreeTop.global.base + 'index.php/famous-family';
                             });
                             break;
                     }

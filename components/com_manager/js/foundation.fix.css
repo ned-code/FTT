@@ -1,9 +1,3 @@
-*,*:before,*:after{
-    -webkit-box-sizing:inherit;
-    -moz-box-sizing:inherit;
-    box-sizing:inherit;
-}
-
 body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, p, blockquote, th, td {
     direction: ltr;
     font-size: 11px;
@@ -29,4 +23,8 @@ table tbody tr td {
     min-height: 1px;
     padding: 0;
     position: relative;
+}
+
+table tbody tr:nth-child(2n) {
+    background: none repeat scroll 0 0 transparent;
 }

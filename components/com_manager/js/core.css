@@ -66,9 +66,11 @@ ul.jmbtabs li {
 	padding: 0 !important;
 	height: 31px; /*--Subtract 1px from the height of the unordered list--*/
 	line-height: 31px !important; /*--Vertically aligns the text within the tab--*/
-	border: 1px solid #999;
-	border-left: none;
-	margin-bottom: -1px; /*--Pull the list item down 1px--*/
+    border-color: #999999 #999999 #999999 -moz-use-text-color;
+    border-image: none;
+    border-style: solid solid none none;
+    border-width: 1px 1px 1px medium;
+    margin-bottom: -1px; /*--Pull the list item down 1px--*/
 	overflow: hidden;
 	position: relative;
 	background: #e0e0e0;
@@ -94,6 +96,7 @@ ul.jmbtabs li a div {
 html ul.jmbtabs li.active, html ul.jmbtabs li.active a:hover  { /*--Makes sure that the active tab does not listen to the hover properties--*/
 	background: #f5fae6;
 	border-bottom: 1px solid #F5FAE6; /*--Makes the active tab look like it's connected with its content--*/
+    height: 32px;
 }
 html ul.jmbtabs.famous-family li.active, html ul.jmbtabs li.active a:hover {
     background-color: #f9f3f0;

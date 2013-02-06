@@ -1,13 +1,11 @@
-(function($ftt){
+(function($, $ftt){
     $ftt.module.create("MOD_SYS_PROFILE_EDITOR", function(){
         var $module = this;
         /*
         * DATA
          */
         $module.data.arguments = arguments;
-        $module.data.msg = {
-            "FTT_MOD_SYS_PROFILE_EDITOR_SLIDE_HEADER_BUTTON_BACK":"Back"
-        }
+        $module.data.msg = {}
         $module.data.callbacks = {};
         $module.data.slide = false;
         $module.data.gedcom_id = false;
@@ -25,7 +23,7 @@
         }
 
         $module.fn.extend = function(def, set){
-            return jQuery.extend({}, def, set);
+            return $.extend({}, def, set);
         }
 
         $module.fn.getMsg = function(n){
@@ -64,6 +62,104 @@
             return storage.usertree.pull[gedcom_id || $module.data.gedcom_id];
         }
         /*
+        * EDIT
+         */
+        $module.fn.edit = function(){
+            var cont, $fn = {
+                crPhoto: function(){
+                    var sb = $module.fn.stringBuffer();
+                    sb._('<fieldset>');
+                        sb._('<legend>Photo</legend>');
+                    sb._('</fieldset>');
+                    return sb.result();
+                },
+                crBasicDetails: function(){
+                    var sb = $module.fn.stringBuffer();
+                    sb._('<fieldset>');
+                        sb._('<legend>Basic Details</legend>');
+                        sb._('<div class="row">');
+                            sb._('<div class="six columns">');
+                                sb._('Gender <select name="gender"><option value="f">Female</option><option value="m">Male</option></select>');
+                            sb._('</div>');
+                            sb._('<div class="six columns">');
+                                sb._('Live <select name="live"><option value="1">Yes</option><option value="0">No</option></select>');
+                            sb._('</div>');
+                        sb._('</div>');
+                        sb._('<div class="row">');
+                            sb._('<div class="twelve columns">');
+                                sb._('<label>First Name:</label>');
+                                sb._('<input type="text" />');
+                                sb._('<label>Middle Name:</label>');
+                                sb._('<input type="text" />');
+                                sb._('<label>Last Name:</label>');
+                                sb._('<input type="text" />');
+                                sb._('<label>Know As:</label>');
+                                sb._('<input type="text" />');
+                            sb._('</div>');
+                        sb._('</div>')
+                    sb._('</fieldset>');
+                    return sb.result();
+                },
+                crBirth: function(){
+                    var sb = $module.fn.stringBuffer();
+                    sb._('<fieldset>');
+                        sb._('<legend>Birth</legend>');
+
+                    sb._('</fieldset>');
+                    return sb.result();
+                },
+                crDeath: function(){
+                    var sb = $module.fn.stringBuffer();
+                    sb._('<fieldset>');
+                    sb._('<legend>Death</legend>');
+
+                    sb._('</fieldset>');
+                    return sb.result();
+                },
+                crNotes: function(){
+                    var sb = $module.fn.stringBuffer();
+                    sb._('<fieldset>');
+                    sb._('<legend>Notes</legend>');
+
+                    sb._('</fieldset>');
+                    return sb.result();
+                },
+                element: function(){
+                    var sb = $module.fn.stringBuffer();
+                    sb._('<div class="row ftt-profile-edit-content">');
+                        sb._('<div class="twelve columns">');
+                            sb._('<form>');
+                                sb._('<div class="row">');
+                                    sb._('<div class="six columns">');
+                                        sb._($fn.crPhoto());
+                                        sb._($fn.crBasicDetails());
+                                    sb._('</div>');
+                                    sb._('<div class="six columns">');
+                                        sb._($fn.crBirth());
+                                        if($module.data.parse.is_alive){
+                                            sb._($fn.crNotes());
+                                            sb._($fn.crDeath());
+                                        } else {
+                                            sb._($fn.crNotes());
+                                            sb._($fn.crDeath());
+                                        }
+                                    sb._('</div>');
+                                sb._('</div>');
+                            sb._('</form>');
+                        sb._('</div>');
+                    sb._('</div>');
+                    return $(sb.result());
+                }
+            }
+            cont = $fn.element();
+            $(cont).find("#customDropdown").foundationCustomForms();
+            $module.data.slide.hide();
+            $module.data.slide.append(cont);
+        }
+
+
+
+        /*
         * SLIDE
          */
         $module.fn.slide = function(){
@@ -86,35 +182,6 @@
                         return a.prms.level - b.prms.level;
                     });
                 },
-                createFacebookBox:function(username){
-                    var sb = $module.fn.stringBuffer(), link = "http://www.facebook.com/" + username;
-                    sb._('<div class="ftt-profile-editor-facebook-box">');
-                        sb._('<div class="ftt-profile-editor-facebook-box-title"><span>facebook</span></div>');
-                        sb._('<div class="ftt-profile-editor-facebook-box-content">');
-                            sb._('<ul style="margin: 10px;">');
-                                sb._('<li><div class="ftt-profile-editor-facebook-box-content-timeline">');
-                                    sb._('<a target="_blank" style="text-decoration: none;" id="timeline" href="')._(link)._('">Timeline</a>');
-                                sb._('</div></li>')
-                                sb._('<li><div class="ftt-profile-editor-facebook-box-content-about">');
-                                    sb._('<a target="_blank" style="text-decoration: none;" id="about" href="')._(link)._('/info">About</a>');
-                                sb._('</div></li>');
-                                sb._('<li><div class="ftt-profile-editor-facebook-box-content-likes">');
-                                    sb._('<a target="_blank" style="text-decoration: none;" id="likes" href="')._(link)._('/favorites">Likes</a>');
-                                sb._('</div></li>');
-                                sb._('<li><div class="ftt-profile-editor-facebook-box-content-following">');
-                                    sb._('<a target="_blank" style="text-decoration: none;" id="following" href="')._(link)._('/following">Following</a>');
-                                sb._('</div></li>')
-                                sb._('<li><div class="ftt-profile-editor-facebook-box-content-send_message">');
-                                    sb._('<a id="send_message" style="text-decoration: none;" id="send_message" href="javascript:void(0);">Send message</a>');
-                                sb._('</div></li>');
-                            sb._('</ul>');
-                        sb._('</div>');
-                    sb._("</div>");
-                    return jQuery(sb.result());
-                },
-                createUnregisterBox:function(){
-
-                },
                 createSlide:function(){
                     var sb = $module.fn.stringBuffer();
                     sb._('<div class="ftt-profile-editor-slide">');
@@ -123,20 +190,6 @@
                     sb._('</div>');
                     return sb.result();
                 },
-                createHeaderButton:function(text){
-                    var sb = $module.fn.stringBuffer();
-                    sb._('<div class="ftt-profile-editor-slide-header-button">');
-                        sb._('<a href="javascript:void(0);">')._(text)._('</span>');
-                    sb._('</div>');
-                    return jQuery(sb.result());
-                },
-                initHeaderButtons:function(div){
-                    var back = fn.createHeaderButton($module.fn.getMsg("SLIDE_HEADER_BUTTON_BACK"));
-                    jQuery(div).find('.ftt-profile-editor-slide-header').append(back);
-                    jQuery(back).click(function(){
-                        $module.data.slide.close();
-                    });
-                },
                 appendListItems:function(ul, bxs){
                     var levels = {}, index = 0;
                     for(var key in bxs){
@@ -144,72 +197,62 @@
                         var el = bxs[key];
                         if(!(el.prms.level in levels)){
                             levels[el.prms.level] = index;
-                            jQuery(ul).append('<li id="'+index+'"></li>');
+                            $(ul).append('<li id="'+index+'"></li>');
                             index++;
                         }
-                        jQuery(ul).find('li[id="'+levels[el.prms.level]+'"]').append(el.object);
+                        $(ul).find('li[id="'+levels[el.prms.level]+'"]').append(el.object);
                     }
                 },
-                appendFacebook:function(ul){
-                    if($module.data.parse && $module.data.parse.facebook_id != "0"){
-                        var facebook_id = $module.data.parse.facebook_id;
-                        FB.api('/'+facebook_id, function(response){
-                            var li = jQuery(ul).find('li[id="0"]');
-                            var table = jQuery('<table><tr><td style="vertical-align: top; width: 100%;"></td><td style="width: 200px;"></td></tr></table>');
-                            var box = fn.createFacebookBox(response.username);
-                            jQuery(box).find("a#send_message").click(function(){
-                                fn.sendMessage(function(r){
-                                    console.log(r);
-                                });
-                            });
-                            jQuery(table[0].rows[0].cells[1]).append(box);
-                            jQuery(table[0].rows[0].cells[0]).append(jQuery(li).find('div').first());
-                            jQuery(li).append(table);
-                        });
-                        //createUnregisterBox
-                    }
-                },
-                sendMessage:function(callback){
-                    var facebook_id = $module.data.parse.facebook_id;
-                    FB.ui({
-                        method:'send',
-                        name: "Family TreeTop",
-                        link: "https://apps.facebook.com/"+ storage.app.namespace,
-                        to: facebook_id,
-                        picture: storage.baseurl + 'components/com_manager/modules/invitation/images/ftt_invitation.png',
-                        description: storage.app.description
-                    }, callback);
+                appendHeaderButtons:function(cont){
+                    var btns, sb = $module.fn.stringBuffer();
+                    sb._('<div style="margin-left: 4px;margin-top: 4px;float:left;"><a class="tiny secondary radius button" href="#">Back</a></div>');
+                    sb._('<div style="margin-right: 4px;margin-top: 4px;float:right;"><a class="tiny secondary radius button" href="#">Edit</a></div>');
+                    btns = $(sb.result());
+                    $(cont).find(".ftt-profile-editor-slide-header").append(btns);
+                    $(btns[0]).click(function(){
+                        $module.data.slide.close();
+                    });
+                    $(btns[1]).click(function(){
+                        $module.fn.edit();
+                    });
                 }
             }
 
             settings = {
-                width: jQuery("#_content").width()
+                width: $("#_content").width()
             };
 
-            div = jQuery(fn.createSlide());
-            offsetParent = jQuery("#_content").offset();
-            jQuery(div).width(settings.width).css("left", -1*(settings.width));
-            fn.initHeaderButtons(div);
-
+            div = $(fn.createSlide());
+            offsetParent = $("#_content").offset();
+            $(div).width(settings.width).css("left", -1*(settings.width));
+            fn.appendHeaderButtons(div);
             return {
                 object: div,
                 close: function(){
                     if(!$module.data.slide) return false;
-                    jQuery(div).animate({"left":"-="+(settings.width)+"px"}, "slow", function(){
-                        jQuery(div).remove();
+                    $(div).animate({"left":"-="+(settings.width)+"px"}, "slow", function(){
+                        $(div).remove();
                     });
                     $module.data.slide = false;
                     $module.fn.echo();
                 },
+                append: function(cont){
+                    $(div).find(".ftt-profile-editor-slide-content").append(cont);
+                },
+                hide: function(){
+                    $(div).find(".ftt-profile-editor-slide-content ul").hide();
+                },
+                visible: function(){
+                    $(div).find(".ftt-profile-editor-slide-content ul").show();
+                },
                 content: function(boxes){
-                    var ul = jQuery("<ul></ul>");
-                    jQuery(div).find(".ftt-profile-editor-slide-content").append(ul);
+                    var ul = $("<ul></ul>");
+                    $(div).find(".ftt-profile-editor-slide-content").append(ul);
                     fn.appendListItems(ul, fn.createListItems(boxes));
-                    fn.appendFacebook(ul);
                 },
                 init: function(){
-                    jQuery("#_content").append(div);
-                    jQuery(div).animate({"left":"0px"}, "slow");
+                    $("#_content").append(div);
+                    $(div).animate({"left":"0px"}, "slow");
                 }
             }
         }
@@ -219,53 +262,33 @@
         $module.fn.box = function(settings){
             var box = this, fn;
             fn = {
-                createButton:function(st){
-                    if("undefined" !== typeof(st.check) && !st.check) return false;
-                    var sb = $module.fn.stringBuffer();
-                    sb._('<div');
-                        sb._(("undefined"!==typeof(st.id))?' id="'+st.id+'" ':"");
-                        sb._(("undefined"!==typeof(st.className))?' class="'+st.className+'" ':"");
-                    sb._('>');
-                        sb._('<a href="javascript:void(0)">')._(st.name)._('</a>');
-                    sb._('</div>');
-                    return jQuery(sb.result()).click(st.onClick);
-                },
-                createButtons:function(buttons){
-                    if(!buttons) return [];
-                    var btns = [], bt;
-                    for(var key in buttons){
-                        if(!buttons.hasOwnProperty(key)) continue;
-                        if(bt = fn.createButton(buttons[key])){
-                            btns.push(bt);
-                        }
-                    }
-                    return btns;
-                },
                 createBox: function(st){
                     var cont, sb = $module.fn.stringBuffer();
                     sb._('<div id="')._(st.id || '')._('" class="ftt-profile-editor-box">');
                         sb._('<div class="ftt-profile-editor-box-header">');
                             sb._('<div class="ftt-profile-editor-box-header-title"><span>')._(st.name || '')._('</span></div>');
-                            sb._('<div class="ftt-profile-editor-box-header-buttons">');
-                            sb._('</div>');
                         sb._('</div>');
                         sb._('<div class="ftt-profile-editor-box-content"></div>');
                     sb._('</div>');
-                    cont = jQuery(sb.result());
-                    jQuery(cont).find(".ftt-profile-editor-box-header-buttons").append(fn.createButtons(st.buttons || false));
-                    fn.appendContent(cont, st);
-                    return cont;
+                    cont = $(sb.result());
+                    return (fn.appendContent(cont, st))?cont:"";
                 },
                 appendContent: function(cont, st){
                     if("undefined"===typeof(st.content)) return false;
                     if("function" === typeof(st.content)){
                         st.content(function(content){
-                            jQuery(cont).find(".ftt-profile-editor-box-content").append(content);
+                            if(content){
+                                $(cont).find(".ftt-profile-editor-box-content").append(content);
+                            } else {
+                                $(cont).remove();
+                            }
                         });
-                    } else if("object" === typeof(st.content)){
-                        jQuery(cont).find(".ftt-profile-editor-box-content").append(st.content);
+                    } else if("object" === typeof(st.content) && st.content.length != 0){
+                        $(cont).find(".ftt-profile-editor-box-content").append(st.content);
+                    } else {
+                        return false;
                     }
-
+                    return true;
                 }
             }
             return fn.createBox(settings);
@@ -304,7 +327,7 @@
                         sb._('<div style="display: inline-block; vertical-align: top; margin:5px;">')._(fn.avatar())._('</div>');
                         sb._(fn.createInfoElement());
                     sb._('</div>');
-                    return jQuery(sb.result());
+                    return $(sb.result());
                 },
                 createInfoElement: function(){
                     var sb = $module.fn.stringBuffer();
@@ -334,7 +357,7 @@
         * FAMILY
          */
         $module.fn.family = function(){
-            var object = jQuery('<div style="position: relative; width: 500px; margin: 0 auto;"></div>');
+            var object = $('<div style="position: relative; width: 500px; margin: 0 auto;"></div>');
             (function(){
                 var cont = _create(),
                     borders = _generateBorders(100),
@@ -369,16 +392,16 @@
 
                 sircar = _sircar(target);
                 if(sircar){
-                    jQuery(cont[0]).css({top:"21px",left:"25px"}).attr('id', target.user.gedcom_id).append(sircar);
+                    $(cont[0]).css({top:"21px",left:"25px"}).attr('id', target.user.gedcom_id).append(sircar);
                 }
 
                 if(spouses.length != 0){
                     info = _info(target, spouses[0]);
-                    jQuery(cont[1]).css({top:"113px", left:"180px"}).append(info);
+                    $(cont[1]).css({top:"113px", left:"180px"}).append(info);
 
                     spouse = _spouse(spouses[0], _getBorderColor(spouses.length>1?spouses[0]:false));
                     if(spouse){
-                        jQuery(cont[2]).attr('id', spouses[0][1]).css({top:"21px",left:"300px"}).append(spouse);
+                        $(cont[2]).attr('id', spouses[0][1]).css({top:"21px",left:"300px"}).append(spouse);
                     }
                 }
 
@@ -399,14 +422,14 @@
                         var pos = {top:startTop, left:startLeft+(index*leftDel)};
                         childPos[childrens[i].gedcom_id] = pos;
                         childs[i] = _child(childrens[i], spouses.length, pos);
-                        jQuery(object).append(childs[i]);
+                        $(object).append(childs[i]);
                         index++;
                     }
                 }
 
-                jQuery(object).height(startTop + 200);
-                jQuery(object).append(cont);
-                jQuery(object).find('div#'+$module.data.gedcom_id).find('div[type="imgContainer"]').animatedBorder({size : 6, color : '#FFCC66'});
+                $(object).height(startTop + 200);
+                $(object).append(cont);
+                $(object).find('div#'+$module.data.gedcom_id).find('div[type="imgContainer"]').animatedBorder({size : 6, color : '#FFCC66'});
 
                 return true;
                 function _generateBorders(n){
@@ -673,7 +696,7 @@
                         _sb._('<div class="ftt-profile-view-sircar">&nbsp;</div>');
                         _sb._('<div class="ftt-profile-view-event">&nbsp;</div>');
                         _sb._('<div class="ftt-profile-view-spouse">&nbsp;</div>');
-                        return jQuery(_sb.result());
+                        return $(_sb.result());
                     })();
                 }
                 function _sircar(object){
@@ -693,7 +716,7 @@
                         if(object.families!=null){
                             _sb._('<div class="ftt-profile-view-arrow-left">&nbsp</div>');
                         }
-                        return jQuery(_sb.result());
+                        return $(_sb.result());
                     })(object);
                 }
                 function _info(object, spouse){
@@ -717,7 +740,7 @@
                             _sb._('<div>')._((_date!=null&&_date[2]!=null)?_date[2]:'')._('</div>');
                             _sb._('<div>')._(_location)._('</div>');
                             _sb._('</div>');
-                            return jQuery(_sb.result());
+                            return $(_sb.result());
                         }
                         return '';
                     })(object, spouse);
@@ -743,7 +766,7 @@
                         if(_object.families!=null){
                             _sb._('<div class="ftt-profile-view-arrow-right" style="background:#')._(bcolor)._(';">&nbsp</div>');
                         }
-                        return jQuery(_sb.result());
+                        return $(_sb.result());
                     })(spouse, bcolor);
                 }
                 function _former_spouse(spouse, bcolor, position){
@@ -764,7 +787,7 @@
                         _sb._('<div class="ftt-profile-view-former-arrow-')._(position)._(' text" style="color:')._(bcolor)._(';">')._(_info.marr(spouse[0], 'date', 2))._('</div>');
                         _sb._('</div>');
                         _sb._('</div>');
-                        return jQuery(_sb.result());
+                        return $(_sb.result());
                     })(spouse, bcolor, position);
                 }
                 function _child(child, len, position){
@@ -793,7 +816,7 @@
                         _sb._('</div>');
                         _sb._('<div class="ftt-profile-view-arrow-up" style="background:#')._(_bcolor)._(';">&nbsp</div>');
                         _sb._('</div>');
-                        return jQuery(_sb.result());
+                        return $(_sb.result());
                     })(child, len, position);
                 }
             })()
@@ -959,7 +982,7 @@
                 return 58*level;
             })($tree);
             var width = 600;
-            return jQuery('<div id="ftt_relation_mapper_viz" style="width:'+width+'px; height:'+height+'px; margin: 0 auto;"></div>');
+            return $('<div id="ftt_relation_mapper_viz" style="width:'+width+'px; height:'+height+'px; margin: 0 auto;"></div>');
         }
 
         /*
@@ -986,36 +1009,24 @@
                         id: "basic_info",
                         name: "Basic Info",
                         level: 0,
-                        buttons: [
-                            {
-                                id: "edit",
-                                name: "Edit",
-                                className: "edit",
-                                check: ($module.data.parse.facebook_id == 0),
-                                onClick:$module.data.basic.onClick
-                            }
-                        ],
                         content: $module.data.basic.render($module.data.gedcom_id)
                     },
                     {
                         id: "family",
                         name: "Family",
                         level: 1,
-                        buttons: [],
                         content: $module.fn.family()
                     },
                     {
                         id: "photos",
                         name: "Photos",
                         level: 2,
-                        buttons: [],
                         content: $module.fn.photos()
                     },
                     {
                         id: "relation",
                         name: "Relation on you: "+ $module.data.parse.relation,
                         level: 3,
-                        buttons: [],
                         content: $module.fn.relation()
                     }
                 ]);
@@ -1032,6 +1043,6 @@
             }
         }
     }, true);
-})($FamilyTreeTop);
+})(jQuery, $FamilyTreeTop);
 
 

@@ -46,7 +46,7 @@ foreach ($info as $page){
     <div id="_content" class="four columns" role="content">
     </div>
 </div>
-<footer class="row">
+<div class="row">
     <div class="four columns">
         <ul class="link-list" style="margin: 0 auto;max-width: 175px;">
             <li><a href="<?php echo $url; ?>index.php/about">About</a></li>
@@ -54,7 +54,7 @@ foreach ($info as $page){
             <li><a href="<?php echo $url; ?>index.php/contact">Contact</a></li>
         </ul>
     </div>
-</footer>
+</div>
 <script>
     (function(w){
         var setData = function(){

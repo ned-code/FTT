@@ -1298,12 +1298,11 @@
                 },
                 mobileRender:function(settings){
                     /*
-                     storage.invitation = new JMBInvitation();
                      storage.ntf = new JMBNotifications();
                      */
                     $FamilyTreeTop.fn.mod("invitation").init("mobile");
                     $FamilyTreeTop.fn.mod("tooltip").init("mobile");
-                    $FamilyTreeTop.fn.mod("topmenubar").init("mobile");
+                    $FamilyTreeTop.fn.mod("topmenubar").init("desctop");
                     $FamilyTreeTop.fn.mod("profile").init("mobile");
                     $FamilyTreeTop.fn.mod("navigation").init("mobile", settings, function(el, setting){
                         fn.initModules("mobile", "#_content", setting);
@@ -1463,7 +1462,6 @@
     $ftt.module.create("MOD_SYS_PHOTOS", function(){
         var $module = this, fn;
         $module.data.arguments = arguments;
-        $module.data.baseurl = jQuery(document.body).attr("_baseurl");
         $module.data.tmpPath = "components/com_manager/media/tmp/";
         $module.data.mediaPath = "components/com_manager/media/";
         $module.data.settings = {
@@ -1521,10 +1519,10 @@
                 return items;
             },
             getGedcomImageCachePath: function(media, el){
-                return $module.data.baseurl + $module.data.tmpPath + storage.usertree.tree_id + '/' + media.cache[el.media_id][$module.data.settings.size.join("_")];
+                return $FamilyTreeTop.global.base + $module.data.tmpPath + storage.usertree.tree_id + '/' + media.cache[el.media_id][$module.data.settings.size.join("_")];
             },
             getGedcomImageRealPath : function(el){
-                return $module.data.baseurl + el.path;
+                return $FamilyTreeTop.global.base + el.path;
             },
             getGedcomImagePath: function(el){
                 var sb = $module.fn.stringBuffer();
@@ -1546,17 +1544,21 @@
 
         return {
             render: function(settings){
-                var cont = fn.create();
+                var cont = fn.create(),items, length = 0;
                 if("undefined" !== settings.gedcom){
-                    jQuery(cont).append(fn.createGedcomPhotos(settings.gedcom));
+                    items = fn.createGedcomPhotos(settings.gedcom);
+                    jQuery(cont).append(items);
+                    length += items.length;
                 }
                 if("undefined" !== settings.facebook){
-                    jQuery(cont).append(fn.createFacebookPhotos(settings.facebook));
+                    items = fn.createFacebookPhotos(settings.facebook);
+                    jQuery(cont).append(items);
+                    length += items.length;
                 }
                 setTimeout(function(){
                     fn.init(cont);
                 }, 1);
-                return cont;
+                return (length != 0)?cont:false;
             }
         }
     }, true);

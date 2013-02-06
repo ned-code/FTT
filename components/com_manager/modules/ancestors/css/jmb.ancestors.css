@@ -39,12 +39,12 @@ div#jit-label div.node{
 .jit-node-item{
 	background: none repeat scroll 0 0 #c3c3c3;
 	border: 1px solid #000000;
-	height: 80px;
+	height: 79px;
 	position: relative;
 	width: 209px;
 }
 .jit-node-item-question {
-	height: 80px;
+	height: 79px;
 	position: relative;
 	width: 209px;
 }
@@ -54,13 +54,13 @@ div#jit-label div.node{
     top: 30px;
 }
 .jit-node-item table{
-	margin-left: -1px;
-	margin-top: -1px;
+	margin-left: -3px;
+	margin-top: -3px;
 }
 .jit-node-item .photo{
 	background: none repeat scroll 0 0 white;
 	border: 1px solid #000000;
-	height: 80px;
+	height: 79px;
 	position: relative;
 	width: 72px;
 }
@@ -70,7 +70,7 @@ div#jit-label div.node{
 .jit-node-item .data{
 	font-family: Tahoma;
 	font-size: 11px;
-	height: 80px;
+	height: 79px;
 	margin-left: -2px;
 	margin-top: 1px;
 	width: 136px;

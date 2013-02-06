@@ -47,7 +47,7 @@ foreach ($info as $page){
         </div>
     </div>
 </div>
-<footer class="row">
+<div class="row">
     <div class="twelve columns">
         <div class="row">
             <div class="one columns"><a href="<?php echo $url; ?>">FamilyTreeTop.com</a></div>
@@ -63,7 +63,7 @@ foreach ($info as $page){
             </div>
         </div>
     </div>
-</footer>
+</div>
 
 
 <script>

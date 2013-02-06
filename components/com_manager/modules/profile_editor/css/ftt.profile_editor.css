@@ -2,38 +2,21 @@
 * SLIDE
 */
 .ftt-profile-editor-slide {
-    background: none repeat scroll 0 0 #769EC5;
-    position: absolute;
-    top: 0px;
-    font-size: 11px;
-    font-family: 'lucida grande',tahoma,verdana,arial,sans-serif;
-    color: #333;
-    line-height: 1.28;
-    text-align: left;
+    background: none repeat scroll 0 0 #D8DCE7;
+    color: #333333;
     direction: ltr;
+    font-family: 'lucida grande',tahoma,verdana,arial,sans-serif;
+    font-size: 11px;
+    line-height: 1.28;
+    padding-bottom: 20px;
+    position: absolute;
+    text-align: left;
+    top: 0;
+    z-index: 1;
 }
 .ftt-profile-editor-slide-header {
-    height: 30px;
-}
-.ftt-profile-editor-slide-header-button {
-    background: url(../imgs/button_arrow.png) no-repeat scroll 5px 3px #5A96C0;
-    border: 1px solid #145072;
-    border-radius: 15px 15px 15px 15px;
-    color: white;
-    margin: 3px;
-    padding: 5px 0 5px 30px;
-    width: 45px;
-}
-.ftt-profile-editor-slide-header-button a {
-    text-decoration: none;
-    color: white;
-    font-weight: bold;
-}
-.ftt-profile-editor-slide-content {
-    margin: 5px;
-    background: none repeat scroll 0 0 #EDEDED;
-    border: 1px solid #456F9A;
-    position: relative;
+    height: 32px;
+    background: url(../imgs/bg_header.png) repeat-x scroll 0 0 transparent;
 }
 .ftt-profile-editor-slide-content ul {
     list-style: none outside none;
@@ -44,63 +27,32 @@
 * BOX
 */
 .ftt-profile-editor-box {
-    background: none repeat scroll 0 0 white;
-    border: 1px solid #C4CDE0;
-    border-radius: 2px 2px 2px 2px;
-    margin: 5px;
-    min-height: 80px;
+    margin: 10px 50px;
 }
 .ftt-profile-editor-box-header {
-    background: none repeat scroll 0 0 #F1F1F1;
-    border-bottom: 1px solid #D3D3D3;
-    margin: 4px;
-    min-height: 40px;
+
 }
 .ftt-profile-editor-box-header-title {
-    background: url(../imgs/box_title.png) no-repeat scroll 0 0 transparent;
-    float: left;
-    height: 30px;
-    margin: 5px 5px 5px 15px;
-    font-size: 14px;
+
 }
 .ftt-profile-editor-box-header-title span{
-    font-weight: bold;
-    line-height: 30px;
-    margin-left: 34px;
-}
-.ftt-profile-editor-box-header-buttons {
-    float: right;
-    margin: 5px;
-}
-.ftt-profile-editor-box-header-buttons div {
-    background: none repeat scroll 0 0 white;
-    border: 1px solid #A6A6A6;
-    border-radius: 2px 2px 2px 2px;
-    display: inline-block;
-    padding: 5px;
-    margin-left: 3px;
-}
-
-.ftt-profile-editor-box-header-buttons div.edit {
-    background: url(../imgs/pencil.png) no-repeat scroll 5px 7px transparent;
-    padding: 5px 5px 5px 20px;
-}
-.ftt-profile-editor-box-header-buttons div a {
-    text-decoration: none;
-    color: black;
+    color: #757985;
+    font-size: 12px;
     font-weight: bold;
 }
 .ftt-profile-editor-box-content {
-    margin: 4px;
+    background: none repeat scroll 0 0 white;
+    border: 1px solid #D6D8DD;
+    border-radius: 10px 10px 10px 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    margin-top: 5px;
+    padding: 5px;
 }
 .ftt-profile-editor-box-content-element-title {
-    color: #878086;
-    font-size: 12px;
+
 }
 .ftt-profile-editor-box-content-element-text {
-    color: #35223E;
-    margin-left: 5px;
-    font-size: 12px;
+
 }
 /*
 * FACEBOOK BOX
@@ -144,5 +96,214 @@
     background: url(../imgs/facebook_box_elements.png) no-repeat scroll 0 -88px transparent;
 }
 /*
-* MYFAMILY BOX
+* FAMILY BOX
 */
+.ftt-profile-view-sircar {
+    height: 260px;
+    width:155px;
+    position: absolute;
+}
+.ftt-profile-view-event {
+    position:absolute;
+    height:30px;
+    width:120px;
+    text-align: center;
+}
+.ftt-profile-view-spouse {
+    height: 260px;
+    width:120px;
+    margin-left: 38px;
+    position: absolute;
+}
+.ftt-profile-view-spouse-div {
+    margin-bottom: 5px;
+    margin-top: 0;
+    position: relative;
+}
+.ftt-profile-view-spouse-div.left{
+    margin-left: 45px;
+}
+.ftt-profile-view-spouse-div.right{
+    padding-top: 0;
+    margin-left: 10px;
+}
+.ftt-profile-view-former-img {
+    background: none repeat scroll 0 0 white;
+    border: 2px solid #000000;
+    height: 60px;
+    position: relative;
+    width: 54px;
+}
+.ftt-profile-view-former-sircar-container{
+    border: 1px solid #F5FAE6;
+    max-height: 200px;
+    position: absolute;
+    width: 130px;
+}
+.ftt-profile-view-former-sircar-container.scroll{
+    overflow-y: scroll;
+}
+.ftt-profile-view-former-sircar-container.active{
+    border: 1px solid #c3c3c3;
+}
+.ftt-profile-view-former-spouse-container{
+    border: 1px solid #F5FAE6;
+    max-height: 240px;
+    position: absolute;
+    width: 130px;
+}
+.ftt-profile-view-former-spouse-container.scroll{
+    overflow-y: scroll;
+}
+.ftt-profile-view-former-spouse-container.active{
+    border: 1px solid #c3c3c3;
+}
+.ftt-profile-view-parent-img {
+    background: white;
+    border: 2px solid #000000;
+    height: 120px;
+    position: relative;
+    width: 108px;
+}
+.ftt-profile-view-parent-name {
+    font-family: Tahoma;
+    font-size: 11px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    width: 112px;
+}
+.ftt-profile-view-parent-name.former{
+    font-size: 9px;
+    height: 9px;
+    line-height: 9px;
+    width: 54px;
+}
+.ftt-profile-view-parent-date {
+    font-family: Tahoma;
+    font-size: 11px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    width: 112px;
+}
+.ftt-profile-view-parent-date.former{
+    font-size: 9px;
+    height: 9px;
+    line-height: 9px;
+    width: 54px;
+}
+.ftt-profile-view-child {
+    position: absolute;
+}
+.ftt-profile-view-child-img {
+    background: white;
+    border:2px solid #000;
+    border: 2px solid #000000;
+    position: relative;
+}
+.ftt-profile-view-child-name {
+    font-family: Tahoma;
+    font-size: 11px;
+    height: 11px;
+    line-height: 11px;
+    text-align: center;
+    margin-top: 5px;
+}
+.ftt-profile-view-child-date {
+    font-family: Tahoma;
+    font-size: 11px;
+    height: 14px;
+    line-height: 14px;
+    text-align: center;
+}
+.ftt-profile-view-arrow-left {
+    background:#000000;
+    height: 1px;
+    left: 112px;
+    position: absolute;
+    top: 120px;
+    width: 38px;
+}
+.ftt-profile-view-arrow-right {
+    background:#000000;
+    height: 1px;
+    left: -36px;
+    position: absolute;
+    top: 120px;
+    width: 38px;
+}
+.ftt-profile-view-arrow-up {
+    background:#000000;
+    height: 28px;
+    left: 39px;
+    position: absolute;
+    top: -26px;
+    width: 1px;
+}
+.ftt-profile-view-former-arrow-right {
+    background: none repeat scroll 0 0 #000000;
+    height: 1px;
+    left: 58px;
+    position: absolute;
+    top: 40px;
+    width: 10px;
+}
+.ftt-profile-view-former-arrow-right.text {
+    background: none repeat scroll 0 0 transparent;
+    font-size: 12px;
+    height: 20px;
+    left: 71px;
+    line-height: 20px;
+    position: absolute;
+    top: 30px;
+    width: 10px;
+}
+.ftt-profile-view-former-arrow-left {
+    background: none repeat scroll 0 0 #000000;
+    height: 1px;
+    left: -10px;
+    position: absolute;
+    top: 35px;
+    width: 10px;
+}
+.ftt-profile-view-former-arrow-left.text {
+    background: none repeat scroll 0 0 transparent;
+    font-size: 11px;
+    height: 20px;
+    left: -35px;
+    line-height: 20px;
+    position: absolute;
+    top: 25px;
+    width: 10px;
+}
+/*
+* RELATION
+*/
+.ftt-relation-mapper-node {
+    text-align: center;
+    width: 120px;
+    height: 40px;
+}
+.ftt-relation-mapper-node-name, .ftt-relation-mapper-node-relation {
+    font-size: 11px;
+    height: 15px;
+    line-height: 13px;
+}
+.ftt-relation-mapper-node-plus {
+    background: url(../imgs/plus.png);
+    height: 24px;
+    left: -14px;
+    position: absolute;
+    top: 2px;
+    width: 24px;
+}
+/*
+* EDIT CONTENT
+*/
+.ftt-profile-edit-content form{
+    background: none repeat scroll 0 0 white;
+    border-radius: 5px 5px 5px 5px;
+    margin: 25px;
+    padding: 5px;
+}

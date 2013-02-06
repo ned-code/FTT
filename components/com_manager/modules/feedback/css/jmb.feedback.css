@@ -48,7 +48,7 @@ div#jmb_feedback_form div.body div.text {
 
 div#jmb_feedback_form div.body div.buttons {
     bottom: 0;
-    padding: 20px 5px;
+    padding: 10px 5px;
     position: relative;
     right: 0;
 }
@@ -61,6 +61,7 @@ div#jmb_feedback_form div.body div.buttons div {
     padding: 5px;
     text-align: center;
     display: inline-block;
+    width: 100px;
 }
 
 div#jmb_feedback_form div.body div.buttons span {
@@ -71,7 +72,7 @@ div#jmb_feedback_form div.body div.buttons span {
 }
 
 div#jmb_feedback_form div.body div.likes {
-    margin-bottom: 5px;
+    margin-bottom: 12px;
     padding: 10px 5px;
 }
 
