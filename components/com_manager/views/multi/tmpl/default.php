@@ -35,30 +35,36 @@ foreach ($info as $page){
     }
 }
 ?>
+
 <div id="_header"></div>
-<div id="_content" class="content">
-    <div class="header"></div>
-    <div class="main">
-        <div id='container'>&nbsp;</div>
-    </div>
-</div>
-<div id="_footer" class="footer">
-    <div style="margin: 0 auto; max-width: 920px;">
-        <div style="float: left; color: black; font-weight: bold;">
-            <a href="<?php echo $url; ?>">FamilyTreeTop.com</a>
-        </div>
-        <div style="float: right;">
-            <ul>
-                <li><a href="<?php echo $url; ?>index.php/about">About</a></li>
-                <li><a href="<?php echo $url; ?>index.php/conditions">Terms & Conditions</a></li>
-                <li><a href="<?php echo $url; ?>index.php/privacy">Privacy Policy</a></li>
-                <li><a href="<?php echo $url; ?>index.php/feedback">Provide Feedback</a></li>
-                <li><a href="<?php echo $url; ?>index.php/contact">Contact</a></li>
-                <li><a href="<?php echo $url; ?>index.php/help">Help</a></li>
-            </ul>
+<div class="row">
+    <div class="twelve columns">
+        <div id="_content" class="content">
+            <div class="header"></div>
+            <div class="main">
+                <div id='container'>&nbsp;</div>
+            </div>
         </div>
     </div>
 </div>
+<footer class="row">
+    <div class="twelve columns">
+        <div class="row">
+            <div class="three columns"><a href="<?php echo $url; ?>">FamilyTreeTop.com</a></div>
+            <div class="nine columns">
+                <ul class="link-list right">
+                    <li><a href="<?php echo $url; ?>index.php/about">About</a></li>
+                    <li><a href="<?php echo $url; ?>index.php/conditions">Terms & Conditions</a></li>
+                    <li><a href="<?php echo $url; ?>index.php/privacy">Privacy Policy</a></li>
+                    <li><a href="<?php echo $url; ?>index.php/feedback">Provide Feedback</a></li>
+                    <li><a href="<?php echo $url; ?>index.php/contact">Contact</a></li>
+                    <li><a href="<?php echo $url; ?>index.php/help">Help</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+
 
 <script>
     (function(w){

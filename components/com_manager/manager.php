@@ -23,6 +23,8 @@ $document =& JFactory::getDocument();
 $builder = new FamilyTreeTopBuilderLibrary();
 
 $builder->setCss(array(
+    'components/com_manager/js/foundation.min.css',
+    'components/com_manager/js/foundation.fix.css',
     'components/com_manager/js/jquery-ui-1.8.23.custom.css',
     'components/com_manager/codebase/skins/dhtmlxlayout_dhx_skyblue.css',
     'components/com_manager/codebase/dhtmlxlayout.css',
@@ -46,11 +48,10 @@ $builder->setCss(array(
     'components/com_manager/modules/feedback/css/jmb.feedback.css',
     'components/com_manager/modules/notifications/css/jmb.notifications.css'
 ));
-$builder->cssCompile("mini.css", true);
-
-$document->addScript('components/com_manager/js/familytreetop.js');
+$builder->cssCompile("mini.css", false);
 
 $builder->setJs(array(
+    'components/com_manager/js/familytreetop.js',
     'components/com_manager/js/excanvas.js',
     'components/com_manager/codebase/dhtmlxcontainer.js',
     'components/com_manager/codebase/dhtmlxcommon.js',
@@ -58,6 +59,7 @@ $builder->setJs(array(
     'components/com_manager/codebase/dhtmlxtree.js',
     'components/com_manager/codebase/dhtmlxtabbar.js',
     'components/com_manager/js/jquery-1.8.1.min.js',
+    'components/com_manager/js/foundation.min.js',
     'components/com_manager/js/jquery-ui-1.8.23.custom.min.js',
     'components/com_manager/js/jquery.form.js',
     'components/com_manager/js/jquery.validate.min.js',
@@ -87,7 +89,7 @@ $builder->setJs(array(
 ));
 $jsPath = $builder->jsCompile("mini.js", false);
 
-$document->addStyleSheet('components/com_manager/mini/mini.css');
+//$document->addStyleSheet('components/com_manager/mini/mini.css');
 //$document->addScript('components/com_manager/mini/mini.js');
 
 $document->addCustomTag('<script type="text/javascript">jQuery.noConflict();</script>');
