@@ -34,16 +34,16 @@
     height: 16px;
 }
 .jmb-tooltip-view-info-data div.name {
-    background: url(image/ftt_profile_tool_tips_icons.png) repeat scroll -16px -16px transparent;
+    background: url(../image/ftt_profile_tool_tips_icons.png) repeat scroll -16px -16px transparent;
 }
 .jmb-tooltip-view-info-data div.born,  .jmb-tooltip-view-info-data div.deceased{
-    background: url(image/ftt_profile_tool_tips_icons.png) repeat scroll -16px -60px transparent;
+    background: url(../image/ftt_profile_tool_tips_icons.png) repeat scroll -16px -60px transparent;
 }
 .jmb-tooltip-view-info-data div.relation {
-    background: url(image/ftt_profile_tool_tips_icons.png) repeat scroll -16px -87px transparent;
+    background: url(../image/ftt_profile_tool_tips_icons.png) repeat scroll -16px -87px transparent;
 }
 .jmb-tooltip-view-info-data div.connection {
-    background: url(image/ftt_profile_tool_tips_icons.png) repeat scroll -16px -118px transparent;
+    background: url(../image/ftt_profile_tool_tips_icons.png) repeat scroll -16px -118px transparent;
 }
 .jmb-tooltip-view-info-data span {
 	color: gray;
@@ -280,7 +280,7 @@
 	position: absolute;
     right: 0;
     top: 0;
-    background: url(image/show_full_profile.png);
+    background: url(../image/show_full_profile.png);
     width: 24px;
     height: 24px;
     cursor: pointer;

@@ -16,7 +16,7 @@
     height: 30px;
 }
 .ftt-profile-editor-slide-header-button {
-    background: url(imgs/button_arrow.png) no-repeat scroll 5px 3px #5A96C0;
+    background: url(../imgs/button_arrow.png) no-repeat scroll 5px 3px #5A96C0;
     border: 1px solid #145072;
     border-radius: 15px 15px 15px 15px;
     color: white;
@@ -57,7 +57,7 @@
     min-height: 40px;
 }
 .ftt-profile-editor-box-header-title {
-    background: url(imgs/box_title.png) no-repeat scroll 0 0 transparent;
+    background: url(../imgs/box_title.png) no-repeat scroll 0 0 transparent;
     float: left;
     height: 30px;
     margin: 5px 5px 5px 15px;
@@ -82,7 +82,7 @@
 }
 
 .ftt-profile-editor-box-header-buttons div.edit {
-    background: url(imgs/pencil.png) no-repeat scroll 5px 7px transparent;
+    background: url(../imgs/pencil.png) no-repeat scroll 5px 7px transparent;
     padding: 5px 5px 5px 20px;
 }
 .ftt-profile-editor-box-header-buttons div a {
@@ -129,19 +129,19 @@
     padding-left: 22px;
 }
 .ftt-profile-editor-facebook-box-content-timeline {
-    background: url(imgs/facebook_box_elements.png) no-repeat scroll 0 0 transparent;
+    background: url(../imgs/facebook_box_elements.png) no-repeat scroll 0 0 transparent;
 }
 .ftt-profile-editor-facebook-box-content-about {
-    background: url(imgs/facebook_box_elements.png) no-repeat scroll 0 -21px transparent;
+    background: url(../imgs/facebook_box_elements.png) no-repeat scroll 0 -21px transparent;
 }
 .ftt-profile-editor-facebook-box-content-likes {
-    background: url(imgs/facebook_box_elements.png) no-repeat scroll 0 -42px transparent;
+    background: url(../imgs/facebook_box_elements.png) no-repeat scroll 0 -42px transparent;
 }
 .ftt-profile-editor-facebook-box-content-following {
-    background: url(imgs/facebook_box_elements.png) no-repeat scroll 0 -65px transparent;
+    background: url(../imgs/facebook_box_elements.png) no-repeat scroll 0 -65px transparent;
 }
 .ftt-profile-editor-facebook-box-content-send_message {
-    background: url(imgs/facebook_box_elements.png) no-repeat scroll 0 -88px transparent;
+    background: url(../imgs/facebook_box_elements.png) no-repeat scroll 0 -88px transparent;
 }
 /*
 * MYFAMILY BOX
