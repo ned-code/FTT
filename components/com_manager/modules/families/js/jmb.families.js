@@ -750,7 +750,7 @@
 
                 $(module.parent).height(start_top + 200);
                 //$(module.parent).css('overflow', 'hidden');
-                if(!module.clickItem || $.browser.msie){
+                if(!module.clickItem){
                     $fn.startAnimation(cont, childs);
                 } else {
                     $fn.animation(cont, childs);
