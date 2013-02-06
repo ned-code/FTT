@@ -38,7 +38,7 @@ foreach ($info as $page){
 
 <div id="_header"></div>
 <div class="row">
-    <div class="twelve columns">
+    <div class="twelve columns" role="content">
         <div id="_content" class="content">
             <div class="header"></div>
             <div class="main">

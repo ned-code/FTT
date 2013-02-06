@@ -857,8 +857,8 @@
 .jmb-profile-cont div.settings {
     position:relative;
 }
-.jmb-profile-cont div.settings div.button{
-    background: url("../imgs/arrows.png") no-repeat scroll 0 -21px #6B944E;
+.jmb-profile-cont div.settings div.ftt-profile-button{
+    background: url("../image/arrows.png") no-repeat scroll 0 -21px #6B944E;
     border-color: #6B944E;
     border-style: solid;
     border-width: 1px;
@@ -867,11 +867,11 @@
     margin-top: 3px;
     width: 22px;
 }
-.jmb-profile-cont div.settings div.button:hover{
-    background: url("../imgs/arrows.png") no-repeat scroll -22px -22px #86af67;
+.jmb-profile-cont div.settings div.ftt-profile-button:hover{
+    background: url("../image/arrows.png") no-repeat scroll -22px -22px #86af67;
 }
-.jmb-profile-cont div.settings div.button.active {
-    background: url("../imgs/arrows.png") no-repeat scroll 0 0 white;
+.jmb-profile-cont div.settings div.ftt-profile-button.active {
+    background: url("../image/arrows.png") no-repeat scroll 0 0 white;
     border-color: #CCCCCC #CCCCCC white;
     border-style: solid;
     border-width: 1px;
@@ -887,7 +887,7 @@
     width: 155px;
 }
 .jmb-profile-cont div.settings div.menu div{
-    background: url("../imgs/list.png") no-repeat scroll 3px 3px transparent;
+    background: url("../image/list.png") no-repeat scroll 3px 3px transparent;
     line-height: 16px;
     margin-top: 5px;
     margin-left: -3px;
@@ -905,7 +905,7 @@
     color:white;
 }
 .jmb-profile-cont div.facebook {
-    background: url("../imgs/facebook-login-button.png") no-repeat scroll 0 0 transparent;
+    background: url("../image/facebook-login-button.png") no-repeat scroll 0 0 transparent;
     border: 1px solid white;
     height: 25px;
     margin-left: 0;
@@ -990,13 +990,13 @@
     width: 24px;
 }
 .ftt-profile-language-list.ui-dialog-content ul li div.flag.en-GB{
-    background: url("../imgs/en-GB.png") no-repeat scroll 0 0 transparent;
+    background: url("../image/en-GB.png") no-repeat scroll 0 0 transparent;
 }
 .ftt-profile-language-list.ui-dialog-content ul li div.flag.ru-RU{
-    background: url("../imgs/ru-RU.png") no-repeat scroll 0 0 transparent;
+    background: url("../image/ru-RU.png") no-repeat scroll 0 0 transparent;
 }
 .ftt-profile-language-list.ui-dialog-content ul li div.flag.pt-PT{
-    background: url("../imgs/pt-PT.png") no-repeat scroll 0 0 transparent;
+    background: url("../image/pt-PT.png") no-repeat scroll 0 0 transparent;
 }
 .ftt-button-ok {
     bottom: 10px;
@@ -1016,7 +1016,7 @@
     width: 310px;
 }
 .ftt-language-progressbar div{
-    background: url("../imgs/progressbar.gif") no-repeat scroll 0 25px transparent;
+    background: url("../image/progressbar.gif") no-repeat scroll 0 25px transparent;
     height: 120px;
     left: 100px;
     position: absolute;
@@ -1028,7 +1028,7 @@
 }
 
 .ftt-preloader-alert {
-    background: url("../imgs/progressbar.gif") no-repeat scroll 105px 0 transparent;
+    background: url("../image/progressbar.gif") no-repeat scroll 105px 0 transparent;
     height: 160px;
 }
 .ftt-preloader-alert div{

@@ -52,6 +52,7 @@ html, body {
 
 .jmb-top-menu-bar .jmb-top-menu-bar-content .jmb-top-menu-bar-item span{
 	cursor: pointer;
+    font-size: 14px;
 }
 
 .jmb-top-menu-bar .jmb-top-menu-bar-content .jmb-top-menu-bar-item span.active{

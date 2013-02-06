@@ -241,9 +241,9 @@
             setHeaderBackground(header);
             var sb = storage.stringBuffer();
             sb._('<div style="display: table; margin: 0 auto; min-width: 100px;">');
-            sb._('<span>');
+            sb._('<div style="float:left;"><span>');
             sb._(getMsg('HEADER'));
-            sb._('</span>');
+            sb._('</span></div>');
             sb._(getHeaderMonthSelect());
             if(isSort()){
                 sb._(getHeaderSortSelect())
@@ -489,13 +489,13 @@
         function getHeaderMonthSelect(){
             var sb = storage.stringBuffer();
             var monthNames = getMonthNames();
-            sb._('<select name="months">')
+            sb._('<div style="float:left;margin-left:10px;"><select name="months">')
             for( var i = 0 ; i < 12 ; i++ ){
                 sb._('<option ')._(getSelected(i))._(' value="')._(getMonthValue(i))._('" >');
                 sb._(getMonthName(i, monthNames));
                 sb._('</option>');
             }
-            sb._('</select>');
+            sb._('</select></div>');
             return sb.result();
             function isSelected(i){
                 return i == module.month - 1;
@@ -531,11 +531,11 @@
         }
         function getHeaderSortSelect(){
             var sb = storage.stringBuffer();
-            sb._('<select name="sort">');
+            sb._('<div style="float:left;margin-left: 10px;"><select name="sort">');
             sb._('<option ')._(getSelected(1))._(' value="1">')._(getMsg('AFTER'))._(' ')._(module.separator)._('</option>');
             sb._('<option ')._(getSelected(0))._(' value="0">')._(getMsg('ALL_YEARS'))._('</option>');
             sb._('<option ')._(getSelected(-1))._(' value="-1">')._(getMsg('BEFORE'))._(' ')._(module.separator)._('</option>');
-            sb._('</select>');
+            sb._('</select></div>');
             return sb.result();
             function isSelect(n){
                 if(module.sort == n){

@@ -64,7 +64,10 @@
 .ftt-myfamily-header-update-text-title {
     font-weight: bold;
 }
-.ftt-myfamily-header-update-text-count {}
+.ftt-myfamily-header-update-text-count {
+    font-size: 10px;
+    margin-top: -5px;
+}
 
 .ftt-myfamily-content {
 

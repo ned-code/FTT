@@ -35,7 +35,7 @@
                 sb._('<tr>');
                 sb._('<td><div class="avatar"></div></td>');
                 sb._('<td><div class="login"><span></span></div></td>');
-                sb._('<td><div class="settings"><div class="button"></div></div></td>');
+                sb._('<td><div class="settings"><div class="ftt-profile-button"></div></div></td>');
                 sb._('</tr>');
                 sb._('</table>');
                 sb._('</div>');
@@ -232,7 +232,7 @@
                 var menu = this.menu();
                 module.menu = menu;
                 $(cont).click(function(){
-                    var button = $(this).find('div.button');
+                    var button = $(this).find('div.ftt-profile-button');
                     if($(button).hasClass('active')){
                         $(button).removeClass('active');
                         menu.off();
