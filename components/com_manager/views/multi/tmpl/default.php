@@ -50,8 +50,8 @@ foreach ($info as $page){
 <footer class="row">
     <div class="twelve columns">
         <div class="row">
-            <div class="three columns"><a href="<?php echo $url; ?>">FamilyTreeTop.com</a></div>
-            <div class="nine columns">
+            <div class="one columns"><a href="<?php echo $url; ?>">FamilyTreeTop.com</a></div>
+            <div class="ten columns">
                 <ul class="link-list right">
                     <li><a href="<?php echo $url; ?>index.php/about">About</a></li>
                     <li><a href="<?php echo $url; ?>index.php/conditions">Terms & Conditions</a></li>

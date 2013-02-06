@@ -24,3 +24,9 @@ table tbody tr td {
     padding: 0;
     vertical-align: top;
 }
+.column, .columns {
+    float: left;
+    min-height: 1px;
+    padding: 0;
+    position: relative;
+}

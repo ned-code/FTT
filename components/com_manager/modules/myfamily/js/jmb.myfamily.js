@@ -259,9 +259,12 @@
             exit:function(){ storage.core.modulesPullObject.unset($moduleName); return 0; },
             reload:function(){ console.log("reload") },
             create:function(){
-                var sb = storage.stringBuffer();
+                var sb = $module.fn.stringBuffer();
                 sb._('<div class="ftt-myfamily-container">');
-                    sb._('<div class="ftt-myfamily-header"><span>')._($fn.getMsg("header_title"))._('</span>');
+                    sb._('<div class="ftt-myfamily-header">');
+                        sb._('<div style="min-width:100px; margin: 0 auto;">');
+                            sb._('<div style="float:left;"><span>')._($fn.getMsg("header_title"))._('</span></div>');
+                        sb._('</div>');
                         sb._('<div class="ftt-myfamily-header-update">');
                             sb._('<table>');
                                 sb._('<tr>');

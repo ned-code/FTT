@@ -88,6 +88,9 @@ ul.jmbtabs li a:hover {
 ul.jmbtabs li a:hover {
 	background: #ccc;
 }
+ul.jmbtabs li a div {
+    font-size: 14px;
+}
 html ul.jmbtabs li.active, html ul.jmbtabs li.active a:hover  { /*--Makes sure that the active tab does not listen to the hover properties--*/
 	background: #f5fae6;
 	border-bottom: 1px solid #F5FAE6; /*--Makes the active tab look like it's connected with its content--*/
@@ -144,6 +147,7 @@ html ul.jmbtabs.myfamily li.active, html ul.jmbtabs li.active a:hover {
 .ftt-mobile-navigation .ftt-mobile-navigation-item div.MobDescendants {
     background: url(mobile_navigation.png) no-repeat -200px 0px transparent;
 }
+
 /**
 * FamilyTreeTop Content Container
 */

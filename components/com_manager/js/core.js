@@ -1301,9 +1301,9 @@
                      storage.invitation = new JMBInvitation();
                      storage.ntf = new JMBNotifications();
                      */
-                    $FamilyTreeTop.fn.mod("invitation").init("desctop");
-                    $FamilyTreeTop.fn.mod("tooltip").init("desctop");
-                    $FamilyTreeTop.fn.mod("topmenubar").init("desctop");
+                    $FamilyTreeTop.fn.mod("invitation").init("mobile");
+                    $FamilyTreeTop.fn.mod("tooltip").init("mobile");
+                    $FamilyTreeTop.fn.mod("topmenubar").init("mobile");
                     $FamilyTreeTop.fn.mod("profile").init("mobile");
                     $FamilyTreeTop.fn.mod("navigation").init("mobile", settings, function(el, setting){
                         fn.initModules("mobile", "#_content", setting);

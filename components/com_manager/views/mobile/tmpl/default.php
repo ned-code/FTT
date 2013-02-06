@@ -32,10 +32,29 @@ foreach ($info as $page){
     }
 }
 ?>
-<div id="_header"></div>
-<div id="_nav"></div>
-<div id="_content"></div>
-<div id="_footer"></div>
+<div class="row">
+    <div class="four columns">
+        <div id="_header"></div>
+    </div>
+</div>
+<div class="row">
+    <div class="four columns">
+        <div id="_nav"></div>
+    </div>
+</div>
+<div class="row">
+    <div id="_content" class="four columns" role="content">
+    </div>
+</div>
+<footer class="row">
+    <div class="four columns">
+        <ul class="link-list" style="margin: 0 auto;max-width: 175px;">
+            <li><a href="<?php echo $url; ?>index.php/about">About</a></li>
+            <li><a href="<?php echo $url; ?>index.php/conditions">Terms</a></li>
+            <li><a href="<?php echo $url; ?>index.php/contact">Contact</a></li>
+        </ul>
+    </div>
+</footer>
 <script>
     (function(w){
         var setData = function(){
