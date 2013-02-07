@@ -307,3 +307,7 @@
     margin: 25px;
     padding: 5px;
 }
+
+.ftt-profile-edit-content img#avatar {
+    max-width: none;
+}

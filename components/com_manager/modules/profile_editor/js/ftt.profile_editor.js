@@ -72,6 +72,11 @@
         }
 
         /**
+         * VALIDATE
+         */
+        $module.fn.validate = function(){}
+
+        /**
          * SAVE
          */
         $module.fn.save = function(){
@@ -221,11 +226,11 @@
 
                         sb._('<div class="row">');
                             sb._('<div class="three columns">');
-                                sb._('<img id="avatar" width="')._($module.data.avatarSize[0])._('px" height="')._($module.data.avatarSize[1])._('px" src="')._($FamilyTreeTop.global.base)._('components/com_manager/modules/profile_editor/imgs/default-avatar.png">');
+                                sb._('<img id="avatar" style="max-width:none;" src="')._($FamilyTreeTop.global.base)._('components/com_manager/modules/profile_editor/imgs/default-avatar.png">');
                             sb._('</div>');
                             sb._('<div class="nine columns">');
-                                sb._('<label>Upload a Picture of Yourself</label>');
-                                sb._('<input type="file" />');
+                                sb._('<label style="margin-left: 5px;">Upload a Picture of Yourself</label>');
+                                sb._('<input style="margin-left: 5px;" type="file" />');
                                 sb._('<button id="upload" style="margin-left: 5px;" type="button" class="small secondary radius button">Upload</button>');
                             sb._('</div>');
                         sb._('</div>');
@@ -315,6 +320,12 @@
             $module.fn.setData(cont);
             $(cont).foundationCustomForms();
             $(cont).find('button#upload').click($module.fn.upload);
+            $FamilyTreeTop.fn.mod("photos").fixSize({
+                object: cont,
+                width:$module.data.avatarSize[0],
+                height:$module.data.avatarSize[1],
+                length:1
+            });
         }
 
 

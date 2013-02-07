@@ -234,53 +234,11 @@ div.buttons span {
 /**
 * PHOTOS
 */
-.ftt-media-photos-container {}
-.ftt-media-photos-item {
-    border: 1px solid #ACB7C5;
-    border-radius: 1px 1px 1px 1px;
-    cursor: pointer;
+.ftt-media-photos-container ul li {
     display: inline-block;
-    height: 120px;
     margin: 3px;
-    position: relative;
-    width: 108px;
 }
-
-.ftt-media-photos-item-facebook {
-    background: url(images/facebook.png) no-repeat scroll 0 0 transparent;
-    border-radius: 3px 3px 3px 3px;
-    bottom: 3px;
-    height: 18px;
-    position: absolute;
-    right: 3px;
-    visibility: hidden;
-    width: 18px;
-}
-.ftt-media-photos-item-facebook  a{
-    text-decoration: none;
-    width: 18px;
-    height: 18px;
-    display: block;
-}
-.ftt-media-photos-item:hover .ftt-media-photos-item-facebook {
-    visibility: visible;
-    -webkit-transition: opacity 100ms linear;
-    -moz-transition: opacity 100ms linear;
-    -o-transition: opacity 100ms linear;
-    transition: opacity 100ms linear;
-}
-.ftt-media-photos-item-close {
-    background: url(images/close.png) no-repeat scroll 0 -32px transparent;
-    height: 15px;
-    position: absolute;
-    right: 3px;
-    top: 3px;
-    visibility: hidden;
-    width: 15px;
-    opacity: 0.5;
-    filter: alpha(opacity=50);
-}
-.ftt-media-photos-item:hover .ftt-media-photos-item-close {
-    visibility: visible;
+.ftt-media-photos-container ul li img {
+    max-width: none;
 }
 

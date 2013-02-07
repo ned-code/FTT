@@ -1460,7 +1460,7 @@
     }, true);
 })(jQuery, $FamilyTreeTop);
 
-(function($ftt){
+(function($, $ftt){
     $ftt.module.create("MOD_SYS_PHOTOS", function(){
         var $module = this, fn;
         $module.data.arguments = arguments;
@@ -1472,34 +1472,24 @@
         fn = {
             create: function(){
                 var sb = $module.fn.stringBuffer();
-                sb._('<div class="ftt-media-photos-container"></div>');
+                sb._('<div class="ftt-media-photos-container" ><ul data-clearing></ul></div>');
                 return jQuery(sb.result());
             },
             createPhotoElement: function(src, view, facebook){
                 var sb = $module.fn.stringBuffer();
-                sb._('<div class="ftt-media-photos-item">');
-                sb._('<div class="ftt-media-photos-item-image">');
-                sb._('<a href="')._(view)._('" rel="prettyPhoto[pp_gal]" title="" >');
-                sb._('<img style="width:');
-                sb._($module.data.settings.size[0]);
-                sb._('px; height:');
-                sb._($module.data.settings.size[1]);
-                sb._('px;" src="');
-                sb._(src)._('" >');
-                sb._('</a>');
-                sb._('</div>');
-                if(facebook){
-                    sb._('<div class="ftt-media-photos-item-facebook"><a target="_blank" href="')._(facebook)._('"></a></div>');
-                }
-                sb._('</div>');
-                return jQuery(sb.result());
+                sb._('<li>');
+                    sb._('<a href="')._(src)._('">');
+                            sb._('<img src="')._(view)._('" />');
+                    sb._('</a>');
+                sb._('</li>');
+                return $(sb.result());
             },
             createFacebookPhotos: function(photos){
                 var items = [];
                 for(var key in photos){
                     if(!photos.hasOwnProperty(key)) continue;
                     var photo = photos[key];
-                    items.push(fn.createPhotoElement(photo.source, photo.source, photo.link))
+                    items.push(fn.createPhotoElement(photo.images[0].source, photo.source, photo.link));
                 }
                 return items;
             },
@@ -1510,61 +1500,101 @@
                 for( var key in photos ){
                     if(!photos.hasOwnProperty(key)) continue;
                     var el = photos[key];
-                    var src = "";
-                    if(media.cache[el.media_id] && media.cache[el.media_id][$module.data.settings.size.join("_")]){
-                        src = fn.getGedcomImageCachePath(media, el);
-                    } else {
-                        src = fn.getGedcomImagePath(el);
-                    }
-                    items.push(fn.createPhotoElement(src, fn.getGedcomImageRealPath(el), false));
+                    var src = fn.getGedcomImageRealPath(el);
+                    items.push(fn.createPhotoElement(src, src, false));
                 }
                 return items;
-            },
-            getGedcomImageCachePath: function(media, el){
-                return $FamilyTreeTop.global.base + $module.data.tmpPath + storage.usertree.tree_id + '/' + media.cache[el.media_id][$module.data.settings.size.join("_")];
             },
             getGedcomImageRealPath : function(el){
                 return $FamilyTreeTop.global.base + el.path;
             },
-            getGedcomImagePath: function(el){
-                var sb = $module.fn.stringBuffer();
-                sb._("index.php?option=com_manager");
-                sb._("&task=getResizeImage");
-                sb._("&tree_id=")._(storage.usertree.tree_id);
-                sb._("&id=")._(el.media_id);
-                sb._("&w=")._($module.data.settings.size[0]);
-                sb._("&h=")._($module.data.settings.size[1]);
-                return sb.result();
+            getChange: function(settings, element){
+                var x1 = $(element).naturalWidth(),
+                    y1 = $(element).naturalHeight(),
+                    x2 = parseInt(settings.width),
+                    y2 = parseInt(settings.height),
+                    ratio, size, shift;
+
+                if(x1 > x2 && y1 > y2){
+                    ratio = (x1>=y1)?y1/y2:x1/x2;
+                } else if(x1 > x2){
+                    ratio = y1/y2;
+                } else if(y1 > y2){
+                    ratio = x1/x2;
+                } else {
+                    ratio = (x1<y1)?y1/y2:x1/x2;
+                }
+
+                size = [x1 / ratio, y1 / ratio];
+                if(size[0] > size[1]){
+                    shift = { type:"left", value:-1*(size[0]-x2)/2 }
+                } else {
+                    shift = { type:"top", value:-1*(size[1]-y2)/2 }
+                }
+                return [size, shift]
             },
             init: function(cont){
-                jQuery(cont).find('a[rel^="prettyPhoto"]').prettyPhoto({
-                    social_tools:''
-                });
-                return cont;
+                $(cont).find("a").unbind();
+                $(cont).foundationClearing();
             }
         }
 
         return {
             render: function(settings){
-                var cont = fn.create(),items, length = 0;
+                var mod = this, cont = fn.create(),items, length = 0;
                 if("undefined" !== settings.gedcom){
                     items = fn.createGedcomPhotos(settings.gedcom);
-                    jQuery(cont).append(items);
+                    jQuery(cont).find('ul').append(items);
                     length += items.length;
                 }
                 if("undefined" !== settings.facebook){
                     items = fn.createFacebookPhotos(settings.facebook);
-                    jQuery(cont).append(items);
+                    jQuery(cont).find('ul').append(items);
                     length += items.length;
                 }
-                setTimeout(function(){
-                    fn.init(cont);
-                }, 1);
+                $(cont).find('a').click(function(){
+                    return false;
+                });
+                mod.fixSize({
+                    object:cont,
+                    width:$module.data.settings.size[0],
+                    height:$module.data.settings.size[1],
+                    length: length,
+                    onComplete:function(){
+                        fn.init(cont);
+                    }
+                });
                 return (length != 0)?cont:false;
+            },
+            fixSize: function(settings){
+                var index = 0;
+                $(settings.object).find('img').hide().one('load', function(){
+                    var el = this, div, change;
+                    //show image
+                    $(el).show().parent();
+
+                    //create block
+                    div = $('<div style="border-radius:5px; overflow:hidden; position:relative;" ></div>');
+                    $(div).css('width', settings.width+'px').css('height', settings.height+'px');
+
+                    //get ratio
+                    change = fn.getChange(settings, el);
+
+                    $(el).css('position', 'relative').css('width', change[0][0]+'px').css('height', change[0][1]+'px');
+                    $(el).css(change[1].type, change[1].value+'px');
+                    $(el).parent().append(div);
+                    $(div).append(el);
+
+                    if("undefined" !== typeof(settings.length) && index == settings.length - 1 && "function" === typeof(settings.onComplete)){
+                        settings.onComplete();
+                    }
+
+                    index++;
+                });
             }
         }
     }, true);
-})($FamilyTreeTop);
+})(jQuery, $FamilyTreeTop);
 
 
 (function($, $ftt){
@@ -1585,8 +1615,8 @@
                     var imageName = (parse.gender == "M")?"male_big.png":"female_big.png";
                     return $FamilyTreeTop.global.base + "components/com_manager/js/images/"+imageName;
                 },
-                getFacebookPath: function(parse){
-                    return "https://graph.facebook.com/"+parse.facebook_id+"/picture";
+                getFacebookPath: function(parse, w, h){
+                    return "https://graph.facebook.com/"+parse.facebook_id+"/picture?width="+w+"&height="+h;
                 },
                 getMediaPath: function(parse, media){
                     return  $FamilyTreeTop.global.base + media.avatar.path.substr(1, media.avatar.path.length - 1);
@@ -1600,11 +1630,11 @@
                 media = object.media;
                 parse = $fn.getParse(object);
                 if((media == null && parse.facebook_id == "0") || (media.avatar == null && parse.facebook_id == "0")){
-                    return '<img width="'+w+'px" height="'+h+'px" src="'+$fn.getPath(parse)+'" />';
+                    return '<img width="'+w+'" height="'+h+'" src="'+$fn.getPath(parse)+'" />';
                 } else if( (media == null && parse.facebook_id != "0") || (media.avatar == null && parse.facebook_id != "0")) {
-                    return '<img width="'+w+'px" height="'+h+'px" src="'+$fn.getFacebookPath(parse)+'" />';
+                    return '<img width="'+w+'" height="'+h+'" src="'+$fn.getFacebookPath(parse, w, h)+'" />';
                 } else {
-                    return '<img width="'+w+'px" height="'+h+'px" src="'+$fn.getMediaPath(parse, media)+'" />';
+                    return '<img width="'+w+'" height="'+h+'" src="'+$fn.getMediaPath(parse, media)+'" />';
                 }
             }
         }
