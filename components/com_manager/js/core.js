@@ -1565,3 +1565,48 @@
         }
     }, true);
 })($FamilyTreeTop);
+
+
+(function($, $ftt){
+    $ftt.module.create("MOD_SYS_AVATAR", function(){
+        var $module = this,
+            $fn = {
+                getObject: function(id){
+                    if("undefined" !== storage.usertree.pull[id]){
+                        return storage.usertree.pull[id];
+                    } else {
+                        return false;
+                    }
+                },
+                getParse: function(object){
+                    return storage.usertree.parse(object);
+                },
+                getPath: function(parse){
+                    var imageName = (parse.gender == "M")?"male_big.png":"female_big.png";
+                    return $FamilyTreeTop.global.base + "components/com_manager/js/images/"+imageName;
+                },
+                getFacebookPath: function(parse){
+                    return "https://graph.facebook.com/"+parse.facebook_id+"/picture";
+                },
+                getMediaPath: function(parse, media){
+                    return  $FamilyTreeTop.global.base + media.avatar.path.substr(1, media.avatar.path.length - 1);
+                }
+        };
+
+        return {
+            get: function(id, w, h){
+                var object = $fn.getObject(id), media, parse;
+                if(!object) return '';
+                media = object.media;
+                parse = $fn.getParse(object);
+                if((media == null && parse.facebook_id == "0") || (media.avatar == null && parse.facebook_id == "0")){
+                    return '<img width="'+w+'px" height="'+h+'px" src="'+$fn.getPath(parse)+'" />';
+                } else if( (media == null && parse.facebook_id != "0") || (media.avatar == null && parse.facebook_id != "0")) {
+                    return '<img width="'+w+'px" height="'+h+'px" src="'+$fn.getFacebookPath(parse)+'" />';
+                } else {
+                    return '<img width="'+w+'px" height="'+h+'px" src="'+$fn.getMediaPath(parse, media)+'" />';
+                }
+            }
+        }
+    }, true);
+})(jQuery, $FamilyTreeTop);

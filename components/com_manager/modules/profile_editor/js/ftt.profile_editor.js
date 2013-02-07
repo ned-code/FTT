@@ -8,6 +8,7 @@
         $module.data.msg = {}
         $module.data.callbacks = {};
         $module.data.renderType = 'desctop';
+        $module.data.avatarSize = [108, 120];
         $module.data.slide = false;
         $module.data.gedcom_id = false;
         $module.data.object = false;
@@ -62,6 +63,70 @@
             if(!gedcom_id&&!$module.data.gedcom_id) return false;
             return storage.usertree.pull[gedcom_id || $module.data.gedcom_id];
         }
+
+        /**
+         * UPLOAD
+         */
+        $module.fn.upload = function(){
+            console.log('upload');
+        }
+
+        /**
+         * SAVE
+         */
+        $module.fn.save = function(){
+            console.log('save');
+        }
+
+        /**
+         * SET DATA IN EDIT FORM
+         */
+        $module.fn.setData = function(cont){
+            var birth, death, $fn = {
+                set: function(type, name, value){
+                    if("input" === type){
+                        var el = $(cont).find(type+'[name="'+name+'"]');
+                        $(el).val(value);
+                    } else if("select" === type){
+                        var el = $(cont).find(type+'[name="'+name+'"]');
+                        $(el).find('option[value="'+value+'"]').attr('selected', 'selected');
+                    } else if("img" === type){
+                        if(!value) return false;
+                        var img = $(cont).find('img#'+name);
+                        var nimg = $(value);
+                        $(img).parent().append(nimg);
+                        $(img).remove();
+                        $(nimg).attr('id', name);
+                    }
+                }
+            }
+            //photo
+            $fn.set('img', 'avatar', $FamilyTreeTop.fn.mod('avatar').get($module.data.parse.gedcom_id, $module.data.avatarSize[0], $module.data.avatarSize[1]));
+
+            //basic details
+            $fn.set('select', 'gender', $module.data.parse.gender.toLowerCase());
+            $fn.set('select', 'live', ($module.data.parse.is_alive)?1:0);
+            $fn.set('input', 'first_name', $module.data.parse.first_name);
+            $fn.set('input', 'middle_name', $module.data.parse.middle_name);
+            $fn.set('input', 'last_name', $module.data.parse.last_name);
+            $fn.set('input', 'know_as', $module.data.parse.nick);
+
+            //birth
+            birth = $module.data.parse.birth();
+            $fn.set('input', 'b_day', birth[0]);
+            $fn.set('select', 'b_month', birth[1]);
+            $fn.set('input', 'b_year', birth[2]);
+
+            //death
+            if($module.data.parse.is_death){
+                death = $module.data.parse.birth();
+                $fn.set('input', 'd_day', death[0]);
+                $fn.set('select', 'd_month', death[1]);
+                $fn.set('input', 'd_year', death[2]);
+            }
+            //notes
+        }
+
         /*
         * EDIT
          */
@@ -91,7 +156,7 @@
                     if("undefined" != typeof(label) && label){
                         sb._('<label>')._(label)._(':</label>');
                     }
-                    sb._('<select name="">');
+                    sb._('<select name="')._(name)._('">');
                         for(key in options){
                             if(!options.hasOwnProperty(key)) continue;
                             option = options[key];
@@ -156,12 +221,12 @@
 
                         sb._('<div class="row">');
                             sb._('<div class="three columns">');
-                                sb._('<img id="thumb" width="102px" height="120px" src="')._($FamilyTreeTop.global.base)._('components/com_manager/modules/profile_editor/imgs/default-avatar.png">');
+                                sb._('<img id="avatar" width="')._($module.data.avatarSize[0])._('px" height="')._($module.data.avatarSize[1])._('px" src="')._($FamilyTreeTop.global.base)._('components/com_manager/modules/profile_editor/imgs/default-avatar.png">');
                             sb._('</div>');
                             sb._('<div class="nine columns">');
                                 sb._('<label>Upload a Picture of Yourself</label>');
-                                sb._('<input id="imageUpload" name="avatar" type="file" />');
-                                sb._('<button style="margin-left: 5px;" type="button" class="small secondary radius button">Save</button>');
+                                sb._('<input type="file" />');
+                                sb._('<button id="upload" style="margin-left: 5px;" type="button" class="small secondary radius button">Upload</button>');
                             sb._('</div>');
                         sb._('</div>');
 
@@ -247,8 +312,9 @@
             cont = $fn.element();
             $module.data.slide.hide();
             $module.data.slide.append(cont);
+            $module.fn.setData(cont);
             $(cont).foundationCustomForms();
-
+            $(cont).find('button#upload').click($module.fn.upload);
         }
 
 
@@ -303,14 +369,17 @@
                     var sb = $module.fn.stringBuffer();
                     sb._('<div style="margin-left: 4px;margin-top: 4px;float:left;"><a class="tiny secondary radius button" href="#">Back</a></div>');
                     sb._('<div style="margin-right: 4px;margin-top: 4px;float:right;"><a class="tiny secondary radius button" href="#">Edit</a></div>');
+                    sb._('<div style="display: none;margin-right: 4px;margin-top: 4px;float:right;"><a class="tiny secondary radius button" href="#">Save</a></div>');
                     headerBtns = $(sb.result());
                     $(cont).find(".ftt-profile-editor-slide-header").append(headerBtns);
                     $(headerBtns[0]).click(function(){
                         $module.data.slide.back();
                     });
                     $(headerBtns[1]).click(function(){
-                        edit = true;
                         $module.fn.edit();
+                    });
+                    $(headerBtns[2]).click(function(){
+                        $module.fn.save();
                     });
                 }
             }
@@ -344,14 +413,19 @@
                     $(div).find(".ftt-profile-editor-slide-content").append(cont);
                 },
                 hide: function(){
+                    edit = true;
                     $(div).find(".ftt-profile-editor-slide-content ul").hide();
                     $(headerBtns[1]).hide();
+                    $(headerBtns[2]).show();
                 },
                 visible: function(){
+                    edit = false;
+
                     $(div).find(".ftt-profile-editor-slide-content .ftt-profile-edit-content").remove();
                     $(div).find(".ftt-profile-editor-slide-content ul").show();
+                    $(headerBtns[2]).hide();
                     $(headerBtns[1]).show();
-                    edit = false;
+
                 },
                 content: function(boxes){
                     var ul = $("<ul></ul>");
