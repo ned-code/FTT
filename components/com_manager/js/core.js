@@ -1300,6 +1300,7 @@
                     /*
                      storage.ntf = new JMBNotifications();
                      */
+                    $FamilyTreeTop.fn.mod("profile_editor").init("mobile");
                     $FamilyTreeTop.fn.mod("invitation").init("mobile");
                     $FamilyTreeTop.fn.mod("tooltip").init("mobile");
                     $FamilyTreeTop.fn.mod("topmenubar").init("desctop");
@@ -1309,6 +1310,7 @@
                     });
                 },
                 desctopRender:function(settings){
+                    $FamilyTreeTop.fn.mod("profile_editor").init("desctop");
                     $FamilyTreeTop.fn.mod("feedback").init("desctop");
                     $FamilyTreeTop.fn.mod("invitation").init("desctop");
                     $FamilyTreeTop.fn.mod("tooltip").init("desctop");

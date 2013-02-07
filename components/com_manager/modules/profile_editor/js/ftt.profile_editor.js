@@ -7,6 +7,7 @@
         $module.data.arguments = arguments;
         $module.data.msg = {}
         $module.data.callbacks = {};
+        $module.data.renderType = 'desctop';
         $module.data.slide = false;
         $module.data.gedcom_id = false;
         $module.data.object = false;
@@ -66,10 +67,106 @@
          */
         $module.fn.edit = function(){
             var cont, $fn = {
+                getSelectMonth:function(name){
+                    var sb = $module.fn.stringBuffer();
+                    sb._('<select name="')._(name)._('">');
+                        sb._('<option value="0">Month</option>');
+                        sb._('<option value="1">January</option>');
+                        sb._('<option value="2">February</option>');
+                        sb._('<option value="3">March</option>');
+                        sb._('<option value="4">April</option>');
+                        sb._('<option value="5">May</option>');
+                        sb._('<option value="6">June</option>');
+                        sb._('<option value="7">July</option>');
+                        sb._('<option value="8">August</option>');
+                        sb._('<option value="9">September</option>');
+                        sb._('<option value="10">October</option>');
+                        sb._('<option value="11">November</option>');
+                        sb._('<option value="12">December</option>');
+                    sb._('</select>');
+                    return sb.result();
+                },
+                getSelect:function(name, options, label){
+                    var sb = $module.fn.stringBuffer(), key, option;
+                    if("undefined" != typeof(label) && label){
+                        sb._('<label>')._(label)._(':</label>');
+                    }
+                    sb._('<select name="">');
+                        for(key in options){
+                            if(!options.hasOwnProperty(key)) continue;
+                            option = options[key];
+                            sb._('<option value="')._(key)._('">')._(option)._('</option>');
+                        }
+                    sb._('</select>');
+                    return sb.result();
+                },
+                getInput:function(name, label, placeholder, type){
+                    var sb = $module.fn.stringBuffer();
+                    if("undefined" != typeof(label) && label){
+                        sb._('<label>')._(label)._(':</label>');
+                    }
+                    sb._('<input ');
+                        sb._('name="')._(name)._('" ');
+                        sb._('type="')._(("undefined"!==typeof(type))?type:"text")._('"');
+                        sb._(' placeholder="')._(("undefined"!==typeof(placeholder))?placeholder:"")._('" ');
+                    sb._('/>');
+                    return sb.result();
+                },
+                getLivingEventContent:function(legend, prefix){
+                    var sb = $module.fn.stringBuffer();
+                    sb._('<fieldset>');
+                        sb._('<legend>')._(legend)._('</legend>');
+                        sb._('<div class="row">');
+                            sb._('<div class="twelve columns">');
+                                sb._('<div class="row">');
+                                    sb._('<div class="two columns">');
+                                        sb._($fn.getInput(prefix+'day', false, "Day"));
+                                    sb._('</div>');
+                                    sb._('<div class="three columns">');
+                                        sb._($fn.getSelectMonth(prefix+'month'));
+                                    sb._('</div>');
+                                    sb._('<div class="six columns">');
+                                        sb._($fn.getInput(prefix+'year', false, "Year"));
+                                    sb._('</div>');
+                                sb._('</div>');
+                                sb._('<div class="row">');
+                                    sb._('<div class="twelve columns">');
+                                        sb._($fn.getInput(prefix+'city', "City/Town"));
+                                    sb._('</div>');
+                                sb._('</div>');
+                                sb._('<div class="row">');
+                                    sb._('<div class="twelve columns">');
+                                        sb._($fn.getInput(prefix+'state', "State/Province"));
+                                    sb._('</div>');
+                                sb._('</div>');
+                                sb._('<div class="row">');
+                                    sb._('<div class="twelve columns">');
+                                        sb._($fn.getInput(prefix+'country', "Country"));
+                                    sb._('</div>');
+                                sb._('</div>');
+                            sb._('</div>');
+                        sb._('</div>');
+                    sb._('</fieldset>');
+                    return sb.result();
+                },
                 crPhoto: function(){
                     var sb = $module.fn.stringBuffer();
                     sb._('<fieldset>');
                         sb._('<legend>Photo</legend>');
+
+                        sb._('<div class="row">');
+                            sb._('<div class="three columns">');
+                                sb._('<img id="thumb" width="102px" height="120px" src="')._($FamilyTreeTop.global.base)._('components/com_manager/modules/profile_editor/imgs/default-avatar.png">');
+                            sb._('</div>');
+                            sb._('<div class="nine columns">');
+                                sb._('<label>Upload a Picture of Yourself</label>');
+                                sb._('<input id="imageUpload" name="avatar" type="file" />');
+                                sb._('<button style="margin-left: 5px;" type="button" class="small secondary radius button">Save</button>');
+                            sb._('</div>');
+                        sb._('</div>');
+
+
+
                     sb._('</fieldset>');
                     return sb.result();
                 },
@@ -79,22 +176,18 @@
                         sb._('<legend>Basic Details</legend>');
                         sb._('<div class="row">');
                             sb._('<div class="six columns">');
-                                sb._('Gender <select name="gender"><option value="f">Female</option><option value="m">Male</option></select>');
+                                sb._($fn.getSelect("gender", {"f":"Female","m":"Male"}, "Gender"));
                             sb._('</div>');
                             sb._('<div class="six columns">');
-                                sb._('Live <select name="live"><option value="1">Yes</option><option value="0">No</option></select>');
+                                sb._($fn.getSelect("live", {"1":"Yes","0":"No"}, "Live"));
                             sb._('</div>');
                         sb._('</div>');
                         sb._('<div class="row">');
                             sb._('<div class="twelve columns">');
-                                sb._('<label>First Name:</label>');
-                                sb._('<input type="text" />');
-                                sb._('<label>Middle Name:</label>');
-                                sb._('<input type="text" />');
-                                sb._('<label>Last Name:</label>');
-                                sb._('<input type="text" />');
-                                sb._('<label>Know As:</label>');
-                                sb._('<input type="text" />');
+                                sb._($fn.getInput('first_name', 'First Name'));
+                                sb._($fn.getInput('middle_name', 'Middle Name'));
+                                sb._($fn.getInput('last_name', 'Last Name'));
+                                sb._($fn.getInput('know_as', 'Know As'));
                             sb._('</div>');
                         sb._('</div>')
                     sb._('</fieldset>');
@@ -102,25 +195,24 @@
                 },
                 crBirth: function(){
                     var sb = $module.fn.stringBuffer();
-                    sb._('<fieldset>');
-                        sb._('<legend>Birth</legend>');
-
-                    sb._('</fieldset>');
+                    sb._($fn.getLivingEventContent("Birth", "b_"));
                     return sb.result();
                 },
                 crDeath: function(){
                     var sb = $module.fn.stringBuffer();
-                    sb._('<fieldset>');
-                    sb._('<legend>Death</legend>');
-
-                    sb._('</fieldset>');
+                    sb._($fn.getLivingEventContent("Death", "d_"));
                     return sb.result();
                 },
                 crNotes: function(){
                     var sb = $module.fn.stringBuffer();
                     sb._('<fieldset>');
                     sb._('<legend>Notes</legend>');
-
+                        sb._('<div class="row">');
+                            sb._('<div class="twelve columns">');
+                                sb._('<textarea name="notes" placeholder=""></textarea>');
+                                sb._('<div style="display:none;">^</div>')
+                            sb._('</div>');
+                        sb._('</div>');
                     sb._('</fieldset>');
                     return sb.result();
                 },
@@ -128,19 +220,20 @@
                     var sb = $module.fn.stringBuffer();
                     sb._('<div class="row ftt-profile-edit-content">');
                         sb._('<div class="twelve columns">');
-                            sb._('<form>');
+                            sb._('<form class="custom">');
                                 sb._('<div class="row">');
                                     sb._('<div class="six columns">');
                                         sb._($fn.crPhoto());
                                         sb._($fn.crBasicDetails());
+                                        if($module.data.parse.is_death){
+                                            sb._($fn.crNotes());
+                                        }
                                     sb._('</div>');
                                     sb._('<div class="six columns">');
                                         sb._($fn.crBirth());
                                         if($module.data.parse.is_alive){
                                             sb._($fn.crNotes());
-                                            sb._($fn.crDeath());
                                         } else {
-                                            sb._($fn.crNotes());
                                             sb._($fn.crDeath());
                                         }
                                     sb._('</div>');
@@ -152,9 +245,10 @@
                 }
             }
             cont = $fn.element();
-            $(cont).find("#customDropdown").foundationCustomForms();
             $module.data.slide.hide();
             $module.data.slide.append(cont);
+            $(cont).foundationCustomForms();
+
         }
 
 
@@ -167,6 +261,8 @@
                 fn = false,
                 settings = false,
                 div = false,
+                headerBtns = [],
+                edit = false,
                 offsetParent = false;
 
             fn = {
@@ -204,15 +300,16 @@
                     }
                 },
                 appendHeaderButtons:function(cont){
-                    var btns, sb = $module.fn.stringBuffer();
+                    var sb = $module.fn.stringBuffer();
                     sb._('<div style="margin-left: 4px;margin-top: 4px;float:left;"><a class="tiny secondary radius button" href="#">Back</a></div>');
                     sb._('<div style="margin-right: 4px;margin-top: 4px;float:right;"><a class="tiny secondary radius button" href="#">Edit</a></div>');
-                    btns = $(sb.result());
-                    $(cont).find(".ftt-profile-editor-slide-header").append(btns);
-                    $(btns[0]).click(function(){
-                        $module.data.slide.close();
+                    headerBtns = $(sb.result());
+                    $(cont).find(".ftt-profile-editor-slide-header").append(headerBtns);
+                    $(headerBtns[0]).click(function(){
+                        $module.data.slide.back();
                     });
-                    $(btns[1]).click(function(){
+                    $(headerBtns[1]).click(function(){
+                        edit = true;
                         $module.fn.edit();
                     });
                 }
@@ -236,14 +333,25 @@
                     $module.data.slide = false;
                     $module.fn.echo();
                 },
+                back: function(){
+                    if(edit){
+                        $module.data.slide.visible();
+                    } else {
+                        $module.data.slide.close();
+                    }
+                },
                 append: function(cont){
                     $(div).find(".ftt-profile-editor-slide-content").append(cont);
                 },
                 hide: function(){
                     $(div).find(".ftt-profile-editor-slide-content ul").hide();
+                    $(headerBtns[1]).hide();
                 },
                 visible: function(){
+                    $(div).find(".ftt-profile-editor-slide-content .ftt-profile-edit-content").remove();
                     $(div).find(".ftt-profile-editor-slide-content ul").show();
+                    $(headerBtns[1]).show();
+                    edit = false;
                 },
                 content: function(boxes){
                     var ul = $("<ul></ul>");
@@ -1040,6 +1148,9 @@
             close:function(){
                 if(!$module.data.slide) return;
                 $module.data.slide.close();
+            },
+            init:function(renderType){
+                $module.data.renderType = renderType;
             }
         }
     }, true);
