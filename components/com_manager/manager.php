@@ -25,7 +25,7 @@ $builder = new FamilyTreeTopBuilderLibrary();
 $builder->setCss(array(
     'components/com_manager/js/foundation.min.css',
     'components/com_manager/js/foundation.fix.css',
-    'components/com_manager/js/jquery-ui-1.8.23.custom.css',
+    'components/com_manager/js/jquery-ui-1.10.0.custom.min.css',
     'components/com_manager/codebase/skins/dhtmlxlayout_dhx_skyblue.css',
     'components/com_manager/codebase/dhtmlxlayout.css',
     'components/com_manager/codebase/dhtmlxtree.css',
@@ -36,15 +36,12 @@ $builder->setCss(array(
     'components/com_manager/js/scrollbar.css',
     'components/com_manager/js/animatedborder.css',
     'components/com_manager/js/tdfriendselector.css',
-    'components/com_manager/modules/overlay/css/jmb.overlay.css',
     'components/com_manager/modules/header/css/jmb.header.css',
     'components/com_manager/modules/profile/css/jmb.profile.css',
     'components/com_manager/modules/profile_editor/css/ftt.profile_editor.css',
     'components/com_manager/modules/tooltip/css/jmb.tooltip.css',
     'components/com_manager/modules/invitation/css/jmb.invitation.css',
     'components/com_manager/modules/family_line/css/jmb.family.line.css',
-    'components/com_manager/modules/login/css/jmb.login.css',
-    'components/com_manager/modules/progressbar/css/jmb.progressbar.css',
     'components/com_manager/modules/feedback/css/jmb.feedback.css',
     'components/com_manager/modules/notifications/css/jmb.notifications.css'
 ));
@@ -60,7 +57,7 @@ $builder->setJs(array(
     'components/com_manager/codebase/dhtmlxtabbar.js',
     'components/com_manager/js/jquery-1.9.1.min.js',
     'components/com_manager/js/foundation.min.js',
-    'components/com_manager/js/jquery-ui-1.8.23.custom.min.js',
+    'components/com_manager/js/jquery-ui-1.10.0.custom.min.js',
     'components/com_manager/js/async.js',
     'components/com_manager/js/jit.js',
     'components/com_manager/js/jquery.bt.js',
@@ -71,7 +68,6 @@ $builder->setJs(array(
     'components/com_manager/js/tdfriendselector.js',
     'components/com_manager/js/jquery.tabSlideOut.v1.3.js',
     'components/com_manager/js/core.js',
-    'components/com_manager/modules/overlay/js/jmb.overlay.js',
     'components/com_manager/modules/header/js/jmb.header.js',
     'components/com_manager/modules/profile/js/jmb.profile.js',
     'components/com_manager/modules/profile_editor/js/ftt.profile_editor.js',
@@ -79,8 +75,6 @@ $builder->setJs(array(
     'components/com_manager/modules/media/js/jmb.media.js',
     'components/com_manager/modules/invitation/js/jmb.invitation.js',
     'components/com_manager/modules/family_line/js/jmb.family.line.js',
-    'components/com_manager/modules/login/js/jmb.login.js',
-    'components/com_manager/modules/progressbar/js/jmb.progressbar.js',
     'components/com_manager/modules/feedback/js/jmb.feedback.js',
     'components/com_manager/modules/notifications/js/jmb.notifications.js'
 ));

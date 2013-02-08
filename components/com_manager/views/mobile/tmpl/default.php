@@ -32,18 +32,14 @@ foreach ($info as $page){
     }
 }
 ?>
+<div id="_header"></div>
 <div class="row">
     <div class="twelve mobile-one columns">
-        <div id="_header"></div>
-    </div>
-</div>
-<div class="row">
-    <div class="twelve mobile-two columns">
         <div id="_nav"></div>
     </div>
 </div>
 <div class="row">
-    <div id="_content" class="four columns" role="content">
+    <div id="_content" class="twelve mobile-two columns" role="content">
     </div>
 </div>
 <div class="row">
@@ -69,7 +65,8 @@ foreach ($info as $page){
                 usermap:<?php echo json_encode($this->usermap); ?>,
                 app:<?php echo json_encode($this->app); ?>,
                 alias: '<?php echo $alias; ?>',
-                baseurl: '<?php echo $url; ?>'
+                baseurl: '<?php echo $url; ?>',
+                mobile: '<?php echo $this->mobile; ?>'
             }
 
             if(typeof(storage) != "undefined"){
@@ -99,5 +96,6 @@ foreach ($info as $page){
         $FamilyTreeTop.global.alias = data.alias;
         $FamilyTreeTop.global.loginType = parseInt(data.usermap.loginType);
         $FamilyTreeTop.fn.mod("RENDER").set("mobile", data.pageInfo);
+        $FamilyTreeTop.fn.mod("usertree").set(storage.usertree);
     })(window)
 </script>

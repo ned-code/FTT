@@ -43,6 +43,13 @@
         isTypeExist:function(name){
             return ("undefined" !== typeof(this.type[name]));
         },
+        extend: function(child, parent){
+            for(var method in parent){
+                if(!parent.hasOwnProperty(method)) continue;
+                child[method] = parent[method];
+            }
+            return child;
+        },
         get:function(name){
             var module = this;
             if(module.isTypeExist(name)){
@@ -86,7 +93,7 @@
             if(module.isTypeExist(name)){
                 var type = module.type[name];
                 if(module.isExist(type, name)){
-                    module.active[name] = module[type][name].object.apply({ fn:$ftt.fn, data:module[type][name].data, dev:$ftt.dev }, arguments);
+                    module.active[name] = module[type][name].object.apply({ fn:module.extend({}, $ftt.fn), data:module[type][name].data, dev:$ftt.dev }, arguments);
                     return true;
                 }
             }
@@ -119,6 +126,25 @@
         },
         call:function(module, classname, method, args, callback, mandatory){
             $FamilyTreeTop.fn.mod("ajax").call(module, classname, method, args, callback, mandatory);
+        },
+        user:function(){
+            var usertree;
+            if(usertree = $FamilyTreeTop.fn.mod("usertree")){
+                return usertree.user(true);
+            }
+            return false;
+        },
+        usertree:function(){
+          return $FamilyTreeTop.fn.mod("usertree");
+        },
+        facebook:function(){
+            return $FamilyTreeTop.fn.mod("facebook");
+        },
+        avatar:function(){
+            return $FamilyTreeTop.fn.mod("avatar");
+        },
+        photos:function(){
+            return $FamilyTreeTop.fn.mod("photos");
         },
         alert:function(message, callback){
             var object = jQuery('<div style="text-align: center;"></div>');

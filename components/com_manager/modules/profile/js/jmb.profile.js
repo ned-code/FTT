@@ -5,7 +5,6 @@
             settings = {},
             path = "/components/com_manager/modules/login/imgs/",
             notifications,
-            fb_logged,
             msg;
 
         msg = {
@@ -20,6 +19,7 @@
         }
 
         module.menu = null;
+        module.renderType = null;
 
         //init functions
         fn = {
@@ -28,32 +28,12 @@
                     callback(res);
                 }, true);
             },
-            create:function(){
-                var sb = storage.stringBuffer();
-                sb._('<div class="jmb-profile-cont">');
-                sb._('<table>');
-                sb._('<tr>');
-                sb._('<td><div class="avatar"></div></td>');
-                sb._('<td><div class="login"><span></span></div></td>');
-                sb._('<td><div class="settings"><div class="ftt-profile-button"></div></div></td>');
-                sb._('</tr>');
-                sb._('</table>');
-                sb._('</div>');
-                return $(sb.result());
-            },
-            connect:function(){
-                var sb = module.fn.stringBuffer();
-                sb._('<div class="jmb-profile-cont">');
-                sb._('<div class="facebook"><span>')._(msg.FTT_MOD_LOGIN_CONNECT_WITH_FACEBOOK)._('</span></div>');
-                sb._('</div>');
-                return $(sb.result());
-            },
-            langList:function(object){
+            langList:function(){
                 var st = module.fn.stringBuffer();
                 st._('<ul>');
                 $(settings.languages).each(function(i,el){
                     if(parseInt(el.published)){
-                        var def = (object.def)?object.def:settings.default_language;
+                        var def = (settings.default_language != null)?settings.default_language:$module.fn.usertree().getLocale();
                         if(el.lang_code == def){
                             st._('<li>');
                             st._('<div class="flag ')._(el.lang_code)._('">&nbsp;</div>');
@@ -127,30 +107,17 @@
                                     tree_id = data.tree_id,
                                     users = data.users,
                                     pull = data.pull;
-                                /*
-                                storage.profile.editor('edit', {
-                                    gedcom_id:gedcom_id,
-                                    owner_id:gedcom_id,
-                                    tree_id:tree_id,
-                                    pull:pull,
-                                    users:users,
-                                    events:{
-                                        afterEditorClose:function(p){
-                                            $(obj).removeClass('active');
-                                            settings.user_data.pull = p;
-                                            module.fn.mod("tooltip").update();
-
-                                        }
-                                    }
-                                });
-                                */
                             }
                             callback();
                         },
                         language:function(object, callback){
-                            var langBox = $('<div class="ftt-profile-language-list"></div>');
-                            $(langBox).append(fn.langList(object));
-                            $(langBox).dialog({
+                            var sb = module.fn.stringBuffer(), modal, selectRadioButton;
+                            selectRadioButton = function(){
+                                var input = $(this).parent().find('input').attr('checked', 'checked');
+                            }
+                            modal = $('<div class="ftt-profile-language-list"></div>');
+                            $(modal).append(fn.langList(object));
+                            $(modal).dialog({
                                 width:320,
                                 height:240,
                                 title: msg.FTT_MOD_LOGIN_LANGUAGE_DIALOG,
@@ -163,17 +130,14 @@
                                     callback();
                                 }
                             });
-                            $(langBox).parent().addClass('language');
-                            $(langBox).parent().css('top', '20px');
-                            var selectRadioButton = function(){
-                                var input = $(this).parent().find('input').attr('checked', 'checked');
-                            }
-                            $(langBox).find('div.flag').click(selectRadioButton);
-                            $(langBox).find('div.title').click(selectRadioButton);
-                            $(langBox).find('div.ftt-button-ok input').click(function(){
-                                var id = $(langBox).find('input:checked').val();
+                            $(modal).parent().addClass('language');
+                            $(modal).parent().css('top', '20px');
+                            $(modal).find('div.flag').click(selectRadioButton);
+                            $(modal).find('div.title').click(selectRadioButton);
+                            $(modal).find('div.ftt-button-ok input').click(function(){
+                                var id = $(modal).find('input:checked').val();
                                 var prgb = $('<div class="ftt-language-progressbar"><div><span>Loading...</span></div></div>');
-                                $(langBox).append(prgb);
+                                $(modal).append(prgb);
                                 fn.ajax('language', id, function(json){
                                     callback(id);
                                     setTimeout(function(){
@@ -181,7 +145,7 @@
                                     }, 1000)
                                 });
                                 return false;
-                            })
+                            });
                         },
                         to_facebook:function(object, callback){
                             window.top.location.href = storage.app.link;
@@ -211,23 +175,6 @@
                 }
 
             },
-            login:function(cont){
-                var json;
-                var div = $("<div class='ftt-preloader-alert'><div>You are now being logged in using your Facebook credentials</div></div>");
-                $(div).hide();
-                $("#_profile").append(div);
-                $(cont).find('div.facebook span').click(function(){
-                    FB.login(function(response){
-                        if(response.authResponse){
-                            storage.alert(div, function(){});
-                            $(div).show();
-                            window.location = storage.baseurl+'index.php?option=com_jfbconnect&task=loginFacebookUser&return=myfamily';
-                        } else {
-                            alert('Login failed.')
-                        }
-                    }, {scope: jfbcRequiredPermissions});
-                });
-            },
             click:function(cont){
                 var menu = this.menu();
                 module.menu = menu;
@@ -247,89 +194,119 @@
                     return false;
                 });
             },
-            setName:function(data, cont){
-                var	box = $(cont).find('div.login span'), parse;
-                $(box).html(data.name);
-            },
-            setAvatar:function(data ,cont){
-                if(typeof(data) != 'undefined'  && typeof(data.facebookId) != 'undefined'){
-                    var	box = $(cont).find('div.avatar');
-                    $(box).html('<img width="22px" height="22px" src="http://graph.facebook.com/'+data.facebookId+'/picture">');
+            append:function(parent, cont, c){
+                if($(parent).length != 0){
+                    $(parent).append(cont);
+                    if("function" === typeof(c)){
+                        c.call(cont);
+                    }
+                } else {
+                    setTimeout(function(){
+                        fn.append(parent, cont, c);
+                    }, 250);
                 }
             },
-            getAvatar:function(object){
-                return storage.usertree.avatar.get({
-                    object:object,
-                    width:50,
-                    height:50
+            renderFamous: function(renderType){
+                var user, cont, sb = module.fn.stringBuffer();
+                if( !(user = module.fn.user()) ) return false;
+                sb._('<div class="jmb-profile-famous-cont">');
+                    sb._('<table>');
+                        sb._('<tr>');
+                            sb._('<td>');
+                                sb._('<div class="text"><span>')._(msg.FTT_MOD_LOGIN_FF_LOGGED)._(':</span></div>');
+                            sb._('</td>');
+                            sb._('<td rowspan="3">');
+                                sb._('<div class="avatar">')._(module.fn.avatar().get(user.gedcom_id, 50, 50))._('</div>');
+                            sb._('</td>');
+                        sb._('</tr>');
+                        sb._('<tr><td><div class="name"><span>')._(user.name)._('</span></div></td></tr>');
+                        sb._('<tr><td><div class="logout"><span>')._(msg.FTT_MOD_LOGIN_FF_EXIT)._('</span></div></td></tr>');
+                    sb._('</table>');
+                sb._('</div>');
+                cont = $(sb.result());
+                module.fn.photos().fixSize({
+                    object: cont,
+                    width: 50,
+                    height: 50
                 });
+                $(cont).find('div.logout span').click(function(){
+                    fn.ajax('famous', 'logout', function(res){
+                        window.location.href = $FamilyTreeTop.global.base + 'index.php/famous-family'
+                    });
+                });
+                fn.append('div.jmb-header-container', cont);
+            },
+            renderFacebook: function(renderType){
+                var sb = module.fn.stringBuffer(), user = module.fn.user(), cont;
+                //create container
+                sb._('<div class="jmb-profile-cont">');
+                    sb._('<table>');
+                        sb._('<tr>');
+                            sb._('<td><div class="avatar"></div></td>');
+                            sb._('<td><div class="login"><span></span></div></td>');
+                            sb._('<td><div class="settings"><div class="ftt-profile-button"></div></div></td>');
+                        sb._('</tr>');
+                    sb._('</table>');
+                sb._('</div>');
+                cont = $(sb.result());
+                //set user param
+                $(cont).find('.login span').html(user.name);
+                $(cont).find('.avatar').html(module.fn.avatar().get(user.gedcom_id, 22, 22));
+                module.fn.photos().fixSize({
+                    object: cont,
+                    width: 22,
+                    height: 22
+                });
+                fn.click(cont);
+                fn.append("#_profile", cont);
+            },
+            renderConnect: function(renderType){
+                var sb = module.fn.stringBuffer(), cont;
+                sb._('<div class="jmb-profile-cont">');
+                sb._('<div class="facebook"><span>')._(msg.FTT_MOD_LOGIN_CONNECT_WITH_FACEBOOK)._('</span></div>');
+                sb._('</div>');
+                cont = $(sb.result());
+                $(cont).find(".facebook span").click(function(){
+                    var facebook;
+                    if(facebook = module.fn.facebook()){
+                        facebook.login(function(response){
+                            if(response.authResponse){
+                                window.location = storage.baseurl+'index.php?option=com_jfbconnect&task=loginFacebookUser&return=myfamily';
+                            } else {
+                                alert('Login failed.')
+                            }
+                        });
+                    }
+                });
+                fn.append("#_profile", cont);
+            },
+            createBox:function(renderType){
+                if($FamilyTreeTop.global.loginType){
+                    fn.renderFamous();
+                } else if(module.fn.usertree() && module.fn.usertree().isGuest()){
+                    fn.renderConnect();
+                } else if(module.fn.usertree() && module.fn.usertree().isUser()){
+                    fn.renderFacebook();
+                }
             },
             user:function(callback){
-                var json, object;
+                var json;
                 fn.ajax('user', null, function(json){
                     if(!json) callback(false);
                     settings.languages = json.languages;
                     settings.default_language = json.default_language;
-                    settings.user_data = json.data;
                     msg = json.msg;
-
-                    if(json.user.facebookId != 0){
-                        storage.usertree.user = json.user;
-                        callback(json.user);
-                    } else {
-                        callback(false);
-                    }
+                    callback();
                 });
             },
-            famous:function(){
-                if(storage.usertree.gedcom_id == null) return false;
-                var object = storage.usertree.pull[storage.usertree.gedcom_id];
-                var	sb = storage.stringBuffer(), parse = storage.usertree.parse(object), htmlObject;
-                sb._('<div class="jmb-profile-famous-cont">');
-                sb._('<table>');
-                sb._('<tr><td><div class="text"><span>')._(msg.FTT_MOD_LOGIN_FF_LOGGED)._(':</span></div></td><td rowspan="3"><div class="avatar">')._(fn.getAvatar(object))._('</div></td></tr>');
-                sb._('<tr><td><div class="name"><span>')._(parse.name)._('</span></div></td></tr>');
-                sb._('<tr><td><div class="logout"><span>')._(msg.FTT_MOD_LOGIN_FF_EXIT)._('</span></div></td></tr>');
-                sb._('</table>');
-                sb._('</div>');
-                htmlObject = $(sb.result());
-                $(htmlObject).find('div.logout span').click(function(){
-                    fn.ajax('famous', 'logout', function(res){
-                        window.location.href = storage.baseurl + 'index.php/famous-family'
-                    });
-                });
-                $('div.jmb-header-container').append(htmlObject);
-            },
-            facebook:function(data){
-                if(!data) return false;
-                var cont = fn.create();
-                fn.setName(data, cont);
-                fn.setAvatar(data, cont);
-                fn.click(cont);
-                $("#_profile").append(cont);
-            },
-            createBox:function(data){
-                if($FamilyTreeTop.global.loginType){
-                    fn.famous();
-                }
-                if(data){
-                    fn.facebook(data);
-                } else {
-                    var cont = fn.connect();
-                    fn.login(cont);
-                    $("#_profile").append(cont);
-                }
-            },
-            init:function(renderType){
-                fn.user(function(data){
-                    fb_logged = $(document.body).attr('_fb');
-                    setTimeout(function(){
-                        fn.createBox(data)
-                    }, 1);
+            init:function(){
+                fn.user(function(){
+                    fn.createBox()
                 });
             }
         }
 
+        /*
         if(window!=window.top){
             module.init = function(callback){
                 function _ajax_ (url, callback){
@@ -363,6 +340,13 @@
             module.init = fn.init;
         }
         return this;
+        */
+        return {
+            init: function(renderType){
+                module.renderType = renderType;
+                fn.init();
+            }
+        }
     }, true);
 })(jQuery, $FamilyTreeTop);
 /*

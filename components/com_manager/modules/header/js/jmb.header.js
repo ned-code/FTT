@@ -106,7 +106,7 @@
                     jQuery(cont).find('div.jmb-header-expand').click(function(){
                         var src;
                         if(fn.get.is_iframe()){
-                            src = storage.baseurl+"index.php/myfamily";
+                            src = $FamilyTreeTop.global.base+"index.php/myfamily";
                         } else {
                             src = storage.app.link;
                         }

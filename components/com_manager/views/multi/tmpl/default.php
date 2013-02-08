@@ -80,7 +80,8 @@ foreach ($info as $page){
                 usermap:<?php echo json_encode($this->usermap); ?>,
                 app:<?php echo json_encode($this->app); ?>,
                 alias: '<?php echo $alias; ?>',
-                baseurl: '<?php echo $url; ?>'
+                baseurl: '<?php echo $url; ?>',
+                mobile: '<?php echo $this->mobile; ?>'
             }
 
             if(typeof(storage) != "undefined"){
@@ -116,5 +117,6 @@ foreach ($info as $page){
         $FamilyTreeTop.global.alias = data.alias;
         $FamilyTreeTop.global.loginType = parseInt(data.usermap.loginType);
         $FamilyTreeTop.fn.mod("RENDER").set("desctop", data.pageInfo);
+        $FamilyTreeTop.fn.mod("usertree").set(storage.usertree);
     })(window)
 </script>

@@ -844,8 +844,9 @@
     vertical-align: top;
 }
 .jmb-profile-cont div.login {
-    margin-left: 3px;
     cursor: pointer;
+    padding-left: 3px;
+    padding-top: 5px;
 }
 .jmb-profile-cont div.login:hover {
     background-color: #86af67;
@@ -884,7 +885,7 @@
     margin-left: -153px;
     padding: 10px;
     position: absolute;
-    width: 155px;
+    width: 175px;
 }
 .jmb-profile-cont div.settings div.menu div{
     background: url("../image/list.png") no-repeat scroll 3px 3px transparent;

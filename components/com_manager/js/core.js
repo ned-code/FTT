@@ -1297,9 +1297,6 @@
                     });
                 },
                 mobileRender:function(settings){
-                    /*
-                     storage.ntf = new JMBNotifications();
-                     */
                     $FamilyTreeTop.fn.mod("profile_editor").init("mobile");
                     $FamilyTreeTop.fn.mod("invitation").init("mobile");
                     $FamilyTreeTop.fn.mod("tooltip").init("mobile");
@@ -1511,8 +1508,8 @@
             getChange: function(settings, element){
                 var x1 = $(element).naturalWidth(),
                     y1 = $(element).naturalHeight(),
-                    x2 = parseInt(settings.width),
-                    y2 = parseInt(settings.height),
+                    x2 = parseInt(settings.width - 2),
+                    y2 = parseInt(settings.height - 2),
                     ratio, size, shift;
 
                 if(x1 > x2 && y1 > y2){
@@ -1573,12 +1570,12 @@
                     //show image
                     $(el).show().parent();
 
-                    //create block
-                    div = $('<div style="border-radius:5px; overflow:hidden; position:relative;" ></div>');
-                    $(div).css('width', settings.width+'px').css('height', settings.height+'px');
-
                     //get ratio
                     change = fn.getChange(settings, el);
+
+                    //create block
+                    div = $('<div class="ftt-photos-fix-image-box" ></div>');
+                    $(div).css('width', (settings.width-2)+'px').css('height', (settings.height-2)+'px');
 
                     $(el).css('position', 'relative').css('width', change[0][0]+'px').css('height', change[0][1]+'px');
                     $(el).css(change[1].type, change[1].value+'px');
@@ -1636,6 +1633,452 @@
                 } else {
                     return '<img width="'+w+'" height="'+h+'" src="'+$fn.getMediaPath(parse, media)+'" />';
                 }
+            }
+        }
+    }, true);
+})(jQuery, $FamilyTreeTop);
+
+
+(function($, $ftt){
+    $ftt.module.create("MOD_SYS_USERTREE", function(){
+        var $module = this,
+            $fn = {
+                parse:function(object){
+                    var	user = (object)?object.user:false,
+                        families = (object)?object.families:false,
+                        media = (object)?object.media:false,
+                        date_num = {"day":0,"month":1,"year":2},
+                        _month = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+                    if('undefined' === typeof(object)) return false;
+                    return {
+                        gedcom_id:user.gedcom_id,
+                        facebook_id:user.facebook_id,
+                        first_name:(user.first_name!=null)?user.first_name.replace('@P.N.', ''):'',
+                        middle_name:(user.middle_name!=null)?user.middle_name:'',
+                        last_name:(user.last_name!=null)?user.last_name.replace('@N.N.', ''):'',
+                        nick:(user.nick!=null)?user.nick:'',
+                        gender:user.gender,
+                        relation:(user.relation!=null)?user.relation:false,
+                        default_family:(user.default_family!='0')?user.default_family:false,
+                        avatar_id:(function(){
+                            var avatar = (media!=null)?media.avatar:null;
+                            if(avatar!=null){
+                                return avatar.media_id;
+                            }
+                            return 0;
+                        })(),
+                        getPhotoIndex:function(media_id){
+                            if(media==null) return false;
+                            for(var index in media.photos){
+                                if(media.photos[index].media_id == media_id){
+                                    return index;
+                                }
+                            }
+                        },
+                        connection:function(){
+                            var conn = [], cn, key, object, n_rel, sizeof, rel, ret = [], colors = {F:["#FFEAF1","#FF77A4"],M:["#ECECFF","#5C9ADE"]};
+                            if(cn = user.connection){
+                                for(key in cn){
+                                    if(!cn.hasOwnProperty(key)) continue;
+                                    object = $module.data.usertree[cn[key].id];
+                                    n_rel = object.user.n_relation;
+                                    if(n_rel != 1 && n_rel != 3){
+                                        conn.push(object);
+                                    }
+                                }
+                            }
+                            if(conn.length > 1){
+                                sizeof = conn.length - 1;
+                                for(key in conn){
+                                    object = conn[key];
+                                    rel = object.user.relation;
+                                    if(key == sizeof){
+                                        ret.pop();
+                                        if(parseInt(object.user.blood)){
+                                            ret.push(" > ");
+                                        } else {
+                                            ret.push(" + ");
+                                        }
+                                        ret.push("<span style='color:"+colors[object.user.gender][1]+";'><b>" + object.user.first_name + "</b></span>");
+                                    } else {
+                                        ret.push("<span style='color: blue;'>"+object.user.first_name+"</span>");
+                                        ret.push(" (" + rel + ") ");
+                                        ret.push("> ");
+                                    }
+
+                                }
+                            }
+                            return ret.join("");
+                        },
+                        name:(function(){
+                            return getFullName(getFirstName(user), getLastName(user));
+                            function getName(u, t, r){
+                                if(u[t] != null && u[t].length != 0){
+                                    return user[t].replace(r, '');
+                                }
+                                return '';
+                            }
+                            function getFirstName(u){
+                                return getName(u, 'first_name', '@P.N.');
+                            }
+                            function getLastName(u){
+                                return getName(u, 'last_name', '@N.N.');
+                            }
+                            function getShortLastName(l){
+                                if(l.length <= 27) return l;
+                                var string = '';
+                                for(var i = 0 ; i <= 27 ; i++){
+                                    string += l[i];
+                                }
+                                string += '...';
+                                return string;
+                            }
+                            function getFullName(first, last){
+                                var fName = [first, last].join(' ');
+                                if(fName.length > 30){
+                                    return [(first.length!=0)?first[0]+'.':'', getShortLastName(last)].join('');
+                                } else {
+                                    return fName;
+                                }
+                            }
+                        })(),
+                        full_name:(function(){
+                            return getFullName(getFirstName(user), getMiddleName(user), getLastName(user));
+                            function getName(u, t, r){
+                                if(u[t] != null && u[t].length != 0){
+                                    if(r){
+                                        return user[t].replace(r, '');
+                                    } else {
+                                        return user[t];
+                                    }
+
+                                }
+                                return '';
+                            }
+                            function getFirstName(u){
+                                return getName(u, 'first_name', '@P.N.');
+                            }
+                            function getMiddleName(u){
+                                return getName(u, 'middle_name', false);
+                            }
+                            function getLastName(u){
+                                return getName(u, 'last_name', '@N.N.');
+                            }
+                            function getShort(l, len){
+                                if(l.length <= len) return l;
+                                var string = '';
+                                for(var i = 0 ; i <= len ; i++){
+                                    string += l[i];
+                                }
+                                string += '...';
+                                return string;
+                            }
+                            function getInitials(first, middle){
+                                var f = (first.length!=0)?first[0]+'.':'';
+                                var m = (middle.length!=0)?middle[0]+'.':'';
+                                return [f,m].join('');
+                            }
+                            function getFullName(first, middle, last){
+                                var fName = [first,middle,last].join(' ');
+                                if(fName.length > 30){
+                                    if(first.length != 0 && middle.length != 0 && last.length != 0){
+                                        return [getInitials(first, middle), getShort(last, 27)].join('');
+                                    } else if(first.length != 0 && last.length != 0) {
+                                        return [getInitials(first, ''), getShort(last, 27)].join('');
+                                    } else if(first.length != 0){
+                                        return getShort(first, 15);
+                                    } else {
+                                        return getShort(fName, 15);
+                                    }
+                                } else {
+                                    return fName;
+                                }
+                            }
+                        })(),
+                        nick:(function(){
+                            var	nick = user.nick,
+                                first_name = user.first_name.replace('@P.N.', '');
+                            var name = (nick!=null)?nick:first_name;
+                            if(name.length > 30){
+                                var string = '';
+                                for(var i = 0 ; i <= 27 ; i++){
+                                    string += name[i];
+                                }
+                                string += '...';
+                                return string;
+                            } else {
+                                return name;
+                            }
+                        })(),
+                        is_editable:(function(){
+                            if("GUEST" == $module.data.usermap.permission){
+                                return false;
+                            } else {
+                                return user.facebook_id == '0' || user.gedcom_id == $module.data.usermap.gedcomId;
+                            }
+                        })(),
+                        is_deletable:(user.creator == $module.data.usermap.gedcomId || user.gedcom_id == $module.data.usermap.gedcomId),
+                        is_birth:(function(){
+                            var event = user['birth'];
+                            if(event != null){
+                                var date = event.date;
+                                return ( date[0]!=null || date[1] != null || date[2] != null )?1:0;
+                            }
+                            return 0;
+                        })(),
+                        is_death:(function(){
+                            var event = user['death'];
+                            var birth = user['birth'];
+                            if(event != null){
+                                return true;
+                            }
+                            if(birth != null){
+                                var birthDate = birth.date;
+                                if(birthDate != null && birthDate[2] != null){
+                                    var year = (new Date()).getFullYear() - birthDate[2];
+                                    if(year > 120){
+                                        return true;
+                                    }
+                                }
+                            }
+                            return false;
+                        })(),
+                        is_alive:user.is_alive,
+                        is_married_event:function(id){
+                            return (families[id]&&families[id].marriage!=null)?1:0;
+                        },
+                        is_married_date_exist:function(id){
+                            var family = families[id];
+                            if(family&&family.marriage!=null){
+                                var date = family.marriage.date;
+                                return (date[0]!=null||date[1]!=null||date[2]!=null);
+                            }
+                            return false;
+                        },
+                        is_divorce_event:function(id){
+                            return (families[id]&&families[id].divorce!=null)?1:0;
+                        },
+                        family_line:(function(){
+                            if(!user) return '';
+                            var fl, ml;
+                            fl = user.is_father_line;
+                            ml = user.is_mother_line;
+                            if(fl || ml){
+                                if(fl && ml){
+                                    return '';
+                                } else {
+                                    return (fl)?" (father side) ":" (mother side) ";
+                                }
+                            }
+                            return '';
+                        })(),
+                        marr:function(id, type, sub){
+                            var family = families[id];
+                            if(family){
+                                var event = family.marriage;
+                                if(event != null && type){
+                                    var evType = event[type];
+                                    if(evType){
+                                        if(!sub){
+                                            return evType;
+                                        } else{
+                                            switch(type){
+                                                case "date":
+                                                    return (evType[sub] != null) ? evType[sub] : '';
+                                                    break;
+
+                                                case "place":
+                                                    return (evType[0]!= null && evType[0][sub] != null) ? evType[0][sub] : '';
+                                                    break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            return '';
+                        },
+                        divorce:function(id, type, sub){
+                            var family = families[id];
+                            if(family){
+                                var event = family.divorce;
+                                if(event != null && type){
+                                    var evType = event[type];
+                                    if(evType){
+                                        if(!sub){
+                                            return evType;
+                                        } else{
+                                            switch(type){
+                                                case "date":
+                                                    return evType[sub] != null ? evType[sub] : '';
+                                                    break;
+
+                                                case "place":
+                                                    return evType[0][sub] != null ? evType[0][sub] : '';
+                                                    break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            return '';
+                        },
+                        birth:function(f){
+                            var event = user['birth'];
+                            if(event!=null){
+                                var date = event.date;
+                                if(f){
+                                    return (date[date_num[f]]!=null)?date[date_num[f]]:'';
+                                }
+                                return date;
+                            }
+                            return '';
+                        },
+                        death:function(f){
+                            var event = user['death'];
+                            if(event!=null){
+                                var date = event.date;
+                                if(f){
+                                    return (date[date_num[f]]!=null)?date[date_num[f]]:'';
+                                }
+                                return date;
+                            }
+                            return '';
+                        },
+                        turns:(function(){
+                            var birth = user['birth'];
+                            var death = user['death'];
+                            if(birth != null && death != null){
+                                var birthDate = birth.date;
+                                var deathDate = death.date;
+                                if(birthDate && deathDate){
+                                    if(birthDate[2] != null && deathDate[2] != null){
+                                        return deathDate[2] - birthDate[2];
+                                    }
+                                }
+                            } else if(birth != null){
+                                var birthDate = birth.date;
+                                if(birthDate && birthDate[2] != null){
+                                    return (new Date()).getFullYear() - birthDate[2];
+                                }
+                            }
+                            return 0;
+                        })(),
+                        date:function(event, sub){
+                            var 	event = user[event],
+                                date = (event!=null)?event.date:null;
+                            if(date!=null){
+                                if(sub){
+                                    return (date[sub])?date[sub]:0;
+                                } else {
+                                    return [date[0],_month[date[1]-1],date[2]].join(' ');
+                                }
+                            }
+                            return '';
+                        },
+                        place:function(type, sub){
+                            var event = user[type];
+                            if(event!=null){
+                                var place = event.place;
+                                if(place!=null){
+                                    return (!sub)?place[0]:((place[0][sub]!=null)?place[0][sub]:'');
+                                }
+                            }
+                            return '';
+                        },
+                        getPlaceName:function(type){
+                            var event = user[type];
+                            if(event != null){
+                                var place = (event.place != null && event.place.length != 0)?event.place[0]:null;
+                                if(place!= null){
+                                    var name = place.place_name;
+                                    if(name != null && name != ''){
+                                        return name.split(',').join(', ');
+                                    }
+                                }
+                            }
+                            return '';
+                        },
+                        getPlaceString:function(type){
+                            var event = user[type];
+                            if(event != null){
+                                var place = (event.place != null && event.place.length != 0)?event.place[0]:null;
+                                if(place!= null){
+                                    var city = place.city;
+                                    var country = place.country;
+                                    if(city != null && country != null){
+                                        return '(' + city + ', ' + country + ')';
+                                    } else if(city != null || country != null){
+                                        return '(' + (city || country) + ')';
+                                    }
+                                }
+                            }
+                            return '';
+                        }
+                    }
+                }
+            };
+
+        $module.data.usertree = null;
+        $module.data.usermap = null;
+        $module.data.friends = null;
+        $module.data.users = null;
+
+
+        return {
+            isGuest: function(){
+                if("undefined" !== typeof($module.data.usermap)){
+                    return $module.data.usermap.guest;
+                }
+                return true;
+
+            },
+            isUser: function(){
+                if("undefined" !== typeof($module.data.usermap)){
+                    if($module.data.usermap.gedcomId != 0){
+                        return true;
+                    }
+                }
+                return false;
+            },
+            set: function(data){
+                $module.data.usertree = data.pull;
+                $module.data.usermap = data.usermap;
+                $module.data.users = data.users;
+            },
+            get: function(id){
+                if("undefined" !== typeof($module.data.usertree[id])){
+                    return $fn.parse($module.data.usertree[id]);
+                }
+                return false;
+            },
+            getLocale:function(){
+                if("undefined" !== typeof($module.data.usermap) && "undefined" !== typeof($module.data.usermap.facebookFields)){
+                    return $module.data.usermap.facebookFields.locale;
+                }
+                return "en-GB";
+            },
+            user: function(parse){
+                if("undefined" !== typeof($module.data.usermap) && $module.data.usermap.gedcomId != 0){
+                    if("undefined" !== typeof(parse)){
+                        return $fn.parse($module.data.usertree[$module.data.usermap.gedcomId]);
+                    }
+                }
+                return false;
+            }
+        }
+    }, true);
+})(jQuery, $FamilyTreeTop);
+
+(function($, $ftt){
+    $ftt.module.create("MOD_SYS_FACEBOOK", function(){
+        var $module = this,
+            $fn = {
+
+            };
+
+        return {
+            login:function(callback){
+                FB.login(callback, {scope: jfbcRequiredPermissions});
             }
         }
     }, true);

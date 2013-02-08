@@ -238,7 +238,11 @@ div.buttons span {
     display: inline-block;
     margin: 3px;
 }
-.ftt-media-photos-container ul li img {
-    max-width: none;
+.ftt-photos-fix-image-box {
+    overflow:hidden;
+    position:relative;
+}
+.ftt-photos-fix-image-box img {
+    max-width: none !important;
 }
 
