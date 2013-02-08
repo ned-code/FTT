@@ -8,7 +8,10 @@
         $module.data.msg = {}
         $module.data.callbacks = {};
         $module.data.renderType = 'desctop';
-        $module.data.avatarSize = [108, 120];
+        $module.data.avatarSize = {
+            desctop:[108, 120],
+            mobile:[50,55]
+        };
         $module.data.slide = false;
         $module.data.gedcom_id = false;
         $module.data.object = false;
@@ -87,7 +90,7 @@
          * SET DATA IN EDIT FORM
          */
         $module.mod.setData = function(cont){
-            var birth, death, $fn = {
+            var birth, death, asize, $fn = {
                 set: function(type, name, value){
                     if("input" === type){
                         var el = $(cont).find(type+'[name="'+name+'"]');
@@ -103,10 +106,19 @@
                         $(img).remove();
                         $(nimg).attr('id', name);
                     }
+                },
+                getPlace: function(type, el){
+                    var place, placeName, split;
+                    place = $module.data.parse.place(type);
+                    if("undefined" != place[el]){
+                        return place[el];
+                    }
+                    return "";
                 }
             }
             //photo
-            $fn.set('img', 'avatar', $FamilyTreeTop.fn.mod('avatar').get($module.data.parse.gedcom_id, $module.data.avatarSize[0], $module.data.avatarSize[1]));
+            asize = $module.data.avatarSize[$module.data.renderType];
+            $fn.set('img', 'avatar', $FamilyTreeTop.fn.mod('avatar').get($module.data.parse.gedcom_id, asize[0], asize[1]));
 
             //basic details
             $fn.set('select', 'gender', $module.data.parse.gender.toLowerCase());
@@ -121,6 +133,9 @@
             $fn.set('input', 'b_day', birth[0]);
             $fn.set('select', 'b_month', birth[1]);
             $fn.set('input', 'b_year', birth[2]);
+            $fn.set('input', 'b_city', $fn.getPlace("birth", "city"));
+            $fn.set('input', 'b_state', $fn.getPlace("birth", "state"));
+            $fn.set('input', 'b_country', $fn.getPlace("birth", "country"));
 
             //death
             if($module.data.parse.is_death){
@@ -128,6 +143,9 @@
                 $fn.set('input', 'd_day', death[0]);
                 $fn.set('select', 'd_month', death[1]);
                 $fn.set('input', 'd_year', death[2]);
+                $fn.set('input', 'd_city', $fn.getPlace("death", "city"));
+                $fn.set('input', 'd_state', $fn.getPlace("death", "state"));
+                $fn.set('input', 'd_country', $fn.getPlace("death","country"));
             }
             //notes
         }
@@ -136,23 +154,19 @@
         * EDIT
          */
         $module.mod.edit = function(){
-            var cont, $fn = {
+            var cont, asize, $fn = {
                 getSelectMonth:function(name){
-                    var sb = $module.fn.stringBuffer();
-                    sb._('<select name="')._(name)._('">');
-                        sb._('<option value="0">Month</option>');
-                        sb._('<option value="1">January</option>');
-                        sb._('<option value="2">February</option>');
-                        sb._('<option value="3">March</option>');
-                        sb._('<option value="4">April</option>');
-                        sb._('<option value="5">May</option>');
-                        sb._('<option value="6">June</option>');
-                        sb._('<option value="7">July</option>');
-                        sb._('<option value="8">August</option>');
-                        sb._('<option value="9">September</option>');
-                        sb._('<option value="10">October</option>');
-                        sb._('<option value="11">November</option>');
-                        sb._('<option value="12">December</option>');
+                    var sb = $module.fn.stringBuffer(),
+                        desctop = ["Month","January","February","March","April","May","June","July","August","September","November","December"],
+                        mobile = ["Day", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
+                        array, i;
+
+                    array = $module.data.renderType == "desctop" ? desctop : mobile;
+
+                    sb._('<select style="')._(($module.data.renderType=="mobile")?"padding-bottom: 6px;padding-top: 8px;":"")._('" name="')._(name)._('">');
+                        for(i = 0 ; i <= 12 ; i++){
+                            sb._('<option value="')._(i)._('">')._(array[i])._('</option>');
+                        }
                     sb._('</select>');
                     return sb.result();
                 },
@@ -164,7 +178,11 @@
                     sb._('<select name="')._(name)._('">');
                         for(key in options){
                             if(!options.hasOwnProperty(key)) continue;
-                            option = options[key];
+                            if($module.data.renderType == "desctop"){
+                                option = options[key];
+                            } else if($module.data.renderType == "mobile") {
+                                option = options[key][0];
+                            }
                             sb._('<option value="')._(key)._('">')._(option)._('</option>');
                         }
                     sb._('</select>');
@@ -186,30 +204,30 @@
                     var sb = $module.fn.stringBuffer();
                     sb._('<fieldset>');
                         sb._('<legend>')._(legend)._('</legend>');
-                        sb._('<div class="row">');
+                        sb._('<div class="row collapse">');
                             sb._('<div class="twelve mobile-four columns">');
-                                sb._('<div class="row">');
-                                    sb._('<div class="two mobile-one columns">');
+                                sb._('<div class="row collapse">');
+                                    sb._('<div class="four mobile-one columns">');
                                         sb._($fn.getInput(prefix+'day', false, "Day"));
                                     sb._('</div>');
                                     sb._('<div class="three mobile-one columns">');
                                         sb._($fn.getSelectMonth(prefix+'month'));
                                     sb._('</div>');
-                                    sb._('<div class="six mobile-two columns">');
+                                    sb._('<div class="five mobile-two columns">');
                                         sb._($fn.getInput(prefix+'year', false, "Year"));
                                     sb._('</div>');
                                 sb._('</div>');
-                                sb._('<div class="row">');
+                                sb._('<div class="row collapse">');
                                     sb._('<div class="twelve mobile-four columns">');
                                         sb._($fn.getInput(prefix+'city', "City/Town"));
                                     sb._('</div>');
                                 sb._('</div>');
-                                sb._('<div class="row">');
+                                sb._('<div class="row collapse">');
                                     sb._('<div class="twelve mobile-four columns">');
                                         sb._($fn.getInput(prefix+'state', "State/Province"));
                                     sb._('</div>');
                                 sb._('</div>');
-                                sb._('<div class="row">');
+                                sb._('<div class="row collapse">');
                                     sb._('<div class="twelve mobile-four columns">');
                                         sb._($fn.getInput(prefix+'country', "Country"));
                                     sb._('</div>');
@@ -223,20 +241,14 @@
                     var sb = $module.fn.stringBuffer();
                     sb._('<fieldset>');
                         sb._('<legend>Photo</legend>');
-
-                        sb._('<div class="row">');
-                            sb._('<div class="three mobile-one columns">');
+                        sb._('<div class="row collapse">');
+                            sb._('<div class="six  mobile-two columns">');
                                 sb._('<img id="avatar" style="max-width:none;" src="')._($FamilyTreeTop.global.base)._('components/com_manager/modules/profile_editor/imgs/default-avatar.png">');
                             sb._('</div>');
-                            sb._('<div class="nine mobile-three columns">');
-                                sb._('<label style="margin-left: 5px;">Upload a Picture of Yourself</label>');
-                                sb._('<input style="margin-left: 5px;" type="file" />');
-                                sb._('<button id="upload" style="margin-left: 5px;" type="button" class="small secondary radius button">Upload</button>');
+                            sb._('<div class="six mobile-two columns">');
+                                sb._('<button id="upload" type="button" class="small secondary radius button">Upload</button>');
                             sb._('</div>');
                         sb._('</div>');
-
-
-
                     sb._('</fieldset>');
                     return sb.result();
                 },
@@ -244,7 +256,7 @@
                     var sb = $module.fn.stringBuffer();
                     sb._('<fieldset>');
                         sb._('<legend>Basic Details</legend>');
-                        sb._('<div class="row">');
+                        sb._('<div class="row collapse">');
                             sb._('<div class="six mobile-two columns">');
                                 sb._($fn.getSelect("gender", {"f":"Female","m":"Male"}, "Gender"));
                             sb._('</div>');
@@ -252,7 +264,7 @@
                                 sb._($fn.getSelect("live", {"1":"Yes","0":"No"}, "Live"));
                             sb._('</div>');
                         sb._('</div>');
-                        sb._('<div class="row">');
+                        sb._('<div class="row collapse">');
                             sb._('<div class="twelve mobile-four columns">');
                                 sb._($fn.getInput('first_name', 'First Name'));
                                 sb._($fn.getInput('middle_name', 'Middle Name'));
@@ -277,7 +289,7 @@
                     var sb = $module.fn.stringBuffer();
                     sb._('<fieldset>');
                     sb._('<legend>Notes</legend>');
-                        sb._('<div class="row">');
+                        sb._('<div class="row collapse">');
                             sb._('<div class="twelve mobile-four columns">');
                                 sb._('<textarea name="notes" placeholder=""></textarea>');
                                 sb._('<div style="display:none;">^</div>')
@@ -291,21 +303,41 @@
                     sb._('<div class="row ftt-profile-edit-content">');
                         sb._('<div class="twelve mobile-four columns">');
                             sb._('<form class="custom">');
-                                sb._('<div class="row">');
+                                sb._('<div class="row collapse">');
                                     sb._('<div class="six mobile-two columns">');
-                                        sb._($fn.crPhoto());
-                                        sb._($fn.crBasicDetails());
+                                        sb._('<div class="row collapse">');
+                                            sb._('<div class="twelve mobile-four columns">');
+                                                sb._($fn.crPhoto());
+                                            sb._('</div>');
+                                        sb._('</div>');
+                                        sb._('<div class="row collapse">');
+                                            sb._('<div class="twelve mobile-four columns">');
+                                                sb._($fn.crBasicDetails());
+                                            sb._('</div>');
+                                        sb._('</div>');
                                         if($module.data.parse.is_death){
-                                            sb._($fn.crNotes());
+                                            sb._('<div class="row collapse">');
+                                                sb._('<div class="twelve mobile-four columns">');
+                                                    sb._($fn.crNotes());
+                                                sb._('</div>');
+                                            sb._('</div>');
                                         }
                                     sb._('</div>');
                                     sb._('<div class="six mobile-two columns">');
-                                        sb._($fn.crBirth());
-                                        if($module.data.parse.is_alive){
-                                            sb._($fn.crNotes());
-                                        } else {
-                                            sb._($fn.crDeath());
-                                        }
+                                        sb._('<div class="row collapse">');
+                                            sb._('<div class="twelve mobile-four columns">');
+                                                sb._($fn.crBirth());
+                                            sb._('</div>');
+                                        sb._('</div>');
+                                        sb._('<div class="row collapse">');
+                                            sb._('<div class="twelve mobile-four columns">');
+                                                if($module.data.parse.is_alive){
+                                                    sb._($fn.crNotes());
+                                                } else {
+                                                    sb._($fn.crDeath());
+                                                }
+                                            sb._('</div>');
+                                        sb._('</div>');
                                     sb._('</div>');
                                 sb._('</div>');
                             sb._('</form>');
@@ -315,15 +347,18 @@
                 }
             }
             cont = $fn.element();
+            asize = $module.data.avatarSize[$module.data.renderType];
             $module.data.slide.hide();
             $module.data.slide.append(cont);
             $module.mod.setData(cont);
-            $(cont).foundationCustomForms();
+            if($module.data.renderType == "desctop"){
+                $(cont).foundationCustomForms();
+            }
             $(cont).find('button#upload').click($module.mod.upload);
             $FamilyTreeTop.fn.mod("photos").fixSize({
                 object: cont,
-                width:$module.data.avatarSize[0],
-                height:$module.data.avatarSize[1],
+                width:asize[0],
+                height:asize[1],
                 length:1
             });
         }
