@@ -27,7 +27,7 @@
 * BOX
 */
 .ftt-profile-editor-box {
-    margin: 10px 50px;
+    margin: 10px 15px;
 }
 .ftt-profile-editor-box-header {
 
@@ -282,7 +282,13 @@
 */
 .ftt-relation-mapper-node {
     text-align: center;
+}
+.ftt-relation-mapper-node.ftt-render-type-desctop {
     width: 120px;
+    height: 40px;
+}
+.ftt-relation-mapper-node.ftt-render-type-mobile {
+    width: 90px;
     height: 40px;
 }
 .ftt-relation-mapper-node-name, .ftt-relation-mapper-node-relation {

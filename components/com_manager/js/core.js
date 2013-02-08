@@ -1302,6 +1302,7 @@
                     $FamilyTreeTop.fn.mod("tooltip").init("mobile");
                     $FamilyTreeTop.fn.mod("topmenubar").init("desctop");
                     $FamilyTreeTop.fn.mod("profile").init("mobile");
+                    $FamilyTreeTop.fn.mod("photos").init("mobile");
                     $FamilyTreeTop.fn.mod("navigation").init("mobile", settings, function(el, setting){
                         fn.initModules("mobile", "#_content", setting);
                     });
@@ -1313,6 +1314,7 @@
                     $FamilyTreeTop.fn.mod("tooltip").init("desctop");
                     $FamilyTreeTop.fn.mod("topmenubar").init("desctop");
                     $FamilyTreeTop.fn.mod("profile").init("desctop");
+                    $FamilyTreeTop.fn.mod("photos").init("desctop");
                     $FamilyTreeTop.fn.mod("header").init("desctop");
                     $FamilyTreeTop.fn.mod("navigation").init("desctop", settings, function(el, setting){
                         if(el){
@@ -1464,7 +1466,10 @@
         $module.data.tmpPath = "components/com_manager/media/tmp/";
         $module.data.mediaPath = "components/com_manager/media/";
         $module.data.settings = {
-            size:["108","120"]
+            size:{
+                mobile:["50", "55"],
+                desctop:["108","120"]
+            }
         }
         fn = {
             create: function(){
@@ -1554,8 +1559,8 @@
                 });
                 mod.fixSize({
                     object:cont,
-                    width:$module.data.settings.size[0],
-                    height:$module.data.settings.size[1],
+                    width:$module.data.settings.size[$module.data.renderType][0],
+                    height:$module.data.settings.size[$module.data.renderType][1],
                     length: length,
                     onComplete:function(){
                         fn.init(cont);
@@ -1588,6 +1593,9 @@
 
                     index++;
                 });
+            },
+            init:function(renderType){
+                $module.data.renderType = renderType;
             }
         }
     }, true);
@@ -1626,9 +1634,9 @@
                 if(!object) return '';
                 media = object.media;
                 parse = $fn.getParse(object);
-                if((media == null && parse.facebook_id == "0") || (media.avatar == null && parse.facebook_id == "0")){
+                if((media == null && parse.facebook_id == "0") || (media != null && media.avatar == null && parse.facebook_id == "0")){
                     return '<img width="'+w+'" height="'+h+'" src="'+$fn.getPath(parse)+'" />';
-                } else if( (media == null && parse.facebook_id != "0") || (media.avatar == null && parse.facebook_id != "0")) {
+                } else if( (media == null && parse.facebook_id != "0") || (media != null && media.avatar == null && parse.facebook_id != "0")) {
                     return '<img width="'+w+'" height="'+h+'" src="'+$fn.getFacebookPath(parse, w, h)+'" />';
                 } else {
                     return '<img width="'+w+'" height="'+h+'" src="'+$fn.getMediaPath(parse, media)+'" />';

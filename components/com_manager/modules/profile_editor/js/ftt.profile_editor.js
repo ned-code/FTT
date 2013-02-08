@@ -1,6 +1,6 @@
 (function($, $ftt){
     $ftt.module.create("MOD_SYS_PROFILE_EDITOR", function(){
-        var $module = this;
+        var $module = this, $fn;
         /*
         * DATA
          */
@@ -13,80 +13,80 @@
         $module.data.gedcom_id = false;
         $module.data.object = false;
         $module.data.parse = false;
+        $module.mod = {};
+        $module.box = {};
 
 
         /*
         * FUNCTIONS
          */
-        $module.fn.ajax = function(f, p, c){
-            $module.fn.call("myfamily", "FTTProfileEditor", f, p, function(res){
-                c(res);
-            });
-        }
-
-        $module.fn.extend = function(def, set){
-            return $.extend({}, def, set);
-        }
-
-        $module.fn.getMsg = function(n){
-            var t = 'FTT_MOD_SYS_PROFILE_EDITOR_'+n.toUpperCase();
-            if(typeof($module.data.msg[t]) != 'undefined'){
-                return $module.data.msg[t];
-            }
-            return '';
-        }
-
-        $module.fn.setMsg = function(msg){
-            for(var key in $module.data.msg){
-                if(typeof(msg[key]) != 'undefined'){
-                    $module.data.msg[key] = msg[key];
+        $fn = {
+            ajax:function(f, p, c){
+                $module.fn.call("myfamily", "FTTProfileEditor", f, p, function(res){
+                    c(res);
+                });
+            },
+            extend:function(def, set){
+                return $.extend({}, def, set);
+            },
+            getMsg:function(n){
+                var t = 'FTT_MOD_SYS_PROFILE_EDITOR_'+n.toUpperCase();
+                if(typeof($module.data.msg[t]) != 'undefined'){
+                    return $module.data.msg[t];
                 }
+                return '';
+            },
+            setMsg:function(msg){
+                for(var key in $module.data.msg){
+                    if(typeof(msg[key]) != 'undefined'){
+                        $module.data.msg[key] = msg[key];
+                    }
+                }
+                return true;
+            },
+            echo:function(){
+                var cbs = $module.data.callbacks;
+                for(var key in cbs){
+                    if(!cbs.hasOwnProperty(key)) continue;
+                    cbs[key]();
+                }
+                $module.data.callbacks = {};
+            },
+            parse:function(o){
+                if(!o&&!$module.data.object) return false;
+                return storage.usertree.parse(o || $module.data.object);
+            },
+            getObject:function(gedcom_id){
+                if(!gedcom_id&&!$module.data.gedcom_id) return false;
+                return storage.usertree.pull[gedcom_id || $module.data.gedcom_id];
             }
-            return true;
         }
 
-        $module.fn.echo = function(){
-            var cbs = $module.data.callbacks;
-            for(var key in cbs){
-                if(!cbs.hasOwnProperty(key)) continue;
-                cbs[key]();
-            }
-            $module.data.callbacks = {};
-        }
 
-        $module.fn.parse = function(o){
-            if(!o&&!$module.data.object) return false;
-            return storage.usertree.parse(o || $module.data.object);
-        }
-
-        $module.fn.getObject = function(gedcom_id){
-            if(!gedcom_id&&!$module.data.gedcom_id) return false;
-            return storage.usertree.pull[gedcom_id || $module.data.gedcom_id];
-        }
 
         /**
          * UPLOAD
          */
-        $module.fn.upload = function(){
+        $module.mod.upload = function(){
             console.log('upload');
         }
 
         /**
          * VALIDATE
          */
-        $module.fn.validate = function(){}
+        $module.mod.validate = function(){}
 
         /**
          * SAVE
          */
-        $module.fn.save = function(){
+        $module.mod.save = function(){
             console.log('save');
         }
 
         /**
          * SET DATA IN EDIT FORM
          */
-        $module.fn.setData = function(cont){
+        $module.mod.setData = function(cont){
             var birth, death, $fn = {
                 set: function(type, name, value){
                     if("input" === type){
@@ -135,7 +135,7 @@
         /*
         * EDIT
          */
-        $module.fn.edit = function(){
+        $module.mod.edit = function(){
             var cont, $fn = {
                 getSelectMonth:function(name){
                     var sb = $module.fn.stringBuffer();
@@ -187,30 +187,30 @@
                     sb._('<fieldset>');
                         sb._('<legend>')._(legend)._('</legend>');
                         sb._('<div class="row">');
-                            sb._('<div class="twelve columns">');
+                            sb._('<div class="twelve mobile-four columns">');
                                 sb._('<div class="row">');
-                                    sb._('<div class="two columns">');
+                                    sb._('<div class="two mobile-one columns">');
                                         sb._($fn.getInput(prefix+'day', false, "Day"));
                                     sb._('</div>');
-                                    sb._('<div class="three columns">');
+                                    sb._('<div class="three mobile-one columns">');
                                         sb._($fn.getSelectMonth(prefix+'month'));
                                     sb._('</div>');
-                                    sb._('<div class="six columns">');
+                                    sb._('<div class="six mobile-two columns">');
                                         sb._($fn.getInput(prefix+'year', false, "Year"));
                                     sb._('</div>');
                                 sb._('</div>');
                                 sb._('<div class="row">');
-                                    sb._('<div class="twelve columns">');
+                                    sb._('<div class="twelve mobile-four columns">');
                                         sb._($fn.getInput(prefix+'city', "City/Town"));
                                     sb._('</div>');
                                 sb._('</div>');
                                 sb._('<div class="row">');
-                                    sb._('<div class="twelve columns">');
+                                    sb._('<div class="twelve mobile-four columns">');
                                         sb._($fn.getInput(prefix+'state', "State/Province"));
                                     sb._('</div>');
                                 sb._('</div>');
                                 sb._('<div class="row">');
-                                    sb._('<div class="twelve columns">');
+                                    sb._('<div class="twelve mobile-four columns">');
                                         sb._($fn.getInput(prefix+'country', "Country"));
                                     sb._('</div>');
                                 sb._('</div>');
@@ -225,10 +225,10 @@
                         sb._('<legend>Photo</legend>');
 
                         sb._('<div class="row">');
-                            sb._('<div class="three columns">');
+                            sb._('<div class="three mobile-one columns">');
                                 sb._('<img id="avatar" style="max-width:none;" src="')._($FamilyTreeTop.global.base)._('components/com_manager/modules/profile_editor/imgs/default-avatar.png">');
                             sb._('</div>');
-                            sb._('<div class="nine columns">');
+                            sb._('<div class="nine mobile-three columns">');
                                 sb._('<label style="margin-left: 5px;">Upload a Picture of Yourself</label>');
                                 sb._('<input style="margin-left: 5px;" type="file" />');
                                 sb._('<button id="upload" style="margin-left: 5px;" type="button" class="small secondary radius button">Upload</button>');
@@ -245,15 +245,15 @@
                     sb._('<fieldset>');
                         sb._('<legend>Basic Details</legend>');
                         sb._('<div class="row">');
-                            sb._('<div class="six columns">');
+                            sb._('<div class="six mobile-two columns">');
                                 sb._($fn.getSelect("gender", {"f":"Female","m":"Male"}, "Gender"));
                             sb._('</div>');
-                            sb._('<div class="six columns">');
+                            sb._('<div class="six mobile-two columns">');
                                 sb._($fn.getSelect("live", {"1":"Yes","0":"No"}, "Live"));
                             sb._('</div>');
                         sb._('</div>');
                         sb._('<div class="row">');
-                            sb._('<div class="twelve columns">');
+                            sb._('<div class="twelve mobile-four columns">');
                                 sb._($fn.getInput('first_name', 'First Name'));
                                 sb._($fn.getInput('middle_name', 'Middle Name'));
                                 sb._($fn.getInput('last_name', 'Last Name'));
@@ -278,7 +278,7 @@
                     sb._('<fieldset>');
                     sb._('<legend>Notes</legend>');
                         sb._('<div class="row">');
-                            sb._('<div class="twelve columns">');
+                            sb._('<div class="twelve mobile-four columns">');
                                 sb._('<textarea name="notes" placeholder=""></textarea>');
                                 sb._('<div style="display:none;">^</div>')
                             sb._('</div>');
@@ -289,17 +289,17 @@
                 element: function(){
                     var sb = $module.fn.stringBuffer();
                     sb._('<div class="row ftt-profile-edit-content">');
-                        sb._('<div class="twelve columns">');
+                        sb._('<div class="twelve mobile-four columns">');
                             sb._('<form class="custom">');
                                 sb._('<div class="row">');
-                                    sb._('<div class="six columns">');
+                                    sb._('<div class="six mobile-two columns">');
                                         sb._($fn.crPhoto());
                                         sb._($fn.crBasicDetails());
                                         if($module.data.parse.is_death){
                                             sb._($fn.crNotes());
                                         }
                                     sb._('</div>');
-                                    sb._('<div class="six columns">');
+                                    sb._('<div class="six mobile-two columns">');
                                         sb._($fn.crBirth());
                                         if($module.data.parse.is_alive){
                                             sb._($fn.crNotes());
@@ -317,9 +317,9 @@
             cont = $fn.element();
             $module.data.slide.hide();
             $module.data.slide.append(cont);
-            $module.fn.setData(cont);
+            $module.mod.setData(cont);
             $(cont).foundationCustomForms();
-            $(cont).find('button#upload').click($module.fn.upload);
+            $(cont).find('button#upload').click($module.mod.upload);
             $FamilyTreeTop.fn.mod("photos").fixSize({
                 object: cont,
                 width:$module.data.avatarSize[0],
@@ -333,7 +333,7 @@
         /*
         * SLIDE
          */
-        $module.fn.slide = function(){
+        $module.mod.slide = function(){
             var slide = this,
                 fn = false,
                 settings = false,
@@ -348,7 +348,7 @@
                     for(var key in bxs){
                         if(!bxs.hasOwnProperty(key)) continue;
                         var prms = bxs[key];
-                        var box = $module.fn.box(prms);
+                        var box = $module.mod.box(prms);
                         items.push({prms:prms, object:box});
                     }
                     return items.sort(function(a, b){
@@ -387,10 +387,10 @@
                         $module.data.slide.back();
                     });
                     $(headerBtns[1]).click(function(){
-                        $module.fn.edit();
+                        $module.mod.edit();
                     });
                     $(headerBtns[2]).click(function(){
-                        $module.fn.save();
+                        $module.mod.save();
                     });
                 }
             }
@@ -411,7 +411,7 @@
                         $(div).remove();
                     });
                     $module.data.slide = false;
-                    $module.fn.echo();
+                    $fn.echo();
                 },
                 back: function(){
                     if(edit){
@@ -452,7 +452,7 @@
         /*
         * BOX
          */
-        $module.fn.box = function(settings){
+        $module.mod.box = function(settings){
             var box = this, fn;
             fn = {
                 createBox: function(st){
@@ -489,7 +489,7 @@
         /**
          * BASIC INFO
          */
-        $module.fn.basic = function(gedcom_id){
+        $module.box.basic = function(gedcom_id){
             var fn;
 
             fn = {
@@ -507,10 +507,11 @@
                     return sb.result();
                 },
                 avatar: function(){
+                    var size = ($module.data.renderType == "desctop")?[108,120]:[50,55];
                     return storage.usertree.avatar.get({
                         object: $module.data.object,
-                        width:108,
-                        height:120
+                        width:size[0],
+                        height:size[1]
                     });
                 },
                 update: function(){},
@@ -549,7 +550,7 @@
         /*
         * FAMILY
          */
-        $module.fn.family = function(){
+        $module.box.family = function(){
             var object = $('<div style="position: relative; width: 500px; margin: 0 auto;"></div>');
             (function(){
                 var cont = _create(),
@@ -1019,7 +1020,7 @@
         /*
         * PHOTOS
          */
-        $module.fn.photos = function(){
+        $module.box.photos = function(){
             var fn;
 
             fn = {
@@ -1039,7 +1040,7 @@
         /*
         * RELATION
          */
-        $module.fn.relation = function(){
+        $module.box.relation = function(){
             var $fn = {
                     createNode:function(id, data){
                         return {
@@ -1078,11 +1079,11 @@
                         var id = node.id.split("_")[1];
                         var object = storage.usertree.pull[id];
                         var parse = storage.usertree.parse(object);
-                        sb._('<div class="ftt-relation-mapper-node">');
+                        sb._('<div class="ftt-relation-mapper-node ftt-render-type-')._($module.data.renderType)._('">');
                         if(node.data.in_law){
                             sb._('<div class="ftt-relation-mapper-node-plus">&nbsp;</div>');
                         }
-                        sb._('<div class="ftt-relation-mapper-node-name">')._(parse.name)._('</div>');
+                        sb._('<div class="ftt-relation-mapper-node-name">')._(($module.data.renderType == "desctop")?parse.name:parse.nick)._('</div>');
                         sb._('<div class="ftt-relation-mapper-node-relation">')._(parse.relation)._('</div>');
                         sb._('</div>');
                         return sb.result();
@@ -1114,12 +1115,12 @@
                             transition: $jit.Trans.Quart.easeInOut,
                             levelDistance: 30,
                             //offsetX:240,
-                            offsetY:70,
+                            offsetY:($module.data.renderType == "desctop")?70:90,
                             levelsToShow: $fn.getLevelToShow(tree),
                             constrained: false,
                             Node: {
                                 height: 28,
-                                width: 120,
+                                width: ($module.data.renderType == "desctop")?120:90,
                                 align:"center",
                                 type: 'rectangle',
                                 color: '#aaa',
@@ -1174,7 +1175,7 @@
                 }
                 return 58*level;
             })($tree);
-            var width = 600;
+            var width = ($module.data.renderType == "desctop")?600:260;
             return $('<div id="ftt_relation_mapper_viz" style="width:'+width+'px; height:'+height+'px; margin: 0 auto;"></div>');
         }
 
@@ -1189,14 +1190,14 @@
 
                 //data
                 $module.data.gedcom_id = settings.gedcom_id;
-                $module.data.object = $module.fn.getObject($module.data.gedcom_id);
-                $module.data.parse = $module.fn.parse($module.data.object);
+                $module.data.object = $fn.getObject($module.data.gedcom_id);
+                $module.data.parse = $fn.parse($module.data.object);
 
                 if(!$module.data.object) return false;
-                $module.data.basic = $module.fn.basic();
+                $module.data.basic = $module.box.basic();
 
                 // create slide with info module structure
-                $module.data.slide = $module.fn.slide();
+                $module.data.slide = $module.mod.slide();
                 $module.data.slide.content([
                     {
                         id: "basic_info",
@@ -1208,19 +1209,19 @@
                         id: "family",
                         name: "Family",
                         level: 1,
-                        content: $module.fn.family()
+                        content: $module.box.family()
                     },
                     {
                         id: "photos",
                         name: "Photos",
                         level: 2,
-                        content: $module.fn.photos()
+                        content: $module.box.photos()
                     },
                     {
                         id: "relation",
                         name: "Relation on you: "+ $module.data.parse.relation,
                         level: 3,
-                        content: $module.fn.relation()
+                        content: $module.box.relation()
                     }
                 ]);
                 $module.data.slide.init();

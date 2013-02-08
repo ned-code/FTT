@@ -239,34 +239,41 @@
             renderFacebook: function(renderType){
                 var sb = module.fn.stringBuffer(), user = module.fn.user(), cont;
                 //create container
-                sb._('<div class="jmb-profile-cont">');
-                    sb._('<table>');
-                        sb._('<tr>');
-                            sb._('<td><div class="avatar"></div></td>');
-                            sb._('<td><div class="login"><span></span></div></td>');
-                            sb._('<td><div class="settings"><div class="ftt-profile-button"></div></div></td>');
-                        sb._('</tr>');
-                    sb._('</table>');
-                sb._('</div>');
-                cont = $(sb.result());
-                //set user param
-                $(cont).find('.login span').html(user.name);
-                $(cont).find('.avatar').html(module.fn.avatar().get(user.gedcom_id, 22, 22));
-                module.fn.photos().fixSize({
-                    object: cont,
-                    width: 22,
-                    height: 22
-                });
-                fn.click(cont);
+                if(renderType == "desctop"){
+                    sb._('<div class="jmb-profile-cont">');
+                        sb._('<table>');
+                            sb._('<tr>');
+                                sb._('<td><div class="avatar"></div></td>');
+                                sb._('<td><div class="login"><span></span></div></td>');
+                                sb._('<td><div class="settings"><div class="ftt-profile-button"></div></div></td>');
+                            sb._('</tr>');
+                        sb._('</table>');
+                    sb._('</div>');
+                    cont = $(sb.result());
+                    //set user param
+                    $(cont).find('.login span').html(user.name);
+                    $(cont).find('.avatar').html(module.fn.avatar().get(user.gedcom_id, 22, 22));
+                    module.fn.photos().fixSize({
+                        object: cont,
+                        width: 22,
+                        height: 22
+                    });
+                    fn.click(cont);
+                } else if(renderType =="mobile"){
+                    sb._('<div class="ftt-profile-cont-mobile"></div>');
+                    cont = $(sb.result());
+                }
                 fn.append("#_profile", cont);
             },
             renderConnect: function(renderType){
-                var sb = module.fn.stringBuffer(), cont;
-                sb._('<div class="jmb-profile-cont">');
-                sb._('<div class="facebook"><span>')._(msg.FTT_MOD_LOGIN_CONNECT_WITH_FACEBOOK)._('</span></div>');
-                sb._('</div>');
-                cont = $(sb.result());
-                $(cont).find(".facebook span").click(function(){
+                var sb = module.fn.stringBuffer(), cont, click, connect;
+                click = function(){
+                    var facebook;
+                    if(facebook = module.fn.facebook()){
+                        facebook.login(connect);
+                    }
+                }
+                connect = function(){
                     var facebook;
                     if(facebook = module.fn.facebook()){
                         facebook.login(function(response){
@@ -277,16 +284,28 @@
                             }
                         });
                     }
-                });
+                }
+                if(renderType == "desctop"){
+                    sb._('<div class="jmb-profile-cont">');
+                    sb._('<div class="facebook"><span>')._(msg.FTT_MOD_LOGIN_CONNECT_WITH_FACEBOOK)._('</span></div>');
+                    sb._('</div>');
+                    cont = $(sb.result());
+                    $(cont).find(".facebook span").click(click);
+                } else if(renderType == "mobile"){
+                    sb._('<div class="ftt-profile-cont-mobile-connect"></div>');
+                    cont = $(sb.result());
+                    $(cont).click(click);
+                }
                 fn.append("#_profile", cont);
             },
-            createBox:function(renderType){
+            createBox:function(){
+                var renderType = module.renderType;
                 if($FamilyTreeTop.global.loginType){
-                    fn.renderFamous();
+                    fn.renderFamous(renderType);
                 } else if(module.fn.usertree() && module.fn.usertree().isGuest()){
-                    fn.renderConnect();
+                    fn.renderConnect(renderType);
                 } else if(module.fn.usertree() && module.fn.usertree().isUser()){
-                    fn.renderFacebook();
+                    fn.renderFacebook(renderType);
                 }
             },
             user:function(callback){

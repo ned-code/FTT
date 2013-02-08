@@ -821,7 +821,28 @@
     width: 24px;
 }
 */
-
+/**
+* Mobile
+*/
+.ftt-profile-cont-mobile {
+    background: url("../image/ftt-profile-mobile.png") no-repeat scroll 0 0 transparent;
+    cursor: pointer;
+    height: 24px;
+    margin-right: 3px;
+    margin-top: 3px;
+    width: 36px;
+}
+.ftt-profile-cont-mobile-connect {
+    background: url("../image/ftt-profile-mobile-connect.png") no-repeat scroll 0 0 transparent;
+    cursor: pointer;
+    height: 15px;
+    margin-right: 5px;
+    margin-top: 7px;
+    width: 45px;
+}
+/**
+* Desctop
+*/
 .jmb-profile-cont {
     position:relative;
     font-size: 11px;
