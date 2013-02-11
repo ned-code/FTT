@@ -278,13 +278,20 @@ class JMBController extends JController
         if($alias == 'invitation') return $alias;
         $qry = explode('?', $menu->link);
         $uri = explode('?', $_SERVER['REQUEST_URI']);
+        $parts = explode(DS, $uri[0]);
+        $last = array_pop($parts);
+        //hack 11 02 2013 for mobile loading page
+        if($last == "mobile") {
+            $host = &FamilyTreeTopHostLibrary::getInstance();
+            $host->user->setAlias($alias);
+            return "mobile";
+        }
         if(sizeof($uri) > 1){
             if($uri[1] == $qry[1]){
                 return $alias;
             }
         } else {
-            $parts = explode(DS, $uri[0]);
-            $last = array_pop($parts);
+
             if($alias == $last){
                 return $alias;
             }

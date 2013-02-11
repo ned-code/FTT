@@ -4,7 +4,6 @@
         /*
         * DATA
          */
-        $module.data.arguments = arguments;
         $module.data.msg = {}
         $module.data.callbacks = {};
         $module.data.renderType = 'desctop';

@@ -90,7 +90,6 @@
                         sb._('<div id="myfamily" class="jmb-top-menu-bar-item"><span>')._(fn.getMsg('myfamily'))._('</span></div>');
                         sb._('<div id="famous-family" class="jmb-top-menu-bar-item"><span>')._(fn.getMsg('famous_families'))._('</span></div>');
                         sb._('<div id="home" class="jmb-top-menu-bar-item"><span>')._(fn.getMsg('home'))._('</span></div>');
-                        sb._('<div id="mobile" class="jmb-top-menu-bar-item"><span>#MOBILE</span></div>');
                    sb._('</div>');
                    return sb.result();
                },
@@ -142,7 +141,6 @@
                }
             };
 
-        $module.data.arguments = arguments;
         $module.data.settings = {};
         $module.data.msg = {
             FTT_MOD_TOPMENUBAR_MYFAMILY:"My Family",
