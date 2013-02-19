@@ -1201,8 +1201,6 @@
     $ftt.module.create("MOD_SYS_AJAX", function(){
         var $module = this;
 
-        $module.data.arguments = arguments;
-
         var request = {
             pull:{},
             add:function(object){
@@ -1327,7 +1325,6 @@
                 }
             };
 
-        $module.data.arguments = arguments;
         $module.data.settings = {};
         $module.data.type = null;
 
@@ -1436,7 +1433,6 @@
                 }
             };
 
-        $module.data.arguments = arguments;
         $module.data.activeItem = false;
         $module.data.liSettings = {};
         $module.data.settings = false;
@@ -1462,7 +1458,6 @@
 (function($, $ftt){
     $ftt.module.create("MOD_SYS_PHOTOS", function(){
         var $module = this, fn;
-        $module.data.arguments = arguments;
         $module.data.tmpPath = "components/com_manager/media/tmp/";
         $module.data.mediaPath = "components/com_manager/media/";
         $module.data.settings = {

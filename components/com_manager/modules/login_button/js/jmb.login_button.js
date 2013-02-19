@@ -1,5 +1,5 @@
 (function($, $ftt){
-    $ftt.module.create("MOD_", function(name, parent, ajax, renderType, popup){
+    $ftt.module.create("MOD_LOGIN_BUTTON", function(name, parent, ajax, renderType, popup){
         var	module = this,
             sb = module.fn.stringBuffer(),
             cont = null;

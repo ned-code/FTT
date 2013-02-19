@@ -33,22 +33,22 @@ foreach ($info as $page){
 }
 ?>
 <div class="row">
-    <div class="mobile-four columns">
+    <div class="twelve mobile-four columns">
         <div id="_header"></div>
     </div>
 </div>
 <div class="row">
-    <div class="mobile-four columns">
+    <div class="twelve mobile-four columns">
         <div id="_nav"></div>
     </div>
 </div>
 <div class="row">
-    <div class="mobile-four columns">
-        <div id="_content" class="four" role="content">
+    <div class="twelve mobile-four columns">
+        <div id="_content" role="content">
     </div>
 </div>
 <div class="row">
-    <div class="mobile-four columns">
+    <div class="twelve mobile-four columns">
         <ul class="link-list" style="margin: 0 auto;max-width: 175px;">
             <li><a href="<?php echo $url; ?>index.php/about">About</a></li>
             <li><a href="<?php echo $url; ?>index.php/conditions">Terms</a></li>
