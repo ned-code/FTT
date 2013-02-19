@@ -257,9 +257,14 @@ class JMBController extends JController
             case "contact":
             case "feedback":
             case "help":
-            case "ie":
+                return "article?". $user->page;
+            break;
+
+            case "article":
                 return $user->page;
             break;
+
+            case "ie": return $user->page; break;
 
 			default:
                 if($invitation_token && !$user->guest) return "invitation";
@@ -281,10 +286,10 @@ class JMBController extends JController
         $parts = explode(DS, $uri[0]);
         $last = array_pop($parts);
         //hack 11 02 2013 for mobile loading page
-        if($last == "mobile") {
+        if($last == "mobile" || $last == "article") {
             $host = &FamilyTreeTopHostLibrary::getInstance();
             $host->user->setAlias($alias);
-            return "mobile";
+            return $last;
         }
         if(sizeof($uri) > 1){
             if($uri[1] == $qry[1]){
@@ -366,6 +371,7 @@ class JMBController extends JController
         }
 
         public function setLocation(){
+            $app = JFactory::getApplication();
             $host = &FamilyTreeTopHostLibrary::getInstance();
             $jfbLib = JFBConnectFacebookLibrary::getInstance();
             $facebook_id = $jfbLib->getFbUserId();
@@ -384,6 +390,13 @@ class JMBController extends JController
                         $host->user->set(0, 0, 0);
                     }
         		break;
+
+                case 'article':
+                    $alias = JRequest::getCmd('p');
+                    $host->user->setAlias('article');
+                    $host->user->setArticle($alias);
+                    $app->redirect("index.php/article");
+                break;
 
                 default:
                     $data = $host->getIndividualsInSystem($facebook_id);

@@ -53,18 +53,17 @@ foreach ($info as $page){
             <div class="one columns"><a href="<?php echo $url; ?>">FamilyTreeTop.com</a></div>
             <div class="ten columns">
                 <ul class="link-list right">
-                    <li><a href="<?php echo $url; ?>index.php/about">About</a></li>
-                    <li><a href="<?php echo $url; ?>index.php/conditions">Terms & Conditions</a></li>
-                    <li><a href="<?php echo $url; ?>index.php/privacy">Privacy Policy</a></li>
-                    <li><a href="<?php echo $url; ?>index.php/feedback">Provide Feedback</a></li>
-                    <li><a href="<?php echo $url; ?>index.php/contact">Contact</a></li>
-                    <li><a href="<?php echo $url; ?>index.php/help">Help</a></li>
+                    <li><a href="<?php echo $url; ?>index.php?option=com_manager&task=setLocation&alias=article&p=about">About</a></li>
+                    <li><a href="<?php echo $url; ?>index.php?option=com_manager&task=setLocation&alias=article&p=conditions">Terms & Conditions</a></li>
+                    <li><a href="<?php echo $url; ?>index.php?option=com_manager&task=setLocation&alias=article&p=privacy">Privacy Policy</a></li>
+                    <li><a href="<?php echo $url; ?>index.php?option=com_manager&task=setLocation&alias=article&p=feedback">Provide Feedback</a></li>
+                    <li><a href="<?php echo $url; ?>index.php?option=com_manager&task=setLocation&alias=article&p=contact">Contact</a></li>
+                    <li><a href="<?php echo $url; ?>index.php?option=com_manager&task=setLocation&alias=article&p=help">Help</a></li>
                 </ul>
             </div>
         </div>
     </div>
 </div>
-
 
 <script>
     (function(w){

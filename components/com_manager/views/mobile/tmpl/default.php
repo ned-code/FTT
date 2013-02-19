@@ -50,9 +50,9 @@ foreach ($info as $page){
 <div class="row">
     <div class="twelve mobile-four columns">
         <ul class="link-list" style="margin: 0 auto;max-width: 175px;">
-            <li><a href="<?php echo $url; ?>index.php/about">About</a></li>
-            <li><a href="<?php echo $url; ?>index.php/conditions">Terms</a></li>
-            <li><a href="<?php echo $url; ?>index.php/contact">Contact</a></li>
+            <li><a href="<?php echo $url; ?>index.php/article?p=about">About</a></li>
+            <li><a href="<?php echo $url; ?>index.php/article?p=conditions">Terms</a></li>
+            <li><a href="<?php echo $url; ?>index.php/article?p=contact">Contact</a></li>
         </ul>
     </div>
 </div>

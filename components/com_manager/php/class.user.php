@@ -18,6 +18,7 @@ class FTTUserLibrary {
     private $loginType = 0;
     private $language = 'en-GB';
     private $page = 'home';
+    private $article = '';
     private $gender = 'M';
     private $token = 0;
     private $birthday = '';
@@ -240,7 +241,7 @@ class FTTUserLibrary {
 
     protected function getUserMap(){
         if(!$this->joomlaId) return false;
-        $sqlString = "SELECT facebook_id, session_id, user_id, tree_id, gedcom_id, permission, login_type, page, language, token, data FROM #__mb_user_map WHERE user_id = ?";
+        $sqlString = "SELECT facebook_id, session_id, user_id, tree_id, gedcom_id, permission, login_type, page, article, language, token, data FROM #__mb_user_map WHERE user_id = ?";
         $this->host->ajax->setQuery($sqlString, $this->joomlaId);
         $result = $this->host->ajax->loadAssocList();
         if(empty($result)){
@@ -300,6 +301,7 @@ class FTTUserLibrary {
         $this->permission = $data['permission'];
         $this->loginType = $data['login_type'];
         $this->page = $data['page'];
+        $this->article = $data['article'];
         $this->language = $data['language'];
         $this->token = $data['token'];
         $this->data = $data['data'];
@@ -341,6 +343,7 @@ class FTTUserLibrary {
             'language' => $this->language,
             'loginType' => $this->loginType,
             'page' => $this->page,
+            'article' => $this->article,
             'guest'=> $this->user->guest,
             'token' => $this->token,
             'email' => $this->facebookFields['email'],
@@ -415,6 +418,13 @@ class FTTUserLibrary {
         $sqlString = "UPDATE #__mb_user_map SET `user_id` = ?, `time` = NOW() WHERE ";
         $sqlString .= ($user)?"user_id = ?":"session_id = ?";
         $this->host->ajax->setQuery($sqlString, $id, ($user)?$this->joomlaId:$this->sessionId);
+        $this->host->ajax->query();
+    }
+
+    public function setArticle($article, $user = false){
+        $sqlString = "UPDATE #__mb_user_map SET `article` = ?, `time` = NOW() WHERE ";
+        $sqlString .= ($user)?"user_id = ?":"session_id = ?";
+        $this->host->ajax->setQuery($sqlString, $article, ($user)?$this->joomlaId:$this->sessionId);
         $this->host->ajax->query();
     }
 
