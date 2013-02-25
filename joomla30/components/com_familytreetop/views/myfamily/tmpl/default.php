@@ -27,19 +27,19 @@ jimport('joomla.application.module.helper');
             </div>
             <div class="tab-pane" id="tab2">
                 <?php
-                    $module = JModuleHelper::getModule('ftt_footer');
+                    $module = JModuleHelper::getModule('ftt_families');
                     echo JModuleHelper::renderModule($module);
                 ?>
             </div>
             <div class="tab-pane" id="tab3">
                 <?php
-                    $module = JModuleHelper::getModule('login');
+                    $module = JModuleHelper::getModule('ftt_descendants');
                     echo JModuleHelper::renderModule($module);
                 ?>
             </div>
             <div class="tab-pane" id="tab4">
                 <?php
-                    $module = JModuleHelper::getModule('ftt_footer');
+                    $module = JModuleHelper::getModule('ftt_ancestors');
                     echo JModuleHelper::renderModule($module);
                 ?>
             </div>
