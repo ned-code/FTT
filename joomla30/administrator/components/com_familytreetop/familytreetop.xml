@@ -34,6 +34,7 @@
 			<folder>models</folder>
 			<folder>views</folder>
 			<folder>php-activerecord</folder>
+			<folder>facebook</folder>
 		</files>
 		<languages folder="admin">
 			<language tag="en-GB">language/en-GB.com_familytreetop.ini</language>

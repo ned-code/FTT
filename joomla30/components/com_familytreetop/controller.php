@@ -13,20 +13,31 @@ class FamilytreetopController extends JControllerLegacy
 		$vName   = $this->input->getCmd('view', 'login');
 		$vFormat = $document->getType();
 		$lName   = $this->input->getCmd('layout', 'default');
+        $jUser = JFactory::getUser();
+
+        if($lName != 'default'){
+            $lName = 'default_' . $lName;
+        }
 
 		if ($view = $this->getView($vName, $vFormat))
 		{
 			// Do any specific processing by view.
-            /*
 			switch ($vName)
 			{
+                case "myfamily":
+                    if($jUser->get('guest')){
+                        $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=login", false));
+                        return;
+                    } else {
+                        $model = $this->getModel($vName);
+                    }
+                    break;
+
+
 				default:
-					$model = $this->getModel('Login');
+					$model = $this->getModel($vName);
 					break;
 			}
-            */
-
-            $model = $this->getModel($vName);
 
 			// Push the model into the view (as default).
 			$view->setModel($model, true);

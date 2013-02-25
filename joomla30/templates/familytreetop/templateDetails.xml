@@ -23,6 +23,7 @@
 	</files>
 	<positions>
 		<position>debug</position>
+		<position>facebook-sdk</position>
 		<position>navbar</position>
 		<position>footer</position>
 	</positions>

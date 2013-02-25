@@ -629,8 +629,6 @@ class JApplication extends JApplicationBase
 					{
 						return false;
 					}
-
-					// Return the error.
 					switch ($authorisation->status)
 					{
 						case JAuthentication::STATUS_EXPIRED:
