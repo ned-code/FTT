@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="COM_FAMILYTREETOP_INDEX_VIEW_DEFAULT_TITLE" option="COM_FAMILYTREETOP_INDEX_VIEW_DEFAULT_OPTION">
+		<help
+			key = "JHELP_MENUS_MENU_ITEM_FAMILYTREETOP_INDEX"
+		/>		<message>
+			<![CDATA[COM_FAMILYTREETOP_INDEX_VIEW_DEFAULT_DESC]]>
+		</message>
+	</layout>
+</metadata>
