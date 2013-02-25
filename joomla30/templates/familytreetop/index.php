@@ -29,7 +29,14 @@ $user = JFactory::getUser();
 	<![endif]-->
 </head>
 <body>
-    <jdoc:include type="component" />
-	<jdoc:include type="modules" name="debug" style="none" />
+<jdoc:include type="modules" name="navbar" style="none" />
+<div class="container">
+    <div class="row">
+        <div class="span12">
+            <jdoc:include type="component" />
+        </div>
+    </div>
+</div>
+<jdoc:include type="modules" name="debug" style="none" />
 </body>
 </html>
