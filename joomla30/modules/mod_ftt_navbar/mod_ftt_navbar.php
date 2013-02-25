@@ -12,9 +12,10 @@ defined('_JEXEC') or die;
 // Include the login functions only once
 require_once __DIR__ . '/helper.php';
 
+$helper = new modFttNavbarHelper();
+
 
 $layout = $params->get('layout', 'default');
-
-// Logged users must load the logout sublayout
+$view = $helper->getView();
 
 require JModuleHelper::getLayoutPath('mod_ftt_navbar', $layout);
