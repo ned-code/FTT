@@ -34,6 +34,7 @@ $user = JFactory::getUser();
 <div class="container">
     <div class="row">
         <div class="span12">
+            <jdoc:include type="message" />
             <jdoc:include type="component" />
             <jdoc:include type="modules" name="footer" style="none" />
         </div>
