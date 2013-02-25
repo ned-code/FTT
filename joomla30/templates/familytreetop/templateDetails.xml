@@ -24,6 +24,7 @@
 	<positions>
 		<position>debug</position>
 		<position>navbar</position>
+		<position>footer</position>
 	</positions>
 	<languages folder="language">
 		<language tag="en-GB">en-GB/en-GB.tpl_protostar.ini</language>

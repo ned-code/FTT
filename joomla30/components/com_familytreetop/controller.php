@@ -17,12 +17,16 @@ class FamilytreetopController extends JControllerLegacy
 		if ($view = $this->getView($vName, $vFormat))
 		{
 			// Do any specific processing by view.
+            /*
 			switch ($vName)
 			{
 				default:
 					$model = $this->getModel('Login');
 					break;
 			}
+            */
+
+            $model = $this->getModel($vName);
 
 			// Push the model into the view (as default).
 			$view->setModel($model, true);
