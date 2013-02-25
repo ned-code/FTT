@@ -21,7 +21,7 @@ jimport('joomla.application.module.helper');
         <div class="tab-content">
             <div class="tab-pane active" id="tab1">
                 <?php
-                    $module = JModuleHelper::getModule('login');
+                    $module = JModuleHelper::getModule('ftt_thismonth');
                     echo JModuleHelper::renderModule($module);
                 ?>
             </div>
