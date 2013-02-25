@@ -3,5 +3,5 @@ defined('_JEXEC') or die;
 
 ?>
 <footer>
-    <p>© Company 2013</p>
+    <p>© Family TreeTop 2013</p>
 </footer>
