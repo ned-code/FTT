@@ -1,0 +1,11 @@
+<?php
+$path = JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . "components/com_familytreetop/gedcom/";
+require_once $path . 'dates.php';
+require_once $path . 'places.php';
+require_once $path . 'events.php';
+require_once $path . 'medias.php';
+require_once $path . 'individuals.php';
+require_once $path . 'families.php';
+
+
+

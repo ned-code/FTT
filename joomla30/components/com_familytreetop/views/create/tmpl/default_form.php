@@ -41,7 +41,7 @@ defined('_JEXEC') or die;
                             <div class="control-group">
                                 <label class="control-label" for="email">Email</label>
                                 <div class="controls">
-                                    <input type="text" id="email" name="User[email]" value="<?=$this->data->facebook['email']?>" placeholder="Email">
+                                    <input type="text" id="email" name="User[email]" disabled value="<?=$this->data->facebook['email']?>" placeholder="Email">
                                 </div>
                             </div>
                             <div class="control-group">
