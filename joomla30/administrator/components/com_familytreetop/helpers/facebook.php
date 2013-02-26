@@ -19,6 +19,7 @@ class FacebookHelper
             $config = array();
             $config['appId'] = '208893339231244';
             $config['secret'] = '637f8f37469796999d208aca420d2235';
+            $config['coockie'] = true;
             self::$instance->facebook = new Facebook($config);
         }
         return self::$instance;

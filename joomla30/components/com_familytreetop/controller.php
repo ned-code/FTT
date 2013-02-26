@@ -20,7 +20,6 @@ class FamilytreetopController extends JControllerLegacy
         $jUser = JFactory::getUser();
         $user = FamilyTreeTopUsers::find_by_joomla_id($jUser->id);
 
-
         if($lName != 'default'){
             $lName = 'default_' . $lName;
         }

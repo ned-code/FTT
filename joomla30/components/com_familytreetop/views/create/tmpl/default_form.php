@@ -1,6 +1,19 @@
 <?php
 defined('_JEXEC') or die;
 ?>
+<?php if($this->error): ?>
+    <div class="alert alert-block alert-error fade in">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <h4 class="alert-heading">You got an error!</h4>
+        <?php if($this->error == 1): ?>
+            <p>User data not complete</p>
+        <?php elseif($this->error == 2): ?>
+            <p>Father data not complete</p>
+        <?php elseif($this->error == 3 ): ?>
+            <p>Mother data not complete</p>
+        <?php endif; ?>
+    </div>
+<?php endif; ?>
 <div class="row">
     <div class="span12">
         <form class="form-horizontal" id="createTreeForm" method="post" action="<?=JRoute::_(
@@ -34,7 +47,7 @@ defined('_JEXEC') or die;
                             <div class="control-group">
                                 <label class="control-label" for="gender">Gender</label>
                                 <div class="controls">
-                                    <select id="gender" name="gender">
+                                    <select id="gender" name="User[gender]">
                                         <?php if($this->data->facebook['gender'] == "male"): ?>
                                             <option selected value="male">Male</option>
                                             <option value="female">Female</option>
@@ -119,6 +132,7 @@ defined('_JEXEC') or die;
             }
         }
 
+
         $('input').change(validate);
         $('input').focus(validate);
 
@@ -130,5 +144,7 @@ defined('_JEXEC') or die;
                 e.preventDefault();
             }
         });
+
+
     });
 </script>

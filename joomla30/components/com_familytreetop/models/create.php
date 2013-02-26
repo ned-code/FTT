@@ -14,4 +14,9 @@ class FamilytreetopModelCreate extends JModelLegacy
 
         return $data;
     }
+
+    public function getError(){
+        $app = JFactory::getApplication();
+        return $app->input->get('error', false);
+    }
 }

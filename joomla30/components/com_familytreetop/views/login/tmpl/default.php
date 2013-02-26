@@ -16,6 +16,13 @@ defined('_JEXEC') or die;
                 $(el).button('complete');
                 if(response.auth == true){
                     window.location.href = "<?=JRoute::_("index.php?option=com_familytreetop&view=myfamily", false);?>";
+                } else if("undefined" !== response.url){
+                    if(args.userID != 0){
+                        console.log(response.url);
+                    } else {
+                        window.location.href = response.url;
+                    }
+
                 }
             });
         }
