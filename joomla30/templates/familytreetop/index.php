@@ -30,6 +30,7 @@ $user = JFactory::getUser();
 	<![endif]-->
 </head>
 <body>
+<div id="fb-root"></div>
 <jdoc:include type="modules" name="facebook-sdk" style="none" />
 <jdoc:include type="modules" name="navbar" style="none" />
 <div class="container">
@@ -42,15 +43,12 @@ $user = JFactory::getUser();
     </div>
 </div>
 <jdoc:include type="modules" name="debug" style="none" />
-<div id="fb-root"></div>
 <script>
     window.fbAsyncInit = function() {
         // init the FB JS SDK
-        FB.init({
-            appId      : '168084486657315', // App ID from the App Dashboard
-            status     : true, // check the login status upon init?
-            cookie     : true, // set sessions cookies to allow your server to access the session?
-            xfbml      : true  // parse XFBML tags on this page?
+        FB.init($FamilyTreeTop.app.config);
+        FB.getLoginStatus(function(response){
+            $FamilyTreeTop.init();
         });
     };
     (function(d, debug){
@@ -61,6 +59,5 @@ $user = JFactory::getUser();
         ref.parentNode.insertBefore(js, ref);
     }(document, /*debug*/ false));
 </script>
-<script>$FamilyTreeTop.init();</script>
 </body>
 </html>

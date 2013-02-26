@@ -9,31 +9,126 @@ defined('_JEXEC') or die;
         ); ?>">
             <fieldset>
                 <legend>Create Tree</legend>
-                <div class="control-group">
-                    <label class="control-label" for="firstName">First Name</label>
-                    <div class="controls">
-                        <input type="text" id="firstName" placeholder="First Name">
+                <div class="row">
+                    <div class="span6">
+                        <fieldset>
+                            <legend>You</legend>
+                            <div class="control-group">
+                                <label class="control-label" for="userFirstName">First Name</label>
+                                <div class="controls">
+                                    <input type="text" id="userFirstName" name="User[firstName]" value="<?=$this->data->facebook['first_name']?>" placeholder="First Name">
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="userLastName">Last Name</label>
+                                <div class="controls">
+                                    <input type="text" id="userLastName" name="User[lastName]" value="<?=$this->data->facebook['last_name']?>" placeholder="Last Name">
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="email">Email</label>
+                                <div class="controls">
+                                    <input type="text" id="email" name="User[email]" value="<?=$this->data->facebook['email']?>" placeholder="Email">
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="gender">Gender</label>
+                                <div class="controls">
+                                    <select id="gender" name="gender">
+                                        <?php if($this->data->facebook['gender'] == "male"): ?>
+                                            <option selected value="male">Male</option>
+                                            <option value="female">Female</option>
+                                        <?php else: ?>
+                                            <option value="male">Male</option>
+                                            <option selected value="female">Female</option>
+                                        <?php endif; ?>
+                                    </select>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="span6">
+                        <div class="row">
+                            <div class="span12">
+                                <fieldset>
+                                    <legend>Your Father</legend>
+                                    <div class="control-group warning">
+                                        <label class="control-label" for="fatherFirstName">Father First Name</label>
+                                        <div class="controls">
+                                            <input type="text" id="fatherFirstName" name="Father[firstName]" placeholder="Father First Name">
+                                        </div>
+                                    </div>
+                                    <div class="control-group warning">
+                                        <label class="control-label" for="fatherLastName">Father Last Name</label>
+                                        <div class="controls">
+                                            <input type="text" id="fatherLastName" name="Father[lastName]" placeholder="Father Last Name">
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="span12">
+                                <fieldset>
+                                    <legend>Your Mother</legend>
+                                    <div class="control-group warning">
+                                        <label class="control-label" for="motherFirstName">Mother First Name</label>
+                                        <div class="controls">
+                                            <input type="text" id="motherFirstName" name="Mother[firstName]" placeholder="First Name">
+                                        </div>
+                                    </div>
+                                    <div class="control-group warning">
+                                        <label class="control-label" for="motherLastName">Mother Last Name</label>
+                                        <div class="controls">
+                                            <input type="text" id="motherLastName" name="Mother[lastName]" placeholder="Mother Last Name">
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="control-group">
-                    <label class="control-label" for="middleName">Middle Name</label>
-                    <div class="controls">
-                        <input type="text" id="middleName" placeholder="Middle Name">
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label" for="lastName">Last Name</label>
-                    <div class="controls">
-                        <input type="text" id="lastName" placeholder="Last Name">
-                    </div>
-                </div>
-                <div class="control-group">
-                    <div class="controls">
-                        <button type="submit" class="btn btn-primary">Create Tree</button>
-                        <button type="button" class="btn">Cancel</button>
+                <div class="row">
+                    <div class="span12">
+                        <div class="well center">
+                            <button type="submit" class="btn btn-primary">Create Tree</button>
+                            <button type="button" class="btn">Cancel</button>
+                            <?=JHtml::_('form.token'); ?>
+                        </div>
                     </div>
                 </div>
             </fieldset>
         </form>
     </div>
 </div>
+<script>
+    $FamilyTreeTop.bind(function($){
+        'use strict';
+        var validate = function(){
+            var val, parent;
+            val = $(this).val();
+            parent = $(this).parent().parent();
+            if(val.length == 0){
+                $(parent).removeClass('success');
+                $(parent).addClass('warning');
+            } else {
+                if($(parent).hasClass('warning')){
+                    $(parent).removeClass('warning');
+                    $(parent).addClass('success');
+                }
+            }
+        }
+
+        $('input').change(validate);
+        $('input').focus(validate);
+
+        $("form").submit(function (e) {
+            var warning = $('.control-group.warning');
+            if(warning.length == 0){
+                return true;
+            } else {
+                e.preventDefault();
+            }
+        });
+    });
+</script>

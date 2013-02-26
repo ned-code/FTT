@@ -5,6 +5,8 @@ class FamilytreetopViewCreate extends JViewLegacy
 {
 	public function display($tpl = null)
 	{
+        $this->data = $this->get('Data');
+
 		parent::display($tpl);
 	}
 }

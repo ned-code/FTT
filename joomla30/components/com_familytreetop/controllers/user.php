@@ -32,14 +32,14 @@ class FamilytreetopControllerUser extends FamilytreetopController
         $app = JFactory::getApplication();
 
         $facebook = FacebookHelper::getInstance()->facebook;
-        $facebook_id = $app->input->getCmd('userID', 0);
+        $facebook_id = $facebook->getUser();
         $args = $facebook->api('/'.$facebook_id);
         $return = 'index.php?option=com_familytreetop&view=index';
         $username = null;
 
-        if($args['id']){
-            $user = JoomlaUsers::find_by_username('fb_' . $args['id']);
+        if($facebook_id != 0 && isset($args['id'])){
             if($args['id'] != 0){
+                $user = JoomlaUsers::find_by_username('fb_' . $args['id']);
                 $accessToken = $facebook->getAccessToken();
                 if(empty($user)){
                     $jUser = $this->create($args, $accessToken);
@@ -62,8 +62,7 @@ class FamilytreetopControllerUser extends FamilytreetopController
                 $app->setUserState('users.login.form.return', $return);
                 $response = $app->login($credentials, $options);
             }
-
-            echo json_encode(array('user'=>$response));
+            echo json_encode(array('auth'=>$response));
         }
         exit;
     }

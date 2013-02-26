@@ -2,8 +2,18 @@
     'use strict';
 
     var $FamilyTreeTop = function(){
+        this.app = {
+            config:{
+                appId:"208893339231244",
+                status: true,
+                coockie: true,
+                xfbml: true
+            },
+            permissions:"user_about_me,user_birthday,user_relationships,user_photos,friends_photos,read_stream,read_insights"
+        }
+
         this.bindPull = [];
-        this.objectPull = {};
+
     }
 
     $FamilyTreeTop.prototype.bind = function(call){
@@ -26,9 +36,6 @@
                 type: "POST",
                 dataType:"json"
             }).done(callback);
-        },
-        getFacebookPermissions:function(){
-            return "user_about_me,user_birthday,user_relationships,user_photos,friends_photos,read_stream,read_insights";
         }
     }
 

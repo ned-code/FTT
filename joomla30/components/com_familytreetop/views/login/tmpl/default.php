@@ -4,7 +4,7 @@ defined('_JEXEC') or die;
 <div class="row">
     <div class="span12">
         <div class="well center">
-            <a id="login" data-complete-text="finished!" data-loading-text="Loading..."  href="#" onclick="return false;" class="btn btn-large">Login</a>
+            <a id="login" data-complete-text="Login" data-loading-text="Loading..."  href="#" onclick="return false;" class="btn btn-large">Login</a>
         </div>
     </div>
 </div>
@@ -12,9 +12,11 @@ defined('_JEXEC') or die;
     $FamilyTreeTop.bind(function($){
         var $this = this, load;
         load = function(el, args){
-            $this.ajax('user.activate', args, function(){
-                $(el).button('complete')
-                console.log(arguments);
+            $this.ajax('user.activate', args, function(response){
+                $(el).button('complete');
+                if(response.auth == true){
+                    window.location.href = "<?=JRoute::_("index.php?option=com_familytreetop&view=myfamily", false);?>";
+                }
             });
         }
 
@@ -26,7 +28,7 @@ defined('_JEXEC') or die;
                     if(response.status == "connected"){
                         load(this, response.authResponse);
                     }
-                }, $this.getFacebookPermissions());
+                }, $FamilyTreeTop.app.permissions);
             } else {
                 load(this, auth);
             }
