@@ -8,6 +8,7 @@ $app = JFactory::getApplication();
 $doc = JFactory::getDocument();
 
 $doc->addStyleSheet('templates/'.$this->template.'/css/bootstrap.min.css');
+$doc->addStyleSheet('templates/'.$this->template.'/css/bootstrap-responsive.min.css');
 
 // Add current user information
 $user = JFactory::getUser();
