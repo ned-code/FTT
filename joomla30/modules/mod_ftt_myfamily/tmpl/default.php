@@ -6,8 +6,8 @@ defined('_JEXEC') or die;
     <div class="span6">
         <div class="well">
             <fieldset>
-                <legend>Families</legend>
-
+                <legend>My Family</legend>
+               
             </fieldset>
         </div>
     </div>

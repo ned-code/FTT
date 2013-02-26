@@ -20,10 +20,33 @@ jimport('joomla.application.module.helper');
         </ul>
         <div class="tab-content">
             <div class="tab-pane active" id="tab1">
-                <?php
-                    $module = JModuleHelper::getModule('ftt_thismonth');
-                    echo JModuleHelper::renderModule($module);
-                ?>
+                <div class="row">
+                    <div class="span6">
+
+                        <?php
+                        $module = JModuleHelper::getModule('ftt_myfamily');
+                        echo JModuleHelper::renderModule($module);
+                        ?>
+                    </div>
+                    <div class="span6">
+                        <?php
+                            $module = JModuleHelper::getModule('ftt_recentvisitors');
+                            echo JModuleHelper::renderModule($module);
+                        ?>
+                        <?php
+                        $module = JModuleHelper::getModule('ftt_thismonth');
+                        echo JModuleHelper::renderModule($module);
+                        ?>
+                        <?php
+                        $module = JModuleHelper::getModule('ftt_quick_facts');
+                        echo JModuleHelper::renderModule($module);
+                        ?>
+                        <?php
+                        $module = JModuleHelper::getModule('ftt_latest_updates');
+                        echo JModuleHelper::renderModule($module);
+                        ?>
+                    </div>
+                </div>
             </div>
             <div class="tab-pane" id="tab2">
                 <?php

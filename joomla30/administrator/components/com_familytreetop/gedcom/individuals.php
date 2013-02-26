@@ -39,7 +39,7 @@ class FamilyTreeTopGedcomIndividualsModel {
 
             $this->gedcom_id = $link->id;
         } else {
-            $ind = FamilyTreeTopIndividuals::find($this->gedcom_id);
+            $ind = FamilyTreeTopIndividuals::find_by_gedcom_id($this->gedcom_id);
         }
         if(empty($this->creator_id)){
             $this->creator_id = $this->gedcom_id;
@@ -80,9 +80,23 @@ class FamilyTreeTopGedcomIndividualsModel {
 class FamilyTreeTopGedcomIndividualsManager {
 
     public function get($gedcom_id = null){
+        $user = new FamilyTreeTopGedcomIndividualsModel();
         if(empty($gedcom_id)){
-            return new FamilyTreeTopGedcomIndividualsModel();
+            return $user;
         }
+        $link = FamilyTreeTopTreeLinks::find($gedcom_id);
+        $ind = FamilyTreeTopIndividuals::find_by_gedcom_id($gedcom_id);
+        $name = FamilyTreeTopNames::find_by_gedcom_id($gedcom_id);
+
+        $user->tree_id = $link->tree_id;
+        $user->gedcom_id = $link->id;
+        $user->first_name = $name->first_name ;
+        $user->middle_name = $name->middle_name ;
+        $user->last_name = $name->last_name ;
+        $user->know_as = $name->know_as ;
+        $user->gender = $ind->gender ;
+
+        return $user;
     }
 
 

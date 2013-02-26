@@ -2,12 +2,12 @@
 defined('_JEXEC') or die;
 
 ?>
-<div id="thisMonth" class="row">
+<div id="quickFacts" class="row">
     <div class="span6">
         <div class="well">
             <fieldset>
-                <legend>Families</legend>
-
+                <legend>Quick Facts</legend>
+               
             </fieldset>
         </div>
     </div>
