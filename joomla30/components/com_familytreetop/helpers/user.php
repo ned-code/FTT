@@ -38,10 +38,13 @@ class FamilyTreeTopUserHelper
 
         //get user accounts
         self::$instance->accounts = FamilyTreeTopAccounts::find_by_joomla_id($user->id);
-        self::$instance->users = FamilyTreeTopUsers::find_by_account_id(self::$instance->accounts->id);
+        $account_id = self::$instance->accounts->id;
+        self::$instance->users = FamilyTreeTopUsers::find_by_account_id($account_id);
+
         if(self::$instance->accounts->current != null){
             $user_id = self::$instance->accounts->current;
             $user = FamilyTreeTopUsers::find($user_id);
+
             self::$instance->tree_id = $user->tree_id;
             self::$instance->gedcom_id = $user->gedcom_id;
         }

@@ -18,7 +18,9 @@ class FamilytreetopController extends JControllerLegacy
         $facebook_id = $facebook->getUser();
 
         $jUser = JFactory::getUser();
-        $user = null;
+        $user = FamilyTreeTopUserHelper::getInstance()->get();
+
+
 
         if($lName != 'default'){
             $lName = 'default_' . $lName;
@@ -33,7 +35,7 @@ class FamilytreetopController extends JControllerLegacy
                     if($jUser->get('guest') || $facebook_id == 0){
                         $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=login", false));
                         return;
-                    } else if($user == null){
+                    } else if($user->tree_id == null){
                         $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=create", false));
                         return;
                     } else {
