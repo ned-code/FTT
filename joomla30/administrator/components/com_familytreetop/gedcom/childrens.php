@@ -8,23 +8,30 @@ class FamilyTreeTopGedcomChildrensManager {
         $this->tree_id = $tree_id;
         $this->type = $type;
 
-        $db = JFactory::getDbo();
-        $sql = "SELECT c.*
-                FROM #__familytreetop_childrens as c, #__familytreetop_tree_links as l, #__familytreetop_trees as t
-                WHERE c.gedcom_id = l.id AND l.tree_id = t.id AND t.id = " . $tree_id;
-        $db->setQuery($sql);
-        $rows = $db->loadAssocList('id');
-
         $list = array(
             'Individual' => array(),
             'Family' => array(),
             'default' => array()
         );
-        $list['default'] = $rows;
-        foreach($rows as $row){
-            $this->addRow($list, 'Individual', $row);
-            $this->addRow($list, 'Family', $row);
+
+        if(!empty($tree_id)){
+            $db = JFactory::getDbo();
+            $sql = "SELECT c.*
+                FROM #__familytreetop_childrens as c, #__familytreetop_tree_links as l, #__familytreetop_trees as t
+                WHERE c.gedcom_id = l.id AND l.tree_id = t.id AND t.id = " . $tree_id;
+            $db->setQuery($sql);
+            $rows = $db->loadAssocList('id');
+
+
+            $list['default'] = $rows;
+            foreach($rows as $row){
+                $this->addRow($list, 'Individual', $row);
+                $this->addRow($list, 'Family', $row);
+            }
+
+
         }
+
         $this->list = $list;
     }
 

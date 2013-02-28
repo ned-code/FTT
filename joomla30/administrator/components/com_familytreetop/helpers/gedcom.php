@@ -18,13 +18,8 @@ class GedcomHelper
             self::$instance = new GedcomHelper ();
 
             $user = FamilyTreeTopUserHelper::getInstance()->get();
-            $accounts = $user->accounts;
-
-            if(!empty($accounts)){
-                $tree_id = $accounts[0]['tree_id'];
-                self::$instance->individuals = new FamilyTreeTopGedcomIndividualsManager($tree_id);
-                self::$instance->families = new FamilyTreeTopGedcomFamiliesManager($tree_id);
-            }
+            self::$instance->individuals = new FamilyTreeTopGedcomIndividualsManager($user->tree_id);
+            self::$instance->families = new FamilyTreeTopGedcomFamiliesManager($user->tree_id);
         }
         return self::$instance;
     }

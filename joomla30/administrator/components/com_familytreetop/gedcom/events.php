@@ -5,39 +5,42 @@ class FamilyTreeTopGedcomEventsManager {
     protected $type;
 
     public function __construct($tree_id = null, $type = null){
-        if(empty($tree_id) && empty($type)) return false;
         $this->tree_id = $tree_id;
         $this->type = $type;
 
-        $db = JFactory::getDbo();
-        $sql = "SELECT e.*
+        if(!empty($tree_id)){
+            $db = JFactory::getDbo();
+            $sql = "SELECT e.*
                 FROM #__familytreetop_events as e, #__familytreetop_tree_links as l, #__familytreetop_trees as t
                 WHERE e.gedcom_id = l.id AND l.tree_id = t.id AND t.id =" . $tree_id. " GROUP BY id";
-        $db->setQuery($sql);
-        $rows = $db->loadAssocList();
-        $individualEvents = array();
+            $db->setQuery($sql);
+            $rows = $db->loadAssocList();
+            $individualEvents = array();
 
-        if(!empty($rows)){
-            foreach($rows as $row){
-                $individualEvents[$row['gedcom_id']][] = $row;
+            if(!empty($rows)){
+                foreach($rows as $row){
+                    $individualEvents[$row['gedcom_id']][] = $row;
+                }
             }
-        }
 
-
-        $sql = "SELECT e.*
+            $sql = "SELECT e.*
                 FROM #__familytreetop_events as e, #__familytreetop_families as f,  #__familytreetop_tree_links as l, #__familytreetop_trees as t
                 WHERE e.family_id = f.id AND (f.husb = l.id OR f.wife = l.id) AND l.tree_id = t.id AND t.id =" . $tree_id. " GROUP BY id";
-        $db->setQuery($sql);
-        $rows = $db->loadAssocList();
-        $familyEvents = array();
+            $db->setQuery($sql);
+            $rows = $db->loadAssocList();
+            $familyEvents = array();
 
-        if(!empty($rows)){
-            foreach($rows as $row){
-                $familyEvents[$row['family_id']][] = $row;
+            if(!empty($rows)){
+                foreach($rows as $row){
+                    $familyEvents[$row['family_id']][] = $row;
+                }
             }
+            $this->list = array('Individual'=>$individualEvents, 'Family'=>$familyEvents);
+        } else {
+            $this->list = array('Individual'=>array(), 'Family'=>array());
         }
 
-        $this->list = array('Individual'=>$individualEvents, 'Family'=>$familyEvents);
+
     }
 
     public function get($id){

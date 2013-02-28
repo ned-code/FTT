@@ -10,6 +10,9 @@ class FamilyTreeTopUserHelper
     private function __wakeup(){}
 
     private $accounts = array();
+    private $users = array();
+    private $tree_id = null;
+    private $gedcom_id = null;
     private $joomla_id = null;
     private $joomla_username = null;
     private $joomla_email = null;
@@ -34,17 +37,23 @@ class FamilyTreeTopUserHelper
         self::$instance->joomla_register_date = $user->registerDate;
 
         //get user accounts
-        $db = JFactory::getDbo();
-        $sql = "SELECT *
-                FROM #__familytreetop_accounts as a, #__familytreetop_users as u
-                WHERE a.id = u.account_id AND a.joomla_id = ". $user->id;
-        $db->setQuery($sql);
-        self::$instance->accounts = $db->loadAssocList();
+        self::$instance->accounts = FamilyTreeTopAccounts::find_by_joomla_id($user->id);
+        self::$instance->users = FamilyTreeTopUsers::find_by_account_id(self::$instance->accounts->id);
+        if(self::$instance->accounts->current != null){
+            $user_id = self::$instance->accounts->current;
+            $user = FamilyTreeTopUsers::find($user_id);
+            self::$instance->tree_id = $user->tree_id;
+            self::$instance->gedcom_id = $user->gedcom_id;
+        }
+
     }
 
     public function get(){
         $user = new stdClass;
         $user->accounts = $this->accounts;
+        $user->users = $this->users;
+        $user->tree_id = $this->tree_id;
+        $user->gedcom_id = $this->gedcom_id;
         $user->joomla_id = $this->joomla_id;
         $user->username = $this->joomla_username;
         $user->email = $this->joomla_email;

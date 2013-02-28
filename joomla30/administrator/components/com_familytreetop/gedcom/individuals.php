@@ -82,23 +82,26 @@ class FamilyTreeTopGedcomIndividualsModel {
 
 
 class FamilyTreeTopGedcomIndividualsManager {
-    protected $list;
+    protected $list = array();
     protected $tree_id;
     protected $chidrens;
     protected $events;
 
     public function __construct($tree_id){
         $this->tree_id = $tree_id;
+
         $this->chidrens = new FamilyTreeTopGedcomChildrensManager($tree_id, "Individual");
         $this->events = new FamilyTreeTopGedcomEventsManager($tree_id, "Individual");
 
-        $db = JFactory::getDbo();
-        $sql = "SELECT i.id as individual_id, n.id as name_id, i.gedcom_id, i.creator_id, i.gender, i.family_id, i.create_time,
+        if(!empty($tree_id)){
+            $db = JFactory::getDbo();
+            $sql = "SELECT i.id as individual_id, n.id as name_id, i.gedcom_id, i.creator_id, i.gender, i.family_id, i.create_time,
                     i.change_time, n.first_name, n.middle_name, n.last_name, n.know_as
                 FROM #__familytreetop_individuals as i,#__familytreetop_names as n,  #__familytreetop_tree_links as l, #__familytreetop_trees as t
                 WHERE n.gedcom_id = i.gedcom_id AND i.gedcom_id = l.id AND l.tree_id = t.id AND t.id = ". $tree_id;
-        $db->setQuery($sql);
-        $this->list = $db->loadAssocList('gedcom_id');
+            $db->setQuery($sql);
+            $this->list = $db->loadAssocList('gedcom_id');
+        }
     }
 
     protected function getObject(){
@@ -135,8 +138,6 @@ class FamilyTreeTopGedcomIndividualsManager {
         //medias
 
         //events
-        $ind->events = $this->events->get($ind->gedcom_id);
-
         return $ind;
     }
 

@@ -34,6 +34,48 @@ class FamilytreetopControllerCreate extends FamilytreetopController
             $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=create&layout=form&error=3" , false));
         }
 
+        $tree = new FamilyTreeTopTrees();
+        $tree->save();
+
+        $ind = $gedcom->individuals->get();
+        $ind->tree_id = $tree->id;
+        $ind->first_name = $userData['firstName'];
+        $ind->last_name = $userData['lastName'];
+        $ind->gender = $userData['gender'];
+        $ind->save();
+
+        $father = $gedcom->individuals->get();
+        $father->tree_id = $tree->id;
+        $father->gender = 1;
+        $father->first_name = $fatherData['firstName'];
+        $father->last_name = $fatherData['lastName'];
+        $father->save();
+
+        $mother = $gedcom->individuals->get();
+        $mother->tree_id = $tree->id;
+        $mother->gender = 0;
+        $mother->first_name = $motherData['firstName'];
+        $mother->last_name = $motherData['lastName'];
+        $mother->save();
+
+        $family = $gedcom->families->get();
+        $family->wife = $father->gedcom_id;
+        $family->husb = $mother->gedcom_id;
+        $family->save();
+        $family->addChild($ind->gedcom_id);
+
+        $account = FamilyTreeTopAccounts::find_by_joomla_id($jUser->id);
+
+        $user = new FamilyTreeTopUsers();
+        $user->account_id = $account->id;
+        $user->gedcom_id = $ind->gedcom_id;
+        $user->tree_id = $tree->id;
+        $user->role = "admin";
+        $user->save();
+
+        $account->current = $user->id;
+        $account->save();
+
         $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=myfamily",false));
 	}
 }

@@ -40,6 +40,8 @@ class FamilyTreeTopGedcomFamilyModel {
         $family->change_time = $this->change_time;
         $family->save();
 
+        $this->id = $family->id;
+
         //childrens
         $this->childrensManager->save($this->id, $this->childrens);
 
@@ -56,7 +58,7 @@ class FamilyTreeTopGedcomFamilyModel {
 }
 
 class FamilyTreeTopGedcomFamiliesManager {
-    protected $list;
+    protected $list = array();
     protected $tree_id;
     protected $chidrens;
     protected $events;
@@ -66,12 +68,15 @@ class FamilyTreeTopGedcomFamiliesManager {
         $this->chidrens = new FamilyTreeTopGedcomChildrensManager($tree_id, "Family");
         $this->events = new FamilyTreeTopGedcomEventsManager($tree_id, "Family");
 
-        $db = JFactory::getDbo();
-        $sql = "SELECT f.*
+        if(!empty($tree_id)){
+            $db = JFactory::getDbo();
+            $sql = "SELECT f.*
                 FROM #__familytreetop_families as f, #__familytreetop_tree_links as l, #__familytreetop_trees as t
-                WHERE (f.husb = l.id OR f.wife = l.id) AND l.tree_id = t.id AND t.id = " . $tree_id;
-        $db->setQuery($sql);
-        $this->list = $db->loadAssocList('id');
+                WHERE (f.husb = l.id OR f.wife = l.id) AND l.tree_id = t.id AND t.id = " . $tree_id. " GROUP BY id";
+            $db->setQuery($sql);
+            $this->list = $db->loadAssocList('id');
+        }
+
     }
 
     protected function getObject(){
