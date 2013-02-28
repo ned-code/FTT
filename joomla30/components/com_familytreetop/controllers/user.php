@@ -7,6 +7,7 @@ class FamilytreetopControllerUser extends FamilytreetopController
 {
 	protected function create($args, $accessToken)
 	{
+        //create joomla user
         $data['username'] = "fb_".$args['id'];
         $data['password'] = $accessToken;
         $data['name'] = $args['name'];
@@ -16,6 +17,12 @@ class FamilytreetopControllerUser extends FamilytreetopController
         $user = new JUser;
         $user->bind($data);
         $user->save();
+
+        //create familytreetop accounts
+        $account = new FamilyTreeTopAccounts();
+        $account->joomla_id = $user->id;
+        $account->access_token = $accessToken;
+        $account->save();
 
         return $user;
 	}
@@ -43,7 +50,7 @@ class FamilytreetopControllerUser extends FamilytreetopController
             exit;
         }
 
-        if($facebook_id != 0 && isset($args['id'])){
+        if($facebook_id != 0){
             $args = $facebook->api('/'.$facebook_id);
             if($args['id'] != 0){
                 $user = JoomlaUsers::find_by_username('fb_' . $args['id']);
@@ -68,8 +75,9 @@ class FamilytreetopControllerUser extends FamilytreetopController
 
                 $app->setUserState('users.login.form.return', $return);
                 $response = $app->login($credentials, $options);
+                echo json_encode(array('auth'=>$response));
+                exit;
             }
-            echo json_encode(array('auth'=>$response));
         }
         echo json_encode(array('auth'=>false));
         exit;

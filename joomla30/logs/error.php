@@ -14,3 +14,6 @@
 2013-02-25T23:18:18+00:00	INFO	joomlacanceled	
 2013-02-25T23:22:26+00:00	INFO	joomlacanceled	
 2013-02-25T23:31:34+00:00	INFO	joomlafailure	Username and password do not match or you do not have an account yet.
+2013-02-28T08:03:44+00:00	INFO	joomlafailure	Username and password do not match or you do not have an account yet.
+2013-02-28T08:24:02+00:00	INFO	joomlafailure	Username and password do not match or you do not have an account yet.
+2013-02-28T08:25:15+00:00	INFO	joomlafailure	Username and password do not match or you do not have an account yet.

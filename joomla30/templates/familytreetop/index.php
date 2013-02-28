@@ -18,7 +18,6 @@ $user = JFactory::getUser();
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.js"></script>
-    <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.js"></script>
 	<jdoc:include type="head" />
 	<!--[if lt IE 9]>
 		<script src="<?php echo $this->baseurl ?>/media/jui/js/html5.js"></script>
@@ -40,6 +39,8 @@ $user = JFactory::getUser();
 <jdoc:include type="modules" name="debug" style="none" />
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/jquery-1.9.1.min.js"></script>
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/bootstrap.min.js"></script>
+<!-- uncompressed files -->
+<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.popovers.js"></script>
 <script>
     window.fbAsyncInit = function() {
         // init the FB JS SDK

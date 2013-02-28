@@ -22,7 +22,6 @@ class FamilytreetopControllerCreate extends FamilytreetopController
         $jUser = JFactory::getUser();
         $gedcom = GedcomHelper::getInstance();
 
-
         $userData = $app->input->post->get('User', array(), 'array');
         $fatherData = $app->input->post->get('Father', array(), 'array');
         $motherData = $app->input->post->get('Mother', array(), 'array');
@@ -34,50 +33,6 @@ class FamilytreetopControllerCreate extends FamilytreetopController
         } else if($this->validateArray($motherData)){
             $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=create&layout=form&error=3" , false));
         }
-
-        $tree = new FamilyTreeTopTrees();
-        $tree->save();
-
-        $family = $gedcom->families->get();
-        $family->save();
-
-        $ind = $gedcom->individuals->get();
-        $ind->tree_id = $tree->id;
-        $ind->first_name = $userData['firstName'];
-        $ind->last_name = $userData['lastName'];
-        $ind->gender = ($userData['gender']=="male")?1:0;
-        $ind->save();
-
-        $user = new FamilyTreeTopUsers();
-        $user->joomla_id = $jUser->id;
-        $user->gedcom_id = $ind->gedcom_id;
-        $user->tree_id = $tree->id;
-        $user->role = "admin";
-        $user->save();
-
-        $father = $gedcom->individuals->get();
-        $father->creator_id = $ind->gedcom_id;
-        $father->gender = 1;
-        $father->family_id = $family->id;
-        $father->tree_id = $tree->id;
-        $father->first_name = $fatherData['firstName'];
-        $father->last_name = $fatherData['lastName'];
-        $father->save();
-
-        $mother = $gedcom->individuals->get();
-        $mother->tree_id = $tree->id;
-        $mother->gender = 0;
-        $mother->family_id = $family->id;
-        $mother->creator_id = $ind->gedcom_id;
-        $mother->first_name = $motherData['firstName'];
-        $mother->last_name = $motherData['lastName'];
-        $mother->save();
-
-        $family->husb = $father->gedcom_id;
-        $family->wife = $mother->gedcom_id;
-        $family->type = "marriage";
-        $family->children = array($ind->gedcom_id);
-        $family->save();
 
         $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=myfamily",false));
 	}

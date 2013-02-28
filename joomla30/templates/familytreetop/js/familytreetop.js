@@ -14,18 +14,31 @@
 
         this.bindPull = [];
 
+        this.moduleLinkPull = {};
+        this.modulePull = [];
+    }
+
+    $FamilyTreeTop.prototype.create = function(name, mod){
+        this.modulePull.push({constructor:mod, object: null});
+        this.moduleLinkPull[name] = this.modulePull.length - 1;
     }
 
     $FamilyTreeTop.prototype.bind = function(call){
-        this.bindPull.push([call]);
+        this.bindPull.push(call);
     }
 
     $FamilyTreeTop.prototype.init = function(){
-        this.bindPull.forEach(function(el){
+        var $this = this;
+        $this.bindPull.forEach(function(el){
             var F = function(){};
             F.prototype = $FamilyTreeTop.prototype.fn;
-            el[0].call(new F(), jQuery);
+            el.call(new F(), jQuery);
         });
+
+        $this.modulePull.forEach(function(el){
+            console.log(el);
+        });
+
     }
 
     $FamilyTreeTop.prototype.fn = {

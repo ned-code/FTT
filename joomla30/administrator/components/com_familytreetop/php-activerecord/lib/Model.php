@@ -690,12 +690,13 @@ class Model
 		return $this->__new_record;
 	}
 
-	/**
-	 * Throws an exception if this model is set to readonly.
-	 *
-	 * @throws ActiveRecord\ReadOnlyException
-	 * @param string $method_name Name of method that was invoked on model for exception message
-	 */
+    /**
+     * Throws an exception if this model is set to readonly.
+     *
+     *
+     * @param string $method_name Name of method that was invoked on model for exception message
+     * @throws ReadOnlyException
+     */
 	private function verify_not_readonly($method_name)
 	{
 		if ($this->is_readonly())
@@ -1148,13 +1149,14 @@ class Model
 		$this->set_attributes_via_mass_assignment($attributes, true);
 	}
 
-	/**
-	 * Passing $guard_attributes as true will throw an exception if an attribute does not exist.
-	 *
-	 * @throws ActiveRecord\UndefinedPropertyException
-	 * @param array $attributes An array in the form array(name => value, ...)
-	 * @param boolean $guard_attributes Flag of whether or not protected/non-accessible attributes should be guarded
-	 */
+    /**
+     * Passing $guard_attributes as true will throw an exception if an attribute does not exist.
+     *
+     *
+     * @param array $attributes An array in the form array(name => value, ...)
+     * @param boolean $guard_attributes Flag of whether or not protected/non-accessible attributes should be guarded
+     * @throws UndefinedPropertyException
+     */
 	private function set_attributes_via_mass_assignment(array &$attributes, $guard_attributes)
 	{
 		//access uninflected columns since that is what we would have in result set
@@ -1842,7 +1844,8 @@ class Model
 		{
 			$connection->transaction();
 
-			if ($closure() === false)
+            /** @var $closure TYPE_NAME */
+            if ($closure() === false)
 			{
 				$connection->rollback();
 				return false;

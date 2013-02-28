@@ -18,7 +18,7 @@ class FamilytreetopController extends JControllerLegacy
         $facebook_id = $facebook->getUser();
 
         $jUser = JFactory::getUser();
-        $user = FamilyTreeTopUsers::find_by_joomla_id($jUser->id);
+        $user = null;
 
         if($lName != 'default'){
             $lName = 'default_' . $lName;
