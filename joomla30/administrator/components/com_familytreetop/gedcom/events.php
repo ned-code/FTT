@@ -1,169 +1,105 @@
 <?php
+class FamilyTreeTopGedcomEventModel {
+    public $id = null;
+    public $gedcom_id = null;
+    public $family_id = null;
+    public $type = null;
+    public $name = null;
+    public $change_time = null;
 
-/*
-public function getEventObject(){
-    $event = new stdClass;
-    $event->id = null;
-    $event->gedcom_id = null;
-    $event->family_id = null;
-    $event->type = null;
-    $event->name = null;
-    $event->change_time = null;
+    public $date = null;
+    public $place = null;
 
-    $event->date = $this->getDateObject();
-    $event->place = $this->getPlaceObject();
-
-    return $event;
-}
-
-public function getDateObject(){
-    $date = new stdClass;
-    $date->id = null;
-    $date->event_id = null;
-    $date->type = null;
-    $date->start_day = null;
-    $date->start_month = null;
-    $date->start_year = null;
-    $date->end_day = null;
-    $date->end_month = null;
-    $date->end_year = null;
-    return $date;
-}
-
-public function getPlaceObject(){
-    $place = new stdClass;
-    $place->id = null;
-    $place->event_id = null;
-    $place->city = null;
-    $place->state = null;
-    $place->country = null;
-    return $place;
-}
-*/
-/*
-class FamilyTreeTopGedcomEventsManager {
-    protected $list;
-    protected $tree_id;
-    protected $type;
-
-    public function __construct($tree_id = null, $type = null){
-        $this->tree_id = $tree_id;
-        $this->type = $type;
-
-        if(!empty($tree_id)){
-            $db = JFactory::getDbo();
-            $sql = "SELECT e.*
-                FROM #__familytreetop_events as e, #__familytreetop_tree_links as l, #__familytreetop_trees as t
-                WHERE e.gedcom_id = l.id AND l.tree_id = t.id AND t.id =" . $tree_id. " GROUP BY id";
-            $db->setQuery($sql);
-            $rows = $db->loadAssocList();
-            $individualEvents = array();
-
-            if(!empty($rows)){
-                foreach($rows as $row){
-                    $individualEvents[$row['gedcom_id']][] = $row;
-                }
-            }
-
-            $sql = "SELECT e.*
-                FROM #__familytreetop_events as e, #__familytreetop_families as f,  #__familytreetop_tree_links as l, #__familytreetop_trees as t
-                WHERE e.family_id = f.id AND (f.husb = l.id OR f.wife = l.id) AND l.tree_id = t.id AND t.id =" . $tree_id. " GROUP BY id";
-            $db->setQuery($sql);
-            $rows = $db->loadAssocList();
-            $familyEvents = array();
-
-            if(!empty($rows)){
-                foreach($rows as $row){
-                    $familyEvents[$row['family_id']][] = $row;
-                }
-            }
-            $this->list = array('Individual'=>$individualEvents, 'Family'=>$familyEvents);
-        } else {
-            $this->list = array('Individual'=>array(), 'Family'=>array());
-        }
-
-
-    }
-
-    public function get($id){
-        $list = $this->list[$this->type];
-        if(isset($list[$id])){
-            $gedcom = GedcomHelper::getInstance();
-            $result = array();
-            foreach($list[$id] as $e){
-                $event = $gedcom->getEventObject();
-                $event->id = $e['id'];
-                $event->gedcom_id = $e['gedcom_id'];
-                $event->family_id = $e['family_id'];
-                $event->type = $e['type'];
-                $event->name = $e['name'];
-                $event->change_time = $e['change_time'];
-
-                $result[$e['type']][] = $event;
-            }
-            return $result;
-        }
-    }
-
-    public function save($id, $data){
-        $list = $this->list[$this->type];
-        $type = $this->type=="Family"?"family_id":"gedcom_id";
-        if(empty($data->id)){
-            $event = new FamilyTreeTopEvents();
-        } else {
-            $event = FamilyTreeTopEvents::find($data->id);
-        }
+    public function __construct(){
         $date = JFactory::getDate();
-        $time = $date->toSql();
+        $this->change_time = $date->toSql();
 
-        $event->{$type} = $id;
-        $event->name = $data->name;
-        $event->type = $data->type;
-        $event->change_time = $time;
+        $gedcom = GedcomHelper::getInstance();
+
+        $this->date = $gedcom->dates->get();
+        $this->place = $gedcom->places->get();
+    }
+
+    public function save(){
+        $gedcom = GedcomHelper::getInstance();
+        if(empty($this->id)){
+            $event = new FamilyTreeTopEvents();
+        }
+        $event->gedcom_id = $this->gedcom_id;
+        $event->family_id = $this->family_id;
+        $event->name = $this->name;
+        $event->type = $this->type;
+        $event->change_time = $this->change_time;
         $event->save();
 
-        $list[$event->{$type}][] = array(
-            'id'=>$event->id,
-            'gedcom_id' => $event->gedcom_id,
-            'family_id' => $event->family_id,
-            'name' => $event->name,
-            'type' => $event->type,
-            'change_time' => $event->change_type
-        );
+        $event->place->save();
+        $event->date->save();
 
-        if($event->id != null){
-            if(empty($data->date->id)){
-                $date = new FamilyTreeTopDates();
-                $date->event_id = $event->id;
+        $gedcom->events->updateList($event);
+    }
+}
 
-            } else {
-                $date = FamilyTreeTopDates::find($data->date->id);
+class FamilyTreeTopGedcomEventsManager {
+    protected $tree_id;
+    protected $list_by_family_id = array();
+    protected $list_by_gedcom_id = array();
+
+    public function __contstruct($tree_id){
+        $this->tree_id = $tree_id;
+        $db = JFactory::getDbo();
+        $sql = "SELECT e.*
+                FROM #__familytreetop_events as e,
+                    #__familytreetop_families as f,
+                    #__familytreetop_tree_links as l,
+                    #__familytreetop_trees as t
+
+                WHERE IF(
+                    e.gedcom_id  IS NULL,
+                            f.husb = l.id OR f.wife = l.id,
+                            e.gedcom_id  = l.id
+                        ) AND  l.tree_id = t.id AND t.id = %s
+
+                GROUP BY id";
+        $db->setQuery(sprintf($sql, $tree_id));
+        $rows = $db->loadAssocList('id');
+
+        $this->list_by_gedcom_id = $this->sortList('gedcom_id', $rows);
+        $this->list_by_family_id = $this->sortList('family_id', $rows);
+    }
+
+    protected function sortList($type, $rows){
+        if(empty($rows)) return array();
+        $result = array();
+        foreach($rows as $key => $row){
+            if(isset($row[$type])){
+                $result[$row[$type]][$key] = $row;
             }
-            $date->type = $data->date->type;
-            $date->start_day = $data->date->start_day;
-            $date->start_month = $data->date->start_month;
-            $date->start_year = $data->date->start_year;
-            $date->end_day = $data->date->end_day;
-            $date->end_month = $data->date->end_month;
-            $date->end_year = $data->date->end_year;
-            $date->change_time = $time;
+        }
+        return $result;
+    }
 
-            $date->save();
+    public function updateList($event){
+        if($event->id) return false;
+        $data = array();
+        $data['id'] = $event->id;
+        $data['gedcom_id'] = $event->gedcom_id;
+        $data['family_id'] = $event->family_id;
+        $data['type'] = $event->type;
+        $data['change_time'] = $event->change_time;
 
-            //place
-            if(empty($data->place->id)){
-                $place = new FamilyTreeTopPlaces();
-                $place->event_id = $event->id;
-            } else {
-                $place = FamilyTreeTopPlaces::find($data->place->id);
-            }
-            $place->city = $data->place->city;
-            $place->state = $data->place->state;
-            $place->country = $data->place->country;
-            $place->change_time = $time;
-            $place->save();
+        $this->list_by_gedcom_id[$event->gedcom_id] = $data;
+        $this->list_by_family_id[$event->family_id] = $data;
+    }
+
+    public function get($id = null, $family = false){
+        if(empty($id)){
+            return new FamilyTreeTopGedcomEventModel();
         }
 
     }
+
+    public function getList(){
+        return $this->list;
+    }
+
 }
-*/

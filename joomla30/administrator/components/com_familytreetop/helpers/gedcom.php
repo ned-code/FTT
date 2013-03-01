@@ -12,6 +12,10 @@ class GedcomHelper
 
     public $individuals;
     public $families;
+    public $childrens;
+    public $events;
+    public $dates;
+    public $places;
 
     public function getInstance(){
         if ( is_null(self::$instance) ) {
@@ -22,6 +26,9 @@ class GedcomHelper
             self::$instance->individuals = new FamilyTreeTopGedcomIndividualsManager($user->tree_id);
             self::$instance->families = new FamilyTreeTopGedcomFamiliesManager($user->tree_id);
             self::$instance->childrens = new FamilyTreeTopGedcomChildrensManager($user->tree_id);
+            self::$instance->events = new FamilyTreeTopGedcomEventsManager($user->tree_id);
+            self::$instance->dates = new FamilyTreeTopGedcomDatesManager($user->tree_id);
+            self::$instance->places = new FamilyTreeTopGedcomPlacesManager($user->tree_id);
 
         }
         return self::$instance;

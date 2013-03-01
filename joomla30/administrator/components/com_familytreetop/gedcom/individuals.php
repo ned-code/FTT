@@ -31,6 +31,7 @@ class FamilyTreeTopGedcomIndividualsModel {
     }
 
     public function save(){
+        if(empty($this->tree_id)) return false;
         $gedcom = GedcomHelper::getInstance();
         if(empty($this->id)){
             $link = new FamilyTreeTopTreeLinks();
@@ -136,18 +137,12 @@ class FamilyTreeTopGedcomIndividualsManager {
             $ind->middle_name = $data['middle_name'];
             $ind->last_name = $data['last_name'];
             $ind->know_as = $data['know_as'];
-
-            $ind->events = $this->events->get($gedcom_id);
-
-
         } else {
             return false;
         }
 
         //relation
-
         //medias
-
         //events
         return $ind;
     }

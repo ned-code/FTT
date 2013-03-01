@@ -102,5 +102,8 @@ class FamilyTreeTopGedcomFamiliesManager {
         return $family;
     }
 
+    public function getList(){
+        return $this->list;
+    }
 
 }
