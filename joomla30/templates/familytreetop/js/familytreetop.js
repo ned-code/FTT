@@ -16,29 +16,8 @@
 
         this.moduleLinkPull = {};
         this.modulePull = [];
-    }
 
-    $FamilyTreeTop.prototype.create = function(name, mod){
-        this.modulePull.push({constructor:mod, object: null});
-        this.moduleLinkPull[name] = this.modulePull.length - 1;
-    }
-
-    $FamilyTreeTop.prototype.bind = function(call){
-        this.bindPull.push(call);
-    }
-
-    $FamilyTreeTop.prototype.init = function(){
-        var $this = this;
-        $this.bindPull.forEach(function(el){
-            var F = function(){};
-            F.prototype = $FamilyTreeTop.prototype.fn;
-            el.call(new F(), jQuery);
-        });
-
-        $this.modulePull.forEach(function(el){
-            console.log(el);
-        });
-
+        this.dataString = {};
     }
 
     $FamilyTreeTop.prototype.fn = {
@@ -51,6 +30,41 @@
             }).done(callback);
         }
     }
+
+    $FamilyTreeTop.prototype.init = function(){
+        var $this = this;
+        $this.modulePull.forEach(function(el, id){
+            var F = el.constructor;
+            F.prototype = $FamilyTreeTop.prototype.fn;
+            $this.modulePull[id].object = new F(jQuery);
+        });
+
+        $this.bindPull.forEach(function(el){
+            var F = function(){};
+            F.prototype = $FamilyTreeTop.prototype.fn;
+            el.call(new F(), jQuery);
+        });
+    }
+
+    $FamilyTreeTop.prototype.create = function(name, mod){
+        this.modulePull.push({constructor:mod, object: null});
+        this.moduleLinkPull[name] = this.modulePull.length - 1;
+    }
+
+    $FamilyTreeTop.prototype.bind = function(call){
+        this.bindPull.push(call);
+    }
+
+    $FamilyTreeTop.prototype.mod = function(name){
+        var id;
+        if("undefined" !== typeof(this.moduleLinkPull[name])){
+            id = this.moduleLinkPull[name];
+            return this.modulePull[id].object;
+        }
+        return false;
+    }
+
+
 
     w.$FamilyTreeTop = new $FamilyTreeTop();
 })(window)

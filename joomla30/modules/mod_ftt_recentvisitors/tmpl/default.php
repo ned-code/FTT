@@ -9,8 +9,8 @@ defined('_JEXEC') or die;
                 <ul class="unstyled inline">
                     <?php foreach($visitors as $visitor): ?>
                     <li style="display:inline-table;">
-                        <div data-toggle="tooltip" title="<?=$visitor->first_name . " " .$visitor->last_name ?>">
-                            <img src="http://placehold.it/50x50" />
+                        <div  data-toggle="tooltip"  title="<?=$visitor['ind']->name(); ?>">
+                            <img class="img-rounded" src="https://graph.facebook.com/<?=$visitor['model']->account->joomla_user->name;?>/picture"/>
                         </div>
                     </li>
                     <?php endforeach; ?>

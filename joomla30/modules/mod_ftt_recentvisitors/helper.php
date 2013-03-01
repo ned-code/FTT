@@ -11,7 +11,7 @@ class modFttRecentvisitorsHelper
         $visitors = array();
         if(!empty($users)){
             foreach($users as $us){
-                $visitors[] = $gedcom->individuals->get($us->gedcom_id);
+                $visitors[] = array('model' => $us, 'ind' => $gedcom->individuals->get($us->gedcom_id) );
             }
         }
 

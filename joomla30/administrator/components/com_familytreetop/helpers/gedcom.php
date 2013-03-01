@@ -34,4 +34,14 @@ class GedcomHelper
         return self::$instance;
     }
 
+    public function getData(){
+        return array(
+            'ind' => $this->individuals->getList(),
+            'fam' => $this->families->getList(),
+            'chi' => $this->childrens->getList(),
+            'eve' => $this->events->getList(),
+            'dat' => $this->dates->getList(),
+            'pla' => $this->places->getList(),
+        );
+    }
 }

@@ -49,10 +49,11 @@ class FamilyTreeTopGedcomEventsManager {
     protected $list_by_family_id = array();
     protected $list_by_gedcom_id = array();
 
-    public function __contstruct($tree_id){
+    public function __construct($tree_id){
         $this->tree_id = $tree_id;
-        $db = JFactory::getDbo();
-        $sql = "SELECT e.*
+        if(!empty($tree_id)){
+            $db = JFactory::getDbo();
+            $sql = "SELECT e.*
                 FROM #__familytreetop_events as e,
                     #__familytreetop_families as f,
                     #__familytreetop_tree_links as l,
@@ -65,11 +66,12 @@ class FamilyTreeTopGedcomEventsManager {
                         ) AND  l.tree_id = t.id AND t.id = %s
 
                 GROUP BY id";
-        $db->setQuery(sprintf($sql, $tree_id));
-        $rows = $db->loadAssocList('id');
+            $db->setQuery(sprintf($sql, $tree_id));
+            $rows = $db->loadAssocList('id');
 
-        $this->list_by_gedcom_id = $this->sortList('gedcom_id', $rows);
-        $this->list_by_family_id = $this->sortList('family_id', $rows);
+            $this->list_by_gedcom_id = $this->sortList('gedcom_id', $rows);
+            $this->list_by_family_id = $this->sortList('family_id', $rows);
+        }
     }
 
     protected function sortList($type, $rows){

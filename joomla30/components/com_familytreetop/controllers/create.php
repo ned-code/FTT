@@ -41,7 +41,7 @@ class FamilytreetopControllerCreate extends FamilytreetopController
         $ind->tree_id = $tree->id;
         $ind->first_name = $userData['firstName'];
         $ind->last_name = $userData['lastName'];
-        $ind->gender = $userData['gender'];
+        $ind->gender = ($userData['gender']=="male")?1:0;
         $ind->save();
 
         $father = $gedcom->individuals->get();

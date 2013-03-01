@@ -9,10 +9,6 @@ require __DIR__ . "/helpers/user.php";
 ActiverecrdHelper::getInstance();
 FacebookHelper::getInstance();
 
-$gedcom = GedcomHelper::getInstance();
-
-var_dump($gedcom->events->getList());
-exit;
 $controller = JControllerLegacy::getInstance('Familytreetop');
 $controller->execute(JFactory::getApplication()->input->get('task', 'display'));
 $controller->redirect();

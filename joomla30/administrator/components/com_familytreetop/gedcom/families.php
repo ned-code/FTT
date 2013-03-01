@@ -38,9 +38,15 @@ class FamilyTreeTopGedcomFamilyModel {
 
         $this->id = $family->id;
 
-        $gedcom->childrens->save($family->childrens);
+        $gedcom->childrens->save($this->id, $this->childrens);
 
         $gedcom->families->updateList($this);
+
+        return $this;
+    }
+
+    public function addChild($gedcom_id){
+        GedcomHelper::getInstance()->childrens->create($this->id, $gedcom_id);
     }
 
 }

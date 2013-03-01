@@ -62,9 +62,11 @@ class FamilyTreeTopGedcomChildrensManager {
 
     public function create($family_id, $gedcom_id){
         if(empty($family_id) || empty($gedcom_id)) return false;
-        foreach($this->list_by_family_id[$family_id] as $key => $value){
-            if($value['gedcom_id'] == $gedcom_id){
-                return false;
+        if(isset($this->list_by_family_id[$family_id])){
+            foreach($this->list_by_family_id[$family_id] as $key => $value){
+                if($value['gedcom_id'] == $gedcom_id){
+                    return false;
+                }
             }
         }
         $row = new FamilyTreeTopChildrens();

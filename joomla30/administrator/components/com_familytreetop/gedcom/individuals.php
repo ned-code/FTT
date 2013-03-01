@@ -74,6 +74,10 @@ class FamilyTreeTopGedcomIndividualsModel {
 
         return $this;
     }
+
+    public function name(){
+        return $this->first_name . " " . $this->last_name;
+    }
 }
 
 

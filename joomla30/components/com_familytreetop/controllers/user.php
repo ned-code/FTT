@@ -10,7 +10,7 @@ class FamilytreetopControllerUser extends FamilytreetopController
         //create joomla user
         $data['username'] = "fb_".$args['id'];
         $data['password'] = $accessToken;
-        $data['name'] = $args['name'];
+        $data['name'] = $args['username'];
         $data['email'] = $args['email'];
         $data['groups'] = array(2);
 
@@ -27,11 +27,12 @@ class FamilytreetopControllerUser extends FamilytreetopController
         return $user;
 	}
 
-    protected function updatePassword($user, $accessToken){
+    protected function updatePassword($user, $accessToken, $args){
         $parts	= explode(':', $user->password);
         $salt	= @$parts[1];
         $crypts = JUserHelper::getCryptedPassword($accessToken, $salt);
         $user->password = $crypts . ":" . $salt;
+        $user->username = $args['username'];
         $user->save();
     }
 
@@ -63,7 +64,7 @@ class FamilytreetopControllerUser extends FamilytreetopController
                     $jUser = $this->create($args, $accessToken);
                     $username = $jUser->username;
                 } else {
-                    $this->updatePassword($user, $accessToken);
+                    $this->updatePassword($user, $accessToken, $args);
                     $username = $user->username;
                 }
 

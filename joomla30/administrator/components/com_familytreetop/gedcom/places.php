@@ -39,11 +39,11 @@ class FamilyTreeTopGedcomPlacesManager {
     protected $tree_id;
     protected $list;
 
-    public function __contstruct($tree_id){
+    public function __construct($tree_id){
         $this->tree_id = $tree_id;
-
-        $db = JFactory::getDbo();
-        $sql = "SELECT p.*
+        if(!empty($tree_id)){
+            $db = JFactory::getDbo();
+            $sql = "SELECT p.*
                 FROM #__familytreetop_places as p,
                     #__familytreetop_events as e,
                     #__familytreetop_families as f,
@@ -58,9 +58,9 @@ class FamilyTreeTopGedcomPlacesManager {
                         ) AND  l.tree_id = t.id AND t.id = %s
 
                 GROUP BY id";
-        $db->setQuery(sprintf($sql, $tree_id));
-        $this->list = $db->loadAssocList('id');
-
+            $db->setQuery(sprintf($sql, $tree_id));
+            $this->list = $db->loadAssocList('id');
+        }
     }
 
     public function get($id = null){
