@@ -21,9 +21,12 @@ class FamilyTreeTopGedcomEventModel {
     }
 
     public function save(){
+        if(empty($this->gedcom_id) && empty($this->family_id)) return false;
         $gedcom = GedcomHelper::getInstance();
         if(empty($this->id)){
             $event = new FamilyTreeTopEvents();
+        } else {
+            $event = FamilyTreeTopEvents::find($this->id);
         }
         $event->gedcom_id = $this->gedcom_id;
         $event->family_id = $this->family_id;
@@ -32,8 +35,10 @@ class FamilyTreeTopGedcomEventModel {
         $event->change_time = $this->change_time;
         $event->save();
 
-        $event->place->save();
-        $event->date->save();
+        $this->id = $event->id;
+
+        $event->place->save($this->id);
+        $event->date->save($this->id);
 
         $gedcom->events->updateList($event);
     }
@@ -99,7 +104,10 @@ class FamilyTreeTopGedcomEventsManager {
     }
 
     public function getList(){
-        return $this->list;
+        return array(
+            'gedcom_id' => $this->list_by_gedcom_id,
+            'family_id' => $this->list_by_gedcom_id
+        );
     }
 
 }
