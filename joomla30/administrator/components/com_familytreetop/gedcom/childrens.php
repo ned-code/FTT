@@ -1,18 +1,11 @@
 <?php
 class FamilyTreeTopGedcomChildrensManager {
-    protected $list;
     protected $tree_id;
-    protected $type;
+    protected $list_by_gedcom_id = array();
+    protected $list_by_family_id = array();
 
-    public function __construct($tree_id, $type){
+    public function __construct($tree_id){
         $this->tree_id = $tree_id;
-        $this->type = $type;
-
-        $list = array(
-            'Individual' => array(),
-            'Family' => array(),
-            'default' => array()
-        );
 
         if(!empty($tree_id)){
             $db = JFactory::getDbo();
@@ -22,50 +15,43 @@ class FamilyTreeTopGedcomChildrensManager {
             $db->setQuery($sql);
             $rows = $db->loadAssocList('id');
 
+            $this->list_by_gedcom_id = $this->getList('gedcom_id', $rows);
+            $this->list_by_family_id = $this->getList('gedcom_id', $rows);
+        }
+    }
 
-            $list['default'] = $rows;
-            foreach($rows as $row){
-                $this->addRow($list, 'Individual', $row);
-                $this->addRow($list, 'Family', $row);
+    protected function getList($type, $rows){
+        if(empty($rows)) return array();
+        $result = array();
+        foreach($rows as $key => $row){
+            if(isset($row[$type])){
+                $result[$row[$type]][$key] = $row;
             }
-
-
         }
-
-        $this->list = $list;
+        return $result;
     }
 
-    protected function addRow(&$list, $type, $row){
-        $ch = ($type == "Family")?"family_id":"gedcom_id";
-        if(isset($row[$ch]) && $row[$ch] != null){
-            $list[$type][$row[$ch]][] = $row;
-        }
-    }
-
-    public function get($id = null){
-        $list = $this->list[$this->type];
-        if(isset($list[$id])){
-            return $list[$id];
+    public function get($id){
+        if(isset($this->list_by_family_id[$id])){
+            $result = array();
+            foreach( $this->list_by_family_id[$id] as $key => $value)
+                $result[$key] = $value['gedcom_id'];
+            return $result;
         }
     }
 
-    public function save($family_id, $childrens){
-        if(!empty($childrens)){
-            foreach($childrens as $gedcom_id){
-                $this->create($family_id, $gedcom_id);
-            }
+    public function save($family_id, $data){
+        if(empty($data) || empty($family_id)) return false;
+        foreach($data as $gedcom_id){
+            $this->create($family_id, $gedcom_id);
         }
     }
 
     public function create($family_id, $gedcom_id){
-        if(empty($gedcom_id)) return false;
-        $list = $this->list['Individual'];
-        if(isset($list[$gedcom_id])){
-            $families = $list[$gedcom_id];
-            foreach($families as $row){
-                if($row['family_id'] == $family_id){
-                    return false;
-                }
+        if(empty($family_id) || empty($gedcom_id)) return false;
+        foreach($this->list_by_family_id[$family_id] as $key => $value){
+            if($value['gedcom_id'] == $gedcom_id){
+                return false;
             }
         }
         $row = new FamilyTreeTopChildrens();
@@ -74,4 +60,5 @@ class FamilyTreeTopGedcomChildrensManager {
         $row->save();
         return $row;
     }
+
 }

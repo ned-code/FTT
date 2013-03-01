@@ -45,7 +45,11 @@ class FamilytreetopControllerUser extends FamilytreetopController
         $username = null;
 
         if($facebook_id == 0){
-            $url =  $facebook->getLoginUrl();
+            $params = array(
+                'redirect_uri' => "http://" . JUri::getInstance()->getHost(). JRoute::_("index.php?option=com_familytreetop&view=myfamily", false)
+            );
+
+            $url =  $facebook->getLoginUrl($params);
             echo json_encode(array('auth'=>false, 'url'=>$url));
             exit;
         }

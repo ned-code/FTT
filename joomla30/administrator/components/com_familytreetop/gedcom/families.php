@@ -13,19 +13,14 @@ class FamilyTreeTopGedcomFamilyModel {
     public $childrens = array();
     public $events = array();
 
-    protected $childrensManager;
-    protected $eventsManager;
-
-    public function __construct($tree_id, &$childrens, &$events){
+    public function __construct($tree_id){
         $this->tree_id = $tree_id;
         $date = JFactory::getDate();
         $this->change_time = $date->toSql();
-
-        $this->childrensManager = $childrens;
-        $this->eventsManager = $events;
     }
 
     public function save(){
+        $gedcom = GedcomHelper::getInstance();
         if(empty($this->id)){
             $family = new FamilyTreeTopFamilies();
         } else {
@@ -42,32 +37,17 @@ class FamilyTreeTopGedcomFamilyModel {
 
         $this->id = $family->id;
 
-        //childrens
-        $this->childrensManager->save($this->id, $this->childrens);
-
+        $gedcom->childrens->save($family->childrens);
     }
 
-    public function addChild($gedcom_id){
-        $this->childrensManager->create($this->id, $gedcom_id);
-    }
-
-    public function event($data = null){
-        if(empty($data)) return false;
-        $this->eventsManager->save($this->id, $data);
-    }
 }
 
 class FamilyTreeTopGedcomFamiliesManager {
     protected $list = array();
     protected $tree_id;
-    protected $chidrens;
-    protected $events;
 
     public function __construct($tree_id){
         $this->tree_id = $tree_id;
-        $this->chidrens = new FamilyTreeTopGedcomChildrensManager($tree_id, "Family");
-        $this->events = new FamilyTreeTopGedcomEventsManager($tree_id, "Family");
-
         if(!empty($tree_id)){
             $db = JFactory::getDbo();
             $sql = "SELECT f.*
@@ -80,10 +60,11 @@ class FamilyTreeTopGedcomFamiliesManager {
     }
 
     protected function getObject(){
-        return new FamilyTreeTopGedcomFamilyModel($this->tree_id, $this->chidrens, $this->events);
+        return new FamilyTreeTopGedcomFamilyModel($this->tree_id);
     }
 
     public function get($family_id = null){
+        $gedcom = GedcomHelper::getInstance();
         if(empty($family_id)){
             return $this->getObject();
         }
@@ -99,8 +80,7 @@ class FamilyTreeTopGedcomFamiliesManager {
             return false;
         }
 
-        $family->childrens = $this->chidrens->get($family->id);
-        $family->events = $this->events->get($family->id);
+        $gedcom->childrens = $gedcom->childrens->get($family_id);
 
         return $family;
     }

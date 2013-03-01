@@ -23,11 +23,8 @@ class FamilyTreeTopGedcomIndividualsModel {
     public $events = array();
     public $medias = array();
 
-    protected $eventsManager;
-
     public function __construct($tree_id, &$events){
         $this->tree_id = $tree_id;
-        $this->eventsManager = $events;
 
         $date = JFactory::getDate();
         $this->change_time = $date->toSql();
@@ -73,26 +70,16 @@ class FamilyTreeTopGedcomIndividualsModel {
 
         return $this;
     }
-
-    public function event($data = null){
-        if(empty($data)) return false;
-        $this->eventsManager->save($this->gedcom_id, $data);
-    }
 }
 
 
 class FamilyTreeTopGedcomIndividualsManager {
     protected $list = array();
     protected $tree_id;
-    protected $chidrens;
     protected $events;
 
     public function __construct($tree_id){
         $this->tree_id = $tree_id;
-
-        $this->chidrens = new FamilyTreeTopGedcomChildrensManager($tree_id, "Individual");
-        $this->events = new FamilyTreeTopGedcomEventsManager($tree_id, "Individual");
-
         if(!empty($tree_id)){
             $db = JFactory::getDbo();
             $sql = "SELECT i.id as individual_id, n.id as name_id, i.gedcom_id, i.creator_id, i.gender, i.family_id, i.create_time,
