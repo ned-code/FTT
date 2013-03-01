@@ -23,7 +23,7 @@ class FamilyTreeTopGedcomIndividualsModel {
     public $events = array();
     public $medias = array();
 
-    public function __construct($tree_id, &$events){
+    public function __construct($tree_id){
         $this->tree_id = $tree_id;
 
         $date = JFactory::getDate();
@@ -31,6 +31,7 @@ class FamilyTreeTopGedcomIndividualsModel {
     }
 
     public function save(){
+        $gedcom = GedcomHelper::getInstance();
         if(empty($this->id)){
             $link = new FamilyTreeTopTreeLinks();
             $ind = new FamilyTreeTopIndividuals();
@@ -68,6 +69,8 @@ class FamilyTreeTopGedcomIndividualsModel {
         $name->change_time = $ind->change_time;
         $name->save();
 
+        $gedcom->individuals->updateList($this);
+
         return $this;
     }
 }
@@ -82,7 +85,7 @@ class FamilyTreeTopGedcomIndividualsManager {
         $this->tree_id = $tree_id;
         if(!empty($tree_id)){
             $db = JFactory::getDbo();
-            $sql = "SELECT i.id as individual_id, n.id as name_id, i.gedcom_id, i.creator_id, i.gender, i.family_id, i.create_time,
+            $sql = "SELECT i.id as individual_id, i.gedcom_id, i.creator_id, i.gender, i.family_id, i.create_time,
                     i.change_time, n.first_name, n.middle_name, n.last_name, n.know_as
                 FROM #__familytreetop_individuals as i,#__familytreetop_names as n,  #__familytreetop_tree_links as l, #__familytreetop_trees as t
                 WHERE n.gedcom_id = i.gedcom_id AND i.gedcom_id = l.id AND l.tree_id = t.id AND t.id = ". $tree_id;
@@ -92,7 +95,26 @@ class FamilyTreeTopGedcomIndividualsManager {
     }
 
     protected function getObject(){
-        return new FamilyTreeTopGedcomIndividualsModel($this->tree_id, $this->events);
+        return new FamilyTreeTopGedcomIndividualsModel($this->tree_id);
+    }
+
+    public function updateList(&$model){
+        if(empty($model->id)) return false;
+        $data['individual_id'] = $model->id;
+        $data['gedcom_id'] = $model->gedcom_id;
+        $data['creator_id'] = $model->creator_id;
+        $data['gender'] = $model->gender;
+        $data['family_id'] = $model->family_id;
+        $data['create_time'] = $model->create_time;
+        $data['change_time'] = $model->change_time;
+        $data['first_name'] = $model->first_name;
+        $data['middle_name'] = $model->middle_name;
+        $data['last_name'] = $model->last_name;
+        $data['know_as'] = $model->know_as;
+
+        if(!isset($this->list[$model->gedcom_id])){
+            $this->list[$model->gedcom_id] = $data;
+        }
     }
 
     public function get($gedcom_id = null){
@@ -103,7 +125,7 @@ class FamilyTreeTopGedcomIndividualsManager {
         if(isset($this->list[$gedcom_id])){
             $data = $this->list[$gedcom_id];
 
-            $ind->id = $data['id'];
+            $ind->id = $data['individual_id'];
             $ind->gedcom_id = $data['gedcom_id'];
             $ind->creator_id = $data['creator_id'];
             $ind->gender = $data['gender'];
@@ -116,6 +138,8 @@ class FamilyTreeTopGedcomIndividualsManager {
             $ind->know_as = $data['know_as'];
 
             $ind->events = $this->events->get($gedcom_id);
+
+
         } else {
             return false;
         }

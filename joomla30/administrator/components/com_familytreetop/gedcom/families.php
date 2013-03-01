@@ -15,6 +15,7 @@ class FamilyTreeTopGedcomFamilyModel {
 
     public function __construct($tree_id){
         $this->tree_id = $tree_id;
+
         $date = JFactory::getDate();
         $this->change_time = $date->toSql();
     }
@@ -38,6 +39,8 @@ class FamilyTreeTopGedcomFamilyModel {
         $this->id = $family->id;
 
         $gedcom->childrens->save($family->childrens);
+
+        $gedcom->families->updateList($this);
     }
 
 }
@@ -60,8 +63,22 @@ class FamilyTreeTopGedcomFamiliesManager {
     }
 
     protected function getObject(){
-        return new FamilyTreeTopGedcomFamilyModel($this->tree_id);
+        return new FamilyTreeTopGedcomFamilyModel($this->tree_id, $this->list);
     }
+
+    public function updateList(&$model){
+        if(empty($model->id)) return false;
+        $data = array();
+        $data['id'] = $model->id;
+        $data['husb'] = $model->husb;
+        $data['wife'] = $model->wife;
+        $data['type'] = $model->type;
+        $data['change_time'] = $model->change_time;
+
+        if(!isset($this->list[$model->id])){
+            $this->list[$model->id] = $data;
+        }
+     }
 
     public function get($family_id = null){
         $gedcom = GedcomHelper::getInstance();
@@ -84,4 +101,6 @@ class FamilyTreeTopGedcomFamiliesManager {
 
         return $family;
     }
+
+
 }

@@ -31,6 +31,16 @@ class FamilyTreeTopGedcomChildrensManager {
         return $result;
     }
 
+    public function updateList(&$row){
+        $data = array();
+        $data['id'] = $row->id;
+        $data['gedcom_id'] = $row->gedcom_id;
+        $data['family_id'] = $row->family_id;
+
+        $this->list_by_family_id[$row->family_id][$row->id] = $data;
+        $this->list_by_gedcom_id[$row->gedcom_id][$row->id] = $data;
+    }
+
     public function get($id){
         if(isset($this->list_by_family_id[$id])){
             $result = array();
@@ -58,6 +68,8 @@ class FamilyTreeTopGedcomChildrensManager {
         $row->family_id = $family_id;
         $row->gedcom_id = $gedcom_id;
         $row->save();
+
+        $this->updateList($row);
         return $row;
     }
 
