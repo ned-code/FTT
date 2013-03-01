@@ -31,12 +31,18 @@ class FamilytreetopControllerUser extends FamilytreetopController
         $parts	= explode(':', $user->password);
         $salt	= @$parts[1];
         $crypts = JUserHelper::getCryptedPassword($accessToken, $salt);
+
         $user->password = $crypts . ":" . $salt;
-        $user->username = $args['username'];
+        $user->name = $args['username'];
         $user->save();
+
+        $account = FamilyTreeTopAccounts::find_by_joomla_id($user->id);
+        $account->access_token = $accessToken;
+        $account->save();
     }
 
     public function activate(){
+
         $app = JFactory::getApplication();
 
         $facebook = FacebookHelper::getInstance()->facebook;
@@ -46,12 +52,8 @@ class FamilytreetopControllerUser extends FamilytreetopController
         $username = null;
 
         if($facebook_id == 0){
-            $params = array(
-                'redirect_uri' => "http://" . JUri::getInstance()->getHost(). JRoute::_("index.php?option=com_familytreetop&view=myfamily", false)
-            );
-
-            $url =  $facebook->getLoginUrl($params);
-            echo json_encode(array('auth'=>false, 'url'=>$url));
+            $url =  JRoute::_("index.php?option=com_familytreetop&view=myfamily", false);
+            echo json_encode(array('auth'=>false, 'url'=>FacebookHelper::getInstance()->getLoginUrl($url)));
             exit;
         }
 
@@ -60,6 +62,7 @@ class FamilytreetopControllerUser extends FamilytreetopController
             if($args['id'] != 0){
                 $user = JoomlaUsers::find_by_username('fb_' . $args['id']);
                 $accessToken = $facebook->getAccessToken();
+
                 if(empty($user)){
                     $jUser = $this->create($args, $accessToken);
                     $username = $jUser->username;
