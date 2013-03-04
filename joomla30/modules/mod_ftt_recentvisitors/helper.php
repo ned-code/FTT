@@ -11,10 +11,10 @@ class modFttRecentvisitorsHelper
         $visitors = array();
         if(!empty($users)){
             foreach($users as $us){
-                $visitors[] = array('model' => $us, 'ind' => $gedcom->individuals->get($us->gedcom_id) );
+                $account = FamilyTreeTopAccounts::find($us->account_id);
+                $visitors[] = array('account' => $account, 'ind' => $gedcom->individuals->get($us->gedcom_id) );
             }
         }
-
         return $visitors;
     }
 }

@@ -61,8 +61,8 @@ class FamilyTreeTopGedcomEventsManager {
 
                 WHERE IF(
                     e.gedcom_id  IS NULL,
-                            f.husb = l.id OR f.wife = l.id,
-                            e.gedcom_id  = l.id
+                            f.family_id = l.id AND l.type = 1,
+                            e.gedcom_id  = l.id AND l.type = 0
                         ) AND  l.tree_id = t.id AND t.id = %s
 
                 GROUP BY id";

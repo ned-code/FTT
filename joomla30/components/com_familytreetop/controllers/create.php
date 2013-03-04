@@ -21,6 +21,7 @@ class FamilytreetopControllerCreate extends FamilytreetopController
         $app = JFactory::getApplication();
         $jUser = JFactory::getUser();
         $gedcom = GedcomHelper::getInstance();
+        $object = FamilyTreeTopUserHelper::getInstance()->get();
 
         $userData = $app->input->post->get('User', array(), 'array');
         $fatherData = $app->input->post->get('Father', array(), 'array');
@@ -44,11 +45,13 @@ class FamilytreetopControllerCreate extends FamilytreetopController
         $ind->gender = ($userData['gender']=="male")?1:0;
         $ind->save();
 
+
         $father = $gedcom->individuals->get();
         $father->tree_id = $tree->id;
         $father->gender = 1;
         $father->first_name = $fatherData['firstName'];
         $father->last_name = $fatherData['lastName'];
+        $father->creator_id = $ind->gedcom_id;
         $father->save();
 
         $mother = $gedcom->individuals->get();
@@ -56,9 +59,11 @@ class FamilytreetopControllerCreate extends FamilytreetopController
         $mother->gender = 0;
         $mother->first_name = $motherData['firstName'];
         $mother->last_name = $motherData['lastName'];
+        $mother->creator_ir = $ind->gedcom_id;
         $mother->save();
 
         $family = $gedcom->families->get();
+        $family->tree_id = $tree->id;
         $family->wife = $father->gedcom_id;
         $family->husb = $mother->gedcom_id;
         $family->save();
@@ -74,6 +79,7 @@ class FamilytreetopControllerCreate extends FamilytreetopController
         $user->save();
 
         $account->current = $user->id;
+        $account->facebook_id = $object->facebook_id;
         $account->save();
 
         $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=myfamily",false));

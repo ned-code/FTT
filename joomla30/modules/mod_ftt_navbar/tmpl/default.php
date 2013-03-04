@@ -1,10 +1,10 @@
 <?php
 defined('_JEXEC') or die;
 $user = FamilyTreeTopUserHelper::getInstance()->get();
-$facebook = FacebookHelper::getInstance()->facebook;
-$facebook_id = $facebook->getUseR();
-if(!empty($user->users) || !empty($user->users->gedcom_id)){
-    $ind = GedcomHelper::getInstance()->individuals->get($user->users->gedcom_id);
+if(!empty($user->gedcom_id)){
+    $ind = GedcomHelper::getInstance()->individuals->get($user->gedcom_id);
+} else {
+    $ind = false;
 }
 ?>
 <div class="navbar navbar-inverse">
@@ -23,13 +23,13 @@ if(!empty($user->users) || !empty($user->users->gedcom_id)){
                     <li <?=($view=="index")?'class="active"':''; ?> ><a href="<?=JRoute::_("index.php?option=com_familytreetop&view=index", false); ?>">Home</a></li>
                 </ul>
             </div>
-            <?php if($facebook_id != 0): ?>
+            <?php if($user->facebook_id != 0 && $ind): ?>
                 <ul class="nav pull-right">
-                    <li><img class="img-rounded" src="https://graph.facebook.com/<?=$facebook_id;?>/picture?width=40&height=40"/></li>
+                    <li><img class="img-rounded" src="https://graph.facebook.com/<?=$user->facebook_id;?>/picture?width=40&height=40"/></li>
                     <li class="divider-vertical"></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?=$ind->name();?> <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
+                        FamilytreetopController                   <ul class="dropdown-menu">
                             <li><a href="#">Profile</a></li>
                             <li><a href="#">Languages</a></li>
                             <li><a href="#">Redirect to Facebook</a></li>

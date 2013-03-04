@@ -34,13 +34,15 @@ class FamilyTreeTopGedcomIndividualsModel {
         if(empty($this->tree_id)) return false;
         $gedcom = GedcomHelper::getInstance();
         if(empty($this->id)){
-            $link = new FamilyTreeTopTreeLinks();
             $ind = new FamilyTreeTopIndividuals();
 
+            $link = new FamilyTreeTopTreeLinks();
             $link->tree_id = $this->tree_id;
+            $link->type = 0;
             $link->save();
 
             $this->gedcom_id = $link->id;
+            $this->create_time = $this->change_time;
         } else {
             $ind = FamilyTreeTopIndividuals::find($this->id);
             if(empty($ind)){
@@ -56,6 +58,7 @@ class FamilyTreeTopGedcomIndividualsModel {
         $ind->gender = $this->gender;
         $ind->family_id = $this->family_id;
         $ind->change_time = $this->change_time;
+        $ind->creator_id = $this->creator_id;
         $ind->save();
 
         $name = FamilyTreeTopNames::find_by_gedcom_id($this->gedcom_id);
@@ -93,7 +96,7 @@ class FamilyTreeTopGedcomIndividualsManager {
             $sql = "SELECT i.id as individual_id, i.gedcom_id, i.creator_id, i.gender, i.family_id, i.create_time,
                     i.change_time, n.first_name, n.middle_name, n.last_name, n.know_as
                 FROM #__familytreetop_individuals as i,#__familytreetop_names as n,  #__familytreetop_tree_links as l, #__familytreetop_trees as t
-                WHERE n.gedcom_id = i.gedcom_id AND i.gedcom_id = l.id AND l.tree_id = t.id AND t.id = ". $tree_id;
+                WHERE l.type = 0 AND i.gedcom_id = l.id AND l.tree_id = t.id AND n.gedcom_id = i.gedcom_id AND t.id = ". $tree_id;
             $db->setQuery($sql);
             $this->list = $db->loadAssocList('gedcom_id');
         }

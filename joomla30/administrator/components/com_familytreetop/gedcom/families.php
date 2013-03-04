@@ -4,6 +4,7 @@ class FamilyTreeTopGedcomFamilyModel {
     public $tree_id = null;
 
     public $id = null;
+    public $family_id = null;
     public $husb = null;
     public $wife = null;
     public $type = 'marriage';
@@ -22,23 +23,29 @@ class FamilyTreeTopGedcomFamilyModel {
 
     public function save(){
         $gedcom = GedcomHelper::getInstance();
-        if(empty($this->id)){
+        if(empty($this->family_id)){
+
+            $link = new FamilyTreeTopTreeLinks();
+            $link->type = 1;
+            $link->tree_id = $this->tree_id;
+            $link->save();
+
             $family = new FamilyTreeTopFamilies();
+            $this->family_id = $link->id;
         } else {
-            $family = FamilyTreeTopFamilies::find($this->id);
+            $family = FamilyTreeTopFamilies::find_by_family_id($this->family_id);
             if(empty($family)){
                 return false;
             }
         }
+        $family->family_id = $this->family_id;
         $family->husb = $this->husb;
         $family->wife = $this->wife;
         $family->type = $this->type;
         $family->change_time = $this->change_time;
         $family->save();
 
-        $this->id = $family->id;
-
-        $gedcom->childrens->save($this->id, $this->childrens);
+        $gedcom->childrens->save($this->family_id, $this->childrens);
 
         $gedcom->families->updateList($this);
 
@@ -46,7 +53,7 @@ class FamilyTreeTopGedcomFamilyModel {
     }
 
     public function addChild($gedcom_id){
-        GedcomHelper::getInstance()->childrens->create($this->id, $gedcom_id);
+        GedcomHelper::getInstance()->childrens->create($this->family_id, $gedcom_id);
     }
 
 }
@@ -61,7 +68,7 @@ class FamilyTreeTopGedcomFamiliesManager {
             $db = JFactory::getDbo();
             $sql = "SELECT f.*
                 FROM #__familytreetop_families as f, #__familytreetop_tree_links as l, #__familytreetop_trees as t
-                WHERE (f.husb = l.id OR f.wife = l.id) AND l.tree_id = t.id AND t.id = " . $tree_id. " GROUP BY id";
+                WHERE l.type = 1 AND f.family_id = l.id AND l.tree_id = t.id AND t.id = " . $tree_id. " GROUP BY id";
             $db->setQuery($sql);
             $this->list = $db->loadAssocList('id');
         }
@@ -73,16 +80,17 @@ class FamilyTreeTopGedcomFamiliesManager {
     }
 
     public function updateList(&$model){
-        if(empty($model->id)) return false;
+        if(empty($model->family_id)) return false;
         $data = array();
         $data['id'] = $model->id;
+        $data['family_id'] = $model->family_id;
         $data['husb'] = $model->husb;
         $data['wife'] = $model->wife;
         $data['type'] = $model->type;
         $data['change_time'] = $model->change_time;
 
-        if(!isset($this->list[$model->id])){
-            $this->list[$model->id] = $data;
+        if(!isset($this->list[$model->family_id])){
+            $this->list[$model->family_id] = $data;
         }
      }
 
@@ -95,6 +103,7 @@ class FamilyTreeTopGedcomFamiliesManager {
         if(isset($this->list[$family_id])){
             $data = $this->list[$family_id];
             $family->id = $data['id'];
+            $family->family_id = $data['family_id'];
             $family->husb = $data['husb'];
             $family->wife = $data['wife'];
             $family->type = $data['type'];
