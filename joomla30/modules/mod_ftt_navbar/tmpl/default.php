@@ -29,7 +29,7 @@ if(!empty($user->gedcom_id)){
                     <li class="divider-vertical"></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?=$ind->name();?> <b class="caret"></b></a>
-                        FamilytreetopController                   <ul class="dropdown-menu">
+                        <ul class="dropdown-menu">
                             <li><a href="#">Profile</a></li>
                             <li><a href="#">Languages</a></li>
                             <li><a href="#">Redirect to Facebook</a></li>

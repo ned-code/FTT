@@ -70,7 +70,7 @@ class FamilyTreeTopGedcomFamiliesManager {
                 FROM #__familytreetop_families as f, #__familytreetop_tree_links as l, #__familytreetop_trees as t
                 WHERE l.type = 1 AND f.family_id = l.id AND l.tree_id = t.id AND t.id = " . $tree_id. " GROUP BY id";
             $db->setQuery($sql);
-            $this->list = $db->loadAssocList('id');
+            $this->list = $db->loadAssocList('family_id');
         }
 
     }

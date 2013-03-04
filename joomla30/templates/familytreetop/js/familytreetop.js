@@ -28,6 +28,54 @@
                 type: "POST",
                 dataType:"json"
             }).done(callback);
+        },
+        mod: function(name){
+            return w.$FamilyTreeTop.mod(name);
+        },
+        stringBuffer: function(){
+            return (function(){
+                var b = "";
+                this.length = 0;
+                return {
+                    _:function(s){
+                        if(arguments.length>1){
+                            var tmp="", l=arguments.length;
+                            switch(l){
+                                case 9: tmp=""+arguments[8]+tmp;
+                                case 8: tmp=""+arguments[7]+tmp;
+                                case 7: tmp=""+arguments[6]+tmp;
+                                case 6: tmp=""+arguments[5]+tmp;
+                                case 5: tmp=""+arguments[4]+tmp;
+                                case 4: tmp=""+arguments[3]+tmp;
+                                case 3: tmp=""+arguments[2]+tmp;
+                                case 2: {
+                                    b+=""+arguments[0]+arguments[1]+tmp;
+                                    break;
+                                }
+                                default: {
+                                    var i=0;
+                                    while(i<arguments.length){
+                                        tmp += arguments[i++];
+                                    }
+                                    b += tmp;
+                                }
+                            }
+                        } else {
+                            b += s;
+                        }
+                        this.length = b.length;
+                        return this;
+                    },
+                    del:function(){
+                        b = "";
+                        this.length = 0;
+                        return this;
+                    },
+                    ret:function(){
+                        return b;
+                    }
+                }
+            }).call(this);
         }
     }
 
@@ -46,15 +94,6 @@
         });
     }
 
-    $FamilyTreeTop.prototype.create = function(name, mod){
-        this.modulePull.push({constructor:mod, object: null});
-        this.moduleLinkPull[name] = this.modulePull.length - 1;
-    }
-
-    $FamilyTreeTop.prototype.bind = function(call){
-        this.bindPull.push(call);
-    }
-
     $FamilyTreeTop.prototype.mod = function(name){
         var id;
         if("undefined" !== typeof(this.moduleLinkPull[name])){
@@ -64,7 +103,14 @@
         return false;
     }
 
+    $FamilyTreeTop.prototype.create = function(name, mod){
+        this.modulePull.push({constructor:mod, object: null});
+        this.moduleLinkPull[name] = this.modulePull.length - 1;
+    }
 
+    $FamilyTreeTop.prototype.bind = function(call){
+        this.bindPull.push(call);
+    }
 
     w.$FamilyTreeTop = new $FamilyTreeTop();
 })(window)

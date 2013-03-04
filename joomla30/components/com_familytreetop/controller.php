@@ -12,7 +12,7 @@ class FamilytreetopController extends JControllerLegacy
 		$document	= JFactory::getDocument();
 
 		// Set the default view name and format from the Request.
-		$vName   = $this->input->getCmd('view', 'login');
+		$vName   = $this->input->getCmd('view', 'index');
 		$vFormat = $document->getType();
 		$lName   = $this->input->getCmd('layout', 'default');
 

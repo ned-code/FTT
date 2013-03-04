@@ -17,6 +17,7 @@ $user = JFactory::getUser();
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->language; ?>" lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>">
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/holder.js"></script>
     <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.js"></script>
 	<jdoc:include type="head" />
 	<!--[if lt IE 9]>
@@ -36,10 +37,33 @@ $user = JFactory::getUser();
         </div>
     </div>
 </div>
+<div id="familytreetop-root" style="display:none;">
+    <div id="popover">
+        <div class="row-fluid">
+            <div class="span12">
+                <div>
+                    <div class="span4" style="inline-block">
+                        <img class="media-object" data-src="template/familytreetop/js/holder.js/100x100">
+                    </div>
+                    <div class="span8" style="inline-block">
+                        <ul class="unstyled">
+                            <li><small><strong>First Name</strong>: <span></span></small></li>
+                            <li><small><strong>Middle Name</strong>: <span></span></small></li>
+                            <li><small><strong>Last Name</strong>: <span></span></small></li>
+                            <li><small><strong>Know As</strong>: <span></span></small></li>
+                        </ul>
+                    </div>
+                </div>
+                <div></div>
+            </div>
+        </div>
+    </div>
+</div>
 <jdoc:include type="modules" name="debug" style="none" />
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/jquery-1.9.1.min.js"></script>
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/bootstrap.min.js"></script>
 <!-- uncompressed files -->
+<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.usertree.js"></script>
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.popovers.js"></script>
 <script>
     window.fbAsyncInit = function() {
