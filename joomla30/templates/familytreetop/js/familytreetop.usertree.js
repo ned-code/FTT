@@ -1,4 +1,5 @@
 $FamilyTreeTop.create("usertree", function($){
+    'use strict';
     var $this = this,
         $fn,
         data;
@@ -41,7 +42,7 @@ $FamilyTreeTop.create("usertree", function($){
 
     $this.family = function(family_id){
         if(data.fam.length = 0 && "undefined" === typeof(data.fam[family_id])) return false;
-        var fam = data.fam[gedcom_id];
+        var fam = data.fam[family_id];
         return {
             change_time: fam.change_time,
             family_id: fam.family_id,
@@ -51,6 +52,64 @@ $FamilyTreeTop.create("usertree", function($){
             wife: fam.wife
         }
     }
+
+    $this.getFamilyIdByGedcomId = function(gedcom_id){
+        var obj = {family_id: null, father: null, mother: null};
+        if("undefined" === typeof(data.fam.gedcom_id[gedcom_id])) return obj;
+        var families = data.fam.gedcom_id[gedcom_id];
+        for(var key in families){
+            var family = families[key];
+            obj.family_id = family.family_id;
+            obj.father = family.husb;
+            obj.mother = family.wife;
+        }
+        return obj;
+    }
+
+    $this.getParents = function(gedcom_id){
+        var obj = {family_id: null, father: null, mother: null};
+        if("undefined" === typeof(data.chi.gedcom_id[gedcom_id])) obj;
+        var row =  data.chi.gedcom_id[gedcom_id];
+        for(var key in row){
+            var family_id = row[key].family_id;
+            break;
+        }
+        if("undefined" !== typeof(data.fam.family_id[family_id])){
+            var family = data.fam.family_id[family_id];
+            obj.family_id = family.family_id;
+            obj.father = family.husb;
+            obj.mother = family.wife;
+            return obj;
+        }
+        return obj;
+    }
+
+    $this.getChildrens = function(gedcom_id){
+        if("undefined" === typeof(data.fam.gedcom_id[gedcom_id])) return [];
+        var families = data.fam.gedcom_id[gedcom_id];
+        var childrens = [];
+        for(var key in families){
+            var family_id = families[key].family_id;
+            var childs = data.chi.family_id[family_id];
+            for(var k in childs){
+                var child = childs[k];
+                childrens.push(child.gedcom_id);
+            }
+
+        }
+        return childrens;
+    }
+
+    $this.getChildrensByFamily = function(family_id){
+        var childrens = [];
+        var childs = data.chi.family_id[family_id];
+        for(var k in childs){
+            var child = childs[k];
+            childrens.push(child.gedcom_id);
+        }
+        return childrens;
+    }
+
 
     $this.init($FamilyTreeTop.dataString);
 });

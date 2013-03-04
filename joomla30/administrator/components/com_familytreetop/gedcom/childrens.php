@@ -15,7 +15,7 @@ class FamilyTreeTopGedcomChildrensManager {
             $db->setQuery($sql);
             $rows = $db->loadAssocList('id');
 
-            $this->list = $rows;
+            $this->list =  $this->sortList('id', $rows);
             $this->list_by_gedcom_id = $this->sortList('gedcom_id', $rows);
             $this->list_by_family_id = $this->sortList('family_id', $rows);
         }
@@ -25,9 +25,7 @@ class FamilyTreeTopGedcomChildrensManager {
         if(empty($rows)) return array();
         $result = array();
         foreach($rows as $key => $row){
-            if(isset($row[$type])){
-                $result[$row[$type]][$key] = $row;
-            }
+            $result[$row[$type]][] = $row;
         }
         return $result;
     }
@@ -39,8 +37,9 @@ class FamilyTreeTopGedcomChildrensManager {
         $data['gedcom_id'] = $row->gedcom_id;
         $data['family_id'] = $row->family_id;
 
-        $this->list_by_family_id[$row->family_id][$row->id] = $data;
-        $this->list_by_gedcom_id[$row->gedcom_id][$row->id] = $data;
+        $this->list[$row->id][] = $data;
+        $this->list_by_family_id[$row->family_id][] = $data;
+        $this->list_by_gedcom_id[$row->gedcom_id][] = $data;
     }
 
     public function get($id = false){
@@ -81,8 +80,9 @@ class FamilyTreeTopGedcomChildrensManager {
 
     public function getList(){
         return array(
+            'list' => $this->list,
             'gedcom_id' => $this->list_by_gedcom_id,
-            'family_id' => $this->list_by_gedcom_id
+            'family_id' => $this->list_by_family_id
         );
     }
 }

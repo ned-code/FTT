@@ -60,6 +60,7 @@ class FamilyTreeTopGedcomFamilyModel {
 
 class FamilyTreeTopGedcomFamiliesManager {
     protected $list = array();
+    protected $list_by_gedcom_id = array();
     protected $tree_id;
 
     public function __construct($tree_id){
@@ -70,9 +71,26 @@ class FamilyTreeTopGedcomFamiliesManager {
                 FROM #__familytreetop_families as f, #__familytreetop_tree_links as l, #__familytreetop_trees as t
                 WHERE l.type = 1 AND f.family_id = l.id AND l.tree_id = t.id AND t.id = " . $tree_id. " GROUP BY id";
             $db->setQuery($sql);
-            $this->list = $db->loadAssocList('family_id');
+            $rows = $db->loadAssocList('family_id');
+            $this->list =  $rows;
+            $this->list_by_gedcom_id = $this->sortList($rows);
         }
 
+    }
+
+    protected function sortList( $rows){
+        if(empty($rows)) return array();
+        $result = array();
+        foreach($rows as $row){
+            if(!empty($row['husb'])){
+                 $result[$row['husb']][] = $row;
+            }
+            if(!empty($row['wife'])){
+                $result[$row['wife']][] = $row;
+            }
+
+        }
+        return $result;
     }
 
     protected function getObject(){
@@ -91,6 +109,12 @@ class FamilyTreeTopGedcomFamiliesManager {
 
         if(!isset($this->list[$model->family_id])){
             $this->list[$model->family_id] = $data;
+            if(!empty($model->husb)){
+                $this->list_by_gedcom_id[$model->husb][] = $data;
+            }
+            if(!empty($model->wife)){
+                $this->list_by_gedcom_id[$model->wife][] = $data;
+            }
         }
      }
 
@@ -118,7 +142,7 @@ class FamilyTreeTopGedcomFamiliesManager {
     }
 
     public function getList(){
-        return $this->list;
+        return array('family_id'=>$this->list, 'gedcom_id'=>$this->list_by_gedcom_id);
     }
 
 }

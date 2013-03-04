@@ -1,7 +1,7 @@
 $FamilyTreeTop.create("popovers", function($){
+    'use strict';
     var $this = this, $fn, $th;
 
-    console.log($this);
     $th = {
         target: false,
         gedcom_id: false,
@@ -46,11 +46,23 @@ $FamilyTreeTop.create("popovers", function($){
                 template: $fn.getTemplate(),
                 selector: false,
                 placement: "right",
-                trigger: 'click',
+                trigger: 'manual',
                 title: $fn.getTitle(),
                 content: $fn.getContent(),
                 delay: { show: 500, hide: 100 },
                 container: $fn.getContainer()
+            });
+        },
+        click: function(args){
+            var active = false;
+            $(args.target).bind('click', function(){
+                if(active) return false;
+                active = true;
+                $(args.target).popover('show');
+                $('body').bind('click.familytreetop', function(){
+                    $(args.target).popover('hide');
+                    $('body').unbind('click.familytreetop');
+                });
             });
         }
     }
@@ -61,5 +73,10 @@ $FamilyTreeTop.create("popovers", function($){
             return false;
         }
         $(args.target).popover($fn.getOptions(args));
+        $fn.click(args);
+    }
+
+    this.hide = function(){
+        $($th.target).popover('hide');
     }
 });
