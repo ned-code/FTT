@@ -4,6 +4,7 @@ $user = FamilyTreeTopUserHelper::getInstance()->get();
 ?>
 <div id="thisMonth" class="row">
     <div class="span12">
+        <div style="position:absolute; top:0; right: 0; cursor: pointer;"><i class="icon-home"></i></div>
         <div id="hideBox" style="display:none">
             <div class="parent-box" style="max-width: 160px;">
                 <div style="position:relative;">
@@ -19,9 +20,8 @@ $user = FamilyTreeTopUserHelper::getInstance()->get();
                 <div class="text-center"></div>
                 <div class="text-center"></div>
             </div>
+
         </div>
-
-
     </div>
 </div>
 <script>
@@ -40,13 +40,18 @@ $user = FamilyTreeTopUserHelper::getInstance()->get();
                 return $('<div style="position:absolute;left:'+left+'px;top: -20px; cursor:pointer;"><i class="icon-circle-arrow-'+type+'"></i></div>');
 
             },
+            createEdit: function(object, gedcom_id){
+                $this.mod('editmenu').render(object, gedcom_id);
+            },
             createBox: function(ind, cl, type){
                 if(!ind) return [];
                 var divs = $(cl).find('div');
                 $(cl).attr('gedcom_id', ind.gedcom_id);
                 $(divs[0]).append($fn.createArrow(type));
+                $(divs[0]).find('img').attr('gedcom_id', ind.gedcom_id);
                 $(divs[1]).text(ind.name());
                 $(divs[2]).text('...');
+                $fn.createEdit(divs[0], ind.gedcom_id);
                 return cl;
             },
             createParent: function(id){
@@ -130,6 +135,14 @@ $user = FamilyTreeTopUserHelper::getInstance()->get();
                     }
                     return 5 + (position - 1) * 110 + indent;
                 }
+            },
+            setPopovers:function(boxs){
+                boxs.forEach(function(object, index){
+                    var target = $(object).find('img');
+                    $this.mod('popovers').render({
+                        target: target
+                    });
+                });
             }
         }
 
@@ -156,5 +169,7 @@ $user = FamilyTreeTopUserHelper::getInstance()->get();
         });
 
         $fn.setPosition($boxs);
+        $fn.setPopovers($boxs);
+
     });
 </script>

@@ -5,7 +5,8 @@ $FamilyTreeTop.create("popovers", function($){
     $th = {
         target: false,
         gedcom_id: false,
-        object: false
+        object: false,
+        lastActive: false
     }
 
     $fn = {
@@ -54,15 +55,23 @@ $FamilyTreeTop.create("popovers", function($){
             });
         },
         click: function(args){
-            var active = false;
-            $(args.target).bind('click', function(){
-                if(active) return false;
-                active = true;
-                $(args.target).popover('show');
-                $('body').bind('click.familytreetop', function(){
-                    $(args.target).popover('hide');
+            $(args.target).bind('click', function(e){
+                if($th.lastActive == args.target) return false;
+                if($th.lastActive){
                     $('body').unbind('click.familytreetop');
+                    $($th.lastActive).popover('hide');
+                    $th.lastActive = false;
+                }
+                $th.lastActive = args.target;
+                $(args.target).popover('show');
+                $('body').bind('click.familytreetop', function(e){
+                    if(!$th.lastActive) return false;
+                    $('body').unbind('click.familytreetop');
+                    $($th.lastActive).popover('hide');
+                    $th.lastActive = false;
+                    return false;
                 });
+                return false;
             });
         }
     }

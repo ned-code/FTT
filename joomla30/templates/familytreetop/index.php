@@ -58,6 +58,17 @@ $user = JFactory::getUser();
             </div>
         </div>
     </div>
+    <div id="editMenu">
+        <div class="btn-group dropdown">
+            <button class="btn  btn-mini" data-toggle="dropdown"><i class="icon-pencil"></i></button>
+            <ul class="dropdown-menu">
+                <li><a href="#">Edit Profile</a></li>
+                <li class="divider"></li>
+                <li><a href="#">Delete</a></li>
+            </ul>
+        </div>
+    </div>
+
 </div>
 <jdoc:include type="modules" name="debug" style="none" />
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/jquery-1.9.1.min.js"></script>
@@ -65,6 +76,7 @@ $user = JFactory::getUser();
 <!-- uncompressed files -->
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.usertree.js"></script>
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.popovers.js"></script>
+<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.editmenu.js"></script>
 <script>
     window.fbAsyncInit = function() {
         // init the FB JS SDK

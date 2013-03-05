@@ -18,7 +18,8 @@ $FamilyTreeTop.create("usertree", function($){
     }
 
     $this.user = function(gedcom_id){
-        if(data.ind.length = 0 && "undefined" === typeof(data.ind[gedcom_id])) return false;
+        if("undefined" === typeof(gedcom_id)) return false;
+        if("undefined" === typeof(data.ind[gedcom_id])) return false;
         var ind = data.ind[gedcom_id];
         return {
             change_time: ind.change_time,
@@ -45,7 +46,8 @@ $FamilyTreeTop.create("usertree", function($){
     }
 
     $this.family = function(family_id){
-        if(data.fam.length = 0 && "undefined" === typeof(data.fam[family_id])) return false;
+        if("undefined" === typeof(family_id)) return false;
+        if("undefined" === typeof(data.fam[family_id])) return false;
         var fam = data.fam[family_id];
         return {
             change_time: fam.change_time,
