@@ -29,7 +29,7 @@ $FamilyTreeTop.create("editor", function($){
         var editProfileForm = $($editProfileForm).clone();
         var editProfile = $($tabs).find('.tab-content #editMenuTab1');
 
-        $(editProfile).html();
+        $(editProfile).html('');
         $(editProfile).append(editProfileForm);
 
         var ind = $this.mod('usertree').user(gedcom_id);
