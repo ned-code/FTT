@@ -3,6 +3,7 @@ $FamilyTreeTop.create("editor", function($){
 
     var $this = this,
         $box,
+        $tabs,
         $editProfileForm,
         $fn;
 
@@ -11,6 +12,7 @@ $FamilyTreeTop.create("editor", function($){
     }
 
     $box = $('#modal');
+    $tabs = $('#editProfileTabs');
     $editProfileForm = $('#formEditProfile');
 
     $this.addParent = function(gedcom_id){}
@@ -22,8 +24,13 @@ $FamilyTreeTop.create("editor", function($){
         var cl = $($box).clone().hide();
         $('body').append(cl);
 
-        var form = $($editProfileForm).clone();
-        $(cl).find('.modal-body').append(form);
+        $(cl).find('.modal-body').append($tabs);
+
+        var editProfileForm = $($editProfileForm).clone();
+        var editProfile = $($tabs).find('.tab-content #editMenuTab1');
+
+        $(editProfile).html();
+        $(editProfile).append(editProfileForm);
 
         var ind = $this.mod('usertree').user(gedcom_id);
 
@@ -41,6 +48,5 @@ $FamilyTreeTop.create("editor", function($){
             console.log(this);
             $(cl).modal('hide');
         });
-
     }
 });

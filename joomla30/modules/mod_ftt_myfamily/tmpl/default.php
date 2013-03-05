@@ -25,7 +25,33 @@ $data = $home['data'];
                     <div class="row-fluid">
                         <ul class="inline">
                             <li class="span2"><img class="img-rounded" src="https://graph.facebook.com/<?=$object['from']['id'];?>/picture"/></li>
-                            <li class="span10"><p><?=(isset($object['message']))?$object['message']:"";?></p></li>
+                            <li class="span10">
+                                <p>
+                                    <?php
+                                        $message = isset($object['message'])?$object['message']:false;
+                                        $description = isset($object['description'])?$object['description']:false;
+                                        $story = isset($object['story'])?$object['story']:false;
+                                        $name = isset($object['name'])?$object['name']:false;
+                                        $ret = "";
+
+                                        if($message){
+                                            $ret = $message;
+                                        } elseif($story){
+                                            $ret = $story;
+                                        } elseif($description){
+                                            $ret = $description;
+                                        } elseif($name){
+                                            $ret = $name;
+                                        } else {
+                                            $ret = "";
+                                        }
+                                        if(strlen($ret) > 500){
+                                            $ret = substr($ret, 0 , 500) . "...";
+                                        }
+                                        echo $ret;
+                                    ?>
+                                </p>
+                            </li>
                         </ul>
                     </div>
                     <div class="row-fluid">

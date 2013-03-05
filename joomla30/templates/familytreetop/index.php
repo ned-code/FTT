@@ -9,6 +9,7 @@ $doc = JFactory::getDocument();
 
 $doc->addStyleSheet('templates/'.$this->template.'/css/bootstrap.min.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/bootstrap-responsive.min.css');
+$doc->addStyleSheet('templates/'.$this->template.'/css/csstreeview.css');
 
 // Add current user information
 $user = JFactory::getUser();
@@ -18,6 +19,8 @@ $user = JFactory::getUser();
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/holder.js"></script>
+    <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/excanvas.js"></script>
+    <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/jit.js"></script>
     <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.js"></script>
 	<jdoc:include type="head" />
 	<!--[if lt IE 9]>
@@ -80,11 +83,26 @@ $user = JFactory::getUser();
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h3 id="modalLabel"></h3>
         </div>
-        <div class="modal-body">
+        <div style="max-height: 500px;" class="modal-body">
         </div>
         <div class="modal-footer">
             <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
             <button familytreetop="submit" class="btn btn-primary">Save changes</button>
+        </div>
+    </div>
+
+    <div id="editProfileTabs">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#editMenuTab1" data-toggle="tab">Profile</a></li>
+            <li><a href="#editMenuTab2" data-toggle="tab">Unions</a></li>
+            <li><a href="#editMenuTab3" data-toggle="tab">Media</a></li>
+            <li><a href="#editMenuTab4" data-toggle="tab">Options</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="editMenuTab1"></div>
+            <div class="tab-pane" id="editMenuTab2"></div>
+            <div class="tab-pane" id="editMenuTab3"></div>
+            <div class="tab-pane" id="editMenuTab4"></div>
         </div>
     </div>
 

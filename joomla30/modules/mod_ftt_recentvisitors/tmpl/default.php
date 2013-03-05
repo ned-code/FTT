@@ -10,7 +10,7 @@ defined('_JEXEC') or die;
                     <?php foreach($visitors as $visitor): ?>
                     <li gedcom_id="<?=$visitor['ind']->gedcom_id;?>" style="margin-top:5px;">
                         <div  data-toggle="tooltip"  title="<?=$visitor['ind']->name(); ?>">
-                            <img class="img-rounded" src="https://graph.facebook.com/<?=$visitor['account']->facebook_id; ?>/picture"/>
+                            <img style="cursor:pointer;" class="img-rounded" src="https://graph.facebook.com/<?=$visitor['account']->facebook_id; ?>/picture"/>
                         </div>
                     </li>
                     <?php endforeach; ?>

@@ -133,7 +133,7 @@ class FamilyTreeTopGedcomIndividualsManager {
         if(isset($this->list[$gedcom_id])){
             $data = $this->list[$gedcom_id];
 
-            $ind->id = $data['individual_id'];
+            $ind->id = $data['id'];
             $ind->gedcom_id = $data['gedcom_id'];
             $ind->creator_id = $data['creator_id'];
             $ind->gender = $data['gender'];

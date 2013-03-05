@@ -25,7 +25,7 @@ if(!empty($user->gedcom_id)){
             </div>
             <?php if($user->facebook_id != 0 && $ind): ?>
                 <ul id="profileUser" class="nav pull-right">
-                    <li><img class="img-rounded" src="https://graph.facebook.com/<?=$user->facebook_id;?>/picture?width=40&height=40"/></li>
+                    <li><img src="https://graph.facebook.com/<?=$user->facebook_id;?>/picture?width=40&height=40"/></li>
                     <li class="divider-vertical"></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?=$ind->name();?> <b class="caret"></b></a>
