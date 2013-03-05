@@ -16,10 +16,10 @@ class FacebookHelper
     public function getInstance(){
         if ( is_null(self::$instance) ) {
             self::$instance = new FacebookHelper ();
-
+            $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
             $config = array();
-            $config['appId'] = '208893339231244';
-            $config['secret'] = '637f8f37469796999d208aca420d2235';
+            $config['appId'] = $settings->facebook_app_id->value;
+            $config['secret'] = $settings->facebook_app_secret->value;
             $config['coockie'] = true;
             self::$instance->facebook = new Facebook($config);
         }

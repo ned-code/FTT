@@ -4,7 +4,7 @@
     var $FamilyTreeTop = function(){
         this.app = {
             config:{
-                appId:"208893339231244",
+                appId:false,
                 status: true,
                 coockie: true,
                 xfbml: true

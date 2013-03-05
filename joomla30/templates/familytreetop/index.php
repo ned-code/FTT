@@ -13,6 +13,8 @@ $doc->addStyleSheet('templates/'.$this->template.'/css/csstreeview.css');
 
 // Add current user information
 $user = JFactory::getUser();
+// Add familytreetop settings
+$settings = FamilyTreeTopSettingsHelper::getInstance()->get();
 ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->language; ?>" lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>">
@@ -28,6 +30,9 @@ $user = JFactory::getUser();
 	<![endif]-->
 </head>
 <body>
+<script>
+    $FamilyTreeTop.app.config.appId = '<?=$settings->facebook_app_id->value;?>';
+</script>
 <div id="fb-root"></div>
 <jdoc:include type="modules" name="facebook-sdk" style="none" />
 <jdoc:include type="modules" name="navbar" style="none" />
@@ -221,7 +226,6 @@ $user = JFactory::getUser();
 
     <div id="formAdd">
         <form action="<?=JRoute::_("index.php?option=com_familytreetop&task.editor.save", false);?>" class="form-horizontal">
-
         </form>
     </div>
 
@@ -235,20 +239,24 @@ $user = JFactory::getUser();
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.editmenu.js"></script>
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.editor.js"></script>
 <script>
-    window.fbAsyncInit = function() {
-        // init the FB JS SDK
-        FB.init($FamilyTreeTop.app.config);
-        FB.getLoginStatus(function(response){
-            $FamilyTreeTop.init();
-        });
-    };
-    (function(d, debug){
-        var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
-        if (d.getElementById(id)) {return;}
-        js = d.createElement('script'); js.id = id; js.async = true;
-        js.src = "//connect.facebook.net/en_US/all" + (debug ? "/debug" : "") + ".js";
-        ref.parentNode.insertBefore(js, ref);
-    }(document, /*debug*/ false));
+    if(!$FamilyTreeTop.app.config.appId){
+        console.log('Facebook App Id doesn\'t exist');
+    } else {
+        window.fbAsyncInit = function() {
+            // init the FB JS SDK
+            FB.init($FamilyTreeTop.app.config);
+            FB.getLoginStatus(function(response){
+                $FamilyTreeTop.init();
+            });
+        };
+        (function(d, debug){
+            var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+            if (d.getElementById(id)) {return;}
+            js = d.createElement('script'); js.id = id; js.async = true;
+            js.src = "//connect.facebook.net/en_US/all" + (debug ? "/debug" : "") + ".js";
+            ref.parentNode.insertBefore(js, ref);
+        }(document, /*debug*/ false));
+    }
 </script>
 </body>
 </html>
