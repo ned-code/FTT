@@ -17,7 +17,7 @@
         this.moduleLinkPull = {};
         this.modulePull = [];
 
-        this.dataString = {};
+        this.dataString = "";
     }
 
     $FamilyTreeTop.prototype.fn = {

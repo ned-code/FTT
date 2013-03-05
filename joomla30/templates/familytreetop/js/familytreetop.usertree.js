@@ -9,8 +9,12 @@ $FamilyTreeTop.create("usertree", function($){
     }
 
     $this.init = function(dataString){
-       data = $.parseJSON(dataString);
-       console.log(data);
+        if(dataString.length != 0){
+            data = $.parseJSON(dataString);
+            console.log(data);
+        } else {
+            data = null;
+        }
     }
 
     $this.user = function(gedcom_id){
@@ -109,7 +113,6 @@ $FamilyTreeTop.create("usertree", function($){
         }
         return childrens;
     }
-
 
     $this.init($FamilyTreeTop.dataString);
 });
