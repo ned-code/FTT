@@ -66,6 +66,10 @@ $user = JFactory::getUser();
             <ul class="dropdown-menu">
                 <li familytreetop="edit"><a href="#">Edit Profile</a></li>
                 <li class="divider"></li>
+                <li familytreetop="addParent"><a href="#">Add Parent</a></li>
+                <li familytreetop="addSpouse"><a href="#">Add Spouse</a></li>
+                <li familytreetop="addChild"><a href="#">Add Child</a></li>
+                <li class="divider"></li>
                 <li familytreetop="delete"><a href="#">Delete</a></li>
             </ul>
         </div>
@@ -76,122 +80,131 @@ $user = JFactory::getUser();
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h3 id="modalLabel"></h3>
         </div>
-        <div style="max-height: none;" class="modal-body">
-            <form action="<?=JRoute::_("index.php?option=com_familytreetop&task.editor.save", false);?>">
-                <div class="row-fluid">
-                    <div class="span3 text-center">
-                        <img class="img-polaroid" data-src="template/familytreetop/js/holder.js/100x100">
-                        <div style="text-align: center; overflow: hidden;">
-                            <button familytreetop="upload" class="btn btn-mini">Upload</button>
-                            <input type="file" name="file" id="file" size="1" style="margin-top: -50px; margin-left:-410px; -moz-opacity: 0; filter: alpha(opacity=0); opacity: 0; font-size: 150px; height: 100px;">
-                        </div>
-                    </div>
-                    <div class="span9">
-                        <div class="row-fluid">
-                            <div class="span6">
-                                <label for="gender"><small>Gender</small></label>
-                                <select class="span12" id="gender" name="gender">
-                                    <option value="1">Male</option>
-                                    <option value="0">Female</option>
-                                </select>
-                            </div>
-                            <div class="span6">
-                                <label for="living"><small>Living</small></label>
-                                <select class="span12" id="living" name="living">
-                                    <option value="1">Yes</option>
-                                    <option value="0">No</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row-fluid">
-                            <div class="span6">
-                                <label for="firstName"><small>First Name</small></label>
-                                <div class="controls">
-                                    <input class="span12" name="first_name" type="text" id="firstName" placeholder="First Name">
-                                </div>
-                            </div>
-                            <div class="span6">
-                                <label for="middleName"><small>Middle Name</small></label>
-                                <div class="controls">
-                                    <input class="span12" name="middle_name" type="text" id="middleName" placeholder="Middle Name">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row-fluid">
-                            <div class="span6">
-                                <label for="firstName"><small>Last Name</small></label>
-                                <div class="controls">
-                                    <input class="span12" name="last_name" type="text" id="lastName" placeholder="Last Name">
-                                </div>
-                            </div>
-                            <div class="span6">
-                                <label for="knowAs"><small>Know As</small></label>
-                                <div class="controls">
-                                    <input class="span12" name="know_as" type="text" id="knowAs" placeholder="Know As">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row-fluid">
-                    <div class="span12">
-                        <p>
-                            Birthday:
-                        </p>
-                    </div>
-                </div>
-                <div class="row-fluid">
-                    <div class="span12">
-                        <select class="span2" name="b_day">
-                            <option value="0">Day</option>
-                        </select>
-                        <select class="span4" name="b_month">
-                            <option value="0">Month</option>
-                        </select>
-                        <input class="span4" type="text" name="b_year" placeholder="Year">
-
-                    </div>
-                </div>
-                <div class="row-fluid">
-                    <div class="span12">
-                        <input class="span4" type="text" name="b_city"  placeholder="City">
-                        <input class="span4" type="text" name="b_state" placeholder="State">
-                        <input class="span4" type="text" name="b_country" placeholder="Country">
-                    </div>
-                </div>
-
-                <div class="row-fluid">
-                    <div class="span12">
-                        <p>
-                            Deathday:
-                        </p>
-                    </div>
-                </div>
-                <div class="row-fluid">
-                    <div class="span12">
-                        <select class="span2" name="d_day">
-                            <option value="0">Day</option>
-                        </select>
-                        <select class="span4" name="d_month">
-                            <option value="0">Month</option>
-                        </select>
-                        <input class="span4" type="text" name="d_year" placeholder="Year">
-
-                    </div>
-                </div>
-                <div class="row-fluid">
-                    <div class="span12">
-                        <input class="span4" type="text" name="d_city"  placeholder="City">
-                        <input class="span4" type="text" name="d_state" placeholder="State">
-                        <input class="span4" type="text" name="d_country" placeholder="Country">
-                    </div>
-                </div>
-            </form>
+        <div class="modal-body">
         </div>
         <div class="modal-footer">
             <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
             <button familytreetop="submit" class="btn btn-primary">Save changes</button>
         </div>
+    </div>
+
+    <div id="formEditProfile">
+        <form action="<?=JRoute::_("index.php?option=com_familytreetop&task.editor.save", false);?>">
+            <div class="row-fluid">
+                <div class="span3 text-center">
+                    <img class="img-polaroid" data-src="template/familytreetop/js/holder.js/100x100">
+                    <div style="text-align: center; overflow: hidden;">
+                        <button familytreetop="upload" class="btn btn-mini">Upload</button>
+                        <input type="file" name="editProfile[file]" id="editProfile[file]" size="1" style="margin-top: -50px; margin-left:-410px; -moz-opacity: 0; filter: alpha(opacity=0); opacity: 0; font-size: 150px; height: 100px;">
+                    </div>
+                </div>
+                <div class="span9">
+                    <div class="row-fluid">
+                        <div class="span6">
+                            <label for="editProfile[gender]"><small>Gender</small></label>
+                            <select class="span12" id="editProfile[gender]" name="editProfile[gender]">
+                                <option value="1">Male</option>
+                                <option value="0">Female</option>
+                            </select>
+                        </div>
+                        <div class="span6">
+                            <label for="editProfile[living]"><small>Living</small></label>
+                            <select class="span12" id="editProfile[living]" name="editProfile[living]">
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span6">
+                            <label for="editProfile[firstName]"><small>First Name</small></label>
+                            <div class="controls">
+                                <input class="span12" name="editProfile[first_name]" type="text" id="editProfile[firstName]" placeholder="First Name">
+                            </div>
+                        </div>
+                        <div class="span6">
+                            <label for="editProfile[middleName]"><small>Middle Name</small></label>
+                            <div class="controls">
+                                <input class="span12" name="editProfile[middle_name]" type="text" id="editProfile[middleName]" placeholder="Middle Name">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span6">
+                            <label for="editProfile[firstName]"><small>Last Name</small></label>
+                            <div class="controls">
+                                <input class="span12" name="editProfile[last_name]" type="text" id="editProfile[lastName]" placeholder="Last Name">
+                            </div>
+                        </div>
+                        <div class="span6">
+                            <label for="editProfile[knowAs]"><small>Know As</small></label>
+                            <div class="controls">
+                                <input class="span12" name="editProfile[know_as]" type="text" id="editProfile[knowAs]" placeholder="Know As">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span12">
+                    <p>
+                        Birthday:
+                    </p>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span12">
+                    <select class="span2" name="editProfile[b_day]">
+                        <option value="0">Day</option>
+                    </select>
+                    <select class="span4" name="editProfile[b_month]">
+                        <option value="0">Month</option>
+                    </select>
+                    <input class="span4" type="text" name="editProfile[b_year]" placeholder="Year">
+
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span12">
+                    <input class="span4" type="text" name="editProfile[b_city]"  placeholder="City">
+                    <input class="span4" type="text" name="editProfile[b_state]" placeholder="State">
+                    <input class="span4" type="text" name="editProfile[b_country]" placeholder="Country">
+                </div>
+            </div>
+
+            <div class="row-fluid">
+                <div class="span12">
+                    <p>
+                        Deathday:
+                    </p>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span12">
+                    <select class="span2" name="editProfile[d_day]">
+                        <option value="0">Day</option>
+                    </select>
+                    <select class="span4" name="editProfile[d_month]">
+                        <option value="0">Month</option>
+                    </select>
+                    <input class="span4" type="text" name="editProfile[d_year]" placeholder="Year">
+
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span12">
+                    <input class="span4" type="text" name="editProfile[d_city]"  placeholder="City">
+                    <input class="span4" type="text" name="editProfile[d_state]" placeholder="State">
+                    <input class="span4" type="text" name="editProfile[d_country]" placeholder="Country">
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div id="formAdd">
+        <form action="<?=JRoute::_("index.php?option=com_familytreetop&task.editor.save", false);?>" class="form-horizontal">
+
+        </form>
     </div>
 
 </div>

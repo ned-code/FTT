@@ -77,11 +77,11 @@ $user = FamilyTreeTopUserHelper::getInstance()->get();
                     switch(index){
                         case 0:
                         case 1:
-                            $(object).css('top', getTop(index)).css((index)?"left":"right", '25%');
+                            $(object).css('top', getTop(index)).css((index)?"left":"right", getParentIndent(index));
                             break;
 
                         case 2:
-                            $(object).css('top', getEventTop()).css((index)?"left":"right", '50%');
+                            $(object).css('top', getEventTop()).css('left', getEventLeft());
                             break;
 
                         default:
@@ -117,6 +117,20 @@ $user = FamilyTreeTopUserHelper::getInstance()->get();
                         return height * 0.1 + 250 + 110*(row - 1);
                     }
 
+                }
+                function getEventLeft(){
+                    var width = $('.tab-content').width();
+                    return Math.ceil(width/2);
+                }
+                function getParentIndent(index){
+                    var width = $('.tab-content').width();
+                    var half = Math.ceil(width/2);
+                    var space = half - 160;
+                    if(space <= 0){
+                        return space;
+                    } else {
+                        return Math.ceil(space/2);
+                    }
                 }
                 function getLeft(index){
                     var length = boxs.length - 3,
@@ -170,6 +184,10 @@ $user = FamilyTreeTopUserHelper::getInstance()->get();
 
         $fn.setPosition($boxs);
         $fn.setPopovers($boxs);
+
+        $(window).resize(function(){
+            $fn.setPosition($boxs);
+        })
 
     });
 </script>

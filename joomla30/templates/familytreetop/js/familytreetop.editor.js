@@ -3,6 +3,7 @@ $FamilyTreeTop.create("editor", function($){
 
     var $this = this,
         $box,
+        $editProfileForm,
         $fn;
 
     $fn = {
@@ -10,12 +11,22 @@ $FamilyTreeTop.create("editor", function($){
     }
 
     $box = $('#modal');
+    $editProfileForm = $('#formEditProfile');
+
+    $this.addParent = function(gedcom_id){}
+    $this.addSpouse = function(gedcom_id){}
+    $this.addChild = function(gedcom_id){}
+
 
     $this.render = function(gedcom_id){
         var cl = $($box).clone().hide();
         $('body').append(cl);
 
+        var form = $($editProfileForm).clone();
+        $(cl).find('.modal-body').append(form);
+
         var ind = $this.mod('usertree').user(gedcom_id);
+
         $(cl).find('#modalLabel').text(ind.name());
         $(cl).find('.modal-body #firstName').val(ind.first_name);
         $(cl).find('.modal-body #middleName').val(ind.middle_name);

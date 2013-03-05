@@ -24,17 +24,17 @@ if(!empty($user->gedcom_id)){
                 </ul>
             </div>
             <?php if($user->facebook_id != 0 && $ind): ?>
-                <ul class="nav pull-right">
+                <ul id="profileUser" class="nav pull-right">
                     <li><img class="img-rounded" src="https://graph.facebook.com/<?=$user->facebook_id;?>/picture?width=40&height=40"/></li>
                     <li class="divider-vertical"></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?=$ind->name();?> <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Profile</a></li>
-                            <li><a href="#">Languages</a></li>
-                            <li><a href="#">Redirect to Facebook</a></li>
+                            <li><a  familytreetop="profile" href="#">Profile</a></li>
+                            <li><a  familytreetop="languages" href="#">Languages</a></li>
+                            <li><a  familytreetop="facebook" href="#">Redirect to Facebook</a></li>
                             <li class="divider"></li>
-                            <li><a href="#">Log Out</a></li>
+                            <li><a  familytreetop="logout" href="#">Log Out</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -42,3 +42,17 @@ if(!empty($user->gedcom_id)){
         </div>
     </div>
 </div>
+<script>
+    $FamilyTreeTop.bind(function($){
+        'use strict';
+
+        $('#profileUser ul.dropdown-menu li a').click(function(){
+            var id = $(this).attr('familytreetop');
+            console.log(id);
+            switch(id){
+                default: return false;
+            }
+            return false;
+        })
+    });
+</script>
