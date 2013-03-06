@@ -8,7 +8,37 @@ $FamilyTreeTop.create("editor", function($){
         $fn;
 
     $fn = {
+        setUserData:function(parent, ind){
+            $(parent).find('input,select').each(function(index, el){
+                var name = $(el).attr('name').match(/\[(\w+)\]/i);
+                switch($(el).prop('tagName')){
+                    case "INPUT":
+                        if($(el).attr('type') != 'file'){
+                            if( (/^b_|d_/i).test(name[1])){
+                                //events
+                            } else {
+                                $(el).val(ind[name[1]]);
+                            }
+                        }
+                        break;
 
+                    case "SELECT":
+                        var val = ind[name[1]];
+                        //console.log(name[1], val);
+                        if("undefined" !== typeof(val)){
+                            $(el).find('option[value="'+val+'"]').attr('selected', 'selected');
+                        }
+                        break;
+
+                    default: break;
+                }
+            });
+        },
+        getArgs:function(parent, ind){
+            var arr = $(parent).find('form').serializeArray();
+            arr.push({name:'gedcom_id', value:ind.gedcom_id});
+            return arr;
+        }
     }
 
     $box = $('#modal');
@@ -24,29 +54,36 @@ $FamilyTreeTop.create("editor", function($){
         var cl = $($box).clone().hide();
         $('body').append(cl);
 
+        var ind = $this.mod('usertree').user(gedcom_id);
+        $(cl).find('#modalLabel').text(ind.name());
         $(cl).find('.modal-body').append($tabs);
 
+        //profile edit
         var editProfileForm = $($editProfileForm).clone();
         var editProfile = $($tabs).find('.tab-content #editMenuTab1');
 
         $(editProfile).html('');
         $(editProfile).append(editProfileForm);
 
-        var ind = $this.mod('usertree').user(gedcom_id);
+        $fn.setUserData(editProfileForm, ind);
 
-        $(cl).find('#modalLabel').text(ind.name());
-        $(cl).find('.modal-body #firstName').val(ind.first_name);
-        $(cl).find('.modal-body #middleName').val(ind.middle_name);
-        $(cl).find('.modal-body #lastName').val(ind.last_name);
-        $(cl).find('.modal-body #knowAs').val(ind.know_as);
+        //unions edit
+        //media edit
+
+        //options
+
+
+
 
         $(cl).modal();
         $(cl).on('hide', function(){
             $(cl).remove();
         });
         $(cl).find('button[familytreetop="submit"]').click(function(){
-            console.log(this);
-            $(cl).modal('hide');
+            $this.ajax('editor.updateUserInfo', $fn.getArgs(cl, ind), function(response){
+                console.log(response);
+                $(cl).modal('hide');
+            });
         });
     }
 });

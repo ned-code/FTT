@@ -81,12 +81,13 @@
 
     $FamilyTreeTop.prototype.init = function(){
         var $this = this;
+        //init modules;
         $this.modulePull.forEach(function(el, id){
             var F = el.constructor;
             F.prototype = $FamilyTreeTop.prototype.fn;
             $this.modulePull[id].object = new F(jQuery);
         });
-
+        //init scripts
         $this.bindPull.forEach(function(el){
             var F = function(){};
             F.prototype = $FamilyTreeTop.prototype.fn;

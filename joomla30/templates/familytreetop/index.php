@@ -46,7 +46,6 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
     </div>
 </div>
 <div id="familytreetop-root" style="display:none;">
-
     <div id="popover">
         <div class="row-fluid">
             <div class="span12">
@@ -112,14 +111,16 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
     </div>
 
     <div id="formEditProfile">
-        <form action="<?=JRoute::_("index.php?option=com_familytreetop&task.editor.save", false);?>">
+        <form action="<?=JRoute::_("index.php?option=com_familytreetop&task=editor.updateUserInfo", false);?>">
             <div class="row-fluid">
                 <div class="span3 text-center">
                     <img class="img-polaroid" data-src="template/familytreetop/js/holder.js/100x100">
+                    <!--
                     <div style="text-align: center; overflow: hidden;">
                         <button familytreetop="upload" class="btn btn-mini">Upload</button>
                         <input type="file" name="editProfile[file]" id="editProfile[file]" size="1" style="margin-top: -50px; margin-left:-410px; -moz-opacity: 0; filter: alpha(opacity=0); opacity: 0; font-size: 150px; height: 100px;">
                     </div>
+                    -->
                 </div>
                 <div class="span9">
                     <div class="row-fluid">
@@ -168,6 +169,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                     </div>
                 </div>
             </div>
+            <!--
             <div class="row-fluid">
                 <div class="span12">
                     <p>
@@ -221,6 +223,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                     <input class="span4" type="text" name="editProfile[d_country]" placeholder="Country">
                 </div>
             </div>
+            -->
         </form>
     </div>
 

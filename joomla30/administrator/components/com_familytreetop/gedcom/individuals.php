@@ -47,11 +47,6 @@ class FamilyTreeTopGedcomIndividualsModel {
             $ind = FamilyTreeTopIndividuals::find($this->id);
             if(empty($ind)){
                 return false;
-            } else {
-                $link = FamilyTreeTopTreeLinks::find_by_gedcom_id($ind->gedcom_id);
-                if($link->tree_id != $this->tree_id){
-                    return false;
-                }
             }
         }
         $ind->gedcom_id = $this->gedcom_id;
