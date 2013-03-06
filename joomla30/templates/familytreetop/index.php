@@ -74,6 +74,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                 <li familytreetop="edit"><a href="#">Edit Profile</a></li>
                 <li class="divider"></li>
                 <li familytreetop="addParent"><a href="#">Add Parent</a></li>
+                <li familytreetop="addSibling"><a href="#">Add Sibling</a></li>
                 <li familytreetop="addSpouse"><a href="#">Add Spouse</a></li>
                 <li familytreetop="addChild"><a href="#">Add Child</a></li>
                 <li class="divider"></li>

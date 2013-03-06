@@ -85,4 +85,12 @@ class FamilyTreeTopGedcomChildrensManager {
             'family_id' => $this->list_by_family_id
         );
     }
+
+    public function getFamilyIdByGedcomId($gedcom_id){
+        if(!empty($this->list_by_gedcom_id[$gedcom_id])){
+            $list = $this->list_by_gedcom_id[$gedcom_id];
+            return $list[0]['family_id'];
+        }
+        return false;
+    }
 }

@@ -74,7 +74,18 @@ class FamilyTreeTopGedcomIndividualsModel {
     }
 
     public function name(){
+        if(empty($this->id)) return "";
         return $this->first_name . " " . $this->last_name;
+    }
+
+    public function getParents(){
+        $gedcom = GedcomHelper::getInstance();
+        $family_id = $gedcom->childrens->getFamilyIdByGedcomId($this->gedcom_id);
+        $family = $gedcom->families->get($family_id);
+        return array(
+            'father'=>$gedcom->individuals->get($family->husb),
+            'mother'=>$gedcom->individuals->get($family->wife)
+        );
     }
 }
 
