@@ -45,7 +45,6 @@ if(!empty($user->gedcom_id)){
 <script>
     $FamilyTreeTop.bind(function($){
         'use strict';
-
         $('#profileUser ul.dropdown-menu li a').click(function(){
             var id = $(this).attr('familytreetop');
             console.log(id);

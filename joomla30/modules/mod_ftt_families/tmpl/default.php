@@ -99,7 +99,7 @@ $user = FamilyTreeTopUserHelper::getInstance()->get();
                     return [Math.round(length/rows), limit, width];
                 }
                 function getMinHeight(){
-                    var height = (getRows()[0] * 270);
+                    var height = (getRows()[0] * 250);
                     return height * 0.1 + 250 + height;
                 }
                 function getEventTop(){

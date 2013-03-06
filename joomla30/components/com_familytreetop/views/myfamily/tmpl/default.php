@@ -15,7 +15,7 @@ jimport('joomla.application.module.helper');
 </div>
 <div class="row">
     <div class="span12">
-        <ul class="nav nav-tabs">
+        <ul id="familyTreeTopTabs" class="nav nav-tabs">
             <li class="active"><a href="#tab1" data-toggle="tab">Bulletin Board</a></li>
             <li><a href="#tab2" data-toggle="tab">Families</a></li>
             <li><a href="#tab3" data-toggle="tab">Descendants</a></li>

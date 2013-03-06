@@ -76,6 +76,10 @@
                     }
                 }
             }).call(this);
+        },
+        generateKey:function(){
+            var s4 = function(){return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);}
+            return s4()+s4()+s4()+s4()+s4()+s4()+s4()+s4();
         }
     }
 
@@ -93,6 +97,8 @@
             F.prototype = $FamilyTreeTop.prototype.fn;
             el.call(new F(), jQuery);
         });
+        //init
+        $this.mod('tabs').init();
     }
 
     $FamilyTreeTop.prototype.mod = function(name){
