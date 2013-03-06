@@ -59,7 +59,7 @@ class FamilytreetopControllerCreate extends FamilytreetopController
         $mother->gender = 0;
         $mother->first_name = $motherData['firstName'];
         $mother->last_name = $motherData['lastName'];
-        $mother->creator_ir = $ind->gedcom_id;
+        $mother->creator_id = $ind->gedcom_id;
         $mother->save();
 
         $family = $gedcom->families->get();

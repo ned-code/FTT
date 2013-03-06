@@ -19,8 +19,6 @@ $user = FamilyTreeTopUserHelper::getInstance()->get();
                 node.name = data.name();
                 node.data = [];
                 node.children = [];
-
-                console.log(node);
                 return node;
             },
             getTree: function(gedcom_id){
