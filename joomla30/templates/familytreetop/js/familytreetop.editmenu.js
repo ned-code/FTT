@@ -42,7 +42,7 @@ $FamilyTreeTop.create("editmenu", function($){
             $(box).find('li[familytreetop="addParent"]').remove();
         }
 
-        $(object).parent().append(box);
+        $(object).append(box);
         $(box).find('li').click(function(){
             $fn.click.call(this, gedcom_id);
             return false;

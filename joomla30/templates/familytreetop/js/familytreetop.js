@@ -12,12 +12,15 @@
             permissions:"user_about_me,user_birthday,user_relationships,user_photos,friends_photos,read_stream,read_insights"
         }
 
+
+
         this.bindPull = [];
 
         this.moduleLinkPull = {};
         this.modulePull = [];
 
         this.dataString = "";
+        this.userString = "";
     }
 
     $FamilyTreeTop.prototype.fn = {

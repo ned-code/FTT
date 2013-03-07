@@ -87,6 +87,17 @@ class FamilyTreeTopGedcomIndividualsModel {
             'mother'=>$gedcom->individuals->get($family->wife)
         );
     }
+
+    public function isParents(){
+        $gedcom = GedcomHelper::getInstance();
+        $family_id = $gedcom->childrens->getFamilyIdByGedcomId($this->gedcom_id);
+        $family = $gedcom->families->get($family_id);
+        if(empty($family->husb) && empty($family->wife)){
+            return false;
+        } else {
+            return true;
+        }
+    }
 }
 
 

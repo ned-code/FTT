@@ -2,19 +2,30 @@ $FamilyTreeTop.create("usertree", function($){
     'use strict';
     var $this = this,
         $fn,
+        usermap,
         data;
 
     $fn = {
 
     }
 
-    $this.init = function(dataString){
+    $this.init = function(dataString, userString){
         if(dataString.length != 0){
             data = $.parseJSON(dataString);
             console.log(data);
         } else {
             data = null;
         }
+        if(userString.length != 0){
+            usermap = $.parseJSON(userString);
+            console.log(usermap);
+        } else {
+            usermap = null;
+        }
+    }
+
+    $this.usermap = function(){
+        return usermap;
     }
 
     $this.user = function(gedcom_id){
@@ -120,5 +131,5 @@ $FamilyTreeTop.create("usertree", function($){
         return childrens;
     }
 
-    $this.init($FamilyTreeTop.dataString);
+    $this.init($FamilyTreeTop.dataString, $FamilyTreeTop.userString);
 });
