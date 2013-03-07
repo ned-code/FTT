@@ -227,12 +227,6 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
             -->
         </form>
     </div>
-
-    <div id="formAdd">
-        <form action="<?=JRoute::_("index.php?option=com_familytreetop&task.editor.save", false);?>" class="form-horizontal">
-        </form>
-    </div>
-
 </div>
 <jdoc:include type="modules" name="debug" style="none" />
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/jquery-1.9.1.min.js"></script>

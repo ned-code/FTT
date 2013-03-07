@@ -13,6 +13,10 @@ $FamilyTreeTop.create("editmenu", function($){
                     $this.mod('editor').render(gedcom_id);
                     break;
 
+                case "addParent":
+                    $this.mod('editor').addParent(gedcom_id);
+                    break;
+
                 case "delete":
                     break;
                 default: return false;
