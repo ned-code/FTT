@@ -45,8 +45,7 @@ $FamilyTreeTop.create("families", function($){
             $(divs[1]).text(ind.name());
             $(divs[2]).text('...');
 
-            if(args.abilityToMove){
-                (type == "up" && ind.isParentsExist()) || type == "down"
+            if(args.abilityToMove && ((type == "up" && ind.isParentsExist()) || (type == "down" && ind.isChildrensExist())) ){
                 $(divs[0]).append($fn.createArrow(type, args));
             }
             if(args.editable){

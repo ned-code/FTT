@@ -58,7 +58,8 @@ $FamilyTreeTop.create("usertree", function($){
                 return parents.father || parents.mother || false;
             },
             isChildrensExist:function(){
-                if("undefined" === data.chi.gedcom_id[ind.gedcom_id]){
+                var childrens = $this.getChildrens(ind.gedcom_id);
+                if(childrens.length != 0){
                     return true;
                 } else {
                     return false;
