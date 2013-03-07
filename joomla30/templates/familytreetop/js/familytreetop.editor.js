@@ -30,9 +30,8 @@ $FamilyTreeTop.create("editor", function($){
                 }
             });
         },
-        setFormInTab:function(selector, form){
-            var tab =   $('#editProfileTabs .tab-content '+ selector);
-            $(tab).html('');
+        setFormInTab:function(num, tabs, form){
+            var tab =   $(tabs[0]).find('.tab-content #'+ tabs[1][num]);
             $(tab).append(form);
         },
         getModalBox:function(){
@@ -43,6 +42,28 @@ $FamilyTreeTop.create("editor", function($){
             });
             return cl;
         },
+        getTabs:function(){
+            var tabs, links, conts, crosslinks;
+
+            tabs = $('#editorTabs').clone();
+            links = $(tabs).find('.nav.nav-tabs li a');
+            conts = $(tabs).find('.tab-content .tab-pane');
+            crosslinks = [];
+
+            $(conts).each(function(index, el){
+                var key = $this.generateKey() + '_' + index;
+                crosslinks.push(key);
+                $(links[index]).attr('href', '#' + key);
+                $(el).attr('id', key);
+            });
+
+            $(tabs).find('a').click(function (e) {
+                e.preventDefault();
+                $(this).tab('show');
+            })
+
+            return [tabs, crosslinks];
+        },
         getEditorProfileForm:function(){
             return $('#formEditProfile').clone();
         },
@@ -50,19 +71,48 @@ $FamilyTreeTop.create("editor", function($){
             var arr = $(parent).find('form').serializeArray();
             arr.push({name:'gedcom_id', value:ind.gedcom_id});
             return arr;
+        },
+        submit:function(task, cl, ind){
+            $(cl).find('button[familytreetop="submit"]').click(function(){
+                $this.ajax(task, $fn.getArgs(cl, ind), function(response){
+                    $(cl).modal('hide');
+                });
+            });
         }
     }
 
-    $this.addParent = function(gedcom_id){}
-    $this.addSpouse = function(gedcom_id){}
-    $this.addChild = function(gedcom_id){}
+    $this.add = function(type, gedcom_id){
+        var cl, ind, editProfileForm;
 
+        //create modal box;
+        cl = $fn.getModalBox();
+
+        //get user data
+        ind = $this.mod('usertree').user(gedcom_id);
+
+        //get form
+        editProfileForm = $fn.getEditorProfileForm();
+
+        //set title
+        $(cl).find('#modalLabel').text("Add " + type.split('add')[1]);
+        //set tabs
+        $(cl).find('.modal-body').append(editProfileForm);
+
+        //init modal
+        $(cl).modal();
+
+        //event submit
+        $fn.submit('editor.'+type, cl, ind);
+    }
 
     $this.render = function(gedcom_id){
-        var cl, ind, editProfileForm;
+        var cl, tabs, ind, editProfileForm;
 
         //create modal box
         cl = $fn.getModalBox();
+
+        //create tabs
+        tabs = $fn.getTabs()
 
         //get user data
         ind = $this.mod('usertree').user(gedcom_id);
@@ -70,11 +120,11 @@ $FamilyTreeTop.create("editor", function($){
         //set title
         $(cl).find('#modalLabel').text(ind.name());
         //set tabs
-        $(cl).find('.modal-body').append($('#editProfileTabs'));
+        $(cl).find('.modal-body').append(tabs[0]);
 
         //profile edit
         editProfileForm = $fn.getEditorProfileForm();
-        $fn.setFormInTab('#editMenuTab1', editProfileForm);
+        $fn.setFormInTab(0, tabs, editProfileForm);
         $fn.setUserData(editProfileForm, ind);
 
         //unions edit
@@ -83,11 +133,8 @@ $FamilyTreeTop.create("editor", function($){
 
         //init modal
         $(cl).modal();
-        $(cl).find('button[familytreetop="submit"]').click(function(){
-            $this.ajax('editor.updateUserInfo', $fn.getArgs(cl, ind), function(response){
-                console.log(response);
-                $(cl).modal('hide');
-            });
-        });
+
+        // event submit
+        $fn.submit('editor.updateUserInfo', cl, ind);
     }
 });

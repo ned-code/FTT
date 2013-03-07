@@ -96,18 +96,18 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
         </div>
     </div>
 
-    <div id="editProfileTabs">
+    <div id="editorTabs">
         <ul class="nav nav-tabs">
-            <li class="active"><a href="#editMenuTab1" data-toggle="tab">Profile</a></li>
-            <li><a href="#editMenuTab2" data-toggle="tab">Unions</a></li>
-            <li><a href="#editMenuTab3" data-toggle="tab">Media</a></li>
-            <li><a href="#editMenuTab4" data-toggle="tab">Options</a></li>
+            <li class="active"><a href="#" data-toggle="tab">Profile</a></li>
+            <li><a href="#" data-toggle="tab">Unions</a></li>
+            <li><a href="#" data-toggle="tab">Media</a></li>
+            <li><a href="#" data-toggle="tab">Options</a></li>
         </ul>
         <div class="tab-content">
-            <div class="tab-pane active" id="editMenuTab1"></div>
-            <div class="tab-pane" id="editMenuTab2"></div>
-            <div class="tab-pane" id="editMenuTab3"></div>
-            <div class="tab-pane" id="editMenuTab4"></div>
+            <div class="tab-pane active" id="_1_"></div>
+            <div class="tab-pane" id="_2_"></div>
+            <div class="tab-pane" id="_3_"></div>
+            <div class="tab-pane" id="_4_"></div>
         </div>
     </div>
 

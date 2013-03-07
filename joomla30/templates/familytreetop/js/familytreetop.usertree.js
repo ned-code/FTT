@@ -41,6 +41,10 @@ $FamilyTreeTop.create("usertree", function($){
                     $name.push(ind.last_name);
                 }
                 return $name.join(' ');
+            },
+            isParents:function(){
+                var parents = $this.getParents(gedcom_id);
+                return parents.father || parents.mother || false;
             }
         }
     }

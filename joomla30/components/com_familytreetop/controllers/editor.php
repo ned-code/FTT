@@ -5,6 +5,28 @@ require_once JPATH_COMPONENT.'/controller.php';
 
 class FamilytreetopControllerEditor extends FamilytreetopController
 {
+    public function addParent(){
+        $app = JFactory::getApplication();
+        $form = $app->input->post->get('editProfile', array(), 'array');
+    }
+
+    public function addSibling(){
+        $app = JFactory::getApplication();
+        $form = $app->input->post->get('editProfile', array(), 'array');
+
+    }
+
+    public function addSpouse(){
+        $app = JFactory::getApplication();
+        $form = $app->input->post->get('editProfile', array(), 'array');
+
+    }
+
+    public function addChild(){
+        $app = JFactory::getApplication();
+        $form = $app->input->post->get('editProfile', array(), 'array');
+    }
+
     public function updateUserInfo(){
         $app = JFactory::getApplication();
 
@@ -26,7 +48,6 @@ class FamilytreetopControllerEditor extends FamilytreetopController
     }
 
     public function updateUnionsInfo(){}
-
     public function updateMediasInfo(){}
 
 }
