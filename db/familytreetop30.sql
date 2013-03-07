@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 3.4.11.1deb1
+-- version 3.5.1
 -- http://www.phpmyadmin.net
 --
--- Host: localhost
--- Generation Time: Mar 05, 2013 at 09:00 PM
--- Server version: 5.5.29
--- PHP Version: 5.4.6-1ubuntu1.1
+-- Хост: 127.0.0.1
+-- Время создания: Мар 07 2013 г., 19:05
+-- Версия сервера: 5.5.25
+-- Версия PHP: 5.3.13
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -17,13 +17,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `familytreetop30`
+-- База данных: `familytreetop30`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_assets`
+-- Структура таблицы `geicz_assets`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_assets` (
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `geicz_assets` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=35 ;
 
 --
--- Dumping data for table `geicz_assets`
+-- Дамп данных таблицы `geicz_assets`
 --
 
 INSERT INTO `geicz_assets` (`id`, `parent_id`, `lft`, `rgt`, `level`, `name`, `title`, `rules`) VALUES
@@ -84,7 +84,7 @@ INSERT INTO `geicz_assets` (`id`, `parent_id`, `lft`, `rgt`, `level`, `name`, `t
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_associations`
+-- Структура таблицы `geicz_associations`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_associations` (
@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS `geicz_associations` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_banners`
+-- Структура таблицы `geicz_banners`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_banners` (
@@ -147,7 +147,7 @@ CREATE TABLE IF NOT EXISTS `geicz_banners` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_banner_clients`
+-- Структура таблицы `geicz_banner_clients`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_banner_clients` (
@@ -173,7 +173,7 @@ CREATE TABLE IF NOT EXISTS `geicz_banner_clients` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_banner_tracks`
+-- Структура таблицы `geicz_banner_tracks`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_banner_tracks` (
@@ -190,7 +190,7 @@ CREATE TABLE IF NOT EXISTS `geicz_banner_tracks` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_categories`
+-- Структура таблицы `geicz_categories`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_categories` (
@@ -232,7 +232,7 @@ CREATE TABLE IF NOT EXISTS `geicz_categories` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
 
 --
--- Dumping data for table `geicz_categories`
+-- Дамп данных таблицы `geicz_categories`
 --
 
 INSERT INTO `geicz_categories` (`id`, `asset_id`, `parent_id`, `lft`, `rgt`, `level`, `path`, `extension`, `title`, `alias`, `note`, `description`, `published`, `checked_out`, `checked_out_time`, `access`, `params`, `metadesc`, `metakey`, `metadata`, `created_user_id`, `created_time`, `modified_user_id`, `modified_time`, `hits`, `language`, `version`) VALUES
@@ -247,7 +247,7 @@ INSERT INTO `geicz_categories` (`id`, `asset_id`, `parent_id`, `lft`, `rgt`, `le
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_contact_details`
+-- Структура таблицы `geicz_contact_details`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_contact_details` (
@@ -308,7 +308,7 @@ CREATE TABLE IF NOT EXISTS `geicz_contact_details` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_content`
+-- Структура таблицы `geicz_content`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_content` (
@@ -356,7 +356,7 @@ CREATE TABLE IF NOT EXISTS `geicz_content` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_content_frontpage`
+-- Структура таблицы `geicz_content_frontpage`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_content_frontpage` (
@@ -368,7 +368,7 @@ CREATE TABLE IF NOT EXISTS `geicz_content_frontpage` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_content_rating`
+-- Структура таблицы `geicz_content_rating`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_content_rating` (
@@ -382,7 +382,7 @@ CREATE TABLE IF NOT EXISTS `geicz_content_rating` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_core_log_searches`
+-- Структура таблицы `geicz_core_log_searches`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_core_log_searches` (
@@ -393,7 +393,7 @@ CREATE TABLE IF NOT EXISTS `geicz_core_log_searches` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_extensions`
+-- Структура таблицы `geicz_extensions`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_extensions` (
@@ -421,7 +421,7 @@ CREATE TABLE IF NOT EXISTS `geicz_extensions` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10013 ;
 
 --
--- Dumping data for table `geicz_extensions`
+-- Дамп данных таблицы `geicz_extensions`
 --
 
 INSERT INTO `geicz_extensions` (`extension_id`, `name`, `type`, `element`, `folder`, `client_id`, `enabled`, `access`, `protected`, `manifest_cache`, `params`, `custom_data`, `system_data`, `checked_out`, `checked_out_time`, `ordering`, `state`) VALUES
@@ -566,7 +566,7 @@ INSERT INTO `geicz_extensions` (`extension_id`, `name`, `type`, `element`, `fold
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_familytreetop_accounts`
+-- Структура таблицы `geicz_familytreetop_accounts`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_familytreetop_accounts` (
@@ -580,7 +580,7 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_accounts` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
--- Dumping data for table `geicz_familytreetop_accounts`
+-- Дамп данных таблицы `geicz_familytreetop_accounts`
 --
 
 INSERT INTO `geicz_familytreetop_accounts` (`id`, `current`, `joomla_id`, `facebook_id`, `access_token`) VALUES
@@ -589,7 +589,7 @@ INSERT INTO `geicz_familytreetop_accounts` (`id`, `current`, `joomla_id`, `faceb
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_familytreetop_childrens`
+-- Структура таблицы `geicz_familytreetop_childrens`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_familytreetop_childrens` (
@@ -599,19 +599,21 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_childrens` (
   PRIMARY KEY (`id`),
   KEY `fk_geicz_familytreetop_childrens_1` (`family_id`),
   KEY `fk_geicz_familytreetop_childrens_2` (`gedcom_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 --
--- Dumping data for table `geicz_familytreetop_childrens`
+-- Дамп данных таблицы `geicz_familytreetop_childrens`
 --
 
 INSERT INTO `geicz_familytreetop_childrens` (`id`, `family_id`, `gedcom_id`) VALUES
-(2, 7, 4);
+(2, 7, 4),
+(3, 13, 5),
+(4, 16, 6);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_familytreetop_dates`
+-- Структура таблицы `geicz_familytreetop_dates`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_familytreetop_dates` (
@@ -632,7 +634,7 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_dates` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_familytreetop_events`
+-- Структура таблицы `geicz_familytreetop_events`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_familytreetop_events` (
@@ -650,7 +652,7 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_events` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_familytreetop_families`
+-- Структура таблицы `geicz_familytreetop_families`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_familytreetop_families` (
@@ -664,19 +666,21 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_families` (
   KEY `fk_geicz_familytreetop_families_1` (`husb`),
   KEY `fk_geicz_familytreetop_families_2` (`wife`),
   KEY `fk_geicz_familytreetop_families_3_idx` (`family_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 --
--- Dumping data for table `geicz_familytreetop_families`
+-- Дамп данных таблицы `geicz_familytreetop_families`
 --
 
 INSERT INTO `geicz_familytreetop_families` (`id`, `family_id`, `husb`, `wife`, `type`, `change_time`) VALUES
-(2, 7, 6, 5, 'marriage', '2013-03-04 08:05:30');
+(2, 7, 5, 6, 'marriage', '2013-03-04 08:05:30'),
+(3, 13, 11, 12, 'marriage', '2013-03-07 08:46:41'),
+(4, 16, 15, 14, 'marriage', '2013-03-07 08:47:50');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_familytreetop_individuals`
+-- Структура таблицы `geicz_familytreetop_individuals`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_familytreetop_individuals` (
@@ -689,21 +693,25 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_individuals` (
   `change_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `fk_geicz_familytreetop_individuals_1` (`gedcom_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=13 ;
 
 --
--- Dumping data for table `geicz_familytreetop_individuals`
+-- Дамп данных таблицы `geicz_familytreetop_individuals`
 --
 
 INSERT INTO `geicz_familytreetop_individuals` (`id`, `gedcom_id`, `creator_id`, `gender`, `family_id`, `create_time`, `change_time`) VALUES
 (4, 4, NULL, 1, NULL, NULL, '2013-03-04 08:05:30'),
 (5, 5, 4, 1, NULL, '2013-03-04 11:10:12', '2013-03-04 08:05:30'),
-(6, 6, 4, 0, NULL, '2013-03-04 11:10:15', '2013-03-04 08:05:30');
+(6, 6, 4, 0, NULL, '2013-03-04 11:10:15', '2013-03-04 08:05:30'),
+(9, 11, 5, 1, NULL, NULL, '2013-03-07 08:46:41'),
+(10, 12, 5, 0, NULL, NULL, '2013-03-07 08:46:41'),
+(11, 14, 6, 0, NULL, NULL, '2013-03-07 08:47:50'),
+(12, 15, 6, 1, NULL, NULL, '2013-03-07 08:47:50');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_familytreetop_medias`
+-- Структура таблицы `geicz_familytreetop_medias`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_familytreetop_medias` (
@@ -716,7 +724,7 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_medias` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_familytreetop_media_link`
+-- Структура таблицы `geicz_familytreetop_media_link`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_familytreetop_media_link` (
@@ -731,7 +739,7 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_media_link` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_familytreetop_names`
+-- Структура таблицы `geicz_familytreetop_names`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_familytreetop_names` (
@@ -744,21 +752,25 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_names` (
   `change_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `fk_geicz_famiytreetop_names_1` (`gedcom_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=13 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=19 ;
 
 --
--- Dumping data for table `geicz_familytreetop_names`
+-- Дамп данных таблицы `geicz_familytreetop_names`
 --
 
 INSERT INTO `geicz_familytreetop_names` (`id`, `gedcom_id`, `first_name`, `middle_name`, `last_name`, `know_as`, `change_time`) VALUES
 (10, 4, 'Alexander', NULL, 'Potashko', NULL, '2013-03-04 08:05:30'),
 (11, 5, 'Alexander', NULL, 'Potashko', NULL, '2013-03-04 08:05:30'),
-(12, 6, 'Natali', NULL, 'Potashko', NULL, '2013-03-04 08:05:30');
+(12, 6, 'Natali', NULL, 'Potashko', NULL, '2013-03-04 08:05:30'),
+(15, 11, 'Leonid', 'Stepanovich', 'Potashko', 'Leo', '2013-03-07 08:46:41'),
+(16, 12, 'unknown', NULL, NULL, NULL, '2013-03-07 08:46:41'),
+(17, 14, 'Galina', '', 'Gernovich', '', '2013-03-07 08:47:50'),
+(18, 15, 'unknown', NULL, NULL, NULL, '2013-03-07 08:47:50');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_familytreetop_notes`
+-- Структура таблицы `geicz_familytreetop_notes`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_familytreetop_notes` (
@@ -774,7 +786,7 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_notes` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_familytreetop_places`
+-- Структура таблицы `geicz_familytreetop_places`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_familytreetop_places` (
@@ -791,7 +803,7 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_places` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_familytreetop_relations`
+-- Структура таблицы `geicz_familytreetop_relations`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_familytreetop_relations` (
@@ -803,7 +815,7 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_relations` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_familytreetop_relation_link`
+-- Структура таблицы `geicz_familytreetop_relation_link`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_familytreetop_relation_link` (
@@ -822,7 +834,7 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_relation_link` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_familytreetop_settings`
+-- Структура таблицы `geicz_familytreetop_settings`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_familytreetop_settings` (
@@ -834,7 +846,7 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_settings` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
--- Dumping data for table `geicz_familytreetop_settings`
+-- Дамп данных таблицы `geicz_familytreetop_settings`
 --
 
 INSERT INTO `geicz_familytreetop_settings` (`id`, `name`, `value`, `params`) VALUES
@@ -844,7 +856,7 @@ INSERT INTO `geicz_familytreetop_settings` (`id`, `name`, `value`, `params`) VAL
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_familytreetop_trees`
+-- Структура таблицы `geicz_familytreetop_trees`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_familytreetop_trees` (
@@ -853,7 +865,7 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_trees` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
--- Dumping data for table `geicz_familytreetop_trees`
+-- Дамп данных таблицы `geicz_familytreetop_trees`
 --
 
 INSERT INTO `geicz_familytreetop_trees` (`id`) VALUES
@@ -862,7 +874,7 @@ INSERT INTO `geicz_familytreetop_trees` (`id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_familytreetop_tree_links`
+-- Структура таблицы `geicz_familytreetop_tree_links`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_familytreetop_tree_links` (
@@ -871,22 +883,28 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_tree_links` (
   `type` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `fk_geicz_familytreetop_tree_links_1` (`tree_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=17 ;
 
 --
--- Dumping data for table `geicz_familytreetop_tree_links`
+-- Дамп данных таблицы `geicz_familytreetop_tree_links`
 --
 
 INSERT INTO `geicz_familytreetop_tree_links` (`id`, `tree_id`, `type`) VALUES
 (4, 2, 0),
 (5, 2, 0),
 (6, 2, 0),
-(7, 2, 1);
+(7, 2, 1),
+(11, 2, 0),
+(12, 2, 0),
+(13, 2, 1),
+(14, 2, 0),
+(15, 2, 0),
+(16, 2, 1);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_familytreetop_users`
+-- Структура таблицы `geicz_familytreetop_users`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_familytreetop_users` (
@@ -899,7 +917,7 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_users` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
--- Dumping data for table `geicz_familytreetop_users`
+-- Дамп данных таблицы `geicz_familytreetop_users`
 --
 
 INSERT INTO `geicz_familytreetop_users` (`id`, `account_id`, `gedcom_id`, `tree_id`, `role`) VALUES
@@ -908,7 +926,7 @@ INSERT INTO `geicz_familytreetop_users` (`id`, `account_id`, `gedcom_id`, `tree_
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_finder_filters`
+-- Структура таблицы `geicz_finder_filters`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_finder_filters` (
@@ -932,7 +950,7 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_filters` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_finder_links`
+-- Структура таблицы `geicz_finder_links`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_finder_links` (
@@ -967,7 +985,7 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_links` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_finder_links_terms0`
+-- Структура таблицы `geicz_finder_links_terms0`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_finder_links_terms0` (
@@ -982,7 +1000,7 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_links_terms0` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_finder_links_terms1`
+-- Структура таблицы `geicz_finder_links_terms1`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_finder_links_terms1` (
@@ -997,7 +1015,7 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_links_terms1` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_finder_links_terms2`
+-- Структура таблицы `geicz_finder_links_terms2`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_finder_links_terms2` (
@@ -1012,7 +1030,7 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_links_terms2` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_finder_links_terms3`
+-- Структура таблицы `geicz_finder_links_terms3`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_finder_links_terms3` (
@@ -1027,7 +1045,7 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_links_terms3` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_finder_links_terms4`
+-- Структура таблицы `geicz_finder_links_terms4`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_finder_links_terms4` (
@@ -1042,7 +1060,7 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_links_terms4` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_finder_links_terms5`
+-- Структура таблицы `geicz_finder_links_terms5`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_finder_links_terms5` (
@@ -1057,7 +1075,7 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_links_terms5` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_finder_links_terms6`
+-- Структура таблицы `geicz_finder_links_terms6`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_finder_links_terms6` (
@@ -1072,7 +1090,7 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_links_terms6` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_finder_links_terms7`
+-- Структура таблицы `geicz_finder_links_terms7`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_finder_links_terms7` (
@@ -1087,7 +1105,7 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_links_terms7` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_finder_links_terms8`
+-- Структура таблицы `geicz_finder_links_terms8`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_finder_links_terms8` (
@@ -1102,7 +1120,7 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_links_terms8` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_finder_links_terms9`
+-- Структура таблицы `geicz_finder_links_terms9`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_finder_links_terms9` (
@@ -1117,7 +1135,7 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_links_terms9` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_finder_links_termsa`
+-- Структура таблицы `geicz_finder_links_termsa`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_finder_links_termsa` (
@@ -1132,7 +1150,7 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_links_termsa` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_finder_links_termsb`
+-- Структура таблицы `geicz_finder_links_termsb`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_finder_links_termsb` (
@@ -1147,7 +1165,7 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_links_termsb` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_finder_links_termsc`
+-- Структура таблицы `geicz_finder_links_termsc`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_finder_links_termsc` (
@@ -1162,7 +1180,7 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_links_termsc` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_finder_links_termsd`
+-- Структура таблицы `geicz_finder_links_termsd`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_finder_links_termsd` (
@@ -1177,7 +1195,7 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_links_termsd` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_finder_links_termse`
+-- Структура таблицы `geicz_finder_links_termse`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_finder_links_termse` (
@@ -1192,7 +1210,7 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_links_termse` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_finder_links_termsf`
+-- Структура таблицы `geicz_finder_links_termsf`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_finder_links_termsf` (
@@ -1207,7 +1225,7 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_links_termsf` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_finder_taxonomy`
+-- Структура таблицы `geicz_finder_taxonomy`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_finder_taxonomy` (
@@ -1226,7 +1244,7 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_taxonomy` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 --
--- Dumping data for table `geicz_finder_taxonomy`
+-- Дамп данных таблицы `geicz_finder_taxonomy`
 --
 
 INSERT INTO `geicz_finder_taxonomy` (`id`, `parent_id`, `title`, `state`, `access`, `ordering`) VALUES
@@ -1235,7 +1253,7 @@ INSERT INTO `geicz_finder_taxonomy` (`id`, `parent_id`, `title`, `state`, `acces
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_finder_taxonomy_map`
+-- Структура таблицы `geicz_finder_taxonomy_map`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_finder_taxonomy_map` (
@@ -1249,7 +1267,7 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_taxonomy_map` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_finder_terms`
+-- Структура таблицы `geicz_finder_terms`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_finder_terms` (
@@ -1272,7 +1290,7 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_terms` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_finder_terms_common`
+-- Структура таблицы `geicz_finder_terms_common`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_finder_terms_common` (
@@ -1283,7 +1301,7 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_terms_common` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `geicz_finder_terms_common`
+-- Дамп данных таблицы `geicz_finder_terms_common`
 --
 
 INSERT INTO `geicz_finder_terms_common` (`term`, `language`) VALUES
@@ -1406,7 +1424,7 @@ INSERT INTO `geicz_finder_terms_common` (`term`, `language`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_finder_tokens`
+-- Структура таблицы `geicz_finder_tokens`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_finder_tokens` (
@@ -1424,7 +1442,7 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_tokens` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_finder_tokens_aggregate`
+-- Структура таблицы `geicz_finder_tokens_aggregate`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_finder_tokens_aggregate` (
@@ -1446,7 +1464,7 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_tokens_aggregate` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_finder_types`
+-- Структура таблицы `geicz_finder_types`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_finder_types` (
@@ -1460,7 +1478,7 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_types` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_languages`
+-- Структура таблицы `geicz_languages`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_languages` (
@@ -1486,7 +1504,7 @@ CREATE TABLE IF NOT EXISTS `geicz_languages` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 --
--- Dumping data for table `geicz_languages`
+-- Дамп данных таблицы `geicz_languages`
 --
 
 INSERT INTO `geicz_languages` (`lang_id`, `lang_code`, `title`, `title_native`, `sef`, `image`, `description`, `metakey`, `metadesc`, `sitename`, `published`, `access`, `ordering`) VALUES
@@ -1495,7 +1513,7 @@ INSERT INTO `geicz_languages` (`lang_id`, `lang_code`, `title`, `title_native`, 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_menu`
+-- Структура таблицы `geicz_menu`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_menu` (
@@ -1534,7 +1552,7 @@ CREATE TABLE IF NOT EXISTS `geicz_menu` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=102 ;
 
 --
--- Dumping data for table `geicz_menu`
+-- Дамп данных таблицы `geicz_menu`
 --
 
 INSERT INTO `geicz_menu` (`id`, `menutype`, `title`, `alias`, `note`, `path`, `link`, `type`, `published`, `parent_id`, `level`, `component_id`, `checked_out`, `checked_out_time`, `browserNav`, `access`, `img`, `template_style_id`, `params`, `lft`, `rgt`, `home`, `language`, `client_id`) VALUES
@@ -1565,7 +1583,7 @@ INSERT INTO `geicz_menu` (`id`, `menutype`, `title`, `alias`, `note`, `path`, `l
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_menu_types`
+-- Структура таблицы `geicz_menu_types`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_menu_types` (
@@ -1578,7 +1596,7 @@ CREATE TABLE IF NOT EXISTS `geicz_menu_types` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 --
--- Dumping data for table `geicz_menu_types`
+-- Дамп данных таблицы `geicz_menu_types`
 --
 
 INSERT INTO `geicz_menu_types` (`id`, `menutype`, `title`, `description`) VALUES
@@ -1587,7 +1605,7 @@ INSERT INTO `geicz_menu_types` (`id`, `menutype`, `title`, `description`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_messages`
+-- Структура таблицы `geicz_messages`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_messages` (
@@ -1607,7 +1625,7 @@ CREATE TABLE IF NOT EXISTS `geicz_messages` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_messages_cfg`
+-- Структура таблицы `geicz_messages_cfg`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_messages_cfg` (
@@ -1620,7 +1638,7 @@ CREATE TABLE IF NOT EXISTS `geicz_messages_cfg` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_modules`
+-- Структура таблицы `geicz_modules`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_modules` (
@@ -1648,7 +1666,7 @@ CREATE TABLE IF NOT EXISTS `geicz_modules` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=98 ;
 
 --
--- Dumping data for table `geicz_modules`
+-- Дамп данных таблицы `geicz_modules`
 --
 
 INSERT INTO `geicz_modules` (`id`, `title`, `note`, `content`, `ordering`, `position`, `checked_out`, `checked_out_time`, `publish_up`, `publish_down`, `published`, `module`, `access`, `showtitle`, `params`, `client_id`, `language`) VALUES
@@ -1682,7 +1700,7 @@ INSERT INTO `geicz_modules` (`id`, `title`, `note`, `content`, `ordering`, `posi
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_modules_menu`
+-- Структура таблицы `geicz_modules_menu`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_modules_menu` (
@@ -1692,7 +1710,7 @@ CREATE TABLE IF NOT EXISTS `geicz_modules_menu` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `geicz_modules_menu`
+-- Дамп данных таблицы `geicz_modules_menu`
 --
 
 INSERT INTO `geicz_modules_menu` (`moduleid`, `menuid`) VALUES
@@ -1728,7 +1746,7 @@ INSERT INTO `geicz_modules_menu` (`moduleid`, `menuid`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_newsfeeds`
+-- Структура таблицы `geicz_newsfeeds`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_newsfeeds` (
@@ -1775,7 +1793,7 @@ CREATE TABLE IF NOT EXISTS `geicz_newsfeeds` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_overrider`
+-- Структура таблицы `geicz_overrider`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_overrider` (
@@ -1789,7 +1807,7 @@ CREATE TABLE IF NOT EXISTS `geicz_overrider` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_redirect_links`
+-- Структура таблицы `geicz_redirect_links`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_redirect_links` (
@@ -1810,7 +1828,7 @@ CREATE TABLE IF NOT EXISTS `geicz_redirect_links` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_schemas`
+-- Структура таблицы `geicz_schemas`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_schemas` (
@@ -1820,7 +1838,7 @@ CREATE TABLE IF NOT EXISTS `geicz_schemas` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `geicz_schemas`
+-- Дамп данных таблицы `geicz_schemas`
 --
 
 INSERT INTO `geicz_schemas` (`extension_id`, `version_id`) VALUES
@@ -1829,7 +1847,7 @@ INSERT INTO `geicz_schemas` (`extension_id`, `version_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_session`
+-- Структура таблицы `geicz_session`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_session` (
@@ -1846,16 +1864,16 @@ CREATE TABLE IF NOT EXISTS `geicz_session` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `geicz_session`
+-- Дамп данных таблицы `geicz_session`
 --
 
 INSERT INTO `geicz_session` (`session_id`, `client_id`, `guest`, `time`, `data`, `userid`, `username`) VALUES
-('lpksbtps96mosop5lkuofdcbb1', 0, 0, '1362502805', '__default|a:7:{s:15:"session.counter";i:10;s:19:"session.timer.start";i:1362502196;s:18:"session.timer.last";i:1362502799;s:17:"session.timer.now";i:1362502799;s:22:"session.client.browser";s:104:"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.22 (KHTML, like Gecko) Chrome/25.0.1364.97 Safari/537.22";s:8:"registry";O:9:"JRegistry":1:{s:7:"\\0\\0\\0data";O:8:"stdClass":0:{}}s:4:"user";O:5:"JUser":24:{s:9:"\\0\\0\\0isRoot";b:0;s:2:"id";s:3:"201";s:4:"name";s:18:"alexander.potashko";s:8:"username";s:18:"fb_100001614066938";s:5:"email";s:18:"fantomhp@gmail.com";s:8:"password";s:65:"d162eb46f2a9f6d0903e69facb3c637f:csvOAzaXAtekn7jJAnffpnJovdAxcOHW";s:14:"password_clear";s:0:"";s:5:"block";s:1:"0";s:9:"sendEmail";s:1:"0";s:12:"registerDate";s:19:"2013-03-04 11:05:10";s:13:"lastvisitDate";s:19:"2013-03-05 15:39:32";s:10:"activation";s:0:"";s:6:"params";s:2:"{}";s:6:"groups";a:1:{i:2;s:1:"2";}s:5:"guest";i:0;s:13:"lastResetTime";s:19:"0000-00-00 00:00:00";s:10:"resetCount";s:1:"0";s:10:"\\0\\0\\0_params";O:9:"JRegistry":1:{s:7:"\\0\\0\\0data";O:8:"stdClass":0:{}}s:14:"\\0\\0\\0_authGroups";a:2:{i:0;i:1;i:1;i:2;}s:14:"\\0\\0\\0_authLevels";a:3:{i:0;i:1;i:1;i:1;i:2;i:2;}s:15:"\\0\\0\\0_authActions";N;s:12:"\\0\\0\\0_errorMsg";N;s:10:"\\0\\0\\0_errors";a:0:{}s:3:"aid";i:0;}}fb_208893339231244_code|s:216:"AQAdliGL6G5UmVUU-21lyqzeomY85KYjKzAhxx8hYyF24qda510wopRCTYE_FoT4vW8Ux8hj9V2L655YZoCIVTgBSiWdmYPJba-z-nU6G8I8uT9KlVTAJn3GQVAsmFXpABr6-_t1fhDdAmV5AVmefGNeT3A4tlJB8Y55lb6mWhd0A9EsZ_bnErHmleGnCwtTMZVwXDXmhYtvTFcWsOougXlc";fb_208893339231244_access_token|s:113:"AAAC9ZCMVH5AwBAErW9U0jZAyFaZC9ts3069fOEB3g0kZAylHUWb6ZArWknmma0dI2pbJZAXwO7mdyogVWUzetJVXaVbDGXKoYRWxILJIrKowZDZD";fb_208893339231244_user_id|s:15:"100001614066938";', 201, 'fb_100001614066938');
+('mnr9dpk8ervma7ej3lmr1n2ua7', 0, 0, '1362668745', '__default|a:7:{s:15:"session.counter";i:37;s:19:"session.timer.start";i:1362666317;s:18:"session.timer.last";i:1362668728;s:17:"session.timer.now";i:1362668740;s:22:"session.client.browser";s:109:"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.22 (KHTML, like Gecko) Chrome/25.0.1364.152 Safari/537.22";s:8:"registry";O:9:"JRegistry":1:{s:7:"\\0\\0\\0data";O:8:"stdClass":0:{}}s:4:"user";O:5:"JUser":24:{s:9:"\\0\\0\\0isRoot";b:0;s:2:"id";s:3:"201";s:4:"name";s:18:"alexander.potashko";s:8:"username";s:18:"fb_100001614066938";s:5:"email";s:18:"fantomhp@gmail.com";s:8:"password";s:65:"d162eb46f2a9f6d0903e69facb3c637f:csvOAzaXAtekn7jJAnffpnJovdAxcOHW";s:14:"password_clear";s:0:"";s:5:"block";s:1:"0";s:9:"sendEmail";s:1:"0";s:12:"registerDate";s:19:"2013-03-04 11:05:10";s:13:"lastvisitDate";s:19:"2013-03-07 11:40:34";s:10:"activation";s:0:"";s:6:"params";s:2:"{}";s:6:"groups";a:1:{i:2;s:1:"2";}s:5:"guest";i:0;s:13:"lastResetTime";s:19:"0000-00-00 00:00:00";s:10:"resetCount";s:1:"0";s:10:"\\0\\0\\0_params";O:9:"JRegistry":1:{s:7:"\\0\\0\\0data";O:8:"stdClass":0:{}}s:14:"\\0\\0\\0_authGroups";a:2:{i:0;i:1;i:1;i:2;}s:14:"\\0\\0\\0_authLevels";a:3:{i:0;i:1;i:1;i:1;i:2;i:2;}s:15:"\\0\\0\\0_authActions";N;s:12:"\\0\\0\\0_errorMsg";N;s:10:"\\0\\0\\0_errors";a:0:{}s:3:"aid";i:0;}}fb_208893339231244_code|s:216:"AQBReWbU5UW_vpAGNiyjYsM862hfDiXz5svoeCuGaPQLSQL2WCtk-n0lL5oSTtD31edyT6G6fTXkcXQWRHH_GbpXdiSVDJNZRI2p2NFUh2gJXLCd-fI0Afqz0nNdpb_SEr0y8PS1BmH9qmFesQl7JukcW2YqFsEkur7qNdv0nRwMG_K_10cuHa3suG0gAk4DL6YqrMreylZhZQZnu6I7zChs";fb_208893339231244_access_token|s:113:"AAAC9ZCMVH5AwBAErW9U0jZAyFaZC9ts3069fOEB3g0kZAylHUWb6ZArWknmma0dI2pbJZAXwO7mdyogVWUzetJVXaVbDGXKoYRWxILJIrKowZDZD";fb_208893339231244_user_id|s:15:"100001614066938";', 201, 'fb_100001614066938');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_template_styles`
+-- Структура таблицы `geicz_template_styles`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_template_styles` (
@@ -1871,7 +1889,7 @@ CREATE TABLE IF NOT EXISTS `geicz_template_styles` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
 
 --
--- Dumping data for table `geicz_template_styles`
+-- Дамп данных таблицы `geicz_template_styles`
 --
 
 INSERT INTO `geicz_template_styles` (`id`, `template`, `client_id`, `home`, `title`, `params`) VALUES
@@ -1884,7 +1902,7 @@ INSERT INTO `geicz_template_styles` (`id`, `template`, `client_id`, `home`, `tit
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_updates`
+-- Структура таблицы `geicz_updates`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_updates` (
@@ -1905,7 +1923,7 @@ CREATE TABLE IF NOT EXISTS `geicz_updates` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Available Updates' AUTO_INCREMENT=69 ;
 
 --
--- Dumping data for table `geicz_updates`
+-- Дамп данных таблицы `geicz_updates`
 --
 
 INSERT INTO `geicz_updates` (`update_id`, `update_site_id`, `extension_id`, `name`, `description`, `element`, `type`, `folder`, `client_id`, `version`, `data`, `detailsurl`, `infourl`) VALUES
@@ -1981,7 +1999,7 @@ INSERT INTO `geicz_updates` (`update_id`, `update_site_id`, `extension_id`, `nam
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_update_sites`
+-- Структура таблицы `geicz_update_sites`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_update_sites` (
@@ -1995,7 +2013,7 @@ CREATE TABLE IF NOT EXISTS `geicz_update_sites` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Update Sites' AUTO_INCREMENT=4 ;
 
 --
--- Dumping data for table `geicz_update_sites`
+-- Дамп данных таблицы `geicz_update_sites`
 --
 
 INSERT INTO `geicz_update_sites` (`update_site_id`, `name`, `type`, `location`, `enabled`, `last_check_timestamp`) VALUES
@@ -2006,7 +2024,7 @@ INSERT INTO `geicz_update_sites` (`update_site_id`, `name`, `type`, `location`, 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_update_sites_extensions`
+-- Структура таблицы `geicz_update_sites_extensions`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_update_sites_extensions` (
@@ -2016,7 +2034,7 @@ CREATE TABLE IF NOT EXISTS `geicz_update_sites_extensions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Links extensions to update sites';
 
 --
--- Dumping data for table `geicz_update_sites_extensions`
+-- Дамп данных таблицы `geicz_update_sites_extensions`
 --
 
 INSERT INTO `geicz_update_sites_extensions` (`update_site_id`, `extension_id`) VALUES
@@ -2027,7 +2045,7 @@ INSERT INTO `geicz_update_sites_extensions` (`update_site_id`, `extension_id`) V
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_usergroups`
+-- Структура таблицы `geicz_usergroups`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_usergroups` (
@@ -2044,7 +2062,7 @@ CREATE TABLE IF NOT EXISTS `geicz_usergroups` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
 
 --
--- Dumping data for table `geicz_usergroups`
+-- Дамп данных таблицы `geicz_usergroups`
 --
 
 INSERT INTO `geicz_usergroups` (`id`, `parent_id`, `lft`, `rgt`, `title`) VALUES
@@ -2061,7 +2079,7 @@ INSERT INTO `geicz_usergroups` (`id`, `parent_id`, `lft`, `rgt`, `title`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_users`
+-- Структура таблицы `geicz_users`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_users` (
@@ -2086,17 +2104,17 @@ CREATE TABLE IF NOT EXISTS `geicz_users` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=202 ;
 
 --
--- Dumping data for table `geicz_users`
+-- Дамп данных таблицы `geicz_users`
 --
 
 INSERT INTO `geicz_users` (`id`, `name`, `username`, `email`, `password`, `block`, `sendEmail`, `registerDate`, `lastvisitDate`, `activation`, `params`, `lastResetTime`, `resetCount`) VALUES
 (199, 'FamilyTreeTop', 'Admin', 'familytreetopdev@gmail.com', '3e26b859bedec92db0d1ce89de27f4f1:jZxWJaXrxuYxy4kCFgqRpcdCVXDEVgmg', 0, 0, '2013-03-04 09:40:41', '2013-03-04 11:04:48', '', '{"admin_style":"","admin_language":"","language":"","editor":"","helpsite":"","timezone":""}', '0000-00-00 00:00:00', 0),
-(201, 'alexander.potashko', 'fb_100001614066938', 'fantomhp@gmail.com', 'd162eb46f2a9f6d0903e69facb3c637f:csvOAzaXAtekn7jJAnffpnJovdAxcOHW', 0, 0, '2013-03-04 11:05:10', '2013-03-05 16:49:56', '', '{}', '0000-00-00 00:00:00', 0);
+(201, 'alexander.potashko', 'fb_100001614066938', 'fantomhp@gmail.com', 'd162eb46f2a9f6d0903e69facb3c637f:csvOAzaXAtekn7jJAnffpnJovdAxcOHW', 0, 0, '2013-03-04 11:05:10', '2013-03-07 14:25:17', '', '{}', '0000-00-00 00:00:00', 0);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_user_notes`
+-- Структура таблицы `geicz_user_notes`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_user_notes` (
@@ -2123,7 +2141,7 @@ CREATE TABLE IF NOT EXISTS `geicz_user_notes` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_user_profiles`
+-- Структура таблицы `geicz_user_profiles`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_user_profiles` (
@@ -2137,7 +2155,7 @@ CREATE TABLE IF NOT EXISTS `geicz_user_profiles` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_user_usergroup_map`
+-- Структура таблицы `geicz_user_usergroup_map`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_user_usergroup_map` (
@@ -2147,7 +2165,7 @@ CREATE TABLE IF NOT EXISTS `geicz_user_usergroup_map` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `geicz_user_usergroup_map`
+-- Дамп данных таблицы `geicz_user_usergroup_map`
 --
 
 INSERT INTO `geicz_user_usergroup_map` (`user_id`, `group_id`) VALUES
@@ -2158,7 +2176,7 @@ INSERT INTO `geicz_user_usergroup_map` (`user_id`, `group_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_viewlevels`
+-- Структура таблицы `geicz_viewlevels`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_viewlevels` (
@@ -2171,7 +2189,7 @@ CREATE TABLE IF NOT EXISTS `geicz_viewlevels` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
--- Dumping data for table `geicz_viewlevels`
+-- Дамп данных таблицы `geicz_viewlevels`
 --
 
 INSERT INTO `geicz_viewlevels` (`id`, `title`, `ordering`, `rules`) VALUES
@@ -2183,7 +2201,7 @@ INSERT INTO `geicz_viewlevels` (`id`, `title`, `ordering`, `rules`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `geicz_weblinks`
+-- Структура таблицы `geicz_weblinks`
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_weblinks` (
@@ -2227,37 +2245,37 @@ CREATE TABLE IF NOT EXISTS `geicz_weblinks` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Constraints for dumped tables
+-- Ограничения внешнего ключа сохраненных таблиц
 --
 
 --
--- Constraints for table `geicz_familytreetop_accounts`
+-- Ограничения внешнего ключа таблицы `geicz_familytreetop_accounts`
 --
 ALTER TABLE `geicz_familytreetop_accounts`
   ADD CONSTRAINT `fk_geicz_familytreetop_accounts_1` FOREIGN KEY (`joomla_id`) REFERENCES `geicz_users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
--- Constraints for table `geicz_familytreetop_childrens`
+-- Ограничения внешнего ключа таблицы `geicz_familytreetop_childrens`
 --
 ALTER TABLE `geicz_familytreetop_childrens`
   ADD CONSTRAINT `fk_geicz_familytreetop_childrens_1` FOREIGN KEY (`family_id`) REFERENCES `geicz_familytreetop_families` (`family_id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_geicz_familytreetop_childrens_2` FOREIGN KEY (`gedcom_id`) REFERENCES `geicz_familytreetop_individuals` (`gedcom_id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
--- Constraints for table `geicz_familytreetop_dates`
+-- Ограничения внешнего ключа таблицы `geicz_familytreetop_dates`
 --
 ALTER TABLE `geicz_familytreetop_dates`
   ADD CONSTRAINT `fk_geicz_familytreetop_dates_1` FOREIGN KEY (`event_id`) REFERENCES `geicz_familytreetop_events` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
--- Constraints for table `geicz_familytreetop_events`
+-- Ограничения внешнего ключа таблицы `geicz_familytreetop_events`
 --
 ALTER TABLE `geicz_familytreetop_events`
   ADD CONSTRAINT `fk_geicz_familytreetop_events_1` FOREIGN KEY (`gedcom_id`) REFERENCES `geicz_familytreetop_individuals` (`gedcom_id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_geicz_familytreetop_events_2` FOREIGN KEY (`family_id`) REFERENCES `geicz_familytreetop_families` (`family_id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
--- Constraints for table `geicz_familytreetop_families`
+-- Ограничения внешнего ключа таблицы `geicz_familytreetop_families`
 --
 ALTER TABLE `geicz_familytreetop_families`
   ADD CONSTRAINT `fk_geicz_familytreetop_families_1` FOREIGN KEY (`husb`) REFERENCES `geicz_familytreetop_individuals` (`gedcom_id`) ON DELETE SET NULL ON UPDATE NO ACTION,
@@ -2265,39 +2283,39 @@ ALTER TABLE `geicz_familytreetop_families`
   ADD CONSTRAINT `fk_geicz_familytreetop_families_3` FOREIGN KEY (`family_id`) REFERENCES `geicz_familytreetop_tree_links` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
--- Constraints for table `geicz_familytreetop_individuals`
+-- Ограничения внешнего ключа таблицы `geicz_familytreetop_individuals`
 --
 ALTER TABLE `geicz_familytreetop_individuals`
   ADD CONSTRAINT `fk_geicz_familytreetop_individuals_1` FOREIGN KEY (`gedcom_id`) REFERENCES `geicz_familytreetop_tree_links` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
--- Constraints for table `geicz_familytreetop_media_link`
+-- Ограничения внешнего ключа таблицы `geicz_familytreetop_media_link`
 --
 ALTER TABLE `geicz_familytreetop_media_link`
   ADD CONSTRAINT `fk_geicz_familytreetop_media_link_1` FOREIGN KEY (`media_id`) REFERENCES `geicz_familytreetop_medias` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_geicz_familytreetop_media_link_2` FOREIGN KEY (`gedcom_id`) REFERENCES `geicz_familytreetop_individuals` (`gedcom_id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
--- Constraints for table `geicz_familytreetop_names`
+-- Ограничения внешнего ключа таблицы `geicz_familytreetop_names`
 --
 ALTER TABLE `geicz_familytreetop_names`
   ADD CONSTRAINT `fk_geicz_famiytreetop_names_1` FOREIGN KEY (`gedcom_id`) REFERENCES `geicz_familytreetop_individuals` (`gedcom_id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
--- Constraints for table `geicz_familytreetop_notes`
+-- Ограничения внешнего ключа таблицы `geicz_familytreetop_notes`
 --
 ALTER TABLE `geicz_familytreetop_notes`
   ADD CONSTRAINT `fk_geicz_familytreetop_notes_1` FOREIGN KEY (`gedcom_id`) REFERENCES `geicz_familytreetop_individuals` (`gedcom_id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_geicz_familytreetop_notes_2` FOREIGN KEY (`family_id`) REFERENCES `geicz_familytreetop_families` (`family_id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
--- Constraints for table `geicz_familytreetop_places`
+-- Ограничения внешнего ключа таблицы `geicz_familytreetop_places`
 --
 ALTER TABLE `geicz_familytreetop_places`
   ADD CONSTRAINT `fk_geicz_familytreetop_places_1` FOREIGN KEY (`event_id`) REFERENCES `geicz_familytreetop_events` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
--- Constraints for table `geicz_familytreetop_relation_link`
+-- Ограничения внешнего ключа таблицы `geicz_familytreetop_relation_link`
 --
 ALTER TABLE `geicz_familytreetop_relation_link`
   ADD CONSTRAINT `fk_geicz_familytreetop_relation_link_1` FOREIGN KEY (`relation_id`) REFERENCES `geicz_familytreetop_relations` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
@@ -2305,7 +2323,7 @@ ALTER TABLE `geicz_familytreetop_relation_link`
   ADD CONSTRAINT `fk_geicz_familytreetop_relation_link_3` FOREIGN KEY (`target_id`) REFERENCES `geicz_familytreetop_individuals` (`gedcom_id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
--- Constraints for table `geicz_familytreetop_tree_links`
+-- Ограничения внешнего ключа таблицы `geicz_familytreetop_tree_links`
 --
 ALTER TABLE `geicz_familytreetop_tree_links`
   ADD CONSTRAINT `fk_geicz_familytreetop_tree_links_1` FOREIGN KEY (`tree_id`) REFERENCES `geicz_familytreetop_trees` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
