@@ -1,5 +1,6 @@
 <?php
 defined('_JEXEC') or die;
+
 ?>
 <div id="recentVisitors" class="row">
     <div class="span6">

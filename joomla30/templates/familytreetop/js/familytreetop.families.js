@@ -1,27 +1,16 @@
 $FamilyTreeTop.create("families", function($){
     'use strict';
 
-    var $this = this, $box = $('#families'), $boxs = [], $fn;
+    var $this = this, $animated, $box = $('#families'), $boxs = [], $fn;
 
     $fn = {
         getSettings: function(settings){
             return $.extend({}, settings, {
+                animation: true,
+                abilityToMove: true,
+                editable: true,
                 iconHome: true
             });
-        },
-        initHome: function(object){
-            $(object).append($($box).find('[familytreetop="home"]'));
-        },
-        init: function(parent, settings){
-            $(parent).css('position', 'relative');
-            $(parent).css('min-height', '100px');
-            if(settings.iconHome){
-                $fn.initHome(parent);
-            }
-        },
-        append: function(parent, box){
-            $boxs.push(box);
-            $(parent).append(box);
         },
         createArrow: function(type){
             var left = Math.ceil(((type  == 'up')?160:110)/2) - 7;
@@ -31,32 +20,37 @@ $FamilyTreeTop.create("families", function($){
         createEdit: function(object, gedcom_id){
             $this.mod('editmenu').render(object, gedcom_id);
         },
-        createBox: function(ind, cl, type){
+        createBox: function(ind, cl, type, args){
             if(!ind) return [];
             var divs = $(cl).find('div');
             $(cl).attr('gedcom_id', ind.gedcom_id);
-            $(divs[0]).append($fn.createArrow(type));
             $(divs[0]).find('img').attr('gedcom_id', ind.gedcom_id);
             $(divs[1]).text(ind.name());
             $(divs[2]).text('...');
 
-            $fn.createEdit(divs[0], ind.gedcom_id);
+            if(args.abilityToMove){
+                $(divs[0]).append($fn.createArrow(type));
+            }
+            if(args.editable){
+                $fn.createEdit(divs[0], ind.gedcom_id);
+            }
             return cl;
         },
-        createParent: function(id){
+        createParent: function(id, args){
             var ind = $this.mod('usertree').user(id);
             var cl = $($box).find('.parent-box').clone();
-            return $fn.createBox(ind, cl, 'up');
+            return $fn.createBox(ind, cl, 'up', args);
         },
-        createChild: function(id){
+        createChild: function(id, args){
             var ind = $this.mod('usertree').user(id);
             var cl = $($box).find('.child-box').clone();
-            return $fn.createBox(ind, cl, 'down');
+            return $fn.createBox(ind, cl, 'down', args);
         },
         createEvent: function(){
             return $('<div>...</div>');
         },
         setPosition: function(boxs){
+            if($animated) return true;
             boxs.forEach(function(object, index){
                 $(object).css('position', 'absolute');
                 switch(index){
@@ -142,7 +136,25 @@ $FamilyTreeTop.create("families", function($){
                     target: target
                 });
             });
-        }
+        },
+        click:function(){
+
+        },
+        initHome: function(object){
+            $(object).append($($box).find('[familytreetop="home"]'));
+        },
+        init: function(parent, settings){
+            $(parent).css('position', 'relative');
+            $(parent).css('min-height', '100px');
+            if(settings.iconHome){
+                $fn.initHome(parent);
+            }
+        },
+        append: function(parent, box){
+            $boxs.push(box);
+            $(parent).append(box);
+        },
+        animation: function(){}
     };
 
     $this.render = function(parent, settings){
@@ -168,21 +180,24 @@ $FamilyTreeTop.create("families", function($){
             $family = $this.mod('usertree').getFamilyIdByGedcomId($start_id);
         }
 
-        $fn.append(parent, $fn.createParent($family.father));
-        $fn.append(parent, $fn.createParent($family.mother));
+        $fn.append(parent, $fn.createParent($family.father, settings));
+        $fn.append(parent, $fn.createParent($family.mother, settings));
         $fn.append(parent, $fn.createEvent());
 
         $childrens.forEach(function(gedcom_id){
-            $fn.append(parent, $fn.createChild(gedcom_id));
+            $fn.append(parent, $fn.createChild(gedcom_id, settings));
         });
 
         $fn.setPosition($boxs);
         $fn.setPopovers($boxs);
 
+        if(settings.animation){
+            $fn.animation($boxs);
+        }
+
         $(window).resize(function(){
             $fn.setPosition($boxs);
         })
-
     };
 
 });

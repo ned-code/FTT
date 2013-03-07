@@ -34,7 +34,7 @@ class Column
 		'tinyint'	=> self::INTEGER,
 		'smallint'	=> self::INTEGER,
 		'mediumint'	=> self::INTEGER,
-		'bigint'	=> self::INTEGER,
+		'bigint'	=> self::STRING,
 
 		'float'		=> self::DECIMAL,
 		'double'	=> self::DECIMAL,
