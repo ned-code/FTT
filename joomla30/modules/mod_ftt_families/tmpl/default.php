@@ -9,6 +9,8 @@ $user = FamilyTreeTopUserHelper::getInstance()->get();
 </div>
 <script>
     $FamilyTreeTop.bind(function($){
-        this.mod('families').render($('#thisMonth .span12'));
+        this.mod('families').render({
+            parent: $('#thisMonth .span12')
+        });
     });
 </script>

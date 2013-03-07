@@ -38,7 +38,7 @@ $FamilyTreeTop.create("editmenu", function($){
 
         ind = $this.mod('usertree').user(gedcom_id);
 
-        if(ind.isParents()){
+        if(ind.isParentsExist()){
             $(box).find('li[familytreetop="addParent"]').remove();
         }
 

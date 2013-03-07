@@ -42,8 +42,8 @@ class FamilytreetopControllerEditor extends FamilytreetopController
             $family->husb = $sircar->gedcom_id;
             $family->wife = $spouse->gedcom_id;
         } else {
-            $family->husb = $spouse->gedcom_id;
             $family->wife = $sircar->gedcom_id;
+            $family->husb = $spouse->gedcom_id;
         }
         $family->save();
         $family->addChild($ind->gedcom_id);

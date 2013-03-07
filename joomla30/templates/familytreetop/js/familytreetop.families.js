@@ -1,21 +1,38 @@
 $FamilyTreeTop.create("families", function($){
     'use strict';
 
-    var $this = this, $animated, $box = $('#families'), $boxs = [], $fn;
+    var $this = this, $animated, $box = $('#families'), $boxs = {}, $fn;
 
     $fn = {
         getSettings: function(settings){
-            return $.extend({}, settings, {
-                animation: true,
-                abilityToMove: true,
-                editable: true,
-                iconHome: true
-            });
+            if(settings.id != null){
+                return settings;
+            } else {
+                settings =  $.extend({}, {
+                    id: null,
+                    parent: null,
+                    gedcom_id: false,
+                    animation: true,
+                    abilityToMove: true,
+                    editable: true,
+                    iconHome: true
+                }, settings);
+                if(settings.id == null){
+                    settings.id = $this.generateKey();
+                }
+                return settings;
+            }
         },
-        createArrow: function(type){
+        getStartIdByParents: function(id){
+            var family = $this.mod('usertree').getParents(id);
+            return family.mother;
+        },
+        createArrow: function(type, args){
             var left = Math.ceil(((type  == 'up')?160:110)/2) - 7;
-            return $('<div style="position:absolute;left:'+left+'px;top: -20px; cursor:pointer;"><i class="icon-circle-arrow-'+type+'"></i></div>');
-
+            return $('<div style="position:absolute;left:'+left+'px;top: -20px; cursor:pointer;"><i class="icon-circle-arrow-'+type+'"></i></div>')
+                .click(function(){
+                    $fn.click.call(this, args);
+                });
         },
         createEdit: function(object, gedcom_id){
             $this.mod('editmenu').render(object, gedcom_id);
@@ -29,7 +46,8 @@ $FamilyTreeTop.create("families", function($){
             $(divs[2]).text('...');
 
             if(args.abilityToMove){
-                $(divs[0]).append($fn.createArrow(type));
+                (type == "up" && ind.isParentsExist()) || type == "down"
+                $(divs[0]).append($fn.createArrow(type, args));
             }
             if(args.editable){
                 $fn.createEdit(divs[0], ind.gedcom_id);
@@ -56,7 +74,7 @@ $FamilyTreeTop.create("families", function($){
                 switch(index){
                     case 0:
                     case 1:
-                        $(object).css('top', getTop(index)).css((index)?"left":"right", getParentIndent(index));
+                        $(object).css('top', getTop(index)).css((index)?"right":"left", getParentIndent(index));
                         break;
 
                     case 2:
@@ -137,67 +155,93 @@ $FamilyTreeTop.create("families", function($){
                 });
             });
         },
-        click:function(){
-
+        setIconHome: function(parent){
+            $(parent).append($($box).find('[familytreetop="home"]'));
         },
-        initHome: function(object){
-            $(object).append($($box).find('[familytreetop="home"]'));
+        click:function(settings){
+            var gedcom_id = $(this).parent().parent().attr('gedcom_id');
+            var arrow = $(this).find('i').attr('class').split('-').pop();
+            settings.gedcom_id = (arrow == "down")?gedcom_id:$fn.getStartIdByParents(gedcom_id);
+            $this.render(settings);
         },
-        init: function(parent, settings){
-            $(parent).css('position', 'relative');
-            $(parent).css('min-height', '100px');
-            if(settings.iconHome){
-                $fn.initHome(parent);
+        clear:function(settings){
+            if("undefined" != typeof($boxs) && "undefined" !== typeof($boxs[settings.id])){
+                $boxs[settings.id].forEach(function(el){
+                    $(el).unbind().remove();
+                });
+                delete $boxs[settings.id];
             }
         },
-        append: function(parent, box){
-            $boxs.push(box);
-            $(parent).append(box);
+        init: function(settings){
+            $(settings.parent).css('position', 'relative');
+
+            $fn.clear(settings);
+
+            if(settings.iconHome){
+                $fn.setIconHome(settings.parent);
+            }
+        },
+        append: function(settings, box){
+            if("undefined" === typeof($boxs[settings.id])){
+                $boxs[settings.id] = [];
+            }
+            $boxs[settings.id].push(box);
+            $(settings.parent).append(box);
         },
         animation: function(){}
     };
 
-    $this.render = function(parent, settings){
-        var $usermap, $start_id, $childrens, $family;
+    $this.render = function(settings){
+        var $usermap, $start_id, $sircar, $spouses, $childrens, $family;
 
-        if("undefined" === typeof(settings)){
-            settings = {};
-        }
         settings = $fn.getSettings(settings);
-        $fn.init(parent, settings);
 
-        $usermap = $this.mod('usertree').usermap();
-        $start_id = $usermap.gedcom_id;
+        if(settings.parent == null){
+            return false;
+        }
+
+        $fn.init(settings);
+
+        if(settings.gedcom_id){
+            $start_id = settings.gedcom_id;
+        } else {
+            $usermap = $this.mod('usertree').usermap();
+            $start_id = $usermap.gedcom_id;
+        }
+
         if($start_id == null){
             return false;
         }
 
         $childrens = $this.mod('usertree').getChildrens($start_id);
         if($childrens.length == 0){
-            $family = $this.mod('usertree').getParents($start_id);
-            $childrens = $this.mod('usertree').getChildrensByFamily($family.family_id);
-        } else {
-            $family = $this.mod('usertree').getFamilyIdByGedcomId($start_id);
+            $start_id = $fn.getStartIdByParents($start_id);
+            $childrens = $this.mod('usertree').getChildrens($start_id);
         }
+        $spouses = $this.mod('usertree').getSpouses($start_id);
 
-        $fn.append(parent, $fn.createParent($family.father, settings));
-        $fn.append(parent, $fn.createParent($family.mother, settings));
-        $fn.append(parent, $fn.createEvent());
+        $fn.append(settings, $fn.createParent($start_id, settings));
+        $fn.append(settings, $fn.createParent($spouses[0], settings));
+        $fn.append(settings, $fn.createEvent($spouses[0]));
 
         $childrens.forEach(function(gedcom_id){
-            $fn.append(parent, $fn.createChild(gedcom_id, settings));
+            $fn.append(settings, $fn.createChild(gedcom_id, settings));
         });
 
-        $fn.setPosition($boxs);
-        $fn.setPopovers($boxs);
+        $fn.setPosition($boxs[settings.id]);
+        $fn.setPopovers($boxs[settings.id]);
 
+        /*
         if(settings.animation){
-            $fn.animation($boxs);
+            $fn.animation($boxs[settings.id]);
         }
+        */
 
+        /*
         $(window).resize(function(){
-            $fn.setPosition($boxs);
-        })
+            $fn.setPosition($boxs[settings.id]);
+        });
+        */
     };
 
 });

@@ -64,8 +64,8 @@ class FamilytreetopControllerCreate extends FamilytreetopController
 
         $family = $gedcom->families->get();
         $family->tree_id = $tree->id;
-        $family->wife = $father->gedcom_id;
-        $family->husb = $mother->gedcom_id;
+        $family->wife = $mother->gedcom_id;
+        $family->husb = $father->gedcom_id;
         $family->save();
         $family->addChild($ind->gedcom_id);
 

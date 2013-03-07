@@ -53,9 +53,16 @@ $FamilyTreeTop.create("usertree", function($){
                 }
                 return $name.join(' ');
             },
-            isParents:function(){
+            isParentsExist:function(){
                 var parents = $this.getParents(gedcom_id);
                 return parents.father || parents.mother || false;
+            },
+            isChildrensExist:function(){
+                if("undefined" === data.chi.gedcom_id[ind.gedcom_id]){
+                    return true;
+                } else {
+                    return false;
+                }
             }
         }
     }
@@ -74,19 +81,6 @@ $FamilyTreeTop.create("usertree", function($){
         }
     }
 
-    $this.getFamilyIdByGedcomId = function(gedcom_id){
-        var obj = {family_id: null, father: null, mother: null};
-        if("undefined" === typeof(data.fam.gedcom_id[gedcom_id])) return obj;
-        var families = data.fam.gedcom_id[gedcom_id];
-        for(var key in families){
-            var family = families[key];
-            obj.family_id = family.family_id;
-            obj.father = family.husb;
-            obj.mother = family.wife;
-        }
-        return obj;
-    }
-
     $this.getParents = function(gedcom_id){
         var obj = {family_id: null, father: null, mother: null};
         if("undefined" === typeof(data.chi.gedcom_id[gedcom_id])) obj;
@@ -103,6 +97,22 @@ $FamilyTreeTop.create("usertree", function($){
             return obj;
         }
         return obj;
+    }
+
+    $this.getSpouses = function(gedcom_id){
+        if("undefined" === typeof(data.fam.gedcom_id[gedcom_id])) return [];
+        var ind = $this.user(gedcom_id);
+        var families = data.fam.gedcom_id[gedcom_id];
+        var spouses = [];
+        for(var key in families){
+            if(!families.hasOwnProperty(key)) continue;
+            if(parseInt(ind.gender)){
+                spouses.push(families[key].wife);
+            } else {
+                spouses.push(families[key].husb);
+            }
+        }
+        return spouses;
     }
 
     $this.getChildrens = function(gedcom_id){
