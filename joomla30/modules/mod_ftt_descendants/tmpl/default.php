@@ -4,30 +4,7 @@ defined('_JEXEC') or die;
 ?>
 <div id="descendants" class="row-fluid">
     <div class="span6">
-        <div familytreetop="tree" class="well">
-            <!--
-            <div class="css-treeview">
-                <ul>
-                    <li>
-                        <input checked type="checkbox" id="item-0" />
-                        <label for="item-0">
-                            <?php
-                            $parents = $tree['parents'];
-                            echo $parents['father']->name() . " + " . $parents['mother']->name();
-                            ?>
-                        </label>
-                        <ul>
-                            <li>
-                                <?php
-                                echo $tree['childrens'][0]->name();
-                                ?>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        -->
+        <div familytreetop="tree" class="well"></div>
     </div>
     <div class="span6">
         <div class="well">
@@ -131,7 +108,6 @@ defined('_JEXEC') or die;
         if(!$tree){
             return false;
         }
-        console.log($tree);
 
         $html = $('<div class="css-treeview"></div>');
         $($html).append($fn.ul($tree, 'index-0'));

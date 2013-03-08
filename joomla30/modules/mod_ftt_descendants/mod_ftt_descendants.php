@@ -12,7 +12,5 @@ defined('_JEXEC') or die;
 // Include the login functions only once
 require_once __DIR__ . '/helper.php';
 
-$helper = new modFttDescendantsHelper();
-$tree = $helper->tree();
 $layout = $params->get('layout', 'default');
 require JModuleHelper::getLayoutPath('mod_ftt_descendants', $layout);
