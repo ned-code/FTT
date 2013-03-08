@@ -105,7 +105,6 @@ abstract class JApplicationBase
 		{
 			return $this->dispatcher->trigger($event, $args);
 		}
-
 		return null;
 	}
 

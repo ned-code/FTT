@@ -145,6 +145,7 @@ class JEventDispatcher extends JObject
 			// No Plugins Associated To Event!
 			return $result;
 		}
+
 		// Loop through all plugins having a method matching our event
 		foreach ($this->_methods[$event] as $key)
 		{
@@ -160,7 +161,7 @@ class JEventDispatcher extends JObject
 				$args['event'] = $event;
 				$value = $this->_observers[$key]->update($args);
 			}
-			// Fire the event for a function based observer.
+            // Fire the event for a function based observer.
 			elseif (is_array($this->_observers[$key]))
 			{
 				$value = call_user_func_array($this->_observers[$key]['handler'], $args);
@@ -170,7 +171,6 @@ class JEventDispatcher extends JObject
 				$result[] = $value;
 			}
 		}
-
 		return $result;
 	}
 

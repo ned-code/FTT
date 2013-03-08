@@ -82,6 +82,25 @@ $FamilyTreeTop.create("usertree", function($){
         }
     }
 
+    $this.getExistParent = function(p){
+        if("undefined" === typeof(f) || !p) return false;
+        if(p.mother != null || p.father != null){
+            return (p.mother != null)?p.mother:p.father;
+        } else {
+            return false;
+        }
+    }
+
+    $this.getExistParentById = function(id){
+        if("undefined" === typeof(id) || id == null || !id) return false;
+        var p = $this.mod('usertree').getParents(id);
+        if(p.mother != null || p.father != null){
+            return (p.mother != null)?p.mother:p.father;
+        } else {
+            return false;
+        }
+    }
+
     $this.getParents = function(gedcom_id){
         var obj = {family_id: null, father: null, mother: null};
         if("undefined" === typeof(data.chi.gedcom_id[gedcom_id])) obj;

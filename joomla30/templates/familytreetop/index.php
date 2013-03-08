@@ -1,6 +1,6 @@
 <?php
-defined('_JEXEC') or die;
 
+defined('_JEXEC') or die;
 // Getting params from template
 $params = JFactory::getApplication()->getTemplate(true)->params;
 

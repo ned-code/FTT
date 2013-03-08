@@ -208,6 +208,7 @@ class JApplication extends JApplicationBase
 
 		// Set user specific editor.
 		$user = JFactory::getUser();
+
 		$editor = $user->getParam('editor', $this->getCfg('editor'));
 		if (!JPluginHelper::isEnabled('editors', $editor))
 		{
