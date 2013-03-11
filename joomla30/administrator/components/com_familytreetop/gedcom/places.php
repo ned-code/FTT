@@ -32,7 +32,7 @@ class FamilyTreeTopGedcomPlaceModel {
 
         $this->id = $place->id;
 
-        $gedcom->places->updateList($place);
+        $gedcom->places->updateList($this);
     }
 
     public function toList(){
@@ -71,7 +71,7 @@ class FamilyTreeTopGedcomPlacesManager {
 
                 GROUP BY id";
             $db->setQuery(sprintf($sql, $tree_id));
-            $this->list = $db->loadAssocList('id');
+            $this->list = $db->loadAssocList('event_id');
         }
     }
 
@@ -79,7 +79,17 @@ class FamilyTreeTopGedcomPlacesManager {
         if(empty($id)){
             return new FamilyTreeTopGedcomPlaceModel();
         }
-
+        if(isset($this->list[$id])){
+            $item = $this->list[$id];
+            $place = new FamilyTreeTopGedcomPlaceModel();
+            $place->id = $item['id'];
+            $place->event_id = $item['event_id'];
+            $place->city = $item['city'];
+            $place->state = $item['state'];
+            $place->country = $item['country'];
+            return $place;
+        }
+        return new FamilyTreeTopGedcomPlaceModel();
     }
 
     public function updateList($place){

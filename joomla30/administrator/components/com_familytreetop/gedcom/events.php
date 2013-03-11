@@ -37,10 +37,19 @@ class FamilyTreeTopGedcomEventModel {
 
         $this->id = $event->id;
 
-        $event->place->save($this->id);
-        $event->date->save($this->id);
-
+        if(!empty($event->place)){
+            $event->place->save($this->id);
+        }
+        if(!empty($event->date)){
+            $event->date->save($this->id);
+        }
         $gedcom->events->updateList($event);
+    }
+
+    public function remove(){
+        if(empty($this->id)) return false;
+        $event = FamilyTreeTopEvents::find($this->id);
+        $event->delete();
     }
 
     public function toList(){
@@ -105,10 +114,33 @@ class FamilyTreeTopGedcomEventsManager {
     }
 
     public function get($id = null, $family = false){
+        $gedcom = GedcomHelper::getInstance();
         if(empty($id)){
             return new FamilyTreeTopGedcomEventModel();
         }
+        if($family){
+            $list = $this->list_by_family_id;
+        } else {
+            $list = $this->list_by_gedcom_id;
+        }
+        if(isset($list[$id]) && !empty($list[$id])){
+            $data = $list[$id];
+            $events = array();
+            foreach($data as $el){
+                $event = new FamilyTreeTopGedcomEventModel();
+                $event->id = $el['id'];
+                $event->gedcom_id = $el['gedcom_id'];
+                $event->family_id = $el['family_id'];
+                $event->type = $el['type'];
 
+                $event->date = $gedcom->dates->get($event->id);
+                $event->place = $gedcom->places->get($event->id);
+
+                $events[] = $event;
+            }
+            return $events;
+        }
+        return array();
     }
 
     public function getList(){

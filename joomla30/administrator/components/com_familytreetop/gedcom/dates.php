@@ -38,7 +38,7 @@ class FamilyTreeTopGedcomDateModel {
 
         $this->id = $date->id;
 
-        $gedcom->dates->updateList($date);
+        $gedcom->dates->updateList($this);
     }
 
     public function toList(){
@@ -82,7 +82,7 @@ class FamilyTreeTopGedcomDatesManager {
 
                 GROUP BY id";
             $db->setQuery(sprintf($sql, $tree_id));
-            $this->list = $db->loadAssocList('id');
+            $this->list = $db->loadAssocList('event_id');
         }
 
     }
@@ -91,12 +91,26 @@ class FamilyTreeTopGedcomDatesManager {
         if(empty($id)){
             return new FamilyTreeTopGedcomDateModel();
         }
+        if(isset($this->list[$id])){
+            $item = $this->list[$id];
+            $date = new FamilyTreeTopGedcomDateModel();
+            $date->id = $item['id'];
+            $date->event_id = $item['event_id'];
+            $date->type = $item['type'];
+            $date->start_day = $item['start_day'];
+            $date->start_month = $item['start_month'];
+            $date->start_year = $item['start_year'];
+            $date->end_day = $item['end_day'];
+            $date->end_month = $item['end_month'];
+            $date->end_year = $item['end_year'];
+            return $date;
+        }
+        return new FamilyTreeTopGedcomDateModel();
     }
 
     public function updateList($date){
         if(empty($date) || empty($date->id)) return false;
         $data = $date->toList();
-
         $this->list[$date->id] = $data;
     }
 

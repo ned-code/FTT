@@ -5,6 +5,69 @@ require_once JPATH_COMPONENT.'/controller.php';
 
 class FamilytreetopControllerEditor extends FamilytreetopController
 {
+
+    protected function isEntryValid($form, $type){
+        $prefix = substr($type, 0, 1). "_";
+        if($form[$prefix.'exist'] == "on") return false;
+        return ( $form[$prefix."day"] != 0
+            || $form[$prefix."month"] != 0
+            || strlen($form[$prefix."year"]) > 0
+            || strlen($form[$prefix."city"]) > 0
+            || strlen($form[$prefix."state"]) > 0
+            || strlen($form[$prefix."country"]) > 0
+        );
+    }
+
+    protected function setEvent($ind, $type, $form){
+        $data = $this->isEntryValid($form, $type);
+        $prefix = substr($type, 0, 1). "_";
+        $event = $ind->{$type}();
+
+        if(empty($event) && !$data) return false;
+
+        if(!empty($event) && !$data){
+            $event->remove();
+            return;
+        }
+
+        if(empty($event) && $data) {
+            $event = GedcomHelper::getInstance()->events->get();
+            $event->gedcom_id = $ind->gedcom_id;
+        }
+
+        $event->name = ($type == 'birth')?"Birthday":"Deathday";
+        $event->type = ($type == 'birth')?"BIRT":"DEAT";
+        $event->save();
+
+        if($form[$prefix."day"] != 0
+            || $form[$prefix."month"] != 0
+            || strlen($form[$prefix."year"]) > 0){
+            if(empty($event->date->id)){
+                $event->date->event_id = $event->id;
+            }
+
+            $date = $event->date;
+            $date->start_day = ($form[$prefix."day"] != 0)?$form[$prefix."day"]:null;
+            $date->start_month = ($form[$prefix."month"] != 0)?$form[$prefix."month"]:null;
+            $date->start_year = (strlen($form[$prefix."year"]) > 0)?$form[$prefix."year"]:null;
+            $date->save();
+        }
+
+        if(strlen($form[$prefix."city"]) > 0
+            || strlen($form[$prefix."state"]) > 0
+            || strlen($form[$prefix."country"]) > 0){
+            if(empty($event->place->id)){
+                $event->place->event_id = $event->id;
+            }
+            $place = $event->place;
+            $place->city = (strlen($form[$prefix."city"]) > 0)?$form[$prefix."city"]:null;
+            $place->state = (strlen($form[$prefix."state"]) > 0)?$form[$prefix."state"]:null;
+            $place->country = (strlen($form[$prefix."country"]) > 0)?$form[$prefix."country"]:null;
+            $place->save();
+        }
+
+    }
+
     public function addParent(){
         $app = JFactory::getApplication();
         $form = $app->input->post->get('editProfile', array(), 'array');
@@ -87,6 +150,16 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         $ind->know_as = $form['know_as'];
         $ind->gender = $form['gender'];
         $ind->save();
+
+        $this->setEvent($ind, 'birth', $form);
+        if((int)$form['living']){
+            if($event = $ind->death()){
+                $event->remove();
+            }
+        } else {
+            $this->setEvent($ind, 'death', $form);
+        }
+
 
         echo json_encode(array('ind'=>$ind, 'form'=>$form));
         exit;

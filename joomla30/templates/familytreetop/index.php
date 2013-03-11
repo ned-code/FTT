@@ -186,7 +186,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                     <option value="0">Month</option>
                 </select>
                 <input class="span4" type="text" name="editProfile[b_year]" placeholder="Year">
-
+                <input class="span1" type="checkbox" name="editProfile[b_exist]" ><small>Unknown</small>
             </div>
         </div>
         <div class="row-fluid">
@@ -213,7 +213,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                     <option value="0">Month</option>
                 </select>
                 <input class="span4" type="text" name="editProfile[d_year]" placeholder="Year">
-
+                <input class="span1" type="checkbox" name="editProfile[d_exist]" ><small>Unknown</small>
             </div>
         </div>
         <div class="row-fluid">

@@ -30,6 +30,50 @@ class FamilyTreeTopGedcomIndividualsModel {
         $this->change_time = $date->toSql();
     }
 
+    public function isParents(){
+        $gedcom = GedcomHelper::getInstance();
+        $family_id = $gedcom->childrens->getFamilyIdByGedcomId($this->gedcom_id);
+        $family = $gedcom->families->get($family_id);
+        if(empty($family->husb) && empty($family->wife)){
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public function name(){
+        if(empty($this->id)) return "";
+        return $this->first_name . " " . $this->last_name;
+    }
+
+    public function birth(){
+        return $this->getEventByType("BIRT");
+    }
+
+    public function death(){
+        return $this->getEventByType("DEAT");
+    }
+
+    public function getEventByType($type){
+        if(empty($this->events)) return false;
+        foreach($this->events as $event){
+            if($event->type == $type){
+                return $event;
+            }
+        }
+        return false;
+    }
+
+    public function getParents(){
+        $gedcom = GedcomHelper::getInstance();
+        $family_id = $gedcom->childrens->getFamilyIdByGedcomId($this->gedcom_id);
+        $family = $gedcom->families->get($family_id);
+        return array(
+            'father'=>$gedcom->individuals->get($family->husb),
+            'mother'=>$gedcom->individuals->get($family->wife)
+        );
+    }
+
     public function save(){
         if(empty($this->tree_id)) return false;
         $gedcom = GedcomHelper::getInstance();
@@ -68,35 +112,15 @@ class FamilyTreeTopGedcomIndividualsModel {
         $name->change_time = $ind->change_time;
         $name->save();
 
+        if(!empty($this->events)){
+            foreach($this->events as $event){
+                $event->save();
+            }
+        }
+
         $gedcom->individuals->updateList($this);
 
         return $this;
-    }
-
-    public function name(){
-        if(empty($this->id)) return "";
-        return $this->first_name . " " . $this->last_name;
-    }
-
-    public function getParents(){
-        $gedcom = GedcomHelper::getInstance();
-        $family_id = $gedcom->childrens->getFamilyIdByGedcomId($this->gedcom_id);
-        $family = $gedcom->families->get($family_id);
-        return array(
-            'father'=>$gedcom->individuals->get($family->husb),
-            'mother'=>$gedcom->individuals->get($family->wife)
-        );
-    }
-
-    public function isParents(){
-        $gedcom = GedcomHelper::getInstance();
-        $family_id = $gedcom->childrens->getFamilyIdByGedcomId($this->gedcom_id);
-        $family = $gedcom->families->get($family_id);
-        if(empty($family->husb) && empty($family->wife)){
-            return false;
-        } else {
-            return true;
-        }
     }
 
     public function toList(){
@@ -150,6 +174,7 @@ class FamilyTreeTopGedcomIndividualsManager {
     }
 
     public function get($gedcom_id = null){
+        $gedcom = GedcomHelper::getInstance();
         if(empty($gedcom_id)){
             return $this->getObject();
         }
@@ -172,9 +197,8 @@ class FamilyTreeTopGedcomIndividualsManager {
             return false;
         }
 
-        //relation
-        //medias
-        //events
+        $ind->events = $gedcom->events->get($ind->gedcom_id);
+
         return $ind;
     }
 
