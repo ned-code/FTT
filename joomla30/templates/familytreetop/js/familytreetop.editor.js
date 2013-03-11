@@ -41,8 +41,29 @@ $FamilyTreeTop.create("editor", function($){
                         var val = ind[name[1]];
                         if("undefined" !== typeof(val)){
                             $(el).find('option[value="'+val+'"]').attr('selected', 'selected');
+                        } else {
+                            if( (/^b_|d_/i).test(name[1])){
+                                var n = name[1].split('_');
+                                var event = ind[(n[0] == "b")?'birth':'death']();
+                                if(event){
+                                    switch(n[1]){
+                                        case "month":
+                                        case "day":
+                                            if("undefined" !==  typeof(event[2])){
+                                                var start = event[2]['start_' + n[1]];
+                                                $(el).data({value:start});
+                                            }
+                                            break;
+                                    }
+                                }
+                            } else if(name[1] == "living"){
+                                if(ind.isAlive()){
+                                    $(parent).find('[familytreetop="deathday"]').hide();
+                                } else {
+                                    $(el).find('option[value="0"]').attr('selected', 'selected');
+                                }
+                            }
                         }
-                        //console.log(el);
                         break;
 
                     default: break;
@@ -145,15 +166,36 @@ $FamilyTreeTop.create("editor", function($){
         editProfileForm = $fn.getEditorProfileForm();
         $fn.setFormInTab(0, tabs, editProfileForm);
         $fn.setUserData(editProfileForm, ind);
-        if(ind.isAlive()){
-            $(editProfileForm).find('[familytreetop="deathday"]').hide();
-        }
+
         $(editProfileForm).find('[familytreetop="living"]').change(function(){
             var selected = $(this).find('option:selected').val();
             if(parseInt(selected)){
                 $(editProfileForm).find('[familytreetop="deathday"]').hide();
             } else {
                 $(editProfileForm).find('[familytreetop="deathday"]').show();
+            }
+        });
+
+        $(editProfileForm).find('[familytreetop="months"]').each(function(index, el){
+            var data = $(el).data();
+            if("undefined" !== typeof(data.value) && data.value != null){
+                $(el).find('option[value="'+data.value+'"]').attr('selected', 'selected');
+            }
+            $(el).change(function(){
+                var month = $(this).find('option:selected').val();
+                var year = $(this).parent().find('[familytreetop="year"]').val();
+                $(this).parent().find('[familytreetop="days"] option[value!=0]').remove();
+                $(this).parent().find('[familytreetop="days"]').append($this.mod('form').select.days(month, year));
+            });
+        });
+
+        $(editProfileForm).find('[familytreetop="days"]').each(function(index, el){
+            var data = $(el).data();
+            var month = $(el).parent().find('[familytreetop="months"] option:selected').val();
+            var year = $(el).parent().find('[familytreetop="year"]').val();
+            $(el).append($this.mod('form').select.days(month, year));
+            if("undefined" !== typeof(data.value) && data.value != null){
+                $(el).find('option[value="'+data.value+'"]').attr('selected', 'selected');
             }
         });
 

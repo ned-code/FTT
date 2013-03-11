@@ -179,13 +179,25 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
         </div>
         <div class="row-fluid">
             <div familytreetop="birthday" class="span12">
-                <select class="span2" name="editProfile[b_day]">
+                <select familytreetop="days" class="span2" name="editProfile[b_day]">
                     <option value="0">Day</option>
                 </select>
-                <select class="span4" name="editProfile[b_month]">
+                <select familytreetop="months" class="span4" name="editProfile[b_month]">
                     <option value="0">Month</option>
+                    <option value="1">January</option>
+                    <option value="2">February</option>
+                    <option value="3">March</option>
+                    <option value="4">April</option>
+                    <option value="5">May</option>
+                    <option value="6">June</option>
+                    <option value="7">July</option>
+                    <option value="8">August</option>
+                    <option value="9">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
                 </select>
-                <input class="span4" type="text" name="editProfile[b_year]" placeholder="Year">
+                <input familytreetop="year" class="span4" type="text" name="editProfile[b_year]" placeholder="Year">
                 <input class="span1" type="checkbox" name="editProfile[b_exist]" ><small>Unknown</small>
             </div>
         </div>
@@ -206,13 +218,25 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
         </div>
         <div class="row-fluid">
             <div familytreetop="deathday" class="span12">
-                <select class="span2" name="editProfile[d_day]">
+                <select familytreetop="days" class="span2" name="editProfile[d_day]">
                     <option value="0">Day</option>
                 </select>
-                <select class="span4" name="editProfile[d_month]">
+                <select familytreetop="months" class="span4" name="editProfile[d_month]">
                     <option value="0">Month</option>
+                    <option value="1">January</option>
+                    <option value="2">February</option>
+                    <option value="3">March</option>
+                    <option value="4">April</option>
+                    <option value="5">May</option>
+                    <option value="6">June</option>
+                    <option value="7">July</option>
+                    <option value="8">August</option>
+                    <option value="9">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
                 </select>
-                <input class="span4" type="text" name="editProfile[d_year]" placeholder="Year">
+                <input familytreetop="year" class="span4" type="text" name="editProfile[d_year]" placeholder="Year">
                 <input class="span1" type="checkbox" name="editProfile[d_exist]" ><small>Unknown</small>
             </div>
         </div>
@@ -247,6 +271,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/jquery-1.9.1.min.js"></script>
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/bootstrap.min.js"></script>
 <!-- uncompressed files -->
+<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.form.js"></script>
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.tabs.js"></script>
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.usertree.js"></script>
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.popovers.js"></script>

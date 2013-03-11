@@ -160,7 +160,6 @@ class FamilytreetopControllerEditor extends FamilytreetopController
             $this->setEvent($ind, 'death', $form);
         }
 
-
         echo json_encode(array('ind'=>$ind, 'form'=>$form));
         exit;
     }
