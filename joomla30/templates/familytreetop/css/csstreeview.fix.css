@@ -1,0 +1,15 @@
+.css-treeview label[familytreetop="0"]{
+    background: url(../images/fem-family.png) no-repeat;
+}
+
+.css-treeview label[familytreetop="1"]{
+    background: url(../images/male-family.png) no-repeat;
+}
+
+.css-treeview label[familytreetop] {
+    background-position: 18px 0;
+}
+
+.css-treeview label[familytreetop]::before {
+    margin: 0 36px 0 0;
+}

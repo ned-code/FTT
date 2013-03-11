@@ -73,6 +73,7 @@ defined('_JEXEC') or die;
                 if(object.childrens.length != 0){
                     $(li).append('<input checked type="checkbox" id="'+id+'" />');
                     $(label).html($fn.string(parent, ind));
+                    $(label).attr('familytreetop', parent.gender);
                     $(li).append(label);
                     object.childrens.forEach(function(child, index){
                         $(li).append($fn.ul(child, prefix + '-' + index));
