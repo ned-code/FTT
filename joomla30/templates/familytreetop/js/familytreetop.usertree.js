@@ -62,6 +62,12 @@ $FamilyTreeTop.create("usertree", function($){
             event:function(id){
                 if("undefined" === typeof(id)) return false;
             },
+            isAlive:function(){
+                if(this.death()){
+                    return false;
+                }
+                return true;
+            },
             isParentsExist:function(){
                 var parents = $this.getParents(gedcom_id);
                 return parents.father || parents.mother || false;

@@ -171,14 +171,14 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
             </div>
         </div>
         <div class="row-fluid">
-            <div class="span12">
+            <div familytreetop="birthday" class="span12">
                 <p>
                     Birthday:
                 </p>
             </div>
         </div>
         <div class="row-fluid">
-            <div class="span12">
+            <div familytreetop="birthday" class="span12">
                 <select class="span2" name="editProfile[b_day]">
                     <option value="0">Day</option>
                 </select>
@@ -189,7 +189,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                 <input class="span1" type="checkbox" name="editProfile[b_exist]" ><small>Unknown</small>
             </div>
         </div>
-        <div class="row-fluid">
+        <div familytreetop="birthday" class="row-fluid">
             <div class="span12">
                 <input class="span4" type="text" name="editProfile[b_city]"  placeholder="City">
                 <input class="span4" type="text" name="editProfile[b_state]" placeholder="State">
@@ -198,14 +198,14 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
         </div>
 
         <div class="row-fluid">
-            <div class="span12">
+            <div familytreetop="deathday" class="span12">
                 <p>
                     Deathday:
                 </p>
             </div>
         </div>
         <div class="row-fluid">
-            <div class="span12">
+            <div familytreetop="deathday" class="span12">
                 <select class="span2" name="editProfile[d_day]">
                     <option value="0">Day</option>
                 </select>
@@ -216,7 +216,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                 <input class="span1" type="checkbox" name="editProfile[d_exist]" ><small>Unknown</small>
             </div>
         </div>
-        <div class="row-fluid">
+        <div familytreetop="deathday" class="row-fluid">
             <div class="span12">
                 <input class="span4" type="text" name="editProfile[d_city]"  placeholder="City">
                 <input class="span4" type="text" name="editProfile[d_state]" placeholder="State">

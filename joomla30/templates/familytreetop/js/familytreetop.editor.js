@@ -145,6 +145,17 @@ $FamilyTreeTop.create("editor", function($){
         editProfileForm = $fn.getEditorProfileForm();
         $fn.setFormInTab(0, tabs, editProfileForm);
         $fn.setUserData(editProfileForm, ind);
+        if(ind.isAlive()){
+            $(editProfileForm).find('[familytreetop="deathday"]').hide();
+        }
+        $(editProfileForm).find('[familytreetop="living"]').change(function(){
+            var selected = $(this).find('option:selected').val();
+            if(parseInt(selected)){
+                $(editProfileForm).find('[familytreetop="deathday"]').hide();
+            } else {
+                $(editProfileForm).find('[familytreetop="deathday"]').show();
+            }
+        });
 
         //unions edit
         //media edit
