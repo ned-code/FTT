@@ -12,7 +12,25 @@ $FamilyTreeTop.create("editor", function($){
                     case "INPUT":
                         if($(el).attr('type') != 'file'){
                             if( (/^b_|d_/i).test(name[1])){
-                                //events
+                                var n = name[1].split('_');
+                                var event = ind[(n[0] == "b")?'birth':'death']();
+                                if(event){
+                                    switch(n[1]){
+                                        case "year":
+                                            if("undefined" !==  typeof(event[2])&& event[2].start_year != null){
+                                                $(el).val(event[2].start_year);
+                                            }
+                                            break;
+
+                                        case "city":
+                                        case "state":
+                                        case "country":
+                                            if("undefined" !== typeof(event[1]) && event[1][n[1]] != null){
+                                                $(el).val(event[1][n[1]]);
+                                            }
+                                            break;
+                                    }
+                                }
                             } else {
                                 $(el).val(ind[name[1]]);
                             }
@@ -24,6 +42,7 @@ $FamilyTreeTop.create("editor", function($){
                         if("undefined" !== typeof(val)){
                             $(el).find('option[value="'+val+'"]').attr('selected', 'selected');
                         }
+                        //console.log(el);
                         break;
 
                     default: break;

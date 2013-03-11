@@ -53,6 +53,15 @@ $FamilyTreeTop.create("usertree", function($){
                 }
                 return $name.join(' ');
             },
+            birth:function(){
+                return $this.getEventByType(ind, 'BIRT');
+            },
+            death:function(){
+                return $this.getEventByType(ind, 'DEAT');
+            },
+            event:function(id){
+                if("undefined" === typeof(id)) return false;
+            },
             isParentsExist:function(){
                 var parents = $this.getParents(gedcom_id);
                 return parents.father || parents.mother || false;
@@ -159,6 +168,32 @@ $FamilyTreeTop.create("usertree", function($){
             childrens.push(child.gedcom_id);
         }
         return childrens;
+    }
+
+    $this.getEventByType = function(ind, type){
+        if("undefined" === typeof( data.eve.gedcom_id[ind.gedcom_id])) return false;
+        var events =  data.eve.gedcom_id[ind.gedcom_id];
+        for(var key in events){
+            if(!events.hasOwnProperty(key)) continue;
+            var event = events[key];
+            if(event['type'] == type){
+                var event_id = event['id']
+                var ret = [];
+                ret.push(event);
+
+                if("undefined" !== typeof(data.pla[event_id])){
+                    ret.push(data.pla[event_id]);
+                }
+
+                if("undefined" !== typeof(data.dat[event_id])){
+                    ret.push(data.dat[event_id]);
+                }
+
+                return ret;
+            }
+
+        }
+        return false;
     }
 
     $this.init($FamilyTreeTop.dataString, $FamilyTreeTop.userString);
