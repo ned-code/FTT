@@ -43,7 +43,11 @@ $data = $home['data'];
                                         } elseif($name){
                                             $ret = $name;
                                         } else {
-                                            $ret = "";
+                                            if(isset($object['type']) && $object['type'] == 'link'){
+                                               $ret = 'Likes on '. $object['application']['name'];
+                                            } else {
+                                               $ret = "";
+                                            }
                                         }
                                         if(strlen($ret) > 500){
                                             $ret = substr($ret, 0 , 500) . "...";

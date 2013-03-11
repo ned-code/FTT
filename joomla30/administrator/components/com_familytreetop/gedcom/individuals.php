@@ -98,6 +98,23 @@ class FamilyTreeTopGedcomIndividualsModel {
             return true;
         }
     }
+
+    public function toList(){
+        if(empty($this->id)) return false;
+        $data = array();
+        $data['id'] = $this->id;
+        $data['gedcom_id'] = $this->gedcom_id;
+        $data['creator_id'] = $this->creator_id;
+        $data['gender'] = $this->gender;
+        $data['family_id'] = $this->family_id;
+        $data['create_time'] = $this->create_time;
+        $data['change_time'] = $this->change_time;
+        $data['first_name'] = $this->first_name;
+        $data['middle_name'] = $this->middle_name;
+        $data['last_name'] = $this->last_name;
+        $data['know_as'] = $this->know_as;
+        return $data;
+    }
 }
 
 
@@ -125,17 +142,7 @@ class FamilyTreeTopGedcomIndividualsManager {
 
     public function updateList(&$model){
         if(empty($model->id)) return false;
-        $data['id'] = $model->id;
-        $data['gedcom_id'] = $model->gedcom_id;
-        $data['creator_id'] = $model->creator_id;
-        $data['gender'] = $model->gender;
-        $data['family_id'] = $model->family_id;
-        $data['create_time'] = $model->create_time;
-        $data['change_time'] = $model->change_time;
-        $data['first_name'] = $model->first_name;
-        $data['middle_name'] = $model->middle_name;
-        $data['last_name'] = $model->last_name;
-        $data['know_as'] = $model->know_as;
+        $data = $model->toList();
 
         if(!isset($this->list[$model->gedcom_id])){
             $this->list[$model->gedcom_id] = $data;

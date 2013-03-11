@@ -88,7 +88,7 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         $ind->gender = $form['gender'];
         $ind->save();
 
-        echo json_encode(array('ind'=>$ind));
+        echo json_encode(array('ind'=>$ind, 'form'=>$form));
         exit;
     }
 

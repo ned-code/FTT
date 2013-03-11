@@ -42,6 +42,17 @@ class FamilyTreeTopGedcomEventModel {
 
         $gedcom->events->updateList($event);
     }
+
+    public function toList(){
+        if(empty($this->id)) return false;
+        $data = array();
+        $data['id'] = $this->id;
+        $data['gedcom_id'] = $this->gedcom_id;
+        $data['family_id'] = $this->family_id;
+        $data['type'] = $this->type;
+        $data['change_time'] = $this->change_time;
+        return $data;
+    }
 }
 
 class FamilyTreeTopGedcomEventsManager {
@@ -87,12 +98,7 @@ class FamilyTreeTopGedcomEventsManager {
 
     public function updateList($event){
         if($event->id) return false;
-        $data = array();
-        $data['id'] = $event->id;
-        $data['gedcom_id'] = $event->gedcom_id;
-        $data['family_id'] = $event->family_id;
-        $data['type'] = $event->type;
-        $data['change_time'] = $event->change_time;
+        $data = $event->toList();
 
         $this->list_by_gedcom_id[$event->gedcom_id] = $data;
         $this->list_by_family_id[$event->family_id] = $data;

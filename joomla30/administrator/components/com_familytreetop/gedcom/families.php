@@ -56,6 +56,17 @@ class FamilyTreeTopGedcomFamilyModel {
         GedcomHelper::getInstance()->childrens->create($this->family_id, $gedcom_id);
     }
 
+    public function toList(){
+        if(empty($this->id)) return false;
+        $data = array();
+        $data['id'] = $this->id;
+        $data['family_id'] = $this->family_id;
+        $data['husb'] = $this->husb;
+        $data['wife'] = $this->wife;
+        $data['type'] = $this->type;
+        $data['change_time'] = $this->change_time;
+        return $data;
+    }
 }
 
 class FamilyTreeTopGedcomFamiliesManager {
@@ -99,13 +110,7 @@ class FamilyTreeTopGedcomFamiliesManager {
 
     public function updateList(&$model){
         if(empty($model->family_id)) return false;
-        $data = array();
-        $data['id'] = $model->id;
-        $data['family_id'] = $model->family_id;
-        $data['husb'] = $model->husb;
-        $data['wife'] = $model->wife;
-        $data['type'] = $model->type;
-        $data['change_time'] = $model->change_time;
+        $data = $model->toList();
 
         if(!isset($this->list[$model->family_id])){
             $this->list[$model->family_id] = $data;

@@ -112,7 +112,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
         </div>
     </div>
 
-    <div id="formEditProfile">
+    <form id="formEditProfile">
         <div class="row-fluid">
             <div familytreetop="avatar" class="span3 text-center">
                 <img class="img-polaroid" data-src="template/familytreetop/js/holder.js/100x100">
@@ -170,7 +170,6 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                 </div>
             </div>
         </div>
-        <!--
         <div class="row-fluid">
             <div class="span12">
                 <p>
@@ -224,8 +223,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                 <input class="span4" type="text" name="editProfile[d_country]" placeholder="Country">
             </div>
         </div>
-        -->
-    </div>
+    </form>
 
     <div id="families">
         <div familytreetop="home" style="position:absolute; top:0; right: 0; cursor: pointer;"><i class="icon-home"></i></div>

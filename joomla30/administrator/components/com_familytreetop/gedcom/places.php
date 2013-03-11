@@ -34,6 +34,18 @@ class FamilyTreeTopGedcomPlaceModel {
 
         $gedcom->places->updateList($place);
     }
+
+    public function toList(){
+        if(empty($this->id)) return false;
+        $data = array();
+        $data['id'] = $this->id;
+        $data['event_id'] = $this->event_id;
+        $data['city'] = $this->city;
+        $data['state' ]= $this->state;
+        $data['country'] = $this->country;
+        $data['change_time'] = $this->change_time;
+        return $data;
+    }
 }
 class FamilyTreeTopGedcomPlacesManager {
     protected $tree_id;
@@ -72,15 +84,7 @@ class FamilyTreeTopGedcomPlacesManager {
 
     public function updateList($place){
         if(empty($place) || empty($place->id)) return false;
-        ///	id	event_id	city	state	country	change_time
-        $data = array();
-        $data['id'] = $place->id;
-        $data['event_id'] = $place->event_id;
-        $data['city'] = $place->city;
-        $data['state' ]= $place->state;
-        $data['country'] = $place->country;
-        $data['change_time'] = $place->change_time;
-
+        $data = $place->toList();
         $this->list[$place->id] = $data;
     }
 
