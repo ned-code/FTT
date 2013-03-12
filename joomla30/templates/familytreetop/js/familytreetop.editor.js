@@ -74,6 +74,41 @@ $FamilyTreeTop.create("editor", function($){
             var tab =   $(tabs[0]).find('.tab-content #'+ tabs[1][num]);
             $(tab).append(form);
         },
+        setLiving:function(editProfileForm){
+            $(editProfileForm).find('[familytreetop="living"]').change(function(){
+                var selected = $(this).find('option:selected').val();
+                if(parseInt(selected)){
+                    $(editProfileForm).find('[familytreetop="deathday"]').hide();
+                } else {
+                    $(editProfileForm).find('[familytreetop="deathday"]').show();
+                }
+            });
+        },
+        setDays:function(editProfileForm){
+            $(editProfileForm).find('[familytreetop="days"]').each(function(index, el){
+                var data = $(el).data();
+                var month = $(el).parent().find('[familytreetop="months"] option:selected').val();
+                var year = $(el).parent().find('[familytreetop="year"]').val();
+                $(el).append($this.mod('form').select.days(month, year));
+                if("undefined" !== typeof(data.value) && data.value != null){
+                    $(el).find('option[value="'+data.value+'"]').attr('selected', 'selected');
+                }
+            });
+        },
+        setMonths:function(editProfileForm){
+            $(editProfileForm).find('[familytreetop="months"]').each(function(index, el){
+                var data = $(el).data();
+                if("undefined" !== typeof(data.value) && data.value != null){
+                    $(el).find('option[value="'+data.value+'"]').attr('selected', 'selected');
+                }
+                $(el).change(function(){
+                    var month = $(this).find('option:selected').val();
+                    var year = $(this).parent().find('[familytreetop="year"]').val();
+                    $(this).parent().find('[familytreetop="days"] option[value!=0]').remove();
+                    $(this).parent().find('[familytreetop="days"]').append($this.mod('form').select.days(month, year));
+                });
+            });
+        },
         getModalBox:function(){
             var cl = $('#modal').clone().hide();
             $('body').append(cl);
@@ -133,6 +168,14 @@ $FamilyTreeTop.create("editor", function($){
         //get form
         editProfileForm = $fn.getEditorProfileForm();
 
+        $fn.setLiving(editProfileForm);
+        $fn.setMonths(editProfileForm);
+        $fn.setDays(editProfileForm);
+
+        if(ind.isAlive()){
+            $(editProfileForm).find('[familytreetop="deathday"]').hide();
+        }
+
         //set title
         $(cl).find('#modalLabel').text("Add " + type.split('add')[1]);
         //set tabs
@@ -167,37 +210,9 @@ $FamilyTreeTop.create("editor", function($){
         $fn.setFormInTab(0, tabs, editProfileForm);
         $fn.setUserData(editProfileForm, ind);
 
-        $(editProfileForm).find('[familytreetop="living"]').change(function(){
-            var selected = $(this).find('option:selected').val();
-            if(parseInt(selected)){
-                $(editProfileForm).find('[familytreetop="deathday"]').hide();
-            } else {
-                $(editProfileForm).find('[familytreetop="deathday"]').show();
-            }
-        });
-
-        $(editProfileForm).find('[familytreetop="months"]').each(function(index, el){
-            var data = $(el).data();
-            if("undefined" !== typeof(data.value) && data.value != null){
-                $(el).find('option[value="'+data.value+'"]').attr('selected', 'selected');
-            }
-            $(el).change(function(){
-                var month = $(this).find('option:selected').val();
-                var year = $(this).parent().find('[familytreetop="year"]').val();
-                $(this).parent().find('[familytreetop="days"] option[value!=0]').remove();
-                $(this).parent().find('[familytreetop="days"]').append($this.mod('form').select.days(month, year));
-            });
-        });
-
-        $(editProfileForm).find('[familytreetop="days"]').each(function(index, el){
-            var data = $(el).data();
-            var month = $(el).parent().find('[familytreetop="months"] option:selected').val();
-            var year = $(el).parent().find('[familytreetop="year"]').val();
-            $(el).append($this.mod('form').select.days(month, year));
-            if("undefined" !== typeof(data.value) && data.value != null){
-                $(el).find('option[value="'+data.value+'"]').attr('selected', 'selected');
-            }
-        });
+        $fn.setLiving(editProfileForm);
+        $fn.setMonths(editProfileForm);
+        $fn.setDays(editProfileForm);
 
         //unions edit
         //media edit
