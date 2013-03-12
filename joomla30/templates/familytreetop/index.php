@@ -52,10 +52,10 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
         <div class="row-fluid">
             <div class="span12">
                 <div>
-                    <div class="span4" style="inline-block">
+                    <div class="span4">
                         <img class="media-object" data-src="template/familytreetop/js/holder.js/100x100">
                     </div>
-                    <div class="span8" style="inline-block">
+                    <div class="span8">
                         <ul class="unstyled">
                             <li><small><strong>First Name</strong>: <span></span></small></li>
                             <li><small><strong>Middle Name</strong>: <span></span></small></li>

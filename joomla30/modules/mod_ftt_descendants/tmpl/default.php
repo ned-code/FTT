@@ -6,8 +6,8 @@ defined('_JEXEC') or die;
     <div class="span6">
         <div familytreetop="tree" class="well"></div>
     </div>
-    <div class="span6">
-        <div class="well">
+    <div class="span4">
+        <div familytreetop="info" class="well">
 
         </div>
         <hr>
@@ -23,6 +23,7 @@ defined('_JEXEC') or die;
             $start_id,
             $tree,
             $html,
+            $activeSpan,
             $fn;
 
 
@@ -58,11 +59,25 @@ defined('_JEXEC') or die;
                 });
                 return node;
             },
+            setUser:function(html){
+                var user = $this.mod('usertree').usermap();
+                $(html).find('span[familytreetop][gedcom_id="'+user.gedcom_id+'"]').click();
+            },
+            click:function(html){
+                $(html).find('span[familytreetop]').click(function(){
+                    if($(this).hasClass('active')) return false;
+                    if("undefined" !== typeof($activeSpan) || $activeSpan){
+                        $($activeSpan).removeClass('active');
+                    }
+                    $($activeSpan = this).addClass('active');
+                    $fn.render($activeSpan);
+                });
+            },
             span:function(object){
-                return '<span id="'+object.gedcom_id+'">'+object.name()+'</span>';
+                return '<span gedcom_id="'+object.gedcom_id+'" familytreetop="'+object.gender+'" id="'+object.gedcom_id+'">'+object.name()+'</span>';
             },
             string: function(ind1, ind2){
-                return $fn.span(ind1) + ' + ' + $fn.span(ind2);
+                return $fn.span(ind1) + '+' + $fn.span(ind2);
             },
             li:function(parent, object, prefix, index){
                 var li = $('<li></li>'),
@@ -88,13 +103,26 @@ defined('_JEXEC') or die;
                     ind = $this.mod('usertree').user(object.id);
 
                 if(object.spouses.length == 0){
-                    $(ul).append('<li>'+ ind.name() +'</li>');
+                    $(ul).append('<li><span familytreetop="child_'+ind.gender+'"></span><span gedcom_id="'+ind.gedcom_id+'" familytreetop="'+ind.gender+'">'+ ind.name() +'</span></li>');
                 } else {
                     object.spouses.forEach(function(spouse, index){
                         $(ul).append($fn.li(ind, spouse, prefix, index));
                     });
                 }
                 return ul;
+            },
+            render:function(span){
+                var div = $('#popover').clone(),
+                    items = $(div).find('li'),
+                    gedcom_id = $(span).attr('gedcom_id'),
+                    ind = $this.mod('usertree').user(gedcom_id);
+
+                $(items[0]).find('span').text(ind.first_name);
+                $(items[1]).find('span').text(ind.middle_name);
+                $(items[2]).find('span').text(ind.last_name);
+                $(items[3]).find('span').text(ind.know_as);
+
+                $('#descendants [familytreetop="info"]').html('').append(div);
             }
         }
 
@@ -113,5 +141,7 @@ defined('_JEXEC') or die;
         $html = $('<div class="css-treeview"></div>');
         $($html).append($fn.ul($tree, 'index-0'));
         $('#descendants [familytreetop="tree"]').append($html);
+        $fn.click($html);
+        $fn.setUser($html);
     });
 </script>

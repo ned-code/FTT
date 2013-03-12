@@ -1,15 +1,37 @@
 .css-treeview label[familytreetop="0"]{
     background: url(../images/female-family.png) no-repeat;
 }
-
 .css-treeview label[familytreetop="1"]{
     background: url(../images/male-family.png) no-repeat;
 }
-
 .css-treeview label[familytreetop] {
     background-position: 18px 0;
 }
-
 .css-treeview label[familytreetop]::before {
     margin: 0 36px 0 0;
+}
+.css-treeview li span[familytreetop] {
+    font-size: 11px;
+    cursor: pointer;
+    padding: 3px;
+}
+.css-treeview li span[familytreetop].active {
+    background: #EEDC82;
+    border-radius: 4px;
+}
+.css-treeview li span[familytreetop="0"],
+.css-treeview li span[familytreetop="child_0"]{
+    color: #FFB7C5;
+}
+.css-treeview li span[familytreetop="1"],
+.css-treeview li span[familytreetop="child_1"]{
+    color: #FF9966;
+}
+.css-treeview li span[familytreetop="child_0"] {
+    padding: 0 0 0 18px;
+    background: url(../images/female.png) no-repeat;
+}
+.css-treeview li span[familytreetop="child_1"] {
+    padding: 0 0 0 18px;
+    background: url(../images/male.png) no-repeat;
 }
