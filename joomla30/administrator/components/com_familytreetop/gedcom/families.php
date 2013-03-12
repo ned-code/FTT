@@ -53,7 +53,10 @@ class FamilyTreeTopGedcomFamilyModel {
     }
 
     public function addChild($gedcom_id){
-        GedcomHelper::getInstance()->childrens->create($this->family_id, $gedcom_id);
+        $gedcom = GedcomHelper::getInstance();
+        if(method_exists($gedcom->childrens, 'create')){
+            $gedcom->childrens->create($this->family_id, $gedcom_id);
+        }
     }
 
     public function toList(){
@@ -140,8 +143,7 @@ class FamilyTreeTopGedcomFamiliesManager {
         } else {
             return false;
         }
-
-        $gedcom->childrens = $gedcom->childrens->get($family_id);
+        $family->childrens = $gedcom->childrens->get($family_id);
 
         return $family;
     }

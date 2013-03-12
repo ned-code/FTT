@@ -69,6 +69,7 @@ class FamilyTreeTopGedcomIndividualsModel {
         $family_id = $gedcom->childrens->getFamilyIdByGedcomId($this->gedcom_id);
         $family = $gedcom->families->get($family_id);
         return array(
+            'family' => $family,
             'father'=>$gedcom->individuals->get($family->husb),
             'mother'=>$gedcom->individuals->get($family->wife)
         );
