@@ -91,8 +91,7 @@ $FamilyTreeTop.create("families", function($){
                 var length = boxs.length - 3;
                 var width = $('.tab-content').width();
                 var limit = Math.ceil(width / (120 * length));
-                var rows = Math.ceil(length/limit);
-                return [Math.round(length/rows), limit, width];
+                return [ Math.ceil(length/limit), limit, width];
             }
             function getMinHeight(){
                 var height = (getRows()[0] * 270);
@@ -109,7 +108,7 @@ $FamilyTreeTop.create("families", function($){
                 } else {
                     var objectHeight = $(boxs[0]).height();
                     var rows = getRows();
-                    var row = Math.ceil((index - 2)/rows[0]);
+                    var row = Math.ceil((index - 2)/rows[1]);
                     return height * 0.1 + 250 + 110*(row - 1);
                 }
 
@@ -132,18 +131,19 @@ $FamilyTreeTop.create("families", function($){
                 var length = boxs.length - 3,
                     len = index - 2,
                     rows = getRows(),
-                    row = Math.ceil(len / rows[0]),
+                    row = Math.ceil(len / rows[1]),
                     indent = 0,
                     position;
+
                 if(row == rows[0] && length != rows[1]){
-                    indent = Math.round((rows[2] - length * 110) / 2);
+                    indent = Math.round((rows[2] - length * 120) / 2);
                 }
                 if(row == 1){
                     position = len;
                 } else {
                     position = rows[1]*row - len;
                 }
-                return 5 + (position - 1) * 110 + indent;
+                return (position - 1) * 120 + indent;
             }
         },
         setPopovers:function(boxs){
@@ -229,18 +229,6 @@ $FamilyTreeTop.create("families", function($){
 
         $fn.setPosition($boxs[settings.id]);
         $fn.setPopovers($boxs[settings.id]);
-
-        /*
-        if(settings.animation){
-            $fn.animation($boxs[settings.id]);
-        }
-        */
-
-        /*
-        $(window).resize(function(){
-            $fn.setPosition($boxs[settings.id]);
-        });
-        */
     };
 
 });
