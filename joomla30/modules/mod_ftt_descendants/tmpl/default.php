@@ -68,7 +68,7 @@ defined('_JEXEC') or die;
                 $(html).find('span[familytreetop][gedcom_id="'+user.gedcom_id+'"]').click();
             },
             click:function(html){
-                $(html).find('span[familytreetop]').click(function(){
+                $(html).find('span[familytreetop="0"],span[familytreetop="1"]').click(function(){
                     if($(this).hasClass('active')) return false;
                     if("undefined" !== typeof($activeSpan) || $activeSpan){
                         $($activeSpan).removeClass('active');
@@ -83,7 +83,8 @@ defined('_JEXEC') or die;
             string: function(ind1, ind2){
                 return $fn.span(ind1) + '+' + $fn.span(ind2);
             },
-            li:function(parent, object, prefix, index){
+            /*
+            li:function(parent, object, ul, prefix, index){
                 var li = $('<li></li>'),
                     label = $('<label></label>'),
                     ind = $this.mod('usertree').user(object.id),
@@ -91,29 +92,65 @@ defined('_JEXEC') or die;
 
                 if(object.childrens.length != 0){
                     $(li).append('<input checked type="checkbox" id="'+id+'" />');
-                    $(label).html($fn.string(parent, ind));
-                    $(label).attr('familytreetop', parent.gender);
-                    $(li).append(label);
-                    object.childrens.forEach(function(child, index){
-                        $(li).append($fn.ul(child, prefix + '-' + index));
-                    });
-                } else {
-                    $(li).html($fn.string(li, parent, ind));
                 }
+                $(label).html($fn.string(parent, ind));
+                $(label).attr('familytreetop', parent.gender);
+                $(li).append(label);
+
+                if(object.childrens.length != 0){
+                    object.childrens.forEach(function(child, index){
+                        $(li).append($fn.ul(child, ul, prefix + '-' + index));
+                    });
+                }
+
                 return li;
             },
-            ul:function(object, prefix){
+            ul:function(object, parent, prefix){
                 var ul = $('<ul></ul>'),
                     ind = $this.mod('usertree').user(object.id);
 
                 if(object.spouses.length == 0){
-                    $(ul).append('<li><span familytreetop="child_'+ind.gender+'"></span><span gedcom_id="'+ind.gedcom_id+'" familytreetop="'+ind.gender+'">'+ ind.name() +'</span></li>');
+                    $(parent).append('<li><span familytreetop="child_'+ind.gender+'"></span><span gedcom_id="'+ind.gedcom_id+'" familytreetop="'+ind.gender+'">'+ ind.name() +'</span></li>');
                 } else {
                     object.spouses.forEach(function(spouse, index){
-                        $(ul).append($fn.li(ind, spouse, prefix, index));
+                        $(ul).append($fn.li(ind, spouse, ul, prefix, index));
                     });
                 }
                 return ul;
+            },
+            */
+            after:function(user, spouse, prefix){
+                var ul = $('<ul></ul>'),
+                    li = $('<li><input checked type="checkbox" id="'+prefix+'" /><label></label></li>'),
+                    sp = $this.mod('usertree').user(spouse.id);
+                $(li).find('label').html($fn.string(user, sp));
+                $(li).find('label').attr('familytreetop', user.gender);
+                if(spouse.childrens.length != 0){
+                    $(li).append(ul);
+                    spouse.childrens.forEach(function(child, index){
+                        $fn.create(ul, child, prefix + '-' + index);
+                    });
+                }
+                return li;
+            },
+            create:function(parent, object, prefix){
+                var ul = $('<ul></ul>'),
+                    user = $this.mod('usertree').user(object.id),
+                    spouses = object.spouses;
+
+                if(spouses.length != 0){
+                    $(parent).append(ul);
+                    spouses.forEach(function(spouse, index){
+                        $(ul).append($fn.after(user, spouse, prefix + '-' + index));
+                    });
+                } else {
+                    $(parent).append('<li><span familytreetop="child_'
+                            +user.gender+'"></span><span gedcom_id="'
+                            +user.gedcom_id+'" familytreetop="'
+                            +user.gender+'">'
+                            + user.name()
+                        +'</span></li>');
+                }
             },
             render:function(span){
                 var div = $('#popover').clone(),
@@ -143,7 +180,8 @@ defined('_JEXEC') or die;
         }
 
         $html = $('<div class="css-treeview"></div>');
-        $($html).append($fn.ul($tree, 'index-0'));
+        //$($html).append($fn.create(false, $tree, 'index-0'));
+        $fn.create($html, $tree, 'index-0')
         $('#descendants [familytreetop="tree"]').append($html);
         $fn.click($html);
         $fn.setUser($html);
