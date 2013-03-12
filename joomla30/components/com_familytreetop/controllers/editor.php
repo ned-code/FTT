@@ -121,9 +121,8 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         $gedcom_id = $app->input->post->get('gedcom_id', false);
 
         $gedcom = GedcomHelper::getInstance();
-        $userData = FamilyTreeTopUserHelper::getInstance()->get();
 
-        $user = $gedcom->individuals->get($userData->gedcom_id);
+        $user = $gedcom->individuals->get($gedcom_id);
         $parents = $user->getParents();
 
         if(!$parents || $user->gedcom_id == null){
@@ -159,12 +158,51 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         $form = $app->input->post->get('editProfile', array(), 'array');
         $gedcom_id = $app->input->post->get('gedcom_id', false);
 
+
     }
 
     public function addChild(){
         $app = JFactory::getApplication();
         $form = $app->input->post->get('editProfile', array(), 'array');
         $gedcom_id = $app->input->post->get('gedcom_id', false);
+
+        $gedcom = GedcomHelper::getInstance();
+
+        $user = $gedcom->individuals->get($gedcom_id);
+
+        $ind = $gedcom->individuals->get();
+        $ind->first_name = $form['first_name'];
+        $ind->middle_name = $form['middle_name'];
+        $ind->last_name = $form['last_name'];
+        $ind->know_as = $form['know_as'];
+        $ind->gender = $form['gender'];
+        $ind->creator_id = $user->gedcom_id;
+        $ind->save();
+
+        $this->setEvent($ind, 'birth', $form);
+        if((int)$form['living']){
+            if($event = $ind->death()){
+                $event->remove();
+            }
+        } else {
+            $this->setEvent($ind, 'death', $form);
+        }
+
+        $spouse_id = $form['spouse'];
+
+        if($user->gender){
+            $husb = $user->gedcom_id;
+            $wife = $spouse_id;
+        } else {
+            $husb = $spouse_id;
+            $wife = $user->gedcom_id;
+        }
+
+        $family = $gedcom->families->getByPartner($husb, $wife);
+        $family->addChild($ind->gedcom_id);
+
+        echo json_encode(array('ind'=>$ind, 'form'=>$form));
+        exit;
     }
 
     public function updateUserInfo(){

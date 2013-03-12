@@ -148,6 +148,21 @@ class FamilyTreeTopGedcomFamiliesManager {
         return $family;
     }
 
+    public function getByPartner($husb, $wife){
+        if(empty($husb) || empty($wife)) return false;
+        $family = FamilyTreeTopFamilies::find(
+            'all',
+            array(
+                'conditions'=>array(
+                    'husb=? AND wife=?',
+                    $husb,
+                    $wife
+                )
+            )
+        );
+        return $this->get($family[0]->family_id);
+    }
+
     public function getList(){
         return array('family_id'=>$this->list, 'gedcom_id'=>$this->list_by_gedcom_id);
     }

@@ -109,6 +109,23 @@ $FamilyTreeTop.create("editor", function($){
                 });
             });
         },
+        setSpouseSelect:function(form , ind){
+            var parent = $(form).find('[familytreetop="gender"]').parent();
+            var spouses = $this.mod('usertree').getSpouses(ind.gedcom_id);
+            var sb = $this.stringBuffer();
+            sb._('<div class="row-fluid">');
+                sb._('<div familytreetop="spouse" class="span12">');
+                    sb._('<label for="editProfile[spouse]">Spouse</label>');
+                    sb._('<select id="editProfile[spouse]" name="editProfile[spouse]">');
+                        spouses.forEach(function(spouse_id){
+                            var spouse = $this.mod('usertree').user(spouse_id);
+                            sb._('<option value="')._(spouse_id)._('">')._(spouse.name())._('</option>');
+                        });
+                    sb._('</select>');
+                sb._('</div>');
+            sb._('</div>');
+            $(parent).before(sb.ret());
+        },
         getModalBox:function(){
             var cl = $('#modal').clone().hide();
             $('body').append(cl);
@@ -174,6 +191,10 @@ $FamilyTreeTop.create("editor", function($){
 
         if(ind.isAlive()){
             $(editProfileForm).find('[familytreetop="deathday"]').hide();
+        }
+
+        if(type == "addChild"){
+            $fn.setSpouseSelect(editProfileForm, ind);
         }
 
         //set title
