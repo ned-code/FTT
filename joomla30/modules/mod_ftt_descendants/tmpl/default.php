@@ -83,42 +83,6 @@ defined('_JEXEC') or die;
             string: function(ind1, ind2){
                 return $fn.span(ind1) + '+' + $fn.span(ind2);
             },
-            /*
-            li:function(parent, object, ul, prefix, index){
-                var li = $('<li></li>'),
-                    label = $('<label></label>'),
-                    ind = $this.mod('usertree').user(object.id),
-                    id = prefix + '-' + index;
-
-                if(object.childrens.length != 0){
-                    $(li).append('<input checked type="checkbox" id="'+id+'" />');
-                }
-                $(label).html($fn.string(parent, ind));
-                $(label).attr('familytreetop', parent.gender);
-                $(li).append(label);
-
-                if(object.childrens.length != 0){
-                    object.childrens.forEach(function(child, index){
-                        $(li).append($fn.ul(child, ul, prefix + '-' + index));
-                    });
-                }
-
-                return li;
-            },
-            ul:function(object, parent, prefix){
-                var ul = $('<ul></ul>'),
-                    ind = $this.mod('usertree').user(object.id);
-
-                if(object.spouses.length == 0){
-                    $(parent).append('<li><span familytreetop="child_'+ind.gender+'"></span><span gedcom_id="'+ind.gedcom_id+'" familytreetop="'+ind.gender+'">'+ ind.name() +'</span></li>');
-                } else {
-                    object.spouses.forEach(function(spouse, index){
-                        $(ul).append($fn.li(ind, spouse, ul, prefix, index));
-                    });
-                }
-                return ul;
-            },
-            */
             after:function(user, spouse, prefix){
                 var ul = $('<ul></ul>'),
                     li = $('<li><input checked type="checkbox" id="'+prefix+'" /><label></label></li>'),
