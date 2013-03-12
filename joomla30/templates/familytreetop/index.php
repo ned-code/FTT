@@ -33,6 +33,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
 <body>
 <script>
     $FamilyTreeTop.app.config.appId = '<?=$settings->facebook_app_id->value;?>';
+    $FamilyTreeTop.app.permissions = '<?=$settings->facebook_permission->value;?>';
     $FamilyTreeTop.userString = '<?=json_encode(FamilyTreeTopUserHelper::getInstance()->get()); ?>';
 </script>
 <div id="fb-root"></div>

@@ -9,7 +9,7 @@
                 coockie: true,
                 xfbml: true
             },
-            permissions:"user_about_me,user_birthday,user_relationships,user_photos,friends_photos,read_stream,read_insights"
+            permissions:false
         }
 
 

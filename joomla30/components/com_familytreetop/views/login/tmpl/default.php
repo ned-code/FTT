@@ -35,7 +35,7 @@ defined('_JEXEC') or die;
                     if(response.status == "connected"){
                         load(this, response.authResponse);
                     }
-                }, $FamilyTreeTop.app.permissions);
+                }, {scope: $FamilyTreeTop.app.permissions});
             } else {
                 load(this, auth);
             }
