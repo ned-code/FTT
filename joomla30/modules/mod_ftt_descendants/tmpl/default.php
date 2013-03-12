@@ -100,12 +100,18 @@ defined('_JEXEC') or die;
             create:function(parent, object, prefix){
                 var ul = $('<ul></ul>'),
                     user = $this.mod('usertree').user(object.id),
-                    spouses = object.spouses;
+                    spouses = object.spouses,
+                    prnt;
 
                 if(spouses.length != 0){
-                    $(parent).append(ul);
+                    if(prefix == 'index-0') {
+                        $(parent).append(ul);
+                        prnt = ul;
+                    } else {
+                        prnt = parent;
+                    }
                     spouses.forEach(function(spouse, index){
-                        $(ul).append($fn.after(user, spouse, prefix + '-' + index));
+                        $(prnt).append($fn.after(user, spouse, prefix + '-' + index));
                     });
                 } else {
                     $(parent).append('<li><span familytreetop="child_'
