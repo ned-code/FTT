@@ -29,10 +29,14 @@ defined('_JEXEC') or die;
 
         $fn = {
             getStartId:function(id){
-                var parent_id;
+                var parent_id, grandparent_id;
                 parent_id = $this.mod('usertree').getExistParentById(id);
                 if(parent_id){
-                    return $this.mod('usertree').getExistParentById(parent_id);
+                    grandparent_id = $this.mod('usertree').getExistParentById(parent_id);
+                    if(grandparent_id){
+                        return grandparent_id;
+                    }
+                    return parent_id;
                 }
                 return false;
             },
