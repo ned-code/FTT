@@ -23,10 +23,9 @@ defined('_JEXEC') or die;
 <script>
     $FamilyTreeTop.bind(function($){
         var $this = this;
-        $('#recentVisitors li').click(function(){
-            var target = this;
+        $('#recentVisitors li').each(function(index, el){
             $this.mod('popovers').render({
-                target: target
+                target: el
             });
         });
     });

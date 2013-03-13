@@ -161,6 +161,7 @@ $FamilyTreeTop.create("families", function($){
             var gedcom_id = $(this).parent().parent().attr('gedcom_id');
             var arrow = $(this).find('i').attr('class').split('-').pop();
             settings.gedcom_id = (arrow == "down")?gedcom_id:$fn.getStartIdByParents(gedcom_id);
+            $this.mod('popovers').hide();
             $this.render(settings);
         },
         clear:function(settings){

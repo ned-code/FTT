@@ -17,15 +17,15 @@ $FamilyTreeTop.create("editor", function($){
                                 if(event){
                                     switch(n[1]){
                                         case "year":
-                                            if("undefined" !==  typeof(event[2])&& event[2].start_year != null){
-                                                $(el).val(event[2].start_year);
+                                            if(event.date && event.date.start_year != null){
+                                                $(el).val(event.date.start_year);
                                             }
                                             break;
 
                                         case "city":
                                         case "state":
                                         case "country":
-                                            if("undefined" !== typeof(event[1]) && event[1][n[1]] != null){
+                                            if(event.place && event.place[n[1]] != null){
                                                 $(el).val(event[1][n[1]]);
                                             }
                                             break;
@@ -49,8 +49,8 @@ $FamilyTreeTop.create("editor", function($){
                                     switch(n[1]){
                                         case "month":
                                         case "day":
-                                            if("undefined" !==  typeof(event[2])){
-                                                var start = event[2]['start_' + n[1]];
+                                            if(event.date){
+                                                var start = event.date['start_' + n[1]];
                                                 $(el).data({value:start});
                                             }
                                             break;

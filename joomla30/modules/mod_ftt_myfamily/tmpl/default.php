@@ -13,7 +13,7 @@ $data = $home['data'];
 
 ?>
 
-<div id="thisMonth" class="row">
+<div id="myFamilyOnFacebook" class="row">
     <div class="span6">
         <div class="well">
             <fieldset>

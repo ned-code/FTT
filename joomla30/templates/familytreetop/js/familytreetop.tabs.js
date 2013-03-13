@@ -2,7 +2,9 @@ $FamilyTreeTop.create("tabs", function($){
     'use strict';
     var $this = this, $pull;
 
-    $pull = {};
+    $pull = {
+        all: []
+    };
 
     $this.bind = function(id, call){
         if("undefined" === typeof($pull[id])){
@@ -15,13 +17,14 @@ $FamilyTreeTop.create("tabs", function($){
         if("undefined" === typeof($pull[target])) return false;
         $pull[target].forEach(function(call){
             call(e);
-        })
+        });
     }
 
     $this.init = function(){
         $('#familyTreeTopTabs a').click(function (e) {
             var target = $(this).attr('href');
             $this.click.call(this, target, e);
+            $this.click.call(this, "all", e);
         });
     }
 

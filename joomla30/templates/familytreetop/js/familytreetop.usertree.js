@@ -193,15 +193,14 @@ $FamilyTreeTop.create("usertree", function($){
             var event = events[key];
             if(event['type'] == type){
                 var event_id = event['id']
-                var ret = [];
-                ret.push(event);
+                var ret = { event: false, place: false, date: false };
+                ret.object = event;
 
                 if("undefined" !== typeof(data.pla[event_id])){
-                    ret.push(data.pla[event_id]);
-                }
+                    ret.place = data.pla[event_id]            }
 
                 if("undefined" !== typeof(data.dat[event_id])){
-                    ret.push(data.dat[event_id]);
+                    ret.date = data.dat[event_id]
                 }
 
                 return ret;

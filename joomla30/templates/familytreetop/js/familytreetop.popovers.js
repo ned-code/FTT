@@ -1,28 +1,39 @@
 $FamilyTreeTop.create("popovers", function($){
     'use strict';
-    var $this = this, $fn, $th;
+    var $this = this, $fn, $th, $pull = [], $active = false;
 
     $th = {
         target: false,
         gedcom_id: false,
-        object: false,
-        lastActive: false
+        object: false
     }
 
     $fn = {
         setData:function(args){
-            $fn.target = args.target;
-            $th.gedcom_id = $(args.target).attr('gedcom_id');
-            $th.object = $this.mod('usertree').user($th.gedcom_id);
+            var $data = $.extend({}, $th);
+            $data.target = args.target;
+            $data.gedcom_id = $(args.target).attr('gedcom_id');
+            $data.object = $this.mod('usertree').user($data.gedcom_id);
+            if($data.gedcom_id){
+                $pull.push({ id: $data.gedcom_id, data: $data });
+                return true;
+            }
+            return false;
+        },
+        getLastObject:function(){
+            if("undefined" !== typeof($pull[$pull.length - 1])){
+                return $pull[$pull.length - 1].data;
+            }
+            return false;
         },
         getTitle:function(){
-            return $th.object.name();
+            return $fn.getLastObject().object.name();
         },
         getContent:function(){
             var div = $('#familytreetop-root #popover').clone(),
                 names = ['first_name', 'middle_name', 'last_name', 'know_as'];
             $(div).find('ul li span').each(function(index, el){
-                var name = $th.object[names[index]];
+                var name = $fn.getLastObject().object[names[index]];
                 if(name != null){
                     $(el).text(name);
                 }
@@ -56,19 +67,18 @@ $FamilyTreeTop.create("popovers", function($){
         },
         click: function(args){
             $(args.target).bind('click', function(e){
-                if($th.lastActive == args.target) return false;
-                if($th.lastActive){
+                if($active == args.target) return false;
+                if($active){
                     $('body').unbind('click.familytreetop');
-                    $($th.lastActive).popover('hide');
-                    $th.lastActive = false;
+                    $this.hide();
                 }
-                $th.lastActive = args.target;
+                $active = args.target;
                 $(args.target).popover('show');
+
                 $('body').bind('click.familytreetop', function(e){
-                    if(!$th.lastActive) return false;
+                    if(!$active) return false;
                     $('body').unbind('click.familytreetop');
-                    $($th.lastActive).popover('hide');
-                    $th.lastActive = false;
+                    $this.hide();
                     return false;
                 });
                 return false;
@@ -76,16 +86,18 @@ $FamilyTreeTop.create("popovers", function($){
         }
     }
 
-    this.render = function(args){
-        $fn.setData(args);
-        if("undefined" === typeof(args) || !$th.gedcom_id){
-            return false;
-        }
+    $this.render = function(args){
+        if("undefined" === typeof(args) || !$fn.setData(args)) return false;
         $(args.target).popover($fn.getOptions(args));
         $fn.click(args);
     }
 
-    this.hide = function(){
-        $($th.target).popover('hide');
+    $this.hide = function(){
+        $($active).popover('hide');
+        $active = false;
     }
+
+    $this.mod('tabs').bind('all', function(e){
+        $this.hide();
+    });
 });

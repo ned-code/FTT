@@ -12,7 +12,7 @@ defined('_JEXEC') or die;
                             <ul class="unstyled inline">
                                 <li>This Month</li>
                                 <li>
-                                    <select class="span2" name="month">
+                                    <select familytreetop="months" class="span2" name="ThisMonth[month]">
                                         <option value="1">January</option>
                                         <option value="2">February</option>
                                         <option value="3">March</option>
@@ -27,22 +27,40 @@ defined('_JEXEC') or die;
                                         <option value="12">December</option>
                                     </select>
                                 </li>
-                                <li>
-                                    <select class="span1" name="month">
-                                        <?php
-                                            for($i = 1; $i <= 31 ; $i++){
-                                                echo '<option value="'.$i.'">'. $i .'</option>';
-                                            }
-                                        ?>
-                                    </select>
-                                </li>
                             </ul>
                         </div>
                     </div>
                 </legend>
-
             </fieldset>
         </div>
     </div>
 </div>
+<script>
+    $FamilyTreeTop.bind(function($){
+        'use strict';
+
+        var $this = this,
+            $parent,
+            $fn;
+
+        $fn = {
+            setMonthSelectChange:function(select){
+                $(select).change(function(){
+
+                });
+            },
+            setMonthsSelect:function(p){
+                var select = $(p).find('[familytreetop="months"]');
+                //$(select).find('option[value="'+((new Date()).getMonth() + 1)+'"]').attr('selected', "selected");
+                //console.log($(select).find('option[value="'+((new Date()).getMonth() + 1)+'"]'));
+                $fn.setMonthSelectChange(select);
+            }
+        }
+
+        $parent = $('#thisMonth');
+
+        $fn.setMonthsSelect($parent);
+
+    });
+</script>
 
