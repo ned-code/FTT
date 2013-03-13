@@ -106,6 +106,24 @@ $FamilyTreeTop.create("usertree", function($){
         }
     }
 
+    $this.isDateInTheEvent = function(event_id, date, postfix){
+        var _date, prop;
+        if("undefined" !== typeof(data.dat[event_id])){
+            _date = data.dat[event_id];
+            if("undefined" !== typeof(postfix)){
+                return (_date[postfix] == date);
+            } else {
+                for(prop in _date){
+                    if(!_date.hasOwnProperty(prop)) continue;
+                    if("undefined" === typeof(date[prop])) return false;
+                    if(_date[prop] !== date[prop]) return false;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
     $this.getExistParent = function(p){
         if("undefined" === typeof(f) || !p) return false;
         if(p.mother != null || p.father != null){
@@ -208,6 +226,33 @@ $FamilyTreeTop.create("usertree", function($){
 
         }
         return false;
+    }
+
+    $this.getEventsByType = function(type, sort){
+        var _data, key, object, id, event, pull = [];
+        switch(type){
+            case "BIRT":case "DEAT": _data = data.eve.gedcom_id; break;
+            case "MARR": _data = data.eve.family_id; break;
+            default: return pull;
+        }
+        for(key in _data){
+            if(!_data.hasOwnProperty(key)) continue;
+            object = _data[key];
+            for(id in object){
+                if(!object.hasOwnProperty(id)) continue;
+                event = object[id];
+                if(event.type == type){
+                    if("undefined" !== typeof(sort) && "function" === typeof(sort)){
+                        if(sort(event)){
+                            pull.push(event);
+                        }
+                    } else {
+                        pull.push(event);
+                    }
+                }
+            }
+        }
+        return pull;
     }
 
     $this.init($FamilyTreeTop.dataString, $FamilyTreeTop.userString);

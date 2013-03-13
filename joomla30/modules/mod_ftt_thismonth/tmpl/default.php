@@ -1,6 +1,7 @@
 <?php
 defined('_JEXEC') or die;
-
+$months = array('January','February','March','April','May','June','July','August','September','October','November','December');
+$date = date('n', strtotime('-1 month'));
 ?>
 <div id="thisMonth" class="row">
     <div class="span6">
@@ -12,25 +13,28 @@ defined('_JEXEC') or die;
                             <ul class="unstyled inline">
                                 <li>This Month</li>
                                 <li>
-                                    <select familytreetop="months" class="span2" name="ThisMonth[month]">
-                                        <option value="1">January</option>
-                                        <option value="2">February</option>
-                                        <option value="3">March</option>
-                                        <option value="4">April</option>
-                                        <option value="5">May</option>
-                                        <option value="6">June</option>
-                                        <option value="7">July</option>
-                                        <option value="8">August</option>
-                                        <option value="9">September</option>
-                                        <option value="10">October</option>
-                                        <option value="11">November</option>
-                                        <option value="12">December</option>
-                                    </select>
+                                    <?php
+                                        echo '<select familytreetop="months" class="span2" name="ThisMonth[month]">';
+                                        foreach($months as $key => $month){
+                                            $option = '<option ';
+                                            if($key == $date){
+                                                $option .= ' selected="selected"';
+                                            }
+                                            $option .= ' value="' . ($key + 1);
+                                            $option .= '">' ;
+                                            $option .= $month;
+                                            $option .= '</option>';
+                                            echo $option;
+                                        }
+                                        echo '</select>';
+                                    ?>
+
                                 </li>
                             </ul>
                         </div>
                     </div>
                 </legend>
+
             </fieldset>
         </div>
     </div>
@@ -40,26 +44,33 @@ defined('_JEXEC') or die;
         'use strict';
 
         var $this = this,
+            $month,
             $parent,
+            $data,
             $fn;
 
-        $fn = {
-            setMonthSelectChange:function(select){
-                $(select).change(function(){
+        $month = '<?=($date + 1);?>';
 
+        $fn = {
+            getData: function(){
+                return $this.mod('usertree').getEventsByType('BIRT', function(event){
+                    console.log($this.mod('usertree').isDateInTheEvent(event.id, $month, "start_month"), event);
+                    return $this.mod('usertree').isDateInTheEvent(event.id, $month, "start_month");
                 });
             },
-            setMonthsSelect:function(p){
-                var select = $(p).find('[familytreetop="months"]');
-                //$(select).find('option[value="'+((new Date()).getMonth() + 1)+'"]').attr('selected', "selected");
-                //console.log($(select).find('option[value="'+((new Date()).getMonth() + 1)+'"]'));
-                $fn.setMonthSelectChange(select);
+            setMonthSelectChange:function(p){
+                $(p).find('[familytreetop="months"]').change(function(){
+                    console.log(this);
+                });
             }
         }
 
         $parent = $('#thisMonth');
+        $fn.setMonthSelectChange($parent);
 
-        $fn.setMonthsSelect($parent);
+        $data = $fn.getData();
+        console.log($data);
+
 
     });
 </script>
