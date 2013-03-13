@@ -54,7 +54,6 @@ $date = date('n', strtotime('-1 month'));
         $fn = {
             getData: function(){
                 return $this.mod('usertree').getEventsByType('BIRT', function(event){
-                    console.log($this.mod('usertree').isDateInTheEvent(event.id, $month, "start_month"), event);
                     return $this.mod('usertree').isDateInTheEvent(event.id, $month, "start_month");
                 });
             },
