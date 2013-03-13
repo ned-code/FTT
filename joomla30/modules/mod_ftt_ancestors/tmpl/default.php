@@ -215,7 +215,6 @@ $user = FamilyTreeTopUserHelper::getInstance()->get();
         },
 
         $tree = $fn.getTree($start_id);
-        console.log($tree);
 
         $this.mod('tabs').bind('#tab4', function(e){
             if($init) return false;

@@ -98,7 +98,7 @@ class FamilyTreeTopGedcomEventsManager {
         if(empty($rows)) return array();
         $result = array();
         foreach($rows as $key => $row){
-            if(isset($row[$type])){
+            if(isset($row[$type]) && $row[$type] != null){
                 $result[$row[$type]][$key] = $row;
             }
         }
@@ -146,7 +146,7 @@ class FamilyTreeTopGedcomEventsManager {
     public function getList(){
         return array(
             'gedcom_id' => $this->list_by_gedcom_id,
-            'family_id' => $this->list_by_gedcom_id
+            'family_id' => $this->list_by_family_id
         );
     }
 
