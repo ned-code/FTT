@@ -8,7 +8,7 @@ $user = FamilyTreeTopUserHelper::getInstance()->get();
     $FamilyTreeTop.bind(function($){
         'use strict';
 
-        var $this = this, $start_id, $label, $node, $nulls, $tree, $fn, $init;
+        var $this = this, $start_id, $label, $labels, $node, $nulls, $tree, $fn, $init;
 
         $fn = {
             setNode: function(id){
@@ -35,6 +35,14 @@ $user = FamilyTreeTopUserHelper::getInstance()->get();
                 $nulls.length++;
 
                 return node;
+            },
+            setPopovers: function(){
+                $labels.forEach(function(object){
+                    var target = $(object).find('img');
+                    $this.mod('popovers').render({
+                        target: target
+                    });
+                });
             },
             getAncestors: function(gedcom_id){
                 if("undefined" === typeof(gedcom_id) || null == gedcom_id) return $fn.setNullNode();
@@ -102,11 +110,12 @@ $user = FamilyTreeTopUserHelper::getInstance()->get();
                         //$(module.overlay).remove();
                     },
                     onCreateLabel: function(label, node){
-                        var sb = $this.stringBuffer(), html, user;
-                        user = $this.mod('usertree').user(node.id.split('_')[1]);
+                        var sb = $this.stringBuffer(), html, user, gedcom_id;
+                        gedcom_id = node.id.split('_')[1];
+                        user = $this.mod('usertree').user(gedcom_id);
                         sb._('<div class="row-fluid">');
                             sb._('<div class="span12">');
-                                sb._('<div style="float:left;"><img class="img-polaroid" data-src="template/familytreetop/js/holder.js/80x80"></div>');
+                                sb._('<div style="float:left;"><img gedcom_id="')._(gedcom_id)._('" class="img-polaroid" data-src="template/familytreetop/js/holder.js/80x80"></div>');
                                 sb._('<div style="float:left;">');
                                     sb._('<div style="padding:3px;border: 1px solid rgba(0,0,0,0.2);width: 142px;height: 82px;background: white;">');
                                         sb._('<ul class="unstyled text-center">');
@@ -118,6 +127,8 @@ $user = FamilyTreeTopUserHelper::getInstance()->get();
                         sb._('</div>');
 
                         html = $(sb.ret());
+
+                        $labels.push(html);
 
                         Holder.run({
                             images: $(html).find('img')[0]
@@ -180,9 +191,10 @@ $user = FamilyTreeTopUserHelper::getInstance()->get();
                 //emulate a click on the root node.
                 st.onClick(st.root, {
                     onComplete:function() {
-                        //code
+                        $fn.setPopovers();
                     }
                 });
+
             }
 
         }
@@ -190,6 +202,7 @@ $user = FamilyTreeTopUserHelper::getInstance()->get();
         $start_id = '<?=$user->gedcom_id;?>';
         $node = { id:null, name: null, data: null, children: null};
         $nulls = { pull:[], length:0 };
+        $labels = [];
         $init = false;
         $label =  {
                 height: 90,
