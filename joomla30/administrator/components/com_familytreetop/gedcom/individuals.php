@@ -25,9 +25,6 @@ class FamilyTreeTopGedcomIndividualsModel {
 
     public function __construct($tree_id){
         $this->tree_id = $tree_id;
-
-        $date = JFactory::getDate();
-        $this->change_time = $date->toSql();
     }
 
     public function isParents(){
@@ -77,6 +74,7 @@ class FamilyTreeTopGedcomIndividualsModel {
 
     public function save(){
         if(empty($this->tree_id)) return false;
+        $date = JFactory::getDate();
         $gedcom = GedcomHelper::getInstance();
         if(empty($this->id)){
             $ind = new FamilyTreeTopIndividuals();
@@ -87,7 +85,7 @@ class FamilyTreeTopGedcomIndividualsModel {
             $link->save();
 
             $this->gedcom_id = $link->id;
-            $this->create_time = $this->change_time;
+            $this->create_time = $date->toSql();
         } else {
             $ind = FamilyTreeTopIndividuals::find($this->id);
             if(empty($ind)){
@@ -97,7 +95,7 @@ class FamilyTreeTopGedcomIndividualsModel {
         $ind->gedcom_id = $this->gedcom_id;
         $ind->gender = $this->gender;
         $ind->family_id = $this->family_id;
-        $ind->change_time = $this->change_time;
+        $ind->change_time = $date->toSql();
         $ind->creator_id = $this->creator_id;
         $ind->save();
 
@@ -189,6 +187,7 @@ class FamilyTreeTopGedcomIndividualsManager {
             $ind->gender = $data['gender'];
             $ind->family_id = $data['family_id'];
             $ind->create_time = $data['create_time'];
+            $ind->change_time = $data['change_time'];
 
             $ind->first_name = $data['first_name'];
             $ind->middle_name = $data['middle_name'];
