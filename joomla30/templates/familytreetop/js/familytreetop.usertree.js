@@ -44,6 +44,9 @@ $FamilyTreeTop.create("usertree", function($){
             know_as: ind.know_as,
             last_name: ind.last_name,
             middle_name: ind.middle_name,
+            username:function(){
+               return this.name().toLowerCase().split(' ').join('.');
+            },
             name:function(){
                 var $name = [];
                 if(ind.first_name != null) $name.push(ind.first_name);
@@ -51,7 +54,13 @@ $FamilyTreeTop.create("usertree", function($){
                     if(ind.middle_name != null) $name.push(ind.middle_name);
                     $name.push(ind.last_name);
                 }
-                return $name.join(' ');
+                return $name.join(' ').replace(/[ \t]{2,}/g, ' ');
+            },
+            shortname: function(){
+                var $name = [];
+                if(ind.first_name != null) $name.push(ind.first_name);
+                if(ind.last_name != null) $name.push(ind.last_name);
+                return $name.join(' ').replace(/[ \t]{2,}/g, ' ');
             },
             birth:function(){
                 return $this.getEventByType(ind, 'BIRT');

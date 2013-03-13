@@ -7,9 +7,7 @@ defined('_JEXEC') or die;
         <div familytreetop="tree" class="well"></div>
     </div>
     <div class="span4">
-        <div familytreetop="info" class="well">
-
-        </div>
+        <div familytreetop="info" class="well"></div>
         <hr>
     </div>
 </div>

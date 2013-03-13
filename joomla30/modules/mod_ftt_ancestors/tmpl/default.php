@@ -2,55 +2,65 @@
 defined('_JEXEC') or die;
 $user = FamilyTreeTopUserHelper::getInstance()->get();
 ?>
-<div id="ancestors" class="row" style="width:100%; height:400px;">
+<div id="ancestors" class="row" style="width:100%; height:500px;">
 </div>
 <script>
     $FamilyTreeTop.bind(function($){
         'use strict';
 
-        var $this = this, $start_id, $node, $tree, $fn, $init;
+        var $this = this, $start_id, $label, $node, $nulls, $tree, $fn, $init;
 
         $fn = {
             setNode: function(id){
-                var data = $this.mod('usertree').user(id);
-                var node = jQuery.extend({}, $node);
-                var key = $this.generateKey();
-                node.id = key + '_' + data.gedcom_id;
-                node.name = data.name();
+                var node = jQuery.extend({}, $node),
+                    user = $this.mod('usertree').user(id),
+                    key = $this.generateKey();
+
+                node.id = key + '_' + user.gedcom_id;
+                node.name = user.username();
                 node.data = [];
                 node.children = [];
                 return node;
             },
-            getTree: function(gedcom_id){
-                var usertree = $this.mod('usertree');
-                var parents = usertree.getParents(gedcom_id);
-                var node = $fn.setNode(gedcom_id);
-                if(parents.father != null){
-                    node.children.push($fn.setNode(parents.father));
-                }
-                if(parents.mother != null){
-                    node.children.push($fn.setNode(parents.mother));
-                }
+            setNullNode: function(){
+                var node = jQuery.extend({}, $node),
+                    key = $this.generateKey();
+
+                node.id = key + '_' +  $nulls.length;
+                node.name = node.id + '_name';
+                node.data = [];
+                node.children = [];
+
+                $nulls.pull.push(node);
+                $nulls.length++;
+
                 return node;
+            },
+            getAncestors: function(gedcom_id){
+                if("undefined" === typeof(gedcom_id) || null == gedcom_id) return $fn.setNullNode();
+                var parents = $this.mod('usertree').getParents(gedcom_id);
+                var node = $fn.setNode(gedcom_id);
+                node.children.push($fn.getAncestors(parents.father));
+                node.children.push($fn.getAncestors(parents.mother));
+                return node;
+            },
+            getOffsetTreeX:function(){
+                var width = $('#ancestors').width();
+                return (width - (30 + 240 * 2) ) / 2;
+            },
+            getTree: function(gedcom_id){
+                return $fn.getAncestors(gedcom_id);
             },
             initTree: function(tree){
                 var st = new $jit.ST({
                     injectInto: 'ancestors',
                     levelsToShow: 2,
                     levelDistance: 30,
-                    offsetX:240,
+                    offsetX:$fn.getOffsetTreeX(),
                     offsetY:0,
-                    duration: 800,
+                    duration: 500,
                     transition: $jit.Trans.Quint.easeOut,
-                    Node: {
-                        height: 84,
-                        width: 214,
-                        type: 'rectangle',
-                        color:'#C3C3C3',
-                        lineWidth: 2,
-                        align:"center",
-                        overridable: true
-                    },
+                    Node: $label,
                     Edge: {
                         type: 'bezier',
                         lineWidth: 2,
@@ -92,8 +102,31 @@ $user = FamilyTreeTopUserHelper::getInstance()->get();
                         //$(module.overlay).remove();
                     },
                     onCreateLabel: function(label, node){
-                        label.id = node.id;
-                        label.innerHTML = node.name;
+                        var sb = $this.stringBuffer(), html, user;
+                        user = $this.mod('usertree').user(node.id.split('_')[1]);
+                        sb._('<div class="row-fluid">');
+                            sb._('<div class="span12">');
+                                sb._('<div style="float:left;"><img class="img-polaroid" data-src="template/familytreetop/js/holder.js/80x80"></div>');
+                                sb._('<div style="float:left;">');
+                                    sb._('<div style="padding:3px;border: 1px solid rgba(0,0,0,0.2);width: 142px;height: 82px;background: white;">');
+                                        sb._('<ul class="unstyled text-center">');
+                                            sb._('<li>')._(user.shortname())._('</li>');
+                                        sb._('</ul>')
+                                    sb._('</div>');
+                                sb._('</div>');
+                            sb._('</div>');
+                        sb._('</div>');
+
+                        html = $(sb.ret());
+
+                        Holder.run({
+                            images: $(html).find('img')[0]
+                        });
+
+                        $(html).css('width', ($label.width) + "px");
+                        $(html).css('height', ($label.height) + "px");
+
+                        $(label).append(html);
                     },
                     onPlaceLabel: function(label, node){
                         /*
@@ -156,9 +189,20 @@ $user = FamilyTreeTopUserHelper::getInstance()->get();
 
         $start_id = '<?=$user->gedcom_id;?>';
         $node = { id:null, name: null, data: null, children: null};
+        $nulls = { pull:[], length:0 };
         $init = false;
+        $label =  {
+                height: 90,
+                width: 240,
+                type: 'rectangle',
+                color:'#C3C3C3',
+                lineWidth: 2,
+                align:"center",
+                overridable: true
+        },
 
         $tree = $fn.getTree($start_id);
+        console.log($tree);
 
         $this.mod('tabs').bind('#tab4', function(e){
             if($init) return false;
