@@ -11,7 +11,7 @@ class FamilyTreeTopGedcomPlaceModel {
         $this->change_time = $date->toSql();
     }
 
-    public function save(){
+    public function save($event_id = null){
         if(empty($this->event_id) && empty($event_id)) return false;
         if(empty($this->event_id)){
             $this->event_id = $event_id;

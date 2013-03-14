@@ -118,6 +118,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
     <form id="formEditUnions">
         <fieldset>
             <legend>Union</legend>
+            <input familytreetop="family_id" name="editUnion[family_id]" type="text" class="hidden" />
             <div class="row-fluid">
                 <div class="span6">
                     <div familytreetop="sircar" class="well">
@@ -163,7 +164,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                         <option value="0">Day</option>
                     </select>
                     <input familytreetop="year" class="span4" type="text" name="editUnion[year]" placeholder="Year">
-                    <input class="span1" type="checkbox" name="editUnion[exist]" ><small>Unknown</small>
+                    <input class="span1" type="checkbox" name="editUnion[unknown]" ><small>Unknown</small>
                 </div>
             </div>
             <div familytreetop="union-event-place" class="row-fluid">

@@ -177,6 +177,34 @@ $FamilyTreeTop.create("usertree", function($){
         return spouses;
     }
 
+    $this.getFamilies = function(id){
+        if("undefined" !== typeof(data.fam.gedcom_id[id])){
+            return data.fam.gedcom_id[id];
+        }
+    }
+
+    $this.getFamilyIdByPartners = function(id1, id2){
+        var families1, families2, key;
+        families1 = sort($this.getFamilies(id1));
+        families2 = sort($this.getFamilies(id2));
+        for(key in families1){
+            if(!families1.hasOwnProperty(key)) continue;
+            if(key in families2){
+                return key;
+            }
+        }
+        return 0;
+        function sort(data){
+            var object = {};
+            for(var prop in data){
+                if(!data.hasOwnProperty(prop)) continue;
+                var element = data[prop];
+                object[element.family_id] = element;
+            }
+            return object;
+        }
+    }
+
     $this.getChildrens = function(gedcom_id){
         if("undefined" === typeof(data.fam.gedcom_id[gedcom_id])) return [];
         var families = data.fam.gedcom_id[gedcom_id];

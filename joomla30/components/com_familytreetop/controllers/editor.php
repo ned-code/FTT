@@ -47,6 +47,7 @@ class FamilytreetopControllerEditor extends FamilytreetopController
             }
 
             $date = $event->date;
+            $date->type = "EVO";
             $date->start_day = ($form[$prefix."day"] != 0)?$form[$prefix."day"]:null;
             $date->start_month = ($form[$prefix."month"] != 0)?$form[$prefix."month"]:null;
             $date->start_year = (strlen($form[$prefix."year"]) > 0)?$form[$prefix."year"]:null;
@@ -68,14 +69,14 @@ class FamilytreetopControllerEditor extends FamilytreetopController
 
     }
 
-    public function getPostForm(){
+    public function getPostForm($all = false){
         $app = JFactory::getApplication();
         $length = $app->input->post->get('length', false);
         $forms = array();
         for($i=0 ; $i < $length ; $i ++){
             $form = $app->input->post->get('form'.$i, array(), 'array');
             $parseForm = array();
-            foreach($form as $key => $el){
+            foreach($form as $el){
                 if(preg_match('/\[(.+?)\]/is',$el['name'], $match)){
                     $name = $match[1];
                 } else {
@@ -86,7 +87,7 @@ class FamilytreetopControllerEditor extends FamilytreetopController
             }
             $forms[] = $parseForm;
         }
-        return (sizeof($forms) > 1)?$forms:$forms[0];
+        return ($all || sizeof($forms) > 1)?$forms:$forms[0];
     }
 
     public function addParent(){
@@ -250,12 +251,35 @@ class FamilytreetopControllerEditor extends FamilytreetopController
     }
 
     public function updateUnionsInfo(){
-        $app = JFactory::getApplication();
-
-        $form = $this->getPostForm();
+        $forms = $this->getPostForm(true);
         $gedcom = GedcomHelper::getInstance();
 
-        echo json_encode(array('form'=>$form));
+        foreach($forms as $form){
+            if($form['family_id'] != 0){
+                $family = $gedcom->families->get($form['family_id']);
+                if(empty($family->id) || ($form['gedcom_id'] != $family->husb && $form['gedcom_id'] != $family->wife) ){
+                    continue;
+                }
+                $marr = $family->marriage();
+                if(!empty($marr->id) && $form['unknown'] == "on"){
+                    $marr->remove();
+                } else {
+                    $marr->type = "MARR";
+                    $marr->name = "Marriage";
+                    $marr->family_id = $form['family_id'];
+                    $marr->place->city = $form['city'];
+                    $marr->place->state = $form['state'];
+                    $marr->place->country = $form['country'];
+                    $marr->date->type = "EVO";
+                    $marr->date->start_day = $form['day'];
+                    $marr->date->start_month = $form['month'];
+                    $marr->date->start_year = $form['year'];
+                    $marr->save();
+                }
+            }
+        }
+
+        echo json_encode(array('forms'=>$forms));
         exit;
     }
     public function updateMediasInfo(){}

@@ -52,11 +52,28 @@ class FamilyTreeTopGedcomFamilyModel {
         return $this;
     }
 
+    public function marriage(){
+        $gedcom = GedcomHelper::getInstance();
+        if(empty($this->events)) {
+            return $gedcom->events->get();
+        }
+        foreach($this->events as $event){
+            if($event->type == "MARR"){
+                return $event;
+            }
+        }
+        return $gedcom->events->get();
+    }
+
     public function addChild($gedcom_id){
         $gedcom = GedcomHelper::getInstance();
         if(method_exists($gedcom->childrens, 'create')){
             $gedcom->childrens->create($this->family_id, $gedcom_id);
         }
+    }
+
+    public function addEvent(){
+
     }
 
     public function toList(){
@@ -144,6 +161,7 @@ class FamilyTreeTopGedcomFamiliesManager {
             return false;
         }
         $family->childrens = $gedcom->childrens->get($family_id);
+        $family->events = $gedcom->events->get($family_id, true);
 
         return $family;
     }

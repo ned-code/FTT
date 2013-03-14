@@ -12,6 +12,7 @@ $FamilyTreeTop.create("editor", function($){
                     form_id = $(form).attr('id'),
                     spouse = $this.mod('usertree').user(spouse_id);
 
+                $(form).find('input[familytreetop="family_id"]').val($this.mod('usertree').getFamilyIdByPartners(ind.gedcom_id, spouse_id));
                 $(form).attr('familytreetop', form_id + forms.length);
                 setUnion(form, 'sircar', ind);
                 setUnion(form, 'spouse', spouse);
@@ -190,11 +191,11 @@ $FamilyTreeTop.create("editor", function($){
                 ];
             var args = {length:0};
             $(parent).find('form' + forms[activeTab]).each(function(i,e){
-                args['form'+i]=getArray(i,e);
+                args['form'+args.length]= getArray(e);
                 args.length++;
             });
             return args;
-            function getArray(index,form){
+            function getArray(form){
                 var a = $(form).serializeArray();
                 a.push({name:'gedcom_id', value:ind.gedcom_id});
                 return a;
@@ -207,16 +208,17 @@ $FamilyTreeTop.create("editor", function($){
                 'editor.updateUnionsInfo'
             ];
             $(cl).find('button[familytreetop="submit"]').click(function(){
-                var args, activeTab;
+                var args, send, activeTab;
                 if("undefined" === typeof(task)){
                     activeTab = $(cl).find('.nav.nav-tabs li.active a').attr('href').split('_')[1];
                     if("undefined" === typeof(tasks[activeTab])) return false;
-                    task = tasks[activeTab];
+                    send = tasks[activeTab];
                     args = $fn.getArgs(cl, activeTab, ind);
                 } else {
                     args = $fn.getArgs(cl, 0, ind);
+                    send = task;
                 }
-                $this.ajax(task, args, function(response){
+                $this.ajax(send, args, function(response){
                     //$(cl).modal('hide');
                     console.log(response);
                 });
@@ -301,7 +303,5 @@ $FamilyTreeTop.create("editor", function($){
 
         // event submit
         $fn.submit(cl, ind);
-        //$fn.submit('editor.updateUserInfo', cl, ind);
-        //$fn.submit('editor.updateUnionsInfo', cl, ind);
     }
 });

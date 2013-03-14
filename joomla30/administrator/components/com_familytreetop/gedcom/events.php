@@ -37,11 +37,11 @@ class FamilyTreeTopGedcomEventModel {
 
         $this->id = $event->id;
 
-        if(!empty($event->place)){
-            $event->place->save($this->id);
+        if(!empty($this->date)){
+            $this->date->save($this->id);
         }
-        if(!empty($event->date)){
-            $event->date->save($this->id);
+        if(!empty($this->place)){
+            $this->place->save($this->id);
         }
         $gedcom->events->updateList($event);
     }
@@ -108,9 +108,12 @@ class FamilyTreeTopGedcomEventsManager {
     public function updateList($event){
         if($event->id) return false;
         $data = $event->toList();
-
-        $this->list_by_gedcom_id[$event->gedcom_id] = $data;
-        $this->list_by_family_id[$event->family_id] = $data;
+        if($event->gedcom_id != null){
+            $this->list_by_gedcom_id[$event->gedcom_id] = $data;
+        }
+        if($event->family_id != null){
+            $this->list_by_family_id[$event->family_id] = $data;
+        }
     }
 
     public function get($id = null, $family = false){
