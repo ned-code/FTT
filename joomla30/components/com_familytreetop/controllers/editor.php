@@ -90,9 +90,8 @@ class FamilytreetopControllerEditor extends FamilytreetopController
     }
 
     public function addParent(){
-        $app = JFactory::getApplication();
         $form = $this->getPostForm();
-        $gedcom_id = $app->input->post->get('gedcom_id', false);
+        $gedcom_id = $form['gedcom_id'];
 
         $gedcom = GedcomHelper::getInstance();
 
@@ -137,9 +136,8 @@ class FamilytreetopControllerEditor extends FamilytreetopController
     }
 
     public function addSibling(){
-        $app = JFactory::getApplication();
         $form = $this->getPostForm();
-        $gedcom_id = $app->input->post->get('gedcom_id', false);
+        $gedcom_id = $form['gedcom_id'];
 
         $gedcom = GedcomHelper::getInstance();
 
@@ -175,17 +173,15 @@ class FamilytreetopControllerEditor extends FamilytreetopController
     }
 
     public function addSpouse(){
-        $app = JFactory::getApplication();
         $form = $this->getPostForm();
-        $gedcom_id = $app->input->post->get('gedcom_id', false);
+        $gedcom_id = $form['gedcom_id'];
 
 
     }
 
     public function addChild(){
-        $app = JFactory::getApplication();
         $form = $this->getPostForm();
-        $gedcom_id = $app->input->post->get('gedcom_id', false);
+        $gedcom_id = $form['gedcom_id'];
 
         $gedcom = GedcomHelper::getInstance();
 
@@ -227,10 +223,8 @@ class FamilytreetopControllerEditor extends FamilytreetopController
     }
 
     public function updateUserInfo(){
-        $app = JFactory::getApplication();
-
         $form = $this->getPostForm();
-        $gedcom_id = $app->input->post->get('gedcom_id', false);
+        $gedcom_id = $form['gedcom_id'];
 
         $gedcom = GedcomHelper::getInstance();
 

@@ -95,8 +95,9 @@ class FamilyTreeTopGedcomIndividualsModel {
         $ind->gedcom_id = $this->gedcom_id;
         $ind->gender = $this->gender;
         $ind->family_id = $this->family_id;
-        $ind->change_time = $date->toSql();
         $ind->creator_id = $this->creator_id;
+        $ind->create_time = $this->create_time;
+        $ind->change_time = $date->toSql();
         $ind->save();
 
         $name = FamilyTreeTopNames::find_by_gedcom_id($this->gedcom_id);
