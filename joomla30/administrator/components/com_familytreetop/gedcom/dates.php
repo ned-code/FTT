@@ -26,6 +26,11 @@ class FamilyTreeTopGedcomDateModel {
         } else {
             $date = FamilyTreeTopDates::find($this->id);
         }
+
+        if($this->type == null){
+            $this->type == "EVO";
+        }
+
         $date->event_id = $this->event_id;
         $date->start_day = $this->start_day;
         $date->start_month = $this->start_month;
