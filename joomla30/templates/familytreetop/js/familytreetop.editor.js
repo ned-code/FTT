@@ -10,14 +10,17 @@ $FamilyTreeTop.create("editor", function($){
             spouses.forEach(function(spouse_id){
                 var form = $fn.getEditorUnionsForm(),
                     form_id = $(form).attr('id'),
-                    spouse = $this.mod('usertree').user(spouse_id);
+                    spouse = $this.mod('usertree').user(spouse_id),
+                    family_id = $this.mod('usertree').getFamilyIdByPartners(ind.gedcom_id, spouse_id);
 
-                $(form).find('input[familytreetop="family_id"]').val($this.mod('usertree').getFamilyIdByPartners(ind.gedcom_id, spouse_id));
+                $(form).find('input[familytreetop="family_id"]').val(family_id);
                 $(form).attr('familytreetop', form_id + forms.length);
-                setUnion(form, 'sircar', ind);
-                setUnion(form, 'spouse', spouse);
                 $fn.setMonths(form);
                 $fn.setDays(form);
+
+                setUnion(form, 'sircar', ind);
+                setUnion(form, 'spouse', spouse);
+                setEvent(form, family_id);
 
                 $fn.setFormInTab(1, parent, form);
             });
@@ -25,6 +28,22 @@ $FamilyTreeTop.create("editor", function($){
             function setUnion(form, type, ind){
                 var el = $(form).find('[familytreetop="'+type+'"]');
                 $(el).find('legend').text(ind.shortname());
+            }
+            function setEvent(form, family_id){
+                var event;
+                if(!family_id) return false;
+                if(event = $this.mod('usertree').getFamilyEvent(family_id)){
+                    if(event.place){
+                        $(form).find('[familytreetop="city"]').val(event.place.city);
+                        $(form).find('[familytreetop="state"]').val(event.place.state);
+                        $(form).find('[familytreetop="country"]').val(event.place.country);
+                    }
+                    if(event.date){
+                        $(form).find('[familytreetop="days"] option[value="'+event.date.start_day+'"]').attr('selected', 'selected');
+                        $(form).find('[familytreetop="months"] option[value="'+event.date.start_month+'"]').attr('selected', 'selected');
+                        $(form).find('[familytreetop="year"]').val(event.date.start_year);
+                    }
+                }
             }
         },
         setUserData:function(parent, ind){

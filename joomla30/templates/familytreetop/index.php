@@ -164,14 +164,14 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                         <option value="0">Day</option>
                     </select>
                     <input familytreetop="year" class="span4" type="text" name="editUnion[year]" placeholder="Year">
-                    <input class="span1" type="checkbox" name="editUnion[unknown]" ><small>Unknown</small>
+                    <input familytreetop="unknown" class="span1" type="checkbox" name="editUnion[unknown]" ><small>Unknown</small>
                 </div>
             </div>
             <div familytreetop="union-event-place" class="row-fluid">
                 <div class="span12">
-                    <input class="span4" type="text" name="editUnion[city]"  placeholder="City">
-                    <input class="span4" type="text" name="editUnion[state]" placeholder="State">
-                    <input class="span4" type="text" name="editUnion[country]" placeholder="Country">
+                    <input familytreetop="city" class="span4" type="text" name="editUnion[city]"  placeholder="City">
+                    <input familytreetop="state" class="span4" type="text" name="editUnion[state]" placeholder="State">
+                    <input familytreetop="country" class="span4" type="text" name="editUnion[country]" placeholder="Country">
                 </div>
             </div>
         </fieldset>

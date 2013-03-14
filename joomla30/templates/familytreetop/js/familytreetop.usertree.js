@@ -177,6 +177,23 @@ $FamilyTreeTop.create("usertree", function($){
         return spouses;
     }
 
+    $this.getFamilyEvent = function(family_id){
+        return $this.getFamilyEventByType(family_id, "MARR");
+    }
+
+    $this.getFamilyEventByType = function(family_id, type){
+        var events, prop, event;
+        if("undefined" === typeof(data.eve.family_id[family_id])) return false;
+        events = data.eve.family_id[family_id];
+        for(prop in events){
+            if(!events.hasOwnProperty(prop)) continue;
+            event = events[prop];
+            if(event.type === type){
+                return $this.getEvent(event.id);
+            }
+        }
+    }
+
     $this.getFamilies = function(id){
         if("undefined" !== typeof(data.fam.gedcom_id[id])){
             return data.fam.gedcom_id[id];
@@ -231,6 +248,21 @@ $FamilyTreeTop.create("usertree", function($){
         return childrens;
     }
 
+    $this.getEvent = function(event_id){
+        var ret = {event: false, place: false, date: false };
+        if("undefined" !== typeof(data.eve.all[event_id])){
+            ret.event = data.eve.all[event_id];
+            if("undefined" !== typeof(data.pla[event_id])){
+                ret.place = data.pla[event_id]            }
+
+            if("undefined" !== typeof(data.dat[event_id])){
+                ret.date = data.dat[event_id]
+            }
+            return ret;
+        }
+        return false;
+    }
+
     $this.getEventByType = function(ind, type){
         if("undefined" === typeof( data.eve.gedcom_id[ind.gedcom_id])) return false;
         var events =  data.eve.gedcom_id[ind.gedcom_id];
@@ -238,17 +270,8 @@ $FamilyTreeTop.create("usertree", function($){
             if(!events.hasOwnProperty(key)) continue;
             var event = events[key];
             if(event['type'] == type){
-                var event_id = event['id']
-                var ret = { event: false, place: false, date: false };
-                ret.object = event;
-
-                if("undefined" !== typeof(data.pla[event_id])){
-                    ret.place = data.pla[event_id]            }
-
-                if("undefined" !== typeof(data.dat[event_id])){
-                    ret.date = data.dat[event_id]
-                }
-
+                var event_id = event['id'];
+                return $this.getEvent(event_id);
                 return ret;
             }
 

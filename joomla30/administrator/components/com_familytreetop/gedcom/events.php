@@ -66,6 +66,7 @@ class FamilyTreeTopGedcomEventModel {
 
 class FamilyTreeTopGedcomEventsManager {
     protected $tree_id;
+    protected $list = array();
     protected $list_by_family_id = array();
     protected $list_by_gedcom_id = array();
 
@@ -89,6 +90,7 @@ class FamilyTreeTopGedcomEventsManager {
             $db->setQuery(sprintf($sql, $tree_id));
             $rows = $db->loadAssocList('id');
 
+            $this->list = $rows;
             $this->list_by_gedcom_id = $this->sortList('gedcom_id', $rows);
             $this->list_by_family_id = $this->sortList('family_id', $rows);
         }
@@ -148,6 +150,7 @@ class FamilyTreeTopGedcomEventsManager {
 
     public function getList(){
         return array(
+            'all' => $this->list,
             'gedcom_id' => $this->list_by_gedcom_id,
             'family_id' => $this->list_by_family_id
         );
