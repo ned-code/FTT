@@ -1,7 +1,7 @@
 $FamilyTreeTop.create("families", function($){
     'use strict';
 
-    var $this = this, $animated, $box = $('#families'), $boxs = {}, $fn;
+    var $this = this, $animated, $box = $('#familiesHide'), $boxs = {}, $fn;
 
     $fn = {
         getSettings: function(settings){
@@ -66,7 +66,7 @@ $FamilyTreeTop.create("families", function($){
         createEvent: function(){
             return $('<div>...</div>');
         },
-        setPosition: function(boxs){
+        setPosition: function(boxs, settings){
             if($animated) return true;
             boxs.forEach(function(object, index){
                 $(object).css('position', 'absolute');
@@ -85,7 +85,7 @@ $FamilyTreeTop.create("families", function($){
                         break;
                 }
             });
-            $('#thisMonth .span12').css('position', 'relative').css('min-height', getMinHeight());
+            $(settings.parent).css('position', 'relative').css('min-height', getMinHeight());
             return true;
             function getRows(){
                 var length = boxs.length - 3;
@@ -228,7 +228,7 @@ $FamilyTreeTop.create("families", function($){
             $fn.append(settings, $fn.createChild(gedcom_id, settings));
         });
 
-        $fn.setPosition($boxs[settings.id]);
+        $fn.setPosition($boxs[settings.id], settings);
         $fn.setPopovers($boxs[settings.id]);
     };
 

@@ -2,7 +2,7 @@
 defined('_JEXEC') or die;
 
 ?>
-<div id="thisMonth" class="row">
+<div id="latestUpdates" class="row">
     <div class="span6">
         <div class="well">
             <fieldset>

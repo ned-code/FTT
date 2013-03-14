@@ -2,7 +2,7 @@
 defined('_JEXEC') or die;
 $user = FamilyTreeTopUserHelper::getInstance()->get();
 ?>
-<div id="thisMonth" class="row">
+<div id="families" class="row">
     <div class="span12">
 
     </div>
@@ -10,7 +10,7 @@ $user = FamilyTreeTopUserHelper::getInstance()->get();
 <script>
     $FamilyTreeTop.bind(function($){
         this.mod('families').render({
-            parent: $('#thisMonth .span12')
+            parent: $('#families .span12')
         });
     });
 </script>

@@ -314,7 +314,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
         </div>
     </form>
 
-    <div id="families">
+    <div id="familiesHide">
         <div familytreetop="home" style="position:absolute; top:0; right: 0; cursor: pointer;"><i class="icon-home"></i></div>
         <div class="parent-box" style="max-width: 160px;">
             <div style="position:relative;">

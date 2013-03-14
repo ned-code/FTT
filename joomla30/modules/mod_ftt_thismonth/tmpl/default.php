@@ -34,7 +34,11 @@ $date = date('n', strtotime('-1 month'));
                         </div>
                     </div>
                 </legend>
+               <div class="row-fluid">
+                   <div class="span12">
 
+                   </div>
+               </div>
             </fieldset>
         </div>
     </div>
@@ -74,7 +78,8 @@ $date = date('n', strtotime('-1 month'));
         $fn.setMonthSelectChange($parent);
 
         $data = $fn.getData();
-        console.log($data);
+
+
     });
 </script>
 
