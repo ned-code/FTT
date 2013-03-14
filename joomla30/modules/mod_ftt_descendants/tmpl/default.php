@@ -6,8 +6,13 @@ defined('_JEXEC') or die;
     <div class="span6">
         <div familytreetop="tree" class="well"></div>
     </div>
-    <div class="span4">
-        <div familytreetop="info" class="well"></div>
+    <div class="span6">
+        <div familytreetop="info" class="well">
+            <fieldset>
+                <legend></legend>
+                <img class="img-polaroid" data-src="template/familytreetop/js/holder.js/100x100">
+            </fieldset>
+        </div>
         <hr>
     </div>
 </div>
@@ -121,17 +126,11 @@ defined('_JEXEC') or die;
                 }
             },
             render:function(span){
-                var div = $('#popover').clone(),
-                    items = $(div).find('li'),
+                var parent =  $('#descendants [familytreetop="info"]'),
                     gedcom_id = $(span).attr('gedcom_id'),
                     ind = $this.mod('usertree').user(gedcom_id);
 
-                $(items[0]).find('span').text(ind.first_name);
-                $(items[1]).find('span').text(ind.middle_name);
-                $(items[2]).find('span').text(ind.last_name);
-                $(items[3]).find('span').text(ind.know_as);
-
-                $('#descendants [familytreetop="info"]').html('').append(div);
+                $(parent).find('legend').text(ind.shortname());
             }
         }
 
@@ -148,7 +147,6 @@ defined('_JEXEC') or die;
         }
 
         $html = $('<div class="css-treeview"></div>');
-        //$($html).append($fn.create(false, $tree, 'index-0'));
         $fn.create($html, $tree, 'index-0')
         $('#descendants [familytreetop="tree"]').append($html);
         $fn.click($html);

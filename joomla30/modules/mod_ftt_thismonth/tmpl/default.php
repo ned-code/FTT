@@ -52,14 +52,20 @@ $date = date('n', strtotime('-1 month'));
         $month = '<?=($date + 1);?>';
 
         $fn = {
-            getData: function(){
-                return $this.mod('usertree').getEventsByType('BIRT', function(event){
+            getEventByType: function(type){
+                return $this.mod('usertree').getEventsByType(type, function(event){
                     return $this.mod('usertree').isDateInTheEvent(event.id, $month, "start_month");
                 });
             },
+            getData: function(){
+                return {
+                    birt:$fn.getEventByType('BIRT'),
+                    deat:$fn.getEventByType('DEAT'),
+                    marr:$fn.getEventByType('MARR')
+                }
+            },
             setMonthSelectChange:function(p){
                 $(p).find('[familytreetop="months"]').change(function(){
-                    console.log(this);
                 });
             }
         }
@@ -69,8 +75,6 @@ $date = date('n', strtotime('-1 month'));
 
         $data = $fn.getData();
         console.log($data);
-
-
     });
 </script>
 
