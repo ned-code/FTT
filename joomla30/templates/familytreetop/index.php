@@ -8,6 +8,7 @@ $app = JFactory::getApplication();
 $doc = JFactory::getDocument();
 
 $doc->addStyleSheet('templates/'.$this->template.'/css/bootstrap.min.css');
+$doc->addStyleSheet('templates/'.$this->template.'/css/bootstrap.fix.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/bootstrap-responsive.min.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/csstreeview.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/csstreeview.fix.css');
@@ -91,7 +92,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h3 id="modalLabel"></h3>
         </div>
-        <div style="max-height: 500px;" class="modal-body">
+        <div class="modal-body">
         </div>
         <div class="modal-footer">
             <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
@@ -113,6 +114,67 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
             <div class="tab-pane" id="_4_"></div>
         </div>
     </div>
+
+    <form id="formEditUnions">
+        <fieldset>
+            <legend>Union</legend>
+            <div class="row-fluid">
+                <div class="span6">
+                    <div familytreetop="sircar" class="well">
+                        <fieldset>
+                            <legend></legend>
+                            <div class="row-fluid">
+                                <div class="span6"><img class="img-polaroid" data-src="template/familytreetop/js/holder.js/100x100"></div>
+                                <div class="span6"></div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+                <div class="span6">
+                    <div familytreetop="spouse" class="well">
+                        <fieldset>
+                            <legend></legend>
+                            <div class="row-fluid">
+                                <div class="span6"><img class="img-polaroid" data-src="template/familytreetop/js/holder.js/100x100"></div>
+                                <div class="span6"></div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div familytreetop="union-event-date" class="span12">
+                    <select familytreetop="months" class="span4" name="editUnion[month]">
+                        <option value="0">Month</option>
+                        <option value="1">January</option>
+                        <option value="2">February</option>
+                        <option value="3">March</option>
+                        <option value="4">April</option>
+                        <option value="5">May</option>
+                        <option value="6">June</option>
+                        <option value="7">July</option>
+                        <option value="8">August</option>
+                        <option value="9">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
+                    <select familytreetop="days" class="span2" name="editUnion[day]">
+                        <option value="0">Day</option>
+                    </select>
+                    <input familytreetop="year" class="span4" type="text" name="editUnion[year]" placeholder="Year">
+                    <input class="span1" type="checkbox" name="editUnion[exist]" ><small>Unknown</small>
+                </div>
+            </div>
+            <div familytreetop="union-event-place" class="row-fluid">
+                <div class="span12">
+                    <input class="span4" type="text" name="editUnion[city]"  placeholder="City">
+                    <input class="span4" type="text" name="editUnion[state]" placeholder="State">
+                    <input class="span4" type="text" name="editUnion[country]" placeholder="Country">
+                </div>
+            </div>
+        </fieldset>
+    </form>
 
     <form id="formEditProfile">
         <div class="row-fluid">
@@ -181,9 +243,6 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
         </div>
         <div class="row-fluid">
             <div familytreetop="birthday" class="span12">
-                <select familytreetop="days" class="span2" name="editProfile[b_day]">
-                    <option value="0">Day</option>
-                </select>
                 <select familytreetop="months" class="span4" name="editProfile[b_month]">
                     <option value="0">Month</option>
                     <option value="1">January</option>
@@ -198,6 +257,9 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                     <option value="10">October</option>
                     <option value="11">November</option>
                     <option value="12">December</option>
+                </select>
+                <select familytreetop="days" class="span2" name="editProfile[b_day]">
+                    <option value="0">Day</option>
                 </select>
                 <input familytreetop="year" class="span4" type="text" name="editProfile[b_year]" placeholder="Year">
                 <input class="span1" type="checkbox" name="editProfile[b_exist]" ><small>Unknown</small>
@@ -220,9 +282,6 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
         </div>
         <div class="row-fluid">
             <div familytreetop="deathday" class="span12">
-                <select familytreetop="days" class="span2" name="editProfile[d_day]">
-                    <option value="0">Day</option>
-                </select>
                 <select familytreetop="months" class="span4" name="editProfile[d_month]">
                     <option value="0">Month</option>
                     <option value="1">January</option>
@@ -237,6 +296,9 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                     <option value="10">October</option>
                     <option value="11">November</option>
                     <option value="12">December</option>
+                </select>
+                <select familytreetop="days" class="span2" name="editProfile[d_day]">
+                    <option value="0">Day</option>
                 </select>
                 <input familytreetop="year" class="span4" type="text" name="editProfile[d_year]" placeholder="Year">
                 <input class="span1" type="checkbox" name="editProfile[d_exist]" ><small>Unknown</small>

@@ -5,6 +5,27 @@ $FamilyTreeTop.create("editor", function($){
         $fn;
 
     $fn = {
+        setUnionsData:function(parent, ind){
+            var spouses = $this.mod('usertree').getSpouses(ind.gedcom_id), forms = [];
+            spouses.forEach(function(spouse_id){
+                var form = $fn.getEditorUnionsForm(),
+                    form_id = $(form).attr('id'),
+                    spouse = $this.mod('usertree').user(spouse_id);
+
+                $(form).attr('familytreetop', form_id + forms.length);
+                setUnion(form, 'sircar', ind);
+                setUnion(form, 'spouse', spouse);
+                $fn.setMonths(form);
+                $fn.setDays(form);
+
+                $fn.setFormInTab(1, parent, form);
+            });
+            return forms;
+            function setUnion(form, type, ind){
+                var el = $(form).find('[familytreetop="'+type+'"]');
+                $(el).find('legend').text(ind.shortname());
+            }
+        },
         setUserData:function(parent, ind){
             $(parent).find('input,select').each(function(index, el){
                 var name = $(el).attr('name').match(/\[(\w+)\]/i);
@@ -26,7 +47,7 @@ $FamilyTreeTop.create("editor", function($){
                                         case "state":
                                         case "country":
                                             if(event.place && event.place[n[1]] != null){
-                                                $(el).val(event[1][n[1]]);
+                                                $(el).val(event.place[n[1]]);
                                             }
                                             break;
                                     }
@@ -159,15 +180,45 @@ $FamilyTreeTop.create("editor", function($){
         getEditorProfileForm:function(){
             return $('#formEditProfile').clone();
         },
-        getArgs:function(parent, ind){
-            var arr = $(parent).find('form').serializeArray();
-            arr.push({name:'gedcom_id', value:ind.gedcom_id});
-            return arr;
+        getEditorUnionsForm:function(){
+            return $('#formEditUnions').clone();
         },
-        submit:function(task, cl, ind){
+        getArgs:function(parent, activeTab, ind){
+            var forms = [
+                "#formEditProfile",
+                "#formEditUnions"
+                ];
+            var args = {length:0};
+            $(parent).find('form' + forms[activeTab]).each(function(i,e){
+                args['form'+i]=getArray(i,e);
+                args.length++;
+            });
+            return args;
+            function getArray(index,form){
+                var a = $(form).serializeArray();
+                a.push({name:'gedcom_id', value:ind.gedcom_id});
+                return a;
+            }
+        },
+        submit:function(cl, ind, task){
+            if(arguments.length)
+            var tasks = [
+                'editor.updateUserInfo',
+                'editor.updateUnionsInfo'
+            ];
             $(cl).find('button[familytreetop="submit"]').click(function(){
-                $this.ajax(task, $fn.getArgs(cl, ind), function(response){
-                    $(cl).modal('hide');
+                var args, activeTab;
+                if("undefined" === typeof(task)){
+                    activeTab = $(cl).find('.nav.nav-tabs li.active a').attr('href').split('_')[1];
+                    if("undefined" === typeof(tasks[activeTab])) return false;
+                    task = tasks[activeTab];
+                    args = $fn.getArgs(cl, activeTab, ind);
+                } else {
+                    args = $fn.getArgs(cl, 0, ind);
+                }
+                $this.ajax(task, args, function(response){
+                    //$(cl).modal('hide');
+                    console.log(response);
                 });
             });
         }
@@ -206,11 +257,15 @@ $FamilyTreeTop.create("editor", function($){
         $(cl).modal();
 
         //event submit
-        $fn.submit('editor.'+type, cl, ind);
+        $fn.submit(cl, ind, 'editor.'+type);
     }
 
     $this.render = function(gedcom_id){
-        var cl, tabs, ind, editProfileForm;
+        var cl,
+            tabs,
+            ind,
+            editProfileForm,
+            editUnionsForms;
 
         //create modal box
         cl = $fn.getModalBox();
@@ -236,6 +291,8 @@ $FamilyTreeTop.create("editor", function($){
         $fn.setDays(editProfileForm);
 
         //unions edit
+        editUnionsForms = $fn.setUnionsData(tabs, ind);
+
         //media edit
         //options
 
@@ -243,6 +300,8 @@ $FamilyTreeTop.create("editor", function($){
         $(cl).modal();
 
         // event submit
-        $fn.submit('editor.updateUserInfo', cl, ind);
+        $fn.submit(cl, ind);
+        //$fn.submit('editor.updateUserInfo', cl, ind);
+        //$fn.submit('editor.updateUnionsInfo', cl, ind);
     }
 });

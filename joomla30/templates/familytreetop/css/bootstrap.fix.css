@@ -1,0 +1,8 @@
+.modal {
+    width: 900px;
+    margin-left: -450px;
+}
+
+.modal-body {
+    /*max-height: 500px;*/
+}

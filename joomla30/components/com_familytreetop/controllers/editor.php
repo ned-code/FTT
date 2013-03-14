@@ -68,9 +68,30 @@ class FamilytreetopControllerEditor extends FamilytreetopController
 
     }
 
+    public function getPostForm(){
+        $app = JFactory::getApplication();
+        $length = $app->input->post->get('length', false);
+        $forms = array();
+        for($i=0 ; $i < $length ; $i ++){
+            $form = $app->input->post->get('form'.$i, array(), 'array');
+            $parseForm = array();
+            foreach($form as $key => $el){
+                if(preg_match('/\[(.+?)\]/is',$el['name'], $match)){
+                    $name = $match[1];
+                } else {
+                    $name = $el['name'];
+                }
+                $value = $el['value'];
+                $parseForm[$name] = $value;
+            }
+            $forms[] = $parseForm;
+        }
+        return (sizeof($forms) > 1)?$forms:$forms[0];
+    }
+
     public function addParent(){
         $app = JFactory::getApplication();
-        $form = $app->input->post->get('editProfile', array(), 'array');
+        $form = $this->getPostForm();
         $gedcom_id = $app->input->post->get('gedcom_id', false);
 
         $gedcom = GedcomHelper::getInstance();
@@ -117,7 +138,7 @@ class FamilytreetopControllerEditor extends FamilytreetopController
 
     public function addSibling(){
         $app = JFactory::getApplication();
-        $form = $app->input->post->get('editProfile', array(), 'array');
+        $form = $this->getPostForm();
         $gedcom_id = $app->input->post->get('gedcom_id', false);
 
         $gedcom = GedcomHelper::getInstance();
@@ -155,7 +176,7 @@ class FamilytreetopControllerEditor extends FamilytreetopController
 
     public function addSpouse(){
         $app = JFactory::getApplication();
-        $form = $app->input->post->get('editProfile', array(), 'array');
+        $form = $this->getPostForm();
         $gedcom_id = $app->input->post->get('gedcom_id', false);
 
 
@@ -163,7 +184,7 @@ class FamilytreetopControllerEditor extends FamilytreetopController
 
     public function addChild(){
         $app = JFactory::getApplication();
-        $form = $app->input->post->get('editProfile', array(), 'array');
+        $form = $this->getPostForm();
         $gedcom_id = $app->input->post->get('gedcom_id', false);
 
         $gedcom = GedcomHelper::getInstance();
@@ -208,7 +229,7 @@ class FamilytreetopControllerEditor extends FamilytreetopController
     public function updateUserInfo(){
         $app = JFactory::getApplication();
 
-        $form = $app->input->post->get('editProfile', array(), 'array');
+        $form = $this->getPostForm();
         $gedcom_id = $app->input->post->get('gedcom_id', false);
 
         $gedcom = GedcomHelper::getInstance();
@@ -234,7 +255,15 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         exit;
     }
 
-    public function updateUnionsInfo(){}
+    public function updateUnionsInfo(){
+        $app = JFactory::getApplication();
+
+        $form = $this->getPostForm();
+        $gedcom = GedcomHelper::getInstance();
+
+        echo json_encode(array('form'=>$form));
+        exit;
+    }
     public function updateMediasInfo(){}
 
 }
