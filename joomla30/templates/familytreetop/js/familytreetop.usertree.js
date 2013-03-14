@@ -94,8 +94,8 @@ $FamilyTreeTop.create("usertree", function($){
 
     $this.family = function(family_id){
         if("undefined" === typeof(family_id)) return false;
-        if("undefined" === typeof(data.fam[family_id])) return false;
-        var fam = data.fam[family_id];
+        if("undefined" === typeof(data.fam.family_id[family_id])) return false;
+        var fam = data.fam.family_id[family_id];
         return {
             change_time: fam.change_time,
             family_id: fam.family_id,
@@ -304,6 +304,10 @@ $FamilyTreeTop.create("usertree", function($){
             }
         }
         return pull;
+    }
+
+    $this.getColorByGender = function(gender){
+        return (parseInt(gender))?"#FF9966":"#FFB7C5";
     }
 
     $this.init($FamilyTreeTop.dataString, $FamilyTreeTop.userString);

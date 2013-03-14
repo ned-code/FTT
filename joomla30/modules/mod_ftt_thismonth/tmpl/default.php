@@ -34,11 +34,34 @@ $date = date('n', strtotime('-1 month'));
                         </div>
                     </div>
                 </legend>
-               <div class="row-fluid">
-                   <div class="span12">
-
-                   </div>
-               </div>
+            <div class="row-fluid">
+                <div class="span12">
+                    <div familytreetop="birthdays" class="row-fluid">
+                        <div class="offset1 span11">
+                            <h5>Birthdays</h5>
+                            <hr />
+                            <ul class="offset1 unstyled">
+                            </ul>
+                        </div>
+                    </div>
+                    <div familytreetop="anniversary" class="row-fluid">
+                        <div class="offset1 span11">
+                            <h5>Anniversary</h5>
+                            <hr />
+                            <ul class="offset1 unstyled">
+                            </ul>
+                        </div>
+                    </div>
+                    <div familytreetop="weremember" class="row-fluid">
+                        <div class="offset1 span11">
+                            <h5>We remember</h5>
+                            <hr />
+                            <ul class="offset1 unstyled">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
             </fieldset>
         </div>
     </div>
@@ -56,30 +79,108 @@ $date = date('n', strtotime('-1 month'));
         $month = '<?=($date + 1);?>';
 
         $fn = {
-            getEventByType: function(type){
+            getEventByType: function(type, month){
                 return $this.mod('usertree').getEventsByType(type, function(event){
-                    return $this.mod('usertree').isDateInTheEvent(event.id, $month, "start_month");
+                    return $this.mod('usertree').isDateInTheEvent(event.id, month, "start_month");
                 });
             },
-            getData: function(){
+            getData: function(month){
                 return {
-                    birt:$fn.getEventByType('BIRT'),
-                    deat:$fn.getEventByType('DEAT'),
-                    marr:$fn.getEventByType('MARR')
+                    birthdays:$fn.getEventByType('BIRT', month),
+                    anniversary:$fn.getEventByType('MARR', month),
+                    weremember:$fn.getEventByType('DEAT', month)
                 }
+            },
+            render: function(month){
+                $data = $fn.getData(month);
+                $fn.setEvents($data, 'birthdays');
+                $fn.setEvents($data, 'weremember');
+                $fn.setEvents($data, 'anniversary');
+                $fn.setPopovers();
+            },
+            setEvents: function(data, type){
+                var parent =  $($parent).find('[familytreetop="'+type+'"]'), ul = $(parent).find('ul');
+                if(!data[type] || data[type].length == 0){
+                    $(parent).hide();
+                    return false;
+                } else {
+                    $(parent.show());
+                }
+                $(parent).find('li span[gedcom_id]').unbind();
+                $(parent).find('li').remove();
+                switch(type){
+                    case "birthdays":
+                    case "weremember":
+                            data[type].forEach(function(e){
+                                var li = $('<li style="cursor:pointer;"></li>'),
+                                    event = $this.mod('usertree').getEvent(e.id),
+                                    user = $this.mod('usertree').user(e.gedcom_id),
+                                    sb = $this.stringBuffer(),
+                                    html;
+
+                                sb._('<span">')._(event.date.start_day || "")._('</span>');
+                                sb._(' ');
+                                sb._('<span style="color:')._($this.mod('usertree').getColorByGender(user.gender))._(';"');
+                                    sb._(' gedcom_id="')._(user.gedcom_id)._('">')._(user.shortname());
+                                sb._('</span>');
+
+                                html = $(sb.ret());
+
+                                $(li).append(html);
+                                $(ul).append(li);
+                            });
+                        break;
+
+                    case "anniversary":
+                            data[type].forEach(function(e){
+                                var li = $('<li style="cursor:pointer;"></li>'),
+                                    event = $this.mod('usertree').getEvent(e.id),
+                                    family = $this.mod('usertree').family(e.family_id),
+                                    husb = $this.mod('usertree').user(family.husb),
+                                    wife = $this.mod('usertree').user(family.wife),
+                                    sb = $this.stringBuffer(),
+                                    html;
+
+                                if(!husb || !wife) return false;
+
+                                sb._('<span>')._(event.date.start_day || "")._('</span>');
+                                sb._(' ');
+                                sb._('<span style="color:')._($this.mod('usertree').getColorByGender(husb.gender))._(';"');
+                                    sb._('" gedcom_id="')._(husb.gedcom_id)._('">')._(husb.shortname());
+                                sb._('</span>');
+                                sb._(' + ');
+                                sb._('<span style="color:')._($this.mod('usertree').getColorByGender(wife.gender))._(';"');
+                                    sb._(' gedcom_id="')._(wife.gedcom_id)._('">')._(wife.shortname());
+                                sb._('</span>');
+
+                                html = $(sb.ret());
+
+                                $(li).append(html);
+                                $(ul).append(li);
+
+                            });
+                        break;
+
+                }
+            },
+            setPopovers:function(){
+                $($parent).find('span[gedcom_id]').each(function(i,el){
+                    $this.mod('popovers').render({
+                        target: el
+                    });
+                });
             },
             setMonthSelectChange:function(p){
                 $(p).find('[familytreetop="months"]').change(function(){
+                    var month = $(this).find('option:selected').val();
+                    $fn.render(month);
                 });
             }
         }
 
         $parent = $('#thisMonth');
         $fn.setMonthSelectChange($parent);
-
-        $data = $fn.getData();
-
-
+        $fn.render($month);
     });
 </script>
 
