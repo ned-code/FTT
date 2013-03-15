@@ -20,6 +20,8 @@
         this.baseurl = "";
         this.templateurl = "";
 
+        this.users = false;
+
         this.bindPull = [];
 
         this.moduleLinkPull = {};
@@ -60,7 +62,7 @@
             }
             return {
                 app: function(){
-                    return $FamilyTreeTop.prototype.app().link() ;
+                    return $FamilyTreeTop.prototype.fn.app().link() ;
                 },
                 base: function(e){
                     if("undefined" !== typeof(e)){

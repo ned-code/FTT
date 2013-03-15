@@ -34,6 +34,30 @@ class GedcomHelper
         return self::$instance;
     }
 
+    public function getTreeUsers($associative = false, $json = false){
+        $user = FamilyTreeTopUserHelper::getInstance()->get();
+        if(!empty($user->tree_id)){
+            $results = array();
+            $users = FamilyTreeTopUsers::find('all', array('conditions' => array('tree_id = ?', $user->tree_id)));
+            foreach($users as $user){
+                $object = array(
+                    'tree_id' => $user->tree_id,
+                    'account_id' => $user->account_id,
+                    'gedcom_id' => $user->gedcom_id,
+                    'facebook_id' => $user->account->facebook_id,
+                    'role' => $user->role
+                );
+                if($associative){
+                    $results[$user->gedcom_id] = $object;
+                } else {
+                    $results[] = $object;
+                }
+                return ($json)?json_encode($results):$results;
+            }
+        }
+        return false;
+    }
+
     public function getData(){
         return array(
             'ind' => $this->individuals->getList(),

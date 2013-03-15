@@ -3,13 +3,14 @@ $FamilyTreeTop.create("usertree", function($){
     var $this = this,
         $fn,
         usermap,
+        usersmap,
         data;
 
     $fn = {
 
     }
 
-    $this.init = function(dataString, userString, facebookString){
+    $this.init = function(dataString, userString, usersString){
         if(dataString.length != 0){
             data = $.parseJSON(dataString);
             console.log(data);
@@ -21,6 +22,12 @@ $FamilyTreeTop.create("usertree", function($){
             console.log(usermap);
         } else {
             usermap = null;
+        }
+        if(userString.length != 0){
+            usersmap = $.parseJSON(usersString);
+            console.log(usersmap);
+        } else {
+            usersmap = null;
         }
     }
 
@@ -71,6 +78,9 @@ $FamilyTreeTop.create("usertree", function($){
             event:function(id){
                 if("undefined" === typeof(id)) return false;
             },
+            isRegistered:function(){
+                return $this.isRegisteredUser(ind.gedcom_id);
+            },
             isAlive:function(){
                 if(this.death()){
                     return false;
@@ -104,6 +114,11 @@ $FamilyTreeTop.create("usertree", function($){
             type: fam.type,
             wife: fam.wife
         }
+    }
+
+
+    $this.isRegisteredUser = function(gedcom_id){
+        return (gedcom_id in usersmap);
     }
 
     $this.isDateInTheEvent = function(event_id, date, postfix){
@@ -316,5 +331,6 @@ $FamilyTreeTop.create("usertree", function($){
         return pull;
     }
 
-    $this.init($FamilyTreeTop.dataString, $FamilyTreeTop.userString);
+
+    $this.init($FamilyTreeTop.dataString, $FamilyTreeTop.userString, $FamilyTreeTop.users);
 });

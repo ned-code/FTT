@@ -39,6 +39,8 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
     $FamilyTreeTop.app.permissions = '<?=$settings->facebook_permission->value;?>';
     $FamilyTreeTop.app.data = '<?=json_encode(FacebookHelper::getInstance()->data); ?>';
 
+    $FamilyTreeTop.users = '<?=GedcomHelper::getInstance()->getTreeUsers(true, true);?>';
+
     $FamilyTreeTop.userString = '<?=json_encode(FamilyTreeTopUserHelper::getInstance()->get()); ?>';
 
     $FamilyTreeTop.template = '<?=$this->template?>';
@@ -87,12 +89,12 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
             <button class="btn  btn-mini" data-toggle="dropdown"><i class="icon-pencil"></i></button>
             <ul class="dropdown-menu">
                 <li familytreetop="edit"><a href="#">Edit Profile</a></li>
-                <li class="divider"></li>
+                <li data-familytreetop-devider="1" class="divider"></li>
                 <li familytreetop="addParent"><a href="#">Add Parent</a></li>
                 <li familytreetop="addSibling"><a href="#">Add Sibling</a></li>
                 <li familytreetop="addSpouse"><a href="#">Add Spouse</a></li>
                 <li familytreetop="addChild"><a href="#">Add Child</a></li>
-                <li class="divider"></li>
+                <li data-familytreetop-devider="2" class="divider"></li>
                 <li familytreetop="sendInvite"><a href="#">Send Invite</a></li>
             </ul>
         </div>
