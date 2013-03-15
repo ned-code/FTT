@@ -63,6 +63,25 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
     </div>
 </div>
 <div id="familytreetop-root" style="display:none;">
+
+    <div class="alert alert-block alert-error fade in" id="alert">
+        <a class="close" data-dismiss="alert" href="#">&times;</a>
+        <h4></h4>
+        <p></p>
+    </div>
+
+    <div class="alert alert-block alert-success fade in" id="success">
+        <a class="close" data-dismiss="alert" href="#">&times;</a>
+        <h4></h4>
+        <p></p>
+    </div>
+
+    <div class="alert alert-block fade in" id="warning">
+        <a class="close" data-dismiss="alert" href="#">&times;</a>
+        <h4></h4>
+        <p></p>
+    </div>
+
     <div id="popover">
         <div class="row-fluid">
             <div class="span12">

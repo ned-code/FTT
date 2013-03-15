@@ -5,6 +5,26 @@ require_once JPATH_COMPONENT.'/controller.php';
 
 class FamilytreetopControllerInvite extends FamilytreetopController
 {
+
+    public function delInvitation(){
+        $app = JFactory::getApplication();
+
+        $user = FamilyTreeTopUserHelper::getInstance()->get();
+
+        $date = JFactory::getDate();
+
+        $token = $app->input->post->get('token', false);
+
+        if($token){
+            $invite = FamilyTreeTopInvitations::find_by_token($token);
+            $invite->delete();
+            echo json_encode(array('success' => true));
+        } else {
+            echo json_encode(array('success' => false));
+        }
+        exit;
+    }
+
     public function addInvitation(){
         $app = JFactory::getApplication();
 
@@ -25,7 +45,6 @@ class FamilytreetopControllerInvite extends FamilytreetopController
             $invite->token = md5($tree_id.$gedcom_id.$facebook_id);
             $invite->create_time = $date->toSql();
             $invite->save();
-
             echo json_encode(array('success' => true, 'token'=>$invite->token));
         } else {
             echo json_encode(array('success' => false));

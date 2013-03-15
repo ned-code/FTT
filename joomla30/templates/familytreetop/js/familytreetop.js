@@ -123,6 +123,38 @@
                 }
             }).call(this);
         },
+        alert:function(args, type){
+            var date = (new Date()).toString();
+            if("undefined" === typeof(args) || "object" !== typeof(args)){
+                args = { title: "", content: date }
+            }
+            if("undefined" === typeof(args.title)){
+                args.title = "";
+            }
+            if("undefined" === typeof(args.content)){
+                args.content = date
+            }
+
+            if("undefined" === typeof(type)){
+                type = "error"
+            }
+            var alertObject = $("#" + type).clone();
+            $(alertObject).find('h4').text(args.title);
+            $(alertObject).find('p').text(args.content);
+
+            $('#system-message').append(alertObject);
+            $(alertObject).alert();
+            return alertObject;
+        },
+        error:function(args){
+            this.alert(args, "error");
+        },
+        success:function(args){
+            this.alert(args, "success");
+        },
+        warning:function(args){
+            this.alert(args, "warning");
+        },
         generateKey:function(){
             var s4 = function(){return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);}
             return s4()+s4()+s4()+s4()+s4()+s4()+s4()+s4();
