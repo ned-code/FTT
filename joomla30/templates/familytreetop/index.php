@@ -12,6 +12,7 @@ $doc->addStyleSheet('templates/'.$this->template.'/css/bootstrap.fix.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/bootstrap-responsive.min.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/csstreeview.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/csstreeview.fix.css');
+$doc->addStyleSheet('templates/'.$this->template.'/css/tdfriendselector.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/familytreetop.css');
 
 // Add current user information
@@ -83,7 +84,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                 <li familytreetop="addSpouse"><a href="#">Add Spouse</a></li>
                 <li familytreetop="addChild"><a href="#">Add Child</a></li>
                 <li class="divider"></li>
-                <li familytreetop="delete"><a href="#">Delete</a></li>
+                <li familytreetop="sendInvite"><a href="#">Send Invite</a></li>
             </ul>
         </div>
     </div>
@@ -333,14 +334,43 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
         </div>
     </div>
 </div>
+<!-- friend selector -->
+<div id="TDFriendSelector">
+    <div class="TDFriendSelector_dialog">
+        <a href="#" id="TDFriendSelector_buttonClose">x</a>
+        <div class="TDFriendSelector_form">
+            <div class="TDFriendSelector_header">
+                <p>Select your friends</p>
+            </div>
+            <div class="TDFriendSelector_content">
+                <p>Invite to App</p>
+                <div class="TDFriendSelector_searchContainer TDFriendSelector_clearfix">
+                    <input type="text" placeholder="Search Friend" id="TDFriendSelector_searchField" />
+                </div>
+                <div class="TDFriendSelector_friendsContainer"></div>
+            </div>
+            <div class="TDFriendSelector_footer TDFriendSelector_clearfix">
+                <a href="#" id="TDFriendSelector_pagePrev" class="TDFriendSelector_disabled">Previous</a>
+                <a href="#" id="TDFriendSelector_pageNext">Next</a>
+                <div class="TDFriendSelector_pageNumberContainer">
+                    Page <span id="TDFriendSelector_pageNumber">1</span> / <span id="TDFriendSelector_pageNumberTotal">1</span>
+                </div>
+                <a href="#" id="TDFriendSelector_buttonOK">OK</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- friend selector end -->
 <jdoc:include type="modules" name="debug" style="none" />
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/jquery-1.9.1.min.js"></script>
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/bootstrap.min.js"></script>
+<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/tdfriendselector.js"></script>
 <!-- uncompressed files -->
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.form.js"></script>
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.tabs.js"></script>
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.usertree.js"></script>
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.popovers.js"></script>
+<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.friendselector.js"></script>
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.editmenu.js"></script>
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.editor.js"></script>
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.families.js"></script>

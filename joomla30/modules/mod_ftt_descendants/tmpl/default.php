@@ -68,7 +68,7 @@ defined('_JEXEC') or die;
             },
             setUser:function(html){
                 var user = $this.mod('usertree').usermap();
-                $(html).find('span[familytreetop][gedcom_id="'+user.gedcom_id+'"]').click();
+                $(html).find('span[data-familytreetop-color][gedcom_id="'+user.gedcom_id+'"]').click();
             },
             click:function(html){
                 $(html).find('span[data-familytreetop-color="0"],span[data-familytreetop-color="1"]').click(function(){
