@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: 127.0.0.1
--- Время создания: Мар 12 2013 г., 14:36
+-- Время создания: Мар 15 2013 г., 20:30
 -- Версия сервера: 5.5.25
 -- Версия PHP: 5.3.13
 
@@ -577,14 +577,15 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_accounts` (
   `access_token` text,
   PRIMARY KEY (`id`),
   KEY `fk_geicz_familytreetop_accounts_1` (`joomla_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --
 -- Дамп данных таблицы `geicz_familytreetop_accounts`
 --
 
 INSERT INTO `geicz_familytreetop_accounts` (`id`, `current`, `joomla_id`, `facebook_id`, `access_token`) VALUES
-(2, 2, 201, 100001614066938, 'AAAC9ZCMVH5AwBAErW9U0jZAyFaZC9ts3069fOEB3g0kZAylHUWb6ZArWknmma0dI2pbJZAXwO7mdyogVWUzetJVXaVbDGXKoYRWxILJIrKowZDZD');
+(2, 2, 201, 100001614066938, 'AAAC9ZCMVH5AwBAErW9U0jZAyFaZC9ts3069fOEB3g0kZAylHUWb6ZArWknmma0dI2pbJZAXwO7mdyogVWUzetJVXaVbDGXKoYRWxILJIrKowZDZD'),
+(3, 5, 202, 100002846057243, 'AAAC9ZCMVH5AwBAHt6mRDUK4ZAPgb85yVoqgGF9rPBZAtEQuhC98gqFuTr5oLOPoIvxFpKoTfgSVZAw6DyLJ2mZApSncokxg6VFpTN6SoaTQZDZD');
 
 -- --------------------------------------------------------
 
@@ -599,7 +600,7 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_childrens` (
   PRIMARY KEY (`id`),
   KEY `fk_geicz_familytreetop_childrens_1` (`family_id`),
   KEY `fk_geicz_familytreetop_childrens_2` (`gedcom_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
 
 --
 -- Дамп данных таблицы `geicz_familytreetop_childrens`
@@ -608,7 +609,10 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_childrens` (
 INSERT INTO `geicz_familytreetop_childrens` (`id`, `family_id`, `gedcom_id`) VALUES
 (2, 7, 4),
 (3, 13, 5),
-(4, 16, 6);
+(4, 16, 6),
+(5, 7, 19),
+(7, 16, 22),
+(8, 26, 14);
 
 -- --------------------------------------------------------
 
@@ -629,16 +633,21 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_dates` (
   `change_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `fk_geicz_familytreetop_dates_1` (`event_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=13 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=22 ;
 
 --
 -- Дамп данных таблицы `geicz_familytreetop_dates`
 --
 
 INSERT INTO `geicz_familytreetop_dates` (`id`, `event_id`, `type`, `start_day`, `start_month`, `start_year`, `end_day`, `end_month`, `end_year`, `change_time`) VALUES
-(10, 11, NULL, 15, 11, 1965, NULL, NULL, NULL, '2013-03-11 13:31:44'),
-(11, 12, NULL, NULL, 2, 1964, NULL, NULL, NULL, '2013-03-11 13:31:37'),
-(12, 13, NULL, NULL, 10, 1987, NULL, NULL, NULL, '2013-03-11 13:32:00');
+(10, 11, 'EVO', 6, 3, 1965, NULL, NULL, NULL, '2013-03-14 11:52:12'),
+(11, 12, 'EVO', 20, 2, 1964, NULL, NULL, NULL, '2013-03-13 08:53:08'),
+(12, 13, 'EVO', 18, 10, 1987, NULL, NULL, NULL, '2013-03-13 08:52:39'),
+(15, 16, 'EVO', 30, 3, 1986, NULL, NULL, NULL, '2013-03-14 13:56:07'),
+(16, 17, 'EVO', 8, 3, NULL, NULL, NULL, NULL, '2013-03-13 09:03:52'),
+(17, 18, 'EVO', NULL, 3, 1946, NULL, NULL, NULL, '2013-03-13 08:54:02'),
+(20, 21, 'EVO', 6, 3, 1987, NULL, NULL, NULL, '2013-03-14 11:52:32'),
+(21, 22, 'EVO', 1, 3, 1986, NULL, NULL, NULL, '2013-03-14 13:56:07');
 
 -- --------------------------------------------------------
 
@@ -656,16 +665,21 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_events` (
   PRIMARY KEY (`id`),
   KEY `fk_geicz_familytreetop_events_1` (`gedcom_id`),
   KEY `fk_geicz_familytreetop_events_2` (`family_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=14 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=23 ;
 
 --
 -- Дамп данных таблицы `geicz_familytreetop_events`
 --
 
 INSERT INTO `geicz_familytreetop_events` (`id`, `gedcom_id`, `family_id`, `type`, `name`, `change_time`) VALUES
-(11, 6, NULL, 'BIRT', 'Birthday', '2013-03-11 13:31:44'),
-(12, 5, NULL, 'BIRT', 'Birthday', '2013-03-11 13:31:37'),
-(13, 4, NULL, 'BIRT', 'Birthday', '2013-03-11 13:32:00');
+(11, 6, NULL, 'BIRT', 'Birthday', '2013-03-14 11:52:12'),
+(12, 5, NULL, 'BIRT', 'Birthday', '2013-03-13 08:53:08'),
+(13, 4, NULL, 'BIRT', 'Birthday', '2013-03-13 08:52:39'),
+(16, 19, NULL, 'DEAT', 'Deathday', '2013-03-14 13:56:07'),
+(17, 14, NULL, 'BIRT', 'Birthday', '2013-03-13 09:03:52'),
+(18, 15, NULL, 'BIRT', 'Birthday', '2013-03-13 08:54:02'),
+(21, NULL, 7, 'MARR', 'Marriage', '2013-03-14 11:52:32'),
+(22, 19, NULL, 'BIRT', 'Birthday', '2013-03-14 13:56:07');
 
 -- --------------------------------------------------------
 
@@ -684,7 +698,7 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_families` (
   KEY `fk_geicz_familytreetop_families_1` (`husb`),
   KEY `fk_geicz_familytreetop_families_2` (`wife`),
   KEY `fk_geicz_familytreetop_families_3_idx` (`family_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 --
 -- Дамп данных таблицы `geicz_familytreetop_families`
@@ -693,7 +707,8 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_families` (
 INSERT INTO `geicz_familytreetop_families` (`id`, `family_id`, `husb`, `wife`, `type`, `change_time`) VALUES
 (2, 7, 5, 6, 'marriage', '2013-03-04 08:05:30'),
 (3, 13, 11, 12, 'marriage', '2013-03-07 08:46:41'),
-(4, 16, 15, 14, 'marriage', '2013-03-07 08:47:50');
+(4, 16, 15, 14, 'marriage', '2013-03-07 08:47:50'),
+(5, 26, 24, 25, 'marriage', '2013-03-14 09:27:06');
 
 -- --------------------------------------------------------
 
@@ -711,20 +726,40 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_individuals` (
   `change_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `fk_geicz_familytreetop_individuals_1` (`gedcom_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=13 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=22 ;
 
 --
 -- Дамп данных таблицы `geicz_familytreetop_individuals`
 --
 
 INSERT INTO `geicz_familytreetop_individuals` (`id`, `gedcom_id`, `creator_id`, `gender`, `family_id`, `create_time`, `change_time`) VALUES
-(4, 4, NULL, 1, NULL, NULL, '2013-03-11 13:32:00'),
-(5, 5, 4, 1, NULL, '2013-03-04 11:10:12', '2013-03-11 13:31:37'),
-(6, 6, 4, 0, NULL, '2013-03-04 11:10:15', '2013-03-11 13:31:44'),
-(9, 11, 5, 1, NULL, NULL, '2013-03-07 08:46:41'),
-(10, 12, 5, 0, NULL, NULL, '2013-03-11 13:58:54'),
-(11, 14, 6, 0, NULL, NULL, '2013-03-07 08:47:50'),
-(12, 15, 6, 1, NULL, NULL, '2013-03-11 13:58:33');
+(4, 4, NULL, 1, NULL, '2013-03-01 22:00:00', '2013-03-13 08:52:39'),
+(5, 5, 4, 1, NULL, '2013-03-04 11:10:12', '2013-03-13 08:53:08'),
+(6, 6, 4, 0, NULL, '2013-03-04 11:10:15', '2013-03-14 11:52:12'),
+(9, 11, 5, 1, NULL, '2013-03-13 22:00:00', '2013-03-07 08:46:41'),
+(10, 12, 5, 0, NULL, '2013-03-06 22:00:00', '2013-03-11 13:58:54'),
+(11, 14, 6, 0, NULL, '2013-03-05 22:00:00', '2013-03-13 09:03:52'),
+(12, 15, 6, 1, NULL, '2013-03-10 22:00:00', '2013-03-13 08:54:02'),
+(15, 19, 4, 1, NULL, '2013-03-04 22:00:00', '2013-03-14 13:56:07'),
+(18, 22, 14, 1, NULL, '2013-02-28 22:00:00', '2013-03-12 11:28:02'),
+(20, 24, 14, 1, NULL, '2013-03-03 22:00:00', '2013-03-14 09:27:06'),
+(21, 25, 14, 0, NULL, '2013-02-28 22:00:00', '2013-03-14 09:27:06');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `geicz_familytreetop_invitations`
+--
+
+CREATE TABLE IF NOT EXISTS `geicz_familytreetop_invitations` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `facebook_id` bigint(20) NOT NULL,
+  `gedcom_id` int(11) NOT NULL,
+  `tree_id` int(11) NOT NULL,
+  `token` varchar(32) NOT NULL,
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=23 ;
 
 -- --------------------------------------------------------
 
@@ -770,20 +805,24 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_names` (
   `change_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `fk_geicz_famiytreetop_names_1` (`gedcom_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=19 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=28 ;
 
 --
 -- Дамп данных таблицы `geicz_familytreetop_names`
 --
 
 INSERT INTO `geicz_familytreetop_names` (`id`, `gedcom_id`, `first_name`, `middle_name`, `last_name`, `know_as`, `change_time`) VALUES
-(10, 4, 'Alexander', '', 'Potashko', '', '2013-03-11 13:32:00'),
-(11, 5, 'Alexander', '', 'Potashko', '', '2013-03-11 13:31:37'),
-(12, 6, 'Natali', 'Ivanovna', 'Potashko', '', '2013-03-11 13:31:44'),
+(10, 4, 'Alexander', '', 'Potashko', '', '2013-03-13 08:52:39'),
+(11, 5, 'Alexander', '', 'Potashko', '', '2013-03-13 08:53:08'),
+(12, 6, 'Natali', 'Ivanovna', 'Potashko', '', '2013-03-14 11:52:12'),
 (15, 11, 'Leonid', 'Stepanovich', 'Potashko', 'Leo', '2013-03-07 08:46:41'),
 (16, 12, 'Antonina', '', 'Potashko', '', '2013-03-11 13:58:54'),
-(17, 14, 'Galina', '', 'Gernovich', '', '2013-03-07 08:47:50'),
-(18, 15, 'Ivan', '', 'Gernovich', '', '2013-03-11 13:58:33');
+(17, 14, 'Galina', '', 'Gernovich', '', '2013-03-13 09:03:52'),
+(18, 15, 'Ivan', '', 'Gernovich', '', '2013-03-13 08:54:02'),
+(21, 19, 'Anton', '', '', '', '2013-03-14 13:56:07'),
+(24, 22, 'Andrei', '', '', '', '2013-03-12 11:28:02'),
+(26, 24, 'great grandparent', '', '', '', '2013-03-14 09:27:06'),
+(27, 25, 'unknown', NULL, NULL, NULL, '2013-03-14 09:27:06');
 
 -- --------------------------------------------------------
 
@@ -816,16 +855,19 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_places` (
   `change_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `fk_geicz_familytreetop_places_1` (`event_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
 
 --
 -- Дамп данных таблицы `geicz_familytreetop_places`
 --
 
 INSERT INTO `geicz_familytreetop_places` (`id`, `event_id`, `city`, `state`, `country`, `change_time`) VALUES
-(2, 11, 'Jodino', NULL, 'Belarus', '2013-03-11 13:31:44'),
-(3, 12, 'Minsk', NULL, 'Belarus', '2013-03-11 13:31:37'),
-(4, 13, 'Minsk', NULL, 'Belarus', '2013-03-11 13:32:00');
+(2, 11, 'Jodino', NULL, 'Belarus', '2013-03-14 11:52:12'),
+(3, 12, 'Minsk', NULL, 'Belarus', '2013-03-13 08:53:08'),
+(4, 13, 'Minsk', NULL, 'Belarus', '2013-03-13 08:52:39'),
+(7, 21, 'Minsk', '', 'Belarus', '2013-03-14 11:52:32'),
+(8, 16, NULL, NULL, NULL, '2013-03-14 13:56:07'),
+(9, 22, NULL, NULL, NULL, '2013-03-14 13:56:07');
 
 -- --------------------------------------------------------
 
@@ -870,7 +912,7 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_settings` (
   `value` varchar(255) DEFAULT NULL,
   `params` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --
 -- Дамп данных таблицы `geicz_familytreetop_settings`
@@ -878,7 +920,8 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_settings` (
 
 INSERT INTO `geicz_familytreetop_settings` (`id`, `name`, `value`, `params`) VALUES
 (1, 'facebook_app_id', '208893339231244', '{}'),
-(2, 'facebook_app_secret', '637f8f37469796999d208aca420d2235', '{}');
+(2, 'facebook_app_secret', '637f8f37469796999d208aca420d2235', '{}'),
+(3, 'facebook_permission', 'email,user_about_me,user_birthday,user_relationships,user_photos,friends_photos,read_stream,read_insights', NULL);
 
 -- --------------------------------------------------------
 
@@ -910,7 +953,7 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_tree_links` (
   `type` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `fk_geicz_familytreetop_tree_links_1` (`tree_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=17 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=27 ;
 
 --
 -- Дамп данных таблицы `geicz_familytreetop_tree_links`
@@ -926,7 +969,17 @@ INSERT INTO `geicz_familytreetop_tree_links` (`id`, `tree_id`, `type`) VALUES
 (13, 2, 1),
 (14, 2, 0),
 (15, 2, 0),
-(16, 2, 1);
+(16, 2, 1),
+(17, 2, 0),
+(18, 2, 0),
+(19, 2, 0),
+(20, 2, 0),
+(21, 2, 0),
+(22, 2, 0),
+(23, 2, 0),
+(24, 2, 0),
+(25, 2, 0),
+(26, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -941,14 +994,15 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_users` (
   `tree_id` int(11) NOT NULL,
   `role` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 --
 -- Дамп данных таблицы `geicz_familytreetop_users`
 --
 
 INSERT INTO `geicz_familytreetop_users` (`id`, `account_id`, `gedcom_id`, `tree_id`, `role`) VALUES
-(2, 2, 4, 2, 'admin');
+(2, 2, 4, 2, 'admin'),
+(5, 3, 5, 2, 'user');
 
 -- --------------------------------------------------------
 
@@ -1895,7 +1949,8 @@ CREATE TABLE IF NOT EXISTS `geicz_session` (
 --
 
 INSERT INTO `geicz_session` (`session_id`, `client_id`, `guest`, `time`, `data`, `userid`, `username`) VALUES
-('mnr9dpk8ervma7ej3lmr1n2ua7', 0, 0, '1363083453', '__default|a:7:{s:15:"session.counter";i:27;s:19:"session.timer.start";i:1363080521;s:18:"session.timer.last";i:1363083398;s:17:"session.timer.now";i:1363083448;s:22:"session.client.browser";s:109:"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.22 (KHTML, like Gecko) Chrome/25.0.1364.152 Safari/537.22";s:8:"registry";O:9:"JRegistry":1:{s:7:"\\0\\0\\0data";O:8:"stdClass":0:{}}s:4:"user";O:5:"JUser":24:{s:9:"\\0\\0\\0isRoot";b:0;s:2:"id";s:3:"201";s:4:"name";s:18:"alexander.potashko";s:8:"username";s:18:"fb_100001614066938";s:5:"email";s:18:"fantomhp@gmail.com";s:8:"password";s:65:"d162eb46f2a9f6d0903e69facb3c637f:csvOAzaXAtekn7jJAnffpnJovdAxcOHW";s:14:"password_clear";s:0:"";s:5:"block";s:1:"0";s:9:"sendEmail";s:1:"0";s:12:"registerDate";s:19:"2013-03-04 11:05:10";s:13:"lastvisitDate";s:19:"2013-03-11 15:00:06";s:10:"activation";s:0:"";s:6:"params";s:2:"{}";s:6:"groups";a:1:{i:2;s:1:"2";}s:5:"guest";i:0;s:13:"lastResetTime";s:19:"0000-00-00 00:00:00";s:10:"resetCount";s:1:"0";s:10:"\\0\\0\\0_params";O:9:"JRegistry":1:{s:7:"\\0\\0\\0data";O:8:"stdClass":0:{}}s:14:"\\0\\0\\0_authGroups";a:2:{i:0;i:1;i:1;i:2;}s:14:"\\0\\0\\0_authLevels";a:3:{i:0;i:1;i:1;i:1;i:2;i:2;}s:15:"\\0\\0\\0_authActions";N;s:12:"\\0\\0\\0_errorMsg";N;s:10:"\\0\\0\\0_errors";a:0:{}s:3:"aid";i:0;}}fb_208893339231244_code|s:216:"AQD6Zpj5swenbGKL0w_khyAxanQw6bID1wx4WRbXgHBWljyhhI8wu6bVyARNjZ7TWAyBrm6cJDXVbnG66Mh_exoE6D7lah0i2u40xGEwsqXsQEurYvsBx2b29JXa2irOhyYZgTb5yFtImnHr-WQUHulQ26ARhAxNXtsJUoHZ98Vs4KBQkzCrPTRLvTAiMrhJTiN3PGie7hcBVGiCC7Mb9ihr";fb_208893339231244_access_token|s:113:"AAAC9ZCMVH5AwBAErW9U0jZAyFaZC9ts3069fOEB3g0kZAylHUWb6ZArWknmma0dI2pbJZAXwO7mdyogVWUzetJVXaVbDGXKoYRWxILJIrKowZDZD";fb_208893339231244_user_id|s:15:"100001614066938";', 201, 'fb_100001614066938');
+('kueofpjv0fk2el9td141mn7tl4', 0, 0, '1363364969', '__default|a:7:{s:15:"session.counter";i:39;s:19:"session.timer.start";i:1363363809;s:18:"session.timer.last";i:1363364932;s:17:"session.timer.now";i:1363364963;s:22:"session.client.browser";s:72:"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0";s:8:"registry";O:9:"JRegistry":1:{s:7:"\\0\\0\\0data";O:8:"stdClass":0:{}}s:4:"user";O:5:"JUser":24:{s:9:"\\0\\0\\0isRoot";b:0;s:2:"id";s:3:"202";s:4:"name";s:20:"alexander.potashko.1";s:8:"username";s:18:"fb_100002846057243";s:5:"email";s:23:"familytreetop@gmail.com";s:8:"password";s:65:"84bc3bf30d3cd41998a0aeb7c4b91594:Herb8LtBj3Ckx8gqoBwDEgpxViW2DpXi";s:14:"password_clear";s:0:"";s:5:"block";s:1:"0";s:9:"sendEmail";s:1:"0";s:12:"registerDate";s:19:"2013-03-15 15:48:29";s:13:"lastvisitDate";s:19:"2013-03-15 15:48:29";s:10:"activation";s:0:"";s:6:"params";s:2:"{}";s:6:"groups";a:1:{i:2;s:1:"2";}s:5:"guest";i:0;s:13:"lastResetTime";s:19:"0000-00-00 00:00:00";s:10:"resetCount";s:1:"0";s:10:"\\0\\0\\0_params";O:9:"JRegistry":1:{s:7:"\\0\\0\\0data";O:8:"stdClass":0:{}}s:14:"\\0\\0\\0_authGroups";a:2:{i:0;i:1;i:1;i:2;}s:14:"\\0\\0\\0_authLevels";a:3:{i:0;i:1;i:1;i:1;i:2;i:2;}s:15:"\\0\\0\\0_authActions";N;s:12:"\\0\\0\\0_errorMsg";N;s:10:"\\0\\0\\0_errors";a:0:{}s:3:"aid";i:0;}}fb_208893339231244_code|s:216:"AQBBn_CXtJQCmcsZ71bHSLM0vzokGV-dIDZjXwR3ZxAPOENyjgvjbxqA6vtO47ugh28IG_k3J2No3YXoTA1C-EUPFHzTzRKjWDACDF2clYvCcInD1fQcvMDcsagFvquagrTismkSDvQDM9JALWbp2b7AsxYELiGxB1sjnbOznFNyQAXFDrzV1CQYzk3bvAdEsQsmc20CrCTtEHQIbQcnN6fI";fb_208893339231244_access_token|s:112:"AAAC9ZCMVH5AwBAHt6mRDUK4ZAPgb85yVoqgGF9rPBZAtEQuhC98gqFuTr5oLOPoIvxFpKoTfgSVZAw6DyLJ2mZApSncokxg6VFpTN6SoaTQZDZD";fb_208893339231244_user_id|s:15:"100002846057243";', 202, 'fb_100002846057243'),
+('mnr9dpk8ervma7ej3lmr1n2ua7', 0, 0, '1363364868', '__default|a:7:{s:15:"session.counter";i:7;s:19:"session.timer.start";i:1363364528;s:18:"session.timer.last";i:1363364855;s:17:"session.timer.now";i:1363364857;s:22:"session.client.browser";s:109:"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.22 (KHTML, like Gecko) Chrome/25.0.1364.152 Safari/537.22";s:8:"registry";O:9:"JRegistry":1:{s:7:"\\0\\0\\0data";O:8:"stdClass":0:{}}s:4:"user";O:5:"JUser":24:{s:9:"\\0\\0\\0isRoot";b:0;s:2:"id";s:3:"201";s:4:"name";s:18:"alexander.potashko";s:8:"username";s:18:"fb_100001614066938";s:5:"email";s:18:"fantomhp@gmail.com";s:8:"password";s:65:"d162eb46f2a9f6d0903e69facb3c637f:csvOAzaXAtekn7jJAnffpnJovdAxcOHW";s:14:"password_clear";s:0:"";s:5:"block";s:1:"0";s:9:"sendEmail";s:1:"0";s:12:"registerDate";s:19:"2013-03-04 11:05:10";s:13:"lastvisitDate";s:19:"2013-03-15 15:54:19";s:10:"activation";s:0:"";s:6:"params";s:2:"{}";s:6:"groups";a:1:{i:2;s:1:"2";}s:5:"guest";i:0;s:13:"lastResetTime";s:19:"0000-00-00 00:00:00";s:10:"resetCount";s:1:"0";s:10:"\\0\\0\\0_params";O:9:"JRegistry":1:{s:7:"\\0\\0\\0data";O:8:"stdClass":0:{}}s:14:"\\0\\0\\0_authGroups";a:2:{i:0;i:1;i:1;i:2;}s:14:"\\0\\0\\0_authLevels";a:3:{i:0;i:1;i:1;i:1;i:2;i:2;}s:15:"\\0\\0\\0_authActions";N;s:12:"\\0\\0\\0_errorMsg";N;s:10:"\\0\\0\\0_errors";a:0:{}s:3:"aid";i:0;}}fb_208893339231244_code|s:216:"AQCgVlYUkz5p4fJ7i6Rb97ZDA_ijLRyv10sFjJXYpIpvlV0LjPZ1YCeQpSsEDBBBKlqPLWXO1Ktymn1yP5W2fjCJUdjCYXsbgriHqg6vejo1E6mBQaZyOG7MJ9IINBVSrdYjXMh6S3C52l8XHTApWe8pNbvqB-jq7XxHFwYHb4ZTbMKuaTU78xd5npSWG5Zn-2AD43rMrL96ObDG8Xz8Ns5_";fb_208893339231244_access_token|s:113:"AAAC9ZCMVH5AwBAErW9U0jZAyFaZC9ts3069fOEB3g0kZAylHUWb6ZArWknmma0dI2pbJZAXwO7mdyogVWUzetJVXaVbDGXKoYRWxILJIrKowZDZD";fb_208893339231244_user_id|s:15:"100001614066938";', 201, 'fb_100001614066938');
 
 -- --------------------------------------------------------
 
@@ -1947,7 +2002,7 @@ CREATE TABLE IF NOT EXISTS `geicz_updates` (
   `detailsurl` text NOT NULL,
   `infourl` text NOT NULL,
   PRIMARY KEY (`update_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Available Updates' AUTO_INCREMENT=69 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Available Updates' AUTO_INCREMENT=73 ;
 
 --
 -- Дамп данных таблицы `geicz_updates`
@@ -2021,7 +2076,11 @@ INSERT INTO `geicz_updates` (`update_id`, `update_site_id`, `extension_id`, `nam
 (65, 3, 0, 'Bahasa Indonesia', '', 'pkg_id-ID', 'package', '', 0, '3.0.3.1', '', 'http://update.joomla.org/language/details3/id-ID_details.xml', ''),
 (66, 3, 0, 'Finnish', '', 'pkg_fi-FI', 'package', '', 0, '3.0.3.1', '', 'http://update.joomla.org/language/details3/fi-FI_details.xml', ''),
 (67, 3, 0, 'Swahili', '', 'pkg_sw-KE', 'package', '', 0, '3.0.3.1', '', 'http://update.joomla.org/language/details3/sw-KE_details.xml', ''),
-(68, 3, 0, 'Swahili', '', 'pkg_sw-KE', 'package', '', 0, '3.0.3.1', '', 'http://update.joomla.org/language/details3/sw-KE_details.xml', '');
+(68, 3, 0, 'Swahili', '', 'pkg_sw-KE', 'package', '', 0, '3.0.3.1', '', 'http://update.joomla.org/language/details3/sw-KE_details.xml', ''),
+(69, 3, 0, 'Russian', '', 'pkg_ru-RU', 'package', '', 0, '3.0.3.1', '', 'http://update.joomla.org/language/details3/ru-RU_details.xml', ''),
+(70, 3, 0, 'Bosnian', '', 'pkg_bs-BA', 'package', '', 0, '3.0.3.1', '', 'http://update.joomla.org/language/details3/bs-BA_details.xml', ''),
+(71, 3, 0, 'Russian', '', 'pkg_ru-RU', 'package', '', 0, '3.0.3.1', '', 'http://update.joomla.org/language/details3/ru-RU_details.xml', ''),
+(72, 3, 0, 'Bosnian', '', 'pkg_bs-BA', 'package', '', 0, '3.0.3.1', '', 'http://update.joomla.org/language/details3/bs-BA_details.xml', '');
 
 -- --------------------------------------------------------
 
@@ -2044,9 +2103,9 @@ CREATE TABLE IF NOT EXISTS `geicz_update_sites` (
 --
 
 INSERT INTO `geicz_update_sites` (`update_site_id`, `name`, `type`, `location`, `enabled`, `last_check_timestamp`) VALUES
-(1, 'Joomla Core', 'collection', 'http://update.joomla.org/core/list.xml', 1, 1362389550),
-(2, 'Joomla Extension Directory', 'collection', 'http://update.joomla.org/jed/list.xml', 1, 1362389550),
-(3, 'Accredited Joomla! Translations', 'collection', 'http://update.joomla.org/language/translationlist_3.xml', 1, 1362389550);
+(1, 'Joomla Core', 'collection', 'http://update.joomla.org/core/list.xml', 1, 1363352327),
+(2, 'Joomla Extension Directory', 'collection', 'http://update.joomla.org/jed/list.xml', 1, 1363352327),
+(3, 'Accredited Joomla! Translations', 'collection', 'http://update.joomla.org/language/translationlist_3.xml', 1, 1363352327);
 
 -- --------------------------------------------------------
 
@@ -2128,15 +2187,16 @@ CREATE TABLE IF NOT EXISTS `geicz_users` (
   KEY `idx_block` (`block`),
   KEY `username` (`username`),
   KEY `email` (`email`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=202 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=203 ;
 
 --
 -- Дамп данных таблицы `geicz_users`
 --
 
 INSERT INTO `geicz_users` (`id`, `name`, `username`, `email`, `password`, `block`, `sendEmail`, `registerDate`, `lastvisitDate`, `activation`, `params`, `lastResetTime`, `resetCount`) VALUES
-(199, 'FamilyTreeTop', 'Admin', 'familytreetopdev@gmail.com', '3e26b859bedec92db0d1ce89de27f4f1:jZxWJaXrxuYxy4kCFgqRpcdCVXDEVgmg', 0, 0, '2013-03-04 09:40:41', '2013-03-04 11:04:48', '', '{"admin_style":"","admin_language":"","language":"","editor":"","helpsite":"","timezone":""}', '0000-00-00 00:00:00', 0),
-(201, 'alexander.potashko', 'fb_100001614066938', 'fantomhp@gmail.com', 'd162eb46f2a9f6d0903e69facb3c637f:csvOAzaXAtekn7jJAnffpnJovdAxcOHW', 0, 0, '2013-03-04 11:05:10', '2013-03-12 09:28:42', '', '{}', '0000-00-00 00:00:00', 0);
+(199, 'FamilyTreeTop', 'Admin', 'familytreetopdev@gmail.com', '3e26b859bedec92db0d1ce89de27f4f1:jZxWJaXrxuYxy4kCFgqRpcdCVXDEVgmg', 0, 0, '2013-03-04 09:40:41', '2013-03-15 12:58:44', '', '{"admin_style":"","admin_language":"","language":"","editor":"","helpsite":"","timezone":""}', '0000-00-00 00:00:00', 0),
+(201, 'alexander.potashko', 'fb_100001614066938', 'fantomhp@gmail.com', 'd162eb46f2a9f6d0903e69facb3c637f:csvOAzaXAtekn7jJAnffpnJovdAxcOHW', 0, 0, '2013-03-04 11:05:10', '2013-03-15 16:22:08', '', '{}', '0000-00-00 00:00:00', 0),
+(202, 'alexander.potashko.1', 'fb_100002846057243', 'familytreetop@gmail.com', '84bc3bf30d3cd41998a0aeb7c4b91594:Herb8LtBj3Ckx8gqoBwDEgpxViW2DpXi', 0, 0, '2013-03-15 15:48:29', '2013-03-15 16:10:09', '', '{}', '0000-00-00 00:00:00', 0);
 
 -- --------------------------------------------------------
 
@@ -2198,7 +2258,8 @@ CREATE TABLE IF NOT EXISTS `geicz_user_usergroup_map` (
 INSERT INTO `geicz_user_usergroup_map` (`user_id`, `group_id`) VALUES
 (182, 8),
 (199, 8),
-(201, 2);
+(201, 2),
+(202, 2);
 
 -- --------------------------------------------------------
 
