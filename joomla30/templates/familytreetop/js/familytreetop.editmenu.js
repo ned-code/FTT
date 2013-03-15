@@ -21,7 +21,7 @@ $FamilyTreeTop.create("editmenu", function($){
                     break;
 
                 case "sendInvite":
-                    $this.mod('friendselector').render();
+                    $this.mod('friendselector').render(gedcom_id);
                     break;
                 default: return false;
             }
