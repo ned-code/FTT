@@ -9,10 +9,12 @@
                 coockie: true,
                 xfbml: true
             },
+            data:false,
             permissions:false
         }
 
-        this.url = "";
+        this.template = "";
+
         this.currenturl = "";
         this.rooturl = "";
         this.baseurl = "";
@@ -25,6 +27,7 @@
 
         this.dataString = "";
         this.userString = "";
+        this.facebookString = "";
     }
 
     $FamilyTreeTop.prototype.fn = {
@@ -39,12 +42,26 @@
         mod: function(name){
             return w.$FamilyTreeTop.mod(name);
         },
+        app:function(){
+            var ftt = w.$FamilyTreeTop;
+            return {
+                link: function(){
+                    return ftt.app.data.link
+                },
+                description: function(){
+                    return ftt.app.data.description;
+                }
+            }
+        },
         url: function(path){
             var ftt = w.$FamilyTreeTop;
             if("undefined" === typeof(path)){
                 path = "";
             }
             return {
+                app: function(){
+                    return $FamilyTreeTop.prototype.app().link() ;
+                },
                 base: function(e){
                     if("undefined" !== typeof(e)){
                         return ftt.baseurl + path;
@@ -55,7 +72,7 @@
                     if("undefined" !== typeof(e)){
                         return ftt.templateurl + path;
                     }
-                    return ftt.rooturl + ftt.templateurl + path;
+                    return ftt.rooturl + '/templates/' + ftt.template + path;
                 }
             }
         },
@@ -130,6 +147,9 @@
 
     $FamilyTreeTop.prototype.init = function(){
         var $this = this;
+
+        $this.app.data = $.parseJSON($this.app.data);
+
         //init modules;
         $this.modulePull.forEach(function(el, id){
             var F = el.constructor;

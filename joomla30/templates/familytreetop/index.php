@@ -37,9 +37,12 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
 <script>
     $FamilyTreeTop.app.config.appId = '<?=$settings->facebook_app_id->value;?>';
     $FamilyTreeTop.app.permissions = '<?=$settings->facebook_permission->value;?>';
+    $FamilyTreeTop.app.data = '<?=json_encode(FacebookHelper::getInstance()->data); ?>';
+
     $FamilyTreeTop.userString = '<?=json_encode(FamilyTreeTopUserHelper::getInstance()->get()); ?>';
 
-    $FamilyTreeTop.url = '<?=0;?>';
+    $FamilyTreeTop.template = '<?=$this->template?>';
+
     $FamilyTreeTop.currenturl = '<?=JUri::current();?>';
     $FamilyTreeTop.rooturl = '<?=substr(JUri::base(), 0, strlen(JUri::base()) - 1);?>';
     $FamilyTreeTop.baseurl = '<?=$this->baseurl;?>';

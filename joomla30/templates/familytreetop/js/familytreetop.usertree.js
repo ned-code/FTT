@@ -9,7 +9,7 @@ $FamilyTreeTop.create("usertree", function($){
 
     }
 
-    $this.init = function(dataString, userString){
+    $this.init = function(dataString, userString, facebookString){
         if(dataString.length != 0){
             data = $.parseJSON(dataString);
             console.log(data);

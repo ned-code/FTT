@@ -12,6 +12,7 @@ class FacebookHelper
 
     public $facebook;
     public $scope = "user_about_me,user_birthday,user_relationships,user_photos,friends_photos,read_stream,read_insights";
+    public $data = array();
 
     public function getInstance(){
         if ( is_null(self::$instance) ) {
@@ -22,6 +23,9 @@ class FacebookHelper
             $config['secret'] = $settings->facebook_app_secret->value;
             $config['coockie'] = true;
             self::$instance->facebook = new Facebook($config);
+            $data = self::$instance->facebook->api('/' . $config['appId']);
+            self::$instance->data['link'] = $data['link'];
+            self::$instance->data['description'] = $data['description'];
         }
         return self::$instance;
     }
