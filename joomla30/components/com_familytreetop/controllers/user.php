@@ -22,6 +22,7 @@ class FamilytreetopControllerUser extends FamilytreetopController
         $account = new FamilyTreeTopAccounts();
         $account->joomla_id = $user->id;
         $account->access_token = $accessToken;
+        $account->facebook_id = $args['id'];
         $account->save();
 
         return $user;

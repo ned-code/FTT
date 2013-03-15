@@ -113,6 +113,7 @@ $user = FamilyTreeTopUserHelper::getInstance()->get();
                         var sb = $this.stringBuffer(), html, user, gedcom_id;
                         gedcom_id = node.id.split('_')[1];
                         user = $this.mod('usertree').user(gedcom_id);
+                        if(!user) return false;
                         sb._('<div class="row-fluid">');
                             sb._('<div class="span12">');
                                 sb._('<div style="float:left;"><img gedcom_id="')._(gedcom_id)._('" class="img-polaroid" data-src="template/familytreetop/js/holder.js/80x80"></div>');
