@@ -23,7 +23,7 @@ $FamilyTreeTop.create("usertree", function($){
         } else {
             usermap = null;
         }
-        if(userString.length != 0){
+        if(usersString.length != 0){
             usersmap = $.parseJSON(usersString);
             console.log(usersmap);
         } else {

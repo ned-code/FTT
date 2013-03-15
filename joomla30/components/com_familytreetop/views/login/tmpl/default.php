@@ -3,7 +3,7 @@ defined('_JEXEC') or die;
 ?>
 <div class="row">
     <div class="span12">
-        <div class="well center">
+        <div class="well text-center">
             <a id="login" data-complete-text="Login" data-loading-text="Loading..."  href="#" onclick="return false;" class="btn btn-large">Login</a>
         </div>
     </div>

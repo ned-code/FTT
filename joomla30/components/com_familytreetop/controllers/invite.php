@@ -6,6 +6,33 @@ require_once JPATH_COMPONENT.'/controller.php';
 class FamilytreetopControllerInvite extends FamilytreetopController
 {
 
+    public function addToTree(){
+        $invite = FamilyTreeTopUserHelper::getInstance()->isUserInInvitationsList();
+        $user = FamilyTreeTopUserHelper::getInstance()->get();
+        if(!empty($invite)){
+            $usersRow = new FamilyTreeTopUsers();
+            $usersRow->account_id = $user->account_id;
+            $usersRow->gedcom_id = $invite->gedcom_id;
+            $usersRow->tree_id = $invite->tree_id;
+            $usersRow->role = "user";
+            $usersRow->save();
+
+            $account = FamilyTreeTopAccounts::find($user->account_id);
+            $account->current = $invite->gedcom_id;
+            $account->save();
+
+            $invite->delete();
+
+            echo json_encode(array(
+                'success' => true,
+                'redirect' => JRoute::_('index.php?option=com_familytreetop&view=myfamily' , false)
+            ));
+        } else {
+            echo json_encode(array('success' => false));
+        }
+        exit;
+    }
+
     public function delInvitation(){
         $app = JFactory::getApplication();
 
