@@ -12,7 +12,9 @@ $FamilyTreeTop.create("friendselector", function($){
                     if(this.success){
                         $fn.sendRequest(selector, selectedFriendIds[0], this.token);
                     } else {
-
+                        console.log(this);
+                        $this.error({ title: "The cureent user is already sent an invitation" });
+                        selector.showFriendSelector();
                     }
                 });
             } else {

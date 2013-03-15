@@ -64,7 +64,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
 </div>
 <div id="familytreetop-root" style="display:none;">
 
-    <div class="alert alert-block alert-error fade in" id="alert">
+    <div class="alert alert-block alert-error fade in" id="error">
         <a class="close" data-dismiss="alert" href="#">&times;</a>
         <h4></h4>
         <p></p>
