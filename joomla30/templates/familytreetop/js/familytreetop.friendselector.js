@@ -4,7 +4,24 @@ $FamilyTreeTop.create("friendselector", function($){
         $fn;
 
     $fn = {
-
+        beforeSendRequest:function(){
+            console.log(arguments);
+        },
+        afterSendRequest:function(){
+            console.log(arguments);
+        },
+        sendRequest:function(facebook_id){
+            FB.ui({
+                method:'send',
+                name: "Click here to Accept",
+                link: $this.url('/index.php/invitation').base(),
+                to: facebook_id,
+                picture: $this.url('/images/ftt_invitation.png').template(),
+                description:(function(){
+                    return 'description';
+                })()
+            }, $fn.afterSendRequest);
+        }
     }
 
 
@@ -14,7 +31,7 @@ $FamilyTreeTop.create("friendselector", function($){
             friendsPerPage           : 5,
             autoDeselection          : true,
             callbackSubmit: function(selectedFriendIds) {
-               console.log(selectedFriendIds);
+                $fn.sendRequest(selectedFriendIds);
             }
         });
         selector.showFriendSelector();

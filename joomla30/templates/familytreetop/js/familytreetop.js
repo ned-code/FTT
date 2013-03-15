@@ -12,7 +12,11 @@
             permissions:false
         }
 
-
+        this.url = "";
+        this.currenturl = "";
+        this.rooturl = "";
+        this.baseurl = "";
+        this.templateurl = "";
 
         this.bindPull = [];
 
@@ -34,6 +38,26 @@
         },
         mod: function(name){
             return w.$FamilyTreeTop.mod(name);
+        },
+        url: function(path){
+            var ftt = w.$FamilyTreeTop;
+            if("undefined" === typeof(path)){
+                path = "";
+            }
+            return {
+                base: function(e){
+                    if("undefined" !== typeof(e)){
+                        return ftt.baseurl + path;
+                    }
+                    return ftt.rooturl + path;
+                },
+                template: function(e){
+                    if("undefined" !== typeof(e)){
+                        return ftt.templateurl + path;
+                    }
+                    return ftt.rooturl + ftt.templateurl + path;
+                }
+            }
         },
         stringBuffer: function(){
             return (function(){

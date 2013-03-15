@@ -38,6 +38,12 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
     $FamilyTreeTop.app.config.appId = '<?=$settings->facebook_app_id->value;?>';
     $FamilyTreeTop.app.permissions = '<?=$settings->facebook_permission->value;?>';
     $FamilyTreeTop.userString = '<?=json_encode(FamilyTreeTopUserHelper::getInstance()->get()); ?>';
+
+    $FamilyTreeTop.url = '<?=0;?>';
+    $FamilyTreeTop.currenturl = '<?=JUri::current();?>';
+    $FamilyTreeTop.rooturl = '<?=substr(JUri::base(), 0, strlen(JUri::base()) - 1);?>';
+    $FamilyTreeTop.baseurl = '<?=$this->baseurl;?>';
+    $FamilyTreeTop.templateurl = '<?=$this->baseurl;?>/templates/<?=$this->template;?>';
 </script>
 <div id="fb-root"></div>
 <jdoc:include type="modules" name="facebook-sdk" style="none" />
