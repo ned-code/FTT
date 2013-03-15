@@ -3,8 +3,11 @@ defined('_JEXEC') or die;
 
 $gedcom = GedcomHelper::getInstance();
 
-$profile = FamilyTreeTopIndividuals::find(array('order' => 'change_time desc'));
-$ind = $gedcom->individuals->get($profile->gedcom_id);
+$profile = $gedcom->individuals->getLastUpdatedProfile();
+if($profile){
+    $ind = $gedcom->individuals->get($profile->gedcom_id);
+}
+
 ?>
 <div id="latestUpdates" class="row">
     <div class="span6">
@@ -12,7 +15,9 @@ $ind = $gedcom->individuals->get($profile->gedcom_id);
             <fieldset>
                 <legend>Latest Updates</legend>
                 <ul class="unstyled">
+                    <?php if($ind): ?>
                     <li><span>Profile Changes</span>: <span data-familytreetop-color="<?=$ind->gender;?>"><?=$ind->name();?></span></li>
+                    <?php endif; ?>
                 </ul>
             </fieldset>
         </div>

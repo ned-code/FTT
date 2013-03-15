@@ -206,11 +206,11 @@ class FamilyTreeTopGedcomIndividualsManager {
     public function getYoungest(){
         $db = JFactory::getDbo();
         $sql = "SELECT e.*, d.start_year
-                    FROM geicz_familytreetop_tree_links as l, geicz_familytreetop_trees as t, geicz_familytreetop_events as e, geicz_familytreetop_dates as d
+                    FROM #__familytreetop_tree_links as l, #__familytreetop_trees as t, #__familytreetop_events as e, #__familytreetop_dates as d
                     WHERE t.id = l.tree_id AND l.id = e.gedcom_id AND e.id = d.event_id AND e.type = 'BIRT' AND d.start_year IS NOT NULL AND t.id = ".$this->tree_id."
                       AND e.gedcom_id NOT IN (
                         SELECT e.gedcom_id
-                        FROM geicz_familytreetop_tree_links as l, geicz_familytreetop_trees as t, geicz_familytreetop_events as e
+                        FROM #__familytreetop_tree_links as l, #__familytreetop_trees as t, #__familytreetop_events as e
                         WHERE t.id = l.tree_id AND l.id = e.gedcom_id AND e.type = 'DEAT' AND t.id = ".$this->tree_id.")
                     ORDER BY d.start_year DESC
                     LIMIT 1";
@@ -226,11 +226,11 @@ class FamilyTreeTopGedcomIndividualsManager {
     public function getOldest(){
         $db = JFactory::getDbo();
         $sql = "SELECT e.*, d.start_year
-                    FROM geicz_familytreetop_tree_links as l, geicz_familytreetop_trees as t, geicz_familytreetop_events as e, geicz_familytreetop_dates as d
+                    FROM #__familytreetop_tree_links as l, #__familytreetop_trees as t, #__familytreetop_events as e, #__familytreetop_dates as d
                     WHERE t.id = l.tree_id AND l.id = e.gedcom_id AND e.id = d.event_id AND e.type = 'BIRT' AND d.start_year IS NOT NULL AND t.id = ".$this->tree_id."
                       AND e.gedcom_id NOT IN (
                         SELECT e.gedcom_id
-                        FROM geicz_familytreetop_tree_links as l, geicz_familytreetop_trees as t, geicz_familytreetop_events as e
+                        FROM #__familytreetop_tree_links as l, #__familytreetop_trees as t, #__familytreetop_events as e
                         WHERE t.id = l.tree_id AND l.id = e.gedcom_id AND e.type = 'DEAT' AND t.id = ".$this->tree_id.")
                     ORDER BY d.start_year ASC
                     LIMIT 1";
@@ -243,6 +243,25 @@ class FamilyTreeTopGedcomIndividualsManager {
             return $this->get($rows[0]['gedcom_id']);
         }
     }
+
+
+    public function getLastUpdatedProfile(){
+        $db = JFactory::getDbo();
+        $sql = "SELECT i.*
+                    FROM geicz_familytreetop_individuals as i, geicz_familytreetop_tree_links as l, geicz_familytreetop_trees as t
+                    WHERE i.gedcom_id = l.id AND l.tree_id = t.id AND t.id = ".$this->tree_id."
+                    ORDER BY i.change_time DESC";
+
+        $db->setQuery($sql);
+        $rows = $db->loadAssocList();
+
+        if(empty($rows)){
+            return false;
+        } else {
+            return $this->get($rows[0]['gedcom_id']);
+        }
+    }
+
 
     public function getList(){
         return $this->list;
