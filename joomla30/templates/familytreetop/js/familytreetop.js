@@ -83,6 +83,24 @@
         generateKey:function(){
             var s4 = function(){return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);}
             return s4()+s4()+s4()+s4()+s4()+s4()+s4()+s4();
+        },
+        isExist:function(array, name, value){
+            var items = name.split('.'), prop, object, key, element;
+            for(prop in array){
+                if(!array.hasOwnProperty(prop)) continue;
+                object = array[prop];
+                for(key in items){
+                    if(!items.hasOwnProperty(key)) continue;
+                    element = items[key];
+                    if("$" !== element && "undefined" !== typeof(object[element])){
+                        object = object[element];
+                    }
+                }
+                if(object == value){
+                    return true;
+                }
+            }
+            return false;
         }
     }
 

@@ -12,6 +12,7 @@ $doc->addStyleSheet('templates/'.$this->template.'/css/bootstrap.fix.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/bootstrap-responsive.min.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/csstreeview.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/csstreeview.fix.css');
+$doc->addStyleSheet('templates/'.$this->template.'/css/familytreetop.css');
 
 // Add current user information
 $user = JFactory::getUser();

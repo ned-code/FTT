@@ -12,7 +12,7 @@ $ind = $gedcom->individuals->get($profile->gedcom_id);
             <fieldset>
                 <legend>Latest Updates</legend>
                 <ul class="unstyled">
-                    <li><span>Profile Changes:</span> <span><?=$ind->name();?></span></li>
+                    <li><span>Profile Changes</span>: <span data-familytreetop-color="<?=$ind->gender;?>"><?=$ind->name();?></span></li>
                 </ul>
             </fieldset>
         </div>

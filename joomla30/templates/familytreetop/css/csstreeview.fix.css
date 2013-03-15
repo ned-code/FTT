@@ -10,20 +10,20 @@
 .css-treeview label[familytreetop]::before {
     margin: 0 36px 0 0;
 }
-.css-treeview li span[familytreetop] {
+.css-treeview li span[data-familytreetop-color] {
     font-size: 11px;
     cursor: pointer;
     padding: 3px;
 }
-.css-treeview li span[familytreetop].active {
+.css-treeview li span[data-familytreetop-color].active {
     background: #EEDC82;
     border-radius: 4px;
 }
-.css-treeview li span[familytreetop="0"],
+.css-treeview li span[data-familytreetop-color="0"],
 .css-treeview li span[familytreetop="child_0"]{
     color: #FFB7C5;
 }
-.css-treeview li span[familytreetop="1"],
+.css-treeview li span[data-familytreetop-color="1"],
 .css-treeview li span[familytreetop="child_1"]{
     color: #FF9966;
 }

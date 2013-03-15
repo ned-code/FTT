@@ -71,7 +71,7 @@ defined('_JEXEC') or die;
                 $(html).find('span[familytreetop][gedcom_id="'+user.gedcom_id+'"]').click();
             },
             click:function(html){
-                $(html).find('span[familytreetop="0"],span[familytreetop="1"]').click(function(){
+                $(html).find('span[data-familytreetop-color="0"],span[data-familytreetop-color="1"]').click(function(){
                     if($(this).hasClass('active')) return false;
                     if("undefined" !== typeof($activeSpan) || $activeSpan){
                         $($activeSpan).removeClass('active');
@@ -81,7 +81,7 @@ defined('_JEXEC') or die;
                 });
             },
             span:function(object){
-                return '<span gedcom_id="'+object.gedcom_id+'" familytreetop="'+object.gender+'" id="'+object.gedcom_id+'">'+object.name()+'</span>';
+                return '<span gedcom_id="'+object.gedcom_id+'" data-familytreetop-color="'+object.gender+'" id="'+object.gedcom_id+'">'+object.name()+'</span>';
             },
             string: function(ind1, ind2){
                 return $fn.span(ind1) + '+' + $fn.span(ind2);
@@ -119,7 +119,7 @@ defined('_JEXEC') or die;
                 } else {
                     $(parent).append('<li><span familytreetop="child_'
                             +user.gender+'"></span><span gedcom_id="'
-                            +user.gedcom_id+'" familytreetop="'
+                            +user.gedcom_id+'" data-familytreetop-color="'
                             +user.gender+'">'
                             + user.name()
                         +'</span></li>');

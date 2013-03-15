@@ -63,10 +63,10 @@ $FamilyTreeTop.create("usertree", function($){
                 return $name.join(' ').replace(/[ \t]{2,}/g, ' ');
             },
             birth:function(){
-                return $this.getEventByType(ind, 'BIRT');
+                return $this.getUserEventByType(ind.gedcom_id, 'BIRT');
             },
             death:function(){
-                return $this.getEventByType(ind, 'DEAT');
+                return $this.getUserEventByType(ind.gedcom_id, 'DEAT');
             },
             event:function(id){
                 if("undefined" === typeof(id)) return false;
@@ -263,9 +263,19 @@ $FamilyTreeTop.create("usertree", function($){
         return false;
     }
 
-    $this.getEventByType = function(ind, type){
-        if("undefined" === typeof( data.eve.gedcom_id[ind.gedcom_id])) return false;
-        var events =  data.eve.gedcom_id[ind.gedcom_id];
+    $this.getUserEvents = function(gedcom_id){
+        if("undefined" === typeof( data.eve.gedcom_id[gedcom_id])) return false;
+        var events = data.eve.gedcom_id[gedcom_id], prop, pull = [];
+        for(prop in events){
+            if(!events.hasOwnProperty(prop)) continue;
+            pull.push($this.getEvent(events[prop].id));
+        }
+        return pull;
+    }
+
+    $this.getUserEventByType = function(gedcom_id, type){
+        if("undefined" === typeof( data.eve.gedcom_id[gedcom_id])) return false;
+        var events =  data.eve.gedcom_id[gedcom_id];
         for(var key in events){
             if(!events.hasOwnProperty(key)) continue;
             var event = events[key];
@@ -304,10 +314,6 @@ $FamilyTreeTop.create("usertree", function($){
             }
         }
         return pull;
-    }
-
-    $this.getColorByGender = function(gender){
-        return (parseInt(gender))?"#FF9966":"#FFB7C5";
     }
 
     $this.init($FamilyTreeTop.dataString, $FamilyTreeTop.userString);

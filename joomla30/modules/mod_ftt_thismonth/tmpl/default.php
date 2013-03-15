@@ -81,6 +81,12 @@ $date = date('n', strtotime('-1 month'));
         $fn = {
             getEventByType: function(type, month){
                 return $this.mod('usertree').getEventsByType(type, function(event){
+                    if(type == "BIRT"){
+                        var events = $this.mod('usertree').getUserEvents(event.gedcom_id);
+                        if($this.isExist(events, '$.event.type', 'DEAT')){
+                            return false;
+                        }
+                    }
                     return $this.mod('usertree').isDateInTheEvent(event.id, month, "start_month");
                 });
             },
@@ -120,7 +126,7 @@ $date = date('n', strtotime('-1 month'));
 
                                 sb._('<span">')._(event.date.start_day || "")._('</span>');
                                 sb._(' ');
-                                sb._('<span style="color:')._($this.mod('usertree').getColorByGender(user.gender))._(';"');
+                                sb._('<span data-familytreetop-color="')._(user.gender)._('"');
                                     sb._(' gedcom_id="')._(user.gedcom_id)._('">')._(user.shortname());
                                 sb._('</span>');
 
@@ -145,11 +151,11 @@ $date = date('n', strtotime('-1 month'));
 
                                 sb._('<span>')._(event.date.start_day || "")._('</span>');
                                 sb._(' ');
-                                sb._('<span style="color:')._($this.mod('usertree').getColorByGender(husb.gender))._(';"');
+                                sb._('<span data-familytreetop-color="')._(husb.gender)._('"');
                                     sb._('" gedcom_id="')._(husb.gedcom_id)._('">')._(husb.shortname());
                                 sb._('</span>');
                                 sb._(' + ');
-                                sb._('<span style="color:')._($this.mod('usertree').getColorByGender(wife.gender))._(';"');
+                                sb._('<span data-familytreetop-color="')._(wife.gender)._('"');
                                     sb._(' gedcom_id="')._(wife.gedcom_id)._('">')._(wife.shortname());
                                 sb._('</span>');
 
