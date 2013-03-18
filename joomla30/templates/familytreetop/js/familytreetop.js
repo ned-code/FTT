@@ -182,6 +182,8 @@
     $FamilyTreeTop.prototype.init = function(){
         var $this = this;
 
+        $FamilyTreeTop.prototype.clearUploadTemplates();
+
         $this.app.data = $.parseJSON($this.app.data);
 
         //init modules;
@@ -198,6 +200,14 @@
         });
         //init
         $this.mod('tabs').init();
+    }
+
+    $FamilyTreeTop.prototype.clearUploadTemplates = function(){
+        var download = jQuery('#template-download').text();
+        var upload = jQuery('#template-upload').text();
+
+        jQuery('#template-download').text(download.replace(/#/gi,""));
+        jQuery('#template-upload').text(upload.replace(/#/gi,""));
     }
 
     $FamilyTreeTop.prototype.mod = function(name){

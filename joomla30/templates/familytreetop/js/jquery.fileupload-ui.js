@@ -533,7 +533,6 @@
                 }
             )) || dfd.resolveWith(node)) && dfd;
         },
-
         _renderPreviews: function (data) {
             var that = this,
                 options = this.options;

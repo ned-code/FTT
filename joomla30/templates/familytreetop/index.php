@@ -463,11 +463,12 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
         <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
         <td class="error" colspan="2"><span class="label label-important">Error</span> {%=file.error%}</td>
         {% } else { %}
+
         <td class="preview">{% if (file.thumbnail_url) { %}
-            <a href="{%=file.url%}" title="{%=file.name%}" data-gallery="gallery" download="{%=file.name%}"><img src="{%=file.thumbnail_url%}"></a>
+            <a href="#{%=file.url%}" title="{%=file.name%}" data-gallery="gallery" download="{%=file.name%}"><img src="#{%=file.thumbnail_url%}"></a>
             {% } %}</td>
         <td class="name">
-            <a href="{%=file.url%}" title="{%=file.name%}" data-gallery="{%=file.thumbnail_url&&'gallery'%}" download="{%=file.name%}">{%=file.name%}</a>
+            <a href="#{%=file.url%}" title="{%=file.name%}" data-gallery="{%=file.thumbnail_url&&'gallery'%}" download="{%=file.name%}">{%=file.name%}</a>
         </td>
         <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
         <td colspan="2"></td>
