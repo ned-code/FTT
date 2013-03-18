@@ -24,8 +24,12 @@ class FacebookHelper
             $config['coockie'] = true;
             self::$instance->facebook = new Facebook($config);
             $data = self::$instance->facebook->api('/' . $config['appId']);
-            self::$instance->data['link'] = $data['link'];
-            self::$instance->data['description'] = $data['description'];
+            if(isset($data['link'])){
+                self::$instance->data['link'] = $data['link'];
+            }
+            if(isset($data['description'])){
+                self::$instance->data['description'] = $data['description'];
+            }
         }
         return self::$instance;
     }

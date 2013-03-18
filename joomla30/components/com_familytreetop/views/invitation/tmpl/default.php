@@ -1,10 +1,12 @@
 <?php
 defined('_JEXEC') or die;
 $invite = FamilyTreeTopUserHelper::getInstance()->isUserInInvitationsList();
+$name = "";
 if(!empty($invite)){
     $names = FamilyTreeTopNames::find_by_gedcom_id($invite->gedcom_id);
     $name = $names->first_name . " ".$names->last_name;
 }
+
 ?>
 <div class="row">
     <div class="span12">

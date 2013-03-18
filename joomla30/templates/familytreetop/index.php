@@ -10,6 +10,7 @@ $doc = JFactory::getDocument();
 $doc->addStyleSheet('templates/'.$this->template.'/css/bootstrap.min.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/bootstrap.fix.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/bootstrap-responsive.min.css');
+$doc->addStyleSheet('templates/'.$this->template.'/css/jquery.fileupload-ui.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/csstreeview.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/csstreeview.fix.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/tdfriendselector.css');
@@ -24,6 +25,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->language; ?>" lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>">
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <noscript><link rel="stylesheet" href="templates/<?=$this->template;?>/css/jquery.fileupload-ui-noscript.css"></noscript>
     <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/holder.js"></script>
     <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/excanvas.js"></script>
     <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/jit.js"></script>
@@ -147,10 +149,46 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
         </div>
     </div>
 
+    <form id="formEditMedia" action="<?=JRoute::_("index.php?option=com_familytreetop&task=upload.file", false);?>" method="POST" enctype="multipart/form-data">
+        <div class="row fileupload-buttonbar">
+            <div class="span7">
+                <span class="btn btn-success fileinput-button">
+                    <i class="icon-plus icon-white"></i>
+                    <span>Add files...</span>
+                    <input type="file" name="files[]" multiple="">
+                </span>
+                <button type="submit" class="btn btn-primary start">
+                    <i class="icon-upload icon-white"></i>
+                    <span>Start upload</span>
+                </button>
+                <button type="reset" class="btn btn-warning cancel">
+                    <i class="icon-ban-circle icon-white"></i>
+                    <span>Cancel upload</span>
+                </button>
+                <button type="button" class="btn btn-danger delete">
+                    <i class="icon-trash icon-white"></i>
+                    <span>Delete</span>
+                </button>
+                <input type="checkbox" class="toggle">
+            </div>
+            <div class="span5 fileupload-progress fade">
+                <div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                    <div class="bar" style="width:0%;"></div>
+                </div>
+                <div class="progress-extended">&nbsp;</div>
+            </div>
+        </div>
+        <div class="fileupload-loading"></div>
+        <br>
+        <table role="presentation" class="table table-striped">
+            <tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody>
+        </table>
+    </form>
+
     <form id="formEditUnions">
         <fieldset>
             <legend>Union</legend>
-            <input familytreetop="family_id" name="editUnion[family_id]" type="text" class="hidden" />
+            <input style="display:none;" familytreetop="family_id" name="editUnion[family_id]" type="text" class="hidden" />
             <div class="row-fluid">
                 <div class="span6">
                     <div familytreetop="sircar" class="well">
@@ -213,12 +251,6 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
         <div class="row-fluid">
             <div familytreetop="avatar" class="span3 text-center">
                 <img class="img-polaroid" data-src="template/familytreetop/js/holder.js/100x100">
-                <!--
-                <div style="text-align: center; overflow: hidden;">
-                    <button familytreetop="upload" class="btn btn-mini">Upload</button>
-                    <input type="file" name="editProfile[file]" id="editProfile[file]" size="1" style="margin-top: -50px; margin-left:-410px; -moz-opacity: 0; filter: alpha(opacity=0); opacity: 0; font-size: 150px; height: 100px;">
-                </div>
-                -->
             </div>
             <div class="span9">
                 <div class="row-fluid">
@@ -390,11 +422,81 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
         </div>
     </div>
 </div>
+<!-- The template to display files available for upload -->
+<script id="template-upload" type="text/x-tmpl">
+    {% for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class="template-upload fade">
+        <td class="preview"><span class="fade"></span></td>
+        <td class="name"><span>{%=file.name%}</span></td>
+        <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
+        {% if (file.error) { %}
+        <td class="error" colspan="2"><span class="label label-important">Error</span> {%=file.error%}</td>
+        {% } else if (o.files.valid && !i) { %}
+        <td>
+            <div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="bar" style="width:0%;"></div></div>
+        </td>
+        <td>{% if (!o.options.autoUpload) { %}
+            <button class="btn btn-primary start">
+                <i class="icon-upload icon-white"></i>
+                <span>Start</span>
+            </button>
+            {% } %}</td>
+        {% } else { %}
+        <td colspan="2"></td>
+        {% } %}
+        <td>{% if (!i) { %}
+            <button class="btn btn-warning cancel">
+                <i class="icon-ban-circle icon-white"></i>
+                <span>Cancel</span>
+            </button>
+            {% } %}</td>
+    </tr>
+    {% } %}
+</script>
+<!-- The template to display files available for download -->
+<script id="template-download" type="text/x-tmpl">
+    {% for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class="template-download fade">
+        {% if (file.error) { %}
+        <td></td>
+        <td class="name"><span>{%=file.name%}</span></td>
+        <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
+        <td class="error" colspan="2"><span class="label label-important">Error</span> {%=file.error%}</td>
+        {% } else { %}
+        <td class="preview">{% if (file.thumbnail_url) { %}
+            <a href="{%=file.url%}" title="{%=file.name%}" data-gallery="gallery" download="{%=file.name%}"><img src="{%=file.thumbnail_url%}"></a>
+            {% } %}</td>
+        <td class="name">
+            <a href="{%=file.url%}" title="{%=file.name%}" data-gallery="{%=file.thumbnail_url&&'gallery'%}" download="{%=file.name%}">{%=file.name%}</a>
+        </td>
+        <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
+        <td colspan="2"></td>
+        {% } %}
+        <td>
+            <button class="btn btn-danger delete" data-type="{%=file.delete_type%}" data-url="{%=file.delete_url%}"{% if (file.delete_with_credentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
+            <i class="icon-trash icon-white"></i>
+            <span>Delete</span>
+            </button>
+            <input type="checkbox" name="delete" value="1" class="toggle">
+        </td>
+    </tr>
+    {% } %}
+</script>
 <!-- friend selector end -->
 <jdoc:include type="modules" name="debug" style="none" />
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/jquery-1.9.1.min.js"></script>
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/bootstrap.min.js"></script>
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/tdfriendselector.js"></script>
+<!-- file upload plugin files -->
+<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/jquery.ui.widget.js"></script>
+<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/tmpl.min.js"></script>
+<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/load-image.min.js"></script>
+<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/canvas-to-blob.min.js"></script>
+<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/jquery.iframe-transport.js"></script>
+<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/jquery.fileupload.js"></script>
+<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/jquery.fileupload-fp.js"></script>
+<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/jquery.fileupload-ui.js"></script>
+<!--[if gte IE 8]><script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/jquery.xdr-transport.js"></script><![endif]-->
 <!-- uncompressed files -->
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.form.js"></script>
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.tabs.js"></script>

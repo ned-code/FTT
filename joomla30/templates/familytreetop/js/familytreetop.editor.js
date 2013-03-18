@@ -5,6 +5,9 @@ $FamilyTreeTop.create("editor", function($){
         $fn;
 
     $fn = {
+        setUserMedia: function(parent, ind){
+            $(parent).fileupload();
+        },
         setUnionsData:function(parent, ind){
             var spouses = $this.mod('usertree').getSpouses(ind.gedcom_id), forms = [];
             spouses.forEach(function(spouse_id){
@@ -197,6 +200,9 @@ $FamilyTreeTop.create("editor", function($){
 
             return [tabs, crosslinks];
         },
+        getEditorMediaForm: function(){
+            return $('#formEditMedia').clone();
+        },
         getEditorProfileForm:function(){
             return $('#formEditProfile').clone();
         },
@@ -285,7 +291,8 @@ $FamilyTreeTop.create("editor", function($){
             tabs,
             ind,
             editProfileForm,
-            editUnionsForms;
+            editUnionsForms,
+            editMediaForm;
 
         //create modal box
         cl = $fn.getModalBox();
@@ -314,6 +321,10 @@ $FamilyTreeTop.create("editor", function($){
         editUnionsForms = $fn.setUnionsData(tabs, ind);
 
         //media edit
+        editMediaForm = $fn.getEditorMediaForm();
+        $fn.setFormInTab(2, tabs, editMediaForm);
+        $fn.setUserMedia(editMediaForm, ind);
+
         //options
 
         //init modal
