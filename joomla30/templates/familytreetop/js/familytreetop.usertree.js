@@ -65,7 +65,7 @@ $FamilyTreeTop.create("usertree", function($){
                         $('<img class="'+style+'" src="" />')
                     ];
                 } else {
-                    url = ($this.url().base()+"/template/familytreetop/js/holder.js/"+((size)?size.join('x'):"100x100"));
+                    url = ($this.url().base()+"/templates/familytreetop/js/holder.js/"+((size)?size.join('x'):"100x100"));
                     data = [
                         url,
                         $('<img class="'+style+'" data-src="'+url+'" />')

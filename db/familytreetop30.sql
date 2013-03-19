@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: 127.0.0.1
--- Время создания: Мар 19 2013 г., 14:27
+-- Время создания: Мар 19 2013 г., 18:48
 -- Версия сервера: 5.5.25
 -- Версия PHP: 5.3.13
 
@@ -768,26 +768,33 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_invitations` (
 --
 
 CREATE TABLE IF NOT EXISTS `geicz_familytreetop_medias` (
-  `id` int(11) NOT NULL,
-  `path` varchar(255) DEFAULT NULL,
-  `type` varchar(45) DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  `original_name` varchar(255) DEFAULT NULL,
+  `size` varchar(255) DEFAULT NULL,
+  `type` varchar(15) DEFAULT NULL,
+  `url` varchar(255) DEFAULT NULL,
+  `thumbnail_url` varchar(255) DEFAULT NULL,
+  `delete_url` varchar(255) DEFAULT NULL,
+  `change_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=13 ;
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `geicz_familytreetop_media_link`
+-- Структура таблицы `geicz_familytreetop_media_links`
 --
 
-CREATE TABLE IF NOT EXISTS `geicz_familytreetop_media_link` (
+CREATE TABLE IF NOT EXISTS `geicz_familytreetop_media_links` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `media_id` int(11) NOT NULL,
   `gedcom_id` int(11) NOT NULL,
+  `role` varchar(4) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_geicz_familytreetop_media_link_1` (`media_id`),
   KEY `fk_geicz_familytreetop_media_link_2` (`gedcom_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
 
 -- --------------------------------------------------------
 
@@ -884,10 +891,10 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_relations` (
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `geicz_familytreetop_relation_link`
+-- Структура таблицы `geicz_familytreetop_relation_links`
 --
 
-CREATE TABLE IF NOT EXISTS `geicz_familytreetop_relation_link` (
+CREATE TABLE IF NOT EXISTS `geicz_familytreetop_relation_links` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `relation_id` int(11) NOT NULL,
   `gedcom_id` int(11) NOT NULL,
@@ -1949,7 +1956,7 @@ CREATE TABLE IF NOT EXISTS `geicz_session` (
 --
 
 INSERT INTO `geicz_session` (`session_id`, `client_id`, `guest`, `time`, `data`, `userid`, `username`) VALUES
-('ad51pcqgoaoq7pbl316avkqh37', 0, 0, '1363688338', '__default|a:7:{s:15:"session.counter";i:363;s:19:"session.timer.start";i:1363604348;s:18:"session.timer.last";i:1363688332;s:17:"session.timer.now";i:1363688336;s:22:"session.client.browser";s:109:"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.22 (KHTML, like Gecko) Chrome/25.0.1364.152 Safari/537.22";s:8:"registry";O:9:"JRegistry":1:{s:7:"\\0\\0\\0data";O:8:"stdClass":1:{s:5:"users";O:8:"stdClass":1:{s:5:"login";O:8:"stdClass":1:{s:4:"form";O:8:"stdClass":1:{s:6:"return";s:45:"index.php?option=com_familytreetop&view=index";}}}}}s:4:"user";O:5:"JUser":24:{s:9:"\\0\\0\\0isRoot";b:0;s:2:"id";s:3:"201";s:4:"name";s:18:"alexander.potashko";s:8:"username";s:18:"fb_100001614066938";s:5:"email";s:18:"fantomhp@gmail.com";s:8:"password";s:65:"d162eb46f2a9f6d0903e69facb3c637f:csvOAzaXAtekn7jJAnffpnJovdAxcOHW";s:14:"password_clear";s:0:"";s:5:"block";s:1:"0";s:9:"sendEmail";s:1:"0";s:12:"registerDate";s:19:"2013-03-04 11:05:10";s:13:"lastvisitDate";s:19:"2013-03-15 16:59:24";s:10:"activation";s:0:"";s:6:"params";s:2:"{}";s:6:"groups";a:1:{i:2;s:1:"2";}s:5:"guest";i:0;s:13:"lastResetTime";s:19:"0000-00-00 00:00:00";s:10:"resetCount";s:1:"0";s:10:"\\0\\0\\0_params";O:9:"JRegistry":1:{s:7:"\\0\\0\\0data";O:8:"stdClass":0:{}}s:14:"\\0\\0\\0_authGroups";a:2:{i:0;i:1;i:1;i:2;}s:14:"\\0\\0\\0_authLevels";a:3:{i:0;i:1;i:1;i:1;i:2;i:2;}s:15:"\\0\\0\\0_authActions";N;s:12:"\\0\\0\\0_errorMsg";N;s:10:"\\0\\0\\0_errors";a:0:{}s:3:"aid";i:0;}}fb_208893339231244_code|s:216:"AQAASQwroMUlrV7xSqrIKJy4QmWwjoEvg6gurBoSF7E8fwDSLcoinEqwEWepGOwR_QlttSdFiwezn_2Zh4xoLHU7aVafPJ3JJceP4enF1yHw7TMghKvwC0Z5H0_rwm5ihHg2NH1kvz_TaxHOj3EZ_zAN6b6wS_ORcl4UB_ZNWnZCyXVKimKcRV4pm_QxhLCZAkuUb5gY-NooI4otXOqWkmeA";fb_208893339231244_access_token|s:113:"AAAC9ZCMVH5AwBAErW9U0jZAyFaZC9ts3069fOEB3g0kZAylHUWb6ZArWknmma0dI2pbJZAXwO7mdyogVWUzetJVXaVbDGXKoYRWxILJIrKowZDZD";fb_208893339231244_user_id|s:15:"100001614066938";', 201, 'fb_100001614066938');
+('t6vhhv0kp032dsm492t1smeda6', 0, 0, '1363704135', '__default|a:7:{s:15:"session.counter";i:10;s:19:"session.timer.start";i:1363704083;s:18:"session.timer.last";i:1363704130;s:17:"session.timer.now";i:1363704133;s:22:"session.client.browser";s:109:"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.22 (KHTML, like Gecko) Chrome/25.0.1364.172 Safari/537.22";s:8:"registry";O:9:"JRegistry":1:{s:7:"\\0\\0\\0data";O:8:"stdClass":1:{s:5:"users";O:8:"stdClass":1:{s:5:"login";O:8:"stdClass":1:{s:4:"form";O:8:"stdClass":1:{s:6:"return";s:45:"index.php?option=com_familytreetop&view=index";}}}}}s:4:"user";O:5:"JUser":24:{s:9:"\\0\\0\\0isRoot";b:0;s:2:"id";s:3:"201";s:4:"name";s:18:"alexander.potashko";s:8:"username";s:18:"fb_100001614066938";s:5:"email";s:18:"fantomhp@gmail.com";s:8:"password";s:65:"d162eb46f2a9f6d0903e69facb3c637f:csvOAzaXAtekn7jJAnffpnJovdAxcOHW";s:14:"password_clear";s:0:"";s:5:"block";s:1:"0";s:9:"sendEmail";s:1:"0";s:12:"registerDate";s:19:"2013-03-04 11:05:10";s:13:"lastvisitDate";s:19:"2013-03-19 14:41:22";s:10:"activation";s:0:"";s:6:"params";s:2:"{}";s:6:"groups";a:1:{i:2;s:1:"2";}s:5:"guest";i:0;s:13:"lastResetTime";s:19:"0000-00-00 00:00:00";s:10:"resetCount";s:1:"0";s:10:"\\0\\0\\0_params";O:9:"JRegistry":1:{s:7:"\\0\\0\\0data";O:8:"stdClass":0:{}}s:14:"\\0\\0\\0_authGroups";a:2:{i:0;i:1;i:1;i:2;}s:14:"\\0\\0\\0_authLevels";a:3:{i:0;i:1;i:1;i:1;i:2;i:2;}s:15:"\\0\\0\\0_authActions";N;s:12:"\\0\\0\\0_errorMsg";N;s:10:"\\0\\0\\0_errors";a:0:{}s:3:"aid";i:0;}}fb_208893339231244_code|s:216:"AQCzNAaYvs1MCmjFmbh2LtQjfi-ngU5OIUcuMAwTRJjcGoLUzcDaLKRpfqsastr49ryJEAzwAjPxt77W2zDl6iPbjQwwKg2zj9FMDCNfEd68O-IwHwofLpHsRjJZei36h3eLUkI5Z3rrx6f8Amh_-m3_OcK9eFhO1pWcxNbmaMk0uOWnEBaty6McOHcXK6grrmxFmk79Upmd7VSrDih_B-kF";fb_208893339231244_access_token|s:113:"AAAC9ZCMVH5AwBAErW9U0jZAyFaZC9ts3069fOEB3g0kZAylHUWb6ZArWknmma0dI2pbJZAXwO7mdyogVWUzetJVXaVbDGXKoYRWxILJIrKowZDZD";fb_208893339231244_user_id|s:15:"100001614066938";', 201, 'fb_100001614066938');
 
 -- --------------------------------------------------------
 
@@ -2001,7 +2008,7 @@ CREATE TABLE IF NOT EXISTS `geicz_updates` (
   `detailsurl` text NOT NULL,
   `infourl` text NOT NULL,
   PRIMARY KEY (`update_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Available Updates' AUTO_INCREMENT=75 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Available Updates' AUTO_INCREMENT=77 ;
 
 --
 -- Дамп данных таблицы `geicz_updates`
@@ -2081,7 +2088,9 @@ INSERT INTO `geicz_updates` (`update_id`, `update_site_id`, `extension_id`, `nam
 (71, 3, 0, 'Russian', '', 'pkg_ru-RU', 'package', '', 0, '3.0.3.1', '', 'http://update.joomla.org/language/details3/ru-RU_details.xml', ''),
 (72, 3, 0, 'Bosnian', '', 'pkg_bs-BA', 'package', '', 0, '3.0.3.1', '', 'http://update.joomla.org/language/details3/bs-BA_details.xml', ''),
 (73, 3, 0, 'Russian', '', 'pkg_ru-RU', 'package', '', 0, '3.0.3.1', '', 'http://update.joomla.org/language/details3/ru-RU_details.xml', ''),
-(74, 3, 0, 'Bosnian', '', 'pkg_bs-BA', 'package', '', 0, '3.0.3.1', '', 'http://update.joomla.org/language/details3/bs-BA_details.xml', '');
+(74, 3, 0, 'Bosnian', '', 'pkg_bs-BA', 'package', '', 0, '3.0.3.1', '', 'http://update.joomla.org/language/details3/bs-BA_details.xml', ''),
+(75, 3, 0, 'Russian', '', 'pkg_ru-RU', 'package', '', 0, '3.0.3.1', '', 'http://update.joomla.org/language/details3/ru-RU_details.xml', ''),
+(76, 3, 0, 'Bosnian', '', 'pkg_bs-BA', 'package', '', 0, '3.0.3.1', '', 'http://update.joomla.org/language/details3/bs-BA_details.xml', '');
 
 -- --------------------------------------------------------
 
@@ -2104,9 +2113,9 @@ CREATE TABLE IF NOT EXISTS `geicz_update_sites` (
 --
 
 INSERT INTO `geicz_update_sites` (`update_site_id`, `name`, `type`, `location`, `enabled`, `last_check_timestamp`) VALUES
-(1, 'Joomla Core', 'collection', 'http://update.joomla.org/core/list.xml', 1, 1363624129),
-(2, 'Joomla Extension Directory', 'collection', 'http://update.joomla.org/jed/list.xml', 1, 1363624129),
-(3, 'Accredited Joomla! Translations', 'collection', 'http://update.joomla.org/language/translationlist_3.xml', 1, 1363624129);
+(1, 'Joomla Core', 'collection', 'http://update.joomla.org/core/list.xml', 1, 1363699097),
+(2, 'Joomla Extension Directory', 'collection', 'http://update.joomla.org/jed/list.xml', 1, 1363699097),
+(3, 'Accredited Joomla! Translations', 'collection', 'http://update.joomla.org/language/translationlist_3.xml', 1, 1363699097);
 
 -- --------------------------------------------------------
 
@@ -2195,8 +2204,8 @@ CREATE TABLE IF NOT EXISTS `geicz_users` (
 --
 
 INSERT INTO `geicz_users` (`id`, `name`, `username`, `email`, `password`, `block`, `sendEmail`, `registerDate`, `lastvisitDate`, `activation`, `params`, `lastResetTime`, `resetCount`) VALUES
-(199, 'FamilyTreeTop', 'Admin', 'familytreetopdev@gmail.com', '3e26b859bedec92db0d1ce89de27f4f1:jZxWJaXrxuYxy4kCFgqRpcdCVXDEVgmg', 0, 0, '2013-03-04 09:40:41', '2013-03-18 16:28:48', '', '{"admin_style":"","admin_language":"","language":"","editor":"","helpsite":"","timezone":""}', '0000-00-00 00:00:00', 0),
-(201, 'alexander.potashko', 'fb_100001614066938', 'fantomhp@gmail.com', 'd162eb46f2a9f6d0903e69facb3c637f:csvOAzaXAtekn7jJAnffpnJovdAxcOHW', 0, 0, '2013-03-04 11:05:10', '2013-03-18 10:59:36', '', '{}', '0000-00-00 00:00:00', 0),
+(199, 'FamilyTreeTop', 'Admin', 'familytreetopdev@gmail.com', '3e26b859bedec92db0d1ce89de27f4f1:jZxWJaXrxuYxy4kCFgqRpcdCVXDEVgmg', 0, 0, '2013-03-04 09:40:41', '2013-03-19 13:18:16', '', '{"admin_style":"","admin_language":"","language":"","editor":"","helpsite":"","timezone":""}', '0000-00-00 00:00:00', 0),
+(201, 'alexander.potashko', 'fb_100001614066938', 'fantomhp@gmail.com', 'd162eb46f2a9f6d0903e69facb3c637f:csvOAzaXAtekn7jJAnffpnJovdAxcOHW', 0, 0, '2013-03-04 11:05:10', '2013-03-19 14:42:03', '', '{}', '0000-00-00 00:00:00', 0),
 (202, 'alexander.potashko.1', 'fb_100002846057243', 'familytreetop@gmail.com', '84bc3bf30d3cd41998a0aeb7c4b91594:Herb8LtBj3Ckx8gqoBwDEgpxViW2DpXi', 0, 0, '2013-03-15 15:48:29', '2013-03-15 16:10:09', '', '{}', '0000-00-00 00:00:00', 0);
 
 -- --------------------------------------------------------
@@ -2378,9 +2387,9 @@ ALTER TABLE `geicz_familytreetop_individuals`
   ADD CONSTRAINT `fk_geicz_familytreetop_individuals_1` FOREIGN KEY (`gedcom_id`) REFERENCES `geicz_familytreetop_tree_links` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
--- Ограничения внешнего ключа таблицы `geicz_familytreetop_media_link`
+-- Ограничения внешнего ключа таблицы `geicz_familytreetop_media_links`
 --
-ALTER TABLE `geicz_familytreetop_media_link`
+ALTER TABLE `geicz_familytreetop_media_links`
   ADD CONSTRAINT `fk_geicz_familytreetop_media_link_1` FOREIGN KEY (`media_id`) REFERENCES `geicz_familytreetop_medias` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_geicz_familytreetop_media_link_2` FOREIGN KEY (`gedcom_id`) REFERENCES `geicz_familytreetop_individuals` (`gedcom_id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
@@ -2404,9 +2413,9 @@ ALTER TABLE `geicz_familytreetop_places`
   ADD CONSTRAINT `fk_geicz_familytreetop_places_1` FOREIGN KEY (`event_id`) REFERENCES `geicz_familytreetop_events` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
--- Ограничения внешнего ключа таблицы `geicz_familytreetop_relation_link`
+-- Ограничения внешнего ключа таблицы `geicz_familytreetop_relation_links`
 --
-ALTER TABLE `geicz_familytreetop_relation_link`
+ALTER TABLE `geicz_familytreetop_relation_links`
   ADD CONSTRAINT `fk_geicz_familytreetop_relation_link_1` FOREIGN KEY (`relation_id`) REFERENCES `geicz_familytreetop_relations` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_geicz_familytreetop_relation_link_2` FOREIGN KEY (`gedcom_id`) REFERENCES `geicz_familytreetop_individuals` (`gedcom_id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_geicz_familytreetop_relation_link_3` FOREIGN KEY (`target_id`) REFERENCES `geicz_familytreetop_individuals` (`gedcom_id`) ON DELETE CASCADE ON UPDATE NO ACTION;
