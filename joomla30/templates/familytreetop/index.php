@@ -150,28 +150,23 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
     </div>
 
     <form id="formEditMedia" action="<?=JRoute::_("index.php?option=com_familytreetop&task=upload.file", false);?>" method="POST" enctype="multipart/form-data">
-        <div class="row fileupload-buttonbar">
-            <div class="span7">
+        <div class="row-fluid fileupload-buttonbar">
+            <div class="span6">
                 <span class="btn btn-success fileinput-button">
                     <i class="icon-plus icon-white"></i>
                     <span>Add files...</span>
                     <input type="file" name="files[]" multiple="">
                 </span>
-                <button type="submit" class="btn btn-primary start">
-                    <i class="icon-upload icon-white"></i>
-                    <span>Start upload</span>
-                </button>
-                <button type="reset" class="btn btn-warning cancel">
-                    <i class="icon-ban-circle icon-white"></i>
-                    <span>Cancel upload</span>
-                </button>
-                <button type="button" class="btn btn-danger delete">
-                    <i class="icon-trash icon-white"></i>
-                    <span>Delete</span>
-                </button>
-                <input type="checkbox" class="toggle">
+                <span class="btn btn-info familytreetop-button set-avatar" style="display: none;">
+                    <i class="icon-ok-sign icon-white"></i>
+                    <span>Set Avatar</span>
+                </span>
+                <span class="btn btn-danger familytreetop-button unset-avatar" style="display: none;">
+                    <i class="icon-remove-sign icon-white"></i>
+                    <span>Unset Avatar</span>
+                </span>
             </div>
-            <div class="span5 fileupload-progress fade">
+            <div class="span6 fileupload-progress fade">
                 <div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
                     <div class="bar" style="width:0%;"></div>
                 </div>
@@ -468,7 +463,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
             <a href="#{%=file.url%}" title="{%=file.name%}" data-gallery="gallery" download="{%=file.name%}"><img src="#{%=file.thumbnail_url%}"></a>
             {% } %}</td>
         <td class="name">
-            <a href="#{%=file.url%}" title="{%=file.name%}" data-gallery="{%=file.thumbnail_url&&'gallery'%}" download="{%=file.name%}">{%=file.name%}</a>
+            <a href="#{%=file.url%}" title="{%=file.name%}" data-gallery="{%=file.thumbnail_url&&'gallery'%}" download="{%=file.name%}">{%=file.original_name%}</a>
         </td>
         <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
         <td colspan="2"></td>

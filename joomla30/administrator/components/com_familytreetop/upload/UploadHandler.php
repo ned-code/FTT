@@ -1,15 +1,5 @@
 <?php
-/*
- * jQuery File Upload Plugin PHP Class 6.2
- * https://github.com/blueimp/jQuery-File-Upload
- *
- * Copyright 2010, Sebastian Tschan
- * https://blueimp.net
- *
- * Licensed under the MIT license:
- * http://www.opensource.org/licenses/MIT
- */
-
+defined('_JEXEC') or die;
 class UploadHandler
 {
     protected $options;
@@ -374,9 +364,9 @@ class UploadHandler
             $file_size = $content_length;
         }
         if ($this->options['max_file_size'] && (
-                $file_size > $this->options['max_file_size'] ||
+            $file_size > $this->options['max_file_size'] ||
                 $file->size > $this->options['max_file_size'])
-            ) {
+        ) {
             $file->error = $this->get_error_message('max_file_size');
             return false;
         }
@@ -386,8 +376,8 @@ class UploadHandler
             return false;
         }
         if (is_int($this->options['max_number_of_files']) && (
-                $this->count_file_objects() >= $this->options['max_number_of_files'])
-            ) {
+            $this->count_file_objects() >= $this->options['max_number_of_files'])
+        ) {
             $file->error = $this->get_error_message('max_number_of_files');
             return false;
         }
@@ -436,7 +426,7 @@ class UploadHandler
         $uploaded_bytes = $this->fix_integer_overflow(intval($content_range[1]));
         while(is_file($this->get_upload_path($name))) {
             if ($uploaded_bytes === $this->get_file_size(
-                    $this->get_upload_path($name))) {
+                $this->get_upload_path($name))) {
                 break;
             }
             $name = $this->upcount_name($name);
@@ -507,7 +497,7 @@ class UploadHandler
     }
 
     protected function handle_file_upload($uploaded_file, $name, $size, $type, $error,
-            $index = null, $content_range = null) {
+                                          $index = null, $content_range = null) {
         $file = new stdClass();
         $file->name = $this->get_file_name($name, $type, $index, $content_range);
         $file->size = $this->fix_integer_overflow(intval($size));
@@ -575,7 +565,7 @@ class UploadHandler
     protected function body($str) {
         echo $str;
     }
-    
+
     protected function header($str) {
         header($str);
     }
@@ -739,11 +729,11 @@ class UploadHandler
             $files[] = $this->handle_file_upload(
                 isset($upload['tmp_name']) ? $upload['tmp_name'] : null,
                 $file_name ? $file_name : (isset($upload['name']) ?
-                        $upload['name'] : null),
+                    $upload['name'] : null),
                 $size ? $size : (isset($upload['size']) ?
-                        $upload['size'] : $_SERVER['CONTENT_LENGTH']),
+                    $upload['size'] : $_SERVER['CONTENT_LENGTH']),
                 isset($upload['type']) ?
-                        $upload['type'] : $_SERVER['CONTENT_TYPE'],
+                    $upload['type'] : $_SERVER['CONTENT_TYPE'],
                 isset($upload['error']) ? $upload['error'] : null,
                 null,
                 $content_range

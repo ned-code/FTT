@@ -6,7 +6,9 @@ $FamilyTreeTop.create("editor", function($){
 
     $fn = {
         setUserMedia: function(parent, ind){
-            $(parent).fileupload();
+            $(parent).fileupload({
+                formData:{gedcom_id: ind.gedcom_id}
+            });
         },
         setUnionsData:function(parent, ind){
             var spouses = $this.mod('usertree').getSpouses(ind.gedcom_id), forms = [];

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: 127.0.0.1
--- Время создания: Мар 15 2013 г., 20:30
+-- Время создания: Мар 19 2013 г., 14:27
 -- Версия сервера: 5.5.25
 -- Версия PHP: 5.3.13
 
@@ -506,7 +506,7 @@ INSERT INTO `geicz_extensions` (`extension_id`, `name`, `type`, `element`, `fold
 (409, 'plg_content_vote', 'plugin', 'vote', 'content', 0, 1, 1, 0, '{"name":"plg_content_vote","type":"plugin","creationDate":"November 2005","author":"Joomla! Project","copyright":"Copyright (C) 2005 - 2013 Open Source Matters. All rights reserved.","authorEmail":"admin@joomla.org","authorUrl":"www.joomla.org","version":"3.0.0","description":"PLG_VOTE_XML_DESCRIPTION","group":""}', '{}', '', '', 0, '0000-00-00 00:00:00', 6, 0),
 (410, 'plg_editors_codemirror', 'plugin', 'codemirror', 'editors', 0, 1, 1, 1, '{"name":"plg_editors_codemirror","type":"plugin","creationDate":"28 March 2011","author":"Marijn Haverbeke","copyright":"","authorEmail":"N\\/A","authorUrl":"","version":"1.0","description":"PLG_CODEMIRROR_XML_DESCRIPTION","group":""}', '{"linenumbers":"0","tabmode":"indent"}', '', '', 0, '0000-00-00 00:00:00', 1, 0),
 (411, 'plg_editors_none', 'plugin', 'none', 'editors', 0, 1, 1, 1, '{"name":"plg_editors_none","type":"plugin","creationDate":"August 2004","author":"Unknown","copyright":"","authorEmail":"N\\/A","authorUrl":"","version":"3.0.0","description":"PLG_NONE_XML_DESCRIPTION","group":""}', '{}', '', '', 0, '0000-00-00 00:00:00', 2, 0),
-(412, 'plg_editors_tinymce', 'plugin', 'tinymce', 'editors', 0, 1, 1, 0, '{"name":"plg_editors_tinymce","type":"plugin","creationDate":"2005-2012","author":"Moxiecode Systems AB","copyright":"Moxiecode Systems AB","authorEmail":"N\\/A","authorUrl":"tinymce.moxiecode.com\\/","version":"3.5.6","description":"PLG_TINY_XML_DESCRIPTION","group":""}', '{"mode":"1","skin":"0","entity_encoding":"raw","lang_mode":"0","lang_code":"en","text_direction":"ltr","content_css":"1","content_css_custom":"","relative_urls":"1","newlines":"0","invalid_elements":"script,applet,iframe","extended_elements":"","toolbar":"top","toolbar_align":"left","html_height":"550","html_width":"750","resizing":"true","resize_horizontal":"false","element_path":"1","fonts":"1","paste":"1","searchreplace":"1","insertdate":"1","format_date":"%Y-%m-%d","inserttime":"1","format_time":"%H:%M:%S","colors":"1","table":"1","smilies":"1","media":"1","hr":"1","directionality":"1","fullscreen":"1","style":"1","layer":"1","xhtmlxtras":"1","visualchars":"1","nonbreaking":"1","template":"1","blockquote":"1","wordcount":"1","advimage":"1","advlink":"1","advlist":"1","autosave":"1","contextmenu":"1","inlinepopups":"1","custom_plugin":"","custom_button":""}', '', '', 0, '0000-00-00 00:00:00', 3, 0),
+(412, 'plg_editors_tinymce', 'plugin', 'tinymce', 'editors', 0, 1, 1, 0, '{"name":"plg_editors_tinymce","type":"plugin","creationDate":"2005-2012","author":"Moxiecode Systems AB","copyright":"Moxiecode Systems AB","authorEmail":"N\\/A","authorUrl":"tinymce.moxiecode.com\\/","version":"3.5.6","description":"PLG_TINY_XML_DESCRIPTION","group":""}', '{"mode":"1","skin":"0","entity_encoding":"raw","lang_mode":"0","lang_code":"en","text_direction":"ltr","content_css":"1","content_css_custom":"","relative_urls":"1","newlines":"0","invalid_elements":"script,applet,iframe","extended_elements":"","toolbar":"top","toolbar_align":"left","html_height":"550","html_width":"750","resizing":"true","resize_horizontal":"false","element_path":"1","fonts":"1","paste":"1","searchreplace":"1","insertdate":"1","format_date":"%Y-%m-%d","inserttime":"1","format_time":"%H:%M:%S","colors":"1","table":"1","smilies":"1","media":"1","hr":"1","directionality":"1","fullscreen":"1","style":"1","layer":"1","xhtmlxtras":"1","visualchars":"1","visualblocks":"1","nonbreaking":"1","template":"1","blockquote":"1","wordcount":"1","advimage":"1","advlink":"1","advlist":"1","autosave":"1","contextmenu":"1","inlinepopups":"1","custom_plugin":"","custom_button":""}', '', '', 199, '2013-03-18 16:33:29', 3, 0),
 (413, 'plg_editors-xtd_article', 'plugin', 'article', 'editors-xtd', 0, 1, 1, 1, '{"name":"plg_editors-xtd_article","type":"plugin","creationDate":"October 2009","author":"Joomla! Project","copyright":"Copyright (C) 2005 - 2013 Open Source Matters. All rights reserved.","authorEmail":"admin@joomla.org","authorUrl":"www.joomla.org","version":"3.0.0","description":"PLG_ARTICLE_XML_DESCRIPTION","group":""}', '{}', '', '', 0, '0000-00-00 00:00:00', 1, 0),
 (414, 'plg_editors-xtd_image', 'plugin', 'image', 'editors-xtd', 0, 1, 1, 0, '{"name":"plg_editors-xtd_image","type":"plugin","creationDate":"August 2004","author":"Joomla! Project","copyright":"Copyright (C) 2005 - 2013 Open Source Matters. All rights reserved.","authorEmail":"admin@joomla.org","authorUrl":"www.joomla.org","version":"3.0.0","description":"PLG_IMAGE_XML_DESCRIPTION","group":""}', '{}', '', '', 0, '0000-00-00 00:00:00', 2, 0),
 (415, 'plg_editors-xtd_pagebreak', 'plugin', 'pagebreak', 'editors-xtd', 0, 1, 1, 0, '{"name":"plg_editors-xtd_pagebreak","type":"plugin","creationDate":"August 2004","author":"Joomla! Project","copyright":"Copyright (C) 2005 - 2013 Open Source Matters. All rights reserved.","authorEmail":"admin@joomla.org","authorUrl":"www.joomla.org","version":"3.0.0","description":"PLG_EDITORSXTD_PAGEBREAK_XML_DESCRIPTION","group":""}', '{}', '', '', 0, '0000-00-00 00:00:00', 3, 0),
@@ -759,7 +759,7 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_invitations` (
   `token` varchar(32) NOT NULL,
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=23 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1949,8 +1949,7 @@ CREATE TABLE IF NOT EXISTS `geicz_session` (
 --
 
 INSERT INTO `geicz_session` (`session_id`, `client_id`, `guest`, `time`, `data`, `userid`, `username`) VALUES
-('kueofpjv0fk2el9td141mn7tl4', 0, 0, '1363364969', '__default|a:7:{s:15:"session.counter";i:39;s:19:"session.timer.start";i:1363363809;s:18:"session.timer.last";i:1363364932;s:17:"session.timer.now";i:1363364963;s:22:"session.client.browser";s:72:"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0";s:8:"registry";O:9:"JRegistry":1:{s:7:"\\0\\0\\0data";O:8:"stdClass":0:{}}s:4:"user";O:5:"JUser":24:{s:9:"\\0\\0\\0isRoot";b:0;s:2:"id";s:3:"202";s:4:"name";s:20:"alexander.potashko.1";s:8:"username";s:18:"fb_100002846057243";s:5:"email";s:23:"familytreetop@gmail.com";s:8:"password";s:65:"84bc3bf30d3cd41998a0aeb7c4b91594:Herb8LtBj3Ckx8gqoBwDEgpxViW2DpXi";s:14:"password_clear";s:0:"";s:5:"block";s:1:"0";s:9:"sendEmail";s:1:"0";s:12:"registerDate";s:19:"2013-03-15 15:48:29";s:13:"lastvisitDate";s:19:"2013-03-15 15:48:29";s:10:"activation";s:0:"";s:6:"params";s:2:"{}";s:6:"groups";a:1:{i:2;s:1:"2";}s:5:"guest";i:0;s:13:"lastResetTime";s:19:"0000-00-00 00:00:00";s:10:"resetCount";s:1:"0";s:10:"\\0\\0\\0_params";O:9:"JRegistry":1:{s:7:"\\0\\0\\0data";O:8:"stdClass":0:{}}s:14:"\\0\\0\\0_authGroups";a:2:{i:0;i:1;i:1;i:2;}s:14:"\\0\\0\\0_authLevels";a:3:{i:0;i:1;i:1;i:1;i:2;i:2;}s:15:"\\0\\0\\0_authActions";N;s:12:"\\0\\0\\0_errorMsg";N;s:10:"\\0\\0\\0_errors";a:0:{}s:3:"aid";i:0;}}fb_208893339231244_code|s:216:"AQBBn_CXtJQCmcsZ71bHSLM0vzokGV-dIDZjXwR3ZxAPOENyjgvjbxqA6vtO47ugh28IG_k3J2No3YXoTA1C-EUPFHzTzRKjWDACDF2clYvCcInD1fQcvMDcsagFvquagrTismkSDvQDM9JALWbp2b7AsxYELiGxB1sjnbOznFNyQAXFDrzV1CQYzk3bvAdEsQsmc20CrCTtEHQIbQcnN6fI";fb_208893339231244_access_token|s:112:"AAAC9ZCMVH5AwBAHt6mRDUK4ZAPgb85yVoqgGF9rPBZAtEQuhC98gqFuTr5oLOPoIvxFpKoTfgSVZAw6DyLJ2mZApSncokxg6VFpTN6SoaTQZDZD";fb_208893339231244_user_id|s:15:"100002846057243";', 202, 'fb_100002846057243'),
-('mnr9dpk8ervma7ej3lmr1n2ua7', 0, 0, '1363364868', '__default|a:7:{s:15:"session.counter";i:7;s:19:"session.timer.start";i:1363364528;s:18:"session.timer.last";i:1363364855;s:17:"session.timer.now";i:1363364857;s:22:"session.client.browser";s:109:"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.22 (KHTML, like Gecko) Chrome/25.0.1364.152 Safari/537.22";s:8:"registry";O:9:"JRegistry":1:{s:7:"\\0\\0\\0data";O:8:"stdClass":0:{}}s:4:"user";O:5:"JUser":24:{s:9:"\\0\\0\\0isRoot";b:0;s:2:"id";s:3:"201";s:4:"name";s:18:"alexander.potashko";s:8:"username";s:18:"fb_100001614066938";s:5:"email";s:18:"fantomhp@gmail.com";s:8:"password";s:65:"d162eb46f2a9f6d0903e69facb3c637f:csvOAzaXAtekn7jJAnffpnJovdAxcOHW";s:14:"password_clear";s:0:"";s:5:"block";s:1:"0";s:9:"sendEmail";s:1:"0";s:12:"registerDate";s:19:"2013-03-04 11:05:10";s:13:"lastvisitDate";s:19:"2013-03-15 15:54:19";s:10:"activation";s:0:"";s:6:"params";s:2:"{}";s:6:"groups";a:1:{i:2;s:1:"2";}s:5:"guest";i:0;s:13:"lastResetTime";s:19:"0000-00-00 00:00:00";s:10:"resetCount";s:1:"0";s:10:"\\0\\0\\0_params";O:9:"JRegistry":1:{s:7:"\\0\\0\\0data";O:8:"stdClass":0:{}}s:14:"\\0\\0\\0_authGroups";a:2:{i:0;i:1;i:1;i:2;}s:14:"\\0\\0\\0_authLevels";a:3:{i:0;i:1;i:1;i:1;i:2;i:2;}s:15:"\\0\\0\\0_authActions";N;s:12:"\\0\\0\\0_errorMsg";N;s:10:"\\0\\0\\0_errors";a:0:{}s:3:"aid";i:0;}}fb_208893339231244_code|s:216:"AQCgVlYUkz5p4fJ7i6Rb97ZDA_ijLRyv10sFjJXYpIpvlV0LjPZ1YCeQpSsEDBBBKlqPLWXO1Ktymn1yP5W2fjCJUdjCYXsbgriHqg6vejo1E6mBQaZyOG7MJ9IINBVSrdYjXMh6S3C52l8XHTApWe8pNbvqB-jq7XxHFwYHb4ZTbMKuaTU78xd5npSWG5Zn-2AD43rMrL96ObDG8Xz8Ns5_";fb_208893339231244_access_token|s:113:"AAAC9ZCMVH5AwBAErW9U0jZAyFaZC9ts3069fOEB3g0kZAylHUWb6ZArWknmma0dI2pbJZAXwO7mdyogVWUzetJVXaVbDGXKoYRWxILJIrKowZDZD";fb_208893339231244_user_id|s:15:"100001614066938";', 201, 'fb_100001614066938');
+('ad51pcqgoaoq7pbl316avkqh37', 0, 0, '1363688338', '__default|a:7:{s:15:"session.counter";i:363;s:19:"session.timer.start";i:1363604348;s:18:"session.timer.last";i:1363688332;s:17:"session.timer.now";i:1363688336;s:22:"session.client.browser";s:109:"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.22 (KHTML, like Gecko) Chrome/25.0.1364.152 Safari/537.22";s:8:"registry";O:9:"JRegistry":1:{s:7:"\\0\\0\\0data";O:8:"stdClass":1:{s:5:"users";O:8:"stdClass":1:{s:5:"login";O:8:"stdClass":1:{s:4:"form";O:8:"stdClass":1:{s:6:"return";s:45:"index.php?option=com_familytreetop&view=index";}}}}}s:4:"user";O:5:"JUser":24:{s:9:"\\0\\0\\0isRoot";b:0;s:2:"id";s:3:"201";s:4:"name";s:18:"alexander.potashko";s:8:"username";s:18:"fb_100001614066938";s:5:"email";s:18:"fantomhp@gmail.com";s:8:"password";s:65:"d162eb46f2a9f6d0903e69facb3c637f:csvOAzaXAtekn7jJAnffpnJovdAxcOHW";s:14:"password_clear";s:0:"";s:5:"block";s:1:"0";s:9:"sendEmail";s:1:"0";s:12:"registerDate";s:19:"2013-03-04 11:05:10";s:13:"lastvisitDate";s:19:"2013-03-15 16:59:24";s:10:"activation";s:0:"";s:6:"params";s:2:"{}";s:6:"groups";a:1:{i:2;s:1:"2";}s:5:"guest";i:0;s:13:"lastResetTime";s:19:"0000-00-00 00:00:00";s:10:"resetCount";s:1:"0";s:10:"\\0\\0\\0_params";O:9:"JRegistry":1:{s:7:"\\0\\0\\0data";O:8:"stdClass":0:{}}s:14:"\\0\\0\\0_authGroups";a:2:{i:0;i:1;i:1;i:2;}s:14:"\\0\\0\\0_authLevels";a:3:{i:0;i:1;i:1;i:1;i:2;i:2;}s:15:"\\0\\0\\0_authActions";N;s:12:"\\0\\0\\0_errorMsg";N;s:10:"\\0\\0\\0_errors";a:0:{}s:3:"aid";i:0;}}fb_208893339231244_code|s:216:"AQAASQwroMUlrV7xSqrIKJy4QmWwjoEvg6gurBoSF7E8fwDSLcoinEqwEWepGOwR_QlttSdFiwezn_2Zh4xoLHU7aVafPJ3JJceP4enF1yHw7TMghKvwC0Z5H0_rwm5ihHg2NH1kvz_TaxHOj3EZ_zAN6b6wS_ORcl4UB_ZNWnZCyXVKimKcRV4pm_QxhLCZAkuUb5gY-NooI4otXOqWkmeA";fb_208893339231244_access_token|s:113:"AAAC9ZCMVH5AwBAErW9U0jZAyFaZC9ts3069fOEB3g0kZAylHUWb6ZArWknmma0dI2pbJZAXwO7mdyogVWUzetJVXaVbDGXKoYRWxILJIrKowZDZD";fb_208893339231244_user_id|s:15:"100001614066938";', 201, 'fb_100001614066938');
 
 -- --------------------------------------------------------
 
@@ -2002,7 +2001,7 @@ CREATE TABLE IF NOT EXISTS `geicz_updates` (
   `detailsurl` text NOT NULL,
   `infourl` text NOT NULL,
   PRIMARY KEY (`update_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Available Updates' AUTO_INCREMENT=73 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Available Updates' AUTO_INCREMENT=75 ;
 
 --
 -- Дамп данных таблицы `geicz_updates`
@@ -2080,7 +2079,9 @@ INSERT INTO `geicz_updates` (`update_id`, `update_site_id`, `extension_id`, `nam
 (69, 3, 0, 'Russian', '', 'pkg_ru-RU', 'package', '', 0, '3.0.3.1', '', 'http://update.joomla.org/language/details3/ru-RU_details.xml', ''),
 (70, 3, 0, 'Bosnian', '', 'pkg_bs-BA', 'package', '', 0, '3.0.3.1', '', 'http://update.joomla.org/language/details3/bs-BA_details.xml', ''),
 (71, 3, 0, 'Russian', '', 'pkg_ru-RU', 'package', '', 0, '3.0.3.1', '', 'http://update.joomla.org/language/details3/ru-RU_details.xml', ''),
-(72, 3, 0, 'Bosnian', '', 'pkg_bs-BA', 'package', '', 0, '3.0.3.1', '', 'http://update.joomla.org/language/details3/bs-BA_details.xml', '');
+(72, 3, 0, 'Bosnian', '', 'pkg_bs-BA', 'package', '', 0, '3.0.3.1', '', 'http://update.joomla.org/language/details3/bs-BA_details.xml', ''),
+(73, 3, 0, 'Russian', '', 'pkg_ru-RU', 'package', '', 0, '3.0.3.1', '', 'http://update.joomla.org/language/details3/ru-RU_details.xml', ''),
+(74, 3, 0, 'Bosnian', '', 'pkg_bs-BA', 'package', '', 0, '3.0.3.1', '', 'http://update.joomla.org/language/details3/bs-BA_details.xml', '');
 
 -- --------------------------------------------------------
 
@@ -2103,9 +2104,9 @@ CREATE TABLE IF NOT EXISTS `geicz_update_sites` (
 --
 
 INSERT INTO `geicz_update_sites` (`update_site_id`, `name`, `type`, `location`, `enabled`, `last_check_timestamp`) VALUES
-(1, 'Joomla Core', 'collection', 'http://update.joomla.org/core/list.xml', 1, 1363352327),
-(2, 'Joomla Extension Directory', 'collection', 'http://update.joomla.org/jed/list.xml', 1, 1363352327),
-(3, 'Accredited Joomla! Translations', 'collection', 'http://update.joomla.org/language/translationlist_3.xml', 1, 1363352327);
+(1, 'Joomla Core', 'collection', 'http://update.joomla.org/core/list.xml', 1, 1363624129),
+(2, 'Joomla Extension Directory', 'collection', 'http://update.joomla.org/jed/list.xml', 1, 1363624129),
+(3, 'Accredited Joomla! Translations', 'collection', 'http://update.joomla.org/language/translationlist_3.xml', 1, 1363624129);
 
 -- --------------------------------------------------------
 
@@ -2194,8 +2195,8 @@ CREATE TABLE IF NOT EXISTS `geicz_users` (
 --
 
 INSERT INTO `geicz_users` (`id`, `name`, `username`, `email`, `password`, `block`, `sendEmail`, `registerDate`, `lastvisitDate`, `activation`, `params`, `lastResetTime`, `resetCount`) VALUES
-(199, 'FamilyTreeTop', 'Admin', 'familytreetopdev@gmail.com', '3e26b859bedec92db0d1ce89de27f4f1:jZxWJaXrxuYxy4kCFgqRpcdCVXDEVgmg', 0, 0, '2013-03-04 09:40:41', '2013-03-15 12:58:44', '', '{"admin_style":"","admin_language":"","language":"","editor":"","helpsite":"","timezone":""}', '0000-00-00 00:00:00', 0),
-(201, 'alexander.potashko', 'fb_100001614066938', 'fantomhp@gmail.com', 'd162eb46f2a9f6d0903e69facb3c637f:csvOAzaXAtekn7jJAnffpnJovdAxcOHW', 0, 0, '2013-03-04 11:05:10', '2013-03-15 16:22:08', '', '{}', '0000-00-00 00:00:00', 0),
+(199, 'FamilyTreeTop', 'Admin', 'familytreetopdev@gmail.com', '3e26b859bedec92db0d1ce89de27f4f1:jZxWJaXrxuYxy4kCFgqRpcdCVXDEVgmg', 0, 0, '2013-03-04 09:40:41', '2013-03-18 16:28:48', '', '{"admin_style":"","admin_language":"","language":"","editor":"","helpsite":"","timezone":""}', '0000-00-00 00:00:00', 0),
+(201, 'alexander.potashko', 'fb_100001614066938', 'fantomhp@gmail.com', 'd162eb46f2a9f6d0903e69facb3c637f:csvOAzaXAtekn7jJAnffpnJovdAxcOHW', 0, 0, '2013-03-04 11:05:10', '2013-03-18 10:59:36', '', '{}', '0000-00-00 00:00:00', 0),
 (202, 'alexander.potashko.1', 'fb_100002846057243', 'familytreetop@gmail.com', '84bc3bf30d3cd41998a0aeb7c4b91594:Herb8LtBj3Ckx8gqoBwDEgpxViW2DpXi', 0, 0, '2013-03-15 15:48:29', '2013-03-15 16:10:09', '', '{}', '0000-00-00 00:00:00', 0);
 
 -- --------------------------------------------------------
