@@ -69,6 +69,9 @@ $FamilyTreeTop.create("usertree", function($){
                 if(ind.last_name != null) $name.push(ind.last_name);
                 return $name.join(' ').replace(/[ \t]{2,}/g, ' ');
             },
+            medias: function(){
+              return $this.getMedias(ind.gedcom_id);
+            },
             birth:function(){
                 return $this.getUserEventByType(ind.gedcom_id, 'BIRT');
             },
@@ -331,6 +334,10 @@ $FamilyTreeTop.create("usertree", function($){
         return pull;
     }
 
+    $this.getMedias = function(gedcom_id){
+        if("undefined" === typeof(data.med.gedcom_id[gedcom_id])) return [];
+        return data.med.gedcom_id[gedcom_id];
+    }
 
     $this.init($FamilyTreeTop.dataString, $FamilyTreeTop.userString, $FamilyTreeTop.users);
 });

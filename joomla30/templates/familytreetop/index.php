@@ -149,6 +149,14 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
         </div>
     </div>
 
+    <div id="dataEditMedia" class="row-fluid familytreetop-gallery">
+        <div class="span12">
+            <ul class="unstyled inline">
+
+            </ul>
+        </div>
+    </div>
+
     <form id="formEditMedia" action="<?=JRoute::_("index.php?option=com_familytreetop&task=upload.file", false);?>" method="POST" enctype="multipart/form-data">
         <div class="row-fluid fileupload-buttonbar">
             <div class="span6">
@@ -164,6 +172,10 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                 <span class="btn btn-danger familytreetop-button unset-avatar" style="display: none;">
                     <i class="icon-remove-sign icon-white"></i>
                     <span>Unset Avatar</span>
+                </span>
+                <span class="btn btn-danger familytreetop-button delete" style="display: none;">
+                    <i class="icon-trash icon-white"></i>
+                    <span>Delete</span>
                 </span>
             </div>
             <div class="span6 fileupload-progress fade">

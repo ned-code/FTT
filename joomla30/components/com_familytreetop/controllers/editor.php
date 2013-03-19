@@ -282,6 +282,20 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         echo json_encode(array('forms'=>$forms));
         exit;
     }
-    public function updateMediasInfo(){}
+
+    public function unsetAvatar(){
+        echo json_encode(array('success'=>true));
+        exit;
+    }
+
+    public function setAvatar(){
+        echo json_encode(array('success'=>true));
+        exit;
+    }
+
+    public function deletePhoto(){
+        echo json_encode(array('success'=>true));
+        exit;
+    }
 
 }

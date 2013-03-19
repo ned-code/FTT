@@ -6,9 +6,69 @@ $FamilyTreeTop.create("editor", function($){
 
     $fn = {
         setUserMedia: function(parent, ind){
+            var dataBox = $('#dataEditMedia').clone(),
+                ul = $(dataBox).find('ul');
+            $(parent).after(dataBox);
+
+            ind.medias().forEach(function(el, index){
+                var li = $('<li><img style="cursor:pointer;" class="img-polaroid" src=""></li>');
+                $(li).find('img').attr('src', el.thumbnail_url);
+                $(li).attr('data-familytreetop-delete', el.delete_url);
+                $(li).data(el);
+                $(ul).append(li);
+            });
+
+            $(ul).find('li').click(function(){
+                if($(this).hasClass('active')) return false;
+                $(ul).find('li').removeClass('active');
+                $(this).addClass('active');
+                var data = $(this).data();
+
+                if(data.role == "AVAT"){
+                    $(parent).find('.unset-avatar').show();
+                    $(parent).find('.set-avatar').hide();
+                    $(parent).find('.unset-avatar').data({data:data, object: this });
+                } else {
+                    $(parent).find('.unset-avatar').hide();
+                    $(parent).find('.set-avatar').show();
+                    $(parent).find('.set-avatar').data({data:data, object: this });
+                }
+                $(parent).find('.delete').show();
+                $(parent).find('.delete').data({data:data, object: this });
+            });
+
+            $(parent).find('.set-avatar').click(function(){
+                var ret = $(this).data();
+                $this.ajax('editor.setAvatar', ret.data, function(){
+                    $(parent).find('.unset-avatar').show();
+                    $(parent).find('.set-avatar').hide();
+                    $(parent).find('.unset-avatar').data(ret.data);
+                });
+            });
+            $(parent).find('.unset-avatar').click(function(){
+                var ret = $(this).data();
+                $this.ajax('editor.unsetAvatar', ret.data, function(){
+                    $(parent).find('.unset-avatar').hide();
+                    $(parent).find('.set-avatar').show();
+                    $(parent).find('.set-avatar').data(ret.data);
+                });
+            });
+            $(parent).find('.delete').click(function(){
+                var ret = $(this).data();
+                $this.ajax('editor.deletePhoto', ret.data, function(){
+                    $(parent).find('.unset-avatar').hide();
+                    $(parent).find('.set-avatar').hide();
+                    $(parent).find('.delete').hide();
+                    $(ret.object).removeClass('active');
+                    $(ret.object).remove();
+                });
+            });
+
             $(parent).fileupload({
                 formData:{gedcom_id: ind.gedcom_id}
             });
+
+            return true;
         },
         setUnionsData:function(parent, ind){
             var spouses = $this.mod('usertree').getSpouses(ind.gedcom_id), forms = [];

@@ -72,9 +72,30 @@ class FamilyTreeTopGedcomMediaModel {
 class FamilyTreeTopGedcomMediasManager {
     protected $tree_id;
     protected $list = array();
+    protected $list_by_gedcom_id = array();
 
     public function __construct($tree_id){
         $this->tree_id = $tree_id;
+        if(!empty($tree_id)){
+            $db = JFactory::getDbo();
+            $sql = "SELECT m.*, ml.id as link_id, ml.gedcom_id, ml.role
+                FROM geicz_familytreetop_medias as m, geicz_familytreetop_media_links as ml, geicz_familytreetop_tree_links as l, geicz_familytreetop_trees as t
+                WHERE t.id = l.tree_id AND ml.gedcom_id = l.id AND ml.media_id = m.id AND t.id = " . $tree_id;
+            $db->setQuery(sprintf($sql, $tree_id));
+            $this->list = $db->loadAssocList('id');
+            $this->list_by_gedcom_id =  $this->sortList('gedcom_id', $this->list);
+        }
+    }
+
+    protected function sortList($type, $rows){
+        if(empty($rows)) return array();
+        $result = array();
+        foreach($rows as $key => $row){
+            if(isset($row[$type]) && $row[$type] != null){
+                $result[$row[$type]][] = $row;
+            }
+        }
+        return $result;
     }
 
     public function get($gedcom_id = null){
@@ -107,7 +128,10 @@ class FamilyTreeTopGedcomMediasManager {
     }
 
     public function getList(){
-        return $this->list;
+        return array(
+            'all'=> $this->list,
+            'gedcom_id' => $this->list_by_gedcom_id
+        );
     }
 
 }
