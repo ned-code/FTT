@@ -91,4 +91,11 @@ class FamilytreetopControllerUser extends FamilytreetopController
         echo json_encode(array('auth'=>false));
         exit;
     }
+
+    public function logout(){
+        $user = FamilyTreeTopUserHelper::getInstance()->get();
+        $app = JFactory::getApplication();
+        $app->logout( $user->id );
+        $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=index", false));
+    }
 }

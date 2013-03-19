@@ -34,7 +34,7 @@ if(!empty($user->gedcom_id)){
                             <li><a  familytreetop="languages" href="#">Languages</a></li>
                             <li><a  familytreetop="facebook" href="#">Redirect to Facebook</a></li>
                             <li class="divider"></li>
-                            <li><a  familytreetop="logout" href="#">Log Out</a></li>
+                            <li><a  familytreetop="logout" href="<?=JRoute::_("index.php?option=com_familytreetop&task=user.logout", false);?>">Log Out</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -47,8 +47,18 @@ if(!empty($user->gedcom_id)){
         'use strict';
         $('#profileUser ul.dropdown-menu li a').click(function(){
             var id = $(this).attr('familytreetop');
+            var a = $(this);
             console.log(id);
             switch(id){
+                case "logout":
+                        if(FB.getAuthResponse() != null){
+                            FB.logout(function(r){
+                                window.location = $(a).attr('href');
+                            });
+                        } else {
+                            window.location = $(a).attr('href');
+                        }
+
                 default: return false;
             }
             return false;
