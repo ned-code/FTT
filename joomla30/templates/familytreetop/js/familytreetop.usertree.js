@@ -58,17 +58,18 @@ $FamilyTreeTop.create("usertree", function($){
 
                 style = (style)?style:"img-polaroid";
                 if(el){
-                    data = [el.thumbnail_url, $('<img class="'+style+'" src="" />')];
+                    data = [el.thumbnail_url, $('<img class="'+style+'" />')];
                 } else if(ind.gedcom_id in usersmap){
                     data = [
                         'https://graph.facebook.com/'+usersmap[ind.gedcom_id].facebook_id+'/picture/',
-                        $('<img class="'+style+'" src="" />')
+                        $('<img class="'+style+'" />')
                     ];
                 } else {
                     url = ($this.url().base()+"/templates/familytreetop/js/holder.js/"+((size)?size.join('x'):"100x100"));
                     data = [
-                        url,
-                        $('<img class="'+style+'" data-src="'+url+'" />')
+                        false,
+                        $('<img class="'+style+'" data-src="'+url+'" />'),
+                        url
                     ];
                 }
                 if(size){
@@ -79,7 +80,7 @@ $FamilyTreeTop.create("usertree", function($){
                     ?data[0]
                     :data[1]
                     .attr('gedcom_id', ind.gedcom_id)
-                    .attr('src', data[0]);
+                    .attr('src', data[0] || "");
             },
             username:function(){
                return this.name().toLowerCase().split(' ').join('.');

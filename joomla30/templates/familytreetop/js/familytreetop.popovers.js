@@ -42,9 +42,11 @@ $FamilyTreeTop.create("popovers", function($){
             avatar = $fn.getLastObject().object.avatar(["100","100"], "media-object");
             $(div).find('.familytreetop-avatar').html("")
             $(div).find('.familytreetop-avatar').append(avatar);
+
             Holder.run({
                 images:avatar[0]
             });
+
             return div;
         },
         getContainer: function(){
