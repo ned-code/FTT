@@ -22,7 +22,8 @@ $FamilyTreeTop.create("editor", function($){
                 if($(this).hasClass('active')) return false;
                 $(ul).find('li').removeClass('active');
                 $(this).addClass('active');
-                var data = $(this).data();
+                var el = $(this).data();
+                var data = $this.mod('usertree').getMedia(el.id);
 
                 if(data.role == "AVAT"){
                     $(parent).find('.unset-avatar').show();
@@ -43,16 +44,20 @@ $FamilyTreeTop.create("editor", function($){
                     $(parent).find('.unset-avatar').show();
                     $(parent).find('.set-avatar').hide();
                     $(parent).find('.unset-avatar').data(ret.data);
+                    $this.mod('usertree').setAvatar(ret.data.gedcom_id, ret.data.id);
                 });
             });
+
             $(parent).find('.unset-avatar').click(function(){
                 var ret = $(this).data();
                 $this.ajax('editor.unsetAvatar', ret.data, function(){
                     $(parent).find('.unset-avatar').hide();
                     $(parent).find('.set-avatar').show();
                     $(parent).find('.set-avatar').data(ret.data);
+                    $this.mod('usertree').unsetAvatar(ret.data.gedcom_id, ret.data.id);
                 });
             });
+
             $(parent).find('.delete').click(function(){
                 var ret = $(this).data();
                 $this.ajax('editor.deletePhoto', ret.data, function(){
@@ -61,6 +66,7 @@ $FamilyTreeTop.create("editor", function($){
                     $(parent).find('.delete').hide();
                     $(ret.object).removeClass('active');
                     $(ret.object).remove();
+                    $this.mod('usertree').mediaRemove(ret.data.id);
                 });
             });
 

@@ -284,16 +284,49 @@ class FamilytreetopControllerEditor extends FamilytreetopController
     }
 
     public function unsetAvatar(){
+        $app = JFactory::getApplication();
+        $media_id = $app->input->post->get('id', false);
+        if(!$media_id){
+            echo json_encode(array('success'=>false));
+            exit;
+        }
+
+        $gedcom = GedcomHelper::getInstance();
+        $media = $gedcom->medias->getById($media_id);
+        $media->unsetAvatar();
+
         echo json_encode(array('success'=>true));
         exit;
     }
 
     public function setAvatar(){
+        $app = JFactory::getApplication();
+        $media_id = $app->input->post->get('id', false);
+        if(!$media_id){
+            echo json_encode(array('success'=>false));
+            exit;
+        }
+
+        $gedcom = GedcomHelper::getInstance();
+        $media = $gedcom->medias->getById($media_id);
+        $media->setAvatar();
+
         echo json_encode(array('success'=>true));
         exit;
     }
 
     public function deletePhoto(){
+        $app = JFactory::getApplication();
+        $media_id = $app->input->post->get('id', false);
+        if(!$media_id){
+            echo json_encode(array('success'=>false));
+            exit;
+        }
+
+        $gedcom = GedcomHelper::getInstance();
+        $media = $gedcom->medias->getById($media_id);
+        $media->remove();
+
         echo json_encode(array('success'=>true));
         exit;
     }

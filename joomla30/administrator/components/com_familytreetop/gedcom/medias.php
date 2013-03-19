@@ -55,9 +55,16 @@ class FamilyTreeTopGedcomMediaModel {
         if(empty($this->id) || empty($this->link_id)){
             return false;
         }
+        $avatar = FamilyTreeTopMediaLinks::find_by_role_and_gedcom_id("AVAT", $this->gedcom_id);
+        if($avatar){
+            $avatar->role = "IMAG";
+            $avatar->save();
+        }
         $link = FamilyTreeTopMediaLinks::find($this->link_id);
-        $link->role = "AVAT";
-        $link->save();
+        if($link){
+            $link->role = "AVAT";
+            $link->save();
+        }
     }
     public function unsetAvatar(){
         if(empty($this->id) || empty($this->link_id)){
@@ -102,6 +109,52 @@ class FamilyTreeTopGedcomMediasManager {
         if(empty($gedcom_id)){
             return new FamilyTreeTopGedcomMediaModel();
         }
+        if(!isset($this->list_by_gedcom_id[$gedcom_id])) return false;
+        $medias = array();
+        $data = $this->list_by_gedcom_id[$gedcom_id];
+        foreach($data as $item){
+            $model = new FamilyTreeTopGedcomMediaModel();
+            $model->id = $item['id'];
+            $model->link_id = $item['link_id'];
+            $model->gedcom_id = $item['gedcom_id'];
+            $model->name = $item['name'];
+            $model->original_name = $item['original_name'];
+            $model->size = $item['size'];
+            $model->type = $item['type'];
+            $model->url = $item['url'];
+            $model->thumbnail_url = $item['thumbnail_url'];
+            $model->delete_url = $item['delete_url'];
+            $model->change_time = $item['change_time'];
+            $medias[] = $model;
+        }
+        return $medias;
+    }
+
+    public function getById($id){
+        if(empty($id)){
+            return new FamilyTreeTopGedcomMediaModel();
+        }
+        $media = FamilyTreeTopMedias::find($id);
+        if($media){
+            $link = FamilyTreeTopMediaLinks::find_by_media_id($id);
+            if(!$link){
+                return false;
+            }
+            $model = new FamilyTreeTopGedcomMediaModel();
+            $model->id = $media->id;
+            $model->link_id = $link->id;
+            $model->gedcom_id = $link->gedcom_id;
+            $model->name = $media->name;
+            $model->original_name = $media->original_name;
+            $model->size = $media->size;
+            $model->type = $media->type;
+            $model->url = $media->url;
+            $model->thumbnail_url = $media->thumbnail_url;
+            $model->delete_url = $media->delete_url;
+            $model->change_time = $media->change_time;
+            return $model;
+        }
+        return false;
     }
 
     public function getByName($name){

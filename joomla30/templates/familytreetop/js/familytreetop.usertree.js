@@ -334,9 +334,57 @@ $FamilyTreeTop.create("usertree", function($){
         return pull;
     }
 
+    $this.getMedia = function(media_id){
+        if("undefined" === typeof(data.med.all[media_id])) return false;
+        return data.med.all[media_id]
+    }
+
     $this.getMedias = function(gedcom_id){
         if("undefined" === typeof(data.med.gedcom_id[gedcom_id])) return [];
         return data.med.gedcom_id[gedcom_id];
+    }
+
+    $this.setAvatar = function(gedcom_id, media_id){
+        if("undefined" === typeof(data.med.gedcom_id[gedcom_id])) return false;
+        if("undefined" === typeof(data.med.all[media_id])) return false;
+        for(var key in data.med.gedcom_id[gedcom_id]){
+            if(!data.med.gedcom_id[gedcom_id].hasOwnProperty(key)) continue;
+            if(data.med.gedcom_id[gedcom_id][key].id == media_id){
+                data.med.gedcom_id[gedcom_id].role = "AVAT";
+            } else {
+                data.med.gedcom_id[gedcom_id].role = "IMAG";
+            }
+        }
+        data.med.all[media_id].role = "AVAT";
+    }
+    $this.unsetAvatar = function(gedcom_id, media_id){
+        if("undefined" === typeof(data.med.gedcom_id[gedcom_id])) return false;
+        if("undefined" === typeof(data.med.all[media_id])) return false;
+        for(var key in data.med.gedcom_id[gedcom_id]){
+            if(!data.med.gedcom_id[gedcom_id].hasOwnProperty(key)) continue;
+            if(data.med.gedcom_id[gedcom_id][key].id == media_id){
+                data.med.gedcom_id[gedcom_id].role = "IMAG";
+            }
+        }
+        data.med.all[media_id].role = "IMAG";
+    }
+
+    $this.mediaRemove = function(media_id){
+        if("undefined" === typeof(data.med.all[media_id])) return false;
+        var d =  data.med.all[media_id]
+        for(var key in d){
+            if(!d.hasOwnProperty(key)) continue;
+            var gedcom_id = d.gedcom_id;
+            if("undefined" !== typeof(data.med.gedcom_id[gedcom_id])){
+                for(var index in data.med.gedcom_id[gedcom_id]){
+                    if(!data.med.gedcom_id[gedcom_id].hasOwnProperty(index)) continue;
+                    if(data.med.gedcom_id[gedcom_id][index].id = media_id){
+                        data.med.gedcom_id[gedcom_id].splice(index, 1);
+                    }
+                }
+            }
+        }
+        delete data.med.all[media_id];
     }
 
     $this.init($FamilyTreeTop.dataString, $FamilyTreeTop.userString, $FamilyTreeTop.users);
