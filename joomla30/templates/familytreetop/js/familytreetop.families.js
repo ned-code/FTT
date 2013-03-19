@@ -41,9 +41,17 @@ $FamilyTreeTop.create("families", function($){
             if(!ind) return [];
             var divs = $(cl).find('div');
             $(cl).attr('gedcom_id', ind.gedcom_id);
-            $(divs[0]).find('img').attr('gedcom_id', ind.gedcom_id);
             $(divs[1]).text(ind.name());
             $(divs[2]).text('...');
+
+            var img = $(divs[0]).find('img');
+            var avatar = ind.avatar((type=="up")?["150","150"]:["100","100"]);
+            $(img).parent().append(avatar);
+            $(img).remove();
+
+            Holder.run({
+                images: avatar[0]
+            });
 
             if(args.abilityToMove && ((type == "up" && ind.isParentsExist()) || (type == "down" && ind.isChildrensExist())) ){
                 $(divs[0]).append($fn.createArrow(type, args));

@@ -323,6 +323,7 @@ class FamilytreetopControllerEditor extends FamilytreetopController
             exit;
         }
 
+
         $gedcom = GedcomHelper::getInstance();
         $media = $gedcom->medias->getById($media_id);
         $media->remove();

@@ -27,7 +27,7 @@ $FamilyTreeTop.create("usertree", function($){
             usersmap = $.parseJSON(usersString);
             console.log(usersmap);
         } else {
-            usersmap = null;
+            usersmap = [];
         }
     }
 
@@ -51,6 +51,36 @@ $FamilyTreeTop.create("usertree", function($){
             know_as: ind.know_as,
             last_name: ind.last_name,
             middle_name: ind.middle_name,
+            avatar: function(size, style, src){
+                var el = $this.getAvatar(ind.gedcom_id),
+                    data = [],
+                    url;
+
+                style = (style)?style:"img-polaroid";
+                if(el){
+                    data = [el.thumbnail_url, $('<img class="'+style+'" src="" />')];
+                } else if(ind.gedcom_id in usersmap){
+                    data = [
+                        'https://graph.facebook.com/'+usersmap[ind.gedcom_id].facebook_id+'/picture/',
+                        $('<img class="'+style+'" src="" />')
+                    ];
+                } else {
+                    url = ($this.url().base()+"/template/familytreetop/js/holder.js/"+((size)?size.join('x'):"100x100"));
+                    data = [
+                        url,
+                        $('<img class="'+style+'" data-src="'+url+'" />')
+                    ];
+                }
+                if(size){
+                    data[1].attr('width', size[0] + "px");
+                    data[1].attr('heght', size[1] + "px");
+                }
+                return (src)
+                    ?data[0]
+                    :data[1]
+                    .attr('gedcom_id', ind.gedcom_id)
+                    .attr('src', data[0]);
+            },
             username:function(){
                return this.name().toLowerCase().split(' ').join('.');
             },
@@ -337,6 +367,17 @@ $FamilyTreeTop.create("usertree", function($){
     $this.getMedia = function(media_id){
         if("undefined" === typeof(data.med.all[media_id])) return false;
         return data.med.all[media_id]
+    }
+
+    $this.getAvatar = function(gedcom_id){
+        var medias = $this.getMedias(gedcom_id);
+        var ret = false;
+        medias.forEach(function(el){
+            if(el.role == "AVAT"){
+                ret = el;
+            }
+        });
+        return ret;
     }
 
     $this.getMedias = function(gedcom_id){

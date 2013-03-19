@@ -88,7 +88,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
         <div class="row-fluid">
             <div class="span12">
                 <div>
-                    <div class="span4">
+                    <div class="span4 familytreetop-avatar">
                         <img class="media-object" data-src="template/familytreetop/js/holder.js/100x100">
                     </div>
                     <div class="span8">

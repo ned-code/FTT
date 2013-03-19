@@ -31,12 +31,19 @@ $FamilyTreeTop.create("popovers", function($){
         },
         getContent:function(){
             var div = $('#familytreetop-root #popover').clone(),
-                names = ['first_name', 'middle_name', 'last_name', 'know_as'];
+                names = ['first_name', 'middle_name', 'last_name', 'know_as'],
+                avatar;
             $(div).find('ul li span').each(function(index, el){
                 var name = $fn.getLastObject().object[names[index]];
                 if(name != null){
                     $(el).text(name);
                 }
+            });
+            avatar = $fn.getLastObject().object.avatar(["100","100"], "media-object");
+            $(div).find('.familytreetop-avatar').html("")
+            $(div).find('.familytreetop-avatar').append(avatar);
+            Holder.run({
+                images:avatar[0]
             });
             return div;
         },
