@@ -23,7 +23,6 @@ class GedcomHelper
             self::$instance = new GedcomHelper ();
 
             $user = FamilyTreeTopUserHelper::getInstance()->get();
-
             self::$instance->individuals = new FamilyTreeTopGedcomIndividualsManager($user->tree_id);
             self::$instance->families = new FamilyTreeTopGedcomFamiliesManager($user->tree_id);
             self::$instance->childrens = new FamilyTreeTopGedcomChildrensManager($user->tree_id);

@@ -160,8 +160,8 @@ class FamilyTreeTopGedcomIndividualsManager {
         }
     }
 
-    protected function getObject(){
-        return new FamilyTreeTopGedcomIndividualsModel($this->tree_id);
+    protected function getObject($tree_id = null){
+        return new FamilyTreeTopGedcomIndividualsModel((empty($tree_id))?$this->tree_id:$tree_id);
     }
 
     public function updateList(&$model){
@@ -199,6 +199,37 @@ class FamilyTreeTopGedcomIndividualsManager {
         }
 
         $ind->events = $gedcom->events->get($ind->gedcom_id);
+
+        return $ind;
+    }
+
+    public function getFromDb($tree_id, $gedcom_id){
+        if(empty($tree_id) || empty($gedcom_id)) return false;
+        $db = JFactory::getDbo();
+        $sql = "SELECT i.id as id, i.gedcom_id, i.creator_id, i.gender, i.family_id, i.create_time,
+                    i.change_time, n.first_name, n.middle_name, n.last_name, n.know_as
+                FROM #__familytreetop_individuals as i,#__familytreetop_names as n,  #__familytreetop_tree_links as l, #__familytreetop_trees as t
+                WHERE l.type = 0 AND i.gedcom_id = l.id AND l.tree_id = t.id AND n.gedcom_id = i.gedcom_id AND t.id = ". $tree_id . " AND l.id=".$gedcom_id;
+        $db->setQuery($sql);
+        $rows = $db->loadAssocList();
+
+        if(sizeof($rows) == 0){
+            return false;
+        }
+
+        $ind = $this->getObject($tree_id);
+        $ind->id = $rows[0]['id'];
+        $ind->gedcom_id = $rows[0]['gedcom_id'];
+        $ind->creator_id = $rows[0]['creator_id'];
+        $ind->gender = $rows[0]['gender'];
+        $ind->family_id = $rows[0]['family_id'];
+        $ind->create_time = $rows[0]['create_time'];
+        $ind->change_time = $rows[0]['change_time'];
+
+        $ind->first_name = $rows[0]['first_name'];
+        $ind->middle_name = $rows[0]['middle_name'];
+        $ind->last_name = $rows[0]['last_name'];
+        $ind->know_as = $rows[0]['know_as'];
 
         return $ind;
     }
@@ -261,7 +292,6 @@ class FamilyTreeTopGedcomIndividualsManager {
             return $this->get($rows[0]['gedcom_id']);
         }
     }
-
 
     public function getList(){
         return $this->list;
