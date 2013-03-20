@@ -9,8 +9,12 @@ defined('_JEXEC') or die;
     <div class="span6">
         <div familytreetop="info" class="well">
             <fieldset>
-                <legend></legend>
-                <img class="img-polaroid" data-src="template/familytreetop/js/holder.js/100x100">
+                <legend>
+                    <div class="row-fluid">
+                        <div class="span2 text-right data-familytreetop-avatar"></div>
+                        <div class="span10"><h4></h4></div>
+                    </div>
+                </legend>
             </fieldset>
         </div>
         <hr>
@@ -128,9 +132,15 @@ defined('_JEXEC') or die;
             render:function(span){
                 var parent =  $('#descendants [familytreetop="info"]'),
                     gedcom_id = $(span).attr('gedcom_id'),
-                    ind = $this.mod('usertree').user(gedcom_id);
+                    ind = $this.mod('usertree').user(gedcom_id),
+                    avatar = ind.avatar(["50","50"]);
 
-                $(parent).find('legend').text(ind.shortname());
+                $(parent).find('legend .data-familytreetop-avatar').html("").append(avatar);
+                $(parent).find('legend h4').text(ind.shortname());
+
+                Holder.run({
+                    image: avatar[0]
+                });
             }
         }
 
