@@ -84,13 +84,12 @@ $user = FamilyTreeTopUserHelper::getInstance()->get();
                         var sb = $this.stringBuffer(), html, user, avatar, gedcom_id;
                         gedcom_id = node.id.split('_')[1];
                         user = $this.mod('usertree').user(gedcom_id);
-                        avatar = user.avatar(["80","80"]);
                         if(!user) return false;
                         sb._('<div class="row-fluid">');
                             sb._('<div class="span12">');
                                 sb._('<div data-familytreetop="avatar" style="float:left;"></div>');
                                 sb._('<div style="float:left;">');
-                                    sb._('<div style="padding:3px;border: 1px solid rgba(0,0,0,0.2);width: 142px;height: 82px;background: white;">');
+                                    sb._('<div style="cursor:pointer;padding:3px;border: 1px solid rgba(0,0,0,0.2);width: 142px;height: 82px;background: white;">');
                                         sb._('<ul class="unstyled text-center">');
                                             sb._('<li>')._(user.shortname())._('</li>');
                                         sb._('</ul>')
@@ -101,13 +100,16 @@ $user = FamilyTreeTopUserHelper::getInstance()->get();
 
                         html = $(sb.ret());
 
-                        $(html).find('[data-familytreetop="avatar"]').append(avatar);
+                        if(user){
+                            avatar = user.avatar(["80","80"]);
+                            $(html).find('[data-familytreetop="avatar"]').append(avatar);
+
+                            Holder.run({
+                                images: avatar[0]
+                            });
+                        }
 
                         $labels.push(html);
-
-                        Holder.run({
-                            images: avatar[0]
-                        });
 
                         $(html).css('width', ($label.width) + "px");
                         $(html).css('height', ($label.height) + "px");
@@ -136,10 +138,7 @@ $user = FamilyTreeTopUserHelper::getInstance()->get();
 
                     }
                 });
-
-                console.log( $('#ancestors [data-familytreetop="home"] i'));
                 $('#ancestors [data-familytreetop="home"] i').click(function(){
-                    console.log('123');
                     st.onClick(st.root);
                 })
 

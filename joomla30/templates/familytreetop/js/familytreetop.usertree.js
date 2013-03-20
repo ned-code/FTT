@@ -52,35 +52,7 @@ $FamilyTreeTop.create("usertree", function($){
             last_name: ind.last_name,
             middle_name: ind.middle_name,
             avatar: function(size, style, src){
-                var el = $this.getAvatar(ind.gedcom_id),
-                    data = [],
-                    url;
-
-                style = (style)?style:"img-polaroid";
-                if(el){
-                    data = [el.thumbnail_url, $('<img class="'+style+'" />')];
-                } else if(ind.gedcom_id in usersmap){
-                    data = [
-                        'https://graph.facebook.com/'+usersmap[ind.gedcom_id].facebook_id+'/picture/',
-                        $('<img class="'+style+'" />')
-                    ];
-                } else {
-                    url = ($this.url().base()+"/templates/familytreetop/js/holder.js/"+((size)?size.join('x'):"100x100"));
-                    data = [
-                        false,
-                        $('<img class="'+style+'" data-src="'+url+'" />'),
-                        url
-                    ];
-                }
-                if(size){
-                    data[1].attr('width', size[0] + "px");
-                    data[1].attr('heght', size[1] + "px");
-                }
-                return (src)
-                    ?data[0]
-                    :data[1]
-                    .attr('gedcom_id', ind.gedcom_id)
-                    .attr('src', data[0] || "");
+                return $this.getImage(ind.gedcom_id, size, style, src);
             },
             username:function(){
                return this.name().toLowerCase().split(' ').join('.');
@@ -365,6 +337,38 @@ $FamilyTreeTop.create("usertree", function($){
         return pull;
     }
 
+    $this.getImage = function(gedcom_id, size, style, src){
+        var el = (gedcom_id)?$this.getAvatar(gedcom_id):false,
+            data = [],
+            url;
+
+        style = (style)?style:"img-polaroid";
+        if(el){
+            data = [el.thumbnail_url, $('<img class="'+style+'" />')];
+        } else if(gedcom_id && gedcom_id in usersmap){
+            data = [
+                'https://graph.facebook.com/'+usersmap[gedcom_id].facebook_id+'/picture/',
+                $('<img class="'+style+'" />')
+            ];
+        } else {
+            url = ($this.url().base()+"/templates/familytreetop/js/holder.js/"+((size)?size.join('x'):"100x100"));
+            data = [
+                false,
+                $('<img class="'+style+'" data-src="'+url+'" />'),
+                url
+            ];
+        }
+        if(size){
+            data[1].attr('width', size[0] + "px");
+            data[1].attr('heght', size[1] + "px");
+        }
+        return (src)
+            ?data[0]
+            :data[1]
+            .attr('gedcom_id', gedcom_id)
+            .attr('src', data[0] || "");
+    }
+
     $this.getMedia = function(media_id){
         if("undefined" === typeof(data.med.all[media_id])) return false;
         return data.med.all[media_id]
@@ -428,6 +432,8 @@ $FamilyTreeTop.create("usertree", function($){
         }
         delete data.med.all[media_id];
     }
+
+
 
     $this.init($FamilyTreeTop.dataString, $FamilyTreeTop.userString, $FamilyTreeTop.users);
 });
