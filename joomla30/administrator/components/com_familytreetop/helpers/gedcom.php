@@ -57,8 +57,8 @@ class GedcomHelper
                 } else {
                     $results[] = $object;
                 }
-                return ($json)?json_encode($results):$results;
             }
+            return ($json)?json_encode($results):$results;
         }
         return false;
     }
