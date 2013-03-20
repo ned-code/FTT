@@ -82,14 +82,13 @@ class FamilyTreeTopGedcomEventsManager {
 
                 WHERE IF(
                     e.gedcom_id  IS NULL,
-                            f.family_id = l.id AND l.type = 1,
+                            e.family_id = l.id AND l.type = 1,
                             e.gedcom_id  = l.id AND l.type = 0
                         ) AND  l.tree_id = t.id AND t.id = %s
 
                 GROUP BY id";
             $db->setQuery(sprintf($sql, $tree_id));
             $rows = $db->loadAssocList('id');
-
             $this->list = $rows;
             $this->list_by_gedcom_id = $this->sortList('gedcom_id', $rows);
             $this->list_by_family_id = $this->sortList('family_id', $rows);

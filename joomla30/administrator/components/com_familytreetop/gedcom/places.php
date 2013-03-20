@@ -65,7 +65,7 @@ class FamilyTreeTopGedcomPlacesManager {
                 WHERE p.event_id = e.id
                         AND IF(
                             e.gedcom_id  IS NULL,
-                            f.family_id = l.id AND l.type = 1,
+                            e.family_id = l.id AND l.type = 1,
                             e.gedcom_id  = l.id AND l.type = 0
                         ) AND  l.tree_id = t.id AND t.id = %s
 
