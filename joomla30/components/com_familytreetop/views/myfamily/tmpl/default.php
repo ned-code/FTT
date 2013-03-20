@@ -1,6 +1,8 @@
 <?php
 defined('_JEXEC') or die;
 jimport('joomla.application.module.helper');
+
+$user = FamilyTreeTopUserHelper::getInstance()->get();
 ?>
 <script>
     $FamilyTreeTop.dataString = '<?=json_encode(GedcomHelper::getInstance()->getData());?>';
@@ -25,28 +27,29 @@ jimport('joomla.application.module.helper');
             <div class="tab-pane active" id="tab1">
                 <div class="row">
                     <div class="span6">
-
                         <?php
-                        $module = JModuleHelper::getModule('ftt_myfamily');
-                        echo JModuleHelper::renderModule($module);
+                        if($user->famous){
+
+                        } else {
+                            $module = JModuleHelper::getModule('ftt_myfamily');
+                            echo JModuleHelper::renderModule($module);
+                        }
                         ?>
                     </div>
                     <div class="span6">
                         <?php
-                            $module = JModuleHelper::getModule('ftt_recentvisitors');
+                            if(!$user->famous){
+                                $module = JModuleHelper::getModule('ftt_recentvisitors');
+                                echo JModuleHelper::renderModule($module);
+                            }
+                            $module = JModuleHelper::getModule('ftt_thismonth');
                             echo JModuleHelper::renderModule($module);
-                        ?>
-                        <?php
-                        $module = JModuleHelper::getModule('ftt_thismonth');
-                        echo JModuleHelper::renderModule($module);
-                        ?>
-                        <?php
-                        $module = JModuleHelper::getModule('ftt_quick_facts');
-                        echo JModuleHelper::renderModule($module);
-                        ?>
-                        <?php
-                        $module = JModuleHelper::getModule('ftt_latest_updates');
-                        echo JModuleHelper::renderModule($module);
+
+                            $module = JModuleHelper::getModule('ftt_quick_facts');
+                            echo JModuleHelper::renderModule($module);
+
+                            $module = JModuleHelper::getModule('ftt_latest_updates');
+                            echo JModuleHelper::renderModule($module);
                         ?>
                     </div>
                 </div>

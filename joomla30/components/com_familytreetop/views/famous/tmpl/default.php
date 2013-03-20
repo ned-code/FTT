@@ -1,17 +1,33 @@
 <?php
 defined('_JEXEC') or die;
 $famous = FamilyTreeTopFamous::find('all');
+$gedcom = GedcomHelper::getInstance();
 ?>
-<div class="row">
+<div data-familytreetop-box="famous" class="row">
     <div class="span12">
         <?php foreach($famous as $family): ?>
-            <?php $user = GedcomHelper::getInstance()->individuals->getFromDb($family->tree_id,$family->gedcom_id); ?>
+            <?php $user = $gedcom->individuals->getFromDb($family->tree_id,$family->gedcom_id); ?>
             <div class="row-fluid">
                 <div class="span12">
                      <div class="well">
                         <fieldset>
-                            <legend><?=$user->name()?></legend>
-                            <button id="<?=$family->tree_id;?>" class="btn">Login by</button>
+                            <legend>
+                                <div class="row-fluid">
+                                    <div class="span2"><img class="media-object" data-src="template/familytreetop/js/holder.js/50x50"></div>
+                                    <div class="span6"><?=$user->name()?></div>
+                                    <div class="span2">
+                                        <a data-familytreetop-button
+                                           href="<?=JRoute::_("index.php?option=com_familytreetop&task=famous.init"
+                                               ."&tree_id=".$family->tree_id
+                                               ."&gedcom_id=".$family->gedcom_id,
+                                               false);?>"
+                                                 class="btn">Login</a>
+                                    </div>
+                                </div>
+                            </legend>
+                            <ul class="unstyled">
+                                <li>Members: <?=$gedcom->getTreeMembersCount($family->tree_id);?></li>
+                            </ul>
                         </fieldset>
                     </div>
                 </div>

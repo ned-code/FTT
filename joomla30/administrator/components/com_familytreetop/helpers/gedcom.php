@@ -21,23 +21,25 @@ class GedcomHelper
     public function getInstance(){
         if ( is_null(self::$instance) ) {
             self::$instance = new GedcomHelper ();
-
             $user = FamilyTreeTopUserHelper::getInstance()->get();
-            self::$instance->individuals = new FamilyTreeTopGedcomIndividualsManager($user->tree_id);
-            self::$instance->families = new FamilyTreeTopGedcomFamiliesManager($user->tree_id);
-            self::$instance->childrens = new FamilyTreeTopGedcomChildrensManager($user->tree_id);
-            self::$instance->events = new FamilyTreeTopGedcomEventsManager($user->tree_id);
-            self::$instance->dates = new FamilyTreeTopGedcomDatesManager($user->tree_id);
-            self::$instance->places = new FamilyTreeTopGedcomPlacesManager($user->tree_id);
-            self::$instance->medias = new FamilyTreeTopGedcomMediasManager($user->tree_id);
-
+            self::$instance->init($user->tree_id);
         }
         return self::$instance;
     }
 
+    public function init($tree_id){
+        $this->individuals = new FamilyTreeTopGedcomIndividualsManager($tree_id);
+        $this->families = new FamilyTreeTopGedcomFamiliesManager($tree_id);
+        $this->childrens = new FamilyTreeTopGedcomChildrensManager($tree_id);
+        $this->events = new FamilyTreeTopGedcomEventsManager($tree_id);
+        $this->dates = new FamilyTreeTopGedcomDatesManager($tree_id);
+        $this->places = new FamilyTreeTopGedcomPlacesManager($tree_id);
+        $this->medias = new FamilyTreeTopGedcomMediasManager($tree_id);
+    }
+
     public function getTreeUsers($associative = false, $json = false){
         $user = FamilyTreeTopUserHelper::getInstance()->get();
-        if(!empty($user->tree_id)){
+        if(!empty($user->tree_id) && !empty($user->account_id) && !empty($user->gedcom_id)){
             $results = array();
             $users = FamilyTreeTopUsers::find('all', array('conditions' => array('tree_id = ?', $user->tree_id)));
             foreach($users as $user){
@@ -57,6 +59,17 @@ class GedcomHelper
             }
         }
         return false;
+    }
+
+    public function getTreeMembersCount($tree_id){
+        $db = JFactory::getDbo();
+        $sql = "SELECT i.id as id, i.gedcom_id, i.creator_id, i.gender, i.family_id, i.create_time,
+                    i.change_time, n.first_name, n.middle_name, n.last_name, n.know_as
+                FROM #__familytreetop_individuals as i,#__familytreetop_names as n,  #__familytreetop_tree_links as l, #__familytreetop_trees as t
+                WHERE l.type = 0 AND i.gedcom_id = l.id AND l.tree_id = t.id AND n.gedcom_id = i.gedcom_id AND t.id = ". $tree_id;
+        $db->setQuery($sql);
+        $rows = $db->loadAssocList();
+        return sizeof($rows);
     }
 
     public function getData(){

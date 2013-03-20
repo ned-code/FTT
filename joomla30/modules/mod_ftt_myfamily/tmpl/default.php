@@ -3,16 +3,19 @@ defined('_JEXEC') or die;
 $facebook = FacebookHelper::getInstance()->facebook;
 $user = FamilyTreeTopUserHelper::getInstance()->get();
 
-$family = $facebook->api(array(
-    'method' => 'fql.query',
-    'query' => 'SELECT name, birthday, uid, relationship FROM family WHERE profile_id =me()',
-));
+if($user->facebook_id != 0){
+    $family = $facebook->api(array(
+        'method' => 'fql.query',
+        'query' => 'SELECT name, birthday, uid, relationship FROM family WHERE profile_id =me()',
+    ));
 
-$home = $facebook->api('/' . $user->facebook_id . '/home');
-$data = $home['data'];
-
+    $home = $facebook->api('/' . $user->facebook_id . '/home');
+    $data = $home['data'];
+} else {
+    $data = null;
+}
 ?>
-
+<?php if(!empty($data)): ?>
 <div id="myFamilyOnFacebook" class="row">
     <div class="span6">
         <div class="well">
@@ -74,3 +77,4 @@ $data = $home['data'];
         </div>
     </div>
 </div>
+<?php endif; ?>

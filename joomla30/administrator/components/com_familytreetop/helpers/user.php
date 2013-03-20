@@ -34,6 +34,8 @@ class FamilyTreeTopUserHelper
     protected $tree_id = null;
     protected $gedcom_id = null;
 
+    protected $famous = false;
+
     public function getInstance(){
         if ( is_null(self::$instance) ) {
             self::$instance = new FamilyTreeTopUserHelper ();
@@ -43,6 +45,15 @@ class FamilyTreeTopUserHelper
     }
 
     protected function init(){
+        $session = JFactory::getSession();
+
+        if($session->get('famous')){
+            self::$instance->tree_id = $session->get('tree_id');
+            self::$instance->gedcom_id = $session->get('gedcom_id');
+            self::$instance->famous = true;
+            return true;
+        }
+
         $facebook = FacebookHelper::getInstance()->facebook;
         $jUser = JFactory::getUser();
 
@@ -117,6 +128,8 @@ class FamilyTreeTopUserHelper
 
         $user->tree_id = $this->tree_id;
         $user->gedcom_id = $this->gedcom_id;
+
+        $user->famous = $this->famous;
 
         return $user;
     }

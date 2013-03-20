@@ -16,6 +16,8 @@ class FacebookHelper
 
     public function getInstance(){
         if ( is_null(self::$instance) ) {
+            Facebook::$CURL_OPTS[CURLOPT_SSL_VERIFYPEER] = false;
+
             self::$instance = new FacebookHelper ();
             $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
             $config = array();
@@ -23,6 +25,7 @@ class FacebookHelper
             $config['secret'] = $settings->facebook_app_secret->value;
             $config['coockie'] = true;
             self::$instance->facebook = new Facebook($config);
+
             $data = self::$instance->facebook->api('/' . $config['appId']);
             if(isset($data['link'])){
                 self::$instance->data['link'] = $data['link'];

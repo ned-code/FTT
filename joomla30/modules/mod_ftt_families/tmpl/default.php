@@ -1,6 +1,5 @@
 <?php
 defined('_JEXEC') or die;
-$user = FamilyTreeTopUserHelper::getInstance()->get();
 ?>
 <div id="families" class="row">
     <div class="span12">

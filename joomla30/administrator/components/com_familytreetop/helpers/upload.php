@@ -32,7 +32,7 @@ class UploadHandlerHelper extends UploadHandler {
         $user = FamilyTreeTopUserHelper::getInstance()->get();
         preg_match('/(?:(?: \(([\d]+)\))?(\.[^.]+))?$/', $name, $matches);
         $ext = isset($matches[2]) ? $matches[2] : '';
-        $hash = md5($media->id . $user->tree_id . $this->options['gedcom_id'] . $name);
+        $hash = md5($this->options['gedcom_id'] . $media->id . $user->tree_id . $name);
         return $hash . $ext;
     }
 

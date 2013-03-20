@@ -1,8 +1,12 @@
 <?php
 defined('_JEXEC') or die;
+$session = JFactory::getSession();
 $user = FamilyTreeTopUserHelper::getInstance()->get();
-if(!empty($user->gedcom_id)){
-    $ind = GedcomHelper::getInstance()->individuals->get($user->gedcom_id);
+$gedcom = GedcomHelper::getInstance();
+if($session->get('famous')){
+    $ind = $gedcom->individuals->getFromDb($user->tree_id, $user->gedcom_id);
+} else if(!empty($user->gedcom_id)){
+    $ind = $gedcom->individuals->get($user->gedcom_id);
 } else {
     $ind = false;
 }

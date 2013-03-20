@@ -10,6 +10,7 @@ class FamilytreetopController extends JControllerLegacy
 
 		// Get the document object.
 		$document	= JFactory::getDocument();
+        $session = JFactory::getSession();
 
 		// Set the default view name and format from the Request.
 		$vName   = $this->input->getCmd('view', 'index');
@@ -28,7 +29,9 @@ class FamilytreetopController extends JControllerLegacy
 			switch ($vName)
 			{
                 case "myfamily":
-                    if($user->guest || $user->facebook_id == 0){
+                    if($session->get('famous')){
+                        $model = $this->getModel($vName);
+                    } else if($user->guest || $user->facebook_id == 0){
                         $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=login", false));
                         return;
                     } else if(FamilyTreeTopUserHelper::getInstance()->isUserInInvitationsList()){
