@@ -56,9 +56,7 @@ class FamilytreetopControllerUser extends FamilytreetopController
             $url =  JRoute::_("index.php?option=com_familytreetop&view=myfamily", false);
             echo json_encode(array('auth'=>false, 'url'=>FacebookHelper::getInstance()->getLoginUrl($url)));
             exit;
-        }
-
-        if($facebook_id != 0){
+        } else {
             $args = $facebook->api('/'.$facebook_id);
             if($args['id'] != 0){
                 $user = JoomlaUsers::find_by_username('fb_' . $args['id']);

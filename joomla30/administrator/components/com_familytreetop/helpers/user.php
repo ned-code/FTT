@@ -62,14 +62,16 @@ class FamilyTreeTopUserHelper
             self::$instance->gender = $response['gender'];
         }
 
-        self::$instance->id = $jUser->id;
-        self::$instance->email = $jUser->email;
-        self::$instance->last_visit = $jUser->lastvisitDate;
-        self::$instance->register = $jUser->registerDate;
+        $account = null;
+        if(!$jUser->get('guest')){
+            self::$instance->id = $jUser->id;
+            self::$instance->email = $jUser->email;
+            self::$instance->last_visit = $jUser->lastvisitDate;
+            self::$instance->register = $jUser->registerDate;
 
+            $account = FamilyTreeTopAccounts::find_by_joomla_id(self::$instance->id);
+        }
         self::$instance->guest = $jUser->get('guest');
-
-        $account = FamilyTreeTopAccounts::find_by_joomla_id(self::$instance->id);
 
         if(!empty($account)){
             self::$instance->account_id = $account->id;
