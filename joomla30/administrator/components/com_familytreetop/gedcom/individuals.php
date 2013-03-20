@@ -62,14 +62,7 @@ class FamilyTreeTopGedcomIndividualsModel {
     }
 
     public function getParents(){
-        $gedcom = GedcomHelper::getInstance();
-        $family_id = $gedcom->childrens->getFamilyIdByGedcomId($this->gedcom_id);
-        $family = $gedcom->families->get($family_id);
-        return array(
-            'family' => $family,
-            'father'=>$gedcom->individuals->get($family->husb),
-            'mother'=>$gedcom->individuals->get($family->wife)
-        );
+        return FamilyTreeTopGedcomIndividualsManager::getParents($this->gedcom_id);
     }
 
     public function save(){
@@ -232,6 +225,22 @@ class FamilyTreeTopGedcomIndividualsManager {
         $ind->know_as = $rows[0]['know_as'];
 
         return $ind;
+    }
+
+    public function getParents($gedcom_id){
+        $gedcom = GedcomHelper::getInstance();
+        $family_id = $gedcom->childrens->getFamilyIdByGedcomId($gedcom_id);
+        $family = $gedcom->families->get($family_id);
+        return array(
+            'family' => $family,
+            'father'=>$gedcom->individuals->get($family->husb),
+            'mother'=>$gedcom->individuals->get($family->wife)
+        );
+    }
+
+    public function getGender($gedcom_id){
+        if(empty($gedcom_id) || !isset($this->list[$gedcom_id])) return false;
+        return $this->list[$gedcom_id]['gender'];
     }
 
     public function getYoungest(){

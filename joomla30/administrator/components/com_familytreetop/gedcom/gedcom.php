@@ -7,5 +7,6 @@ require_once $path . 'events.php';
 require_once $path . 'dates.php';
 require_once $path . 'places.php';
 require_once $path . 'medias.php';
+require_once $path . 'relations.php';
 
 

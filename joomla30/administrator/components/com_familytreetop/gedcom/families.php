@@ -166,6 +166,18 @@ class FamilyTreeTopGedcomFamiliesManager {
         return $family;
     }
 
+    public function getSpouses($gedcom_id){
+        if(empty($gedcom_id)) return false;
+        if(isset($this->list_by_gedcom_id[$gedcom_id])){
+            $rows = $this->list_by_gedcom_id[$gedcom_id];
+            $result = array();
+            foreach($rows as $row){
+                $result[] = ($row['husb'] == $gedcom_id)?$row['wife']:$row['husb'];
+            }
+            return $result;
+        }
+    }
+
     public function getByPartner($husb, $wife){
         if(empty($husb) || empty($wife)) return false;
         $family = FamilyTreeTopFamilies::find(

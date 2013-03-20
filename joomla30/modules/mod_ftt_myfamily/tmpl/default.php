@@ -14,6 +14,7 @@ if($user->facebook_id != 0){
 } else {
     $data = null;
 }
+
 ?>
 <?php if(!empty($data)): ?>
 <div id="myFamilyOnFacebook" class="row">

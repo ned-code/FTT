@@ -17,6 +17,7 @@ class GedcomHelper
     public $dates;
     public $places;
     public $medias;
+    public $relations;
 
     public function getInstance(){
         if ( is_null(self::$instance) ) {
@@ -35,6 +36,7 @@ class GedcomHelper
         $this->dates = new FamilyTreeTopGedcomDatesManager($tree_id);
         $this->places = new FamilyTreeTopGedcomPlacesManager($tree_id);
         $this->medias = new FamilyTreeTopGedcomMediasManager($tree_id);
+        $this->relations = new FamilyTreeTopGedcomRelationsManager($tree_id);
     }
 
     public function getTreeUsers($associative = false, $json = false){
