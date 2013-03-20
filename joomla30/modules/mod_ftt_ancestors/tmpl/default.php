@@ -2,7 +2,8 @@
 defined('_JEXEC') or die;
 $user = FamilyTreeTopUserHelper::getInstance()->get();
 ?>
-<div id="ancestors" class="row" style="width:100%; height:500px;">
+<div id="ancestors" class="row" style="position:relative;width:100%; height:500px;">
+    <div data-familytreetop="home" style="position:absolute; top:0; right: -10px;"><i style="cursor: pointer;" class="icon-home"></i></div>
 </div>
 <script>
     $FamilyTreeTop.bind(function($){
@@ -26,7 +27,7 @@ $user = FamilyTreeTopUserHelper::getInstance()->get();
                 var node = jQuery.extend({}, $node),
                     key = $this.generateKey();
 
-                node.id = key + '_' +  $nulls.length;
+                node.id = "_" + key + '_' +  $nulls.length;
                 node.name = node.id + '_name';
                 node.data = [];
                 node.children = [];
@@ -76,47 +77,18 @@ $user = FamilyTreeTopUserHelper::getInstance()->get();
                         overridable: true
                     },
                     onBeforeCompute: function(node){
-                        /*
-                        var	width = $(module.parent).width(),
-                                height  = $(module.parent).height();
-                        jQuery(module.overlay).css('width', width+'px').css('height', height+'px');
-                        jQuery(module.parent).append(module.overlay);
-                        //set spouse
-                        var parent = node.getParents();
-                        if(parent.length!=0){
-                            var ptree = $jit.json.getSubtree(module.tree, parent[0].id);
-                            var id = (ptree.children[0].id != node.id)?ptree.children[0].id:ptree.children[1].id;
-                            module.spouse = module.st.graph.getNode(id);
-                        } else {
-                            module.spouse = null;
-                        }
-
-                        //set active nodes
-                        var subtree = $jit.json.getSubtree(module.tree, node.id);
-                        var nodes = {};
-                        var set_node = function(tr, level){
-                            if(level == 3) return false;
-                            nodes[tr.id] = tr.id;
-                            if(tr.children!=0){
-                                set_node(tr.children[0], level + 1);
-                                set_node(tr.children[1], level + 1);
-                            }
-                        }
-                        set_node(subtree, 0);
-                        module.nodes = nodes;
-                        */
                     },
                     onAfterCompute: function(){
-                        //$(module.overlay).remove();
                     },
                     onCreateLabel: function(label, node){
-                        var sb = $this.stringBuffer(), html, user, gedcom_id;
+                        var sb = $this.stringBuffer(), html, user, avatar, gedcom_id;
                         gedcom_id = node.id.split('_')[1];
                         user = $this.mod('usertree').user(gedcom_id);
+                        avatar = user.avatar(["80","80"]);
                         if(!user) return false;
                         sb._('<div class="row-fluid">');
                             sb._('<div class="span12">');
-                                sb._('<div style="float:left;"><img gedcom_id="')._(gedcom_id)._('" class="img-polaroid" data-src="template/familytreetop/js/holder.js/80x80"></div>');
+                                sb._('<div data-familytreetop="avatar" style="float:left;"></div>');
                                 sb._('<div style="float:left;">');
                                     sb._('<div style="padding:3px;border: 1px solid rgba(0,0,0,0.2);width: 142px;height: 82px;background: white;">');
                                         sb._('<ul class="unstyled text-center">');
@@ -129,60 +101,28 @@ $user = FamilyTreeTopUserHelper::getInstance()->get();
 
                         html = $(sb.ret());
 
+                        $(html).find('[data-familytreetop="avatar"]').append(avatar);
+
                         $labels.push(html);
 
                         Holder.run({
-                            images: $(html).find('img')[0]
+                            images: avatar[0]
                         });
 
                         $(html).css('width', ($label.width) + "px");
                         $(html).css('height', ($label.height) + "px");
 
+                        $(html).click(function(){
+                            st.onClick(node.id);
+                        });
+
                         $(label).append(html);
                     },
                     onPlaceLabel: function(label, node){
-                        /*
-                        var	left = jQuery(label).find('div.jit-node-arrow.left'),
-                                right = jQuery(label).find('div.jit-node-arrow.right'),
-                                data = node.data.ftt_storage,
-                                active = module.st.clickedNode.id,
-                                mod = node._depth%2;
-
-                        jQuery(left).show();
-                        jQuery(right).show();
-                        if(!data.prew || mod!=0 || node.id != active){
-                            jQuery(left).hide();
-                        }
-                        if(mod || node.id == active){
-                            jQuery(right).hide();
-                        }
-                        if(data.object && data.object.parents == null){
-                            jQuery(right).hide();
-                        }
-
-                        if(node.id in module.nodes){
-                            jQuery(label).css('visibility', 'visible');
-                        } else {
-                            jQuery(label).css('visibility', 'hidden');
-                        }
-                        */
                     },
                     onBeforePlotNode:function(node){
-                        /*
-                        if(node.id in module.nodes){
-                            node.data.$color = "#C3C3C3"
-                        } else {
-                            node.data.$color = module.nodeBackgound;
-                        }
-                        */
                     },
                     onBeforePlotLine:function(adj){
-                        /*
-                        adj.data.$color = "#EDF0F8";
-                        if(adj.nodeTo.id in module.nodes && adj.nodeFrom.id in module.nodes){
-                            adj.data.$color = "#999";
-                        }
-                        */
                     }
                 });
                 //load json data
@@ -193,8 +133,15 @@ $user = FamilyTreeTopUserHelper::getInstance()->get();
                 st.onClick(st.root, {
                     onComplete:function() {
                         $fn.setPopovers();
+
                     }
                 });
+
+                console.log( $('#ancestors [data-familytreetop="home"] i'));
+                $('#ancestors [data-familytreetop="home"] i').click(function(){
+                    console.log('123');
+                    st.onClick(st.root);
+                })
 
             }
 
@@ -216,7 +163,6 @@ $user = FamilyTreeTopUserHelper::getInstance()->get();
         },
 
         $tree = $fn.getTree($start_id);
-
         $this.mod('tabs').bind('#tab4', function(e){
             if($init) return false;
             function init(){

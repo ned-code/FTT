@@ -139,7 +139,7 @@ defined('_JEXEC') or die;
                 $(parent).find('legend h4').text(ind.shortname());
 
                 Holder.run({
-                    image: avatar[0]
+                    images: avatar[0]
                 });
             }
         }
