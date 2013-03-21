@@ -134,6 +134,56 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
         </div>
     </div>
 
+    <div id="profile" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="profileLabel" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="profileLabel"></h3>
+        </div>
+        <div class="modal-body">
+            <div data-familytreetop-profile="facebook" class="row-fluid">
+                <div class="span12">
+
+                </div>
+            </div>
+            <div data-familytreetop-profile="about" class="row-fluid">
+                <div class="span12">
+                    <div class="well">
+                        <fieldset>
+                            <legend>About</legend>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+            <div data-familytreetop-profile="relation" class="row-fluid">
+                <div class="span12">
+                    <div class="well">
+                        <fieldset>
+                            <legend>Relation Map</legend>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+            <div data-familytreetop-profile="family" class="row-fluid">
+                <div class="span12">
+                    <div class="well">
+                        <fieldset>
+                            <legend>Family</legend>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+            <div data-familytreetop-profile="photos" class="row-fluid">
+                <div class="span12">
+                    <div class="well">
+                        <fieldset>
+                            <legend>Photos</legend>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="editorTabs">
         <ul class="nav nav-tabs">
             <li class="active"><a href="#" data-toggle="tab">Profile</a></li>
@@ -513,6 +563,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.friendselector.js"></script>
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.editmenu.js"></script>
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.editor.js"></script>
+<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.profile.js"></script>
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.families.js"></script>
 <script>
     if(!$FamilyTreeTop.app.config.appId){

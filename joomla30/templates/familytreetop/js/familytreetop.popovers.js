@@ -53,7 +53,12 @@ $FamilyTreeTop.create("popovers", function($){
             return 'body';
         },
         getTemplate:function(){
-            return '<div class="popover" style="min-width:350px;"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>';
+            var html = '<div class="popover" style="min-width:350px;"><div class="arrow"></div><a style="margin:5px;" class="pull-right" href="#"><i class="icon-eye-open"></a></i><h3 class="popover-title"></h3><div class="popover-content"></div></div>';
+            var object = $(html);
+            $(object).find('a[class="pull-right"]').click(function(){
+                $this.mod('profile').render($fn.getLastObject());
+            });
+            return object;
         },
         getOptions: function(args){
             var options;
