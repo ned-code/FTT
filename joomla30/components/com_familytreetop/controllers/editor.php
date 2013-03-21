@@ -177,7 +177,31 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         $form = $this->getPostForm();
         $gedcom_id = $form['gedcom_id'];
 
+        $gedcom = GedcomHelper::getInstance();
+        $user = $gedcom->individuals->get($gedcom_id);
 
+        $ind = $gedcom->individuals->get();
+        $ind->first_name = $form['first_name'];
+        $ind->middle_name = $form['middle_name'];
+        $ind->last_name = $form['last_name'];
+        $ind->know_as = $form['know_as'];
+        $ind->gender = $form['gender'];
+        $ind->creator_id = $user->gedcom_id;
+        $ind->save();
+
+        $family = $gedcom->families->get();
+        $family->tree_id = $ind->tree_id;
+        if($user->gender){
+            $family->husb = $user->gedcom_id;
+            $family->wife = $ind->gedcom_id;
+        } else {
+            $family->wife = $user->gedcom_id;
+            $family->husb = $ind->gedcom_id;
+        }
+        $family->save();
+
+        echo json_encode(array('form'=>$form));
+        exit;
     }
 
     public function addChild(){
