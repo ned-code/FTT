@@ -8,7 +8,12 @@ $FamilyTreeTop.create("profile", function($){
             avatar = args.object.avatar(["100","100"]);
             $(box).find('li').each(function(index, element){
                 var names = ["first_name", "middle_name", "last_name", "know_as"];
-                $(element).find('span').text(args.object[names[index]]);
+                var value = args.object[names[index]];
+                if(value.length != 0){
+                    $(element).find('span').text(args.object[names[index]]);
+                } else {
+                    $(element).remove();
+                }
             });
             $(box).find('[data-familytreetop="avatar"]').append(avatar);
             Holder.run({
@@ -22,6 +27,7 @@ $FamilyTreeTop.create("profile", function($){
             var box = $(this).find('[data-familytreetop-profile="family"] fieldset');
             $this.mod('families').render({
                 parent: box,
+                gedcom_id: args.object.gedcom_id,
                 abilityToMove: false,
                 editable: false,
                 iconHome: false
