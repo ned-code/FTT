@@ -150,6 +150,17 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                     <div class="well">
                         <fieldset>
                             <legend>About</legend>
+                            <div class="row-fluid">
+                                <div  data-familytreetop="avatar" class="span2"></div>
+                                <div class="span10">
+                                    <ul class="unstyled">
+                                        <li><small><strong>First Name</strong>: <span></span></small></li>
+                                        <li><small><strong>Middle Name</strong>: <span></span></small></li>
+                                        <li><small><strong>Last Name</strong>: <span></span></small></li>
+                                        <li><small><strong>Know As</strong>: <span></span></small></li>
+                                    </ul>
+                                </div>
+                            </div>
                         </fieldset>
                     </div>
                 </div>
@@ -177,6 +188,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                     <div class="well">
                         <fieldset>
                             <legend>Photos</legend>
+                            <ul class="unstyled inline"></ul>
                         </fieldset>
                     </div>
                 </div>
