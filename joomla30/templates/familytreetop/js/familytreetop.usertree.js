@@ -2,12 +2,24 @@ $FamilyTreeTop.create("usertree", function($){
     'use strict';
     var $this = this,
         $fn,
+        trPull = [],
         usermap,
         usersmap,
         data;
 
     $fn = {
 
+    }
+
+    $this.trigger = function(callback){
+        trPull.push(callback);
+    }
+
+    $this.call = function(){
+        for(var prop in trPull){
+            if(!trPull.hasOwnProperty(prop)) continue;
+            trPull[prop]();
+        }
     }
 
     $this.init = function(dataString, userString, usersString){
@@ -109,6 +121,7 @@ $FamilyTreeTop.create("usertree", function($){
                     break;
             }
         }
+        $this.call();
         return true;
     }
 

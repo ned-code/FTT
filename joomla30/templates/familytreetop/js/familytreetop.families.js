@@ -238,6 +238,10 @@ $FamilyTreeTop.create("families", function($){
 
         $fn.setPosition($boxs[settings.id], settings);
         $fn.setPopovers($boxs[settings.id]);
+
+        $this.mod('usertree').trigger(function(){
+            $this.render(settings);
+        });
     };
 
 });

@@ -24,3 +24,4 @@ chmod 777 administrator/cache/
 chmod 777 logs/
 chmod 777 tmp/
 chmod 777 configuration.php
+chmod 777 files
