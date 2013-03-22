@@ -312,6 +312,7 @@ $FamilyTreeTop.create("editor", function($){
                     send = task;
                 }
                 $this.ajax(send, args, function(response){
+                    console.log(response);
                     $(cl).modal('hide');
                 });
             });

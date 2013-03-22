@@ -45,6 +45,8 @@ class FamilyTreeTopGedcomFamilyModel {
         $family->change_time = $this->change_time;
         $family->save();
 
+        $this->id = $family->id;
+
         $gedcom->childrens->save($this->family_id, $this->childrens);
 
         $gedcom->families->updateList($this);

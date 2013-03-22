@@ -93,6 +93,8 @@ class FamilyTreeTopGedcomIndividualsModel {
         $ind->change_time = $date->toSql();
         $ind->save();
 
+        $this->id = $ind->id;
+
         $name = FamilyTreeTopNames::find_by_gedcom_id($this->gedcom_id);
         if(empty($name)){
             $name = new FamilyTreeTopNames();
@@ -114,6 +116,10 @@ class FamilyTreeTopGedcomIndividualsModel {
         $gedcom->individuals->updateList($this);
 
         return $this;
+    }
+
+    public function addEvent($event){
+        $this->events[] = $event;
     }
 
     public function toList(){
