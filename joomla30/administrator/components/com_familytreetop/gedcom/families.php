@@ -68,8 +68,9 @@ class FamilyTreeTopGedcomFamilyModel {
     public function addChild($gedcom_id){
         $gedcom = GedcomHelper::getInstance();
         if(method_exists($gedcom->childrens, 'create')){
-            $gedcom->childrens->create($this->family_id, $gedcom_id);
+            return $gedcom->childrens->create($this->family_id, $gedcom_id);
         }
+        return false;
     }
 
     public function addEvent(){

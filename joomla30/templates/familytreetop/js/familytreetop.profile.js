@@ -45,10 +45,7 @@ $FamilyTreeTop.create("profile", function($){
         }
     }
 
-
     $box = $('#profile');
-
-
 
     $this.render = function(args){
         var parent = $($box).clone(), object = args.object;

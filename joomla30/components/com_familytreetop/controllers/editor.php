@@ -90,6 +90,81 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         return ($all || sizeof($forms) > 1)?$forms:$forms[0];
     }
 
+    protected function sub_arr(&$m, $a){
+        foreach($a as $v){
+            if(!isset($m[$a])){
+                $m[$a] = array();
+            }
+        }
+    }
+
+    protected function getResponse(){
+        $arguments = func_get_args();
+        $result = array();
+        foreach($arguments as $argument){
+            foreach($argument as $key => $items){
+                foreach($items as $item){
+                    if(!isset($result[$key])){
+                        $result[$key] = array();
+                    }
+                    switch($key){
+                        case "chi":
+                            if(!$item) continue;
+
+                            $this->sub_arr($result[$key], array('gedcom_id', 'family_id'));
+
+                            $data = array();
+                            $data['id'] = $item->id;
+                            $data['gedcom_id'] = $item->id;
+                            $data['family_id'] = $item->id;
+                            $result[$key]['gedcom_id'] = $data;
+                            $result[$key]['family_id'] = $data;
+                            break;
+                        case "dat":
+                        case "pla":
+                            foreach($item as $event){
+                                $object = $event->{($key=="dat")?"date":"place"};
+                                if($object != null){
+                                    $result[$key][$event->id] = $object->toList();
+                                }
+                            }
+                            break;
+                        case "eve":
+                            $this->sub_arr($result[$key], array('all', 'gedcom_id', 'family_id'));
+                            foreach($item as $event){
+                                $result[$key]['all'][$event->id] = $event->toList();
+                                if($event->family_id != null){
+                                    $result[$key]['family_id'][$event->id] = $event->toList();
+                                }
+                                if($event->gedcom_id != null){
+                                    $result[$key]['gedcom_id'][$event->id] = $event->toList();
+                                }
+                            }
+                            break;
+                        case "fam":
+                            $this->sub_arr($result[$key], array('gedcom_id', 'family_id'));
+
+                            if($item->husb != null){
+                                $result[$key]['gedcom_id'][$item->husb] = $item->toList();
+                            }
+                            if($item->wife != null){
+                                $result[$key]['gedcom_id'][$item->wife] = $item->toList();
+                            }
+                            $result[$key]['family_id'][$item->family_id] = $item->toList();
+                            break;
+                        case "ind":
+                            $result[$key][$item->gedcom_id] = $item->toList();
+                            break;
+                        case "med":
+                        default: break;
+                    }
+
+                }
+            }
+        }
+        return json_encode($result);
+    }
+
     public function addParent(){
         $form = $this->getPostForm();
         $gedcom_id = $form['gedcom_id'];
@@ -113,6 +188,15 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         $sircar->creator_id = $ind->gedcom_id;
         $sircar->save();
 
+        $this->setEvent($sircar, 'birth', $form);
+        if((int)$form['living']){
+            if($event = $sircar->death()){
+                $event->remove();
+            }
+        } else {
+            $this->setEvent($sircar, 'death', $form);
+        }
+
         $spouse = $gedcom->individuals->get();
         $spouse->tree_id = $ind->tree_id;
         $spouse->gender = ($gender)?0:1;
@@ -130,9 +214,17 @@ class FamilytreetopControllerEditor extends FamilytreetopController
             $family->husb = $spouse->gedcom_id;
         }
         $family->save();
-        $family->addChild($ind->gedcom_id);
+        $child = $family->addChild($ind->gedcom_id);
 
-        echo json_encode(array('family' => $family, 'sircar'=>$sircar, 'spouse'=>$spouse));
+
+        echo $this->getResponse(
+            array('ind' => array($sircar, $spouse)),
+            array('fam' => array($family)),
+            array('chi' => array($child)),
+            array('eve' => array($sircar->events)),
+            array('pla' => array($sircar->evetns)),
+            array('dat' => array($sircar->events))
+        );
         exit;
     }
 
@@ -167,9 +259,12 @@ class FamilytreetopControllerEditor extends FamilytreetopController
             $this->setEvent($ind, 'death', $form);
         }
 
-        $parents['family']->addChild($ind->gedcom_id);
+        $child = $parents['family']->addChild($ind->gedcom_id);
 
-        echo json_encode(array('ind'=>$ind, 'form'=>$form));
+        echo $this->getResponse(
+            array('ind' => array($ind)),
+            array('chi' => array($child))
+        );
         exit;
     }
 
@@ -200,7 +295,10 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         }
         $family->save();
 
-        echo json_encode(array('form'=>$form));
+        echo $this->getResponse(
+            array('ind' => array($ind)),
+            array('fam' => array($family))
+        );
         exit;
     }
 
@@ -241,9 +339,12 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         }
 
         $family = $gedcom->families->getByPartner($husb, $wife);
-        $family->addChild($ind->gedcom_id);
+        $child = $family->addChild($ind->gedcom_id);
 
-        echo json_encode(array('ind'=>$ind, 'form'=>$form));
+        echo $this->getResponse(
+            array('ind' => array($ind)),
+            array('chi' => array($child))
+        );
         exit;
     }
 
@@ -270,7 +371,9 @@ class FamilytreetopControllerEditor extends FamilytreetopController
             $this->setEvent($ind, 'death', $form);
         }
 
-        echo json_encode(array('ind'=>$ind, 'form'=>$form));
+        echo $this->getResponse(
+            array('ind' => array($ind))
+        );
         exit;
     }
 

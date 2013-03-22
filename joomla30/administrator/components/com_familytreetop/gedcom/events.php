@@ -133,9 +133,11 @@ class FamilyTreeTopGedcomEventsManager {
             foreach($data as $el){
                 $event = new FamilyTreeTopGedcomEventModel();
                 $event->id = $el['id'];
+                $event->name = $el['name'];
                 $event->gedcom_id = $el['gedcom_id'];
                 $event->family_id = $el['family_id'];
                 $event->type = $el['type'];
+                $event->change_time = $el['change_time'];
 
                 $event->date = $gedcom->dates->get($event->id);
                 $event->place = $gedcom->places->get($event->id);
