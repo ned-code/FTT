@@ -115,15 +115,16 @@ class FamilytreetopControllerEditor extends FamilytreetopController
                     switch($key){
                         case "chi":
                             if(!$item) continue;
-                            $this->sub_arr($result[$key], array('gedcom_id', 'family_id'));
+                            $this->sub_arr($result[$key], array('all', 'gedcom_id', 'family_id'));
 
                             $data = array();
                             $data['id'] = $item->id;
-                            $data['gedcom_id'] = $item->id;
-                            $data['family_id'] = $item->id;
+                            $data['gedcom_id'] = $item->gedcom_id;
+                            $data['family_id'] = $item->family_id;
 
-                            $result[$key]['gedcom_id'] = $data;
-                            $result[$key]['family_id'] = $data;
+                            $result[$key]['gedcom_id'][$item->gedcom_id] = $data;
+                            $result[$key]['family_id'][$item->family_id] = $data;
+                            $result[$key]['all'][$item->id] = $data;
                             break;
                         case "dat":
                         case "pla":
@@ -276,7 +277,10 @@ class FamilytreetopControllerEditor extends FamilytreetopController
 
         echo $this->getResponse(
             array('ind' => array($ind)),
-            array('chi' => array($child))
+            array('chi' => array($child)),
+            array('eve' => array($ind->events)),
+            array('pla' => array($ind->events)),
+            array('dat' => array($ind->events))
         );
         exit;
     }
@@ -310,7 +314,10 @@ class FamilytreetopControllerEditor extends FamilytreetopController
 
         echo $this->getResponse(
             array('ind' => array($ind)),
-            array('fam' => array($family))
+            array('fam' => array($family)),
+            array('eve' => array($ind->events)),
+            array('pla' => array($ind->events)),
+            array('dat' => array($ind->events))
         );
         exit;
     }
@@ -356,7 +363,10 @@ class FamilytreetopControllerEditor extends FamilytreetopController
 
         echo $this->getResponse(
             array('ind' => array($ind)),
-            array('chi' => array($child))
+            array('chi' => array($child)),
+            array('eve' => array($ind->events)),
+            array('pla' => array($ind->events)),
+            array('dat' => array($ind->events))
         );
         exit;
     }
@@ -385,7 +395,10 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         }
 
         echo $this->getResponse(
-            array('ind' => array($ind))
+            array('ind' => array($ind)),
+            array('eve' => array($ind->events)),
+            array('pla' => array($ind->events)),
+            array('dat' => array($ind->events))
         );
         exit;
     }

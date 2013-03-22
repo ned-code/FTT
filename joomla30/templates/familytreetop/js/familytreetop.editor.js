@@ -313,6 +313,7 @@ $FamilyTreeTop.create("editor", function($){
                 }
                 $this.ajax(send, args, function(response){
                     console.log(response);
+                    $this.mod('usertree').update(response);
                     $(cl).modal('hide');
                 });
             });

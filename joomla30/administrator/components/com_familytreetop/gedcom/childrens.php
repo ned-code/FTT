@@ -80,7 +80,7 @@ class FamilyTreeTopGedcomChildrensManager {
 
     public function getList(){
         return array(
-            'list' => $this->list,
+            'all' => $this->list,
             'gedcom_id' => $this->list_by_gedcom_id,
             'family_id' => $this->list_by_family_id
         );

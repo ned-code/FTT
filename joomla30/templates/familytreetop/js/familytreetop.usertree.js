@@ -13,6 +13,7 @@ $FamilyTreeTop.create("usertree", function($){
     $this.init = function(dataString, userString, usersString){
         if(dataString.length != 0){
             data = $.parseJSON(dataString);
+            window._A = data;
             console.log(data);
         } else {
             data = null;
@@ -31,9 +32,90 @@ $FamilyTreeTop.create("usertree", function($){
         }
     }
 
+    $this.update = function(response){
+        var prop, items, key, id, list, i, els;
+        for(prop in response){
+            if(!response.hasOwnProperty(prop)) continue;
+            items = response[prop];
+            switch(prop){
+                case "chi":
+                    for(var key in items){
+                        if(!items.hasOwnProperty(key)) continue;
+                        list = items[key];
+                        for(id in list){
+                            if(!list.hasOwnProperty(id)) continue;
+                            els = list[id];
+                            for(i in els){
+                                if(!els.hasOwnProperty(i)) continue;
+                                if("undefined" === typeof(data[prop][key][id])){
+                                    data[prop][key][id] = [];
+                                }
+                                data[prop][key][id].push(els[i]);
+                            }
+                        }
+                    }
+                    break;
+                case "eve":
+                    for(var key in items){
+                        if(!items.hasOwnProperty(key)) continue;
+                        list = items[key];
+                        for(id in list){
+                            if(!list.hasOwnProperty(id)) continue;
+                            if("all" == key){
+                                data[prop][key][id] = list[id];
+                            } else {
+                                els = list[id];
+                                for(i in els){
+                                    if(!els.hasOwnProperty(i)) continue;
+                                    if("undefined" === typeof(data[prop][key][id])){
+                                        data[prop][key][id] = {};
+                                    }
+                                    data[prop][key][id][i] = els[i];
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case "fam":
+                    for(var key in items){
+                        if(!items.hasOwnProperty(key)) continue;
+                        list = items[key];
+                        for(id in list){
+                            if(!list.hasOwnProperty(id)) continue;
+                            if("family_id" == key){
+                                data[prop][key][id] = list[id];
+                            } else {
+                                els = list[id];
+                                for(i in els){
+                                    if(!els.hasOwnProperty(i)) continue;
+                                    if("undefined" === typeof(data[prop][key][id])){
+                                        data[prop][key][id] = [];
+                                    }
+                                    data[prop][key][id].push(els[i]);
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case "med":
+
+                case "ind":
+                case "pla":
+                case "dat":
+                    for(key in items){
+                        if(!items.hasOwnProperty(key)) continue;
+                        data[prop][key] = items[key];
+                    }
+                    break;
+            }
+        }
+        return true;
+    }
+
     $this.usermap = function(){
         return usermap;
     }
+
 
     $this.user = function(gedcom_id){
         if("undefined" === typeof(gedcom_id)) return false;
