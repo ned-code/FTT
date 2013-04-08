@@ -1,11 +1,21 @@
 <?php
 class FamilyTreeTopGedcomRelationsManager {
     protected $tree_id;
+    protected $owner_id;
     protected $list = array();
 
-    public function __construct($tree_id){
+    public function __construct($tree_id, $gedcom_id){
         $this->tree_id = $tree_id;
+        $this->owner_id = $gedcom_id;
 
+        if(!empty($this->tree_id) && !empty($this->owner_id)){
+            $db = JFactory::getDbo();
+            $sql = "SELECT r.id, r.relation_id, r.gedcom_id, r.target_id, r.json, r.change_time
+                    FROM #__familytreetop_relation_links as r, #__familytreetop_tree_links as l, #__familytreetop_trees as t
+                    WHERE r.gedcom_id = l.id AND l.tree_id = t.id AND t.id = " . $this->tree_id . " AND r.gedcom_id = " . $this->owner_id;
+            $db->setQuery($sql);
+            $this->list = $db->loadAssocList('target_id');
+        }
     }
 
     protected function get_parents($gedcom_id){
@@ -87,7 +97,7 @@ class FamilyTreeTopGedcomRelationsManager {
         }
     }
 
-    public function get($gedcom_id, $target_id){
+    protected function _get($gedcom_id, $target_id){
         $gedcom = GedcomHelper::getInstance();
         if($gedcom_id == $target_id){
             return array(1, array());
@@ -155,10 +165,47 @@ class FamilyTreeTopGedcomRelationsManager {
         return array(9, $params);
     }
 
+    protected function isRelationsNotExist(){
+        $gedcom = GedcomHelper::getInstance();
+        $individuals = $gedcom->individuals->getList();
+        if(sizeof($individuals) != sizeof($this->list)){
+            return $individuals;
+        }
+        return false;
+    }
+
+    public function get($gedcom_id, $target_id){
+        $relation = $this->_get($gedcom_id, $target_id);
+        if($relation && !isset($this->list[$target_id])){
+            $rel = new FamilyTreeTopRelationLinks();
+            $rel->relation_id = $relation[0];
+            $rel->gedcom_id = $gedcom_id;
+            $rel->target_id = $target_id;
+            $rel->connection = '';
+            $rel->json = (empty($relation[1]))?NULL:json_encode($relation[1]);
+            $rel->save();
+
+            $this->list[$target_id] = array(
+                'relation_id' => $rel->relation_id,
+                'gedcom_id' => $rel->gedcom_id,
+                'target_id' => $rel->target_id,
+                'connection' => $rel->connection,
+                'json' => $rel->json,
+                'change_time' => $rel->change_time,
+            );
+        }
+        return $relation;
+    }
 
     public function getList(){
-        return array(
-        );
+        if($individuals = $this->isRelationsNotExist()){
+            foreach($individuals as $ind){
+                if(!isset($this->list[$ind['gedcom']])){
+                    $this->get($this->owner_id, $ind['gedcom_id']);
+                }
+            }
+        }
+        return $this->list;
     }
 
 }

@@ -24,12 +24,12 @@ class GedcomHelper
         if ( is_null(self::$instance) ) {
             self::$instance = new GedcomHelper ();
             $user = FamilyTreeTopUserHelper::getInstance()->get();
-            self::$instance->init($user->tree_id);
+            self::$instance->init($user->tree_id, $user->gedcom_id);
         }
         return self::$instance;
     }
 
-    public function init($tree_id){
+    public function init($tree_id, $gedcom_id){
         $this->individuals = new FamilyTreeTopGedcomIndividualsManager($tree_id);
         $this->families = new FamilyTreeTopGedcomFamiliesManager($tree_id);
         $this->childrens = new FamilyTreeTopGedcomChildrensManager($tree_id);
@@ -37,7 +37,7 @@ class GedcomHelper
         $this->dates = new FamilyTreeTopGedcomDatesManager($tree_id);
         $this->places = new FamilyTreeTopGedcomPlacesManager($tree_id);
         $this->medias = new FamilyTreeTopGedcomMediasManager($tree_id);
-        $this->relations = new FamilyTreeTopGedcomRelationsManager($tree_id);
+        $this->relations = new FamilyTreeTopGedcomRelationsManager($tree_id, $gedcom_id);
         $this->connections = new FamilyTreeTopGedcomConnectionsManager($tree_id);
     }
 
