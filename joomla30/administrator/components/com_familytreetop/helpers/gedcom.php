@@ -18,6 +18,7 @@ class GedcomHelper
     public $places;
     public $medias;
     public $relations;
+    public $connections;
 
     public function getInstance(){
         if ( is_null(self::$instance) ) {
@@ -37,6 +38,7 @@ class GedcomHelper
         $this->places = new FamilyTreeTopGedcomPlacesManager($tree_id);
         $this->medias = new FamilyTreeTopGedcomMediasManager($tree_id);
         $this->relations = new FamilyTreeTopGedcomRelationsManager($tree_id);
+        $this->connections = new FamilyTreeTopGedcomConnectionsManager($tree_id);
     }
 
     public function getTreeUsers($associative = false, $json = false){
@@ -82,7 +84,9 @@ class GedcomHelper
             'eve' => $this->events->getList(),
             'dat' => $this->dates->getList(),
             'pla' => $this->places->getList(),
-            'med' => $this->medias->getList()
+            'med' => $this->medias->getList(),
+            'rel' => $this->relations->getList(),
+            'con' => $this->connections->getList()
         );
     }
 }

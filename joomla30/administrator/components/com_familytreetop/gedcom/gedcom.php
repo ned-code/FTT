@@ -8,5 +8,6 @@ require_once $path . 'dates.php';
 require_once $path . 'places.php';
 require_once $path . 'medias.php';
 require_once $path . 'relations.php';
+require_once $path . 'connections.php';
 
 
