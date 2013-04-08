@@ -9,12 +9,28 @@ if($user->facebook_id != 0){
         'query' => 'SELECT name, birthday, uid, relationship FROM family WHERE profile_id =me()',
     ));
 
+    $members = json_decode(GedcomHelper::getInstance()->getTreeUsers(true, true));
     $home = $facebook->api('/' . $user->facebook_id . '/home');
     $data = $home['data'];
 } else {
     $data = null;
 }
 
+$search = array();
+foreach($members as $member){
+    $search[$member->facebook_id] = $member->facebook_id;
+}
+foreach($family as $member){
+    $search[$member['uid']] = $member['uid'];
+}
+
+$result_array = array();
+foreach($data as $object){
+    $facebook_id = $object['from']['id'];
+    if(isset($search[$facebook_id])){
+        $result_array[] = $object;
+    }
+}
 ?>
 <?php if(!empty($data)): ?>
 <div id="myFamilyOnFacebook" class="row">
@@ -23,7 +39,7 @@ if($user->facebook_id != 0){
             <fieldset>
                 <legend>My Family</legend>
             </fieldset>
-            <?php foreach($data as $object): ?>
+            <?php foreach($result_array as $object): ?>
                 <div class="row-fluid">
                     <h4><?=$object['from']['name'];?></h4>
                     <div class="row-fluid">
