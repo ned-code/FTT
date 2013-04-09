@@ -35,8 +35,8 @@ $FamilyTreeTop.create("popovers", function($){
                 avatar;
             $(div).find('ul li').each(function(index, el){
                 var type = $(el).attr('data-familytreetop');
-                if(type == "relation"){
-                    $(el).find('span').text(object.relation());
+                if(object[type].length == 0){
+                    $(el).hide();
                 } else {
                     $(el).find('span').text(object[type]);
                 }

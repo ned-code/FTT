@@ -3,6 +3,7 @@ class FamilyTreeTopGedcomRelationsManager {
     protected $tree_id;
     protected $owner_id;
     protected $list = array();
+    protected $tmp = array();
 
     public function __construct($tree_id, $gedcom_id){
         $this->tree_id = $tree_id;
@@ -36,9 +37,9 @@ class FamilyTreeTopGedcomRelationsManager {
             $ancestors[] = array($level, $parents[0][0]);
             $this->set_ancestors($parents[0][0], $ancestors, $level + 1);
         }
-        if(!empty($parents)  && $parents[0][1] != null){
-            $ancestors[] = array($level, $parents[0][1]);
-            $this->set_ancestors($parents[0][1], $ancestors, $level + 1);
+        if(!empty($parents)  && $parents[1][0] != null){
+            $ancestors[] = array($level, $parents[1][0]);
+            $this->set_ancestors($parents[1][0], $ancestors, $level + 1);
         }
     }
 
@@ -117,9 +118,11 @@ class FamilyTreeTopGedcomRelationsManager {
         }
 
         $lca = $this->lowest_common_ancestor($target_id, $gedcom_id);
+        $this->tmp[$target_id] = $lca;
         if (!$lca) {
             return false;
         }
+
 
         $a_level = $lca[1];
         $b_level = $lca[2];
@@ -209,6 +212,7 @@ class FamilyTreeTopGedcomRelationsManager {
                 }
             }
         }
+        $this->list['_TMP'] = $this->tmp;
         return $this->list;
     }
 

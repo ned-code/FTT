@@ -147,11 +147,17 @@ $FamilyTreeTop.create("usertree", function($){
             know_as: ind.know_as,
             last_name: ind.last_name,
             middle_name: ind.middle_name,
-            relation: function(){
-                var relation_id = data.rel[ind.gedcom_id].relation_id,
-                    name = data.rel._NAMES[relation_id].name;;
-                return $('#relations').find('[data-familytreetop="'+name+'"]').text();
-            },
+            relation: (function(){
+                var relation_id, name;
+                if("undefined" !== typeof(data.rel[ind.gedcom_id])){
+                    relation_id = data.rel[ind.gedcom_id].relation_id;
+                    if("undefined" !== typeof(data.rel._NAMES[relation_id])){
+                        name = data.rel._NAMES[relation_id].name;
+                        return $('#relations').find('[data-familytreetop="'+name+'"]').text();
+                    }
+                }
+                return "";
+            })(),
             avatar: function(size, style, src){
                 return $this.getImage(ind.gedcom_id, size, style, src);
             },
