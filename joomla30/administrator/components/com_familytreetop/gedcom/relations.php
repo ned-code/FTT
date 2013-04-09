@@ -15,6 +15,10 @@ class FamilyTreeTopGedcomRelationsManager {
                     WHERE r.gedcom_id = l.id AND l.tree_id = t.id AND t.id = " . $this->tree_id . " AND r.gedcom_id = " . $this->owner_id;
             $db->setQuery($sql);
             $this->list = $db->loadAssocList('target_id');
+
+            $sql = "SELECT * FROM #__familytreetop_relations WHERE 1";
+            $db->setQuery($sql);
+            $this->list["_NAMES"] = $db->loadAssocList('id');
         }
     }
 

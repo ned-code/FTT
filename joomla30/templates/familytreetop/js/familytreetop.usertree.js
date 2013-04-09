@@ -110,10 +110,11 @@ $FamilyTreeTop.create("usertree", function($){
                     }
                     break;
                 case "med":
-
+                    break;
                 case "ind":
                 case "pla":
                 case "dat":
+                case "rel":
                     for(key in items){
                         if(!items.hasOwnProperty(key)) continue;
                         data[prop][key] = items[key];
@@ -146,6 +147,11 @@ $FamilyTreeTop.create("usertree", function($){
             know_as: ind.know_as,
             last_name: ind.last_name,
             middle_name: ind.middle_name,
+            relation: function(){
+                var relation_id = data.rel[ind.gedcom_id].relation_id,
+                    name = data.rel._NAMES[relation_id].name;;
+                return $('#relations').find('[data-familytreetop="'+name+'"]').text();
+            },
             avatar: function(size, style, src){
                 return $this.getImage(ind.gedcom_id, size, style, src);
             },
