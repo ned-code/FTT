@@ -3,7 +3,6 @@ class FamilyTreeTopGedcomRelationsManager {
     protected $tree_id;
     protected $owner_id;
     protected $list = array();
-    protected $tmp = array();
 
     public function __construct($tree_id, $gedcom_id){
         $this->tree_id = $tree_id;
@@ -15,12 +14,22 @@ class FamilyTreeTopGedcomRelationsManager {
                     FROM #__familytreetop_relation_links as r, #__familytreetop_tree_links as l, #__familytreetop_trees as t
                     WHERE r.gedcom_id = l.id AND l.tree_id = t.id AND t.id = " . $this->tree_id . " AND r.gedcom_id = " . $this->owner_id;
             $db->setQuery($sql);
-            $this->list = $db->loadAssocList('target_id');
+            $this->list = $this->sort($db->loadAssocList('target_id'));
 
             $sql = "SELECT * FROM #__familytreetop_relations WHERE 1";
             $db->setQuery($sql);
             $this->list["_NAMES"] = $db->loadAssocList('id');
         }
+    }
+
+    protected function sort($rows){
+        $sort = array();
+        foreach($rows as $key => $row){
+            $el = $row;
+            $el['json'] = json_decode($row['json']);
+            $sort[$key] = $el;
+        }
+        return $sort;
     }
 
     protected function get_parents($gedcom_id){
@@ -33,13 +42,13 @@ class FamilyTreeTopGedcomRelationsManager {
     protected function set_ancestors($id, &$ancestors, $level = 1){
         if(!$id) return;
         $parents = $this->get_parents($id);
-        if(!empty($parents) && $parents[0][0] != null){
-            $ancestors[] = array($level, $parents[0][0]);
-            $this->set_ancestors($parents[0][0], $ancestors, $level + 1);
+        if(!empty($parents) && $parents[0] != null){
+            $ancestors[] = array($level, $parents[0]);
+            $this->set_ancestors($parents[0], $ancestors, $level + 1);
         }
-        if(!empty($parents)  && $parents[1][0] != null){
-            $ancestors[] = array($level, $parents[1][0]);
-            $this->set_ancestors($parents[1][0], $ancestors, $level + 1);
+        if(!empty($parents)  && $parents[1] != null){
+            $ancestors[] = array($level, $parents[1]);
+            $this->set_ancestors($parents[1], $ancestors, $level + 1);
         }
     }
 
@@ -118,7 +127,6 @@ class FamilyTreeTopGedcomRelationsManager {
         }
 
         $lca = $this->lowest_common_ancestor($target_id, $gedcom_id);
-        $this->tmp[$target_id] = $lca;
         if (!$lca) {
             return false;
         }
@@ -212,7 +220,6 @@ class FamilyTreeTopGedcomRelationsManager {
                 }
             }
         }
-        $this->list['_TMP'] = $this->tmp;
         return $this->list;
     }
 

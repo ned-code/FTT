@@ -148,12 +148,15 @@ $FamilyTreeTop.create("usertree", function($){
             last_name: ind.last_name,
             middle_name: ind.middle_name,
             relation: (function(){
-                var relation_id, name;
+                if(data.rel == null) return "";
+                var relation_object, relation_id, name, suffix;
                 if("undefined" !== typeof(data.rel[ind.gedcom_id])){
-                    relation_id = data.rel[ind.gedcom_id].relation_id;
+                    relation_object = data.rel[ind.gedcom_id];
+                    relation_id = relation_object.relation_id;
                     if("undefined" !== typeof(data.rel._NAMES[relation_id])){
                         name = data.rel._NAMES[relation_id].name;
-                        return $('#relations').find('[data-familytreetop="'+name+'"]').text();
+                        suffix = (relation_object.json != null && "undefined" !==  typeof(relation_object.json.suffix))?relation_object.json.suffix + " ":"";
+                        return suffix + $('#relations').find('[data-familytreetop="'+name+'"]').text();
                     }
                 }
                 return "";
@@ -544,3 +547,6 @@ $FamilyTreeTop.create("usertree", function($){
 
     $this.init($FamilyTreeTop.dataString, $FamilyTreeTop.userString, $FamilyTreeTop.users);
 });
+
+
+
