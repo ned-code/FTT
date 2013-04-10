@@ -130,6 +130,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                             <li data-familytreetop="last_name"><small><strong>Last Name</strong>: <span></span></small></li>
                             <li data-familytreetop="know_as"><small><strong>Know As</strong>: <span></span></small></li>
                             <li data-familytreetop="relation"><small><strong>Relation</strong>: <span></span></small></li>
+                            <li data-familytreetop="connection"><small><strong>Connection</strong>: <span></span></small></li>
                         </ul>
                     </div>
                 </div>

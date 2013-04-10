@@ -34,11 +34,12 @@ $FamilyTreeTop.create("popovers", function($){
                 object = $fn.getLastObject().object,
                 avatar;
             $(div).find('ul li').each(function(index, el){
-                var type = $(el).attr('data-familytreetop');
-                if(object[type] == null || object[type].length == 0){
+                var type = $(el).attr('data-familytreetop'),
+                    val = ("function"===typeof(object[type])?object[type]():object[type]);
+                if(val == null || val.length == 0){
                     $(el).hide();
                 } else {
-                    $(el).find('span').text(object[type]);
+                    $(el).find('span').text(val);
                 }
             });
             avatar = $fn.getLastObject().object.avatar(["100","100"], "media-object");

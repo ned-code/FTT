@@ -161,6 +161,19 @@ $FamilyTreeTop.create("usertree", function($){
                 }
                 return "";
             })(),
+            connection:function(){
+                var object;
+                if(data.con == null) return "";
+                if("undefined" !== typeof(data.con[ind.gedcom_id])){
+                    object = data.con[ind.gedcom_id];
+                    if(object){
+                        return object.map(function(v){
+                            return $FamilyTreeTop.mod('usertree').user(v).relation;
+                        }).join(" > ");
+                    }
+                }
+                return "";
+            },
             avatar: function(size, style, src){
                 return $this.getImage(ind.gedcom_id, size, style, src);
             },
