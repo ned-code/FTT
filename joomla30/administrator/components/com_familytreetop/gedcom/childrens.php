@@ -45,7 +45,7 @@ class FamilyTreeTopGedcomChildrensManager {
     public function get($id = false){
         $result = array();
         if($id && isset($this->list_by_family_id[$id])){
-            foreach( $this->list_by_family_id[$id] as $key => $value)
+            foreach($this->list_by_family_id[$id] as $key => $value)
                 $result[$key] = $value['gedcom_id'];
 
         }
