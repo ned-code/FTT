@@ -57,13 +57,10 @@ $FamilyTreeTop.create("usertree", function($){
                         for(id in list){
                             if(!list.hasOwnProperty(id)) continue;
                             els = list[id];
-                            for(i in els){
-                                if(!els.hasOwnProperty(i)) continue;
-                                if("undefined" === typeof(data[prop][key][id])){
-                                    data[prop][key][id] = [];
-                                }
-                                data[prop][key][id].push(els[i]);
+                            if("undefined" === typeof(data[prop][key][id])){
+                                data[prop][key][id] = [];
                             }
+                            data[prop][key][id].push(els);
                         }
                     }
                     break;

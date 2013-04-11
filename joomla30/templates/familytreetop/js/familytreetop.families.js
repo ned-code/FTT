@@ -98,8 +98,12 @@ $FamilyTreeTop.create("families", function($){
             function getRows(){
                 var length = boxs.length - 3;
                 var width = $('.tab-content').width();
-                var limit = Math.ceil(width / (120 * length));
-                return [ Math.ceil(length/limit), limit, width];
+                var rows = Math.ceil( (120 * length) / width );
+                var limit = Math.ceil(length / rows);
+                if(limit * rows < length){
+                    rows++
+                }
+                return [rows, limit, width];
             }
             function getMinHeight(){
                 var height = (getRows()[0] * 270);
@@ -117,7 +121,7 @@ $FamilyTreeTop.create("families", function($){
                     var objectHeight = $(boxs[0]).height();
                     var rows = getRows();
                     var row = Math.ceil((index - 2)/rows[1]);
-                    return height * 0.1 + 250 + 110*(row - 1);
+                    return height * 0.1 + 250 + 190*(row - 1);
                 }
 
             }
@@ -143,9 +147,7 @@ $FamilyTreeTop.create("families", function($){
                     indent = 0,
                     position;
 
-                if(row == rows[0] && length != rows[1]){
-                    indent = Math.round((rows[2] - length * 120) / 2);
-                }
+                indent = Math.round((rows[2] - rows[1] * 120) / 2);
                 if(row == 1){
                     position = len;
                 } else {

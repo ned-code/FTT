@@ -88,7 +88,7 @@ class FamilytreetopControllerUser extends FamilytreetopController
             }
         }
         if($redirect){
-            $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=family", false));
+            $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=myfamily", false));
         } else {
             echo json_encode(array('auth'=>false));
             exit;
