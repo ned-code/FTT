@@ -220,6 +220,14 @@ $FamilyTreeTop.create("usertree", function($){
                 var parents = $this.getParents(gedcom_id);
                 return parents.father || parents.mother || false;
             },
+            isSpouseExist:function(){
+                var spouses = $this.getSpouses(ind.gedcom_id);
+                if(spouses.length != 0){
+                    return true;
+                } else {
+                    return false;
+                }
+            },
             isChildrensExist:function(){
                 var childrens = $this.getChildrens(ind.gedcom_id);
                 if(childrens.length != 0){

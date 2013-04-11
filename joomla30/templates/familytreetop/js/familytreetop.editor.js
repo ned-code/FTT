@@ -312,7 +312,6 @@ $FamilyTreeTop.create("editor", function($){
                     send = task;
                 }
                 $this.ajax(send, args, function(response){
-                    console.log(response);
                     $this.mod('usertree').update(response);
                     $(cl).modal('hide');
                 });

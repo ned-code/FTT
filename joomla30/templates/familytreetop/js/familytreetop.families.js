@@ -28,7 +28,7 @@ $FamilyTreeTop.create("families", function($){
             return family.mother;
         },
         createArrow: function(type, args){
-            var left = Math.ceil(((type  == 'up')?160:110)/2) - 10;
+            var left = Math.ceil(((type  == 'up')?160:110)/2) - 12;
             return $('<div style="position:absolute;left:'+left+'px;top: -30px; cursor:pointer;"><i class="icon-large icon-circle-arrow-'+type+'"></i></div>')
                 .click(function(){
                     $fn.click.call(this, args);
@@ -41,7 +41,7 @@ $FamilyTreeTop.create("families", function($){
             if(!ind) return [];
             var divs = $(cl).find('div');
             $(cl).attr('gedcom_id', ind.gedcom_id);
-            $(divs[1]).text(ind.name());
+            $(divs[1]).text((type=="up")?ind.name():ind.first_name);
             $(divs[2]).text('...');
 
             var img = $(divs[0]).find('img');
@@ -53,7 +53,7 @@ $FamilyTreeTop.create("families", function($){
                 images: avatar[0]
             });
 
-            if(args.abilityToMove && ((type == "up" && ind.isParentsExist()) || (type == "down" && ind.isChildrensExist())) ){
+            if(args.abilityToMove && ((type == "up" && ind.isParentsExist()) || (type == "down" && (ind.isChildrensExist()||ind.isSpouseExist()) )) ){
                 $(divs[0]).append($fn.createArrow(type, args));
             }
             if(args.editable){
@@ -103,7 +103,7 @@ $FamilyTreeTop.create("families", function($){
             }
             function getMinHeight(){
                 var height = (getRows()[0] * 270);
-                return height * 0.1 + 250 + height;
+                return height * 0.1 + 285 + height;
             }
             function getEventTop(){
                 var height = getMinHeight();
@@ -222,7 +222,7 @@ $FamilyTreeTop.create("families", function($){
         }
 
         $childrens = $this.mod('usertree').getChildrens($start_id);
-        if($childrens.length == 0){
+        if($childrens.length == 0 && !$this.mod('usertree').user($start_id).isSpouseExist()){
             $start_id = $fn.getStartIdByParents($start_id);
             $childrens = $this.mod('usertree').getChildrens($start_id);
         }
