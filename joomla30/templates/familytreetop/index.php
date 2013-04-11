@@ -10,6 +10,7 @@ $doc = JFactory::getDocument();
 $doc->addStyleSheet('templates/'.$this->template.'/css/bootstrap.min.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/bootstrap.fix.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/bootstrap-responsive.min.css');
+$doc->addStyleSheet('templates/'.$this->template.'/css/bootstrap-scroll-modal.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/jquery.fileupload-ui.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/csstreeview.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/csstreeview.fix.css');
@@ -590,6 +591,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
 <jdoc:include type="modules" name="debug" style="none" />
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/jquery-1.9.1.min.js"></script>
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/bootstrap.min.js"></script>
+<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/bootstrap-scroll-modal.js"></script>
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/tdfriendselector.js"></script>
 <!-- file upload plugin files -->
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/jquery.ui.widget.js"></script>

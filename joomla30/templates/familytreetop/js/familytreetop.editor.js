@@ -350,7 +350,7 @@ $FamilyTreeTop.create("editor", function($){
         $(cl).find('.modal-body').append(editProfileForm);
 
         //init modal
-        $(cl).modal();
+        $(cl).modal({dynamic: true});
 
         //event submit
         $fn.submit(cl, ind, 'editor.'+type);
@@ -398,7 +398,7 @@ $FamilyTreeTop.create("editor", function($){
         //options
 
         //init modal
-        $(cl).modal();
+        $(cl).modal({dynamic:true});
 
         // event submit
         $fn.submit(cl, ind);
