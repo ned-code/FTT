@@ -48,12 +48,13 @@ class FamilytreetopControllerUser extends FamilytreetopController
 
         $facebook = FacebookHelper::getInstance()->facebook;
         $facebook_id = $facebook->getUser();
+        $redirect = $app->input->get('redirect', false);
 
         $return = 'index.php?option=com_familytreetop&view=index';
         $username = null;
 
         if($facebook_id == 0){
-            $url =  JRoute::_("index.php?option=com_familytreetop&view=myfamily", false);
+            $url =  JRoute::_("index.php?option=com_familytreetop&task=user.activate?redirect", false);
             echo json_encode(array('auth'=>false, 'url'=>FacebookHelper::getInstance()->getLoginUrl($url)));
             exit;
         } else {
@@ -86,8 +87,12 @@ class FamilytreetopControllerUser extends FamilytreetopController
                 exit;
             }
         }
-        echo json_encode(array('auth'=>false));
-        exit;
+        if($redirect){
+            $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=family", false));
+        } else {
+            echo json_encode(array('auth'=>false));
+            exit;
+        }
     }
 
     public function logout(){
