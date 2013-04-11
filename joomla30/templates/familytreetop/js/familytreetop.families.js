@@ -28,8 +28,8 @@ $FamilyTreeTop.create("families", function($){
             return family.mother;
         },
         createArrow: function(type, args){
-            var left = Math.ceil(((type  == 'up')?160:110)/2) - 7;
-            return $('<div style="position:absolute;left:'+left+'px;top: -20px; cursor:pointer;"><i class="icon-circle-arrow-'+type+'"></i></div>')
+            var left = Math.ceil(((type  == 'up')?160:110)/2) - 10;
+            return $('<div style="position:absolute;left:'+left+'px;top: -30px; cursor:pointer;"><i class="icon-large icon-circle-arrow-'+type+'"></i></div>')
                 .click(function(){
                     $fn.click.call(this, args);
                 });

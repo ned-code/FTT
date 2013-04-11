@@ -10,6 +10,7 @@ $doc = JFactory::getDocument();
 $doc->addStyleSheet('templates/'.$this->template.'/css/bootstrap.min.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/bootstrap.fix.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/bootstrap-responsive.min.css');
+$doc->addStyleSheet('templates/'.$this->template.'/css/bootstrap.icon-large.min.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/bootstrap-scroll-modal.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/jquery.fileupload-ui.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/csstreeview.css');
@@ -483,7 +484,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
     </form>
 
     <div id="familiesHide">
-        <div familytreetop="home" style="position:absolute; top:0; right: 0; cursor: pointer;"><i class="icon-home"></i></div>
+        <div familytreetop="home" style="position:absolute; top:0; right: 0; cursor: pointer;"><i class="icon-large icon-home"></i></div>
         <div class="parent-box" style="max-width: 160px;">
             <div style="position:relative;">
                 <img class="img-polaroid" data-src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/holder.js/150x150">
