@@ -1,6 +1,9 @@
 <?php
 defined('_JEXEC') or die;
 ?>
+<script>
+    $FamilyTreeTop.dataString = '<?=json_encode(GedcomHelper::getInstance()->getData());?>';
+</script>
 <div class="row-fluid">
     <div class="span6">
         <div class="row-fluid">

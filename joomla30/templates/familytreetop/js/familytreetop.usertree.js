@@ -26,19 +26,19 @@ $FamilyTreeTop.create("usertree", function($){
         if(dataString.length != 0){
             data = $.parseJSON(dataString);
             window._A = data;
-            console.log(data);
+            //console.log(data);
         } else {
             data = null;
         }
         if(userString.length != 0){
             usermap = $.parseJSON(userString);
-            console.log(usermap);
+            //console.log(usermap);
         } else {
             usermap = null;
         }
         if(usersString.length != 0){
             usersmap = $.parseJSON(usersString);
-            console.log(usersmap);
+            //console.log(usersmap);
         } else {
             usersmap = [];
         }

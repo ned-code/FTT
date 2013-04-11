@@ -54,6 +54,10 @@ if($session->get('famous')){
             var a = $(this);
             console.log(id);
             switch(id){
+                case "profile":
+                        $FamilyTreeTop.mod('editor').render($FamilyTreeTop.mod('usertree').usermap().gedcom_id);
+                        break;
+
                 case "logout":
                         if(FB.getAuthResponse() != null){
                             FB.logout(function(r){
@@ -62,6 +66,7 @@ if($session->get('famous')){
                         } else {
                             window.location = $(a).attr('href');
                         }
+                    break;
 
                 default: return false;
             }
