@@ -37,7 +37,7 @@ foreach($data as $object){
     <div class="span6">
         <div class="well">
             <fieldset>
-                <legend>My Family</legend>
+                <legend class="text-center">My Family on Facebook</legend>
             </fieldset>
             <?php foreach($result_array as $object): ?>
                 <div class="row-fluid">
