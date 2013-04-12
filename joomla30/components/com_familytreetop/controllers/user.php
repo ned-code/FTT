@@ -83,12 +83,16 @@ class FamilytreetopControllerUser extends FamilytreetopController
 
                 $app->setUserState('users.login.form.return', $return);
                 $response = $app->login($credentials, $options);
-                echo json_encode(array('auth'=>$response));
+                if($redirect){
+                    echo $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=myfamily", false));
+                } else {
+                    echo json_encode(array('auth'=>$response));
+                }
                 exit;
             }
         }
         if($redirect){
-            $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=myfamily", false));
+            $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&task=user.activate?redirect", false));
         } else {
             echo json_encode(array('auth'=>false));
             exit;

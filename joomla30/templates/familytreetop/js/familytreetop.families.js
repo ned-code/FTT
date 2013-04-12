@@ -145,9 +145,25 @@ $FamilyTreeTop.create("families", function($){
                     rows = getRows(),
                     row = Math.ceil(len / rows[1]),
                     indent = 0,
-                    position;
+                    position,
+                    start,
+                    end,
+                    ln,
+                    k;
 
-                indent = Math.round((rows[2] - rows[1] * 120) / 2);
+                start = rows[1]*(row-1) + 1;
+                end = row*rows[1];
+                ln = 0;
+                if(end > length){
+                    for(var k = start ; k <= end ; k++){
+                        if(k <= length && k != 0){
+                            ln++;
+                        }
+                    }
+                } else {
+                    ln = rows[1];
+                }
+                indent = Math.round((rows[2] - ln * 120) / 2);
                 if(row == 1){
                     position = len;
                 } else {
