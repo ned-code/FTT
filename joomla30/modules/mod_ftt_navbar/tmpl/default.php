@@ -12,7 +12,7 @@ if($session->get('famous')){
 }
 ?>
 <div class="navbar navbar-inverse">
-    <div class="navbar-inner">
+    <div style="border-radius: 0;" class="navbar-inner">
         <div class="container">
             <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
                 <span class="icon-bar"></span>
@@ -29,8 +29,7 @@ if($session->get('famous')){
             </div>
             <?php if($user->facebook_id != 0 && $ind): ?>
                 <ul id="profileUser" class="nav pull-right">
-                    <li><img src="https://graph.facebook.com/<?=$user->facebook_id;?>/picture?width=40&height=40"/></li>
-                    <li class="divider-vertical"></li>
+                    <li><img style="margin: 4px;" src="https://graph.facebook.com/<?=$user->facebook_id;?>/picture?width=30&height=30"/></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?=$ind->name();?> <b class="caret"></b></a>
                         <ul class="dropdown-menu">

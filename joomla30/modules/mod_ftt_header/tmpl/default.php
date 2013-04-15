@@ -6,6 +6,12 @@ $ind = $gedcom->individuals->get($user->gedcom_id);
 ?>
 <div class="navbar">
     <div class="navbar-inner">
+        <ul id="familyTreeTopTabs" class="nav">
+            <li class="active"><a href="#tab1" data-toggle="tab">Bulletin Board</a></li>
+            <li><a href="#tab2" data-toggle="tab">Families</a></li>
+            <li><a href="#tab3" data-toggle="tab">Descendants</a></li>
+            <li><a href="#tab4" data-toggle="tab">Ancestors</a></li>
+        </ul>
         <?php if($user->famous): ?>
             <div class="pull-right">
                 <span><?=$ind->name();?></span>
@@ -15,15 +21,15 @@ $ind = $gedcom->individuals->get($user->gedcom_id);
         <div data-familytreetop="familyline" class="btn-group pull-right">
             <button class="btn"><i class="icon-pencil"></i></button>
             <button class="btn"><i class="icon-eye-open"></i></button>
-            <button class="btn disabled">
+            <button style="background: none;border: none;" class="btn disabled">
                 <ul class="unstyled inline">
                     <li>Mother</li>
-                    <li><canvas id="mother_chart" style="height:15px"></canvas></li>
+                    <li><canvas id="mother_chart" style="height:20px"></canvas></li>
                 </ul>
             </button>
-            <button class="btn disabled">
+            <button style="background: none;border: none;" class="btn disabled">
                 <ul class="unstyled inline">
-                    <li><canvas id="father_chart" style="height:15px"></canvas></li>
+                    <li><canvas id="father_chart" style="height:20px"></canvas></li>
                     <li>Father</li>
                 </ul>
             </button>

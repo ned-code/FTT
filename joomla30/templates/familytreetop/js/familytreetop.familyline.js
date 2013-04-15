@@ -6,9 +6,9 @@ $FamilyTreeTop.create("familyline", function($){
 
     $fn = {
         renderChart: function(canvas, ctx, index, data){
-            var lastend = 0,
+            var lastend = Math.PI * 1.5,
                 myTotal = 0,
-                myColor = ['red','blue','red'],
+                myColor = ['#c2c3c2','#22b14c','#c2c3c2'],
                 e,
                 i;
 
