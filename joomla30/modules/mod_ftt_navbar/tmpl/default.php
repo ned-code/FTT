@@ -93,12 +93,10 @@ if($session->get('famous')){
                     $fn.profile();
                     break;
 
-
                 case "logout":
                     $fn.logout();
                     break;
             }
-            return false;
         });
     });
 </script>
