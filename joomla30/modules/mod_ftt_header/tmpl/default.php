@@ -7,10 +7,32 @@ $ind = $gedcom->individuals->get($user->gedcom_id);
 <div class="navbar">
     <div class="navbar-inner">
         <ul id="familyTreeTopTabs" class="nav">
-            <li class="active"><a href="#tab1" data-toggle="tab">Bulletin Board</a></li>
+            <!-- BULLETIN BOARD -->
+            <li class="visible-desktop active"><a href="#tab1" data-toggle="tab">Bulletin Board</a></li>
+            <li class="hidden-desktop dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Bulletin Board<b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <li><a href="#">My Family On FB</a></li>
+                    <li><a href="#">Latest Changes</a></li>
+                </ul>
+            </li>
+            <!-- CALENDAR -->
+            <li class="visible-desktop"><a href="#">Calendar</a></li>
+            <li class="hidden-desktop dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Calendar<b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <li><a href="#">This Month</a></li>
+                    <li><a href="#">Latest Events</a></li>
+                </ul>
+            </li>
+            <!-- MEMBERS -->
+            <li><a href="#">Members</a></li>
+            <li><a href="#">Family Tree</a></li>
+            <!--
             <li><a href="#tab2" data-toggle="tab">Families</a></li>
             <li><a href="#tab3" data-toggle="tab">Descendants</a></li>
             <li><a href="#tab4" data-toggle="tab">Ancestors</a></li>
+            -->
         </ul>
         <?php if($user->famous): ?>
             <div class="pull-right">

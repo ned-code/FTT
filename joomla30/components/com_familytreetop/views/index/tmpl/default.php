@@ -29,6 +29,6 @@ defined('_JEXEC') or die;
     $FamilyTreeTop.bind(function($){
         'use strict';
 
-        
+
     });
 </script>
