@@ -18,7 +18,7 @@ $ind = $gedcom->individuals->get($user->gedcom_id);
                 <a class="btn" href="<?=JRoute::_("index.php?option=com_familytreetop&task=famous.ext", false);?>" >Exit</a>
             </div>
         <?php endif;?>
-        <div data-familytreetop="familyline" class="btn-group pull-right">
+        <div data-familytreetop="familyline" class="btn-group pull-right visible-desktop">
             <button class="btn"><i class="icon-pencil"></i></button>
             <button class="btn"><i class="icon-eye-open"></i></button>
             <button style="background: none;border: none;" class="btn disabled">
