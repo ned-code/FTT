@@ -3,18 +3,18 @@ defined('_JEXEC') or die;
 $months = array('January','February','March','April','May','June','July','August','September','October','November','December');
 $date = date('n', strtotime('-1 month'));
 ?>
-<div id="thisMonth" class="row">
-    <div class="span6">
+<div id="thisMonth" class="row-fluid">
+    <div class="span12">
         <div class="well">
             <fieldset>
                 <legend>
-                    <div class="row">
-                        <div class="span5">
+                    <div class="row-fluid">
+                        <div class="span12">
                             <ul class="unstyled inline">
                                 <li>This Month</li>
                                 <li>
                                     <?php
-                                        echo '<select familytreetop="months" class="span2" name="ThisMonth[month]">';
+                                        echo '<select familytreetop="months" class="span12" name="ThisMonth[month]">';
                                         foreach($months as $key => $month){
                                             $option = '<option ';
                                             if($key == $date){

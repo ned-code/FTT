@@ -6,8 +6,8 @@ $youngest = $gedcom->individuals->getYoungest();
 $oldest = $gedcom->individuals->getOldest();
 
 ?>
-<div id="quickFacts" class="row">
-    <div class="span6">
+<div id="quickFacts" class="row-fluid">
+    <div class="span12">
         <div class="well">
             <fieldset>
                 <legend>Quick Facts</legend>

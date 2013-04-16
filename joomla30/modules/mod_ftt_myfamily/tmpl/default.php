@@ -33,8 +33,8 @@ foreach($data as $object){
 }
 ?>
 <?php if(!empty($data)): ?>
-<div id="myFamilyOnFacebook" class="row">
-    <div class="span6">
+<div id="myFamilyOnFacebook" class="row-fluid">
+    <div class="span12">
         <div class="well">
             <fieldset>
                 <legend class="text-center">My Family on Facebook</legend>

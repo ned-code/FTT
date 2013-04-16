@@ -20,13 +20,13 @@ $user = FamilyTreeTopUserHelper::getInstance()->get();
         <div class="tab-content">
             <div class="tab-pane active" id="bulletin_board">
                 <div class="row">
-                    <div id="myfamily" class="span6">
+                    <div id="myfamily" data-familytreetop="span" class="span6">
                         <?php
                             $module = JModuleHelper::getModule('ftt_myfamily');
                             echo JModuleHelper::renderModule($module);
                         ?>
                     </div>
-                    <div id="latest_changes" class="span6">
+                    <div id="latest_changes" data-familytreetop="span" class="span6">
                         <?php
                             $module = JModuleHelper::getModule('ftt_recentvisitors');
                             echo JModuleHelper::renderModule($module);
@@ -42,13 +42,13 @@ $user = FamilyTreeTopUserHelper::getInstance()->get();
             </div>
             <div class="tab-pane" style="display:none;" id="calendar">
                 <div class="row">
-                    <div id="this_month" class="span6">
+                    <div id="this_month" data-familytreetop="span" class="span6">
                         <?php
                             $module = JModuleHelper::getModule('ftt_thismonth');
                             echo JModuleHelper::renderModule($module);
                         ?>
                     </div>
-                    <div id="latest_events" class="span6">
+                    <div id="latest_events" data-familytreetop="span" class="span6">
                         <?php
 
                         ?>

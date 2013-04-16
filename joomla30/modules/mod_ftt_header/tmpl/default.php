@@ -12,8 +12,8 @@ $ind = $gedcom->individuals->get($user->gedcom_id);
             <li class="hidden-desktop dropdown active">
                 <a data-familytreetop="bulletin_board" href="#" class="dropdown-toggle" data-toggle="dropdown">Bulletin Board<b class="caret"></b></a>
                 <ul class="dropdown-menu">
-                    <li><a data-familytreetop="myfamily" href="#">My Family On FB</a></li>
-                    <li><a data-familytreetop="latest_changes" href="#">Latest Changes</a></li>
+                    <li><a data-familytreetop="bulletin_board/myfamily" href="#">My Family On FB</a></li>
+                    <li><a data-familytreetop="bulletin_board/latest_changes" href="#">Latest Changes</a></li>
                 </ul>
             </li>
             <!-- CALENDAR -->
@@ -21,8 +21,8 @@ $ind = $gedcom->individuals->get($user->gedcom_id);
             <li class="hidden-desktop dropdown">
                 <a data-familytreetop="calendar" href="#" class="dropdown-toggle" data-toggle="dropdown">Calendar<b class="caret"></b></a>
                 <ul class="dropdown-menu">
-                    <li><a data-familytreetop="this_month" href="#">This Month</a></li>
-                    <li><a data-familytreetop="latest_events" href="#">Latest Events</a></li>
+                    <li><a data-familytreetop="calendar/this_month" href="#">This Month</a></li>
+                    <li><a data-familytreetop="calendar/latest_events" href="#">Latest Events</a></li>
                 </ul>
             </li>
             <!-- MEMBERS -->

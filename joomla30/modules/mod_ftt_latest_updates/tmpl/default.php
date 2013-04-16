@@ -9,8 +9,8 @@ if($profile){
 }
 
 ?>
-<div id="latestUpdates" class="row">
-    <div class="span6">
+<div id="latestUpdates" class="row-fluid">
+    <div class="span12">
         <div class="well">
             <fieldset>
                 <legend>Latest Updates</legend>

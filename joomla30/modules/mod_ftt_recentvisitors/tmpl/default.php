@@ -2,8 +2,8 @@
 defined('_JEXEC') or die;
 
 ?>
-<div id="recentVisitors" class="row">
-    <div class="span6">
+<div id="recentVisitors" class="row-fluid">
+    <div class="span12">
         <div class="well">
             <fieldset>
                 <legend>Recent Visitors</legend>
