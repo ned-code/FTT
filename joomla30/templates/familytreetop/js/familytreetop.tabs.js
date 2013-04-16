@@ -54,6 +54,7 @@ $FamilyTreeTop.create("tabs", function($){
             }
 
             $this.click.call(this, "all", e);
+            $(document.body).click();
             return false;
         });
     }
