@@ -57,7 +57,8 @@ $user = FamilyTreeTopUserHelper::getInstance()->get();
             </div>
             <div class="tab-pane" style="display:none;" id="members">
                 <?php
-
+                    $module = JModuleHelper::getModule('ftt_members');
+                    echo JModuleHelper::renderModule($module);
                 ?>
             </div>
             <div class="tab-pane" style="display:none;" id="family_tree">
