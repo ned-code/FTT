@@ -1,6 +1,6 @@
 $FamilyTreeTop.create("tabs", function($){
     'use strict';
-    var $this = this, $pull;
+    var $this = this, $fn, $pull, $box, $active = false;
 
     $pull = {
         all: []
@@ -21,10 +21,25 @@ $FamilyTreeTop.create("tabs", function($){
     }
 
     $this.init = function(){
+        $box = $('#familyTreeTopTabs');
         $('#familyTreeTopTabs a').click(function (e) {
-            var target = $(this).attr('href');
-            $this.click.call(this, target, e);
+            if($(this).hasClass('dropdown-toggle')){
+                return true;
+            }
+
+            var data = $(this).attr('data-familytreetop'),
+                parent = $(this).parent().parent();
+            $active = $($box).find('a[data-familytreetop="' + data + '"]');
+
+            if($(parent).hasClass('nav')){
+                $($box).find('li').removeClass('active');
+                $($active).parent().addClass('active');
+            }
+
+            
+
             $this.click.call(this, "all", e);
+            return false;
         });
     }
 
