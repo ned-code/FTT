@@ -40,16 +40,17 @@ foreach($data as $object){
                 <legend class="text-center">My Family on Facebook</legend>
             </fieldset>
             <div id="accordion2" class="accordion">
-                <?php foreach($result_array as $object): ?>
+                <?php foreach($data as $object): ?>
+                    <?php $uid = uniqid(); ?>
                     <div class="accordion-group">
                         <div class="accordion-heading">
                             <div class="row-fluid">
                                 <div class="span12">
                                     <h4>
-                                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse<?=$object['from']['id'];?>">
+                                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse<?=$object['from']['id'].$uid;?>">
                                             <?=$object['from']['name'];?>
                                         </a>
-                                    </h4>   
+                                    </h4>
                                 </div>
                             </div>
                             <div class="row-fluid">
@@ -103,9 +104,16 @@ foreach($data as $object){
                                 </div>
                             </div>
                         </div>
-                        <div id="collapse<?=$object['from']['id'];?>" class="accordion-body collapse">
+                        <div id="collapse<?=$object['from']['id'].$uid;?>" class="accordion-body collapse">
                             <div class="accordion-inner">
-                                COLLAPSE INNER MESSAGE!
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="text-center">
+                                            <a href="<?=$object['link']?>" target="_blank">Click Here</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                div.row-fluid>div.span12
                             </div>
                         </div>
                     </div>
