@@ -3,7 +3,7 @@ defined('_JEXEC') or die;
 ?>
 <div class="row-fluid">
     <div class="span12">
-        <div class="row-fluic">
+        <div class="row-fluid">
             <div class="span12">
                 <div class="well">
                     <fieldset>
@@ -38,7 +38,7 @@ defined('_JEXEC') or die;
                 </div>
             </div>
         </div>
-        <div class="row-fluic">
+        <div class="row-fluid">
             <div class="span12">
                 <div class="well">
                     <fieldset>
@@ -73,7 +73,7 @@ defined('_JEXEC') or die;
                 </div>
             </div>
         </div>
-        <div class="row-fluic">
+        <div class="row-fluid">
             <div class="span12">
                 <div class="well">
                     <fieldset>

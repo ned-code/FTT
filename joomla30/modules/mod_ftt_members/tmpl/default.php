@@ -17,6 +17,24 @@ defined('_JEXEC') or die;
                         </div>
                     </div>
                 </legend>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <td>Relation</td>
+                            <td>Name</td>
+                            <td>Birth Year</td>
+                            <td>Birth Place</td>
+                        </tr>
+                    </thead>
+                    <tr><td>Cousin</td><td>FirstName LastName</td><td></td><td></td></tr>
+                    <tr><td>Cousin</td><td>FirstName LastName</td><td></td><td></td></tr>
+                    <tr><td>Cousin</td><td>FirstName LastName</td><td></td><td></td></tr>
+                    <tr><td>Cousin</td><td>FirstName LastName</td><td></td><td></td></tr>
+                    <tr><td>Cousin</td><td>FirstName LastName</td><td></td><td></td></tr>
+                    <tr><td>Cousin</td><td>FirstName LastName</td><td></td><td></td></tr>
+                    <tr><td>Cousin</td><td>FirstName LastName</td><td></td><td></td></tr>
+                    <tr><td>Cousin</td><td>FirstName LastName</td><td></td><td></td></tr>
+                </table>
             </fieldset>
         </div>
     </div>
