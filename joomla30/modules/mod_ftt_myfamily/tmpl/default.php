@@ -106,14 +106,22 @@ foreach($data as $object){
                         </div>
                         <div id="collapse<?=$object['from']['id'].$uid;?>" class="accordion-body collapse">
                             <div class="accordion-inner">
-                                <div class="row-fluid">
-                                    <div class="span12">
-                                        <div class="text-center">
-                                            <a href="<?=$object['link']?>" target="_blank">Click Here</a>
+                                <?php if(isset($object['link'])): ?>
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            <div class="text-center">
+                                                <a href="<?=$object['link']?>" target="_blank">Click Here</a>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                div.row-fluid>div.span12
+                                <? endif; ?>
+                                <?php if(isset($object['picture'])): ?>
+                                    <div class="row-fluid">
+                                        <div class="span12 text-center">
+                                            <img src="<?=$object['picture'];?>" />
+                                        </div>
+                                    </div>
+                                <? endif; ?>
                             </div>
                         </div>
                     </div>
