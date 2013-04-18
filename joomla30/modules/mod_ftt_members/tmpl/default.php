@@ -65,8 +65,8 @@ defined('_JEXEC') or die;
                 </div>
                 <hr>
                 <div class="row-fluid">
-                    <div class="span12">
-                        <div class="btn-group">
+                    <div class="span12 text-center">
+                        <div class="btn-group" style="padding: 5px;">
                             <button class="btn">Male</button>
                             <button class="btn">Female</button>
                             <button class="btn disabled">Both</button>
@@ -74,8 +74,8 @@ defined('_JEXEC') or die;
                     </div>
                 </div>
                 <div class="row-fluid">
-                    <div class="span12">
-                        <div class="btn-group">
+                    <div class="span12 text-center">
+                        <div class="btn-group" style="padding: 5px;">
                             <button class="btn">Living</button>
                             <button class="btn">Deceased</button>
                             <button class="btn disabled">Both</button>
@@ -83,8 +83,8 @@ defined('_JEXEC') or die;
                     </div>
                 </div>
                 <div class="row-fluid">
-                    <div class="span12">
-                        <div class="btn-group">
+                    <div class="span12 text-center">
+                        <div class="btn-group" style="padding: 5px;">
                             <button class="btn">Ancestors</button>
                             <button class="btn">Descendants</button>
                             <button class="btn disabled">Both</button>
@@ -92,8 +92,8 @@ defined('_JEXEC') or die;
                     </div>
                 </div>
                 <div class="row-fluid">
-                    <div class="span12">
-                        <div class="btn-group">
+                    <div class="span12 text-center">
+                        <div class="btn-group" style="padding: 5px;">
                             <button class="btn">Registered</button>
                             <button class="btn">Unregistered</button>
                             <button class="btn disabled">Both</button>
