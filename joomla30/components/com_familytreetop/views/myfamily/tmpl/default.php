@@ -50,7 +50,8 @@ $user = FamilyTreeTopUserHelper::getInstance()->get();
                     </div>
                     <div id="latest_events" data-familytreetop="span" class="span6">
                         <?php
-
+                            $module = JModuleHelper::getModule('ftt_latest_events');
+                            echo JModuleHelper::renderModule($module);
                         ?>
                     </div>
                 </div>
