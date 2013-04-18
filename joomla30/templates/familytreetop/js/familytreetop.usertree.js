@@ -465,6 +465,36 @@ $FamilyTreeTop.create("usertree", function($){
         return pull;
     }
 
+    $this.parseDate = function(date){
+        if("undefined" === typeof(date) || date == null) return '';
+        var ret = [];
+        if(date.start_day != null){
+            ret.push(date.start_day);
+        }
+        if(date.start_month != null){
+            ret.push(date.start_month);
+        }
+        if(date.start_year != null){
+            ret.push(date.start_year);
+        }
+        return ret.join(" ");
+    }
+
+    $this.parsePlace = function(place){
+        if("undefined" === typeof(place) || place == null) return '';
+        var ret = [];
+        if(place.city != null){
+            ret.push(place.city);
+        }
+        if(place.state != null){
+            ret.push(place.state);
+        }
+        if(place.country != null){
+            ret.push(place.country);
+        }
+        return ret.join(" ");
+    }
+
     $this.getImage = function(gedcom_id, size, style, src){
         var el = (gedcom_id)?$this.getAvatar(gedcom_id):false,
             data = [],
@@ -561,7 +591,13 @@ $FamilyTreeTop.create("usertree", function($){
         delete data.med.all[media_id];
     }
 
+    $this.getData = function(){
+        return data;
+    }
 
+    $this.getUsers = function(){
+        return data.ind;
+    }
 
     $this.init($FamilyTreeTop.dataString, $FamilyTreeTop.userString, $FamilyTreeTop.users);
 });

@@ -1,7 +1,7 @@
 <?php
 defined('_JEXEC') or die;
 ?>
-<div class="row-fluid">
+<div id="members" class="row-fluid">
     <div class="span8">
         <div class="well">
             <fieldset>
@@ -17,7 +17,7 @@ defined('_JEXEC') or die;
                         </div>
                     </div>
                 </legend>
-                <table class="table table-striped">
+                <table id="membersTable" class="table table-striped">
                     <thead>
                         <tr>
                             <td>Relation</td>
@@ -26,14 +26,6 @@ defined('_JEXEC') or die;
                             <td>Birth Place</td>
                         </tr>
                     </thead>
-                    <tr><td>Cousin</td><td>FirstName LastName</td><td></td><td></td></tr>
-                    <tr><td>Cousin</td><td>FirstName LastName</td><td></td><td></td></tr>
-                    <tr><td>Cousin</td><td>FirstName LastName</td><td></td><td></td></tr>
-                    <tr><td>Cousin</td><td>FirstName LastName</td><td></td><td></td></tr>
-                    <tr><td>Cousin</td><td>FirstName LastName</td><td></td><td></td></tr>
-                    <tr><td>Cousin</td><td>FirstName LastName</td><td></td><td></td></tr>
-                    <tr><td>Cousin</td><td>FirstName LastName</td><td></td><td></td></tr>
-                    <tr><td>Cousin</td><td>FirstName LastName</td><td></td><td></td></tr>
                 </table>
             </fieldset>
         </div>
@@ -84,7 +76,7 @@ defined('_JEXEC') or die;
                 </div>
                 <div class="row-fluid">
                     <div class="span12 text-center">
-                        <div class="btn-group" style="padding: 5px;">
+                        <div class="btn-group" >
                             <button class="btn">Ancestors</button>
                             <button class="btn">Descendants</button>
                             <button class="btn disabled">Both</button>
@@ -93,7 +85,7 @@ defined('_JEXEC') or die;
                 </div>
                 <div class="row-fluid">
                     <div class="span12 text-center">
-                        <div class="btn-group" style="padding: 5px;">
+                        <div class="btn-group">
                             <button class="btn">Registered</button>
                             <button class="btn">Unregistered</button>
                             <button class="btn disabled">Both</button>
@@ -104,3 +96,8 @@ defined('_JEXEC') or die;
         </div>
     </div>
 </div>
+<script>
+    $FamilyTreeTop.bind(function($){
+        $FamilyTreeTop.fn.mod('members').init();
+    });
+</script>
