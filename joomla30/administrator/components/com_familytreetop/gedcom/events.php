@@ -151,7 +151,7 @@ class FamilyTreeTopGedcomEventsManager {
 
     public function getLatestEvents(){
         $db = JFactory::getDbo();
-        $sql = "SELECT e.*,d.*
+        $sql = "SELECT e.*,d.start_day, d.start_month, d.start_year
                     FROM #__familytreetop_events as e,
                         #__familytreetop_dates as d,
                         #__familytreetop_tree_links as l,
@@ -164,8 +164,15 @@ class FamilyTreeTopGedcomEventsManager {
                         ) AND  l.tree_id = t.id AND t.id = %s
                     ORDER BY d.start_year DESC";
         $db->setQuery(sprintf($sql, $this->tree_id));
-        $rows = $db->loadAssocList('type');
-        return json_encode($rows);
+        $rows = $db->loadAssocList('id');
+        $result = array();
+        foreach($rows as $id => $row){
+            if(!isset($result[$row['type']])){
+                $result[$row['type']] = array();
+            }
+            $result[$row['type']][] = $row;
+        }
+        return json_encode($result);
     }
 
     public function getList(){
