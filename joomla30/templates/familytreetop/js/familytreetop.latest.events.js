@@ -11,7 +11,6 @@ $FamilyTreeTop.create("latest_events", function($){
     }
 
     $this.init = function(events){
-        console.log(events);
         var birth = events.BIRT, death = events.DEAT, marr = events.MARR;
         if("undefined" !== typeof(birth)){
             for(var prop in birth){
