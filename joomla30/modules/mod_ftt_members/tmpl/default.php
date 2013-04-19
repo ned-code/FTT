@@ -23,14 +23,14 @@ defined('_JEXEC') or die;
                             <td>Relation</td>
                             <td>Name</td>
                             <td>Birth Year</td>
-                            <td>Birth Place</td>
+                            <td class="visible-desktop">Birth Place</td>
                         </tr>
                     </thead>
                 </table>
             </fieldset>
         </div>
     </div>
-    <div id="filterMembers" class="span4">
+    <div id="filterMembers" class="span4 visible-desktop">
         <div class="well">
             <fieldset>
                 <legend class="text-center">Filter</legend>
