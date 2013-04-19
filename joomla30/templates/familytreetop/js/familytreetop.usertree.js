@@ -158,6 +158,13 @@ $FamilyTreeTop.create("usertree", function($){
                 }
                 return "";
             })(),
+            relationId:(function(){
+                if(data.rel == null) return 0;
+                if("undefined" !== typeof(data.rel[ind.gedcom_id])){
+                    return data.rel[ind.gedcom_id].relation_id;
+                }
+                return 0;
+            })(),
             connection:function(){
                 var object;
                 if(data.con == null) return "";
@@ -272,6 +279,13 @@ $FamilyTreeTop.create("usertree", function($){
         }
         return false;
     }
+    $this.getRelationName = function(id){
+        if(data.rel != null && "undefined" !== typeof(data.rel._NAMES[id])){
+            return $('#relations').find('[data-familytreetop="'+data.rel["_NAMES"][id].name+'"]').text();
+        }
+        return "undefined";
+    }
+
 
     $this.getExistParent = function(p){
         if("undefined" === typeof(f) || !p) return false;
@@ -477,7 +491,7 @@ $FamilyTreeTop.create("usertree", function($){
         if(date.start_year != null){
             ret.push(date.start_year);
         }
-        return ret.join(" ");
+        return ret.join("-");
     }
 
     $this.parsePlace = function(place){
@@ -492,7 +506,7 @@ $FamilyTreeTop.create("usertree", function($){
         if(place.country != null){
             ret.push(place.country);
         }
-        return ret.join(" ");
+        return ret.join("-");
     }
 
     $this.getImage = function(gedcom_id, size, style, src){

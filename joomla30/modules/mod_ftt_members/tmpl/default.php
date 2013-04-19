@@ -30,28 +30,13 @@ defined('_JEXEC') or die;
             </fieldset>
         </div>
     </div>
-    <div class="span4">
+    <div id="filterMembers" class="span4">
         <div class="well">
             <fieldset>
                 <legend class="text-center">Filter</legend>
                 <div class="row-fluid">
                     <div class="span12">
                         <ul class="unstyled">
-                            <li>
-                                <label class="checkbox">
-                                    <input type="checkbox"> 2 Siblings
-                                </label>
-                            </li>
-                            <li>
-                                <label class="checkbox">
-                                    <input type="checkbox"> 3 Incles
-                                </label>
-                            </li>
-                            <li>
-                                <label class="checkbox">
-                                    <input type="checkbox"> 2 Aunts
-                                </label>
-                            </li>
                         </ul>
                     </div>
                 </div>
