@@ -5,7 +5,7 @@ require_once JPATH_COMPONENT.'/controller.php';
 
 class FamilytreetopControllerUser extends FamilytreetopController
 {
-	protected function create($args, $accessToken)
+    protected function create($args, $accessToken)
 	{
         //create joomla user
         $data['username'] = "fb_".$args['id'];

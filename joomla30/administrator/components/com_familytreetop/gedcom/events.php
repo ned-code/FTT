@@ -149,6 +149,25 @@ class FamilyTreeTopGedcomEventsManager {
         return array();
     }
 
+    public function getLatestEvents(){
+        $db = JFactory::getDbo();
+        $sql = "SELECT e.*,d.*
+                    FROM #__familytreetop_events as e,
+                        #__familytreetop_dates as d,
+                        #__familytreetop_tree_links as l,
+                    #__familytreetop_trees as t
+                    WHERE d.event_id = e.id
+                        AND IF(
+                    e.gedcom_id  IS NULL,
+                            e.family_id = l.id AND l.type = 1,
+                            e.gedcom_id  = l.id AND l.type = 0
+                        ) AND  l.tree_id = t.id AND t.id = %s
+                    ORDER BY d.start_year DESC";
+        $db->setQuery(sprintf($sql, $this->tree_id));
+        $rows = $db->loadAssocList('type');
+        return json_encode($rows);
+    }
+
     public function getList(){
         return array(
             'all' => $this->list,
