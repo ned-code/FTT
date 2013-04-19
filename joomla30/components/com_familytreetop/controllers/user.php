@@ -50,12 +50,11 @@ class FamilytreetopControllerUser extends FamilytreetopController
         $facebook_id = $facebook->getUser();
         $redirect = $app->input->get('redirect', false);
 
-        $return = 'index.php?option=com_familytreetop&view=index';
+        $return = JRoute::_("index.php?option=com_familytreetop&task=user.activate&redirect=1", false);
         $username = null;
 
         if($facebook_id == 0){
-            $url =  JRoute::_("index.php?option=com_familytreetop&task=user.activate&redirect", false);
-            echo json_encode(array('auth'=>false, 'url'=>FacebookHelper::getInstance()->getLoginUrl($url)));
+            echo json_encode(array('auth'=>false, 'url'=>FacebookHelper::getInstance()->getLoginUrl($return)));
             exit;
         } else {
             $args = $facebook->api('/'.$facebook_id);
@@ -88,12 +87,14 @@ class FamilytreetopControllerUser extends FamilytreetopController
                     return;
                 } else {
                     echo json_encode(array('auth'=>$response));
+
+                    var_dump($redirect);
                     exit;
                 }
             }
         }
         if($redirect){
-            $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&task=user.activate&redirect", false));
+            $this->setRedirect($return);
             return;
         } else {
             echo json_encode(array('auth'=>false));

@@ -68,7 +68,6 @@ if($session->get('famous')){
         }
 
         $('#profileUser ul.dropdown-menu li a').click(function(){
-            alert('123123');
             var id = $(this).attr('familytreetop');
             var a = $(this);
             switch(id){
