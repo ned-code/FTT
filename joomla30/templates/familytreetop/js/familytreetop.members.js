@@ -40,5 +40,17 @@ $FamilyTreeTop.create("members", function($){
             var object = $pull[prop];
             $(ul).append('<li><label class="checkbox"><input type="checkbox">'+object.length+' '+$this.mod('usertree').getRelationName(prop)+'</label></li>')
         }
+
+
+        var find = function(){
+            var temp = $('input.input-medium.search-query').val();
+            if(temp.length == 0){
+                $('#membersTable tbody tr').show();
+            } else {
+                $('#membersTable tbody td:nth-child(2):not(:contains("'+temp+'"))').parent().hide();
+            }
+        }
+        $('html').keyup(function(e){if(e.keyCode == 8)find()});
+        $('input.input-medium.search-query').keypress(find);
     }
 });
