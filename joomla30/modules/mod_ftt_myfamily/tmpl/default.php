@@ -40,7 +40,7 @@ foreach($data as $object){
                 <legend class="text-center">My Family on Facebook</legend>
             </fieldset>
             <div id="accordion2" class="accordion">
-                <?php foreach($result_array as $object): ?>
+                <?php foreach($data as $object): ?>
                     <?php $uid = uniqid(); ?>
                     <div class="accordion-group">
                         <div class="accordion-heading">
