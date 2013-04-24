@@ -5,7 +5,7 @@ $date = date('n', strtotime('-1 month'));
 ?>
 <div id="thisMonth" class="row-fluid">
     <div class="span12">
-        <div class="well">
+        <div class="well" familytreetop="module">
             <fieldset>
                 <legend>
                     <div class="row-fluid">

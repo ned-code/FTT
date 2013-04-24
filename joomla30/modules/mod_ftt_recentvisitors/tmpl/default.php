@@ -4,10 +4,10 @@ defined('_JEXEC') or die;
 ?>
 <div id="recentVisitors" class="row-fluid">
     <div class="span12">
-        <div class="well">
+        <div class="well" familytreetop="module">
             <fieldset>
                 <legend>Recent Visitors</legend>
-                <ul class="unstyled inline">
+                <ul class-familytreetop="module-padding" class="unstyled inline">
                     <?php foreach($visitors as $visitor): ?>
                     <li gedcom_id="<?=$visitor['ind']->gedcom_id;?>" style="margin-top:5px;">
                         <div  data-toggle="tooltip"  title="<?=$visitor['ind']->name(); ?>">

@@ -11,10 +11,10 @@ if($profile){
 ?>
 <div id="latestUpdates" class="row-fluid">
     <div class="span12">
-        <div class="well">
+        <div class="well" familytreetop="module">
             <fieldset>
                 <legend>Latest Updates</legend>
-                <ul class="unstyled">
+                <ul class-familytreetop="module-padding" class="unstyled">
                     <?php if($ind): ?>
                     <li><span>Profile Changes</span>: <span data-familytreetop-color="<?=$ind->gender;?>"><?=$ind->name();?></span></li>
                     <?php endif; ?>

@@ -35,7 +35,7 @@ foreach($data as $object){
 <?php if(!empty($data)): ?>
 <div id="myFamilyOnFacebook" class="row-fluid">
     <div class="span12">
-        <div class="well">
+        <div class="well" familytreetop="module">
             <fieldset>
                 <legend class="text-center">My Family on Facebook</legend>
             </fieldset>

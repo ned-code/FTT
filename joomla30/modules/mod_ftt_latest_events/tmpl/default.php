@@ -6,7 +6,7 @@ defined('_JEXEC') or die;
     <div class="span12">
         <div class="row-fluid">
             <div class="span12">
-                <div class="well">
+                <div class="well" familytreetop="module">
                     <fieldset>
                         <legend>Latest Births</legend>
                     </fieldset>
@@ -17,7 +17,7 @@ defined('_JEXEC') or die;
         </div>
         <div class="row-fluid">
             <div class="span12">
-                <div class="well">
+                <div class="well" familytreetop="module">
                     <fieldset>
                         <legend>Latest Marriages</legend>
                     </fieldset>
@@ -28,7 +28,7 @@ defined('_JEXEC') or die;
         </div>
         <div class="row-fluid">
             <div class="span12">
-                <div class="well">
+                <div class="well" familytreetop="module">
                     <fieldset>
                         <legend>Latest Deaths</legend>
                     </fieldset>

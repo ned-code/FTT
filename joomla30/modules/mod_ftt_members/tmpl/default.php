@@ -3,7 +3,7 @@ defined('_JEXEC') or die;
 ?>
 <div id="members" class="row-fluid">
     <div class="span8">
-        <div class="well">
+        <div class="well" familytreetop="module">
             <fieldset>
                 <legend>
                     <div class="row-fluid">
@@ -31,12 +31,12 @@ defined('_JEXEC') or die;
         </div>
     </div>
     <div id="filterMembers" class="span4 visible-desktop">
-        <div class="well">
+        <div class="well" familytreetop="module">
             <fieldset>
                 <legend class="text-center">Filter</legend>
                 <div class="row-fluid">
                     <div class="span12">
-                        <ul class="unstyled">
+                        <ul class-familytreetop="module-padding" class="unstyled">
                         </ul>
                     </div>
                 </div>
@@ -77,6 +77,7 @@ defined('_JEXEC') or die;
                         </div>
                     </div>
                 </div>
+                <hr>
             </fieldset>
         </div>
     </div>

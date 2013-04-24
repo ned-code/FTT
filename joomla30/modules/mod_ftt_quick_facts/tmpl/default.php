@@ -8,10 +8,10 @@ $oldest = $gedcom->individuals->getOldest();
 ?>
 <div id="quickFacts" class="row-fluid">
     <div class="span12">
-        <div class="well">
+        <div class="well" familytreetop="module">
             <fieldset>
                 <legend>Quick Facts</legend>
-                <ul class="unstyled">
+                <ul class-familytreetop="module-padding" class="unstyled">
                     <?php if($youngest): ?>
                         <li><span>Youngest</span>: <span data-familytreetop-color="<?=$youngest->gender;?>"><?=$youngest->name();?></span></li>
                     <?php endif; ?>
