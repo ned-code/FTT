@@ -8,7 +8,6 @@ $app = JFactory::getApplication();
 $doc = JFactory::getDocument();
 
 $doc->addStyleSheet('templates/'.$this->template.'/css/bootstrap.min.css');
-$doc->addStyleSheet('templates/'.$this->template.'/css/font-awesome.min.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/bootstrap.fix.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/bootstrap-responsive.min.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/bootstrap.icon-large.min.css');

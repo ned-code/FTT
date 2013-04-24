@@ -24,7 +24,7 @@ $FamilyTreeTop.create("latest_events", function($){
                 $(td).append(avatar);
                 $(tr).append('<td>'+$this.mod('usertree').parseDate(b.date)+'</td>');
                 $(tr).append(td);
-                $(tr).append('<td><div>'+user.name()+'</div><div>'+user.relation+'</div></td>');
+                $(tr).append('<td><div>'+user.name()+'</div><div><i class="icon-sitemap">'+user.relation+'</i></div></td>');
                 $($birthBox).append(tr);
 
                 Holder.run({
