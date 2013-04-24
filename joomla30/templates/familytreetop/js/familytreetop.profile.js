@@ -48,7 +48,11 @@ $FamilyTreeTop.create("profile", function($){
                     if(response.data.length == 0){
                         return false;
                     }
-                    console.log(response);
+                    $(response.data).each(function(el, index){
+                        var li = $('<li><img style="cursor:pointer;" class="img-polaroid" src=""></li>');
+                        $(li).find('img').attr('src', el.picture);
+                        $(ul).append(li);
+                    });
                 });
             }
         }
