@@ -127,6 +127,10 @@ $FamilyTreeTop.create("usertree", function($){
         return usermap;
     }
 
+    $this.usersmap = function(){
+        return usersmap;
+    }
+
 
     $this.user = function(gedcom_id){
         if("undefined" === typeof(gedcom_id)) return false;
@@ -144,6 +148,13 @@ $FamilyTreeTop.create("usertree", function($){
             know_as: ind.know_as,
             last_name: ind.last_name,
             middle_name: ind.middle_name,
+            facebook_id: (function(){
+                if(ind.gedcom_id in usersmap){
+                    return usersmap[ind.gedcom_id].facebook_id;
+                } else {
+                    return 0;
+                }
+            })(),
             relation: (function(){
                 if(data.rel == null) return "";
                 var relation_object, relation_id, name, suffix;

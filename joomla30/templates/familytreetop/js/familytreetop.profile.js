@@ -42,6 +42,15 @@ $FamilyTreeTop.create("profile", function($){
                 $(li).data(el);
                 $(ul).append(li);
             });
+
+            if(args.object.facebook_id){
+                FB.api('/'+args.object.facebook_id+'/photos', function(response){
+                    if(response.data.length == 0){
+                        return false;
+                    }
+                    console.log(response);
+                });
+            }
         }
     }
 
