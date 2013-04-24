@@ -522,6 +522,7 @@ $FamilyTreeTop.create("usertree", function($){
 
     $this.getImage = function(gedcom_id, size, style, src){
         var el = (gedcom_id)?$this.getAvatar(gedcom_id):false,
+            user = $this.user(gedcom_id),
             data = [],
             url;
 
@@ -532,6 +533,12 @@ $FamilyTreeTop.create("usertree", function($){
             data = [
                 'https://graph.facebook.com/'+usersmap[gedcom_id].facebook_id+'/picture/',
                 $('<img class="'+style+'" />')
+            ];
+        } else if(size[0] in {"35":true, "50":true, "90":true, "140":true}) {
+            url = ($this.url().base()+"/templates/familytreetop/images/"+((user.gender)?"male":"female")+size[0]+".png");
+            data = [
+                url,
+                $('<img class="'+style+'" src="'+url+'" />')
             ];
         } else {
             url = ($this.url().base()+"/templates/familytreetop/js/holder.js/"+((size)?size.join('x'):"100x100"));
