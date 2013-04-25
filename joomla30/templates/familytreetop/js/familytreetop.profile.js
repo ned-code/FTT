@@ -45,6 +45,7 @@ $FamilyTreeTop.create("profile", function($){
 
             if(args.object.facebook_id){
                 FB.api('/'+args.object.facebook_id+'/photos', function(response){
+                    if(response.error) return false;
                     if(response.data.length == 0){
                         return false;
                     }
