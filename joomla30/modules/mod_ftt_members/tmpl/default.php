@@ -20,10 +20,10 @@ defined('_JEXEC') or die;
                 <table id="membersTable" class="table table-striped">
                     <thead>
                         <tr>
-                            <td>Relation</td>
-                            <td>Name</td>
-                            <td>Birth Year</td>
-                            <td class="visible-desktop">Birth Place</td>
+                            <td><a familytreetop="sort">Relation</a></td>
+                            <td><a familytreetop="sort">Name</a></td>
+                            <td><a familytreetop="sort">Birth Year</a></td>
+                            <td class="visible-desktop"><a familytreetop="sort">Birth Place</a></td>
                         </tr>
                     </thead>
                 </table>
@@ -37,6 +37,13 @@ defined('_JEXEC') or die;
                 <div class="row-fluid">
                     <div class="span12">
                         <ul class-familytreetop="module-padding" class="unstyled">
+                            <li familytreetop="immediate_family"><label class="checkbox"><input type="checkbox"><span familytreetop="count">0</span> <span>Immediate</span> Family</label></li>
+                            <li familytreetop="grandparents"><label class="checkbox"><input type="checkbox"><span familytreetop="count">0</span> <span>Grandparents</span></label></li>
+                            <li familytreetop="grandchildren"><label class="checkbox"><input type="checkbox"><span familytreetop="count">0</span> <span>Grandchildren</span></label></li>
+                            <li familytreetop="cousins"><label class="checkbox"><input type="checkbox"><span familytreetop="count">0</span> <span>Cousins</span></label></li>
+                            <li familytreetop="in_laws"><label class="checkbox"><input type="checkbox"><span familytreetop="count">0</span> <span>In-Laws</span></label></li>
+                            <li familytreetop="unknown"><label class="checkbox"><input type="checkbox"><span familytreetop="count">0</span> <span>Unknown</span></label></li>
+
                         </ul>
                     </div>
                 </div>
