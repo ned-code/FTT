@@ -1,5 +1,7 @@
 <?php
 defined('_JEXEC') or die;
+
+$filterButtonsWidth = 100;
 ?>
 <div id="members" class="row-fluid">
     <div class="span8">
@@ -51,36 +53,36 @@ defined('_JEXEC') or die;
                 <div class="row-fluid">
                     <div class="span12 text-center">
                         <div class="btn-group" style="padding: 5px;">
-                            <button class="btn">Male</button>
-                            <button class="btn">Female</button>
-                            <button class="btn disabled">Both</button>
+                            <button class="btn" style="width:<?=$filterButtonsWidth?>px;">Male</button>
+                            <button class="btn" style="width:<?=$filterButtonsWidth?>px;">Female</button>
+                            <button class="btn disabled" style="width:<?=$filterButtonsWidth?>px;">Both</button>
                         </div>
                     </div>
                 </div>
                 <div class="row-fluid">
                     <div class="span12 text-center">
                         <div class="btn-group" style="padding: 5px;">
-                            <button class="btn">Living</button>
-                            <button class="btn">Deceased</button>
-                            <button class="btn disabled">Both</button>
+                            <button class="btn" style="width:<?=$filterButtonsWidth?>px;">Living</button>
+                            <button class="btn" style="width:<?=$filterButtonsWidth?>px;">Deceased</button>
+                            <button class="btn disabled" style="width:<?=$filterButtonsWidth?>px;">Both</button>
                         </div>
                     </div>
                 </div>
                 <div class="row-fluid">
                     <div class="span12 text-center">
                         <div class="btn-group" >
-                            <button class="btn">Ancestors</button>
-                            <button class="btn">Descendants</button>
-                            <button class="btn disabled">Both</button>
+                            <button class="btn" style="width:<?=$filterButtonsWidth?>px;">Ancestors</button>
+                            <button class="btn" style="width:<?=$filterButtonsWidth?>px;">Descendants</button>
+                            <button class="btn disabled" style="width:<?=$filterButtonsWidth?>px;">Both</button>
                         </div>
                     </div>
                 </div>
                 <div class="row-fluid">
                     <div class="span12 text-center">
                         <div class="btn-group">
-                            <button class="btn">Registered</button>
-                            <button class="btn">Unregistered</button>
-                            <button class="btn disabled">Both</button>
+                            <button class="btn" style="width:<?=$filterButtonsWidth?>px;">Registered</button>
+                            <button class="btn" style="width:<?=$filterButtonsWidth?>px;">Unregistered</button>
+                            <button class="btn disabled" style="width:<?=$filterButtonsWidth?>px;">Both</button>
                         </div>
                     </div>
                 </div>
