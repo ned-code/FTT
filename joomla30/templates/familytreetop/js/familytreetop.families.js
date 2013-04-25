@@ -28,7 +28,7 @@ $FamilyTreeTop.create("families", function($){
             return family.mother;
         },
         createArrow: function(type, args){
-            var left = Math.ceil(((type  == 'up')?160:110)/2) - 12;
+            var left = Math.ceil(((type  == 'up')?150:100)/2) - 12;
             return $('<div style="position:absolute;left:'+left+'px;top: -30px; cursor:pointer;"><i class="icon-large icon-circle-arrow-'+type+'"></i></div>')
                 .click(function(){
                     $fn.click.call(this, args);
@@ -132,7 +132,7 @@ $FamilyTreeTop.create("families", function($){
             function getParentIndent(index){
                 var width = $('.tab-content').width();
                 var half = Math.ceil(width/2);
-                var space = half - 160;
+                var space = half - 150;
                 if(space <= 0){
                     return space;
                 } else {
