@@ -40,92 +40,98 @@ foreach($data as $object){
                 <legend class="text-center">My Family on Facebook</legend>
             </fieldset>
             <div id="accordion2" class="accordion">
-                <?php foreach($result_array as $object): ?>
-                    <?php $uid = uniqid(); ?>
-                    <div class="accordion-group">
-                        <div class="accordion-heading">
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    <h4>
-                                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse<?=$object['from']['id'].$uid;?>">
-                                            <?=$object['from']['name'];?>
-                                        </a>
-                                    </h4>
-                                </div>
-                            </div>
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    <ul class="inline">
-                                        <li class="span2"><img class="img-rounded" src="https://graph.facebook.com/<?=$object['from']['id'];?>/picture"/></li>
-                                        <li class="span10">
-                                            <p>
-                                                <?php
-                                                $message = isset($object['message'])?$object['message']:false;
-                                                $description = isset($object['description'])?$object['description']:false;
-                                                $story = isset($object['story'])?$object['story']:false;
-                                                $name = isset($object['name'])?$object['name']:false;
-                                                $ret = "";
+                <table class="table table-striped">
+                    <?php foreach($data as $object): ?>
+                        <?php $uid = uniqid(); ?>
+                        <tr>
+                            <td>
+                                <div style="border: none;" class="accordion-group">
+                                    <div class="accordion-heading">
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <h4>
+                                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse<?=$object['from']['id'].$uid;?>">
+                                                        <?=$object['from']['name'];?>
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                        </div>
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <ul class="inline">
+                                                    <li class="span2"><img class="img-rounded" src="https://graph.facebook.com/<?=$object['from']['id'];?>/picture"/></li>
+                                                    <li class="span10">
+                                                        <p>
+                                                            <?php
+                                                            $message = isset($object['message'])?$object['message']:false;
+                                                            $description = isset($object['description'])?$object['description']:false;
+                                                            $story = isset($object['story'])?$object['story']:false;
+                                                            $name = isset($object['name'])?$object['name']:false;
+                                                            $ret = "";
 
-                                                if($message){
-                                                    $ret = $message;
-                                                } elseif($story){
-                                                    $ret = $story;
-                                                } elseif($description){
-                                                    $ret = $description;
-                                                } elseif($name){
-                                                    $ret = $name;
-                                                } else {
-                                                    if(isset($object['type']) && $object['type'] == 'link'){
-                                                        $ret = 'Likes on '. $object['application']['name'];
-                                                    } else {
-                                                        $ret = "";
-                                                    }
-                                                }
-                                                if(strlen($ret) > 500){
-                                                    $ret = substr($ret, 0 , 500) . "...";
-                                                }
-                                                echo $ret;
-                                                ?>
-                                            </p>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    <div class="pull-right">
-                                        <small>
-                                            <?php
-                                            $date = $object['updated_time'];
-                                            echo date('j F \a\t H:i', strtotime($date));
-                                            ?>
-                                        </small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="collapse<?=$object['from']['id'].$uid;?>" class="accordion-body collapse">
-                            <div class="accordion-inner">
-                                <?php if(isset($object['link'])): ?>
-                                    <div class="row-fluid">
-                                        <div class="span12">
-                                            <div class="text-center">
-                                                <a href="<?=$object['link']?>" target="_blank">Click Here</a>
+                                                            if($message){
+                                                                $ret = $message;
+                                                            } elseif($story){
+                                                                $ret = $story;
+                                                            } elseif($description){
+                                                                $ret = $description;
+                                                            } elseif($name){
+                                                                $ret = $name;
+                                                            } else {
+                                                                if(isset($object['type']) && $object['type'] == 'link'){
+                                                                    $ret = 'Likes on '. $object['application']['name'];
+                                                                } else {
+                                                                    $ret = "";
+                                                                }
+                                                            }
+                                                            if(strlen($ret) > 500){
+                                                                $ret = substr($ret, 0 , 500) . "...";
+                                                            }
+                                                            echo $ret;
+                                                            ?>
+                                                        </p>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <div class="pull-right">
+                                                    <small>
+                                                        <?php
+                                                        $date = $object['updated_time'];
+                                                        echo date('j F \a\t H:i', strtotime($date));
+                                                        ?>
+                                                    </small>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                <? endif; ?>
-                                <?php if(isset($object['picture'])): ?>
-                                    <div class="row-fluid">
-                                        <div class="span12 text-center">
-                                            <img src="<?=$object['picture'];?>" />
+                                    <div style="border: none;" id="collapse<?=$object['from']['id'].$uid;?>" class="accordion-body collapse">
+                                        <div class="accordion-inner">
+                                            <?php if(isset($object['link'])): ?>
+                                                <div class="row-fluid">
+                                                    <div class="span12">
+                                                        <div class="text-center">
+                                                            <a href="<?=$object['link']?>" target="_blank">Click Here</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <? endif; ?>
+                                            <?php if(isset($object['picture'])): ?>
+                                                <div class="row-fluid">
+                                                    <div class="span12 text-center">
+                                                        <img src="<?=$object['picture'];?>" />
+                                                    </div>
+                                                </div>
+                                            <? endif; ?>
                                         </div>
                                     </div>
-                                <? endif; ?>
-                            </div>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </table>
             </div>
         </div>
     </div>
