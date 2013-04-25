@@ -535,7 +535,7 @@ $FamilyTreeTop.create("usertree", function($){
                 $('<img class="'+style+'" />')
             ];
         } else if(size[0] in {"35":true, "50":true, "90":true, "140":true}) {
-            url = ($this.url().base()+"/templates/familytreetop/images/"+((user.gender)?"male":"female")+size[0]+".png");
+            url = ($this.url().base()+"/templates/familytreetop/images/"+((parseInt(user.gender))?"male":"female")+size[0]+".png");
             data = [
                 url,
                 $('<img class="'+style+'" src="'+url+'" />')

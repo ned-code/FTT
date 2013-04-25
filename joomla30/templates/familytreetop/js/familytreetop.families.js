@@ -45,7 +45,7 @@ $FamilyTreeTop.create("families", function($){
             $(divs[2]).text('...');
 
             var img = $(divs[0]).find('img');
-            var avatar = ind.avatar((type=="up")?["150","150"]:["100","100"]);
+            var avatar = ind.avatar((type=="up")?["140","140"]:["90","90"]);
             $(img).parent().append(avatar);
             $(img).remove();
 
