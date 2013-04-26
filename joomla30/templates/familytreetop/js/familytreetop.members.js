@@ -1,6 +1,7 @@
 $FamilyTreeTop.create("members", function($){
     'use strict';
     var $this = this,
+        $users,
         $box = $('#membersTable'),
         $filter = $('#filterMembers'),
         $relPull = {"immediate_family":[], "grandparents":[], "grandchildren":[], "cousins":[], "in_laws":[], "unknown":[]},
@@ -30,28 +31,37 @@ $FamilyTreeTop.create("members", function($){
                 li = $(ul).find('[familytreetop="'+prop+'"]');
                 $(li).find('[familytreetop="count"]').text(object.length);
             }
+        },
+        order: function(type){
+            $users.map(function(){});
+        },
+        render: function(){
+            $($box).find('tbody tr').remove();
+            for ( var key in $users ){
+                if(!$users.hasOwnProperty(key)) continue;
+                var object = $this.mod('usertree').user($users[key].gedcom_id);
+                var birth = object.birth();
+                var tr = $('<tr></tr>');
+                $fn.setRelPullObject(object);
+                $(tr).append('<td>'+object.relation+'</td>');
+                $(tr).append('<td>'+object.name()+'</td>');
+                $(tr).append('<td>'+$this.mod('usertree').parseDate(birth.date)+'</td>');
+                $(tr).append('<td class="visible-desktop">'+$this.mod('usertree').parsePlace(birth.place)+'</td>');
+                $($box).append(tr);
+            }
         }
     }
 
     $this.init = function(){
-
         //table user rows
-        var users = $this.mod('usertree').getUsers();
-        for ( var key in users ){
-            if(!users.hasOwnProperty(key)) continue;
-            var object = $this.mod('usertree').user(users[key].gedcom_id);
-            var birth = object.birth();
-            var tr = $('<tr></tr>');
-            $fn.setRelPullObject(object);
-            $(tr).append('<td>'+object.relation+'</td>');
-            $(tr).append('<td>'+object.name()+'</td>');
-            $(tr).append('<td>'+$this.mod('usertree').parseDate(birth.date)+'</td>');
-            $(tr).append('<td class="visible-desktop">'+$this.mod('usertree').parsePlace(birth.place)+'</td>');
-            $($box).append(tr);
-        }
+        $users = $this.mod('usertree').getUsers();
+        $fn.render();
 
         //sort header columns
         $($box).find('[familytreetop="sort"]').click(function(){
+            var type = $(this).attr('familytreetop-type');
+            $fn.order(type);
+            $fn.render();
             return false;
         });
 

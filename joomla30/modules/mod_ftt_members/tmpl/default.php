@@ -22,10 +22,10 @@ $filterButtonsWidth = 100;
                 <table id="membersTable" class="table table-striped">
                     <thead>
                         <tr>
-                            <td><a familytreetop="sort">Relation</a></td>
-                            <td><a familytreetop="sort">Name</a></td>
-                            <td><a familytreetop="sort">Birth Year</a></td>
-                            <td class="visible-desktop"><a familytreetop="sort">Birth Place</a></td>
+                            <td><a familytreetop="sort" familytreetop-type="relation">Relation</a></td>
+                            <td><a familytreetop="sort" familytreetop-type="name">Name</a></td>
+                            <td><a familytreetop="sort" familytreetop-type="year">Birth Year</a></td>
+                            <td class="visible-desktop" familytreetop-type="place"><a familytreetop="sort">Birth Place</a></td>
                         </tr>
                     </thead>
                 </table>
