@@ -456,7 +456,6 @@ $FamilyTreeTop.create("usertree", function($){
             if(event['type'] == type){
                 var event_id = event['id'];
                 return $this.getEvent(event_id);
-                return ret;
             }
 
         }

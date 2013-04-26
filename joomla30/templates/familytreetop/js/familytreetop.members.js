@@ -62,7 +62,27 @@ $FamilyTreeTop.create("members", function($){
             var compB = b.name().toUpperCase();
             return (compA < compB) ? -1 : (compA > compB) ? 1 : 0;
         },
-        orderByYear: function(a,b){},
+        orderByYear: function(a,b){
+            var aB = a.birth();
+            var bB = b.birth();
+            if(!aB && !bB){
+                return 0;
+            } else if(aB && !bB){
+                return -1;
+            } else if(!aB && bB){
+                return 1;
+            } else {
+                var aDate = aB.date.start_year;
+                var bDate = bB.date.start_year;
+                if(aDate > bDate){
+                    return -1;
+                } else if(aDate < bDate){
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }
+        },
         orderByPlace: function(a,b){},
         order: function(type){
             $users.sort(function(a,b){
