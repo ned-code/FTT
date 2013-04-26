@@ -9,6 +9,15 @@ $FamilyTreeTop.create("members", function($){
         $fn;
 
     $fn = {
+        getUserArray: function(users){
+            var result = [];
+            for(var prop in users){
+                if(!users.hasOwnProperty(prop)) continue;
+                var user = $this.mod('usertree').user(users[prop].gedcom_id);
+                result.push(user);
+            }
+            return result;
+        },
         setRelPullObject: function(object){
             var relId = object.relationId;
             if(relId > 0 && relId < 13 && relId != 9){
@@ -32,14 +41,35 @@ $FamilyTreeTop.create("members", function($){
                 $(li).find('[familytreetop="count"]').text(object.length);
             }
         },
+        orderByRelation: function(a,b){
+            var _a = parseInt(a.relationId), _b = parseInt(b.relationId);
+            if(_a == 0 && _b == 0){
+                return 0;
+            } else if(_a != 0 && _b == 0){
+                return -1
+            } else if(_a == 0 && _b != 0){
+                return 1;
+            } else if(_a < _b){
+                return -1;
+            } else if(_a > _b){
+                return 1;
+            } else if(_a == _b){
+                return 0;
+            }
+        },
+        orderByName: function(a,b){},
+        orderByYear: function(a,b){},
+        orderByPlace: function(a,b){},
         order: function(type){
-            $users.map(function(){});
+            $users.sort(function(a,b){
+                return $fn['orderBy'+type](a,b);
+            })
         },
         render: function(){
             $($box).find('tbody tr').remove();
             for ( var key in $users ){
                 if(!$users.hasOwnProperty(key)) continue;
-                var object = $this.mod('usertree').user($users[key].gedcom_id);
+                var object = $users[key];
                 var birth = object.birth();
                 var tr = $('<tr></tr>');
                 $fn.setRelPullObject(object);
@@ -54,7 +84,7 @@ $FamilyTreeTop.create("members", function($){
 
     $this.init = function(){
         //table user rows
-        $users = $this.mod('usertree').getUsers();
+        $users = $fn.getUserArray($this.mod('usertree').getUsers());
         $fn.render();
 
         //sort header columns
