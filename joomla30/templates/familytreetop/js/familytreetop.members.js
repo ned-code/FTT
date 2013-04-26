@@ -57,7 +57,11 @@ $FamilyTreeTop.create("members", function($){
                 return 0;
             }
         },
-        orderByName: function(a,b){},
+        orderByName: function(a,b){
+            var compA = a.name().toUpperCase();
+            var compB = b.name().toUpperCase();
+            return (compA < compB) ? -1 : (compA > compB) ? 1 : 0;
+        },
         orderByYear: function(a,b){},
         orderByPlace: function(a,b){},
         order: function(type){
