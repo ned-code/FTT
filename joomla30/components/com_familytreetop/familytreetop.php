@@ -7,6 +7,7 @@ require_once JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familyt
 require_once JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familytreetop/helpers/gedcom.php';
 require_once JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familytreetop/helpers/user.php';
 require_once JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familytreetop/helpers/upload.php';
+require_once JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familytreetop/helpers/languages.php';
 
 ActiverecrdHelper::getInstance();
 FacebookHelper::getInstance();
