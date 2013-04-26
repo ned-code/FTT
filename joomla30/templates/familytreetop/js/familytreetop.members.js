@@ -72,8 +72,8 @@ $FamilyTreeTop.create("members", function($){
             } else if(!aB && bB){
                 return 1;
             } else {
-                var aDate = aB.date.start_year;
-                var bDate = bB.date.start_year;
+                var aDate = (aB.date.start_year!=null)?parseInt(aB.date.start_year):0;
+                var bDate = (bB.date.start_year!=null)?parseInt(bB.date.start_year):0;
                 if(aDate > bDate){
                     return -1;
                 } else if(aDate < bDate){
@@ -83,7 +83,21 @@ $FamilyTreeTop.create("members", function($){
                 }
             }
         },
-        orderByPlace: function(a,b){},
+        orderByPlace: function(a,b){
+            var aB = a.birth();
+            var bB = b.birth();
+            if(!aB && !bB){
+                return 0;
+            } else if(aB && !bB){
+                return -1;
+            } else if(!aB && bB){
+                return 1;
+            } else {
+                var aDate = (aB.place.country!=null)?aB.place.country.toUpperCase():"";
+                var bDate = (bB.place.country!=null)?bB.place.country.toUpperCase():"";
+                return (aDate < bDate) ? -1 : (aDate > bDate) ? 1 : 0;
+            }
+        },
         order: function(type){
             $users.sort(function(a,b){
                 return $fn['orderBy'+type](a,b);
