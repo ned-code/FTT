@@ -13,6 +13,7 @@ class FamilyTreeTopUserHelper
     protected $username = null;
     protected $link = null;
     protected $locale = null;
+    protected $language = null;
 
     protected $first_name = null;
     protected $last_name = null;
@@ -86,6 +87,7 @@ class FamilyTreeTopUserHelper
 
         if(!empty($account)){
             self::$instance->account_id = $account->id;
+            self::$instance->language = $account->local;
 
             if(!empty($account->current)){
                 self::$instance->current_id = $account->current;
@@ -108,6 +110,7 @@ class FamilyTreeTopUserHelper
         $user->username = $this->username;
         $user->link = $this->link;
         $user->locale = $this->locale;
+        $user->language = $this->language;
 
         $user->first_name = $this->first_name;
         $user->last_name = $this->last_name;
