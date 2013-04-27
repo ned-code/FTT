@@ -93,9 +93,9 @@ $FamilyTreeTop.create("members", function($){
             } else if(!aB && bB){
                 return 1;
             } else {
-                var aDate = (aB.place.country!=null)?aB.place.country.toUpperCase():"";
-                var bDate = (bB.place.country!=null)?bB.place.country.toUpperCase():"";
-                return (aDate < bDate) ? -1 : (aDate > bDate) ? 1 : 0;
+                var aPlace = (aB.place.country!=null)?aB.place.country.toUpperCase():"";
+                var bPlace = (bB.place.country!=null)?bB.place.country.toUpperCase():"";
+                return (aPlace < bPlace) ? -1 : (aPlace > bPlace) ? 1 : 0;
             }
         },
         order: function(type){

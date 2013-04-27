@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<extension version="3.0" client="site" type="language" method="upgrade">
+	<name>Russian</name>
+	<tag>ru-RU</tag>
+	<version>3.0.3.1</version>
+	<creationDate>2013-03-01</creationDate>
+	<author>Russian Translation Team</author>
+	<authorEmail>smart@joomlaportal.ru</authorEmail>
+	<authorUrl>www.joomlaportal.ru</authorUrl>
+	<copyright>Copyright (C) 2005 - 2013 Open Source Matters. All rights reserved</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+	<description>Russian language pack (site) for Joomla! 3.0</description>
+	<files>
+		<filename>index.html</filename>
+		<filename>ru-RU.com_contact.ini</filename>
+		<filename>ru-RU.com_content.ini</filename>
+		<filename>ru-RU.com_finder.ini</filename>
+		<filename>ru-RU.com_mailto.ini</filename>
+		<filename>ru-RU.com_media.ini</filename>
+		<filename>ru-RU.com_messages.ini</filename>
+		<filename>ru-RU.com_newsfeeds.ini</filename>
+		<filename>ru-RU.com_search.ini</filename>
+		<filename>ru-RU.com_users.ini</filename>
+		<filename>ru-RU.com_weblinks.ini</filename>
+		<filename>ru-RU.com_wrapper.ini</filename>
+		<filename>ru-RU.files_joomla.sys.ini</filename>
+		<filename>ru-RU.finder_cli.ini</filename>
+		<filename>ru-RU.ini</filename>
+		<filename>ru-RU.lib_joomla.ini</filename>
+		<filename>ru-RU.lib_joomla.sys.ini</filename>
+		<filename>ru-RU.lib_phpmailer.sys.ini</filename>
+		<filename>ru-RU.lib_phputf8.sys.ini</filename>
+		<filename>ru-RU.lib_simplepie.sys.ini</filename>
+		<filename>ru-RU.localise.php</filename>
+		<filename>ru-RU.mod_articles_archive.ini</filename>
+		<filename>ru-RU.mod_articles_archive.sys.ini</filename>
+		<filename>ru-RU.mod_articles_categories.ini</filename>
+		<filename>ru-RU.mod_articles_categories.sys.ini</filename>
+		<filename>ru-RU.mod_articles_category.ini</filename>
+		<filename>ru-RU.mod_articles_category.sys.ini</filename>
+		<filename>ru-RU.mod_articles_latest.ini</filename>
+		<filename>ru-RU.mod_articles_latest.sys.ini</filename>
+		<filename>ru-RU.mod_articles_news.ini</filename>
+		<filename>ru-RU.mod_articles_news.sys.ini</filename>
+		<filename>ru-RU.mod_articles_popular.ini</filename>
+		<filename>ru-RU.mod_articles_popular.sys.ini</filename>
+		<filename>ru-RU.mod_banners.ini</filename>
+		<filename>ru-RU.mod_banners.sys.ini</filename>
+		<filename>ru-RU.mod_breadcrumbs.ini</filename>
+		<filename>ru-RU.mod_breadcrumbs.sys.ini</filename>
+		<filename>ru-RU.mod_custom.ini</filename>
+		<filename>ru-RU.mod_custom.sys.ini</filename>
+		<filename>ru-RU.mod_feed.ini</filename>
+		<filename>ru-RU.mod_feed.sys.ini</filename>
+		<filename>ru-RU.mod_finder.ini</filename>
+		<filename>ru-RU.mod_finder.sys.ini</filename>
+		<filename>ru-RU.mod_footer.ini</filename>
+		<filename>ru-RU.mod_footer.sys.ini</filename>
+		<filename>ru-RU.mod_languages.ini</filename>
+		<filename>ru-RU.mod_languages.sys.ini</filename>
+		<filename>ru-RU.mod_login.ini</filename>
+		<filename>ru-RU.mod_login.sys.ini</filename>
+		<filename>ru-RU.mod_menu.ini</filename>
+		<filename>ru-RU.mod_menu.sys.ini</filename>
+		<filename>ru-RU.mod_random_image.ini</filename>
+		<filename>ru-RU.mod_random_image.sys.ini</filename>
+		<filename>ru-RU.mod_related_items.ini</filename>
+		<filename>ru-RU.mod_related_items.sys.ini</filename>
+		<filename>ru-RU.mod_search.ini</filename>
+		<filename>ru-RU.mod_search.sys.ini</filename>
+		<filename>ru-RU.mod_stats.ini</filename>
+		<filename>ru-RU.mod_stats.sys.ini</filename>
+		<filename>ru-RU.mod_syndicate.ini</filename>
+		<filename>ru-RU.mod_syndicate.sys.ini</filename>
+		<filename>ru-RU.mod_users_latest.ini</filename>
+		<filename>ru-RU.mod_users_latest.sys.ini</filename>
+		<filename>ru-RU.mod_weblinks.ini</filename>
+		<filename>ru-RU.mod_weblinks.sys.ini</filename>
+		<filename>ru-RU.mod_whosonline.ini</filename>
+		<filename>ru-RU.mod_whosonline.sys.ini</filename>
+		<filename>ru-RU.mod_wrapper.ini</filename>
+		<filename>ru-RU.mod_wrapper.sys.ini</filename>
+		<filename>ru-RU.pkg_joomla.sys.ini</filename>
+		<filename>ru-RU.tpl_beez3.ini</filename>
+		<filename>ru-RU.tpl_beez3.sys.ini</filename>
+		<filename>ru-RU.tpl_protostar.ini</filename>
+		<filename>ru-RU.tpl_protostar.sys.ini</filename>
+		<filename file="meta">ru-RU.xml</filename>
+		<filename file="meta">install.xml</filename>
+	</files>
+</extension>
