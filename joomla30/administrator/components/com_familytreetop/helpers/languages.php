@@ -8,7 +8,6 @@ class LanguagesHelper {
         $lang =& JFactory::getLanguage();
 
         $lang->setLanguage($user->language);
-
         $base_dir = JPATH_SITE;
         $language_tag = $user->language;
         $reload = true;
