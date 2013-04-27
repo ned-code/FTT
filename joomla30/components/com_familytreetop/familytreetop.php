@@ -13,6 +13,8 @@ ActiverecrdHelper::getInstance();
 FacebookHelper::getInstance();
 FamilyTreeTopSettingsHelper::getInstance();
 
+LanguagesHelper::init();
+
 $controller = JControllerLegacy::getInstance('Familytreetop');
 $controller->execute(JFactory::getApplication()->input->get('task', 'display'));
 $controller->redirect();

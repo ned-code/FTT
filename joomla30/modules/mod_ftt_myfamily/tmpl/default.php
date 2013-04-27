@@ -37,11 +37,11 @@ foreach($data as $object){
     <div class="span12">
         <div class="well" familytreetop="module">
             <fieldset>
-                <legend class="text-center">My Family on Facebook</legend>
+                <legend class="text-center"><?=JText::_('MOD_FTT_MYFAMILY_TITLE');?></legend>
             </fieldset>
             <div id="accordion2" class="accordion">
                 <table class="table table-striped">
-                    <?php foreach($data as $object): ?>
+                    <?php foreach($result_array as $object): ?>
                         <?php $uid = uniqid(); ?>
                         <tr>
                             <td>

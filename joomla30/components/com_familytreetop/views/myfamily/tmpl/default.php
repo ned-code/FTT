@@ -1,7 +1,6 @@
 <?php
 defined('_JEXEC') or die;
 jimport('joomla.application.module.helper');
-
 $user = FamilyTreeTopUserHelper::getInstance()->get();
 ?>
 <script>
