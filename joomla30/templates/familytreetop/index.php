@@ -52,6 +52,8 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
     $FamilyTreeTop.rooturl = '<?=substr(JUri::base(), 0, strlen(JUri::base()) - 1);?>';
     $FamilyTreeTop.baseurl = '<?=$this->baseurl;?>';
     $FamilyTreeTop.templateurl = '<?=$this->baseurl;?>/templates/<?=$this->template;?>';
+
+    $FamilyTreeTop.languagesString = '<?=LanguagesHelper::get()?>';
 </script>
 <div id="fb-root"></div>
 <jdoc:include type="modules" name="facebook-sdk" style="none" />

@@ -14,6 +14,7 @@ class FamilytreetopControllerLanguages extends FamilytreetopController
         $account = FamilyTreeTopAccounts::find_by_joomla_id($user->id);
         $account->local = $local;
         $account->save();
+        echo json_encode(array('success' => true));
         exit;
     }
 }

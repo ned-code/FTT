@@ -56,6 +56,27 @@ if($session->get('famous')){
             profile: function(){
                 $FamilyTreeTop.mod('editor').render($FamilyTreeTop.mod('usertree').usermap().gedcom_id);
             },
+            languages: function(){
+                var langs = $.parseJSON($FamilyTreeTop.languagesString), ul = $('<ul></ul>'), li, prop, box = $('#modal').clone();
+                $(box).find('#modalLabel').text('Languages');
+                for(prop in langs){
+                    if(!langs.hasOwnProperty(prop)) continue;
+                    li = $('<li><a familytreetop-data="'+langs[prop].lang_code+'" href="#">'+langs[prop].title+'</a></li>');
+                    $(ul).append(li);
+                }
+                $(box).find('.modal-body').append(ul);
+                $(box).modal();
+
+                $(ul).find('li a').click(function(){
+                    var local = $(this).attr('familytreetop-data');
+                    $FamilyTreeTop.fn.ajax('languages.setLanguage', {local: local}, function(response){
+                        console.log(response);
+                        $(box).modal('hide');
+                        window.location.reload();
+                    });
+                    return false;
+                });
+            },
             logout: function(){
                 if(FB.getAuthResponse() != null){
                     FB.logout(function(r){
@@ -73,7 +94,11 @@ if($session->get('famous')){
             switch(id){
                 case "profile":
                         $fn.profile();
-                        break;
+                    break;
+
+                case "languages":
+                        $fn.languages();
+                    break;
 
                 case "logout":
                         $fn.logout();

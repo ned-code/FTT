@@ -30,6 +30,8 @@
         this.dataString = "";
         this.userString = "";
         this.facebookString = "";
+
+        this.languagesString = "";
     }
 
     $FamilyTreeTop.prototype.fn = {
