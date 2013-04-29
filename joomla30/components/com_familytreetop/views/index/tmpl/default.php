@@ -5,11 +5,11 @@ defined('_JEXEC') or die;
     $FamilyTreeTop.dataString = '<?=json_encode(GedcomHelper::getInstance()->getData());?>';
 </script>
 <div class="row-fluid">
-    <div class="span6 hidden-phone">
+    <div class="span6 hidden-phone text-center">
         <img src="<?=$this->baseurl;?>/components/com_familytreetop/images/index.logo.jpg">
     </div>
     <div class="span6">
-        <div class="row-fluid">
+        <div class="row-fluid hidden-phone">
             <div class="span12 text-center">
                 <h3>Welcome to Family TreeTop</h3>
             </div>
@@ -21,7 +21,7 @@ defined('_JEXEC') or die;
             </div>
         </div>
     </div>
-    <div class="span6 visible-phone">
+    <div class="span6 visible-phone text-center">
         <img src="<?=$this->baseurl;?>/components/com_familytreetop/images/index.logo.jpg">
     </div>
 </div>
