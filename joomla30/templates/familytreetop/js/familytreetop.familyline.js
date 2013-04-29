@@ -2,6 +2,7 @@ $FamilyTreeTop.create("familyline", function($){
     'use strict';
     var $this = this,
         $box,
+        $pull = [],
         $fn;
 
     $fn = {
@@ -32,15 +33,18 @@ $FamilyTreeTop.create("familyline", function($){
             $fn.renderChart(canvas, ctx, index, [485, 343]);
         },
         buttonClick:function(){
-            var $this = this, icon = $($this).find('i'), _class = $(icon).attr('class').split(" ")[0];
+            var $this = this, icon = $($this).find('i'), _class = $(icon).attr('class').split(" ")[0], args, line;
+            line = ($(icon).attr('familytreetop-line') == "father")?1:0;
             switch(_class){
                 case "icon-pencil":
                     if($(icon).hasClass('icon-pencil-active')){
                         $(icon).removeClass('icon-pencil-active');
                         $($this).removeClass('btn-warning');
+                        args = {type:"pencil", active: 0, line: line};
                     } else {
                         $(icon).addClass('icon-pencil-active');
                         $($this).addClass('btn-warning');
+                        args = {type:"pencil", active: 1, line: line};
                     }
                     break;
 
@@ -48,20 +52,30 @@ $FamilyTreeTop.create("familyline", function($){
                     $(icon).removeClass('icon-eye-open');
                     $($this).addClass('btn-warning');
                     $(icon).addClass('icon-eye-close');
+                    args = {type:"eye", active: 0, line: line};
                     break;
 
                 case "icon-eye-close":
                     $(icon).removeClass('icon-eye-close');
                     $($this).removeClass('btn-warning');
                     $(icon).addClass('icon-eye-open');
+                    args = {type:"eye", active: 1, line: line};
+                    break;
+
                 default:
                     break;
 
             }
-
+            $fn.send(args);
         },
         buttonsClick:function(index, el){
             $(el).click($fn.buttonClick);
+        },
+        send: function(args){
+            for(var prop in $pull){
+                if(!$pull.hasOwnProperty(prop)) continue;
+                $pull[prop].callback(args);
+            }
         }
     }
 
@@ -69,5 +83,9 @@ $FamilyTreeTop.create("familyline", function($){
         $box = $('.navbar div[data-familytreetop="familyline"]');
         $box.find('button:not(.disabled)').each($fn.buttonsClick);
         $box.find('button.disabled canvas').each($fn.renderCharts);
+    }
+
+    $this.bind = function(n, c){
+        $pull.push({name:n, callback:c});
     }
 });
