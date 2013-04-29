@@ -16,10 +16,20 @@ if($profile){
                 <legend>Latest Updates</legend>
                 <ul class-familytreetop="module-padding" class="unstyled">
                     <?php if($ind): ?>
-                    <li><span>Profile Changes</span>: <span data-familytreetop-color="<?=$ind->gender;?>"><?=$ind->name();?></span></li>
+                    <li><span>Profile Changes</span>: <span gedcom_id="<?=$ind->gedcom_id;?>" data-familytreetop-color="<?=$ind->gender;?>"><?=$ind->name();?></span></li>
                     <?php endif; ?>
                 </ul>
             </fieldset>
         </div>
     </div>
 </div>
+<script>
+    $FamilyTreeTop.bind(function($){
+        var $this = this, $box = $('#latestUpdates');
+        $($box).find('[data-familytreetop-color]').each(function(i, el){
+            $this.mod('popovers').render({
+                target: el
+            });
+        });
+    });
+</script>
