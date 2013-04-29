@@ -12,10 +12,10 @@ $oldest = $gedcom->individuals->getOldest();
                 <legend>Quick Facts</legend>
                 <ul class-familytreetop="module-padding" class="unstyled">
                     <?php if($youngest): ?>
-                        <li><span>Youngest</span>: <span gedcom_id="<?=$youngest->gedcom_id;?>" data-familytreetop-color="<?=$youngest->gender;?>"><?=$youngest->name();?></span></li>
+                        <li><span>Youngest</span>: <span style="cursor:pointer;" gedcom_id="<?=$youngest->gedcom_id;?>" data-familytreetop-color="<?=$youngest->gender;?>"><?=$youngest->name();?></span></li>
                     <?php endif; ?>
                     <?php if($oldest): ?>
-                        <li><span>Oldest</span>: <span gedcom_id="<?=$oldest->gedcom_id;?>" data-familytreetop-color="<?=$oldest->gender;?>"><?=$oldest->name();?></span></li>
+                        <li><span>Oldest</span>: <span style="cursor:pointer;" gedcom_id="<?=$oldest->gedcom_id;?>" data-familytreetop-color="<?=$oldest->gender;?>"><?=$oldest->name();?></span></li>
                     <?php endif; ?>
                 </ul>
             </fieldset>

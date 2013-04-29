@@ -16,7 +16,7 @@ if($profile){
                 <legend>Latest Updates</legend>
                 <ul class-familytreetop="module-padding" class="unstyled">
                     <?php if($ind): ?>
-                    <li><span>Profile Changes</span>: <span gedcom_id="<?=$ind->gedcom_id;?>" data-familytreetop-color="<?=$ind->gender;?>"><?=$ind->name();?></span></li>
+                    <li><span>Profile Changes</span>: <span style="cursor:pointer;" gedcom_id="<?=$ind->gedcom_id;?>" data-familytreetop-color="<?=$ind->gender;?>"><?=$ind->name();?></span></li>
                     <?php endif; ?>
                 </ul>
             </fieldset>
