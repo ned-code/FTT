@@ -189,6 +189,44 @@ $FamilyTreeTop.create("usertree", function($){
                 }
                 return "";
             },
+            isFatherLine:function(){
+                var object, id, _user;
+                if(data.con == null) return false;
+                if("undefined" !== typeof(data.con[ind.gedcom_id])){
+                    object = data.con[ind.gedcom_id];
+                    if(object.length > 1){
+                        _user = $this.user(object[1]);
+                        id = parseInt(_user.relationId);
+                        if(id==4){
+                            return true;
+                        } else if(id > 4 && id < 9){
+                            return true;
+                        } else if(id == 105 || id == 106 || id == 205 || id == 206){
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            },
+            isMotherLine:function(){
+                var object, id, _user;
+                if(data.con == null) return false;
+                if("undefined" !== typeof(data.con[ind.gedcom_id])){
+                    object = data.con[ind.gedcom_id];
+                    if(object.length > 1){
+                        _user = $this.user(object[1]);
+                        id = parseInt(_user.relationId);
+                        if(id==3){
+                            return true;
+                        } else if(id > 4 && id < 9){
+                            return true;
+                        } else if(id == 105 || id == 106 || id == 205 || id == 206){
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            },
             avatar: function(size, style, src){
                 return $this.getImage(ind.gedcom_id, size, style, src);
             },
