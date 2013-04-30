@@ -88,35 +88,35 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
     </div>
 
     <div id="relations">
-        <div data-familytreetop="SELF"><?=JText::_("COM_FAMILYTREETOP_SELF");?></div>
-        <div data-familytreetop="SPOUSE"><?=JText::_("COM_FAMILYTREETOP_SPOUSE");?></div>
-        <div data-familytreetop="MOTHER"><?=JText::_("COM_FAMILYTREETOP_MOTHER");?></div>
-        <div data-familytreetop="FATHER"><?=JText::_("COM_FAMILYTREETOP_FATHER");?></div>
-        <div data-familytreetop="DAUGHTER"><?=JText::_("COM_FAMILYTREETOP_DAUGHTER");?></div>
-        <div data-familytreetop="SON"><?=JText::_("COM_FAMILYTREETOP_SON");?></div>
-        <div data-familytreetop="SISTER"><?=JText::_("COM_FAMILYTREETOP_SISTER");?></div>
-        <div data-familytreetop="BROTHER"><?=JText::_("COM_FAMILYTREETOP_BROTHER");?></div>
-        <div data-familytreetop="COUSIN"><?=JText::_("COM_FAMILYTREETOP_COUSIN");?></div>
-        <div data-familytreetop="AUNT"><?=JText::_("COM_FAMILYTREETOP_AUNT");?></div>
-        <div data-familytreetop="UNCLE"><?=JText::_("COM_FAMILYTREETOP_UNCLE");?></div>
-        <div data-familytreetop="NIECE"><?=JText::_("COM_FAMILYTREETOP_NIECE");?></div>
-        <div data-familytreetop="NEPHEW"><?=JText::_("COM_FAMILYTREETOP_NEPHEW");?></div>
-        <div data-familytreetop="GRAND_MOTHER"><?=JText::_("COM_FAMILYTREETOP_GRAND_MOTHER");?></div>
-        <div data-familytreetop="GRAND_FATHER"><?=JText::_("COM_FAMILYTREETOP_GRAND_FATHER");?></div>
-        <div data-familytreetop="GRAND_DAUGHTER"><?=JText::_("COM_FAMILYTREETOP_GRAND_DAUGHTER");?></div>
-        <div data-familytreetop="GRAND_SON"><?=JText::_("COM_FAMILYTREETOP_GRAND_SON");?></div>
-        <div data-familytreetop="GRAND_AUNT"><?=JText::_("COM_FAMILYTREETOP_GRAND_AUNT");?></div>
-        <div data-familytreetop="GRAND_UNCLE"><?=JText::_("COM_FAMILYTREETOP_GRAND_UNCLE");?></div>
-        <div data-familytreetop="GRAND_NIECE"><?=JText::_("COM_FAMILYTREETOP_GRAND_NIECE");?></div>
-        <div data-familytreetop="GRAND_NEPHEW"><?=JText::_("COM_FAMILYTREETOP_GRAND_NEPHEW");?></div>
-        <div data-familytreetop="GREAT_GRAND_MOTHER"><?=JText::_("COM_FAMILYTREETOP_GREAT_GRAND_MOTHER");?></div>
-        <div data-familytreetop="GREAT_GRAND_FATHER"><?=JText::_("COM_FAMILYTREETOP_GREAT_GRAND_FATHER");?></div>
-        <div data-familytreetop="GREAT_GRAND_DAUGHTER"><?=JText::_("COM_FAMILYTREETOP_GREAT_GRAND_DAUGHTER");?></div>
-        <div data-familytreetop="GREAT_GRAND_SON"><?=JText::_("COM_FAMILYTREETOP_GREAT_GRAND_SON");?></div>
-        <div data-familytreetop="GREAT_GRAND_AUNT"><?=JText::_("COM_FAMILYTREETOP_GREAT_GRAND_AUNT");?></div>
-        <div data-familytreetop="GREAT_GRAND_UNCLE"><?=JText::_("COM_FAMILYTREETOP_GREAT_GRAND_UNCLE");?></div>
-        <div data-familytreetop="GREAT_GRAND_NIECE"><?=JText::_("COM_FAMILYTREETOP_GREAT_GRAND_NIECE");?></div>
-        <div data-familytreetop="GREAT_GRAND_NEPHEW"><?=JText::_("COM_FAMILYTREETOP_GREAT_GRAND_NEPHEW");?></div>
+        <div data-familytreetop="SELF"><?=JText::_("TPL_FAMILYTREETOP_SELF");?></div>
+        <div data-familytreetop="SPOUSE"><?=JText::_("TPL_FAMILYTREETOP_SPOUSE");?></div>
+        <div data-familytreetop="MOTHER"><?=JText::_("TPL_FAMILYTREETOP_MOTHER");?></div>
+        <div data-familytreetop="FATHER"><?=JText::_("TPL_FAMILYTREETOP_FATHER");?></div>
+        <div data-familytreetop="DAUGHTER"><?=JText::_("TPL_FAMILYTREETOP_DAUGHTER");?></div>
+        <div data-familytreetop="SON"><?=JText::_("TPL_FAMILYTREETOP_SON");?></div>
+        <div data-familytreetop="SISTER"><?=JText::_("TPL_FAMILYTREETOP_SISTER");?></div>
+        <div data-familytreetop="BROTHER"><?=JText::_("TPL_FAMILYTREETOP_BROTHER");?></div>
+        <div data-familytreetop="COUSIN"><?=JText::_("TPL_FAMILYTREETOP_COUSIN");?></div>
+        <div data-familytreetop="AUNT"><?=JText::_("TPL_FAMILYTREETOP_AUNT");?></div>
+        <div data-familytreetop="UNCLE"><?=JText::_("TPL_FAMILYTREETOP_UNCLE");?></div>
+        <div data-familytreetop="NIECE"><?=JText::_("TPL_FAMILYTREETOP_NIECE");?></div>
+        <div data-familytreetop="NEPHEW"><?=JText::_("TPL_FAMILYTREETOP_NEPHEW");?></div>
+        <div data-familytreetop="GRAND_MOTHER"><?=JText::_("TPL_FAMILYTREETOP_GRAND_MOTHER");?></div>
+        <div data-familytreetop="GRAND_FATHER"><?=JText::_("TPL_FAMILYTREETOP_GRAND_FATHER");?></div>
+        <div data-familytreetop="GRAND_DAUGHTER"><?=JText::_("TPL_FAMILYTREETOP_GRAND_DAUGHTER");?></div>
+        <div data-familytreetop="GRAND_SON"><?=JText::_("TPL_FAMILYTREETOP_GRAND_SON");?></div>
+        <div data-familytreetop="GRAND_AUNT"><?=JText::_("TPL_FAMILYTREETOP_GRAND_AUNT");?></div>
+        <div data-familytreetop="GRAND_UNCLE"><?=JText::_("TPL_FAMILYTREETOP_GRAND_UNCLE");?></div>
+        <div data-familytreetop="GRAND_NIECE"><?=JText::_("TPL_FAMILYTREETOP_GRAND_NIECE");?></div>
+        <div data-familytreetop="GRAND_NEPHEW"><?=JText::_("TPL_FAMILYTREETOP_GRAND_NEPHEW");?></div>
+        <div data-familytreetop="GREAT_GRAND_MOTHER"><?=JText::_("TPL_FAMILYTREETOP_GREAT_GRAND_MOTHER");?></div>
+        <div data-familytreetop="GREAT_GRAND_FATHER"><?=JText::_("TPL_FAMILYTREETOP_GREAT_GRAND_FATHER");?></div>
+        <div data-familytreetop="GREAT_GRAND_DAUGHTER"><?=JText::_("TPL_FAMILYTREETOP_GREAT_GRAND_DAUGHTER");?></div>
+        <div data-familytreetop="GREAT_GRAND_SON"><?=JText::_("TPL_FAMILYTREETOP_GREAT_GRAND_SON");?></div>
+        <div data-familytreetop="GREAT_GRAND_AUNT"><?=JText::_("TPL_FAMILYTREETOP_GREAT_GRAND_AUNT");?></div>
+        <div data-familytreetop="GREAT_GRAND_UNCLE"><?=JText::_("TPL_FAMILYTREETOP_GREAT_GRAND_UNCLE");?></div>
+        <div data-familytreetop="GREAT_GRAND_NIECE"><?=JText::_("TPL_FAMILYTREETOP_GREAT_GRAND_NIECE");?></div>
+        <div data-familytreetop="GREAT_GRAND_NEPHEW"><?=JText::_("TPL_FAMILYTREETOP_GREAT_GRAND_NEPHEW");?></div>
     </div>
 
     <div id="popover">
@@ -128,12 +128,12 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                     </div>
                     <div class="span8">
                         <ul class="unstyled">
-                            <li data-familytreetop="first_name"><small><strong>First Name</strong>: <span></span></small></li>
-                            <li data-familytreetop="middle_name"><small><strong>Middle Name</strong>: <span></span></small></li>
-                            <li data-familytreetop="last_name"><small><strong>Last Name</strong>: <span></span></small></li>
-                            <li data-familytreetop="know_as"><small><strong>Know As</strong>: <span></span></small></li>
-                            <li data-familytreetop="relation"><small><strong>Relation</strong>: <span></span></small></li>
-                            <li data-familytreetop="connection"><small><strong>Connection</strong>: <span></span></small></li>
+                            <li data-familytreetop="first_name"><small><strong><?=JText::_("TPL_FAMILYTREETOP_FIRST_NAME");?></strong>: <span></span></small></li>
+                            <li data-familytreetop="middle_name"><small><strong><?=JText::_("TPL_FAMILYTREETOP_MIDDLE_NAME");?></strong>: <span></span></small></li>
+                            <li data-familytreetop="last_name"><small><strong><?=JText::_("TPL_FAMILYTREETOP_LAST_NAME");?></strong>: <span></span></small></li>
+                            <li data-familytreetop="know_as"><small><strong><?=JText::_("TPL_FAMILYTREETOP_KNOW_AS");?></strong>: <span></span></small></li>
+                            <li data-familytreetop="relation"><small><strong><?=JText::_("TPL_FAMILYTREETOP_RELATION");?></strong>: <span></span></small></li>
+                            <li data-familytreetop="connection"><small><strong><?=JText::_("TPL_FAMILYTREETOP_CONNECTION");?></strong>: <span></span></small></li>
                         </ul>
                     </div>
                 </div>
