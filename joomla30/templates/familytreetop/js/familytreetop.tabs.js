@@ -42,7 +42,7 @@ $FamilyTreeTop.create("tabs", function($){
                 $($active).parent().parent().parent().addClass('active');
             }
 
-            $($tabs).find('.tab-pane').hide();
+            $($tabs).find('[familytreetop-tab="1"]').hide();
             tab = $($tabs).find('#'+parts[0]+'.tab-pane');
             $(tab).show();
 
