@@ -146,14 +146,14 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
         <div class="btn-group dropdown">
             <button class="btn  btn-mini" data-toggle="dropdown"><i class="icon-pencil"></i></button>
             <ul class="dropdown-menu">
-                <li familytreetop="edit"><a href="#">Edit Profile</a></li>
+                <li familytreetop="edit"><a href="#"><?=JText::_("TPL_FAMILYTREETOP_EDIT_PROFILE");?></a></li>
                 <li data-familytreetop-devider="1" class="divider"></li>
-                <li familytreetop="addParent"><a href="#">Add Parent</a></li>
-                <li familytreetop="addSibling"><a href="#">Add Sibling</a></li>
-                <li familytreetop="addSpouse"><a href="#">Add Spouse</a></li>
-                <li familytreetop="addChild"><a href="#">Add Child</a></li>
+                <li familytreetop="addParent"><a href="#"><?=JText::_("TPL_FAMILYTREETOP_ADD_PARENT");?></a></li>
+                <li familytreetop="addSibling"><a href="#"><?=JText::_("TPL_FAMILYTREETOP_ADD_SIBLING");?></a></li>
+                <li familytreetop="addSpouse"><a href="#"><?=JText::_("TPL_FAMILYTREETOP_ADD_SPOUSE");?></a></li>
+                <li familytreetop="addChild"><a href="#"><?=JText::_("TPL_FAMILYTREETOP_ADD_CHILD");?></a></li>
                 <li data-familytreetop-devider="2" class="divider"></li>
-                <li familytreetop="sendInvite"><a href="#">Send Invite</a></li>
+                <li familytreetop="sendInvite"><a href="#"><?=JText::_("TPL_FAMILYTREETOP_SEND_INVITE");?></a></li>
             </ul>
         </div>
     </div>
@@ -166,8 +166,8 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
         <div class="modal-body">
         </div>
         <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-            <button familytreetop="submit" class="btn btn-primary">Save changes</button>
+            <button class="btn" data-dismiss="modal" aria-hidden="true"><?=JText::_("TPL_FAMILYTREETOP_MODAL_CLOSE");?></button>
+            <button familytreetop="submit" class="btn btn-primary"><?=JText::_("TPL_FAMILYTREETOP_MODAL_SAVE_CHANGES");?></button>
         </div>
     </div>
 
@@ -186,15 +186,15 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                 <div class="span12">
                     <div class="well">
                         <fieldset>
-                            <legend>About</legend>
+                            <legend><?=JText::_("TPL_FAMILYTREETOP_ABOUT");?></legend>
                             <div class="row-fluid">
                                 <div  data-familytreetop="avatar" class="span2"></div>
                                 <div class="span10">
                                     <ul class="unstyled">
-                                        <li><small><strong>First Name</strong>: <span></span></small></li>
-                                        <li><small><strong>Middle Name</strong>: <span></span></small></li>
-                                        <li><small><strong>Last Name</strong>: <span></span></small></li>
-                                        <li><small><strong>Know As</strong>: <span></span></small></li>
+                                        <li><small><strong><?=JText::_("TPL_FAMILYTREETOP_FIRST_NAME");?></strong>: <span></span></small></li>
+                                        <li><small><strong><?=JText::_("TPL_FAMILYTREETOP_MIDDLE_NAME");?></strong>: <span></span></small></li>
+                                        <li><small><strong><?=JText::_("TPL_FAMILYTREETOP_LAST_NAME");?></strong>: <span></span></small></li>
+                                        <li><small><strong><?=JText::_("TPL_FAMILYTREETOP_KNOW_AS");?></strong>: <span></span></small></li>
                                     </ul>
                                 </div>
                             </div>
@@ -206,7 +206,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                 <div class="span12">
                     <div class="well">
                         <fieldset>
-                            <legend>Relation Map</legend>
+                            <legend><?=JText::_("TPL_FAMILYTREETOP_RELATION_MAP");?></legend>
                         </fieldset>
                     </div>
                 </div>
@@ -215,7 +215,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                 <div class="span12">
                     <div class="well">
                         <fieldset>
-                            <legend>Family</legend>
+                            <legend><?=JText::_("TPL_FAMILYTREETOP_FAMILY");?></legend>
                         </fieldset>
                     </div>
                 </div>
@@ -224,7 +224,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                 <div class="span12">
                     <div class="well">
                         <fieldset>
-                            <legend>Photos</legend>
+                            <legend><?=JText::_("TPL_FAMILYTREETOP_PHOTOS");?></legend>
                             <ul class="unstyled inline"></ul>
                         </fieldset>
                     </div>
@@ -235,10 +235,10 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
 
     <div id="editorTabs">
         <ul class="nav nav-tabs">
-            <li class="active"><a href="#" data-toggle="tab">Profile</a></li>
-            <li><a href="#" data-toggle="tab">Unions</a></li>
-            <li><a href="#" data-toggle="tab">Media</a></li>
-            <li><a href="#" data-toggle="tab">Options</a></li>
+            <li class="active"><a href="#" data-toggle="tab"><?=JText::_("TPL_FAMILYTREETOP_EDITOR_TABS_PROFILE");?></a></li>
+            <li><a href="#" data-toggle="tab"><?=JText::_("TPL_FAMILYTREETOP_EDITOR_TABS_UNIONS");?></a></li>
+            <li><a href="#" data-toggle="tab"><?=JText::_("TPL_FAMILYTREETOP_EDITOR_TABS_MEDIA");?></a></li>
+            <li><a href="#" data-toggle="tab"><?=JText::_("TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS");?></a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane active" id="_1_"></div>
@@ -261,20 +261,20 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
             <div class="span6">
                 <span class="btn btn-success fileinput-button">
                     <i class="icon-plus icon-white"></i>
-                    <span>Add files...</span>
+                    <span><?=JText::_("TPL_FAMILYTREETOP_EDITOR_TABS_MEDIA_ADD_FILES");?></span>
                     <input type="file" name="files[]" multiple="">
                 </span>
                 <span class="btn btn-info familytreetop-button set-avatar" style="display: none;">
                     <i class="icon-ok-sign icon-white"></i>
-                    <span>Set Avatar</span>
+                    <span><?=JText::_("TPL_FAMILYTREETOP_EDITOR_TABS_MEDIA_SET_AVATAR");?></span>
                 </span>
                 <span class="btn btn-danger familytreetop-button unset-avatar" style="display: none;">
                     <i class="icon-remove-sign icon-white"></i>
-                    <span>Unset Avatar</span>
+                    <span><?=JText::_("TPL_FAMILYTREETOP_EDITOR_TABS_MEDIA_UNSET_AVATAR");?></span>
                 </span>
                 <span class="btn btn-danger familytreetop-button delete" style="display: none;">
                     <i class="icon-trash icon-white"></i>
-                    <span>Delete</span>
+                    <span><?=JText::_("TPL_FAMILYTREETOP_EDITOR_TABS_MEDIA_DELETE");?></span>
                 </span>
             </div>
             <div class="span6 fileupload-progress fade">
@@ -293,7 +293,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
 
     <form id="formEditUnions">
         <fieldset>
-            <legend>Union</legend>
+            <legend><?=JText::_("TPL_FAMILYTREETOP_EDITOR_TABS_UNIONS_UNIONS");?></legend>
             <input style="display:none;" familytreetop="family_id" name="editUnion[family_id]" type="text" class="hidden" />
             <div class="row-fluid">
                 <div class="span6">
@@ -322,32 +322,32 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
             <div class="row-fluid">
                 <div familytreetop="union-event-date" class="span12">
                     <select familytreetop="months" class="span4" name="editUnion[month]">
-                        <option value="0">Month</option>
-                        <option value="1">January</option>
-                        <option value="2">February</option>
-                        <option value="3">March</option>
-                        <option value="4">April</option>
-                        <option value="5">May</option>
-                        <option value="6">June</option>
-                        <option value="7">July</option>
-                        <option value="8">August</option>
-                        <option value="9">September</option>
-                        <option value="10">October</option>
-                        <option value="11">November</option>
-                        <option value="12">December</option>
+                        <option value="0"><?=JText::_("TPL_FAMILYTREETOP_MONTH");?></option>
+                        <option value="1"><?=JText::_("TPL_FAMILYTREETOP_JANUARY");?></option>
+                        <option value="2"><?=JText::_("TPL_FAMILYTREETOP_FEBRUARY");?></option>
+                        <option value="3"><?=JText::_("TPL_FAMILYTREETOP_MARCH");?></option>
+                        <option value="4"><?=JText::_("TPL_FAMILYTREETOP_APRIL");?></option>
+                        <option value="5"><?=JText::_("TPL_FAMILYTREETOP_MAY");?></option>
+                        <option value="6"><?=JText::_("TPL_FAMILYTREETOP_JUNE");?></option>
+                        <option value="7"><?=JText::_("TPL_FAMILYTREETOP_JULY");?></option>
+                        <option value="8"><?=JText::_("TPL_FAMILYTREETOP_AUGUST");?></option>
+                        <option value="9"><?=JText::_("TPL_FAMILYTREETOP_SEPTEMBER");?></option>
+                        <option value="10"><?=JText::_("TPL_FAMILYTREETOP_OCTOBER");?></option>
+                        <option value="11"><?=JText::_("TPL_FAMILYTREETOP_NOVEMBER");?></option>
+                        <option value="12"><?=JText::_("TPL_FAMILYTREETOP_DECEMBER");?></option>
                     </select>
                     <select familytreetop="days" class="span2" name="editUnion[day]">
-                        <option value="0">Day</option>
+                        <option value="0"><?=JText::_("TPL_FAMILYTREETOP_DAY");?></option>
                     </select>
-                    <input familytreetop="year" class="span4" type="text" name="editUnion[year]" placeholder="Year">
-                    <input familytreetop="unknown" class="span1" type="checkbox" name="editUnion[unknown]" ><small>Unknown</small>
+                    <input familytreetop="year" class="span4" type="text" name="editUnion[year]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_YEAR");?>">
+                    <input familytreetop="unknown" class="span1" type="checkbox" name="editUnion[unknown]" ><small><?=JText::_("TPL_FAMILYTREETOP_UNKNOWN");?></small>
                 </div>
             </div>
             <div familytreetop="union-event-place" class="row-fluid">
                 <div class="span12">
-                    <input familytreetop="city" class="span4" type="text" name="editUnion[city]"  placeholder="City">
-                    <input familytreetop="state" class="span4" type="text" name="editUnion[state]" placeholder="State">
-                    <input familytreetop="country" class="span4" type="text" name="editUnion[country]" placeholder="Country">
+                    <input familytreetop="city" class="span4" type="text" name="editUnion[city]"  placeholder="<?=JText::_("TPL_FAMILYTREETOP_CITY");?>">
+                    <input familytreetop="state" class="span4" type="text" name="editUnion[state]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_STATE");?>">
+                    <input familytreetop="country" class="span4" type="text" name="editUnion[country]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_COUNTRY");?>">
                 </div>
             </div>
         </fieldset>
@@ -361,45 +361,45 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
             <div class="span9">
                 <div class="row-fluid">
                     <div familytreetop="gender" class="span6">
-                        <label for="editProfile[gender]"><small>Gender</small></label>
+                        <label for="editProfile[gender]"><small><?=JText::_("TPL_FAMILYTREETOP_GENDER");?></small></label>
                         <select class="span12" id="editProfile[gender]" name="editProfile[gender]">
-                            <option value="1">Male</option>
-                            <option value="0">Female</option>
+                            <option value="1"><?=JText::_("TPL_FAMILYTREETOP_GENDER_MALE");?></option>
+                            <option value="0"><?=JText::_("TPL_FAMILYTREETOP_GENDER_FEMALE");?></option>
                         </select>
                     </div>
                     <div familytreetop="living" class="span6">
-                        <label for="editProfile[living]"><small>Living</small></label>
+                        <label for="editProfile[living]"><small><?=JText::_("TPL_FAMILYTREETOP_LIVING");?></small></label>
                         <select class="span12" id="editProfile[living]" name="editProfile[living]">
-                            <option value="1">Yes</option>
-                            <option value="0">No</option>
+                            <option value="1"><?=JText::_("TPL_FAMILYTREETOP_YES");?></option>
+                            <option value="0"><?=JText::_("TPL_FAMILYTREETOP_NO");?></option>
                         </select>
                     </div>
                 </div>
                 <div class="row-fluid">
                     <div familytreetop="firstName" class="span6">
-                        <label for="editProfile[firstName]"><small>First Name</small></label>
+                        <label for="editProfile[firstName]"><small><?=JText::_("TPL_FAMILYTREETOP_FIRST_NAME");?></small></label>
                         <div class="controls">
-                            <input class="span12" name="editProfile[first_name]" type="text" id="editProfile[firstName]" placeholder="First Name">
+                            <input class="span12" name="editProfile[first_name]" type="text" id="editProfile[firstName]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_FIRST_NAME");?>">
                         </div>
                     </div>
                     <div familytreetop="middleName" class="span6">
-                        <label for="editProfile[middleName]"><small>Middle Name</small></label>
+                        <label for="editProfile[middleName]"><small><?=JText::_("TPL_FAMILYTREETOP_MIDDLE_NAME");?></small></label>
                         <div class="controls">
-                            <input class="span12" name="editProfile[middle_name]" type="text" id="editProfile[middleName]" placeholder="Middle Name">
+                            <input class="span12" name="editProfile[middle_name]" type="text" id="editProfile[middleName]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_MIDDLE_NAME");?>">
                         </div>
                     </div>
                 </div>
                 <div class="row-fluid">
                     <div familytreetop="lastName" class="span6">
-                        <label for="editProfile[firstName]"><small>Last Name</small></label>
+                        <label for="editProfile[firstName]"><small><?=JText::_("TPL_FAMILYTREETOP_LAST_NAME");?></small></label>
                         <div class="controls">
-                            <input class="span12" name="editProfile[last_name]" type="text" id="editProfile[lastName]" placeholder="Last Name">
+                            <input class="span12" name="editProfile[last_name]" type="text" id="editProfile[lastName]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_LAST_NAME");?>">
                         </div>
                     </div>
                     <div familytreetop="knowAs" class="span6">
-                        <label for="editProfile[knowAs]"><small>Know As</small></label>
+                        <label for="editProfile[knowAs]"><small><?=JText::_("TPL_FAMILYTREETOP_KNOW_AS");?></small></label>
                         <div class="controls">
-                            <input class="span12" name="editProfile[know_as]" type="text" id="editProfile[knowAs]" placeholder="Know As">
+                            <input class="span12" name="editProfile[know_as]" type="text" id="editProfile[knowAs]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_KNOW_AS");?>">
                         </div>
                     </div>
                 </div>
@@ -408,78 +408,78 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
         <div class="row-fluid">
             <div familytreetop="birthday" class="span12">
                 <p>
-                    Birthday:
+                    <?=JText::_("TPL_FAMILYTREETOP_BIRTHDAY");?>:
                 </p>
             </div>
         </div>
         <div class="row-fluid">
             <div familytreetop="birthday" class="span12">
                 <select familytreetop="months" class="span4" name="editProfile[b_month]">
-                    <option value="0">Month</option>
-                    <option value="1">January</option>
-                    <option value="2">February</option>
-                    <option value="3">March</option>
-                    <option value="4">April</option>
-                    <option value="5">May</option>
-                    <option value="6">June</option>
-                    <option value="7">July</option>
-                    <option value="8">August</option>
-                    <option value="9">September</option>
-                    <option value="10">October</option>
-                    <option value="11">November</option>
-                    <option value="12">December</option>
+                    <option value="0"><?=JText::_("TPL_FAMILYTREETOP_MONTH");?></option>
+                    <option value="1"><?=JText::_("TPL_FAMILYTREETOP_JANUARY");?></option>
+                    <option value="2"><?=JText::_("TPL_FAMILYTREETOP_FEBRUARY");?></option>
+                    <option value="3"><?=JText::_("TPL_FAMILYTREETOP_MARCH");?></option>
+                    <option value="4"><?=JText::_("TPL_FAMILYTREETOP_APRIL");?></option>
+                    <option value="5"><?=JText::_("TPL_FAMILYTREETOP_MAY");?></option>
+                    <option value="6"><?=JText::_("TPL_FAMILYTREETOP_JUNE");?></option>
+                    <option value="7"><?=JText::_("TPL_FAMILYTREETOP_JULY");?></option>
+                    <option value="8"><?=JText::_("TPL_FAMILYTREETOP_AUGUST");?></option>
+                    <option value="9"><?=JText::_("TPL_FAMILYTREETOP_SEPTEMBER");?></option>
+                    <option value="10"><?=JText::_("TPL_FAMILYTREETOP_OCTOBER");?></option>
+                    <option value="11"><?=JText::_("TPL_FAMILYTREETOP_NOVEMBER");?></option>
+                    <option value="12"><?=JText::_("TPL_FAMILYTREETOP_DECEMBER");?></option>
                 </select>
                 <select familytreetop="days" class="span2" name="editProfile[b_day]">
-                    <option value="0">Day</option>
+                    <option value="0"><?=JText::_("TPL_FAMILYTREETOP_DAY");?></option>
                 </select>
-                <input familytreetop="year" class="span4" type="text" name="editProfile[b_year]" placeholder="Year">
-                <input class="span1" type="checkbox" name="editProfile[b_exist]" ><small>Unknown</small>
+                <input familytreetop="year" class="span4" type="text" name="editProfile[b_year]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_YEAR");?>">
+                <input class="span1" type="checkbox" name="editProfile[b_exist]" ><small><?=JText::_("TPL_FAMILYTREETOP_UNKNOWN");?></small>
             </div>
         </div>
         <div familytreetop="birthday" class="row-fluid">
             <div class="span12">
-                <input class="span4" type="text" name="editProfile[b_city]"  placeholder="City">
-                <input class="span4" type="text" name="editProfile[b_state]" placeholder="State">
-                <input class="span4" type="text" name="editProfile[b_country]" placeholder="Country">
+                <input class="span4" type="text" name="editProfile[b_city]"  placeholder="<?=JText::_("TPL_FAMILYTREETOP_CITY");?>">
+                <input class="span4" type="text" name="editProfile[b_state]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_STATE");?>">
+                <input class="span4" type="text" name="editProfile[b_country]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_COUNTRY");?>">
             </div>
         </div>
 
         <div class="row-fluid">
             <div familytreetop="deathday" class="span12">
                 <p>
-                    Deathday:
+                    <?=JText::_("TPL_FAMILYTREETOP_DEATHDAY");?>:
                 </p>
             </div>
         </div>
         <div class="row-fluid">
             <div familytreetop="deathday" class="span12">
                 <select familytreetop="months" class="span4" name="editProfile[d_month]">
-                    <option value="0">Month</option>
-                    <option value="1">January</option>
-                    <option value="2">February</option>
-                    <option value="3">March</option>
-                    <option value="4">April</option>
-                    <option value="5">May</option>
-                    <option value="6">June</option>
-                    <option value="7">July</option>
-                    <option value="8">August</option>
-                    <option value="9">September</option>
-                    <option value="10">October</option>
-                    <option value="11">November</option>
-                    <option value="12">December</option>
+                    <option value="0"><?=JText::_("TPL_FAMILYTREETOP_MONTH");?></option>
+                    <option value="1"><?=JText::_("TPL_FAMILYTREETOP_JANUARY");?></option>
+                    <option value="2"><?=JText::_("TPL_FAMILYTREETOP_FEBRUARY");?></option>
+                    <option value="3"><?=JText::_("TPL_FAMILYTREETOP_MARCH");?></option>
+                    <option value="4"><?=JText::_("TPL_FAMILYTREETOP_APRIL");?></option>
+                    <option value="5"><?=JText::_("TPL_FAMILYTREETOP_MAY");?></option>
+                    <option value="6"><?=JText::_("TPL_FAMILYTREETOP_JUNE");?></option>
+                    <option value="7"><?=JText::_("TPL_FAMILYTREETOP_JULY");?></option>
+                    <option value="8"><?=JText::_("TPL_FAMILYTREETOP_AUGUST");?></option>
+                    <option value="9"><?=JText::_("TPL_FAMILYTREETOP_SEPTEMBER");?></option>
+                    <option value="10"><?=JText::_("TPL_FAMILYTREETOP_OCTOBER");?></option>
+                    <option value="11"><?=JText::_("TPL_FAMILYTREETOP_NOVEMBER");?></option>
+                    <option value="12"><?=JText::_("TPL_FAMILYTREETOP_DECEMBER");?></option>
                 </select>
                 <select familytreetop="days" class="span2" name="editProfile[d_day]">
-                    <option value="0">Day</option>
+                    <option value="0"><?=JText::_("TPL_FAMILYTREETOP_DAY");?></option>
                 </select>
-                <input familytreetop="year" class="span4" type="text" name="editProfile[d_year]" placeholder="Year">
-                <input class="span1" type="checkbox" name="editProfile[d_exist]" ><small>Unknown</small>
+                <input familytreetop="year" class="span4" type="text" name="editProfile[d_year]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_YEAR");?>">
+                <input class="span1" type="checkbox" name="editProfile[d_exist]" ><small><?=JText::_("TPL_FAMILYTREETOP_UNKNOWN");?></small>
             </div>
         </div>
         <div familytreetop="deathday" class="row-fluid">
             <div class="span12">
-                <input class="span4" type="text" name="editProfile[d_city]"  placeholder="City">
-                <input class="span4" type="text" name="editProfile[d_state]" placeholder="State">
-                <input class="span4" type="text" name="editProfile[d_country]" placeholder="Country">
+                <input class="span4" type="text" name="editProfile[d_city]"  placeholder="<?=JText::_("TPL_FAMILYTREETOP_CITY");?>">
+                <input class="span4" type="text" name="editProfile[d_state]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_STATE");?>">
+                <input class="span4" type="text" name="editProfile[d_country]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_COUNTRY");?>">
             </div>
         </div>
     </form>
@@ -508,22 +508,22 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
         <a href="#" id="TDFriendSelector_buttonClose">x</a>
         <div class="TDFriendSelector_form">
             <div class="TDFriendSelector_header">
-                <p>Select your friends</p>
+                <p><?=JText::_("TPL_FAMILYTREETOP_TDFRIENDSELECTOR_SELECT_YOUR_FRIENDS");?></p>
             </div>
             <div class="TDFriendSelector_content">
-                <p>Invite to App</p>
+                <p><?=JText::_("TPL_FAMILYTREETOP_TDFRIENDSELECTOR_INVITE_TO_APP");?></p>
                 <div class="TDFriendSelector_searchContainer TDFriendSelector_clearfix">
                     <input type="text" placeholder="Search Friend" id="TDFriendSelector_searchField" />
                 </div>
                 <div class="TDFriendSelector_friendsContainer"></div>
             </div>
             <div class="TDFriendSelector_footer TDFriendSelector_clearfix">
-                <a href="#" id="TDFriendSelector_pagePrev" class="TDFriendSelector_disabled">Previous</a>
-                <a href="#" id="TDFriendSelector_pageNext">Next</a>
+                <a href="#" id="TDFriendSelector_pagePrev" class="TDFriendSelector_disabled"><?=JText::_("TPL_FAMILYTREETOP_TDFRIENDSELECTOR_PREVIOUS");?></a>
+                <a href="#" id="TDFriendSelector_pageNext"><?=JText::_("TPL_FAMILYTREETOP_TDFRIENDSELECTOR_NEXT");?></a>
                 <div class="TDFriendSelector_pageNumberContainer">
-                    Page <span id="TDFriendSelector_pageNumber">1</span> / <span id="TDFriendSelector_pageNumberTotal">1</span>
+                    <?=JText::_("TPL_FAMILYTREETOP_TDFRIENDSELECTOR_PAGE");?> <span id="TDFriendSelector_pageNumber">1</span> / <span id="TDFriendSelector_pageNumberTotal">1</span>
                 </div>
-                <a href="#" id="TDFriendSelector_buttonOK">OK</a>
+                <a href="#" id="TDFriendSelector_buttonOK"><?=JText::_("TPL_FAMILYTREETOP_TDFRIENDSELECTOR_OK");?></a>
             </div>
         </div>
     </div>
