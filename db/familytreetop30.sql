@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 3.5.1
+-- version 3.3.2deb1
 -- http://www.phpmyadmin.net
 --
--- Хост: 127.0.0.1
--- Время создания: Апр 18 2013 г., 17:42
--- Версия сервера: 5.5.25
--- Версия PHP: 5.3.13
+-- Хост: localhost
+-- Время создания: Апр 30 2013 г., 11:34
+-- Версия сервера: 5.1.41
+-- Версия PHP: 5.3.2-1ubuntu4.9
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -95,6 +94,11 @@ CREATE TABLE IF NOT EXISTS `geicz_associations` (
   KEY `idx_key` (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Дамп данных таблицы `geicz_associations`
+--
+
+
 -- --------------------------------------------------------
 
 --
@@ -144,6 +148,11 @@ CREATE TABLE IF NOT EXISTS `geicz_banners` (
   KEY `idx_language` (`language`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
+--
+-- Дамп данных таблицы `geicz_banners`
+--
+
+
 -- --------------------------------------------------------
 
 --
@@ -170,6 +179,11 @@ CREATE TABLE IF NOT EXISTS `geicz_banner_clients` (
   KEY `idx_metakey_prefix` (`metakey_prefix`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
+--
+-- Дамп данных таблицы `geicz_banner_clients`
+--
+
+
 -- --------------------------------------------------------
 
 --
@@ -186,6 +200,11 @@ CREATE TABLE IF NOT EXISTS `geicz_banner_tracks` (
   KEY `idx_track_type` (`track_type`),
   KEY `idx_banner_id` (`banner_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `geicz_banner_tracks`
+--
+
 
 -- --------------------------------------------------------
 
@@ -305,6 +324,11 @@ CREATE TABLE IF NOT EXISTS `geicz_contact_details` (
   KEY `idx_xreference` (`xreference`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
+--
+-- Дамп данных таблицы `geicz_contact_details`
+--
+
+
 -- --------------------------------------------------------
 
 --
@@ -353,6 +377,11 @@ CREATE TABLE IF NOT EXISTS `geicz_content` (
   KEY `idx_xreference` (`xreference`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
+--
+-- Дамп данных таблицы `geicz_content`
+--
+
+
 -- --------------------------------------------------------
 
 --
@@ -364,6 +393,11 @@ CREATE TABLE IF NOT EXISTS `geicz_content_frontpage` (
   `ordering` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`content_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `geicz_content_frontpage`
+--
+
 
 -- --------------------------------------------------------
 
@@ -379,6 +413,11 @@ CREATE TABLE IF NOT EXISTS `geicz_content_rating` (
   PRIMARY KEY (`content_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Дамп данных таблицы `geicz_content_rating`
+--
+
+
 -- --------------------------------------------------------
 
 --
@@ -389,6 +428,11 @@ CREATE TABLE IF NOT EXISTS `geicz_core_log_searches` (
   `search_term` varchar(128) NOT NULL DEFAULT '',
   `hits` int(10) unsigned NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `geicz_core_log_searches`
+--
+
 
 -- --------------------------------------------------------
 
@@ -418,7 +462,7 @@ CREATE TABLE IF NOT EXISTS `geicz_extensions` (
   KEY `element_clientid` (`element`,`client_id`),
   KEY `element_folder_clientid` (`element`,`folder`,`client_id`),
   KEY `extension` (`type`,`element`,`folder`,`client_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10015 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10025 ;
 
 --
 -- Дамп данных таблицы `geicz_extensions`
@@ -563,7 +607,13 @@ INSERT INTO `geicz_extensions` (`extension_id`, `name`, `type`, `element`, `fold
 (10011, 'mod_ftt_quick_facts', 'module', 'mod_ftt_quick_facts', '', 0, 1, 0, 0, '{"name":"mod_ftt_quick_facts","type":"module","creationDate":"February 2013","author":"Family TreeTop","copyright":"Copyright (C) All rights reserved.","authorEmail":"admin@familytreetop.org","authorUrl":"www.familytreetop.com","version":"3.0.0","description":"MOD_FTT_QUICK_FACTS_XML_DESCRIPTION","group":""}', '{}', '', '', 0, '0000-00-00 00:00:00', 0, 0),
 (10012, 'mod_ftt_latest_updates', 'module', 'mod_ftt_latest_updates', '', 0, 1, 0, 0, '{"name":"mod_ftt_latest_updates","type":"module","creationDate":"February 2013","author":"Family TreeTop","copyright":"Copyright (C) All rights reserved.","authorEmail":"admin@familytreetop.org","authorUrl":"www.familytreetop.com","version":"3.0.0","description":"MOD_FTT_LATEST_UPDATES_XML_DESCRIPTION","group":""}', '{}', '', '', 0, '0000-00-00 00:00:00', 0, 0),
 (10013, 'mod_ftt_members', 'module', 'mod_ftt_members', '', 0, 1, 0, 0, '{"name":"mod_ftt_members","type":"module","creationDate":"February 2013","author":"Family TreeTop","copyright":"Copyright (C) All rights reserved.","authorEmail":"admin@familytreetop.org","authorUrl":"www.familytreetop.com","version":"3.0.0","description":"MOD_FTT_MEMBERS_XML_DESCRIPTION","group":""}', '{}', '', '', 0, '0000-00-00 00:00:00', 0, 0),
-(10014, 'mod_ftt_latest_events', 'module', 'mod_ftt_latest_events', '', 0, 1, 0, 0, '{"name":"mod_ftt_latest_events","type":"module","creationDate":"February 2013","author":"Family TreeTop","copyright":"Copyright (C) All rights reserved.","authorEmail":"admin@familytreetop.org","authorUrl":"www.familytreetop.com","version":"3.0.0","description":"MOD_FTT_LATEST_EVENTS_XML_DESCRIPTION","group":""}', '{}', '', '', 0, '0000-00-00 00:00:00', 0, 0);
+(10014, 'mod_ftt_latest_events', 'module', 'mod_ftt_latest_events', '', 0, 1, 0, 0, '{"name":"mod_ftt_latest_events","type":"module","creationDate":"February 2013","author":"Family TreeTop","copyright":"Copyright (C) All rights reserved.","authorEmail":"admin@familytreetop.org","authorUrl":"www.familytreetop.com","version":"3.0.0","description":"MOD_FTT_LATEST_EVENTS_XML_DESCRIPTION","group":""}', '{}', '', '', 0, '0000-00-00 00:00:00', 0, 0),
+(10015, 'Russian', 'language', 'ru-RU', '', 0, 1, 0, 0, '{"name":"Russian","type":"language","creationDate":"2013-03-01","author":"Russian Translation Team","copyright":"Copyright (C) 2005 - 2013 Open Source Matters. All rights reserved","authorEmail":"smart@joomlaportal.ru","authorUrl":"www.joomlaportal.ru","version":"3.0.3.1","description":"Russian language pack (site) for Joomla! 3.0","group":""}', '{}', '', '', 0, '0000-00-00 00:00:00', 0, 0),
+(10016, 'Russian', 'language', 'ru-RU', '', 1, 1, 0, 0, '{"name":"Russian","type":"language","creationDate":"2013-03-01","author":"Russian Translation Team","copyright":"Copyright (C) 2005 - 2013 Open Source Matters. All rights reserved","authorEmail":"smart@joomlaportal.ru","authorUrl":"www.joomlaportal.ru","version":"3.0.3.1","description":"Russian language pack (administrator) for Joomla! 3.0","group":""}', '{}', '', '', 0, '0000-00-00 00:00:00', 0, 0),
+(10021, 'Portuguspt-PT', 'language', 'pt-PT', '', 0, 1, 0, 0, '{"name":"Portugu\\u00eas (pt-PT)","type":"language","creationDate":"2013-04-06","author":"Comunidade JoomlaPT! Portugal","copyright":"Copyright (C) 2005 - 2013 joomlapt.com e Open Source Matters. Todos os direitos reservados.","authorEmail":"www.joomlapt.com","authorUrl":"www.joomlapt.com","version":"3.0.3.2","description":"Portugu\\u00eas pt-PT. Idioma da interface p\\u00fablica para Joomla 3.x","group":""}', '{}', '', '', 0, '0000-00-00 00:00:00', 0, 0),
+(10022, 'Portuguspt-PT', 'language', 'pt-PT', '', 1, 1, 0, 0, '{"name":"Portugu\\u00eas (pt-PT)","type":"language","creationDate":"2012-12-09","author":"Comunidade JoomlaPT! Portugal","copyright":"Copyright (C) 2005 - 2013 Joomlapt.com e Open Source Matters. Todos os direitos reservados.","authorEmail":"geral@joomlapt.com","authorUrl":"www.joomlapt.com","version":"3.0.3.2","description":"Portugu\\u00eas pt-PT. Idioma de interface de administra\\u00e7\\u00e3o para Joomla 2.5 . Com acordo ortogr\\u00e1fico","group":""}', '{}', '', '', 0, '0000-00-00 00:00:00', 0, 0),
+(10023, 'TinyMCE - Português de Portugal', 'file', 'file_tinymce_pt-PT', '', 0, 1, 0, 0, '{"name":"TinyMCE - Portugu\\u00eas de Portugal","type":"file","creationDate":"2013-04-06","author":"Comunidade Portuguesa JoomlaPT!","copyright":"(C) 2011 - 2012 Comunidade JoomlaPT Portugal","authorEmail":"geral@joomlapt.com","authorUrl":"www.joomlapt.com","version":"3.5.6.1","description":"\\n      <h2>Instalou com sucesso o idioma portugu\\u00eas de Portugal para TinyMCE 3.5.6 em Joomla<\\/h2>\\n      <p>Configura\\u00e7\\u00f5es a efetuar no editor TinyMCE:\\n      <ol>\\n      <li>Menu Extens\\u00f5es<\\/li>\\n      <li>Em Gestor de Plugins escolher o editor TinyMCE\\n      <br \\/>ou diretamente aqui: <a href=\\"index.php?option=com_plugins&view=plugins&filter_search=Editor - TinyMCE\\">Editor - TinyMCE<\\/a><\\/li>\\n      <li>No editor, alterar as Op\\u00e7\\u00f5es b\\u00e1sicas<\\/li>\\n      <li>Funcionalidades :: COMPLETO\\n      <br \\/>(Opcional -- se pretende utilizar todos os \\u00edcones da barra de ferramentas do TinyMCE)<\\/li>\\n      <li>C\\u00f3digo de idioma :: pt\\n      <br \\/>(em min\\u00fasculas, para ativar idioma padr\\u00e3o pt-PT)<\\/li>\\n      <li>Sele\\u00e7\\u00e3o autom\\u00e1tica de idioma :: SIM \\n      <br \\/>(para ativar idiomas por utilizador)<\\/li>\\n      <\\/ol>\\n      <\\/p>\\n      <p>Se pretende utilizar outros idiomas Joomla, para al\\u00e9m de Ingl\\u00eas e Portugu\\u00eas (de Portugal), instale tamb\\u00e9m esses idiomas para TinyMCE.<br \\/>\\n      Este \\u00e9 um requisito caso pretenda ativar a \\"Sele\\u00e7\\u00e3o autom\\u00e1tica de idioma\\" no editor.\\n      <\\/p>\\n      <p><\\/p>\\n      <p>Este pacote de idioma \\u00e9 uma produ\\u00e7\\u00e3o da <a href=\\"http:\\/\\/www.joomlapt.com\\" target=\\"_blank\\" title=\\"Comunidade JoomlaPT\\">Comunidade JoomlaPT Portugal<\\/a><\\/p>\\n      \\n   ","group":""}', '', '', '', 0, '0000-00-00 00:00:00', 0, 0),
+(10024, 'pt-PT', 'package', 'pkg_pt-PT', '', 0, 1, 1, 0, '{"name":"Portugu\\u00eas Europeu","type":"package","creationDate":"2013-04-06","author":"Comunidade JoomlaPT Portugal","copyright":"Copyright (C) 2005 - 2013 Open Source Matters. Todos os direitos reservados.","authorEmail":"geral@joomlapt.com","authorUrl":"http:\\/\\/www.joomlapt.com","version":"3.0.3.2","description":"\\n      <h2>Instalou com sucesso o idioma portugu\\u00eas de Portugal para Joomla 3.x <br \\/>Inclui idioma para TinyMCE<\\/h2>\\n      <p>A- Tornar este idioma como padr\\u00e3o no Joomla:<\\/p>\\n      <ol>\\n      <li>Menu Extens\\u00f5es<\\/li>\\n      <li>Em Gestor de Idiomas escolher os idiomas instalados na Administra\\u00e7\\u00e3o<br \\/>ou diretamente aqui: <a href=\\"index.php?option=com_languages&amp;view=installed&amp;client=1\\">Gestor de idiomas<\\/a><\\/li>\\n      <li>Separador Administra\\u00e7\\u00e3o: carregar na estrela para tornar este idioma o padr\\u00e3o no interface de administra\\u00e7\\u00e3o<\\/li>\\n      <li>Separador S\\u00edtio: carregar na estrela para tornar este idioma o padr\\u00e3o no interface de s\\u00edtio<\\/li>\\n      <\\/ol>\\n      <p> <\\/p>\\n      <p>B- Configura\\u00e7\\u00f5es a efetuar no editor TinyMCE:<\\/p>\\n      <ol>\\n      <li>Menu Extens\\u00f5es<\\/li>\\n      <li>Em Gestor de Plugins escolher o editor TinyMCE <br \\/>ou diretamente aqui: <a href=\\"index.php?option=com_plugins&amp;view=plugins&amp;filter_search=Editor - TinyMCE\\">Editor - TinyMCE<\\/a><\\/li>\\n      <li>No editor, alterar as Op\\u00e7\\u00f5es b\\u00e1sicas<\\/li>\\n      <li>Funcionalidades :: COMPLETO <br \\/>(Opcional -- se pretende utilizar todos os \\u00edcones da barra de ferramentas do TinyMCE)<\\/li>\\n      <li>C\\u00f3digo de idioma :: pt <br \\/>(em min\\u00fasculas, para ativar idioma padr\\u00e3o pt-PT)<\\/li>\\n      <li>Sele\\u00e7\\u00e3o autom\\u00e1tica de idioma :: SIM <br \\/>(para ativar idiomas por utilizador)<\\/li>\\n      <\\/ol>\\n      <p> <\\/p>\\n      <p>Nota: mesmo se n\\u00e3o for o editor padr\\u00e3o \\u00e9 necess\\u00e1rio instalar\\/atualizar o idioma do editor TinyMCE configurando-o para portugu\\u00eas<\\/p>\\n      <p>Se pretende utilizar outros idiomas Joomla, para al\\u00e9m de Ingl\\u00eas e Portugu\\u00eas (de Portugal), instale tamb\\u00e9m os idiomas respetivos para TinyMCE.<br \\/> Este \\u00e9 um requisito caso pretenda ativar a \\"Sele\\u00e7\\u00e3o autom\\u00e1tica de idioma\\" no editor.<\\/p>\\n      <p> <\\/p>\\n      <p>Este pacote de idioma \\u00e9 uma produ\\u00e7\\u00e3o da <a href=\\"http:\\/\\/www.joomlapt.com\\" target=\\"_blank\\" title=\\"Comunidade JoomlaPT\\">Comunidade JoomlaPT Portugal<\\/a><\\/p>\\n      <p>Colabore online e corrija erros da tradu\\u00e7\\u00e3o: <a href=\\"https:\\/\\/www.transifex.net\\/projects\\/p\\/JoomlaPortugal\\/\\" target=\\"_blank\\" title=\\"Tradu\\u00e7\\u00e3o no Transifex\\">Tradu\\u00e7\\u00e3o em linha - Sistema Transifex<\\/a><\\/p>\\n      \\n\\t","group":""}', '{}', '', '', 0, '0000-00-00 00:00:00', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -576,19 +626,21 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_accounts` (
   `current` int(11) DEFAULT NULL,
   `joomla_id` int(11) NOT NULL,
   `facebook_id` bigint(20) DEFAULT NULL,
+  `local` varchar(10) NOT NULL,
   `access_token` text,
   PRIMARY KEY (`id`),
   KEY `fk_geicz_familytreetop_accounts_1` (`joomla_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 --
 -- Дамп данных таблицы `geicz_familytreetop_accounts`
 --
 
-INSERT INTO `geicz_familytreetop_accounts` (`id`, `current`, `joomla_id`, `facebook_id`, `access_token`) VALUES
-(2, 2, 201, 100001614066938, 'BAAC9ZCMVH5AwBAJEROB5v8BFecQFrnzZBZByuE4tkqltLV20NL0az0GkZBxK62Qw1kHcl1HbZBVnpEDiyB9VtT0N8VUGRNkQQW0jZBW6LDhvSQDwtrtRkn3OeVvj64l0vmt0TJp2b1bA2BvS864Pkkwy04EyizOjkLYr0CrW9duViYqsX6qoTjLGudGPQZCJrkZD'),
-(3, 5, 202, 100002846057243, 'BAAC9ZCMVH5AwBAAiMlVhV560JRtHbjd9x2OVacIo3WT7togrdseqGZAjbWq3S6qCZBRbmMQuQttyR2txnIEZCCAButzvZCpN6PNEkEbGOOLz8YV8XBa3qyzoWTW2eCqcXF8KDyvL7M2PXQZCXA2m2S7QKVw0tN821nZAsJEznFZAhMmtrhOwJ188GTDpLLeLOmsZD'),
-(4, NULL, 203, 100003467689503, 'AAAC9ZCMVH5AwBAGp3NnRqcznhvYwL759GZAnNmSssm8G3KngI4ycHqqtW89rJwxMUgjZBOO9IKHtT3BBZAf3AfOhRIAZCThZBL2v1zvvpsmAZDZD');
+INSERT INTO `geicz_familytreetop_accounts` (`id`, `current`, `joomla_id`, `facebook_id`, `local`, `access_token`) VALUES
+(2, 2, 201, 100001614066938, 'ru-RU', 'CAACY3zgelSMBAExgujx7rLg8uI5c3zRCpUOX1CYfxTOtQsoFIwGeoR6mn1CtoK9XxK6ka1P0VfYw5gOhQZCJKm3ZABdh8ozzui8ZChPiUNwXUz1ImsBh14Gwg6LhAYRhYA5cTILnXdzIxun39pKTwuxUWjlOxcZD'),
+(3, 5, 202, 100002846057243, 'en-GB', 'BAACY3zgelSMBALXHEwaO5HWZCvotGSGRjasAZBrJGE2ZAoEey5eQ385lCyOuLNkUhXDEyJWaZA3VmLFpCtTmast98FO63YoYCYnvPCvrMA6aAX3v0G4AAe50Vshe12c42ZBN2xq9o1ifcZCvtliTN7XlZBGkTOHrfE3HVZBD50GflgngR3UgWgduWUon3VrmwRv2qlRMZA9HMIOvewjItyXt8'),
+(4, NULL, 203, 100003467689503, 'en-GB', 'AAAC9ZCMVH5AwBAGp3NnRqcznhvYwL759GZAnNmSssm8G3KngI4ycHqqtW89rJwxMUgjZBOO9IKHtT3BBZAf3AfOhRIAZCThZBL2v1zvvpsmAZDZD'),
+(5, 6, 204, 100000657385590, 'en-GB', 'BAACY3zgelSMBAJuJBsRLt5GKEmxZALLPfHjJaGZCRiUJt3cEjZCFszADZAABmR1OLzAXk7jGHQQJX9FZBMDNLXfJc6CdjGNGZCUmjb5exdDPtvpSQkk0LZABQZBgWf5XiiLhjMO0U3KMlQJauaeD4YathJrr7eZBFJxFepCaqcpsSkcg5t5uFjKUT18vp6lWv74fb0mXZC2vFrx2P3otdvZBGQY');
 
 -- --------------------------------------------------------
 
@@ -603,7 +655,7 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_childrens` (
   PRIMARY KEY (`id`),
   KEY `fk_geicz_familytreetop_childrens_1` (`family_id`),
   KEY `fk_geicz_familytreetop_childrens_2` (`gedcom_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=43 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=44 ;
 
 --
 -- Дамп данных таблицы `geicz_familytreetop_childrens`
@@ -649,7 +701,8 @@ INSERT INTO `geicz_familytreetop_childrens` (`id`, `family_id`, `gedcom_id`) VAL
 (39, 89, 99),
 (40, 89, 100),
 (41, 89, 101),
-(42, 89, 102);
+(42, 89, 102),
+(43, 106, 103);
 
 -- --------------------------------------------------------
 
@@ -680,11 +733,11 @@ INSERT INTO `geicz_familytreetop_dates` (`id`, `event_id`, `type`, `start_day`, 
 (10, 11, 'EVO', 6, 3, 1965, NULL, NULL, NULL, '2013-03-22 14:30:58'),
 (11, 12, 'EVO', 20, 2, 1964, NULL, NULL, NULL, '2013-04-12 13:13:52'),
 (12, 13, 'EVO', 18, 10, 1987, NULL, NULL, NULL, '2013-03-22 14:36:24'),
-(15, 16, 'EVO', 30, 3, 1986, NULL, NULL, NULL, '2013-03-14 13:56:07'),
+(15, 16, 'EVO', 30, 3, 1986, NULL, NULL, NULL, '2013-04-25 15:34:33'),
 (16, 17, 'EVO', 8, 3, NULL, NULL, NULL, NULL, '2013-03-13 09:03:52'),
 (17, 18, 'EVO', NULL, 3, 1946, NULL, NULL, NULL, '2013-03-13 08:54:02'),
 (20, 21, 'EVO', 6, 3, 1987, NULL, NULL, NULL, '2013-03-14 11:52:32'),
-(21, 22, 'EVO', 1, 3, 1986, NULL, NULL, NULL, '2013-03-14 13:56:07'),
+(21, 22, 'EVO', 1, 3, 1986, NULL, NULL, NULL, '2013-04-25 15:34:33'),
 (22, 23, NULL, 1, 1, 1905, NULL, NULL, NULL, '2013-03-22 12:39:36'),
 (23, 24, NULL, 7, 7, 1850, NULL, NULL, NULL, '2013-03-22 12:41:03'),
 (24, 25, NULL, 10, 3, 1985, NULL, NULL, NULL, '2013-03-22 12:48:08'),
@@ -753,7 +806,7 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_families` (
   KEY `fk_geicz_familytreetop_families_1` (`husb`),
   KEY `fk_geicz_familytreetop_families_2` (`wife`),
   KEY `fk_geicz_familytreetop_families_3_idx` (`family_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=26 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=28 ;
 
 --
 -- Дамп данных таблицы `geicz_familytreetop_families`
@@ -783,7 +836,9 @@ INSERT INTO `geicz_familytreetop_families` (`id`, `family_id`, `husb`, `wife`, `
 (22, 79, 77, 78, 'marriage', '2013-03-22 13:01:49'),
 (23, 82, 80, 81, 'marriage', '2013-03-22 13:02:24'),
 (24, 85, 84, 33, 'marriage', '2013-04-11 10:11:42'),
-(25, 89, 19, 88, 'marriage', '2013-04-11 10:16:49');
+(25, 89, 19, 88, 'marriage', '2013-04-11 10:16:49'),
+(26, 106, 104, 105, 'marriage', '2013-04-18 13:52:50'),
+(27, 108, 103, 107, 'marriage', '2013-04-18 14:15:34');
 
 -- --------------------------------------------------------
 
@@ -823,7 +878,7 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_individuals` (
   `change_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `fk_geicz_familytreetop_individuals_1` (`gedcom_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=78 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=82 ;
 
 --
 -- Дамп данных таблицы `geicz_familytreetop_individuals`
@@ -837,7 +892,7 @@ INSERT INTO `geicz_familytreetop_individuals` (`id`, `gedcom_id`, `creator_id`, 
 (10, 12, 5, 0, NULL, '2013-03-06 22:00:00', '2013-03-11 13:58:54'),
 (11, 14, 6, 0, NULL, '2013-03-05 22:00:00', '2013-03-13 09:03:52'),
 (12, 15, 6, 1, NULL, '2013-03-10 22:00:00', '2013-03-13 08:54:02'),
-(15, 19, 4, 1, NULL, '2013-03-04 22:00:00', '2013-03-14 13:56:07'),
+(15, 19, 4, 1, NULL, '2013-03-04 22:00:00', '2013-04-25 15:34:33'),
 (18, 22, 14, 1, NULL, '2013-02-28 22:00:00', '2013-03-12 11:28:02'),
 (20, 24, 14, 1, NULL, '2013-03-03 22:00:00', '2013-03-14 09:27:06'),
 (21, 25, 14, 0, NULL, '2013-02-28 22:00:00', '2013-03-14 09:27:06'),
@@ -896,7 +951,11 @@ INSERT INTO `geicz_familytreetop_individuals` (`id`, `gedcom_id`, `creator_id`, 
 (74, 99, 19, 1, NULL, '2013-04-11 12:12:13', '2013-04-11 12:12:13'),
 (75, 100, 19, 1, NULL, '2013-04-11 12:14:16', '2013-04-11 12:14:16'),
 (76, 101, 19, 1, NULL, '2013-04-11 12:15:20', '2013-04-11 12:15:20'),
-(77, 102, 19, 1, NULL, '2013-04-11 12:18:57', '2013-04-11 12:18:57');
+(77, 102, 19, 1, NULL, '2013-04-11 12:18:57', '2013-04-11 12:18:57'),
+(78, 103, NULL, 1, NULL, '2013-04-18 13:52:50', '2013-04-18 13:52:50'),
+(79, 104, 103, 1, NULL, '2013-04-18 13:52:50', '2013-04-18 13:52:50'),
+(80, 105, 103, 0, NULL, '2013-04-18 13:52:50', '2013-04-18 13:52:50'),
+(81, 107, 103, 0, NULL, '2013-04-18 14:15:34', '2013-04-18 14:15:34');
 
 -- --------------------------------------------------------
 
@@ -913,6 +972,11 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_invitations` (
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Дамп данных таблицы `geicz_familytreetop_invitations`
+--
+
 
 -- --------------------------------------------------------
 
@@ -937,8 +1001,6 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_medias` (
 -- Дамп данных таблицы `geicz_familytreetop_medias`
 --
 
-INSERT INTO `geicz_familytreetop_medias` (`id`, `name`, `original_name`, `size`, `type`, `url`, `thumbnail_url`, `delete_url`, `change_time`) VALUES
-(1, 'a8fb7645c3a7d567ae9b1dc58126da6b.png', 'Yahoo-Messenger-icon.png', '50946', 'image/png', 'http://localhost/familytreetop/joomla30/files/2/a8fb7645c3a7d567ae9b1dc58126da6b.png', 'http://localhost/familytreetop/joomla30/files/2/thumbnail/a8fb7645c3a7d567ae9b1dc58126da6b.png', '/familytreetop/joomla30/component/familytreetop/?task=upload.file&file=a8fb7645c3a7d567ae9b1dc58126da6b.png', '2013-03-21 11:55:11');
 
 -- --------------------------------------------------------
 
@@ -960,8 +1022,6 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_media_links` (
 -- Дамп данных таблицы `geicz_familytreetop_media_links`
 --
 
-INSERT INTO `geicz_familytreetop_media_links` (`id`, `media_id`, `gedcom_id`, `role`) VALUES
-(1, 1, 4, 'IMAG');
 
 -- --------------------------------------------------------
 
@@ -979,7 +1039,7 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_names` (
   `change_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `fk_geicz_famiytreetop_names_1` (`gedcom_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=84 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=88 ;
 
 --
 -- Дамп данных таблицы `geicz_familytreetop_names`
@@ -993,7 +1053,7 @@ INSERT INTO `geicz_familytreetop_names` (`id`, `gedcom_id`, `first_name`, `middl
 (16, 12, 'Antonina', '', 'Potashko', '', '2013-03-11 13:58:54'),
 (17, 14, 'Galina', '', 'Gernovich', '', '2013-03-13 09:03:52'),
 (18, 15, 'Ivan', '', 'Gernovich', '', '2013-03-13 08:54:02'),
-(21, 19, 'Anton', '', '', '', '2013-03-14 13:56:07'),
+(21, 19, 'Anton', '', '', '', '2013-04-25 15:34:33'),
 (24, 22, 'Andrei', '', '', '', '2013-03-12 11:28:02'),
 (26, 24, 'great grandparent', '', '', '', '2013-03-14 09:27:06'),
 (27, 25, 'unknown', NULL, NULL, NULL, '2013-03-14 09:27:06'),
@@ -1052,7 +1112,11 @@ INSERT INTO `geicz_familytreetop_names` (`id`, `gedcom_id`, `first_name`, `middl
 (80, 99, 'child9', '', '', '', '2013-04-11 12:12:13'),
 (81, 100, 'child9', '', '', '', '2013-04-11 12:14:16'),
 (82, 101, 'child10', '', '', '', '2013-04-11 12:15:20'),
-(83, 102, 'child11', '', '', '', '2013-04-11 12:18:57');
+(83, 102, 'child11', '', '', '', '2013-04-11 12:18:57'),
+(84, 103, 'Fernando', NULL, 'Oliveira', NULL, '2013-04-18 13:52:50'),
+(85, 104, 'Daddio', NULL, 'Wadio', NULL, '2013-04-18 13:52:50'),
+(86, 105, 'Mamadina', NULL, 'Promadina', NULL, '2013-04-18 13:52:50'),
+(87, 107, 'Luisa', '', 'Quarta', '', '2013-04-18 14:15:34');
 
 -- --------------------------------------------------------
 
@@ -1069,6 +1133,11 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_notes` (
   KEY `fk_geicz_familytreetop_notes_1` (`gedcom_id`),
   KEY `fk_geicz_familytreetop_notes_2` (`family_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+--
+-- Дамп данных таблицы `geicz_familytreetop_notes`
+--
+
 
 -- --------------------------------------------------------
 
@@ -1096,8 +1165,8 @@ INSERT INTO `geicz_familytreetop_places` (`id`, `event_id`, `city`, `state`, `co
 (3, 12, 'Minsk', NULL, 'Belarus', '2013-04-12 13:13:52'),
 (4, 13, 'Minsk', NULL, 'Belarus', '2013-03-22 14:36:24'),
 (7, 21, 'Minsk', '', 'Belarus', '2013-03-14 11:52:32'),
-(8, 16, NULL, NULL, NULL, '2013-03-14 13:56:07'),
-(9, 22, NULL, NULL, NULL, '2013-03-14 13:56:07'),
+(8, 16, NULL, NULL, NULL, '2013-04-25 15:34:33'),
+(9, 22, NULL, NULL, NULL, '2013-04-25 15:34:33'),
 (10, 23, NULL, NULL, NULL, '2013-03-22 12:39:36'),
 (11, 24, 'Mensk', NULL, 'Belarus', '2013-03-22 12:41:03'),
 (12, 25, 'Mensk', NULL, 'Belarus', '2013-03-22 12:48:08'),
@@ -1173,7 +1242,7 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_relation_links` (
   KEY `fk_geicz_familytreetop_relation_link_1` (`relation_id`),
   KEY `fk_geicz_familytreetop_relation_link_2` (`gedcom_id`),
   KEY `fk_geicz_familytreetop_relation_link_3` (`target_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=81 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=84 ;
 
 --
 -- Дамп данных таблицы `geicz_familytreetop_relation_links`
@@ -1259,7 +1328,10 @@ INSERT INTO `geicz_familytreetop_relation_links` (`id`, `relation_id`, `gedcom_i
 (77, 106, 5, 99, '', NULL, '2013-04-12 14:43:12'),
 (78, 106, 5, 100, '', NULL, '2013-04-12 14:43:12'),
 (79, 106, 5, 101, '', NULL, '2013-04-12 14:43:12'),
-(80, 106, 5, 102, '', NULL, '2013-04-12 14:43:12');
+(80, 106, 5, 102, '', NULL, '2013-04-12 14:43:12'),
+(81, 1, 103, 103, '', NULL, '2013-04-18 13:52:51'),
+(82, 4, 103, 104, '', NULL, '2013-04-18 13:52:51'),
+(83, 3, 103, 105, '', NULL, '2013-04-18 13:52:51');
 
 -- --------------------------------------------------------
 
@@ -1280,8 +1352,8 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_settings` (
 --
 
 INSERT INTO `geicz_familytreetop_settings` (`id`, `name`, `value`, `params`) VALUES
-(1, 'facebook_app_id', '208893339231244', '{}'),
-(2, 'facebook_app_secret', '637f8f37469796999d208aca420d2235', '{}'),
+(1, 'facebook_app_id', '168084486657315', '{}'),
+(2, 'facebook_app_secret', 'ecd1c1ff64952b957ce0253dc5c0ead7', '{}'),
 (3, 'facebook_permission', 'email,user_about_me,user_birthday,user_relationships,user_photos,friends_photos,read_stream,read_insights', NULL);
 
 -- --------------------------------------------------------
@@ -1293,7 +1365,7 @@ INSERT INTO `geicz_familytreetop_settings` (`id`, `name`, `value`, `params`) VAL
 CREATE TABLE IF NOT EXISTS `geicz_familytreetop_trees` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 --
 -- Дамп данных таблицы `geicz_familytreetop_trees`
@@ -1301,7 +1373,8 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_trees` (
 
 INSERT INTO `geicz_familytreetop_trees` (`id`) VALUES
 (2),
-(3);
+(3),
+(4);
 
 -- --------------------------------------------------------
 
@@ -1315,7 +1388,7 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_tree_links` (
   `type` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `fk_geicz_familytreetop_tree_links_1` (`tree_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=103 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=109 ;
 
 --
 -- Дамп данных таблицы `geicz_familytreetop_tree_links`
@@ -1417,7 +1490,13 @@ INSERT INTO `geicz_familytreetop_tree_links` (`id`, `tree_id`, `type`) VALUES
 (99, 2, 0),
 (100, 2, 0),
 (101, 2, 0),
-(102, 2, 0);
+(102, 2, 0),
+(103, 4, 0),
+(104, 4, 0),
+(105, 4, 0),
+(106, 4, 1),
+(107, 4, 0),
+(108, 4, 1);
 
 -- --------------------------------------------------------
 
@@ -1432,7 +1511,7 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_users` (
   `tree_id` int(11) NOT NULL,
   `role` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
 
 --
 -- Дамп данных таблицы `geicz_familytreetop_users`
@@ -1440,7 +1519,8 @@ CREATE TABLE IF NOT EXISTS `geicz_familytreetop_users` (
 
 INSERT INTO `geicz_familytreetop_users` (`id`, `account_id`, `gedcom_id`, `tree_id`, `role`) VALUES
 (2, 2, 4, 2, 'admin'),
-(5, 3, 5, 2, 'user');
+(5, 3, 5, 2, 'user'),
+(6, 5, 103, 4, 'admin');
 
 -- --------------------------------------------------------
 
@@ -1465,6 +1545,11 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_filters` (
   `params` mediumtext,
   PRIMARY KEY (`filter_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Дамп данных таблицы `geicz_finder_filters`
+--
+
 
 -- --------------------------------------------------------
 
@@ -1501,6 +1586,11 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_links` (
   KEY `idx_published_sale` (`published`,`state`,`access`,`publish_start_date`,`publish_end_date`,`sale_price`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
+--
+-- Дамп данных таблицы `geicz_finder_links`
+--
+
+
 -- --------------------------------------------------------
 
 --
@@ -1515,6 +1605,11 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_links_terms0` (
   KEY `idx_term_weight` (`term_id`,`weight`),
   KEY `idx_link_term_weight` (`link_id`,`term_id`,`weight`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `geicz_finder_links_terms0`
+--
+
 
 -- --------------------------------------------------------
 
@@ -1531,6 +1626,11 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_links_terms1` (
   KEY `idx_link_term_weight` (`link_id`,`term_id`,`weight`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Дамп данных таблицы `geicz_finder_links_terms1`
+--
+
+
 -- --------------------------------------------------------
 
 --
@@ -1545,6 +1645,11 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_links_terms2` (
   KEY `idx_term_weight` (`term_id`,`weight`),
   KEY `idx_link_term_weight` (`link_id`,`term_id`,`weight`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `geicz_finder_links_terms2`
+--
+
 
 -- --------------------------------------------------------
 
@@ -1561,6 +1666,11 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_links_terms3` (
   KEY `idx_link_term_weight` (`link_id`,`term_id`,`weight`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Дамп данных таблицы `geicz_finder_links_terms3`
+--
+
+
 -- --------------------------------------------------------
 
 --
@@ -1575,6 +1685,11 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_links_terms4` (
   KEY `idx_term_weight` (`term_id`,`weight`),
   KEY `idx_link_term_weight` (`link_id`,`term_id`,`weight`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `geicz_finder_links_terms4`
+--
+
 
 -- --------------------------------------------------------
 
@@ -1591,6 +1706,11 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_links_terms5` (
   KEY `idx_link_term_weight` (`link_id`,`term_id`,`weight`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Дамп данных таблицы `geicz_finder_links_terms5`
+--
+
+
 -- --------------------------------------------------------
 
 --
@@ -1605,6 +1725,11 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_links_terms6` (
   KEY `idx_term_weight` (`term_id`,`weight`),
   KEY `idx_link_term_weight` (`link_id`,`term_id`,`weight`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `geicz_finder_links_terms6`
+--
+
 
 -- --------------------------------------------------------
 
@@ -1621,6 +1746,11 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_links_terms7` (
   KEY `idx_link_term_weight` (`link_id`,`term_id`,`weight`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Дамп данных таблицы `geicz_finder_links_terms7`
+--
+
+
 -- --------------------------------------------------------
 
 --
@@ -1635,6 +1765,11 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_links_terms8` (
   KEY `idx_term_weight` (`term_id`,`weight`),
   KEY `idx_link_term_weight` (`link_id`,`term_id`,`weight`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `geicz_finder_links_terms8`
+--
+
 
 -- --------------------------------------------------------
 
@@ -1651,6 +1786,11 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_links_terms9` (
   KEY `idx_link_term_weight` (`link_id`,`term_id`,`weight`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Дамп данных таблицы `geicz_finder_links_terms9`
+--
+
+
 -- --------------------------------------------------------
 
 --
@@ -1665,6 +1805,11 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_links_termsa` (
   KEY `idx_term_weight` (`term_id`,`weight`),
   KEY `idx_link_term_weight` (`link_id`,`term_id`,`weight`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `geicz_finder_links_termsa`
+--
+
 
 -- --------------------------------------------------------
 
@@ -1681,6 +1826,11 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_links_termsb` (
   KEY `idx_link_term_weight` (`link_id`,`term_id`,`weight`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Дамп данных таблицы `geicz_finder_links_termsb`
+--
+
+
 -- --------------------------------------------------------
 
 --
@@ -1695,6 +1845,11 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_links_termsc` (
   KEY `idx_term_weight` (`term_id`,`weight`),
   KEY `idx_link_term_weight` (`link_id`,`term_id`,`weight`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `geicz_finder_links_termsc`
+--
+
 
 -- --------------------------------------------------------
 
@@ -1711,6 +1866,11 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_links_termsd` (
   KEY `idx_link_term_weight` (`link_id`,`term_id`,`weight`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Дамп данных таблицы `geicz_finder_links_termsd`
+--
+
+
 -- --------------------------------------------------------
 
 --
@@ -1726,6 +1886,11 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_links_termse` (
   KEY `idx_link_term_weight` (`link_id`,`term_id`,`weight`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Дамп данных таблицы `geicz_finder_links_termse`
+--
+
+
 -- --------------------------------------------------------
 
 --
@@ -1740,6 +1905,11 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_links_termsf` (
   KEY `idx_term_weight` (`term_id`,`weight`),
   KEY `idx_link_term_weight` (`link_id`,`term_id`,`weight`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `geicz_finder_links_termsf`
+--
+
 
 -- --------------------------------------------------------
 
@@ -1783,6 +1953,11 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_taxonomy_map` (
   KEY `node_id` (`node_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Дамп данных таблицы `geicz_finder_taxonomy_map`
+--
+
+
 -- --------------------------------------------------------
 
 --
@@ -1805,6 +1980,11 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_terms` (
   KEY `idx_stem_phrase` (`stem`,`phrase`),
   KEY `idx_soundex_phrase` (`soundex`,`phrase`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Дамп данных таблицы `geicz_finder_terms`
+--
+
 
 -- --------------------------------------------------------
 
@@ -1958,6 +2138,11 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_tokens` (
   KEY `idx_context` (`context`)
 ) ENGINE=MEMORY DEFAULT CHARSET=utf8;
 
+--
+-- Дамп данных таблицы `geicz_finder_tokens`
+--
+
+
 -- --------------------------------------------------------
 
 --
@@ -1980,6 +2165,11 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_tokens_aggregate` (
   KEY `keyword_id` (`term_id`)
 ) ENGINE=MEMORY DEFAULT CHARSET=utf8;
 
+--
+-- Дамп данных таблицы `geicz_finder_tokens_aggregate`
+--
+
+
 -- --------------------------------------------------------
 
 --
@@ -1993,6 +2183,11 @@ CREATE TABLE IF NOT EXISTS `geicz_finder_types` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `title` (`title`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Дамп данных таблицы `geicz_finder_types`
+--
+
 
 -- --------------------------------------------------------
 
@@ -2020,14 +2215,16 @@ CREATE TABLE IF NOT EXISTS `geicz_languages` (
   UNIQUE KEY `idx_langcode` (`lang_code`),
   KEY `idx_access` (`access`),
   KEY `idx_ordering` (`ordering`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
 -- Дамп данных таблицы `geicz_languages`
 --
 
 INSERT INTO `geicz_languages` (`lang_id`, `lang_code`, `title`, `title_native`, `sef`, `image`, `description`, `metakey`, `metadesc`, `sitename`, `published`, `access`, `ordering`) VALUES
-(1, 'en-GB', 'English (UK)', 'English (UK)', 'en', 'en', '', '', '', '', 1, 0, 1);
+(1, 'en-GB', 'English (UK)', 'English (UK)', 'en', 'en', '', '', '', '', 1, 0, 1),
+(2, 'ru-RU', 'Russian (RU)', 'Russian (RU)', 'ru', 'ru', '', '', '', '', 1, 0, 2),
+(3, 'pt-PT', 'Portuguspt (PT)', 'Portuguspt (PT)', 'pt', 'pt', '', '', '', '', 1, 0, 3);
 
 -- --------------------------------------------------------
 
@@ -2141,6 +2338,11 @@ CREATE TABLE IF NOT EXISTS `geicz_messages` (
   KEY `useridto_state` (`user_id_to`,`state`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
+--
+-- Дамп данных таблицы `geicz_messages`
+--
+
+
 -- --------------------------------------------------------
 
 --
@@ -2153,6 +2355,11 @@ CREATE TABLE IF NOT EXISTS `geicz_messages_cfg` (
   `cfg_value` varchar(255) NOT NULL DEFAULT '',
   UNIQUE KEY `idx_user_var_name` (`user_id`,`cfg_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `geicz_messages_cfg`
+--
+
 
 -- --------------------------------------------------------
 
@@ -2313,6 +2520,11 @@ CREATE TABLE IF NOT EXISTS `geicz_newsfeeds` (
   KEY `idx_xreference` (`xreference`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
+--
+-- Дамп данных таблицы `geicz_newsfeeds`
+--
+
+
 -- --------------------------------------------------------
 
 --
@@ -2326,6 +2538,11 @@ CREATE TABLE IF NOT EXISTS `geicz_overrider` (
   `file` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Дамп данных таблицы `geicz_overrider`
+--
+
 
 -- --------------------------------------------------------
 
@@ -2347,6 +2564,11 @@ CREATE TABLE IF NOT EXISTS `geicz_redirect_links` (
   UNIQUE KEY `idx_link_old` (`old_url`),
   KEY `idx_link_modifed` (`modified_date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Дамп данных таблицы `geicz_redirect_links`
+--
+
 
 -- --------------------------------------------------------
 
@@ -2391,7 +2613,8 @@ CREATE TABLE IF NOT EXISTS `geicz_session` (
 --
 
 INSERT INTO `geicz_session` (`session_id`, `client_id`, `guest`, `time`, `data`, `userid`, `username`) VALUES
-('3pvaibdc1kq1j536dbn7763bu6', 0, 0, '1366292418', '__default|a:7:{s:15:"session.counter";i:7;s:19:"session.timer.start";i:1366290158;s:18:"session.timer.last";i:1366290593;s:17:"session.timer.now";i:1366292410;s:22:"session.client.browser";s:108:"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.64 Safari/537.31";s:8:"registry";O:9:"JRegistry":1:{s:7:"\\0\\0\\0data";O:8:"stdClass":0:{}}s:4:"user";O:5:"JUser":24:{s:9:"\\0\\0\\0isRoot";b:0;s:2:"id";s:3:"201";s:4:"name";s:18:"alexander.potashko";s:8:"username";s:18:"fb_100001614066938";s:5:"email";s:18:"fantomhp@gmail.com";s:8:"password";s:65:"cd61f82757adf2336ed04364009355d1:csvOAzaXAtekn7jJAnffpnJovdAxcOHW";s:14:"password_clear";s:0:"";s:5:"block";s:1:"0";s:9:"sendEmail";s:1:"0";s:12:"registerDate";s:19:"2013-03-04 11:05:10";s:13:"lastvisitDate";s:19:"2013-04-18 10:54:17";s:10:"activation";s:0:"";s:6:"params";s:2:"{}";s:6:"groups";a:1:{i:2;s:1:"2";}s:5:"guest";i:0;s:13:"lastResetTime";s:19:"0000-00-00 00:00:00";s:10:"resetCount";s:1:"0";s:10:"\\0\\0\\0_params";O:9:"JRegistry":1:{s:7:"\\0\\0\\0data";O:8:"stdClass":0:{}}s:14:"\\0\\0\\0_authGroups";a:2:{i:0;i:1;i:1;i:2;}s:14:"\\0\\0\\0_authLevels";a:3:{i:0;i:1;i:1;i:1;i:2;i:2;}s:15:"\\0\\0\\0_authActions";N;s:12:"\\0\\0\\0_errorMsg";N;s:10:"\\0\\0\\0_errors";a:0:{}s:3:"aid";i:0;}}fb_208893339231244_code|s:216:"AQA9ELMn4MCqD3ynCGypRJWybJ6OJ3PBehcSBZVOEir6qP7z16fCUMXlC9A4N18G2y04eo9ObRavMLFO8gHy3aJsZsYZuiLVU6VGwzmuW3pq_u6rrDIbfaVscwlrJ6A6e-VkjtP0YLse4AnUWMEyhf3QEsYjEsepmPBcyL60vpFSLJ1FJqNJEp9z81UXi6D3gTkEVVyTEFKtJd3guCpTq7RJ";fb_208893339231244_access_token|s:113:"AAAC9ZCMVH5AwBAErW9U0jZAyFaZC9ts3069fOEB3g0kZAylHUWb6ZArWknmma0dI2pbJZAXwO7mdyogVWUzetJVXaVbDGXKoYRWxILJIrKowZDZD";fb_208893339231244_user_id|s:15:"100001614066938";', 201, 'fb_100001614066938');
+('2cahughjtug9fm9vvv5i2v6ju3', 0, 0, '1367320984', '__default|a:7:{s:15:"session.counter";i:8;s:19:"session.timer.start";i:1367320967;s:18:"session.timer.last";i:1367320980;s:17:"session.timer.now";i:1367320981;s:22:"session.client.browser";s:135:"Mozilla/5.0 (iPhone; CPU iPhone OS 6_1_3 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10B329 Safari/8536.25";s:8:"registry";O:9:"JRegistry":1:{s:7:"\\0\\0\\0data";O:8:"stdClass":1:{s:5:"users";O:8:"stdClass":1:{s:5:"login";O:8:"stdClass":1:{s:4:"form";O:8:"stdClass":1:{s:6:"return";s:74:"/joomla30/index.php/component/familytreetop/?task=user.activate&redirect=1";}}}}}s:4:"user";O:5:"JUser":24:{s:9:"\\0\\0\\0isRoot";b:0;s:2:"id";s:3:"204";s:4:"name";s:10:"ferndoggie";s:8:"username";s:18:"fb_100000657385590";s:5:"email";s:24:"fernandooliveira@knet.ca";s:8:"password";s:65:"4ef1f9c3ff858ae71b201eb9252e55f5:3OWBTHWW4Av64q8IyZDCJy4gsIVyIWqw";s:14:"password_clear";s:0:"";s:5:"block";s:1:"0";s:9:"sendEmail";s:1:"0";s:12:"registerDate";s:19:"2013-04-18 12:59:03";s:13:"lastvisitDate";s:19:"2013-04-29 17:28:37";s:10:"activation";s:0:"";s:6:"params";s:2:"{}";s:6:"groups";a:1:{i:2;s:1:"2";}s:5:"guest";i:0;s:13:"lastResetTime";s:19:"0000-00-00 00:00:00";s:10:"resetCount";s:1:"0";s:10:"\\0\\0\\0_params";O:9:"JRegistry":1:{s:7:"\\0\\0\\0data";O:8:"stdClass":0:{}}s:14:"\\0\\0\\0_authGroups";a:2:{i:0;i:1;i:1;i:2;}s:14:"\\0\\0\\0_authLevels";a:3:{i:0;i:1;i:1;i:1;i:2;i:2;}s:15:"\\0\\0\\0_authActions";N;s:12:"\\0\\0\\0_errorMsg";N;s:10:"\\0\\0\\0_errors";a:0:{}s:3:"aid";i:0;}}fb_168084486657315_code|s:216:"AQDWNNEiVfRC6sSvoNInEoK5lrF_u_DVMRNENk1ZcX5jcnXMzC5eHB7mvWw-F0pk_S31FdSHp-IGa7q26T7PFusTrw_IqfXwz8NqFboU9wzQzdxhe166ixKkn2rmR9AH_cIweMyc4s-ePEf6ydUQLM5ekDnnBNmv2LJTIrHt1SrrDCXrnq6pRaMKlGZ4iIBr8so_41cyU8xOyZ-BAM6IOgxg";fb_168084486657315_access_token|s:220:"BAACY3zgelSMBAJuJBsRLt5GKEmxZALLPfHjJaGZCRiUJt3cEjZCFszADZAABmR1OLzAXk7jGHQQJX9FZBMDNLXfJc6CdjGNGZCUmjb5exdDPtvpSQkk0LZABQZBgWf5XiiLhjMO0U3KMlQJauaeD4YathJrr7eZBFJxFepCaqcpsSkcg5t5uFjKUT18vp6lWv74fb0mXZC2vFrx2P3otdvZBGQY";fb_168084486657315_user_id|s:15:"100000657385590";', 204, 'fb_100000657385590'),
+('kme1gvfki7m2ilj43afb0mop63', 0, 0, '1367321420', '__default|a:7:{s:15:"session.counter";i:9;s:19:"session.timer.start";i:1367321388;s:18:"session.timer.last";i:1367321418;s:17:"session.timer.now";i:1367321418;s:22:"session.client.browser";s:135:"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.22 (KHTML, like Gecko) Ubuntu Chromium/25.0.1364.160 Chrome/25.0.1364.160 Safari/537.22";s:8:"registry";O:9:"JRegistry":1:{s:7:"\\0\\0\\0data";O:8:"stdClass":1:{s:5:"users";O:8:"stdClass":1:{s:5:"login";O:8:"stdClass":1:{s:4:"form";O:8:"stdClass":1:{s:6:"return";s:74:"/joomla30/index.php/component/familytreetop/?task=user.activate&redirect=1";}}}}}s:4:"user";O:5:"JUser":24:{s:9:"\\0\\0\\0isRoot";b:0;s:2:"id";s:3:"201";s:4:"name";s:18:"alexander.potashko";s:8:"username";s:18:"fb_100001614066938";s:5:"email";s:18:"fantomhp@gmail.com";s:8:"password";s:65:"4e955c440fd7ec0fc88a39538a23cbd4:csvOAzaXAtekn7jJAnffpnJovdAxcOHW";s:14:"password_clear";s:0:"";s:5:"block";s:1:"0";s:9:"sendEmail";s:1:"0";s:12:"registerDate";s:19:"2013-03-04 11:05:10";s:13:"lastvisitDate";s:19:"2013-04-30 11:29:49";s:10:"activation";s:0:"";s:6:"params";s:2:"{}";s:6:"groups";a:1:{i:2;s:1:"2";}s:5:"guest";i:0;s:13:"lastResetTime";s:19:"0000-00-00 00:00:00";s:10:"resetCount";s:1:"0";s:10:"\\0\\0\\0_params";O:9:"JRegistry":1:{s:7:"\\0\\0\\0data";O:8:"stdClass":0:{}}s:14:"\\0\\0\\0_authGroups";a:2:{i:0;i:1;i:1;i:2;}s:14:"\\0\\0\\0_authLevels";a:3:{i:0;i:1;i:1;i:1;i:2;i:2;}s:15:"\\0\\0\\0_authActions";N;s:12:"\\0\\0\\0_errorMsg";N;s:10:"\\0\\0\\0_errors";a:0:{}s:3:"aid";i:0;}}fb_168084486657315_code|s:216:"AQDspfKsjaMnKOQ8J-uOyfJJ8IdDduTDpz0zW_U0zkWzFaaFKTDEOn5KS-Q3MGUbltYGeev7WiLwkwXhLfoJD5m0F5aN847FiAWvHt6EmQZBX5KRWxjAkHRESchatMzbJBUY_B9qQ6aLRNvTg5wXrgZ9lZouiwH1MkD-P9X6fkGuI44QRT5kqggE-nJyLEXE__GLiWWYpTht1eAB3EwflM0l";fb_168084486657315_access_token|s:161:"CAACY3zgelSMBAExgujx7rLg8uI5c3zRCpUOX1CYfxTOtQsoFIwGeoR6mn1CtoK9XxK6ka1P0VfYw5gOhQZCJKm3ZABdh8ozzui8ZChPiUNwXUz1ImsBh14Gwg6LhAYRhYA5cTILnXdzIxun39pKTwuxUWjlOxcZD";fb_168084486657315_user_id|s:15:"100001614066938";', 201, 'fb_100001614066938');
 
 -- --------------------------------------------------------
 
@@ -2443,7 +2666,7 @@ CREATE TABLE IF NOT EXISTS `geicz_updates` (
   `detailsurl` text NOT NULL,
   `infourl` text NOT NULL,
   PRIMARY KEY (`update_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Available Updates' AUTO_INCREMENT=93 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Available Updates' AUTO_INCREMENT=154 ;
 
 --
 -- Дамп данных таблицы `geicz_updates`
@@ -2506,7 +2729,6 @@ INSERT INTO `geicz_updates` (`update_id`, `update_site_id`, `extension_id`, `nam
 (54, 3, 0, 'Ukrainian', '', 'pkg_uk-UA', 'package', '', 0, '3.0.2.1', '', 'http://update.joomla.org/language/details3/uk-UA_details.xml', ''),
 (55, 3, 0, 'Ukrainian', '', 'pkg_uk-UA', 'package', '', 0, '3.0.2.1', '', 'http://update.joomla.org/language/details3/uk-UA_details.xml', ''),
 (56, 3, 0, 'Uyghur', '', 'pkg_ug-CN', 'package', '', 0, '3.0.2.1', '', 'http://update.joomla.org/language/details3/ug-CN_details.xml', ''),
-(57, 3, 0, 'Portuguese Brazil', '', 'pkg_pt-BR', 'package', '', 0, '3.0.3.1', '', 'http://update.joomla.org/language/details3/pt-BR_details.xml', ''),
 (58, 3, 0, 'Portuguese Brazil', '', 'pkg_pt-BR', 'package', '', 0, '3.0.3.1', '', 'http://update.joomla.org/language/details3/pt-BR_details.xml', ''),
 (59, 3, 0, 'Serbian Latin', '', 'pkg_sr-YU', 'package', '', 0, '3.0.3.1', '', 'http://update.joomla.org/language/details3/sr-YU_details.xml', ''),
 (60, 3, 0, 'Spanish', '', 'pkg_es-ES', 'package', '', 0, '3.0.3.1', '', 'http://update.joomla.org/language/details3/es-ES_details.xml', ''),
@@ -2533,7 +2755,6 @@ INSERT INTO `geicz_updates` (`update_id`, `update_site_id`, `extension_id`, `nam
 (81, 3, 0, 'Flemish', '', 'pkg_nl-BE', 'package', '', 0, '3.0.3.2', '', 'http://update.joomla.org/language/details3/nl-BE_details.xml', ''),
 (82, 3, 0, 'Arabic Unitag', '', 'pkg_ar-AA', 'package', '', 0, '3.0.3.2', '', 'http://update.joomla.org/language/details3/ar-AA_details.xml', ''),
 (83, 3, 0, 'Bulgarian', '', 'pkg_bg-BG', 'package', '', 0, '3.0.3.1', '', 'http://update.joomla.org/language/details3/bg-BG_details.xml', ''),
-(84, 3, 0, 'Portuguese', '', 'pkg_pt-PT', 'package', '', 0, '3.0.2.2', '', 'http://update.joomla.org/language/details3/pt-PT_details.xml', ''),
 (85, 3, 0, 'Russian', '', 'pkg_ru-RU', 'package', '', 0, '3.0.3.1', '', 'http://update.joomla.org/language/details3/ru-RU_details.xml', ''),
 (86, 3, 0, 'Bosnian', '', 'pkg_bs-BA', 'package', '', 0, '3.0.3.1', '', 'http://update.joomla.org/language/details3/bs-BA_details.xml', ''),
 (87, 3, 0, 'Flemish', '', 'pkg_nl-BE', 'package', '', 0, '3.0.3.2', '', 'http://update.joomla.org/language/details3/nl-BE_details.xml', ''),
@@ -2541,7 +2762,68 @@ INSERT INTO `geicz_updates` (`update_id`, `update_site_id`, `extension_id`, `nam
 (89, 3, 0, 'Bulgarian', '', 'pkg_bg-BG', 'package', '', 0, '3.0.3.1', '', 'http://update.joomla.org/language/details3/bg-BG_details.xml', ''),
 (90, 3, 0, 'Catalan', '', 'pkg_ca-ES', 'package', '', 0, '3.1.0.1', '', 'http://update.joomla.org/language/details3/ca-ES_details.xml', ''),
 (91, 3, 0, 'Russian', '', 'pkg_ru-RU', 'package', '', 0, '3.0.3.1', '', 'http://update.joomla.org/language/details3/ru-RU_details.xml', ''),
-(92, 3, 0, 'Bosnian', '', 'pkg_bs-BA', 'package', '', 0, '3.0.3.1', '', 'http://update.joomla.org/language/details3/bs-BA_details.xml', '');
+(92, 3, 0, 'Bosnian', '', 'pkg_bs-BA', 'package', '', 0, '3.0.3.1', '', 'http://update.joomla.org/language/details3/bs-BA_details.xml', ''),
+(93, 1, 700, 'Joomla', '', 'joomla', 'file', '', 0, '3.1.1', '', 'http://update.joomla.org/core/sts/extension_sts.xml', ''),
+(94, 3, 0, 'Flemish', '', 'pkg_nl-BE', 'package', '', 0, '3.0.3.2', '', 'http://update.joomla.org/language/details3/nl-BE_details.xml', ''),
+(95, 3, 0, 'Chinese Traditional', '', 'pkg_zh-TW', 'package', '', 0, '3.1.0.1', '', 'http://update.joomla.org/language/details3/zh-TW_details.xml', ''),
+(96, 3, 0, 'French', '', 'pkg_fr-FR', 'package', '', 0, '3.1.0.1', '', 'http://update.joomla.org/language/details3/fr-FR_details.xml', ''),
+(97, 3, 0, 'German', '', 'pkg_de-DE', 'package', '', 0, '3.1.0.1', '', 'http://update.joomla.org/language/details3/de-DE_details.xml', ''),
+(98, 3, 0, 'Arabic Unitag', '', 'pkg_ar-AA', 'package', '', 0, '3.1.1.1', '', 'http://update.joomla.org/language/details3/ar-AA_details.xml', ''),
+(99, 3, 0, 'Bulgarian', '', 'pkg_bg-BG', 'package', '', 0, '3.0.3.1', '', 'http://update.joomla.org/language/details3/bg-BG_details.xml', ''),
+(100, 3, 0, 'Catalan', '', 'pkg_ca-ES', 'package', '', 0, '3.1.0.1', '', 'http://update.joomla.org/language/details3/ca-ES_details.xml', ''),
+(101, 3, 0, 'Chinese Simplified', '', 'pkg_zh-CN', 'package', '', 0, '3.1.0.1', '', 'http://update.joomla.org/language/details3/zh-CN_details.xml', ''),
+(102, 3, 0, 'Danish', '', 'pkg_da-DK', 'package', '', 0, '3.1.1.1', '', 'http://update.joomla.org/language/details3/da-DK_details.xml', ''),
+(103, 3, 0, 'Dutch', '', 'pkg_nl-NL', 'package', '', 0, '3.1.0.1', '', 'http://update.joomla.org/language/details3/nl-NL_details.xml', ''),
+(104, 3, 0, 'English AU', '', 'pkg_en-AU', 'package', '', 0, '3.1.0.1', '', 'http://update.joomla.org/language/details3/en-AU_details.xml', ''),
+(105, 3, 0, 'English US', '', 'pkg_en-US', 'package', '', 0, '3.1.0.1', '', 'http://update.joomla.org/language/details3/en-US_details.xml', ''),
+(106, 3, 0, 'Italian', '', 'pkg_it-IT', 'package', '', 0, '3.1.1.1', '', 'http://update.joomla.org/language/details3/it-IT_details.xml', ''),
+(107, 3, 0, 'Japanese', '', 'pkg_ja-JP', 'package', '', 0, '3.1.1.1', '', 'http://update.joomla.org/language/details3/ja-JP_details.xml', ''),
+(108, 3, 0, 'Latvian', '', 'pkg_lv-LV', 'package', '', 0, '3.1.0.1', '', 'http://update.joomla.org/language/details3/lv-LV_details.xml', ''),
+(109, 3, 0, 'Macedonian', '', 'pkg_mk-MK', 'package', '', 0, '3.1.0.1', '', 'http://update.joomla.org/language/details3/mk-MK_details.xml', ''),
+(110, 3, 0, 'Polish', '', 'pkg_pl-PL', 'package', '', 0, '3.1.0.2', '', 'http://update.joomla.org/language/details3/pl-PL_details.xml', ''),
+(111, 3, 0, 'Russian', '', 'pkg_ru-RU', 'package', '', 0, '3.0.3.1', '', 'http://update.joomla.org/language/details3/ru-RU_details.xml', ''),
+(112, 3, 0, 'Scottish Gaelic', '', 'pkg_gd-GB', 'package', '', 0, '3.1.0.1', '', 'http://update.joomla.org/language/details3/gd-GB_details.xml', ''),
+(113, 3, 0, 'Swedish', '', 'pkg_sv-SE', 'package', '', 0, '3.1.0.1', '', 'http://update.joomla.org/language/details3/sv-SE_details.xml', ''),
+(114, 3, 0, 'Tamil', '', 'pkg_ta-IN', 'package', '', 0, '3.1.0.1', '', 'http://update.joomla.org/language/details3/ta-IN_details.xml', ''),
+(115, 3, 0, 'Thai', '', 'pkg_th-TH', 'package', '', 0, '3.1.0.1', '', 'http://update.joomla.org/language/details3/th-TH_details.xml', ''),
+(116, 3, 0, 'Turkish', '', 'pkg_tr-TR', 'package', '', 0, '3.1.0.1', '', 'http://update.joomla.org/language/details3/tr-TR_details.xml', ''),
+(117, 3, 0, 'Serbian Latin', '', 'pkg_sr-YU', 'package', '', 0, '3.1.0.1', '', 'http://update.joomla.org/language/details3/sr-YU_details.xml', ''),
+(118, 3, 0, 'Spanish', '', 'pkg_es-ES', 'package', '', 0, '3.1.0.1', '', 'http://update.joomla.org/language/details3/es-ES_details.xml', ''),
+(119, 3, 0, 'Bosnian', '', 'pkg_bs-BA', 'package', '', 0, '3.1.0.1', '', 'http://update.joomla.org/language/details3/bs-BA_details.xml', ''),
+(120, 3, 0, 'Serbian Cyrillic', '', 'pkg_sr-RS', 'package', '', 0, '3.1.0.1', '', 'http://update.joomla.org/language/details3/sr-RS_details.xml', ''),
+(121, 3, 0, 'Finnish', '', 'pkg_fi-FI', 'package', '', 0, '3.1.0.1', '', 'http://update.joomla.org/language/details3/fi-FI_details.xml', ''),
+(122, 3, 0, 'Swahili', '', 'pkg_sw-KE', 'package', '', 0, '3.1.0.1', '', 'http://update.joomla.org/language/details3/sw-KE_details.xml', ''),
+(123, 3, 0, 'Romanian', '', 'pkg_ro-RO', 'package', '', 0, '3.1.1.2', '', 'http://update.joomla.org/language/details3/ro-RO_details.xml', ''),
+(124, 3, 0, 'Flemish', '', 'pkg_nl-BE', 'package', '', 0, '3.0.3.2', '', 'http://update.joomla.org/language/details3/nl-BE_details.xml', ''),
+(125, 3, 0, 'Chinese Traditional', '', 'pkg_zh-TW', 'package', '', 0, '3.1.0.1', '', 'http://update.joomla.org/language/details3/zh-TW_details.xml', ''),
+(126, 3, 0, 'French', '', 'pkg_fr-FR', 'package', '', 0, '3.1.1.1', '', 'http://update.joomla.org/language/details3/fr-FR_details.xml', ''),
+(127, 3, 0, 'German', '', 'pkg_de-DE', 'package', '', 0, '3.1.1.1', '', 'http://update.joomla.org/language/details3/de-DE_details.xml', ''),
+(128, 3, 0, 'Hungarian', '', 'pkg_hu-HU', 'package', '', 0, '3.1.1.1', '', 'http://update.joomla.org/language/details3/hu-HU_details.xml', ''),
+(129, 3, 0, 'Arabic Unitag', '', 'pkg_ar-AA', 'package', '', 0, '3.1.1.1', '', 'http://update.joomla.org/language/details3/ar-AA_details.xml', ''),
+(130, 3, 0, 'Bulgarian', '', 'pkg_bg-BG', 'package', '', 0, '3.0.3.1', '', 'http://update.joomla.org/language/details3/bg-BG_details.xml', ''),
+(131, 3, 0, 'Catalan', '', 'pkg_ca-ES', 'package', '', 0, '3.1.0.1', '', 'http://update.joomla.org/language/details3/ca-ES_details.xml', ''),
+(132, 3, 0, 'Chinese Simplified', '', 'pkg_zh-CN', 'package', '', 0, '3.1.0.1', '', 'http://update.joomla.org/language/details3/zh-CN_details.xml', ''),
+(133, 3, 0, 'Danish', '', 'pkg_da-DK', 'package', '', 0, '3.1.1.1', '', 'http://update.joomla.org/language/details3/da-DK_details.xml', ''),
+(134, 3, 0, 'Dutch', '', 'pkg_nl-NL', 'package', '', 0, '3.1.1.1', '', 'http://update.joomla.org/language/details3/nl-NL_details.xml', ''),
+(135, 3, 0, 'English AU', '', 'pkg_en-AU', 'package', '', 0, '3.1.0.1', '', 'http://update.joomla.org/language/details3/en-AU_details.xml', ''),
+(136, 3, 0, 'English US', '', 'pkg_en-US', 'package', '', 0, '3.1.0.1', '', 'http://update.joomla.org/language/details3/en-US_details.xml', ''),
+(137, 3, 0, 'Italian', '', 'pkg_it-IT', 'package', '', 0, '3.1.1.1', '', 'http://update.joomla.org/language/details3/it-IT_details.xml', ''),
+(138, 3, 0, 'Japanese', '', 'pkg_ja-JP', 'package', '', 0, '3.1.1.1', '', 'http://update.joomla.org/language/details3/ja-JP_details.xml', ''),
+(139, 3, 0, 'Latvian', '', 'pkg_lv-LV', 'package', '', 0, '3.1.0.1', '', 'http://update.joomla.org/language/details3/lv-LV_details.xml', ''),
+(140, 3, 0, 'Macedonian', '', 'pkg_mk-MK', 'package', '', 0, '3.1.0.1', '', 'http://update.joomla.org/language/details3/mk-MK_details.xml', ''),
+(141, 3, 0, 'Polish', '', 'pkg_pl-PL', 'package', '', 0, '3.1.0.2', '', 'http://update.joomla.org/language/details3/pl-PL_details.xml', ''),
+(142, 3, 0, 'Russian', '', 'pkg_ru-RU', 'package', '', 0, '3.0.3.1', '', 'http://update.joomla.org/language/details3/ru-RU_details.xml', ''),
+(143, 3, 0, 'Slovak', '', 'pkg_sk-SK', 'package', '', 0, '3.1.0.1', '', 'http://update.joomla.org/language/details3/sk-SK_details.xml', ''),
+(144, 3, 0, 'Swedish', '', 'pkg_sv-SE', 'package', '', 0, '3.1.0.1', '', 'http://update.joomla.org/language/details3/sv-SE_details.xml', ''),
+(145, 3, 0, 'Tamil', '', 'pkg_ta-IN', 'package', '', 0, '3.1.1.1', '', 'http://update.joomla.org/language/details3/ta-IN_details.xml', ''),
+(146, 3, 0, 'Thai', '', 'pkg_th-TH', 'package', '', 0, '3.1.0.1', '', 'http://update.joomla.org/language/details3/th-TH_details.xml', ''),
+(147, 3, 0, 'Turkish', '', 'pkg_tr-TR', 'package', '', 0, '3.1.0.1', '', 'http://update.joomla.org/language/details3/tr-TR_details.xml', ''),
+(148, 3, 0, 'Serbian Latin', '', 'pkg_sr-YU', 'package', '', 0, '3.1.0.1', '', 'http://update.joomla.org/language/details3/sr-YU_details.xml', ''),
+(149, 3, 0, 'Spanish', '', 'pkg_es-ES', 'package', '', 0, '3.1.0.1', '', 'http://update.joomla.org/language/details3/es-ES_details.xml', ''),
+(150, 3, 0, 'Bosnian', '', 'pkg_bs-BA', 'package', '', 0, '3.1.0.1', '', 'http://update.joomla.org/language/details3/bs-BA_details.xml', ''),
+(151, 3, 0, 'Serbian Cyrillic', '', 'pkg_sr-RS', 'package', '', 0, '3.1.0.1', '', 'http://update.joomla.org/language/details3/sr-RS_details.xml', ''),
+(152, 3, 0, 'Finnish', '', 'pkg_fi-FI', 'package', '', 0, '3.1.0.1', '', 'http://update.joomla.org/language/details3/fi-FI_details.xml', ''),
+(153, 3, 0, 'Swahili', '', 'pkg_sw-KE', 'package', '', 0, '3.1.0.1', '', 'http://update.joomla.org/language/details3/sw-KE_details.xml', '');
 
 -- --------------------------------------------------------
 
@@ -2557,16 +2839,17 @@ CREATE TABLE IF NOT EXISTS `geicz_update_sites` (
   `enabled` int(11) DEFAULT '0',
   `last_check_timestamp` bigint(20) DEFAULT '0',
   PRIMARY KEY (`update_site_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Update Sites' AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Update Sites' AUTO_INCREMENT=5 ;
 
 --
 -- Дамп данных таблицы `geicz_update_sites`
 --
 
 INSERT INTO `geicz_update_sites` (`update_site_id`, `name`, `type`, `location`, `enabled`, `last_check_timestamp`) VALUES
-(1, 'Joomla Core', 'collection', 'http://update.joomla.org/core/list.xml', 1, 1366276899),
-(2, 'Joomla Extension Directory', 'collection', 'http://update.joomla.org/jed/list.xml', 1, 1366276899),
-(3, 'Accredited Joomla! Translations', 'collection', 'http://update.joomla.org/language/translationlist_3.xml', 1, 1366276899);
+(1, 'Joomla Core', 'collection', 'http://update.joomla.org/core/list.xml', 1, 1367319818),
+(2, 'Joomla Extension Directory', 'collection', 'http://update.joomla.org/jed/list.xml', 0, 1367319818),
+(3, 'Accredited Joomla! Translations', 'collection', 'http://update.joomla.org/language/translationlist_3.xml', 1, 1367319818),
+(4, 'JoomlaPT Community - pt-PT Language Updates', 'collection', 'http://update.joomlapt.com/translationlist.xml', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -2587,7 +2870,10 @@ CREATE TABLE IF NOT EXISTS `geicz_update_sites_extensions` (
 INSERT INTO `geicz_update_sites_extensions` (`update_site_id`, `extension_id`) VALUES
 (1, 700),
 (2, 700),
-(3, 600);
+(3, 600),
+(3, 10024),
+(4, 10023),
+(4, 10024);
 
 -- --------------------------------------------------------
 
@@ -2648,17 +2934,18 @@ CREATE TABLE IF NOT EXISTS `geicz_users` (
   KEY `idx_block` (`block`),
   KEY `username` (`username`),
   KEY `email` (`email`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=204 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=205 ;
 
 --
 -- Дамп данных таблицы `geicz_users`
 --
 
 INSERT INTO `geicz_users` (`id`, `name`, `username`, `email`, `password`, `block`, `sendEmail`, `registerDate`, `lastvisitDate`, `activation`, `params`, `lastResetTime`, `resetCount`) VALUES
-(199, 'FamilyTreeTop', 'Admin', 'familytreetopdev@gmail.com', '3e26b859bedec92db0d1ce89de27f4f1:jZxWJaXrxuYxy4kCFgqRpcdCVXDEVgmg', 0, 0, '2013-03-04 09:40:41', '2013-04-18 09:21:38', '', '{"admin_style":"","admin_language":"","language":"","editor":"","helpsite":"","timezone":""}', '0000-00-00 00:00:00', 0),
-(201, 'alexander.potashko', 'fb_100001614066938', 'fantomhp@gmail.com', 'cd61f82757adf2336ed04364009355d1:csvOAzaXAtekn7jJAnffpnJovdAxcOHW', 0, 0, '2013-03-04 11:05:10', '2013-04-18 13:02:38', '', '{}', '0000-00-00 00:00:00', 0),
-(202, 'alexander.potashko.1', 'fb_100002846057243', 'familytreetop@gmail.com', '5017ec4c5c67ba5f2ff005b5c18813ca:Herb8LtBj3Ckx8gqoBwDEgpxViW2DpXi', 0, 0, '2013-03-15 15:48:29', '2013-04-12 15:13:52', '', '{}', '0000-00-00 00:00:00', 0),
-(203, 'fam.treetop', 'fb_100003467689503', 'fttftt1@gmail.com', 'e0a941794cce1cf2f857abb94c214fcf:BFbfcftiSZhogJXMcQWSZrOSmnWogrET', 0, 0, '2013-03-20 09:40:33', '2013-04-10 14:16:47', '', '{}', '0000-00-00 00:00:00', 0);
+(199, 'FamilyTreeTop', 'Admin', 'familytreetopdev@gmail.com', '3e26b859bedec92db0d1ce89de27f4f1:jZxWJaXrxuYxy4kCFgqRpcdCVXDEVgmg', 0, 0, '2013-03-04 09:40:41', '2013-04-30 11:03:37', '', '{"admin_style":"","admin_language":"","language":"","editor":"","helpsite":"","timezone":""}', '0000-00-00 00:00:00', 0),
+(201, 'alexander.potashko', 'fb_100001614066938', 'fantomhp@gmail.com', '4e955c440fd7ec0fc88a39538a23cbd4:csvOAzaXAtekn7jJAnffpnJovdAxcOHW', 0, 0, '2013-03-04 11:05:10', '2013-04-30 11:29:56', '', '{}', '0000-00-00 00:00:00', 0),
+(202, 'alexander.potashko.1', 'fb_100002846057243', 'familytreetop@gmail.com', '287b05ad754fae8b9f87b764be325fe9:Herb8LtBj3Ckx8gqoBwDEgpxViW2DpXi', 0, 0, '2013-03-15 15:48:29', '2013-04-29 16:18:13', '', '{}', '0000-00-00 00:00:00', 0),
+(203, 'fam.treetop', 'fb_100003467689503', 'fttftt1@gmail.com', 'e0a941794cce1cf2f857abb94c214fcf:BFbfcftiSZhogJXMcQWSZrOSmnWogrET', 0, 0, '2013-03-20 09:40:33', '2013-04-10 14:16:47', '', '{}', '0000-00-00 00:00:00', 0),
+(204, 'ferndoggie', 'fb_100000657385590', 'fernandooliveira@knet.ca', '4ef1f9c3ff858ae71b201eb9252e55f5:3OWBTHWW4Av64q8IyZDCJy4gsIVyIWqw', 0, 0, '2013-04-18 12:59:03', '2013-04-30 11:23:01', '', '{}', '0000-00-00 00:00:00', 0);
 
 -- --------------------------------------------------------
 
@@ -2687,6 +2974,11 @@ CREATE TABLE IF NOT EXISTS `geicz_user_notes` (
   KEY `idx_category_id` (`catid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
+--
+-- Дамп данных таблицы `geicz_user_notes`
+--
+
+
 -- --------------------------------------------------------
 
 --
@@ -2700,6 +2992,11 @@ CREATE TABLE IF NOT EXISTS `geicz_user_profiles` (
   `ordering` int(11) NOT NULL DEFAULT '0',
   UNIQUE KEY `idx_user_id_profile_key` (`user_id`,`profile_key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Simple user profile storage table';
+
+--
+-- Дамп данных таблицы `geicz_user_profiles`
+--
+
 
 -- --------------------------------------------------------
 
@@ -2722,7 +3019,8 @@ INSERT INTO `geicz_user_usergroup_map` (`user_id`, `group_id`) VALUES
 (199, 8),
 (201, 2),
 (202, 2),
-(203, 2);
+(203, 2),
+(204, 2);
 
 -- --------------------------------------------------------
 
@@ -2794,6 +3092,11 @@ CREATE TABLE IF NOT EXISTS `geicz_weblinks` (
   KEY `idx_language` (`language`),
   KEY `idx_xreference` (`xreference`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Дамп данных таблицы `geicz_weblinks`
+--
+
 
 --
 -- Ограничения внешнего ключа сохраненных таблиц
@@ -2885,7 +3188,3 @@ ALTER TABLE `geicz_familytreetop_relation_links`
 --
 ALTER TABLE `geicz_familytreetop_tree_links`
   ADD CONSTRAINT `fk_geicz_familytreetop_tree_links_1` FOREIGN KEY (`tree_id`) REFERENCES `geicz_familytreetop_trees` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
