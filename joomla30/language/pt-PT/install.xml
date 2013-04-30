@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.1" client="site" type="language" method="upgrade">
+	<name>Português (pt-PT)</name>
+	<tag>pt-PT</tag>
+	<version>3.0.3.2</version>
+	<creationDate>2013-04-06</creationDate>	
+	<author>Comunidade JoomlaPT! Portugal</author>
+	<authorEmail>www.joomlapt.com</authorEmail>
+	<authorUrl>www.joomlapt.com</authorUrl>
+	<copyright>Copyright (C) 2005 - 2013 joomlapt.com e Open Source Matters. Todos os direitos reservados.</copyright>
+	<license>Licença GNU GPL v2 ou posterior; ver LICENSE.txt</license>
+	<description>Português pt-PT. Idioma da interface pública para Joomla 3.x</description>
+	<files>
+		<filename>index.html</filename>
+		<filename>pt-PT.com_contact.ini</filename>
+		<filename>pt-PT.com_content.ini</filename>
+		<filename>pt-PT.com_finder.ini</filename>
+		<filename>pt-PT.com_mailto.ini</filename>
+		<filename>pt-PT.com_media.ini</filename>
+		<filename>pt-PT.com_messages.ini</filename>
+		<filename>pt-PT.com_newsfeeds.ini</filename>
+		<filename>pt-PT.com_search.ini</filename>
+		<filename>pt-PT.com_tags.ini</filename>
+		<filename>pt-PT.com_users.ini</filename>
+		<filename>pt-PT.com_weblinks.ini</filename>
+		<filename>pt-PT.com_wrapper.ini</filename>
+		<filename>pt-PT.files_joomla.sys.ini</filename>
+		<filename>pt-PT.finder_cli.ini</filename>
+		<filename>pt-PT.ini</filename>
+		<filename>pt-PT.lib_joomla.ini</filename>
+		<filename>pt-PT.lib_joomla.sys.ini</filename>
+		<filename>pt-PT.lib_phpmailer.sys.ini</filename>
+		<filename>pt-PT.lib_phputf8.sys.ini</filename>
+		<filename>pt-PT.lib_simplepie.sys.ini</filename>
+		<filename>pt-PT.localise.php</filename>
+		<filename>pt-PT.mod_articles_archive.ini</filename>
+		<filename>pt-PT.mod_articles_archive.sys.ini</filename>
+		<filename>pt-PT.mod_articles_categories.ini</filename>
+		<filename>pt-PT.mod_articles_categories.sys.ini</filename>
+		<filename>pt-PT.mod_articles_category.ini</filename>
+		<filename>pt-PT.mod_articles_category.sys.ini</filename>
+		<filename>pt-PT.mod_articles_latest.ini</filename>
+		<filename>pt-PT.mod_articles_latest.sys.ini</filename>
+		<filename>pt-PT.mod_articles_news.ini</filename>
+		<filename>pt-PT.mod_articles_news.sys.ini</filename>
+		<filename>pt-PT.mod_articles_popular.ini</filename>
+		<filename>pt-PT.mod_articles_popular.sys.ini</filename>
+		<filename>pt-PT.mod_banners.ini</filename>
+		<filename>pt-PT.mod_banners.sys.ini</filename>
+		<filename>pt-PT.mod_breadcrumbs.ini</filename>
+		<filename>pt-PT.mod_breadcrumbs.sys.ini</filename>
+		<filename>pt-PT.mod_custom.ini</filename>
+		<filename>pt-PT.mod_custom.sys.ini</filename>
+		<filename>pt-PT.mod_feed.ini</filename>
+		<filename>pt-PT.mod_feed.sys.ini</filename>
+		<filename>pt-PT.mod_finder.ini</filename>
+		<filename>pt-PT.mod_finder.sys.ini</filename>
+		<filename>pt-PT.mod_footer.ini</filename>
+		<filename>pt-PT.mod_footer.sys.ini</filename>
+		<filename>pt-PT.mod_languages.ini</filename>
+		<filename>pt-PT.mod_languages.sys.ini</filename>
+		<filename>pt-PT.mod_login.ini</filename>
+		<filename>pt-PT.mod_login.sys.ini</filename>
+		<filename>pt-PT.mod_menu.ini</filename>
+		<filename>pt-PT.mod_menu.sys.ini</filename>
+		<filename>pt-PT.mod_random_image.ini</filename>
+		<filename>pt-PT.mod_random_image.sys.ini</filename>
+		<filename>pt-PT.mod_related_items.ini</filename>
+		<filename>pt-PT.mod_related_items.sys.ini</filename>
+		<filename>pt-PT.mod_search.ini</filename>
+		<filename>pt-PT.mod_search.sys.ini</filename>
+		<filename>pt-PT.mod_stats.ini</filename>
+		<filename>pt-PT.mod_stats.sys.ini</filename>
+		<filename>pt-PT.mod_syndicate.ini</filename>
+		<filename>pt-PT.mod_syndicate.sys.ini</filename>
+		<filename>pt-PT.mod_tags_popular.ini</filename>
+		<filename>pt-PT.mod_tags_popular.sys.ini</filename>
+		<filename>pt-PT.mod_tags_similar.ini</filename>
+		<filename>pt-PT.mod_tags_similar.sys.ini</filename>
+		<filename>pt-PT.mod_users_latest.ini</filename>
+		<filename>pt-PT.mod_users_latest.sys.ini</filename>
+		<filename>pt-PT.mod_weblinks.ini</filename>
+		<filename>pt-PT.mod_weblinks.sys.ini</filename>
+		<filename>pt-PT.mod_whosonline.ini</filename>
+		<filename>pt-PT.mod_whosonline.sys.ini</filename>
+		<filename>pt-PT.mod_wrapper.ini</filename>
+		<filename>pt-PT.mod_wrapper.sys.ini</filename>
+		<filename>pt-PT.pkg_joomla.sys.ini</filename>
+		<filename>pt-PT.tpl_beez3.ini</filename>
+		<filename>pt-PT.tpl_beez3.sys.ini</filename>
+		<filename>pt-PT.tpl_protostar.ini</filename>
+		<filename>pt-PT.tpl_protostar.sys.ini</filename>
+		<filename file="meta">install.xml</filename>
+		<filename file="meta">pt-PT.xml</filename>
+	</files>
+	<params />
+</extension>
