@@ -25,11 +25,11 @@ if($session->get('famous')){
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?=$ind->name();?> <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a  familytreetop="profile" href="#">Profile</a></li>
-                        <li><a  familytreetop="languages" href="#">Languages</a></li>
-                        <li><a  familytreetop="facebook" href="#">Redirect to Facebook</a></li>
+                        <li><a  familytreetop="profile" href="#"><?=JText::_('MOD_FTT_NAVBAR_PROFILE_PROFILE');?></a></li>
+                        <li><a  familytreetop="languages" href="#"><?=JText::_('MOD_FTT_NAVBAR_PROFILE_LANGUAGES');?></a></li>
+                        <li><a  familytreetop="facebook" href="#"><?=JText::_('MOD_FTT_NAVBAR_PROFILE_REDIRECT_TO_FACEBOOK');?></a></li>
                         <li class="divider"></li>
-                        <li><a  familytreetop="logout" href="<?=JRoute::_("index.php?option=com_familytreetop&task=user.logout", false);?>">Log Out</a></li>
+                        <li><a  familytreetop="logout" href="<?=JRoute::_("index.php?option=com_familytreetop&task=user.logout", false);?>"><?=JText::_('MOD_FTT_NAVBAR_PROFILE_LOG_OUT');?></a></li>
                     </ul>
                 </li>
             </ul>
@@ -37,13 +37,13 @@ if($session->get('famous')){
             <a class="brand" href="<?=JRoute::_("index.php?option=com_familytreetop&view=index", false); ?>">Family TreeTop</a>
             <div  id="navProfileUser" class="nav-collapse collapse">
                 <ul class="nav">
-                    <li <?=($view=="myfamily")?'class="active"':''; ?> > <a href="<?=JRoute::_("index.php?option=com_familytreetop&view=myfamily", false); ?>">My Family</a></li>
-                    <li <?=($view=="famous")?'class="active"':''; ?> ><a href="<?=JRoute::_("index.php?option=com_familytreetop&view=famous", false); ?>">Famous Family</a></li>
-                    <li <?=($view=="index")?'class="active"':''; ?> ><a href="<?=JRoute::_("index.php?option=com_familytreetop&view=index", false); ?>">Home</a></li>
-                    <li class="visible-phone"><a familytreetop="profile" href="#">Profile</a></li>
-                    <li class="visible-phone"><a familytreetop="about" href="#">About</a></li>
-                    <li class="visible-phone"><a familytreetop="help" href="#">Help</a></li>
-                    <li class="visible-phone"><a familytreetop="logout" href="#">Logout</a></li>
+                    <li <?=($view=="myfamily")?'class="active"':''; ?> > <a href="<?=JRoute::_("index.php?option=com_familytreetop&view=myfamily", false); ?>"><?=JText::_('MOD_FTT_NAVBAR_MENU_MY_FAMILY');?></a></li>
+                    <li <?=($view=="famous")?'class="active"':''; ?> ><a href="<?=JRoute::_("index.php?option=com_familytreetop&view=famous", false); ?>"><?=JText::_('MOD_FTT_NAVBAR_MENU_FAMOUS_FAMILY');?></a></li>
+                    <li <?=($view=="index")?'class="active"':''; ?> ><a href="<?=JRoute::_("index.php?option=com_familytreetop&view=index", false); ?>"><?=JText::_('MOD_FTT_NAVBAR_MENU_HOME');?></a></li>
+                    <li class="visible-phone"><a familytreetop="profile" href="#"><?=JText::_('MOD_FTT_NAVBAR_MENU_PROFILE');?></a></li>
+                    <li class="visible-phone"><a familytreetop="about" href="#"><?=JText::_('MOD_FTT_NAVBAR_MENU_ABOUT');?></a></li>
+                    <li class="visible-phone"><a familytreetop="help" href="#"><?=JText::_('MOD_FTT_NAVBAR_MENU_HELP');?></a></li>
+                    <li class="visible-phone"><a familytreetop="logout" href="#"><?=JText::_('MOD_FTT_NAVBAR_MENU_LOG_OUT');?></a></li>
                 </ul>
             </div>
         </div>
