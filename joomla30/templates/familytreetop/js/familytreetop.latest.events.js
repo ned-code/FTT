@@ -20,7 +20,7 @@ $FamilyTreeTop.create("latest_events", function($){
                 var b = user.birth();
                 var tr = $('<tr></tr>');
                 var td = $('<td></td>');
-                var avatar = user.avatar(["50","50"]);
+                var avatar = user.avatar(["35","35"]);
                 $(td).append(avatar);
                 $(tr).append('<td>'+$this.mod('usertree').parseDate(b.date)+'</td>');
                 $(tr).append(td);
@@ -40,7 +40,7 @@ $FamilyTreeTop.create("latest_events", function($){
                 var d = user.death();
                 var tr = $('<tr></tr>');
                 var td = $('<td></td>');
-                var avatar = user.avatar(["50","50"]);
+                var avatar = user.avatar(["35","35"]);
                 $(td).append(avatar);
                 $(tr).append('<td>'+$this.mod('usertree').parseDate(d.date)+'</td>');
                 $(tr).append(td);
