@@ -19,12 +19,12 @@ $FamilyTreeTop.create("latest_events", function($){
                 var user = $this.mod('usertree').user(birth[prop].gedcom_id);
                 var b = user.birth();
                 var tr = $('<tr></tr>');
-                var td = $('<td></td>');
+                var td = $('<td style="width:45px;"></td>');
                 var avatar = user.avatar(["35","35"]);
                 $(td).append(avatar);
-                $(tr).append('<td>'+$this.mod('usertree').parseDate(b.date)+'</td>');
+                $(tr).append('<td class="text-center" style="width:100px; vertical-align: middle;">'+$this.mod('usertree').parseDate(b.date)+'</td>');
                 $(tr).append(td);
-                $(tr).append('<td><div>'+user.name()+'</div><div><i class="icon-sitemap">'+user.relation+'</i></div></td>');
+                $(tr).append('<td><div>'+user.name()+'</div><div><i class="icon-leaf"></i>'+user.relation+'</div></td>');
                 $($birthBox).append(tr);
 
                 Holder.run({
@@ -39,12 +39,12 @@ $FamilyTreeTop.create("latest_events", function($){
                 var user = $this.mod('usertree').user(death[prop].gedcom_id);
                 var d = user.death();
                 var tr = $('<tr></tr>');
-                var td = $('<td></td>');
+                var td = $('<td style="width:45px;"></td>');
                 var avatar = user.avatar(["35","35"]);
                 $(td).append(avatar);
-                $(tr).append('<td>'+$this.mod('usertree').parseDate(d.date)+'</td>');
+                $(tr).append('<td class="text-center" style="width:100px; vertical-align: middle;">'+$this.mod('usertree').parseDate(d.date)+'</td>');
                 $(tr).append(td);
-                $(tr).append('<td><div>'+user.name()+'</div><div>'+user.relation+'</div></td>');
+                $(tr).append('<td><div>'+user.name()+'</div><div><i class="icon-leaf"></i>'+user.relation+'</div></td>');
                 $($deathBox).append(tr);
 
                 Holder.run({
