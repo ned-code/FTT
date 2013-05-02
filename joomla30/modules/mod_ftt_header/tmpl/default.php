@@ -35,24 +35,33 @@ $ind = $gedcom->individuals->get($user->gedcom_id);
                 <a class="btn" href="<?=JRoute::_("index.php?option=com_familytreetop&task=famous.ext", false);?>" ><?=JText::_('MOD_FAMILYTREETOP_HEADER_EXIT')?></a>
             </div>
         <?php endif;?>
-        <div data-familytreetop="familyline" class="btn-group pull-right visible-desktop" style="padding-top: 5px;margin: 0;border-left: 1px solid #d4d4d4;border-right: 1px solid #d4d4d4;padding-left: 10px;padding-right: 10px;background: white;">
-            <button class="btn"><i familytreetop-line="mother" class="icon-pencil"></i></button>
-            <button class="btn"><i familytreetop-line="mother" class="icon-eye-open"></i></button>
-            <button style="background: none;border: none;" class="btn disabled">
-                <ul class="unstyled inline">
-                    <li><?=JText::_('MOD_FAMILYTREETOP_FAMILY_LINE_MOTHER')?></li>
-                    <li><canvas id="mother_chart" style="height:20px"></canvas></li>
-                </ul>
-            </button>
-            <button style="background: none;border: none;" class="btn disabled">
-                <ul class="unstyled inline">
-                    <li><canvas id="father_chart" style="height:20px"></canvas></li>
-                    <li><?=JText::_('MOD_FAMILYTREETOP_FAMILY_LINE_FATHER')?></li>
-                </ul>
-            </button>
-            <button class="btn"><i familytreetop-line="father" class="icon-eye-open"></i></button>
-            <button class="btn"><i familytreetop-line="father" class="icon-pencil"></i></button>
-        </div>
+        <ul class="nav pull-right" style="border-left: 1px solid #d4d4d4;border-right: 1px solid #d4d4d4;padding-left: 10px;padding-right: 10px;background: white;">
+            <li>
+                <div data-familytreetop="familyline" class="btn-group pull-right visible-desktop">
+                    <button class="btn"><i familytreetop-line="mother" class="icon-pencil"></i></button>
+                    <button class="btn"><i familytreetop-line="mother" class="icon-eye-open"></i></button>
+                    <button style="background: none;border: none;" class="btn disabled">
+                        <ul class="unstyled inline">
+                            <li><?=JText::_('MOD_FAMILYTREETOP_FAMILY_LINE_MOTHER')?></li>
+                            <li><canvas id="mother_chart" style="height:20px"></canvas></li>
+                        </ul>
+                    </button>
+                </div>
+            </li>
+            <li class="divider-vertical"></li>
+            <li>
+                <div data-familytreetop="familyline" class="btn-group pull-right visible-desktop">
+                    <button style="background: none;border: none;" class="btn disabled">
+                        <ul class="unstyled inline">
+                            <li><canvas id="father_chart" style="height:20px"></canvas></li>
+                            <li><?=JText::_('MOD_FAMILYTREETOP_FAMILY_LINE_FATHER')?></li>
+                        </ul>
+                    </button>
+                    <button class="btn"><i familytreetop-line="father" class="icon-eye-open"></i></button>
+                    <button class="btn"><i familytreetop-line="father" class="icon-pencil"></i></button>
+                </div>
+            </li>
+        </ul>
     </div>
 </div>
 <script>
