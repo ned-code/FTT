@@ -2,10 +2,24 @@
 defined('_JEXEC') or die;
 ?>
 <div class="row">
-    <div class="span12">
+    <div class="span4"></div>
+    <div class="span4 text-center">
+        <img src="<?=$this->baseurl;?>/templates/familytreetop/images/ftt_title.png" accesskey="">
+    </div>
+    <div class="span4"></div>
+</div>
+<div class="row">
+    <div class="span4"></div>
+    <div class="span4">
         <div class="well text-center">
             <a id="login" data-complete-text="Login" data-loading-text="Loading..."  href="#" onclick="return false;" class="btn btn-large">Login</a>
         </div>
+    </div>
+    <div class="span4"></div>
+</div>
+<div class="row">
+    <div class="span12">
+        <img src="<?=$this->baseurl;?>/templates/familytreetop/images/family_line.png" accesskey="">
     </div>
 </div>
 <script>

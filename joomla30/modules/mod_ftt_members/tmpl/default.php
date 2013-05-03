@@ -11,7 +11,7 @@ $filterButtonsWidth = 100;
                     <div class="row-fluid">
                         <div class="span12">
                             <div class="text-center">
-                                <span>Family Members</span>
+                                <span><?=JText::_('MOD_FTT_MEMBERS_FAMILY_MEMBERS');?></span>
                                 <div class="pull-right" style="position:relative">
                                     <input type="text" class="input-medium search-query"><i class="icon-search" style="position:absolute; right: 10px;top: 14px;"></i>
                                 </div>
@@ -22,10 +22,10 @@ $filterButtonsWidth = 100;
                 <table id="membersTable" class="table table-striped">
                     <thead>
                         <tr>
-                            <td><a style="cursor:pointer;" familytreetop="sort" familytreetop-type="Relation">Relation</a></td>
-                            <td><a style="cursor:pointer;" familytreetop="sort" familytreetop-type="Name">Name</a></td>
-                            <td><a style="cursor:pointer;" familytreetop="sort" familytreetop-type="Year">Birth Year</a></td>
-                            <td class="visible-desktop"><a style="cursor:pointer;" familytreetop="sort" familytreetop-type="Place">Birth Place</a></td>
+                            <td><a style="cursor:pointer;" familytreetop="sort" familytreetop-type="Relation"><?=JText::_('MOD_FTT_MEMBERS_THEAD_RELATION');?></a></td>
+                            <td><a style="cursor:pointer;" familytreetop="sort" familytreetop-type="Name"><?=JText::_('MOD_FTT_MEMBERS_THEAD_NAME');?></a></td>
+                            <td><a style="cursor:pointer;" familytreetop="sort" familytreetop-type="Year"><?=JText::_('MOD_FTT_MEMBERS_THEAD_BIRTH_YEAR');?></a></td>
+                            <td class="visible-desktop"><a style="cursor:pointer;" familytreetop="sort" familytreetop-type="Place"><?=JText::_('MOD_FTT_MEMBERS_THEAD_BRITH_PLACE');?></a></td>
                         </tr>
                     </thead>
                 </table>
@@ -35,16 +35,16 @@ $filterButtonsWidth = 100;
     <div id="filterMembers" class="span4 visible-desktop">
         <div class="well" familytreetop="module">
             <fieldset>
-                <legend class="text-center">Filter</legend>
+                <legend class="text-center"><?=JText::_('MOD_FTT_MEMBERS_FILTER');?></legend>
                 <div class="row-fluid">
                     <div class="span12">
                         <ul class-familytreetop="module-padding" class="unstyled">
-                            <li familytreetop="immediate_family"><label class="checkbox"><input type="checkbox"><span familytreetop="count">0</span> <span>Immediate</span> Family</label></li>
-                            <li familytreetop="grandparents"><label class="checkbox"><input type="checkbox"><span familytreetop="count">0</span> <span>Grandparents</span></label></li>
-                            <li familytreetop="grandchildren"><label class="checkbox"><input type="checkbox"><span familytreetop="count">0</span> <span>Grandchildren</span></label></li>
-                            <li familytreetop="cousins"><label class="checkbox"><input type="checkbox"><span familytreetop="count">0</span> <span>Cousins</span></label></li>
-                            <li familytreetop="in_laws"><label class="checkbox"><input type="checkbox"><span familytreetop="count">0</span> <span>In-Laws</span></label></li>
-                            <li familytreetop="unknown"><label class="checkbox"><input type="checkbox"><span familytreetop="count">0</span> <span>Unknown</span></label></li>
+                            <li familytreetop="immediate_family"><label class="checkbox"><input type="checkbox"><span familytreetop="count">0</span> <span><?=JText::_('MOD_FTT_MEMBERS_IMMEDIATE_FAMILY');?></span></label></li>
+                            <li familytreetop="grandparents"><label class="checkbox"><input type="checkbox"><span familytreetop="count">0</span> <span><?=JText::_('MOD_FTT_MEMBERS_GRANDPARENTS');?></span></label></li>
+                            <li familytreetop="grandchildren"><label class="checkbox"><input type="checkbox"><span familytreetop="count">0</span> <span><?=JText::_('MOD_FTT_MEMBERS_GRANDCHILDREN');?></span></label></li>
+                            <li familytreetop="cousins"><label class="checkbox"><input type="checkbox"><span familytreetop="count">0</span> <span><?=JText::_('MOD_FTT_MEMBERS_COUSIN');?></span></label></li>
+                            <li familytreetop="in_laws"><label class="checkbox"><input type="checkbox"><span familytreetop="count">0</span> <span><?=JText::_('MOD_FTT_MEMBERS_IN_LAWS');?></span></label></li>
+                            <li familytreetop="unknown"><label class="checkbox"><input type="checkbox"><span familytreetop="count">0</span> <span><?=JText::_('MOD_FTT_MEMBERS_UNKNOWN');?></span></label></li>
 
                         </ul>
                     </div>
@@ -53,36 +53,36 @@ $filterButtonsWidth = 100;
                 <div class="row-fluid">
                     <div class="span12 text-center">
                         <div class="btn-group" style="padding: 5px;">
-                            <button class="btn" style="width:<?=$filterButtonsWidth?>px;">Male</button>
-                            <button class="btn" style="width:<?=$filterButtonsWidth?>px;">Female</button>
-                            <button class="btn disabled" style="width:<?=$filterButtonsWidth?>px;">Both</button>
+                            <button class="btn" style="width:<?=$filterButtonsWidth?>px;"><?=JText::_('MOD_FTT_MEMBERS_MALE');?></button>
+                            <button class="btn" style="width:<?=$filterButtonsWidth?>px;"><?=JText::_('MOD_FTT_MEMBERS_FEMALE');?></button>
+                            <button class="btn disabled" style="width:<?=$filterButtonsWidth?>px;"><?=JText::_('MOD_FTT_MEMBERS_BOTH');?></button>
                         </div>
                     </div>
                 </div>
                 <div class="row-fluid">
                     <div class="span12 text-center">
                         <div class="btn-group" style="padding: 5px;">
-                            <button class="btn" style="width:<?=$filterButtonsWidth?>px;">Living</button>
-                            <button class="btn" style="width:<?=$filterButtonsWidth?>px;">Deceased</button>
-                            <button class="btn disabled" style="width:<?=$filterButtonsWidth?>px;">Both</button>
+                            <button class="btn" style="width:<?=$filterButtonsWidth?>px;"><?=JText::_('MOD_FTT_MEMBERS_LIVING');?></button>
+                            <button class="btn" style="width:<?=$filterButtonsWidth?>px;"><?=JText::_('MOD_FTT_MEMBERS_DEACEASE');?></button>
+                            <button class="btn disabled" style="width:<?=$filterButtonsWidth?>px;"><?=JText::_('MOD_FTT_MEMBERS_BOTH');?></button>
                         </div>
                     </div>
                 </div>
                 <div class="row-fluid">
                     <div class="span12 text-center">
                         <div class="btn-group" >
-                            <button class="btn" style="width:<?=$filterButtonsWidth?>px;">Ancestors</button>
-                            <button class="btn" style="width:<?=$filterButtonsWidth?>px;">Descendants</button>
-                            <button class="btn disabled" style="width:<?=$filterButtonsWidth?>px;">Both</button>
+                            <button class="btn" style="width:<?=$filterButtonsWidth?>px;"><?=JText::_('MOD_FTT_MEMBERS_ANCESTORS');?></button>
+                            <button class="btn" style="width:<?=$filterButtonsWidth?>px;"><?=JText::_('MOD_FTT_MEMBERS_DESCENDANTS');?></button>
+                            <button class="btn disabled" style="width:<?=$filterButtonsWidth?>px;"><?=JText::_('MOD_FTT_MEMBERS_BOTH');?></button>
                         </div>
                     </div>
                 </div>
                 <div class="row-fluid">
                     <div class="span12 text-center">
                         <div class="btn-group">
-                            <button class="btn" style="width:<?=$filterButtonsWidth?>px;">Registered</button>
-                            <button class="btn" style="width:<?=$filterButtonsWidth?>px;">Unregistered</button>
-                            <button class="btn disabled" style="width:<?=$filterButtonsWidth?>px;">Both</button>
+                            <button class="btn" style="width:<?=$filterButtonsWidth?>px;"><?=JText::_('MOD_FTT_MEMBERS_REGISTERED');?></button>
+                            <button class="btn" style="width:<?=$filterButtonsWidth?>px;"><?=JText::_('MOD_FTT_MEMBERS_UNREGISTRED');?></button>
+                            <button class="btn disabled" style="width:<?=$filterButtonsWidth?>px;"><?=JText::_('MOD_FTT_MEMBERS_BOTH');?></button>
                         </div>
                     </div>
                 </div>
