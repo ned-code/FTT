@@ -27,6 +27,7 @@ if($profile){
     $FamilyTreeTop.bind(function($){
         var $this = this, $box = $('#latestUpdates');
         $($box).find('[data-familytreetop-color]').each(function(i, el){
+            $this.mod('familyline').bind(el, $(el).attr('gedcom_id'));
             $this.mod('popovers').render({
                 target: el
             });

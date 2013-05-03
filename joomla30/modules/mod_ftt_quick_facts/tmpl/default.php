@@ -31,44 +31,5 @@ $oldest = $gedcom->individuals->getOldest();
                 target: el
             });
         });
-
-
-
-        /*
-        $this.mod('familyline').bind('quickFacts', function(args){
-            switch(args.type){
-                case "pencil":
-                    $($box).find('[data-familytreetop-color]').each(function(i, el){
-                        var func = (args.line)?"isFatherLine":"isMotherLine",
-                            gedcom_id = $(el).attr('gedcom_id'),
-                            user = $this.mod('usertree').user(gedcom_id);
-
-                        if(user[func]()){
-                            if(args.active){
-                                $(el).addClass('label');
-                                $(el).addClass('label-info');
-                            } else {
-                                $(el).removeClass('label');
-                                $(el).removeClass('label-info');
-                            }
-                        }
-                    });
-                    break;
-
-                case "eye":
-                    $($box).find('[data-familytreetop-color]').each(function(i, el){
-                        var func = (args.line)?"isFatherLine":"isMotherLine",
-                            active = (args.active)?"show":"hide",
-                            gedcom_id = $(el).attr('gedcom_id'),
-                            user = $this.mod('usertree').user(gedcom_id);
-
-                        if(user[func]()){
-                            $(el)[active]();
-                        }
-                    });
-                    break;
-            }
-        });
-        */
     });
 </script>

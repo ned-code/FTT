@@ -24,6 +24,7 @@ defined('_JEXEC') or die;
     $FamilyTreeTop.bind(function($){
         var $this = this;
         $('#recentVisitors li').each(function(index, el){
+            $this.mod('familyline').bind(el, $(el).attr('gedcom_id'));
             $this.mod('popovers').render({
                 target: el
             });
