@@ -21,7 +21,7 @@ $FamilyTreeTop.create("profile", function($){
             })
         },
         setRelation:function(args){
-
+            args.object.relationMap();
         },
         setFamily:function(args){
             var box = $(this).find('[data-familytreetop-profile="family"] fieldset');

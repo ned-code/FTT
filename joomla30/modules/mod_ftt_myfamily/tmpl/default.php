@@ -41,7 +41,7 @@ foreach($data as $object){
             </fieldset>
             <div id="accordion2" class="accordion">
                 <table class="table table-striped">
-                    <?php foreach($data as $object): ?>
+                    <?php foreach($result_array as $object): ?>
                         <?php $uid = uniqid(); ?>
                         <tr>
                             <td>

@@ -189,6 +189,15 @@ $FamilyTreeTop.create("usertree", function($){
                 }
                 return "";
             },
+            relationMap:function(){
+                var object;
+                if(data.con == null) return false;
+                if("undefined" !== typeof(data.con[ind.gedcom_id])){
+                    object = data.con[ind.gedcom_id];
+                    //console.log(object);
+                }
+                return false;
+            },
             isFatherLine:function(){
                 var object, id, _user;
                 if(data.con == null) return false;
