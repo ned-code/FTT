@@ -71,10 +71,35 @@ $FamilyTreeTop.create("familyline", function($){
         buttonsClick:function(index, el){
             $(el).click($fn.buttonClick);
         },
+        eye: function(item, args){
+            var func = (args.line)?"isFatherLine":"isMotherLine",
+                active = (args.active)?"show":"hide",
+                el = item.target,
+                user = $this.mod('usertree').user(item.gedcom_id);
+
+            if(user[func]()){
+                $(el)[active]();
+            }
+        },
+        pencil: function(item, args){
+            var func = (args.line)?"isFatherLine":"isMotherLine",
+                user = $this.mod('usertree').user(item.gedcom_id),
+                el = item.target;
+
+            if(user[func]()){
+                if(args.active){
+                    $(el).addClass('label');
+                    $(el).addClass('label-info');
+                } else {
+                    $(el).removeClass('label');
+                    $(el).removeClass('label-info');
+                }
+            }
+        },
         send: function(args){
             for(var prop in $pull){
                 if(!$pull.hasOwnProperty(prop)) continue;
-                $pull[prop].callback(args);
+                $fn[args.type]($pull[prop], args);
             }
         }
     }
@@ -85,7 +110,7 @@ $FamilyTreeTop.create("familyline", function($){
         $box.find('button.disabled canvas').each($fn.renderCharts);
     }
 
-    $this.bind = function(n, c){
-        $pull.push({name:n, callback:c});
+    $this.bind = function(el, gedcom_id){
+        $pull.push({target:el, gedcom_id: gedcom_id});
     }
 });

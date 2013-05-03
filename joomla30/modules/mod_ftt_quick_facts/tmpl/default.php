@@ -26,11 +26,15 @@ $oldest = $gedcom->individuals->getOldest();
     $FamilyTreeTop.bind(function($){
         var $this = this, $box = $('#quickFacts');
         $($box).find('[data-familytreetop-color]').each(function(i, el){
+            $this.mod('familyline').bind(el, $(el).attr('gedcom_id'));
             $this.mod('popovers').render({
                 target: el
             });
         });
 
+
+
+        /*
         $this.mod('familyline').bind('quickFacts', function(args){
             switch(args.type){
                 case "pencil":
@@ -65,5 +69,6 @@ $oldest = $gedcom->individuals->getOldest();
                     break;
             }
         });
+        */
     });
 </script>
