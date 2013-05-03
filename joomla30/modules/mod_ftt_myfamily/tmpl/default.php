@@ -41,7 +41,7 @@ foreach($data as $object){
             </fieldset>
             <div id="accordion2" class="accordion">
                 <table class="table table-striped">
-                    <?php foreach($result_array as $object): ?>
+                    <?php foreach($data as $object): ?>
                         <?php $uid = uniqid(); ?>
                         <tr>
                             <td>
@@ -137,3 +137,17 @@ foreach($data as $object){
     </div>
 </div>
 <?php endif; ?>
+<script>
+    $FamilyTreeTop.bind(function($){
+        $("#myFamilyOnFacebook").find('.accordion-toggle').click(function(){
+            var td = $(this).parents('td');
+            if($(this).hasClass('active')){
+                $(td).removeClass('familytreetop-accordion-active');
+                $(this).removeClass('active');
+            } else {
+                $(td).addClass('familytreetop-accordion-active');
+                $(this).addClass('active');
+            }
+        });
+    });
+</script>
