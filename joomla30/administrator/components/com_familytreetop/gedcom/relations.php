@@ -223,7 +223,7 @@ class FamilyTreeTopGedcomRelationsManager {
         return $json;
     }
 
-    public function get($gedcom_id, $target_id, $in_law = false){
+    public function get($gedcom_id, $target_id){
         $relation = $this->_get($gedcom_id, $target_id);
         if($relation && !isset($this->list[$target_id])){
             $json = $this->getJSON($relation);
@@ -245,12 +245,35 @@ class FamilyTreeTopGedcomRelationsManager {
                 'change_time' => $rel->change_time,
             );
 
-            if($in_law){
-                $this->list['_SPOUSES'][$gedcom_id][$target_id] = $item;
-            } else {
-                $this->list[$target_id] = $item;
-            }
+            $this->list[$target_id] = $item;
 
+        }
+        return $relation;
+    }
+
+    public function getInLaw($gedcom_id, $target_id){
+        $relation = $this->_get($gedcom_id, $target_id);
+        if($relation && !isset($this->list['_SPOUSES'][$gedcom_id][$target_id])){
+            $json = $this->getJSON($relation);
+
+            $rel = new FamilyTreeTopRelationLinks();
+            $rel->relation_id = $relation[0];
+            $rel->gedcom_id = $gedcom_id;
+            $rel->target_id = $target_id;
+            $rel->connection = '';
+            $rel->json = (empty($json))?NULL:base64_encode(json_encode($json));
+            $rel->save();
+
+            $item = array(
+                'relation_id' => $rel->relation_id,
+                'gedcom_id' => $rel->gedcom_id,
+                'target_id' => $rel->target_id,
+                'connection' => $rel->connection,
+                'json' => $json,
+                'change_time' => $rel->change_time,
+            );
+
+            $this->list['_SPOUSES'][$gedcom_id][$target_id] = $item;
         }
         return $relation;
     }
@@ -262,7 +285,7 @@ class FamilyTreeTopGedcomRelationsManager {
                 if(!isset($this->list[$ind['gedcom_id']])){
                     if(!$this->get($this->owner_id, $ind['gedcom_id'])){
                         foreach($spouses as $spouse){
-                            $this->get($spouse, $ind['gedcom_id'], true);
+                            $this->getInLaw($spouse, $ind['gedcom_id']);
                         }
                     }
                 }
