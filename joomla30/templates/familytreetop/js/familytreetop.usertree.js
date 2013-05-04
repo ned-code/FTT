@@ -156,7 +156,19 @@ $FamilyTreeTop.create("usertree", function($){
                 }
             })(),
             relation: (function(){
-                return $this.getRelation(data.rel, ind.gedcom_id);
+                var relation = $this.getRelation(data.rel, ind.gedcom_id);
+                if(relation.length == 0){
+                    var spouses = $this.getSpouses(usermap.gedcom_id);
+                    for(var prop in spouses){
+                        if(!spouses.hasOwnProperty(prop)) continue;
+                        var mass = data.rel._SPOUSES[spouses[prop]];
+                        relation = $this.getRelation(mass, ind.gedcom_id);
+                        if(relation.length != 0){
+                            return relation + '-in-law';
+                        }
+                    }
+                }
+                return relation;
             })(),
             relationId:(function(){
                 if(data.rel == null) return 0;
