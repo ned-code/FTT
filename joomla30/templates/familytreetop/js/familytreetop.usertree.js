@@ -156,24 +156,21 @@ $FamilyTreeTop.create("usertree", function($){
                 }
             })(),
             relation: (function(){
-                var relation = $this.getRelation(data.rel, ind.gedcom_id);
-                if(relation.length == 0){
-                    var spouses = $this.getSpouses(usermap.gedcom_id);
-                    for(var prop in spouses){
-                        if(!spouses.hasOwnProperty(prop)) continue;
-                        var mass = data.rel._SPOUSES[spouses[prop]];
-                        relation = $this.getRelation(mass, ind.gedcom_id);
-                        if(relation.length != 0){
-                            return relation + '-in-law';
-                        }
+                var relation_id = $this.getRelationId(ind.gedcom_id);
+                if(relation_id[0]){
+                    var name = $this.getRelationName(relation_id[0]);
+                    if(relation_id[1]){
+                        return name;
+                    } else {
+                        return name+'-in-law';
                     }
                 }
-                return relation;
+                return "";
             })(),
             relationId:(function(){
-                if(data.rel == null) return 0;
-                if("undefined" !== typeof(data.rel[ind.gedcom_id])){
-                    return data.rel[ind.gedcom_id].relation_id;
+                var relation_id = $this.getRelationId(ind.gedcom_id);
+                if(relation_id[1]){
+                    return relation_id[0];
                 }
                 return 0;
             })(),
@@ -185,13 +182,6 @@ $FamilyTreeTop.create("usertree", function($){
                     if(object){
                         return object.map(function(v){
                             var relation = $FamilyTreeTop.mod('usertree').user(v).relation;
-                            if(relation.length == 0 && spouse){
-                                var mass = data.rel._SPOUSES[spouse];
-                                return $this.getRelation(mass, v) + '-in-law';
-                            }
-                            if(!spouse && $this.isSpouse(usermap.gedcom_id, v)){
-                                spouse = v;
-                            }
                             return relation;
                         }).join(" > ");
                     }
@@ -324,17 +314,6 @@ $FamilyTreeTop.create("usertree", function($){
         }
     }
 
-    $this.isSpouse = function(gedcom_id, target_id){
-        var spouses = $this.getSpouses(gedcom_id);
-        for(var prop in spouses){
-            if(!spouses.hasOwnProperty(prop)) continue;
-            if(spouses[prop] == target_id){
-                return true;
-            }
-        }
-        return false;
-    }
-
     $this.isRegisteredUser = function(gedcom_id){
         return (gedcom_id in usersmap);
     }
@@ -356,20 +335,44 @@ $FamilyTreeTop.create("usertree", function($){
         }
         return false;
     }
-    $this.getRelation = function(mass, gedcom_id){
-        if(data.rel == null) return "";
-        var relation_object, relation_id, name,json, suffix;
-        if("undefined" !== typeof(mass[gedcom_id])){
-            relation_object = mass[gedcom_id];
-            relation_id = relation_object.relation_id;
-            if("undefined" !== typeof(data.rel._NAMES[relation_id])){
-                name = data.rel._NAMES[relation_id].name;
-                json = (relation_object.json != null)?relation_object.json:null;
-                suffix = (json != null && "undefined" !==  typeof(json.suffix))?json.suffix + " ":"";
-                return suffix + $('#relations').find('[data-familytreetop="'+name+'"]').text();
+
+    $this.isRelationBelongTo = function(target_id, object){
+        var map = $this.getRelationMap(target_id);
+        for(var prop in map){
+            if(!map.hasOwnProperty(prop)) continue;
+            if(map[prop] in object) return true;
+        }
+        return false;
+    }
+
+    $this.getRelationId = function(gedcom_id){
+        if(data.rel == null) return [0, true];
+        if("undefined" !== typeof(data.rel[gedcom_id])){
+            return [data.rel[gedcom_id].relation_id, true];
+        } else {
+            var spouses = $this.getSpouses($this.usermap().gedcom_id, true);
+            if($this.isRelationBelongTo(gedcom_id, spouses)){
+                for(var prop in spouses){
+                    if(!spouses.hasOwnProperty(prop)) continue;
+                    if("undefined" !== typeof(data.rel._SPOUSES[prop])){
+                        var map = data.rel._SPOUSES[prop];
+                        if("undefined" !== typeof(map[gedcom_id])){
+                            return [map[gedcom_id].relation_id, false];
+                        }
+                    }
+                }
             }
         }
-        return "";
+        return [0, true];
+    }
+
+    $this.getRelationMap = function(gedcom_id){
+        var object;
+        if(data.con == null) return false;
+        if("undefined" !== typeof(data.con[gedcom_id])){
+            return data.con[gedcom_id];
+        }
+        return false;
     }
 
     $this.getRelationName = function(id){
@@ -417,7 +420,7 @@ $FamilyTreeTop.create("usertree", function($){
         return obj;
     }
 
-    $this.getSpouses = function(gedcom_id){
+    $this.getSpouses = function(gedcom_id, how_object){
         if("undefined" === typeof(data.fam.gedcom_id[gedcom_id])) return [];
         var ind = $this.user(gedcom_id);
         var families = data.fam.gedcom_id[gedcom_id];
@@ -425,9 +428,17 @@ $FamilyTreeTop.create("usertree", function($){
         for(var key in families){
             if(!families.hasOwnProperty(key)) continue;
             if(parseInt(ind.gender)){
-                spouses.push(families[key].wife);
+                if("undefined" !== typeof(how_object)){
+                    spouses[families[key].wife] = true;
+                } else {
+                    spouses.push(families[key].wife);
+                }
             } else {
-                spouses.push(families[key].husb);
+                if("undefined" !== typeof(how_object)){
+                    spouses[families[key].husb] = true;
+                } else {
+                    spouses.push(families[key].husb);
+                }
             }
         }
         return spouses;
