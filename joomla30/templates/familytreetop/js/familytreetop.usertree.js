@@ -135,7 +135,7 @@ $FamilyTreeTop.create("usertree", function($){
     $this.user = function(gedcom_id){
         if("undefined" === typeof(gedcom_id)) return false;
         if("undefined" === typeof(data.ind[gedcom_id])) return false;
-        var ind = data.ind[gedcom_id];
+        var ind = data.ind[gedcom_id], usermap = $this.usermap();
         return {
             change_time: ind.change_time,
             create_time: ind.create_time,
@@ -156,19 +156,7 @@ $FamilyTreeTop.create("usertree", function($){
                 }
             })(),
             relation: (function(){
-                if(data.rel == null) return "";
-                var relation_object, relation_id, name,json, suffix;
-                if("undefined" !== typeof(data.rel[ind.gedcom_id])){
-                    relation_object = data.rel[ind.gedcom_id];
-                    relation_id = relation_object.relation_id;
-                    if("undefined" !== typeof(data.rel._NAMES[relation_id])){
-                        name = data.rel._NAMES[relation_id].name;
-                        json = (relation_object.json != null)?relation_object.json:null;
-                        suffix = (json != null && "undefined" !==  typeof(json.suffix))?json.suffix + " ":"";
-                        return suffix + $('#relations').find('[data-familytreetop="'+name+'"]').text();
-                    }
-                }
-                return "";
+                return $this.getRelation(data.rel, ind.gedcom_id);
             })(),
             relationId:(function(){
                 if(data.rel == null) return 0;
@@ -178,13 +166,21 @@ $FamilyTreeTop.create("usertree", function($){
                 return 0;
             })(),
             connection:function(){
-                var object;
+                var object, spouse = false;
                 if(data.con == null) return "";
                 if("undefined" !== typeof(data.con[ind.gedcom_id])){
                     object = data.con[ind.gedcom_id];
                     if(object){
                         return object.map(function(v){
-                            return $FamilyTreeTop.mod('usertree').user(v).relation;
+                            var relation = $FamilyTreeTop.mod('usertree').user(v).relation;
+                            if(relation.length == 0 && spouse){
+                                var mass = data.rel._SPOUSES[spouse];
+                                return $this.getRelation(mass, v) + '-in-law';
+                            }
+                            if(!spouse && $this.isSpouse(usermap.gedcom_id, v)){
+                                spouse = v;
+                            }
+                            return relation;
                         }).join(" > ");
                     }
                 }
@@ -316,6 +312,16 @@ $FamilyTreeTop.create("usertree", function($){
         }
     }
 
+    $this.isSpouse = function(gedcom_id, target_id){
+        var spouses = $this.getSpouses(gedcom_id);
+        for(var prop in spouses){
+            if(!spouses.hasOwnProperty(prop)) continue;
+            if(spouses[prop] == target_id){
+                return true;
+            }
+        }
+        return false;
+    }
 
     $this.isRegisteredUser = function(gedcom_id){
         return (gedcom_id in usersmap);
@@ -338,6 +344,22 @@ $FamilyTreeTop.create("usertree", function($){
         }
         return false;
     }
+    $this.getRelation = function(mass, gedcom_id){
+        if(data.rel == null) return "";
+        var relation_object, relation_id, name,json, suffix;
+        if("undefined" !== typeof(mass[gedcom_id])){
+            relation_object = mass[gedcom_id];
+            relation_id = relation_object.relation_id;
+            if("undefined" !== typeof(data.rel._NAMES[relation_id])){
+                name = data.rel._NAMES[relation_id].name;
+                json = (relation_object.json != null)?relation_object.json:null;
+                suffix = (json != null && "undefined" !==  typeof(json.suffix))?json.suffix + " ":"";
+                return suffix + $('#relations').find('[data-familytreetop="'+name+'"]').text();
+            }
+        }
+        return "";
+    }
+
     $this.getRelationName = function(id){
         if(data.rel != null && "undefined" !== typeof(data.rel._NAMES[id])){
             return $('#relations').find('[data-familytreetop="'+data.rel["_NAMES"][id].name+'"]').text();
