@@ -157,13 +157,14 @@ $FamilyTreeTop.create("usertree", function($){
             })(),
             relation: (function(){
                 if(data.rel == null) return "";
-                var relation_object, relation_id, name, suffix;
+                var relation_object, relation_id, name,json, suffix;
                 if("undefined" !== typeof(data.rel[ind.gedcom_id])){
                     relation_object = data.rel[ind.gedcom_id];
                     relation_id = relation_object.relation_id;
                     if("undefined" !== typeof(data.rel._NAMES[relation_id])){
                         name = data.rel._NAMES[relation_id].name;
-                        suffix = (relation_object.json != null && "undefined" !==  typeof(relation_object.json.suffix))?relation_object.json.suffix + " ":"";
+                        json = (relation_object.json != null)?relation_object.json:null;
+                        suffix = (json != null && "undefined" !==  typeof(json.suffix))?json.suffix + " ":"";
                         return suffix + $('#relations').find('[data-familytreetop="'+name+'"]').text();
                     }
                 }

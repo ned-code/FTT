@@ -3,30 +3,47 @@ class FamilyTreeTopGedcomRelationsManager {
     protected $tree_id;
     protected $owner_id;
     protected $list = array();
+    protected $spouses_list = array();
 
     public function __construct($tree_id, $gedcom_id){
         $this->tree_id = $tree_id;
         $this->owner_id = $gedcom_id;
 
         if(!empty($this->tree_id) && !empty($this->owner_id)){
-            $db = JFactory::getDbo();
-            $sql = "SELECT r.id, r.relation_id, r.gedcom_id, r.target_id, r.json, r.change_time
-                    FROM #__familytreetop_relation_links as r, #__familytreetop_tree_links as l, #__familytreetop_trees as t
-                    WHERE r.gedcom_id = l.id AND l.tree_id = t.id AND t.id = " . $this->tree_id . " AND r.gedcom_id = " . $this->owner_id;
-            $db->setQuery($sql);
-            $this->list = $this->sort($db->loadAssocList('target_id'));
+            $spouses = $this->get_spouses($this->owner_id);
 
-            $sql = "SELECT * FROM #__familytreetop_relations WHERE 1";
-            $db->setQuery($sql);
-            $this->list["_NAMES"] = $db->loadAssocList('id');
+            $this->list = $this->getRelations($this->owner_id);
+            $this->list['_NAMES'] = $this->getRelationsName();
+
+            $spousesRelations = array();
+            foreach($spouses as $spouse){
+                $spousesRelations[$spouse] = $this->getRelations($spouse);
+            }
+            $this->list['_SPOUSES'] = $spousesRelations;
         }
+    }
+
+    protected function getRelations($gedcom_id){
+        $db = JFactory::getDbo();
+        $sql = "SELECT r.id, r.relation_id, r.gedcom_id, r.target_id, r.json, r.change_time
+                    FROM #__familytreetop_relation_links as r, #__familytreetop_tree_links as l, #__familytreetop_trees as t
+                    WHERE r.gedcom_id = l.id AND l.tree_id = t.id AND t.id = " . $this->tree_id . " AND r.gedcom_id = " . $gedcom_id;
+        $db->setQuery($sql);
+        return $this->sort($db->loadAssocList('target_id'));
+    }
+
+    protected function getRelationsName(){
+        $db = JFactory::getDbo();
+        $sql = "SELECT * FROM #__familytreetop_relations WHERE 1";
+        $db->setQuery($sql);
+        return $db->loadAssocList('id');
     }
 
     protected function sort($rows){
         $sort = array();
         foreach($rows as $key => $row){
             $el = $row;
-            $el['json'] = json_decode($row['json']);
+            $el['json'] = json_decode(base64_decode($row['json']));
             $sort[$key] = $el;
         }
         return $sort;
@@ -197,14 +214,11 @@ class FamilyTreeTopGedcomRelationsManager {
         return false;
     }
 
-    protected function getJSON($relation, $in_law){
+    protected function getJSON($relation){
         if(!empty($relation[1])){
             $json = $relation[1];
         } else {
             $json = array();
-        }
-        if($in_law){
-            $json['in_law'] = 1;
         }
         return $json;
     }
@@ -212,24 +226,31 @@ class FamilyTreeTopGedcomRelationsManager {
     public function get($gedcom_id, $target_id, $in_law = false){
         $relation = $this->_get($gedcom_id, $target_id);
         if($relation && !isset($this->list[$target_id])){
-            $json = $this->getJSON($relation, $in_law);
+            $json = $this->getJSON($relation);
 
             $rel = new FamilyTreeTopRelationLinks();
             $rel->relation_id = $relation[0];
             $rel->gedcom_id = $gedcom_id;
             $rel->target_id = $target_id;
             $rel->connection = '';
-            $rel->json = (empty($json))?NULL:json_encode($json);
+            $rel->json = (empty($json))?NULL:base64_encode(json_encode($json));
             $rel->save();
 
-            $this->list[$target_id] = array(
+            $item = array(
                 'relation_id' => $rel->relation_id,
                 'gedcom_id' => $rel->gedcom_id,
                 'target_id' => $rel->target_id,
                 'connection' => $rel->connection,
-                'json' => $rel->json,
+                'json' => $json,
                 'change_time' => $rel->change_time,
             );
+
+            if($in_law){
+                $this->list['_SPOUSES'][$gedcom_id][$target_id] = $item;
+            } else {
+                $this->list[$target_id] = $item;
+            }
+
         }
         return $relation;
     }
