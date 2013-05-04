@@ -193,7 +193,7 @@ class FamilyTreeTopGedcomFamiliesManager {
                 )
             )
         );
-        return $family[0]->family_id;
+        return (empty($family[0]))?null:$family[0]->family_id;
     }
 
     public function getByPartner($husb, $wife){

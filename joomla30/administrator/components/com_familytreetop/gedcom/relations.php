@@ -32,6 +32,14 @@ class FamilyTreeTopGedcomRelationsManager {
         return $sort;
     }
 
+    protected function get_spouses($gedcom_id){
+        $spouses = GedcomHelper::getInstance()->families->getSpouses($gedcom_id);
+        if(empty($spouses)){
+            return array();
+        }
+        return $spouses;
+    }
+
     protected function get_parents($gedcom_id){
         $parents = GedcomHelper::getInstance()->individuals->getParents($gedcom_id);
         $husb = ($parents['father'])?$parents['father']->gedcom_id:null;
@@ -189,15 +197,29 @@ class FamilyTreeTopGedcomRelationsManager {
         return false;
     }
 
-    public function get($gedcom_id, $target_id){
+    protected function getJSON($relation, $in_law){
+        if(!empty($relation[1])){
+            $json = $relation[1];
+        } else {
+            $json = array();
+        }
+        if($in_law){
+            $json['in_law'] = 1;
+        }
+        return $json;
+    }
+
+    public function get($gedcom_id, $target_id, $in_law = false){
         $relation = $this->_get($gedcom_id, $target_id);
         if($relation && !isset($this->list[$target_id])){
+            $json = $this->getJSON($relation, $in_law);
+
             $rel = new FamilyTreeTopRelationLinks();
             $rel->relation_id = $relation[0];
             $rel->gedcom_id = $gedcom_id;
             $rel->target_id = $target_id;
             $rel->connection = '';
-            $rel->json = (empty($relation[1]))?NULL:json_encode($relation[1]);
+            $rel->json = (empty($json))?NULL:json_encode($json);
             $rel->save();
 
             $this->list[$target_id] = array(
@@ -214,13 +236,17 @@ class FamilyTreeTopGedcomRelationsManager {
 
     public function getList(){
         if($individuals = $this->isRelationsNotExist()){
+            $spouses = $this->get_spouses($this->owner_id);
             foreach($individuals as $ind){
-                if(!isset($this->list[$ind['gedcom']])){
-                    $this->get($this->owner_id, $ind['gedcom_id']);
+                if(!isset($this->list[$ind['gedcom_id']])){
+                    if(!$this->get($this->owner_id, $ind['gedcom_id'])){
+                        foreach($spouses as $spouse){
+                            $this->get($spouse, $ind['gedcom_id'], true);
+                        }
+                    }
                 }
             }
         }
         return $this->list;
     }
-
 }
