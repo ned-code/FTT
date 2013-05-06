@@ -185,7 +185,7 @@ $FamilyTreeTop.create("usertree", function($){
                 return "";
             },
             relationMap:function(){
-
+                return $this.getRelationMap(ind.gedcom_id);
             },
             isFatherLine:function(){
                 var object, id, _user;
@@ -370,7 +370,7 @@ $FamilyTreeTop.create("usertree", function($){
 
     $this.getRelationMap = function(gedcom_id){
         var object = $this.getConnection(gedcom_id);
-        console.log(object);
+        //console.log(object);
     }
 
     $this.getRelationName = function(object){
