@@ -156,9 +156,9 @@ $FamilyTreeTop.create("usertree", function($){
                 }
             })(),
             relation: (function(){
-                var relation_id = $this.getRelationId(ind.gedcom_id);
+                var relation_id = $this.getRelation(ind.gedcom_id);
                 if(relation_id[0]){
-                    var name = $this.getRelationName(relation_id[0]);
+                    var name = $this.getRelationName(relation_id);
                     if(relation_id[1]){
                         return name;
                     } else {
@@ -168,9 +168,9 @@ $FamilyTreeTop.create("usertree", function($){
                 return "";
             })(),
             relationId:(function(){
-                var relation_id = $this.getRelationId(ind.gedcom_id);
+                var relation_id = $this.getRelation(ind.gedcom_id);
                 if(relation_id[1]){
-                    return relation_id[0];
+                    return relation_id[0].relationId;
                 }
                 return 0;
             })(),
@@ -189,13 +189,18 @@ $FamilyTreeTop.create("usertree", function($){
                 return "";
             },
             relationMap:function(){
-                var object;
-                if(data.con == null) return false;
+                var object, spouse = false;
+                if(data.con == null) return "";
                 if("undefined" !== typeof(data.con[ind.gedcom_id])){
                     object = data.con[ind.gedcom_id];
-                    //console.log(object);
+                    if(object){
+                        return object.map(function(v){
+                            var relationId = $FamilyTreeTop.mod('usertree').user(v).relationId;
+                            return v;
+                        });
+                    }
                 }
-                return false;
+                return "";
             },
             isFatherLine:function(){
                 var object, id, _user;
@@ -345,10 +350,10 @@ $FamilyTreeTop.create("usertree", function($){
         return false;
     }
 
-    $this.getRelationId = function(gedcom_id){
-        if(data.rel == null) return [0, true];
+    $this.getRelation = function(gedcom_id){
+        if(data.rel == null) return [false, true];
         if("undefined" !== typeof(data.rel[gedcom_id])){
-            return [data.rel[gedcom_id].relation_id, true];
+            return [data.rel[gedcom_id], true];
         } else {
             var spouses = $this.getSpouses($this.usermap().gedcom_id, true);
             if($this.isRelationBelongTo(gedcom_id, spouses)){
@@ -357,13 +362,13 @@ $FamilyTreeTop.create("usertree", function($){
                     if("undefined" !== typeof(data.rel._SPOUSES[prop])){
                         var map = data.rel._SPOUSES[prop];
                         if("undefined" !== typeof(map[gedcom_id])){
-                            return [map[gedcom_id].relation_id, false];
+                            return [map[gedcom_id], false];
                         }
                     }
                 }
             }
         }
-        return [0, true];
+        return [false, true];
     }
 
     $this.getRelationMap = function(gedcom_id){
@@ -375,9 +380,13 @@ $FamilyTreeTop.create("usertree", function($){
         return false;
     }
 
-    $this.getRelationName = function(id){
-        if(data.rel != null && "undefined" !== typeof(data.rel._NAMES[id])){
-            return $('#relations').find('[data-familytreetop="'+data.rel["_NAMES"][id].name+'"]').text();
+    $this.getRelationName = function(object){
+        var relationId = object[0].relation_id,
+            json = object[0].json,
+            suffix = (json!=null&&"undefined"!=typeof(json.suffix))?json.suffix:"";
+        if(data.rel != null && "undefined" !== typeof(data.rel._NAMES[relationId])){
+
+            return (suffix) + " " + $('#relations').find('[data-familytreetop="'+data.rel["_NAMES"][relationId].name+'"]').text();
         }
         return "undefined";
     }
