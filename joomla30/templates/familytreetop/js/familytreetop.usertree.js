@@ -645,7 +645,7 @@ $FamilyTreeTop.create("usertree", function($){
         }
         if(size){
             data[1].attr('width', size[0] + "px");
-            data[1].attr('heght', size[1] + "px");
+            data[1].attr('height', size[1] + "px");
         }
         return (src)
             ?data[0]
