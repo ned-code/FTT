@@ -170,7 +170,7 @@ $FamilyTreeTop.create("usertree", function($){
             relationId:(function(){
                 var relation_id = $this.getRelation(ind.gedcom_id);
                 if(relation_id[1]){
-                    return relation_id[0].relationId;
+                    return relation_id[0].relation_id;
                 }
                 return 0;
             })(),
