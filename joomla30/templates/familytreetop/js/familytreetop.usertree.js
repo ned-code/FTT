@@ -175,32 +175,17 @@ $FamilyTreeTop.create("usertree", function($){
                 return 0;
             })(),
             connection:function(){
-                var object, spouse = false;
-                if(data.con == null) return "";
-                if("undefined" !== typeof(data.con[ind.gedcom_id])){
-                    object = data.con[ind.gedcom_id];
-                    if(object){
-                        return object.map(function(v){
-                            var relation = $FamilyTreeTop.mod('usertree').user(v).relation;
-                            return relation;
-                        }).join(" > ");
-                    }
+                var object = $this.getConnection(ind.gedcom_id);
+                if(object){
+                    return object.map(function(v){
+                        var relation = $FamilyTreeTop.mod('usertree').user(v).relation;
+                        return relation;
+                    }).join(" > ");
                 }
                 return "";
             },
             relationMap:function(){
-                var object, spouse = false;
-                if(data.con == null) return "";
-                if("undefined" !== typeof(data.con[ind.gedcom_id])){
-                    object = data.con[ind.gedcom_id];
-                    if(object){
-                        return object.map(function(v){
-                            var relationId = $FamilyTreeTop.mod('usertree').user(v).relationId;
-                            return v;
-                        });
-                    }
-                }
-                return "";
+
             },
             isFatherLine:function(){
                 var object, id, _user;
@@ -371,13 +356,21 @@ $FamilyTreeTop.create("usertree", function($){
         return [false, true];
     }
 
-    $this.getRelationMap = function(gedcom_id){
+    $this.getConnection = function(gedcom_id){
         var object;
         if(data.con == null) return false;
         if("undefined" !== typeof(data.con[gedcom_id])){
-            return data.con[gedcom_id];
+            object = data.con[gedcom_id];
+            if(object){
+                return object;
+            }
         }
         return false;
+    }
+
+    $this.getRelationMap = function(gedcom_id){
+        var object = $this.getConnection(gedcom_id);
+        console.log(object);
     }
 
     $this.getRelationName = function(object){
