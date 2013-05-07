@@ -156,10 +156,10 @@ $FamilyTreeTop.create("usertree", function($){
                 }
             })(),
             relation: (function(){
-                var relation_id = $this.getRelation(ind.gedcom_id);
-                if(relation_id[0]){
-                    var name = $this.getRelationName(relation_id);
-                    if(relation_id[1]){
+                var relation = $this.getRelation(ind.gedcom_id);
+                if(relation[0]){
+                    var name = $this.getRelationName(relation);
+                    if(relation[1]){
                         return name;
                     } else {
                         return name+'-in-law';
@@ -168,9 +168,9 @@ $FamilyTreeTop.create("usertree", function($){
                 return "";
             })(),
             relationId:(function(){
-                var relation_id = $this.getRelation(ind.gedcom_id);
-                if(relation_id[1]){
-                    return relation_id[0].relation_id;
+                var relation = $this.getRelation(ind.gedcom_id);
+                if(relation[1]){
+                    return relation[0].relation_id;
                 }
                 return 0;
             })(),
