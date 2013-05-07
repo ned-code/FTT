@@ -333,12 +333,14 @@ $FamilyTreeTop.create("usertree", function($){
         } else {
             var spouses = data.rel._SPOUSES,
                 map = $this.getConnectionMap(gedcom_id);
-            for(var prop in spouses){
-                if(!spouses.hasOwnProperty(prop)) continue;
-                if(prop in map){
-                    var mass = data.rel._SPOUSES[prop];
-                    if("undefined" !== typeof(mass[gedcom_id])){
-                        return [mass[gedcom_id], false];
+            if(map){
+                for(var prop in spouses){
+                    if(!spouses.hasOwnProperty(prop)) continue;
+                    if(prop in map){
+                        var mass = data.rel._SPOUSES[prop];
+                        if("undefined" !== typeof(mass[gedcom_id])){
+                            return [mass[gedcom_id], false];
+                        }
                     }
                 }
             }
@@ -383,7 +385,7 @@ $FamilyTreeTop.create("usertree", function($){
                 var gedcom_id = object[prop],
                     relation = $this.getRelation(gedcom_id),
                     user = $this.user(gedcom_id),
-                    relation_id = relation.relation_id;
+                    relation_id = relation[0].relation_id;
                 pull.push({rel:relation, usr: user});
                 if(index(relation_id) == 3 || index(relation_id) == 4){
                     vehicle = pull.length - 1;
@@ -404,11 +406,18 @@ $FamilyTreeTop.create("usertree", function($){
             if(ch = setTree(tree, vehicle, -1)){
                 tree.children.push(ch);
             }
-            return tree;
+            return [tree, getDeep(pull, vehicle)];
         }
         function index(id){
             if("undefined" === typeof(id)) return false;
-            return id.toLocaleString().substr(-1);
+            return parseInt(id.toLocaleString().substr(-1));
+        }
+        function getDeep(p, v){
+            var it = p.length - v;
+            if(it > v){
+                return it;
+            }
+            return v;
         }
         function setTree(object, i, k){
             var index = i+ k, element, obj, ch;

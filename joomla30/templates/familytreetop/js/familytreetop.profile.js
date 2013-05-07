@@ -22,18 +22,22 @@ $FamilyTreeTop.create("profile", function($){
         },
         setRelation:function(args){
             var tree = args.object.relationMap();
+            console.log(tree);
+            var box = $(this).find('[data-familytreetop-profile="relation"] fieldset');
+            var id = "jit"+$this.generateKey();
+            $(box).attr('id', id);
+            $(box).height(tree[1]*60 + 100);
             var st = new $jit.ST({
-                injectInto: 'infovis',
+                injectInto: id,
                 duration: 800,
                 transition: $jit.Trans.Quart.easeInOut,
-                levelDistance: 50,
-                Navigation: {
-                    enable:true,
-                    panning:true
-                },
+                offsetX:0,
+                offsetY:tree[1]*30,
+                levelDistance: 30,
+                levelsToShow: tree[1],
                 Node: {
                     height: 20,
-                    width: 60,
+                    width: 70,
                     type: 'rectangle',
                     color: '#aaa',
                     overridable: true
@@ -44,28 +48,13 @@ $FamilyTreeTop.create("profile", function($){
                 },
                 onCreateLabel: function(label, node){
                     label.id = node.id;
-                    label.innerHTML = node.name;
-                    label.onclick = function(){
-                        if(normal.checked) {
-                            st.onClick(node.id);
-                        } else {
-                            st.setRoot(node.id, 'animate');
-                        }
-                    };
-                    //set label styles
-                    var style = label.style;
-                    style.width = 60 + 'px';
-                    style.height = 17 + 'px';
-                    style.cursor = 'pointer';
-                    style.color = '#333';
-                    style.fontSize = '0.8em';
-                    style.textAlign= 'center';
-                    style.paddingTop = '3px';
+                    label.innerHTML = node.data.usr.relation;
                 }
             });
-            st.loadJSON(tree);
+            st.loadJSON(tree[0]);
             st.compute();
-            st.onClick(st.root);
+            st.select(st.root);
+            st.switchPosition("top", "replot", function(){});
         },
         setFamily:function(args){
             var box = $(this).find('[data-familytreetop-profile="family"] fieldset');
@@ -111,7 +100,9 @@ $FamilyTreeTop.create("profile", function($){
         $(parent).find('#profileLabel').text(object.shortname());
 
         $fn.setAbout.call(parent, args);
-        $fn.setRelation.call(parent, args);
+        $(parent).on('shown', function(){
+            $fn.setRelation.call(parent, args);
+        });
         $fn.setFamily.call(parent, args);
         $fn.setPhotos.call(parent, args);
 
