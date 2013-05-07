@@ -111,9 +111,7 @@ $FamilyTreeTop.create("profile", function($){
         $(parent).find('#profileLabel').text(object.shortname());
 
         $fn.setAbout.call(parent, args);
-        $(parent).on('shown', function () {
-            $fn.setRelation.call(parent, args);
-        })
+        $fn.setRelation.call(parent, args);
         $fn.setFamily.call(parent, args);
         $fn.setPhotos.call(parent, args);
 

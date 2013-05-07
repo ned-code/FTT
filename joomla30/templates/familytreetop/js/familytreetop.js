@@ -275,6 +275,7 @@
             F.prototype = $FamilyTreeTop.prototype.fn;
             el.call(new F(), jQuery);
         });
+
         //init
         $this.mod('tabs').init();
     }

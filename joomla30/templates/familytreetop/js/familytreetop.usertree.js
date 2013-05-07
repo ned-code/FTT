@@ -326,34 +326,41 @@ $FamilyTreeTop.create("usertree", function($){
         return false;
     }
 
-    $this.isRelationBelongTo = function(target_id, object){
-        var map = $this.getRelationMap(target_id);
-        for(var prop in map){
-            if(!map.hasOwnProperty(prop)) continue;
-            if(map[prop] in object) return true;
-        }
-        return false;
-    }
-
     $this.getRelation = function(gedcom_id){
         if(data.rel == null) return [false, true];
         if("undefined" !== typeof(data.rel[gedcom_id])){
             return [data.rel[gedcom_id], true];
         } else {
-            var spouses = $this.getSpouses($this.usermap().gedcom_id, true);
-            if($this.isRelationBelongTo(gedcom_id, spouses)){
-                for(var prop in spouses){
-                    if(!spouses.hasOwnProperty(prop)) continue;
-                    if("undefined" !== typeof(data.rel._SPOUSES[prop])){
-                        var map = data.rel._SPOUSES[prop];
-                        if("undefined" !== typeof(map[gedcom_id])){
-                            return [map[gedcom_id], false];
-                        }
+            var spouses = data.rel._SPOUSES,
+                map = $this.getConnectionMap(gedcom_id);
+            for(var prop in spouses){
+                if(!spouses.hasOwnProperty(prop)) continue;
+                if(prop in map){
+                    var mass = data.rel._SPOUSES[prop];
+                    if("undefined" !== typeof(mass[gedcom_id])){
+                        return [mass[gedcom_id], false];
                     }
                 }
             }
         }
         return [false, true];
+    }
+
+    $this.getConnectionMap = function(gedcom_id){
+        var object;
+        if(data.con == null) return false;
+        if("undefined" !== typeof(data.con[gedcom_id])){
+            object = data.con[gedcom_id];
+            if(object){
+                var ret = {};
+                for(var prop in object){
+                    if(!object.hasOwnProperty(prop)) continue;
+                    ret[prop] = true;
+                }
+                return ret;
+            }
+        }
+        return false;
     }
 
     $this.getConnection = function(gedcom_id){
@@ -476,18 +483,18 @@ $FamilyTreeTop.create("usertree", function($){
 
     $this.getSpouses = function(gedcom_id, how_object){
         if("undefined" === typeof(data.fam.gedcom_id[gedcom_id])) return [];
-        var ind = $this.user(gedcom_id);
         var families = data.fam.gedcom_id[gedcom_id];
         var spouses = [];
         for(var key in families){
             if(!families.hasOwnProperty(key)) continue;
-            if(parseInt(ind.gender)){
+            var family = families[key];
+            if(family.husb == gedcom_id){
                 if("undefined" !== typeof(how_object)){
                     spouses[families[key].wife] = true;
                 } else {
                     spouses.push(families[key].wife);
                 }
-            } else {
+            } else if(family.wife == gedcom_id){
                 if("undefined" !== typeof(how_object)){
                     spouses[families[key].husb] = true;
                 } else {
