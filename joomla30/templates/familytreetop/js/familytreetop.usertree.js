@@ -369,8 +369,53 @@ $FamilyTreeTop.create("usertree", function($){
     }
 
     $this.getRelationMap = function(gedcom_id){
-        var object = $this.getConnection(gedcom_id);
-        //console.log(object);
+        var object = $this.getConnection(gedcom_id), pull = [], tree, vehicle = 0;
+        if(object){
+            for(var prop in object){
+                if(!object.hasOwnProperty(prop)) continue;
+                var gedcom_id = object[prop],
+                    relation = $this.getRelation(gedcom_id),
+                    user = $this.user(gedcom_id),
+                    relation_id = relation.relation_id;
+                pull.push({rel:relation, usr: user});
+                if(index(relation_id) == 3 || index(relation_id) == 4){
+                    vehicle = pull.length - 1;
+                }
+            }
+            tree = {
+                id: $this.fn.generateKey() + '_' + pull[vehicle].usr.gedcom_id,
+                name: pull[vehicle].usr.name(),
+                data: {
+                    usr:pull[vehicle].usr,
+                    rel:pull[vehicle].rel
+                },
+                children: []
+            }
+            setTree(vehicle, 1);
+            setTree(vehicle, -1);
+            console.log(tree);
+            return tree;
+        }
+        function index(id){
+            if("undefined" === typeof(id)) return false;
+            return id.toLocaleString().substr(-1);
+        }
+        function setTree(i, k){
+            var index = i+k;
+            if("undefined" !== typeof(pull[index])){
+                var element = pull[index];
+                tree.children.push({
+                    id: $this.fn.generateKey() + '_' + element.usr.gedcom_id,
+                    name: element.usr.name(),
+                    data: {
+                        usr:element.usr,
+                        rel:element.rel
+                    },
+                    children: []
+                });
+                setTree(index, k);
+            }
+        }
     }
 
     $this.getRelationName = function(object){
@@ -646,8 +691,6 @@ $FamilyTreeTop.create("usertree", function($){
         if(size){
             data[1].attr('width', size[0] + "px");
             data[1].attr('height', size[1] + "px");
-            data[1].css('width', size[0] + "px");
-            data[1].css('height', size[1] + "px");
         }
         return (src)
             ?data[0]
