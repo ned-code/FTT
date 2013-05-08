@@ -6,6 +6,7 @@ $FamilyTreeTop.create("members", function($){
         $filter = $('#filterMembers'),
         $relPull = {"immediate_family":[], "grandparents":[], "grandchildren":[], "cousins":[], "in_laws":[], "unknown":[]},
         $pull = {},
+        $sort = false,
         $fn;
 
     $fn = {
@@ -103,6 +104,9 @@ $FamilyTreeTop.create("members", function($){
                 return $fn['orderBy'+type](a,b);
             })
         },
+        sort: function(){
+
+        },
         render: function(){
             $($box).find('tbody tr').remove();
             for ( var key in $users ){
@@ -110,12 +114,14 @@ $FamilyTreeTop.create("members", function($){
                 var object = $users[key];
                 var birth = object.birth();
                 var tr = $('<tr></tr>');
-                $fn.setRelPullObject(object);
-                $(tr).append('<td>'+object.relation+'</td>');
-                $(tr).append('<td>'+object.name()+'</td>');
-                $(tr).append('<td>'+$this.mod('usertree').parseDate(birth.date)+'</td>');
-                $(tr).append('<td class="visible-desktop">'+$this.mod('usertree').parsePlace(birth.place)+'</td>');
-                $($box).append(tr);
+                if(!$sort || (object.relationId in $sort)){
+                    $fn.setRelPullObject(object);
+                    $(tr).append('<td>'+object.relation+'</td>');
+                    $(tr).append('<td>'+object.name()+'</td>');
+                    $(tr).append('<td>'+$this.mod('usertree').parseDate(birth.date)+'</td>');
+                    $(tr).append('<td class="visible-desktop">'+$this.mod('usertree').parsePlace(birth.place)+'</td>');
+                    $($box).append(tr);
+                }
             }
         }
     }
@@ -147,10 +153,29 @@ $FamilyTreeTop.create("members", function($){
         }
 
         $($filter).find('[class-familytreetop="module-padding"] input').click(function(){
-            console.log(this);
+            $sort = {};
+            $($filter).find('[class-familytreetop="module-padding"] input:checked').each(function(i,e){
+                var type = $(e).parent().parent().attr('familytreetop');
+                switch(type){
+                    case "immediate_family": $sort[0] = true; $sort[13] = true; $sort[9] = true; break;
+                    case "grandparents":  $sort[103] = true; $sort[104] = true; $sort[203] = true; $sort[204] = true; break;
+                    case "grandchildren": $sort[105] = true; $sort[106] = true; $sort[205] = true; $sort[206] = true; break;
+                    case "cousins": $sort[9] = true; break;
+                    case "unknown": $sort["unknown"] = true;
+                }
+                $fn.render();
+                console.log($sort);
+            });
+
         });
 
-        $($filter)
+        $($filter).find('.btn').click(function(){
+            if($(this).hasClass('disabled')) return false;
+            $(this).parent().find('.btn').removeClass('disabled');
+            $(this).addClass('disabled');
+
+            console.log(this);
+        });
 
         $('html').keyup(function(e){if(e.keyCode == 8)find()});
         $('input.input-medium.search-query').keypress(find);
