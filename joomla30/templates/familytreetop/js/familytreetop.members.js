@@ -125,6 +125,23 @@ $FamilyTreeTop.create("members", function($){
                 return true;
             }
         },
+        isRegistered: function(object){
+            if("object" == typeof($isRegistered)){
+                if(object.facebook_id != 0 && $isRegistered['registered']){
+                    return true
+                } else if(object.facebook_id != 0 && !$isRegistered['registered']){
+                    return false;
+                } else if(object.facebook_id == 0 && $isRegistered['registered']){
+                    return false;
+                } else if(object.facebook_id == 0 && !$isRegistered['registered']){
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return true;
+            }
+        },
         render: function(){
             $($box).find('tbody tr').remove();
             for ( var key in $users ){
@@ -132,7 +149,7 @@ $FamilyTreeTop.create("members", function($){
                 var object = $users[key];
                 var birth = object.birth();
                 var tr = $('<tr></tr>');
-                if($fn.isSortable(object)&&$fn.isGender(object)&&$fn.isLiving(object)){
+                if($fn.isSortable(object)&&$fn.isGender(object)&&$fn.isLiving(object)&&$fn.isRegistered(object)){
                     $fn.setRelPullObject(object);
                     $(tr).append('<td>'+object.relation+'</td>');
                     $(tr).append('<td>'+object.name()+'</td>');
@@ -208,8 +225,18 @@ $FamilyTreeTop.create("members", function($){
                         $isLiving['alive'] = (type[1]=="yes");
                     }
                     break;
-                case "members": break;
-                case "registered": break;
+                case "members":
+
+                    break;
+                case "registered":
+                    if(type[1] == "both"){
+                        $isRegistered = true;
+                    } else {
+                        $isRegistered = {};
+                        $isRegistered['registered'] = (type[1]=="yes");
+                    }
+                    break;
+                    break;
             }
             $fn.render();
         });
