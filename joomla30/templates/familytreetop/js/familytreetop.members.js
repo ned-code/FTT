@@ -145,6 +145,13 @@ $FamilyTreeTop.create("members", function($){
                 $('#membersTable tbody td:nth-child(2):not(:contains("'+temp+'"))').parent().hide();
             }
         }
+
+        $($filter).find('[class-familytreetop="module-padding"] input').click(function(){
+            console.log(this);
+        });
+
+        $($filter)
+
         $('html').keyup(function(e){if(e.keyCode == 8)find()});
         $('input.input-medium.search-query').keypress(find);
     }

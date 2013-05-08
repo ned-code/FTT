@@ -39,12 +39,12 @@ $filterButtonsWidth = 100;
                 <div class="row-fluid">
                     <div class="span12">
                         <ul class-familytreetop="module-padding" class="unstyled">
-                            <li familytreetop="immediate_family"><label class="checkbox"><input type="checkbox"><span familytreetop="count">0</span> <span><?=JText::_('MOD_FTT_MEMBERS_IMMEDIATE_FAMILY');?></span></label></li>
-                            <li familytreetop="grandparents"><label class="checkbox"><input type="checkbox"><span familytreetop="count">0</span> <span><?=JText::_('MOD_FTT_MEMBERS_GRANDPARENTS');?></span></label></li>
-                            <li familytreetop="grandchildren"><label class="checkbox"><input type="checkbox"><span familytreetop="count">0</span> <span><?=JText::_('MOD_FTT_MEMBERS_GRANDCHILDREN');?></span></label></li>
-                            <li familytreetop="cousins"><label class="checkbox"><input type="checkbox"><span familytreetop="count">0</span> <span><?=JText::_('MOD_FTT_MEMBERS_COUSIN');?></span></label></li>
-                            <li familytreetop="in_laws"><label class="checkbox"><input type="checkbox"><span familytreetop="count">0</span> <span><?=JText::_('MOD_FTT_MEMBERS_IN_LAWS');?></span></label></li>
-                            <li familytreetop="unknown"><label class="checkbox"><input type="checkbox"><span familytreetop="count">0</span> <span><?=JText::_('MOD_FTT_MEMBERS_UNKNOWN');?></span></label></li>
+                            <li familytreetop="immediate_family"><label class="checkbox"><input type="checkbox" checked><span familytreetop="count">0</span> <span><?=JText::_('MOD_FTT_MEMBERS_IMMEDIATE_FAMILY');?></span></label></li>
+                            <li familytreetop="grandparents"><label class="checkbox"><input type="checkbox" checked><span familytreetop="count">0</span> <span><?=JText::_('MOD_FTT_MEMBERS_GRANDPARENTS');?></span></label></li>
+                            <li familytreetop="grandchildren"><label class="checkbox"><input type="checkbox" checked><span familytreetop="count">0</span> <span><?=JText::_('MOD_FTT_MEMBERS_GRANDCHILDREN');?></span></label></li>
+                            <li familytreetop="cousins"><label class="checkbox"><input type="checkbox" checked><span familytreetop="count">0</span> <span><?=JText::_('MOD_FTT_MEMBERS_COUSIN');?></span></label></li>
+                            <li familytreetop="in_laws"><label class="checkbox"><input type="checkbox" checked><span familytreetop="count">0</span> <span><?=JText::_('MOD_FTT_MEMBERS_IN_LAWS');?></span></label></li>
+                            <li familytreetop="unknown"><label class="checkbox"><input type="checkbox" checked><span familytreetop="count">0</span> <span><?=JText::_('MOD_FTT_MEMBERS_UNKNOWN');?></span></label></li>
 
                         </ul>
                     </div>
