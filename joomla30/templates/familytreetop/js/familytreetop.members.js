@@ -7,6 +7,10 @@ $FamilyTreeTop.create("members", function($){
         $relPull = {"immediate_family":[], "grandparents":[], "grandchildren":[], "cousins":[], "in_laws":[], "unknown":[]},
         $pull = {},
         $sort = false,
+        $isGender = true,
+        $isLiving = true,
+        $isMembers = true,
+        $isRegistered = true,
         $fn;
 
     $fn = {
@@ -104,8 +108,22 @@ $FamilyTreeTop.create("members", function($){
                 return $fn['orderBy'+type](a,b);
             })
         },
-        sort: function(){
-
+        isSortable: function(object){
+            return !$sort || ($sort["unknown"] && !object.relationId) || (object.relationId in $sort);
+        },
+        isGender: function(object){
+            if("object" == typeof($isGender)){
+                return (object.gender == $isGender['gender']);
+            } else {
+                return true;
+            }
+        },
+        isLiving: function(object){
+            if("object" == typeof($isLiving)){
+                return (object.isAlive() == $isLiving['alive']);
+            } else {
+                return true;
+            }
         },
         render: function(){
             $($box).find('tbody tr').remove();
@@ -114,7 +132,7 @@ $FamilyTreeTop.create("members", function($){
                 var object = $users[key];
                 var birth = object.birth();
                 var tr = $('<tr></tr>');
-                if(!$sort || ($sort["unknown"] && !object.relationId) || (object.relationId in $sort)){
+                if($fn.isSortable(object)&&$fn.isGender(object)&&$fn.isLiving(object)){
                     $fn.setRelPullObject(object);
                     $(tr).append('<td>'+object.relation+'</td>');
                     $(tr).append('<td>'+object.name()+'</td>');
@@ -172,7 +190,28 @@ $FamilyTreeTop.create("members", function($){
             $(this).parent().find('.btn').removeClass('disabled');
             $(this).addClass('disabled');
 
-            console.log(this);
+            var type = $(this).attr('familytreetop').split(':');
+            switch(type[0]){
+                case "gender":
+                    if(type[1] == "both"){
+                        $isGender = true;
+                    } else {
+                        $isGender = {};
+                        $isGender['gender'] = (type[1]=="male")?1:0;
+                    }
+                    break;
+                case "living":
+                    if(type[1] == "both"){
+                        $isLiving = true;
+                    } else {
+                        $isLiving = {};
+                        $isLiving['alive'] = (type[1]=="yes");
+                    }
+                    break;
+                case "members": break;
+                case "registered": break;
+            }
+            $fn.render();
         });
 
         $('html').keyup(function(e){if(e.keyCode == 8)find()});
