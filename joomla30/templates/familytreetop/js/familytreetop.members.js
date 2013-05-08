@@ -114,7 +114,7 @@ $FamilyTreeTop.create("members", function($){
                 var object = $users[key];
                 var birth = object.birth();
                 var tr = $('<tr></tr>');
-                if(!$sort || (object.relationId in $sort)){
+                if(!$sort || ($sort["unknown"] && !object.relationId) || (object.relationId in $sort)){
                     $fn.setRelPullObject(object);
                     $(tr).append('<td>'+object.relation+'</td>');
                     $(tr).append('<td>'+object.name()+'</td>');
@@ -163,10 +163,8 @@ $FamilyTreeTop.create("members", function($){
                     case "cousins": $sort[9] = true; break;
                     case "unknown": $sort["unknown"] = true;
                 }
-                $fn.render();
-                console.log($sort);
             });
-
+            $fn.render();
         });
 
         $($filter).find('.btn').click(function(){

@@ -45,7 +45,6 @@ $filterButtonsWidth = 100;
                             <li familytreetop="cousins"><label class="checkbox"><input type="checkbox" checked><span familytreetop="count">0</span> <span><?=JText::_('MOD_FTT_MEMBERS_COUSIN');?></span></label></li>
                             <li familytreetop="in_laws"><label class="checkbox"><input type="checkbox" checked><span familytreetop="count">0</span> <span><?=JText::_('MOD_FTT_MEMBERS_IN_LAWS');?></span></label></li>
                             <li familytreetop="unknown"><label class="checkbox"><input type="checkbox" checked><span familytreetop="count">0</span> <span><?=JText::_('MOD_FTT_MEMBERS_UNKNOWN');?></span></label></li>
-
                         </ul>
                     </div>
                 </div>
