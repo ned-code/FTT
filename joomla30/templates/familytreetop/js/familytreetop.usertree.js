@@ -680,7 +680,7 @@ $FamilyTreeTop.create("usertree", function($){
         if(place.country != null){
             ret.push(place.country);
         }
-        return ret.join("-");
+        return ret.join(", ");
     }
 
     $this.getImage = function(gedcom_id, size, style, src){
