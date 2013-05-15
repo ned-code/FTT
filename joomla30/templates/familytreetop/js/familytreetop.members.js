@@ -154,7 +154,7 @@ $FamilyTreeTop.create("members", function($){
                     $(tr).append('<td>'+object.relation+'</td>');
                     $(tr).append('<td>'+object.name()+'</td>');
                     $(tr).append('<td>'+$this.mod('usertree').parseDate(birth.date)+'</td>');
-                    $(tr).append('<td class="visible-desktop">'+$this.mod('usertree').parsePlace(birth.place)+'</td>');
+                    $(tr).append('<td>'+$this.mod('usertree').parsePlace(birth.place)+'</td>');
                     $($box).append(tr);
                 }
             }

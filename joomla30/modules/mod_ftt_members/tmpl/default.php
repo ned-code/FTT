@@ -25,7 +25,7 @@ $filterButtonsWidth = 100;
                             <td><a style="cursor:pointer;" familytreetop="sort" familytreetop-type="Relation"><?=JText::_('MOD_FTT_MEMBERS_THEAD_RELATION');?></a></td>
                             <td><a style="cursor:pointer;" familytreetop="sort" familytreetop-type="Name"><?=JText::_('MOD_FTT_MEMBERS_THEAD_NAME');?></a></td>
                             <td><a style="cursor:pointer;" familytreetop="sort" familytreetop-type="Year"><?=JText::_('MOD_FTT_MEMBERS_THEAD_BIRTH_YEAR');?></a></td>
-                            <td class="visible-desktop"><a style="cursor:pointer;" familytreetop="sort" familytreetop-type="Place"><?=JText::_('MOD_FTT_MEMBERS_THEAD_BRITH_PLACE');?></a></td>
+                            <td><a style="cursor:pointer;" familytreetop="sort" familytreetop-type="Place"><?=JText::_('MOD_FTT_MEMBERS_THEAD_BRITH_PLACE');?></a></td>
                         </tr>
                     </thead>
                 </table>
