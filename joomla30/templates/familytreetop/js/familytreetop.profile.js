@@ -89,13 +89,21 @@ $FamilyTreeTop.create("profile", function($){
                     });
                 });
             }
+        },
+        getModalBox:function(){
+            var cl = $($box).clone().hide();
+            $('body').append(cl);
+            $(cl).on('hide', function(){
+                $(cl).remove();
+            });
+            return cl;
         }
     }
 
     $box = $('#profile');
 
     $this.render = function(args){
-        var parent = $($box).clone(), object = args.object;
+        var parent = $fn.getModalBox(), object = args.object;
 
         $(parent).find('#profileLabel').text(object.shortname());
 
@@ -106,7 +114,7 @@ $FamilyTreeTop.create("profile", function($){
         $fn.setFamily.call(parent, args);
         $fn.setPhotos.call(parent, args);
 
-        $(parent).modal();
+        $(parent).modal({dynamic:true});
 
     }
 
