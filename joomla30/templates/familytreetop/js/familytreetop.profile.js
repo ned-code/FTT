@@ -3,6 +3,13 @@ $FamilyTreeTop.create("profile", function($){
     var $this = this, $fn, $box;
 
     $fn = {
+        isConnectionTarget: function(args, node){
+            var con = $this.mod('usertree').getConnection(args.object.gedcom_id);
+            if(node.data.usr.gedcom_id == con[con.length - 1]){
+                return true;
+            }
+            return false;
+        },
         setAbout:function(args){
             var box = $(this).find('[data-familytreetop-profile="about"] fieldset'), avatar;
             avatar = args.object.avatar(["100","100"]);
@@ -51,6 +58,9 @@ $FamilyTreeTop.create("profile", function($){
                     $(label).width(140);
                     $(label).height(40);
                     $(label).addClass('text-center');
+                    if($fn.isConnectionTarget(args, node)){
+                        node.data.$color = "#ffc90e";
+                    }
                 }
             });
             st.loadJSON(tree[0]);
