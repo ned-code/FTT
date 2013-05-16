@@ -59,9 +59,10 @@ $FamilyTreeTop.create("profile", function($){
             st.switchPosition("top", "replot", function(){});
         },
         setFamily:function(args){
-            var box = $(this).find('[data-familytreetop-profile="family"] fieldset');
+            var box = $(this).find('[data-familytreetop-profile="family"] fieldset'), familyBox = $('<div style="position:relative;"></div>');
+            $(box).append(familyBox);
             $this.mod('families').render({
-                parent: box,
+                parent: familyBox,
                 gedcom_id: args.object.gedcom_id,
                 abilityToMove: false,
                 editable: false,
