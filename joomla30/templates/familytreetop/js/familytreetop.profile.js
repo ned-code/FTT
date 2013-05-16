@@ -22,17 +22,16 @@ $FamilyTreeTop.create("profile", function($){
         },
         setRelation:function(args){
             var tree = args.object.relationMap();
-            console.log(tree);
             var box = $(this).find('[data-familytreetop-profile="relation"] fieldset');
             var id = "jit"+$this.generateKey();
             $(box).attr('id', id);
-            $(box).height(tree[1]*60 + 100);
+            $(box).height(tree[1]*80 + 100);
             var st = new $jit.ST({
                 injectInto: id,
                 duration: 800,
                 transition: $jit.Trans.Quart.easeInOut,
                 offsetX:0,
-                offsetY:tree[1]*30,
+                offsetY:tree[1]*50,
                 levelDistance: 30,
                 levelsToShow: tree[1],
                 Node: {
@@ -48,7 +47,10 @@ $FamilyTreeTop.create("profile", function($){
                 },
                 onCreateLabel: function(label, node){
                     label.id = node.id;
-                    label.innerHTML = node.data.usr.relation;
+                    label.innerHTML = $fn.getLabelHtml(label,node);
+                    $(label).width(140);
+                    $(label).height(40);
+                    $(label).addClass('text-center');
                 }
             });
             st.loadJSON(tree[0]);
@@ -89,6 +91,12 @@ $FamilyTreeTop.create("profile", function($){
                     });
                 });
             }
+        },
+        getLabelHtml:function(label, node){
+            var user = node.data.usr, box = $('<div class="text-center"></div>');
+            $(box).append('<div>'+user.shortname()+'</div>');
+            $(box).append('<div>'+user.relation+'</div>');
+            return $(box).html();
         },
         getModalBox:function(){
             var cl = $($box).clone().hide();
