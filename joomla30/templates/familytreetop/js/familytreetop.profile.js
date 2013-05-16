@@ -88,18 +88,19 @@ $FamilyTreeTop.create("profile", function($){
                 $(li).data(el);
                 $(ul).append(li);
             });
-
-            if(args.object.facebook_id){
-                FB.api('/'+args.object.facebook_id+'/photos', function(response){
-                    if(response.error) return false;
-                    if(response.data.length == 0){
-                        return false;
-                    }
-                    $(response.data).each(function(el, index){
-                        var li = $('<li><img style="cursor:pointer;" class="img-polaroid" src=""></li>');
-                        $(li).find('img').attr('src', el.picture);
-                        $(ul).append(li);
-                    });
+            if(/*args.object.facebook_id*/true){
+                FB.api('/'+args.object.facebook_id+'/albums', function(albums){
+                   var data = albums.data;
+                   $(data).each(function(i, album){
+                       FB.api('/'+album.id+'/photos', function(photos){
+                           var d = photos.data;
+                           $(d).each(function(i, photo){
+                               var li = $('<li><img style="cursor:pointer;" class="img-polaroid" src=""></li>');
+                               $(li).find('img').attr('src', photo.picture);
+                               $(ul).append(li);
+                           });
+                       });
+                   });
                 });
             }
         },
