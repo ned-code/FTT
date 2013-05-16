@@ -36,10 +36,10 @@ $FamilyTreeTop.create("profile", function($){
                 levelDistance: 30,
                 levelsToShow: tree[1],
                 Node: {
-                    height: 20,
-                    width: 70,
+                    height: 40,
+                    width: 140,
                     type: 'rectangle',
-                    color: '#aaa',
+                    color: '#efe4b0',
                     overridable: true
                 },
                 Edge: {
