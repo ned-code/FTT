@@ -7,6 +7,10 @@
     padding: 20px;
 }
 
+.familytreetop-table tr:hover {
+    background: #dff0d8;
+}
+
 .familytreetop-gallery li{
     border: 1px solid white;
     padding: 5px 0px;
