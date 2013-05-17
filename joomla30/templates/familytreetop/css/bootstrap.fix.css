@@ -7,8 +7,8 @@
     padding: 20px;
 }
 
-.familytreetop-table tr:hover {
-    background: #dff0d8;
+.familytreetop-table tr:hover td {
+    background: #dff0d8 !important;
 }
 
 .familytreetop-gallery li{
