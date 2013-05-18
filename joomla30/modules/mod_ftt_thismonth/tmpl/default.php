@@ -39,19 +39,19 @@ $date = date('n', strtotime('-1 month'));
                     <div familytreetop="birthdays" class="row-fluid">
                         <div class="span12">
                             <div style="background: #c3c3c3; padding: 3px; padding-left: 20px;"><i class="icon-gift"></i>Birthdays</div>
-                            <table style="margin:0;" class="table table-striped"></table>
+                            <table style="margin:0;" class="table table-striped familytreetop-table"></table>
                         </div>
                     </div>
                     <div familytreetop="anniversary" class="row-fluid">
                         <div class="span12">
                             <div style="background: #c3c3c3; padding: 3px; padding-left: 20px;"><i class="icon-gift"></i>Anniversary</div>
-                            <table style="margin:0;" class="table table-striped"></table>
+                            <table style="margin:0;" class="table table-striped familytreetop-table"></table>
                         </div>
                     </div>
                     <div familytreetop="weremember" class="row-fluid">
                         <div class="span12">
                             <div style="background: #c3c3c3; padding: 3px; padding-left: 20px;"><i class="icon-gift"></i>We remember</div>
-                            <table style="margin:0;" class="table table-striped"></table>
+                            <table style="margin:0;" class="table table-striped familytreetop-table"></table>
                         </div>
                     </div>
                 </div>

@@ -485,7 +485,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
     </form>
 
     <div id="familiesHide">
-        <div familytreetop="home" style="position:absolute; top:0; left: 50%; margin-left: -14px; cursor: pointer;"><i class="icon-large icon-home"></i></div>
+        <div familytreetop="home" style="position: absolute;top: 0;left: 50%;margin-left: -14px;cursor: pointer;border: 1px solid #000;border-radius: 20px;padding: 5px;"><i class="icon-large icon-home"></i></div>
         <div class="parent-box" style="max-width: 160px;">
             <div style="position:relative;">
                 <img class="img-polaroid" data-src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/holder.js/150x150">
