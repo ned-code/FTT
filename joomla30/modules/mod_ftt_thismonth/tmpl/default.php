@@ -37,27 +37,21 @@ $date = date('n', strtotime('-1 month'));
             <div class="row-fluid">
                 <div class="span12">
                     <div familytreetop="birthdays" class="row-fluid">
-                        <div class="offset1 span11">
-                            <h5>Birthdays</h5>
-                            <hr />
-                            <ul class="offset1 unstyled">
-                            </ul>
+                        <div class="span12">
+                            <div style="background: #c3c3c3; padding: 3px; padding-left: 20px;"><i class="icon-gift"></i>Birthdays</div>
+                            <table style="margin:0;" class="table table-striped"></table>
                         </div>
                     </div>
                     <div familytreetop="anniversary" class="row-fluid">
-                        <div class="offset1 span11">
-                            <h5>Anniversary</h5>
-                            <hr />
-                            <ul class="offset1 unstyled">
-                            </ul>
+                        <div class="span12">
+                            <div style="background: #c3c3c3; padding: 3px; padding-left: 20px;"><i class="icon-gift"></i>Anniversary</div>
+                            <table style="margin:0;" class="table table-striped"></table>
                         </div>
                     </div>
                     <div familytreetop="weremember" class="row-fluid">
-                        <div class="offset1 span11">
-                            <h5>We remember</h5>
-                            <hr />
-                            <ul class="offset1 unstyled">
-                            </ul>
+                        <div class="span12">
+                            <div style="background: #c3c3c3; padding: 3px; padding-left: 20px;"><i class="icon-gift"></i>We remember</div>
+                            <table style="margin:0;" class="table table-striped"></table>
                         </div>
                     </div>
                 </div>
@@ -105,41 +99,42 @@ $date = date('n', strtotime('-1 month'));
                 $fn.setPopovers();
             },
             setEvents: function(data, type){
-                var parent =  $($parent).find('[familytreetop="'+type+'"]'), ul = $(parent).find('ul');
+                var parent =  $($parent).find('[familytreetop="'+type+'"]'), table = $(parent).find('table');
                 if(!data[type] || data[type].length == 0){
                     $(parent).hide();
                     return false;
                 } else {
                     $(parent.show());
                 }
+                $(table).html('');
                 $(parent).find('li span[gedcom_id]').unbind();
                 $(parent).find('li').remove();
                 switch(type){
                     case "birthdays":
                     case "weremember":
                             data[type].forEach(function(e){
-                                var li = $('<li style="cursor:pointer;"></li>'),
+                                var tr = $('<tr style="cursor:pointer;"></re>'),
                                     event = $this.mod('usertree').getEvent(e.id),
                                     user = $this.mod('usertree').user(e.gedcom_id),
                                     sb = $this.stringBuffer(),
                                     html;
 
-                                sb._('<span">')._(event.date.start_day || "")._('</span>');
+                                sb._('<td style="width:24px;"><div class="familytreetop-this-month-data">')._(event.date.start_day || "")._('</div></td>');
                                 sb._(' ');
-                                sb._('<span data-familytreetop-color="')._(user.gender)._('"');
+                                sb._('<td data-familytreetop-color="')._(user.gender)._('"');
                                     sb._(' gedcom_id="')._(user.gedcom_id)._('">')._(user.shortname());
-                                sb._('</span>');
+                                sb._('</td>');
 
                                 html = $(sb.ret());
 
-                                $(li).append(html);
-                                $(ul).append(li);
+                                $(tr).append(html);
+                                $(table).append(tr);
                             });
                         break;
 
                     case "anniversary":
                             data[type].forEach(function(e){
-                                var li = $('<li style="cursor:pointer;"></li>'),
+                                var tr = $('<tr style="cursor:pointer;"></tr>'),
                                     event = $this.mod('usertree').getEvent(e.id),
                                     family = $this.mod('usertree').family(e.family_id),
                                     husb = $this.mod('usertree').user(family.husb),
@@ -149,8 +144,9 @@ $date = date('n', strtotime('-1 month'));
 
                                 if(!husb || !wife) return false;
 
-                                sb._('<span>')._(event.date.start_day || "")._('</span>');
+                                sb._('<td style="width:24px;"><div class="familytreetop-this-month-data">')._(event.date.start_day || "")._('</div></td>');
                                 sb._(' ');
+                                sb._('<td>');
                                 sb._('<span data-familytreetop-color="')._(husb.gender)._('"');
                                     sb._('" gedcom_id="')._(husb.gedcom_id)._('">')._(husb.shortname());
                                 sb._('</span>');
@@ -158,11 +154,12 @@ $date = date('n', strtotime('-1 month'));
                                 sb._('<span data-familytreetop-color="')._(wife.gender)._('"');
                                     sb._(' gedcom_id="')._(wife.gedcom_id)._('">')._(wife.shortname());
                                 sb._('</span>');
+                                sb._('</td>');
 
                                 html = $(sb.ret());
 
-                                $(li).append(html);
-                                $(ul).append(li);
+                                $(tr).append(html);
+                                $(table).append(tr);
 
                             });
                         break;

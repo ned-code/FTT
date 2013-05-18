@@ -2,31 +2,12 @@
     width: 900px;
     margin-left: -450px;
 }
-
-[class-familytreetop="module-padding"] {
-    padding: 20px;
-}
-
-.familytreetop-table tr:hover td {
-    background: #dff0d8 !important;
-}
-
-.familytreetop-gallery li{
-    border: 1px solid white;
-    padding: 5px 0px;
-}
-.familytreetop-gallery li.active{
-    border: 1px solid yellow;
-}
-
 .well[familytreetop="module"] {
     padding: 0;
 }
-
 .well[familytreetop="module"] fieldset {
     width: 100%;
 }
-
 .well[familytreetop="module"] fieldset legend{
     border-bottom: 2px solid white;
     text-align: center;
@@ -36,14 +17,6 @@
     padding: 0;
     background: #e8e8e8;
 }
-
 .accordion td.familytreetop-accordion-active {
     background: #FFFF99 !important;
-}
-
-.parent-box img:hover, .child-box img:hover {
-    border-color: #0088cc;
-    -webkit-box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
-    -moz-box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
-    box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
 }
