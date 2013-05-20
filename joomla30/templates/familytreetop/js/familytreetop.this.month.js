@@ -69,7 +69,7 @@ $FamilyTreeTop.create("this_month", function($){
                     if(!month.hasOwnProperty(key)) continue;
                     item = month[key];
                     tr = $('<tr></tr>');
-                    $(tr).append('<td><div class="familytreetop-this-month-data">'+item.date.start_day || ""+'</div></td>');
+                    $(tr).append('<td><div class="familytreetop-this-month-data">'+(item.date.start_day || "")+'</div></td>');
                     $(tr).append('<td><i class="icon-gift"></i></td>');
                     if(item.event.gedcom_id != null){
                         user = $this.mod('usertree').user(item.event.gedcom_id);
