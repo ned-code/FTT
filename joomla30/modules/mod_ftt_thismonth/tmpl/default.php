@@ -37,8 +37,23 @@ $date = date('n', strtotime('-1 month'));
                 </legend>
             <div class="row-fluid">
                 <div class="span12">
-                    <div familytreetop="all" class="row-fluid">
-
+                    <div familytreetop="all" class="row-fluid" style="display:none;">
+                        <div class="span12">
+                            <div familytreetop="subbox" _example style="display:none;">
+                                <div familytreetop="subbox-header" style="background: #c3c3c3; padding: 3px; text-align: center;"><span></span></div>
+                                <table style="margin:0;" class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <td>Day</td>
+                                            <td>Event</td>
+                                            <td>Name</td>
+                                            <td>Note</td>
+                                            <td>Relation</td>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                     <div familytreetop="birthdays" class="row-fluid">
                         <div class="span12">

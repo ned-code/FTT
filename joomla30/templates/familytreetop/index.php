@@ -119,6 +119,22 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
         <div data-familytreetop="GREAT_GRAND_NEPHEW"><?=JText::_("TPL_FAMILYTREETOP_GREAT_GRAND_NEPHEW");?></div>
     </div>
 
+    <div id="months">
+        <div data-familytreetop="0"><?=JText::_("TPL_FAMILYTREETOP_MONTH");?></div>
+        <div data-familytreetop="1"><?=JText::_("TPL_FAMILYTREETOP_JANUARY");?></div>
+        <div data-familytreetop="2"><?=JText::_("TPL_FAMILYTREETOP_FEBRUARY");?></div>
+        <div data-familytreetop="3"><?=JText::_("TPL_FAMILYTREETOP_MARCH");?></div>
+        <div data-familytreetop="4"><?=JText::_("TPL_FAMILYTREETOP_APRIL");?></div>
+        <div data-familytreetop="5"><?=JText::_("TPL_FAMILYTREETOP_MAY");?></div>
+        <div data-familytreetop="6"><?=JText::_("TPL_FAMILYTREETOP_JUNE");?></div>
+        <div data-familytreetop="7"><?=JText::_("TPL_FAMILYTREETOP_JULY");?></div>
+        <div data-familytreetop="8"><?=JText::_("TPL_FAMILYTREETOP_AUGUST");?></div>
+        <div data-familytreetop="9"><?=JText::_("TPL_FAMILYTREETOP_SEPTEMBER");?></div>
+        <div data-familytreetop="10"><?=JText::_("TPL_FAMILYTREETOP_OCTOBER");?></div>
+        <div data-familytreetop="11"><?=JText::_("TPL_FAMILYTREETOP_NOVEMBER");?></div>
+        <div data-familytreetop="12"><?=JText::_("TPL_FAMILYTREETOP_DECEMBER");?></div>
+    </div>
+
     <div id="popover">
         <div class="row-fluid">
             <div class="span12">
