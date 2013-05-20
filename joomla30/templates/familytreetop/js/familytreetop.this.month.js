@@ -27,11 +27,27 @@ $FamilyTreeTop.create("this_month", function($){
             }
         },
         render: function(month){
-            $data = $fn.getData(month);
-            $fn.setEvents($data, 'birthdays');
-            $fn.setEvents($data, 'weremember');
-            $fn.setEvents($data, 'anniversary');
+            if(month == 0){
+                $fn.setAllMonths();
+            } else {
+                $data = $fn.getData(month);
+                $fn.setEvents($data, 'birthdays');
+                $fn.setEvents($data, 'weremember');
+                $fn.setEvents($data, 'anniversary');
+            }
             $fn.setPopovers();
+        },
+        setAllMonths: function(){
+            $($parent).find('[familytreetop="birthdays"]').hide();
+            $($parent).find('[familytreetop="anniversary"]').hide();
+            $($parent).find('[familytreetop="weremember"]').hide();
+
+            var box = $($parent).find('[familytreetop="all"]');
+            var data = $this.mod('usertree').getAllMonthsEvents();
+            $(box).html('');
+
+
+            console.log(data);
         },
         setEvents: function(data, type){
             var parent =  $($parent).find('[familytreetop="'+type+'"]'), table = $(parent).find('table');

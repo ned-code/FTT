@@ -37,6 +37,9 @@ $date = date('n', strtotime('-1 month'));
                 </legend>
             <div class="row-fluid">
                 <div class="span12">
+                    <div familytreetop="all" class="row-fluid">
+
+                    </div>
                     <div familytreetop="birthdays" class="row-fluid">
                         <div class="span12">
                             <div style="background: #c3c3c3; padding: 3px; padding-left: 20px;"><i class="icon-gift"></i>Birthdays</div>

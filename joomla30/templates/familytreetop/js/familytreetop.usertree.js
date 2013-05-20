@@ -625,6 +625,23 @@ $FamilyTreeTop.create("usertree", function($){
         return false;
     }
 
+    $this.getAllMonthsEvents = function(){
+        var pull = {}, records, prop, date, k;
+        records = data.eve.all;
+        for(prop in records){
+            if(!records.hasOwnProperty(prop)) continue;
+            date = data.dat[prop];
+            if("undefined" !== typeof(date)){
+                k = (date.start_month!=null)?date.start_month:0;
+                if("undefined" == typeof(pull[k])){
+                    pull[k] = {};
+                }
+                pull[k][prop] = {event: records[prop], date: date};
+            }
+        }
+        return pull;
+    }
+
     $this.getEventsByType = function(type, sort){
         var _data, key, object, id, event, pull = [];
         switch(type){
