@@ -70,24 +70,29 @@ $FamilyTreeTop.create("this_month", function($){
                     $(tr).append('<td><i class="icon-gift"></i></td>');
                     if(item.event.gedcom_id != null){
                         user = $this.mod('usertree').user(item.event.gedcom_id);
-                        $(tr).append('<td>'+user.name()+'</td>');
+                        $(tr).append('<td gedcom_id="'+user.gedcom_id+'">'+user.name()+'</td>');
                         $(tr).append('<td></td>');
                         $(tr).append('<td>'+user.relation+'</td>');
-
+                        $this.mod('popovers').render({
+                            target: $(tr).find('td[gedcom_id]')
+                        });
                     } else if(item.event.family_id != null){
                         family = $this.mod('usertree').family(item.event.family_id);
                         husb = $this.mod('usertree').user(family.husb);
                         wife = $this.mod('usertree').user(family.wife);
-                        $(tr).append('<td><div>'+husb.name()+'</div><div>'+wife.name()+'</div></td>');
+                        $(tr).append('<td><div gedcom_id="'+husb.gedcom_id+'">'+husb.name()+'</div><div gedcom_id="'+wife.gedcom_id+'">'+wife.name()+'</div></td>');
                         $(tr).append('<td></td>');
                         $(tr).append('<td><div>'+husb.relation+'</div><div>'+wife.relation+'</div></td>');
+
+                        $(tr).find('div[gedcom_id]').each(function(i, el){
+                            $this.mod('popovers').render({
+                                target: el
+                            });
+                        });
                     }
                     $(table).append(tr);
                 }
             }
-
-            console.log(data);
-
             $(box).show();
         },
         setEvents: function(data, type){
@@ -122,6 +127,10 @@ $FamilyTreeTop.create("this_month", function($){
 
                         $(tr).append(html);
                         $(table).append(tr);
+
+                        $this.mod('popovers').render({
+                            target: $(tr).find('td[gedcom_id]')
+                        });
                     });
                     break;
 
@@ -154,6 +163,11 @@ $FamilyTreeTop.create("this_month", function($){
                         $(tr).append(html);
                         $(table).append(tr);
 
+                        $(tr).find('span[gedcom_id]').each(function(i,el){
+                            $this.mod('popovers').render({
+                                target: el
+                            });
+                        });
                     });
                     break;
 
