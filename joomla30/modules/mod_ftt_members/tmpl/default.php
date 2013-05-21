@@ -19,7 +19,7 @@ $filterButtonsWidth = 100;
                         </div>
                     </div>
                 </legend>
-                <table id="membersTable" class="table table-striped">
+                <table id="membersTable" class="table table-striped familytreetop-table">
                     <thead>
                         <tr>
                             <td><a style="cursor:pointer;" familytreetop="sort" familytreetop-type="Relation"><?=JText::_('MOD_FTT_MEMBERS_THEAD_RELATION');?></a></td>

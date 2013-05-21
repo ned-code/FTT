@@ -152,10 +152,13 @@ $FamilyTreeTop.create("members", function($){
                 if($fn.isSortable(object)&&$fn.isGender(object)&&$fn.isLiving(object)&&$fn.isRegistered(object)){
                     $fn.setRelPullObject(object);
                     $(tr).append('<td>'+object.relation+'</td>');
-                    $(tr).append('<td>'+object.name()+'</td>');
+                    $(tr).append('<td gedcom_id="'+object.gedcom_id+'">'+object.name()+'</td>');
                     $(tr).append('<td>'+$this.mod('usertree').parseDate(birth.date)+'</td>');
                     $(tr).append('<td>'+$this.mod('usertree').parsePlace(birth.place)+'</td>');
                     $($box).append(tr);
+                    $this.mod('popovers').render({
+                        target: $(tr).find('td[gedcom_id]')
+                    });
                 }
             }
         }
