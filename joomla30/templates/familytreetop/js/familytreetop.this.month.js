@@ -39,10 +39,9 @@ $FamilyTreeTop.create("this_month", function($){
         },
         setAllMonths: function(){
             var box = $($parent).find('[familytreetop="all"]'),
-                cont = $(box).find('.span12'),
+                table = $(box).find('table'),
                 data = $this.mod('usertree').getAllMonthsEvents(),
                 prop,
-                subbox,
                 month,
                 key,
                 item,
@@ -52,28 +51,26 @@ $FamilyTreeTop.create("this_month", function($){
                 husb,
                 wife;
 
-            $(box).find('[familytreetop="subbox"]:not([_example])').remove();
+            $(table).find('[familytreetop-row]').remove();
             $($parent).find('[familytreetop="birthdays"]').hide();
             $($parent).find('[familytreetop="anniversary"]').hide();
             $($parent).find('[familytreetop="weremember"]').hide();
 
             for(prop in data){
                 if(!data.hasOwnProperty(prop) || prop == 0) continue;
-                subbox = $(box).find('[_example]').clone();
-                $(subbox).removeAttr('_example');
-                $(subbox).find('[familytreetop="subbox-header"] span').text($('#months').find('[data-familytreetop="'+prop+'"]').text());
-
                 month = data[prop];
+                tr = $('<tr familytreetop-row><td style="text-align: center; background: gray;" colspan="5">'+($('#months').find('[data-familytreetop="'+prop+'"]').text())+'</td></tr>');
+                $(table).append(tr);
 
                 for(key in month){
                     if(!month.hasOwnProperty(key)) continue;
                     item = month[key];
-                    tr = $('<tr></tr>');
-                    $(tr).append('<td><div class="familytreetop-this-month-data">'+(item.date.start_day || "")+'</div></td>');
+                    tr = $('<tr familytreetop-row></tr>');
+                    $(tr).append('<td>'+(item.date.start_day || "")+'</td>');
                     $(tr).append('<td><i class="icon-gift"></i></td>');
                     if(item.event.gedcom_id != null){
                         user = $this.mod('usertree').user(item.event.gedcom_id);
-                        $(tr).append('<td data-familytreetop-color="'+user.gender+'">'+user.name()+'</td>');
+                        $(tr).append('<td>'+user.name()+'</td>');
                         $(tr).append('<td></td>');
                         $(tr).append('<td>'+user.relation+'</td>');
 
@@ -81,15 +78,12 @@ $FamilyTreeTop.create("this_month", function($){
                         family = $this.mod('usertree').family(item.event.family_id);
                         husb = $this.mod('usertree').user(family.husb);
                         wife = $this.mod('usertree').user(family.wife);
-                        $(tr).append('<td><div data-familytreetop-color="'+husb.gender+'">'+husb.name()+'</div><div data-familytreetop-color="'+wife.gender+'">'+wife.name()+'</div></td>');
+                        $(tr).append('<td><div>'+husb.name()+'</div><div>'+wife.name()+'</div></td>');
                         $(tr).append('<td></td>');
                         $(tr).append('<td><div>'+husb.relation+'</div><div>'+wife.relation+'</div></td>');
                     }
-                    $(subbox).find('table').append(tr);
+                    $(table).append(tr);
                 }
-
-                $(cont).append(subbox);
-                $(subbox).show();
             }
 
             console.log(data);

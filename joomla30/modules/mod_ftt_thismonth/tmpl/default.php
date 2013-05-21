@@ -10,28 +10,22 @@ $date = date('n', strtotime('-1 month'));
                 <legend>
                     <div class="row-fluid">
                         <div class="span12">
-                            <ul class="unstyled inline">
-                                <li>This Month</li>
-                                <li>
-                                    <?php
-                                        echo '<select familytreetop="months" class="span12" name="ThisMonth[month]">';
-                                        echo '<option value="0">All Months</option>';
-                                        foreach($months as $key => $month){
-                                            $option = '<option ';
-                                            if($key == $date){
-                                                $option .= ' selected="selected"';
-                                            }
-                                            $option .= ' value="' . ($key + 1);
-                                            $option .= '">' ;
-                                            $option .= $month;
-                                            $option .= '</option>';
-                                            echo $option;
-                                        }
-                                        echo '</select>';
-                                    ?>
-
-                                </li>
-                            </ul>
+                            <?php
+                            echo '<select familytreetop="months" style="margin:0;" name="ThisMonth[month]">';
+                            echo '<option value="0">All Months</option>';
+                            foreach($months as $key => $month){
+                                $option = '<option ';
+                                if($key == $date){
+                                    $option .= ' selected="selected"';
+                                }
+                                $option .= ' value="' . ($key + 1);
+                                $option .= '">' ;
+                                $option .= $month;
+                                $option .= '</option>';
+                                echo $option;
+                            }
+                            echo '</select>';
+                            ?>
                         </div>
                     </div>
                 </legend>
@@ -39,11 +33,10 @@ $date = date('n', strtotime('-1 month'));
                 <div class="span12">
                     <div familytreetop="all" class="row-fluid" style="display:none;">
                         <div class="span12">
-                            <div familytreetop="subbox" _example style="display:none;">
-                                <div familytreetop="subbox-header" style="background: #c3c3c3; padding: 3px; text-align: center;"><span></span></div>
-                                <table style="margin:0;" class="table table-striped table-bordered">
+                            <div familytreetop="subbox">
+                                <table style="margin:0;" class="table table-striped table-bordered familytreetop-table">
                                     <thead>
-                                        <tr>
+                                        <tr style="background: #efe4b0;">
                                             <td>Day</td>
                                             <td>Event</td>
                                             <td>Name</td>
