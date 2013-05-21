@@ -300,7 +300,10 @@ $FamilyTreeTop.create("usertree", function($){
             husb: fam.husb,
             id: fam.id,
             type: fam.type,
-            wife: fam.wife
+            wife: fam.wife,
+            event:function(){
+                return $this.getFamilyEventByType(family_id, 'MARR');
+            }
         }
     }
 
@@ -613,6 +616,21 @@ $FamilyTreeTop.create("usertree", function($){
     $this.getUserEventByType = function(gedcom_id, type){
         if("undefined" === typeof( data.eve.gedcom_id[gedcom_id])) return false;
         var events =  data.eve.gedcom_id[gedcom_id];
+        for(var key in events){
+            if(!events.hasOwnProperty(key)) continue;
+            var event = events[key];
+            if(event['type'] == type){
+                var event_id = event['id'];
+                return $this.getEvent(event_id);
+            }
+
+        }
+        return false;
+    }
+
+    $this.getFAmilyEventByType = function(family_id, type){
+        if("undefined" === typeof( data.eve.family_id[family_id])) return false;
+        var events =  data.eve.family_id[family_id];
         for(var key in events){
             if(!events.hasOwnProperty(key)) continue;
             var event = events[key];
