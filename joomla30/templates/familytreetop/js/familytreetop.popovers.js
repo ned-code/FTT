@@ -31,12 +31,37 @@ $FamilyTreeTop.create("popovers", function($){
         },
         getContent:function(){
             var div = $('#familytreetop-root #popover').clone(),
+                cont = $(div).find('[familytreetop-name="content"]'),
                 object = $fn.getLastObject().object,
                 avatar;
 
             if(object.facebook_id == 0){
                 $(div).find('[familytreetop-name="footer"]').show();
             }
+
+            $(cont).find('li').each(function(index, element){
+                var name = $(element).attr('familytreetop-name');
+                var value, _value, place;
+                if("function" === typeof(object[name])){
+                    value = object[name]();
+                } else {
+                    value = object[name];
+                }
+                if(value && value != "" ){
+                    if(name == 'birth' || name == 'death'){
+                        _value = [];
+                        _value.push($this.mod('usertree').parseDate(value.date));
+                        place = $this.mod('usertree').parsePlace(value.place);
+                        if(place != ""){
+                            _value.push("(" + place + ")");
+                        }
+                        value = _value.join("");
+                    }
+                    $($(element).find('span')[1]).text(value);
+                } else {
+                    $(element).hide();
+                }
+            });
 
 
             avatar = $fn.getLastObject().object.avatar(["75","75"], "media-object");

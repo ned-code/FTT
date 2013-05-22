@@ -138,8 +138,15 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
 
     <div id="popover">
         <div class="row-fluid" style="padding: 9px 14px;">
-            <div class="span4"><img class="media-object" data-src="template/familytreetop/js/holder.js/75x75"></div>
-            <div class="span8"></div>
+            <div class="span3"><img class="media-object" data-src="template/familytreetop/js/holder.js/75x75"></div>
+            <div class="span8" familytreetop-name="content">
+                <ul class="unstyled">
+                    <li familytreetop-name="birth"><span style="font-weight: bold;"><?=JText::_("TPL_FAMILYTREETOP_BORN");?></span>: <span></span></li>
+                    <li familytreetop-name="death"><span style="font-weight: bold;"><?=JText::_("TPL_FAMILYTREETOP_DIED");?></span>: <span></span></li>
+                    <li familytreetop-name="relation"><span style="font-weight: bold;"><?=JText::_("TPL_FAMILYTREETOP_RELATION");?></span>: <span></span></li>
+                    <li familytreetop-name="connection"><span style="font-weight: bold;"><?=JText::_("TPL_FAMILYTREETOP_CONNECTION");?></span>: <span></span></li>
+                </ul>
+            </div>
         </div>
         <div class="row-fluid" familytreetop-name="footer" style="display: none;">
             <div class="span12 familytreetop-popover-footer text-center">
