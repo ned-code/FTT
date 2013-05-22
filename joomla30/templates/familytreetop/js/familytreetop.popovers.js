@@ -33,16 +33,13 @@ $FamilyTreeTop.create("popovers", function($){
             var div = $('#familytreetop-root #popover').clone(),
                 object = $fn.getLastObject().object,
                 avatar;
-            $(div).find('ul li').each(function(index, el){
-                var type = $(el).attr('data-familytreetop'),
-                    val = ("function"===typeof(object[type])?object[type]():object[type]);
-                if(val == null || val.length == 0){
-                    $(el).hide();
-                } else {
-                    $(el).find('span').text(val);
-                }
-            });
-            avatar = $fn.getLastObject().object.avatar(["100","100"], "media-object");
+
+            if(object.facebook_id == 0){
+                $(div).find('[familytreetop-name="footer"]').show();
+            }
+
+
+            avatar = $fn.getLastObject().object.avatar(["75","75"], "media-object");
             $(div).find('.familytreetop-avatar').html("")
             $(div).find('.familytreetop-avatar').append(avatar);
 
@@ -56,8 +53,7 @@ $FamilyTreeTop.create("popovers", function($){
             return 'body';
         },
         getTemplate:function(){
-            var html = '<div class="popover" style="min-width:350px;"><div class="arrow"></div><a style="margin:5px;" class="pull-right" href="#"><i class="icon-large icon-share"></a></i><h3 class="popover-title"></h3><div class="popover-content"></div></div>';
-            var object = $(html);
+            var object = $('#familytreetop-root .popover').clone();
             var args = $fn.getLastObject();
             $(object).find('a[class="pull-right"]').click(function(){
                 $this.mod('profile').render(args);

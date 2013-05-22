@@ -1,3 +1,7 @@
+.icon-large-white{
+    background-image:url("../img/glyphicons-white.png") !important;
+    background-position: 24px 24px;
+}
 .modal {
     width: 900px;
     margin-left: -450px;

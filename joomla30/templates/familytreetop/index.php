@@ -135,27 +135,33 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
         <div data-familytreetop="12"><?=JText::_("TPL_FAMILYTREETOP_DECEMBER");?></div>
     </div>
 
+
     <div id="popover">
-        <div class="row-fluid">
-            <div class="span12">
-                <div>
-                    <div class="span4 familytreetop-avatar">
-                        <img class="media-object" data-src="template/familytreetop/js/holder.js/100x100">
-                    </div>
-                    <div class="span8">
-                        <ul class="unstyled">
-                            <li data-familytreetop="first_name"><small><strong><?=JText::_("TPL_FAMILYTREETOP_FIRST_NAME");?></strong>: <span></span></small></li>
-                            <li data-familytreetop="middle_name"><small><strong><?=JText::_("TPL_FAMILYTREETOP_MIDDLE_NAME");?></strong>: <span></span></small></li>
-                            <li data-familytreetop="last_name"><small><strong><?=JText::_("TPL_FAMILYTREETOP_LAST_NAME");?></strong>: <span></span></small></li>
-                            <li data-familytreetop="know_as"><small><strong><?=JText::_("TPL_FAMILYTREETOP_KNOW_AS");?></strong>: <span></span></small></li>
-                            <li data-familytreetop="relation"><small><strong><?=JText::_("TPL_FAMILYTREETOP_RELATION");?></strong>: <span></span></small></li>
-                            <li data-familytreetop="connection"><small><strong><?=JText::_("TPL_FAMILYTREETOP_CONNECTION");?></strong>: <span></span></small></li>
-                        </ul>
+        <div class="row-fluid" style="padding: 9px 14px;">
+            <div class="span4"><img class="media-object" data-src="template/familytreetop/js/holder.js/75x75"></div>
+            <div class="span8"></div>
+        </div>
+        <div class="row-fluid" familytreetop-name="footer" style="display: none;">
+            <div class="span12 familytreetop-popover-footer text-center">
+                <div type="button" class="btn btn-primary" style="padding: 4px 12px 0px 12px;">
+                    <div class="row-fluid">
+                        <div class="span6">
+                            <i class="icon-large icon-large-white icon-facebook"></i>
+                        </div>
+                        <div class="span6" style="line-height: 25px;">
+                            Invite
+                        </div>
                     </div>
                 </div>
-                <div></div>
             </div>
         </div>
+    </div>
+
+    <div class="popover" style="min-width:350px;">
+        <div class="arrow"></div>
+        <a style="margin:5px;" class="pull-right" href="#"><i class="icon-large icon-new-window"></a></i>
+        <h3 class="popover-title" style="font-weight: bold;"></h3>
+        <div class="popover-content" style="padding:0;"></div>
     </div>
 
     <div id="editMenu">
