@@ -104,7 +104,13 @@ $FamilyTreeTop.create("popovers", function($){
                 container:  $fn.getContainer()
             });
         },
-        click: function(args){
+        friendselector: function(args, opt){
+            $(opt.content).find('[familytreetop-invite]').click(function(){
+                var gedcom_id = $(args.target).attr('gedcom_id');
+                $this.mod('friendselector').render(gedcom_id);
+            });
+        },
+        click: function(args, opt){
             $(args.target).bind('click', function(e){
                 if($active == args.target) return false;
                 if($active){
@@ -112,6 +118,7 @@ $FamilyTreeTop.create("popovers", function($){
                     $this.hide();
                 }
                 $active = args.target;
+                $fn.friendselector(args, opt);
                 $(args.target).popover('show');
 
                 $('body').bind('click.familytreetop', function(e){
@@ -130,19 +137,7 @@ $FamilyTreeTop.create("popovers", function($){
         if("undefined" === typeof(args) || !$fn.setData(args)) return false;
         options = $fn.getOptions(args);
         $(args.target).popover(options);
-        $fn.click(args);
-        $(options.content).find('[familytreetop-invite]').click(function(){
-            TDFriendSelector.init();
-            var selector = TDFriendSelector.newInstance({
-                maxSelection             : 1,
-                friendsPerPage           : 5,
-                autoDeselection          : true,
-                callbackSubmit: function(selectedFriendIds) {
-                    console.log(selectedFriendIds)
-                }
-            });
-            selector.showFriendSelector();
-        });
+        $fn.click(args, options);
     }
 
     $this.hide = function(){
