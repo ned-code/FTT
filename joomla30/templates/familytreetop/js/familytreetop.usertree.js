@@ -329,6 +329,20 @@ $FamilyTreeTop.create("usertree", function($){
         return false;
     }
 
+    $this.isHolderImg = function(src){
+        var _src, _data_src;
+        if("object" === typeof(src)){
+            _src = $(src).attr('src');
+            _data_src = $(src).attr('data-src');
+            if(_src != ""){
+                src = _src;
+            } else {
+                src = _data_src;
+            }
+        }
+        return (src.indexOf("holder.js") + 1);
+    }
+
     $this.getRelation = function(gedcom_id){
         if(data.rel == null) return [false, true];
         if("undefined" !== typeof(data.rel[gedcom_id])){

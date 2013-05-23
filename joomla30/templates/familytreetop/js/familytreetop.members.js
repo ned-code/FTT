@@ -155,7 +155,8 @@ $FamilyTreeTop.create("members", function($){
                     $fn.setRelPullObject(object);
                     $(tr).append('<td>'+object.relation+'</td>');
                     td = $('<td gedcom_id="'+object.gedcom_id+'"></td>');
-                    if(object.facebook_id != 0){
+                    if(!$this.mod('usertree').isHolderImg(avatar)){
+
                         $(td).append(avatar);
                     }
                     $(td).append(object.name());
