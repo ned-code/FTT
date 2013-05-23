@@ -101,7 +101,7 @@ $FamilyTreeTop.create("popovers", function($){
                 title: $fn.getTitle(),
                 content: $fn.getContent(),
                 delay: { show: 500, hide: 100 },
-                container: $fn.getContainer()
+                container:  $fn.getContainer()
             });
         },
         click: function(args){
@@ -126,9 +126,23 @@ $FamilyTreeTop.create("popovers", function($){
     }
 
     $this.render = function(args){
+        var options;
         if("undefined" === typeof(args) || !$fn.setData(args)) return false;
-        $(args.target).popover($fn.getOptions(args));
+        options = $fn.getOptions(args);
+        $(args.target).popover(options);
         $fn.click(args);
+        $(options.content).find('[familytreetop-invite]').click(function(){
+            TDFriendSelector.init();
+            var selector = TDFriendSelector.newInstance({
+                maxSelection             : 1,
+                friendsPerPage           : 5,
+                autoDeselection          : true,
+                callbackSubmit: function(selectedFriendIds) {
+                    console.log(selectedFriendIds)
+                }
+            });
+            selector.showFriendSelector();
+        });
     }
 
     $this.hide = function(){

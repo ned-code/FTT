@@ -155,7 +155,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                         <div class="span6">
                             <i class="icon-large icon-large-white icon-facebook"></i>
                         </div>
-                        <div class="span6" style="line-height: 25px;">
+                        <div class="span6" familytreetop-invite style="line-height: 25px;">
                             Invite
                         </div>
                     </div>
