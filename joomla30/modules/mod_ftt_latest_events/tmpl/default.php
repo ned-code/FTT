@@ -10,7 +10,7 @@ defined('_JEXEC') or die;
                     <fieldset>
                         <legend>Latest Births</legend>
                     </fieldset>
-                    <table style="margin:0;" id="latestBriths" class="table table-striped familytreetop-table">
+                    <table style="margin:0;" id="latestBriths" class="table table-striped familytreetop-table familytreetop-table-td">
                     </table>
                 </div>
             </div>
@@ -21,7 +21,7 @@ defined('_JEXEC') or die;
                     <fieldset>
                         <legend>Latest Marriages</legend>
                     </fieldset>
-                    <table style="margin:0;" id="latestMarriages" class="table table-striped familytreetop-table">
+                    <table style="margin:0;" id="latestMarriages" class="table table-striped familytreetop-table familytreetop-table-td">
                     </table>
                 </div>
             </div>
@@ -32,7 +32,7 @@ defined('_JEXEC') or die;
                     <fieldset>
                         <legend>Latest Deaths</legend>
                     </fieldset>
-                    <table style="margin:0;" id="latestDeaths" class="table table-striped familytreetop-table">
+                    <table style="margin:0;" id="latestDeaths" class="table table-striped familytreetop-table familytreetop-table-td">
                     </table>
                 </div>
             </div>

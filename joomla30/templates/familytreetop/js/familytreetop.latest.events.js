@@ -26,13 +26,13 @@ $FamilyTreeTop.create("latest_events", function($){
                     husb =  $this.mod('usertree').user(family.husb);
                     wife =  $this.mod('usertree').user(family.wife);
 
-                    avatar = husb.avatar(["35", "35"]);
+                    avatar = husb.avatar(["25", "25"]);
                     $fn.setHolderImage(avatar[0]);
                     div = $('<div></div>');
                     $(div).append(avatar);
                     $(td).append(div);
 
-                    avatar = wife.avatar(["35", "35"]);
+                    avatar = wife.avatar(["25", "25"]);
                     $fn.setHolderImage(avatar[0]);
                     div = $('<div></div>');
                     $(div).append(avatar);
@@ -51,7 +51,7 @@ $FamilyTreeTop.create("latest_events", function($){
                 } else {
                     user = $this.mod('usertree').user(events[prop].gedcom_id);
                     ev = user[type]();
-                    avatar = user.avatar(["35","35"]);
+                    avatar = user.avatar(["25","25"]);
                     $fn.setHolderImage(avatar[0]);
                     $(td).append(avatar);
                     $(tr).append('<td class="text-center" style="width:100px; vertical-align: middle;">'+$this.mod('usertree').parseDate(ev.date)+'</td>');
