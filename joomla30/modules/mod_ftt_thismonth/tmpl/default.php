@@ -34,7 +34,7 @@ $date = date('n', strtotime('-1 month'));
                     <div familytreetop="all" class="row-fluid" style="display:none;">
                         <div class="span12">
                             <div familytreetop="subbox">
-                                <table style="margin:0;" class="table table-striped table-bordered familytreetop-table">
+                                <table style="margin:0;" class="table table-striped table-bordered familytreetop-table familytreetop-table-td">
                                     <thead>
                                         <tr style="background: #efe4b0;">
                                             <td>Day</td>
@@ -51,19 +51,19 @@ $date = date('n', strtotime('-1 month'));
                     <div familytreetop="birthdays" class="row-fluid">
                         <div class="span12">
                             <div style="background: #c3c3c3; padding: 3px; padding-left: 20px;"><i class="icon-gift"></i>Birthdays</div>
-                            <table style="margin:0;" class="table table-striped familytreetop-table"></table>
+                            <table style="margin:0;" class="table table-striped familytreetop-table familytreetop-table-td"></table>
                         </div>
                     </div>
                     <div familytreetop="anniversary" class="row-fluid">
                         <div class="span12">
                             <div style="background: #c3c3c3; padding: 3px; padding-left: 20px;"><i class="icon-gift"></i>Anniversary</div>
-                            <table style="margin:0;" class="table table-striped familytreetop-table"></table>
+                            <table style="margin:0;" class="table table-striped familytreetop-table familytreetop-table-td"></table>
                         </div>
                     </div>
                     <div familytreetop="weremember" class="row-fluid">
                         <div class="span12">
                             <div style="background: #c3c3c3; padding: 3px; padding-left: 20px;"><i class="icon-gift"></i>We remember</div>
-                            <table style="margin:0;" class="table table-striped familytreetop-table"></table>
+                            <table style="margin:0;" class="table table-striped familytreetop-table familytreetop-table-td"></table>
                         </div>
                     </div>
                 </div>

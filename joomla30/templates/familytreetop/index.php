@@ -150,12 +150,12 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
         </div>
         <div class="row-fluid" familytreetop-name="footer" style="display: none;">
             <div class="span12 familytreetop-popover-footer text-center">
-                <div type="button" class="btn btn-primary" style="padding: 4px 12px 0px 12px;">
+                <div familytreetop-invite type="button" class="btn btn-primary" style="padding: 4px 12px 0px 12px;">
                     <div class="row-fluid">
                         <div class="span6">
                             <i class="icon-large icon-large-white icon-facebook"></i>
                         </div>
-                        <div class="span6" familytreetop-invite style="line-height: 25px;">
+                        <div class="span6" style="line-height: 25px;">
                             Invite
                         </div>
                     </div>

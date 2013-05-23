@@ -119,9 +119,9 @@ $FamilyTreeTop.create("this_month", function($){
 
                         sb._('<td style="width:24px;"><div class="familytreetop-this-month-data">')._(event.date.start_day || "")._('</div></td>');
                         sb._(' ');
-                        sb._('<td data-familytreetop-color="')._(user.gender)._('"');
-                        sb._(' gedcom_id="')._(user.gedcom_id)._('"><div>')._(user.shortname())._('</div>');
-                        sb._('<div>')._(user.relation)._('</div>')
+                        sb._('<td');
+                        sb._(' gedcom_id="')._(user.gedcom_id)._('"><div data-familytreetop-color="')._(user.gender)._('">')._(user.shortname())._('</div>');
+                        sb._('<div><i class="icon-leaf"></i>')._(user.relation)._('</div>')
                         sb._('</td>');
 
                         html = $(sb.ret());

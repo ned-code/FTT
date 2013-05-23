@@ -118,8 +118,8 @@ $FamilyTreeTop.create("popovers", function($){
                     $this.hide();
                 }
                 $active = args.target;
-                $fn.friendselector(args, opt);
                 $(args.target).popover('show');
+                $fn.friendselector(args, opt);
 
                 $('body').bind('click.familytreetop', function(e){
                     if(!$active) return false;
