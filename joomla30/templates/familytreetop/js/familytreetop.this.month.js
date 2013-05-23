@@ -59,7 +59,7 @@ $FamilyTreeTop.create("this_month", function($){
             for(prop in data){
                 if(!data.hasOwnProperty(prop) || prop == 0) continue;
                 month = data[prop];
-                tr = $('<tr familytreetop-row><td style="text-align: center; background: #c3c3c3;" colspan="5">'+($('#months').find('[data-familytreetop="'+prop+'"]').text())+'</td></tr>');
+                tr = $('<tr familytreetop-row class="familytreetop-no-hover-effect"><td style="text-align: center; background: #c3c3c3;" colspan="5">'+($('#months').find('[data-familytreetop="'+prop+'"]').text())+'</td></tr>');
                 $(table).append(tr);
 
                 for(key in month){

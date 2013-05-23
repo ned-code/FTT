@@ -53,3 +53,6 @@
 .familytreetop-table-td td {
     padding: 4px;
 }
+.familytreetop-no-hover-effect:hover {
+    background: none;
+}
