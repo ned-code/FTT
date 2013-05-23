@@ -710,7 +710,7 @@ $FamilyTreeTop.create("usertree", function($){
             ret.push(place.city);
         }
         if(place.state != null){
-            ret.push(place.state);
+            //ret.push(place.state);
         }
         if(place.country != null){
             ret.push(place.country);
