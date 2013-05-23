@@ -143,16 +143,23 @@ $FamilyTreeTop.create("members", function($){
             }
         },
         render: function(){
+            var key, object, birth, tr,td, avatar;
             $($box).find('tbody tr').remove();
-            for ( var key in $users ){
+            for (key in $users ){
                 if(!$users.hasOwnProperty(key)) continue;
-                var object = $users[key];
-                var birth = object.birth();
-                var tr = $('<tr></tr>');
+                object = $users[key];
+                birth = object.birth();
+                tr = $('<tr></tr>');
                 if($fn.isSortable(object)&&$fn.isGender(object)&&$fn.isLiving(object)&&$fn.isRegistered(object)){
+                    avatar = object.avatar(["25","25"]);
                     $fn.setRelPullObject(object);
                     $(tr).append('<td>'+object.relation+'</td>');
-                    $(tr).append('<td gedcom_id="'+object.gedcom_id+'">'+object.name()+'</td>');
+                    td = $('<td gedcom_id="'+object.gedcom_id+'"></td>');
+                    if(object.facebook_id != 0){
+                        $(td).append(avatar);
+                    }
+                    $(td).append(object.name());
+                    $(tr).append(td);
                     $(tr).append('<td>'+$this.mod('usertree').parseDate(birth.date)+'</td>');
                     $(tr).append('<td>'+$this.mod('usertree').parsePlace(birth.place)+'</td>');
                     $($box).append(tr);
