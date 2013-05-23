@@ -165,7 +165,7 @@ $FamilyTreeTop.create("usertree", function($){
                         return name+'-in-law';
                     }
                 }
-                return "";
+                return "unknown";
             })(),
             relationId:(function(){
                 var relation = $this.getRelation(ind.gedcom_id);
