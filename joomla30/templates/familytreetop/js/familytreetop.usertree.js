@@ -157,20 +157,15 @@ $FamilyTreeTop.create("usertree", function($){
             })(),
             relation: (function(){
                 var relation = $this.getRelation(ind.gedcom_id);
-                if(relation[0]){
-                    var name = $this.getRelationName(relation);
-                    if(relation[1]){
-                        return name;
-                    } else {
-                        return name+'-in-law';
-                    }
+                if(relation){
+                    return $this.getRelationName(relation);
                 }
                 return "unknown";
             })(),
             relationId:(function(){
                 var relation = $this.getRelation(ind.gedcom_id);
-                if(relation[1]){
-                    return relation[0].relation_id;
+                if(relation){
+                    return relation.relation_id;
                 }
                 return 0;
             })(),
@@ -346,23 +341,9 @@ $FamilyTreeTop.create("usertree", function($){
     $this.getRelation = function(gedcom_id){
         if(data.rel == null) return [false, true];
         if("undefined" !== typeof(data.rel[gedcom_id])){
-            return [data.rel[gedcom_id], true];
-        } else {
-            var spouses = data.rel._SPOUSES,
-                map = $this.getConnectionMap(gedcom_id);
-            if(map){
-                for(var prop in spouses){
-                    if(!spouses.hasOwnProperty(prop)) continue;
-                    if(prop in map){
-                        var mass = data.rel._SPOUSES[prop];
-                        if("undefined" !== typeof(mass[gedcom_id])){
-                            return [mass[gedcom_id], false];
-                        }
-                    }
-                }
-            }
+            return data.rel[gedcom_id];
         }
-        return [false, true];
+        return false;
     }
 
     $this.getConnectionMap = function(gedcom_id){
@@ -402,7 +383,7 @@ $FamilyTreeTop.create("usertree", function($){
                 var gedcom_id = object[prop],
                     relation = $this.getRelation(gedcom_id),
                     user = $this.user(gedcom_id),
-                    relation_id = relation[0].relation_id;
+                    relation_id = relation.relation_id;
                 pull.push({rel:relation, usr: user});
                 if(index(relation_id) == 3 || index(relation_id) == 4){
                     vehicle = pull.length - 1;
@@ -459,12 +440,12 @@ $FamilyTreeTop.create("usertree", function($){
     }
 
     $this.getRelationName = function(object){
-        var relationId = object[0].relation_id,
-            json = object[0].json,
-            suffix = (json!=null&&"undefined"!=typeof(json.suffix))?json.suffix:"";
+        var relationId = object.relation_id,
+            json = object.json,
+            suffix =( (json!=null&&"undefined"!=typeof(json.suffix))?json.suffix:"" ),
+            postfix = (object.in_law != 0)?"in-law":"";
         if(data.rel != null && "undefined" !== typeof(data.rel._NAMES[relationId])){
-
-            return (suffix) + " " + $('#relations').find('[data-familytreetop="'+data.rel["_NAMES"][relationId].name+'"]').text();
+            return (suffix) + " " + $('#relations').find('[data-familytreetop="'+data.rel["_NAMES"][relationId].name+'"]').text() + " " + postfix;
         }
         return "undefined";
     }

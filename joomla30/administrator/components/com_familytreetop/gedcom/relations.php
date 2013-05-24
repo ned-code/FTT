@@ -3,29 +3,20 @@ class FamilyTreeTopGedcomRelationsManager {
     protected $tree_id;
     protected $owner_id;
     protected $list = array();
-    protected $spouses_list = array();
 
     public function __construct($tree_id, $gedcom_id){
         $this->tree_id = $tree_id;
         $this->owner_id = $gedcom_id;
 
         if(!empty($this->tree_id) && !empty($this->owner_id)){
-            $spouses = $this->get_spouses($this->owner_id);
-
             $this->list = $this->getRelations($this->owner_id);
             $this->list['_NAMES'] = $this->getRelationsName();
-
-            $spousesRelations = array();
-            foreach($spouses as $spouse){
-                $spousesRelations[$spouse] = $this->getRelations($spouse);
-            }
-            $this->list['_SPOUSES'] = $spousesRelations;
         }
     }
 
     protected function getRelations($gedcom_id){
         $db = JFactory::getDbo();
-        $sql = "SELECT r.id, r.relation_id, r.gedcom_id, r.target_id, r.json, r.change_time
+        $sql = "SELECT r.id, r.relation_id, r.gedcom_id, r.target_id, r.json, r.in_law, r.change_time
                     FROM #__familytreetop_relation_links as r, #__familytreetop_tree_links as l, #__familytreetop_trees as t
                     WHERE r.gedcom_id = l.id AND l.tree_id = t.id AND t.id = " . $this->tree_id . " AND r.gedcom_id = " . $gedcom_id;
         $db->setQuery($sql);
@@ -234,6 +225,7 @@ class FamilyTreeTopGedcomRelationsManager {
             $rel->target_id = $target_id;
             $rel->connection = '';
             $rel->json = (empty($json))?NULL:base64_encode(json_encode($json));
+            $rel->in_law = 0;
             $rel->save();
 
             $item = array(
@@ -242,7 +234,8 @@ class FamilyTreeTopGedcomRelationsManager {
                 'target_id' => $rel->target_id,
                 'connection' => $rel->connection,
                 'json' => $json,
-                'change_time' => $rel->change_time,
+                'in_law' => false,
+                'change_time' => $rel->change_time
             );
 
             $this->list[$target_id] = $item;
@@ -253,15 +246,16 @@ class FamilyTreeTopGedcomRelationsManager {
 
     public function getInLaw($gedcom_id, $target_id){
         $relation = $this->_get($gedcom_id, $target_id);
-        if($relation && !isset($this->list['_SPOUSES'][$gedcom_id][$target_id])){
+        if($relation){
             $json = $this->getJSON($relation);
 
             $rel = new FamilyTreeTopRelationLinks();
             $rel->relation_id = $relation[0];
-            $rel->gedcom_id = $gedcom_id;
+            $rel->gedcom_id = $this->owner_id;
             $rel->target_id = $target_id;
             $rel->connection = '';
             $rel->json = (empty($json))?NULL:base64_encode(json_encode($json));
+            $rel->in_law = $gedcom_id;
             $rel->save();
 
             $item = array(
@@ -270,10 +264,10 @@ class FamilyTreeTopGedcomRelationsManager {
                 'target_id' => $rel->target_id,
                 'connection' => $rel->connection,
                 'json' => $json,
-                'change_time' => $rel->change_time,
+                'in_law' => $gedcom_id,
+                'change_time' => $rel->change_time
             );
-
-            $this->list['_SPOUSES'][$gedcom_id][$target_id] = $item;
+            $this->list[$target_id] = $item;
         }
         return $relation;
     }
