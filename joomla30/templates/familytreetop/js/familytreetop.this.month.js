@@ -114,17 +114,30 @@ $FamilyTreeTop.create("this_month", function($){
                         var tr = $('<tr style="cursor:pointer;"></re>'),
                             event = $this.mod('usertree').getEvent(e.id),
                             user = $this.mod('usertree').user(e.gedcom_id),
+                            avatar = user.avatar(["25","25"]),
                             sb = $this.stringBuffer(),
+                            div,
+                            txt,
                             html;
 
                         sb._('<td style="width:24px;"><div class="familytreetop-this-month-data">')._(event.date.start_day || "")._('</div></td>');
                         sb._(' ');
                         sb._('<td');
-                        sb._(' gedcom_id="')._(user.gedcom_id)._('"><div data-familytreetop-color="')._(user.gender)._('">')._(user.shortname())._('</div>');
+                        sb._(' gedcom_id="')._(user.gedcom_id)._('"><div data-familytreetop-color="')._(user.gender)._('">');
+                            sb._(user.shortname());
+                        sb._('</div>');
                         sb._('<div><i class="icon-leaf"></i>')._(user.relation)._('</div>')
                         sb._('</td>');
 
                         html = $(sb.ret());
+
+                        if(!$this.mod('usertree').isHolderImg(avatar[0])){
+                            div = $(html).find('[data-familytreetop-color]');
+                            txt = $(div).text();
+                            $(div).text('');
+                            $(div).append(avatar);
+                            $(div).append(" "+txt);
+                        }
 
                         $(tr).append(html);
                         $(table).append(tr);
@@ -142,6 +155,10 @@ $FamilyTreeTop.create("this_month", function($){
                             family = $this.mod('usertree').family(e.family_id),
                             husb = $this.mod('usertree').user(family.husb),
                             wife = $this.mod('usertree').user(family.wife),
+                            av = {
+                                husb:husb.avatar(["25","25"]),
+                                wife:wife.avatar(["25","25"])
+                            },
                             sb = $this.stringBuffer(),
                             html;
 
@@ -150,16 +167,26 @@ $FamilyTreeTop.create("this_month", function($){
                         sb._('<td style="width:24px;"><div class="familytreetop-this-month-data">')._(event.date.start_day || "")._('</div></td>');
                         sb._(' ');
                         sb._('<td>');
-                        sb._('<span data-familytreetop-color="')._(husb.gender)._('"');
+                        sb._('<span familytreetop-el="husb" data-familytreetop-color="')._(husb.gender)._('"');
                         sb._('" gedcom_id="')._(husb.gedcom_id)._('">')._(husb.shortname());
                         sb._('</span>');
                         sb._(' + ');
-                        sb._('<span data-familytreetop-color="')._(wife.gender)._('"');
+                        sb._('<span familytreetop-el="wife" data-familytreetop-color="')._(wife.gender)._('"');
                         sb._(' gedcom_id="')._(wife.gedcom_id)._('">')._(wife.shortname());
                         sb._('</span>');
                         sb._('</td>');
 
                         html = $(sb.ret());
+
+                        $(html).find('[familytreetop-el]').each(function(index, element){
+                            var avatar = av[$(this).attr('familytreetop-el')], text;
+                            if(!$this.mod('usertree').isHolderImg(avatar[0])){
+                                text = $(element).text();
+                                $(element).text('');
+                                $(element).append(avatar);
+                                $(element).append(" "+text);
+                            }
+                        });
 
                         $(tr).append(html);
                         $(table).append(tr);
