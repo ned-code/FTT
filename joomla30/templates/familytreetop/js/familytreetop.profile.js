@@ -3,6 +3,13 @@ $FamilyTreeTop.create("profile", function($){
     var $this = this, $fn, $box;
 
     $fn = {
+        isConnectionUser: function(args, node){
+            var con = $this.mod('usertree').getConnection(args.object.gedcom_id);
+            if(node.data.usr.gedcom_id == con[0]){
+                return true;
+            }
+            return false;
+        },
         isConnectionTarget: function(args, node){
             var con = $this.mod('usertree').getConnection(args.object.gedcom_id);
             if(node.data.usr.gedcom_id == con[con.length - 1]){
@@ -45,7 +52,7 @@ $FamilyTreeTop.create("profile", function($){
                     height: 40,
                     width: 140,
                     type: 'rectangle',
-                    color: '#efe4b0',
+                    color: '#c3c3c3',
                     overridable: true
                 },
                 Edge: {
@@ -60,6 +67,8 @@ $FamilyTreeTop.create("profile", function($){
                     $(label).addClass('text-center');
                     if($fn.isConnectionTarget(args, node)){
                         node.data.$color = "#ffc90e";
+                    } else if($fn.isConnectionUser(args, node)){
+                        node.data.$color = "#efe4b0";
                     }
                 }
             });
@@ -107,7 +116,7 @@ $FamilyTreeTop.create("profile", function($){
         getLabelHtml:function(label, node){
             var user = node.data.usr, box = $('<div class="text-center"></div>');
             $(box).append('<div>'+user.shortname()+'</div>');
-            $(box).append('<div>'+user.relation+'</div>');
+            $(box).append('<div style="color: #7f7f7f;"><i class="icon-leaf"></i>'+user.relation+'</div>');
             return $(box).html();
         },
         getModalBox:function(){
