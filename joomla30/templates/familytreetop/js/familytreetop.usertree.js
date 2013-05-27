@@ -182,6 +182,76 @@ $FamilyTreeTop.create("usertree", function($){
             relationMap:function(){
                 return $this.getRelationMap(ind.gedcom_id);
             },
+            avatar: function(size, style, src){
+                return $this.getImage(ind.gedcom_id, size, style, src);
+            },
+            username:function(){
+               return this.name().toLowerCase().split(' ').join('.');
+            },
+            name:function(){
+                var $name = [];
+                if(ind.first_name != null) $name.push(ind.first_name);
+                if(ind.last_name != null){
+                    if(ind.middle_name != null) $name.push(ind.middle_name);
+                    $name.push(ind.last_name);
+                }
+                return $name.join(' ').replace(/[ \t]{2,}/g, ' ');
+            },
+            shortname: function(){
+                var $name = [];
+                if(ind.first_name != null) $name.push(ind.first_name);
+                if(ind.last_name != null) $name.push(ind.last_name);
+                return $name.join(' ').replace(/[ \t]{2,}/g, ' ');
+            },
+            medias: function(){
+              return $this.getMedias(ind.gedcom_id);
+            },
+            birth:function(){
+                return $this.getUserEventByType(ind.gedcom_id, 'BIRT');
+            },
+            death:function(){
+                return $this.getUserEventByType(ind.gedcom_id, 'DEAT');
+            },
+            event:function(id){
+                if("undefined" === typeof(id)) return false;
+            },
+            turns: function(event){
+                var $self = this, date = new Date(), e;
+                e = $self[event]();
+                if(e && e.date && e.date.start_year != null){
+                    return date.getFullYear() - e.date.start_year;
+                }
+                return "";
+            },
+            isRegistered:function(){
+                return $this.isRegisteredUser(ind.gedcom_id);
+            },
+            isAlive:function(){
+                if(this.death()){
+                    return false;
+                }
+                return true;
+            },
+            isParentsExist:function(){
+                var parents = $this.getParents(gedcom_id);
+                return parents.father || parents.mother || false;
+            },
+            isSpouseExist:function(){
+                var spouses = $this.getSpouses(ind.gedcom_id);
+                if(spouses.length != 0){
+                    return true;
+                } else {
+                    return false;
+                }
+            },
+            isChildrensExist:function(){
+                var childrens = $this.getChildrens(ind.gedcom_id);
+                if(childrens.length != 0){
+                    return true;
+                } else {
+                    return false;
+                }
+            },
             isFatherLine:function(){
                 var object, id, _user;
                 if(data.con == null) return false;
@@ -219,68 +289,6 @@ $FamilyTreeTop.create("usertree", function($){
                     }
                 }
                 return false;
-            },
-            avatar: function(size, style, src){
-                return $this.getImage(ind.gedcom_id, size, style, src);
-            },
-            username:function(){
-               return this.name().toLowerCase().split(' ').join('.');
-            },
-            name:function(){
-                var $name = [];
-                if(ind.first_name != null) $name.push(ind.first_name);
-                if(ind.last_name != null){
-                    if(ind.middle_name != null) $name.push(ind.middle_name);
-                    $name.push(ind.last_name);
-                }
-                return $name.join(' ').replace(/[ \t]{2,}/g, ' ');
-            },
-            shortname: function(){
-                var $name = [];
-                if(ind.first_name != null) $name.push(ind.first_name);
-                if(ind.last_name != null) $name.push(ind.last_name);
-                return $name.join(' ').replace(/[ \t]{2,}/g, ' ');
-            },
-            medias: function(){
-              return $this.getMedias(ind.gedcom_id);
-            },
-            birth:function(){
-                return $this.getUserEventByType(ind.gedcom_id, 'BIRT');
-            },
-            death:function(){
-                return $this.getUserEventByType(ind.gedcom_id, 'DEAT');
-            },
-            event:function(id){
-                if("undefined" === typeof(id)) return false;
-            },
-            isRegistered:function(){
-                return $this.isRegisteredUser(ind.gedcom_id);
-            },
-            isAlive:function(){
-                if(this.death()){
-                    return false;
-                }
-                return true;
-            },
-            isParentsExist:function(){
-                var parents = $this.getParents(gedcom_id);
-                return parents.father || parents.mother || false;
-            },
-            isSpouseExist:function(){
-                var spouses = $this.getSpouses(ind.gedcom_id);
-                if(spouses.length != 0){
-                    return true;
-                } else {
-                    return false;
-                }
-            },
-            isChildrensExist:function(){
-                var childrens = $this.getChildrens(ind.gedcom_id);
-                if(childrens.length != 0){
-                    return true;
-                } else {
-                    return false;
-                }
             }
         }
     }
