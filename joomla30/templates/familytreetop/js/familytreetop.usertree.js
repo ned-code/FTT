@@ -216,15 +216,18 @@ $FamilyTreeTop.create("usertree", function($){
                 if("undefined" === typeof(id)) return false;
             },
             turns: function(){
-                var $self = this, date = new Date(), e;
-                e = $self.birth();
+                var $self = this, date = new Date(), e = $self.birth();
                 if(e && e.date && e.date.start_year != null){
                     return "turns " + (date.getFullYear() - e.date.start_year);
                 }
                 return "";
             },
             died: function(){
-
+                var $self = this, date = new Date(), e = $self.death();
+                if(e && e.date && e.date.start_year != null){
+                    return "died " + (date.getFullYear() - e.date.start_year) + " years ago";
+                }
+                return "";
             },
             isRegistered:function(){
                 return $this.isRegisteredUser(ind.gedcom_id);
@@ -309,6 +312,13 @@ $FamilyTreeTop.create("usertree", function($){
             wife: fam.wife,
             event:function(){
                 return $this.getFamilyEventByType(family_id, 'MARR');
+            },
+            married: function(){
+                var $self = this, date = new Date(), e = $self.event();
+                if(e && e.date && e.date.start_year != null){
+                    return "married " + (date.getFullYear() - e.date.start_year) + " years ago";
+                }
+                return "";
             }
         }
     }

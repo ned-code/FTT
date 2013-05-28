@@ -128,7 +128,7 @@ $FamilyTreeTop.create("this_month", function($){
                         sb._('</div>');
                         sb._('<div><i class="icon-leaf"></i>')._(user.relation)._('</div>')
                         sb._('</td>');
-                        sb._('<td style="font-size: 12px;color:#b7b7b7;">')._(user.turns())._('</td>');
+                        sb._('<td style="font-size: 12px;color:#b7b7b7;">')._((type=="birthdays")?user.turns():user.died())._('</td>');
 
                         html = $(sb.ret());
 
@@ -176,7 +176,7 @@ $FamilyTreeTop.create("this_month", function($){
                                 sb._(' gedcom_id="')._(wife.gedcom_id)._('"><div data-familytreetop-color="')._(wife.gender)._('">')._(wife.shortname())._('</div><div><i class="icon-leaf"></i>')._(wife.relation)._('</div>');
                             sb._('</span></li>');
                         sb._('</ul></td>');
-                        sb._('<td style="font-size: 12px;color:#b7b7b7;"><div>')._(husb.turns())._('</div><div>')._(wife.turns())._('</div></td>');
+                        sb._('<td style="font-size: 12px;color:#b7b7b7;">')._(family.married())._('</td>');
 
                         html = $(sb.ret());
 
