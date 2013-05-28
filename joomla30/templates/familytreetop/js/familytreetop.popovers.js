@@ -87,6 +87,12 @@ $FamilyTreeTop.create("popovers", function($){
             });
             return object;
         },
+        getPlacement: function(args){
+            if("undefined" !== typeof(args.placement)){
+                return args.placement;
+            }
+            return "right";
+        },
         getOptions: function(args){
             var options;
             if("undefined" === typeof(args.options)){
@@ -98,7 +104,7 @@ $FamilyTreeTop.create("popovers", function($){
                 html: true,
                 template: $fn.getTemplate(),
                 selector: false,
-                placement: "right",
+                placement: $fn.getPlacement(args),
                 trigger: 'manual',
                 title: $fn.getTitle(),
                 content: $fn.getContent(),

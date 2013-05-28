@@ -29,7 +29,8 @@ if($profile){
         $($box).find('[data-familytreetop-color]').each(function(i, el){
             $this.mod('familyline').bind(el, $(el).attr('gedcom_id'));
             $this.mod('popovers').render({
-                target: el
+                target: el,
+                placement: "left"
             });
         });
     });

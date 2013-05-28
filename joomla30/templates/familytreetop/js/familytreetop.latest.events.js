@@ -45,7 +45,8 @@ $FamilyTreeTop.create("latest_events", function($){
                     $(tr).append('<td><div gedcom_id="'+husb.gedcom_id+'">'+husb.name()+'</div><div><i class="icon-leaf"></i>'+husb.relation+'</div><div gedcom_id="'+wife.gedcom_id+'">'+wife.name()+'</div><div><i class="icon-leaf"></i>'+wife.relation+'</div></td>');
                     $(tr).find('div[gedcom_id]').each(function(i, el){
                         $this.mod('popovers').render({
-                            target: el
+                            target: el,
+                            placement: "left"
                         });
                     });
                 } else {
@@ -58,7 +59,8 @@ $FamilyTreeTop.create("latest_events", function($){
                     $(tr).append(td);
                     $(tr).append('<td><div gedcom_id="'+user.gedcom_id+'">'+user.name()+'</div><div><i class="icon-leaf"></i>'+user.relation+'</div></td>');
                     $this.mod('popovers').render({
-                        target: $(tr).find('div[gedcom_id]')
+                        target: $(tr).find('div[gedcom_id]'),
+                        placement: "left"
                     });
                 }
                 $(box).append(tr);

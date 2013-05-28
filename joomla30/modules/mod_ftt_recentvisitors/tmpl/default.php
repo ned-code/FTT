@@ -26,7 +26,8 @@ defined('_JEXEC') or die;
         $('#recentVisitors li').each(function(index, el){
             $this.mod('familyline').bind(el, $(el).attr('gedcom_id'));
             $this.mod('popovers').render({
-                target: el
+                target: el,
+                placement: "left"
             });
         });
     });
