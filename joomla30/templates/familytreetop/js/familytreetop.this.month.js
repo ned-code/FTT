@@ -168,12 +168,12 @@ $FamilyTreeTop.create("this_month", function($){
                         sb._('<td style="width:24px;"><div class="familytreetop-this-month-data">')._(event.date.start_day || "")._('</div></td>');
                         sb._(' ');
                         sb._('<td><ul class="unstyled inline">');
-                            sb._('<li><span familytreetop-el="husb"');
-                                sb._('" gedcom_id="')._(husb.gedcom_id)._('"><div data-familytreetop-color="')._(husb.gender)._('">')._(husb.shortname())._('</div><div><i class="icon-leaf"></i>')._(husb.relation)._('</div>');
+                            sb._('<li><span');
+                                sb._('" gedcom_id="')._(husb.gedcom_id)._('"><div familytreetop-el="husb" data-familytreetop-color="')._(husb.gender)._('">')._(husb.shortname())._('</div><div><i class="icon-leaf"></i>')._(husb.relation)._('</div>');
                             sb._('</span></li>');
                                 sb._('<li>+</li>');
-                            sb._('<li><span familytreetop-el="wife"');
-                                sb._(' gedcom_id="')._(wife.gedcom_id)._('"><div data-familytreetop-color="')._(wife.gender)._('">')._(wife.shortname())._('</div><div><i class="icon-leaf"></i>')._(wife.relation)._('</div>');
+                            sb._('<li><span');
+                                sb._(' gedcom_id="')._(wife.gedcom_id)._('"><div familytreetop-el="wife" data-familytreetop-color="')._(wife.gender)._('">')._(wife.shortname())._('</div><div><i class="icon-leaf"></i>')._(wife.relation)._('</div>');
                             sb._('</span></li>');
                         sb._('</ul></td>');
                         sb._('<td style="font-size: 12px;color:#b7b7b7;">')._(family.married())._('</td>');
@@ -181,13 +181,12 @@ $FamilyTreeTop.create("this_month", function($){
                         html = $(sb.ret());
 
                         $(html).find('[familytreetop-el]').each(function(index, element){
-                            var avatar = av[$(this).attr('familytreetop-el')], div, txt;
+                            var avatar = av[$(this).attr('familytreetop-el')], text;
                             if(!$this.mod('usertree').isHolderImg(avatar[0])){
-                                div = $(element).find('[familytreetop-el] div').first();
-                                txt = $(div).text();
-                                $(div).text('');
-                                $(div).append(avatar);
-                                $(div).append(txt);
+                                text = $(element).text();
+                                $(element).text('');
+                                $(element).append(avatar);
+                                $(element).append(text);
                             }
                         });
 
