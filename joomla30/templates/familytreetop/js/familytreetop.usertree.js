@@ -215,13 +215,16 @@ $FamilyTreeTop.create("usertree", function($){
             event:function(id){
                 if("undefined" === typeof(id)) return false;
             },
-            turns: function(event){
+            turns: function(){
                 var $self = this, date = new Date(), e;
-                e = $self[event]();
+                e = $self.birth();
                 if(e && e.date && e.date.start_year != null){
-                    return date.getFullYear() - e.date.start_year;
+                    return "turns " + (date.getFullYear() - e.date.start_year);
                 }
                 return "";
+            },
+            died: function(){
+
             },
             isRegistered:function(){
                 return $this.isRegisteredUser(ind.gedcom_id);
