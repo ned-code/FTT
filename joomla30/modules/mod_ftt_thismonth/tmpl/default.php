@@ -50,19 +50,19 @@ $date = date('n', strtotime('-1 month'));
                     </div>
                     <div familytreetop="birthdays" class="row-fluid">
                         <div class="span12">
-                            <div style="background: #c3c3c3; padding: 3px; padding-left: 20px;"><i class="icon-gift"></i>Birthdays</div>
+                            <div style="background: #c3c3c3; padding: 3px; padding-left: 20px;"><i class="icon-large icon-gift"></i>Birthdays</div>
                             <table style="margin:0;" class="table table-striped familytreetop-table familytreetop-table-td"></table>
                         </div>
                     </div>
                     <div familytreetop="anniversary" class="row-fluid">
                         <div class="span12">
-                            <div style="background: #c3c3c3; padding: 3px; padding-left: 20px;"><i class="icon-gift"></i>Anniversary</div>
+                            <div style="background: #c3c3c3; padding: 3px; padding-left: 20px;"><i class="icon-large icon-heart"></i>Anniversary</div>
                             <table style="margin:0;" class="table table-striped familytreetop-table familytreetop-table-td"></table>
                         </div>
                     </div>
                     <div familytreetop="weremember" class="row-fluid">
                         <div class="span12">
-                            <div style="background: #c3c3c3; padding: 3px; padding-left: 20px;"><i class="icon-gift"></i>We remember</div>
+                            <div style="background: #c3c3c3; padding: 3px; padding-left: 20px;"><i class="icon-large icon-bookmark"></i>We remember</div>
                             <table style="margin:0;" class="table table-striped familytreetop-table familytreetop-table-td"></table>
                         </div>
                     </div>
