@@ -35,9 +35,11 @@ $FamilyTreeTop.create("popovers", function($){
                 object = $fn.getLastObject().object,
                 avatar;
 
-            if(object.facebook_id == 0){
+            if(object.facebook_id == 0 && object.isAlive()){
                 $(div).find('[familytreetop-name="footer"]').show();
             }
+
+
 
             $(cont).find('li').each(function(index, element){
                 var name = $(element).attr('familytreetop-name');
