@@ -2,7 +2,7 @@
 defined('_JEXEC') or die;
 
 ?>
-<div class="row-fluid">
+<div id="latest_events" class="row-fluid">
     <div class="span12">
         <div class="row-fluid">
             <div class="span12">

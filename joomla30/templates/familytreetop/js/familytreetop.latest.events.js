@@ -39,7 +39,8 @@ $FamilyTreeTop.create("latest_events", function($){
                     $(td).append(div);
 
                     ev = family.event();
-
+                    $(tr).addClass('familytreetop-hover-effect');
+                    $(tr).attr('gedcom_id', 'family:' + husb.gedcom_id + "," + wife.gedcom_id);
                     $(tr).append('<td class="text-center" style="width:100px; vertical-align: middle;">'+$this.mod('usertree').parseDate(ev.date)+'</td>');
                     $(tr).append(td);
                     $(tr).append('<td><div gedcom_id="'+husb.gedcom_id+'">'+husb.name()+'</div><div><i class="icon-leaf"></i>'+husb.relation+'</div><div gedcom_id="'+wife.gedcom_id+'">'+wife.name()+'</div><div><i class="icon-leaf"></i>'+wife.relation+'</div></td>');
@@ -54,6 +55,8 @@ $FamilyTreeTop.create("latest_events", function($){
                     ev = user[type]();
                     avatar = user.avatar(["25","25"]);
                     $fn.setHolderImage(avatar[0]);
+                    $(tr).addClass('familytreetop-hover-effect');
+                    $(tr).attr('gedcom_id', user.gedcom_id);
                     $(td).append(avatar);
                     $(tr).append('<td class="text-center" style="width:100px; vertical-align: middle;">'+$this.mod('usertree').parseDate(ev.date)+'</td>');
                     $(tr).append(td);
@@ -65,6 +68,19 @@ $FamilyTreeTop.create("latest_events", function($){
                 }
                 $(box).append(tr);
             }
+        },
+        setFamilyLine:function(){
+            $("#latest_events").find('tr[gedcom_id]').each(function(index, element){
+                var gedcom_id = $(element).attr('gedcom_id'), gparts;
+                gparts = gedcom_id.split(':');
+                if(gparts[0] == "family"){
+                    gparts = gparts[1].split(',');
+                    $this.mod('familyline').bind(element, gparts[0]);
+                    $this.mod('familyline').bind(element, gparts[1]);
+                } else {
+                    $this.mod('familyline').bind(element,  gedcom_id);
+                }
+            });
         }
     }
 
@@ -79,5 +95,6 @@ $FamilyTreeTop.create("latest_events", function($){
         if("undefined" !== typeof(marr)){
             $fn.setEvents($marrBox, marr, 'marr');
         }
+        $fn.setFamilyLine();
     }
 });
