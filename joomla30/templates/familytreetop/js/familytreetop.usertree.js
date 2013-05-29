@@ -346,6 +346,26 @@ $FamilyTreeTop.create("usertree", function($){
     }
 
     $this.isHolderImg = function(src){
+        return $this.isImg('holder.js', src)
+    }
+
+    $this.isDefaultImg = function(src){
+        var sizes = ["25","35","50","90","150"], src = $this.getImgSrc(src), size;
+        for(size in sizes){
+            if(src.indexOf("male"+sizes[size]) + 1){
+                return true;
+            } else if(src.indexOf("female"+sizes[size]) + 1){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    $this.isImg = function(pattern, src){
+        return ($this.getImgSrc(src).indexOf(pattern) + 1);
+    }
+
+    $this.getImgSrc = function(src){
         var _src, _data_src;
         if("object" === typeof(src)){
             _src = $(src).attr('src');
@@ -356,7 +376,7 @@ $FamilyTreeTop.create("usertree", function($){
                 src = _data_src;
             }
         }
-        return (src.indexOf("holder.js") + 1);
+        return src;
     }
 
     $this.getRelation = function(gedcom_id){
