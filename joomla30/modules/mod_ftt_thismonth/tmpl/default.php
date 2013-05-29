@@ -11,7 +11,7 @@ $date = date('n', strtotime('-1 month'));
                     <div class="row-fluid">
                         <div class="span12">
                             <?php
-                            echo '<select familytreetop="months" style="margin:0;" name="ThisMonth[month]">';
+                            echo '<select familytreetop="months" style="margin:0;  width: 130px;" name="ThisMonth[month]">';
                             echo '<option value="0">All Months</option>';
                             foreach($months as $key => $month){
                                 $option = '<option ';
@@ -48,21 +48,22 @@ $date = date('n', strtotime('-1 month'));
                             </div>
                         </div>
                     </div>
-                    <div familytreetop="birthdays" class="row-fluid">
+                    <div familytreetop="BIRT" class="row-fluid">
                         <div class="span12">
-                            <div style="background: #c3c3c3; padding: 3px; padding-left: 20px;"><i class="icon-large icon-gift"></i>Birthdays</div>
+                            <!--<div style="font-weight:bold; #c3c3c3; padding: 3px; padding-left: 20px;"><i class="icon-large icon-gift"></i>Birthdays</div> -->
+                            <table style="margin:0;" class="table table-striped familytreetop-table familytreetop-table-td">
+                            </table>
+                        </div>
+                    </div>
+                    <div familytreetop="MARR" class="row-fluid">
+                        <div class="span12">
+                            <!--<div style="font-weight:bold; background: #c3c3c3; padding: 3px; padding-left: 20px;"><i class="icon-large icon-heart"></i>Anniversary</div>-->
                             <table style="margin:0;" class="table table-striped familytreetop-table familytreetop-table-td"></table>
                         </div>
                     </div>
-                    <div familytreetop="anniversary" class="row-fluid">
+                    <div familytreetop="DEAT" class="row-fluid">
                         <div class="span12">
-                            <div style="background: #c3c3c3; padding: 3px; padding-left: 20px;"><i class="icon-large icon-heart"></i>Anniversary</div>
-                            <table style="margin:0;" class="table table-striped familytreetop-table familytreetop-table-td"></table>
-                        </div>
-                    </div>
-                    <div familytreetop="weremember" class="row-fluid">
-                        <div class="span12">
-                            <div style="background: #c3c3c3; padding: 3px; padding-left: 20px;"><i class="icon-large icon-bookmark"></i>We remember</div>
+                            <!--<div style="font-weight:bold; background: #c3c3c3; padding: 3px; padding-left: 20px;"><i class="icon-large icon-bookmark"></i>We remember</div>-->
                             <table style="margin:0;" class="table table-striped familytreetop-table familytreetop-table-td"></table>
                         </div>
                     </div>

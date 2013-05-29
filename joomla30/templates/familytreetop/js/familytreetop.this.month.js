@@ -21,9 +21,9 @@ $FamilyTreeTop.create("this_month", function($){
         },
         getData: function(month){
             return {
-                birthdays:$fn.getEventByType('BIRT', month),
-                anniversary:$fn.getEventByType('MARR', month),
-                weremember:$fn.getEventByType('DEAT', month)
+                BIRT:$fn.getEventByType('BIRT', month),
+                MARR:$fn.getEventByType('MARR', month),
+                DEAT:$fn.getEventByType('DEAT', month)
             }
         },
         getEventIcon: function(event){
@@ -32,6 +32,14 @@ $FamilyTreeTop.create("this_month", function($){
                 case "DEAT": return '<i class="icon-large icon-bookmark"></i>';
                 case "MARR": return '<i class="icon-large icon-heart"></i>';
                 default: return '<i class="icon-large icon-leaf"></i>';
+            }
+        },
+        getEventName: function(type){
+            switch(type){
+                case "BIRT": return "Birthdays";
+                case "DEAT": return "We remember";
+                case "MARR": return "Anniversary";
+                default: return "";
             }
         },
         getNote: function(object, event){
@@ -47,9 +55,9 @@ $FamilyTreeTop.create("this_month", function($){
                 $fn.setAllMonths();
             } else {
                 $data = $fn.getData(month);
-                $fn.setEvents($data, 'birthdays');
-                $fn.setEvents($data, 'weremember');
-                $fn.setEvents($data, 'anniversary');
+                $fn.setEvents($data, 'BIRT');
+                $fn.setEvents($data, 'DEAT');
+                $fn.setEvents($data, 'MARR');
             }
             $fn.setFamilyLine();
             $fn.setPopovers();
@@ -69,9 +77,9 @@ $FamilyTreeTop.create("this_month", function($){
                 wife;
 
             $(table).find('[familytreetop-row]').remove();
-            $($parent).find('[familytreetop="birthdays"]').hide();
-            $($parent).find('[familytreetop="anniversary"]').hide();
-            $($parent).find('[familytreetop="weremember"]').hide();
+            $($parent).find('[familytreetop="BIRT"]').hide();
+            $($parent).find('[familytreetop="MARR"]').hide();
+            $($parent).find('[familytreetop="DEAT"]').hide();
 
             for(prop in data){
                 if(!data.hasOwnProperty(prop) || prop == 0) continue;
@@ -115,7 +123,9 @@ $FamilyTreeTop.create("this_month", function($){
             $(box).show();
         },
         setEvents: function(data, type){
-            var parent =  $($parent).find('[familytreetop="'+type+'"]'), table = $(parent).find('table');
+            var parent =  $($parent).find('[familytreetop="'+type+'"]'),
+                table = $(parent).find('table');
+
             if(!data[type] || data[type].length == 0){
                 $(parent).hide();
                 return false;
@@ -126,9 +136,11 @@ $FamilyTreeTop.create("this_month", function($){
             $(table).html('');
             $(parent).find('li span[gedcom_id]').unbind();
             $(parent).find('li').remove();
+
             switch(type){
-                case "birthdays":
-                case "weremember":
+                case "BIRT":
+                case "DEAT":
+                    $(table).append('<tr class="familytreetop-this-month-header"><td>'+$fn.getEventIcon({type:type})+'</td><td colspan="2">'+$fn.getEventName(type)+'</td></tr>');
                     data[type].forEach(function(e){
                         var tr = $('<tr class="familytreetop-hover-effect" gedcom_id="'+e.gedcom_id+'" style="cursor:pointer;"></re>'),
                             event = $this.mod('usertree').getEvent(e.id),
@@ -147,7 +159,7 @@ $FamilyTreeTop.create("this_month", function($){
                         sb._('</div>');
                         sb._('<div><i class="icon-leaf"></i>')._(user.relation)._('</div>')
                         sb._('</td>');
-                        sb._('<td style="font-size: 12px;color:#b7b7b7;">')._((type=="birthdays")?user.turns():user.died())._('</td>');
+                        sb._('<td style="text-align: right; font-size: 12px;color:#b7b7b7;">')._((type=="BIRT")?user.turns():user.died())._('</td>');
 
                         html = $(sb.ret());
 
@@ -168,7 +180,8 @@ $FamilyTreeTop.create("this_month", function($){
                     });
                     break;
 
-                case "anniversary":
+                case "MARR":
+                    $(table).append('<tr class="familytreetop-this-month-header"><td><i class="icon-large icon-heart"></i></td><td colspan="2">Anniversary</td></tr>');
                     data[type].forEach(function(e){
                         var tr = $('<tr class="familytreetop-hover-effect" style="cursor:pointer;"></tr>'),
                             event = $this.mod('usertree').getEvent(e.id),
@@ -197,7 +210,7 @@ $FamilyTreeTop.create("this_month", function($){
                                 sb._(' gedcom_id="')._(wife.gedcom_id)._('"><div familytreetop-el="wife" data-familytreetop-color="')._(wife.gender)._('">')._(wife.shortname())._('</div><div><i class="icon-leaf"></i>')._(wife.relation)._('</div>');
                             sb._('</span></li>');
                         sb._('</ul></td>');
-                        sb._('<td style="font-size: 12px;color:#b7b7b7;">')._(family.married())._('</td>');
+                        sb._('<td style="text-align: right; font-size: 12px;color:#b7b7b7;">')._(family.married())._('</td>');
 
                         html = $(sb.ret());
 

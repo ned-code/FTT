@@ -63,3 +63,13 @@
 .familytreetop-table-td td {
     padding: 4px;
 }
+.familytreetop-this-month-header {
+    font-weight:bold;
+    background: #c3c3c3;
+    padding: 3px;
+    padding-left: 20px;
+}
+.familytreetop-this-month-header td{
+    background: none !important;
+    vertical-align: middle;
+}
