@@ -225,7 +225,7 @@ $FamilyTreeTop.create("usertree", function($){
             died: function(){
                 var $self = this, date = new Date(), e = $self.death();
                 if(e && e.date && e.date.start_year != null){
-                    return "died " + (date.getFullYear() - e.date.start_year) + " years ago";
+                    return "<div><div>died</div><div>" + (date.getFullYear() - e.date.start_year) + " years ago</div>";
                 }
                 return "";
             },
@@ -316,7 +316,7 @@ $FamilyTreeTop.create("usertree", function($){
             married: function(){
                 var $self = this, date = new Date(), e = $self.event();
                 if(e && e.date && e.date.start_year != null){
-                    return "married " + (date.getFullYear() - e.date.start_year) + " years ago";
+                    return "<div>married</div><div>" + (date.getFullYear() - e.date.start_year) + " years ago</div>";
                 }
                 return "";
             }

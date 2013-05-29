@@ -26,6 +26,22 @@ $FamilyTreeTop.create("this_month", function($){
                 weremember:$fn.getEventByType('DEAT', month)
             }
         },
+        getEventIcon: function(event){
+            switch(event.type){
+                case "BIRT": return '<i class="icon-large icon-gift"></i>';
+                case "DEAT": return '<i class="icon-large icon-bookmark"></i>';
+                case "MARR": return '<i class="icon-large icon-heart"></i>';
+                default: return '<i class="icon-large icon-leaf"></i>';
+            }
+        },
+        getNote: function(object, event){
+            switch(event.type){
+                case "BIRT": return object.turns();
+                case "DEAT": return object.died();
+                case "MARR": return object.married();
+                default: return "";
+            }
+        },
         render: function(month){
             if(month == 0){
                 $fn.setAllMonths();
@@ -67,13 +83,13 @@ $FamilyTreeTop.create("this_month", function($){
                     if(!month.hasOwnProperty(key)) continue;
                     item = month[key];
                     tr = $('<tr class="familytreetop-hover-effect" familytreetop-row></tr>');
-                    $(tr).append('<td>'+(item.date.start_day || "")+'</td>');
-                    $(tr).append('<td><i class="icon-gift"></i></td>');
+                    $(tr).append('<td style="text-align: center">'+(item.date.start_day || "")+'</td>');
+                    $(tr).append('<td style="text-align: center">'+$fn.getEventIcon(item.event)+'</td>');
                     if(item.event.gedcom_id != null){
                         user = $this.mod('usertree').user(item.event.gedcom_id);
                         $(tr).attr('gedcom_id', user.gedcom_id);
                         $(tr).append('<td gedcom_id="'+user.gedcom_id+'">'+user.name()+'</td>');
-                        $(tr).append('<td style="font-size: 12px;color:#b7b7b7;">'+user.turns()+'</td>');
+                        $(tr).append('<td style="font-size: 12px;color:#b7b7b7;">'+$fn.getNote(user, item.event)+'</td>');
                         $(tr).append('<td><i class="icon-leaf"></i>'+user.relation+'</td>');
                         $this.mod('popovers').render({
                             target: $(tr).find('td[gedcom_id]')
@@ -84,7 +100,7 @@ $FamilyTreeTop.create("this_month", function($){
                         wife = $this.mod('usertree').user(family.wife);
                         $(tr).attr('gedcom_id', "family:" + husb.gedcom_id + "," + wife.gedcom_id);
                         $(tr).append('<td><div gedcom_id="'+husb.gedcom_id+'">'+husb.name()+'</div><div gedcom_id="'+wife.gedcom_id+'">'+wife.name()+'</div></td>');
-                        $(tr).append('<td style="font-size: 12px;color:#b7b7b7;"><div>'+husb.turns()+'</div><div>'+wife.turns()+'</div></td>');
+                        $(tr).append('<td style="font-size: 12px;color:#b7b7b7;">'+$fn.getNote(family, item.event)+'</td>');
                         $(tr).append('<td><div><i class="icon-leaf"></i>'+husb.relation+'</div><div><i class="icon-leaf"></i>'+wife.relation+'</div></td>');
 
                         $(tr).find('div[gedcom_id]').each(function(i, el){
