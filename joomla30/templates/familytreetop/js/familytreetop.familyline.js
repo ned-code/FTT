@@ -88,13 +88,13 @@ $FamilyTreeTop.create("familyline", function($){
 
             if(user[func]()){
                 if(args.active){
-                    $(el).addClass('badge');
-                    $(el).addClass('badge-warning');
-                    $(el).addClass('familytreetop-text-black');
+                    //$(el).addClass('badge');
+                    //$(el).addClass('badge-warning');
+                    //$(el).addClass('familytreetop-text-black');
                 } else {
-                    $(el).removeClass('badge');
-                    $(el).removeClass('badge-warning');
-                    $(el).removeClass('familytreetop-text-black');
+                    //$(el).removeClass('badge');
+                    //$(el).removeClass('badge-warning');
+                    //$(el).removeClass('familytreetop-text-black');
                 }
             }
         },

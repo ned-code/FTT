@@ -14,7 +14,7 @@ $FamilyTreeTop.create("popovers", function($){
             $data.target = args.target;
             $data.gedcom_id = $(args.target).attr('gedcom_id');
             $data.object = $this.mod('usertree').user($data.gedcom_id);
-            if($data.gedcom_id){
+            if($data.gedcom_id && $data.gedcom_id != null){
                 $pull.push({ id: $data.gedcom_id, data: $data });
                 return true;
             }

@@ -1,16 +1,18 @@
 [data-familytreetop-color="0"]{
-    color: #FFB7C5;
+    color: #924192;
 }
 [data-familytreetop-color="1"]{
-    color: #FF9966;
+    color: #415981;
 }
 [class-familytreetop="module-padding"] {
     padding: 20px;
 }
-.familytreetop-table tr:hover td {
+.familytreetop-hover-effect:hover {
     background: #dff0d8 !important;
 }
-
+.familytreetop-hover-effect:hover  td {
+    background: none !important;
+}
 .familytreetop-gallery li{
     border: 1px solid white;
     padding: 5px 0px;
@@ -52,7 +54,4 @@
 
 .familytreetop-table-td td {
     padding: 4px;
-}
-.familytreetop-no-hover-effect:hover {
-    background: none;
 }
