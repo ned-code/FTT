@@ -778,7 +778,7 @@ $FamilyTreeTop.create("usertree", function($){
                 'https://graph.facebook.com/'+usersmap[gedcom_id].facebook_id+'/picture/',
                 $('<img class="'+style+'" />')
             ];
-        } else if(size[0] in {"25":true, "35":true, "50":true, "90":true, "140":true}) {
+        } else if(size[0] in {"25":true, "35":true, "50":true,"75":true, "90":true, "140":true}) {
             url = ($this.url().base()+"/templates/familytreetop/images/"+((parseInt(user.gender))?"male":"female")+size[0]+".png");
             data = [
                 url,

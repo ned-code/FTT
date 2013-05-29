@@ -38,9 +38,6 @@ $FamilyTreeTop.create("popovers", function($){
             if(object.facebook_id == 0 && object.isAlive()){
                 $(div).find('[familytreetop-name="footer"]').show();
             }
-
-
-
             $(cont).find('li').each(function(index, element){
                 var name = $(element).attr('familytreetop-name');
                 var value, _value, place;
@@ -67,13 +64,13 @@ $FamilyTreeTop.create("popovers", function($){
 
 
             avatar = $fn.getLastObject().object.avatar(["75","75"], "media-object");
+            if($this.mod('usertree').isHolderImg(avatar)){
+                Holder.run({
+                    images:avatar[0]
+                });
+            }
             $(div).find('.familytreetop-avatar').html("")
             $(div).find('.familytreetop-avatar').append(avatar);
-
-            Holder.run({
-                images:avatar[0]
-            });
-
             return div;
         },
         getContainer: function(){

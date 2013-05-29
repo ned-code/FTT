@@ -138,7 +138,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
 
     <div id="popover">
         <div class="row-fluid" style="padding: 9px 14px;">
-            <div class="span3"><img class="media-object" data-src="template/familytreetop/js/holder.js/75x75"></div>
+            <div class="span3 familytreetop-avatar"><img class="media-object" data-src="template/familytreetop/js/holder.js/75x75"></div>
             <div class="span8" familytreetop-name="content">
                 <ul class="unstyled" style="font-size:11px;">
                     <li familytreetop-name="birth"><span style="color: #c3c3c3;"><?=JText::_("TPL_FAMILYTREETOP_BORN");?></span>: <span></span></li>
