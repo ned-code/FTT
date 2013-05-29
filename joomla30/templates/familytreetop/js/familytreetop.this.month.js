@@ -74,7 +74,7 @@ $FamilyTreeTop.create("this_month", function($){
                         $(tr).attr('gedcom_id', user.gedcom_id);
                         $(tr).append('<td gedcom_id="'+user.gedcom_id+'">'+user.name()+'</td>');
                         $(tr).append('<td style="font-size: 12px;color:#b7b7b7;">'+user.turns()+'</td>');
-                        $(tr).append('<td>'+user.relation+'</td>');
+                        $(tr).append('<td><i class="icon-leaf"></i>'+user.relation+'</td>');
                         $this.mod('popovers').render({
                             target: $(tr).find('td[gedcom_id]')
                         });
@@ -85,7 +85,7 @@ $FamilyTreeTop.create("this_month", function($){
                         $(tr).attr('gedcom_id', "family:" + husb.gedcom_id + "," + wife.gedcom_id);
                         $(tr).append('<td><div gedcom_id="'+husb.gedcom_id+'">'+husb.name()+'</div><div gedcom_id="'+wife.gedcom_id+'">'+wife.name()+'</div></td>');
                         $(tr).append('<td style="font-size: 12px;color:#b7b7b7;"><div>'+husb.turns()+'</div><div>'+wife.turns()+'</div></td>');
-                        $(tr).append('<td><div>'+husb.relation+'</div><div>'+wife.relation+'</div></td>');
+                        $(tr).append('<td><div><i class="icon-leaf"></i>'+husb.relation+'</div><div><i class="icon-leaf"></i>'+wife.relation+'</div></td>');
 
                         $(tr).find('div[gedcom_id]').each(function(i, el){
                             $this.mod('popovers').render({
