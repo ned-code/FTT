@@ -361,6 +361,16 @@ $FamilyTreeTop.create("usertree", function($){
         return false;
     }
 
+    $this.isAvatar = function(src){
+        var src = $this.getImgSrc(src);
+        if( (src.indexOf("graph.facebook.com") + 1) ){
+            return true;
+        } else if( (src.indexOf("joomla30/files") + 1) ){
+            return true;
+        }
+        return false;
+    }
+
     $this.isImg = function(pattern, src){
         return ($this.getImgSrc(src).indexOf(pattern) + 1);
     }

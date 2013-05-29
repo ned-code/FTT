@@ -135,7 +135,7 @@ $FamilyTreeTop.create("this_month", function($){
 
                         html = $(sb.ret());
 
-                        if(!$this.mod('usertree').isHolderImg(avatar[0])){
+                        if($this.mod('usertree').isAvatar(avatar[0])){
                             div = $(html).find('[data-familytreetop-color]');
                             txt = $(div).text();
                             $(div).text('');
@@ -187,7 +187,7 @@ $FamilyTreeTop.create("this_month", function($){
 
                         $(html).find('[familytreetop-el]').each(function(index, element){
                             var avatar = av[$(this).attr('familytreetop-el')], text;
-                            if(!$this.mod('usertree').isHolderImg(avatar[0])){
+                            if($this.mod('usertree').isAvatar(avatar[0])){
                                 text = $(element).text();
                                 $(element).text('');
                                 $(element).append(avatar);
