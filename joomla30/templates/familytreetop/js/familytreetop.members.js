@@ -149,7 +149,7 @@ $FamilyTreeTop.create("members", function($){
                 if(!$users.hasOwnProperty(key)) continue;
                 object = $users[key];
                 birth = object.birth();
-                tr = $('<tr></tr>');
+                tr = $('<tr class="familytreetop-hover-effect" gedcom_id="'+object.gedcom_id+'"></tr>');
                 if($fn.isSortable(object)&&$fn.isGender(object)&&$fn.isLiving(object)&&$fn.isRegistered(object)){
                     avatar = object.avatar(["25","25"]);
                     $fn.setRelPullObject(object);
@@ -167,6 +167,7 @@ $FamilyTreeTop.create("members", function($){
                     $this.mod('popovers').render({
                         target: $(tr).find('td[gedcom_id]')
                     });
+                    $this.mod('familyline').bind(tr, object.gedcom_id);
                 }
             }
         }
