@@ -5,13 +5,13 @@
     color: #415981;
 }
 .familytreetop-is-mother-line {
-    background: #FFABFF !important;
+    background: #ffcc99 !important;
 }
 .familytreetop-is-mother-line > * {
     background: none !important;
 }
 .familytreetop-is-father-line {
-    background: #B3CFFF !important;
+    background: #ccff99 !important;
 }
 .familytreetop-is-father-line > * {
     background: none !important;
