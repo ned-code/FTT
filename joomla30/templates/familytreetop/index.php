@@ -16,6 +16,7 @@ $doc->addStyleSheet('templates/'.$this->template.'/css/csstreeview.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/csstreeview.fix.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/tdfriendselector.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/jquery.neosmart.fb.wall.css');
+$doc->addStyleSheet('templates/'.$this->template.'/css/jquery.neosmart.fb.wall.fix.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/familytreetop.css');
 
 
