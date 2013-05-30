@@ -73,3 +73,7 @@
     background: none !important;
     vertical-align: middle;
 }
+
+.familytreetop-this-month-in td {
+   border-top: none;
+}
