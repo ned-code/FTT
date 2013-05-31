@@ -53,7 +53,7 @@ $FamilyTreeTop.create("profile", function($){
                     height: 40,
                     width: 140,
                     type: 'rectangle',
-                    color: '#c3c3c3',
+                    color: '#f5f5f5',
                     overridable: true
                 },
                 Edge: {
@@ -70,6 +70,8 @@ $FamilyTreeTop.create("profile", function($){
                         node.data.$color = "#ffc90e";
                     } else if($fn.isConnectionUser(args, node)){
                         node.data.$color = "#efe4b0";
+                    } else {
+                        node.data.$color = "c3c3c3";
                     }
                 },
                 onBeforePlotNode: function(node){
