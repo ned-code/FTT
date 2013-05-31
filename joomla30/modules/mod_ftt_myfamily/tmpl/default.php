@@ -40,8 +40,6 @@ foreach($data as $object){
                 <legend class="text-center"><?=JText::_('MOD_FTT_MYFAMILY_TITLE');?></legend>
                 <div></div>
             </fieldset>
-
-            <!--
             <div id="accordion2" class="accordion">
                 <table class="table table-striped">
                     <?php foreach($result_array as $object): ?>
@@ -66,7 +64,6 @@ foreach($data as $object){
                                                     <li class="span10">
                                                         <p>
                                                             <?php
-                                                            /*
                                                             $message = isset($object['message'])?$object['message']:false;
                                                             $description = isset($object['description'])?$object['description']:false;
                                                             $story = isset($object['story'])?$object['story']:false;
@@ -92,7 +89,6 @@ foreach($data as $object){
                                                                 $ret = substr($ret, 0 , 500) . "...";
                                                             }
                                                             echo $ret;
-                                                            */
                                                             ?>
                                                         </p>
                                                     </li>
@@ -138,14 +134,12 @@ foreach($data as $object){
                     <?php endforeach; ?>
                 </table>
             </div>
-            -->
         </div>
     </div>
 </div>
 <?php endif; ?>
 <script>
     $FamilyTreeTop.bind(function($){
-        /*
         $("#myFamilyOnFacebook").find('.accordion-toggle').click(function(){
             var td = $(this).parents('td');
             if($(this).hasClass('active')){
@@ -156,16 +150,5 @@ foreach($data as $object){
                 $(this).addClass('active');
             }
         });
-        */
-        var auth = FB.getAuthResponse();
-        $('#myFamilyOnFacebook fieldset div').fbWall({
-            id:auth.userID,
-            accessToken:auth.accessToken,
-            showGuestEntries:true,
-            showComments:true,
-            max:5,
-            timeConversion:24
-        });
-
     });
 </script>

@@ -15,8 +15,6 @@ $doc->addStyleSheet('templates/'.$this->template.'/css/jquery.fileupload-ui.css'
 $doc->addStyleSheet('templates/'.$this->template.'/css/csstreeview.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/csstreeview.fix.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/tdfriendselector.css');
-$doc->addStyleSheet('templates/'.$this->template.'/css/jquery.neosmart.fb.wall.css');
-$doc->addStyleSheet('templates/'.$this->template.'/css/jquery.neosmart.fb.wall.fix.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/familytreetop.css');
 
 
@@ -627,7 +625,6 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/bootstrap.min.js"></script>
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/bootstrap-scroll-modal.js"></script>
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/tdfriendselector.js"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/jquery.neosmart.fb.wall.js"></script>
 <!-- file upload plugin files -->
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/jquery.ui.widget.js"></script>
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/tmpl.min.js"></script>
