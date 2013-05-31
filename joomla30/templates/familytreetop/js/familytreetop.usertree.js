@@ -427,7 +427,7 @@ $FamilyTreeTop.create("usertree", function($){
     }
 
     $this.getRelationMap = function(gedcom_id){
-        var object = $this.getConnection(gedcom_id), pull = [], tree, ch, vehicle = 0;
+        var object = $this.getConnection(gedcom_id), pull = [],item, tree, ch, vehicle = 0;
         if(object){
             for(var prop in object){
                 if(!object.hasOwnProperty(prop)) continue;
@@ -440,7 +440,8 @@ $FamilyTreeTop.create("usertree", function($){
                     vehicle = pull.length - 1;
                 }
             }
-            tree = {
+            tree = getTree();
+            item = {
                 id: $this.generateKey() + '_' + pull[vehicle].usr.gedcom_id,
                 name: pull[vehicle].usr.name(),
                 data: {
@@ -449,44 +450,71 @@ $FamilyTreeTop.create("usertree", function($){
                 },
                 children: []
             }
-            if(ch = setTree(tree, vehicle, 1)){
-                tree.children.push(ch);
+            tree.children.push(item);
+            if(ch = setTree(item, vehicle, 1)){
+                if(ch.data.rel.relation_id == "2" || (ch.data.rel.in_law != "0" && ch.data.rel.in_law == item.data.usr.gedcom_id)){
+                    ch.data.in_law = true;
+                    tree.children.push(ch);
+                } else {
+                    item.children.push(ch);
+                }
             }
-            if(ch = setTree(tree, vehicle, -1)){
-                tree.children.push(ch);
+            if(ch = setTree(item, vehicle, -1)){
+                if(ch.data.rel.relation_id == "2" || (ch.data.rel.in_law != "0" && ch.data.rel.in_law == item.data.usr.gedcom_id)){
+                    ch.data.in_law = true;
+                    tree.children.push(ch);
+                } else {
+                    item.children.push(ch);
+                }
             }
             return [tree, getDeep(pull, vehicle)];
-        }
-        function index(id){
-            if("undefined" === typeof(id)) return false;
-            return parseInt(id.toLocaleString().substr(-1));
-        }
-        function getDeep(p, v){
-            var it = p.length - v;
-            if(it > v){
-                return it;
-            }
-            return v;
         }
         function setTree(object, i, k){
             var index = i+ k, element, obj, ch;
             if("undefined" !== typeof(pull[index])){
                 element = pull[index];
                 obj = {
-                        id: $this.generateKey() + '_' + element.usr.gedcom_id,
-                        name: element.usr.name(),
-                        data: {
-                            usr:element.usr,
-                            rel:element.rel
-                        },
-                        children: []
-                    };
+                    id: $this.generateKey() + '_' + element.usr.gedcom_id,
+                    name: element.usr.name(),
+                    data: {
+                        usr:element.usr,
+                        rel:element.rel
+                    },
+                    children: []
+                };
                 if(ch = setTree(obj, index, k)){
-                    obj.children.push(ch);
+                    if(ch.data.rel.relation_id == "2" || (ch.data.rel.in_law != "0" && ch.data.rel.in_law == obj.data.usr.gedcom_id)){
+                        ch.data.in_law = true;
+                        object.children.push(ch);
+                    } else {
+                        obj.children.push(ch);
+                    }
                 }
                 return obj;
             }
             return false;
+        }
+        function getDeep(p, v){
+            var it = 1 + p.length - v;
+            if(it > v){
+                return it;
+            }
+            return v;
+        }
+        function getTree(){
+            return {
+                id: $this.generateKey() + '_TOP',
+                name: "",
+                data: {
+                    usr:false,
+                    rel:false
+                },
+                children: []
+            }
+        }
+        function index(id){
+            if("undefined" === typeof(id)) return false;
+            return parseInt(id.toLocaleString().substr(-1));
         }
     }
 

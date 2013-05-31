@@ -36,6 +36,7 @@ $FamilyTreeTop.create("profile", function($){
         },
         setRelation:function(args){
             var tree = args.object.relationMap();
+            console.log(tree);
             var box = $(this).find('[data-familytreetop-profile="relation"] fieldset');
             var id = "jit"+$this.generateKey();
             $(box).attr('id', id);
@@ -45,7 +46,7 @@ $FamilyTreeTop.create("profile", function($){
                 duration: 800,
                 transition: $jit.Trans.Quart.easeInOut,
                 offsetX:0,
-                offsetY:tree[1]*50,
+                offsetY:tree[1]*50 + 60,
                 levelDistance: 30,
                 levelsToShow: tree[1],
                 Node: {
@@ -69,6 +70,20 @@ $FamilyTreeTop.create("profile", function($){
                         node.data.$color = "#ffc90e";
                     } else if($fn.isConnectionUser(args, node)){
                         node.data.$color = "#efe4b0";
+                    }
+                },
+                onBeforePlotNode: function(node){
+                    if(node.id.split("_")[1] == "TOP"){
+                        node.data.$color = "#f5f5f5";
+                    }
+                },
+                onBeforePlotLine: function(adj){
+                    if(adj.nodeTo.id.split("_")[1] == "TOP"
+                        || adj.nodeFrom.id.split("_")[1] == "TOP"
+                        || adj.nodeTo.data.in_law
+                        || adj.nodeFrom.data.in_law){
+                        adj.data.$color = "#f5f5f5";
+                        adj.data.$lineWidth = 0;
                     }
                 }
             });
@@ -115,8 +130,12 @@ $FamilyTreeTop.create("profile", function($){
         },
         getLabelHtml:function(label, node){
             var user = node.data.usr, box = $('<div class="text-center"></div>');
+            if(!user) return "";
             $(box).append('<div>'+user.shortname()+'</div>');
             $(box).append('<div style="color: #7f7f7f;"><i class="icon-leaf"></i>'+user.relation+'</div>');
+            if(node.data.in_law){
+                $(box).append('<div style="position: absolute;top: 10px;left: -10px;"><i class="icon-plus"></i></div>');
+            }
             return $(box).html();
         },
         getModalBox:function(){
