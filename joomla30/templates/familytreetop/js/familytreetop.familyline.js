@@ -33,31 +33,32 @@ $FamilyTreeTop.create("familyline", function($){
             $fn.renderChart(canvas, ctx, index, [485, 343]);
         },
         buttonClick:function(){
-            var $this = this, icon = $($this).find('i'), _class = $(icon).attr('class').split(" ")[0], args, line;
+            var $this = this, icon = $($this).find('i'), _class = $(icon).attr('class').split(" ")[0], args, line, btnGroup;
             line = ($(icon).attr('familytreetop-line') == "father")?1:0;
+            btnGroup = (line)?"btn-success":"btn-warning";
             switch(_class){
                 case "icon-pencil":
                     if($(icon).hasClass('icon-pencil-active')){
                         $(icon).removeClass('icon-pencil-active');
-                        $($this).removeClass('btn-warning');
+                        $($this).removeClass(btnGroup);
                         args = {type:"pencil", active: 0, line: line};
                     } else {
                         $(icon).addClass('icon-pencil-active');
-                        $($this).addClass('btn-warning');
+                        $($this).addClass(btnGroup);
                         args = {type:"pencil", active: 1, line: line};
                     }
                     break;
 
                 case "icon-eye-open":
                     $(icon).removeClass('icon-eye-open');
-                    $($this).addClass('btn-warning');
+                    $($this).addClass(btnGroup);
                     $(icon).addClass('icon-eye-close');
                     args = {type:"eye", active: 0, line: line};
                     break;
 
                 case "icon-eye-close":
                     $(icon).removeClass('icon-eye-close');
-                    $($this).removeClass('btn-warning');
+                    $($this).removeClass(btnGroup);
                     $(icon).addClass('icon-eye-open');
                     args = {type:"eye", active: 1, line: line};
                     break;
