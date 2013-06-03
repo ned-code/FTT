@@ -116,6 +116,12 @@ $FamilyTreeTop.create("familyline", function($){
                 if(!$pull.hasOwnProperty(prop)) continue;
                 $fn[args.type]($pull[prop], args);
             }
+        },
+        hide: function(){
+            $($box).find('.btn:not(.disabled)').hide();
+        },
+        show: function(){
+            $($box).find('.btn:not(.disabled)').show();
         }
     }
 
@@ -123,6 +129,13 @@ $FamilyTreeTop.create("familyline", function($){
         $box = $('.navbar div[data-familytreetop="familyline"]');
         $box.find('button:not(.disabled)').each($fn.buttonsClick);
         $box.find('button.disabled canvas').each($fn.renderCharts);
+        $this.mod('tabs').bind('all', function(e){
+            if($(e.target).attr('data-familytreetop') == "family_tree"){
+                $fn.hide();
+            } else {
+                $fn.show();
+            }
+        });
     }
 
     $this.bind = function(el, gedcom_id){
