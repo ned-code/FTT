@@ -40,12 +40,13 @@
 }
 
 .familytreetop-this-month-data {
-    background: url('../images/this-month-data.png');
-    width: 22px;
-    height: 22px;
+    /*background: url('../images/this-month-data.png');*/
+    background: url('../images/calendar-icon-25x25.png');
+    width: 25px;
+    height: 25px;
     text-align: center;
     font-weight: bold;
-    line-height: 26px;
+    line-height: 30px;
 }
 .familytreetop-popover-footer {
     padding: 8px 14px;
