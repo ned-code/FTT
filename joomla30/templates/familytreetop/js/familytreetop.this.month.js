@@ -96,7 +96,7 @@ $FamilyTreeTop.create("this_month", function($){
                     if(item.event.gedcom_id != null){
                         user = $this.mod('usertree').user(item.event.gedcom_id);
                         $(tr).attr('gedcom_id', user.gedcom_id);
-                        $(tr).append('<td gedcom_id="'+user.gedcom_id+'">'+user.name()+'</td>');
+                        $(tr).append('<td data-familytreetop-color="'+user.gender+'" gedcom_id="'+user.gedcom_id+'">'+user.name()+'</td>');
                         $(tr).append('<td style="font-size: 12px;color:#b7b7b7;">'+$fn.getNote(user, item.event)+'</td>');
                         $(tr).append('<td class="familytreetop-this-month-relation"><i class="icon-leaf"></i>'+user.relation+'</td>');
                         $this.mod('popovers').render({
@@ -107,7 +107,7 @@ $FamilyTreeTop.create("this_month", function($){
                         husb = $this.mod('usertree').user(family.husb);
                         wife = $this.mod('usertree').user(family.wife);
                         $(tr).attr('gedcom_id', "family:" + husb.gedcom_id + "," + wife.gedcom_id);
-                        $(tr).append('<td><div gedcom_id="'+husb.gedcom_id+'">'+husb.name()+'</div><div gedcom_id="'+wife.gedcom_id+'">'+wife.name()+'</div></td>');
+                        $(tr).append('<td><div data-familytreetop-color="'+husb.gender+'" gedcom_id="'+husb.gedcom_id+'">'+husb.name()+'</div><div data-familytreetop-color="'+wife.gender+'" gedcom_id="'+wife.gedcom_id+'">'+wife.name()+'</div></td>');
                         $(tr).append('<td style="font-size: 12px;color:#b7b7b7;">'+$fn.getNote(family, item.event)+'</td>');
                         $(tr).append('<td class="familytreetop-this-month-relation"><div><i class="icon-leaf"></i>'+husb.relation+'</div><div><i class="icon-leaf"></i>'+wife.relation+'</div></td>');
 

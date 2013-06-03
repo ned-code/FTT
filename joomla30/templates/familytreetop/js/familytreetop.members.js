@@ -154,7 +154,7 @@ $FamilyTreeTop.create("members", function($){
                     avatar = object.avatar(["25","25"]);
                     $fn.setRelPullObject(object);
                     $(tr).append('<td><i class="icon-leaf"></i>'+object.relation+'</td>');
-                    td = $('<td gedcom_id="'+object.gedcom_id+'"></td>');
+                    td = $('<td data-familytreetop-color="'+object.gender+'" gedcom_id="'+object.gedcom_id+'"></td>');
                     if($this.mod('usertree').isAvatar(avatar)){
                         $(td).append(avatar);
                     }
