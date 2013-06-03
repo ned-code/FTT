@@ -3,6 +3,10 @@ $FamilyTreeTop.create("familyline", function($){
     var $this = this,
         $box,
         $pull = [],
+        $line = {
+            mother: { pencil: false, eye: false },
+            father: { pencil: false, eye: false }
+        },
         $fn;
 
     $fn = {
@@ -36,16 +40,19 @@ $FamilyTreeTop.create("familyline", function($){
             var $this = this, icon = $($this).find('i'), _class = $(icon).attr('class').split(" ")[0], args, line, btnGroup;
             line = ($(icon).attr('familytreetop-line') == "father")?1:0;
             btnGroup = (line)?"btn-success":"btn-warning";
+            if(!$fn.checkFamilyLineActive(line)) return false;
             switch(_class){
                 case "icon-pencil":
                     if($(icon).hasClass('icon-pencil-active')){
                         $(icon).removeClass('icon-pencil-active');
                         $($this).removeClass(btnGroup);
-                        args = {type:"pencil", active: 0, line: line};
+                        args = { type:"pencil", active: 0, line: line};
+                        $line[line?"father":"mother"].pencil = false;
                     } else {
                         $(icon).addClass('icon-pencil-active');
                         $($this).addClass(btnGroup);
                         args = {type:"pencil", active: 1, line: line};
+                        $line[line?"father":"mother"].pencil = true;
                     }
                     break;
 
@@ -54,6 +61,7 @@ $FamilyTreeTop.create("familyline", function($){
                     $($this).addClass(btnGroup);
                     $(icon).addClass('icon-eye-close');
                     args = {type:"eye", active: 0, line: line};
+                    $line[line?"father":"mother"].eye = true;
                     break;
 
                 case "icon-eye-close":
@@ -61,6 +69,7 @@ $FamilyTreeTop.create("familyline", function($){
                     $($this).removeClass(btnGroup);
                     $(icon).addClass('icon-eye-open');
                     args = {type:"eye", active: 1, line: line};
+                    $line[line?"father":"mother"].eye = false;
                     break;
 
                 default:
@@ -68,6 +77,13 @@ $FamilyTreeTop.create("familyline", function($){
 
             }
             $fn.send(args);
+        },
+        checkFamilyLineActive: function(line){
+            var type = line?"mother":"father";
+            if($line[type].pencil || $line[type].eye){
+                return false;
+            }
+            return true;
         },
         buttonsClick:function(index, el){
             $(el).click($fn.buttonClick);
