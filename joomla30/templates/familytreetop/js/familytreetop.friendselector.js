@@ -58,6 +58,19 @@ $FamilyTreeTop.create("friendselector", function($){
             $this.success({
                 title: "Request has been send"
             });
+        },
+        hideRegisteredUser: function(cont){
+            if(!cont) return false;
+            var friends, usersmap = $this.mod('usertree').usersmap(), prop, map = {};
+            for(prop in usersmap){
+                if(!usersmap.hasOwnProperty(prop)) continue;
+                map[usersmap[prop].facebook_id] = true;
+            }
+            friends = $(cont).filter(function(index, element){
+                var id = $(element).attr('data-id');
+                return (!(id in map));
+            });
+            return friends;
         }
     }
 
@@ -69,9 +82,13 @@ $FamilyTreeTop.create("friendselector", function($){
             autoDeselection          : true,
             callbackSubmit: function(selectedFriendIds) {
                $fn.beforeSendRequest(selector, selectedFriendIds, gedcom_id);
+            },
+            callbackBeforeShow: function(container){
+               return $fn.hideRegisteredUser(container);
             }
         });
         selector.showFriendSelector();
+        $fn.hideRegisteredUser();
     }
     TDFriendSelector.init({debug: false});
 });
