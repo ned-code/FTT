@@ -34,16 +34,16 @@ $FamilyTreeTop.create("latest_events", function($){
 
                     avatar = wife.avatar(["25", "25"]);
                     $fn.setHolderImage(avatar[0]);
-                    div = $('<div></div>');
+                    div = $('<div style="margin-top: 5px;"></div>');
                     $(div).append(avatar);
                     $(td).append(div);
 
                     ev = family.event();
                     $(tr).addClass('familytreetop-hover-effect');
                     $(tr).attr('gedcom_id', 'family:' + husb.gedcom_id + "," + wife.gedcom_id);
-                    $(tr).append('<td class="text-center" style="width:100px; vertical-align: middle;">'+$this.mod('usertree').parseDate(ev.date)+'</td>');
+                    $(tr).append('<td class="text-center" style="padding-left:10px;width:100px; vertical-align: middle;">'+$this.mod('usertree').parseDate(ev.date)+'</td>');
                     $(tr).append(td);
-                    $(tr).append('<td><div data-familytreetop-color="'+husb.gender+'" gedcom_id="'+husb.gedcom_id+'">'+husb.name()+'</div><div class="familytreetop-this-month-relation"><i class="icon-leaf"></i>'+husb.relation+'</div><div data-familytreetop-color="'+wife.gender+'" gedcom_id="'+wife.gedcom_id+'">'+wife.name()+'</div><div class="familytreetop-this-month-relation"><i class="icon-leaf"></i>'+wife.relation+'</div></td>');
+                    $(tr).append('<td><div data-familytreetop-color="'+husb.gender+'" gedcom_id="'+husb.gedcom_id+'">'+husb.name()+'</div><div class="familytreetop-this-month-relation"><i class="icon-leaf"></i>'+husb.relation+'</div><div style="margin-top: 5px;" data-familytreetop-color="'+wife.gender+'" gedcom_id="'+wife.gedcom_id+'">'+wife.name()+'</div><div class="familytreetop-this-month-relation"><i class="icon-leaf"></i>'+wife.relation+'</div></td>');
                     $(tr).find('div[gedcom_id]').each(function(i, el){
                         $this.mod('popovers').render({
                             target: el,
@@ -58,7 +58,7 @@ $FamilyTreeTop.create("latest_events", function($){
                     $(tr).addClass('familytreetop-hover-effect');
                     $(tr).attr('gedcom_id', user.gedcom_id);
                     $(td).append(avatar);
-                    $(tr).append('<td class="text-center" style="width:100px; vertical-align: middle;">'+$this.mod('usertree').parseDate(ev.date)+'</td>');
+                    $(tr).append('<td class="text-center" style="padding-left:10px;width:100px; vertical-align: middle;">'+$this.mod('usertree').parseDate(ev.date)+'</td>');
                     $(tr).append(td);
                     $(tr).append('<td><div data-familytreetop-color="'+user.gender+'" gedcom_id="'+user.gedcom_id+'">'+user.name()+'</div><div class="familytreetop-this-month-relation"><i class="icon-leaf"></i>'+user.relation+'</div></td>');
                     $this.mod('popovers').render({
