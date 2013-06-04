@@ -1,6 +1,7 @@
 $FamilyTreeTop.create("friendselector", function($){
     'use strict';
     var $this = this,
+        $box = $('#familytreetopFriendSelector'),
         $fn;
 
     $fn = {
@@ -10,9 +11,8 @@ $FamilyTreeTop.create("friendselector", function($){
                 $fn.addInvitation(selectedFriendIds[0], gedcom_id, function(){
                     $(alert).alert('close');
                     if(this.success){
-                        $fn.sendRequest(selector, selectedFriendIds[0], this.token);
+                        $fn.sendRequest(selector, selectedFriendIds[0], gedcom_id, this.token);
                     } else {
-                        console.log(this);
                         $this.error({ title: "The cureent user is already sent an invitation" });
                         selector.showFriendSelector();
                     }
@@ -33,14 +33,18 @@ $FamilyTreeTop.create("friendselector", function($){
                 callback.call(response);
             });
         },
-        sendRequest:function(selector, facebook_id, token){
+        sendRequest:function(selector, facebook_id, gedcom_id, token){
             FB.ui({
                 method:'send',
                 name: "Click here to Accept",
                 link: $this.url().app(),
                 to: facebook_id,
                 description:(function(){
-                    return 'description';
+                    var text = $($box).find('[familytreetop="description"]').text();
+                    var user = $this.mod('usertree').user(gedcom_id);
+                    text = text.replace('%NAME%', user.shortname());
+                    text = text.replace('%RELATION%', user.relation);
+                    return text;
                 })()
             }, function(response){
                 if("undefined" !== typeof(response) && response != null && response.success){

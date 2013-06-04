@@ -531,6 +531,11 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
             <div class="text-center"></div>
         </div>
     </div>
+
+    <div id="familytreetopFriendSelector">
+        <div familytreetop="link">What is Family TreeTop?</div>
+        <div familytreetop="description">Your %RELATION%, %NAME%, has invited you to join your family tree on Family TreeTop. This is a private space that can only be seen by members of your family.</div>
+    </div>
 </div>
 <!-- friend selector -->
 <div id="TDFriendSelector">
