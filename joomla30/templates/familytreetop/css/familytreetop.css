@@ -85,3 +85,15 @@
     color:#797979;
     font-size: 12px;
 }
+.familytreetop-myfamily-buttons {
+    color: #999;
+    line-height: 1.28;
+}
+
+.familytreetop-myfamily-buttons li.button {
+    font-family: 'lucida grande',tahoma,verdana,arial,sans-serif;
+    font-size: 11px;
+    color:#6d84b4;
+    cursor: pointer;
+    text-decoration: none;
+}
