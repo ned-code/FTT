@@ -41,7 +41,7 @@ foreach($data as $object){
                 <legend class="text-center"><?=JText::_('MOD_FTT_MYFAMILY_TITLE');?></legend>
                 <div></div>
             </fieldset>
-            <table>
+            <table class="table">
                 <?php foreach($result_array as $object): ?>
                     <tr>
                         <td style="padding: 5px;padding-top: 15px;width: 50px; vertical-align: top;"><img class="img-rounded" src="https://graph.facebook.com/<?=$object['from']['id'];?>/picture"/></td>
@@ -52,13 +52,13 @@ foreach($data as $object){
                                         <!-- AVATAR -->
                                         <li>
                                             <ul class="unstyled inline">
-                                                <li> <h4><?=$object['from']['name'];?></h4></li>
+                                                <li style="cursor: pointer; color:#4c5797; font-size:12px; font-weight: bold;"><?=$object['from']['name'];?></li>
                                                 <li style="color: #797979;font-size: 12px;"><i class="icon-leaf"></i><?=$search[$object['from']['id']]->name();?></li>
                                             </ul>
                                         </li>
                                         <!-- BODY -->
                                         <li>
-                                            <p style="padding: 5px;">
+                                            <p style="padding: 5px; font-size: 12px;">
                                                 <?php
                                                 $message = isset($object['message'])?$object['message']:false;
                                                 $description = isset($object['description'])?$object['description']:false;
