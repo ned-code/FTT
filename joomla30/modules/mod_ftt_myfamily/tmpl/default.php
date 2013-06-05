@@ -21,6 +21,7 @@ $search = array();
 foreach($members as $member){
     $search[$member->facebook_id] = $gedcom->individuals->get($member->gedcom_id);
 }
+
 foreach($family as $member){
     $search[$member['uid']] = $member['uid'];
 }
@@ -53,7 +54,14 @@ foreach($data as $object){
                                         <li>
                                             <ul class="unstyled inline">
                                                 <li style="cursor: pointer; color:#4c5797; font-size:12px; font-weight: bold;"><?=$object['from']['name'];?></li>
-                                                <li style="color: #797979;font-size: 12px;"><i class="icon-leaf"></i> <?=$search[$object['from']['id']]->name();?></li>
+                                                <li style="color: #797979;font-size: 12px;"><i class="icon-leaf"></i> <?php
+                                                    $e = $search[$object['from']['id']];
+                                                    if(gettype($e) == "object"){
+                                                        echo $search[$object['from']['id']]->name();
+                                                    } else {
+                                                        echo $object['name'];
+                                                    }
+                                                    ?></li>
                                             </ul>
                                         </li>
                                         <!-- BODY -->
