@@ -41,24 +41,24 @@ foreach($data as $object){
                 <legend class="text-center"><?=JText::_('MOD_FTT_MYFAMILY_TITLE');?></legend>
                 <div></div>
             </fieldset>
-            <table class="table">
+            <table style="margin:0;" class="table">
                 <?php foreach($result_array as $object): ?>
                     <tr>
                         <td style="padding: 5px;padding-top: 15px;width: 50px; vertical-align: top;"><img class="img-rounded" src="https://graph.facebook.com/<?=$object['from']['id'];?>/picture"/></td>
                         <td>
                             <div class="row-fluid">
                                 <div class="span12">
-                                    <ul class="unstyled">
+                                    <ul style="margin:0;" class="unstyled">
                                         <!-- AVATAR -->
                                         <li>
                                             <ul class="unstyled inline">
                                                 <li style="cursor: pointer; color:#4c5797; font-size:12px; font-weight: bold;"><?=$object['from']['name'];?></li>
-                                                <li style="color: #797979;font-size: 12px;"><i class="icon-leaf"></i><?=$search[$object['from']['id']]->name();?></li>
+                                                <li style="color: #797979;font-size: 12px;"><i class="icon-leaf"></i> <?=$search[$object['from']['id']]->name();?></li>
                                             </ul>
                                         </li>
                                         <!-- BODY -->
                                         <li>
-                                            <p style="padding: 5px; font-size: 12px;">
+                                            <p style="padding-left: 10px; font-size: 12px;">
                                                 <?php
                                                 $message = isset($object['message'])?$object['message']:false;
                                                 $description = isset($object['description'])?$object['description']:false;
@@ -98,9 +98,9 @@ foreach($data as $object){
                                                 <div class="span12">
                                                     <div class="pull-left">
                                                         <ul class="unstyled inline familytreetop-myfamily-buttons">
-                                                            <li class="button">Like</li>
-                                                            <li class="button">Comment</li>
-                                                            <li class="button">Share</li>
+                                                            <li familytreetop="like" class="button">Like</li>
+                                                            <li familytreetop="comment" class="button">Comment</li>
+                                                            <li familytreetop="share" class="button">Share</li>
                                                         </ul>
                                                     </div>
                                                     <div class="pull-right">
@@ -127,5 +127,10 @@ foreach($data as $object){
 <?php endif; ?>
 <script>
     $FamilyTreeTop.bind(function($){
+       $("#myFamilyOnFacebook").find('.familytreetop-myfamily-buttons li').each(function(index, element){
+           $(element).click(function(){
+
+           });
+       });
     });
 </script>
