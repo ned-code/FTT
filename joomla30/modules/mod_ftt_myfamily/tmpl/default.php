@@ -41,84 +41,86 @@ foreach($data as $object){
                 <legend class="text-center"><?=JText::_('MOD_FTT_MYFAMILY_TITLE');?></legend>
                 <div></div>
             </fieldset>
-            <?php foreach($result_array as $object): ?>
-                <div class="row-fluid">
-                    <div class="span12">
-                        <div class="row-fluid">
-                            <div class="span12">
-                                <ul class="unstyled inline">
-                                    <li> <h4><?=$object['from']['name'];?></h4></li>
-                                    <li style="color: #797979;font-size: 12px;"><i class="icon-leaf"></i><?=$search[$object['from']['id']]->name();?></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="row-fluid">
-                            <div class="span12">
-                                <ul class="inline">
-                                    <li class="span2"><img class="img-rounded" src="https://graph.facebook.com/<?=$object['from']['id'];?>/picture"/></li>
-                                    <li class="span10">
-                                        <p>
-                                            <?php
-                                            $message = isset($object['message'])?$object['message']:false;
-                                            $description = isset($object['description'])?$object['description']:false;
-                                            $story = isset($object['story'])?$object['story']:false;
-                                            $name = isset($object['name'])?$object['name']:false;
-                                            $ret = "";
-
-                                            if($message){
-                                                $ret = $message;
-                                            } elseif($story){
-                                                $ret = $story;
-                                            } elseif($description){
-                                                $ret = $description;
-                                            } elseif($name){
-                                                $ret = $name;
-                                            } else {
-                                                if(isset($object['type']) && $object['type'] == 'link'){
-                                                    $ret = 'Likes on '. $object['application']['name'];
-                                                } else {
-                                                    $ret = "";
-                                                }
-                                            }
-                                            if(strlen($ret) > 500){
-                                                $ret = substr($ret, 0 , 500) . "...";
-                                            }
-                                            echo $ret;
-                                            ?>
-                                        </p>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <?php if(isset($object['picture'])): ?>
+            <table>
+                <?php foreach($result_array as $object): ?>
+                    <tr>
+                        <td style="padding: 5px;padding-top: 15px;width: 50px; vertical-align: top;"><img class="img-rounded" src="https://graph.facebook.com/<?=$object['from']['id'];?>/picture"/></td>
+                        <td>
                             <div class="row-fluid">
-                                <div class="span12 text-center">
-                                    <img src="<?=$object['picture'];?>" />
-                                </div>
-                            </div>
-                        <? endif; ?>
-                        <div class="row-fluid">
-                            <div class="span12">
-                                <div class="pull-left">
-                                    <ul class="unstyled inline familytreetop-myfamily-buttons">
-                                        <li class="button">Like</li>
-                                        <li class="button">Comment</li>
-                                        <li class="button">Share</li>
+                                <div class="span12">
+                                    <ul class="unstyled">
+                                        <!-- AVATAR -->
+                                        <li>
+                                            <ul class="unstyled inline">
+                                                <li> <h4><?=$object['from']['name'];?></h4></li>
+                                                <li style="color: #797979;font-size: 12px;"><i class="icon-leaf"></i><?=$search[$object['from']['id']]->name();?></li>
+                                            </ul>
+                                        </li>
+                                        <!-- BODY -->
+                                        <li>
+                                            <p style="padding: 5px;">
+                                                <?php
+                                                $message = isset($object['message'])?$object['message']:false;
+                                                $description = isset($object['description'])?$object['description']:false;
+                                                $story = isset($object['story'])?$object['story']:false;
+                                                $name = isset($object['name'])?$object['name']:false;
+                                                $ret = "";
+
+                                                if($message){
+                                                    $ret = $message;
+                                                } elseif($story){
+                                                    $ret = $story;
+                                                } elseif($description){
+                                                    $ret = $description;
+                                                } elseif($name){
+                                                    $ret = $name;
+                                                } else {
+                                                    if(isset($object['type']) && $object['type'] == 'link'){
+                                                        $ret = 'Likes on '. $object['application']['name'];
+                                                    } else {
+                                                        $ret = "";
+                                                    }
+                                                }
+                                                if(strlen($ret) > 500){
+                                                    $ret = substr($ret, 0 , 500) . "...";
+                                                }
+                                                echo $ret;
+                                                ?>
+                                            </p>
+                                        </li>
+                                        <!-- PICTURE -->
+                                        <?php if(isset($object['picture'])): ?>
+                                            <li><img src="<?=$object['picture'];?>" /></li>
+                                        <?php endif; ?>
+                                        <!-- FOOTER -->
+                                        <li>
+                                            <div class="row-fluid">
+                                                <div class="span12">
+                                                    <div class="pull-left">
+                                                        <ul class="unstyled inline familytreetop-myfamily-buttons">
+                                                            <li class="button">Like</li>
+                                                            <li class="button">Comment</li>
+                                                            <li class="button">Share</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="pull-right">
+                                                        <small>
+                                                            <?php
+                                                            $date = $object['updated_time'];
+                                                            echo date('j F \a\t H:i', strtotime($date));
+                                                            ?>
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
                                     </ul>
                                 </div>
-                                <div class="pull-right">
-                                    <small>
-                                        <?php
-                                        $date = $object['updated_time'];
-                                        echo date('j F \a\t H:i', strtotime($date));
-                                        ?>
-                                    </small>
-                                </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            <?php endforeach; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
         </div>
     </div>
 </div>
