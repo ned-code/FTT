@@ -53,8 +53,14 @@ if($session->get('famous')){
     $FamilyTreeTop.bind(function($){
         'use strict';
         var $fn = {
-            profile: function(){
-                $FamilyTreeTop.mod('editor').render($FamilyTreeTop.mod('usertree').usermap().gedcom_id);
+            profile: function(object){
+                var gedcom_id =  $FamilyTreeTop.mod('usertree').usermap().gedcom_id;
+                var user =  $FamilyTreeTop.mod('usertree').user(gedcom_id);
+                $FamilyTreeTop.mod('profile').render({
+                    target: object,
+                    gedcom_id: gedcom_id,
+                    object: user
+                });
             },
             languages: function(){
                 var langs = $.parseJSON($FamilyTreeTop.languagesString), ul = $('<ul></ul>'), li, prop, box = $('#modal').clone();
@@ -93,7 +99,7 @@ if($session->get('famous')){
             var a = $(this);
             switch(id){
                 case "profile":
-                        $fn.profile();
+                        $fn.profile(this);
                     break;
 
                 case "languages":

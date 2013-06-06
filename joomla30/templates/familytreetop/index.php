@@ -224,8 +224,8 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
     <div id="profile" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="profileLabel" aria-hidden="true">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <button type="button" familytreetop="edit" class="btn close"><i class="icon-large icon-pencil"></i>Edit</button>
-            <button type="button" familytreetop="facebook" class="btn close"><i class="icon-large icon-facebook"></i>Facebook</button>
+            <button type="button" familytreetop="edit" class="btn familytreetop-header-button"><i class="icon-large icon-pencil"></i><span>Edit</span></button>
+            <button type="button" familytreetop="facebook" class="btn familytreetop-header-button"><i class="icon-large icon-facebook"></i><span>Facebook</span></button>
             <h3 id="profileLabel"></h3>
         </div>
         <div class="modal-body">
@@ -392,7 +392,6 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                         <option value="0"><?=JText::_("TPL_FAMILYTREETOP_DAY");?></option>
                     </select>
                     <input familytreetop="year" class="span4" type="text" name="editUnion[year]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_YEAR");?>">
-                    <input familytreetop="unknown" class="span1" type="checkbox" name="editUnion[unknown]" ><small><?=JText::_("TPL_FAMILYTREETOP_UNKNOWN");?></small>
                 </div>
             </div>
             <div familytreetop="union-event-place" class="row-fluid">
@@ -485,7 +484,6 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                     <option value="0"><?=JText::_("TPL_FAMILYTREETOP_DAY");?></option>
                 </select>
                 <input familytreetop="year" class="span4" type="text" name="editProfile[b_year]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_YEAR");?>">
-                <input class="span1" type="checkbox" name="editProfile[b_exist]" ><small><?=JText::_("TPL_FAMILYTREETOP_UNKNOWN");?></small>
             </div>
         </div>
         <div familytreetop="birthday" class="row-fluid">
@@ -524,7 +522,6 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                     <option value="0"><?=JText::_("TPL_FAMILYTREETOP_DAY");?></option>
                 </select>
                 <input familytreetop="year" class="span4" type="text" name="editProfile[d_year]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_YEAR");?>">
-                <input class="span1" type="checkbox" name="editProfile[d_exist]" ><small><?=JText::_("TPL_FAMILYTREETOP_UNKNOWN");?></small>
             </div>
         </div>
         <div familytreetop="deathday" class="row-fluid">
