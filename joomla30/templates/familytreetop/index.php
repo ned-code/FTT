@@ -154,7 +154,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                 <button familytreetop="facebook" type="button" class="btn" style="display:none;padding: 4px 12px 0px 12px;">
                     <div class="row-fluid">
                         <div class="span4">
-                            <i class="icon-large icon-user"></i>
+                            <i class="icon-large icon-facebook"></i>
                         </div>
                         <div class="span8" style="line-height: 25px;">
                             Facebook
@@ -175,7 +175,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                 <button familytreetop="profile" type="button" class="btn" style="padding: 4px 12px 0px 12px;">
                     <div class="row-fluid">
                         <div class="span4">
-                            <i class="icon-large icon-facebook"></i>
+                            <i class="icon-large icon-user"></i>
                         </div>
                         <div class="span8" style="line-height: 25px;">
                             Profile
