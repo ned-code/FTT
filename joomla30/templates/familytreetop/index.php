@@ -149,9 +149,20 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                 </ul>
             </div>
         </div>
-        <div class="row-fluid" familytreetop-name="footer" style="display: none;">
+        <div class="row-fluid" familytreetop-name="footer">
             <div class="span12 familytreetop-popover-footer text-center">
-                <div familytreetop-invite type="button" class="btn btn-primary" style="padding: 4px 12px 0px 12px;">
+                <button familytreetop="facebook" type="button" class="btn" style="display:none;padding: 4px 12px 0px 12px;">
+                    <div class="row-fluid">
+                        <div class="span4">
+                            <i class="icon-large icon-user"></i>
+                        </div>
+                        <div class="span8" style="line-height: 25px;">
+                            Facebook
+                        </div>
+                    </div>
+                </button>
+
+                <button familytreetop-invite type="button" class="btn btn-primary" style="display:none;padding: 4px 12px 0px 12px;">
                     <div class="row-fluid">
                         <div class="span6">
                             <i class="icon-large icon-large-white icon-facebook"></i>
@@ -160,14 +171,23 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                             Invite
                         </div>
                     </div>
-                </div>
+                </button>
+                <button familytreetop="profile" type="button" class="btn" style="padding: 4px 12px 0px 12px;">
+                    <div class="row-fluid">
+                        <div class="span4">
+                            <i class="icon-large icon-facebook"></i>
+                        </div>
+                        <div class="span8" style="line-height: 25px;">
+                            Profile
+                        </div>
+                    </div>
+                </button>
             </div>
         </div>
     </div>
 
     <div class="popover" style="min-width:350px;">
         <div class="arrow"></div>
-        <a style="margin:5px;" class="pull-right" href="#"><i class="icon-large icon-new-window"></a></i>
         <h3 class="popover-title" style="font-weight: bold;"></h3>
         <div class="popover-content" style="padding:0;"></div>
     </div>

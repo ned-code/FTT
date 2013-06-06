@@ -36,8 +36,14 @@ $FamilyTreeTop.create("popovers", function($){
                 avatar;
 
             if(object.facebook_id == 0 && object.isAlive()){
-                $(div).find('[familytreetop-name="footer"]').show();
+                $(div).find('[familytreetop-name="footer"] button[familytreetop-invite]').show();
             }
+            if(object.facebook_id != 0 && object.isAlive()){
+                $(div).find('[familytreetop-name="footer"] button[familytreetop="facebook"]').show();
+                $(div).find('[familytreetop-name="footer"] button[familytreetop="facebook"]').attr('facebook_id', object.facebook_id);
+            }
+            $(div).find('[familytreetop-name="footer"] button[familytreetop="profile"]').attr('gedcom_id', object.gedcom_id);
+
             $(cont).find('li').each(function(index, element){
                 var name = $(element).attr('familytreetop-name');
                 var value, _value, place;
@@ -78,10 +84,6 @@ $FamilyTreeTop.create("popovers", function($){
         },
         getTemplate:function(){
             var object = $('#familytreetop-root .popover').clone();
-            var args = $fn.getLastObject();
-            $(object).find('a[class="pull-right"]').click(function(){
-                $this.mod('profile').render(args);
-            });
             return object;
         },
         getPlacement: function(args){
@@ -115,6 +117,23 @@ $FamilyTreeTop.create("popovers", function($){
                 $this.mod('friendselector').render(gedcom_id);
             });
         },
+        profile: function(args, opt){
+            $(opt.content).find('[familytreetop-name="footer"] button[familytreetop="profile"]').click(function(){
+                var gedcom_id = $(this).attr('gedcom_id');
+                var user = $this.mod('usertree').user(gedcom_id);
+                $this.mod('profile').render({
+                    target: args.target,
+                    gedcom_id: gedcom_id,
+                    object: user
+                });
+            });
+        },
+        facebook: function(args, opt){
+            $(opt.content).find('[familytreetop-name="footer"] button[familytreetop="facebook"]').click(function(){
+                var facebook_id = $(this).attr('facebook_id');
+                window.open("http://www.facebook.com/"+facebook_id,'_blank');
+            });
+        },
         click: function(args, opt){
             $(args.target).bind('click', function(e){
                 if($active == args.target) return false;
@@ -125,6 +144,9 @@ $FamilyTreeTop.create("popovers", function($){
                 $active = args.target;
                 $(args.target).popover('show');
                 $fn.friendselector(args, opt);
+                $fn.profile(args, opt);
+                $fn.facebook(args, opt);
+
 
                 $('body').bind('click.familytreetop', function(e){
                     if(!$active) return false;
