@@ -36,7 +36,6 @@ $FamilyTreeTop.create("profile", function($){
         },
         setRelation:function(args){
             var tree = args.object.relationMap();
-            console.log(tree);
             var box = $(this).find('[data-familytreetop-profile="relation"] fieldset');
             var id = "jit"+$this.generateKey();
             $(box).attr('id', id);
@@ -156,6 +155,22 @@ $FamilyTreeTop.create("profile", function($){
         var parent = $fn.getModalBox(), object = args.object;
 
         $(parent).find('#profileLabel').text(object.shortname());
+        $(parent).find('[familytreetop="facebook"]').attr('facebook_id', object.facebook_id);
+        $(parent).find('[familytreetop="edit"]').attr('gedcom_id', object.gedcom_id);
+        if(object.facebook_id == 0){
+            $(parent).find('[familytreetop="facebook"]').hide();
+        }
+        $(parent).find('[familytreetop="facebook"]').click(function(){
+            var facebook_id = $(this).attr('facebook_id');
+            window.open("http://www.facebook.com/"+facebook_id,'_blank');
+        });
+        $(parent).find('[familytreetop="edit"]').click(function(){
+            var gedcom_id = $(this).attr('gedcom_id');
+
+            $(parent).modal('hide');
+            $this.mod('editor').render(gedcom_id);
+        });
+
 
         $fn.setAbout.call(parent, args);
         $(parent).on('shown', function(){
