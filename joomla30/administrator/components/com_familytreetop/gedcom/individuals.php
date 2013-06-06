@@ -16,9 +16,6 @@ class FamilyTreeTopGedcomIndividualsModel {
     public $last_name = null;
     public $know_as = null;
 
-    //relation
-    public $relation = null;
-
     //others
     public $events = array();
     public $medias = array();
@@ -36,6 +33,15 @@ class FamilyTreeTopGedcomIndividualsModel {
         } else {
             return true;
         }
+    }
+
+    public function relationId(){
+        $gedcom = GedcomHelper::getInstance();
+        $relationList = $gedcom->relations->getList();
+        if(isset($relationList[$this->gedcom_id])){
+            return $relationList[$this->gedcom_id]['relation_id'];
+        }
+        return 0;
     }
 
     public function name(){
