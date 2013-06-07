@@ -105,8 +105,7 @@ foreach($data as $object){
                                                     </li>
                                                     <!-- PICTURE -->
                                                     <?php if(isset($object['picture'])): ?>
-                                                        <li><a target="_blank" href="<?=$object['link'];?>"><?=$object['name'];?></a></li>
-                                                        <li><img style="width:100%;" src="<?=$object['picture'];?>" /></li>
+                                                        <li><a target="_blank" href="<?=$object['link'];?>"><img class="img-polaroid" src="<?=$object['picture'];?>" /></a></li>
                                                     <?php endif; ?>
                                                     <!-- FOOTER -->
                                                     <li>
