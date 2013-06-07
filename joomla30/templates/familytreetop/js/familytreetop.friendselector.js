@@ -39,6 +39,7 @@ $FamilyTreeTop.create("friendselector", function($){
                 name: "Click here to Accept",
                 link: $this.url().app(),
                 to: facebook_id,
+                picture: $FamilyTreeTop.fn.url().template()+"/images/ftt_invitation.png",
                 description:(function(){
                     var text = $($box).find('[familytreetop="description"]').text();
                     var user = $this.mod('usertree').user(gedcom_id);

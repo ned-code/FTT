@@ -113,9 +113,9 @@ foreach($data as $object){
                                                             <div class="span12">
                                                                 <div class="pull-left">
                                                                     <ul class="unstyled inline familytreetop-myfamily-buttons">
-                                                                        <li familytreetop="like" class="button">Like</li>
-                                                                        <li familytreetop="comment" class="button">Comment</li>
-                                                                        <li familytreetop="share" class="button">Share</li>
+                                                                        <li familytreetop-switch="on" familytreetop-date="" familytreetop="like" class="button">Like</li>
+                                                                        <li familytreetop-switch="on" familytreetop-date="" familytreetop="comment" class="button">Comment</li>
+                                                                        <li familytreetop-switch="on" familytreetop-date="<?=(isset($object['link']))?$object['link']:"";?>" familytreetop="share" class="button">Share</li>
                                                                     </ul>
                                                                 </div>
                                                                 <div class="pull-right">
@@ -147,7 +147,35 @@ foreach($data as $object){
     $FamilyTreeTop.bind(function($){
        $("#myFamilyOnFacebook").find('.familytreetop-myfamily-buttons li').each(function(index, element){
            $(element).click(function(){
+               var data = $(this).attr('familytreetop-data'), fSwitch = $(this).attr('familytreetop-switch');
+               if(fSwitch == "off") return false;
+               switch($(this).attr('familytreetop')){
+                   case "like":
+                       break;
 
+                   case "comment":
+                       break;
+
+                   case "share":
+                       return false;
+                       FB.ui(
+                           {
+                               method: 'feed',
+                               name: 'Family TreeTop',
+                               link: 'http://developers.facebook.com/docs/reference/dialogs/',
+                               picture: $FamilyTreeTop.fn.url().template()+"/images/ftt_invitation.png",
+                               caption: 'Family TreeTop Share',
+                               description: 'description.'
+                           },
+                           function(response) {
+                               if (response && response.post_id) {
+                                   $(this).attr('familytreetop-switch', "off");
+                                   $(this).css('color', "000");
+                               }
+                           }
+                       );
+                       break;
+               }
            });
        });
        $("#myFamilyOnFacebook").find('[familytreetop="profile"]').each(function(index, element){
