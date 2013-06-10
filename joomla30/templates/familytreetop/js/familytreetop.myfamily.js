@@ -50,7 +50,7 @@ $FamilyTreeTop.create("myfamily", function($){
         },
         createBody: function(object){
             var parentDiv = $('<div class="row-fluid"><div class="span12"></div></div>');
-            $(parentDiv).find('.span12').append('<div familytreetop="profile">'+$fn.getName(object)+'</div>');
+            $(parentDiv).find('.span12').append('<div familytreetop="profile" style="cursor: pointer; color:#4c5797; font-size:12px; font-weight: bold;">'+$fn.getName(object)+'</div>');
             $(parentDiv).find('.span12').append('<div style="color: #797979;font-size: 12px;">'+$fn.getRelation(object)+'</div>');
             $(parentDiv).find('.span12').append('<div>'+$fn.getMessage(object)+'</div>');
             if("undefined" !== typeof(object.picture)){
