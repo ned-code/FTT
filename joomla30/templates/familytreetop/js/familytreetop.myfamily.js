@@ -22,10 +22,19 @@ $FamilyTreeTop.create("myfamily", function($){
             return str.replace(/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/, "...");
         },
         getPicture: function(object){
+            if("undefined" === typeof(object.picture)) return "";
             return '<a target="_blank" href="'+object.link+'"><img class="img-polaroid" src="'+object.picture+'" /></a>';
         },
         getTime: function(object){
             return $fn.timeAgo(object['updated_time']);
+        },
+        getGedcomId: function(object){
+            var facebook_id = object.from.id;
+            var obj = $search[facebook_id];
+            if("undefined" !== typeof(obj) && "undefined" !== typeof(obj.gedcom_id)){
+                return obj.gedcom_id;
+            }
+            return 0;
         },
         timeAgo: function(time){
             var date = new Date((time || "").replace(/-/g,"/").replace(/[TZ]/g," ")),
@@ -50,14 +59,10 @@ $FamilyTreeTop.create("myfamily", function($){
         },
         createBody: function(object){
             var parentDiv = $('<div class="row-fluid"><div class="span12"></div></div>');
-            $(parentDiv).find('.span12').append('<div familytreetop="profile" style="cursor: pointer; color:#4c5797; font-size:12px; font-weight: bold;">'+$fn.getName(object)+'</div>');
+            $(parentDiv).find('.span12').append('<div gedcom_id="'+$fn.getGedcomId(object)+'" familytreetop="profile" style="cursor: pointer; color:#4c5797; font-size:12px; font-weight: bold;">'+$fn.getName(object)+'</div>');
             $(parentDiv).find('.span12').append('<div style="color: #797979;font-size: 12px;">'+$fn.getRelation(object)+'</div>');
-            $(parentDiv).find('.span12').append('<div>'+$fn.getMessage(object)+'</div>');
-            if("undefined" !== typeof(object.picture)){
-                $(parentDiv).find('.span12').append('<div>'+$fn.getPicture(object)+'</div>');
-            }
+            $(parentDiv).find('.span12').append('<div><table><tr><td style="border:none;">'+$fn.getPicture(object)+'</td><td style="border:none;vertical-align: top;">'+$fn.getMessage(object)+'</td></tr></table></div>');
             $(parentDiv).find('.span12').append('<div class="pull-right familytreetop-myfamily-buttons"><small>'+$fn.getTime(object)+'</small></div>');
-
             return parentDiv;
         },
         createTd: function(style){
@@ -72,16 +77,24 @@ $FamilyTreeTop.create("myfamily", function($){
             $(tr).append($($fn.createTd("width:50px;")).append($fn.createImage(object)));
             $(tr).append($($fn.createTd()).append($fn.createBody(object)));
             return tr;
+        },
+        initPopovers: function(){
+            $($box).find('[familytreetop="profile"]').each(function(index, element){
+                if($(element).attr('gedcom_id') != 0){
+                    $this.mod('popovers').render({
+                        target: element
+                    });
+                }
+            });
         }
     }
 
     $this.render = function(json){
         var table = $($box).find('table');
         $search = json.search;
-
-        console.log(json);
         $(json.sort).each(function(index, element){
             $(table).append($fn.createTr(element));
         });
+        $fn.initPopovers();
     }
 });
