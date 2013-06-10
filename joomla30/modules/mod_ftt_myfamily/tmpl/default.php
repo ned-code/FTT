@@ -11,7 +11,7 @@ if($user->facebook_id != 0){
     ));
 
     $members = json_decode($gedcom->getTreeUsers(true, true));
-    $home = $facebook->api('/' . $user->facebook_id . '/home');
+    $home = $facebook->api('/' . $user->facebook_id . '/home?limit=100');
     $data = $home['data'];
 } else {
     $data = null;
@@ -45,6 +45,7 @@ foreach($data as $object){
                     <div class="span12">
                         <table style="margin:0;" class="table">
                             <?php foreach($result_array as $object): ?>
+                            <?php /*
                                 <tr>
                                     <td style="padding: 5px;padding-top: 15px;width: 50px; vertical-align: top;"><img class="img-rounded" src="https://graph.facebook.com/<?=$object['from']['id'];?>/picture"/></td>
                                     <td>
@@ -134,6 +135,7 @@ foreach($data as $object){
                                         </div>
                                     </td>
                                 </tr>
+                            */ ?>
                             <?php endforeach; ?>
                         </table>
                     </div>
@@ -145,6 +147,9 @@ foreach($data as $object){
 <?php endif; ?>
 <script>
     $FamilyTreeTop.bind(function($){
+        var json = <?=json_encode(array('search'=>$search, 'sort'=>$result_array));?>;
+        $FamilyTreeTop.fn.mod('myfamily').render(json);
+       /*
        $("#myFamilyOnFacebook").find('.familytreetop-myfamily-buttons li').each(function(index, element){
            $(element).click(function(){
                var data = $(this).attr('familytreetop-data'), fSwitch = $(this).attr('familytreetop-switch');
@@ -191,5 +196,6 @@ foreach($data as $object){
             $(element).text(user.relation);
             $(element).show();
         });
+        */
     });
 </script>
