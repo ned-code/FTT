@@ -13,6 +13,9 @@ $FamilyTreeTop.create("latest_events", function($){
             });
             return img;
         },
+        setNull: function(box){
+            $(box).append('<tr><td colspan="3">(none to show)</td></tr>')
+        },
         setEvents: function(box, events, type){
             var user, family, husb, wife, div, ev, tr, td, avatar;
             for(var prop in events){
@@ -88,12 +91,18 @@ $FamilyTreeTop.create("latest_events", function($){
         var birth = events.BIRT, death = events.DEAT, marr = events.MARR;
         if("undefined" !== typeof(birth)){
             $fn.setEvents($birthBox, birth, 'birth');
+        } else {
+            $fn.setNull($birthBox);
         }
         if("undefined" !== typeof(death)){
             $fn.setEvents($deathBox, death, 'death');
+        }else {
+            $fn.setNull($deathBox);
         }
         if("undefined" !== typeof(marr)){
             $fn.setEvents($marrBox, marr, 'marr');
+        }else {
+            $fn.setNull($marrBox);
         }
         $fn.setFamilyLine();
     }
