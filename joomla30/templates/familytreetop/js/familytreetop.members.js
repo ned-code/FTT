@@ -161,7 +161,7 @@ $FamilyTreeTop.create("members", function($){
                     $(td).append(' '+'<span style="cursor:pointer;">'+object.name()+'</span>');
                     $(tr).append(td);
                     $(tr).append('<td>'+$this.mod('usertree').parseDate(birth.date)+'</td>');
-                    $(tr).append('<td>'+$this.mod('usertree').parsePlace(birth.place)+'</td>');
+                    $(tr).append('<td style="text-align: right;">'+$this.mod('usertree').parsePlace(birth.place)+'</td>');
                     $($box).append(tr);
                     $this.mod('popovers').render({
                         target: $(tr).find('td[gedcom_id]')

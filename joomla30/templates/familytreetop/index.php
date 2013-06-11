@@ -224,7 +224,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
     <div id="profile" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="profileLabel" aria-hidden="true">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <button type="button" familytreetop="edit" class="btn familytreetop-header-button"><i class="icon-large icon-pencil"></i><span>Edit</span></button>
+            <button type="button" familytreetop="edit" class="btn familytreetop-header-button" style="padding: 5px 10px;"><i class="icon-pencil"></i><span style="top: 0;margin-left: 3px;">Edit</span></button>
             <button type="button" familytreetop="facebook" class="btn familytreetop-header-button"><i class="icon-large icon-facebook"></i><span>Facebook</span></button>
             <h3 id="profileLabel"></h3>
         </div>
