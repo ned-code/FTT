@@ -158,7 +158,7 @@ $FamilyTreeTop.create("members", function($){
                     if($this.mod('usertree').isAvatar(avatar)){
                         $(td).append(avatar);
                     }
-                    $(td).append(object.name());
+                    $(td).append(' '+'<span style="cursor:pointer;">'+object.name()+'</span>');
                     $(tr).append(td);
                     $(tr).append('<td>'+$this.mod('usertree').parseDate(birth.date)+'</td>');
                     $(tr).append('<td>'+$this.mod('usertree').parsePlace(birth.place)+'</td>');

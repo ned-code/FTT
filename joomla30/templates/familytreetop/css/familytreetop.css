@@ -19,6 +19,9 @@
 [class-familytreetop="module-padding"] {
     padding: 20px;
 }
+.familytreetop-hover-effect > tr, .familytreetop-hover-effect > td {
+    vertical-align: middle;
+}
 .familytreetop-hover-effect:hover {
     background: #dff0d8 !important;
 }
