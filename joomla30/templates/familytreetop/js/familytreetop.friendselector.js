@@ -7,7 +7,7 @@ $FamilyTreeTop.create("friendselector", function($){
     $fn = {
         beforeSendRequest:function(selector, selectedFriendIds, gedcom_id){
             if(selectedFriendIds.length > 0){
-                var alert = $this.warning({title: "Invitation creating, wait...", timeout: false});
+                var alert = $this.warning({title: "Preparing invitation...", timeout: false});
                 $fn.addInvitation(selectedFriendIds[0], gedcom_id, function(){
                     $(alert).alert('close');
                     if(this.success){
@@ -22,7 +22,7 @@ $FamilyTreeTop.create("friendselector", function($){
             }
         },
         delInvitation:function(selector, token){
-            var alert = $this.warning({title: "You abort send message, wait..."});
+            var alert = $this.warning({title: "Invitation request cancelled..."});
             $this.ajax('invite.delInvitation', {token:token}, function(r){
                 $(alert).alert('close');
                 selector.showFriendSelector();
