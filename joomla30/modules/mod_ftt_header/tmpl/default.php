@@ -4,6 +4,8 @@ $gedcom = GedcomHelper::getInstance();
 $user = FamilyTreeTopUserHelper::getInstance()->get();
 $ind = $gedcom->individuals->get($user->gedcom_id);
 ?>
+<?php
+/*
 <div class="navbar">
     <div class="navbar-inner">
         <ul id="familyTreeTopTabs" class="nav">
@@ -51,6 +53,54 @@ $ind = $gedcom->individuals->get($user->gedcom_id);
             <li class="divider-vertical"></li>
             <li>
                 <div data-familytreetop="familyline" class="btn-group pull-right visible-desktop">
+                    <button style="background: none;border: none;" class="btn disabled">
+                        <ul class="unstyled inline">
+                            <li ><canvas id="father_chart" style="height:20px; width: 40px;"></canvas></li>
+                            <li style="position: relative;top: -3px;"><?=JText::_('MOD_FAMILYTREETOP_FAMILY_LINE_FATHER')?></li>
+                        </ul>
+                    </button>
+                    <button class="btn"><i familytreetop-line="father" class="icon-eye-open"></i></button>
+                    <button class="btn"><i familytreetop-line="father" class="icon-pencil"></i></button>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+ */
+?>
+<div class="navbar">
+    <div class="navbar-inner">
+        <ul id="familyTreeTopTabs" class="nav">
+            <!-- BULLETIN BOARD -->
+            <li class="active"><a data-familytreetop="bulletin_board" href="#"><?=JText::_('MOD_FAMILYTREETOP_HEADER_BULLETIN_BOARD')?></a></li>
+            <!-- CALENDAR -->
+            <li class=""><a data-familytreetop="calendar" href="#"><?=JText::_('MOD_FAMILYTREETOP_HEADER_CALENDAR')?></a></li>
+            <!-- MEMBERS -->
+            <li><a data-familytreetop="members" href="#"><?=JText::_('MOD_FAMILYTREETOP_HEADER_MEMBERS')?></a></li>
+            <li><a data-familytreetop="family_tree" href="#"><?=JText::_('MOD_FAMILYTREETOP_HEADER_FAMILY_TREE')?></a></li>
+        </ul>
+        <?php if($user->famous): ?>
+            <div class="pull-right">
+                <span><?=$ind->name();?></span>
+                <a class="btn" href="<?=JRoute::_("index.php?option=com_familytreetop&task=famous.ext", false);?>" ><?=JText::_('MOD_FAMILYTREETOP_HEADER_EXIT')?></a>
+            </div>
+        <?php endif;?>
+        <ul class="nav pull-right visible-desktop" style="border-left: 1px solid #d4d4d4;border-right: 1px solid #d4d4d4;padding-left: 10px;padding-right: 10px;background: white;">
+            <li>
+                <div data-familytreetop="familyline" class="btn-group pull-right">
+                    <button class="btn"><i familytreetop-line="mother" class="icon-pencil"></i></button>
+                    <button class="btn"><i familytreetop-line="mother" class="icon-eye-open"></i></button>
+                    <button style="background: none;border: none;" class="btn disabled">
+                        <ul class="unstyled inline">
+                            <li style="position: relative;top: -3px;"><?=JText::_('MOD_FAMILYTREETOP_FAMILY_LINE_MOTHER')?></li>
+                            <li><canvas id="mother_chart" style="height:20px; width: 40px;"></canvas></li>
+                        </ul>
+                    </button>
+                </div>
+            </li>
+            <li class="divider-vertical"></li>
+            <li>
+                <div data-familytreetop="familyline" class="btn-group pull-right">
                     <button style="background: none;border: none;" class="btn disabled">
                         <ul class="unstyled inline">
                             <li ><canvas id="father_chart" style="height:20px; width: 40px;"></canvas></li>
