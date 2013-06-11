@@ -146,6 +146,9 @@
 
             $('#system-message').append(alertObject);
             $(alertObject).alert();
+            setTimeout(function(){
+                $(alertObject).alert('close');
+            }, 3000);
             return alertObject;
         },
         error:function(args){
