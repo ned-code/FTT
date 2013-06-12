@@ -50,7 +50,7 @@ $FamilyTreeTop.create("profile", function($){
                 levelsToShow: tree[1],
                 Node: {
                     height: 40,
-                    width: 140,
+                    width: 220,
                     type: 'rectangle',
                     color: '#f5f5f5',
                     overridable: true
@@ -62,7 +62,7 @@ $FamilyTreeTop.create("profile", function($){
                 onCreateLabel: function(label, node){
                     label.id = node.id;
                     label.innerHTML = $fn.getLabelHtml(label,node);
-                    $(label).width(140);
+                    $(label).width(220);
                     $(label).height(40);
                     $(label).addClass('text-center');
                     if($fn.isConnectionTarget(args, node)){
@@ -79,16 +79,18 @@ $FamilyTreeTop.create("profile", function($){
                     }
                 },
                 onBeforePlotLine: function(adj){
-                    console.log(( adj.nodeFrom.data.usr)?adj.nodeFrom.data.usr.name():adj.nodeFrom.data);
-                    console.log(( adj.nodeTo.data.usr)?adj.nodeTo.data.usr.name():adj.nodeTo.data);
-                    if(adj.nodeTo.id.split("_")[1] == "TOP"
-                        || adj.nodeFrom.id.split("_")[1] == "TOP"
-                        || (adj.nodeTo.data.in_law && !adj.nodeFrom.data.rel.in_law)
-                        || (adj.nodeFrom.data.in_law && !adj.nodeTo.data.rel.in_law)
-                        ){
+                    if(isTop(adj) || isInLawFromTo(adj) || isInLawToFrom(adj)){
                         adj.data.$color = "#f5f5f5";
                         adj.data.$lineWidth = 0;
-                        console.log(adj);
+                    }
+                    function isTop(adj){
+                        return adj.nodeTo.id.split("_")[1] == "TOP" ||adj.nodeFrom.id.split("_")[1] == "TOP";
+                    }
+                    function isInLawFromTo(adj){
+                        return adj.nodeFrom.data.rel.in_law != "0" && adj.nodeTo.data.rel.in_law == "0";
+                    }
+                    function isInLawToFrom(adj){
+                        return adj.nodeTo.data.rel.in_law != "0" && adj.nodeFrom.data.rel.in_law == "0";
                     }
                 }
             });
