@@ -45,7 +45,7 @@ $FamilyTreeTop.create("profile", function($){
                 duration: 800,
                 transition: $jit.Trans.Quart.easeInOut,
                 offsetX:0,
-                offsetY:tree[1]*50 + 60,
+                offsetY:tree[1]*50,
                 levelDistance: 30,
                 levelsToShow: tree[1],
                 Node: {
@@ -79,12 +79,16 @@ $FamilyTreeTop.create("profile", function($){
                     }
                 },
                 onBeforePlotLine: function(adj){
+                    console.log(( adj.nodeFrom.data.usr)?adj.nodeFrom.data.usr.name():adj.nodeFrom.data);
+                    console.log(( adj.nodeTo.data.usr)?adj.nodeTo.data.usr.name():adj.nodeTo.data);
                     if(adj.nodeTo.id.split("_")[1] == "TOP"
                         || adj.nodeFrom.id.split("_")[1] == "TOP"
-                        || adj.nodeTo.data.in_law
-                        || adj.nodeFrom.data.in_law){
+                        || (adj.nodeTo.data.in_law && !adj.nodeFrom.data.rel.in_law)
+                        || (adj.nodeFrom.data.in_law && !adj.nodeTo.data.rel.in_law)
+                        ){
                         adj.data.$color = "#f5f5f5";
                         adj.data.$lineWidth = 0;
+                        console.log(adj);
                     }
                 }
             });
