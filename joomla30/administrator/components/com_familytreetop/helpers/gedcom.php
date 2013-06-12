@@ -37,8 +37,9 @@ class GedcomHelper
         $this->dates = new FamilyTreeTopGedcomDatesManager($tree_id);
         $this->places = new FamilyTreeTopGedcomPlacesManager($tree_id);
         $this->medias = new FamilyTreeTopGedcomMediasManager($tree_id);
+        $this->connections = new FamilyTreeTopGedcomConnectionsManager($tree_id, $gedcom_id);
         $this->relations = new FamilyTreeTopGedcomRelationsManager($tree_id, $gedcom_id);
-        $this->connections = new FamilyTreeTopGedcomConnectionsManager($tree_id);
+
     }
 
     public function getTreeUsers($associative = false, $json = false){

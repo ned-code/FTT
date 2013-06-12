@@ -89,6 +89,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
     </div>
 
     <div id="relations">
+        <div data-familytreetop="RELATIVE"><?=JText::_("TPL_FAMILYTREETOP_RELATIVE");?></div>
         <div data-familytreetop="SELF"><?=JText::_("TPL_FAMILYTREETOP_SELF");?></div>
         <div data-familytreetop="SPOUSE"><?=JText::_("TPL_FAMILYTREETOP_SPOUSE");?></div>
         <div data-familytreetop="MOTHER"><?=JText::_("TPL_FAMILYTREETOP_MOTHER");?></div>

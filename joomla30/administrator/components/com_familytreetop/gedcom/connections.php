@@ -6,8 +6,9 @@ class FamilyTreeTopGedcomConnectionsManager {
     protected $connections = array();
     protected $tmp = array();
 
-    public function __construct($tree_id){
+    public function __construct($tree_id, $gedcom_id){
         $this->tree_id = $tree_id;
+        $this->owner_id = $gedcom_id;
 
         $gedcom = GedcomHelper::getInstance();
 
