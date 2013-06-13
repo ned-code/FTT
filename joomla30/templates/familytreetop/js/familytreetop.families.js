@@ -42,7 +42,7 @@ $FamilyTreeTop.create("families", function($){
             var divs = $(cl).find('div');
             $(cl).attr('gedcom_id', ind.gedcom_id);
             $(divs[1]).text((type=="up")?ind.name():ind.first_name);
-            $(divs[2]).text('...');
+            $(divs[2]).text(ind.birth('date.start_year'));
 
             var img = $(divs[0]).find('img');
             var avatar = ind.avatar((type=="up")?["140","140"]:["90","90"]);

@@ -206,8 +206,18 @@ $FamilyTreeTop.create("usertree", function($){
             medias: function(){
               return $this.getMedias(ind.gedcom_id);
             },
-            birth:function(){
-                return $this.getUserEventByType(ind.gedcom_id, 'BIRT');
+            birth:function(path){
+                var e = $this.getUserEventByType(ind.gedcom_id, 'BIRT'), st, prop, val = "";
+                if(!e) return "";
+                if("undefined" === typeof(path)){
+                    return e || "";
+                }
+                st = path.split('.');
+                for(prop in st){
+                    if(!st.hasOwnProperty(prop)) continue;
+                    val = (val=="")?e[st[prop]]:val[st[prop]];
+                }
+                return ("undefined"!==typeof(val))?val:"";
             },
             death:function(){
                 return $this.getUserEventByType(ind.gedcom_id, 'DEAT');
