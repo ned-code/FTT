@@ -140,36 +140,33 @@ $FamilyTreeTop.create("families", function($){
                 }
             }
             function getLeft(index){
-                var length = boxs.length - 3,
-                    len = index - 2,
-                    rows = getRows(),
-                    row = Math.ceil(len / rows[1]),
-                    indent = 0,
-                    position,
-                    start,
-                    end,
-                    ln,
-                    k;
-
-                start = rows[1]*(row-1) + 1;
-                end = row*rows[1];
-                ln = 0;
-                if(end > length){
-                    for(var k = start ; k <= end ; k++){
-                        if(k <= length && k != 0){
-                            ln++;
-                        }
+                var rows = getRows(), length = index - 2, step = 0, margin = 0;
+                if(length <= rows[1]){
+                    step = length;
+                } else {
+                    step = _getStepLength_(rows[1], length);
+                }
+                margin = _getMargin_(rows, index);
+                return (step - 1) * 110 + margin;
+                function _getStepLength_(limit, length){
+                    var len = length - limit;
+                    if(len <= limit){
+                        return len;
                     }
-                } else {
-                    ln = rows[1];
+                    return _getStepLength_(limit, len);
                 }
-                indent = Math.round((rows[2] - ln * 120) / 2);
-                if(row == 1){
-                    position = len;
-                } else {
-                    position = rows[1]*row - len;
+                function _getMargin_(rows, index){
+                    var count = _getCountOnRow_(rows, index);
+                    return Math.ceil((rows[2] - count*110)/2);
                 }
-                return (position - 1) * 120 + indent;
+                function _getCountOnRow_(rows, index){
+                    var length = boxs.length - 3, row = Math.ceil((index - 2)/rows[1]);
+                    if(length - row*rows[1] >= 0){
+                        return rows[1];
+                    } else {
+                        return length- (row-1)*rows[1];
+                    }
+                }
             }
         },
         setPopovers:function(boxs){
@@ -259,6 +256,9 @@ $FamilyTreeTop.create("families", function($){
 
         $this.mod('usertree').trigger(function(){
             $this.render(settings);
+        });
+        $(window).resize(function(){
+            $fn.setPosition($boxs[settings.id], settings);
         });
     };
 
