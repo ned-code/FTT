@@ -17,7 +17,6 @@ $doc->addStyleSheet('templates/'.$this->template.'/css/csstreeview.fix.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/tdfriendselector.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/familytreetop.css');
 
-
 // Add current user information
 $user = JFactory::getUser();
 // Add familytreetop settings

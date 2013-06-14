@@ -36,8 +36,12 @@ class FamilyTreeTopGedcomRelationsManager {
         $sort = array();
         foreach($rows as $key => $row){
             $el = $row;
-            $el['connection'] = json_decode(base64_decode($row['connection']));
-            $el['json'] = json_decode(base64_decode($row['json']));
+            if(isset($row['connection'])){
+                $el['connection'] = json_decode(base64_decode($row['connection']));
+            }
+            if(isset($el['json'])){
+                $el['json'] = json_decode(base64_decode($row['json']));
+            }
             $sort[$key] = $el;
         }
         return $sort;
