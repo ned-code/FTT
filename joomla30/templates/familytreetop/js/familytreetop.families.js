@@ -5,7 +5,7 @@ $FamilyTreeTop.create("families", function($){
 
     $fn = {
         getSettings: function(settings){
-            if(settings.id != null){
+            if(settings && settings.id != null){
                 return settings;
             } else {
                 settings =  $.extend({}, {
@@ -178,7 +178,9 @@ $FamilyTreeTop.create("families", function($){
             });
         },
         setIconHome: function(parent){
-            $(parent).append($($box).find('[familytreetop="home"]'));
+            var home = $($box).find('[familytreetop="home"]').clone();
+            $(parent).append(home);
+            return home;
         },
         click:function(settings){
             var gedcom_id = $(this).parent().parent().attr('gedcom_id');
@@ -187,11 +189,14 @@ $FamilyTreeTop.create("families", function($){
             $this.mod('popovers').hide();
             $this.render(settings);
         },
+        clickHome:function(but){
+            $(but).click(function(){
+                $this.render($this.first);
+            });
+        },
         clear:function(settings){
+            $(settings.parent).html('');
             if("undefined" != typeof($boxs) && "undefined" !== typeof($boxs[settings.id])){
-                $boxs[settings.id].forEach(function(el){
-                    $(el).unbind().remove();
-                });
                 delete $boxs[settings.id];
             }
         },
@@ -201,7 +206,7 @@ $FamilyTreeTop.create("families", function($){
             $fn.clear(settings);
 
             if(settings.iconHome){
-                $fn.setIconHome(settings.parent);
+                $fn.clickHome($fn.setIconHome(settings.parent));
             }
         },
         append: function(settings, box){
@@ -214,12 +219,21 @@ $FamilyTreeTop.create("families", function($){
         animation: function(){}
     };
 
+    $this.first = false;
+    $this.setFirst = function(settings){
+        if(!$this.first){
+            $this.first = settings;
+        }
+    }
+
     $this.render = function(settings){
-        var $usermap, $start_id, $sircar, $spouses, $childrens, $family;
+        var $usermap, $start_id, $spouses, $childrens;
+
+        $this.setFirst(settings);
 
         settings = $fn.getSettings(settings);
 
-        if(settings.parent == null){
+        if(settings && settings.parent == null){
             return false;
         }
 
@@ -261,5 +275,8 @@ $FamilyTreeTop.create("families", function($){
             $fn.setPosition($boxs[settings.id], settings);
         });
     };
+
+
+
 
 });
