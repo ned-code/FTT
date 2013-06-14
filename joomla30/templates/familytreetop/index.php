@@ -241,6 +241,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <button type="button" familytreetop="edit" class="btn familytreetop-header-button" style="padding: 5px 10px;"><i class="icon-pencil"></i><span style="top: 0;margin-left: 3px;">Edit</span></button>
             <button type="button" familytreetop="facebook" class="btn familytreetop-header-button"><i class="icon-large icon-facebook"></i><span>Facebook</span></button>
+            <button type="button" familytreetop="invite" class="btn btn-primary familytreetop-header-button"> <i class="icon-large icon-large-white icon-facebook"></i><span>Invite</span></button>
             <h3 id="profileLabel"></h3>
         </div>
         <div class="modal-body">

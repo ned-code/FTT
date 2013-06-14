@@ -161,10 +161,13 @@ $FamilyTreeTop.create("profile", function($){
         var parent = $fn.getModalBox(), object = args.object;
 
         $(parent).find('#profileLabel').text(object.shortname());
-        $(parent).find('[familytreetop="facebook"]').attr('facebook_id', object.facebook_id);
+        $(parent).find('[familytreetop="facebook"]').attr('facebook_id', object.gedcom_id);
+        $(parent).find('[familytreetop="invite"]').attr('gedcom_id', object.facebook_id);
         $(parent).find('[familytreetop="edit"]').attr('gedcom_id', object.gedcom_id);
         if(object.facebook_id == 0){
             $(parent).find('[familytreetop="facebook"]').hide();
+        } else {
+            $(parent).find('[familytreetop="invite"]').hide();
         }
         $(parent).find('[familytreetop="facebook"]').click(function(){
             var facebook_id = $(this).attr('facebook_id');
@@ -172,9 +175,13 @@ $FamilyTreeTop.create("profile", function($){
         });
         $(parent).find('[familytreetop="edit"]').click(function(){
             var gedcom_id = $(this).attr('gedcom_id');
-
             $(parent).modal('hide');
             $this.mod('editor').render(gedcom_id);
+        });
+        $(parent).find('[familytreetop="invite"]').click(function(){
+            var gedcom_id = $(this).attr('gedcom_id');
+            $(parent).modal('hide');
+            $this.mod('friendselector').render(gedcom_id);
         });
 
 
