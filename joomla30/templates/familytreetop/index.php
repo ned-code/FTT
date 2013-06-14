@@ -1,5 +1,18 @@
 <?php
 defined('_JEXEC') or die;
+
+require_once JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familytreetop/helpers/settings.php';
+require_once JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familytreetop/helpers/activerecord.php';
+require_once JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familytreetop/helpers/facebook.php';
+require_once JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familytreetop/helpers/gedcom.php';
+require_once JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familytreetop/helpers/user.php';
+require_once JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familytreetop/helpers/upload.php';
+require_once JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familytreetop/helpers/languages.php';
+
+ActiverecrdHelper::getInstance();
+FacebookHelper::getInstance();
+FamilyTreeTopSettingsHelper::getInstance();
+
 // Getting params from template
 $params = JFactory::getApplication()->getTemplate(true)->params;
 
@@ -17,19 +30,7 @@ $doc->addStyleSheet('templates/'.$this->template.'/css/csstreeview.fix.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/tdfriendselector.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/familytreetop.css');
 
-require_once JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familytreetop/helpers/settings.php';
-require_once JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familytreetop/helpers/activerecord.php';
-require_once JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familytreetop/helpers/facebook.php';
-require_once JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familytreetop/helpers/gedcom.php';
-require_once JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familytreetop/helpers/user.php';
-require_once JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familytreetop/helpers/upload.php';
-require_once JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familytreetop/helpers/languages.php';
 
-ActiverecrdHelper::getInstance();
-FacebookHelper::getInstance();
-FamilyTreeTopSettingsHelper::getInstance();
-
-LanguagesHelper::init();
 
 // Add current user information
 $user = JFactory::getUser();
