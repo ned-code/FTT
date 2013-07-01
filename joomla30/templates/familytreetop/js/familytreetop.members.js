@@ -33,6 +33,8 @@ $FamilyTreeTop.create("members", function($){
                 $relPull["grandchildren"].push(object);
             } else if(relId == 9){
                 $relPull["cousins"].push(object);
+            } else if(relId == 1000) {
+                $relPull["in_laws"].push(object);
             } else {
                 $relPull["unknown"].push(object);
             }
@@ -145,7 +147,7 @@ $FamilyTreeTop.create("members", function($){
         render: function(){
             var key, object, birth, tr,td, avatar;
             $($box).find('tbody tr').remove();
-            for (key in $users ){
+            for (key in $users){
                 if(!$users.hasOwnProperty(key)) continue;
                 object = $users[key];
                 birth = object.birth();
@@ -203,10 +205,32 @@ $FamilyTreeTop.create("members", function($){
             $($filter).find('[class-familytreetop="module-padding"] input:checked').each(function(i,e){
                 var type = $(e).parent().parent().attr('familytreetop');
                 switch(type){
-                    case "immediate_family": $sort[0] = true; $sort[13] = true; $sort[9] = true; break;
+                    case "immediate_family":
+                        $sort[1] = true;
+                        $sort[2] = true;
+                        $sort[3] = true;
+                        $sort[4] = true;
+                        $sort[5] = true;
+                        $sort[6] = true;
+                        $sort[7] = true;
+                        $sort[8] = true;
+                        $sort[10] = true;
+                        $sort[11] = true;
+                        $sort[12] = true;
+                        $sort[13] = true;
+                        $sort[110] = true;
+                        $sort[111] = true;
+                        $sort[112] = true;
+                        $sort[113] = true;
+                        $sort[210] = true;
+                        $sort[211] = true;
+                        $sort[212] = true;
+                        $sort[213] = true;
+                    break;
                     case "grandparents":  $sort[103] = true; $sort[104] = true; $sort[203] = true; $sort[204] = true; break;
                     case "grandchildren": $sort[105] = true; $sort[106] = true; $sort[205] = true; $sort[206] = true; break;
                     case "cousins": $sort[9] = true; break;
+                    case "in_laws": $sort[1000] = true; break;
                     case "unknown": $sort["unknown"] = true;
                 }
             });
@@ -246,7 +270,6 @@ $FamilyTreeTop.create("members", function($){
                         $isRegistered = {};
                         $isRegistered['registered'] = (type[1]=="yes");
                     }
-                    break;
                     break;
             }
             $fn.render();
