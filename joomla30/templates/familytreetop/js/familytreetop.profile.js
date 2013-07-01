@@ -161,8 +161,8 @@ $FamilyTreeTop.create("profile", function($){
         var parent = $fn.getModalBox(), object = args.object;
 
         $(parent).find('#profileLabel').text(object.shortname());
-        $(parent).find('[familytreetop="facebook"]').attr('facebook_id', object.gedcom_id);
-        $(parent).find('[familytreetop="invite"]').attr('gedcom_id', object.facebook_id);
+        $(parent).find('[familytreetop="facebook"]').attr('facebook_id', object.facebook_id);
+        $(parent).find('[familytreetop="invite"]').attr('gedcom_id', object.gedcom_id);
         $(parent).find('[familytreetop="edit"]').attr('gedcom_id', object.gedcom_id);
         if(object.facebook_id == 0){
             $(parent).find('[familytreetop="facebook"]').hide();
