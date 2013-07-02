@@ -34,6 +34,7 @@ $FamilyTreeTop.create("friendselector", function($){
             });
         },
         sendRequest:function(selector, facebook_id, gedcom_id, token){
+            console.log($this.url().app());
             FB.ui({
                 method:'send',
                 name: "Click here to Accept",
