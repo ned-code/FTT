@@ -676,6 +676,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/jquery.fileupload-ui.js"></script>
 <!--[if gte IE 8]><script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/jquery.xdr-transport.js"></script><![endif]-->
 <!-- uncompressed files -->
+<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.footer.js"></script>
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.form.js"></script>
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.familyline.js"></script>
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.tabs.js"></script>
@@ -710,8 +711,5 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
         }(document, /*debug*/ false));
     }
 </script>
-
-
-
 </body>
 </html>

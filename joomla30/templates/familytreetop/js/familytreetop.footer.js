@@ -1,0 +1,1 @@
+$('ul.pager.pagenav').hide();
