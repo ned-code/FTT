@@ -21,7 +21,7 @@ $FamilyTreeTop.create("latest_events", function($){
             for(var prop in events){
                 if(!events.hasOwnProperty(prop)) continue;
                 if(prop == 3) break;
-                tr = $('<tr></tr>');
+                tr = $('<tr class="familytreetop-last-event-item"></tr>');
                 td = $('<td style="width:45px;"></td>');
 
                 if(type == "marr"){
@@ -59,11 +59,11 @@ $FamilyTreeTop.create("latest_events", function($){
                     avatar = user.avatar(["25","25"]);
                     $fn.setHolderImage(avatar[0]);
                     $(tr).addClass('familytreetop-hover-effect');
-                    $(tr).attr('gedcom_id', user.gedcom_id);
+                    //$(tr).attr('gedcom_id', user.gedcom_id);
                     $(td).append(avatar);
                     $(tr).append('<td class="text-center" style="padding-left:10px;width:100px; vertical-align: middle;">'+$this.mod('usertree').parseDate(ev.date)+'</td>');
                     $(tr).append(td);
-                    $(tr).append('<td><div data-familytreetop-color="'+user.gender+'" gedcom_id="'+user.gedcom_id+'">'+user.name()+'</div><div class="familytreetop-this-month-relation"><i class="icon-leaf"></i>'+user.relation+'</div></td>');
+                    $(tr).append('<td><div div="'+user.gedcom_id+'" data-familytreetop-color="'+user.gender+'" gedcom_id="'+user.gedcom_id+'">'+user.name()+'</div><div class="familytreetop-this-month-relation"><i class="icon-leaf"></i>'+user.relation+'</div></td>');
                     $this.mod('popovers').render({
                         target: $(tr),
                         placement: "left"

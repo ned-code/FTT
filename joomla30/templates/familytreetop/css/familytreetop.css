@@ -109,3 +109,6 @@
     position: relative;
     top: -6px;
 }
+.familytreetop-last-event-item div[gedcom_id] {
+    cursor:pointer;
+}
