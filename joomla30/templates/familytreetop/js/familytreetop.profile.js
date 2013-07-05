@@ -35,6 +35,18 @@ $FamilyTreeTop.create("profile", function($){
             })
         },
         setRelation:function(args){
+            var box = $(this).find('[data-familytreetop-profile="relation"] fieldset');
+            var canvas = $('<canvas width="500" height="300"></canvas>');
+            $(box).append(canvas);
+
+            var stage = new createjs.Stage(canvas);
+
+            var circle = new createjs.Shape();
+            circle.graphics.beginFill("red").drawCircle(0, 0, 50);
+            circle.x = 100;
+            circle.y = 100;
+            stage.addChild(circle);
+            /*
             var tree = args.object.relationMap();
             var box = $(this).find('[data-familytreetop-profile="relation"] fieldset');
             var id = "jit"+$this.generateKey();
@@ -98,6 +110,7 @@ $FamilyTreeTop.create("profile", function($){
             st.compute();
             st.select(st.root);
             st.switchPosition("top", "replot", function(){});
+            */
         },
         setFamily:function(args){
             var box = $(this).find('[data-familytreetop-profile="family"] fieldset'), familyBox = $('<div style="position:relative;"></div>');

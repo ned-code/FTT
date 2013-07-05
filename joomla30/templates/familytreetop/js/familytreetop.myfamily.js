@@ -18,7 +18,7 @@ $FamilyTreeTop.create("myfamily", function($){
             return object.from.name;
         },
         getMessage: function(object){
-            var str = object.message || object.description || object.story || (("undefined" !== typeof("undefined"!==typeof(object.type)&&object.type=="link"))?"Likes on " + object.application.name :"") || "";
+            var str = object.message || object.description || object.story || (("undefined"!==typeof(object.type)&&object.type=="link")?"Likes on " + object.application.name :"") || "";
             return str.replace(/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/, "...");
         },
         getPicture: function(object){
