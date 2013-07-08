@@ -3,7 +3,6 @@ defined('_JEXEC') or die;
 ?>
 <div id="families" class="row">
     <div class="span12">
-
     </div>
 </div>
 <script>

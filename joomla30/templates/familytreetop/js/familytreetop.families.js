@@ -1,7 +1,7 @@
 $FamilyTreeTop.create("families", function($){
     'use strict';
 
-    var $this = this, $animated, $box = $('#familiesHide'), $boxs = {}, $fn;
+    var $this = this, $animated, $box = $('#familiesHide'), $boxs = {}, $canvas, $fn;
 
     $fn = {
         getSettings: function(settings){
@@ -26,6 +26,14 @@ $FamilyTreeTop.create("families", function($){
         getStartIdByParents: function(id){
             var family = $this.mod('usertree').getParents(id);
             return family.mother;
+        },
+        getCssParam: function(object ,name){
+            var string = $(object).css(name);
+            if(string.length == 0 || "auto" === string){
+                return false;
+            } else {
+                return string.replace (/px/g, "");
+            }
         },
         createArrow: function(type, args){
             var left = Math.ceil(((type  == 'up')?150:100)/2) - 12;
@@ -76,6 +84,7 @@ $FamilyTreeTop.create("families", function($){
         },
         setPosition: function(boxs, settings){
             if($animated) return true;
+            var boxes = [];
             boxs.forEach(function(object, index){
                 $(object).css('position', 'absolute');
                 switch(index){
@@ -85,15 +94,21 @@ $FamilyTreeTop.create("families", function($){
                         break;
 
                     case 2:
-                        $(object).css('top', getEventTop()).css('left', getEventLeft());
+                        $(object).css('top', getEventTop(getTop(0))).css('left', getEventLeft());
                         break;
 
                     default:
                         $(object).css('top', getTop(index)).css("left", getLeft(index));
                         break;
                 }
+                boxes.push(object);
             });
             $(settings.parent).css('position', 'relative').css('min-height', getMinHeight());
+
+            $canvas = $('<canvas height="'+getMinHeight()+'" width="'+$(settings.parent).width()+'" ></canvas>');
+            $(settings.parent).append($canvas);
+
+            $fn.drawCanvasArrow(boxes, settings);
             return true;
             function getRows(){
                 var length = boxs.length - 3;
@@ -109,16 +124,14 @@ $FamilyTreeTop.create("families", function($){
                 var height = (getRows()[0] * 270);
                 return height * 0.1 + 285 + height;
             }
-            function getEventTop(){
-                var height = getMinHeight();
-                return height * 0.1 + 70;
+            function getEventTop(top){
+                return top + 50;
             }
             function getTop(index){
                 var height = getMinHeight();
                 if(index < 3){
                     return height * 0.1;
                 } else {
-                    var objectHeight = $(boxs[0]).height();
                     var rows = getRows();
                     var row = Math.ceil((index - 2)/rows[1]);
                     return height * 0.1 + 250 + 190*(row - 1);
@@ -182,6 +195,58 @@ $FamilyTreeTop.create("families", function($){
             $(parent).append(home);
             return home;
         },
+        drawCanvasArrow: function(boxs, settings){
+            var canvas = $($box).find('canvas'), canvas, points = [], path = false;
+            boxs.forEach(function(object, index){
+                var point = {
+                    object: object,
+                    index: index,
+                    top:$fn.getCssParam(object, "top"),
+                    left:$fn.getCssParam(object, "left"),
+                    right:$fn.getCssParam(object, "right"),
+                    parent:$(object).hasClass('parent-box')
+                }
+                points.push(point);
+            });
+            canvas = new fabric.StaticCanvas($canvas[0]);
+
+            var parentLineCoords = [parseInt(points[0].left) + 70, parseInt(points[0].top) + 70, parseInt($(settings.parent).width()) - parseInt(points[1].right) - 70, parseInt(points[1].top) + 70];
+            var center = getCenter(parentLineCoords);
+            canvas.add(drawLine(parentLineCoords));
+            if(points.length > 3){
+                canvas.add(drawLine([center[0], center[1], center[0], center[1] + 100]));
+            }
+            points.forEach(function(e,i){
+                switch(i){
+                    case 0:case 1:case 2: break;
+                    default:
+                        var prew = path;
+                        var left = parseInt(e.left) + 50;
+                        var top = parseInt(e.top);
+                        path = [left, top, left, top - 40];
+
+                        if(prew && path[1] == prew[1]){
+                            canvas.add(drawLine([prew[2], prew[3], path[2], path[3]]));
+                            canvas.add(drawLine(prew));
+                            canvas.add(drawLine(path));
+                        }
+                        break;
+                }
+            });
+
+            return true;
+            function drawLine(coords){
+                return new fabric.Line(coords, {
+                    fill: 'black',
+                    stroke: 'black',
+                    strokeWidth: 2,
+                    selectable: false
+                });
+            }
+            function getCenter(coords){
+                return [(coords[0] + coords[2]) / 2 , (coords[1] + coords[3]) / 2];
+            }
+        },
         click:function(settings){
             var gedcom_id = $(this).parent().parent().attr('gedcom_id');
             var arrow = $(this).find('i').attr('class').split('-').pop();
@@ -204,7 +269,6 @@ $FamilyTreeTop.create("families", function($){
             $(settings.parent).css('position', 'relative');
 
             $fn.clear(settings);
-
             if(settings.iconHome){
                 $fn.clickHome($fn.setIconHome(settings.parent));
             }
