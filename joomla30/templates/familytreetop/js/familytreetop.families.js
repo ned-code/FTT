@@ -244,7 +244,7 @@ $FamilyTreeTop.create("families", function($){
                 });
             }
             function getCenter(coords){
-                return [(coords[0] + coords[2]) / 2 , (coords[1] + coords[3]) / 2];
+                return [((coords[0] + coords[2]) / 2) - 4 , (coords[1] + coords[3]) / 2];
             }
         },
         click:function(settings){
