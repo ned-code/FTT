@@ -16,7 +16,7 @@ $FamilyTreeTop.create("trees", function($){
         line: {
             fill: 'black',
             stroke: 'black',
-            strokeWidth: 2,
+            strokeWidth: 1,
             selectable: false
         }
     }

@@ -237,9 +237,9 @@ $FamilyTreeTop.create("families", function($){
             return true;
             function drawLine(coords){
                 return new fabric.Line(coords, {
-                    fill: 'black',
-                    stroke: 'black',
-                    strokeWidth: 2,
+                    fill: '#ABC4FF',
+                    stroke: '#ABC4FF',
+                    strokeWidth: 1,
                     selectable: false
                 });
             }
