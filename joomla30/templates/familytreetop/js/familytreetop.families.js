@@ -1,7 +1,7 @@
 $FamilyTreeTop.create("families", function($){
     'use strict';
 
-    var $this = this, $animated, $box = $('#familiesHide'), $boxs = {}, $canvas = false, $fn;
+    var $this = this, $animated, $box = $('#familiesHide'), $boxs = {}, $canvas = false, $start_id, $fn;
 
     $fn = {
         getSettings: function(settings){
@@ -157,18 +157,6 @@ $FamilyTreeTop.create("families", function($){
                         return Math.ceil(s/2);
                     }
                 }
-
-                /*
-                var left = getLeft(3);
-                var width = $('.tab-content').width();
-                var half = Math.ceil(width/2);
-                var space = half - 150;
-                if(space <= 0){
-                    return space;
-                } else {
-                    return Math.ceil(space/2);
-                }
-                */
             }
             function getLeft(index){
                 var rows = getRows(), length = index - 2, step = 0, margin = 0;
@@ -295,8 +283,12 @@ $FamilyTreeTop.create("families", function($){
             $(settings.parent).css('position', 'relative');
 
             $fn.clear(settings);
-            if(settings.iconHome){
+            if(settings.iconHome && !isUser()){
                 $fn.clickHome($fn.setIconHome(settings.parent));
+            }
+            return true;
+            function isUser(){
+                return $start_id == $this.mod('usertree').usermap().gedcom_id;
             }
         },
         append: function(settings, box){
@@ -317,7 +309,7 @@ $FamilyTreeTop.create("families", function($){
     }
 
     $this.render = function(settings){
-        var $usermap, $start_id, $spouses, $childrens;
+        var $usermap, $spouses, $childrens;
 
         $this.setFirst(settings);
 
@@ -326,8 +318,6 @@ $FamilyTreeTop.create("families", function($){
         if(settings && settings.parent == null){
             return false;
         }
-
-        $fn.init(settings);
 
         if(settings.gedcom_id){
             $start_id = settings.gedcom_id;
@@ -339,6 +329,8 @@ $FamilyTreeTop.create("families", function($){
         if($start_id == null){
             return false;
         }
+
+        $fn.init(settings);
 
         $childrens = $this.mod('usertree').getChildrens($start_id);
         if($childrens.length == 0 && !$this.mod('usertree').user($start_id).isSpouseExist()){
