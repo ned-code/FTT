@@ -90,7 +90,7 @@ $FamilyTreeTop.create("families", function($){
                 switch(index){
                     case 0:
                     case 1:
-                        $(object).css('top', getTop(index)).css((index)?"right":"left", getParentIndent(index));
+                        $(object).css('top', getTop(index)).css("left", getParentIndent(index));
                         break;
 
                     case 2:
@@ -143,6 +143,21 @@ $FamilyTreeTop.create("families", function($){
                 return Math.ceil(width/2);
             }
             function getParentIndent(index){
+                var width = parseInt($('.tab-content').width());
+                var halfWidth = Math.ceil(width/2);
+                var space = getSpace(halfWidth);
+                return (index)?halfWidth + space:space;
+                function getSpace(w){
+                    var s = w - 150;
+                    if(s <= 0){
+                        return s;
+                    } else {
+                        return Math.ceil(s/2);
+                    }
+                }
+
+                /*
+                var left = getLeft(3);
                 var width = $('.tab-content').width();
                 var half = Math.ceil(width/2);
                 var space = half - 150;
@@ -151,6 +166,7 @@ $FamilyTreeTop.create("families", function($){
                 } else {
                     return Math.ceil(space/2);
                 }
+                */
             }
             function getLeft(index){
                 var rows = getRows(), length = index - 2, step = 0, margin = 0;
@@ -218,7 +234,15 @@ $FamilyTreeTop.create("families", function($){
             }
             points.forEach(function(e,i){
                 switch(i){
-                    case 0:case 1:case 2: break;
+                    case 0:case 1:
+                        var img = $(e.object).find('.icon-circle-arrow-up');
+                        if(img.length == 1){
+                            var top = parseInt(e.top);
+                            var ident = parseInt(e.left) + 76;
+                            canvas.add(drawLine([ident, top, ident, top - 50]));
+                        }
+                        break;
+                    case 2: break;
                     default:
                         var prew = path;
                         var left = parseInt(e.left) + 50;
