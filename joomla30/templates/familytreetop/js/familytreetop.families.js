@@ -1,7 +1,7 @@
 $FamilyTreeTop.create("families", function($){
     'use strict';
 
-    var $this = this, $animated, $box = $('#familiesHide'), $boxs = {}, $canvas, $fn;
+    var $this = this, $animated, $box = $('#familiesHide'), $boxs = {}, $canvas = false, $fn;
 
     $fn = {
         getSettings: function(settings){
@@ -104,7 +104,9 @@ $FamilyTreeTop.create("families", function($){
                 boxes.push(object);
             });
             $(settings.parent).css('position', 'relative').css('min-height', getMinHeight());
-
+            if($canvas){
+                $($canvas).remove();
+            }
             $canvas = $('<canvas height="'+getMinHeight()+'" width="'+$(settings.parent).width()+'" ></canvas>');
             $(settings.parent).append($canvas);
 
@@ -226,7 +228,7 @@ $FamilyTreeTop.create("families", function($){
             });
             canvas = new fabric.StaticCanvas($canvas[0]);
 
-            var parentLineCoords = [parseInt(points[0].left) + 70, parseInt(points[0].top) + 70, parseInt($(settings.parent).width()) - parseInt(points[1].right) - 70, parseInt(points[1].top) + 70];
+            var parentLineCoords = [parseInt(points[0].left) + 70, parseInt(points[0].top) + 70, parseInt(points[1].left) + 70, parseInt(points[1].top) + 70];
             var center = getCenter(parentLineCoords);
             canvas.add(drawLine(parentLineCoords));
             if(points.length > 3){
