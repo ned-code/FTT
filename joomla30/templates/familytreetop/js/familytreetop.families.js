@@ -114,7 +114,7 @@ $FamilyTreeTop.create("families", function($){
             return true;
             function getRows(){
                 var length = boxs.length - 3;
-                var width = $('.tab-content').width();
+                var width = parseInt($(settings.parent).width());
                 var rows = Math.ceil( (120 * length) / width );
                 var limit = Math.ceil(length / rows);
                 if(limit * rows < length){
@@ -141,11 +141,11 @@ $FamilyTreeTop.create("families", function($){
 
             }
             function getEventLeft(){
-                var width = $('.tab-content').width();
+                var width = $(settings.parent).width()
                 return Math.ceil(width/2);
             }
             function getParentIndent(index){
-                var width = parseInt($('.tab-content').width());
+                var width = parseInt($(settings.parent).width());
                 var halfWidth = Math.ceil(width/2);
                 var space = getSpace(halfWidth);
                 return (index)?halfWidth + space:space;
@@ -298,6 +298,55 @@ $FamilyTreeTop.create("families", function($){
             $boxs[settings.id].push(box);
             $(settings.parent).append(box);
         },
+        render: function(settings){
+            var $usermap, $spouses, $childrens;
+
+            $this.setFirst(settings);
+
+            settings = $fn.getSettings(settings);
+
+            if(settings && settings.parent == null){
+                return false;
+            }
+
+            if(settings.gedcom_id){
+                $start_id = settings.gedcom_id;
+            } else {
+                $usermap = $this.mod('usertree').usermap();
+                $start_id = $usermap.gedcom_id;
+            }
+
+            if($start_id == null){
+                return false;
+            }
+
+            $fn.init(settings);
+
+            $childrens = $this.mod('usertree').getChildrens($start_id);
+            if($childrens.length == 0 && !$this.mod('usertree').user($start_id).isSpouseExist()){
+                $start_id = $fn.getStartIdByParents($start_id);
+                $childrens = $this.mod('usertree').getChildrens($start_id);
+            }
+            $spouses = $this.mod('usertree').getSpouses($start_id);
+
+            $fn.append(settings, $fn.createParent($start_id, settings));
+            $fn.append(settings, $fn.createParent($spouses[0], settings));
+            $fn.append(settings, $fn.createEvent($spouses[0]));
+
+            $childrens.forEach(function(gedcom_id){
+                $fn.append(settings, $fn.createChild(gedcom_id, settings));
+            });
+
+            $fn.setPosition($boxs[settings.id], settings);
+            $fn.setPopovers($boxs[settings.id]);
+
+            $this.mod('usertree').trigger(function(){
+                $this.render(settings);
+            });
+            $(window).resize(function(){
+                $fn.setPosition($boxs[settings.id], settings);
+            });
+        },
         animation: function(){}
     };
 
@@ -308,54 +357,14 @@ $FamilyTreeTop.create("families", function($){
         }
     }
 
-    $this.render = function(settings){
-        var $usermap, $spouses, $childrens;
-
-        $this.setFirst(settings);
-
-        settings = $fn.getSettings(settings);
-
-        if(settings && settings.parent == null){
-            return false;
-        }
-
-        if(settings.gedcom_id){
-            $start_id = settings.gedcom_id;
+    $this.render = function(settings, timeout){
+        if("undefined" !== typeof(timeout)){
+            setTimeout(function(){
+                $fn.render(settings);
+            }, settings.timeout);
         } else {
-            $usermap = $this.mod('usertree').usermap();
-            $start_id = $usermap.gedcom_id;
+            $fn.render(settings);
         }
-
-        if($start_id == null){
-            return false;
-        }
-
-        $fn.init(settings);
-
-        $childrens = $this.mod('usertree').getChildrens($start_id);
-        if($childrens.length == 0 && !$this.mod('usertree').user($start_id).isSpouseExist()){
-            $start_id = $fn.getStartIdByParents($start_id);
-            $childrens = $this.mod('usertree').getChildrens($start_id);
-        }
-        $spouses = $this.mod('usertree').getSpouses($start_id);
-
-        $fn.append(settings, $fn.createParent($start_id, settings));
-        $fn.append(settings, $fn.createParent($spouses[0], settings));
-        $fn.append(settings, $fn.createEvent($spouses[0]));
-
-        $childrens.forEach(function(gedcom_id){
-            $fn.append(settings, $fn.createChild(gedcom_id, settings));
-        });
-
-        $fn.setPosition($boxs[settings.id], settings);
-        $fn.setPopovers($boxs[settings.id]);
-
-        $this.mod('usertree').trigger(function(){
-            $this.render(settings);
-        });
-        $(window).resize(function(){
-            $fn.setPosition($boxs[settings.id], settings);
-        });
     };
 
 

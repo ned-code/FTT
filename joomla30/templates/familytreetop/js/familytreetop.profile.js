@@ -115,7 +115,7 @@ $FamilyTreeTop.create("profile", function($){
                 abilityToMove: false,
                 editable: false,
                 iconHome: false
-            });
+            }, 1000);
         },
         setPhotos:function(args){
             var ul = $(this).find('[data-familytreetop-profile="photos"] fieldset ul');
@@ -193,12 +193,11 @@ $FamilyTreeTop.create("profile", function($){
 
 
         $fn.setAbout.call(parent, args);
+        $fn.setPhotos.call(parent, args);
         $(parent).on('shown', function(){
             $fn.setRelation.call(parent, args);
+            $fn.setFamily.call(parent, args);
         });
-        $fn.setFamily.call(parent, args);
-        $fn.setPhotos.call(parent, args);
-
         $(parent).modal({dynamic:true});
 
     }
