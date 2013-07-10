@@ -171,7 +171,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                 <button familytreetop="facebook" type="button" class="btn" style="display:none;padding: 4px 12px 0px 12px;">
                     <div class="row-fluid">
                         <div class="span4">
-                            <i class="icon-large icon-facebook"></i>
+                            <i class="icon-2x icon-facebook-sign"></i>
                         </div>
                         <div class="span8" style="line-height: 25px;">
                             Facebook
@@ -182,7 +182,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                 <button familytreetop-invite type="button" class="btn btn-primary" style="display:none;padding: 4px 12px 0px 12px;">
                     <div class="row-fluid">
                         <div class="span6">
-                            <i class="icon-large icon-large-white icon-facebook"></i>
+                            <i class="icon-2x  icon-white icon-facebook-sign"></i>
                         </div>
                         <div class="span6" style="line-height: 25px;">
                             Invite
@@ -242,8 +242,8 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <button type="button" familytreetop="edit" class="btn familytreetop-header-button" style="padding: 5px 10px;"><i class="icon-pencil"></i><span style="top: 0;margin-left: 3px;">Edit</span></button>
-            <button type="button" familytreetop="facebook" class="btn familytreetop-header-button"><i class="icon-large icon-facebook"></i><span>Facebook</span></button>
-            <button type="button" familytreetop="invite" class="btn btn-primary familytreetop-header-button"> <i class="icon-large icon-large-white icon-facebook"></i><span>Invite</span></button>
+            <button type="button" familytreetop="facebook" class="btn familytreetop-header-button"><i class="icon-2x icon-facebook-sign"></i><span>Facebook</span></button>
+            <button type="button" familytreetop="invite" class="btn btn-primary familytreetop-header-button"> <i class="icon-2x icon--white icon-facebook-sign"></i><span>Invite</span></button>
             <h3 id="profileLabel"></h3>
         </div>
         <div class="modal-body">
