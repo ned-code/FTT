@@ -6,8 +6,6 @@ $FamilyTreeTop.create("trees", function($){
         $fn;
 
     $default = {
-        offsetX: 10,
-        offsetY: 10,
         node: {
             width: 150,
             height: 60,
@@ -22,18 +20,6 @@ $FamilyTreeTop.create("trees", function($){
     }
 
     $fn = {
-        getShift: function(user, pos){
-            return [pos[0] + $default.node.width + $default.offsetX, pos[1]];
-        },
-        getCenter: function(pos){
-            return [pos[0] + $default.node.width / 2, pos[1] + $default.node.height / 2];
-        },
-        getFamily: function(id, json){
-            return json.families[id];
-        },
-        getContainer: function(canvas){
-            return $(canvas.contextContainer.canvas).parent();
-        },
         renderBox: function(pos){
             return new fabric.Rect({
                 left: pos[0],
@@ -64,26 +50,7 @@ $FamilyTreeTop.create("trees", function($){
             return div;
         },
         render: function(canvas, map){
-            var positions = [0,0];
-            var container = $fn.getContainer(canvas);
-            $(map).each(function(count, id){
-                var user = $this.mod('usertree').user(id);
-                var center = $fn.getCenter(positions);
-                var shift = $fn.getShift(user, positions);
-
-                if((count + 1) != map.length){
-                    var lineShift = $fn.getShift(user, center);
-                    var line = $fn.renderLine([center[0], center[1], lineShift[0], lineShift[1]]);
-                    canvas.add(line);
-                }
-                var box = $fn.renderBox(center);
-                canvas.add(box);
-
-                var div = $fn.renderDiv(user, positions);
-                $(container).append(div);
-
-                positions = shift;
-            });
+            //console.log(canvas, map);
         },
         init: function(object){
             var div = $('<div style="position:relative;"></div>')
