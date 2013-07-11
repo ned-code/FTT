@@ -37,7 +37,7 @@ $FamilyTreeTop.create("families", function($){
         },
         createArrow: function(type, args){
             var left = Math.ceil(((type  == 'up')?150:100)/2) - 12;
-            return $('<div style="position:absolute;left:'+left+'px;top: -30px; cursor:pointer;"><i class="icon-2x icon-circle-arrow-'+type+'"></i></div>')
+            return $('<div style="position:absolute;left:'+left+'px;top: -30px; cursor:pointer;background:white;"><a style="text-decoration: none;" onclick="return false;"><i class="icon-2x icon-circle-arrow-'+type+'"></i></a></div>')
                 .click(function(){
                     $fn.click.call(this, args);
                 });
@@ -251,8 +251,8 @@ $FamilyTreeTop.create("families", function($){
             return true;
             function drawLine(coords){
                 return new fabric.Line(coords, {
-                    fill: '#ABC4FF',
-                    stroke: '#ABC4FF',
+                    fill: '#0088cc',
+                    stroke: '#0088cc',
                     strokeWidth: 1,
                     selectable: false
                 });
