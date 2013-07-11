@@ -22,8 +22,17 @@ $FamilyTreeTop.create("myfamily", function($){
             return str.replace(/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/, "...");
         },
         getPicture: function(object){
-            if("undefined" === typeof(object.picture)) return "";
-            return '<a target="_blank" href="'+object.link+'"><img class="img-polaroid" src="'+object.picture+'" /></a>';
+            if("undefined" === typeof(object.picture)) {
+                if("undefined" !== typeof(object.link)){
+                    return '<a style="text-decoration: none;" target="_blank" href="'+object.link+'"><i class="icon-flag icon-4x pull-left icon-facebook-sign"></i></a>';
+                }
+                if("undefined" !== typeof(object.actions) && "undefined" !== typeof(object.actions[0].link)){
+                    return '<a style="text-decoration: none;" target="_blank" href="'+object.actions[0].link+'"><i class="icon-flag icon-4x pull-left icon-facebook-sign"></i></a>';
+                }
+                return "";
+            } else {
+                return '<a target="_blank" href="'+object.link+'"><img class="img-polaroid" src="'+object.picture+'" /></a>';
+            }
         },
         getTime: function(object){
             return $fn.timeAgo(object['updated_time']);
