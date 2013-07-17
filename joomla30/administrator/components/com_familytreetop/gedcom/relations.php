@@ -316,6 +316,7 @@ class FamilyTreeTopGedcomRelationsManager {
     }
 
     public function getList(){
+        /*
         if($individuals = $this->isRelationsNotExist()){
             $spouses = $this->get_spouses($this->owner_id);
             foreach($individuals as $ind){
@@ -356,5 +357,6 @@ class FamilyTreeTopGedcomRelationsManager {
             }
         }
         return $this->list;
+        */
     }
 }
