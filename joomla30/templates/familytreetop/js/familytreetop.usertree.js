@@ -520,14 +520,58 @@ $FamilyTreeTop.create("usertree", function($){
     }
 
     $this.getRelationName = function(object){
-        var relationId = object.relation_id,
-            json = object.json,
-            suffix =( (json!=null&&"undefined"!=typeof(json.suffix))?json.suffix:"" ),
-            postfix = (object.in_law != 0)?"in-law":"";
+        var sub_object, relationId, json, suffix, postfix;
+        if(parseInt(object.in_law)){
+            sub_object = $this.getRelation(object.in_law);
+            if(object.relation_id == 2){
+                relationId = getSubRelationId(sub_object.relation_id);
+            } else {
+                relationId = object.relation_id;
+            }
+        } else {
+            relationId = object.relation_id;
+        }
+        json = object.json;
+        suffix =( (json!=null&&"undefined"!=typeof(json.suffix))?json.suffix:"" );
+        postfix = (parseInt(object.in_law))?"in-law":"";
+
         if(data.rel != null && "undefined" !== typeof(data.rel._NAMES[relationId])){
             return (suffix) + " " + $('#relations').find('[data-familytreetop="'+data.rel["_NAMES"][relationId].name+'"]').text() + " " + postfix;
         }
         return "undefined";
+        function getSubRelationId(id){
+            switch(parseInt(id)){
+            case 2:	return 0;   //SPOUSE
+            case 3:	return 4;   //MOTHER
+            case 4:	return 3;   //FATHER
+            case 5:	return 6;   //DAUGHTER
+            case 6:	return 5;   //SON
+            case 7:	return 8;   //SISTER
+            case 8:	return 7;   //BROTHER
+            case 9:	return 9;   //COUSIN
+            case 10: //AUNT
+            case 11: //UNCLE
+            case 12: //NIECE
+            case 13: //NEPHEW
+            case 103: //GRAND_MOTHER
+            case 104: //GRAND_FATHER
+            case 105: //GRAND_DAUGHTER
+            case 106: //GRAND_SON
+            case 110: //GRAND_AUNT
+            case 111: //GRAND_UNCLE
+            case 112: //GRAND_NIECE
+            case 113: //GRAND_NEPHEW
+            case 203: //GREAT_GRAND_MOTHER
+            case 204: //GREAT_GRAND_FATHER
+            case 205: //GREAT_GRAND_DAUGHTER
+            case 206: //GREAT_GRAND_SON
+            case 210: //GREAT_GRAND_AUNT
+            case 211: //GREAT_GRAND_UNCLE
+            case 212: //GREAT_GRAND_NIECE
+            case 213: //GREAT_GRAND_NEPHEW
+                return 1000;
+            }
+        }
     }
 
 
