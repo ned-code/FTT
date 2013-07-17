@@ -148,6 +148,13 @@ $FamilyTreeTop.create("usertree", function($){
             know_as: ind.know_as,
             last_name: ind.last_name,
             middle_name: ind.middle_name,
+            inLaw: (function(){
+                var relation = $this.getRelation(ind.gedcom_id);
+                if(relation){
+                    return parseInt(relation.in_law);
+                }
+                return 0;
+            })(),
             facebook_id: (function(){
                 if(ind.gedcom_id in usersmap){
                     return usersmap[ind.gedcom_id].facebook_id;

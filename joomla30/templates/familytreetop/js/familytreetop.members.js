@@ -24,8 +24,10 @@ $FamilyTreeTop.create("members", function($){
             return result;
         },
         setRelPullObject: function(object){
-            var relId = object.relationId;
-            if(relId > 0 && relId < 13 && relId != 9){
+            var relId = object.relationId, inLaw = object.inLaw;
+            if(inLaw){
+                $relPull["in_laws"].push(object);
+            } else if(relId > 0 && relId < 13 && relId != 9){
                 $relPull["immediate_family"].push(object);
             } else if(relId == 103 || relId == 104 || relId == 203 || relId == 204){
                 $relPull["grandparents"].push(object);
@@ -33,8 +35,6 @@ $FamilyTreeTop.create("members", function($){
                 $relPull["grandchildren"].push(object);
             } else if(relId == 9){
                 $relPull["cousins"].push(object);
-            } else if(relId == 1000) {
-                $relPull["in_laws"].push(object);
             } else {
                 $relPull["unknown"].push(object);
             }
@@ -111,7 +111,16 @@ $FamilyTreeTop.create("members", function($){
             })
         },
         isSortable: function(object){
-            return !$sort || ($sort["unknown"] && !object.relationId) || (object.relationId in $sort);
+            if(!$sort){
+                return true;
+            } else if("undefined" !== typeof($sort["unknown"]) && !object.relationId){
+                return true;
+            } else if("undefined" !== typeof($sort[1000]) && object.inLaw){
+                return true;
+            } else if (object.relationId in $sort && !object.inLaw) {
+                return true;
+            }
+            return false;
         },
         isGender: function(object){
             if("object" == typeof($isGender)){
