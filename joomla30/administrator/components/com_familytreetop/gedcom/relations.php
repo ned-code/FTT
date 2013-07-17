@@ -220,41 +220,6 @@ class FamilyTreeTopGedcomRelationsManager {
         }
         return $json;
     }
-
-    protected function sw($id){
-        switch($id){
-            case 2:	return 0;   //SPOUSE
-            case 3:	return 4;   //MOTHER
-            case 4:	return 3;   //FATHER
-            case 5:	return 6;   //DAUGHTER
-            case 6:	return 5;   //SON
-            case 7:	return 8;   //SISTER
-            case 8:	return 7;   //BROTHER
-            case 9:	return 9;   //COUSIN
-            case 10: //AUNT
-            case 11: //UNCLE
-            case 12: //NIECE
-            case 13: //NEPHEW
-            case 103: //GRAND_MOTHER
-            case 104: //GRAND_FATHER
-            case 105: //GRAND_DAUGHTER
-            case 106: //GRAND_SON
-            case 110: //GRAND_AUNT
-            case 111: //GRAND_UNCLE
-            case 112: //GRAND_NIECE
-            case 113: //GRAND_NEPHEW
-            case 203: //GREAT_GRAND_MOTHER
-            case 204: //GREAT_GRAND_FATHER
-            case 205: //GREAT_GRAND_DAUGHTER
-            case 206: //GREAT_GRAND_SON
-            case 210: //GREAT_GRAND_AUNT
-            case 211: //GREAT_GRAND_UNCLE
-            case 212: //GREAT_GRAND_NIECE
-            case 213: //GREAT_GRAND_NEPHEW
-                return 1000;
-        }
-    }
-
     public function set($data){
         $rel = new FamilyTreeTopRelationLinks();
         $rel->relation_id = $data['relation_id'];
@@ -275,8 +240,8 @@ class FamilyTreeTopGedcomRelationsManager {
         );
     }
 
-    public function get($gedcom_id, $target_id){
-        $relation = $this->_get($gedcom_id, $target_id);
+    public function get($gedcom_id, $target_id, $in_law = 0){
+        $relation = $this->_get((!$in_law)?$gedcom_id:$in_law, $target_id);
         if($relation && !isset($this->list[$target_id])){
             $json = $this->getJSON($relation);
             $item = $this->set(array(
@@ -285,78 +250,48 @@ class FamilyTreeTopGedcomRelationsManager {
                 'target_id' => $target_id,
                 'connection' => base64_encode(json_encode($this->conn[$target_id])),
                 'json' => $json,
-                'in_law' => 0
+                'in_law' => $in_law
             ));
             $this->list[$target_id] = $item;
-
         }
         return $relation;
     }
 
-    public function getInLaw($gedcom_id, $target_id){
-        if(!$gedcom_id) return false;
-        $relation = $this->_get($gedcom_id, $target_id);
-        if($relation){
-            $json = $this->getJSON($relation);
-            if($relation[0] > 9){
-                $relation[0] = 1000;
-                $json = array();
+    public function getInLawRelation($id){
+        $con = $this->conn[$id];
+        if($con){
+            $gedcom_id = false;
+            foreach($con as $index => $key){
+                if(!isset($this->list[$key])){
+                    if($con[$index - 1] == $gedcom_id){
+                        return $gedcom_id;
+                    }
+                } else {
+                    $gedcom_id = $key;
+                }
             }
-            $item = $this->set(array(
-                'relation_id' => $relation[0],
-                'gedcom_id' => $this->owner_id,
-                'target_id' => $target_id,
-                'connection' => base64_encode(json_encode($this->conn[$target_id])),
-                'json' => $json,
-                'in_law' => $gedcom_id
-            ));
-            $this->list[$target_id] = $item;
         }
-        return $relation;
     }
 
     public function getList(){
-        /*
-        if($individuals = $this->isRelationsNotExist()){
-            $spouses = $this->get_spouses($this->owner_id);
-            foreach($individuals as $ind){
-                if(!isset($this->list[$ind['gedcom_id']])){
-                    if(!$this->get($this->owner_id, $ind['gedcom_id'])){
-                        foreach($spouses as $spouse){
-                            $this->getInLaw($spouse, $ind['gedcom_id']);
-                        }
-                        if(!isset($this->list[$ind['gedcom_id']])){
-                            $con = $this->conn[$ind['gedcom_id']];
-                            if($con){
-                                $gedcom_id = false;
-                                foreach($con as $index => $key){
-                                    if(!isset($this->list[$key])){
-                                        if($con[$index - 1] == $gedcom_id){
-                                            $rel = $this->list[$gedcom_id];
-                                            $relation_id = $this->sw($rel['relation_id']);
-                                        } else {
-                                            $relation_id = 1000;
-                                        }
-                                        $item = $this->set(array(
-                                            'relation_id' => $relation_id,
-                                            'gedcom_id' => $this->owner_id,
-                                            'target_id' => $key,
-                                            'connection' => base64_encode(json_encode($con)),
-                                            'json' => array(),
-                                            'in_law' => $gedcom_id
-                                        ));
-                                        $this->list[$key] = $item;
-                                    } else if(!$this->list[$key]['in_law']){
-                                        $gedcom_id = $key;
-                                    }
-                                }
-                            }
+        if($members = $this->isRelationsNotExist()){
+            $unknowns = array();
+            foreach($members as $member){
+                if(!isset($this->list[$member['gedcom_id']]) && !$this->get($this->owner_id, $member['gedcom_id'])){
+                    $unknowns[] = $member;
+                }
+            }
+            foreach($unknowns as $unknown){
+                if(!isset($this->list[$unknown['gedcom_id']])){
+                    $gedcom_id = $this->getInLawRelation($unknown['gedcom_id']);
+                    foreach($members as $_member){
+                        if(!isset($this->list[$_member['gedcom_id']]) && !$this->get($this->owner_id, $_member['gedcom_id'], $gedcom_id)){
+                            //
                         }
                     }
                 }
             }
         }
         return $this->list;
-        */
     }
 }
