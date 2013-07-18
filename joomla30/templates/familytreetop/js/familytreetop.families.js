@@ -29,7 +29,7 @@ $FamilyTreeTop.create("families", function($){
         },
         getCssParam: function(object ,name){
             var string = $(object).css(name);
-            if(string.length == 0 || "auto" === string){
+            if("undefined" === typeof(string) || string.length == 0 || "auto" === string){
                 return false;
             } else {
                 return string.replace (/px/g, "");

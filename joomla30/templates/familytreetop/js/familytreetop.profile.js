@@ -36,10 +36,7 @@ $FamilyTreeTop.create("profile", function($){
         },
         setRelation:function(args){
             var box = $(this).find('[data-familytreetop-profile="relation"] fieldset');
-            var trees = $this.mod('trees');
-            var canvas = trees.init(box);
-            var map = $this.mod('usertree').getConnection(args.object.gedcom_id);
-            trees.render(canvas, map);
+
             /*
             var tree = args.object.relationMap();
             var box = $(this).find('[data-familytreetop-profile="relation"] fieldset');
