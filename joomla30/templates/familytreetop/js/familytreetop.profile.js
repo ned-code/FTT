@@ -36,20 +36,77 @@ $FamilyTreeTop.create("profile", function($){
         },
         setRelation:function(args){
             var box = $(this).find('[data-familytreetop-profile="relation"] fieldset');
+            var cont = $('<div style="position:relative;"></div>');
+            $(box).append(cont);
             var connection = $this.mod('usertree').getConnection(args.gedcom_id);
+            var node = {
+                width: 150,
+                height: 60
+            }
             var points = [];
             var vehicle;
             for(var key in connection){
                 var user = $this.mod('usertree').user(connection[key]);
                 if(key == 0){
-                    points[key] = {x:0,y:0,object:user};
+                    points[key] = {x:0,y:0,user:user};
                 } else {
                     var cords = getCords(user, key);
                     var prew = points[key - 1];
-                    points[key] = {x:prew.x + cords.x, y:prew.y + cords.y, object:user};
+                    points[key] = {x:prew.x + cords.x, y:prew.y + cords.y, user:user};
                 }
             }
             vehicle = getVehicle(points);
+            $(cont).css('min-height', ((vehicle.y * (node.height + 40)) + 100) + "px");
+            calcLeft();
+            renderBox(vehicle.pos);
+            render(vehicle.pos, -1);
+            render(vehicle.pos, 1);
+            function render(target, shift){
+                var pos = parseInt(target) + parseInt(shift);
+                if(target == 0 || target > points.length) return false;
+                renderBox(pos);
+                render(pos, shift);
+            }
+            function renderBox(pos){
+                var object = points[pos];
+                if("undefined" === typeof(object)) return false;
+                var user = object.user;
+                var div = $('<div>'+user.shortname()+'('+object.x+','+object.y+')</div>');
+                $(div).css('position', 'absolute');
+                $(div).css('border', '1px solid #000');
+                $(div).css('background', 'white');
+                $(div).css('width', node.width+'px');
+                $(div).css('height', node.height+'px');
+                $(div).css('top', getTop(pos) + 'px');
+                $(div).css('left', getLeft(pos) + 'px');
+                $(cont).append(div);
+
+            }
+            function calcLeft(){
+                for(var key in points){
+                    var object = points[key];
+                    var prew = points[key - 1];
+                    if("undefined" !== typeof(prew) && "undefined" !== typeof(prew.left)){
+                        if(prew.y == object.y){
+                            object.left = prew.left + parseInt(node.width + 20);
+                        } else {
+                            object.left = prew.left + parseInt(Math.ceil(node.width/2) + 10);
+                        }
+                    } else {
+                        object.left = parseInt(node.width + 30) * object.x;
+                    }
+                }
+            }
+            function getLeft(pos){
+                var object = points[pos];
+                return object.left
+            }
+            function getTop(pos){
+                var object = points[pos];
+                var top = (node.height + 40) * (vehicle.y - object.y);
+                object.top = top;
+                return object.top;
+            }
             function getVehicle(p){
                 var v = {x:0,y:0,user:false};
                 for(var k in p){
