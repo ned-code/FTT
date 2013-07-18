@@ -36,7 +36,62 @@ $FamilyTreeTop.create("profile", function($){
         },
         setRelation:function(args){
             var box = $(this).find('[data-familytreetop-profile="relation"] fieldset');
+            var connection = $this.mod('usertree').getConnection(args.gedcom_id);
+            var points = [];
+            for(var key in connection){
+                var user = $this.mod('usertree').user(connection[key]);
+                if(key == 0){
+                    points[key] = {x:0,y:0,object:user};
+                } else {
+                    var cords = getCords(user, key);
+                    var prew = points[key - 1];
+                    points[key] = {x:prew.x + cords.x, y:prew.y + cords.y, object:user};
+                }
+                console.log(points[key], user.relation);
+            }
+            console.log('--------------');
+            function getCords(u,k){
+                var relId = parseInt(u.relationId);
+                switch(relId){
+                    case 2:
+                    case 1000:
+                        return {x:1,y:0};
+                    case 3:
+                    case 4:
+                    case 103:
+                    case 104:
+                    case 203:
+                    case 204:
+                        return {x:1,y:1};
+                    case 5:
+                    case 6:
+                    case 7:
+                    case 8:
+                    case 9:
+                    case 10:
+                    case 11:
+                    case 12:
+                    case 13:
+                    case 105:
+                    case 106:
+                    case 107:
+                    case 108:
+                    case 110:
+                    case 111:
+                    case 112:
+                    case 113:
+                    case 205:
+                    case 206:
+                    case 207:
+                    case 208:
+                    case 210:
+                    case 211:
+                    case 212:
+                    case 213:
+                        return {x:1,y:-1};
 
+                }
+            }
             /*
             var tree = args.object.relationMap();
             var box = $(this).find('[data-familytreetop-profile="relation"] fieldset');
