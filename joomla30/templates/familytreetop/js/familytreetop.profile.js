@@ -38,6 +38,7 @@ $FamilyTreeTop.create("profile", function($){
             var box = $(this).find('[data-familytreetop-profile="relation"] fieldset');
             var connection = $this.mod('usertree').getConnection(args.gedcom_id);
             var points = [];
+            var vehicle;
             for(var key in connection){
                 var user = $this.mod('usertree').user(connection[key]);
                 if(key == 0){
@@ -47,9 +48,19 @@ $FamilyTreeTop.create("profile", function($){
                     var prew = points[key - 1];
                     points[key] = {x:prew.x + cords.x, y:prew.y + cords.y, object:user};
                 }
-                console.log(points[key], user.relation);
             }
-            console.log('--------------');
+            vehicle = getVehicle(points);
+            function getVehicle(p){
+                var v = {x:0,y:0,user:false};
+                for(var k in p){
+                    var o = p[k];
+                    if(o.y > v.y || (o.y == v.y && o.x > v.x) ){
+                        v = o;
+                        v.pos = k;
+                    }
+                }
+                return v;
+            }
             function getCords(u,k){
                 var relId = parseInt(u.relationId);
                 switch(relId){
