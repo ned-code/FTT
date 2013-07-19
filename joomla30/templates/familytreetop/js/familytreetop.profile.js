@@ -44,23 +44,28 @@ $FamilyTreeTop.create("profile", function($){
                 height: 60
             }
             var points = [];
-            var vehicle;
-            for(var key in connection){
-                var user = $this.mod('usertree').user(connection[key]);
-                if(key == 0){
-                    points[key] = {x:0,y:0,user:user};
-                } else {
-                    var cords = getCords(user, key);
-                    var prew = points[key - 1];
-                    points[key] = {x:prew.x + cords.x, y:prew.y + cords.y, user:user};
-                }
-            }
-            vehicle = getVehicle(points);
-            $(cont).css('min-height', ((vehicle.y * (node.height + 40)) + 100) + "px");
+            calcPoints();
+            calcSpousePoints();
             calcLeft();
+
+            var vehicle= getVehicle(points);
+            $(cont).css('min-height', ((vehicle.y * (node.height + 40)) + 100) + "px");
+
             renderBox(vehicle.pos);
             render(vehicle.pos, -1);
             render(vehicle.pos, 1);
+
+            return true;
+
+            function isPosEmpty(o){
+                for(var key in points){
+                    var e = points[key];
+                    if(o.x == e.y && o.x == e.x){
+                        return false;
+                    }
+                }
+                return true;
+            }
             function render(target, shift){
                 var pos = parseInt(target) + parseInt(shift);
                 if(target == 0 || target > points.length) return false;
@@ -82,10 +87,39 @@ $FamilyTreeTop.create("profile", function($){
                 $(cont).append(div);
 
             }
+            function renderLine(){}
+            function calcSpousePoints(){
+                var p = [], key;
+                for(key in points){
+                    var point = points[key];
+                    var user = point.user;
+                    var spouses = $this.mod('usertree').getSpouses(user.gedcom_id);
+                    if(spouses.length != 0 && key != points.length - 1){
+                        var spouse = $this.mod('usertree').user(spouses[0]);
+                        var cords = {x: point.x + 1, y: point.y, user: spouse, spouse: key};
+                        if(isPosEmpty(cords)){
+                            p.push(cords);
+                        }
+                    }
+                }
+                for(key in p){ points.push(p[key]); }
+            }
+            function calcPoints(){
+                for(var key in connection){
+                    var user = $this.mod('usertree').user(connection[key]);
+                    if(key == 0){
+                        points[key] = {x:0,y:0,user:user};
+                    } else {
+                        var cords = getCords(user, key);
+                        var prew = points[key - 1];
+                        points[key] = {x:prew.x + cords.x, y:prew.y + cords.y, user:user};
+                    }
+                }
+            }
             function calcLeft(){
                 for(var key in points){
                     var object = points[key];
-                    var prew = points[key - 1];
+                    var prew = ("undefined" !== typeof(object.spouse))?points[object.spouse]:points[key - 1];
                     if("undefined" !== typeof(prew) && "undefined" !== typeof(prew.left)){
                         if(prew.y == object.y){
                             object.left = prew.left + parseInt(node.width + 20);
