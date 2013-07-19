@@ -48,14 +48,14 @@ $FamilyTreeTop.create("profile", function($){
                 width: 150,
                 height: 60
             }
-            var points = [];
+            var points = [], chainLength;
             calcPoints();
-            var chainLength = points.length;
+            chainLength = points.length;
             calcSpousePoints();
             calcLeft();
 
             var vehicle= getVehicle(points);
-            var height = ((vehicle.y * (node.height + 40)) + 100);
+            var height = ((getRows() * (node.height + 40)));
             $(cont).css('min-height', height + "px");
             $(canvas).attr('height', height + "px");
             $(canvas).attr('width', $(box).width() + "px");
@@ -87,7 +87,7 @@ $FamilyTreeTop.create("profile", function($){
             }
             function render(target, shift){
                 var pos = parseInt(target) + parseInt(shift);
-                if(target == 0 || target >= points.length) return false;
+                if(target < 0 || target >= points.length) return false;
                 renderBox(pos);
                 render(pos, shift);
             }
@@ -143,7 +143,7 @@ $FamilyTreeTop.create("profile", function($){
                     if(spouses.length != 0){
                         var spouse = $this.mod('usertree').user(spouses[0]);
                         var cords = {x: point.x + 1, y: point.y, user: spouse, spouse: key};
-                        if(isPosEmpty(cords)&&!isUserExist(user)){
+                        if(isPosEmpty(cords)&&!isUserExist(spouse)){
                             p.push(cords);
                         }
                     }
@@ -177,6 +177,38 @@ $FamilyTreeTop.create("profile", function($){
                     }
                 }
             }
+            function getRows(){
+                var min = 0, max = 0;
+                for(var key in points){
+                    var point = points[key];
+                    if(point.y < min){
+                        min = point.y
+                    }
+                    if(point.y > max){
+                        max = point.y;
+                    }
+                }
+                return max + min * -1 + 1;
+            }
+            function getRow(y){
+                var min = 0, max = 0;
+                for(var key in points){
+                    var point = points[key];
+                    if(point.y < min){
+                        min = point.y
+                    }
+                    if(point.y > max){
+                        max = point.y;
+                    }
+                }
+                var index = 0;
+                for(var i = max; i >= min; i--){
+                    if(i == y){
+                        return index;
+                    }
+                    index++;
+                }
+            }
             function getBackgroundColor(pos){
                 var point = points[pos];
                 var user = point.user;
@@ -194,12 +226,13 @@ $FamilyTreeTop.create("profile", function($){
             }
             function getTop(pos){
                 var object = points[pos];
-                var top = (node.height + 40) * (vehicle.y - object.y);
+                var top = (node.height + 40) * getRow(object.y);
                 object.top = top;
                 return object.top;
             }
             function getVehicle(p){
-                var v = {x:0,y:0,user:false};
+                var v = p[0];
+                v.pos = 0;
                 for(var k in p){
                     var o = p[k];
                     if(o.y > v.y || (o.y == v.y && o.x > v.x) ){
@@ -264,33 +297,38 @@ $FamilyTreeTop.create("profile", function($){
                 ]);
                 return cords;
             }
-            function getSpouseLine(o1,o2, pos){
-                var cords = [];
-                if(pos > chainLength - 1){
+            function getSpouseLine(o1, o2, pos){
+                if("undefined" !== typeof(o2.spouse)){
+                    var spouse = points[parseInt(o2.spouse)];
                     var target = points[parseInt(o2.spouse) + 1];
-                    if(o2.y > target.y){
-                        return getDownLine(o2,target);
-                    } else {
-                        return getUpLine(o2,target);
+                    if(pos >= chainLength && "undefined" === typeof(target.spouse)){
+                        if(o2.y > target.y){
+                            return getDownLine(o2,target);
+                        } else if(o2.y < target.y)  {
+                            return getUpLine(o2,target);
+                        }
                     }
-                } else {
-                    var x,y;
-                    x = o1.left + node.width + Math.ceil((o2.left - (o1.left + node.width))/2);
-                    y = o1.top + Math.ceil(node.height/2);
-                    cords.push([
+                    return sim(spouse, o2);
+                }
+                return sim(o1, o2);
+                function sim(e1, e2){
+                    var c = [], x, y;
+                    x = e1.left + node.width + Math.ceil((e2.left - (e1.left + node.width))/2);
+                    y = e1.top + Math.ceil(node.height/2);
+                    c.push([
                         x - 5,
                         y,
                         x + 6,
                         y
                     ]);
-                    cords.push([
+                    c.push([
                         x,
                         y - 5,
                         x,
                         y + 5
                     ]);
+                    return c;
                 }
-                return cords;
             }
             function getCords(u,k){
                 var relId = parseInt(u.relationId);
