@@ -41,12 +41,16 @@ $FamilyTreeTop.create("profile", function($){
             $(box).append(cont);
             $(cont).append(canvas);
             var connection = $this.mod('usertree').getConnection(args.gedcom_id);
+            if(connection.length == 1) {
+                return false;
+            }
             var node = {
                 width: 150,
                 height: 60
             }
             var points = [];
             calcPoints();
+            var chainLength = points.length;
             calcSpousePoints();
             calcLeft();
 
@@ -74,7 +78,7 @@ $FamilyTreeTop.create("profile", function($){
             }
             function render(target, shift){
                 var pos = parseInt(target) + parseInt(shift);
-                if(target == 0 || target > points.length) return false;
+                if(target == 0 || target >= points.length) return false;
                 renderBox(pos);
                 render(pos, shift);
             }
@@ -99,7 +103,7 @@ $FamilyTreeTop.create("profile", function($){
                     var point = points[key];
                     var prew = points[key - 1];
                     if("undefined" !== typeof(prew) && "undefined" !== typeof(point)){
-                        var cords = getLineCords(prew, point);
+                        var cords = getLineCords(prew, point, key);
                         drawLines(cnvs,cords);
                     }
                 }
@@ -182,9 +186,9 @@ $FamilyTreeTop.create("profile", function($){
                 }
                 return v;
             }
-            function getLineCords(o1, o2){
+            function getLineCords(o1, o2, pos){
                 if("undefined" !== typeof(o2.spouse) || o1.y == o2.y){
-                       return getSpouseLine(o1,o2);
+                       return getSpouseLine(o1,o2, pos);
                 } else {
                     if(o1.y > o2.y){
                         return getDownLine(o1,o2);
@@ -237,9 +241,32 @@ $FamilyTreeTop.create("profile", function($){
                 ]);
                 return cords;
             }
-            function getSpouseLine(o1,o2){
-                var x1,x2,y1,y2, cords = [];
-
+            function getSpouseLine(o1,o2, pos){
+                var cords = [];
+                if(pos > chainLength - 1){
+                    var target = points[parseInt(o2.spouse) + 1];
+                    if(o2.y > target.y){
+                        return getDownLine(o2,target);
+                    } else {
+                        return getUpLine(o2,target);
+                    }
+                } else {
+                    var x,y;
+                    x = o1.left + node.width + Math.ceil((o2.left - (o1.left + node.width))/2);
+                    y = o1.top + Math.ceil(node.height/2);
+                    cords.push([
+                        x - 5,
+                        y,
+                        x + 5,
+                        y
+                    ]);
+                    cords.push([
+                        x,
+                        y - 5,
+                        x,
+                        y + 5,
+                    ]);
+                }
                 return cords;
             }
             function getCords(u,k){
