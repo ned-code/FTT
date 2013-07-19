@@ -76,6 +76,15 @@ $FamilyTreeTop.create("profile", function($){
                 }
                 return true;
             }
+            function isUserExist(u){
+                for(var key in points){
+                    var e = points[key];
+                    if(e.user.gedcom_id == u.gedcom_id){
+                        return true;
+                    }
+                }
+                return false;
+            }
             function render(target, shift){
                 var pos = parseInt(target) + parseInt(shift);
                 if(target == 0 || target >= points.length) return false;
@@ -131,10 +140,10 @@ $FamilyTreeTop.create("profile", function($){
                     var point = points[key];
                     var user = point.user;
                     var spouses = $this.mod('usertree').getSpouses(user.gedcom_id);
-                    if(spouses.length != 0 && key != points.length - 1){
+                    if(spouses.length != 0){
                         var spouse = $this.mod('usertree').user(spouses[0]);
                         var cords = {x: point.x + 1, y: point.y, user: spouse, spouse: key};
-                        if(isPosEmpty(cords)){
+                        if(isPosEmpty(cords)&&!isUserExist(user)){
                             p.push(cords);
                         }
                     }
@@ -325,71 +334,6 @@ $FamilyTreeTop.create("profile", function($){
 
                 }
             }
-            /*
-            var tree = args.object.relationMap();
-            var box = $(this).find('[data-familytreetop-profile="relation"] fieldset');
-            var id = "jit"+$this.generateKey();
-            $(box).attr('id', id);
-            $(box).height(tree[1]*80 + 100);
-            var st = new $jit.ST({
-                injectInto: id,
-                duration: 800,
-                transition: $jit.Trans.Quart.easeInOut,
-                offsetX:0,
-                offsetY:tree[1]*50,
-                levelDistance: 30,
-                levelsToShow: tree[1],
-                Node: {
-                    height: 40,
-                    width: 220,
-                    type: 'rectangle',
-                    color: '#f5f5f5',
-                    overridable: true
-                },
-                Edge: {
-                    type: 'bezier',
-                    overridable: true
-                },
-                onCreateLabel: function(label, node){
-                    label.id = node.id;
-                    label.innerHTML = $fn.getLabelHtml(label,node);
-                    $(label).width(220);
-                    $(label).height(40);
-                    $(label).addClass('text-center');
-                    if($fn.isConnectionTarget(args, node)){
-                        node.data.$color = "#ffc90e";
-                    } else if($fn.isConnectionUser(args, node)){
-                        node.data.$color = "#efe4b0";
-                    } else {
-                        node.data.$color = "c3c3c3";
-                    }
-                },
-                onBeforePlotNode: function(node){
-                    if(node.id.split("_")[1] == "TOP"){
-                        node.data.$color = "#f5f5f5";
-                    }
-                },
-                onBeforePlotLine: function(adj){
-                    if(isTop(adj) || isInLawFromTo(adj) || isInLawToFrom(adj)){
-                        adj.data.$color = "#f5f5f5";
-                        adj.data.$lineWidth = 0;
-                    }
-                    function isTop(adj){
-                        return adj.nodeTo.id.split("_")[1] == "TOP" ||adj.nodeFrom.id.split("_")[1] == "TOP";
-                    }
-                    function isInLawFromTo(adj){
-                        return adj.nodeFrom.data.rel.in_law != "0" && adj.nodeTo.data.rel.in_law == "0";
-                    }
-                    function isInLawToFrom(adj){
-                        return adj.nodeTo.data.rel.in_law != "0" && adj.nodeFrom.data.rel.in_law == "0";
-                    }
-                }
-            });
-            st.loadJSON(tree[0]);
-            st.compute();
-            st.select(st.root);
-            st.switchPosition("top", "replot", function(){});
-            */
         },
         setFamily:function(args){
             var box = $(this).find('[data-familytreetop-profile="family"] fieldset'), familyBox = $('<div style="position:relative;"></div>');
