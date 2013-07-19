@@ -86,10 +86,13 @@ $FamilyTreeTop.create("profile", function($){
                 var object = points[pos];
                 if("undefined" === typeof(object)) return false;
                 var user = object.user;
-                var div = $('<div>'+user.shortname()+'('+object.x+','+object.y+')</div>');
+                var div = $('<div></div>');
+                $(div).append('<div>'+user.shortname()+'</div>')
+                $(div).append('<div style="color:dimgray;"><i class="icon-leaf"></i>'+user.relation+'</div>')
                 $(div).css('position', 'absolute');
-                $(div).css('border', '1px solid #000');
-                $(div).css('background', 'white');
+                $(div).css('line-height', '30px');
+                $(div).css('background', getBackgroundColor(pos));
+                $(div).css('text-align', 'center');
                 $(div).css('width', node.width+'px');
                 $(div).css('height', node.height+'px');
                 $(div).css('top', getTop(pos) + 'px');
@@ -116,8 +119,8 @@ $FamilyTreeTop.create("profile", function($){
             }
             function drawLine(coords){
                 return new fabric.Line(coords, {
-                    fill: '#0088cc',
-                    stroke: '#0088cc',
+                    fill: '#c3c3c3',
+                    stroke: '#c3c3c3',
                     strokeWidth: 1,
                     selectable: false
                 });
@@ -163,6 +166,17 @@ $FamilyTreeTop.create("profile", function($){
                     } else {
                         object.left = parseInt(node.width + 30) * object.x;
                     }
+                }
+            }
+            function getBackgroundColor(pos){
+                var point = points[pos];
+                var user = point.user;
+                if(connection[0] == user.gedcom_id){
+                    return "#efe4b0";
+                } else if(connection[connection.length - 1] == user.gedcom_id){
+                    return "#ffc90e";
+                } else {
+                    return "#c3c3c3";
                 }
             }
             function getLeft(pos){
@@ -257,14 +271,14 @@ $FamilyTreeTop.create("profile", function($){
                     cords.push([
                         x - 5,
                         y,
-                        x + 5,
+                        x + 6,
                         y
                     ]);
                     cords.push([
                         x,
                         y - 5,
                         x,
-                        y + 5,
+                        y + 5
                     ]);
                 }
                 return cords;
