@@ -36,8 +36,10 @@ $FamilyTreeTop.create("profile", function($){
         },
         setRelation:function(args){
             var box = $(this).find('[data-familytreetop-profile="relation"] fieldset');
+            var canvas = $('<canvas></canvas>');
             var cont = $('<div style="position:relative;"></div>');
             $(box).append(cont);
+            $(cont).append(canvas);
             var connection = $this.mod('usertree').getConnection(args.gedcom_id);
             var node = {
                 width: 150,
@@ -49,11 +51,15 @@ $FamilyTreeTop.create("profile", function($){
             calcLeft();
 
             var vehicle= getVehicle(points);
-            $(cont).css('min-height', ((vehicle.y * (node.height + 40)) + 100) + "px");
+            var height = ((vehicle.y * (node.height + 40)) + 100);
+            $(cont).css('min-height', height + "px");
+            $(canvas).attr('height', height + "px");
+            $(canvas).attr('width', $(box).width() + "px");
 
             renderBox(vehicle.pos);
             render(vehicle.pos, -1);
             render(vehicle.pos, 1);
+            renderLine();
 
             return true;
 
@@ -87,7 +93,31 @@ $FamilyTreeTop.create("profile", function($){
                 $(cont).append(div);
 
             }
-            function renderLine(){}
+            function renderLine(){
+                var  cnvs = new fabric.StaticCanvas(canvas[0]);
+                for(var key in points){
+                    var point = points[key];
+                    var prew = points[key - 1];
+                    if("undefined" !== typeof(prew) && "undefined" !== typeof(point)){
+                        var cords = getLineCords(prew, point);
+                        drawLines(cnvs,cords);
+                    }
+                }
+            }
+            function drawLines(cnvs, cords){
+                for(var key in cords){
+                    var cord = cords[key];
+                    cnvs.add(drawLine(cord));
+                }
+            }
+            function drawLine(coords){
+                return new fabric.Line(coords, {
+                    fill: '#0088cc',
+                    stroke: '#0088cc',
+                    strokeWidth: 1,
+                    selectable: false
+                });
+            }
             function calcSpousePoints(){
                 var p = [], key;
                 for(key in points){
@@ -151,6 +181,66 @@ $FamilyTreeTop.create("profile", function($){
                     }
                 }
                 return v;
+            }
+            function getLineCords(o1, o2){
+                if("undefined" !== typeof(o2.spouse) || o1.y == o2.y){
+                       return getSpouseLine(o1,o2);
+                } else {
+                    if(o1.y > o2.y){
+                        return getDownLine(o1,o2);
+                    } else {
+                        return getUpLine(o1,o2);
+                    }
+                }
+            }
+            function getUpLine(o1, o2){
+                var cords = [];
+                cords.push([
+                    o1.left + Math.ceil(node.width/2),
+                    o1.top,
+                    o1.left + Math.ceil(node.width/2),
+                    o1.top - Math.ceil((o1.top - (o2.top + node.height))/2)
+                ]);
+                cords.push([
+                    o1.left + Math.ceil(node.width/2),
+                    o1.top - Math.ceil((o1.top - (o2.top + node.height))/2),
+                    o2.left + Math.ceil(node.width/2),
+                    o1.top - Math.ceil((o1.top - (o2.top + node.height))/2)
+                ]);
+                cords.push([
+                    o2.left + Math.ceil(node.width/2),
+                    o1.top - Math.ceil((o1.top - (o2.top + node.height))/2),
+                    o2.left + Math.ceil(node.width/2),
+                    o2.top + node.height
+                ]);
+                return cords;
+            }
+            function getDownLine(o1, o2){
+                var cords = [];
+                cords.push([
+                    o1.left + Math.ceil(node.width/2),
+                    o1.top + node.height,
+                    o1.left + Math.ceil(node.width/2),
+                    o1.top + node.height + Math.ceil((o2.top - (o1.top + node.height))/2)
+                ]);
+                cords.push([
+                    o1.left + Math.ceil(node.width/2),
+                    o1.top + node.height + Math.ceil((o2.top - (o1.top + node.height))/2),
+                    o2.left + Math.ceil(node.width/2),
+                    o1.top + node.height + Math.ceil((o2.top - (o1.top + node.height))/2)
+                ]);
+                cords.push([
+                    o2.left + Math.ceil(node.width/2),
+                    o1.top + node.height + Math.ceil((o2.top - (o1.top + node.height))/2),
+                    o2.left + Math.ceil(node.width/2),
+                    o2.top
+                ]);
+                return cords;
+            }
+            function getSpouseLine(o1,o2){
+                var x1,x2,y1,y2, cords = [];
+
+                return cords;
             }
             function getCords(u,k){
                 var relId = parseInt(u.relationId);
