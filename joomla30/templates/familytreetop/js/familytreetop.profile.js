@@ -35,36 +35,50 @@ $FamilyTreeTop.create("profile", function($){
             })
         },
         setRelation:function(args){
-            var box = $(this).find('[data-familytreetop-profile="relation"] fieldset');
-            var canvas = $('<canvas></canvas>');
-            var cont = $('<div style="position:relative;"></div>');
+            var box, canvas, cont, connection, settings, points, vehicle, height;
+            
+            box = $(this).find('[data-familytreetop-profile="relation"] fieldset');
+            canvas = $('<canvas></canvas>');
+            cont = $('<div style="position:relative;"></div>');
+
             $(box).append(cont);
             $(cont).append(canvas);
-            var connection = $this.mod('usertree').getConnection(args.gedcom_id);
+
+            connection = $this.mod('usertree').getConnection(args.gedcom_id);
+
             if(connection.length == 1) {
                 return false;
             }
-            var node = {
-                width: 150,
-                height: 60
+            settings = {
+                node:{
+                    width: 150,
+                    height: 60
+                }
             }
-            var points = [], chainLength;
+
+            calcPoints();
+            calcPointsOffset();
+
+            console.log(points);
+            /*
+            points = [], chainLength;
             calcPoints();
             chainLength = points.length;
             calcSpousePoints();
             calcLeft();
 
-            var vehicle= getVehicle(points);
-            var height = ((getRows() * (node.height + 40)));
+            vehicle= getVehicle(points);
+            height = ((getRows() * (node.height + 40)));
             $(cont).css('min-height', height + "px");
             $(canvas).attr('height', height + "px");
             $(canvas).attr('width', $(box).width() + "px");
+
 
             renderBox(vehicle.pos);
             render(vehicle.pos, -1);
             render(vehicle.pos, 1);
             renderLine();
-
+            */
             return true;
 
             function isPosEmpty(o){
@@ -151,14 +165,173 @@ $FamilyTreeTop.create("profile", function($){
                 for(key in p){ points.push(p[key]); }
             }
             function calcPoints(){
-                for(var key in connection){
-                    var user = $this.mod('usertree').user(connection[key]);
-                    if(key == 0){
-                        points[key] = {x:0,y:0,user:user};
-                    } else {
-                        var cords = getCords(user, key);
-                        var prew = points[key - 1];
-                        points[key] = {x:prew.x + cords.x, y:prew.y + cords.y, user:user};
+                var key, user, spouses, object, cords, prew;
+                points = [];
+                for(key in connection){
+                    user = $this.mod('usertree').user(connection[key]);
+                    cords = _getCords_(user, key);
+                    prew = _getPrew_(key);
+
+                    object = {x:prew.x + cords.x, y:prew.y + cords.y, user:user, pos:parseInt(key)};
+
+                    spouses = $this.mod('usertree').getSpouses(user.gedcom_id);
+
+                    object.spouse = (spouses.length != 0)?$this.mod('usertree').user(spouses[0]):0;
+
+                    points[key] = object;
+                }
+                return true;
+                function _getPrew_(key){
+                    if("undefined" !== typeof(points[(key - 1)])){
+                        return points[(key-1)];
+                    }
+                    return {x:0,y:0,user:false};
+                }
+                function _getCords_(u,k){
+                    var relId = parseInt(u.relationId);
+                    switch(relId){
+                        case 1:
+                            return {x:0,y:0};
+                        case 2:
+                        case 1000:
+                            return {x:1,y:0};
+                        case 3:
+                        case 4:
+                        case 103:
+                        case 104:
+                        case 203:
+                        case 204:
+                            return {x:1,y:1};
+                        case 5:
+                        case 6:
+                        case 7:
+                        case 8:
+                        case 9:
+                        case 10:
+                        case 11:
+                        case 12:
+                        case 13:
+                        case 105:
+                        case 106:
+                        case 107:
+                        case 108:
+                        case 110:
+                        case 111:
+                        case 112:
+                        case 113:
+                        case 205:
+                        case 206:
+                        case 207:
+                        case 208:
+                        case 210:
+                        case 211:
+                        case 212:
+                        case 213:
+                            return {x:1,y:-1};
+
+                    }
+                }
+            }
+            function calcPointsOffset(){
+                var vehicle = _getVehicle_();
+                _setOffset_(vehicle.pos);
+                _setOffset_(vehicle.pos, -1);
+                _setOffset_(vehicle.pos, 1);
+                _setLeft_();
+                return true;
+                function _getVehicle_(){
+                    var p = points, v = p[0], k, o;
+                    for(k in p){
+                        o = p[k];
+                        if(o.y > v.y || (o.y == v.y && o.x < v.x) ){
+                            v = o;
+                        }
+                    }
+                    return v;
+                }
+                function _getNext_(index){
+                    var next = points[index + 1];
+                    if("undefined" === typeof(next)){
+                        return false;
+                    }
+                    return next;
+                }
+                function _getDirection_(object, next){
+                    if(!next) return false;
+                    if(object.y == next.y && object.x > next.x){
+                        return "left"
+                    } else if(object.y == next.y && object.x < next.x){
+                        return "right";
+                    } else if(object.y > next.y){
+                        return "bottom";
+                    } else if(object.y < next.y){
+                        return "top";
+                    }
+                }
+                function _getWidth_(object){
+                    if(object.spouse){
+                        return settings.node.width*2 + 20;
+                    }
+                    return settings.node.width;
+                }
+                function _getLeft_(object){
+                    return 0;
+                }
+                function _getTop_(object){
+                    return (settings.node.height + 40) * _getRow_(object);
+                }
+                function _getRow_(object){
+                    var min = 0, max = 0, index = 0, key;
+                    for(key in points){
+                        if(points[key].y < min){ min = points[key].y; }
+                        if(points[key].y > max){ max = points[key].y; }
+                    }
+                    for(key = max ; key >= min; key--){
+                        if(key == object.y){
+                            return index;
+                        }
+                        index++;
+                    }
+                }
+                function _setLeft_(){
+                    points.forEach(function(e,i){
+                        var prew = points[e.pos - 1];
+                        if("undefined" !== typeof(prew)){
+                            if(e.y == prew.y){
+                                e.left = prew.left + prew.width + 40;
+                            } else if(e.y > prew.y){
+                                 
+                            } else if(e.y < prew.y){
+
+                            }
+                        } else {
+                            e.left = 0;
+                        }
+                    });
+                }
+                function _setOffset_(key, shift){
+                    if("undefined" === typeof(shift)){
+                        shift = 0;
+                    }
+                    var index = key + shift,
+                        object,
+                        next;
+                    if(index < 0 || index == points.length){
+                        return false;
+                    }
+
+                    object = points[index];
+                    next = _getNext_(index);
+
+                    object.direction = _getDirection_(object, next);
+                    object.width = _getWidth_(object);
+                    object.height = settings.node.height;
+                    object.top = _getTop_(object);
+
+                    console.log(object);
+
+                    if(shift != 0){
+                        _setOffset_(index, shift);
                     }
                 }
             }
@@ -176,6 +349,12 @@ $FamilyTreeTop.create("profile", function($){
                         object.left = parseInt(node.width + 30) * object.x;
                     }
                 }
+            }
+            function getPrew(key){
+                if("undefined" !== typeof(points[(key - 1)])){
+                    return points[(key-1)];
+                }
+                return {x:0,y:0,user:false};
             }
             function getRows(){
                 var min = 0, max = 0;
@@ -230,14 +409,22 @@ $FamilyTreeTop.create("profile", function($){
                 object.top = top;
                 return object.top;
             }
-            function getVehicle(p){
-                var v = p[0];
-                v.pos = 0;
-                for(var k in p){
-                    var o = p[k];
-                    if(o.y > v.y || (o.y == v.y && o.x > v.x) ){
+            function getMinMax(){
+                var p = points, xmin = 0, xmax = 0, ymin = 0, ymax = 0;
+                p.forEach(function(e,i){
+                    if(xmin > e.x){ xmin = e.x; }
+                    if(xmax < e.x){ xmax = e.x; }
+                    if(ymin > e.y){ ymin = e.y; }
+                    if(ymax < e.y){ ymax = e.y; }
+                });
+                return {x:{min:xmin,max:xmax},y:{min:ymin,max:ymax}};
+            }
+            function getVehicle(){
+                var p = points, v = p[0], k, o;
+                for(k in p){
+                    o = p[k];
+                    if(o.y > v.y || (o.y == v.y && o.x < v.x) ){
                         v = o;
-                        v.pos = k;
                     }
                 }
                 return v;
@@ -333,6 +520,8 @@ $FamilyTreeTop.create("profile", function($){
             function getCords(u,k){
                 var relId = parseInt(u.relationId);
                 switch(relId){
+                    case 1:
+                        return {x:0,y:0};
                     case 2:
                     case 1000:
                         return {x:1,y:0};
