@@ -58,87 +58,38 @@ $FamilyTreeTop.create("profile", function($){
 
             calcPoints();
             calcPointsOffset();
+            render();
 
-            console.log(points);
-            /*
-            points = [], chainLength;
-            calcPoints();
-            chainLength = points.length;
-            calcSpousePoints();
-            calcLeft();
-
-            vehicle= getVehicle(points);
-            height = ((getRows() * (node.height + 40)));
-            $(cont).css('min-height', height + "px");
-            $(canvas).attr('height', height + "px");
-            $(canvas).attr('width', $(box).width() + "px");
-
-
-            renderBox(vehicle.pos);
-            render(vehicle.pos, -1);
-            render(vehicle.pos, 1);
-            renderLine();
-            */
             return true;
-
-            function isPosEmpty(o){
-                for(var key in points){
-                    var e = points[key];
-                    if(o.x == e.y && o.x == e.x){
-                        return false;
+            function render(){
+                points.forEach(function(object){
+                    renderBox(object, false);
+                    if(object.spouse){
+                        var spouse = $.extend({}, object);
+                        spouse.user = object.spouse;
+                        spouse.left = object.left + settings.node.width + 40;
+                        renderBox(spouse, true);
                     }
-                }
-                return true;
+                    renderLines(object)
+                });
             }
-            function isUserExist(u){
-                for(var key in points){
-                    var e = points[key];
-                    if(e.user.gedcom_id == u.gedcom_id){
-                        return true;
-                    }
-                }
-                return false;
-            }
-            function render(target, shift){
-                var pos = parseInt(target) + parseInt(shift);
-                if(target < 0 || target >= points.length) return false;
-                renderBox(pos);
-                render(pos, shift);
-            }
-            function renderBox(pos){
-                var object = points[pos];
-                if("undefined" === typeof(object)) return false;
+            function renderBox(object, spouse){
                 var user = object.user;
                 var div = $('<div></div>');
                 $(div).append('<div>'+user.shortname()+'</div>')
                 $(div).append('<div style="color:dimgray;"><i class="icon-leaf"></i>'+user.relation+'</div>')
                 $(div).css('position', 'absolute');
                 $(div).css('line-height', '30px');
-                $(div).css('background', getBackgroundColor(pos));
+                $(div).css('background', getBackgroundColor(object.pos, spouse));
                 $(div).css('text-align', 'center');
-                $(div).css('width', node.width+'px');
-                $(div).css('height', node.height+'px');
-                $(div).css('top', getTop(pos) + 'px');
-                $(div).css('left', getLeft(pos) + 'px');
+                $(div).css('width', settings.node.width+'px');
+                $(div).css('height', settings.node.height+'px');
+                $(div).css('top', object.top + 'px');
+                $(div).css('left', object.left + 'px');
                 $(cont).append(div);
-
             }
-            function renderLine(){
-                var  cnvs = new fabric.StaticCanvas(canvas[0]);
-                for(var key in points){
-                    var point = points[key];
-                    var prew = points[key - 1];
-                    if("undefined" !== typeof(prew) && "undefined" !== typeof(point)){
-                        var cords = getLineCords(prew, point, key);
-                        drawLines(cnvs,cords);
-                    }
-                }
-            }
-            function drawLines(cnvs, cords){
-                for(var key in cords){
-                    var cord = cords[key];
-                    cnvs.add(drawLine(cord));
-                }
+            function renderLines(object){
+                
             }
             function drawLine(coords){
                 return new fabric.Line(coords, {
@@ -147,22 +98,6 @@ $FamilyTreeTop.create("profile", function($){
                     strokeWidth: 1,
                     selectable: false
                 });
-            }
-            function calcSpousePoints(){
-                var p = [], key;
-                for(key in points){
-                    var point = points[key];
-                    var user = point.user;
-                    var spouses = $this.mod('usertree').getSpouses(user.gedcom_id);
-                    if(spouses.length != 0){
-                        var spouse = $this.mod('usertree').user(spouses[0]);
-                        var cords = {x: point.x + 1, y: point.y, user: spouse, spouse: key};
-                        if(isPosEmpty(cords)&&!isUserExist(spouse)){
-                            p.push(cords);
-                        }
-                    }
-                }
-                for(key in p){ points.push(p[key]); }
             }
             function calcPoints(){
                 var key, user, spouses, object, cords, prew;
@@ -258,10 +193,8 @@ $FamilyTreeTop.create("profile", function($){
                 }
                 function _getDirection_(object, next){
                     if(!next) return false;
-                    if(object.y == next.y && object.x > next.x){
-                        return "left"
-                    } else if(object.y == next.y && object.x < next.x){
-                        return "right";
+                    if(object.y == next.y){
+                        return "shift"
                     } else if(object.y > next.y){
                         return "bottom";
                     } else if(object.y < next.y){
@@ -270,12 +203,16 @@ $FamilyTreeTop.create("profile", function($){
                 }
                 function _getWidth_(object){
                     if(object.spouse){
-                        return settings.node.width*2 + 20;
+                        var prew = points[object.pos - 1];
+                        var next = points[object.pos + 1];
+                        if("undefined" !== typeof(prew) && prew.user.gedcom_id == object.spouse.gedcom_id){
+                            return settings.node.width;
+                        } else if("undefined" !== typeof(next) && next.user.gedcom_id == object.spouse.gedcom_id){
+                            return settings.node.width;
+                        }
+                        return settings.node.width*2 + 40;
                     }
                     return settings.node.width;
-                }
-                function _getLeft_(object){
-                    return 0;
                 }
                 function _getTop_(object){
                     return (settings.node.height + 40) * _getRow_(object);
@@ -294,18 +231,51 @@ $FamilyTreeTop.create("profile", function($){
                     }
                 }
                 function _setLeft_(){
+                    if(points.length == 0){
+                        return false;
+                    } else if(points.length == 1){
+                        points[0].left = 0;
+                        return true;
+                    }
                     points.forEach(function(e,i){
                         var prew = points[e.pos - 1];
+                        var next = points[e.pos + 1];
                         if("undefined" !== typeof(prew)){
-                            if(e.y == prew.y){
-                                e.left = prew.left + prew.width + 40;
-                            } else if(e.y > prew.y){
-                                 
-                            } else if(e.y < prew.y){
-
+                            if(e.direction == "shift"
+                                || "undefined" !== typeof(next) && next.direction == "bottom"
+                                || "undefined" === typeof(next)){
+                                e.spouse = false;
+                                e.width = settings.node.width;
                             }
+                            if(prew.direction == "shift"){
+                                e.left = prew.left + prew.width + 40;
+                            } else if(prew.direction == "top"){
+                                if(e.direction == "bottom" && e.spouse || !e.spouse){
+                                    e.left = prew.left;
+                                } else if(e.spouse){
+                                    e.left = prew.left - Math.ceil(e.width/2) + Math.ceil(prew.width/2);
+                                }
+                            } else if(prew.direction == "bottom"){
+                                if(prew.spouse){
+                                    if(prew.prewObject.direction == "top"){
+                                        e.left = prew.prewObject.left + prew.prewObject.width + 40;
+                                    } else {
+                                        e.left = prew.left + Math.ceil(prew.width/2) - Math.ceil(e.width/2);
+                                    }
+                                } else {
+                                    e.left = prew.left;
+                                }
+                            }
+                            e.prewObject = prew;
                         } else {
                             e.left = 0;
+                            e.spouse = false;
+                            e.width = settings.node.width;
+                            if(e.direction == "top" && next.spouse){
+                                e.left = 0 + Math.ceil(next.width/2) - Math.ceil(settings.node.width/2);
+                            } else {
+                                e.left = 0;
+                            }
                         }
                     });
                 }
@@ -335,230 +305,17 @@ $FamilyTreeTop.create("profile", function($){
                     }
                 }
             }
-            function calcLeft(){
-                for(var key in points){
-                    var object = points[key];
-                    var prew = ("undefined" !== typeof(object.spouse))?points[object.spouse]:points[key - 1];
-                    if("undefined" !== typeof(prew) && "undefined" !== typeof(prew.left)){
-                        if(prew.y == object.y){
-                            object.left = prew.left + parseInt(node.width + 20);
-                        } else {
-                            object.left = prew.left + parseInt(Math.ceil(node.width/2) + 10);
-                        }
-                    } else {
-                        object.left = parseInt(node.width + 30) * object.x;
-                    }
-                }
-            }
-            function getPrew(key){
-                if("undefined" !== typeof(points[(key - 1)])){
-                    return points[(key-1)];
-                }
-                return {x:0,y:0,user:false};
-            }
-            function getRows(){
-                var min = 0, max = 0;
-                for(var key in points){
-                    var point = points[key];
-                    if(point.y < min){
-                        min = point.y
-                    }
-                    if(point.y > max){
-                        max = point.y;
-                    }
-                }
-                return max + min * -1 + 1;
-            }
-            function getRow(y){
-                var min = 0, max = 0;
-                for(var key in points){
-                    var point = points[key];
-                    if(point.y < min){
-                        min = point.y
-                    }
-                    if(point.y > max){
-                        max = point.y;
-                    }
-                }
-                var index = 0;
-                for(var i = max; i >= min; i--){
-                    if(i == y){
-                        return index;
-                    }
-                    index++;
-                }
-            }
-            function getBackgroundColor(pos){
+            function getBackgroundColor(pos, spouse){
                 var point = points[pos];
                 var user = point.user;
-                if(connection[0] == user.gedcom_id){
+                if(spouse){
+                    return "#c3c3c3";
+                } else if(connection[0] == user.gedcom_id){
                     return "#efe4b0";
                 } else if(connection[connection.length - 1] == user.gedcom_id){
                     return "#ffc90e";
                 } else {
                     return "#c3c3c3";
-                }
-            }
-            function getLeft(pos){
-                var object = points[pos];
-                return object.left
-            }
-            function getTop(pos){
-                var object = points[pos];
-                var top = (node.height + 40) * getRow(object.y);
-                object.top = top;
-                return object.top;
-            }
-            function getMinMax(){
-                var p = points, xmin = 0, xmax = 0, ymin = 0, ymax = 0;
-                p.forEach(function(e,i){
-                    if(xmin > e.x){ xmin = e.x; }
-                    if(xmax < e.x){ xmax = e.x; }
-                    if(ymin > e.y){ ymin = e.y; }
-                    if(ymax < e.y){ ymax = e.y; }
-                });
-                return {x:{min:xmin,max:xmax},y:{min:ymin,max:ymax}};
-            }
-            function getVehicle(){
-                var p = points, v = p[0], k, o;
-                for(k in p){
-                    o = p[k];
-                    if(o.y > v.y || (o.y == v.y && o.x < v.x) ){
-                        v = o;
-                    }
-                }
-                return v;
-            }
-            function getLineCords(o1, o2, pos){
-                if("undefined" !== typeof(o2.spouse) || o1.y == o2.y){
-                       return getSpouseLine(o1,o2, pos);
-                } else {
-                    if(o1.y > o2.y){
-                        return getDownLine(o1,o2);
-                    } else {
-                        return getUpLine(o1,o2);
-                    }
-                }
-            }
-            function getUpLine(o1, o2){
-                var cords = [];
-                cords.push([
-                    o1.left + Math.ceil(node.width/2),
-                    o1.top,
-                    o1.left + Math.ceil(node.width/2),
-                    o1.top - Math.ceil((o1.top - (o2.top + node.height))/2)
-                ]);
-                cords.push([
-                    o1.left + Math.ceil(node.width/2),
-                    o1.top - Math.ceil((o1.top - (o2.top + node.height))/2),
-                    o2.left + Math.ceil(node.width/2),
-                    o1.top - Math.ceil((o1.top - (o2.top + node.height))/2)
-                ]);
-                cords.push([
-                    o2.left + Math.ceil(node.width/2),
-                    o1.top - Math.ceil((o1.top - (o2.top + node.height))/2),
-                    o2.left + Math.ceil(node.width/2),
-                    o2.top + node.height
-                ]);
-                return cords;
-            }
-            function getDownLine(o1, o2){
-                var cords = [];
-                cords.push([
-                    o1.left + Math.ceil(node.width/2),
-                    o1.top + node.height,
-                    o1.left + Math.ceil(node.width/2),
-                    o1.top + node.height + Math.ceil((o2.top - (o1.top + node.height))/2)
-                ]);
-                cords.push([
-                    o1.left + Math.ceil(node.width/2),
-                    o1.top + node.height + Math.ceil((o2.top - (o1.top + node.height))/2),
-                    o2.left + Math.ceil(node.width/2),
-                    o1.top + node.height + Math.ceil((o2.top - (o1.top + node.height))/2)
-                ]);
-                cords.push([
-                    o2.left + Math.ceil(node.width/2),
-                    o1.top + node.height + Math.ceil((o2.top - (o1.top + node.height))/2),
-                    o2.left + Math.ceil(node.width/2),
-                    o2.top
-                ]);
-                return cords;
-            }
-            function getSpouseLine(o1, o2, pos){
-                if("undefined" !== typeof(o2.spouse)){
-                    var spouse = points[parseInt(o2.spouse)];
-                    var target = points[parseInt(o2.spouse) + 1];
-                    if(pos >= chainLength && "undefined" === typeof(target.spouse)){
-                        if(o2.y > target.y){
-                            return getDownLine(o2,target);
-                        } else if(o2.y < target.y)  {
-                            return getUpLine(o2,target);
-                        }
-                    }
-                    return sim(spouse, o2);
-                }
-                return sim(o1, o2);
-                function sim(e1, e2){
-                    var c = [], x, y;
-                    x = e1.left + node.width + Math.ceil((e2.left - (e1.left + node.width))/2);
-                    y = e1.top + Math.ceil(node.height/2);
-                    c.push([
-                        x - 5,
-                        y,
-                        x + 6,
-                        y
-                    ]);
-                    c.push([
-                        x,
-                        y - 5,
-                        x,
-                        y + 5
-                    ]);
-                    return c;
-                }
-            }
-            function getCords(u,k){
-                var relId = parseInt(u.relationId);
-                switch(relId){
-                    case 1:
-                        return {x:0,y:0};
-                    case 2:
-                    case 1000:
-                        return {x:1,y:0};
-                    case 3:
-                    case 4:
-                    case 103:
-                    case 104:
-                    case 203:
-                    case 204:
-                        return {x:1,y:1};
-                    case 5:
-                    case 6:
-                    case 7:
-                    case 8:
-                    case 9:
-                    case 10:
-                    case 11:
-                    case 12:
-                    case 13:
-                    case 105:
-                    case 106:
-                    case 107:
-                    case 108:
-                    case 110:
-                    case 111:
-                    case 112:
-                    case 113:
-                    case 205:
-                    case 206:
-                    case 207:
-                    case 208:
-                    case 210:
-                    case 211:
-                    case 212:
-                    case 213:
-                        return {x:1,y:-1};
-
                 }
             }
         },
