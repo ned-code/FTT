@@ -35,7 +35,7 @@ $FamilyTreeTop.create("profile", function($){
             })
         },
         setRelation:function(args){
-            var box, canvas, cont, connection, settings, points, vehicle, height;
+            var box, canvas, cont, connection, settings, points;
             
             box = $(this).find('[data-familytreetop-profile="relation"] fieldset');
             canvas = $('<canvas></canvas>');
@@ -58,8 +58,11 @@ $FamilyTreeTop.create("profile", function($){
 
             calcPoints();
             calcPointsOffset();
-            render();
 
+            $(canvas).attr('height', (getMaxRow() * (settings.node.height + 40)) + "px");
+            $(canvas).attr('width', $(box).width() + "px");
+
+            render();
             return true;
             function render(){
                 points.forEach(function(object){
@@ -89,7 +92,16 @@ $FamilyTreeTop.create("profile", function($){
                 $(cont).append(div);
             }
             function renderLines(object){
-                
+                var prew = object.prewObject;
+                if("undefined" !== typeof(prew)){
+                    if(prew.direction == "top"){
+
+                    } else if(prew.direction == "bottom"){
+
+                    } else if(prew.direction == "shift"){
+
+                    }
+                }
             }
             function drawLine(coords){
                 return new fabric.Line(coords, {
@@ -168,12 +180,12 @@ $FamilyTreeTop.create("profile", function($){
                 }
             }
             function calcPointsOffset(){
-                var vehicle = _getVehicle_();
-                _setOffset_(vehicle.pos);
-                _setOffset_(vehicle.pos, -1);
-                _setOffset_(vehicle.pos, 1);
+                var _vehicle = _getVehicle_();
+                _setOffset_(_vehicle.pos);
+                _setOffset_(_vehicle.pos, -1);
+                _setOffset_(_vehicle.pos, 1);
                 _setLeft_();
-                return true;
+                return _vehicle;
                 function _getVehicle_(){
                     var p = points, v = p[0], k, o;
                     for(k in p){
@@ -243,7 +255,7 @@ $FamilyTreeTop.create("profile", function($){
                         if("undefined" !== typeof(prew)){
                             if(e.direction == "shift"
                                 || "undefined" !== typeof(next) && next.direction == "bottom"
-                                || "undefined" === typeof(next)){
+                                || prew.direction == "shift"){
                                 e.spouse = false;
                                 e.width = settings.node.width;
                             }
@@ -253,14 +265,17 @@ $FamilyTreeTop.create("profile", function($){
                                 if(e.direction == "bottom" && e.spouse || !e.spouse){
                                     e.left = prew.left;
                                 } else if(e.spouse){
-                                    e.left = prew.left - Math.ceil(e.width/2) + Math.ceil(prew.width/2);
+                                    e.left = prew.left - Math.ceil(e.width/2) + Math.ceil(settings.node.width/2);
+                                    if(e.left < 0){
+                                        _correctLeftPosition_(e.left);
+                                    }
                                 }
                             } else if(prew.direction == "bottom"){
                                 if(prew.spouse){
-                                    if(prew.prewObject.direction == "top"){
+                                    if("undefined" !== typeof(prew.prewObject) && prew.prewObject.direction == "top"){
                                         e.left = prew.prewObject.left + prew.prewObject.width + 40;
                                     } else {
-                                        e.left = prew.left + Math.ceil(prew.width/2) - Math.ceil(e.width/2);
+                                        e.left = prew.left + Math.ceil(prew.width/2) - Math.ceil(settings.node.width/2);
                                     }
                                 } else {
                                     e.left = prew.left;
@@ -268,9 +283,11 @@ $FamilyTreeTop.create("profile", function($){
                             }
                             e.prewObject = prew;
                         } else {
-                            e.left = 0;
-                            e.spouse = false;
-                            e.width = settings.node.width;
+                            if(e.direction != "bottom"){
+                                e.left = 0;
+                                e.spouse = false;
+                                e.width = settings.node.width;
+                            }
                             if(e.direction == "top" && next.spouse){
                                 e.left = 0 + Math.ceil(next.width/2) - Math.ceil(settings.node.width/2);
                             } else {
@@ -278,6 +295,13 @@ $FamilyTreeTop.create("profile", function($){
                             }
                         }
                     });
+                    return true;
+                    function _correctLeftPosition_(left){
+                        var shift = left * -1;
+                        points.forEach(function(e){
+                            e.left = e.left + shift;
+                        });
+                    }
                 }
                 function _setOffset_(key, shift){
                     if("undefined" === typeof(shift)){
@@ -298,12 +322,21 @@ $FamilyTreeTop.create("profile", function($){
                     object.height = settings.node.height;
                     object.top = _getTop_(object);
 
-                    console.log(object);
-
                     if(shift != 0){
                         _setOffset_(index, shift);
                     }
                 }
+            }
+            function getMaxRow(){
+                var min = 0, max = 0, key;
+                for(key in points){
+                    if(points[key].y < min){ min = points[key].y; }
+                    if(points[key].y > max){ max = points[key].y; }
+                }
+                if(min < 0){
+                    min = min * -1;
+                }
+                return max + min + 1;
             }
             function getBackgroundColor(pos, spouse){
                 var point = points[pos];
