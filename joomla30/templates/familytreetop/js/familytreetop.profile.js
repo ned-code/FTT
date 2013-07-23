@@ -65,15 +65,16 @@ $FamilyTreeTop.create("profile", function($){
             render();
             return true;
             function render(){
+                var  cnvs = new fabric.StaticCanvas(canvas[0])
                 points.forEach(function(object){
-                    renderBox(object, false);
+                    object.box = renderBox(object, false);
                     if(object.spouse){
                         var spouse = $.extend({}, object);
                         spouse.user = object.spouse;
                         spouse.left = object.left + settings.node.width + 40;
-                        renderBox(spouse, true);
+                        object.spouseBox = renderBox(spouse, true);
                     }
-                    renderLines(object)
+                    renderLines(object, cnvs)
                 });
             }
             function renderBox(object, spouse){
@@ -90,24 +91,104 @@ $FamilyTreeTop.create("profile", function($){
                 $(div).css('top', object.top + 'px');
                 $(div).css('left', object.left + 'px');
                 $(cont).append(div);
+                return div;
             }
-            function renderLines(object){
+            function renderLines(object, cnvs){
                 var prew = object.prewObject;
+                if(object.spouse){
+                    _drawSpouseLine_(object);
+                    _drawPlusLines_(object);
+                }
                 if("undefined" !== typeof(prew)){
-                    if(prew.direction == "top"){
-
+                    if(prew.direction == "shift"){
+                        _drawSpouseLine_(prew);
+                        _drawPlusLines_(prew);
+                    } else if(prew.direction == "top"){
+                        if(prew.left == object.left && object.spouse){
+                            _drawVertLine1_(object);
+                            _drawVertLine2_(prew);
+                            _drawHorLine_(prew, object);
+                        } else {
+                            _drawStraightLine_(prew);
+                        }
                     } else if(prew.direction == "bottom"){
-
-                    } else if(prew.direction == "shift"){
-
+                        if(prew.left == object.left){
+                            _drawStraightLine_(object);
+                        } else {
+                            _drawVertLine1_(prew);
+                            _drawVertLine2_(object);
+                            _drawHorLine_(object, prew);
+                        }
                     }
                 }
+                return true;
+                function _drawPlusLines_(o){
+                    var center = [
+                        o.left + settings.node.width + 20,
+                        o.top + (settings.node.height/2) - 15
+                    ]
+                    //hor
+                    cnvs.add(drawLine([
+                        center[0] - 5,
+                        center[1],
+                        center[0] + 6,
+                        center[1]
+                    ],2));
+                    //ver
+                    cnvs.add(drawLine([
+                        center[0],
+                        center[1] - 5,
+                        center[0],
+                        center[1] + 6
+                    ],2));
+                }
+                function _drawSpouseLine_(o){
+                    cnvs.add(drawLine([
+                        o.left + settings.node.width,
+                        o.top + Math.ceil(settings.node.height/2),
+                        o.left + settings.node.width + 40,
+                        o.top + Math.ceil(settings.node.height/2)
+                    ]));
+                }
+                function _drawStraightLine_(o){
+                    cnvs.add(drawLine([
+                        o.left + Math.ceil(settings.node.width/2),
+                        o.top,
+                        o.left + Math.ceil(settings.node.width/2),
+                        o.top - 40 - Math.ceil(settings.node.height/2)
+                    ]));
+                }
+                function _drawHorLine_(p,o){
+                    cnvs.add(drawLine([
+                        p.left + Math.ceil(settings.node.width/2),
+                        p.top - 20,
+                        o.left + settings.node.width + 20,
+                        p.top - 20
+                    ]));
+                }
+                function _drawVertLine1_(o){
+                    cnvs.add(drawLine([
+                        o.left + settings.node.width + 20,
+                        o.top + Math.ceil(settings.node.height/2),
+                        o.left + settings.node.width + 20,
+                        o.top + settings.node.height + 20
+                    ]));
+                }
+                function _drawVertLine2_(o){
+                    cnvs.add(drawLine([
+                        o.left + Math.ceil(settings.node.width/2),
+                        o.top,
+                        o.left + Math.ceil(settings.node.width/2),
+                        o.top - 20
+                    ]));
+                }
+
             }
-            function drawLine(coords){
+            function drawLine(coords, width){
                 return new fabric.Line(coords, {
                     fill: '#c3c3c3',
                     stroke: '#c3c3c3',
-                    strokeWidth: 1,
+                    strokeWidth: ("undefined"!==typeof(width))?width:1,
                     selectable: false
                 });
             }
@@ -267,7 +348,7 @@ $FamilyTreeTop.create("profile", function($){
                                 } else if(e.spouse){
                                     e.left = prew.left - Math.ceil(e.width/2) + Math.ceil(settings.node.width/2);
                                     if(e.left < 0){
-                                        _correctLeftPosition_(e.left);
+                                        _correctLeftPosition_(e.left, i);
                                     }
                                 }
                             } else if(prew.direction == "bottom"){
@@ -296,10 +377,13 @@ $FamilyTreeTop.create("profile", function($){
                         }
                     });
                     return true;
-                    function _correctLeftPosition_(left){
+                    function _correctLeftPosition_(left, index){
+                        if(left > 0) return false;
                         var shift = left * -1;
-                        points.forEach(function(e){
-                            e.left = e.left + shift;
+                        points.forEach(function(e, i){
+                            if("undefined" !== typeof(e.left)){
+                                e.left = e.left + shift;
+                            }
                         });
                     }
                 }
