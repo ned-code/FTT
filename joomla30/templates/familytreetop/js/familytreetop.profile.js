@@ -104,6 +104,19 @@ $FamilyTreeTop.create("profile", function($){
                         _drawSpouseLine_(prew);
                         _drawPlusLines_(prew);
                     } else if(prew.direction == "top"){
+                        _drawVertLine1_(object);
+                        _drawVertLine2_(prew);
+                        _drawHorLine_(prew, object);
+                    } else if(prew.direction == "bottom"){
+                        _drawVertLine1_(prew);
+                        _drawVertLine2_(object);
+                        _drawHorLine_(object, prew);
+                    }
+                    /*
+                    if(prew.direction == "shift"){
+                        _drawSpouseLine_(prew);
+                        _drawPlusLines_(prew);
+                    } else if(prew.direction == "top"){
                         if(prew.left == object.left && object.spouse){
                             _drawVertLine1_(object);
                             _drawVertLine2_(prew);
@@ -120,6 +133,7 @@ $FamilyTreeTop.create("profile", function($){
                             _drawHorLine_(object, prew);
                         }
                     }
+                    */
                 }
                 return true;
                 function _drawPlusLines_(o){
@@ -363,6 +377,7 @@ $FamilyTreeTop.create("profile", function($){
                                 }
                             }
                             e.prewObject = prew;
+                            _correctPosition_(e);
                         } else {
                             if(e.direction != "bottom"){
                                 e.left = 0;
@@ -377,6 +392,21 @@ $FamilyTreeTop.create("profile", function($){
                         }
                     });
                     return true;
+                    function _correctPosition_(object){
+                        points.forEach(function(e,i){
+                            if(e.y == object.y && e.pos != object.pos){
+                                var a = { x: e.left, y: e.left + e.width };
+                                var b = { x: object.left, y: object.left + object.width };
+                                if(a.x <= b.y && a.x >= b.x
+                                    || a.y >= b.x && a.y <= b.y
+                                    || b.x >= a.x && b.y <= a.y){
+                                    object.left = e.left + e.width + 40;
+                                }
+                            }
+                        });
+                        return true;
+
+                    }
                     function _correctLeftPosition_(left, index){
                         if(left > 0) return false;
                         var shift = left * -1;
