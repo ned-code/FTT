@@ -335,7 +335,7 @@ $FamilyTreeTop.create("profile", function($){
                         var next = points[e.pos + 1];
                         if("undefined" !== typeof(prew)){
                             if(e.direction == "shift"
-                                || "undefined" !== typeof(next) && next.direction == "bottom"
+                                //|| "undefined" !== typeof(next) && next.direction == "bottom"
                                 || prew.direction == "shift"){
                                 e.spouse = false;
                                 e.width = settings.node.width;
