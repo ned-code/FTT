@@ -112,28 +112,6 @@ $FamilyTreeTop.create("profile", function($){
                         _drawVertLine2_(object);
                         _drawHorLine_(object, prew);
                     }
-                    /*
-                    if(prew.direction == "shift"){
-                        _drawSpouseLine_(prew);
-                        _drawPlusLines_(prew);
-                    } else if(prew.direction == "top"){
-                        if(prew.left == object.left && object.spouse){
-                            _drawVertLine1_(object);
-                            _drawVertLine2_(prew);
-                            _drawHorLine_(prew, object);
-                        } else {
-                            _drawStraightLine_(prew);
-                        }
-                    } else if(prew.direction == "bottom"){
-                        if(prew.left == object.left){
-                            _drawStraightLine_(object);
-                        } else {
-                            _drawVertLine1_(prew);
-                            _drawVertLine2_(object);
-                            _drawHorLine_(object, prew);
-                        }
-                    }
-                    */
                 }
                 return true;
                 function _drawPlusLines_(o){
