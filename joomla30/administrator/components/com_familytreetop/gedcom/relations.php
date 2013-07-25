@@ -267,7 +267,10 @@ class FamilyTreeTopGedcomRelationsManager {
                         return $gedcom_id;
                     }
                 } else {
-                    $gedcom_id = $key;
+                    $user = $this->list[$key];
+                    if($user['in_law'] == 0 || $user['relation_id'] == 2){
+                        $gedcom_id = $key;
+                    }
                 }
             }
         }

@@ -527,26 +527,58 @@ $FamilyTreeTop.create("usertree", function($){
     }
 
     $this.getRelationName = function(object){
-        var sub_object, relationId, json, suffix, postfix;
-        if(parseInt(object.in_law)){
-            sub_object = $this.getRelation(object.in_law);
-            if(object.relation_id == 2){
-                relationId = getSubRelationId(sub_object.relation_id);
-            } else {
-                relationId = object.relation_id;
-            }
+        var rel = _getRelationId_(object), name;
+        if("object" === typeof(rel)){
+            name = _getName_(rel[1].obj, rel[1].id) + " of " + _getName_(rel[0].obj, rel[0].id);
         } else {
-            relationId = object.relation_id;
+            name = _getName_(object, rel);
         }
-        json = object.json;
-        suffix =( (json!=null&&"undefined"!=typeof(json.suffix))?json.suffix:"" );
-        postfix = (parseInt(object.in_law))?"in-law":"";
-
-        if(data.rel != null && "undefined" !== typeof(data.rel._NAMES[relationId])){
-            return (suffix) + " " + $('#relations').find('[data-familytreetop="'+data.rel["_NAMES"][relationId].name+'"]').text() + " " + postfix;
+        return (name)?name:"undefined";
+        function _getName_(obj, id){
+            console.log(obj, id);
+            var val = data.rel["_NAMES"][id], name;
+            if(data.rel != null && "undefined" !== typeof(val)){
+                name = $('#relations').find('[data-familytreetop="'+val.name+'"]').text()
+                return _getSuffix_(obj) + " " + name + " " + _getPostfix_(obj);
+            }
+            return false;
         }
-        return "undefined";
-        function getSubRelationId(id){
+        function _getSuffix_(o){
+            return (o.json!=null&&"undefined"!=typeof(o.json.suffix))?o.json.suffix:"";
+        }
+        function _getPostfix_(o){
+            return (parseInt(o.in_law))?"in-law":"";
+        }
+        function _getRelationId_(o){
+            var s1,s2,id;
+            if(parseInt(o.in_law)){
+                s1 = $this.getRelation(o.in_law);
+                if(parseInt(s1.in_law)){
+                    s2 = $this.getRelation(s1.in_law);
+                    if(parseInt(s2.in_law)){
+                        id = 1000;
+                    } else {
+                        if(s1.relation_id == 2){
+                            id = [];
+                            id.push({obj:s1, id: _getSubRelationId_(s2.relation_id)});
+                            id.push({obj:o, id: o.relation_id});
+                        } else {
+                            id = 1000;
+                        }
+                    }
+                } else {
+                    if(o.relation_id == 2){
+                        id = _getSubRelationId_(s1.relation_id);
+                    } else {
+                        id = 1000;
+                    }
+                }
+            } else {
+                id = o.relation_id;
+            }
+            return id;
+        }
+        function _getSubRelationId_(id){
             switch(parseInt(id)){
             case 2:	return 0;   //SPOUSE
             case 3:	return 4;   //MOTHER
