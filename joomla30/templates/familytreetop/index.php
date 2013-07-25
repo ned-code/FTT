@@ -553,33 +553,33 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
 
     <form id="formEditOptions" action="<?=JRoute::_("index.php?option=com_familytreetop&task=upload.file", false);?>" method="POST" enctype="multipart/form-data">
         <div familytreetop="buttons" style="margin-left: 5px;margin-right: 5px;margin-bottom: 20px;">
-            <button familytreetop type="button" class="btn btn-danger">Delete</button>
+            <button familytreetop-button="delete" type="button" class="btn btn-danger">Delete</button>
         </div>
         <div familytreetop="delete" style="display:none;">
             <table class="table table-striped">
                 <tr>
-                    <td><div style="font-weight: bold;">Option 1</div><div><img class="img-polaroid" src="holder.js/50x50" /></div></td>
+                    <td><div familytreetop="option1" style="font-weight: bold;">Option 1</div><div><!--<img class="img-polaroid" src="" />--></div></td>
                     <td>
-                        <div style="font-weight: bold;">Do not change my Profile</div>
+                        <div style="cursor:pointer;color:blue;font-weight: bold;">Do not change my Profile</div>
                         <div>Your profile information will remain visible to existing family members</div>
                     </td>
                 </tr>
                 <tr>
-                    <td><div style="font-weight: bold;">Option 2</div><div><img class="img-polaroid" src="holder.js/50x50" /></div></td>
+                    <td><div familytreetop="option2" style="font-weight: bold;">Option 2</div><div><!--<img class="img-polaroid" src="" />--></div></td>
                     <td>
-                        <div style="font-weight: bold;">Delete my Profile Information</div>
+                        <div style="cursor:pointer;color:blue;font-weight: bold;">Delete my Profile Information</div>
                         <div>Your name, dates and other profile data will be deleted and replaced with “unknown”</div>
                     </td>
                 </tr>
                 <tr>
-                    <td><div style="font-weight: bold;">Option 3</div><div><img class="img-polaroid" src="holder.js/50x50" /></div></td>
+                    <td><div familytreetop="option3" style="font-weight: bold;">Option 3</div><div><!--<img class="img-polaroid" src="" />--></div></td>
                     <td>
-                        <div style="font-weight: bold;">Remove from Tree</div>
+                        <div style="cursor:pointer;color:blue;font-weight: bold;">Remove from Tree</div>
                         <div>Your place in this family tree will be completely removed. Note that you must first
                             delete any spouses or descendants.</div>
                     </td>
                 </tr>
-                <tr><td colspan="2" style="text-align: center;"><button familytreetop type="button" class="btn btn-inverse">Cancel</button></td></tr>
+                <tr><td colspan="2" style="text-align: center;"><button familytreetop="cancel" type="button" class="btn btn-inverse">Cancel</button></td></tr>
             </table>
         </div>
     </form>

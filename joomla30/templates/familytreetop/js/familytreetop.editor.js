@@ -7,16 +7,26 @@ $FamilyTreeTop.create("editor", function($){
     $fn = {
         setOptions: function(parent, ind){
             var active = false;
-            $(parent).find('[familytreetop]').click(function(){
-                _initButton_('delete');
+            $(parent).find('[familytreetop-button="delete"]').click(function(){
+                _init_('delete');
+                _initHideButton_('delete');
+
             });
             return true;
-            function _initButton_(type){
+            function _init_(type){
                 if(active){
                     $(active).hide();
                 }
                 active = $(parent).find('[familytreetop="'+type+'"]');
                 $(active).show();
+            }
+            function _initHideButton_(type){
+                var box =  $(parent).find('[familytreetop="'+type+'"]');
+                $(box).find('[familytreetop="cancel"]').click(function(){
+                    $(this).unbind();
+                    $(box).hide();
+                    active = false;
+                });
             }
         },
         setUserMedia: function(parent, ind){
