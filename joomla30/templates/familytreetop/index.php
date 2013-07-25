@@ -551,6 +551,12 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
         </div>
     </form>
 
+    <form id="formEditOptions" action="<?=JRoute::_("index.php?option=com_familytreetop&task=upload.file", false);?>" method="POST" enctype="multipart/form-data">
+        <div>
+            <button familytreetop type="button" class="btn btn-danger">Delete</button>
+        </div>
+    </form>
+
     <div id="familiesHide">
         <div familytreetop="home" style="position: absolute;top: 0;left: 50%;margin-left: -14px;cursor: pointer;border: 1px solid #0088cc;border-radius: 20px;padding: 5px;">
             <a style="text-decoration: none;" onclick="return false;"><i class="icon-large icon-home"></i></a>

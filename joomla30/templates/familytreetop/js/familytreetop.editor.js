@@ -5,6 +5,11 @@ $FamilyTreeTop.create("editor", function($){
         $fn;
 
     $fn = {
+        setOptions: function(parent, ind){
+            $(parent).find('[familytreetop]').click(function(){
+                console.log(this);
+            });
+        },
         setUserMedia: function(parent, ind){
             var dataBox = $('#dataEditMedia').clone(),
                 ul = $(dataBox).find('ul');
@@ -277,6 +282,9 @@ $FamilyTreeTop.create("editor", function($){
         getEditorUnionsForm:function(){
             return $('#formEditUnions').clone();
         },
+        getEditorOptionsForm:function(){
+            return $('#formEditOptions').clone();
+        },
         getArgs:function(parent, activeTab, ind){
             var forms = [
                 "#formEditProfile",
@@ -361,7 +369,8 @@ $FamilyTreeTop.create("editor", function($){
             ind,
             editProfileForm,
             editUnionsForms,
-            editMediaForm;
+            editMediaForm,
+            editOptionsForm;
 
         //create modal box
         cl = $fn.getModalBox();
@@ -395,6 +404,9 @@ $FamilyTreeTop.create("editor", function($){
         $fn.setUserMedia(editMediaForm, ind);
 
         //options
+        editOptionsForm = $fn.getEditorOptionsForm();
+        $fn.setFormInTab(3, tabs, editOptionsForm);
+        $fn.setOptions(editOptionsForm, ind);
 
         //init modal
         $(cl).modal({dynamic:true});

@@ -536,6 +536,7 @@ $FamilyTreeTop.create("profile", function($){
             $fn.setRelation.call(parent, args);
             $fn.setFamily.call(parent, args);
         });
+
         $(parent).modal({dynamic:true});
 
     }
