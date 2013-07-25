@@ -535,7 +535,6 @@ $FamilyTreeTop.create("usertree", function($){
         }
         return (name)?name:"undefined";
         function _getName_(obj, id){
-            console.log(obj, id);
             var val = data.rel["_NAMES"][id], name;
             if(data.rel != null && "undefined" !== typeof(val)){
                 name = $('#relations').find('[data-familytreetop="'+val.name+'"]').text()
@@ -567,8 +566,8 @@ $FamilyTreeTop.create("usertree", function($){
                         }
                     }
                 } else {
-                    if(o.relation_id == 2){
-                        id = _getSubRelationId_(s1.relation_id);
+                    if(s1.relation_id == 2){
+                        id = o.relation_id;
                     } else {
                         id = 1000;
                     }
