@@ -246,6 +246,30 @@ $FamilyTreeTop.create("usertree", function($){
                 }
                 return "";
             },
+            isCanBeDelete: function(){
+                var parents, childrens, spouses;
+                parents = $this.getParents(ind.gedcom_id);
+                childrens = $this.getChildrens(ind.gedcom_id);
+                spouses = $this.getSpouses(ind.gedcom_id);
+                if(_isParentExist_(parents) && !_isChildrenExist_(childrens) && !_isSpousesExist_(spouses)){
+                    return true;
+                } else if(!_isParentExist_(parents) && _isChildrenExist_(childrens) && !_isSpousesExist_(spouses)){
+                    return true;
+                }
+                return false;
+                function _isParentExist_(p){
+                    if(p.father == null && p.mother == null){
+                        return false;
+                    }
+                    return true;
+                }
+                function _isChildrenExist_(c){
+                    return (c.length != 0);
+                }
+                function _isSpousesExist_(s){
+                    return (s.length != 0);
+                }
+            },
             isRegistered:function(){
                 return $this.isRegisteredUser(ind.gedcom_id);
             },

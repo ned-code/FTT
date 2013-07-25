@@ -7,7 +7,7 @@ $FamilyTreeTop.create("editor", function($){
     $fn = {
         setOptions: function(parent, ind){
             $(parent).find('[familytreetop]').click(function(){
-                console.log(this);
+                console.log(ind.isCanBeDelete());
             });
         },
         setUserMedia: function(parent, ind){
