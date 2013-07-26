@@ -10,7 +10,9 @@ $FamilyTreeTop.create("editor", function($){
             $(parent).find('[familytreetop-button="delete"]').click(function(){
                 _init_('delete');
                 _initHideButton_('delete');
-
+                _initDeleteOptionsButton_(function(){
+                    console.log(this);
+                });
             });
             return true;
             function _init_(type){
@@ -26,6 +28,23 @@ $FamilyTreeTop.create("editor", function($){
                     $(this).unbind();
                     $(box).hide();
                     active = false;
+                });
+            }
+            function _initDeleteOptionsButton_(callback){
+                var box =  $(parent).find('[familytreetop="delete"]');
+                $(box).find('[familytreetop="option"]').each(function(index, element){
+                    var tr = $(element).parent().parent();
+                    $(tr).show();
+                    switch(parseInt($(element).attr('option'))){
+                        case 1:
+                            if(parseInt(ind.facebook_id) == 0) $(tr).hide()
+                            break;
+
+                        case 3:
+                            if(!ind.isCanBeDelete()) $(tr).hide();
+                            break;
+                    }
+                    $(element).click(callback);
                 });
             }
         },

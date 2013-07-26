@@ -558,23 +558,23 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
         <div familytreetop="delete" style="display:none;">
             <table class="table table-striped">
                 <tr>
-                    <td><div familytreetop="option1" style="font-weight: bold;">Option 1</div><div><!--<img class="img-polaroid" src="" />--></div></td>
+                    <td><div style="font-weight: bold;">Option 1</div><div><!--<img class="img-polaroid" src="" />--></div></td>
                     <td>
-                        <div style="cursor:pointer;color:blue;font-weight: bold;">Do not change my Profile</div>
+                        <div familytreetop="option" option="1" style="cursor:pointer;color:blue;font-weight: bold;">Do not change my Profile</div>
                         <div>Your profile information will remain visible to existing family members</div>
                     </td>
                 </tr>
                 <tr>
-                    <td><div familytreetop="option2" style="font-weight: bold;">Option 2</div><div><!--<img class="img-polaroid" src="" />--></div></td>
+                    <td><div style="font-weight: bold;">Option 2</div><div><!--<img class="img-polaroid" src="" />--></div></td>
                     <td>
-                        <div style="cursor:pointer;color:blue;font-weight: bold;">Delete my Profile Information</div>
+                        <div familytreetop="option" option="2" style="cursor:pointer;color:blue;font-weight: bold;">Delete my Profile Information</div>
                         <div>Your name, dates and other profile data will be deleted and replaced with “unknown”</div>
                     </td>
                 </tr>
                 <tr>
-                    <td><div familytreetop="option3" style="font-weight: bold;">Option 3</div><div><!--<img class="img-polaroid" src="" />--></div></td>
+                    <td><div style="font-weight: bold;">Option 3</div><div><!--<img class="img-polaroid" src="" />--></div></td>
                     <td>
-                        <div style="cursor:pointer;color:blue;font-weight: bold;">Remove from Tree</div>
+                        <div familytreetop="option" option="3" style="cursor:pointer;color:blue;font-weight: bold;">Remove from Tree</div>
                         <div>Your place in this family tree will be completely removed. Note that you must first
                             delete any spouses or descendants.</div>
                     </td>
