@@ -252,8 +252,8 @@ class FamilyTreeTopGedcomIndividualsManager {
     }
 
     public function removeFromList($gedcom_id){
-        if(!isset($this->list[$gedcom_id])){
-            unset $this->list[$gedcom_id];
+        if(isset($this->list[$gedcom_id])){
+            unset($this->list[$gedcom_id]);
         }
     }
 
