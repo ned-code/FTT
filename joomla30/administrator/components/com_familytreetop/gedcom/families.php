@@ -177,8 +177,9 @@ class FamilyTreeTopGedcomFamiliesManager {
             foreach($rows as $row){
                 $result[] = ($row['husb'] == $gedcom_id)?$row['wife']:$row['husb'];
             }
-            return $result;
+            return (empty($result))?false:$result;
         }
+        return false;
     }
 
     public function getFamilyId($id){

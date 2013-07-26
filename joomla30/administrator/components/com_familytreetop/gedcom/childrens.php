@@ -86,6 +86,14 @@ class FamilyTreeTopGedcomChildrensManager {
         );
     }
 
+    public function getChildrens($family_id){
+        if(!empty($this->list_by_family_id[$family_id])){
+            $list = $this->list_by_family_id[$family_id];
+            return $list;
+        }
+        return false;
+    }
+
     public function getFamilyIdByGedcomId($gedcom_id){
         if(!empty($this->list_by_gedcom_id[$gedcom_id])){
             $list = $this->list_by_gedcom_id[$gedcom_id];

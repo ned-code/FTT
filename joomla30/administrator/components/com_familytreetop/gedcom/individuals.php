@@ -35,6 +35,37 @@ class FamilyTreeTopGedcomIndividualsModel {
         }
     }
 
+    public function isChildrens(){
+        $gedcom = GedcomHelper::getInstance();
+        $family_id = $gedcom->families->getFamilyId($this->gedcom_id);
+        $childens = $gedcom->childrens->getChildrens($family_id);
+        if($childens){
+            return true;
+        }
+        return false;
+    }
+
+    public function isSpouses(){
+        $gedcom = GedcomHelper::getInstance();
+        $spouses = $gedcom->families->getSpouses($this->gedcom_id);
+        if($spouses){
+            return true;
+        }
+        return false;
+    }
+
+    public function isCanBeDelete(){
+        $isParents = $this->isParents();
+        $isChildrens = $this->isChildrens();
+        $isSpouses = $this->isSpouses();
+        if($isParents && !$isChildrens && !$isSpouses){
+            return true;
+        } else if(!$isParents && $isChildrens && !$isSpouses){
+            return true;
+        }
+        return false;
+    }
+
     public function relationId(){
         $gedcom = GedcomHelper::getInstance();
         $relationList = $gedcom->relations->getList();
