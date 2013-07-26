@@ -98,8 +98,23 @@ class FamilyTreeTopGedcomIndividualsModel {
         return false;
     }
 
-    //public function delete(){}
+    public function delete(){
+        $gedcom = GedcomHelper::getInstance();
+
+        if(empty($this->id)) return false;
+        $user = FamilyTreeTopIndividuals::find_by_pk($this->id);
+        $user->delete();
+
+        if($this->facebook_id != 0){
+            $this->unregister();
+        }
+
+        $gedcom->individuals->removeFromList($this->gedcom_id);
+    }
+
     public function clear(){
+        $gedcom = GedcomHelper::getInstance();
+
         $name = FamilyTreeTopNames::find_by_gedcom_id($this->gedcom_id);
         $name->first_name = "unknown";
         $name->middle_name = "";
@@ -114,9 +129,16 @@ class FamilyTreeTopGedcomIndividualsModel {
             }
         }
 
+        if($this->facebook_id != 0){
+            $this->unregister();
+        }
+
         $gedcom->individuals->updateList($this);
     }
-    //public function unregister(){}
+
+    public function unregister(){
+
+    }
 
     public function save(){
         if(empty($this->tree_id)) return false;
@@ -226,6 +248,12 @@ class FamilyTreeTopGedcomIndividualsManager {
 
         if(!isset($this->list[$model->gedcom_id])){
             $this->list[$model->gedcom_id] = $data;
+        }
+    }
+
+    public function removeFromList($gedcom_id){
+        if(!isset($this->list[$gedcom_id])){
+            unset $this->list[$gedcom_id];
         }
     }
 
