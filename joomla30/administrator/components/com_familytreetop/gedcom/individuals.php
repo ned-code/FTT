@@ -99,7 +99,23 @@ class FamilyTreeTopGedcomIndividualsModel {
     }
 
     //public function delete(){}
-    //public function clear(){}
+    public function clear(){
+        $name = FamilyTreeTopNames::find_by_gedcom_id($this->gedcom_id);
+        $name->first_name = "unknown";
+        $name->middle_name = "";
+        $name->last_name = "";
+        $name->know_as = "";
+        $name->change_time = $ind->change_time;
+        $name->save();
+
+        if(!empty($this->events)){
+            foreach($this->events as $event){
+                $event->remove();
+            }
+        }
+
+        $gedcom->individuals->updateList($this);
+    }
     //public function unregister(){}
 
     public function save(){
