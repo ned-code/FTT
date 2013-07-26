@@ -485,4 +485,21 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         exit;
     }
 
+    public function delete(){
+        $app = JFactory::getApplication();
+        $gedcom = GedcomHelper::getInstance();
+        $type = $app->input->post->get('type', false);
+        switch((int)$type){
+            case 1:
+
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+        }
+        echo json_encode(array('res'=>$option));
+        exit;
+    }
+
 }

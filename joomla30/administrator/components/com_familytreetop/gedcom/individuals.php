@@ -98,9 +98,9 @@ class FamilyTreeTopGedcomIndividualsModel {
         return false;
     }
 
-    public function getParents(){
-        return FamilyTreeTopGedcomIndividualsManager::getParents($this->gedcom_id);
-    }
+    //public function delete(){}
+    //public function clear(){}
+    //public function unregister(){}
 
     public function save(){
         if(empty($this->tree_id)) return false;
@@ -153,6 +153,10 @@ class FamilyTreeTopGedcomIndividualsModel {
         $gedcom->individuals->updateList($this);
 
         return $this;
+    }
+
+    public function getParents(){
+        return FamilyTreeTopGedcomIndividualsManager::getParents($this->gedcom_id);
     }
 
     public function addEvent($event){
