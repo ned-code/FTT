@@ -94,7 +94,7 @@ $FamilyTreeTop.create("families", function($){
                         break;
 
                     case 2:
-                        $(object).css('top', getEventTop(getTop(0))).css('left', getEventLeft());
+                        $(object).css('top', getEventTop(getTop(0))).css('left', getEventLeft(object));
                         break;
 
                     default:
@@ -140,9 +140,25 @@ $FamilyTreeTop.create("families", function($){
                 }
 
             }
-            function getEventLeft(){
-                var width = $(settings.parent).width()
-                return Math.ceil(width/2);
+            function getEventLeft(object){
+                var w, p1, p2, k = 135;
+                w = $(object).width();
+                if(w == 0){
+                    w = getTextWidth.call(object);
+                }
+                p1 = getNum.call($(boxes[0]).css('left'));
+                p2 = getNum.call($(boxes[1]).css('left'));
+                return ((p1 + k) + ((p2 - (p1 + k))/2 - (w/2)));
+                function getNum(){ return parseInt(this.replace(/[^-\d\.]/g, '')); };
+                function getTextWidth(font){
+                    var f = font || '14px "Helvetica Neue",Helvetica,Arial,sans-serif',
+                        o = $('<div>' + (this).html() + '</div>')
+                            .css({'position': 'absolute', 'float': 'left', 'white-space': 'nowrap', 'visibility': 'hidden', 'font': f})
+                            .appendTo($('body')),
+                        w = o.width();
+                    o.remove();
+                    return w;
+                }
             }
             function getParentIndent(index){
                 var width = parseInt($(settings.parent).width());
@@ -251,8 +267,8 @@ $FamilyTreeTop.create("families", function($){
             return true;
             function drawLine(coords){
                 return new fabric.Line(coords, {
-                    fill: '#0088cc',
-                    stroke: '#0088cc',
+                    fill: '#ccc',
+                    stroke: '#ccc',
                     strokeWidth: 1,
                     selectable: false
                 });
