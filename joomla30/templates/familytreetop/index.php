@@ -585,8 +585,13 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
     </form>
 
     <div id="familiesHide">
-        <div familytreetop="home" style="position: absolute;top: 0;left: 50%;margin-left: -14px;cursor: pointer;border: 1px solid #0088cc;border-radius: 20px;padding: 5px;">
-            <a style="text-decoration: none;" onclick="return false;"><i class="icon-large icon-home"></i></a>
+        <div familytreetop="home" style="position: absolute;top: 0;left: 50%; margin-left: -20px; cursor: pointer;">
+            <a style="text-decoration: none;" onclick="return false;">
+                <span class="icon-stack">
+                     <i class="icon-circle icon-stack-base"></i>
+                     <i class="icon-home icon-light"></i>
+                </span>
+            </a>
         </div>
         <div class="parent-box" style="max-width: 160px;">
             <div style="width: 150px;position:relative;">
