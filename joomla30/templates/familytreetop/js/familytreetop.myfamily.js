@@ -21,14 +21,18 @@ $FamilyTreeTop.create("myfamily", function($){
             var str = object.message || object.description || object.story || (("undefined"!==typeof(object.type)&&object.type=="link")?"Likes on " + object.application.name :"") || "";
             return str.replace(/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/, "...");
         },
+        getFacebookSign: function(object){
+            var div = '<div familytreetop="facebook-sign" style="position:absolute; top: 0; right: 0; cursor: pointer;">';
+            if("undefined" !== typeof(object.link)){
+                div += '<a style="text-decoration: none;" target="_blank" href link="'+object.link+'"><i class="icon-facebook-sign icon-2x icon-muted"></i></a>';
+            } else if("undefined" !== typeof(object.actions) && "undefined" !== typeof(object.actions[0].link)){
+                div += '<a style="text-decoration: none;" target="_blank" href="'+object.actions[0].link+'"><i class="icon-facebook-sign icon-2x icon-muted"></i></a>';
+            }
+            div += '</div>';
+            return div;
+        },
         getPicture: function(object){
             if("undefined" === typeof(object.picture)) {
-                if("undefined" !== typeof(object.link)){
-                    return '<a style="text-decoration: none;" target="_blank" href="'+object.link+'"><i class="icon-flag icon-4x pull-left icon-facebook-sign"></i></a>';
-                }
-                if("undefined" !== typeof(object.actions) && "undefined" !== typeof(object.actions[0].link)){
-                    return '<a style="text-decoration: none;" target="_blank" href="'+object.actions[0].link+'"><i class="icon-flag icon-4x pull-left icon-facebook-sign"></i></a>';
-                }
                 return "";
             } else {
                 return '<a target="_blank" href="'+object.link+'"><img class="img-polaroid" src="'+object.picture+'" /></a>';
@@ -67,8 +71,9 @@ $FamilyTreeTop.create("myfamily", function($){
             return $('<img class="img-rounded" src="https://graph.facebook.com/'+object.from.id+'/picture"/>');
         },
         createBody: function(object){
-            var parentDiv = $('<div class="row-fluid"><div class="span12"></div></div>'), img;
-            $(parentDiv).find('.span12').append('<div gedcom_id="'+$fn.getGedcomId(object)+'" familytreetop="profile" style="cursor: pointer; color:#4c5797; font-size:12px; font-weight: bold;">'+$fn.getName(object)+'</div>');
+            var parentDiv = $('<div class="row-fluid"><div class="span12" style="position:relative;"></div></div>'), img;
+            $(parentDiv).find('.span12').append($fn.getFacebookSign(object));
+            $(parentDiv).find('.span12').append('<div style="color:#4c5797; font-size:12px; font-weight: bold;"><span style="cursor: pointer;" gedcom_id="'+$fn.getGedcomId(object)+'" familytreetop="profile">'+$fn.getName(object)+'</span></div>');
             $(parentDiv).find('.span12').append('<div style="color: #797979;font-size: 12px;">'+$fn.getRelation(object)+'</div>');
             $(parentDiv).find('.span12').append('<div><table><tr><td familytreetop-image style="border:none;">'+$fn.getPicture(object)+'</td><td style="border:none;vertical-align: top;">'+$fn.getMessage(object)+'</td></tr></table></div>');
             $(parentDiv).find('.span12').append('<div class="pull-right familytreetop-myfamily-buttons"><small>'+$fn.getTime(object)+'</small></div>');
@@ -109,6 +114,11 @@ $FamilyTreeTop.create("myfamily", function($){
                     var td = $(e.target).parent().parent();
                     $(td).css('width', width + "px");
                 }
+            });
+            $(tr).find('[familytreetop="facebook-sign"]').hover(function(){
+                $(this).find('i').removeClass('icon-muted');
+            }, function(){
+                $(this).find('i').addClass('icon-muted');
             });
             $(table).append(tr);
         });
