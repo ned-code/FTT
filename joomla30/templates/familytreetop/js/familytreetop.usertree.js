@@ -582,9 +582,7 @@ $FamilyTreeTop.create("usertree", function($){
                         id = 1000;
                     } else {
                         if(s1.relation_id == 2){
-                            id = [];
-                            id.push({obj:s1, id: _getSubRelationId_(s2.relation_id)});
-                            id.push({obj:o, id: o.relation_id});
+                            id = _getSubRelationId_(s2.relation_id);
                         } else {
                             id = 1000;
                         }
