@@ -161,8 +161,8 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                 <ul class="unstyled" style="font-size:11px;">
                     <li familytreetop-name="birth"><span style="color: #c3c3c3;"><?=JText::_("TPL_FAMILYTREETOP_BORN");?></span>: <span></span></li>
                     <li familytreetop-name="death"><span style="color: #c3c3c3;"><?=JText::_("TPL_FAMILYTREETOP_DIED");?></span>: <span></span></li>
-                    <li familytreetop-name="relation"><span style="color: #c3c3c3;"><?=JText::_("TPL_FAMILYTREETOP_RELATION");?></span>: <span></span></li>
-                    <li familytreetop-name="connection"><span style="color: #c3c3c3;"><?=JText::_("TPL_FAMILYTREETOP_CONNECTION");?></span>: <span></span></li>
+                    <li familytreetop-name="relation2"><span style="color: #c3c3c3;"><?=JText::_("TPL_FAMILYTREETOP_RELATION");?></span>: <span></span></li>
+                    <!--<li familytreetop-name="connection"><span style="color: #c3c3c3;"><?=JText::_("TPL_FAMILYTREETOP_CONNECTION");?></span>: <span></span></li>-->
                 </ul>
             </div>
         </div>

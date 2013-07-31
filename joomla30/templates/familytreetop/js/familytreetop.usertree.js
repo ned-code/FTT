@@ -169,6 +169,13 @@ $FamilyTreeTop.create("usertree", function($){
                 }
                 return "unknown";
             })(),
+            relation2: (function(){
+                var relation = $this.getRelation(ind.gedcom_id);
+                if(relation){
+                    return $this.getRelationName(relation, true);
+                }
+                return "unknown";
+            })(),
             relationId:(function(){
                 var relation = $this.getRelation(ind.gedcom_id);
                 if(relation){
@@ -550,12 +557,16 @@ $FamilyTreeTop.create("usertree", function($){
         }
     }
 
-    $this.getRelationName = function(object){
+    $this.getRelationName = function(object, flag){
         var rel = _getRelationId_(object), name;
-        if("object" === typeof(rel)){
-            name = _getName_(rel[1].obj, rel[1].id) + " of " + _getName_(rel[0].obj, rel[0].id);
+        if("object" === typeof(rel) && "undefined" !== typeof(flag)){
+            name = _getName_(rel[1].obj, rel[1].id) + " your " + _getName_(rel[0].obj, rel[0].id);
         } else {
-            name = _getName_(object, rel);
+            if("object" === typeof(rel)){
+                name = _getName_(rel[1].obj, rel[1].id);
+            } else {
+                name = _getName_(object, rel);
+            }
         }
         return (name)?name:"undefined";
         function _getName_(obj, id){
@@ -582,7 +593,9 @@ $FamilyTreeTop.create("usertree", function($){
                         id = 1000;
                     } else {
                         if(s1.relation_id == 2){
-                            id = _getSubRelationId_(s2.relation_id);
+                            id = [];
+                            id.push({obj:s1, id: _getSubRelationId_(s2.relation_id)});
+                            id.push({obj:o, id: o.relation_id});
                         } else {
                             id = 1000;
                         }
