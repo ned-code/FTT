@@ -183,6 +183,23 @@ $FamilyTreeTop.create("usertree", function($){
                 }
                 return 0;
             })(),
+            proxyRelation: (function(){
+                var relation = $this.getRelationId(ind.gedcom_id);
+                if("object" === typeof(relation)){
+                    var o1 = _name_(relation[0].obj.target_id),
+                        o2 = _name_(relation[1].obj.target_id),
+                        r1 = $this.getRelation(relation[0].obj.target_id),
+                        r2 = $this.getRelation(relation[1].obj.target_id);
+                    return o2 + " is the " + $this.getRelationName(r2) + " of your " + $this.getRelationName(r1);
+                } else {
+                    if("undefined" !== typeof(relation)){
+                        return $this.getRelationName(relation);
+                    } else {
+                        return "unknown";
+                    }
+                }
+                function _name_(id){ return $this.getName(data.ind[id]); }
+            })(),
             connection:function(){
                 var object = $this.getConnection(ind.gedcom_id);
                 if(object){
@@ -445,6 +462,72 @@ $FamilyTreeTop.create("usertree", function($){
         return false;
     }
 
+    $this.getRelationId = function(gedcom_id){
+        return _getRelationId_($this.getRelation(gedcom_id));
+        function _getRelationId_(o){
+            var s1,s2,id;
+            if(parseInt(o.in_law)){
+                s1 = $this.getRelation(o.in_law);
+                if(parseInt(s1.in_law)){
+                    s2 = $this.getRelation(s1.in_law);
+                    if(parseInt(s2.in_law)){
+                        id = 1000;
+                    } else {
+                        if(s1.relation_id == 2){
+                            id = [];
+                            id.push({obj:s1, id: _getSubRelationId_(s2.relation_id)});
+                            id.push({obj:o, id: parseInt(o.relation_id)});
+                        } else {
+                            id = 1000;
+                        }
+                    }
+                } else {
+                    if(s1.relation_id == 2){
+                        id = o.relation_id;
+                    } else {
+                        id = 1000;
+                    }
+                }
+            } else {
+                id = o.relation_id;
+            }
+            return id;
+        }
+        function _getSubRelationId_(id){
+            switch(parseInt(id)){
+                case 2:	return 0;   //SPOUSE
+                case 3:	return 4;   //MOTHER
+                case 4:	return 3;   //FATHER
+                case 5:	return 6;   //DAUGHTER
+                case 6:	return 5;   //SON
+                case 7:	return 8;   //SISTER
+                case 8:	return 7;   //BROTHER
+                case 9:	return 9;   //COUSIN
+                case 10: //AUNT
+                case 11: //UNCLE
+                case 12: //NIECE
+                case 13: //NEPHEW
+                case 103: //GRAND_MOTHER
+                case 104: //GRAND_FATHER
+                case 105: //GRAND_DAUGHTER
+                case 106: //GRAND_SON
+                case 110: //GRAND_AUNT
+                case 111: //GRAND_UNCLE
+                case 112: //GRAND_NIECE
+                case 113: //GRAND_NEPHEW
+                case 203: //GREAT_GRAND_MOTHER
+                case 204: //GREAT_GRAND_FATHER
+                case 205: //GREAT_GRAND_DAUGHTER
+                case 206: //GREAT_GRAND_SON
+                case 210: //GREAT_GRAND_AUNT
+                case 211: //GREAT_GRAND_UNCLE
+                case 212: //GREAT_GRAND_NIECE
+                case 213: //GREAT_GRAND_NEPHEW
+                    return 1000;
+            }
+        }
+    }
+
     $this.getConnectionMap = function(gedcom_id){
         var object;
         if(data.con == null) return false;
@@ -557,8 +640,19 @@ $FamilyTreeTop.create("usertree", function($){
         }
     }
 
+    $this.getName = function(dataObject){
+        if("undefined" === typeof(dataObject)) return "unknown";
+        var $name = [];
+        if(dataObject.first_name != null) $name.push(dataObject.first_name);
+        if(dataObject.last_name != null){
+            if(dataObject.middle_name != null) $name.push(dataObject.middle_name);
+            $name.push(dataObject.last_name);
+        }
+        return $name.join(' ').replace(/[ \t]{2,}/g, ' ');
+    }
+
     $this.getRelationName = function(object, flag){
-        var rel = _getRelationId_(object), name;
+        var rel = $this.getRelationId(object.target_id), name;
         if("object" === typeof(rel) && "undefined" !== typeof(flag)){
             name = _getName_(rel[1].obj, rel[1].id) + " your " + _getName_(rel[0].obj, rel[0].id);
         } else {
@@ -583,68 +677,7 @@ $FamilyTreeTop.create("usertree", function($){
         function _getPostfix_(o){
             return (parseInt(o.in_law))?"in-law":"";
         }
-        function _getRelationId_(o){
-            var s1,s2,id;
-            if(parseInt(o.in_law)){
-                s1 = $this.getRelation(o.in_law);
-                if(parseInt(s1.in_law)){
-                    s2 = $this.getRelation(s1.in_law);
-                    if(parseInt(s2.in_law)){
-                        id = 1000;
-                    } else {
-                        if(s1.relation_id == 2){
-                            id = [];
-                            id.push({obj:s1, id: _getSubRelationId_(s2.relation_id)});
-                            id.push({obj:o, id: o.relation_id});
-                        } else {
-                            id = 1000;
-                        }
-                    }
-                } else {
-                    if(s1.relation_id == 2){
-                        id = o.relation_id;
-                    } else {
-                        id = 1000;
-                    }
-                }
-            } else {
-                id = o.relation_id;
-            }
-            return id;
-        }
-        function _getSubRelationId_(id){
-            switch(parseInt(id)){
-            case 2:	return 0;   //SPOUSE
-            case 3:	return 4;   //MOTHER
-            case 4:	return 3;   //FATHER
-            case 5:	return 6;   //DAUGHTER
-            case 6:	return 5;   //SON
-            case 7:	return 8;   //SISTER
-            case 8:	return 7;   //BROTHER
-            case 9:	return 9;   //COUSIN
-            case 10: //AUNT
-            case 11: //UNCLE
-            case 12: //NIECE
-            case 13: //NEPHEW
-            case 103: //GRAND_MOTHER
-            case 104: //GRAND_FATHER
-            case 105: //GRAND_DAUGHTER
-            case 106: //GRAND_SON
-            case 110: //GRAND_AUNT
-            case 111: //GRAND_UNCLE
-            case 112: //GRAND_NIECE
-            case 113: //GRAND_NEPHEW
-            case 203: //GREAT_GRAND_MOTHER
-            case 204: //GREAT_GRAND_FATHER
-            case 205: //GREAT_GRAND_DAUGHTER
-            case 206: //GREAT_GRAND_SON
-            case 210: //GREAT_GRAND_AUNT
-            case 211: //GREAT_GRAND_UNCLE
-            case 212: //GREAT_GRAND_NIECE
-            case 213: //GREAT_GRAND_NEPHEW
-                return 1000;
-            }
-        }
+
     }
 
 

@@ -239,6 +239,7 @@
 
             return unescape(output);
         },
+        trim: function(){return this.replace(/^\s+|\s+$/g, '');},
         isExist:function(array, name, value){
             var items = name.split('.'), prop, object, key, element;
             for(prop in array){
