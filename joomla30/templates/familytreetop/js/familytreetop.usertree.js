@@ -193,11 +193,13 @@ $FamilyTreeTop.create("usertree", function($){
                     return o2 + " is the " + $this.getRelationName(r2) + " of your " + $this.getRelationName(r1);
                 } else {
                     if("undefined" !== typeof(relation)){
-                        return $this.getRelationName(relation);
+                        var rel = $this.getRelation(ind.gedcom_id);
+                        return $this.getRelationName(rel)
                     } else {
                         return "unknown";
                     }
                 }
+                return true;
                 function _name_(id){ return $this.getName(data.ind[id]); }
             })(),
             connection:function(){
@@ -463,7 +465,7 @@ $FamilyTreeTop.create("usertree", function($){
     }
 
     $this.getRelationId = function(gedcom_id){
-        return _getRelationId_($this.getRelation(gedcom_id));
+        return  _getRelationId_($this.getRelation(gedcom_id));
         function _getRelationId_(o){
             var s1,s2,id;
             if(parseInt(o.in_law)){
@@ -484,6 +486,8 @@ $FamilyTreeTop.create("usertree", function($){
                 } else {
                     if(s1.relation_id == 2){
                         id = o.relation_id;
+                    } else if(o.relation_id == 2){
+                        id = _getSubRelationId_(s1.relation_id);
                     } else {
                         id = 1000;
                     }

@@ -23,6 +23,9 @@ $FamilyTreeTop.create("profile", function($){
             $(box).find('li').each(function(index, element){
                 var names = ["first_name", "middle_name", "last_name", "know_as", "proxyRelation"];
                 var value = args.object[names[index]];
+                if(index == 4){
+                    console.log(args.object, value);
+                }
                 if(value != null && value.length != 0){
                     $(element).find('span').text(args.object[names[index]]);
                 } else {
