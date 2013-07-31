@@ -24,7 +24,7 @@ $FamilyTreeTop.create("myfamily", function($){
         getFacebookSign: function(object){
             var div = '<div familytreetop="facebook-sign" style="position:absolute; top: 0; right: 0; cursor: pointer;">';
             if("undefined" !== typeof(object.link)){
-                div += '<a style="text-decoration: none;" target="_blank" href link="'+object.link+'"><i class="icon-facebook-sign icon-2x icon-muted"></i></a>';
+                div += '<a style="text-decoration: none;" target="_blank" href="'+object.link+'"><i class="icon-facebook-sign icon-2x icon-muted"></i></a>';
             } else if("undefined" !== typeof(object.actions) && "undefined" !== typeof(object.actions[0].link)){
                 div += '<a style="text-decoration: none;" target="_blank" href="'+object.actions[0].link+'"><i class="icon-facebook-sign icon-2x icon-muted"></i></a>';
             }
