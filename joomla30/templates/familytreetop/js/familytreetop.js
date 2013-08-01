@@ -6,7 +6,7 @@
             config:{
                 appId:false,
                 status: true,
-                coockie: true,
+                cookie: true,
                 oauth: true
             },
             data:false,

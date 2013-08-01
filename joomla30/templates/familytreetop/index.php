@@ -740,21 +740,17 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
     if(!$FamilyTreeTop.app.config.appId){
         console.log('Facebook App Id doesn\'t exist');
     } else {
-        window.fbAsyncInit = function() {
-            // init the FB JS SDK
-            FB.init($FamilyTreeTop.app.config);
-            FB.getLoginStatus(function(response){
-                console.log(response);
-                $FamilyTreeTop.init();
-            }, true);
-        };
-        (function(d, s, id){
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) {return;}
-            js = d.createElement(s); js.id = id;
-            js.src = "//connect.facebook.net/en_US/all.js";
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
+        jQuery(document).ready(function() {
+            $.ajaxSetup({ cache: true });
+            $.getScript('//connect.facebook.net/en_UK/all.js', function(){
+                FB.init($FamilyTreeTop.app.config);
+                FB.getLoginStatus(function(response){
+                    console.log(FB.getAuthResponse());
+                    console.log(FB.getLoginStatus());
+                    $FamilyTreeTop.init();
+                }, true);
+            });
+        });
     }
 </script>
 </body>
