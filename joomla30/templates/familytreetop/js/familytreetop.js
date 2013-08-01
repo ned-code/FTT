@@ -7,7 +7,7 @@
                 appId:false,
                 status: true,
                 coockie: true,
-                xfbml: true
+                oauth: true
             },
             data:false,
             permissions:false
@@ -30,8 +30,11 @@
         this.dataString = "";
         this.userString = "";
         this.facebookString = "";
+        this.facebookAccessToken = "";
 
         this.languagesString = "";
+
+
     }
 
     $FamilyTreeTop.prototype.fn = {
@@ -42,6 +45,9 @@
                 type: "POST",
                 dataType:"json"
             }).done(callback);
+        },
+        accessToken: function(){
+            return this.facebookAccessToken;
         },
         mod: function(name){
             return w.$FamilyTreeTop.mod(name);

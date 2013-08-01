@@ -10,8 +10,8 @@ require_once JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familyt
 require_once JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familytreetop/helpers/languages.php';
 
 ActiverecrdHelper::getInstance();
-FacebookHelper::getInstance();
 FamilyTreeTopSettingsHelper::getInstance();
+$facebook = FacebookHelper::getInstance()->facebook;
 
 // Getting params from template
 $params = JFactory::getApplication()->getTemplate(true)->params;
@@ -31,8 +31,6 @@ $doc->addStyleSheet('templates/'.$this->template.'/css/csstreeview.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/csstreeview.fix.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/tdfriendselector.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/familytreetop.css');
-
-
 
 // Add current user information
 $user = JFactory::getUser();
@@ -58,6 +56,8 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
     $FamilyTreeTop.app.config.appId = '<?=$settings->facebook_app_id->value;?>';
     $FamilyTreeTop.app.permissions = '<?=$settings->facebook_permission->value;?>';
     $FamilyTreeTop.app.data = '<?=json_encode(FacebookHelper::getInstance()->data); ?>';
+
+    $FamilyTreeTop.facebookAccessToken = '<?=$facebook->getAccessToken();?>';
 
     $FamilyTreeTop.users = '<?=GedcomHelper::getInstance()->getTreeUsers(true, true);?>';
 
@@ -744,16 +744,17 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
             // init the FB JS SDK
             FB.init($FamilyTreeTop.app.config);
             FB.getLoginStatus(function(response){
+                console.log(response);
                 $FamilyTreeTop.init();
-            });
+            }, true);
         };
-        (function(d, debug){
-            var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+        (function(d, s, id){
+            var js, fjs = d.getElementsByTagName(s)[0];
             if (d.getElementById(id)) {return;}
-            js = d.createElement('script'); js.id = id; js.async = true;
-            js.src = "//connect.facebook.net/en_US/all" + (debug ? "/debug" : "") + ".js";
-            ref.parentNode.insertBefore(js, ref);
-        }(document, /*debug*/ false));
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/en_US/all.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
     }
 </script>
 </body>

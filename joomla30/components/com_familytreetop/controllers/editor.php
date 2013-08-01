@@ -491,7 +491,6 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         $type = $app->input->post->get('type', false);
         switch((int)$type){
             case 1:
-
                 break;
             case 2:
                 break;
