@@ -100,8 +100,6 @@ class FamilyTreeTopGedcomIndividualsModel {
 
     public function delete(){
         $gedcom = GedcomHelper::getInstance();
-        return false;
-        /*
         if(empty($this->id)) return false;
         $user = FamilyTreeTopIndividuals::find_by_gedcom_id($this->gedcom_id);
         $user->delete();
@@ -111,7 +109,6 @@ class FamilyTreeTopGedcomIndividualsModel {
         }
 
         $gedcom->individuals->removeFromList($this->gedcom_id);
-        */
     }
 
     public function clear(){
