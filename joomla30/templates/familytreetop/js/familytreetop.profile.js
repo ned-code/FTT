@@ -254,6 +254,7 @@ $FamilyTreeTop.create("profile", function($){
             }
             function calcPointsOffset(){
                 var _vehicle = _getVehicle_();
+                if("undefined" === typeof(_vehicle)) return false;
                 _setOffset_(_vehicle.pos);
                 _setOffset_(_vehicle.pos, -1);
                 _setOffset_(_vehicle.pos, 1);

@@ -12,7 +12,8 @@ $FamilyTreeTop.create("editor", function($){
                 _initHideButton_('delete');
                 _initDeleteOptionsButton_(function(){
                     var option = $(this).attr('option');
-                    $this.ajax('editor.delete', {type:option}, function(res){
+                    console.log(ind.gedcom_id);
+                    $this.ajax('editor.delete', {type:option, gedcom_id: ind.gedcom_id}, function(res){
 
                     });
                 });

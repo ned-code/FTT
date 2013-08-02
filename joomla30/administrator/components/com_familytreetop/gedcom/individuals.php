@@ -137,7 +137,8 @@ class FamilyTreeTopGedcomIndividualsModel {
     }
 
     public function unregister(){
-
+        $user = FamilyTreeTopUsers::find_by_gedcom_id($this->gedcom_id);
+        $user->remove();
     }
 
     public function save(){

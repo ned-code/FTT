@@ -489,15 +489,17 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         $app = JFactory::getApplication();
         $gedcom = GedcomHelper::getInstance();
         $type = $app->input->post->get('type', false);
+        $gedcom_id = $app->input->post->get('gedcom_id', false);
         switch((int)$type){
             case 1:
+
                 break;
             case 2:
                 break;
             case 3:
                 break;
         }
-        echo json_encode(array('res'=>$option));
+        echo json_encode(array('res'=>$option, 'gedcom_id'=>$gedcom_id));
         exit;
     }
 
