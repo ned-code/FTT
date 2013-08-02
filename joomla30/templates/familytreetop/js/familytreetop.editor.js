@@ -448,7 +448,7 @@ $FamilyTreeTop.create("editor", function($){
         editOptionsForm = $fn.getEditorOptionsForm();
         $fn.setFormInTab(3, tabs, editOptionsForm);
         $fn.setOptions(editOptionsForm, ind, function(){
-            $(cl).modal('close');
+            $(cl).modal('hide');
         });
 
         //init modal

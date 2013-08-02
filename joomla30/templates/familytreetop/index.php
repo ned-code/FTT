@@ -1,6 +1,5 @@
 <?php
 defined('_JEXEC') or die;
-
 require_once JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familytreetop/helpers/settings.php';
 require_once JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familytreetop/helpers/activerecord.php';
 require_once JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familytreetop/helpers/facebook.php';
@@ -20,7 +19,7 @@ $app = JFactory::getApplication();
 $doc = JFactory::getDocument();
 
 $doc->addStyleSheet('templates/'.$this->template.'/css/bootstrap.min.css');
-$doc->addStyleSheet('templates/'.$this->template.'/css/bootstrap-responsive.min.css');
+//$doc->addStyleSheet('templates/'.$this->template.'/css/bootstrap-responsive.min.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/bootstrap-combined.no-icons.min.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/font-awesome.css');
 //$doc->addStyleSheet('templates/'.$this->template.'/css/bootstrap.icon-large.min.css');
@@ -36,6 +35,7 @@ $doc->addStyleSheet('templates/'.$this->template.'/css/familytreetop.css');
 $user = JFactory::getUser();
 // Add familytreetop settings
 $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
+
 ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->language; ?>" lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>">
@@ -704,7 +704,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
 </script>
 <!-- friend selector end -->
 <jdoc:include type="modules" name="debug" style="none" />
-<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/jquery-1.9.1.min.js"></script>
+<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/jquery-2.0.3.min.js"></script>
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/bootstrap.min.js"></script>
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/bootstrap-scroll-modal.js"></script>
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/tdfriendselector.js"></script>
