@@ -233,7 +233,8 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
         </div>
         <div class="modal-footer">
             <button class="btn" data-dismiss="modal" aria-hidden="true"><?=JText::_("TPL_FAMILYTREETOP_MODAL_CLOSE");?></button>
-            <button familytreetop="submit" class="btn btn-primary"><?=JText::_("TPL_FAMILYTREETOP_MODAL_SAVE_CHANGES");?></button>
+            <button familytreetop="submit" class="btn"><?=JText::_("TPL_FAMILYTREETOP_MODAL_SAVE");?></button>
+            <button familytreetop="submit" class="btn btn-primary"><?=JText::_("TPL_FAMILYTREETOP_MODAL_SAVE_AND_CLOSE");?></button>
         </div>
     </div>
 

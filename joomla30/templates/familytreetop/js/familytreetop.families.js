@@ -185,7 +185,7 @@ $FamilyTreeTop.create("families", function($){
                 return (step - 1) * 110 + margin;
                 function _getStepLength_(limit, length){
                     var len = length - limit;
-                    if(len <= limit){
+                    if(len <= limit || limit == 0){
                         return len;
                     }
                     return _getStepLength_(limit, len);

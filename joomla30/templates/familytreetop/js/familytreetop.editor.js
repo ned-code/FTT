@@ -350,7 +350,8 @@ $FamilyTreeTop.create("editor", function($){
                 'editor.updateUnionsInfo'
             ];
             $(cl).find('button[familytreetop="submit"]').click(function(){
-                var args, send, activeTab;
+                var args, send, activeTab, saveButton;
+                saveButton = $(this).hasClass('btn-primary');
                 if("undefined" === typeof(task)){
                     activeTab = $(cl).find('.nav.nav-tabs li.active a').attr('href').split('_')[1];
                     if("undefined" === typeof(tasks[activeTab])) return false;
@@ -362,7 +363,9 @@ $FamilyTreeTop.create("editor", function($){
                 }
                 $this.ajax(send, args, function(response){
                     $this.mod('usertree').update(response);
-                    $(cl).modal('hide');
+                    if(saveButton){
+                        $(cl).modal('hide');
+                    }
                 });
             });
         }

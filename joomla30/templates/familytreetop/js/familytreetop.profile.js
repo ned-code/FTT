@@ -530,7 +530,6 @@ $FamilyTreeTop.create("profile", function($){
             $this.mod('friendselector').render(gedcom_id);
         });
 
-
         $fn.setAbout.call(parent, args);
         $fn.setPhotos.call(parent, args);
         $(parent).on('shown', function(){
