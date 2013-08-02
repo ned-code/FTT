@@ -5,16 +5,15 @@ $FamilyTreeTop.create("editor", function($){
         $fn;
 
     $fn = {
-        setOptions: function(parent, ind){
+        setOptions: function(parent, ind, callback){
             var active = false;
             $(parent).find('[familytreetop-button="delete"]').click(function(){
                 _init_('delete');
                 _initHideButton_('delete');
                 _initDeleteOptionsButton_(function(){
                     var option = $(this).attr('option');
-                    console.log(ind.gedcom_id);
                     $this.ajax('editor.delete', {type:option, gedcom_id: ind.gedcom_id}, function(res){
-
+                        callback(res);
                     });
                 });
             });
@@ -448,7 +447,9 @@ $FamilyTreeTop.create("editor", function($){
         //options
         editOptionsForm = $fn.getEditorOptionsForm();
         $fn.setFormInTab(3, tabs, editOptionsForm);
-        $fn.setOptions(editOptionsForm, ind);
+        $fn.setOptions(editOptionsForm, ind, function(){
+            $(cl).modal('close');
+        });
 
         //init modal
         $(cl).modal({dynamic:true});

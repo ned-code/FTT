@@ -745,8 +745,6 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
             $.getScript('//connect.facebook.net/en_UK/all.js', function(){
                 FB.init($FamilyTreeTop.app.config);
                 FB.getLoginStatus(function(response){
-                    console.log(FB.getAuthResponse());
-                    console.log(FB.getLoginStatus());
                     $FamilyTreeTop.init();
                 }, true);
             });
