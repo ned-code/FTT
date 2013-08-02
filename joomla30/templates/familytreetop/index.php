@@ -22,7 +22,7 @@ $doc->addStyleSheet('templates/'.$this->template.'/css/bootstrap.min.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/bootstrap-responsive.min.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/bootstrap-combined.no-icons.min.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/font-awesome.css');
-$doc->addStyleSheet('templates/'.$this->template.'/css/bootstrap.icon-large.min.css');
+//$doc->addStyleSheet('templates/'.$this->template.'/css/bootstrap.icon-large.min.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/bootstrap-scroll-modal.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/bootstrap.fix.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/jquery.fileupload-ui.css');
