@@ -100,9 +100,8 @@ class FamilyTreeTopGedcomIndividualsModel {
 
     public function delete(){
         $gedcom = GedcomHelper::getInstance();
-
         if(empty($this->id)) return false;
-        $user = FamilyTreeTopIndividuals::find_by_pk($this->id);
+        $user = FamilyTreeTopIndividuals::find_by_gedcom_id($this->gedcom_id);
         $user->delete();
 
         if($this->facebook_id != 0){
@@ -114,14 +113,21 @@ class FamilyTreeTopGedcomIndividualsModel {
 
     public function clear(){
         $gedcom = GedcomHelper::getInstance();
+        $date = JFactory::getDate();
 
         $name = FamilyTreeTopNames::find_by_gedcom_id($this->gedcom_id);
         $name->first_name = "unknown";
         $name->middle_name = "";
         $name->last_name = "";
         $name->know_as = "";
-        $name->change_time = $ind->change_time;
+        $name->change_time = $date->toSql();
         $name->save();
+
+        $this->first_name = $name->first_name;
+        $this->middle_name = $name->middle_name;
+        $this->last_name = $name->last_name;
+        $this->know_as = $name->know_as;
+        $this->change_time = $name->change_time;
 
         if(!empty($this->events)){
             foreach($this->events as $event){
@@ -129,15 +135,12 @@ class FamilyTreeTopGedcomIndividualsModel {
             }
         }
 
-        if($this->facebook_id != 0){
-            $this->unregister();
-        }
-
         $gedcom->individuals->updateList($this);
     }
 
     public function unregister(){
-
+        $user = FamilyTreeTopUsers::find_by_gedcom_id($this->gedcom_id);
+        $user->remove();
     }
 
     public function save(){

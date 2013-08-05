@@ -149,7 +149,7 @@ $FamilyTreeTop.create("families", function($){
                 p1 = getNum.call($(boxes[0]).css('left'));
                 p2 = getNum.call($(boxes[1]).css('left'));
                 return ((p1 + k) + ((p2 - (p1 + k))/2 - (w/2)));
-                function getNum(){ return parseInt(this.replace(/[^-\d\.]/g, '')); };
+                function getNum(){ return ("undefined"!==typeof(this))?parseInt(this.replace(/[^-\d\.]/g, '')):0; };
                 function getTextWidth(font){
                     var f = font || '14px "Helvetica Neue",Helvetica,Arial,sans-serif',
                         o = $('<div>' + (this).html() + '</div>')
@@ -185,7 +185,7 @@ $FamilyTreeTop.create("families", function($){
                 return (step - 1) * 110 + margin;
                 function _getStepLength_(limit, length){
                     var len = length - limit;
-                    if(len <= limit){
+                    if(len <= limit || limit == 0){
                         return len;
                     }
                     return _getStepLength_(limit, len);

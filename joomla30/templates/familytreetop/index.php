@@ -1,6 +1,5 @@
 <?php
 defined('_JEXEC') or die;
-
 require_once JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familytreetop/helpers/settings.php';
 require_once JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familytreetop/helpers/activerecord.php';
 require_once JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familytreetop/helpers/facebook.php';
@@ -36,6 +35,7 @@ $doc->addStyleSheet('templates/'.$this->template.'/css/familytreetop.css');
 $user = JFactory::getUser();
 // Add familytreetop settings
 $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
+
 ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->language; ?>" lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>">
@@ -44,7 +44,6 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
     <noscript><link rel="stylesheet" href="templates/<?=$this->template;?>/css/jquery.fileupload-ui-noscript.css"></noscript>
     <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/holder.js"></script>
     <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/excanvas.js"></script>
-    <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/jit.js"></script>
     <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.js"></script>
 	<jdoc:include type="head" />
 	<!--[if lt IE 9]>
@@ -234,7 +233,8 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
         </div>
         <div class="modal-footer">
             <button class="btn" data-dismiss="modal" aria-hidden="true"><?=JText::_("TPL_FAMILYTREETOP_MODAL_CLOSE");?></button>
-            <button familytreetop="submit" class="btn btn-primary"><?=JText::_("TPL_FAMILYTREETOP_MODAL_SAVE_CHANGES");?></button>
+            <button familytreetop="submit" class="btn"><?=JText::_("TPL_FAMILYTREETOP_MODAL_SAVE");?></button>
+            <button familytreetop="submit" class="btn btn-primary"><?=JText::_("TPL_FAMILYTREETOP_MODAL_SAVE_AND_CLOSE");?></button>
         </div>
     </div>
 
@@ -704,7 +704,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
 </script>
 <!-- friend selector end -->
 <jdoc:include type="modules" name="debug" style="none" />
-<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/jquery-1.9.1.min.js"></script>
+<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/jquery-2.0.3.min.js"></script>
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/bootstrap.min.js"></script>
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/bootstrap-scroll-modal.js"></script>
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/tdfriendselector.js"></script>
@@ -745,7 +745,6 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
             $.getScript('//connect.facebook.net/en_UK/all.js', function(){
                 FB.init($FamilyTreeTop.app.config);
                 FB.getLoginStatus(function(response){
-                    //console.log("FB.getUserID()",FB.getUserID());console.log("FB.getAccessToken()",FB.getAccessToken());console.log("FB.getAuthResponse()",FB.getAuthResponse());console.log("FB.getLoginStatus()",FB.getLoginStatus());
                     $FamilyTreeTop.init();
                 }, true);
             });

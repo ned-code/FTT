@@ -5,15 +5,15 @@ $FamilyTreeTop.create("editor", function($){
         $fn;
 
     $fn = {
-        setOptions: function(parent, ind){
+        setOptions: function(parent, ind, callback){
             var active = false;
             $(parent).find('[familytreetop-button="delete"]').click(function(){
                 _init_('delete');
                 _initHideButton_('delete');
                 _initDeleteOptionsButton_(function(){
                     var option = $(this).attr('option');
-                    $this.ajax('editor.delete', {type:option}, function(res){
-
+                    $this.ajax('editor.delete', {type:option, gedcom_id: ind.gedcom_id}, function(res){
+                        callback(res);
                     });
                 });
             });
@@ -350,7 +350,8 @@ $FamilyTreeTop.create("editor", function($){
                 'editor.updateUnionsInfo'
             ];
             $(cl).find('button[familytreetop="submit"]').click(function(){
-                var args, send, activeTab;
+                var args, send, activeTab, saveButton;
+                saveButton = $(this).hasClass('btn-primary');
                 if("undefined" === typeof(task)){
                     activeTab = $(cl).find('.nav.nav-tabs li.active a').attr('href').split('_')[1];
                     if("undefined" === typeof(tasks[activeTab])) return false;
@@ -362,7 +363,9 @@ $FamilyTreeTop.create("editor", function($){
                 }
                 $this.ajax(send, args, function(response){
                     $this.mod('usertree').update(response);
-                    $(cl).modal('hide');
+                    if(saveButton){
+                        $(cl).modal('hide');
+                    }
                 });
             });
         }
@@ -447,7 +450,9 @@ $FamilyTreeTop.create("editor", function($){
         //options
         editOptionsForm = $fn.getEditorOptionsForm();
         $fn.setFormInTab(3, tabs, editOptionsForm);
-        $fn.setOptions(editOptionsForm, ind);
+        $fn.setOptions(editOptionsForm, ind, function(){
+            $(cl).modal('hide');
+        });
 
         //init modal
         $(cl).modal({dynamic:true});

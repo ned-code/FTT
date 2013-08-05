@@ -254,6 +254,7 @@ $FamilyTreeTop.create("profile", function($){
             }
             function calcPointsOffset(){
                 var _vehicle = _getVehicle_();
+                if("undefined" === typeof(_vehicle)) return false;
                 _setOffset_(_vehicle.pos);
                 _setOffset_(_vehicle.pos, -1);
                 _setOffset_(_vehicle.pos, 1);
@@ -528,7 +529,6 @@ $FamilyTreeTop.create("profile", function($){
             $(parent).modal('hide');
             $this.mod('friendselector').render(gedcom_id);
         });
-
 
         $fn.setAbout.call(parent, args);
         $fn.setPhotos.call(parent, args);

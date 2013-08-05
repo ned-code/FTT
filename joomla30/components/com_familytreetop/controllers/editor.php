@@ -488,16 +488,23 @@ class FamilytreetopControllerEditor extends FamilytreetopController
     public function delete(){
         $app = JFactory::getApplication();
         $gedcom = GedcomHelper::getInstance();
+
         $type = $app->input->post->get('type', false);
+        $gedcom_id = $app->input->post->get('gedcom_id', false);
+
+        $user = $gedcom->individuals->get($gedcom_id);
         switch((int)$type){
             case 1:
+                $user->unregister();
                 break;
             case 2:
+                $user->clear();
                 break;
             case 3:
+                $user->delete();
                 break;
         }
-        echo json_encode(array('res'=>$option));
+        echo json_encode(array('user'=>$user));
         exit;
     }
 
