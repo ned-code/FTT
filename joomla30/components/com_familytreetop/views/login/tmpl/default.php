@@ -27,7 +27,6 @@ defined('_JEXEC') or die;
         var $this = this, load;
         load = function(el, args){
             $this.ajax('user.activate', args, function(response){
-                $(el).button('complete');
                 if(response.auth == true){
                     window.location.href = "<?=JRoute::_("index.php?option=com_familytreetop&view=myfamily", false);?>";
                 } else if("undefined" !== response.url){
@@ -43,7 +42,6 @@ defined('_JEXEC') or die;
 
         $("#login").click(function(){
             var auth;
-            $(this).button('loading');
             if( (auth = FB.getAuthResponse()) == null){
                 FB.login(function(response){
                     if(response.status == "connected"){
