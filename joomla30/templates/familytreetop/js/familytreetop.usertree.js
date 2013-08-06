@@ -186,11 +186,8 @@ $FamilyTreeTop.create("usertree", function($){
             proxyRelation: (function(){
                 var relation = $this.getRelationId(ind.gedcom_id);
                 if("object" === typeof(relation)){
-                    var o1 = _name_(relation[0].obj.target_id),
-                        o2 = _name_(relation[1].obj.target_id),
-                        r1 = $this.getRelation(relation[0].obj.target_id),
-                        r2 = $this.getRelation(relation[1].obj.target_id);
-                    return o2 + " is the " + $this.getRelationName(r2) + " of your " + $this.getRelationName(r1);
+                    var n = _name_(relation[1].obj.target_id), rn = $this.getRelationName($this.getRelation(ind.gedcom_id), true);
+                    return n + " is the " + rn;
                 } else {
                     if("undefined" !== typeof(relation)){
                         var rel = $this.getRelation(ind.gedcom_id);
@@ -655,6 +652,24 @@ $FamilyTreeTop.create("usertree", function($){
         return $name.join(' ').replace(/[ \t]{2,}/g, ' ');
     }
 
+    $this.getRelName = function(obj, id, suffix, postfix){
+        var val = data.rel["_NAMES"][id], name;
+        if(data.rel != null && "undefined" !== typeof(val)){
+            name = $('#relations').find('[data-familytreetop="'+val.name+'"]').text()
+            return ((_is_(suffix))?_getSuffix_(obj):"") + " " + name + " " + ((_is_(postfix))?_getPostfix_(obj):"");
+        }
+        return false;
+        function _is_(k){
+            return "undefined" === typeof(k) || ( "undefined"!==typeof(k)&&k );
+        }
+        function _getSuffix_(o){
+            return (o.json!=null&&"undefined"!=typeof(o.json.suffix))?o.json.suffix:"";
+        }
+        function _getPostfix_(o){
+            return (parseInt(o.in_law))?"in-law":"";
+        }
+    }
+
     $this.getRelationName = function(object, flag){
         var rel = $this.getRelationId(object.target_id), name;
         if("object" === typeof(rel) && "undefined" !== typeof(flag)){
@@ -668,23 +683,8 @@ $FamilyTreeTop.create("usertree", function($){
         }
         return (name)?name:"undefined";
         function _getName_(obj, id, suffix, postfix){
-            var val = data.rel["_NAMES"][id], name;
-            if(data.rel != null && "undefined" !== typeof(val)){
-                name = $('#relations').find('[data-familytreetop="'+val.name+'"]').text()
-                return ((_is_(suffix))?_getSuffix_(obj):"") + " " + name + " " + ((_is_(postfix))?_getPostfix_(obj):"");
-            }
-            return false;
+            return $this.getRelName(obj, id, suffix, postfix);
         }
-        function _is_(k){
-            return "undefined" === typeof(k) || ( "undefined"!==typeof(k)&&k );
-        }
-        function _getSuffix_(o){
-            return (o.json!=null&&"undefined"!=typeof(o.json.suffix))?o.json.suffix:"";
-        }
-        function _getPostfix_(o){
-            return (parseInt(o.in_law))?"in-law":"";
-        }
-
     }
 
 
