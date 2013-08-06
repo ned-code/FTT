@@ -88,8 +88,6 @@ class FamilytreetopControllerUser extends FamilytreetopController
                     return;
                 } else {
                     echo json_encode(array('auth'=>$response));
-
-                    var_dump($redirect);
                     exit;
                 }
             }
