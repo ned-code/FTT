@@ -38,7 +38,7 @@ if($session->get('famous')){
             <div  id="navProfileUser" class="nav-collapse collapse">
                 <ul class="nav">
                     <li <?=($view=="myfamily")?'class="active"':''; ?> > <a href="<?=JRoute::_("index.php?option=com_familytreetop&view=myfamily", false); ?>"><?=JText::_('MOD_FTT_NAVBAR_MENU_MY_FAMILY');?></a></li>
-                    <li <?=($view=="famous")?'class="active"':''; ?> ><a href="<?=JRoute::_("index.php?option=com_familytreetop&view=famous", false); ?>"><?=JText::_('MOD_FTT_NAVBAR_MENU_FAMOUS_FAMILY');?></a></li>
+                    <!--<li <?=($view=="famous")?'class="active"':''; ?> ><a href="<?=JRoute::_("index.php?option=com_familytreetop&view=famous", false); ?>"><?=JText::_('MOD_FTT_NAVBAR_MENU_FAMOUS_FAMILY');?></a></li>-->
                     <li <?=($view=="index")?'class="active"':''; ?> ><a href="<?=JRoute::_("index.php?option=com_familytreetop&view=index", false); ?>"><?=JText::_('MOD_FTT_NAVBAR_MENU_HOME');?></a></li>
                     <li class="visible-phone"><a familytreetop="profile" href="#"><?=JText::_('MOD_FTT_NAVBAR_MENU_PROFILE');?></a></li>
                     <li class="visible-phone"><a familytreetop="about" href="#"><?=JText::_('MOD_FTT_NAVBAR_MENU_ABOUT');?></a></li>
