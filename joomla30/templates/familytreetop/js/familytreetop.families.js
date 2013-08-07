@@ -79,8 +79,27 @@ $FamilyTreeTop.create("families", function($){
             var cl = $($box).find('.child-box').clone();
             return $fn.createBox(ind, cl, 'down', args);
         },
-        createEvent: function(){
-            return $('<div>...</div>');
+        createEvent: function(id1, id2){
+            var family = _getFamily_($this.mod('usertree').getFamilies(id2));
+            var event = $this.mod('usertree').getFamilyEvent(family.family_id);
+            var div = $(document.createElement('div'));
+            $(div).append(_getData_(event.date));
+            $(div).append(_getPlace_(event.place));
+            return div;
+            function _getData_(d){
+                return $(document.createElement('div')).text($this.mod('usertree').parseDate(d));
+            }
+            function _getPlace_(p){
+                return $(document.createElement('div')).text($this.mod('usertree').parsePlace(p));
+            }
+            function _getFamily_(f){
+                for(var k in f){
+                    if(!f.hasOwnProperty(k)) continue;
+                    if(f[k].wife == id1 || f[k].husb == id1){
+                        return f[k];
+                    }
+                }
+            }
         },
         setPosition: function(boxs, settings){
             if($animated) return true;
@@ -94,7 +113,7 @@ $FamilyTreeTop.create("families", function($){
                         break;
 
                     case 2:
-                        $(object).css('top', getEventTop(getTop(0))).css('left', getEventLeft(object));
+                        $(object).css('top', getEventTop(object, getTop(0))).css('left', getEventLeft(object));
                         break;
 
                     default:
@@ -126,8 +145,21 @@ $FamilyTreeTop.create("families", function($){
                 var height = (getRows()[0] * 270);
                 return height * 0.1 + 285 + height;
             }
-            function getEventTop(top){
-                return top + 50;
+            function getEventTop(obj, top){
+                var h = $(obj).height();
+                if(h == 0){
+                    h = getTextHeight.call(obj);
+                }
+                return top + Math.ceil(150/2) - h - 10;
+                function getTextHeight(font){
+                    var f = font || '14px "Helvetica Neue",Helvetica,Arial,sans-serif',
+                        o = $('<div>' + (this).html() + '</div>')
+                            .css({'position': 'absolute', 'float': 'left', 'white-space': 'nowrap', 'visibility': 'hidden', 'font': f})
+                            .appendTo($('body')),
+                        h = o.height();
+                    o.remove();
+                    return h;
+                }
             }
             function getTop(index){
                 var height = getMinHeight();
@@ -347,7 +379,7 @@ $FamilyTreeTop.create("families", function($){
 
             $fn.append(settings, $fn.createParent($start_id, settings));
             $fn.append(settings, $fn.createParent($spouses[0], settings));
-            $fn.append(settings, $fn.createEvent($spouses[0]));
+            $fn.append(settings, $fn.createEvent($start_id, $spouses[0]));
 
             $childrens.forEach(function(gedcom_id){
                 $fn.append(settings, $fn.createChild(gedcom_id, settings));
