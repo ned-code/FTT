@@ -80,8 +80,8 @@ $FamilyTreeTop.create("profile", function($){
             function renderBox(object, spouse){
                 var user = object.user;
                 var div = $('<div></div>');
-                $(div).append('<div>'+user.shortname()+'</div>')
-                $(div).append('<div style="color:dimgray;"><i class="icon-leaf"></i>'+user.relation+'</div>')
+                $(div).append('<div style="height:30px;overflow:hidden;">'+_getText_(user.shortname())+'</div>')
+                $(div).append('<div style="height:30px;color:dimgray;background:white;margin:2px;margin-top:-2px;overflow:hidden;"><i class="icon-leaf"></i>'+_getText_(user.relation)+'</div>')
                 $(div).css('position', 'absolute');
                 $(div).css('line-height', '30px');
                 $(div).css('background', getBackgroundColor(object.pos, spouse));
@@ -92,6 +92,7 @@ $FamilyTreeTop.create("profile", function($){
                 $(div).css('left', object.left + 'px');
                 $(cont).append(div);
                 return div;
+                function _getText_(t){return t.length>19?t.substring(0,19):t;}
             }
             function renderLines(object, cnvs){
                 var prew = object.prewObject;
