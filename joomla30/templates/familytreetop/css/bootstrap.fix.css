@@ -24,3 +24,6 @@
 .accordion td.familytreetop-accordion-active {
     background: #FFFF99 !important;
 }
+.familytreetop-icon-muted {
+    color: gray;
+}
