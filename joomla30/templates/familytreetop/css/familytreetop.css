@@ -52,13 +52,16 @@
     line-height: 30px;
     margin-left: 10px;
 }
+.popover-title {
+    background-color: #efe4b0;
+}
 .familytreetop-popover-footer {
     padding: 8px 14px;
     margin: 0;
     font-size: 14px;
     font-weight: normal;
     line-height: 18px;
-    background-color: #f7f7f7;
+    background-color: #efe4b0;
     border-top: 1px solid #ebebeb;
     -webkit-border-radius: 5px 5px 0 0;
     -moz-border-radius: 5px 5px 0 0;

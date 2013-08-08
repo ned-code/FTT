@@ -69,7 +69,7 @@ $FamilyTreeTop.create("popovers", function($){
             });
 
 
-            avatar = $fn.getLastObject().object.avatar(["75","75"], "media-object");
+            avatar = $fn.getLastObject().object.avatar(["75","75"], "img-polaroid");
             if($this.mod('usertree').isHolderImg(avatar)){
                 Holder.run({
                     images:avatar[0]
