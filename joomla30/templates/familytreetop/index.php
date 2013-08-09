@@ -35,8 +35,6 @@ $doc->addStyleSheet('templates/'.$this->template.'/css/familytreetop.css');
 $user = JFactory::getUser();
 // Add familytreetop settings
 $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
-
-header('Content-Type: text/html;charset=UTF-8');
 ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->language; ?>" lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>">

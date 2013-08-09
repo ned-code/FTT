@@ -206,7 +206,7 @@ $FamilyTreeTop.create("profile", function($){
                     if("undefined" !== typeof(points[(key - 1)])){
                         return points[(key-1)];
                     }
-                    return {x:0,y:0,user:false};
+                    return {x:10,y:10,user:false};
                 }
                 function _getCords_(u,k){
                     var relId = parseInt(u.relationId);
