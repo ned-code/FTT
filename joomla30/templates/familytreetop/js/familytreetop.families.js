@@ -142,8 +142,8 @@ $FamilyTreeTop.create("families", function($){
                 return [rows, limit, width];
             }
             function getMinHeight(){
-                var height = (getRows()[0] * 270);
-                return height * 0.1 + 285 + height;
+                 var height = (getRows()[0] * 170);
+                 return 250 + height + getRows()[0] * 30;
             }
             function getEventTop(obj, top){
                 var h = $(obj).height();
