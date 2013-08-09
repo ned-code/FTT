@@ -254,7 +254,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
             </div>
             <div data-familytreetop-profile="about" class="row-fluid">
                 <div class="span12">
-                    <div class="well">
+                    <div class="well" familytreetop="module">
                         <fieldset>
                             <legend><?=JText::_("TPL_FAMILYTREETOP_ABOUT");?></legend>
                             <div class="row-fluid">
@@ -275,7 +275,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
             </div>
             <div data-familytreetop-profile="relation" class="row-fluid">
                 <div class="span12">
-                    <div class="well">
+                    <div class="well" familytreetop="module">
                         <fieldset>
                             <legend><?=JText::_("TPL_FAMILYTREETOP_RELATION_MAP");?></legend>
                         </fieldset>
@@ -284,7 +284,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
             </div>
             <div data-familytreetop-profile="family" class="row-fluid">
                 <div class="span12">
-                    <div class="well">
+                    <div class="well" familytreetop="module">
                         <fieldset>
                             <legend><?=JText::_("TPL_FAMILYTREETOP_FAMILY");?></legend>
                         </fieldset>
@@ -293,7 +293,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
             </div>
             <div data-familytreetop-profile="photos" class="row-fluid">
                 <div class="span12">
-                    <div class="well">
+                    <div class="well" familytreetop="module">
                         <fieldset>
                             <legend><?=JText::_("TPL_FAMILYTREETOP_PHOTOS");?></legend>
                             <ul class="unstyled inline"></ul>
