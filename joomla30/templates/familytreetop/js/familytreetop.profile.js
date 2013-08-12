@@ -50,6 +50,7 @@ $FamilyTreeTop.create("profile", function($){
                 return false;
             }
             settings = {
+                width: $(box).width(),
                 node:{
                     width: 150,
                     height: 60
@@ -302,7 +303,7 @@ $FamilyTreeTop.create("profile", function($){
                     return settings.node.width;
                 }
                 function _getTop_(object){
-                    return (settings.node.height + 40) * _getRow_(object);
+                    return ((settings.node.height + 40) * _getRow_(object)) + 20;
                 }
                 function _getRow_(object){
                     var min = 0, max = 0, index = 0, key;
@@ -371,7 +372,24 @@ $FamilyTreeTop.create("profile", function($){
                             }
                         }
                     });
+                    _correctLeft_();
                     return true;
+                    function _correctLeft_(){
+                        var left = 0, right, ident;
+                        points.forEach(function(e,i){
+                            if(left < e.left){
+                                left = e.left;
+                            }
+                        });
+                        right = left + settings.node.width;
+                        if(right < settings.width){
+                            ident = Math.ceil((settings.width - (right))/2);
+                            points.forEach(function(e,i){
+                                e.left = e.left + ident;
+                            });
+                        }
+                        return true;
+                    }
                     function _correctPosition_(object){
                         points.forEach(function(e,i){
                             if(e.y == object.y && e.pos != object.pos){
@@ -385,7 +403,6 @@ $FamilyTreeTop.create("profile", function($){
                             }
                         });
                         return true;
-
                     }
                     function _correctLeftPosition_(left, index){
                         if(left > 0) return false;

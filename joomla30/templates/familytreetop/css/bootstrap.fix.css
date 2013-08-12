@@ -21,6 +21,7 @@
     padding: 0;
     background: #e8e8e8;
 }
+
 .accordion td.familytreetop-accordion-active {
     background: #FFFF99 !important;
 }
@@ -28,3 +29,12 @@
     color: gray;
 }
 
+.modal-header {
+    background-color: #efe4b0;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+}
+
+.modal-wrapper {
+    left: 40%;
+}
