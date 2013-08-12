@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+<joomfish type="contentelement">
+	<name>obSuggest Forum</name>
+	<author>Phong Lo</author>
+	<version>1.6</version>
+	<description>Definition for the forum of obSuggest component</description>
+	<copyright>2011 foobla</copyright>
+	<reference>
+		<table name="foobla_uv_forum">
+			<field type="referenceid" name="id" translate="0">ID</field>
+			<field type="titletext" name="name" length="60" maxlength="60" translate="1">Name</field>
+			<field type="textarea" name="description" length="50" maxlength="255" translate="1">Description</field>
+			<field type="textarea" name="wellcome_message" length="50" maxlength="250" translate="1">Wellcome message</field>
+			<field type="text" name="prompt"  length="50" maxlength="250" translate="1">Prompt</field>
+			<field type="textarea" name="example"  length="50" maxlength="250" translate="1">Example</field>
+		</table>
+  	<component>
+  		<form>com_obsuggest</form>
+  	</component>
+  </reference>
+  <translationfilters>
+	  <id>id</id>
+  </translationfilters>
+</joomfish>

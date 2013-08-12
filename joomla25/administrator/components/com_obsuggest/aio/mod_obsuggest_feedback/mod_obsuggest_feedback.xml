@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<install type="module" version="1.5" method="upgrade" client="site">
+	<name>obSuggest Feedback Button module</name>
+	<author>Thong Tran - foobla.com</author>
+	<creationDate>Mar 2012</creationDate>
+	<copyright>Copyright (C) 2007 - 2012 foobla.com. All rights reserved.</copyright>
+	<license>GNU/GPL, see LICENSE</license>
+	<authorEmail>contact@foobla.com</authorEmail>
+	<authorUrl>foobla.com</authorUrl>
+	<version>1.8.2</version>
+	<description>obSuggest::Forums module</description>
+	<files>
+		<filename module="mod_obsuggest_feedback">mod_obsuggest_feedback.xml</filename>
+		<filename module="mod_obsuggest_feedback">mod_obsuggest_feedback.php</filename>
+		<filename module="mod_obsuggest_feedback">helper.php</filename>
+		<filename module="mod_obsuggest_feedback">index.html</filename>
+		<folder>tmpl</folder>
+		<folder>elements</folder>
+		<folder>language</folder>
+		<folder>assets</folder>
+	</files>
+	<!-- Joomla 1.5 -->
+	<params addpath="/modules/mod_obsuggest_feedback/elements">
+		<param name="moduleclass_sfx" type="text" default="" label="Module Class Suffix" description="PARAMMODULECLASSSUFFIX" />
+		<param name="@spacer" type="spacer" default="" label="" description="" />
+		<param name="select_forums" type="forums" default="1" label="Select Forum" description="Select the Forums which will be shown in the Forums chooser" />
+	</params>
+	<config>
+		<fields name="params" addfieldpath="/modules/mod_obsuggest_feedback/elements/">
+			<fieldset name="basic">
+				<field name="select_forums" type="obsuggestforums" default="" label="Select Forum" description="Select the Forums which will be shown in the Forums chooser" />
+			</fieldset>
+		</fields>
+	</config>
+	<config>
+		<fields name="params">
+			<fieldset name="advanced">
+				<field name="moduleclass_sfx" type="text" default="" label="Module Class Suffix" description="PARAMMODULECLASSSUFFIX" />
+				<field name="cache" type="list" default="1" label="Caching" description="Select whether to cache the content of this module">
+					<option value="1">Use global</option>
+					<option value="0">No caching</option>
+				</field>
+				<field name="cache_time" type="text" default="900" label="Cache Time" description="The time before the module is recached" />
+			</fieldset>
+		</fields>
+	</config>
+</install>

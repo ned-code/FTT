@@ -1,0 +1,7 @@
+div.scsocialbuttons{
+    width:100%
+}
+div.scsocialbuttons div{
+    float:left;
+    margin-right:5px;
+}

@@ -1,0 +1,301 @@
+<install version="1.7" type="plugin" group="editors" >
+	<name>Editor - JoomlaCK</name>
+	<version>5.0 Stable</version>
+	<creationDate>June 2012 </creationDate>
+	<author>WebxSolution Ltd</author>
+	<authorurl>http://www.webxsolution.com</authorurl>
+	<license>GPL</license>
+	<description>Welcome to the next-generation of internet based editors. The JoomlaCK Editors performance is truly amazing, thanks to its plug-n-play state-of-the-art API engine and is much more than an Out-of-the-Box installation of the CKEditor. Weve been under the hood and Joomla-ised its logic into a seamless and extendable integration.  Users can now customise the editor from the largest growing extension base of all Joomla editors, choose what tool-bars, setup user permissions, create and edit the editors own typography style-sheet and configure the editor for real-time editing! And whats more - when you have created your bespoke configuration you can now export your setting via the all new JCK Manager component!
+</description>
+	<files>
+		<filename plugin="jckeditor">jckeditor.php</filename>
+		<folder>jckeditor</folder>
+	</files>
+	<languages>
+	<language tag="en-GB">language/en-GB/en-GB.plg_editors_jckeditor.ini</language>
+	</languages>
+	<scriptfile>install.php</scriptfile>
+	<params>
+		<param name="toolbar" type="list" default="Full" label="PLG_JCK_ADMINISTRATOR_END_TOOLBAR MODE" description="PLG_JCK_FUNCTIONBK">
+			<option value="Full">Full</option>
+			<option value="Publisher">Publisher</option>
+			<option value="Basic">Basic</option>
+			<option value="Blog">Blog</option>
+			<option value="Image">Image</option>
+		</param>
+		<param name="toolbar_ft" type="list" default="Full" label="PLG_JCK_FRONTEND_TOOLBAR_MODE" description="PLG_JCK_FUNCTIONFT">
+			<option value="Full">Full</option>
+			<option value="Publisher">Publisher</option>
+			<option value="Basic">Basic</option>
+			<option value="Blog">Blog</option>
+			<option value="Image">Image</option>
+		</param>
+		<param name="uicolor" type="text"  class="color" default="#D6E6F4" label="PLG_JCK_TOOLBAR_COLOUR" description="PLG_JCK_TOOLBAR_COLOUR_DESC" />
+		<param name="skin" type="list" default="office2007" label="PLG_JCK_SKIN" description="PLG_JCK_EDITORSKIN">
+			<option value="office2007">Office2007</option>
+			<option value="kama">Kama</option>
+		</param>
+		<param name="content_css" type="radio" default="1" label="PLG_JCK_USE_TEMPLATE_CSS_CLASSES" description="PLG_JCK_LOADCSSTMPT">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+		<param name="editor_css" type="radio" default="0" label="PLG_JCK_USE_EDITOR_CSS_CLASSES" description="PLG_JCK_LOADCSSED">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+		<param name="content_css_custom" type="text" default="" label="PLG_JCK_USE_CUSTOM_CSS_CLASSES" description="PLG_JCK_CUSLOADCSS" />
+		<param name="imagePath" type="text" default="images" label="PLG_JCK_LOCATION_OF_THE_IMAGES" description="PLG_JCK_IMGPATH" />
+		<param name="flashPath" type="text" default="images/flash" label="PLG_JCK_LOCATION_OF_THE_FLASH" description="PLG_JCK_FLAPATH" />
+		<param name="filePath" type="text" default="files" label="PLG_JCK_LOCATION_OF_THE_DOCS" description="PLG_JCK_FILEPATH" />
+		<param name="entermode" type="list" default="1" label="PLG_JCK_ENTER_MODE" description="PLG_JCK_DESCENTERMODE">
+			<option value="1">P Elements</option>
+			<option value="2">BR Elements</option>
+			<option value="3">Div Elements</option>
+		</param>
+		<param name="shiftentermode" type="list" default="2" label="PLG_JCK_SHIFT_ENTER_MODE" description="PLG_JCK_DESCSHIFTENTERMODE">
+			<option value="1">P Elements</option>
+			<option value="2">BR Elements</option>
+			<option value="3">Div Elements</option>
+		</param>
+		<param name="wwidth" type="text" default="" label="PLG_JCK_WIDTH" description="PLG_JCK_WIDTH_DESC" />
+		<param name="hheight" type="text" default="" label="PLG_JCK_HEIGHT" description="PLG_JCK_HEIGHT_DESC" />
+	</params>
+	<params group="advanced">
+		<param name="showerrors" type="radio" default="1" label="PLG_JCK_DISPLAY_ERRORS" description="PLG_JCK_DESCSHOWERROR">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+		<param name="lang_mode" type="radio" default="1" label="PLG_JCK_LANGUAGE_SELECTION_MODE" description="PLG_JCK_DESCLANGMODE">
+			<option value="0">Manual</option>
+			<option value="1">Joomla! Default</option>
+			<option value="2">Browser Default</option>
+		</param>
+		<param name="lang_code" type="text" default="en" label="PLG_JCK_LANGUAGE_CODE" description="PLG_JCK_DESCLANGCODE" />
+		<param name="@spacer" type="spacer" default="" label="" description="" />
+		<param name="bgcolor" type="text" class="color" default="#FFFFFF" label="PLG_JCK_BACKGROUND_COLOUR" description="PLG_JCK_DESCBKCOLOR" />
+		<param name="ftcolor" type="text" class="color" default="" label="PLG_JCK_FONT_COLOUR" description="PLG_JCK_DESCCOLOR" />
+		<param name="ftsize" type="list" class="combobox" default="" label="Font Size" description="Font Size" >
+			<option value="8">8</option>
+			<option value="9">9</option>
+			<option value="10">10</option>
+			<option value="11">11</option>
+			<option value="12">12</option>
+			<option value="14">14</option>
+			<option value="16">16</option>
+			<option value="18">18</option>
+			<option value="20">20</option>
+			<option value="22">22</option>
+			<option value="24">24</option>
+			<option value="26">26</option>
+			<option value="28">28</option>
+			<option value="36">36</option>
+			<option value="48">48</option>
+			<option value="72">72</option>
+		</param>
+		<param name="ftfamily" type="list" class="combobox" default="" label="Font Family" description="Font Family">
+			<option value="Arial">Arial</option>
+			<option value="Comic Sans MS">Comic Sans MS</option>
+			<option value="Courier">Courier</option>
+			<option value="Courier New">Courier New</option>
+			<option value="Geneva">Geneva</option>
+			<option value="Helvetica">Helvetica</option>
+			<option value="sans-serif">sans-serif</option>
+			<option value="Tahoma">Tahoma</option>
+			<option value="Times New Roman">Times New Roman</option>
+			<option value="Trebuchet MS">Trebuchet MS</option>
+			<option value="Verdana">Verdana</option>
+		</param>
+		<param name="textalign" type="list" default="0" label="PLG_JCK_TXT_ALIGNMENT" description="PLG_JCK_TXT_ALIGNMENT_DESC">
+			<option value="0">Default</option>
+			<option value="left">Left</option>
+			<option value="center">Center</option>
+			<option value="right">Right</option>
+			<option value="justify">Justify</option>
+			<option value="inherit">Inherit</option>
+		</param>
+		<param name="entities" type="radio" default="1" label="PLG_JCK_PROCESS_HTML_ENTITIES" description="PLG_JCK_DESCPROCHTMLENT">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+		<param name="formatsource" type="radio" default="1" label="PLG_JCK_AUTO_FORMAT_SOURCE" description="PLG_JCK_FMTSRC">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+		<param name="returnScript" type="radio" default="1" label="PLG_JCK_AUTO_LOAD" description="PLG_JCK_AUTO_LOAD_DESC" >
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+		<param name="useUserFolders" type="radio" default="0" label="PLG_JCK_USE_USER_FOLDERS" description="PLG_JCK_DESCUSERFOLDER">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+		<param name="userFolderType" type="list" default="username" label="PLG_JCK_USER_FOLDER_TYPE" description="PLG_JCK_USER_FOLDER_TYPE_DESC">
+			<option value="username">UserName</option>
+			<option value="id">ID</option>
+		</param>
+		<param name="forcesimpleAmpersand" type="list" default="0" label="PLG_JCK_FORCE_SIMPLE_AMPERSAND" description="PLG_JCK_FORCE_SIMPLE_AMPERSAND_DESC">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+		<param name="startupFocus" type="list" default="0" label="PLG_JCK_STARTUP_FOCUS" description="PLG_JCK_STARTUP_FOCUS_DESC">
+				<option value="0">No</option>
+				<option value="1">Yes</option>
+		</param>
+		<param name="EnableImageDragndrop" type="list" default="1" label="PLG_JCK_IMAGE_DRAGNDROP" description="PLG_JCK_IMAGE_DRAGNDROP_DESC">
+				<option value="0">No</option>
+				<option value="1">Yes</option>
+		</param>
+		<param type="spacer" name="" default="&lt;link rel='stylesheet' href='../media/system/css/modal.css' type='text/css'/&gt;"  label="" description="" />
+		<param type="spacer" name="" default=" &lt;hr/&gt;&lt;script src='../media/system/js/modal.js' type='text/javascript'&gt;&lt;/script&gt;"  label="" description="" />
+		<param name="jcktypography" type="list" default="1" label="Load JCK typography" description="This option determines if the JCK typography stylesheet is loaded up for the editor and your default template">
+				<option value="0">No</option>
+				<option value="1">Yes</option>
+		</param>
+		<param name="jcktypographycontent" type="textarea" class="typography"  cols="45" rows="20" default="" label="Edit JCK typography" description="Edit if you want to change the JCK typography styles"/>
+		<param type="spacer" name="" default="&lt;script src='../plugins/editors/jckeditor/fields/stylesheettextarea.js' type='text/javascript'&gt;&lt;/script&gt;"  label="" description="" />
+		<param type="spacer" name="" default="&lt;hr/&gt;&lt;script src='../plugins/editors/jckeditor/jscolor/jscolor.js' type='text/javascript'&gt;&lt;/script&gt;"  label="" description="" />
+		<param type="spacer" name="" default="&lt;script src='../plugins/editors/jckeditor/fields/combobox.js' type='text/javascript'&gt;&lt;/script&gt;"  label="" description="" />
+	</params>
+	<config>
+		<fields name="params" addfieldpath="plugins/editors/jckeditor/fields">
+			<fieldset name="basic">
+				<field name="toolbar" type="list" default="Full" label="PLG_JCK_ADMINISTRATOR_END_TOOLBAR MODE" description="PLG_JCK_FUNCTIONBK">
+					<option value="Full">Full</option>
+					<option value="Publisher">Publisher</option>
+					<option value="Basic">Basic</option>
+					<option value="Blog">Blog</option>
+					<option value="Image">Image</option>
+				</field>
+				<field name="toolbar_ft" type="list" default="Full" label="PLG_JCK_FRONTEND_TOOLBAR_MODE" description="PLG_JCK_FUNCTIONFT">
+					<option value="Full">Full</option>
+					<option value="Publisher">Publisher</option>
+					<option value="Basic">Basic</option>
+					<option value="Blog">Blog</option>
+					<option value="Image">Image</option>
+				</field>
+				<field name="uicolor" type="jscolor" default="#D6E6F4" label="PLG_JCK_TOOLBAR_COLOUR" description="PLG_JCK_TOOLBAR_COLOUR_DESC" />
+				<field name="skin" type="list" default="office2007" label="PLG_JCK_SKIN" description="PLG_JCK_EDITORSKIN">
+					<option value="office2007">Office2007</option>
+					<option value="kama">Kama</option>
+				</field>
+				<field name="content_css" type="radio" default="1" label="PLG_JCK_USE_TEMPLATE_CSS_CLASSES" description="PLG_JCK_LOADCSSTMPT">
+					<option value="0">No</option>
+					<option value="1">Yes</option>
+				</field>
+				<field name="editor_css" type="radio" default="0" label="PLG_JCK_USE_EDITOR_CSS_CLASSES" description="PLG_JCK_LOADCSSED">
+					<option value="0">No</option>
+					<option value="1">Yes</option>
+				</field>
+				<field name="content_css_custom" type="text" default="" label="PLG_JCK_USE_CUSTOM_CSS_CLASSES" description="PLG_JCK_CUSLOADCSS" />
+				<field name="imagePath" type="text" default="images" label="PLG_JCK_LOCATION_OF_THE_IMAGES" description="PLG_JCK_IMGPATH" />
+				<field name="flashPath" type="text" default="images/flash" label="PLG_JCK_LOCATION_OF_THE_FLASH" description="PLG_JCK_FLAPATH" />
+				<field name="filePath" type="text" default="files" label="PLG_JCK_LOCATION_OF_THE_DOCS" description="PLG_JCK_FILEPATH" />
+				<field name="entermode" type="list" default="1" label="PLG_JCK_ENTER_MODE" description="PLG_JCK_DESCENTERMODE">
+					<option value="1">P Elements</option>
+					<option value="2">BR Elements</option>
+					<option value="3">Div Elements</option>
+				</field>
+				<field name="shiftentermode" type="list" default="2" label="PLG_JCK_SHIFT_ENTER_MODE" description="PLG_JCK_DESCSHIFTENTERMODE">
+					<option value="1">P Elements</option>
+					<option value="2">BR Elements</option>
+					<option value="3">Div Elements</option>
+				</field>
+				<field name="wwidth" type="text" default="" label="PLG_JCK_WIDTH" description="PLG_JCK_WIDTH_DESC" />
+				<field name="hheight" type="text" default="" label="PLG_JCK_HEIGHT" description="PLG_JCK_HEIGHT_DESC" />
+			</fieldset>
+			<fieldset name="advanced">
+				<field name="showerrors" type="radio" default="1" label="PLG_JCK_DISPLAY_ERRORS" description="PLG_JCK_DESCSHOWERROR">
+					<option value="0">No</option>
+					<option value="1">Yes</option>
+				</field>
+				<field name="lang_mode" type="radio" default="1" label="PLG_JCK_LANGUAGE_SELECTION_MODE" description="PLG_JCK_DESCLANGMODE">
+					<option value="0">Manual</option>
+					<option value="1">Joomla! Default</option>
+					<option value="2">Browser Default</option>
+				</field>
+				<field name="lang_code" type="text" default="en" label="PLG_JCK_LANGUAGE_CODE" description="PLG_JCK_DESCLANGCODE" />
+				<field name="@spacer" type="spacer" default="" label="" description="" />
+				<field name="bgcolor" type="jscolor" default="#FFFFFF" label="PLG_JCK_BACKGROUND_COLOUR" description="PLG_JCK_DESCBKCOLOR" />
+				<field name="ftcolor" type="jscolor"  default="" label="PLG_JCK_FONT_COLOUR" description="PLG_JCK_DESCCOLOR" />
+				<field name="ftsize" type="jscombo"  default="" label="Font Size" description="Font Size" >
+					<option value="8">8</option>
+					<option value="9">9</option>
+					<option value="10">10</option>
+					<option value="11">11</option>
+					<option value="12">12</option>
+					<option value="14">14</option>
+					<option value="16">16</option>
+					<option value="18">18</option>
+					<option value="20">20</option>
+					<option value="22">22</option>
+					<option value="24">24</option>
+					<option value="26">26</option>
+					<option value="28">28</option>
+					<option value="36">36</option>
+					<option value="48">48</option>
+					<option value="72">72</option>
+				</field>
+				<field name="ftfamily" type="jscombo"  default="" label="Font Family" description="Font Family">
+					<option value="Arial">Arial</option>
+					<option value="Comic Sans MS">Comic Sans MS</option>
+					<option value="Courier">Courier</option>
+					<option value="Courier New">Courier New</option>
+					<option value="Geneva">Geneva</option>
+					<option value="Helvetica">Helvetica</option>
+					<option value="sans-serif">sans-serif</option>
+					<option value="Tahoma">Tahoma</option>
+					<option value="Times New Roman">Times New Roman</option>
+					<option value="Trebuchet MS">Trebuchet MS</option>
+					<option value="Verdana">Verdana</option>
+				</field>
+				<field name="textalign" type="list" default="0" label="PLG_JCK_TXT_ALIGNMENT" description="PLG_JCK_TXT_ALIGNMENT_DESC">
+					<option value="0">Default</option>
+					<option value="left">Left</option>
+					<option value="center">Center</option>
+					<option value="right">Right</option>
+					<option value="justify">Justify</option>
+					<option value="inherit">Inherit</option>
+				</field>
+				<field name="entities" type="radio" default="1" label="PLG_JCK_PROCESS_HTML_ENTITIES" description="PLG_JCK_DESCPROCHTMLENT">
+					<option value="0">No</option>
+					<option value="1">Yes</option>
+				</field>
+				<field name="formatsource" type="radio" default="1" label="PLG_JCK_AUTO_FORMAT_SOURCE" description="PLG_JCK_FMTSRC">
+					<option value="0">No</option>
+					<option value="1">Yes</option>
+				</field>
+				<field name="returnScript" type="radio" default="1" label="PLG_JCK_AUTO_LOAD" description="PLG_JCK_AUTO_LOAD_DESC" >
+					<option value="0">No</option>
+					<option value="1">Yes</option>
+				</field>
+				<field name="useUserFolders" type="radio" default="0" label="PLG_JCK_USE_USER_FOLDERS" description="PLG_JCK_DESCUSERFOLDER">
+					<option value="0">No</option>
+					<option value="1">Yes</option>
+				</field>
+				<field name="userFolderType" type="list" default="username" label="PLG_JCK_USER_FOLDER_TYPE" description="PLG_JCK_USER_FOLDER_TYPE_DESC">
+					<option value="username">UserName</option>
+					<option value="id">ID</option>
+				</field>
+				<field name="displayFoldersTo" type="UserGroup" label="PLG_JCK_ALLOW_USERS_TO_SEE" multiple="true" size="5" description="PLG_JCK_ALLOW_USERS_TO_SEE_DESC"/>
+				<field name="filebrowsergroups" type="UserGroup" label="PLG_JCK_FORCE_FILEBROWSER_TO_ALLOW_ACCESS_TO" multiple="true" size="5" description="PLG_JCK_FORCE_FILEBROWSER_TO_ALLOW_ACCESS_TO_DESC"/>
+				<field  name="forcesimpleAmpersand" type="list" default="0" label="PLG_JCK_FORCE_SIMPLE_AMPERSAND" description="PLG_JCK_FORCE_SIMPLE_AMPERSAND_DESC">
+					<option value="0">No</option>
+					<option value="1">Yes</option>
+			    </field >
+				<field name="startupFocus" type="list" default="0" label="PLG_JCK_STARTUP_FOCUS" description="PLG_JCK_STARTUP_FOCUS_DESC">
+					<option value="0">No</option>
+					<option value="1">Yes</option>
+				</field>
+				<field name="EnableImageDragndrop" type="list" default="1" label="PLG_JCK_IMAGE_DRAGNDROP" description="PLG_JCK_IMAGE_DRAGNDROP_DESC">
+					<option value="0">No</option>
+					<option value="1">Yes</option>
+				</field>
+				<field name="jcktypography" type="list" default="1" label="Load JCK typography" description="This option determines if the JCK typography stylesheet is loaded up for the editor and your default template">
+					<option value="0">No</option>
+					<option value="1">Yes</option>
+				</field>
+				<field name="jcktypographycontent" type="stylesheettextarea"  cols="45" rows="20" default="" label="Edit JCK typography" description="Edit if you want to change the JCK typography styles"/>
+			</fieldset>
+		</fields>
+	</config>
+</install>

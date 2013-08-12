@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<install type="module" version="1.5.0" method="upgrade" client="site">
+	<name>obSuggest RemainningVote module</name>
+	<author>foobla.com</author>
+	<creationDate>March 2011</creationDate>
+	<copyright>(C) 2007 - 2011 foobla.com. All rights reserved.</copyright>
+	<license>GNU/GPL, see LICENSE</license>
+	<authorEmail>admin@foobla.com</authorEmail>
+	<authorUrl>foobla.com</authorUrl>
+	<version>1.6.1</version>
+	<description>obSuggest::Forums module</description>
+	<files>
+		<filename module="mod_obsuggest_remainingvote">mod_obsuggest_forums.xml</filename>
+		<filename module="mod_obsuggest_remainingvote">mod_obsuggest_forums.php</filename>
+		<filename module="mod_obsuggest_remainingvote">index.html</filename>
+	</files>
+	<params>
+		<param name="moduleclass_sfx" type="text" default="" label="Module Class Suffix" description="PARAMMODULECLASSSUFFIX" />
+	</params>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="moduleclass_sfx" type="text" default="" label="Module Class Suffix" description="PARAMMODULECLASSSUFFIX" />
+			</fieldset>
+		</fields>
+	</config>
+</install>

@@ -1,0 +1,135 @@
+/*
+* MAIN
+*/
+.jmb-famous-family-backend-container{
+	font-family: Calibri,Tahoma,sans-serif;
+	font-size: 12px;
+    	font-weight: normal;
+    	position: relative;
+}
+.jmb-famous-family-backend-buttons{
+	position: absolute;
+	right: 10px;
+    	top: 40px;
+}
+.jmb-famous-family-backend-buttons input{
+	margin-left: 3px;
+	cursor:pointer;
+}
+.jmb-famous-family-modal {
+	height: 100px;
+	opacity: 0.3;
+	position: absolute;
+	top: 32px;
+}
+.jmb-famous-family-keeper-create {
+	background: none repeat scroll 0 0 white;
+	border: 1px solid #999999;
+	left: 25%;
+	padding: 20px;
+	position: absolute;
+	top: 50%;
+}
+.jmb-famous-family-keeper-create input{
+	margin-left: 5px;
+}
+/*
+* HEADER
+*/
+.jmb-famous-family-backend-header{
+	background: none repeat scroll 0 0 #E6E6E6;
+	border: 1px solid #999999;
+    	font-size: 14px;
+    	height: 30px;
+    	line-height: 30px;
+    	text-align: center;
+}
+/*
+* TREE
+*/
+.jmb-famous-family-backend-tree{
+	margin-top:20px;
+	margin-left:5px;
+}
+.jmb-famous-family-backend-tree-header{
+	background: url("../imgs/tree.png") no-repeat scroll 0 0 transparent;
+	height: 19px;
+    	line-height: 19px;
+}
+.jmb-famous-family-backend-tree-header span{
+	margin-left: 21px;
+}
+.jmb-famous-family-backend-tree-item{
+	background: url("../imgs/tree_item.png") no-repeat scroll 0 0 transparent;
+	height: 19px;
+    	line-height: 19px;
+    	margin-left: 8px;
+}
+.jmb-famous-family-backend-tree-item span.active{
+	background: none repeat scroll 0 0 yellow;
+}
+.jmb-famous-family-backend-tree-item span{
+	margin-left: 33px;
+	cursor:pointer;
+}
+.jmb-famous-family-backend-tree-add{
+	color: #7174E1;
+	margin: 5px;
+    	text-align: center;
+}
+.jmb-famous-family-backend-tree-add span{
+	cursor:pointer;
+}
+/*
+* CONTENT
+*/
+.jmb-famous-family-backend-content{
+	margin: 20px;
+}
+.jmb-famous-family-backend-content textarea {
+	resize: none;
+}
+.jmb-famous-family-backend-content-item{
+	margin-top:5px;
+}
+.jmb-famous-family-backend-content-keepers {
+	margin: 20px 10px 10px;
+	width: 400px;
+}
+.jmb-famous-family-backend-content-keepers .header{}
+.jmb-famous-family-backend-content-keepers .body{}
+.jmb-famous-family-backend-content-keepers .body .head{
+	background: none repeat scroll 0 0 #E6E6E6;
+}
+.jmb-famous-family-backend-content-keepers .body div{
+	text-align:center;
+}
+
+.jmb-famous-family-backend-content-keepers .body .delete{
+	background: url("../imgs/delete.png") no-repeat scroll 0 0 transparent;
+	height: 16px;
+	margin: 3px;
+	width: 16px;
+	cursor:pointer;
+}
+.jmb-famous-family-backend-content-keepers-add{
+	color: #7174E1;
+	margin: 5px;
+    	text-align: center;
+}
+.jmb-famous-family-backend-content-keepers-add span{
+	cursor:pointer;
+}
+
+.jmb-famous-individual {
+	background: none repeat scroll 0 0 white;
+	border: 1px solid #999999;
+    	left: 50%;
+    	padding: 20px;
+    	position: absolute;
+    	top: 50%;
+}
+
+.jmb-famous-individual input{
+	margin-left:5px;
+}

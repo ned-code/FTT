@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<install type="component" version="1.5.0" method="upgrade">
+	<name>obSuggest</name>
+	<creationDate>Jan 2012</creationDate>
+	<author>foobla</author>
+	<authorEmail>info@foobla.com</authorEmail>
+	<authorUrl>http://www.foobla.com</authorUrl>
+	<copyright>Copyright (C) 2007-2012 foobla.com. All rights reserved.</copyright>
+	<license>GNU/GPL, see LICENSE</license>
+	<version>1.8.4</version>
+	<description><![CDATA[OBSUGGEST_MANIFEST_DESC]]></description>
+	<installfile>install.obsuggest.php</installfile>
+	<uninstallfile>uninstall.obsuggest.php</uninstallfile>
+	<files folder="site">
+		<folder>assets</folder>
+		<folder>classes</folder>
+		<folder>controllers</folder>
+		<folder>helper</folder>
+		<folder>language</folder>
+		<folder>models</folder>
+		<folder>sef_ext</folder>
+		<folder>themes</folder>
+		<folder>views</folder>
+		<folder>vote_boxs</folder>
+		<filename>obsuggest.php</filename>
+		<filename>router.php</filename>
+	</files>
+	<languages folder="site/language">
+		<language tag="en-GB">en-GB/en-GB.com_obsuggest.ini</language>
+		<language tag="de-DE">de-DE/de-DE.com_obsuggest.ini</language>
+		<language tag="fr-FR">fr-FR/fr-FR.com_obsuggest.ini</language>
+		<language tag="nl-NL">nl-NL/nl-NL.com_obsuggest.ini</language>
+	</languages>
+	<administration>
+		<menu link="option=com_obsuggest" img="../administrator/components/com_obsuggest/assets/images/obsuggest_16.png">COM_OBSUGGEST</menu>
+
+	 	<submenu>
+			<menu link="option=com_obsuggest&amp;controller=default" img="../administrator/components/com_obsuggest/assets/images/icons/cpanel_16.png">CONTROL_PANEL</menu>
+			<menu link="option=com_obsuggest&amp;controller=forum" img="../administrator/components/com_obsuggest/assets/images/icons/forum_16.png">FORUM_MANAGER</menu>
+			<menu link="option=com_obsuggest&amp;controller=idea" img="../administrator/components/com_obsuggest/assets/images/icons/idea_16.png">IDEA_MANAGER</menu>
+			<menu link="option=com_obsuggest&amp;controller=langs" img="../administrator/components/com_obsuggest/assets/images/icons/langs_16.png">TRANSLATION</menu>
+			<menu link="option=com_obsuggest&amp;controller=permission" img="../administrator/components/com_obsuggest/assets/images/icons/permission_16.png">PERMISSION</menu>
+			<menu link="option=com_obsuggest&amp;controller=exportimport" img="../administrator/components/com_obsuggest/assets/images/icons/import_16.png">IMPORT_EXPORT</menu>
+			<menu link="option=com_obsuggest&amp;controller=vote" img="../administrator/components/com_obsuggest/assets/images/icons/vote_16.png">VOTE</menu>
+			<menu link="option=com_obsuggest&amp;controller=upgrade" img="../administrator/components/com_obsuggest/assets/images/icons/support_16.png">SUPPORT</menu>
+			<!-- <menu link="option=com_obsuggest&amp;controller=report" img="../administrator/components/com_obsuggest/assets/images/icons/report_16.png">REPORTS</menu>
+			<menu link="option=com_obsuggest&amp;controller=themes" img="../administrator/components/com_obsuggest/assets/images/icons/theme_16.png">THEMES</menu> -->
+		</submenu>
+
+		<files folder="admin">
+			<folder>aio</folder>
+			<folder>assets</folder>
+			<folder>backup</folder>
+			<folder>classes</folder>
+			<folder>controllers</folder>
+			<folder>data</folder>
+			<folder>defaultdata</folder>
+			<folder>elements</folder>
+			<folder>fix</folder>
+			<folder>helpers</folder>
+			<folder>language</folder>
+			<folder>models</folder>
+			<folder>views</folder>
+			<filename>obsuggest.php</filename>
+			<filename>toolbar.obsuggest.php</filename>
+			<filename>toolbar.obsuggest.html.php</filename>
+		</files>
+		<files>
+			<filename>obsuggest.xml</filename>
+			<filename>install.obsuggest.php</filename>
+			<filename>uninstall.obsuggest.php</filename>
+			<filename>CHANGELOG</filename>
+			<filename>LICENSE</filename>
+			<filename>README</filename>
+		</files>
+		<languages folder="admin/language">
+			<language tag="en-GB">en-GB/en-GB.com_obsuggest.ini</language>
+			<language tag="en-GB">en-GB/en-GB.com_obsuggest.menu.ini</language>
+			<language tag="en-GB">en-GB/en-GB.com_obsuggest.sys.ini</language>
+			<language tag="de-DE">de-DE/de-DE.com_obsuggest.ini</language>
+			<language tag="de-DE">de-DE/de-DE.com_obsuggest.menu.ini</language>
+			<language tag="de-DE">de-DE/de-DE.com_obsuggest.sys.ini</language>
+			<language tag="fr-FR">fr-FR/fr-FR.com_obsuggest.ini</language>
+			<language tag="fr-FR">fr-FR/fr-FR.com_obsuggest.menu.ini</language>
+			<language tag="fr-FR">fr-FR/fr-FR.com_obsuggest.sys.ini</language>
+			<language tag="nl-NL">nl-NL/nl-NL.com_obsuggest.ini</language>
+			<language tag="nl-NL">nl-NL/nl-NL.com_obsuggest.menu.ini</language>
+			<language tag="nl-NL">nl-NL/nl-NL.com_obsuggest.sys.ini</language>
+		</languages>
+	</administration>
+</install>

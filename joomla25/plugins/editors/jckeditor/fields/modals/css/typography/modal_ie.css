@@ -1,0 +1,9 @@
+#editarea
+{
+	width:635px !important;
+	height:473px !important;
+}
+.CodeMirror-scroll 
+{
+  height: 473px;
+}

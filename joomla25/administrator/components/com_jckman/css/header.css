@@ -1,0 +1,50 @@
+.icon-48-cpanel {
+ background-image:url("../icons/icon-48-cpanel.png") !important;
+}
+.icon-32-cpanel {
+ background-image:url("../icons/icon-32-cpanel.png") !important;
+}
+.pane-sliders .content {
+ background:none repeat scroll 0 0 #FFFFFF !important;
+}
+.icon-48-plugin {
+background-image:url("../icons/icon-48-plugin.png") !important;
+}
+.icon-48-layout {
+background-image:url("../icons/icon-48-layout.png") !important;
+}
+.icon-48-installer {
+background-image:url("../icons/icon-48-installer.png") !important;
+}
+.icon-48-import {
+background-image:url("../icons/icon-48-import.png") !important;
+}
+.message small
+{
+ font-size:inherit !important;
+}
+
+/*J!1.6 StyleFixes - PF*/
+fieldset.adminform input, fieldset.adminform textarea, fieldset.adminform select, fieldset.adminform img, fieldset.adminform button {
+	float: none !important;
+}
+fieldset.adminform label, fieldset.adminform span.faux-label {
+	float: none !important; display: inline !important;
+}
+div.width-60 {
+    float: left;
+}
+div.width-40 {
+    float: right;
+}
+div#element-box div.m {
+    padding: 0 10px !important;
+}
+table.adminform td {
+	padding: 15px !important; font-size: 11px !important;
+}
+#content-pane {margin: 0 !important;
+}
+input.button {
+    margin-top: 2px;
+}

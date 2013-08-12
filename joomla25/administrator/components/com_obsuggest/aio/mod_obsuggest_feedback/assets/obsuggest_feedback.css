@@ -1,0 +1,57 @@
+#obsuggest-feedback {
+	position: fixed;
+}
+
+#obsuggest-feedback div.obsuggest-feedback-top {
+	
+}
+
+#obsuggest-feedback div.obsuggest-feedback-right {
+	
+}
+
+#obsuggest-feedback div.obsuggest-feedback-bottom {
+	
+}
+
+/* #obsuggest-feedback div.obsuggest-feedback-left {
+	position: fixed;
+	top: 150px;
+	left: 0px;
+	-webkit-transform: rotate(90deg);
+	-moz-transform: rotate(90deg);
+	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
+	border-top: 1px solid green;
+	border-right: 1px solid green;
+	border-bottom: none;
+	border-left: 1px solid green;
+	padding: 5px;
+}
+
+div#obsuggest-feedback a {
+	text-decoration: none;
+} */
+
+
+#obsuggest-feedback-container .obsuggest-feedback-bottom {
+	position: fixed;
+	left: 10px;
+	bottom: 0;
+	z-index: 999999;
+}
+
+.obsuggest-feedback-button-bottom 
+{
+     background: url(feedback_bottom.png);
+     height: 36px;
+	 width: 200px;
+	 display: block;
+}
+
+.obsuggest-feedback-button-bottom:hover
+{
+	background: url(feedback_bottom.png);
+	background-position:0px 37px;
+     
+}
+

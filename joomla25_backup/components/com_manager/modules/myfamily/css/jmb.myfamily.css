@@ -1,0 +1,165 @@
+.tab_content.famous-family .ftt-myfamily-container{
+    border-color: #f0e2d9;
+}
+.tab_content.famous-family .ftt-myfamily-header{
+    border-color: #f0e2d9;
+    background-color: #ecdace;
+}
+.tab_content.famous-family .ftt-myfamily-header span {
+    color: #A06546;
+}
+.tab_content.myfamily .ftt-myfamily-container{
+    border-color: #d1daec;
+}
+.tab_content.myfamily .ftt-myfamily-header{
+    border-color: #d1daec;
+    background-color: #cfd8eb;
+}
+.tab_content.myfamily .ftt-myfamily-header span {
+    color: #3b5998;
+}
+.tab_content .ftt-myfamily-container {
+    margin: 10px;
+}
+.ftt-myfamily-container {
+    border: 1px solid #d1daec;
+    background: none repeat scroll 0 0 #FFFFFF;
+    position: relative;
+    font-size: 12px;
+    font-family: Tahoma;
+    font-weight: normal;
+}
+.ftt-myfamily-header {
+    background: none repeat scroll 0 0 #d1daec;
+    border-bottom: 1px solid #d1daec;
+    height: 40px;
+    padding: 5px;
+}
+.ftt-myfamily-header span{
+    font-family: Tahoma;
+    font-size: 13px;
+    font-weight: bold;
+    position: absolute;
+    left: 35%;
+    top: 8px;
+}
+
+.ftt-myfamily-header-update {
+    float: right;
+    font-family: lucida grande,tahoma;
+    font-size: 10px;
+    position: relative;
+    top: -2px;
+}
+.ftt-myfamily-header-update-button {
+    background: url(../imgs/update.png) no-repeat scroll 0 0 transparent;
+    height: 27px;
+    width: 27px;
+    cursor: pointer;
+}
+.ftt-myfamily-header-update-text {
+    margin-left: 5px;
+    color: #5475B8;
+}
+.ftt-myfamily-header-update-text-title {
+    font-weight: bold;
+}
+.ftt-myfamily-header-update-text-count {
+    font-size: 10px;
+    margin-top: -5px;
+}
+
+.ftt-myfamily-content {
+
+}
+.ftt-myfamily-content table{
+    width: 100%;
+    border-collapse: collapse;
+}
+.ftt-myfamily-content table tr {
+    background: none repeat scroll 0 0 white;
+    border-bottom: 1px solid #DCDEE2;
+    border-top: 1px solid #DCDEE2;
+    cursor:pointer;
+}
+.ftt-myfamily-content table tr.active {
+    background: none repeat scroll 0 0 #d8deea;
+    border-bottom: 1px solid #adb4c7;
+    border-top: 1px solid #adb4c7;
+}
+.ftt-myfamily-list-item-relation {
+    min-width: 40px;
+    text-align: center;
+}
+.ftt-myfamily-list-item-relation span._gedcom {
+    color: blue;
+}
+.ftt-myfamily-list-item-avatar {
+    height: 50px;
+    margin: 10px;
+    width: 50px;
+}
+.ftt-myfamily-list-item-avatar img{
+    border-radius: 5px;
+}
+.ftt-myfamily-list-item-text {
+    font-size: 11px;
+    text-align: left;
+    font-family: lucida grande,tahoma,verdana,arial,sans-serif;
+    margin: 3px;
+}
+.ftt-myfamily-list-item-author {
+    font-size: 11px;
+    font-family: lucida grande,tahoma,verdana,arial,sans-serif;
+    font-weight: bold;
+}
+.ftt-myfamily-list-item-load {
+    background: url(imgs/fbpb.gif) no-repeat scroll 0 0 transparent;
+    height: 32px;
+    margin: 0 auto;
+    width: 32px;
+}
+.ftt-myfamily-list-item-time {
+    color: gray;
+    float: right;
+    font-family: lucida grande,tahoma;
+    font-size: 9px;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.ftt-myfamily-tip {
+    width: 360px;
+}
+.ftt-myfamily-tip-title {
+    font-size: 12px;
+    font-weight: bold;
+    margin: 10px;
+    text-align: center;
+}
+.ftt-myfamily-tip-title a {
+    text-decoration: none;
+}
+.ftt-myfamily-tip-icon {
+    margin: 10px auto;
+    width: 320px;
+    text-align: center;
+}
+.ftt-myfamily-tip-message {}
+.ftt-myfamily-tip-comments {}
+
+.ftt-myfamily-wiki-content{
+    margin: 10px;
+    position: relative;
+}
+.ftt-myfamily-show {
+    background: url(../imgs/show.png) no-repeat scroll 0 0 transparent;
+    position: absolute;
+    right: 15px;
+    top: 3px;
+}
+.ftt-myfamily-show a {
+    height: 24px;
+    width: 24px;
+    display: block;
+}

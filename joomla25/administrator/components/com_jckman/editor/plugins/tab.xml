@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<install version="1.5" type="plugin" plugin="tab" method="upgrade">
+	<version>0.1</version>
+	<creationDate>Feb 2012</creationDate>
+	<author>CKSource.com</author>
+	<authorUrl>http://cksource.com/</authorUrl>
+	<license>GNU/GPLv2</license>
+	<description>Core Tab plugin</description>
+	<languages>
+	</languages>
+	<params group="options">
+		<param name="tabSpaces" type="list" default="4" label="Tab Spaces" description="Intructs the editor to add a number of spaces (&amp;nbsp;) to the text when hitting the TAB key. If set to zero, the TAB key will be used to move the cursor focus to the next element in the page, out of the editor focus.">
+			<option value="0">0</option>
+			<option value="1">1</option>
+			<option value="2">2</option>
+			<option value="3">3</option>
+			<option value="4">4</option>
+		</param>
+	</params>
+</install>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- $Id: install_add.xml 25 2009-02-08 08:07:40Z chdemko $ -->
+<form>
+  <fields name="search">
+    <fieldset name="search">
+      <field
+        id="expr"
+        name="expr"
+        type="search"
+        label="JSearch_Filter_Label"
+        description="JSearch_Filter" />
+    </fieldset>
+  </fields>
+  <fields name="select">
+    <fieldset name="select">
+      <field
+        id="client"
+        name="client"
+        type="client"
+        hidden="true"
+        onchange="Joomla.submitform('',this.form);">
+        <option value="">COM_LOCALISE_OPTION_CLIENT_SELECT</option>
+      </field>
+      <field
+        id="tag"
+        name="tag"
+        type="language"
+        hidden="true"
+        onchange="Joomla.submitform('',this.form);">
+        <option value="">COM_LOCALISE_OPTION_LANGUAGE_SELECT</option>
+      </field>
+    </fieldset>
+  </fields>
+</form>

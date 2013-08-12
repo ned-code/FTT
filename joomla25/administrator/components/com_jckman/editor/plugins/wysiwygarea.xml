@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<install version="1.5" type="plugin" plugin="wysiwygarea" method="upgrade">
+	<version>0.1</version>
+	<creationDate>Feb 2012</creationDate>
+	<author>CKSource.com</author>
+	<authorUrl>http://cksource.com/</authorUrl>
+	<license>GNU/GPLv2</license>
+	<description>Core Wysiwygarea plugin</description>
+	<languages>
+	</languages>
+<params group="options">
+		<param name="resize_enabled" type="radio" default="1" label="Enable Resizing " description="Determines whether to enable the resizing feature. If this feature is disabled, the resize handle will not be visible. ">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+		<param name="resize_dir" type="radio" default="list" label="Resize Direction" description=" The dimensions for which the editor resizing is enabled. Possible values are both, vertical, and horizontal.">
+			<option value="both">Both</option>
+			<option value="vertical">Vertical</option>
+			<option value="horizontal">Horizontal</option>
+		</param>
+		<param name="resize_maxHeight" type="list" default="500" label="Resize Max Height" description=" The maximum editor height, in pixels, when resizing the editor interface by using the resize handle. ">
+			<option value="500">500</option>
+			<option value="1000">1000</option>
+			<option value="500">1500</option>
+			<option value="1000">2000</option>
+			<option value="500">2500</option>
+			<option value="1000">3000</option>
+		</param>
+			<param name="resize_maxWidth" type="list" default="750" label="Resize Max Width" description=" The maximum editor width, in pixels, when resizing the editor interface by using the resize handle.">
+			<option value="750">750</option>
+			<option value="1000">1000</option>
+			<option value="500">1500</option>
+			<option value="1000">2000</option>
+			<option value="500">2500</option>
+			<option value="1000">3000</option>
+		</param>
+		<param name="resize_minHeight" type="list" default="500" label="Resize Min Height" description=" The minimum editor height, in pixels, when resizing the editor interface by using the resize handle. Note: It falls back to editor's actual height if it is smaller than the default value.">
+			<option value="250">250</option>
+			<option value="300">300</option>
+			<option value="350">350</option>
+			<option value="400">400</option>
+			<option value="450">450</option>
+			<option value="500">500</option>
+			<option value="550">550</option>
+			<option value="600">600</option>
+			<option value="650">650</option>
+			<option value="700">700</option>
+			<option value="1000">750</option>
+		</param>
+			<param name="resize_minWidth" type="list" default="1" label="Resize Max Width" description="The minimum editor width, in pixels, when resizing the editor interface by using the resize handle. Note: It falls back to editor's actual width if it is smaller than the default value.">
+			<option value="500">500</option>
+			<option value="550">550</option>
+			<option value="600">600</option>
+			<option value="650">650</option>
+			<option value="700">700</option>
+			<option value="750">750</option>
+		</param>
+		<param name="startupFocus" type="radio" default="0" label="Enable Focus On Startup " description="Sets whether the editor should have the focus when the page load.">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+		<param name="ignoreEmptyParagraph" type="radio" default="1" label="Ignore Empty Paragraph " description="Determines whether the editor must output an empty value ('') if it's contents is made by an empty paragraph only. ">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+		<param name="bodyClass" type="text" default="" label="Body Class" description="Sets the class attribute to be used on the body element of the editing area. This can be useful when you intend to reuse the original CSS file you are using on your live website and want to assign the editor the same class as the section that will include the contents. In this way class-specific CSS rules will be enabled."/>
+		<param name="bodyId" type="text" default="" label="Body Id" description="Sets the id attribute to be used on the body element of the editing area. This can be useful when you intend to reuse the original CSS file you are using on your live website and want to assign the editor the same ID as the section that will include the contents. In this way ID-specific CSS rules will be enabled."/>
+		<param name="disableObjectResizing" type="radio" default="1" label="Disable Object Resizing" description="Disables the ability of resize objects (image and tables) in the editing area.">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+		<param name="docType" type="list" default="0" label="HTML Document Type" description="Sets the DOCTYPE to be used when loading the editor content as HTML.">
+			<option value="&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;">XHTML</option>
+			<option value="&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.0 Transitional//EN&quot;&gt;">HTML4</option>
+			<option value="&lt;!DOCTYPE html&gt;">HTML5</option>
+		</param>
+</params>
+</install>

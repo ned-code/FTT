@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<install type="module" version="1.5" client="site" method="upgrade">
+	<name>obSuggest Quick Suggest</name>
+	<author>foobla.com</author>
+	<creationDate>March 2011</creationDate>
+	<copyright>(C) 2007-2011 foobla.com. All rights reserved.</copyright>
+	<license>GNU/GPL, see LICENSE</license>
+	<authorEmail>admin@foobla.com</authorEmail>
+	<authorUrl>foobla.com</authorUrl>
+	<version>1.6.1</version>
+	<description>obSuggest::Quick Suggest module</description>
+	<files>
+		<filename module="mod_obsuggest_quicksuggest">mod_obsuggest_quicksuggest.php</filename>
+		<filename module="mod_obsuggest_quicksuggest">mod_obsuggest_quicksuggest.xml</filename>
+		<filename module="mod_obsuggest_quicksuggest">helper.php</filename>
+		<filename module="mod_obsuggest_quicksuggest">index.html</filename>
+		<filename module="mod_obsuggest_quicksuggest">tmpl/index.html</filename>
+		<filename module="mod_obsuggest_quicksuggest">tmpl/default.php</filename>
+		<filename module="mod_obsuggest_quicksuggest">element/forum.php</filename>
+	    <filename module="mod_obsuggest_quicksuggest">element/listforum.php</filename>
+	</files>
+	<params addpath="/modules/mod_obsuggest_quicksuggest/element">
+		<param name="moduleclass_sfx" type="text" default="" label="Module Class Suffix" description="PARAMMODULECLASSSUFFIX" />
+		<param name="@spacer" type="spacer" default="" label="" description="" />
+		
+        <param name="think" type="textarea" label="Prompt"  rows="5" cols="35"/>
+        <param name="forum_default" type="listforum" label="Forum Default" />
+        <param name="display_list_forum" type='radio' default="1" label="Disp List Forum">
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+        </param>
+	</params>
+	<config>
+		<fields name="params">
+			<fieldset name="basic" addpath="/modules/mod_obsuggest_quicksuggest/element">
+				<field name="moduleclass_sfx" type="text" default="" label="Module Class Suffix" description="PARAMMODULECLASSSUFFIX" />
+				<field name="@spacer" type="spacer" default="" label="" description="" />
+				
+		        <field name="think" type="textarea" label="Prompt"  rows="5" cols="35"/>
+		        <field name="forum_default" type="listforum" label="Forum Default" />
+		        <field name="display_list_forum" type='radio' default="1" label="Disp List Forum">
+		              <option value="1">Yes</option>
+		              <option value="0">No</option>
+		        </field>
+			</fieldset>
+		</fields>
+	</config>
+	<config>
+		<fields name="params">
+			<fieldset name="advanced">
+				<field name="cache" type="list" default="1" label="Caching" description="Select whether to cache the content of this module">
+					<option value="1">Use global</option>
+					<option value="0">No caching</option>
+				</field>
+				<field name="cache_time" type="text" default="900" label="Cache Time" description="The time before the module is recached" />
+			</fieldset>
+		</fields>
+	</config>
+</install>

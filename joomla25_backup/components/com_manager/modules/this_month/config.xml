@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<install type="component" version="1.5.14" method="upgrade">
+  <name>this_month</name>
+  <title>This Month</title>
+  <description>module view events about this month</description>
+  <files>
+	<javascript>
+		<file>js/this.month.js</file>
+	</javascript>
+	<css>
+		<file>css/this_month.css</file>
+	</css>
+ </files>
+
+
+</install>

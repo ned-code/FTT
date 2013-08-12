@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<install version="1.5" type="plugin" plugin="image" method="upgrade">
+	<version>0.1</version>
+	<creationDate>Feb 2012</creationDate>
+	<author>CKSource.com</author>
+	<authorUrl>http://cksource.com/</authorUrl>
+	<license>GNU/GPLv2</license>
+	<description>Core Image plugin</description>
+	<languages>
+	</languages>
+	<params>
+		<param name="dialogtitle" type="jscombo" default="Default" label="Dialog Title" description="The Title shown in the dialog for this plugin" >
+			<option value="Default">Default</option>
+			<option value="Enter new title here">Enter new title here</option>
+		</param>	
+		<param name="height" type="text" default="310" label="Dialog height" description="The height of dialog" />
+		<param name="width" type="text" default="420" label="Dialog width" description="The width of dialog"/>
+	</params>
+	<params group="options">
+		<param name="image_removeLinkByEmptyURL" type="radio" default="1" label="Image Remove Empty Link" description=" Determines whether to remove links when emptying the link URL field in the image dialog. ">
+			<option value="">No</option>
+			<option value="encode">Yes</option>
+		</param>
+		<param name="filebrowser" type="filebrowsers"  label="Choose A Filebrowser" description = ""/>
+	</params>
+</install>

@@ -1,0 +1,145 @@
+.paging
+{
+	border:0px solid red;
+	display:table;
+	margin:0 auto;
+}
+.paging div{
+	border:0px solid red;
+	border-collapse:collapse;
+	float:left;	
+}
+
+.paging a, .paging span {
+	border:0px solid #333333;
+}
+.paging_first {
+	float:left;
+}
+/* .page a {
+	display: block;
+	height: 22px;
+	float: left;
+	line-height: 22px;
+	font-size: 11px;
+	color: #999999;
+	cursor: pointer;
+	padding:0 5px 0 5px;
+}
+.page span{
+	display: block;
+	height: 22px;
+	float: left;
+	line-height: 22px;
+	font-size: 11px;
+	color: #FF;
+	cursor: pointer;
+	padding:0 5px 0 5px;
+}
+.page_off .page a
+{
+	display: block;
+	height: 22px;
+	float: left;
+	line-height: 22px;
+	font-size: 11px;
+	color: #999999;
+	cursor: pointer;
+	padding:0 5px 0 5px;
+}
+.page_off .page span{
+	display: block;
+	height: 26px;
+	float: left;
+	line-height: 26px;
+	font-size: 11px;
+	color: #999999;
+	cursor: pointer;
+	padding:0 5px 0 5px;
+} */
+
+.paging_prev,
+.paging_prev div{
+	float:left;
+}
+
+.paging_first a,
+.paging_first span,
+.paging_prev a,
+.paging_prev span{
+	display: block;
+	height: 22px;
+	float: left;
+	line-height: 22px;
+	font-size: 11px;
+	color: #999999;
+	cursor: pointer;
+	padding:0 5px 0 5px;
+	text-decoration:none;
+}
+
+.paging_next,
+.paging_next div{
+	float:left;
+}
+
+.paging_last,
+.paging_last div{
+	float:left;
+}
+.paging_next a,
+.paging_next span,
+.paging_last a,
+.paging_last span{
+	text-decoration:none;
+	display: block;
+	height: 22px;
+	float: left;
+	line-height: 22px;
+	font-size: 11px;
+	color: #999999;
+	cursor: pointer;
+	padding:0 5px 0 5px;
+}
+.paging_last .page_last{
+	background:#0000FF;
+}
+.page_cur{
+	display:block;
+	height:22px;
+	line-height:22px;
+	border:0px solid red;
+	font-size:11px;
+}
+/* .page,
+.page a
+{
+	display: block;
+	height: 22px;
+	float: left;
+	line-height: 22px;
+	font-size: 11px;
+	color: #999999;
+	cursor: pointer;
+	padding:0 5px 0 5px;
+}
+.page span{
+	display: block;
+	height: 20px;
+	float: left;
+	line-height: 20px;
+	font-size: 11px;
+	color: #999999;
+	cursor: pointer;
+	padding:0 5px 0 5px;
+} */
+.page_on{
+	display: block;
+	height: 22px;
+	float: left;
+	line-height: 22px;
+	font-size: 11px;
+	color: #999999;
+	cursor: pointer;
+	padding:0 5px 0 5px;
+}

@@ -1,0 +1,294 @@
+#localise-translation-form .translated, #localise-translation-form .untranslated, #localise-translation-form .unchanged, #localise-translation-form .extra {
+  padding: 2px;
+  float: left;
+  margin: 3px 0 0 2px;
+}
+#localise-translation-form .translated {
+  background-color: #CCFFCC;
+}
+#localise-translation-form .untranslated {
+  background-color:#FFCCCC;
+}
+#localise-translation-form .unchanged {
+  background-color:#FFDDBB;
+}
+#localise-translation-form .extra {
+  background-color:#CCCCFF;
+}
+#localise-translation-form .width-50 {
+  width: 50%;
+}
+#localise-translation-form .width-45 {
+  width: 45%;
+}
+#localise-translation-form div.key label {
+  max-width: 45%;
+  min-width: 45%;
+  text-align: right;
+  width: 45%;
+}
+#localise-translation-form div.key .adminformlist label {
+  direction: ltr;
+  float: left;
+  padding: 0 5px 0 0;
+}
+#localise-translation-form div.key span.spacer > span.text label {
+  text-align: left;
+  white-space: nowrap;
+  font-weight: bold;
+  color: #666;
+  width: 100%;
+  max-width: 100%;
+  min-width: 100%;
+  margin: 0px;
+}
+#localise-translation-form div.key input {
+  width: 45%;
+  max-width: 45%;
+  min-width: 45%;
+}
+.icon-16-global {
+  background-image: url(../images/icon-16-frontpage.png);
+}
+.icon-16-local {
+  background-image: url(../../../administrator/templates/bluestork/images/menu/icon-16-category.png);
+}
+.icon-16-core {
+  background-image: url(../../../administrator/templates/bluestork/images/menu/icon-16-default.png);
+}
+.icon-16-thirdparty {
+  background-image: url(../../../administrator/templates/bluestork/images/menu/icon-16-user.png);
+}
+.icon-16-inlanguage {
+  background-image: url(../../../administrator/templates/bluestork/images/menu/icon-16-checkin.png);
+}
+.icon-16-notinreference {
+  background-image: url(../../../administrator/templates/bluestork/images/menu/icon-16-delete.png);
+}
+.icon-16-delete {
+  background-image: url(../../../administrator/templates/bluestork/images/menu/icon-16-delete.png);
+}
+.icon-16-unexisting {
+  background-image: url(../images/icon-16-disabled.png);
+}
+.icon-16-joomla {
+  background-image: url(../../../administrator/templates/bluestork/images/mini_icon.png);
+}
+.icon-16-override {
+  background-image: url(../images/icon-16-override);
+}
+.icon-16-template {
+  background-image: url(../../../administrator/templates/bluestork/images/menu/icon-16-themes.png);
+}
+.icon-16-package {
+  background-image: url(../../../administrator/templates/bluestork/images/menu/icon-16-content.png);
+}
+.icon-16-library {
+  background-image: url(../../../administrator/templates/bluestork/images/menu/icon-16-category.png);
+}
+.icon-16-file {
+  background-image: url(../../../administrator/templates/bluestork/images/menu/icon-16-article.png);
+}
+.icon-16-reference {
+  background-image: url(../../../administrator/templates/bluestork/images/menu/icon-16-maintenance.png);
+}
+.icon-16-site {
+  background-image: url(../../../administrator/templates/bluestork/images/menu/icon-16-redirect.png);
+}
+.icon-16-administrator {
+  background-image: url(../../../administrator/templates/bluestork/images/menu/icon-16-config.png);
+}
+.icon-16-installation {
+  background-image: url(../../../administrator/templates/bluestork/images/menu/icon-16-install.png);
+}
+.icon-16-translations {
+  background-image: url(../../../administrator/templates/bluestork/images/admin/expandall.png);
+}
+.icon-16-error {
+  background-image: url(../images/icon-16-warning.png);
+}
+.icon-16-complete {
+  background-image: url(../../../administrator/templates/bluestork/images/menu/icon-16-checkin.png);
+}
+.pointer {
+  cursor: pointer;
+  float: left;
+  margin: 5px 5px 5px 0;
+}
+.localise-icon {
+  background-repeat: no-repeat;
+  height: 20px;
+}
+.adminlist .localise-icon {
+  padding-left: 18px;
+}
+div.filter-select select {
+  background-image: none;
+}
+option.localise-icon {
+  padding-top: 3px;
+  padding-left: 18px;
+}
+#adminForm option.inlanguage {
+  background-color: #ffffdd;
+}
+#adminForm .unexisting td, #adminForm .unexisting {
+  background-color: #ffcccc;
+}
+#adminForm .notinreference td, #adminForm .notinreference {
+  background-color: #aaddff;
+}
+#adminForm .unchanged td, #adminForm .unchanged {
+  background-color: #ffddaa;
+}
+#adminForm .translated td, #adminForm .translated {
+  background-color: #ccffcc;
+}
+#adminForm .error td, #adminForm .error {
+  background-color: #ffd9b2;
+}
+.tip {
+  max-width: 400px;
+}
+.editbox {
+  margin: .4em;
+  padding: 0;
+  font-family: monospace;
+  font-size: 10pt;
+  color: black;
+}
+pre.code, .editbox {
+  color: #666666;
+}
+.editbox p {
+  margin: 0;
+}
+span.ini-group {
+  color: #ff8000;
+}
+span.ini-identifier {
+  color: #00AA00;
+}
+span.ini-boolean {
+  color: #770088;
+}
+span.ini-number {
+  color: #770088;
+}
+span.ini-comment {
+  color: #a0a0a0;
+}
+span.ini-string {
+  color: #AA2222;
+}
+span.ini-equal {
+  color: #000000;
+}
+span.ini-constant {
+  color: #0000AA;
+}
+span.ini-error {
+  color: #000000;
+  background-color: #FF0000;
+}
+.pane-sliders .content {
+  padding: 5px !important;
+}
+ul.adminformlist, ul.adminformlist li {
+  display: inline-block;
+  width: 100%;
+}
+/** Bing related */
+#translationbar {
+  padding-right:5%;
+  margin:20px 0 20px 0
+}
+#translationbar a {
+  float:right;
+  margin-left:10px
+}
+#translationbar .Button:link, #translationbar .retbtn:link {
+  color: #000;
+}
+#translationbar .Button span {
+  background:url("../images/icon-16-bing.png") 0 4px no-repeat;
+  padding: 5px 0 5px 20px;
+}
+#translationbar .retbtn span {
+  background:url("../images/icon-16-arrow.png") 0 4px no-repeat;
+  padding: 5px 0 5px 30px;
+}
+#translationbar .Button {
+  display: inline-block;
+  outline: none;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  font: 12px Helvetica, sans-serif;
+  padding: 6px 12px;
+  text-shadow: 0 1px 1px rgba(0,0,0,.3);
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+  -moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+  box-shadow: 0 1px 2px rgba(0,0,0,.2);
+  color: #000;
+  background: #ccc;
+  background: -webkit-gradient(linear, left top, left bottom, from(#ccc), to(#eee));
+  background: -moz-linear-gradient(top, #ccc, #eee);
+  filter:  progid:DXImaGETransform.Microsoft.gradient(startColorstr='#ccc', endColorstr='#eee');
+}
+#translationbar .Button:hover {
+  background: #ccc;
+  background: -webkit-gradient(linear, left top, left bottom, from(#eee), to(#ccc));
+  background: -moz-linear-gradient(top, #eee, #ccc);
+  filter:  progid:DXImaGETransform.Microsoft.gradient(startColorstr='#eee', endColorstr='#ccc');
+  text-decoration: none;
+  color: #000;
+}
+#translationbar .Button:active {
+  color: #ffffff;
+  background: -webkit-gradient(linear, left top, left bottom, from(#ccc), to(#eee));
+  background: -moz-linear-gradient(top, #ccc, #eee);
+  filter:  progid:DXImaGETransform.Microsoft.gradient(startColorstr='#ccc', endColorstr='#eee');
+  position: relative;
+  top: 1px;
+}
+#translationbar .retbtn {
+  display: inline-block;
+  outline: none;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  font: 12px Helvetica, sans-serif;
+  padding: 6px 12px;
+  text-shadow: 0 1px 1px rgba(0,0,0,.3);
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+  -moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+  box-shadow: 0 1px 2px rgba(0,0,0,.2);
+  color: #000;
+  background: #ccc;
+  background: -webkit-gradient(linear, left top, left bottom, from(#ccc), to(#eee));
+  background: -moz-linear-gradient(top, #ccc, #eee);
+  filter:  progid:DXImaGETransform.Microsoft.gradient(startColorstr='#ccc', endColorstr='#eee');
+}
+#translationbar .retbtn:hover {
+  background: #ccc;
+  background: -webkit-gradient(linear, left top, left bottom, from(#63a6f2), to(#ccc));
+  background: -moz-linear-gradient(top, #eee, #ccc);
+  filter:  progid:DXImaGETransform.Microsoft.gradient(startColorstr='#eee', endColorstr='#ccc');
+  text-decoration: none;
+  color: #000;
+}
+#translationbar .retbtn:active {
+  color: #000;
+  background: -webkit-gradient(linear, left top, left bottom, from(#ccc), to(#eee));
+  background: -moz-linear-gradient(top, #ccc, #eee);
+  filter:  progid:DXImaGETransform.Microsoft.gradient(startColorstr='#ccc', endColorstr='#eee');
+  position: relative;
+  top: 1px;
+}

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="OBSUGGEST_DEFAULT_LAYOUT">
+		<message>
+			<![CDATA[OBSUGGEST_DEFAULT_LAYOUT_DESC]]>
+		</message>
+	</layout>
+	
+	<!-- Joomla 1.5 //-->
+	<params>
+		<param name="forumId" type="sql"
+			label="OBSG_SELECT_FORUM"
+			description="OBSG_SELECT_FORUM_DESC"
+			query="SELECT j.`id` AS `id`, j.`name` AS `name` FROM #__foobla_uv_forum j LIMIT 0,1000"
+			key_field="id"
+			value_field="name"
+		/>
+	</params>
+	
+	<!-- Joomla 1.6+ //-->
+	<fields name="request">
+		<fieldset name="request">
+			<field name="forumId" type="sql"
+				label="OBSG_SELECT_FORUM"
+				description="OBSG_SELECT_FORUM_DESC"
+				query="SELECT j.`id` AS `id`, j.`name` AS `name` FROM #__foobla_uv_forum j LIMIT 0,1000"
+				key_field="id"
+				value_field="name"
+			/>
+		</fieldset>
+	</fields>
+</metadata>

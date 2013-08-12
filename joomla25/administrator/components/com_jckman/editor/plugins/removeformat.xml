@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<install version="1.5" type="plugin" plugin="removeformat" method="upgrade">
+	<version>0.1</version>
+	<creationDate>Feb 2012</creationDate>
+	<author>CKSource.com</author>
+	<authorUrl>http://cksource.com/</authorUrl>
+	<license>GNU/GPLv2</license>
+	<description>Core Removeformat plugin</description> 
+	<languages>
+	</languages>
+	<params group="options">
+		<param name="removeFormatAttributes" type="addselectlist"  default="" label="Remove Format Attributes" description="A list of elements attributes to be removed when executing the 'remove format' command.">
+			<option value="class">class</option>
+			<option value="style">style</option>
+            <option value="lang">lang</option>
+			<option value="width">width</option>
+            <option value="height">height</option>
+			<option value="align">align</option>
+            <option value="hspace">hspace</option>
+			<option value="valign">valign</option>
+         </param>   
+        <param name="removeFormatTags" type="addselectlist" default="" label="Remove Format Tags" description="A list of elements to be removed when executing the 'remove  format' command. Note that only inline elements are allowed.">
+            <option value="b">b</option>
+			<option value="big">big</option>
+            <option value="code">code</option>
+			<option value="del">del</option>
+            <option value="dfn">dfn</option>
+			<option value="em">em</option>
+            <option value="i">i</option>
+			<option value="ins">ins</option>
+            <option value="kbd">kbd</option>
+            <option value="q">q</option>
+            <option value="samp">samp</option>
+            <option value="small">small</option>
+            <option value="span">span</option>
+            <option value="strike">strike</option>
+            <option value="strong">strong</option>
+            <option value="sub">sub</option>
+            <option value="sup">sup</option>
+            <option value="tt">tt</option>
+            <option value="u">u</option>
+            <option value="var">var</option>
+        </param> 
+</params>
+</install>

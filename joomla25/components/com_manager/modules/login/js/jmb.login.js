@@ -40,7 +40,7 @@ function JMBLogin(){
 					sb._('<tr>');
 						sb._('<td><div class="avatar"></div></td>');
 						sb._('<td><div class="login"><span></span></div></td>');
-						sb._('<td><div class="settings"><div class="button"></div></div></td>');
+						sb._('<td><div class="settings"><div class="button"></div></div></td>');	
 					sb._('</tr>');
 				sb._('</table>');
 			sb._('</div>');
@@ -76,7 +76,7 @@ function JMBLogin(){
 			});
 			st._('</ul>');
             st._('<div class="ftt-button-ok"><input type="button" value="OK"></div>');
-			var html = jQuery(st.result());
+			var html = jQuery(st.result());	
 			return html;
 		},
 		getDefaultLang:function(){
@@ -215,7 +215,7 @@ function JMBLogin(){
 					return this;
 				}
 			}
-
+	
 		},
 		login:function(cont){
 			var json;
@@ -372,5 +372,7 @@ function JMBLogin(){
     } else {
         module.init = fn.init;
     }
+
+
 }
 

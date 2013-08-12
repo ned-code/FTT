@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<install version="1.5" type="plugin" plugin="colorbutton" method="upgrade">
+	<version>0.1</version>
+	<creationDate>Feb 2012</creationDate>
+	<author>CKSource.com</author>
+	<authorUrl>http://cksource.com/</authorUrl>
+	<license>GNU/GPLv2</license>
+	<description>Core ColorButton plugin</description> 
+	<languages>
+	</languages>
+	<params group="options">
+        <param name="colorButton_colors" type="addcolorlist"  default="" label="Color List" description="Defines the colors to be displayed in the color selectors. This is a string containing hexadecimal notation for HTML colors, without the '#' prefix. A color abel is defined by entering text in the 'Text' input box next to the 'Value' input box. For example, 'FontColor1' can be used for the label and 'FF9900' could be used for the color.">
+            <option value="000">000</option>
+			<option value="800000">800000</option>
+            <option value="8B4513">8B4513</option>
+            <option value="2F4F4F">2F4F4F</option>
+            <option value="008080">008080</option>
+            <option value="000080">000080</option>
+            <option value="4B0082">4B0082</option>
+            <option value="696969">696969</option>
+            <option value="B22222">B22222</option>
+            <option value="A52A2A">A52A2A</option>
+            <option value="DAA520">DAA520</option>
+            <option value="006400">006400</option>
+            <option value="40E0D0">40E0D0</option>
+            <option value="0000CD">0000CD</option>
+            <option value="800080">800080</option>
+            <option value="808080">808080</option>
+			<option value="F00">F00</option>
+			 <option value="FF8C00">FF8C00</option>
+			 <option value="FFD700">FFD700</option>
+			<option value="008000">008000</option>
+			<option value="0FF">0FF</option>
+			<option value="00F">00F</option>
+			<option value="A9A9A9">A9A9A9</option>
+			<option value="FFA07A">FFA07A</option>
+			<option value="FFA500">FFA500</option>
+			<option value="FFFF00">FFFF00</option>
+			<option value="00FF00">00FF00</option>
+			<option value="FFFF00">FFFF00</option>
+			<option value="AFEEEE">AFEEEE</option>
+			<option value="ADD8E6">ADD8E6</option>
+			<option value="DDA0DD">DDA0DD</option>
+			<option value="D3D3D3">D3D3D3</option>
+			<option value="FFF0F5">FFF0F5</option>
+			<option value="FAEBD7">FAEBD7</option>
+			<option value="FAEBD7">FAEBD7</option>
+			<option value="FFFFE0">FFFFE0</option>
+			<option value="F0FFF0">F0FFF0</option>
+			<option value="F0FFFF">F0FFFF</option>
+			<option value="F0F8FF">F0F8FF</option>
+			<option value="E6E6FA">E6E6FA</option>
+			<option value="FFF">FFF</option>
+        </param>
+		<param name="colorButton_enableMore" type="radio"  default="1" label="Enable More Colors" description="Determines whether to enable the 'More Colors' button in the color selectors.">
+		    <option value="0">No</option>
+            <option value="1">Yes</option>
+         </param>
+</params>
+</install>

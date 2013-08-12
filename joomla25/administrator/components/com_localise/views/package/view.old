@@ -1,0 +1,39 @@
+<?php
+/*------------------------------------------------------------------------
+# com_localise - Localise
+# ------------------------------------------------------------------------
+# author    Mohammad Hasani Eghtedar <m.h.eghtedar@gmail.com>
+# copyright Copyright (C) 2010 http://joomlacode.org/gf/project/com_localise/. All Rights Reserved.
+# @license - http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
+# Websites: http://joomlacode.org/gf/project/com_localise/
+# Technical Support:  Forum - http://joomlacode.org/gf/project/com_localise/forum/
+-------------------------------------------------------------------------*/
+// no direct access
+defined( '_JEXEC' ) or die( 'Restricted access' );
+
+jimport('joomla.application.component.view');
+
+/**
+ * Package View class for the Localise component
+ *
+ * @package    Extensions.Components
+ * @subpackage  Localise
+ * @since    1.6
+ */
+class LocaliseViewPackage extends JView
+{
+  protected $filename = null;
+  protected $form = null;
+  protected $extensions = null;
+  protected $pane = null;
+  protected $panel = null;
+  protected $panel_title = null;
+  protected $header = null;
+  function display($tpl = null) 
+  {
+    $this->filename = & $this->get('Filename');
+    $this->form = & $this->get('Form');
+    $this->extensions = & $this->get('Extensions');
+    parent::display($tpl);
+  }
+}

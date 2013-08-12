@@ -1,0 +1,382 @@
+/* css */
+table {
+	margin: 0;
+	padding: 0;
+}
+
+a {
+	text-decoration: none;
+}
+
+.main {
+	background-color: #ffffff;
+	font-family: arial, serif;
+	font-weight: 13px;
+	height: auto;
+	width: 100%;
+	color: #635821;
+	text-align: center;
+}
+
+/**********  TOP ***********/
+.head {
+	height: 25px;
+	width: 100%;
+	background-color: #5690de;
+	color: #fff;
+	font-weight: bold;
+	margin-top: 0px;
+	text-align: right;
+	padding-right: 5px;
+}
+
+.head a {
+	text-decoration: none;
+	color: #ffffff;
+	font-weight: bold;
+}
+
+.head a:hover {
+	color: #FFE973;
+	font-weight: bold;
+}
+
+/**********    SEARCH IDEA   **********/
+#searchBox {
+	padding-top: 10px;
+	padding-bottom: 5px;
+}
+
+#searchBox span {
+	color: #464646;
+	font-size: 15px;
+}
+
+#searchBox fieldset {
+	border: 0;
+	background-color: #fdf59e;
+	-moz-border-radius: 9px;
+	border: 1px solid #FDF59E;
+	margin-top: 10px;
+	padding-top: 7px;
+	padding-left: 7px;
+}
+
+#keysearch {
+	font-weight: bold;
+	color: #135CAE;
+	font-size: 14px;
+}
+
+#keysearch input {
+	width: 80%;
+	float: left;
+	padding: 5px;
+	color: #cccccc;
+	font-size: 14px;
+}
+
+#button input {
+	font-weight: bolder;
+	height: 32px;
+	color: #135CAE;
+	margin-left: 5px;
+}
+
+.search-text {
+	
+}
+
+/********** NEW & EDIT FORM ********/
+#newform,#editform {
+	position: absolute;
+	top: -500px;
+	left: -100px;
+	z-index: 100;
+}
+
+#newform .addIdea,#editform .addIdea {
+	background-color: #fff;
+	/* width: 400px; */
+	border: 1px solid #135cae;
+}
+
+#newform .idea_top,#editform .idea_top {
+	background-color: #5690de;
+	height: 25px;
+	font-size: 13px;
+	color: #fff;
+	font-weight: bold;
+	text-align: right;
+	padding-right: 5px;
+}
+
+#imgclose {
+	background: background :   url(images/cancel.png) no-repeat right top;
+}
+
+#idea_title {
+	padding: 10px;
+}
+
+#idea_title p,#idea_title .button {
+	color: #0066cc;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+#idea_title .textinput {
+	width: 95%;
+	font-weight: bold;
+	font-size: 13px;
+	border: 1px solid #5690de;
+	color: #4c4d4d;
+}
+
+#idea_title textarea {
+	width: 95%;
+	height: 100px;
+	color: #4c4d4d;
+	font-size: 12px;
+	border: 1px solid #5690de;
+}
+
+/*************  TABS IDEAS  ************/
+#tab { /*padding-left:13px;*/
+	
+}
+
+#tab table {
+	width: 98%;
+	margin-top: 6px;
+}
+
+/*************  STATUS  FORM  *************/
+.frame {
+	border: 1px solid #ccc;
+	background-color: #fff;
+	width: auto;
+	display: block;
+	color: #135CAE;
+}
+
+.parentid {
+	padding-left: 3px;
+	color: #fff;
+	font-size: 11px;
+	background-color: #5690de;
+}
+
+.child {
+	padding-left: 15px;
+	padding-top: 5px;
+	padding-right: 3px;
+	color: #135cae;
+	font-size: 12px;
+	font-weight: bold;
+	background-color: #fff;
+}
+
+.invisible_form {
+	position: absolute;
+	top: -400px;
+	left: -200px;
+	z-index: 1000;
+}
+
+.show_form {
+	position: absolute !important;
+	top: 400px;
+	left: 500px;
+	z-index: 100;
+}
+
+/*******  LIST IDEAS  *******/
+#content {
+	color: #4c4d4d;
+	font-size: 12px;
+	/*
+	border-left: 1px solid #83ACCA;
+	border-right: 1px solid #83ACCA;
+	border-bottom: 1px solid #83ACCA;
+	*/
+}
+
+.title_idea {
+	float: left;
+	font-size: 18px;
+	font-weight: bolder;
+}
+
+.voteBox {
+	width: 120px;
+	text-align: center;
+}
+
+.score {
+	color: #135cae;
+	font-size: 16px;
+	font-weight: bolder;
+	height: 15px;
+	padding-left: 25px;
+}
+
+.voteIMG { /*padding-left:30px; */
+	
+}
+
+.star {
+	background: url("../images/star_select2.jpg") no-repeat top left;
+	width: 15px;
+	height: 15px;
+	float: left;
+	padding-left: 2px;
+}
+
+.noResponse {
+	color: #635821;
+}
+
+.noResponse i {
+	background-color: #ccc;
+}
+
+.Response {
+	color: #bbb;
+	background-color: #fff;
+	width: 98%;
+	height: auto;
+	border: 1px dashed #bbb;
+	padding: 3px;
+}
+
+/*******  VOTE IMG  ******/
+.voteT {
+	background: url("../images/voteT.gif") no-repeat bottom left;
+	width: 50px;
+	height: 10px;
+}
+
+.voteC {
+	width: 48px;
+	height: 34px;
+	font-size: 10px;
+	text-align: center;
+	border-left: 1px solid #ccc;
+	border-right: 1px solid #ccc;
+}
+
+.voteB {
+	background: url("../images/voteB1.gif") no-repeat top left;
+	width: 50px;
+	height: 16px;
+	color: #135cae;
+	text-align: center;
+}
+
+.voteB p,.voteBB p {
+	font-size: 12px;
+	font-weight: bold;
+	text-align: center;
+}
+
+.voteC .sumvotes p {
+	font-size: 20px;
+	color: #ff7800;
+	text-align: center;
+}
+
+.voteC p {
+	font-size: 10px;
+	font-weight: bold;
+	text-align: center;
+}
+
+.voteBB {
+	background: url("../images/voteB2.gif") no-repeat top left;
+	width: 50px;
+	height: 16px;
+	color: #fff;
+	text-align: center;
+}
+
+#voteform {
+	border: 1px solid #ccc;
+}
+
+.howvote {
+	background-color: #0066cc;
+	color: #fff;
+	font-weight: bold;
+}
+
+.howvotes {
+	color: #135ace;
+	font-weight: bold;
+	font-size: 13px;
+	background-color: #fff;
+	height: auto;
+	width: auto;
+	display: block;
+	padding-left: 4px;
+}
+
+.howvotes a {
+	font-weight: bold;
+	font-size: 13px;
+	padding: 0px 5px;
+	text-decoration: none;
+}
+
+.howvotes a:hover {
+	font-weight: bold;
+	font-size: 13px;
+	color: #fff;
+	background-color: #135ace;
+	text-decoration: none;
+}
+
+/******** IDEA *******	
+#oneIdea{
+	background:#fff;
+	}	
+.active_ {
+	float:left;
+	color: #0066CC;
+	font-size:11px;
+
+	}
+.active_ a {
+	text-decoration:none;
+	}
+.active_ a:hover{
+	color:#ff7800;
+	text-decoration:none;
+	}	
+/********  SEARCH *******/
+.rsSearch {
+	color: #ff7800;
+	font-size: 13px;
+	font-weight: bold;
+	float: left;
+}
+
+.rsSearch a {
+	color: #ff7800;
+	text-decoration: none;
+}
+
+.rsSearch a:hover {
+	text-decoration: none;
+	font-weight: bold;
+	color: green;
+}
+
+/******************************/
+div.current {
+	max-width: 100% !important;
+}
+
+#myPanel {
+	margin-top: 0px;
+	}

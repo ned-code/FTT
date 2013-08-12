@@ -1,0 +1,26 @@
+<forum>
+
+			<forum_name></forum_name>
+
+			<description></description>
+
+			<wellcome_message></wellcome_message>
+
+			<prompt></prompt>
+
+			<example></example>
+
+			<ideas>
+	 				<idea>
+	 					<id></id>
+	 					<title>Idea template</title>
+	 					<content></content>
+	 					<createdate></createdate>
+	 					<response></response>
+	 					<votes>0</votes>
+	 					<published>1</published>
+	 					<comments>
+	 					</comments>
+	 				</idea>
+	 				</ideas>
+		</forum>

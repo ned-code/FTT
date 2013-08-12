@@ -1,0 +1,25 @@
+<forum>
+
+			<forum_name>asdas</forum_name>
+
+			<description>dasd</description>
+
+			<wellcome_message>asd</wellcome_message>
+
+			<prompt>asd</prompt>
+
+			<example>asdasdas</example>
+
+			<ideas>
+	 				<idea>
+	 					<id>662</id>
+	 					<title>Seed this page with existing ideas</title>
+	 					<content>Few things can be as intimidating as a blank page. Try adding a few ideas yourself to get things started and help your users understand what they might also add to the discussion.</content>
+	 					<createdate>2008-08-12 07:07:33</createdate>
+	 					<response></response>
+	 					<votes>6</votes>
+	 					<published>1</published>
+	 					<comments>
+	 					</comments>
+	 				</idea></ideas>
+		</forum>

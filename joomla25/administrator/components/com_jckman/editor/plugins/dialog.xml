@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<install version="1.5" type="plugin" plugin="dialog" method="upgrade">
+	<version>0.1</version>
+	<creationDate>Feb 2012</creationDate>
+	<author>CKSource.com</author>
+	<authorUrl>http://cksource.com/</authorUrl>
+	<license>GNU/GPLv2</license>
+	<description>Core Dialog plugin</description>
+	<languages>
+	</languages>
+<params group="options">
+		<param name="baseFloatZIndex" type="text" default="10000" label="Dialog Float Index" description="The base Z-index for floating dialog windows and popups."/>
+		<param name="dialog_backgroundCoverColor" type="jscolor" default="#FFFFFF" label="Dialog Background Cover Color" description="The color of the dialog background cover. It should be a valid CSS color string."/>
+		<param name="indentOffset" type="list" default="0.7" label="Indent Offset" description="Size of each indentation step">
+			<option value="0.1">0.1</option>
+			<option value="0.2">0.2</option>
+			<option value="0.3">0.3</option>
+			<option value="0.4">0.4</option>
+			<option value="0.5">0.5</option>
+			<option value="0.6">0.6</option>
+			<option value="0.7">0.7</option>
+			<option value="0.8">0.8</option>
+			<option value="0.9">0.9</option>
+			<option value="1.0">1.0</option>
+		</param>
+		<param name="dialog_buttonsOrder" type="list" default="OS" label="Dialog Button Order" description="The guideline to follow when generating the dialog buttons. There are 3 possible options:  'Operatig System' - the buttons will be displayed in the default order of the user's OS, Left to Right , Right to Left.">
+			<option value="OS">Operating System</option>
+			<option value="ltr">Left to Right</option>
+			<option value="rtl">Right to Left</option>
+		</param>
+		<param name="dialog_startupFocusTab" type="radio" default="0" label="Dialog Startup Focus Tab" description="If the dialog has more than one tab, put focus into the first tab as soon as dialog is opened. ">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+</params>
+</install>

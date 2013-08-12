@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<install version="1.5" type="plugin" plugin="smiley" method="upgrade">
+	<version>0.1</version>
+	<creationDate>Feb 2012</creationDate>
+	<author>CKSource.com</author>
+	<authorUrl>http://cksource.com/</authorUrl>
+	<license>GNU/GPLv2</license>
+	<description>Core Simley plugin</description>
+	<languages>
+	</languages>
+	<params>
+		<param name="dialogtitle" type="jscombo" default="Default" label="Dialog Title" description="The Title shown in the dialog for this plugin" >
+			<option value="Default">Default</option>
+			<option value="Enter new title here">Enter new title here</option>
+		</param>	
+		<param name="height" type="text" default="120" label="Dialog height" description="The height of dialog" />
+		<param name="width" type="text" default="270" label="Dialog width" description="The width of dialog"/>
+	</params>	
+	<params group="options">
+		<param name="smiley_path" type="text" default="plugins/smiley/images/" label="Simley Image Path" description="The base path used to build the URL for the smiley images. It must end with a slash.  Also Note that if the path starts with 'plugins' that the URL will be  resolved with JURI::base."/>
+</params>
+</install>

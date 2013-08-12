@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?><forum>
+			<forum_name>sadasda</forum_name>
+			<description>dasad</description>
+			<wellcome_message></wellcome_message>
+			<prompt></prompt>
+			<example></example>
+			<ideas>
+	 				<idea>
+	 					<id>125516</id>
+	 					<title>Theo dõi các nhóm Doanh nghiệp theo ý mình</title>
+	 					<content>Người dùng có thể tạo các nhóm mã mình quan tâm để tập hợp, sàng lọc thông tin cũng như có sẵn các chỉ số phân tích để sử dụng trên màn hình.</content>
+	 					<createdate>2009-02-19T15:32:23Z</createdate>	 					
+	 					<votes>16</votes>	
+	 					<response></response> 		
+	 					<published>1</published>			
+	 					<comments></comments>
+	 				</idea>
+	 				<idea>
+	 					<id>125509</id>
+	 					<title>Tổ chức tra cứu thông tin doanh nghiệp dễ dùng hơn</title>
+	 					<content>Chỉ cần gõ mã là có tất cả các thông tin cần thiết của Doanh nghiệp hay của ngành xung quanh, phân làm nhiều tab, nhiều khu vực rõ ràng.</content>
+	 					<createdate>2009-02-19T15:27:19Z</createdate>	 					
+	 					<votes>13</votes>	
+	 					<response></response> 		
+	 					<published>1</published>			
+	 					<comments></comments>
+	 				</idea>
+	 				<idea>
+	 					<id>139331</id>
+	 					<title>Đưa các dịch vụ của SSI thành online service</title>
+	 					<content>Khách hàng có thể tự thao tác để thực hiện các dịch vụ như: mở TK, ứng trước tiền bán, cầm cố .v.v. mà không cần trực tiếp đến SSI.</content>
+	 					<createdate>2009-03-13T08:42:31Z</createdate>	 					
+	 					<votes>8</votes>	
+	 					<response></response> 		
+	 					<published>1</published>			
+	 					<comments></comments>
+	 				</idea>
+	 				<idea>
+	 					<id>139364</id>
+	 					<title>Xây dựng top-list các CP đang được quan tâm, update tự động</title>
+	 					<content>Mục top cổ phiếu hiện đang được người dùng xem, tìm kiếm nhiều nhất dựa và thống kê tự động của trang. Danh sách này được cập nhật tự động liên tục. Sẽ thu hút thêm sự quan tâm của người dùng!</content>
+	 					<createdate>2009-03-13T10:01:57Z</createdate>	 					
+	 					<votes>6</votes>	
+	 					<response></response> 		
+	 					<published>1</published>			
+	 					<comments></comments>
+	 				</idea>
+	 				<idea>
+	 					<id>139344</id>
+	 					<title>Bán các sản phẩm thông tin, báo cáo qua website</title>
+	 					<content>Khách hàng có thể trả tiền để nhận được các giá trị gia tăng. VD: Một số báo cáo, sản phẩm phân tích cao cấp, tư vấn chiến lược đầu tư cho cá nhân khách hàng v.v.</content>
+	 					<createdate>2009-03-13T09:23:55Z</createdate>	 					
+	 					<votes>5</votes>	
+	 					<response></response> 		
+	 					<published>1</published>			
+	 					<comments></comments>
+	 				</idea>
+	 				<idea>
+	 					<id>142511</id>
+	 					<title>Cho người tìm CP theo nhiều tiêu chí khác nhau</title>
+	 					<content>Ví dụ công ty trong ngành nhất định có P/E thấp hơn x, hoặc những công ty có EPS &gt; y mà có khối lượng giao dịch cao nhất trong 4 tuần vừa qua.</content>
+	 					<createdate>2009-03-18T15:08:12Z</createdate>	 					
+	 					<votes>5</votes>	
+	 					<response></response> 		
+	 					<published>1</published>			
+	 					<comments></comments>
+	 				</idea>
+	 				<idea>
+	 					<id>141807</id>
+	 					<title>Cho phép người dùng tạo bookmark cá nhân, công cộng</title>
+	 					<content>Mỗi người dùng có thể đánh dấu các bài mình quan tâm, yêu thích vào 1 chỗ riêng để tiện việc tìm đọc lại sau này. Tương tự như vậy là việc hỗ trợ các mạng bookmark xã hội như digg, stumble hay folkd. Bookmark cá nhân chỉ người đó nhìn thấy. Chức năng này sẽ tạo tính cá nhân riêng tư cho người dùng để gắn kết họ với web SSI.</content>
+	 					<createdate>2009-03-17T16:28:23Z</createdate>	 					
+	 					<votes>5</votes>	
+	 					<response></response> 		
+	 					<published>1</published>			
+	 					<comments></comments>
+	 				</idea>
+	 				<idea>
+	 					<id>139353</id>
+	 					<title>Khách hàng có thể chọn ngôn ngữ website ngay khi login</title>
+	 					<content>Khắc phục tình trạng hiện nay khi truy cập www.ssi.com.vn thì luôn là trang tiếng Việt. Khách hàng nước ngoài kém về Web sẽ gặp khó khăn khi muốn chuyển sang ngôn ngữ của họ từ trang tiếng Việt.</content>
+	 					<createdate>2009-03-13T09:39:44Z</createdate>	 					
+	 					<votes>4</votes>	
+	 					<response></response> 		
+	 					<published>1</published>			
+	 					<comments></comments>
+	 				</idea>
+	 				<idea>
+	 					<id>139409</id>
+	 					<title>Tạo tiểu mục download</title>
+	 					<content>Các phần mềm free thông dụng, đặc biệt là dữ liệu Metastock hàng ngày. (thực tế hiện nay một ngày có rất nhiều người cần dữ liệu này mà không có ai cung cấp -&gt; quảng bá nhiều hơn website cua SSI</content>
+	 					<createdate>2009-03-13T12:03:58Z</createdate>	 					
+	 					<votes>4</votes>	
+	 					<response></response> 		
+	 					<published>1</published>			
+	 					<comments></comments>
+	 				</idea>
+	 				<idea>
+	 					<id>139323</id>
+	 					<title>Bổ sung các bài phân tích của riêng SSI cho KH của mình</title>
+	 					<content>Hiện nay SSI chủ yếu mới chỉ đăng tin từ các nguồn khác nên không có sự phân biệt so với các trang khác. KH của SSI cần nhận được các bài phân tích của riêng SSI, kể cả HOLD/BUY/SELL với một số loại cổ phiếu đang được nhiều người quan tâm.</content>
+	 					<createdate>2009-03-13T08:11:52Z</createdate>	 					
+	 					<votes>3</votes>	
+	 					<response></response> 		
+	 					<published>1</published>			
+	 					<comments></comments>
+	 				</idea></ideas>
+		</forum>

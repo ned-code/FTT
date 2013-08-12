@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<install type="module" version="1.5" method="upgrade" client="site">
+	<name>obSuggest Forums module</name>
+	<author>foobla.com</author>
+	<creationDate>March 2011</creationDate>
+	<copyright>(C) 2007 - 2011 foobla.com. All rights reserved.</copyright>
+	<license>GNU/GPL, see LICENSE</license>
+	<authorEmail>admin@foobla.com</authorEmail>
+	<authorUrl>foobla.com</authorUrl>
+	<version>1.6.1</version>
+	<description>obSuggest::Forums module</description>
+	<files>
+		<filename module="mod_obsuggest_forums">mod_obsuggest_forums.xml</filename>
+		<filename module="mod_obsuggest_forums">mod_obsuggest_forums.php</filename>
+		<filename module="mod_obsuggest_forums">helper.php</filename>
+		<filename module="mod_obsuggest_forums">index.html</filename>
+		<filename module="mod_obsuggest_forums">tmpl/index.html</filename>
+		<filename module="mod_obsuggest_forums">tmpl/default.php</filename>
+		<filename module="mod_obsuggest_forums">element/forum.php</filename>
+	</files>
+	<params addpath="/modules/mod_obsuggest_forums/element">
+		<param name="moduleclass_sfx" type="text" default="" label="Module Class Suffix" description="PARAMMODULECLASSSUFFIX" />
+		<param name="@spacer" type="spacer" default="" label="" description="" />
+		<param name="select_forums" type="forum" default="1" label="Select Forum" description="Select the Forums which will be shown in the Forums chooser" />
+	</params>
+	<config>
+		<fields name="params">
+			<fieldset name="basic" addpath="/modules/mod_obsuggest_forums/element">
+				<field name="moduleclass_sfx" type="text" default="" label="Module Class Suffix" description="PARAMMODULECLASSSUFFIX" />
+				<field name="@spacer" type="spacer" default="" label="" description="" />
+				<field name="select_forums" type="forum" default="1" label="Select Forum" description="Select the Forums which will be shown in the Forums chooser" />
+			</fieldset>
+		</fields>
+	</config>
+	<config>
+		<fields name="params">
+			<fieldset name="advanced">
+				<field name="cache" type="list" default="1" label="Caching" description="Select whether to cache the content of this module">
+					<option value="1">Use global</option>
+					<option value="0">No caching</option>
+				</field>
+				<field name="cache_time" type="text" default="900" label="Cache Time" description="The time before the module is recached" />
+			</fieldset>
+		</fields>
+	</config>
+</install>

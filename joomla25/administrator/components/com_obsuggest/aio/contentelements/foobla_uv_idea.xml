@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+<joomfish type="contentelement">
+  <name>obSuggest Idea</name>
+  <author>Phong Lo</author>
+  <version>1.6</version>
+  <description>Definition for the ideas of obSuggest component</description>
+  <copyright>2003 - 2011, Think Network GmbH, Munich</copyright>
+  <reference>
+  	<table name="foobla_uv_idea">
+		<field type="referenceid" name="id" translate="0">ID</field>
+		<field type="titletext" name="title" length="60" maxlength="60" translate="1">TITLE</field>
+		<field type="textarea" name="content" translate="1">Content</field>
+		<field type="created_date" name="createdate" translate="0">Created Date</field>
+		<field type="text" name="response"  length="50" maxlength="250" translate="1">response</field>
+		<field type="text" name="resource"  length="50" maxlength="250" translate="1">resource</field>
+  	</table>
+  	<component>
+  		<form>com_obsuggest#categories#cid#task#!edit</form>
+  	</component>
+  </reference>
+  <translationfilters>
+	  <id>id</id>
+  </translationfilters>
+</joomfish>

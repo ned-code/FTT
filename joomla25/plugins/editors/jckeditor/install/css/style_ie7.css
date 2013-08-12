@@ -1,0 +1,32 @@
+html,body {
+overflow:hidden;
+}
+
+.container {
+height: 317px;
+width:557px;
+}
+
+table {
+margin:14px;
+width:513px;
+}
+input[type="text"],select{
+	margin-right:28px;
+}
+
+select.combobox {
+margin:0px;
+}
+
+.mainBody {
+padding-right:0px;
+}
+
+td.last{
+	width:250px !important;
+}
+
+fieldset {
+overflow:hidden;
+}

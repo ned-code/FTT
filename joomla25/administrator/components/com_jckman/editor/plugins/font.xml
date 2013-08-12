@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<install version="1.5" type="plugin" plugin="font" method="upgrade">
+	<version>0.1</version>
+	<creationDate>Feb 2012</creationDate>
+	<author>CKSource.com</author>
+	<authorUrl>http://cksource.com/</authorUrl>
+	<license>GNU/GPLv2</license>
+	<description>Core Font plugin</description> 
+	<languages>
+	</languages>
+	<params group="options">
+		<param name="font_names" type="dualaddselectlist"  separator=";" default="" label="Font List Names" description="The list of fonts names to be displayed in the Font combo in the toolbar.A display is defined by entering text in the 'Text' input box next to the 'Value' input box. For example, 'Arial' can be used for the display and 'Arial, Helvetica, sans-serif' could be used for the value.">
+		    <option value="Arial, Helvetica, sans-serif">Arial</option>
+            <option value="Comic Sans MS, cursiv">Comic Sans MS</option>
+            <option value="Georgia, serif">Georgia</option>
+            <option value="Courier New, Courier, monospace">Courier New</option>
+            <option value="Lucida Sans Unicode">Lucida Sans Unicode</option>
+            <option value="Tahoma, Geneva, sans-serif">Tahoma</option>
+            <option value="Times New Roman, Times, serif">Times New Roman</option>
+            <option value="Trebuchet MS, Helvetica, sans-serif">Trebuchet MS</option>
+            <option value="Verdana, Geneva, sans-serif">Verdana</option>
+         </param>
+        <param name="fontSize_sizes" type="dualaddselectlist"  separator=";" default="" label="Font List Sizes" description="The list of fonts size to be displayed in the Font Size combo in the toolbar. Any kind of 'CSS like' size can be used, like '12px', '2.3em', '130%', 'larger' or 'x-small'. A display is defined by entering text in the 'Text' input box next to the 'Value' input box. For example, 'Bigger Font' can be used for the display and '14px' could be used for the value.">
+            <option value="8px">8</option>
+			<option value="9px">9</option>
+            <option value="10px">10</option>
+            <option value="11px">11</option>
+            <option value="12px">12</option>
+            <option value="14px">14</option>
+            <option value="16px">16</option>
+            <option value="18px">18</option>
+            <option value="20px">20</option>
+            <option value="22px">22</option>
+            <option value="24px">24</option>
+            <option value="26px">26</option>
+            <option value="28px">28</option>
+            <option value="36px">36</option>
+            <option value="48px">48</option>
+            <option value="72px">72</option>
+        </param>
+</params>
+</install>

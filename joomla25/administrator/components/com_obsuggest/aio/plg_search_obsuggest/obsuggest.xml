@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<install version="1.5" type="plugin" group="search" method="upgrade">
+	<name>plg_search_obsuggest</name>
+	<creationDate>January 2011</creationDate>
+	<author>foobla.com</author>
+	<authorEmail>info@foobla.com</authorEmail>
+	<authorUrl>http://foobla.com</authorUrl>
+	<copyright>(C) 2010-2011 foobla.com. All rights reserved.</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+	<version>1.6.0</version>
+	<description>PLG_SEARCH_OBSUGGEST_XML_DESCRIPTION</description>
+	<files>
+		<filename plugin="obsuggest">obsuggest.php</filename>
+		<filename>index.html</filename>
+	</files>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_search_obsuggest.ini</language>
+		<language tag="de-DE">de-DE/de-DE.plg_search_obsuggest.ini</language>
+		<language tag="fr-FR">fr-FR/fr-FR.plg_search_obsuggest.ini</language>
+		<language tag="nl-NL">nl-NL/nl-NL.plg_search_obsuggest.ini</language>
+	</languages>
+	<params>
+		<param type="text" name="search_limit" default="50" size="5" label="PLG_SEARCH_CONTENT_FIELD_SEARCHLIMIT_LABEL" description="PLG_SEARCH_CONTENT_FIELD_SEARCHLIMIT_DESC"/>
+		<param type="radio" name="search_content" default="0" label="PLG_SEARCH_CONTENT_FIELD_CONTENT_LABEL" description="PLG_SEARCH_CONTENT_FIELD_CONTENT_DESC">
+			<option value="0">JOFF</option>
+			<option value="1">JON</option>
+		</param>
+		<param type="radio" name="search_archived" default="0" label="PLG_SEARCH_CONTENT_FIELD_ARCHIVED_LABEL" description="PLG_SEARCH_CONTENT_FIELD_ARCHIVED_DESC">
+			<option value="0">JOFF</option>
+			<option value="1">JON</option>
+		</param>
+	</params>
+	<config>
+		<fields name="params">
+
+			<fieldset name="basic">
+				<field name="search_limit" type="text"
+					default="50"
+					description="PLG_SEARCH_CONTENT_FIELD_SEARCHLIMIT_DESC"
+					label="PLG_SEARCH_CONTENT_FIELD_SEARCHLIMIT_LABEL"
+					size="5"
+				/>
+
+				<field name="search_content" type="radio"
+					default="0"
+					description="PLG_SEARCH_CONTENT_FIELD_CONTENT_DESC"
+					label="PLG_SEARCH_CONTENT_FIELD_CONTENT_LABEL"
+				>
+					<option value="0">JOFF</option>
+					<option value="1">JON</option>
+				</field>
+
+				<field name="search_archived" type="radio"
+					default="0"
+					description="PLG_SEARCH_CONTENT_FIELD_ARCHIVED_DESC"
+					label="PLG_SEARCH_CONTENT_FIELD_ARCHIVED_LABEL"
+				>
+					<option value="0">JOFF</option>
+					<option value="1">JON</option>
+				</field>
+			</fieldset>
+
+		</fields>
+	</config>
+</install>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="1.6" type="plugin" group="authentication" method="upgrade" client="site">
+	<name>Authentication - JFBConnect Facebook</name>
+	<version>4.1.2</version>
+	<creationDate>2012/01/31</creationDate>
+	<author>SourceCoast | www.sourcecoast.com</author>
+	<authorEmail>support@sourcecoast.com</authorEmail>
+	<authorUrl>http://www.sourcecoast.com</authorUrl>
+	<copyright>2010-2012 SourceCoast. All rights reserved.</copyright>
+	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+	<description>Facebook authentication plugin to be used with JFBConnect</description>
+	<files>
+		<filename plugin="jfbconnectauth">jfbconnectauth.php</filename>
+	</files>
+    <updateservers>
+        <server type="extension" priority="1" name="JFBConnectAuth Plugin Updates"><![CDATA[http://www.sourcecoast.com/versions/updates/jfbconnectauth.xml]]></server>
+    </updateservers>
+</extension>

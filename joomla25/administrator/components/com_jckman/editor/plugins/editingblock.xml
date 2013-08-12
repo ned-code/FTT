@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<install version="1.5" type="plugin" plugin="editingblock" method="upgrade">
+	<version>0.1</version>
+	<creationDate>Feb 2012</creationDate>
+	<author>CKSource.com</author>
+	<authorUrl>http://cksource.com/</authorUrl>
+	<license>GNU/GPLv2</license>
+	<description>Core Dialog plugin</description>
+	<languages>
+	</languages>
+	<params group="options">
+		<param name="autoParagraph" type="radio" default="1" label="Auto  Paragrah " description="Determines whether automatically create wrapping blocks around inline contents inside document body, this helps to ensure the integrality of the block enter mode. Note: Changing the default value might introduce unpredictable usability issues.">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+		<param name="startupMode" type="radio" default="0" label="StartUp  Mode" description="The mode to load at the editor startup. It depends on the plugins loaded. By default, the 'wysiwyg' and 'source' modes are available. ">
+			<option value="wysiwyg">WYSISYG</option>
+			<option value="source">Source</option>
+		</param>
+		<param name="useComputedState" type="radio" default="0" label="Use Computed State " description="Determines whether automatically create wrapping blocks around inline contents inside document body, this helps to ensure the integrality of the block enter mode. Note: Changing the default value might introduce unpredictable usability issues.">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+</params>
+</install>

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="1.6" type="module" method="upgrade" client="site">
+    <name>SCLogin</name>
+    <version>1.0.2</version>
+    <creationDate>2011/11/28</creationDate>
+    <author>SourceCoast | www.sourcecoast.com</author>
+    <authorEmail>support@sourcecoast.com</authorEmail>
+    <authorUrl>http://www.sourcecoast.com</authorUrl>
+    <copyright>Copyright (C) 2009-2012 SourceCoast. All rights reserved.</copyright>
+    <license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+    <description>This is the login module that goes with the JFBConnect/JLinked component.</description>
+    <files>
+        <filename module="mod_sclogin">mod_sclogin.php</filename>
+        <filename>helper.php</filename>
+        <filename>index.html</filename>
+        <filename>mod_sclogin.xml</filename>
+        <filename>css/mod_sclogin.css</filename>
+        <filename>tmpl/index.html</filename>
+        <filename>tmpl/login.php</filename>
+        <filename>tmpl/logout.php</filename>
+    </files>
+    <languages folder="translations">
+        <language tag="de-DE">de-DE.mod_sclogin.ini</language>
+        <language tag="en-GB">en-GB.mod_sclogin.ini</language>
+        <language tag="fr-FR">fr-FR.mod_sclogin.ini</language>
+        <language tag="it-IT">it-IT.mod_sclogin.ini</language>
+        <language tag="nl-NL">nl-NL.mod_sclogin.ini</language>
+        <language tag="zh-TW">zh-TW.mod_sclogin.ini</language>
+    </languages>
+    <config>
+        <fields name="params">
+            <fieldset name="login" label="Login View Settings">
+                <field name="register_type" type="radio" default="joomla" label="Registration Component"
+                       desription="This changes the 'Register Now' link to point to the component specified. Only select JomSocial if you have it installed.">
+                    <option value="joomla">Joomla</option>
+                    <option value="jomsocial">JomSocial</option>
+                    <option value="communitybuilder">Community Builder</option>
+                </field>
+                <field name="showLoginForm" type="radio" label="Show Login Form"
+                       description="Show the Login form with username/password and login button" default="1">
+                    <option value="0">Hide</option>
+                    <option value="1">Show</option>
+                </field>
+                <field name="showRegisterLink" type="radio" label="Show Register Link"
+                       description="Show the 'Register for this site' link" default="1">
+                    <option value="0">Hide</option>
+                    <option value="1">Show</option>
+                </field>
+                <field name="showForgotUsername" type="radio" label="Show Forgot Username Link"
+                       description="Show the 'Forgot Username' link" default="1">
+                    <option value="0">Hide</option>
+                    <option value="1">Show</option>
+                </field>
+                <field name="showForgotPassword" type="radio" label="Show Forgot Password Link"
+                       description="Show the 'Forgot Password' link" default="1">
+                    <option value="0">Hide</option>
+                    <option value="1">Show</option>
+                </field>
+                <field name="separator" type="spacer" default="" disable="separator" label="Joomla Login Redirection:"
+                       description="Joomla Login Redirection"/>
+                <field name="jlogin_redirect" type="radio" label="Redirect on Joomla Login"
+                       description="'Yes' will use the list below to determine where the user should be redirected to upon a Joomla login. When set to 'No' the user will remain on the current page after logging in."
+                       default="1">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </field>
+                <field name="jlogin" type="menuitem" default="" disable="separator" label="Joomla Login Redirection URL"
+                       description="PARAMJOOMLALOGINREDIRECTURL"/>
+            </fieldset>
+            <fieldset name="logout" label="Logout View Settings">
+                <field name="enableProfilePic" type="list" label="Enable Profile Picture"
+                       description="Show profile picture of user when logged in. If a social network is selected, the avatar from that network will be displayed first, if available. If not, the other one will be used. If a Joomla-only user is logged in, no image will be shown."
+                       default="0">
+                    <option value="0">Hide</option>
+                    <option value="facebook">Facebook</option>
+                    <option value="linkedin">LinkedIn</option>
+                </field>
+                <field name="profileWidth" type="text" label="Profile Width (in px)" default="50"
+                       description="Width of profile picture. Suggested sizes are: Square/Small (50), Normal (100), Large (200)"/>
+                <field name="profileHeight" type="text" label="Profile Height (in px)" default=""
+                       description="Height of profile picture. Suggested sizes are: Square(50), Small/Normal/Large (leave blank)"/>
+                <field name="linkProfile" type="radio" label="Link pic to social profile"
+                       description="Link the profile pic to the user's LinkedIn or Facebook public profile" default="0">
+                    <option value="0">Do Not Link</option>
+                    <option value="1">Link</option>
+                </field>
+                <field name="showGreeting" type="radio" label="Show Greeting" description="Show Greeting when logged in"
+                       default="1">
+                    <option value="0">Hide</option>
+                    <option value="1">Show</option>
+                </field>
+                <field name="greetingName" type="radio" label="Greeting Name"
+                       description="Name to show if Greeting is enabled" default="1">
+                    <option value="0">Username</option>
+                    <option value="1">Name</option>
+                </field>
+                <field name="showLogoutButton" type="radio" label="Show Logout Button"
+                       description="Show Logout Button logged in" default="1">
+                    <option value="0">Hide</option>
+                    <option value="1">Show</option>
+                </field>
+                <field name="showConnectButton" type="radio" label="Show Connect Account Button(s)"
+                       description="When logged in through Joomla only and the user has never connected their account to a Facebook or LinkedIn account, show a Connect to Facebook and/or LinkedIn button."
+                       default="1">
+                    <option value="0">Hide</option>
+                    <option value="1">Show</option>
+                </field>
+            </fieldset>
+            <fieldset name="facebook" label="Facebook Options">
+                <field name="loginButtonSize" type="list" label="FB Login Button Size"
+                       description="Size of the Login with Facebook button" default="medium">
+                    <option value="small">Small</option>
+                    <option value="medium">Medium</option>
+                    <option value="large">Large</option>
+                    <option value="xlarge">XLarge</option>
+                    <!-- <option value="icon">Icon only</option>-->
+                </field>
+            </fieldset>
+            <fieldset name="advanced">
+                <field name="user_intro" type="textarea" rows="5" cols="40" label="Intro Text"
+                       description="PARAMUSERDESC" default=""/>
+                <field name="showPoweredByLink" type="radio" label="Show Powered By Link"
+                       description="Show 'Powered By' link" default="2">
+                    <option value="2">Use Global</option>
+                    <option value="0">Hide</option>
+                    <option value="1">Show</option>
+                </field>
+                <field name="moduleclass_sfx" type="text" label="MODULE CLASS SUFFIX"
+                       description="PARAMMODULECLASSSUFFIX" default=""/>
+            </fieldset>
+        </fields>
+    </config>
+    <updateservers>
+        <server type="extension" priority="1" name="SCLogin Updates"><![CDATA[http://www.sourcecoast.com/versions/updates/sclogin.xml]]></server>
+    </updateservers>
+</extension>

@@ -1,0 +1,76 @@
+body{
+margin: 0;
+padding: 0;
+font-family:Arial, Helvetica, sans-serif;
+}
+
+h3 {
+margin-top: 3px;
+margin-bottom: 17px;
+color:0b55c4;
+}
+
+.container {
+height: 303px;
+width:543px;
+}
+.header {
+background-image:url(../images/headerBg.png);
+background-repeat:repeat-x;
+background-color: #266db2;
+width: 571px;
+height:69px;
+}
+.innerHeader {
+background-image:url(../images/icon-48-cpanel.png);
+background-repeat:no-repeat;
+background-attachment:fixed;
+background-position:516px 13px; 
+min-width:543px;
+height:41px;
+padding:14px 14px 4px 14px;
+}
+.mainBody {
+width:inherit;
+height: inherit;
+padding: 14px;
+}
+
+.buttons {
+    left: 480px;
+    position:absolute;
+    top: 363px;
+    width: 77px;
+	z-index:1000;
+}
+
+.left {
+  left: 14px;	
+}
+
+fieldset.adminform {
+border:1px solid #CCCCCC;
+}
+
+legend {
+color:#0B55C4;
+font-size:12px;
+font-weight:bold;
+}
+
+table {
+font-size:10px;
+}
+
+input[type="text"], select {
+border:1px solid silver;
+font-size:10px !important;
+}
+
+input.box,select.box {
+	width:113px;
+}
+
+td {
+	padding-bottom:5px;
+}

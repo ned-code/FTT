@@ -90,6 +90,7 @@
                                     $(child.span).css('padding-left', '10px');
                                 }
                             }
+                            $(child.span).css('display', 'table');
                             correct_style(child);
                         });
                     }

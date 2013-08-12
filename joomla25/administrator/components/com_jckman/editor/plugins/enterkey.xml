@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<install version="1.5" type="plugin" plugin="enterkey" method="upgrade">
+	<version>0.1</version>
+	<creationDate>Feb 2012</creationDate>
+	<author>CKSource.com</author>
+	<authorUrl>http://cksource.com/</authorUrl>
+	<license>GNU/GPLv2</license>
+	<description>Core EnteyKey plugin</description>
+	<languages>
+	</languages>
+	<params group="options">
+		<param name="forceEnterMode" type="radio" default="0" label="Force Enter Mode" description="Force the use of  the enterMode option as line breaks regardless of the context. If, for example the enterMode option is set to &lt;P&gt;, pressing the Enter key inside a &lt;div&gt; element will create a new paragraph with &lt;p&gt; instead of a &lt;div&gt;.">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+	</params>
+</install>

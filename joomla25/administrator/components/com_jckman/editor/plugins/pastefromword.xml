@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<install version="1.5" type="plugin" plugin="pastefromword" method="upgrade">
+	<version>0.1</version>
+	<creationDate>Feb 2012</creationDate>
+	<author>CKSource.com</author>
+	<authorUrl>http://cksource.com/</authorUrl>
+	<license>GNU/GPLv2</license>
+	<description>Core Pastfromword plugin</description>
+	<languages>
+	</languages>
+	<params group="options">
+		<param name="pasteFromWordCleanupFile" type="filelist" default="default" label="PasteFromWord CleanupFile" description="The file that provides the MS Word cleanup function for pasting operations. Note: This is a global configuration shared by all editor instances present in the page." directory="plugins/editors/jckeditor/plugins/pastefromword/filter" filter="" exclude="" stripext="1"   hide_none="1"  hide_default="1"/>
+		<param name="pasteFromWordNumberedHeadingToList" type="radio" default="0" label="Convert NumberHeadings to List" description="Determines whether to transform MS Word outline numbered headings into lists.">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+		<param name="pasteFromWordPromptCleanup" type="radio" default="0" label="Always Prompt When Pasting From MS Word" description="Determines whether to prompt the user about the clean up of content being pasted from MS Word.">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+		<param name="pasteFromWordRemoveFontStyles" type="radio" default="1" label="Ignore Font  Styles" description="Determines whether to ignore all font related formatting styles, including:  font size, font family, font foreground/background color.">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+		<param name="pasteFromWordRemoveStyles" type="radio" default="1" label="Ignore Styles" description="Determines whether to remove element styles that can't be managed with the editor. Note that this doesn't handle the font specific styles, which depends on the Ignore Font  Styles setting instead. ">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+</params>
+</install>

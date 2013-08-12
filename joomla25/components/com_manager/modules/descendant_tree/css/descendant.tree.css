@@ -11,10 +11,6 @@
     background-image: none;
     border: 1px solid white;
 }
-.body:nth-of-type(1) .dhxtree_dhx_skyblue span.selectedTreeRow, body:nth-of-type(1) .dhxtree_dhx_skyblue span.selectedTreeRow_lor {
-    display: table;
-}
-
 .jmb-dtp-container{
 	background-color: #5F8D34;
 	border: 3px solid #5F8D34;

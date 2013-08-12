@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<install version="1.5" type="plugin" plugin="contextmenu" method="upgrade">
+	<version>0.1</version>
+	<creationDate>Feb 2012</creationDate>
+	<author>CKSource.com</author>
+	<authorUrl>http://cksource.com/</authorUrl>
+	<license>GNU/GPLv2</license>
+	<description>Core Contextmenu plugin</description>
+	<languages>
+	</languages>
+	<params group="options">
+		<param name="browserContextMenuOnCtrl" type="radio" default="1" label="Show Browser  Context Menu on Ctrl Key" description="Determines whether to show the browser native context menu when the Ctrl or Meta (Mac) key is pressed on opening the context menu with the right mouse button click or the Menu key.">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+	</params>
+</install>

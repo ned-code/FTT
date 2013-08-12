@@ -1,0 +1,20 @@
+<extension version="1.7.0" type="backup"  method="upgrade">
+	<version>0.1</version>
+	<creationDate>Mar 2012</creationDate>
+	<description></description>
+	<license>GNU/GPL</license>
+    <author>Andrew Williams</author>
+    <authoremail>andrew@joomlackedior.com</authoremail>
+    <authorurl>http://www.joomlackedior.com</authorurl>
+    <copyright>2012 - 2013 WebxSolutions Ltd</copyright>
+	<languages>
+	</languages>
+	<install>
+		<sql>
+			<file driver="mysql" charset="utf8">plugins/sql.sql</file>
+		</sql>
+	</install>
+	<files>
+		<folder>plugins</folder>
+	</files>
+</extension>

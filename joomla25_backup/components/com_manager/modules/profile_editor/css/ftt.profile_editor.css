@@ -1,0 +1,319 @@
+/*
+* SLIDE
+*/
+.ftt-profile-editor-slide {
+    background: none repeat scroll 0 0 #D8DCE7;
+    color: #333333;
+    direction: ltr;
+    font-family: 'lucida grande',tahoma,verdana,arial,sans-serif;
+    font-size: 11px;
+    line-height: 1.28;
+    padding-bottom: 20px;
+    position: absolute;
+    text-align: left;
+    top: 0;
+    z-index: 1;
+}
+.ftt-profile-editor-slide-header {
+    height: 32px;
+    background: url(../imgs/bg_header.png) repeat-x scroll 0 0 transparent;
+}
+.ftt-profile-editor-slide-content ul {
+    list-style: none outside none;
+    margin: 0;
+    padding: 0;
+}
+/*
+* BOX
+*/
+.ftt-profile-editor-box {
+    margin: 10px 15px;
+}
+.ftt-profile-editor-box-header {
+
+}
+.ftt-profile-editor-box-header-title {
+
+}
+.ftt-profile-editor-box-header-title span{
+    color: #757985;
+    font-size: 12px;
+    font-weight: bold;
+}
+.ftt-profile-editor-box-content {
+    background: none repeat scroll 0 0 white;
+    border: 1px solid #D6D8DD;
+    border-radius: 10px 10px 10px 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    margin-top: 5px;
+    padding: 5px;
+}
+.ftt-profile-editor-box-content-element-title {
+
+}
+.ftt-profile-editor-box-content-element-text {
+
+}
+/*
+* FACEBOOK BOX
+*/
+.ftt-profile-editor-facebook-box {
+    background: none repeat scroll 0 0 white;
+    border: 1px solid #C4CDE0;
+    margin: 5px;
+    width: 200px;
+}
+.ftt-profile-editor-facebook-box-title {
+    background: none repeat scroll 0 0 #3B5999;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+}
+.ftt-profile-editor-facebook-box-content {
+    margin: 0 auto;
+    width: 120px;
+}
+.ftt-profile-editor-facebook-box-content ul li div {
+    height: 20px;
+    padding-left: 22px;
+}
+.ftt-profile-editor-facebook-box-content-timeline {
+    background: url(../imgs/facebook_box_elements.png) no-repeat scroll 0 0 transparent;
+}
+.ftt-profile-editor-facebook-box-content-about {
+    background: url(../imgs/facebook_box_elements.png) no-repeat scroll 0 -21px transparent;
+}
+.ftt-profile-editor-facebook-box-content-likes {
+    background: url(../imgs/facebook_box_elements.png) no-repeat scroll 0 -42px transparent;
+}
+.ftt-profile-editor-facebook-box-content-following {
+    background: url(../imgs/facebook_box_elements.png) no-repeat scroll 0 -65px transparent;
+}
+.ftt-profile-editor-facebook-box-content-send_message {
+    background: url(../imgs/facebook_box_elements.png) no-repeat scroll 0 -88px transparent;
+}
+/*
+* FAMILY BOX
+*/
+.ftt-profile-view-sircar {
+    height: 260px;
+    width:155px;
+    position: absolute;
+}
+.ftt-profile-view-event {
+    position:absolute;
+    height:30px;
+    width:120px;
+    text-align: center;
+}
+.ftt-profile-view-spouse {
+    height: 260px;
+    width:120px;
+    margin-left: 38px;
+    position: absolute;
+}
+.ftt-profile-view-spouse-div {
+    margin-bottom: 5px;
+    margin-top: 0;
+    position: relative;
+}
+.ftt-profile-view-spouse-div.left{
+    margin-left: 45px;
+}
+.ftt-profile-view-spouse-div.right{
+    padding-top: 0;
+    margin-left: 10px;
+}
+.ftt-profile-view-former-img {
+    background: none repeat scroll 0 0 white;
+    border: 2px solid #000000;
+    height: 60px;
+    position: relative;
+    width: 54px;
+}
+.ftt-profile-view-former-sircar-container{
+    border: 1px solid #F5FAE6;
+    max-height: 200px;
+    position: absolute;
+    width: 130px;
+}
+.ftt-profile-view-former-sircar-container.scroll{
+    overflow-y: scroll;
+}
+.ftt-profile-view-former-sircar-container.active{
+    border: 1px solid #c3c3c3;
+}
+.ftt-profile-view-former-spouse-container{
+    border: 1px solid #F5FAE6;
+    max-height: 240px;
+    position: absolute;
+    width: 130px;
+}
+.ftt-profile-view-former-spouse-container.scroll{
+    overflow-y: scroll;
+}
+.ftt-profile-view-former-spouse-container.active{
+    border: 1px solid #c3c3c3;
+}
+.ftt-profile-view-parent-img {
+    background: white;
+    border: 2px solid #000000;
+    height: 120px;
+    position: relative;
+    width: 108px;
+}
+.ftt-profile-view-parent-name {
+    font-family: Tahoma;
+    font-size: 11px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    width: 112px;
+}
+.ftt-profile-view-parent-name.former{
+    font-size: 9px;
+    height: 9px;
+    line-height: 9px;
+    width: 54px;
+}
+.ftt-profile-view-parent-date {
+    font-family: Tahoma;
+    font-size: 11px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    width: 112px;
+}
+.ftt-profile-view-parent-date.former{
+    font-size: 9px;
+    height: 9px;
+    line-height: 9px;
+    width: 54px;
+}
+.ftt-profile-view-child {
+    position: absolute;
+}
+.ftt-profile-view-child-img {
+    background: white;
+    border:2px solid #000;
+    border: 2px solid #000000;
+    position: relative;
+}
+.ftt-profile-view-child-name {
+    font-family: Tahoma;
+    font-size: 11px;
+    height: 11px;
+    line-height: 11px;
+    text-align: center;
+    margin-top: 5px;
+}
+.ftt-profile-view-child-date {
+    font-family: Tahoma;
+    font-size: 11px;
+    height: 14px;
+    line-height: 14px;
+    text-align: center;
+}
+.ftt-profile-view-arrow-left {
+    background:#000000;
+    height: 1px;
+    left: 112px;
+    position: absolute;
+    top: 120px;
+    width: 38px;
+}
+.ftt-profile-view-arrow-right {
+    background:#000000;
+    height: 1px;
+    left: -36px;
+    position: absolute;
+    top: 120px;
+    width: 38px;
+}
+.ftt-profile-view-arrow-up {
+    background:#000000;
+    height: 28px;
+    left: 39px;
+    position: absolute;
+    top: -26px;
+    width: 1px;
+}
+.ftt-profile-view-former-arrow-right {
+    background: none repeat scroll 0 0 #000000;
+    height: 1px;
+    left: 58px;
+    position: absolute;
+    top: 40px;
+    width: 10px;
+}
+.ftt-profile-view-former-arrow-right.text {
+    background: none repeat scroll 0 0 transparent;
+    font-size: 12px;
+    height: 20px;
+    left: 71px;
+    line-height: 20px;
+    position: absolute;
+    top: 30px;
+    width: 10px;
+}
+.ftt-profile-view-former-arrow-left {
+    background: none repeat scroll 0 0 #000000;
+    height: 1px;
+    left: -10px;
+    position: absolute;
+    top: 35px;
+    width: 10px;
+}
+.ftt-profile-view-former-arrow-left.text {
+    background: none repeat scroll 0 0 transparent;
+    font-size: 11px;
+    height: 20px;
+    left: -35px;
+    line-height: 20px;
+    position: absolute;
+    top: 25px;
+    width: 10px;
+}
+/*
+* RELATION
+*/
+.ftt-relation-mapper-node {
+    text-align: center;
+}
+.ftt-relation-mapper-node.ftt-render-type-desctop {
+    width: 120px;
+    height: 40px;
+}
+.ftt-relation-mapper-node.ftt-render-type-mobile {
+    width: 90px;
+    height: 40px;
+}
+.ftt-relation-mapper-node-name, .ftt-relation-mapper-node-relation {
+    font-size: 11px;
+    height: 15px;
+    line-height: 13px;
+}
+.ftt-relation-mapper-node-plus {
+    background: url(../imgs/plus.png);
+    height: 24px;
+    left: -14px;
+    position: absolute;
+    top: 2px;
+    width: 24px;
+}
+/*
+* EDIT CONTENT
+*/
+.ftt-profile-edit-content form{
+    background: none repeat scroll 0 0 white;
+    border-radius: 5px 5px 5px 5px;
+    margin: 25px;
+    padding: 5px;
+}
+
+.ftt-profile-edit-content img#avatar {
+    max-width: none;
+}

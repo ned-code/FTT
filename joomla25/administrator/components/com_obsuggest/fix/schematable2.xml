@@ -1,0 +1,125 @@
+<database>
+	<tables>
+		<table>
+			<name>#__foobla_uv_account</name>
+			<fields>
+				<field type="int(11)" null="NO" key="PRI" default="" extra="auto_increment">id</field>
+				<field type="varchar(255)" null="NO" key="" default="fooblauv" extra="">subdomain</field>
+				<field type="varchar(255)" null="NO" key="" default="" extra="">password</field>
+				<field type="int(11)" null="NO" key="" default="1" extra="">published</field>				
+			</fields>
+			</table>
+		<table>
+			<name>#__foobla_uv_comment</name>
+			<fields>
+				<field type="int(11)" null="NO" key="PRI" default="" extra="auto_increment">id</field>
+				<field type="int(11)" null="NO" key="MUL" default="0" extra="">idea_id</field>
+				<field type="int(11)" null="NO" key="" default="0" extra="">user_id</field>
+				<field type="text" null="NO" key="" default="" extra="">comment</field>
+				<field type="datetime" null="NO" key="" default="0000-00-00 00:00:00" extra="">createdate</field>
+				<field type="int(11)" null="NO" key="" default="0" extra="">forum_id</field>
+			</fields>
+			</table>
+		<table>
+			<name>#__foobla_uv_config</name>
+			<fields>
+				<field type="int(11)" null="NO" key="PRI" default="" extra="auto_increment">id</field>
+				<field type="text" null="NO" key="" default="" extra="">bad_word</field>
+				<field type="int(11)" null="NO" key="" default="1" extra="">listbox</field>
+			</fields>
+			</table>
+		<table>
+			<name>#__foobla_uv_forum</name>
+			<fields>
+				<field type="int(11)" null="NO" key="PRI" default="" extra="auto_increment">id</field>
+				<field type="varchar(60)" null="NO" key="" default="" extra="">name</field>
+				<field type="varchar(255)" null="NO" key="" default="" extra="">description</field>
+				<field type="varchar(255)" null="NO" key="" default="" extra="">wellcome_message</field>
+				<field type="varchar(255)" null="NO" key="" default="" extra="">prompt</field>
+				<field type="varchar(255)" null="NO" key="" default="" extra="">example</field>
+				<field type="int(11)" null="NO" key="" default="0" extra="">default</field>
+				<field type="int(11)" null="NO" key="" default="0" extra="">published</field>
+				<field type="int(11)" null="NO" key="" default="10" extra="">limit_idea_page</field>
+			</fields>
+			</table>
+		<table>
+			<name>#__foobla_uv_forum_article</name>
+			<fields>
+				<field type="int(11)" null="NO" key="PRI" default="0" extra="">forum_id</field>
+				<field type="int(11)" null="NO" key="PRI" default="" extra="">article_id</field>
+			</fields>
+			</table>
+		<table>
+			<name>#__foobla_uv_idea</name>
+			<fields>
+				<field type="int(11)" null="NO" key="PRI" default="" extra="auto_increment">id</field>
+				<field type="varchar(60)" null="YES" key="" default="" extra="">title</field>
+				<field type="text" null="YES" key="" default="" extra="">content</field>
+				<field type="int(11)" null="NO" key="MUL" default="0" extra="">user_id</field>
+				<field type="datetime" null="YES" key="" default="0000-00-00 00:00:00" extra="">createdate</field>
+				<field type="text" null="YES" key="" default="" extra="">response</field>
+				<field type="varchar(255)" null="NO" key="" default="" extra="">resource</field>
+				<field type="int(11)" null="NO" key="MUL" default="0" extra="">status_id</field>
+				<field type="int(11)" null="NO" key="MUL" default="0" extra="">forum_id</field>
+				<field type="int(11)" null="YES" key="" default="0" extra="">votes</field>
+				<field type="int(11)" null="NO" key="" default="1" extra="">published</field>
+			</fields>
+			</table>
+		<table>
+			<name>#__foobla_uv_permission</name>
+			<fields>
+				<field type="int(11)" null="NO" key="" default="0" extra="">group_id</field>
+				<field type="int(2)" null="NO" key="" default="0" extra="">new_idea_a</field>
+				<field type="int(2)" null="NO" key="" default="0" extra="">new_idea_o</field>
+				<field type="int(2)" null="NO" key="" default="0" extra="">edit_idea_a</field>
+				<field type="int(2)" null="NO" key="" default="0" extra="">edit_idea_o</field>
+				<field type="int(2)" null="NO" key="" default="0" extra="">delete_idea_a</field>
+				<field type="int(2)" null="NO" key="" default="0" extra="">delete_idea_o</field>
+				<field type="int(2)" null="NO" key="" default="0" extra="">change_status_a</field>
+				<field type="int(2)" null="NO" key="" default="0" extra="">change_status_o</field>
+				<field type="int(2)" null="NO" key="" default="0" extra="">vote_idea_a</field>
+				<field type="int(2)" null="NO" key="" default="0" extra="">vote_idea_o</field>
+				<field type="int(2)" null="NO" key="" default="0" extra="">response_idea_a</field>
+				<field type="int(2)" null="NO" key="" default="0" extra="">response_idea_o</field>
+				<field type="int(2)" null="NO" key="" default="0" extra="">new_comment_a</field>
+				<field type="int(2)" null="NO" key="" default="0" extra="">new_comment_o</field>
+				<field type="int(2)" null="NO" key="" default="0" extra="">edit_comment_a</field>
+				<field type="int(2)" null="NO" key="" default="0" extra="">edit_comment_o</field>
+				<field type="int(2)" null="NO" key="" default="0" extra="">delete_comment_a</field>
+				<field type="int(2)" null="NO" key="" default="0" extra="">delete_comment_o</field>
+			</fields>
+			</table>
+		<table>
+			<name>#__foobla_uv_status</name>
+			<fields>
+				<field type="int(11)" null="NO" key="PRI" default="" extra="auto_increment">id</field>
+				<field type="varchar(100)" null="NO" key="" default="" extra="">title</field>
+				<field type="int(11)" null="YES" key="" default="-1" extra="">parent_id</field>
+			</fields>
+			</table>
+		<table>
+			<name>#__foobla_uv_tab</name>
+			<fields>
+				<field type="int(11)" null="NO" key="MUL" default="0" extra="">status_id</field>
+				<field type="int(11)" null="NO" key="MUL" default="0" extra="">forum_id</field>
+			</fields>
+			</table>
+		<table>
+			<name>#__foobla_uv_vote</name>
+			<fields>
+				<field type="int(11)" null="NO" key="PRI" default="0" extra="">idea_id</field>
+				<field type="int(11)" null="NO" key="PRI" default="0" extra="">user_id</field>
+				<field type="int(3)" null="YES" key="" default="0" extra="">vote</field>
+			</fields>
+			</table>
+		<table>
+			<name>#__foobla_uv_votes_value</name>
+			<fields>
+				<field type="int(10) unsigned" null="NO" key="PRI" default="" extra="auto_increment">id</field>
+				<field type="tinyint(3) unsigned" null="NO" key="" default="" extra="">vote_value</field>
+				<field type="char(50)" null="YES" key="" default="0" extra="">title</field>
+				<field type="tinyint(1) unsigned" null="YES" key="" default="0" extra="">published</field>
+			</fields>
+			</table>	
+	</tables>
+</database>

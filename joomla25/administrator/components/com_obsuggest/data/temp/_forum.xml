@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<forum>
+		<name>General</name>
+		<description></description>
+		<wellcome_message>Welcome to our official feedback forum. Do you have an idea? Do you recognize a good idea when you see one? We want to hear from you!</wellcome_message>
+		<prompt>I suggest you ...</prompt>
+		<example>- enter your idea (new feature, fix bug, etc) -</example>
+		<published>1</published>
+</forum>

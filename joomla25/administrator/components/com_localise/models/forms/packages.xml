@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- $Id: install_add.xml 25 2009-02-08 08:07:40Z chdemko $ -->
+<form>
+  <fields  name="search">
+    <fieldset  name="search">
+      <field
+        id="expr"
+        name="expr"
+        type="search"
+        label="JSearch_Filter_Label"
+        description="JSearch_Filter" />
+    </fieldset>
+  </fields>
+</form>

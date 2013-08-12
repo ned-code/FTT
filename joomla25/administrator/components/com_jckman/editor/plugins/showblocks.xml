@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<install version="1.5" type="plugin" plugin="showblocks" method="upgrade">
+	<version>0.1</version>
+	<creationDate>Feb 2012</creationDate>
+	<author>CKSource.com</author>
+	<authorUrl>http://cksource.com/</authorUrl>
+	<license>GNU/GPLv2</license>
+	<description>Core Showblocks plugin</description>
+	<languages>
+	</languages>
+	<params group="options">
+		<param name="startupOutlineBlocks" type="radio" default="0" label="Outline Blocks on startup" description="Determines whether to automaticaly enable the  'show block' command when the editor loads.">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+	</params>
+</install>

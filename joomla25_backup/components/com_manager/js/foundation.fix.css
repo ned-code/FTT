@@ -1,0 +1,30 @@
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, p, blockquote, th, td {
+    direction: ltr;
+    font-size: 11px;
+    margin: 0;
+    padding: 0;
+}
+
+table {
+    background: none repeat scroll 0 0 transparent;
+    border: none;
+    border-radius: 0;
+    margin: 0;
+}
+
+table tbody tr td {
+    border: none;
+    color: #333333;
+    padding: 0;
+    vertical-align: top;
+}
+.column, .columns {
+    float: left;
+    min-height: 1px;
+    padding: 0;
+    position: relative;
+}
+
+table tbody tr:nth-child(2n) {
+    background: none repeat scroll 0 0 transparent;
+}

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<forums type="array">
+<forum>
+  <id type="integer">12914</id>
+  <name>Web 2009</name>
+  <key deprecated="true">general</key>
+  <url>http://web2009.uservoice.com/forums/12914-web-2009</url>
+  <design>
+    <logo_url>http://web2009.uservoice.com//subdomain/logo/10961/logo-small-En.gif</logo_url>
+    <background_color>FFFFFF</background_color>
+  </design>
+  <subdomain>
+    <name>Web SSI</name>
+  </subdomain>
+  <texts>
+    <welcome>B&#7841;n mu&#7889;n g&#243;p &#253; cho Web c&#7911;a SSI? B&#7841;n nh&#7853;n ra m&#7897;t &#253; t&#432;&#7903;ng hay? SSI &#273;ang x&#226;y d&#7921;ng m&#7897;t h&#7879; th&#7889;ng Web m&#7899;i; ch&#250;ng t&#244;i mu&#7889;n nghe &#253; ki&#7871;n c&#7911;a b&#7841;n!</welcome>
+    <prompt>T&#244;i &#273;&#7873; xu&#7845;t ...</prompt>
+    <example>- &#253; ki&#7871;n c&#7911;a b&#7841;n (ch&#7913;c n&#259;ng, s&#7917;a l&#7895;i, v.v.) -</example>
+  </texts>
+  <private type="boolean">false</private>
+  <idea_count type="integer">27</idea_count>
+  <votes_allowed type="integer">10</votes_allowed>
+  <created_at type="datetime">2009-02-19T15:14:15Z</created_at>
+  <updated_at type="datetime">2009-08-25T03:06:03Z</updated_at>
+</forum>
+</forums>

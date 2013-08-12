@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+        <layout title="Single">
+                <message>Single</message>
+        </layout>
+        <fields
+                name="request"
+                addfieldpath="/administrator/components/com_manager/models/fields"
+        >
+                <fieldset name="request">
+                        <field
+                                name="id"
+                                type="single"
+                                label="Single"
+                                description="Single"
+                        />
+                </fieldset>
+        </fields>
+</metadata>

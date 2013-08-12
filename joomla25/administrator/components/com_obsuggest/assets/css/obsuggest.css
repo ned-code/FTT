@@ -1,0 +1,45 @@
+.icon-48-obsuggest {background:url(../images/obsuggest_48.png)}
+.icon-48-manager{
+		background:url('../images/icons/forum_48.png');
+}
+
+.icon-48-idea {
+	background-image:url('../images/icons/idea_48.png');
+}
+
+.icon-48-PERMISSION {
+	background-image:url('../images/icons/permission_48.png');
+}
+
+.icon-48-eiport{
+	background-image:url('../images/icons/import_48.png');
+}
+
+.icon-48-configg{
+	background-image:url('../images/configuration_48.png');
+}
+
+.icon-48-vote {
+	background-image:url('../images/icons/vote_48.png');
+}
+
+.icon-48-support{
+	background-image:url('../images/icons/support_48.png');
+}
+.icon-48-langs_48{
+	background-image:url('../images/icons/langs_48.png');
+}
+.icon-48-report{
+	background-image:url('../images/icons/report_48.png');
+}
+.icon-48-theme{
+	background-image:url('../images/icons/theme_48.png');
+}
+button.datetime-config{
+	width:60px;
+	text-align:center;
+}
+
+.switcher-on,
+.switcher-off { width:67px; height:24px; background:transparent url(../images/icons/switcher.png) no-repeat 0 0; cursor:pointer; float: left; margin-top: 3px; }
+.switcher-off { background-position:-68px 0; }

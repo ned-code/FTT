@@ -1,0 +1,248 @@
+/*
+* FamilyTreeTop content
+*/
+.content {
+    position: relative;
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: medium none;
+    margin: 20px auto 0;
+    max-width: 920px;
+    line-height: 1.28;
+}
+.header {
+    position: relative;
+}
+.main {
+    position:relative;
+}
+#container {
+    position:relative;
+    font-size: 11px;
+    font-family: 'lucida grande',tahoma,verdana,arial,sans-serif;
+    color: #333;
+    line-height: 1.28;
+    text-align: left;
+    direction: ltr;
+    max-width: 920px;
+}
+.footer {
+    margin-top: 10px;
+    font-size: 11px;
+    font-family: 'lucida grande',tahoma,verdana,arial,sans-serif;
+    color: #333;
+    line-height: 1.28;
+    text-align: left;
+    direction: ltr;
+}
+.footer ul {
+    list-style: none outside none;
+    margin: 0;
+    padding: 0;
+}
+.footer ul li{
+    display: inline-block;
+    margin-left: 5px;
+}
+.footer a {
+    text-decoration: none;
+}
+/*
+* FamilyTreeTop Tab Navigation
+*/
+ul.jmbtabs {
+	margin-top: 20px;
+    margin-bottom: 0px;
+    padding: 0;
+	float: left;
+	list-style: none;
+	height: 32px; /*--Set height of tabs--*/
+	border-bottom: 1px solid #999;
+	border-left: 1px solid #999;
+	width: 99%;
+}
+ul.jmbtabs li {
+	float: left;
+	margin: 0 !important;
+	padding: 0 !important;
+	height: 31px; /*--Subtract 1px from the height of the unordered list--*/
+	line-height: 31px !important; /*--Vertically aligns the text within the tab--*/
+    border-color: #999999 #999999 #999999 -moz-use-text-color;
+    border-image: none;
+    border-style: solid solid none none;
+    border-width: 1px 1px 1px medium;
+    margin-bottom: -1px; /*--Pull the list item down 1px--*/
+	overflow: hidden;
+	position: relative;
+	background: #e0e0e0;
+}
+ul.jmbtabs li a {
+	text-decoration: none;
+	color: #000 !important;
+	display: block;
+	font-size: 1.2em;
+	padding: 0 20px;
+	border: 1px solid none; /*--Gives the bevel look with a 1px white border inside the list item--*/
+	outline: none;
+}
+ul.jmbtabs li a:hover {
+	color: #000 !important;
+}
+ul.jmbtabs li a:hover {
+	background: #ccc;
+}
+ul.jmbtabs li a div {
+    font-size: 14px;
+}
+html ul.jmbtabs li.active, html ul.jmbtabs li.active a:hover  { /*--Makes sure that the active tab does not listen to the hover properties--*/
+	background: #f5fae6;
+	border-bottom: 1px solid #F5FAE6; /*--Makes the active tab look like it's connected with its content--*/
+    height: 32px;
+}
+html ul.jmbtabs.famous-family li.active, html ul.jmbtabs li.active a:hover {
+    background-color: #f9f3f0;
+    border-bottom: 1px solid #f9f3f0;
+}
+html ul.jmbtabs.myfamily li.active, html ul.jmbtabs li.active a:hover {
+    background-color: #f5f8fc;
+    border-bottom: 1px solid #f5f8fc;
+}
+/*
+* FamilyTreeTop Mobile Navigation
+*/
+.ftt-mobile-navigation {
+    background: url(mobile_nav_background.png) repeat-x transparent;
+    height: 50px;
+    list-style: none outside none;
+    margin: 0;
+    padding: 0;
+}
+.ftt-mobile-navigation .ftt-mobile-navigation-item {
+    display: inline-block;
+    position: relative;
+}
+.ftt-mobile-navigation .ftt-mobile-navigation-item div.active {
+    background: none repeat scroll 0 0 yellow;
+    border-radius: 5px 5px 5px 5px;
+    height: 43px;
+    left: 3px;
+    opacity: 0.3;
+    position: absolute;
+    top: 3px;
+    width: 43px;
+}
+.ftt-mobile-navigation .ftt-mobile-navigation-item div {
+    height: 49px;
+    width: 49px;
+    cursor: pointer;
+}
+.ftt-mobile-navigation .ftt-mobile-navigation-item div.MobMyFamily {
+    background: url(mobile_navigation.png) no-repeat -5px 0px transparent;
+}
+.ftt-mobile-navigation .ftt-mobile-navigation-item div.MobCalendar {
+    background: url(mobile_navigation.png) no-repeat -55px 0px transparent;
+}
+.ftt-mobile-navigation .ftt-mobile-navigation-item div.MobFamilyMembers {
+    background: url(mobile_navigation.png) no-repeat -100px 0px transparent;
+}
+.ftt-mobile-navigation .ftt-mobile-navigation-item div.MobFamilies {
+    background: url(mobile_navigation.png) no-repeat -150px 0px transparent;
+}
+.ftt-mobile-navigation .ftt-mobile-navigation-item div.MobDescendants {
+    background: url(mobile_navigation.png) no-repeat -200px 0px transparent;
+}
+
+/**
+* FamilyTreeTop Content Container
+*/
+.ftt-table-content {
+    width: 100%;
+    height: 100%;
+    table-layout:fixed;
+}
+.ftt-table-content tr {
+    margin: 0 auto;
+    vertical-align: top;
+}
+.ftt-table-desctop {
+    margin-top: -15px;
+}
+.ftt-table-mobile {}
+.ftt-table-tablet {}
+.ftt-table-cell-single{
+    margin:0 auto;
+    width:100%;
+    max-width:100%;
+    min-width:100%;
+    height:100%;
+}
+.ftt-table-cell-double{
+    width:50%;
+    max-width:50%;
+    margin:0 auto;
+    min-width:50%;
+    height:100%;
+}
+.ftt-table-cell-triple{
+    width:33%;
+    max-width:33%;
+    min-width:33%;
+    height:100%;
+}
+/**
+* FamilyTreeTop Content
+*/
+.tab_container {
+	border: 1px solid #999;
+	border-top: none;
+	clear: both;
+    width: 99%;
+	background: #fff;
+	position: relative;
+}
+.tab_content {
+	font-size: 1.2em;
+	background: #f5f8fc;
+}
+.tab_content.famous-family {
+    background: #f9f3f0;
+}
+.tab_content.myfamily {
+    background: #f5f8fc;
+}
+#jmbtab{
+	min-height:400px;
+}
+
+.jmb-core-overlay {
+	background: url("loading.gif") no-repeat scroll 50% 50% transparent;
+	position: absolute;
+	top:0;
+	left:0;
+}
+
+div.buttons {
+	bottom: -20px;
+	position: absolute;
+    	right: 10px;
+}
+div.buttons span {
+	color: blue;
+	cursor: pointer;
+    	font-size: 14px;
+    	font-weight: bold;
+}
+/**
+* PHOTOS
+*/
+.ftt-media-photos-container ul li {
+    display: inline-block;
+    margin: 3px;
+}
+.ftt-photos-fix-image-box {
+    overflow:hidden;
+    position:relative;
+}
+.ftt-photos-fix-image-box img {
+    max-width: none !important;
+}
+

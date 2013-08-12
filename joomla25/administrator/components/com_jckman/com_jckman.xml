@@ -1,0 +1,59 @@
+<extension type="component" version="1.7.0" method="upgrade">
+    <name>JCKMan</name>
+    <version>4.7</version>
+	<creationDate>July 2012</creationDate>
+    <description><![CDATA[ 
+	<p>JoomlaCK Editor Manager v4.7</p> 
+	]]></description>
+    <license>GNU/GPL</license>
+    <author>Andrew Williams</author>
+    <authoremail>andrew@joomlackedior.com</authoremail>
+    <authorurl>http://www.joomlackedior.com</authorurl>
+    <copyright>2012 - 2013 WebxSolutions Ltd</copyright>
+	<scriptfile>install.php</scriptfile>
+    <install>
+        <sql>
+            <file driver="mysql" charset="utf8">sql/install.sql</file>
+        </sql>
+    </install>
+    <uninstall>
+        <sql>
+            <file driver="mysql" charset="utf8">sql/uninstall.sql</file>
+        </sql>
+    </uninstall>
+   <administration>
+  	<languages>
+				<language tag="en-GB">language/en-GB/en-GB.com_jckman.sys.ini</language>
+				<language tag="en-GB">language/en-GB/en-GB.com_jckman.ini</language>
+	</languages>    
+   <menu img="components/com_jckman/icons/jcklogo.png">COM_JCKMAN_MENU_NAME</menu>
+		<submenu>
+			<menu  img="components/com_jckman/icons/icon-16-cpanel.png" link="option=com_jckman&amp;controller=cpanel">COM_JCKMAN_SUBMENU_CPANEL_NAME</menu>
+			<menu  img="components/com_jckman/icons/icon-16-installer.png" link="option=com_jckman&amp;controller=Install">COM_JCKMAN_SUBMENU_INSTALL_NAME</menu>
+			<menu  img="components/com_jckman/icons/icon-16-pluginmanager.png" link="option=com_jckman&amp;controller=list">COM_JCKMAN_SUBMENU_PLUGIN_NAME</menu>
+			<menu  img="components/com_jckman/icons/icon-16-layout.png" link="option=com_jckman&amp;controller=toolbars">COM_JCKMAN_SUBMENU_LAYOUT_NAME</menu>
+			<menu  img="components/com_jckman/icons/icon-16-restore.png" link="option=com_jckman&amp;controller=import">COM_JCKMAN_SUBMENU_IMPORT_NAME</menu>
+		</submenu>
+    <files folder="admin">
+	<filename>admin.jckman.php</filename>
+	<filename>helper.php</filename>
+	<filename>index.html</filename>
+	<folder>adapters</folder>
+	<folder>base</folder>
+	<folder>config</folder>
+	<folder>css</folder>
+	<folder>editor</folder>
+	<folder>event</folder>
+	<folder>controllers</folder>
+	<folder>helpers</folder>
+	<folder>html</folder>
+	<folder>icons</folder>
+	<folder>tables</folder>
+	<folder>models</folder>
+	<folder>views</folder>
+	<folder>modules</folder>
+    <folder>sql</folder>
+	  <folder>restorers</folder>
+    </files>
+  </administration>
+</extension>

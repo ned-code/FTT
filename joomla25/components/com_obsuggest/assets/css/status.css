@@ -1,0 +1,95 @@
+/********   TYPE STATUS   *******/
+.statusBox {
+	font-size:11px;
+	}
+
+.noStatus{
+	background-color: #fcfdcf;
+	color: #2d9504;
+	font-weight:bold;
+	padding-left:4px;
+	padding-right:4px;
+	text-decoration:none;
+	}
+
+.status1 {
+	background-color: #5690de;
+	color: #fff;
+	font-weight:bold;
+	padding-left:4px;
+	padding-right:4px;
+	text-decoration:none;
+}
+.status2 {
+	background-color: #88bd40;
+	color: #fff;	
+	font-weight:bold;
+	padding-left:4px;
+	padding-right:4px;
+	text-decoration:none;
+}
+
+.status3 {
+	background-color: #ff7800;
+	color: #fff;
+	font-weight:bold;
+	padding-left:4px;
+	padding-right:4px;
+	text-decoration:none;
+}
+.status4 {
+	background-color: #f88cfc;
+	color:#fff;
+	font-weight:bold;
+	padding-left:4px;
+	padding-right:4px;
+	text-decoration:none;	
+}
+.status5 {
+	background-color: #fc4153;
+	color: #fff;	
+	font-weight:bold;
+	padding-left:4px;
+	padding-right:4px;
+	text-decoration:none;	
+}
+.status6 {
+	background-color: #ccc;
+	color: #fff;
+	font-weight:bold;
+	padding-left:4px;
+	padding-right:4px;
+	text-decoration:none;
+}
+.status7 {
+	background-color: #bbb;
+	color: #fff;
+	font-weight:bold;
+	padding-left:4px;
+	padding-right:4px;
+	text-decoration:none;
+}
+.status8 {
+	background-color: #7855fc;
+	color: #fff;
+	font-weight:bold;
+	padding-left:4px;
+	padding-right:4px;
+	text-decoration:none;
+}
+.status9 {
+	background-color: #028bae;
+	color: #fff;
+	font-weight:bold;
+	padding-left:4px;
+	padding-right:4px;
+	text-decoration:none;
+}
+.status10 {
+	background-color: #655943;
+	color: #fff;
+	font-weight:bold;
+	padding-left:4px;
+	padding-right:4px;
+	text-decoration:none;
+}

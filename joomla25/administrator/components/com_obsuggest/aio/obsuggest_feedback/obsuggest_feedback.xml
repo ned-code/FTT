@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<install version="1.5" type="plugin" group="system" method="upgrade">
+	<name>System - obSuggest Feedback</name>
+	<author>foobla.com</author>
+	<creationDate>March 2011</creationDate>
+	<copyright>(C) 2007-2011 foobla.com. All rights reserved.</copyright>
+	<license>GNU/GPL, see LICENSE</license>
+	<authorUrl>http://foobla.com</authorUrl>
+	<authorEmail>admin@foobla.com</authorEmail>
+	<description>obSuggest::Feedback button plugin</description>
+	<files>
+		<filename plugin="obsuggest_feedback">obsuggest_feedback.php</filename>
+		<filename>obsuggest_feedback/feedback.png</filename>
+	</files>	
+</install>

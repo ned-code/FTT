@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="1.6" type="plugin" group="system" method="upgrade" client="site">
+    <name>System - JFBCSystem</name>
+    <version>4.1.2</version>
+    <creationDate>2012/01/31</creationDate>
+    <author>SourceCoast | www.sourcecoast.com</author>
+    <authorEmail>support@sourcecoast.com</authorEmail>
+    <authorUrl>http://www.sourcecoast.com</authorUrl>
+    <copyright>Copyright (C) 2010-2012 SourceCoast. All rights reserved.</copyright>
+    <license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+    <description>This plugin is required for JFBConnect to function properly. Used for inserting and maintaining the proper Facebook/Javascript environment HTML code.</description>
+    <files>
+        <filename plugin="jfbcsystem">jfbcsystem.php</filename>
+    </files>
+    <updateservers>
+        <server type="extension" priority="1" name="JFBCSystem Plugin Updates"><![CDATA[http://www.sourcecoast.com/versions/updates/jfbcsystem.xml]]></server>
+    </updateservers>
+</extension>

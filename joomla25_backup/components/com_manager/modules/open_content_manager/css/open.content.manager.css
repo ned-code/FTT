@@ -1,0 +1,187 @@
+.ocmTableView{
+	width: 100%;
+	height: 330px;
+}
+
+.ocmModuleDiv {
+	cursor:pointer;
+ 	position: static !important;
+	border: 1px solid gray;
+	background: white;
+	margin: 2px;	
+	border-radius: 10px;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-user-select:none;
+	-moz-user-select:none;
+}
+
+.ocmModuleDivHeader {
+	color:white;
+	background: gray;
+	font-size:20px;
+	height:30px;
+	line-height:30px;
+	margin-top:10px;
+	text-align:center !important;
+}
+
+.ocmDragBox {
+	background: white;
+	width: 170px;
+	height: 50px;
+	border: 3px solid gray;
+	z-index:10000;
+	position: absolute;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-user-select:none;
+	-moz-user-select:none;
+}
+
+.ocmPageTitle {
+	font-family: Arial,Helvetica,sans-serif;
+	font-size: 14px;
+	font-weight: bold;
+	margin: 0 0 0 20px;
+}
+
+.ocmButtonTitle {
+	font-size: 11px;
+	font-weight: bold;
+	text-align: center;
+}
+
+.ocmActive {
+	/* background: yellow !important; */
+}
+
+.ocmHover {
+	/* border: 3px solid red !important; */
+	background: yellow !important;
+}
+
+
+.ocmImg {
+	background:url("../imgs/ocm.gif") no-repeat;
+	float:left;
+	width:37px;
+	height:35px;
+}
+
+/* New */
+.ocmImgNew {
+	cursor:pointer;
+	background-position:0px 0px;
+}
+
+.ocmImgNew:hover {
+	cursor:pointer;
+	background-position:0px -35px;
+}
+
+.ocmImgNewSelect {
+	cursor:pointer;
+	background-position:0px -70px !important;
+}
+
+/* Undo */
+.ocmImgUndo {
+	cursor:pointer;
+	background-position:-37px 0px;
+}
+
+.ocmImgUndo:hover {
+	cursor:pointer;
+	background-position:-37px -35px;
+}
+
+.ocmImgUndoSelect {
+	cursor:pointer;
+	background-position:-37px -70px !important;
+}
+
+/* Rendo */
+.ocmImgRendo {
+	cursor:pointer;
+	background-position:-74px 0px;
+}
+
+.ocmImgRendo:hover {
+	cursor:pointer;
+	background-position:-74px -35px;
+}
+
+.ocmImgRendoSelect {
+	cursor:pointer;
+	background-position:-74px 70px !important;
+}
+
+/* ShowLines */
+.ocmImgShowLines {
+	cursor:pointer;
+	background-position:-111px 0px;
+	
+}
+
+.ocmImgShowLines:hover {
+	cursor:pointer;
+	background-position:-111px -35px;
+	
+}
+
+.ocmImgShowLinesSelect {
+	cursor:pointer;
+	background-position:-111px -70px !important;
+	
+}
+
+/* Mod */
+.ocmImgMod {
+	cursor:pointer;
+	background-position:-148px 0px;
+}
+
+.ocmImgMod:hover {
+	cursor:pointer;
+	background-position:-148px -35px;
+}
+
+.ocmImgModSelect {
+	cursor:pointer;
+	background-position:-148px -70px !important;
+}
+
+/* Delete */
+.ocmImgDelete {
+	cursor:pointer;
+	background-position:-186px 0px;
+}
+
+.ocmImgDelete:hover {
+	cursor:pointer;
+	background-position:-186px -35px;
+}
+
+.ocmImgDeleteSelect {
+	cursor:pointer;
+	background-position:-186px -70px !important;
+}
+
+/* modules */
+.jmb_search_obj {
+	position:relative;
+	background: url("../imgs/search.gif") no-repeat scroll 0 0 transparent;
+	cursor: pointer;
+	height: 16px;
+	width: 16px;
+}
+
+.jmb_search_result {
+	font-size: 10px;
+	line-height: 10px;
+	margin-left: 10px;
+	position: relative;
+}
+

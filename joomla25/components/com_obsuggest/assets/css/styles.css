@@ -1,0 +1,324 @@
+
+h1 {
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	font-size:16px;
+	font-weight:bold;
+	margin:0;
+	padding:0;
+	}
+
+hr {
+	border:none;
+	border-top:1px solid #CCCCCC;
+	height:1px;
+	margin-bottom:25px;
+	}
+	
+#tabs {
+	float:left;
+	width:100%;
+	background:#FFF;
+	font-size:93%;
+	line-height:normal;
+	}
+
+#tabs ul {
+	margin:0;
+	padding:10px 10px 0 5px;
+	list-style:none;
+	}
+
+#tabs li {
+	display:inline;
+	margin:0;
+	padding:0;
+	}
+
+#tabs a {
+	outline-style:none;
+	float:left;
+	margin:0;
+	padding:0 0 0 4px;
+	text-decoration:none;
+	font-size:10px;
+	font-weight:bold;
+	}
+
+#tabs a span {
+	float:left;
+	display:block;
+	background:url("../images/tabright.gif") repeat-x right top;
+	padding:5px 15px 4px 6px;
+	color:#FFF;
+	}
+
+/* Commented Backslash Hack hides rule from IE5-Mac \*/
+#tabs a span {float:none;}
+
+/* End IE5-Mac hack */
+#tabs a:hover span {
+	color:#FFF;
+	}
+
+#tabs a:hover {
+	background-position:0% -42px;outline-style:none;
+	}
+
+#tabs a:hover span {
+	background-position:100% -42px;outline-style:none;
+	} 
+.tab_blur {
+	background-color:#000;
+}
+
+/* wrapper*/
+.border-blue {
+	border: 1px solid #A1B4D9;
+	-moz-border-radius-topleft: 0;
+	-moz-border-radius-topright: 0;
+	-webkit-border-top-left-radius: 0;
+	-webkit-border-top-right-radius: 0;
+	zoom: 1;	
+}
+.yt-rounded{
+	-moz-border-radius:9px;background:transparent url(../images/header-bg1.jpg) repeat-x scroll top center;
+	-webkit-border-radius:10px;
+	border-radius:9px;
+}
+.wrapp_comment{
+	background:transparent url(../images/header-bg.jpg) no-repeat scroll top center;
+	text-align:center;
+	margin-left:30px;
+}
+.basictab{
+	padding: 3px 0;
+	margin-left: 0;
+	font: bold 12px Verdana;
+	border-bottom: 1px solid #BCD2E6;
+	list-style-type: none;
+	text-align: left;
+}
+.basictab li{
+	display: inline;
+	margin: 0;
+}
+.basictab li a{
+	text-decoration: none;
+	padding: 3px 7px;
+	outline-style:none;
+	margin-right: 3px;
+	border: 1px solid #BCD2E6;
+	border-bottom: none;
+	-moz-border-radius-topleft:5px;
+	-moz-border-radius-topright:5px;
+	background-color: #f6ffd5;
+	color: #2d2b2b;font-weight:bold;
+}
+.basictab li a:visited{	color: #2d2b2b;}
+.basictab li a:hover{/*background-color: #DBFF6C;*/color: black;background:transparent url(../images/header-bg.jpg) no-repeat scroll top center;}
+.basictab li a:active{color: black;}
+.basictab li.selected a{ /*selected tab effect*/
+	position: relative;
+	top: 1px;
+	outline-style:none;
+	padding-top: 4px;
+	background:transparent url(../images/lightblue_rounded.png) no-repeat scroll 0 0 ;
+	font-weight:bold;
+	color: black;
+}
+div.user {
+	border:none;
+	width:96%;float:left;
+	margin:10px;
+}
+div.user ul li {list-style-type:none;list-style-position:outside;line-height:-3px;}
+div.user ul li h1{font-size:200%;}
+ul.status li{
+	min-width: 50px;
+	width:55px;height:30px;
+	border:1px solid #BCD2E6;
+	-moz-border-radius:7px;
+	list-style-type:none;list-style-position:outside;
+	text-align:center;
+	padding:5px;
+	/*background:#ECF5FA;*/
+	background:transparent url(../images/123.jpg) no-repeat scroll top center;
+	margin:5px;	
+	font-weight:bold;font-size:150%;
+}
+ul.status label{
+	font-weight:normal;color:#888888;font-size:65%;
+}
+
+div ul.status li{
+	float:left;
+}
+
+.ratingBox{
+	line-height:1.4em !important;
+	margin:5px !important;
+	float:left;	
+	text-align:center;
+	background:transparent url(../images/ratingBox.png) no-repeat scroll 0 0;
+	width:70px;
+	height:50px;
+	border:0px solid blue;
+}
+.ratingBox label{
+	text-align:center;
+	/*font-size:100%;*/
+	border:0px solid green;
+	color:#ACACAC;
+}
+.toptab{
+	background:transparent url(../images/ratingBox1.png) no-repeat scroll 0 0;
+	float:left;
+	margin-left:15px;
+	text-align:center !important;
+	width:83px;
+	z-index:10000;
+	padding:6px 0 6px 0 !important;
+	}
+.ratingBox div{
+	margin:0 auto;
+	text-align:center;
+	font-size:24px;
+	font-weight:bold;
+	border:0px solid red;
+	padding:7px 0px 7px 0px;
+	color:#ACACAC;
+}
+
+.ui-tabs-panel-maWsatdY {
+		}
+		div#magictabs_maWsatdY .ui-tabs-nav li {
+			list-style-type:none;
+			float: left;
+		}
+
+.magictabs_style_lightblue_rounded .ui-tabs-nav, .magictabs_style_lightblue_rounded .ui-tabs-panel {
+	font-size: 12px;
+}
+.magictabs_style_lightblue_rounded .ui-tabs-nav {
+    list-style: none;
+    margin: 0;
+    padding:0;
+}
+.magictabs_style_lightblue_rounded .ui-tabs-nav:after { /* clearing without presentational markup, IE gets extra treatment */
+    display: block;
+    clear: both;
+    content: " ";
+}
+.magictabs_style_lightblue_rounded .ui-tabs-nav li {
+    margin: 0;
+	 background: none;
+	 padding: 0 0 0 0;
+    min-width: 100px; /* be nice to Opera */
+	 text-decoration: none;
+}
+.magictabs_style_lightblue_rounded .ui-tabs-nav a, .magictabs_style_lightblue_rounded .ui-tabs-nav a span {
+    display: block;
+    padding: 0 10px;
+    background: url(../images/lightblue_rounded.png) no-repeat;
+}
+.magictabs_style_lightblue_rounded .ui-tabs-nav a {
+    margin: 1px 0 0; /* position: relative makes opacity fail for disabled tab in IE */
+    padding-left: 0;
+    color: #627EB7;
+    font-weight: bold;
+    line-height: 1.2;
+    text-align: center;
+    text-decoration: none;
+    white-space: nowrap; /* required in IE 6 */    
+    outline: 0; /* prevent dotted border in Firefox */
+}
+.magictabs_style_lightblue_rounded .ui-tabs-nav a:hover {
+    color: #627EB7;
+	 text-decoration: none;
+}
+.magictabs_style_lightblue_rounded .ui-tabs-nav .ui-tabs-selected a {
+    position: relative;
+    top: 1px;
+    z-index: 2;
+    margin-top: 0;
+    color: #627EB7;
+	 text-decoration: none;
+}
+.magictabs_style_lightblue_rounded .ui-tabs-nav .ui-tabs-selected a:hover {
+	text-decoration: none;
+   color: #627EB7;
+}
+.magictabs_style_lightblue_rounded .ui-tabs-nav a span {
+    width: 80px; /* IE 6 treats width as min-width */
+    min-width: 80px;
+    height: 18px; /* IE 6 treats height as min-height */
+    min-height: 18px;
+    padding-top: 6px;
+    padding-right: 0;
+}
+*>.magictabs_style_lightblue_rounded ui-tabs-nav a span { /* hide from IE 6 */
+    width: auto;
+    height: auto;
+}
+.magictabs_style_lightblue_rounded .ui-tabs-nav .ui-tabs-selected a span {
+    padding-bottom: 1px;
+}
+.magictabs_style_lightblue_rounded .ui-tabs-nav .ui-tabs-selected a, .magictabs_style_lightblue_rounded .ui-tabs-nav a:hover, .magictabs_style_lightblue_rounded .ui-tabs-nav a:focus, .magictabs_style_lightblue_rounded .ui-tabs-nav a:active {
+    background-position: 100% -150px;
+}
+.magictabs_style_lightblue_rounded .ui-tabs-nav a, .magictabs_style_lightblue_rounded .ui-tabs-nav .ui-tabs-disabled a:hover, .magictabs_style_lightblue_rounded .ui-tabs-nav .ui-tabs-disabled a:focus, .magictabs_style_lightblue_rounded .ui-tabs-nav .ui-tabs-disabled a:active {
+    background-position: 100% -100px;
+}
+.magictabs_style_lightblue_rounded .ui-tabs-nav .ui-tabs-selected a span, .magictabs_style_lightblue_rounded .ui-tabs-nav a:hover span, .magictabs_style_lightblue_rounded .ui-tabs-nav a:focus span, .magictabs_style_lightblue_rounded .ui-tabs-nav a:active span {
+    background-position: 0 -50px;
+}
+.ui-tabs-nav a span, .ui-tabs-nav .ui-tabs-disabled a:hover span, .ui-tabs-nav .ui-tabs-disabled a:focus span, .ui-tabs-nav .ui-tabs-disabled a:active span {
+    background-position: 0 0;
+}
+.magictabs_style_lightblue_rounded .ui-tabs-nav .ui-tabs-selected a:link, .magictabs_style_lightblue_rounded .ui-tabs-nav .ui-tabs-selected a:visited, .magictabs_style_lightblue_rounded .ui-tabs-nav .ui-tabs-disabled a:link, .magictabs_style_lightblue_rounded .ui-tabs-nav .ui-tabs-disabled a:visited { /* @ Opera, use pseudo classes otherwise it confuses cursor... */
+    cursor: text;
+}
+.magictabs_style_lightblue_rounded .ui-tabs-nav a:hover, .magictabs_style_lightblue_rounded .ui-tabs-nav a:focus, .magictabs_style_lightblue_rounded .ui-tabs-nav a:active,
+.magictabs_style_lightblue_rounded .ui-tabs-nav .ui-tabs-unselect a:hover, .magictabs_style_lightblue_rounded .ui-tabs-nav .ui-tabs-unselect a:focus, .magictabs_style_lightblue_rounded .ui-tabs-nav .ui-tabs-unselect a:active { /* @ Opera, we need to be explicit again here now... */
+    cursor: pointer;
+}
+.magictabs_style_lightblue_rounded .ui-tabs-disabled {
+    opacity: .4;
+    filter: alpha(opacity=40);
+}
+.magictabs_style_lightblue_rounded .ui-tabs-panel {
+    border: 1px solid #BCD2E6;
+    /*background:transparent url(../images/header-bg.jpg) repeat-x scroll top left;*/
+    padding: 1em 8px;
+    -moz-border-radius:5px;
+    background: #fff; /* declare background color for container to avoid distorted fonts in IE while fading */
+}
+.magictabs_style_lightblue_rounded .ui-tabs-loading em {
+    padding: 0 0 0 20px;
+    background: url(../images/loading.gif) no-repeat 0 50%;
+}
+
+/* Additional IE specific bug fixes... */
+* html .magictabs_style_lightblue_rounded .ui-tabs-nav { /* auto clear, @ IE 6 & IE 7 Quirks Mode */
+    display: inline-block;
+}
+*:first-child+html .magictabs_style_lightblue_rounded .ui-tabs-nav  { /* @ IE 7 Standards Mode - do not group selectors, otherwise IE 6 will ignore complete rule (because of the unknown + combinator)... */
+    display: inline-block;
+}
+
+.vote_body{
+	border-left:1px solid #CCCCCC;
+	border-right:1px solid #CCCCCC;
+	width:48px;
+	text-align:center;
+}
+.vote_body .sumvotes{
+	color:#FF7800;
+	font-size:20px;
+	text-align:center;
+}
+.vote_body  label{	font-size:10px;	text-align:center;}
+.vote_body  p{	margin:0;text-align:center;}
+.voteBB p{margin:0;}
+.voteB p{margin:0;}
+

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<install version="1.5" type="plugin" plugin="templates" method="upgrade">
+	<version>0.1</version>
+	<creationDate>Feb 2012</creationDate>
+	<author>CKSource.com</author>
+	<authorUrl>http://cksource.com/</authorUrl>
+	<license>GNU/GPLv2</license>
+	<description>Core Templates plugin</description>
+	<languages>
+	</languages>
+	<params group="options">
+		<param name="templates" type="filelist" default="default" label="Templates to Use" description="The templates definition set to use." directory="plugins/editors/jckeditor/plugins/templates/templates" filter="" exclude="" stripext="1"   hide_none="1"  hide_default="1" />
+		<param name="templates_replaceContent" type="radio" default="0" label="Replace Content" description="Determines whether the 'Replace actual contents' checkbox is checked by default in the Templates dialog.">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+	</params>
+</install>

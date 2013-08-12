@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<install version="1.5" type="plugin" plugin="sourcearea" method="upgrade">
+	<version>0.1</version>
+	<creationDate>Feb 2012</creationDate>
+	<author>CKSource.com</author>
+	<authorUrl>http://cksource.com/</authorUrl>
+	<license>GNU/GPLv2</license>
+	<description>Core Dialog plugin</description>
+	<languages>
+	</languages>
+<params group="options">
+			<param name="autoUpdateElement" type="radio" default="1" label="Auto  Update Element " description=" Determines whether the replaced element (usually a &lt;textarea&gt;) is to be updated automatically when posting the form containing the editor. ">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+</params>
+</install>

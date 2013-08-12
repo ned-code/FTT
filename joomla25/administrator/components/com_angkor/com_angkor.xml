@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="2.5" method="upgrade">
+	<name>Angkor</name>
+	<version>2.5.9</version>	
+	<copyright></copyright>
+	<creationDate>February 2012</creationDate>
+	<productName>Angkor Email Template Editor for Joomla</productName>
+	<author>Sankuru Development Team</author>
+	<authorEmail>serey@sankuru.biz</authorEmail>
+	<authorUrl>http://www.sankuru.biz</authorUrl>	
+	<license>This extension is released under the GNU/GPL License</license>
+
+	<!-- ========================= -->
+	<!-- DESCRIPTION -->	
+	<!-- ========================= -->
+	
+	<description>
+	<![CDATA[Use the component to edit the joomla core emails such as User
+Registration Email (with activation or without activation), User
+Registration Email to Administrator, Forget Password email and Forget
+User Name email, and optionally send them out as html email.]]>
+	</description>
+	<installfile>install.angkor.php</installfile>
+	<uninstallfile>uninstall.angkor.php</uninstallfile>
+
+	<!-- ========================= -->
+	<!-- INSTALLER QUERIES -->	
+	<!-- ========================= -->	
+	<install> <!-- Runs on install -->
+		<sql>
+			<file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
+		</sql>
+	</install>	
+	<update>
+	      <schemas>
+			<schemapath type="mysql">sql/updates</schemapath>
+	      </schemas>
+	</update>
+
+	<!-- ========================= -->
+	<!-- INSTALLER FILE -->	
+	<!-- ========================= -->
+
+
+	<!-- ========================= -->
+	<!-- UNINSTALLER QUERIES -->	
+	<!-- ========================= -->
+
+	<uninstall>
+		<queries>
+		</queries>	
+	</uninstall>
+
+	<!-- ========================= -->
+	<!-- INSTALLER FILE -->	
+	<!-- ========================= -->
+
+	<!-- ========================= -->
+	<!-- ADMINISTRATION -->	
+	<!-- ========================= -->
+	<administration>
+
+		<!-- ========================= -->
+		<!-- MENUS -->	
+		<!-- ========================= -->
+		
+		<menu img="components/com_angkor/assets/images/angkor_16.png">Angkor</menu>
+
+		<!-- ========================= -->
+		<!-- ADMIN FILES -->	
+		<!-- ========================= -->		
+		<files folder='admin'>
+			<filename>angkor.php</filename>
+			<filename>controller.php</filename>
+			<filename>access.xml</filename>
+			<filename>config.xml</filename>
+			<filename>index.html</filename>			
+			<folder>assets</folder>			
+			<folder>functions</folder>
+			<folder>helper</folder>
+			<folder>models</folder>
+			<folder>patched_files</folder>
+			<folder>sql</folder>	
+			<folder>tables</folder>
+			<folder>views</folder>
+		</files>
+		<languages folder="admin">
+			<language tag="en-GB">en-GB.com_angkor.ini</language>
+			<language tag="en-GB">en-GB.com_angkor.sys.ini</language>
+		</languages>
+		<!-- ========================= -->
+	</administration>
+</extension>

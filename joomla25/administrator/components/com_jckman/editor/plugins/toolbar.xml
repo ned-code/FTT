@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<install version="1.5" type="plugin" plugin="toolbar" method="upgrade">
+	<version>0.1</version>
+	<creationDate>Feb 2012</creationDate>
+	<author>CKSource.com</author>
+	<authorUrl>http://cksource.com/</authorUrl>
+	<license>GNU/GPLv2</license>
+	<description>Core Dialog plugin</description>
+	<languages>
+	</languages>
+<params group="options">
+		<param name="toolbarCanCollapse" type="radio" default="1" label="Enable Toolbar  Collapse " description=" Determines whether the toolbar can be collapsed by the user. If disabled, the collapser button will not be displayed. ">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+		<param name="toolbarLocation" type="radio" default="1" label="Toolbar Location" description=" The location of the toolbar. This options defauts to the top location just above the textarea ">
+			<option value="top">Top</option>
+			<option value="bottom">Bottom</option>
+		</param>
+		<param name="toolbarGroupCycling" type="radio" default="1" label="Enable Toolbar Group  Cycling " description=" When  this option is enabled it makes the arrow keys navigation cycle within the current toolbar group. Otherwise the arrows will move trought all items available in the toolbar. The TAB key will still be used to quickly jump among the toolbar groups. ">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+		<param name="toolbarStartupExpanded" type="radio" default="1" label="Toolbar Startup Expanded " description="Determines whether the toolbar must start expanded when the editor is loaded. ">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+</params>
+</install>
+
+

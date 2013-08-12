@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<install type="module" version="1.0.0">
+	<name>JoomlaCK Pugin Manager Control Panel</name>
+	<author>Andrew Williams</author>
+	<creationDate>June 2010</creationDate>
+	<copyright>2009 - 2010 WebxSolutions Ltd.</copyright>
+	<license>GNU/GPL</license>
+	<authorEmail>andrew@joomlafckedior.com</authorEmail>
+	<authorUrl>http://www.joomlackedior.com</authorUrl>
+	<version>1.0.0 DEVELOPMENT</version>
+	<description>JoomlCK Pugin ManagerControl Panel Icons based on Quick Icons Module</description>
+	<files>
+		<filename module="mod_jckquickicon">mod_jckquickicon.php</filename>
+	</files>
+	<params>
+		<param name="cache" type="list" default="1" label="Caching" description="Select whether to cache the content of this module">
+			<option value="1">Use global</option>
+			<option value="0">No caching</option>
+		</param>
+	</params>
+</install>

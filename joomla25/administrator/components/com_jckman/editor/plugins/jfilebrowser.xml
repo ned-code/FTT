@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<install version="1.5" type="plugin" plugin="jfilebrowser" method="upgrade">
+	<version>0.1</version>
+	<creationDate>Feb 2012</creationDate>
+	<author>CKSource.com</author>
+	<authorUrl>http://cksource.com/</authorUrl>
+	<license>GNU/GPLv2</license>
+	<description>Core Filebrowser plugin</description>
+	<languages>
+	</languages>
+	<browseUrl>core/connector/php/connector.php</browseUrl>
+	<imageBrowseUrl>core/connector/php/connector.php?type=Images</imageBrowseUrl>
+	<flashBrowseUrl>core/connector/php/connector.php?type=Flash</flashBrowseUrl>
+	<params group="options">
+		<param name="filebrowserWindowHeight" type="text" default="70%" label="Height" description="The height of the file browser popup window. It can be a number denoting a value in pixels."/>
+		<param name="filebrowserWindowWidth" type="text" default="80%" label="Height" description="The height of the file browser popup window. It can be a number denoting a value in pixels."/>
+        <param name="filebrowserWindowFeatures" type="WindowFeatureslist" default="['location=no','menubar=no','toolbar=no','dependent=yes',':minimizable=yes','modal=yes','alwaysRaised=yes','scrollbars=yes']"  label="Filebrowser Window Features" description="The features to use in the file browser popup window.">
+            <option value="location=yes">Location</option>
+            <option value="menubar=yes">Menubar</option>
+			<option value="toolbar=yes">Toolbar</option>
+            <option value="dependent=yes">Dependent</option>         
+		    <option value="minimizable=yes">Minimizable</option>
+            <option value="modal=yes">Modal</option>
+			<option value="alwaysRaised=yes">AlwaysRaised</option>
+            <option value="scrollbars=yes">Scrollbars</option>
+		</param>
+	</params>
+</install>
+
