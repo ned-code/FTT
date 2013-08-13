@@ -165,7 +165,7 @@ $FamilyTreeTop.create("members", function($){
                     avatar = object.avatar(["25","25"]);
                     $fn.setRelPullObject(object);
                     $(tr).append('<td><i class="icon-leaf"></i>'+object.relation+'</td>');
-                    td = $('<td data-familytreetop-color="'+object.gender+'" gedcom_id="'+object.gedcom_id+'"></td>');
+                    td = $('<td style="'+getPadding(avatar)+'" data-familytreetop-color="'+object.gender+'" gedcom_id="'+object.gedcom_id+'"></td>');
                     if($this.mod('usertree').isAvatar(avatar)){
                         var div = $(document.createElement('div'));
                         $(div).addClass('pull-left');
@@ -186,6 +186,9 @@ $FamilyTreeTop.create("members", function($){
             return true;
             function getMaxWidth(a){
                 return ($this.mod('usertree').isAvatar(avatar))?"max-width:200px;":"";
+            }
+            function getPadding(a){
+                return ($this.mod('usertree').isAvatar(avatar))?"padding:0;":"";
             }
         }
     }
