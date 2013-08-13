@@ -64,14 +64,14 @@ class FamilyTreeTopUserHelper
             self::$instance->facebook_id = $facebook_id;
             $response = $facebook->api('/' . $facebook_id);
 
-            self::$instance->username = $response['username'];
-            self::$instance->link = $response['link'];
-            self::$instance->locale = $response['locale'];
+            self::$instance->username = (isset($response['username']))?$response['username']:null;
+            self::$instance->link = (isset($response['link']))?$response['link']:null;
+            self::$instance->locale = (isset($response['locale']))?$response['locale']:null;
 
-            self::$instance->first_name = $response['first_name'];
-            self::$instance->last_name = $response['last_name'];
-            self::$instance->name = $response['name'];
-            self::$instance->gender = $response['gender'];
+            self::$instance->first_name = (isset($response['first_name']))?$response['first_name']:null;
+            self::$instance->last_name = (isset($response['last_name']))?$response['last_name']:null;
+            self::$instance->name = (isset($response['name']))?$response['name']:null;
+            self::$instance->gender = (isset($response['gender']))?$response['gender']:null;
         }
 
         $account = null;
