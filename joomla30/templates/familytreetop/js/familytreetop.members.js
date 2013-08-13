@@ -167,11 +167,14 @@ $FamilyTreeTop.create("members", function($){
                     $(tr).append('<td><i class="icon-leaf"></i>'+object.relation+'</td>');
                     td = $('<td data-familytreetop-color="'+object.gender+'" gedcom_id="'+object.gedcom_id+'"></td>');
                     if($this.mod('usertree').isAvatar(avatar)){
-                        $(td).append(avatar);
+                        var div = $(document.createElement('div'));
+                        $(div).addClass('pull-left');
+                        $(div).append(avatar);
+                        $(td).append(div);
                     }
-                    $(td).append(' '+'<span style="cursor:pointer;">'+object.name()+'</span>');
+                    $(td).append('<div class="pull-left" style="'+getMaxWidth(avatar)+'"> <span style="cursor:pointer;">'+object.name()+'</span></div>');
                     $(tr).append(td);
-                    $(tr).append('<td>'+$this.mod('usertree').parseDate(birth.date)+'</td>');
+                    $(tr).append('<td style="width:95px;">'+$this.mod('usertree').parseDate(birth.date)+'</td>');
                     $(tr).append('<td style="text-align: right;">'+$this.mod('usertree').parsePlace(birth.place)+'</td>');
                     $($box).append(tr);
                     $this.mod('popovers').render({
@@ -179,6 +182,10 @@ $FamilyTreeTop.create("members", function($){
                     });
                     $this.mod('familyline').bind(tr, object.gedcom_id);
                 }
+            }
+            return true;
+            function getMaxWidth(a){
+                return ($this.mod('usertree').isAvatar(avatar))?"max-width:200px;":"";
             }
         }
     }

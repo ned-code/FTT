@@ -10,9 +10,9 @@ $filterButtonsWidth = 100;
                 <legend>
                     <div class="row-fluid">
                         <div class="span12">
-                            <div class="text-center">
+                            <div style="position:relative;" class="text-center">
                                 <span><?=JText::_('MOD_FTT_MEMBERS_FAMILY_MEMBERS');?></span>
-                                <div class="pull-right" style="position:relative">
+                                <div style="position:absolute;top: 0;right: 0;">
                                     <input type="text" class="input-medium search-query"><i class="icon-search" style="position:absolute; right: 10px;top: 14px;"></i>
                                 </div>
                             </div>
