@@ -102,11 +102,12 @@ class FamilyTreeTopGedcomIndividualsModel {
         $gedcom = GedcomHelper::getInstance();
         if(empty($this->id)) return false;
         $user = FamilyTreeTopIndividuals::find_by_gedcom_id($this->gedcom_id);
-        $user->delete();
 
         if($this->facebook_id != 0){
             $this->unregister();
         }
+
+        $user->delete();
 
         $gedcom->individuals->removeFromList($this->gedcom_id);
     }
@@ -139,6 +140,10 @@ class FamilyTreeTopGedcomIndividualsModel {
     }
 
     public function unregister(){
+        $account = FamilyTreeTopAccounts::find_by_facebook_id($this->facebook_id);
+        $account->current = 0;
+        $account->save();
+
         $user = FamilyTreeTopUsers::find_by_gedcom_id($this->gedcom_id);
         $user->remove();
     }

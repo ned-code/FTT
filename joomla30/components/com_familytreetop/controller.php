@@ -7,8 +7,7 @@ class FamilytreetopController extends JControllerLegacy
 	public function display($cachable = false, $urlparams = false)
 	{
 
-
-		// Get the document object.
+        // Get the document object.
 		$document	= JFactory::getDocument();
         $session = JFactory::getSession();
 
@@ -47,7 +46,7 @@ class FamilytreetopController extends JControllerLegacy
                     break;
 
                 case "login":
-                    if($user->facebook_id != 0){
+                    if($user->facebook_id != 0 && $user->tree_id != null){
                         $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=myfamily", false));
                         return;
                     } else {
