@@ -4,34 +4,37 @@ $facebook = FacebookHelper::getInstance()->facebook;
 $user = FamilyTreeTopUserHelper::getInstance()->get();
 $gedcom = GedcomHelper::getInstance();
 
-if($user->facebook_id != 0){
-    $family = $facebook->api(array(
-        'method' => 'fql.query',
-        'query' => 'SELECT name, birthday, uid, relationship FROM family WHERE profile_id =me()',
-    ));
-
-    $members = json_decode($gedcom->getTreeUsers(true, true));
-    $home = $facebook->api('/' . $user->facebook_id . '/home?limit=100');
-    $data = $home['data'];
-} else {
-    $data = null;
-}
-
-$search = array();
-foreach($members as $member){
-    $search[$member->facebook_id] = $gedcom->individuals->get($member->gedcom_id);
-}
-
-
-foreach($family as $member){
-    $search[$member['uid']] = $member;
-}
-
 $result_array = array();
-foreach($data as $object){
-    $facebook_id = $object['from']['id'];
-    if(isset($search[$facebook_id])){
-        $result_array[] = $object;
+$data = null;
+try {
+    if($user->facebook_id != 0){
+        $family = $facebook->api(array(
+            'method' => 'fql.query',
+            'query' => 'SELECT name, birthday, uid, relationship FROM family WHERE profile_id =me()',
+        ));
+
+        $members = json_decode($gedcom->getTreeUsers(true, true));
+        $home = $facebook->api('/' . $user->facebook_id . '/home?limit=100');
+        $data = $home['data'];
+    } else {
+        $data = null;
+    }
+
+    $search = array();
+    foreach($members as $member){
+        $search[$member->facebook_id] = $gedcom->individuals->get($member->gedcom_id);
+    }
+
+
+    foreach($family as $member){
+        $search[$member['uid']] = $member;
+    }
+
+    foreach($data as $object){
+        $facebook_id = $object['from']['id'];
+        if(isset($search[$facebook_id])){
+            $result_array[] = $object;
+        }
     }
 }
 ?>
