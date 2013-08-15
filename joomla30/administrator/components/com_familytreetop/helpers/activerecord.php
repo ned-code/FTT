@@ -12,7 +12,6 @@ class ActiverecrdHelper
 
     public function getInstance(){
         if ( is_null(self::$instance) ) {
-
             ActiveRecord\Config::initialize(function($cfg){
                 $config = JFactory::getConfig();
                 $user = $config->get( 'user' );

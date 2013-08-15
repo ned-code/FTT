@@ -21,11 +21,11 @@ defined('_JEXEC') or die;
             false
         ); ?>">
             <fieldset>
-                <legend>Create Tree</legend>
+                <legend class="text-center">Create Tree</legend>
                 <div class="row">
                     <div class="span6">
                         <fieldset>
-                            <legend>You</legend>
+                            <legend style="padding-left:90px;">You</legend>
                             <div class="control-group">
                                 <label class="control-label" for="userFirstName">First Name</label>
                                 <div class="controls">
@@ -64,7 +64,7 @@ defined('_JEXEC') or die;
                         <div class="row">
                             <div class="span12">
                                 <fieldset>
-                                    <legend>Your Father</legend>
+                                    <legend style="padding-left:40px;">Your Father</legend>
                                     <div class="control-group warning">
                                         <label class="control-label" for="fatherFirstName">Father First Name</label>
                                         <div class="controls">
@@ -83,7 +83,7 @@ defined('_JEXEC') or die;
                         <div class="row">
                             <div class="span12">
                                 <fieldset>
-                                    <legend>Your Mother</legend>
+                                    <legend style="padding-left:40px;">Your Mother</legend>
                                     <div class="control-group warning">
                                         <label class="control-label" for="motherFirstName">Mother First Name</label>
                                         <div class="controls">
@@ -103,7 +103,7 @@ defined('_JEXEC') or die;
                 </div>
                 <div class="row">
                     <div class="span12">
-                        <div class="well center">
+                        <div class="well text-center">
                             <button type="submit" class="btn btn-primary">Create Tree</button>
                             <button type="button" class="btn">Cancel</button>
                             <?=JHtml::_('form.token'); ?>

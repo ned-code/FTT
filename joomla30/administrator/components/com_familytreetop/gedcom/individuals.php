@@ -16,6 +16,8 @@ class FamilyTreeTopGedcomIndividualsModel {
     public $last_name = null;
     public $know_as = null;
 
+    public $facebook_id = null;
+
     //others
     public $events = array();
     public $medias = array();
@@ -102,11 +104,9 @@ class FamilyTreeTopGedcomIndividualsModel {
         $gedcom = GedcomHelper::getInstance();
         if(empty($this->id)) return false;
         $user = FamilyTreeTopIndividuals::find_by_gedcom_id($this->gedcom_id);
-        $user->delete();
 
-        if($this->facebook_id != 0){
-            $this->unregister();
-        }
+        $this->unregister();
+        $user->delete();
 
         $gedcom->individuals->removeFromList($this->gedcom_id);
     }
@@ -139,8 +139,19 @@ class FamilyTreeTopGedcomIndividualsModel {
     }
 
     public function unregister(){
+        $users = FamilyTreeTopUsers::find('all',array('conditions' => array('tree_id=?', $this->tree_id)));
         $user = FamilyTreeTopUsers::find_by_gedcom_id($this->gedcom_id);
-        $user->remove();
+        $account = FamilyTreeTopAccounts::find($user->account_id);
+        if($user){
+            $user->delete();
+            $account->current = 0;
+            $account->save();
+
+            if(sizeof($users) == 1){
+                $tree = FamilyTreeTopTrees::find($this->tree_id);
+                $tree->delete();
+            }
+        }
     }
 
     public function save(){

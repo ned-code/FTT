@@ -493,6 +493,7 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         $gedcom_id = $app->input->post->get('gedcom_id', false);
 
         $user = $gedcom->individuals->get($gedcom_id);
+
         switch((int)$type){
             case 1:
                 $user->unregister();
