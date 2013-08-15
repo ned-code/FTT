@@ -36,24 +36,26 @@ try {
             $result_array[] = $object;
         }
     }
+} catch($php_errormsg){
+
 }
 ?>
-<?php if(!empty($data)): ?>
 <div id="myFamilyOnFacebook" class="row-fluid">
     <div class="span12">
         <div class="well" familytreetop="module">
             <fieldset>
                 <legend class="text-center"><?=JText::_('MOD_FTT_MYFAMILY_TITLE');?></legend>
-                <div class="row-fluid">
-                    <div class="span12">
-                        <table style="margin:0;" class="table"></table>
+                <?php if(!empty($data)): ?>
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <table style="margin:0;" class="table"></table>
+                        </div>
                     </div>
-                </div>
+                <?php endif; ?>
             </fieldset>
         </div>
     </div>
 </div>
-<?php endif; ?>
 <script>
     $FamilyTreeTop.bind(function($){
         var json = <?=json_encode(array('search'=>$search, 'sort'=>$result_array));?>;
