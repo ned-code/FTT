@@ -961,7 +961,7 @@ $FamilyTreeTop.create("usertree", function($){
             data = [el.thumbnail_url, $('<img class="'+style+'" />')];
         } else if(gedcom_id && gedcom_id in usersmap){
             data = [
-                'https://graph.facebook.com/'+usersmap[gedcom_id].facebook_id+'/picture/',
+                'https://graph.facebook.com/'+usersmap[gedcom_id].facebook_id+'/picture?width='+size[0]+'&height='+size[1],
                 $('<img class="'+style+'" />')
             ];
         } else if(size[0] in {"25":true, "35":true, "50":true,"75":true, "90":true, "140":true}) {
