@@ -36,7 +36,7 @@ try {
             $result_array[] = $object;
         }
     }
-} catch($php_errormsg){
+} catch(Exception $php_errormsg){
 
 }
 ?>
