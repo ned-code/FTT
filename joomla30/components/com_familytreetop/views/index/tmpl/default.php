@@ -1,9 +1,6 @@
 <?php
 defined('_JEXEC') or die;
 ?>
-<script>
-    $FamilyTreeTop.dataString = '<?=json_encode(GedcomHelper::getInstance()->getData());?>';
-</script>
 <div class="row-fluid">
     <div class="span6 hidden-phone text-center">
         <img src="<?=$this->baseurl;?>/components/com_familytreetop/images/index.logo.jpg">

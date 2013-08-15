@@ -1,11 +1,7 @@
 <?php
 defined('_JEXEC') or die;
 jimport('joomla.application.module.helper');
-$user = FamilyTreeTopUserHelper::getInstance()->get();
 ?>
-<script>
-    $FamilyTreeTop.dataString = '<?=json_encode(GedcomHelper::getInstance()->getData());?>';
-</script>
 <div class="row">
     <div class="span12">
         <?php

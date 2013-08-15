@@ -3,9 +3,6 @@ defined('_JEXEC') or die;
 $famous = FamilyTreeTopFamous::find('all');
 $gedcom = GedcomHelper::getInstance();
 ?>
-<script>
-    $FamilyTreeTop.dataString = '<?=json_encode(GedcomHelper::getInstance()->getData());?>';
-</script>
 <div data-familytreetop-box="famous" class="row">
     <div class="span12">
         <?php foreach($famous as $family): ?>

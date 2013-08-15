@@ -69,6 +69,8 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
     $FamilyTreeTop.templateurl = '<?=$this->baseurl;?>/templates/<?=$this->template;?>';
 
     $FamilyTreeTop.languagesString = '<?=LanguagesHelper::get()?>';
+
+    $FamilyTreeTop.dataString = '<?=json_encode(GedcomHelper::getInstance()->getData());?>';
 </script>
 <div id="fb-root"></div>
 <jdoc:include type="modules" name="facebook-sdk" style="none" />
