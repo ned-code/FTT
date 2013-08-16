@@ -185,7 +185,7 @@ $FamilyTreeTop.create("members", function($){
             }
             return true;
             function getMaxWidth(a){
-                return ($this.mod('usertree').isAvatar(avatar))?"max-width:200px;":"";
+                return ($this.mod('usertree').isAvatar(avatar))?"max-width:200px;line-height: 35px;padding-left: 5px;":"";
             }
             function getPadding(a){
                 return ($this.mod('usertree').isAvatar(avatar))?"padding:0;":"";
