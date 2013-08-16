@@ -16,8 +16,6 @@ class FamilyTreeTopGedcomIndividualsModel {
     public $last_name = null;
     public $know_as = null;
 
-    public $facebook_id = null;
-
     //others
     public $events = array();
     public $medias = array();
@@ -104,9 +102,11 @@ class FamilyTreeTopGedcomIndividualsModel {
         $gedcom = GedcomHelper::getInstance();
         if(empty($this->id)) return false;
         $user = FamilyTreeTopIndividuals::find_by_gedcom_id($this->gedcom_id);
-
-        $this->unregister();
         $user->delete();
+
+        if($this->facebook_id != 0){
+            $this->unregister();
+        }
 
         $gedcom->individuals->removeFromList($this->gedcom_id);
     }
@@ -127,7 +127,7 @@ class FamilyTreeTopGedcomIndividualsModel {
         $this->middle_name = mysql_real_escape_string($name->middle_name);
         $this->last_name = mysql_real_escape_string($name->last_name);
         $this->know_as = mysql_real_escape_string($name->know_as);
-        $this->change_time = $name->change_time
+        $this->change_time = $name->change_time;
 
         if(!empty($this->events)){
             foreach($this->events as $event){
@@ -139,19 +139,8 @@ class FamilyTreeTopGedcomIndividualsModel {
     }
 
     public function unregister(){
-        $users = FamilyTreeTopUsers::find('all',array('conditions' => array('tree_id=?', $this->tree_id)));
         $user = FamilyTreeTopUsers::find_by_gedcom_id($this->gedcom_id);
-        $account = FamilyTreeTopAccounts::find($user->account_id);
-        if($user){
-            $user->delete();
-            $account->current = 0;
-            $account->save();
-
-            if(sizeof($users) == 1){
-                $tree = FamilyTreeTopTrees::find($this->tree_id);
-                $tree->delete();
-            }
-        }
+        $user->remove();
     }
 
     public function save(){
