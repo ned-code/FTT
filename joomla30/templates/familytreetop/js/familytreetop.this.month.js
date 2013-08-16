@@ -51,10 +51,9 @@ $FamilyTreeTop.create("this_month", function($){
             }
         },
         isEmpty: function(data){
-            return "undefined" !== typeof(data) && data.BIRT.length == 0 && data.DEAT.length == 0 && data.MARR.length == 0;
+            return "undefined" === typeof(data) || ("undefined" !== typeof(data) && data.BIRT.length == 0 && data.DEAT.length == 0 && data.MARR.length == 0);
         },
         render: function(month){
-            $
             if(month == 0 || $fn.isEmpty($data)){
                 $fn.setAllMonths();
             } else {
