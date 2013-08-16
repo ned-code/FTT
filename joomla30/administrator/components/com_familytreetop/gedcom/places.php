@@ -24,9 +24,9 @@ class FamilyTreeTopGedcomPlaceModel {
         }
 
         $place->event_id = $this->event_id;
-        $place->city = $this->city;
-        $place->state = $this->state;
-        $place->country = $this->country;
+        $place->city = mysql_real_escape_string($this->city);
+        $place->state = mysql_real_escape_string($this->state);
+        $place->country = mysql_real_escape_string($this->country);
         $place->change_time = $this->change_time;
         $place->save();
 

@@ -123,11 +123,11 @@ class FamilyTreeTopGedcomIndividualsModel {
         $name->change_time = $date->toSql();
         $name->save();
 
-        $this->first_name = $name->first_name;
-        $this->middle_name = $name->middle_name;
-        $this->last_name = $name->last_name;
-        $this->know_as = $name->know_as;
-        $this->change_time = $name->change_time;
+        $this->first_name = mysql_real_escape_string($name->first_name);
+        $this->middle_name = mysql_real_escape_string($name->middle_name);
+        $this->last_name = mysql_real_escape_string($name->last_name);
+        $this->know_as = mysql_real_escape_string($name->know_as);
+        $this->change_time = $name->change_time
 
         if(!empty($this->events)){
             foreach($this->events as $event){
