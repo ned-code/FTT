@@ -52,7 +52,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
 <body>
 <script>
     $FamilyTreeTop.app.config.appId = '<?=$settings->facebook_app_id->value;?>';
-    $FamilyTreeTop.app.config.channelUrl = '<?=$this->baseurl; ?>/templates/<?=$this->template; ?>/channel.html';
+    $FamilyTreeTop.app.config.channelUrl = '<?=JURI::base(); ?>templates/<?=$this->template; ?>/channel.html';
 
     $FamilyTreeTop.app.permissions = '<?=$settings->facebook_permission->value;?>';
     $FamilyTreeTop.app.data = '<?=json_encode(FacebookHelper::getInstance()->data); ?>';
@@ -749,12 +749,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
             jQuery.getScript('//connect.facebook.net/en_US/all.js', function(){
                 FB.init($FamilyTreeTop.app.config);
                 FB.getLoginStatus(function(response){
-                    //console.log(response);
-                    if(response.status === "unknown"){
-                        //console.log('Facebook LoginStatus unknown');
-                    } else {
-                        $FamilyTreeTop.init();
-                    }
+                    $FamilyTreeTop.init();
                 }, true);
            });
        });

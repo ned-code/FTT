@@ -8,6 +8,7 @@
                 channelUrl: false,
                 status: true,
                 xfmbl: true,
+                cookie: true,
                 oauth: true
             },
             data:false,
