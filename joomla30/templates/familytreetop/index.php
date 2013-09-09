@@ -52,6 +52,8 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
 <body>
 <script>
     $FamilyTreeTop.app.config.appId = '<?=$settings->facebook_app_id->value;?>';
+    $FamilyTreeTop.app.config.channelUrl = '<?=$this->baseurl; ?>/templates/<?=$this->template; ?>/channel.html';
+
     $FamilyTreeTop.app.permissions = '<?=$settings->facebook_permission->value;?>';
     $FamilyTreeTop.app.data = '<?=json_encode(FacebookHelper::getInstance()->data); ?>';
 
@@ -743,14 +745,19 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
         console.log('Facebook App Id doesn\'t exist');
     } else {
         jQuery(document).ready(function() {
-            $.ajaxSetup({ cache: true });
-            $.getScript('//connect.facebook.net/en_UK/all.js', function(){
+            jQuery.ajaxSetup({ cache: true });
+            jQuery.getScript('//connect.facebook.net/en_US/all.js', function(){
                 FB.init($FamilyTreeTop.app.config);
                 FB.getLoginStatus(function(response){
-                    $FamilyTreeTop.init();
+                    //console.log(response);
+                    if(response.status === "unknown"){
+                        //console.log('Facebook LoginStatus unknown');
+                    } else {
+                        $FamilyTreeTop.init();
+                    }
                 }, true);
-            });
-        });
+           });
+       });
     }
 </script>
 </body>

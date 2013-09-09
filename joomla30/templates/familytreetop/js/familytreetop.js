@@ -3,10 +3,11 @@
 
     var $FamilyTreeTop = function(){
         this.app = {
-            config:{
+           config:{
                 appId:false,
+                channelUrl: false,
                 status: true,
-                cookie: true,
+                xfmbl: true,
                 oauth: true
             },
             data:false,
