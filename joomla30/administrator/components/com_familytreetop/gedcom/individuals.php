@@ -178,10 +178,10 @@ class FamilyTreeTopGedcomIndividualsModel {
             $name = new FamilyTreeTopNames();
         }
         $name->gedcom_id = $this->gedcom_id;
-        $name->first_name = $this->first_name;
-        $name->middle_name = $this->middle_name;
-        $name->last_name = $this->last_name;
-        $name->know_as = $this->know_as;
+        $name->first_name = $gedcom->checkInputData($this->first_name);
+        $name->middle_name = $gedcom->checkInputData($this->middle_name);
+        $name->last_name = $gedcom->checkInputData($this->last_name);
+        $name->know_as = $gedcom->checkInputData($this->know_as);
         $name->change_time = $ind->change_time;
         $name->save();
 

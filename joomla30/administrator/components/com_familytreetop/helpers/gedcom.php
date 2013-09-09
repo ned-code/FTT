@@ -90,4 +90,8 @@ class GedcomHelper
             'con' => $this->connections->getList()
         );
     }
+
+    public function checkInputData($data){
+        return mysql_real_escape_string($data);
+    }
 }
