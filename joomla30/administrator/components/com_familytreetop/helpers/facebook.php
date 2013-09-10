@@ -11,19 +11,15 @@ class FacebookHelper
     private function __wakeup(){}
 
     public $facebook;
-    public $scope = "user_about_me,user_birthday,user_relationships,user_photos,friends_photos,read_stream,read_insights";
     public $data = array();
 
     public function getInstance(){
         if ( is_null(self::$instance) ) {
-            Facebook::$CURL_OPTS[CURLOPT_SSL_VERIFYPEER] = false;
-
             self::$instance = new FacebookHelper ();
             $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
             $config = array();
             $config['appId'] = $settings->facebook_app_id->value;
             $config['secret'] = $settings->facebook_app_secret->value;
-            $config['coockie'] = true;
             self::$instance->facebook = new Facebook($config);
 
             $data = self::$instance->facebook->api('/' . $config['appId']);
@@ -38,13 +34,14 @@ class FacebookHelper
     }
 
     public function getLoginUrl($redirect = null){
+        $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
         if(empty($redirect)){
             $redirect = JRoute::_("index.php?option=com_familytreetop&view=myfamily", false);
         }
-        $redirect_url = "http://" . JUri::getInstance()->getHost() . $redirect;
+        $redirect_url = "https://" . JUri::getInstance()->getHost() . $redirect;
 
         $params = array(
-            'scope' => $this->scope,
+            'scope' => $settings->facebook_permission,
             'redirect_uri' => $redirect_url
         );
 

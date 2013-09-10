@@ -1,6 +1,7 @@
 <?php
 class FamilyTreeTopGedcomChildrensManager {
     protected $tree_id;
+    protected $list = array();
     protected $list_by_gedcom_id = array();
     protected $list_by_family_id = array();
 
