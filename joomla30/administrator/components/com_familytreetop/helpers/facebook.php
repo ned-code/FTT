@@ -17,12 +17,13 @@ class FacebookHelper
         if ( is_null(self::$instance) ) {
             self::$instance = new FacebookHelper ();
             $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
-            $config = array();
-            $config['appId'] = $settings->facebook_app_id->value;
-            $config['secret'] = $settings->facebook_app_secret->value;
-            self::$instance->facebook = new Facebook($config);
 
-            $data = self::$instance->facebook->api('/' . $config['appId']);
+            self::$instance->facebook = new Facebook(array(
+                'appId' => $settings->facebook_app_id->value,
+                'secret' => trim($settings->facebook_app_secret->value)
+            ));
+
+            $data = self::$instance->facebook->api('/' . $settings->facebook_app_id->value);
             if(isset($data['link'])){
                 self::$instance->data['link'] = $data['link'];
             }
@@ -40,11 +41,9 @@ class FacebookHelper
         }
         $redirect_url = "https://" . JUri::getInstance()->getHost() . $redirect;
 
-        $params = array(
-            'scope' => $settings->facebook_permission,
+        return $this->facebook->getLoginUrl(array(
+            'scope' => $settings->facebook_permission->value,
             'redirect_uri' => $redirect_url
-        );
-
-        return $this->facebook->getLoginUrl($params);
+        ));
     }
 }
