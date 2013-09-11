@@ -27,8 +27,6 @@ defined('_JEXEC') or die;
         var $this = this, load;
         load = function(el, args){
             $this.ajax('user.activate', args, function(response){
-                //console.log(response.url);
-                //return false;
                 if(response.auth == true){
                     window.location.href = "<?=JRoute::_("index.php?option=com_familytreetop&view=myfamily", false);?>";
                 } else if("undefined" !== response.url){
@@ -45,11 +43,12 @@ defined('_JEXEC') or die;
         $("#login").click(function(){
             var auth;
             if( (auth = FB.getAuthResponse()) == null){
-                FB.login(function(response){
+                FB.login(function(response){}, {scope: $FamilyTreeTop.app.permissions});
+                FB.Event.subscribe('auth.login', function(response) {
                     if(response.status == "connected"){
                         load(this, response.authResponse);
                     }
-                }, {scope: $FamilyTreeTop.app.permissions});
+                });
             } else {
                 load(this, auth);
             }

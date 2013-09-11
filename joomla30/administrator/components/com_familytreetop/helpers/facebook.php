@@ -20,7 +20,8 @@ class FacebookHelper
 
             self::$instance->facebook = new Facebook(array(
                 'appId' => $settings->facebook_app_id->value,
-                'secret' => trim($settings->facebook_app_secret->value)
+                'secret' => trim($settings->facebook_app_secret->value),
+                'cookie' => true
             ));
 
             $data = self::$instance->facebook->api('/' . $settings->facebook_app_id->value);

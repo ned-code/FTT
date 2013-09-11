@@ -44,15 +44,10 @@ class FamilytreetopControllerUser extends FamilytreetopController
     }
 
     public function activate(){
-
         $app = JFactory::getApplication();
         $redirect = $app->input->get('redirect', false);
-        $state = $app->input->get('state', false);
-        $code = $app->input->get('code', false);
-        $accessToken = $app->input->get('accessToken');
 
         $facebook = FacebookHelper::getInstance()->facebook;
-        $facebook->setAccessToken($accessToken);
         $facebook_id = $facebook->getUser();
 
         $return = JRoute::_("index.php?option=com_familytreetop&task=user.activate&redirect=1", false);
@@ -67,6 +62,7 @@ class FamilytreetopControllerUser extends FamilytreetopController
             $args = $facebook->api('/'.$facebook_id);
             if($args['id'] != 0){
                 $user = JoomlaUsers::find_by_username('fb_' . $args['id']);
+                $facebook->setExtendedAccessToken();
                 $accessToken = $facebook->getAccessToken();
 
                 if(empty($user)){
