@@ -436,6 +436,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                     <div familytreetop="gender" class="span6">
                         <label for="editProfile[gender]"><small><?=JText::_("TPL_FAMILYTREETOP_GENDER");?></small></label>
                         <select class="span12" id="editProfile[gender]" name="editProfile[gender]">
+                            <option value="default">Select gender...</option>
                             <option value="1"><?=JText::_("TPL_FAMILYTREETOP_GENDER_MALE");?></option>
                             <option value="0"><?=JText::_("TPL_FAMILYTREETOP_GENDER_FEMALE");?></option>
                         </select>

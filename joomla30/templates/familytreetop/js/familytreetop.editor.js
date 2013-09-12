@@ -343,6 +343,9 @@ $FamilyTreeTop.create("editor", function($){
                 return a;
             }
         },
+        validate: function(args){
+            console.log(args);
+        },
         submit:function(cl, ind, task){
             if(arguments.length)
             var tasks = [
@@ -360,6 +363,9 @@ $FamilyTreeTop.create("editor", function($){
                 } else {
                     args = $fn.getArgs(cl, 0, ind);
                     send = task;
+                }
+                if(!$fn.validate(args)){
+                    return false;
                 }
                 $this.ajax(send, args, function(response){
                     $this.mod('usertree').update(response);
@@ -420,7 +426,7 @@ $FamilyTreeTop.create("editor", function($){
         cl = $fn.getModalBox();
 
         //create tabs
-        tabs = $fn.getTabs()
+        tabs = $fn.getTabs();
 
         //get user data
         ind = $this.mod('usertree').user(gedcom_id);
@@ -432,6 +438,7 @@ $FamilyTreeTop.create("editor", function($){
 
         //profile edit
         editProfileForm = $fn.getEditorProfileForm();
+        $(editProfileForm).find('option[value="default"]').remove();
         $fn.setFormInTab(0, tabs, editProfileForm);
         $fn.setUserData(editProfileForm, ind);
 
