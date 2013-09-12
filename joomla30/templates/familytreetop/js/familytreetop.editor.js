@@ -344,7 +344,16 @@ $FamilyTreeTop.create("editor", function($){
             }
         },
         validate: function(args){
-            console.log(args);
+            var form = args['form0'];
+            for(var key in form){
+                if(!form.hasOwnProperty(key)) continue;
+                if(form[key].name == "editProfile[gender]"){
+                    if(form[key].value == "default"){
+                        return false;
+                    }
+                }
+            }
+            return true;
         },
         submit:function(cl, ind, task){
             if(arguments.length)
