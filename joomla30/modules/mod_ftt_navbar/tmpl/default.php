@@ -64,7 +64,7 @@ if($session->get('famous')){
                     object: user
                 });
             },
-            languages: function(){
+            languages: function(object){
                 var langs = $.parseJSON($FamilyTreeTop.languagesString), ul = $('<ul></ul>'), li, prop, box = $('#modal').clone();
                 $(box).find('#modalLabel').text('Languages');
                 for(prop in langs){
@@ -85,14 +85,16 @@ if($session->get('famous')){
                     return false;
                 });
             },
-            logout: function(){
-                var a = $('[familytreetop="logout"]');
+            facebook:function(object){
+                window.location = $FamilyTreeTop.data.link;
+            },
+            logout: function(object){
                 if(FB.getAuthResponse() != null){
                     FB.logout(function(r){
-                        window.location = $(a).attr('href');
+                        window.location = $(object).attr('href');
                     });
                 } else {
-                    window.location = $(a).attr('href');
+                    window.location = $(object).attr('href');
                 }
             }
         }
@@ -106,11 +108,15 @@ if($session->get('famous')){
                     break;
 
                 case "languages":
-                        $fn.languages();
+                        $fn.languages(this);
+                    break;
+
+                case "facebook":
+                        $fn.facebook(this);
                     break;
 
                 case "logout":
-                        $fn.logout();
+                        $fn.logout(this);
                     break;
 
                 default: return false;
