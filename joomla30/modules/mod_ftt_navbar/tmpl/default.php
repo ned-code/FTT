@@ -86,6 +86,7 @@ if($session->get('famous')){
                 });
             },
             logout: function(){
+                var a = $('[familytreetop="logout"]');
                 if(FB.getAuthResponse() != null){
                     FB.logout(function(r){
                         window.location = $(a).attr('href');
