@@ -28,6 +28,7 @@ if($session->get('famous')){
                         <li><a  familytreetop="profile" href="#"><?=JText::_('MOD_FTT_NAVBAR_PROFILE_PROFILE');?></a></li>
                         <li><a  familytreetop="languages" href="#"><?=JText::_('MOD_FTT_NAVBAR_PROFILE_LANGUAGES');?></a></li>
                         <li><a  familytreetop="facebook" href="#"><?=JText::_('MOD_FTT_NAVBAR_PROFILE_REDIRECT_TO_FACEBOOK');?></a></li>
+                        <li><a  familytreetop="familytreetop" href="#">Redirect to FamilyTreeTop</a></li>
                         <li class="divider"></li>
                         <li><a  familytreetop="logout" href="<?=JRoute::_("index.php?option=com_familytreetop&task=user.logout", false);?>"><?=JText::_('MOD_FTT_NAVBAR_PROFILE_LOG_OUT');?></a></li>
                     </ul>
@@ -86,7 +87,10 @@ if($session->get('famous')){
                 });
             },
             facebook:function(object){
-                window.location = $FamilyTreeTop.data.link;
+                window.location = $FamilyTreeTop.app.data.link;
+            },
+            familytreetop:function(object){
+                window.top.location = $FamilyTreeTop.rooturl;
             },
             logout: function(object){
                 if(FB.getAuthResponse() != null){
@@ -97,6 +101,12 @@ if($session->get('famous')){
                     window.location = $(object).attr('href');
                 }
             }
+        }
+
+        if(window!=window.top){
+            $('#profileUser ul.dropdown-menu li a[familytreetop="facebook"]').remove();
+        } else {
+            $('#profileUser ul.dropdown-menu li a[familytreetop="familytreetop"]').remove();
         }
 
         $('#profileUser ul.dropdown-menu li a').click(function(){
@@ -113,6 +123,10 @@ if($session->get('famous')){
 
                 case "facebook":
                         $fn.facebook(this);
+                    break;
+
+                case "familytreetop":
+                        $fn.familytreetop(this);
                     break;
 
                 case "logout":
