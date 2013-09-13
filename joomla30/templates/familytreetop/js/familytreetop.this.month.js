@@ -84,6 +84,8 @@ $FamilyTreeTop.create("this_month", function($){
             $($parent).find('[familytreetop="MARR"]').hide();
             $($parent).find('[familytreetop="DEAT"]').hide();
 
+            $("#thisMonth").find('[familytreetop="months"]').find('option[value="0"]').attr('selected', 'selected');
+
             for(prop in data){
                 if(!data.hasOwnProperty(prop) || prop == 0) continue;
                 month = data[prop];
