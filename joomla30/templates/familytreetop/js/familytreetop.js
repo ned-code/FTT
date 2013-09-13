@@ -300,6 +300,14 @@
         $this.mod('tabs').init();
     }
 
+    $FamilyTreeTop.prototype.resize = function(){
+        $(window).resize(function(){
+            $(document.body).find('#wrap').css('height', $(window).height()+'px');
+        });
+        $(document.body).find('#wrap').css('height', $(window).height()+'px');
+        $(document.body).find('#wrap').addClass('familytreetop-wrap');
+    }
+
     $FamilyTreeTop.prototype.clearUploadTemplates = function(){
         var download = jQuery('#template-download').text();
         var upload = jQuery('#template-upload').text();

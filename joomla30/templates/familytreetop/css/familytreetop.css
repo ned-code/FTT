@@ -1,3 +1,9 @@
+.familytreetop-wrap {
+    margin: 0 auto -60px;
+}
+.familytreetop-footer {
+    height: 60px;
+}
 [data-familytreetop-color="0"]{
     color: #924192;
 }

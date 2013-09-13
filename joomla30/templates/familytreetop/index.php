@@ -75,15 +75,20 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
     $FamilyTreeTop.dataString = '<?=json_encode(GedcomHelper::getInstance()->getData());?>';
 </script>
 <div id="fb-root"></div>
-<jdoc:include type="modules" name="facebook-sdk" style="none" />
-<jdoc:include type="modules" name="navbar" style="none" />
-<div class="container">
-    <div class="row">
-        <div class="span12">
-            <jdoc:include type="message" />
-            <jdoc:include type="component" />
-            <jdoc:include type="modules" name="footer" style="none" />
+<div id="wrap">
+    <jdoc:include type="modules" name="navbar" style="none" />
+    <div class="container">
+        <div class="row">
+            <div class="span12">
+                <jdoc:include type="message" />
+                <jdoc:include type="component" />
+            </div>
         </div>
+    </div>
+</div>
+<div id="footer" class="familytreetop-footer">
+    <div class="container" style="text-align: center;">
+        <jdoc:include type="modules" name="footer" style="none" />
     </div>
 </div>
 <div id="familytreetop-root" style="display:none;">
@@ -751,6 +756,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                 FB.init($FamilyTreeTop.app.config);
                 FB.getLoginStatus(function(response){
                     $FamilyTreeTop.init();
+                    $FamilyTreeTop.resize();
                 }, true);
            });
        });
