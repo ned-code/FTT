@@ -260,7 +260,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                     <div class="well" familytreetop="module">
                         <fieldset>
                             <legend><?=JText::_("TPL_FAMILYTREETOP_ABOUT");?></legend>
-                            <div class="row-fluid">
+                            <div class="row-fluid" style="padding: 5px;">
                                 <div  data-familytreetop="avatar" class="span4"></div>
                                 <div class="span8">
                                     <ul class="unstyled">

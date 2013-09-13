@@ -47,6 +47,7 @@ $FamilyTreeTop.create("profile", function($){
             connection = $this.mod('usertree').getConnection(args.gedcom_id);
 
             if(connection.length == 1) {
+                $(this).find('[data-familytreetop-profile="relation"]').remove();
                 return false;
             }
             settings = {
