@@ -1,14 +1,14 @@
 <?php
 defined('_JEXEC') or die;
 ?>
-<div class="row">
+<div class="row" id="loginHeader">
     <div class="span4"></div>
     <div class="span4 text-center">
         <img src="<?=$this->baseurl;?>/templates/familytreetop/images/ftt_title.png" accesskey="">
     </div>
     <div class="span4"></div>
 </div>
-<div class="row">
+<div class="row" id="loginContent">
     <div class="span4"></div>
     <div class="span4">
         <div class="well text-center">
@@ -17,14 +17,14 @@ defined('_JEXEC') or die;
     </div>
     <div class="span4"></div>
 </div>
-<div class="row">
+<div class="row" id="loginFooter">
     <div class="span12">
         <img src="<?=$this->baseurl;?>/templates/familytreetop/images/family_line.png" accesskey="">
     </div>
 </div>
 <script>
     $FamilyTreeTop.bind(function($){
-        var $this = this, load;
+        var $this = this, load, setPos;
         load = function(el, args){
             $this.ajax('user.activate', args, function(response){
                 if(response.auth == true){
@@ -40,6 +40,20 @@ defined('_JEXEC') or die;
             });
         }
 
+        setPos = function(){
+            var offset = $('#footer').offset();
+            $("#loginFooter").css('position', 'absolute').css('top',(offset.top - 100)+'px');
+            var p = $("#loginHeader").parent().parent();
+            var o = $(p).offset();
+            var h = offset.top - o.top - 100;
+            $(p).css('height', h + "px");
+            $('#loginHeader').css('margin-top', Math.ceil((h - 200)/2)+'px');
+        }
+
+        setPos();
+        $(window).resize(function(){
+            setPos();
+        });
         $("#login").click(function(){
             var auth;
             if( (auth = FB.getAuthResponse()) == null){
