@@ -45,6 +45,7 @@ $FamilyTreeTop.create("usertree", function($){
     }
 
     $this.update = function(response){
+        console.log(response);
         var prop, items, key, id, list, i, els;
         for(prop in response){
             if(!response.hasOwnProperty(prop)) continue;

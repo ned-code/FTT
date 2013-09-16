@@ -756,7 +756,6 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                 FB.init($FamilyTreeTop.app.config);
                 FB.getLoginStatus(function(response){
                     $FamilyTreeTop.init();
-                    $FamilyTreeTop.resize();
                 }, true);
            });
        });
