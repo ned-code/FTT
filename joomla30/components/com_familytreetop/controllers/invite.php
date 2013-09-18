@@ -64,6 +64,9 @@ class FamilytreetopControllerInvite extends FamilytreetopController
         $tree_id = $user->tree_id;
 
         $check = FamilyTreeTopInvitations::find_by_gedcom_id_and_facebook_id_and_tree_id($gedcom_id, $facebook_id, $tree_id);
+
+        //echo json_encode(array('success'=>false, 'user'=>$user, 'facebook_id'=>$facebook_id, 'gedcom_id'=>$gedcom_id, 'tree_id'=>$tree_id));
+        //exit;
         if(empty($check)){
             $invite = new FamilyTreeTopInvitations();
             $invite->gedcom_id = $gedcom_id;

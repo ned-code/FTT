@@ -37,7 +37,7 @@ $FamilyTreeTop.create("friendselector", function($){
             FB.ui({
                 method:'send',
                 name: "Click here to Accept",
-                link: $this.url().app(),
+                link: $this.url().base(),
                 to: facebook_id,
                 picture: $FamilyTreeTop.fn.url().template()+"/images/ftt_invitation.png",
                 description:(function(){
