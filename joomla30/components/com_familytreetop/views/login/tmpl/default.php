@@ -59,20 +59,6 @@ defined('_JEXEC') or die;
             clearInterval(progressbarTimer);
             $('.bar').css('width', '100%');
         }
-        setPos = function(){
-            var offset = $('#footer').offset();
-            $("#loginFooter").css('position', 'absolute').css('top',(offset.top - 100)+'px');
-            var p = $("#loginHeader").parent().parent();
-            var o = $(p).offset();
-            var h = offset.top - o.top - 100;
-            $(p).css('height', h + "px");
-            $('#loginHeader').css('margin-top', Math.ceil((h - 200)/2)+'px');
-        }
-
-        setPos();
-        $(window).resize(function(){
-            setPos();
-        });
         $("#login").click(function(){
             var auth;
             if( (auth = FB.getAuthResponse()) == null){

@@ -748,6 +748,37 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.myfamily.js"></script>
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.latest.events.js"></script>
 <script>
+    (function(){
+        if($('#loginContent').length > 0){
+            var setpos = function(){
+                var offset = $('#footer').offset();
+                $("#loginFooter").css('position', 'absolute').css('top',(offset.top - 100)+'px');
+                var p = $("#loginHeader").parent().parent();
+                var o = $(p).offset();
+                var h = offset.top - o.top - 100;
+                $(p).css('height', h + "px");
+                $('#loginHeader').css('margin-top', Math.ceil((h - 200)/2)+'px');
+            }
+            setpos();
+            $(window).resize(function(){
+                setpos();
+            });
+        }
+    })();
+    setpos = function(){
+        var offset = $('#footer').offset();
+        $("#loginfooter").css('position', 'absolute').css('top',(offset.top - 100)+'px');
+        var p = $("#loginheader").parent().parent();
+        var o = $(p).offset();
+        var h = offset.top - o.top - 100;
+        $(p).css('height', h + "px");
+        $('#loginheader').css('margin-top', math.ceil((h - 200)/2)+'px');
+    }
+
+    setpos();
+    $(window).resize(function(){
+        setpos();
+    });
     if(!$FamilyTreeTop.app.config.appId){
         console.log('Facebook App Id doesn\'t exist');
     } else {
