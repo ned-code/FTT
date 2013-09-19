@@ -306,7 +306,6 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                     <div class="well" familytreetop="module">
                         <fieldset>
                             <legend><?=JText::_("TPL_FAMILYTREETOP_PHOTOS");?></legend>
-                            <ul class="unstyled inline"></ul>
                         </fieldset>
                     </div>
                 </div>

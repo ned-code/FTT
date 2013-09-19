@@ -476,7 +476,85 @@ $FamilyTreeTop.create("profile", function($){
             }, 1000);
         },
         setPhotos:function(args){
-            var ul = $(this).find('[data-familytreetop-profile="photos"] fieldset ul');
+            var box = $(this).find('[data-familytreetop-profile="photos"] fieldset');
+            var media = {};
+            var fn = {
+                createBox: function(){
+                     return $('<div class="row-fluid"><div class="span12"></div></div>');
+                },
+                createUl: function(){
+                    return $('<ul style="margin: 0 20px;" class="unstyled inline"></ul>')
+                },
+                createProfilePhotos: function(photos){
+                    if(photos.length == 0) return false;
+                    var div = fn.createBox();
+                    var ul = fn.createUl();
+                    $(div).append('<div style="font-weight: bold;margin-left: 10px;">Photos of '+args.object.first_name+':</div>');
+                    $(div).append(ul);
+                    $(box).append(div);
+                    $(photos).each(function(index, photo){
+                        var li = $('<li><a target="_blank" href="'+photo.link+'"><img style="cursor:pointer;" class="img-polaroid" src=""></a></li>');
+                        $(li).find('img').attr('src', photo.picture);
+                        $(ul).append(li);
+                    });
+                },
+                createAllPhotos: function(photos){
+                    if(photos.length == 0) return false;
+                    var div = fn.createBox();
+                    var ul = fn.createUl();
+                    $(div).append('<div style="font-weight: bold;margin-left: 10px;">Other photos in '+args.object.first_name+'\'s gallery:</div>');
+                    $(div).append(ul);
+                    $(box).append(div);
+                    $(photos).each(function(index, photo){
+                        var li = $('<li><a target="_blank" href="'+photo.link+'"><img style="cursor:pointer;" class="img-polaroid" src=""></a></li>');
+                        $(li).find('img').attr('src', photo.picture);
+                        $(ul).append(li);
+                    });
+                },
+                sort: function(){
+                    var s = { profile:[], all:[] };
+                    for (var key in media){
+                        if(!media.hasOwnProperty(key)) continue;
+                        var el = media[key];
+                        for(var k in el){
+                            if(key == "familytreetop" || key == "profile"){
+                                s.profile.push(el[k]);
+                            } else {
+                                s.all.push(el[k]);
+                            }
+                        }
+
+                    }
+                    return s;
+                },
+                init: function(){
+                    var arr = fn.sort();
+                    fn.createProfilePhotos(arr.profile);
+                    fn.createAllPhotos(arr.all);
+                }
+            }
+            media.familytreetop = args.object.medias();
+            if(args.object.facebook_id){
+                FB.api('/'+args.object.facebook_id+'/albums', function(albums){
+                   var adata = albums.data;
+                   var inc = 1;
+                   $(adata).each(function(i, album){
+                       media[album.type] = [];
+                       FB.api('/'+album.id+'/photos', function(photos){
+                           var data = photos.data;
+                           for(var key in data){
+                               media[album.type].push(data[key]);
+                           }
+                           if(albums.data.length == inc){
+                               fn.init();
+                           } else {
+                               inc++;
+                           }
+                       });
+                   });
+                });
+            }
+            /*
             args.object.medias().forEach(function(el, index){
                 var li = $('<li><img style="cursor:pointer;" class="img-polaroid" src=""></li>');
                 $(li).find('img').attr('src', el.thumbnail_url);
@@ -499,6 +577,7 @@ $FamilyTreeTop.create("profile", function($){
                    });
                 });
             }
+            */
         },
         getLabelHtml:function(label, node){
             var user = node.data.usr, box = $('<div class="text-center"></div>');
