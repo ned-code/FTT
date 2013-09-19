@@ -476,14 +476,17 @@ $FamilyTreeTop.create("profile", function($){
             }, 1000);
         },
         setPhotos:function(args){
-            var box = $(this).find('[data-familytreetop-profile="photos"] fieldset');
-            var media = {};
-            var fn = {
+            var box, count, interval, photosCont, media, fn;
+            box = $(this).find('[data-familytreetop-profile="photos"] fieldset');
+            count = 0;
+            interval = 100;
+            media = {};
+            fn = {
                 createBox: function(){
                      return $('<div class="row-fluid"><div class="span12"></div></div>');
                 },
                 createUl: function(){
-                    return $('<ul style="margin: 0 20px;" class="unstyled inline"></ul>')
+                    return $('<ul style="margin: 10px 20px;" class="unstyled inline"></ul>');
                 },
                 createProfilePhotos: function(photos){
                     if(photos.length == 0) return false;
@@ -502,6 +505,7 @@ $FamilyTreeTop.create("profile", function($){
                     if(photos.length == 0) return false;
                     var div = fn.createBox();
                     var ul = fn.createUl();
+                    photosCont = ul;
                     $(div).append('<div style="font-weight: bold;margin-left: 10px;">Other photos in '+args.object.first_name+'\'s gallery:</div>');
                     $(div).append(ul);
                     $(box).append(div);
@@ -511,19 +515,45 @@ $FamilyTreeTop.create("profile", function($){
                         $(ul).append(li);
                     });
                 },
+                createOtherPhotos: function(photos){
+                    if(photos.length == 0) return false;
+                    var div = fn.createBox();
+                    $(div).css('text-align', 'center').css('margin', '10px');
+                    $(div).append('<button class="btn">Click here to view more photos.</button>');
+                    $(box).append(div);
+                    $(div).find('button').click(function(){
+                        var max = count + interval;
+                        for(var i = count ; i < max ; i++){
+                            if("undefined" !== typeof(photos[i])){
+                                var li = $('<li><a target="_blank" href="'+photos[i].link+'"><img style="cursor:pointer;" class="img-polaroid" src=""></a></li>');
+                                $(li).find('img').attr('src', photos[i].picture);
+                                $(photosCont).append(li);
+                            } else {
+                                $(div).remove();
+                                break;
+                            }
+                            count++;
+                        }
+                    });
+                },
                 sort: function(){
-                    var s = { profile:[], all:[] };
+                    var s = { profile:[], all:[], other:[] };
+                    var index = 0;
                     for (var key in media){
                         if(!media.hasOwnProperty(key)) continue;
                         var el = media[key];
                         for(var k in el){
-                            if(key == "familytreetop" || key == "profile"){
-                                s.profile.push(el[k]);
+                            if(index <= interval - 1){
+                                if(key == "familytreetop" || key == "profile"){
+                                    s.profile.push(el[k]);
+                                } else {
+                                    s.all.push(el[k]);
+                                }
                             } else {
-                                s.all.push(el[k]);
+                                s.other.push(el[k]);
                             }
+                            index++;
                         }
-
                     }
                     return s;
                 },
@@ -531,6 +561,9 @@ $FamilyTreeTop.create("profile", function($){
                     var arr = fn.sort();
                     fn.createProfilePhotos(arr.profile);
                     fn.createAllPhotos(arr.all);
+                    if(arr.other.length > 0){
+                       fn.createOtherPhotos(arr.other);
+                    }
                 }
             }
             media.familytreetop = args.object.medias();
