@@ -496,8 +496,15 @@ $FamilyTreeTop.create("profile", function($){
                     $(div).append(ul);
                     $(box).append(div);
                     $(photos).each(function(index, photo){
-                        var li = $('<li><a target="_blank" href="'+photo.link+'"><img style="cursor:pointer;" class="img-polaroid" src=""></a></li>');
-                        $(li).find('img').attr('src', photo.picture);
+                        var li, picture;
+                        if("undefined"===typeof(photo.gedcom_id)){
+                            li = $('<li><a target="_blank" href="'+photo.link+'"><img style="cursor:pointer;" class="img-polaroid" src=""></a></li>');
+                            picture = photo.picture;
+                        } else {
+                            li = $('<li><img style="cursor:pointer;" class="img-polaroid" src=""></li>');
+                            picture = photo.thumbnail_url;
+                        }
+                        $(li).find('img').attr('src', picture);
                         $(ul).append(li);
                     });
                 },

@@ -86,9 +86,9 @@ class FamilyTreeTopGedcomMediasManager {
         if(!empty($tree_id)){
             $db = JFactory::getDbo();
             $sql = "SELECT m.*, ml.id as link_id, ml.gedcom_id, ml.role
-                FROM geicz_familytreetop_medias as m, geicz_familytreetop_media_links as ml, geicz_familytreetop_tree_links as l, geicz_familytreetop_trees as t
+                FROM #__familytreetop_medias as m, #__familytreetop_media_links as ml, #__familytreetop_tree_links as l, #__familytreetop_trees as t
                 WHERE t.id = l.tree_id AND ml.gedcom_id = l.id AND ml.media_id = m.id AND t.id = " . $tree_id;
-            $db->setQuery(sprintf($sql, $tree_id));
+            $db->setQuery($sql);
             $this->list = $db->loadAssocList('id');
             $this->list_by_gedcom_id =  $this->sortList('gedcom_id', $this->list);
         }
