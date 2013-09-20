@@ -60,7 +60,6 @@ $FamilyTreeTop.create("families", function($){
             Holder.run({
                 images: avatar[0]
             });
-
             if(args.abilityToMove && ((type == "up" && ind.isParentsExist()) || (type == "down" && (ind.isChildrensExist()||ind.isSpouseExist()) )) ){
                 $(divs[0]).append($fn.createArrow(type, args));
             }
@@ -386,7 +385,10 @@ $FamilyTreeTop.create("families", function($){
             });
 
             $fn.setPosition($boxs[settings.id], settings);
-            $fn.setPopovers($boxs[settings.id]);
+
+            if(settings.abilityToMove){
+                $fn.setPopovers($boxs[settings.id]);
+            }
 
             $this.mod('usertree').trigger(function(){
                 $this.render(settings);
