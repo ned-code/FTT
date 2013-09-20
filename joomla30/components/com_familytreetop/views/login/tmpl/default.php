@@ -30,6 +30,7 @@ defined('_JEXEC') or die;
         var $this = this, load, setPos,progressbarTimer, progressbarPercent, progressbarAnimateStart, progressbarAnimateStop;
         load = function(el, args){
             $this.ajax('user.activate', args, function(response){
+                progressbarAnimateStop();
                 if(response.auth == true){
                     window.location.href = "<?=JRoute::_("index.php?option=com_familytreetop&view=myfamily", false);?>";
                 } else if("undefined" !== response.url){
@@ -74,11 +75,10 @@ defined('_JEXEC') or die;
         });
         $("#login").click(function(){
             var auth;
-            progressbarAnimateStart();
             if( (auth = FB.getAuthResponse()) == null){
                 FB.login(function(response){}, {scope: $FamilyTreeTop.app.permissions});
                 FB.Event.subscribe('auth.login', function(response) {
-                    progressbarAnimateStop();
+                    progressbarAnimateStart();
                     if(response.status == "connected"){
                         load(this, response.authResponse);
                     }

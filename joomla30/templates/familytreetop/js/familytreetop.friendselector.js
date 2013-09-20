@@ -40,13 +40,19 @@ $FamilyTreeTop.create("friendselector", function($){
                 link: $this.url().base(),
                 to: facebook_id,
                 picture: $FamilyTreeTop.fn.url().template()+"/images/ftt_invitation.png",
+                caption: "caption",
+                message: "message",
+                description: "description"
+                /*
                 description:(function(){
                     var text = $($box).find('[familytreetop="description"]').text();
                     var user = $this.mod('usertree').user(gedcom_id);
                     text = text.replace('%NAME%', user.shortname());
                     text = text.replace('%RELATION%', user.relation);
+                    console.log(text);
                     return text;
                 })()
+                */
             }, function(response){
                 if("undefined" !== typeof(response) && response != null && response.success){
                     $fn.afterSendRequest(token);
