@@ -107,7 +107,8 @@ class FamilytreetopControllerUser extends FamilytreetopController
         $user = FamilyTreeTopUserHelper::getInstance()->get();
         $app = JFactory::getApplication();
         $app->logout( $user->id );
-        $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=login", false));
-        return;
+        $url = JRoute::_("index.php?option=com_familytreetop&view=login", false);
+        echo json_encode(array('user'=>$user, 'url' => $url));
+        exit;
     }
 }
