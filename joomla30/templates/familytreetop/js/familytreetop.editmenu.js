@@ -42,12 +42,12 @@ $FamilyTreeTop.create("editmenu", function($){
         ind = $this.mod('usertree').user(gedcom_id);
 
         if(ind.isParentsExist()){
-            //$(box).find('li[familytreetop="addParent"]').remove();
+            $(box).find('li[familytreetop="addParent"]').remove();
         }
 
         if(ind.isRegistered()){
-            //$(box).find('li[familytreetop="sendInvite"]').remove();
-            //$(box).find('li[data-familytreetop-devider="2"]').remove();
+           $(box).find('li[familytreetop="sendInvite"]').remove();
+            $(box).find('li[data-familytreetop-devider="2"]').remove();
         }
 
         $(object).append(box);
