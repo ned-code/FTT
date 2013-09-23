@@ -45,8 +45,7 @@ $FamilyTreeTop.create("usertree", function($){
     }
 
     $this.update = function(response){
-        console.log(response);
-        var prop, items, key, id, list, i, els;
+        var prop, items, key, id, list, i, els, k, t;
         for(prop in response){
             if(!response.hasOwnProperty(prop)) continue;
             items = response[prop];
@@ -99,9 +98,16 @@ $FamilyTreeTop.create("usertree", function($){
                                 for(i in els){
                                     if(!els.hasOwnProperty(i)) continue;
                                     if("undefined" === typeof(data[prop][key][id])){
-                                        data[prop][key][id] = [];
+                                        data[prop][key][id] = {};
                                     }
-                                    data[prop][key][id].push(els[i]);
+                                    if("undefined" === typeof(data[prop][key][id][k])){
+                                            data[prop][key][id][i] = {};
+                                    }
+                                    t = els[i];
+                                    for(k in t){
+                                        if(!t.hasOwnProperty(k)) continue;
+                                        data[prop][key][id][i][k] = t[k];
+                                    }
                                 }
                             }
                         }

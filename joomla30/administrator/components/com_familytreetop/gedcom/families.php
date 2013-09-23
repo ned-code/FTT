@@ -115,12 +115,12 @@ class FamilyTreeTopGedcomFamiliesManager {
     protected function sortList( $rows){
         if(empty($rows)) return array();
         $result = array();
-        foreach($rows as $row){
+        foreach($rows as $key => $row){
             if(!empty($row['husb'])){
-                 $result[$row['husb']][] = $row;
+                 $result[$row['husb']][$key] = $row;
             }
             if(!empty($row['wife'])){
-                $result[$row['wife']][] = $row;
+                $result[$row['wife']][$key] = $row;
             }
 
         }

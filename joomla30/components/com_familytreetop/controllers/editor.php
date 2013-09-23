@@ -154,12 +154,15 @@ class FamilytreetopControllerEditor extends FamilytreetopController
                             break;
                         case "fam":
                             $this->sub_arr($result[$key], array('gedcom_id', 'family_id'));
+                            $el = $item->toList();
 
                             if($item->husb != null){
-                                $result[$key]['gedcom_id'][$item->husb] = $item->toList();
+                                $result[$key]['gedcom_id'][$item->husb] = array();
+                                $result[$key]['gedcom_id'][$item->husb][$item->family_id] = $el;
                             }
                             if($item->wife != null){
-                                $result[$key]['gedcom_id'][$item->wife] = $item->toList();
+                                $result[$key]['gedcom_id'][$item->wife] = array();
+                                $result[$key]['gedcom_id'][$item->wife][$item->family_id] = $el;
                             }
                             if($item->family_id){
                                 $result[$key]['family_id'][$item->family_id] = $item->toList();
