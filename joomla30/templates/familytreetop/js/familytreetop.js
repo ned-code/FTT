@@ -6,6 +6,7 @@
            config:{
                 appId:false,
                 channelUrl: false,
+                frictionlessRequests : true,
                 status: true,
                 cookie: true,
                 oauth: true

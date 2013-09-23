@@ -81,7 +81,6 @@ $FamilyTreeTop.create("friendselector", function($){
         }
     }
 
-
     $this.render = function(gedcom_id){
         var selector = TDFriendSelector.newInstance({
             maxSelection             : 1,
@@ -98,4 +97,5 @@ $FamilyTreeTop.create("friendselector", function($){
         $fn.hideRegisteredUser();
     }
     TDFriendSelector.init({debug: false});
+
 });
