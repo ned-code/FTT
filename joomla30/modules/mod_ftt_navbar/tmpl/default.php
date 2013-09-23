@@ -35,7 +35,7 @@ if($session->get('famous')){
                 </li>
             </ul>
             <?php endif; ?>
-            <a class="brand" href="<?=JRoute::_("index.php?option=com_familytreetop&view=index", false); ?>">Family TreeTop</a>
+            <a class="brand" href="<?=JRoute::_("index.php?option=com_familytreetop&view=index", false); ?>"><i style="background: url(templates/familytreetop/img/glyphicons_317_tree_deciduous_green.png) no-repeat; padding-left: 25px;">Family TreeTop</i></a>
             <!--
             <div  id="navProfileUser" class="nav-collapse collapse">
                 <ul class="nav">
