@@ -5,6 +5,7 @@ $FamilyTreeTop.create("friendselector", function($){
         $fn;
 
     $fn = {
+        /*
         beforeSendRequest:function(selector, selectedFriendIds, gedcom_id){
             if(selectedFriendIds.length > 0){
                 var alert = $this.warning({title: "Preparing invitation...", timeout: false});
@@ -43,7 +44,6 @@ $FamilyTreeTop.create("friendselector", function($){
                 caption: "caption",
                 message: "message",
                 description: "description"
-                /*
                 description:(function(){
                     var text = $($box).find('[familytreetop="description"]').text();
                     var user = $this.mod('usertree').user(gedcom_id);
@@ -52,7 +52,6 @@ $FamilyTreeTop.create("friendselector", function($){
                     console.log(text);
                     return text;
                 })()
-                */
             }, function(response){
                 if("undefined" !== typeof(response) && response != null && response.success){
                     $fn.afterSendRequest(token);
@@ -79,8 +78,10 @@ $FamilyTreeTop.create("friendselector", function($){
             });
             return friends;
         }
+        */
     }
 
+    /*
     $this.render = function(gedcom_id){
         var selector = TDFriendSelector.newInstance({
             maxSelection             : 1,
@@ -97,5 +98,19 @@ $FamilyTreeTop.create("friendselector", function($){
         $fn.hideRegisteredUser();
     }
     TDFriendSelector.init({debug: false});
+    */
+    $this.render = function(gedcom_id){
 
+        /*
+        FB.ui({
+            method: 'apprequests',
+            title: '',
+            message: 'My Great Request',
+            redirect_uri: '',
+            max_recipients: 1
+        }, function(response){
+
+        });
+        */
+    }
 });
