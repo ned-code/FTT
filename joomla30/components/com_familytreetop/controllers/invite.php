@@ -33,6 +33,27 @@ class FamilytreetopControllerInvite extends FamilytreetopController
         exit;
     }
 
+    public function getTreeInvitations(){
+       $app = JFactory::getApplication();
+       $tree_id = $app->input->get('tree_id', false);
+
+       if(!$tree_id){
+           echo json_encode(array('success'=>false));
+           exit;
+       }
+
+       $invitations = FamilyTreeTopInvitations::find('all', array('conditions'=> array('tree_id=?', $tree_id)));
+       $response = array();
+       if(!empty($invitations)){
+           foreach($invitations as $key => $val){
+               $response[] = $val->facebook_id;
+           }
+       }
+
+       echo json_encode(array('success'=>true,'data'=>$response));
+       exit;
+    }
+
     public function delInvitation(){
         $app = JFactory::getApplication();
 
@@ -63,11 +84,9 @@ class FamilytreetopControllerInvite extends FamilytreetopController
         $gedcom_id = $app->input->post->get('gedcom_id', false);
         $tree_id = $user->tree_id;
 
-        $check = FamilyTreeTopInvitations::find_by_gedcom_id_and_facebook_id_and_tree_id($gedcom_id, $facebook_id, $tree_id);
-
-        //echo json_encode(array('success'=>false, 'user'=>$user, 'facebook_id'=>$facebook_id, 'gedcom_id'=>$gedcom_id, 'tree_id'=>$tree_id));
-        //exit;
-        if(empty($check)){
+        $inviteByGedcomId = FamilyTreeTopInvitations::find_by_gedcom_id_and_tree_id($gedcom_id, $tree_id);
+        $inviteByFacebookId = FamilyTreeTopInvitations::find_by_facebook_id_and_tree_id($facebook_id, $tree_id);
+        if(empty($inviteByGedcomId) && empty($inviteByFacebookId)){
             $invite = new FamilyTreeTopInvitations();
             $invite->gedcom_id = $gedcom_id;
             $invite->facebook_id = $facebook_id;
