@@ -422,7 +422,7 @@ $FamilyTreeTop.create("editor", function($){
         $fn.submit(cl, ind, 'editor.'+type);
     }
 
-    $this.render = function(gedcom_id){
+    $this.render = function(gedcom_id, renderTab){
         var cl,
             tabs,
             ind,
@@ -472,6 +472,12 @@ $FamilyTreeTop.create("editor", function($){
 
         //init modal
         $(cl).modal({dynamic:true});
+
+        $(cl).on('shown', function () {
+            if("undefined" !== typeof(renderTab)){
+                $(tabs[0]).find('ul.nav-tabs li:nth-child('+renderTab+') a').tab('show');
+            }
+        })
 
         // event submit
         $fn.submit(cl, ind);

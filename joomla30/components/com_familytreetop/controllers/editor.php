@@ -8,7 +8,7 @@ class FamilytreetopControllerEditor extends FamilytreetopController
 
     protected function isEntryValid($form, $type){
         $prefix = substr($type, 0, 1). "_";
-        if($form[$prefix.'exist'] == "on") return false;
+        if(isset($form[$prefix.'exist']) && $form[$prefix.'exist'] == "on" ) return false;
         return ( $form[$prefix."day"] != 0
             || $form[$prefix."month"] != 0
             || strlen($form[$prefix."year"]) > 0

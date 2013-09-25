@@ -21,6 +21,7 @@ $FamilyTreeTop.create("editmenu", function($){
                     break;
 
                 case "delete":
+                    $this.mod('editor').render(gedcom_id, 4);
                     break;
 
                 case "sendInvite":
