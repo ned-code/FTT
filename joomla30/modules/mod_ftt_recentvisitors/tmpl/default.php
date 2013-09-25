@@ -1,6 +1,6 @@
 <?php
 defined('_JEXEC') or die;
-
+var_dump($visitors);
 ?>
 <div id="recentVisitors" class="row-fluid">
     <div class="span12">
