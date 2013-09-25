@@ -206,7 +206,7 @@ class FamilyTreeTopGedcomRelationsManager {
     protected function isRelationsNotExist(){
         $gedcom = GedcomHelper::getInstance();
         $individuals = $gedcom->individuals->getList();
-        if(sizeof($individuals) != sizeof($this->list)){
+        if(sizeof($individuals) != (sizeof($this->list) - 1) ){
             return $individuals;
         }
         return false;
@@ -279,8 +279,8 @@ class FamilyTreeTopGedcomRelationsManager {
     public function getList(){
         if($members = $this->isRelationsNotExist()){
             $unknowns = array();
-            foreach($members as $member){
-                if(!isset($this->list[$member['gedcom_id']]) && !$this->get($this->owner_id, $member['gedcom_id'])){
+            foreach($members as $key => $member){
+                if($key != "_NAMES" && !isset($this->list[$member['gedcom_id']]) && !$this->get($this->owner_id, $member['gedcom_id'])){
                     $unknowns[] = $member;
                 }
             }

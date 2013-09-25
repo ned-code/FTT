@@ -20,6 +20,9 @@ $FamilyTreeTop.create("editmenu", function($){
                     $this.mod('editor').add(id, gedcom_id);
                     break;
 
+                case "delete":
+                    break;
+
                 case "sendInvite":
                     $this.mod('friendselector').render(gedcom_id);
                     break;
@@ -46,8 +49,13 @@ $FamilyTreeTop.create("editmenu", function($){
         }
 
         if(ind.isRegistered()){
+           $(box).find('li[familytreetop-devider="sendInvite"]').remove();
            $(box).find('li[familytreetop="sendInvite"]').remove();
-            $(box).find('li[data-familytreetop-devider="2"]').remove();
+        }
+
+       if(!ind.isCanBeDelete()){
+            $(box).find('li[familytreetop-devider="delete"]').remove();
+            $(box).find('li[familytreetop="delete"]').remove();
         }
 
         $(object).append(box);
