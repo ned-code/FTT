@@ -6,6 +6,7 @@ $FamilyTreeTop.create("editor", function($){
 
     $fn = {
         setOptions: function(parent, ind, callback){
+            /*
             var active = false;
             $(parent).find('[familytreetop-button="delete"]').click(function(){
                 _init_('delete');
@@ -50,6 +51,7 @@ $FamilyTreeTop.create("editor", function($){
                     $(element).click(callback);
                 });
             }
+            */
         },
         setUserMedia: function(parent, ind){
             var dataBox = $('#dataEditMedia').clone(),
