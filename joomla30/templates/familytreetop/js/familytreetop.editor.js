@@ -5,54 +5,6 @@ $FamilyTreeTop.create("editor", function($){
         $fn;
 
     $fn = {
-        setOptions: function(parent, ind, callback){
-            /*
-            var active = false;
-            $(parent).find('[familytreetop-button="delete"]').click(function(){
-                _init_('delete');
-                _initHideButton_('delete');
-                _initDeleteOptionsButton_(function(){
-                    var option = $(this).attr('option');
-                    $this.ajax('editor.delete', {type:option, gedcom_id: ind.gedcom_id}, function(res){
-                        callback(res);
-                    });
-                });
-            });
-            return true;
-            function _init_(type){
-                if(active){
-                    $(active).hide();
-                }
-                active = $(parent).find('[familytreetop="'+type+'"]');
-                $(active).show();
-            }
-            function _initHideButton_(type){
-                var box =  $(parent).find('[familytreetop="'+type+'"]');
-                $(box).find('[familytreetop="cancel"]').click(function(){
-                    $(this).unbind();
-                    $(box).hide();
-                    active = false;
-                });
-            }
-            function _initDeleteOptionsButton_(callback){
-                var box =  $(parent).find('[familytreetop="delete"]');
-                $(box).find('[familytreetop="option"]').each(function(index, element){
-                    var tr = $(element).parent().parent();
-                    $(tr).show();
-                    switch(parseInt($(element).attr('option'))){
-                        case 1:
-                            if(parseInt(ind.facebook_id) == 0) $(tr).hide()
-                            break;
-
-                        case 3:
-                            if(!ind.isCanBeDelete()) $(tr).hide();
-                            break;
-                    }
-                    $(element).click(callback);
-                });
-            }
-            */
-        },
         setUserMedia: function(parent, ind){
             var dataBox = $('#dataEditMedia').clone(),
                 ul = $(dataBox).find('ul');
@@ -123,6 +75,52 @@ $FamilyTreeTop.create("editor", function($){
             });
 
             return true;
+        },
+        setOptions: function(parent, ind, callback){
+            var active = false;
+            $(parent).find('[familytreetop-button="delete"]').click(function(){
+                _init_('delete');
+                _initHideButton_('delete');
+                _initDeleteOptionsButton_(function(){
+                    var option = $(this).attr('option');
+                    $this.ajax('editor.delete', {type:option, gedcom_id: ind.gedcom_id}, function(res){
+                        callback(res);
+                    });
+                });
+            });
+            return true;
+            function _init_(type){
+                if(active){
+                    $(active).hide();
+                }
+                active = $(parent).find('[familytreetop="'+type+'"]');
+                $(active).show();
+            }
+            function _initHideButton_(type){
+                var box =  $(parent).find('[familytreetop="'+type+'"]');
+                $(box).find('[familytreetop="cancel"]').click(function(){
+                    $(this).unbind();
+                    $(box).hide();
+                    active = false;
+                });
+            }
+            function _initDeleteOptionsButton_(callback){
+                var box =  $(parent).find('[familytreetop="delete"]');
+                $(box).find('[familytreetop="option"]').each(function(index, element){
+                    var tr = $(element).parent().parent();
+                    $(tr).show();
+                    switch(parseInt($(element).attr('option'))){
+                        case 1:
+                            if(parseInt(ind.facebook_id) == 0) $(tr).hide()
+                            break;
+
+                        case 3:
+                            if(!ind.isCanBeDelete()) $(tr).hide();
+                            break;
+                    }
+                    $(element).click(callback);
+                });
+            }
         },
         setUnionsData:function(parent, ind){
             var spouses = $this.mod('usertree').getSpouses(ind.gedcom_id), forms = [];
