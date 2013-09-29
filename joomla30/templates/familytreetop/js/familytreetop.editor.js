@@ -97,7 +97,14 @@ $FamilyTreeTop.create("editor", function($){
             function _showDeleteConfirm_(){ $(parent).find('[familytreetop="delete-confirm"]').show() }
             function _showDeleteTable_(){ $(parent).find('[familytreetop="delete"]').show() }
             function _delete_(){
-                console.log('delete');
+                _hideButtons_();
+                _showDeleteTable_();
+                _initDeleteTable_(function(){
+                    var option = $(this).attr('option');
+                    _ajax_(option, ind.gedcom_id, function(res){
+                        callback(res);
+                    });
+                });
             }
             function _deleteTree_(){
                 _hideButtons_();
@@ -118,47 +125,7 @@ $FamilyTreeTop.create("editor", function($){
                     _showButtons_();
                 });
             }
-            function _isOwner_(ind){
-                return ind.gedcom_id == $this.mod('usertree').usermap().gedcom_id;
-            }
-            function _getUsersInTreeCount_(){
-                var users, key, count = 0;
-                users = $this.mod('usertree').usersmap();
-                for(key in users){
-                    if(!users.hasOwnProperty(key)) continue;
-                    count++
-                }
-                return count;
-            }
-            /*
-            var active = false;
-            $(parent).find('[familytreetop-button="delete"]').click(function(){
-                _init_('delete');
-                _initHideButton_('delete');
-                _initDeleteOptionsButton_(function(){
-                    var option = $(this).attr('option');
-                    $this.ajax('editor.delete', {type:option, gedcom_id: ind.gedcom_id}, function(res){
-                        callback(res);
-                    });
-                });
-            });
-            return true;
-            function _init_(type){
-                if(active){
-                    $(active).hide();
-                }
-                active = $(parent).find('[familytreetop="'+type+'"]');
-                $(active).show();
-            }
-            function _initHideButton_(type){
-                var box =  $(parent).find('[familytreetop="'+type+'"]');
-                $(box).find('[familytreetop="cancel"]').click(function(){
-                    $(this).unbind();
-                    $(box).hide();
-                    active = false;
-                });
-            }
-            function _initDeleteOptionsButton_(callback){
+            function _initDeleteTable_(call){
                 var box =  $(parent).find('[familytreetop="delete"]');
                 $(box).find('[familytreetop="option"]').each(function(index, element){
                     var tr = $(element).parent().parent();
@@ -172,10 +139,26 @@ $FamilyTreeTop.create("editor", function($){
                             if(!ind.isCanBeDelete()) $(tr).hide();
                             break;
                     }
-                    $(element).click(callback);
+                    $(element).click(call);
+                });
+                $(box).find('[familytreetop="cancel"]').click(function(){
+                    _hideDeleteTable_();
+                    _showButtons_();
+                    $(box).find('tr').show();
                 });
             }
-            */
+            function _isOwner_(ind){
+                return ind.gedcom_id == $this.mod('usertree').usermap().gedcom_id;
+            }
+            function _getUsersInTreeCount_(){
+                var users, key, count = 0;
+                users = $this.mod('usertree').usersmap();
+                for(key in users){
+                    if(!users.hasOwnProperty(key)) continue;
+                    count++
+                }
+                return count;
+            }
         },
         setUnionsData:function(parent, ind){
             var spouses = $this.mod('usertree').getSpouses(ind.gedcom_id), forms = [];
@@ -519,13 +502,11 @@ $FamilyTreeTop.create("editor", function($){
         $fn.setUserMedia(editMediaForm, ind);
 
         //options
-        if(ind.isCanBeDelete()){
-            editOptionsForm = $fn.getEditorOptionsForm();
-            $fn.setFormInTab(3, tabs, editOptionsForm);
-            $fn.setOptions(editOptionsForm, ind, function(){
-                $(cl).modal('hide');
-            });
-        }
+        editOptionsForm = $fn.getEditorOptionsForm();
+        $fn.setFormInTab(3, tabs, editOptionsForm);
+        $fn.setOptions(editOptionsForm, ind, function(){
+            $(cl).modal('hide');
+        });
         //init modal
         $(cl).modal({dynamic:true});
 
