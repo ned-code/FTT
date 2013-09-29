@@ -507,6 +507,10 @@ class FamilytreetopControllerEditor extends FamilytreetopController
             case 3:
                 $user->delete();
                 break;
+
+            case 4:
+                $user = $user->deleteTree();
+                break;
         }
         echo json_encode(array('user'=>$user));
         exit;

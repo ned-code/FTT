@@ -77,6 +77,60 @@ $FamilyTreeTop.create("editor", function($){
             return true;
         },
         setOptions: function(parent, ind, callback){
+            $(parent).find('[familytreetop-button="delete"]').click(function(){
+               if(_getUsersInTreeCount_() == 1 && _isOwner_(ind)){
+                   _deleteTree_();
+               } else {
+                   _delete_()
+               }
+            });
+            return true;
+            function _ajax_(option, gedcom_id, call){
+                $this.ajax('editor.delete', {type:option, gedcom_id: gedcom_id}, function(res){
+                    call(res);
+                });
+            }
+            function _hideButtons_(){ $(parent).find('[familytreetop-button="delete"]').hide() }
+            function _hideDeleteConfirm_(){ $(parent).find('[familytreetop="delete-confirm"]').hide() }
+            function _hideDeleteTable_(){ $(parent).find('[familytreetop="delete"]').hide() }
+            function _showButtons_(){ $(parent).find('[familytreetop-button="delete"]').show() }
+            function _showDeleteConfirm_(){ $(parent).find('[familytreetop="delete-confirm"]').show() }
+            function _showDeleteTable_(){ $(parent).find('[familytreetop="delete"]').show() }
+            function _delete_(){
+                console.log('delete');
+            }
+            function _deleteTree_(){
+                _hideButtons_();
+                _showDeleteConfirm_();
+                $(parent).find('[familytreetop-button="delete-confirm-delete"]').click(function(){
+                    _ajax_(4, ind.gedcom_id, function(res){
+                        if(res){
+                            callback(res);
+                            FB.logout(function(){
+                                window.location.reload();
+                            });
+                        }
+                    });
+
+                });
+                $(parent).find('[familytreetop-button="delete-confirm-cancel"]').click(function(){
+                    _hideDeleteConfirm_();
+                    _showButtons_();
+                });
+            }
+            function _isOwner_(ind){
+                return ind.gedcom_id == $this.mod('usertree').usermap().gedcom_id;
+            }
+            function _getUsersInTreeCount_(){
+                var users, key, count = 0;
+                users = $this.mod('usertree').usersmap();
+                for(key in users){
+                    if(!users.hasOwnProperty(key)) continue;
+                    count++
+                }
+                return count;
+            }
+            /*
             var active = false;
             $(parent).find('[familytreetop-button="delete"]').click(function(){
                 _init_('delete');
@@ -121,6 +175,7 @@ $FamilyTreeTop.create("editor", function($){
                     $(element).click(callback);
                 });
             }
+            */
         },
         setUnionsData:function(parent, ind){
             var spouses = $this.mod('usertree').getSpouses(ind.gedcom_id), forms = [];
@@ -464,12 +519,13 @@ $FamilyTreeTop.create("editor", function($){
         $fn.setUserMedia(editMediaForm, ind);
 
         //options
-        editOptionsForm = $fn.getEditorOptionsForm();
-        $fn.setFormInTab(3, tabs, editOptionsForm);
-        $fn.setOptions(editOptionsForm, ind, function(){
-            $(cl).modal('hide');
-        });
-
+        if(ind.isCanBeDelete()){
+            editOptionsForm = $fn.getEditorOptionsForm();
+            $fn.setFormInTab(3, tabs, editOptionsForm);
+            $fn.setOptions(editOptionsForm, ind, function(){
+                $(cl).modal('hide');
+            });
+        }
         //init modal
         $(cl).modal({dynamic:true});
 

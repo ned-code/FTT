@@ -98,6 +98,28 @@ class FamilyTreeTopGedcomIndividualsModel {
         return false;
     }
 
+    public function deleteTree(){
+        $tree = FamilyTreeTopTrees::find_by_id($this->tree_id);
+        if(empty($tree)) return false;
+
+        $user = FamilyTreeTopUsers::find('all', array('conditions'=>array('tree_id=?', $this->tree_id)));
+        if(empty($user) || sizeof($user) > 1)  return false;
+
+        $user = $user[0];
+        $account = FamilyTreeTopAccounts::find_by_id($user->account_id);
+        $app = JFactory::getApplication();
+
+        $tree->delete();
+        $user->delete();
+
+        $account->current = 0;
+        $account->save();
+
+        $app->logout( $this->jooml_id );
+
+        return true;
+    }
+
     public function delete(){
         $gedcom = GedcomHelper::getInstance();
         if(empty($this->id)) return false;

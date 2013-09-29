@@ -568,6 +568,14 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
         <div familytreetop="buttons" style="margin-left: 5px;margin-right: 5px;margin-bottom: 20px;">
             <button familytreetop-button="delete" type="button" class="btn btn-danger">Delete</button>
         </div>
+        <div familytreetop="delete-confirm" style="display:none;">
+            <div>You are about to delete your family tree.</div>
+            <div>Are you sure?</div>
+            <div>
+                <div familytreetop-button="delete-confirm-delete" class="btn btn-danger">Delete</div>
+                <div familytreetop-button="delete-confirm-cancel" class="btn">Cancel</div>
+            </div>
+        </div>
         <div familytreetop="delete" style="display:none;">
             <table class="table table-striped">
                 <tr>
