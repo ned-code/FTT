@@ -91,9 +91,7 @@ class FamilyTreeTopUserHelper
 
             if(!empty($account->current)){
                 self::$instance->current_id = $account->current;
-
-                $user = FamilyTreeTopUsers::find_by_gedcom_id(self::$instance->current_id);
-
+                $user = FamilyTreeTopUsers::find_by_id(self::$instance->current_id);
                 if(!empty($user)){
                     self::$instance->user = $user;
                     self::$instance->tree_id = $user->tree_id;

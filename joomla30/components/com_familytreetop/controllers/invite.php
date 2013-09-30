@@ -18,7 +18,7 @@ class FamilytreetopControllerInvite extends FamilytreetopController
             $usersRow->save();
 
             $account = FamilyTreeTopAccounts::find($user->account_id);
-            $account->current = $invite->gedcom_id;
+            $account->current = $usersRow->id;
             $account->save();
 
             $invite->delete();
