@@ -6,7 +6,6 @@ class FamilytreetopController extends JControllerLegacy
 {
 	public function display($cachable = false, $urlparams = false)
 	{
-
         // Get the document object.
 		$document	= JFactory::getDocument();
         $session = JFactory::getSession();

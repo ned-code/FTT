@@ -4,7 +4,6 @@ defined('_JEXEC') or die;
 class LanguagesHelper {
     public function init($extension = 'com_familytreetop'){
         $user = FamilyTreeTopUserHelper::getInstance()->get();
-
         $lang =& JFactory::getLanguage();
 
         $lang->setLanguage($user->language);
