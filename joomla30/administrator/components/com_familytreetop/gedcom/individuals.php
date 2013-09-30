@@ -165,8 +165,21 @@ class FamilyTreeTopGedcomIndividualsModel {
     }
 
     public function unregister(){
-        $user = FamilyTreeTopUsers::find_by_gedcom_id($this->gedcom_id);
-        $user->remove();
+        $user = FamilyTreeTopUsers::find('all', array('conditions'=>array('gedcom_id=? and tree_id=?', $this->gedcom_id, $this->tree_id)));
+        if(empty($user)) return false;
+
+        $user = $user[0];
+        $account = FamilyTreeTopAccounts::find_by_id($user->account_id);
+        $app = JFactory::getApplication();
+
+        $user->delete();
+
+        $account->current = 0;
+        $account->save();
+
+        $app->logout( $this->joomla_id );
+
+        return true;
     }
 
     public function save(){

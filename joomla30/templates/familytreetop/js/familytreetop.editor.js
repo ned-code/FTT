@@ -103,6 +103,7 @@ $FamilyTreeTop.create("editor", function($){
                     var option = $(this).attr('option');
                     _ajax_(option, ind.gedcom_id, function(res){
                         callback(res);
+                        window.location.reload();
                     });
                 });
             }
