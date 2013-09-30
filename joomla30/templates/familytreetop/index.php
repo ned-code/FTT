@@ -265,7 +265,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                 </div>
             </div>
             <div data-familytreetop-profile="about" class="row-fluid">
-                <div class="span6">
+                <div class="span7">
                     <div class="well" familytreetop="module">
                         <fieldset>
                             <legend><?=JText::_("TPL_FAMILYTREETOP_ABOUT");?></legend>
@@ -437,7 +437,6 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
     <form id="formEditProfile">
         <div class="row-fluid">
             <div familytreetop="avatar" class="span3 text-center">
-                <img class="img-polaroid" data-src="template/familytreetop/js/holder.js/100x100">
             </div>
             <div class="span9">
                 <div class="row-fluid">

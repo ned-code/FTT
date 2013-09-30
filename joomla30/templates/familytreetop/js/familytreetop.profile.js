@@ -19,7 +19,7 @@ $FamilyTreeTop.create("profile", function($){
         },
         setAbout:function(args){
             var box = $(this).find('[data-familytreetop-profile="about"] fieldset'), avatar;
-            avatar = args.object.avatar(["90","90"]);
+            avatar = args.object.avatar(["140","140"]);
             $(box).find('li').each(function(index, element){
                 var names = ["first_name", "middle_name", "last_name", "know_as", "proxyRelation"];
                 var value = args.object[names[index]];

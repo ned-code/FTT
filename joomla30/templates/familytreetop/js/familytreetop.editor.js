@@ -266,6 +266,7 @@ $FamilyTreeTop.create("editor", function($){
                     default: break;
                 }
             });
+            $(parent).find('[familytreetop="avatar"]').append(ind.avatar(["140","140"]))
         },
         setFormInTab:function(num, tabs, form){
             var tab =   $(tabs[0]).find('.tab-content #'+ tabs[1][num]);
