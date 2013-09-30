@@ -383,7 +383,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                         <fieldset>
                             <legend></legend>
                             <div class="row-fluid">
-                                <div class="span6"><img class="img-polaroid" data-src="template/familytreetop/js/holder.js/100x100"></div>
+                                <div class="span6" familytreetop="avatar"></div>
                                 <div class="span6"></div>
                             </div>
                         </fieldset>
@@ -394,7 +394,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                         <fieldset>
                             <legend></legend>
                             <div class="row-fluid">
-                                <div class="span6"><img class="img-polaroid" data-src="template/familytreetop/js/holder.js/100x100"></div>
+                                <div class="span6" familytreetop="avatar"></div>
                                 <div class="span6"></div>
                             </div>
                         </fieldset>

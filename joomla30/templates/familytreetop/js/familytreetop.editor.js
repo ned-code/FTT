@@ -183,6 +183,11 @@ $FamilyTreeTop.create("editor", function($){
             return forms;
             function setUnion(form, type, ind){
                 var el = $(form).find('[familytreetop="'+type+'"]');
+                var av = ind.avatar(["90","90"]);
+                $(el).find('[familytreetop="avatar"]').append(av);
+                Holder.run({
+                    images:av[0]
+                });
                 $(el).find('legend').text(ind.shortname());
             }
             function setEvent(form, family_id){
