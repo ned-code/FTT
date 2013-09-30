@@ -157,6 +157,10 @@ class FamilyTreeTopGedcomIndividualsModel {
             }
         }
 
+        if($this->facebook_id != 0){
+            $this->unregister();
+        }
+
         $gedcom->individuals->updateList($this);
     }
 
