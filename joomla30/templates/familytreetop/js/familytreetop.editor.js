@@ -77,26 +77,46 @@ $FamilyTreeTop.create("editor", function($){
             return true;
         },
         setOptions: function(parent, ind, callback){
-            $(parent).find('[familytreetop-button="delete"]').click(function(){
-               if(_getUsersInTreeCount_() == 1 && _isOwner_(ind)){
-                   _deleteTree_();
-               } else {
-                   _delete_()
-               }
-            });
+            if(_isOwner_(ind)){
+                _click_(function(){
+                    if(_getUsersInTreeCount_() == 1){
+                        _deleteTree_();
+                    } else {
+                        _deleteTable_();
+                    }
+                });
+            } else {
+                if(ind.isCanBeDelete()){
+                    _click_(function(){
+                        _delete_();
+                    });
+                } else {
+                    _hideButtons_();
+                    _showButtonInvalid_();
+                }
+            }
             return true;
             function _ajax_(option, gedcom_id, call){
                 $this.ajax('editor.delete', {type:option, gedcom_id: gedcom_id}, function(res){
                     call(res);
                 });
             }
-            function _hideButtons_(){ $(parent).find('[familytreetop-button="delete"]').hide() }
+            function _click_(callback){ $(parent).find('[familytreetop-button="delete"]').click(callback);}
+            function _hideButtons_(){ $(parent).find('[familytreetop="buttons"]').hide() }
+            function _hideButtonInvalid_(){ $(parent).find('[familytreetop="delete-invalid"]').hide() }
             function _hideDeleteConfirm_(){ $(parent).find('[familytreetop="delete-confirm"]').hide() }
             function _hideDeleteTable_(){ $(parent).find('[familytreetop="delete"]').hide() }
-            function _showButtons_(){ $(parent).find('[familytreetop-button="delete"]').show() }
+            function _showButtons_(){ $(parent).find('[familytreetop="buttons"]').show() }
+            function _showButtonInvalid_(){ $(parent).find('[familytreetop="delete-invalid"]').show() }
             function _showDeleteConfirm_(){ $(parent).find('[familytreetop="delete-confirm"]').show() }
             function _showDeleteTable_(){ $(parent).find('[familytreetop="delete"]').show() }
             function _delete_(){
+                _ajax_(3, ind.gedcom_id, function(res){
+                    if(res) ind.delete();
+                    callback(res);
+                });
+            }
+            function _deleteTable_(){
                 _hideButtons_();
                 _showDeleteTable_();
                 _initDeleteTable_(function(){

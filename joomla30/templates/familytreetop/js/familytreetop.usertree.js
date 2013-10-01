@@ -206,6 +206,77 @@ $FamilyTreeTop.create("usertree", function($){
                 return true;
                 function _name_(id){ return $this.getName(data.ind[id]); }
             })(),
+            delete: function(){
+                _deleteFromChi_();
+                _deleteFromCon_();
+                _deleteFromEve_();
+                _deleteFromFam_();
+                _deleteFromMed_();
+                _deleteFromRel_();
+                delete data.ind[ind.gedcom_id];
+                $this.call();
+                function _deleteFromChi_(){
+                    if(data.chi.length == 0 || "undefined" === typeof(data.chi.gedcom_id[ind.gedcom_id])) return false;
+                    var chi = data.chi.gedcom_id[ind.gedcom_id];
+                    if(chi.length <= 0) return false;
+                    var dat = data.chi.family_id[chi[0].family_id];
+                    for(var key in dat){
+                        if(!dat.hasOwnProperty(key)) continue;
+                        if(dat[key].gedcom_id == chi[0].gedcom_id){
+                            dat.splice(key, 1);
+                        }
+                    }
+                    delete data.chi.all[chi[0].id];
+                    delete data.chi.gedcom_id[ind.gedcom_id];
+                }
+                function _deleteFromCon_(){
+                    if(data.con.length == 0 || "undefined" === typeof(data.con[ind.gedcom_id])) return false;
+                    var con = data.con[ind.gedcom_id];
+                    if("undefined" === typeof(con)) return false;
+                    delete data.con[ind.gedcom_id];
+                }
+                function _deleteFromEve_(){
+                    if(data.eve.length == 0) return false;
+                    if("undefined" !== typeof(data.eve.gedcom_id[ind.gedcom_id])){
+                        var eve = data.eve.gedcom_id[ind.gedcom_id];
+                        for(var key in eve){
+                            if(!eve.hasOwnProperty(key)) continue;
+                            if(data.dat.length != 0 && "undefined" !== typeof(data.dat[key])){
+                                delete data.dat[key];
+                            }
+                            if(data.pla.length != 0 && "undefined" !== typeof(data.pla[key])){
+                                delete data.pla[key];
+                            }
+                            if("undefined" !== typeof(data.eve.all[key])){
+                                delete data.eve.all[key];
+                            }
+                        }
+                        delete data.eve.gedcom_id[ind.gedcom_id];
+                    }
+                }
+                function _deleteFromFam_(){
+                    if(data.fam.length == 0 || "undefined" === typeof(data.fam.gedcom_id[ind.gedcom_id]) ) return false;
+                    var fam = data.fam.gedcom_id[ind.gedcom_id];
+                    for (var key in fam){
+                        if(!fam.hasOwnProperty(key)) continue;
+                        if("undefined" !==typeof(data.fam.family_id[key])){
+                            delete data.fam.family_id[key];
+                        }
+                    }
+                    delete data.fam.gedcom_id[ind.gedcom_id];
+                }
+                function _deleteFromMed_(){
+                    if(data.med.length == 0 || "undefined" == typeof(data.med.gedcom_id[ind.gedcom_id])) return false;
+                    var med = data.med.gedcom_id[ind.gedcom_id];
+                    if(med.length == 0) return false;
+                    delete data.med.all[med[0].id];
+                    delete data.med.gedcom_id[ind.gedcom_id];
+                }
+                function _deleteFromRel_(){
+                    if("undefined" === typeof(data.rel[ind.gedcom_id])) return false;
+                    delete data.rel[ind.gedcom_id];
+                }
+            },
             connection:function(){
                 var object = $this.getConnection(ind.gedcom_id);
                 if(object){
