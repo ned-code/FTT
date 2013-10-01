@@ -91,4 +91,5 @@ class FamilytreetopController extends JControllerLegacy
 			$view->display();
 		}
 	}
+
 }

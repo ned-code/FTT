@@ -66,25 +66,46 @@ if($session->get('famous')){
                 });
             },
             languages: function(object){
-                var langs = $.parseJSON($FamilyTreeTop.languagesString), ul = $('<ul></ul>'), li, prop, box = $('#modal').clone();
+                var langs = $.parseJSON($FamilyTreeTop.languagesString), ul = $('<ul></ul>'), li, prop, box = $('#modal').clone(),prg, prgInt, prgWidth = 0;
+                prg = $('<div familytreetop="languages-progressbar" style="visibility: hidden;" class="progress progress-striped active"><div class="bar" style="width: 0%;"></div></div>');
                 $(box).find('#modalLabel').text('Languages');
                 for(prop in langs){
                     if(!langs.hasOwnProperty(prop)) continue;
                     li = $('<li><a familytreetop-data="'+langs[prop].lang_code+'" href="#">'+langs[prop].title+'</a></li>');
                     $(ul).append(li);
                 }
+                $(ul).append(prg);
                 $(box).find('.modal-body').append(ul);
+                $(box).find('.modal-footer').remove();
                 $(box).modal();
 
                 $(ul).find('li a').click(function(){
                     var local = $(this).attr('familytreetop-data');
+                    _tactOn_();
                     $FamilyTreeTop.fn.ajax('languages.setLanguage', {local: local}, function(response){
-                        console.log(response);
-                        $(box).modal('hide');
+                        _tactDone_();
+                        setTimeout(function(){
+                           $(box).modal('hide');
+                        }, 1000);
                         window.location.reload();
                     });
                     return false;
                 });
+
+                function _tactOn_(){
+                    var bar = $(prg).find('.bar');
+                    $(prg).css('visibility', 'visible');
+                    prgInt = setInterval(function(){
+                        prgWidth++;
+                        if(prgWidth < 97){
+                          $(bar).css('width', prgWidth+'%');
+                        }
+                    }, 100);
+                }
+                function _tactDone_(){
+                    clearInterval(prgInt);
+                    $(prg).find('.bar').css('width', '100%');
+                }
             },
             facebook:function(object){
                 window.location = $FamilyTreeTop.app.data.link;
