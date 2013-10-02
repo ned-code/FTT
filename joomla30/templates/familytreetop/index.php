@@ -317,10 +317,10 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
 
     <div id="editorTabs">
         <ul class="nav nav-tabs">
-            <li class="active"><a href="#" data-toggle="tab"><?=JText::_("TPL_FAMILYTREETOP_EDITOR_TABS_PROFILE");?></a></li>
-            <li><a href="#" data-toggle="tab"><?=JText::_("TPL_FAMILYTREETOP_EDITOR_TABS_UNIONS");?></a></li>
-            <li><a href="#" data-toggle="tab"><?=JText::_("TPL_FAMILYTREETOP_EDITOR_TABS_MEDIA");?></a></li>
-            <li><a href="#" data-toggle="tab"><?=JText::_("TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS");?></a></li>
+            <li class="active"><a href="#" familytreetop-tab="profile" data-toggle="tab"><?=JText::_("TPL_FAMILYTREETOP_EDITOR_TABS_PROFILE");?></a></li>
+            <li><a href="#" familytreetop-tab="unions" data-toggle="tab"><?=JText::_("TPL_FAMILYTREETOP_EDITOR_TABS_UNIONS");?></a></li>
+            <li><a href="#" familytreetop-tab="media" data-toggle="tab"><?=JText::_("TPL_FAMILYTREETOP_EDITOR_TABS_MEDIA");?></a></li>
+            <li><a href="#" familytreetop-tab="options" data-toggle="tab"><?=JText::_("TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS");?></a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane active" id="_1_"></div>
