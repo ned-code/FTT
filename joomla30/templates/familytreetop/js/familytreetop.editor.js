@@ -538,7 +538,7 @@ $FamilyTreeTop.create("editor", function($){
         $(cl).modal({dynamic:true});
 
         $(tabs[0]).on('shown', function (e) {
-            console.log(e, this);
+            //console.log(e, this);
         })
 
         $(cl).on('shown', function () {
