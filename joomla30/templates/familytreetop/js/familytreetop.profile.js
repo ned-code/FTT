@@ -550,16 +550,16 @@ $FamilyTreeTop.create("profile", function($){
                         if(!media.hasOwnProperty(key)) continue;
                         var el = media[key];
                         for(var k in el){
-                            if(index <= interval - 1){
-                                if(key == "familytreetop" || key == "profile"){
-                                    s.profile.push(el[k]);
-                                } else {
-                                    s.all.push(el[k]);
-                                }
+                            if($this.trim.call(key) == "familytreetop" || $this.trim.call(key) == "profile"){
+                                s.profile.push(el[k]);
                             } else {
-                                s.other.push(el[k]);
+                                if( index <= interval - 1 ){
+                                    s.all.push(el[k]);
+                                } else {
+                                    s.other.push(el[k]);
+                                }
+                                index++;
                             }
-                            index++;
                         }
                     }
                     return s;
@@ -594,30 +594,6 @@ $FamilyTreeTop.create("profile", function($){
                    });
                 });
             }
-            /*
-            args.object.medias().forEach(function(el, index){
-                var li = $('<li><img style="cursor:pointer;" class="img-polaroid" src=""></li>');
-                $(li).find('img').attr('src', el.thumbnail_url);
-                $(li).attr('data-familytreetop-delete', el.delete_url);
-                $(li).data(el);
-                $(ul).append(li);
-            });
-            if(args.object.facebook_id){
-                FB.api('/'+args.object.facebook_id+'/albums', function(albums){
-                   var data = albums.data;
-                   $(data).each(function(i, album){
-                       FB.api('/'+album.id+'/photos', function(photos){
-                           var d = photos.data;
-                           $(d).each(function(i, photo){
-                               var li = $('<li><img style="cursor:pointer;" class="img-polaroid" src=""></li>');
-                               $(li).find('img').attr('src', photo.picture);
-                               $(ul).append(li);
-                           });
-                       });
-                   });
-                });
-            }
-            */
         },
         getLabelHtml:function(label, node){
             var user = node.data.usr, box = $('<div class="text-center"></div>');
