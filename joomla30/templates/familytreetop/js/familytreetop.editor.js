@@ -537,6 +537,10 @@ $FamilyTreeTop.create("editor", function($){
         //init modal
         $(cl).modal({dynamic:true});
 
+        $(tabs[0]).on('shown', function (e) {
+            console.log(e, this);
+        })
+
         $(cl).on('shown', function () {
             if("undefined" !== typeof(renderTab)){
                 $(tabs[0]).find('ul.nav-tabs li:nth-child('+renderTab+') a').tab('show');
