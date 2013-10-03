@@ -564,10 +564,14 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
     </form>
 
     <form id="formEditOptions" action="<?=JRoute::_("index.php?option=com_familytreetop&task=upload.file", false);?>" method="POST" enctype="multipart/form-data">
-        <div familytreetop="buttons" style="margin-left: 5px;margin-right: 5px;margin-bottom: 20px;">
-            <button familytreetop-button="delete" type="button" class="btn btn-danger">Delete this Person</button>
+        <div familytreetop="buttons">
+            <div class="row-fluid">
+                <div class="span4"></div>
+                <div class="span4"><button familytreetop-button="delete" type="button" class="btn btn-danger">Delete this Person</button></div>
+                <div class="span4"></div>
+            </div>
         </div>
-        <div familytreetop="delete-tree" style="margin-left: 5px;margin-right: 5px;margin-bottom: 20px;">
+        <div familytreetop="delete-tree" style="display:none;">
             <div class="row-fluid">
                 <div class="span4"></div>
                 <div class="span4">
@@ -577,14 +581,25 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
             </div>
         </div>
         <div familytreetop="delete-invalid" style="display:none;">
-            <button familytreetop-button="delete-invalid" type="button" class="btn disabled">Delete this Person</button>
+            <div class="row-fluid">
+                <div class="span4"></div>
+                <div class="span4"><button familytreetop-button="delete-invalid" type="button" class="btn disabled">Delete this Person</button></div>
+                <div class="span4"></div>
+            </div>
         </div>
         <div familytreetop="delete-confirm" style="display:none;">
-            <div>You are about to delete your family tree.</div>
-            <div>Are you sure?</div>
-            <div>
-                <div familytreetop-button="delete-confirm-delete" class="btn btn-danger">Delete</div>
-                <div familytreetop-button="delete-confirm-cancel" class="btn">Cancel</div>
+            <div class="row-fluid" style="text-align: center;">
+                <div class="span4"></div>
+                <div class="span4">
+                    <div><i style="color:red;" class="icon-4x icon-warning-sign"></i></div>
+                    <div>You are about to delete your family tree.</div>
+                    <div>Are you sure?</div>
+                    <div style="margin:10px;">
+                        <div familytreetop-button="delete-confirm-delete" class="btn btn-danger">Delete</div>
+                        <div familytreetop-button="delete-confirm-cancel" class="btn">Cancel</div>
+                    </div>
+                </div>
+                <div class="span4"></div>
             </div>
         </div>
         <div familytreetop="delete" style="display:none;">
