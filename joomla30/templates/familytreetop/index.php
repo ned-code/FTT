@@ -603,25 +603,30 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
             </div>
         </div>
         <div familytreetop="delete" style="display:none;">
-            <table class="table table-striped">
+            <table class="table">
+                <tr>
+                    <td><i style="color:red;" class="icon-4x icon-warning-sign"></i></td>
+                    <td><p style="font-weight: bold;">You are about to unregistered yourself from the Family TreeTop website. Note that you will not be able to return to this family tree unless you are invited back by another family member.</p></td>
+                </tr>
+                <tr><td></td><td><span style="font-weight: bold;">Please Select an option:</span></td></tr>
                 <tr>
                     <td><div style="font-weight: bold;">Option 1</div><div><img class="img-polaroid" style="width:67px;height:49px;" src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/images/m_options_unlink.jpg" /></div></td>
                     <td>
-                        <div familytreetop="option" option="1" style="cursor:pointer;color:blue;font-weight: bold;">Do not change my Profile</div>
+                        <div familytreetop="option" option="1" style="cursor:pointer;color:blue;font-weight: bold;">Unregister but do not change my profile</div>
                         <div>Your profile information will remain visible to existing family members</div>
                     </td>
                 </tr>
                 <tr>
                     <td><div style="font-weight: bold;">Option 2</div><div><img class="img-polaroid" style="width:67px;height:49px;" src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/images/m_options_remove.jpg" /></div></td>
                     <td>
-                        <div familytreetop="option" option="2" style="cursor:pointer;color:blue;font-weight: bold;">Delete my Profile Information</div>
+                        <div familytreetop="option" option="2" style="cursor:pointer;color:blue;font-weight: bold;">Unregister and delete my profile information</div>
                         <div>Your name, dates and other profile data will be deleted and replaced with “unknown”</div>
                     </td>
                 </tr>
                 <tr>
                     <td><div style="font-weight: bold;">Option 3</div><div><img class="img-polaroid" style="width:67px;height:49px;" src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/images/m_options_delete.jpg" /></div></td>
                     <td>
-                        <div familytreetop="option" option="3" style="cursor:pointer;color:blue;font-weight: bold;">Remove from Tree</div>
+                        <div familytreetop="option" option="3" style="cursor:pointer;color:blue;font-weight: bold;">Unregister and remove me from this family tree</div>
                         <div>Your place in this family tree will be completely removed. Note that you must first
                             delete any spouses or descendants.</div>
                     </td>

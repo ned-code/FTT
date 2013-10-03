@@ -121,7 +121,7 @@ $FamilyTreeTop.create("editor", function($){
                 });
             }
             function _deleteTable_(){
-                _hideButtons_();
+                _hideDeleteTreeButton_();
                 _showDeleteTable_();
                 _initDeleteTable_(function(){
                     var option = $(this).attr('option');
@@ -147,7 +147,7 @@ $FamilyTreeTop.create("editor", function($){
                 });
                 $(parent).find('[familytreetop-button="delete-confirm-cancel"]').click(function(){
                     _hideDeleteConfirm_();
-                    _showButtons_();
+                    _showDeleteTreeButton_();
                 });
             }
             function _initDeleteTable_(call){
@@ -168,7 +168,7 @@ $FamilyTreeTop.create("editor", function($){
                 });
                 $(box).find('[familytreetop="cancel"]').click(function(){
                     _hideDeleteTable_();
-                    _showButtons_();
+                    _showDeleteTreeButton_();
                     $(box).find('tr').show();
                 });
             }
