@@ -651,11 +651,30 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                     </td>
                 </tr>
                 <tr>
-                    <td><div style="font-weight: bold;">Option 3</div><div><img class="img-polaroid" style="width:67px;height:49px;" src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/images/m_options_delete.jpg" /></div></td>
                     <td>
-                        <div familytreetop="option" option="3" style="cursor:pointer;color:blue;font-weight: bold;">Unregister and remove me from this family tree</div>
-                        <div>Your place in this family tree will be completely removed. Note that you must first
-                            delete any spouses or descendants.</div>
+                        <div style="font-weight: bold;">Option 3</div>
+                        <div>
+                            <img class="img-polaroid" style="width:67px;height:49px;" src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/images/m_options_delete.jpg" />
+                        </div>
+                    </td>
+                    <td>
+                        <div familytreetop="valid">
+                           <div familytreetop="option" option="3" style="cursor:pointer;color:blue;font-weight: bold;">Unregister and remove me from this family tree</div>
+                            <div>
+                                Your place in this family tree will be completely removed. Note that you must first delete any spouses or descendants.
+                            </div>
+                        </div>
+                        <div familytreetop="invalid" style="display:none;">
+                            <div style="color:gray;">
+                                Unregister and remove me from this family tree<span style="color:red;">*</span>
+                            </div>
+                            <div style="color:gray;">
+                               Your place in this family tree will be completely removed. Note that you must first delete any spouses or descendants.
+                            </div>
+                            <div style="color:red;">
+                                *Option available. You must first delete any spouses or children.
+                            </div>
+                        </div>
                     </td>
                 </tr>
                 <tr><td colspan="2" style="text-align: center;"><button familytreetop="cancel" type="button" class="btn btn-inverse">Cancel</button></td></tr>

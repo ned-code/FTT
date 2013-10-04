@@ -159,6 +159,7 @@ $FamilyTreeTop.create("editor", function($){
             }
             function _initDeleteTable_(call){
                 var box =  $(parent).find('[familytreetop="delete"]');
+                /*
                 $(box).find('[familytreetop="option"]').each(function(index, element){
                     var tr = $(element).parent().parent();
                     $(tr).show();
@@ -167,12 +168,14 @@ $FamilyTreeTop.create("editor", function($){
                             if(parseInt(ind.facebook_id) == 0) $(tr).hide()
                             break;
 
+
                         case 3:
                             if(!ind.isCanBeDelete()) $(tr).hide();
                             break;
                     }
                     $(element).click(call);
                 });
+                */
                 $(box).find('[familytreetop="cancel"]').click(function(){
                     _hideDeleteTable_();
                     _showDeleteTreeButton_();
