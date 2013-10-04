@@ -583,7 +583,34 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
         <div familytreetop="delete-invalid" style="display:none;">
             <div class="row-fluid">
                 <div class="span4"></div>
-                <div class="span4"><button familytreetop-button="delete-invalid" type="button" class="btn disabled">Delete this Person</button></div>
+                <div class="span4" style="text-align: center;">
+                    <div>
+                        <button familytreetop-button="delete-invalid" type="button" class="btn disabled">Delete this Person</button>
+                    </div>
+                    <div>
+                        <p style="color:red; font-weight: bold;">
+                            Option not available. You must first delete any spouses or
+                            children that are connected to this member's profile.
+                        </p>
+                    </div>
+                </div>
+                <div class="span4"></div>
+            </div>
+        </div>
+        <div familytreetop="delete-invalid-register" style="display:none;">
+            <div class="row-fluid">
+                <div class="span4"></div>
+                <div class="span4" style="text-align: center;">
+                    <div>
+                        <button familytreetop-button="delete-invalid" type="button" class="btn disabled">Delete this Person</button>
+                    </div>
+                    <div>
+                        <p style="color:red; font-weight: bold;">
+                            Option not available. This member is registered.
+                            You cannot delete the profile of a registered family member.
+                        </p>
+                    </div>
+                </div>
                 <div class="span4"></div>
             </div>
         </div>

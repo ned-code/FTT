@@ -78,23 +78,28 @@ $FamilyTreeTop.create("editor", function($){
         },
         setOptions: function(parent, ind, callback){
             if(_isOwner_(ind)){
-                _hideButtons_();
-                _showDeleteTreeButton_();
-                _click_('delete-tree',function(){
-                    if(_getUsersInTreeCount_() == 1){
-                        _deleteTree_();
-                    } else {
+                if(_getUsersInTreeCount_() == 1){
+                    _hideButtons_();
+                    _showDeleteTreeButton_();
+                    _click_('delete-tree',function(){
+                         _deleteTree_();
+                    });
+                } else {
+                    _click_('delete', function(){
                         _deleteTable_();
-                    }
-                });
+                    });
+                }
             } else {
-                if(ind.isCanBeDelete()){
+                if(ind.facebook_id != 0){
+                    _hideButtons_();
+                    _showButtonInvalidRegister_();
+                } else if(!ind.isCanBeDelete()) {
+                    _hideButtons_();
+                    _showButtonInvalid_();
+                } else {
                     _click_('delete',function(){
                         _delete_();
                     });
-                } else {
-                    _hideButtons_();
-                    _showButtonInvalid_();
                 }
             }
             return true;
@@ -106,14 +111,16 @@ $FamilyTreeTop.create("editor", function($){
             function _click_(button, callback){ $(parent).find('[familytreetop-button="'+button+'"]').click(callback);}
             function _hideButtons_(){ $(parent).find('[familytreetop="buttons"]').hide(); }
             function _hideDeleteTreeButton_(){ $(parent).find('[familytreetop="delete-tree"]').hide(); }
-            function _hideButtonInvalid_(){ $(parent).find('[familytreetop="delete-invalid"]').hide() }
-            function _hideDeleteConfirm_(){ $(parent).find('[familytreetop="delete-confirm"]').hide() }
-            function _hideDeleteTable_(){ $(parent).find('[familytreetop="delete"]').hide() }
-            function _showButtons_(){ $(parent).find('[familytreetop="buttons"]').show() }
+            function _hideButtonInvalid_(){ $(parent).find('[familytreetop="delete-invalid"]').hide(); }
+            function _hideButtonInvalidRegister_(){ $(parent).find('[familytreetop="delete-invalid-register"]').hide(); }
+            function _hideDeleteConfirm_(){ $(parent).find('[familytreetop="delete-confirm"]').hide(); }
+            function _hideDeleteTable_(){ $(parent).find('[familytreetop="delete"]').hide(); }
+            function _showButtons_(){ $(parent).find('[familytreetop="buttons"]').show(); }
             function _showDeleteTreeButton_(){ $(parent).find('[familytreetop="delete-tree"]').show(); }
-            function _showButtonInvalid_(){ $(parent).find('[familytreetop="delete-invalid"]').show() }
-            function _showDeleteConfirm_(){ $(parent).find('[familytreetop="delete-confirm"]').show() }
-            function _showDeleteTable_(){ $(parent).find('[familytreetop="delete"]').show() }
+            function _showButtonInvalid_(){ $(parent).find('[familytreetop="delete-invalid"]').show(); }
+            function _showButtonInvalidRegister_(){ $(parent).find('[familytreetop="delete-invalid-register"]').show(); }
+            function _showDeleteConfirm_(){ $(parent).find('[familytreetop="delete-confirm"]').show(); }
+            function _showDeleteTable_(){ $(parent).find('[familytreetop="delete"]').show(); }
             function _delete_(){
                 _ajax_(3, ind.gedcom_id, function(res){
                     if(res) ind.delete();
