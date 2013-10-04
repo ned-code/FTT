@@ -128,7 +128,7 @@ $FamilyTreeTop.create("editor", function($){
                 });
             }
             function _deleteTable_(){
-                _hideDeleteTreeButton_();
+                _hideButtons_();
                 _showDeleteTable_();
                 _initDeleteTable_(function(){
                     var option = $(this).attr('option');
@@ -159,26 +159,19 @@ $FamilyTreeTop.create("editor", function($){
             }
             function _initDeleteTable_(call){
                 var box =  $(parent).find('[familytreetop="delete"]');
-                /*
-                $(box).find('[familytreetop="option"]').each(function(index, element){
-                    var tr = $(element).parent().parent();
+                $(box).find('[familytreetop="option"]').each(function(i,e){
+                    var tr = $(e).parent().parent();
                     $(tr).show();
-                    switch(parseInt($(element).attr('option'))){
-                        case 1:
-                            if(parseInt(ind.facebook_id) == 0) $(tr).hide()
-                            break;
-
-
-                        case 3:
-                            if(!ind.isCanBeDelete()) $(tr).hide();
-                            break;
+                    if(parseInt($(e).attr('option')) == 3 && !ind.isCanBeDelete()){
+                        $(tr).find('[familytreetop="valid"]').hide();
+                        $(tr).find('[familytreetop="invalid"]').show();
+                    } else {
+                        $(e).click(call);
                     }
-                    $(element).click(call);
                 });
-                */
                 $(box).find('[familytreetop="cancel"]').click(function(){
                     _hideDeleteTable_();
-                    _showDeleteTreeButton_();
+                    _showButtons_();
                     $(box).find('tr').show();
                 });
             }
