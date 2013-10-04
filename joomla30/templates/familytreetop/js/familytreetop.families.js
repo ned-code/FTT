@@ -45,6 +45,9 @@ $FamilyTreeTop.create("families", function($){
         createEdit: function(object, gedcom_id){
             $this.mod('editmenu').render(object, gedcom_id);
         },
+        createFacebookIcon: function(object, ind){
+            $(object).append('<div style="bottom: 5px;position: absolute;right: 5px;"><a style="text-decoration: none;" target="_blank" href="https://www.facebook.com/'+ind.facebook_id+'"><i class="icon-facebook-sign icon-2x"></i></a></div>')
+        },
         createBox: function(ind, cl, type, args){
             if(!ind) return [];
             var divs = $(cl).find('div');
@@ -60,6 +63,9 @@ $FamilyTreeTop.create("families", function($){
             Holder.run({
                 images: avatar[0]
             });
+            if(ind.facebook_id != 0){
+                $fn.createFacebookIcon(divs[0], ind);
+            }
             if(args.abilityToMove && ((type == "up" && ind.isParentsExist()) || (type == "down" && (ind.isChildrensExist()||ind.isSpouseExist()) )) ){
                 $(divs[0]).append($fn.createArrow(type, args));
             }

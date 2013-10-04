@@ -699,7 +699,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
             <div class="text-center"></div>
         </div>
         <div class="child-box" style="max-width: 110px;">
-            <div>
+            <div style="position:relative;">
                 <img class="img-polaroid" data-src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/holder.js/100x100">
             </div>
             <div class="text-center"></div>
