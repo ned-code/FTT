@@ -75,7 +75,11 @@ if($session->get('famous')){
                     $(ul).append(li);
                 }
                 $(ul).append(prg);
-                $(box).find('.modal-body').append(ul);
+
+                var div = $('<div class="row-fluid"><div class="span4"></div><div familytreetop-language class="span4"></div><div class="span4"></div></div>')
+
+                $(div).find('[familytreetop-language]').append(ul);
+                $(box).find('.modal-body').append(div);
                 $(box).find('.modal-footer').remove();
                 $(box).modal();
 
