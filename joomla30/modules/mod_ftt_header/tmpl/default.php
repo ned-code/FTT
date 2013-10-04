@@ -88,8 +88,8 @@ $ind = $gedcom->individuals->get($user->gedcom_id);
         <ul class="nav pull-right visible-desktop" style="border-left: 1px solid #d4d4d4;border-right: 1px solid #d4d4d4;padding-left: 10px;padding-right: 10px;background: white;">
             <li>
                 <div data-familytreetop="familyline" class="btn-group pull-right">
-                    <button class="btn"><i familytreetop-line="mother" class="icon-pencil"></i></button>
-                    <button class="btn"><i familytreetop-line="mother" class="icon-eye-open"></i></button>
+                    <button familytreetop-tooltip="Highlight people on your mother’s side" class="btn"><i familytreetop-line="mother" class="icon-pencil"></i></button>
+                    <button familytreetop-tooltip="Hide people on your mother’s side" class="btn"><i familytreetop-line="mother" class="icon-eye-open"></i></button>
                     <button style="background: none;border: none;" class="btn disabled">
                         <ul class="unstyled inline">
                             <li style="padding:0; position: relative;top: -3px;"><?=JText::_('MOD_FAMILYTREETOP_FAMILY_LINE_MOTHER')?></li>
@@ -107,8 +107,8 @@ $ind = $gedcom->individuals->get($user->gedcom_id);
                             <li style="padding:0; position: relative;top: -3px;"><?=JText::_('MOD_FAMILYTREETOP_FAMILY_LINE_FATHER')?></li>
                         </ul>
                     </button>
-                    <button class="btn"><i familytreetop-line="father" class="icon-eye-open"></i></button>
-                    <button class="btn"><i familytreetop-line="father" class="icon-pencil"></i></button>
+                    <button familytreetop-tooltip="Hide people on your father’s side" class="btn"><i familytreetop-line="father" class="icon-eye-open"></i></button>
+                    <button familytreetop-tooltip="Highlight people on your father’s side" class="btn"><i familytreetop-line="father" class="icon-pencil"></i></button>
                 </div>
             </li>
         </ul>

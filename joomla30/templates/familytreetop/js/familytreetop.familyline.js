@@ -128,6 +128,14 @@ $FamilyTreeTop.create("familyline", function($){
                 $fn.show();
             }
         });
+        $box.find('[familytreetop-tooltip]').each(function(i, e){
+            var text = $(e).attr('familytreetop-tooltip');
+            $(e).tooltip({
+                title: text,
+                container: document.body,
+                display: { show: 1000, hide: 100 }
+            });
+        });
     }
 
     $this.bind = function(el, gedcom_id){
