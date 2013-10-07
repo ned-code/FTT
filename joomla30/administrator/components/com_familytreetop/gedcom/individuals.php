@@ -123,12 +123,27 @@ class FamilyTreeTopGedcomIndividualsModel {
     public function delete(){
         $gedcom = GedcomHelper::getInstance();
         if(empty($this->id)) return false;
+        $link = FamilyTreeTopTreeLinks::find_by_id_and_type($this->gedcom_id, 0);
         $user = FamilyTreeTopIndividuals::find_by_gedcom_id($this->gedcom_id);
-        $user->delete();
+        $family_id = $gedcom->families->getFamilyId($this->gedcom_id);
+        $family = $gedcom->families->get($family_id);
+
+        if(!empty($this->events)){
+            foreach($this->events as $event){
+                $event->remove();
+            }
+        }
 
         if($this->facebook_id != 0){
             $this->unregister();
         }
+
+        if($family){
+            $family->remove();
+        }
+
+        $user->delete();
+        $link->delete();
 
         $gedcom->individuals->removeFromList($this->gedcom_id);
     }

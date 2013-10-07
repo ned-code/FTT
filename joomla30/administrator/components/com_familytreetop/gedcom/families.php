@@ -79,6 +79,25 @@ class FamilyTreeTopGedcomFamilyModel {
 
     }
 
+    public function remove(){
+        if(empty($this->id)) return false;
+        $gedcom = GedcomHelper::getInstance();
+
+        $link = FamilyTreeTopTreeLinks::find_by_id_and_type($this->family_id, 1);
+        $family = FamilyTreeTopFamilies::find_by_family_id($this->family_id);
+
+        if(!empty($this->events)){
+            foreach($this->events as $event){
+                $event->remove();
+            }
+        }
+        if(!empty($this->childrens)){
+            $gedcom->childrens->deleteByFamilyId($this->family_id);
+        }
+        $family->delete();
+        $link->delete();
+    }
+
     public function toList(){
         if(empty($this->id)) return false;
         $data = array();

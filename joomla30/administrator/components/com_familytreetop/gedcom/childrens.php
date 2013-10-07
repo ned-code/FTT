@@ -53,6 +53,13 @@ class FamilyTreeTopGedcomChildrensManager {
         return $result;
     }
 
+    public function deleteByFamilyId($family_id){
+        $childrens = FamilyTreeTopChildrens::find('all', array('conditions' => array('family_id=?', $family_id)) );
+        foreach($childrens as $child){
+            $child->delete();
+        }
+    }
+
     public function save($family_id, $data){
         if(empty($data) || empty($family_id)) return false;
         foreach($data as $gedcom_id){
