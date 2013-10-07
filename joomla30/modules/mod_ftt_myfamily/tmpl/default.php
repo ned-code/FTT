@@ -3,9 +3,11 @@ defined('_JEXEC') or die;
 $facebook = FacebookHelper::getInstance()->facebook;
 $user = FamilyTreeTopUserHelper::getInstance()->get();
 $gedcom = GedcomHelper::getInstance();
+$settings = FamilyTreeTopSettingsHelper::getInstance()->get();
 
 $result_array = array();
 $data = null;
+
 try {
     if($user->facebook_id != 0){
         $family = $facebook->api(array(
@@ -36,6 +38,17 @@ try {
             $result_array[] = $object;
         }
     }
+
+    /*
+    $fb_feed_params = array(
+        'method' => 'fql.query',
+        'query' => "SELECT post_id, actor_id, target_id, message, likes, created_time, type FROM stream WHERE filter_key = 'nf' AND is_hidden = 0 LIMIT 100",
+    );
+
+    $fb_news_feed = $facebook->api($fb_feed_params);
+    */
+
+
 } catch(Exception $php_errormsg){
 
 }
