@@ -257,13 +257,24 @@ $FamilyTreeTop.create("usertree", function($){
                 function _deleteFromFam_(){
                     if(data.fam.length == 0 || "undefined" === typeof(data.fam.gedcom_id[ind.gedcom_id]) ) return false;
                     var fam = data.fam.gedcom_id[ind.gedcom_id];
+                    var spouses = [];
                     for (var key in fam){
                         if(!fam.hasOwnProperty(key)) continue;
                         if("undefined" !==typeof(data.fam.family_id[key])){
+                            spouses.push(data.fam.family_id[key]);
                             delete data.fam.family_id[key];
                         }
                     }
-                    delete data.fam.gedcom_id[ind.gedcom_id];
+                    for (var k in spouses){
+                        if(!spouses.hasOwnProperty(k)) continue;
+                        var el = spouses[k];
+                        if("undefined" !== typeof(data.fam.gedcom_id[el.husb])){
+                            delete data.fam.gedcom_id[el.husb];
+                        }
+                        if("undefined" !== typeof(data.fam.gedcom_id[el.wife])){
+                            delete data.fam.gedcom_id[el.wife];
+                        }
+                    }
                 }
                 function _deleteFromMed_(){
                     if(data.med.length == 0 || "undefined" == typeof(data.med.gedcom_id[ind.gedcom_id])) return false;
