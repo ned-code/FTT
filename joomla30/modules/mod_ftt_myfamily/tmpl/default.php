@@ -39,15 +39,15 @@ try {
         }
     }
 
-    /*
+
     $fb_feed_params = array(
         'method' => 'fql.query',
-        'query' => "SELECT post_id, actor_id, target_id, message, likes, created_time, type FROM stream WHERE filter_key = 'nf' AND is_hidden = 0 LIMIT 100",
+        'query' => "SELECT attachment, action_links, post_id, actor_id, target_id, message, description, permalink, likes, created_time, type FROM stream WHERE filter_key = 'nf' AND is_hidden = 0 LIMIT 100",
     );
 
     $fb_news_feed = $facebook->api($fb_feed_params);
-    */
 
+    //var_dump($fb_news_feed);
 
 } catch(Exception $php_errormsg){
 
@@ -71,7 +71,10 @@ try {
 </div>
 <script>
     $FamilyTreeTop.bind(function($){
-        var json = <?=json_encode(array('search'=>$search, 'sort'=>$result_array));?>;
-        $FamilyTreeTop.fn.mod('myfamily').render(json);
+        var _json = <?=json_encode(array('search'=>$search, 'sort'=>$data));?>;
+        var json = <?=json_encode(array('search'=>$search, 'sort'=>$fb_news_feed));?>;
+        console.log(json);
+        console.log(_json);
+        //$FamilyTreeTop.fn.mod('myfamily').render(json);
     });
 </script>
