@@ -31,7 +31,7 @@ try {
     }
 
     $fql_queries = array(
-        'query1' => "SELECT attachment, post_id, actor_id, target_id, message, description, permalink, likes, created_time, type FROM stream WHERE filter_key in (SELECT filter_key FROM stream_filter WHERE uid=me() and type in ('newsfeed','application','friendlist','public_profiles') ) AND actor_id in (".substr($string, 0, -1).") ORDER BY created_time DESC LIMIT 100",
+        'query1' => "SELECT attachment, post_id, actor_id, target_id, message, description, permalink, likes, created_time, updated_time, type FROM stream WHERE filter_key in (SELECT filter_key FROM stream_filter WHERE uid=me() and type in ('newsfeed','application','friendlist','public_profiles') ) AND actor_id in (".substr($string, 0, -1).") ORDER BY updated_time DESC LIMIT 100",
         'query2' => "SELECT uid, name, username, pic from user WHERE uid IN (SELECT actor_id FROM #query1) LIMIT 100"
     );
 
