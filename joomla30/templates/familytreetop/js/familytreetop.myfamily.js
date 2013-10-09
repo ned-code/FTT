@@ -130,12 +130,12 @@ $FamilyTreeTop.create("myfamily", function($){
     }
 
     $this.render = function(json){
-        console.log(json);
+        //console.log(json);
         var table = $($box).find('table');
         $gedcom = json.gedcom;
         $facebook = json.facebook;
         $(json.data).each(function(index, element){
-            console.log(element);
+            //console.log(element);
             var tr = $fn.createTr(element);
             $(tr).find('[familytreetop-image] img').load(function(e){
                 if("undefined" !== typeof(e.target.naturalWidth)){
