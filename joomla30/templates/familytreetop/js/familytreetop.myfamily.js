@@ -1,6 +1,6 @@
 $FamilyTreeTop.create("myfamily", function($){
     'use strict';
-    var $this = this, $box, $search, $fn;
+    var $this = this, $box, $gedcom, $facebook, $fn;
 
     $box = $("#myFamilyOnFacebook");
 
@@ -68,16 +68,16 @@ $FamilyTreeTop.create("myfamily", function($){
                 day_diff < 31 && Math.ceil( day_diff / 7 ) + " weeks ago";
         },
         createImage: function(object){
-            return $('<img class="img-rounded" src="https://graph.facebook.com/'+object.from.id+'/picture"/>');
+            return $('<img class="img-rounded" src="https://graph.facebook.com/'+object.actor_id+'/picture"/>');
         },
         createBody: function(object){
-            var parentDiv = $('<div class="row-fluid"><div class="span12" style="position:relative;"></div></div>'), img;
-            $(parentDiv).find('.span12').append($fn.getFacebookSign(object));
-            $(parentDiv).find('.span12').append('<div style="color:#4c5797; font-size:12px; font-weight: bold;"><span style="cursor: pointer;" gedcom_id="'+$fn.getGedcomId(object)+'" familytreetop="profile">'+$fn.getName(object)+'</span></div>');
-            $(parentDiv).find('.span12').append('<div style="color: #797979;font-size: 12px;">'+$fn.getRelation(object)+'</div>');
+            var parentDiv = $('<div class="row-fluid"><div class="span12" style="position:relative;"></div></div>');
+            //$(parentDiv).find('.span12').append($fn.getFacebookSign(object));
+            //$(parentDiv).find('.span12').append('<div style="color:#4c5797; font-size:12px; font-weight: bold;"><span style="cursor: pointer;" gedcom_id="'+$fn.getGedcomId(object)+'" familytreetop="profile">'+$fn.getName(object)+'</span></div>');
+            //$(parentDiv).find('.span12').append('<div style="color: #797979;font-size: 12px;">'+$fn.getRelation(object)+'</div>');
             //$(parentDiv).find('.span12').append('<div><table><tr><td familytreetop-image style="border:none;">'+$fn.getPicture(object)+'</td><td style="border:none;vertical-align: top;">'+$fn.getMessage(object)+'</td></tr></table></div>');
-            $(parentDiv).find('.span12').append('<div><div familytreetop-image style="border:none;">'+$fn.getPicture(object)+'</div><div style="border:none;vertical-align: top;">'+$fn.getMessage(object)+'</div></div>');
-            $(parentDiv).find('.span12').append('<div class="pull-right familytreetop-myfamily-buttons"><small>'+$fn.getTime(object)+'</small></div>');
+            //$(parentDiv).find('.span12').append('<div><div familytreetop-image style="border:none;">'+$fn.getPicture(object)+'</div><div style="border:none;vertical-align: top;">'+$fn.getMessage(object)+'</div></div>');
+            //$(parentDiv).find('.span12').append('<div class="pull-right familytreetop-myfamily-buttons"><small>'+$fn.getTime(object)+'</small></div>');
             return parentDiv;
         },
         createTd: function(style){
@@ -105,10 +105,14 @@ $FamilyTreeTop.create("myfamily", function($){
     }
 
     $this.render = function(json){
+        console.log(json);
         var table = $($box).find('table');
-        $search = json.search;
-        $(json.sort).each(function(index, element){
+        $gedcom = json.gedcom;
+        $facebook = json.facebook;
+        $(json.data).each(function(index, element){
+            console.log(element);
             var tr = $fn.createTr(element);
+            /*
             $(tr).find('[familytreetop-image] img').load(function(e){
                 if("undefined" !== typeof(e.target.naturalWidth)){
                     var width = e.target.naturalWidth;
@@ -116,6 +120,7 @@ $FamilyTreeTop.create("myfamily", function($){
                     $(td).css('width', width + "px");
                 }
             });
+            */
             $(tr).find('[familytreetop="facebook-sign"]').hover(function(){
                 $(this).find('i').removeClass('familytreetop-icon-muted');
             }, function(){
@@ -123,6 +128,8 @@ $FamilyTreeTop.create("myfamily", function($){
             });
             $(table).append(tr);
         });
+        /*
         $fn.initPopovers();
+        */
     }
 });
