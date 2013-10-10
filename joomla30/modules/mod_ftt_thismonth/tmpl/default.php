@@ -1,6 +1,19 @@
 <?php
 defined('_JEXEC') or die;
-$months = array('January','February','March','April','May','June','July','August','September','October','November','December');
+$months = array(
+    'TPL_FAMILYTREETOP_JANUARY',
+    'TPL_FAMILYTREETOP_FEBRUARY',
+    'TPL_FAMILYTREETOP_MARCH',
+    'TPL_FAMILYTREETOP_APRIL',
+    'TPL_FAMILYTREETOP_MAY',
+    'TPL_FAMILYTREETOP_JUNE',
+    'TPL_FAMILYTREETOP_JULY',
+    'TPL_FAMILYTREETOP_AUGUST',
+    'TPL_FAMILYTREETOP_SEPTEMBER',
+    'TPL_FAMILYTREETOP_OCTOBER',
+    'TPL_FAMILYTREETOP_NOVEMBER',
+    'November'
+);
 $date = date('n', strtotime('-1 month'));
 ?>
 <div id="thisMonth" class="row-fluid">
@@ -12,7 +25,7 @@ $date = date('n', strtotime('-1 month'));
                         <div class="span12">
                             <?php
                             echo '<select familytreetop="months" style="margin:0;  width: 130px;" name="ThisMonth[month]">';
-                            echo '<option value="0">All Months</option>';
+                            echo '<option value="0">'.JText::_("TPL_FAMILYTREETOP_ALL_MONTH").'</option>';
                             foreach($months as $key => $month){
                                 $option = '<option ';
                                 if($key == $date){
@@ -20,7 +33,7 @@ $date = date('n', strtotime('-1 month'));
                                 }
                                 $option .= ' value="' . ($key + 1);
                                 $option .= '">' ;
-                                $option .= $month;
+                                $option .= JText::_($month);;
                                 $option .= '</option>';
                                 echo $option;
                             }
@@ -37,11 +50,11 @@ $date = date('n', strtotime('-1 month'));
                                 <table style="margin:0;" class="table table-striped table-bordered familytreetop-table familytreetop-table-td">
                                     <thead>
                                         <tr style="background: #efe4b0;">
-                                            <td>Day</td>
-                                            <td>Event</td>
-                                            <td>Name</td>
-                                            <td>Note</td>
-                                            <td>Relation</td>
+                                            <td><?=JText::_('MOD_FTT_THISMONTH_DAY');?></td>
+                                            <td><?=JText::_('MOD_FTT_THISMONTH_EVENT');?></td>
+                                            <td><?=JText::_('MOD_FTT_THISMONTH_NAME');?></td>
+                                            <td><?=JText::_('MOD_FTT_THISMONTH_NOTE');?></td>
+                                            <td><?=JText::_('MOD_FTT_THISMONTH_RELATION');?></td>
                                         </tr>
                                     </thead>
                                 </table>
