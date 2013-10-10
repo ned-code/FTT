@@ -13,10 +13,10 @@ if($profile){
     <div class="span12">
         <div class="well" familytreetop="module">
             <fieldset>
-                <legend>Latest Updates</legend>
+                <legend><?=JText::_('MOD_FTT_LATEST_UPDATES_TITLE');?></legend>
                 <ul class-familytreetop="module-padding" class="unstyled">
                     <?php if($ind): ?>
-                    <li><span>Profile Changes</span>: <span style="cursor:pointer;" gedcom_id="<?=$ind->gedcom_id;?>" data-familytreetop-color="<?=$ind->gender;?>"><?=$ind->name();?></span></li>
+                    <li><span><?=JText::_('MOD_FTT_LATEST_UPDATES_PROFLIE_CHANGES');?></span>: <span style="cursor:pointer;" gedcom_id="<?=$ind->gedcom_id;?>" data-familytreetop-color="<?=$ind->gender;?>"><?=$ind->name();?></span></li>
                     <?php endif; ?>
                 </ul>
             </fieldset>
