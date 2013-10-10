@@ -253,9 +253,9 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
     <div id="profile" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="profileLabel" aria-hidden="true">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <button type="button" familytreetop="edit" class="btn familytreetop-header-button" style="padding: 5px 10px;"><i class="icon-pencil"></i><span style="top: 0;margin-left: 3px;">Edit</span></button>
-            <button type="button" familytreetop="facebook" class="btn familytreetop-header-button"><i class="icon-2x icon-facebook-sign"></i><span style="margin-left:3px;">Facebook</span></button>
-            <button type="button" familytreetop="invite" class="btn btn-primary familytreetop-header-button"> <i class="icon-2x icon--white icon-facebook-sign"></i><span>Invite</span></button>
+            <button type="button" familytreetop="edit" class="btn familytreetop-header-button" style="padding: 5px 10px;"><i class="icon-pencil"></i><span style="top: 0;margin-left: 3px;"><?=JText::_('TPL_FAMILYTREETOP_BUTTON_EDIT');?></span></button>
+            <button type="button" familytreetop="facebook" class="btn familytreetop-header-button"><i class="icon-2x icon-facebook-sign"></i><span style="margin-left:3px;"><?=JText::_('TPL_FAMILYTREETOP_BUTTON_FACEBOOK');?></span></button>
+            <button type="button" familytreetop="invite" class="btn btn-primary familytreetop-header-button"> <i class="icon-2x icon--white icon-facebook-sign"></i><span><?=JText::_('TPL_FAMILYTREETOP_BUTTON_INVITE');?></span></button>
             <h3 id="profileLabel"></h3>
         </div>
         <div class="modal-body">
