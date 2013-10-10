@@ -4,6 +4,7 @@ $FamilyTreeTop.create("latest_events", function($){
         $birthBox = $('#latestBriths'),
         $marrBox = $('#latestMarriages'),
         $deathBox = $('#latestDeaths'),
+        $languages,
         $fn;
 
     $fn = {
@@ -14,7 +15,7 @@ $FamilyTreeTop.create("latest_events", function($){
             return img;
         },
         setNull: function(box){
-            $(box).append('<tr><td colspan="3">(none to show)</td></tr>')
+            $(box).append('<tr><td colspan="3">'+$languages['none']+'</td></tr>')
         },
         setEvents: function(box, events, type){
             var user, family, husb, wife, div, ev, tr, td, avatar;
@@ -87,7 +88,8 @@ $FamilyTreeTop.create("latest_events", function($){
         }
     }
 
-    $this.init = function(events){
+    $this.init = function(events, languages){
+        $languages = languages;
         var birth = events.BIRT, death = events.DEAT, marr = events.MARR;
         if("undefined" !== typeof(birth)){
             $fn.setEvents($birthBox, birth, 'birth');
