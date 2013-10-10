@@ -567,7 +567,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
         <div familytreetop="buttons">
             <div class="row-fluid">
                 <div class="span4"></div>
-                <div class="span4"><button familytreetop-button="delete" type="button" class="btn btn-danger">Delete this Person</button></div>
+                <div class="span4"><button familytreetop-button="delete" type="button" class="btn btn-danger"><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_DELETE_THIS_PERSON');?></button></div>
                 <div class="span4"></div>
             </div>
         </div>
@@ -575,7 +575,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
             <div class="row-fluid">
                 <div class="span4"></div>
                 <div class="span4">
-                    <button familytreetop-button="delete-tree" type="button" class="btn btn-danger">Delete my Family Tree</button>
+                    <button familytreetop-button="delete-tree" type="button" class="btn btn-danger"><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_DELETE_MY_FAMILY_TREE');?></button>
                 </div>
                 <div class="span4"></div>
             </div>
@@ -585,12 +585,11 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                 <div class="span4"></div>
                 <div class="span4" style="text-align: center;">
                     <div>
-                        <button familytreetop-button="delete-invalid" type="button" class="btn disabled">Delete this Person</button>
+                        <button familytreetop-button="delete-invalid" type="button" class="btn disabled"><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_DELETE_THIS_PERSON');?></button>
                     </div>
                     <div>
                         <p style="color:red; font-weight: bold;">
-                            Option not available. You must first delete any spouses or
-                            children that are connected to this member's profile.
+                            <?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_OPTION_AVAILABLE_1');?>
                         </p>
                     </div>
                 </div>
@@ -602,12 +601,11 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                 <div class="span4"></div>
                 <div class="span4" style="text-align: center;">
                     <div>
-                        <button familytreetop-button="delete-invalid" type="button" class="btn disabled">Delete this Person</button>
+                        <button familytreetop-button="delete-invalid" type="button" class="btn disabled"><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_DELETE_THIS_PERSON');?></button>
                     </div>
                     <div>
                         <p style="color:red; font-weight: bold;">
-                            Option not available. This member is registered.
-                            You cannot delete the profile of a registered family member.
+                             <?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_OPTION_AVAILABLE_2');?>
                         </p>
                     </div>
                 </div>
@@ -619,11 +617,11 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                 <div class="span4"></div>
                 <div class="span4">
                     <div><i style="color:red;" class="icon-4x icon-warning-sign"></i></div>
-                    <div>You are about to delete your family tree.</div>
-                    <div>Are you sure?</div>
+                    <div><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_YOU_ABOUT_DELETE');?></div>
+                    <div><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_ARE_YOU_SURE');?></div>
                     <div style="margin:10px;">
-                        <div familytreetop-button="delete-confirm-delete" class="btn btn-danger">Delete</div>
-                        <div familytreetop-button="delete-confirm-cancel" class="btn">Cancel</div>
+                        <div familytreetop-button="delete-confirm-delete" class="btn btn-danger"><?=JText::_('TPL_FAMILYTREETOP_BUTTON_DELETE');?></div>
+                        <div familytreetop-button="delete-confirm-cancel" class="btn"><?=JText::_('TPL_FAMILYTREETOP_BUTTON_CANCEL');?></div>
                     </div>
                 </div>
                 <div class="span4"></div>
@@ -633,18 +631,18 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
             <table class="table">
                 <tr>
                     <td><i style="color:red;" class="icon-4x icon-warning-sign"></i></td>
-                    <td><p style="font-weight: bold;">You are about to unregistered yourself from the Family TreeTop website. Note that you will not be able to return to this family tree unless you are invited back by another family member.</p></td>
+                    <td><p style="font-weight: bold;"><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_YOU_ABOUT_UNREGISTERED');?>.</p></td>
                 </tr>
-                <tr><td></td><td><span style="font-weight: bold;">Please Select an option:</span></td></tr>
+                <tr><td></td><td><span style="font-weight: bold;"><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_PLEASE_SELECT_OPTION');?>:</span></td></tr>
                 <tr>
-                    <td><div style="font-weight: bold;">Option 1</div><div><img class="img-polaroid" style="width:67px;height:49px;" src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/images/m_options_unlink.jpg" /></div></td>
+                    <td><div style="font-weight: bold;"><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_OPTION_1');?></div><div><img class="img-polaroid" style="width:67px;height:49px;" src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/images/m_options_unlink.jpg" /></div></td>
                     <td>
                         <div familytreetop="option" option="1" style="cursor:pointer;color:blue;font-weight: bold;">Unregister but do not change my profile</div>
                         <div>Your profile information will remain visible to existing family members</div>
                     </td>
                 </tr>
                 <tr>
-                    <td><div style="font-weight: bold;">Option 2</div><div><img class="img-polaroid" style="width:67px;height:49px;" src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/images/m_options_remove.jpg" /></div></td>
+                    <td><div style="font-weight: bold;"><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_OPTION_2');?></div><div><img class="img-polaroid" style="width:67px;height:49px;" src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/images/m_options_remove.jpg" /></div></td>
                     <td>
                         <div familytreetop="option" option="2" style="cursor:pointer;color:blue;font-weight: bold;">Unregister and delete my profile information</div>
                         <div>Your name, dates and other profile data will be deleted and replaced with “unknown”</div>
@@ -652,7 +650,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                 </tr>
                 <tr>
                     <td>
-                        <div style="font-weight: bold;">Option 3</div>
+                        <div style="font-weight: bold;"><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_OPTION_3');?></div>
                         <div>
                             <img class="img-polaroid" style="width:67px;height:49px;" src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/images/m_options_delete.jpg" />
                         </div>
@@ -677,7 +675,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                         </div>
                     </td>
                 </tr>
-                <tr><td colspan="2" style="text-align: center;"><button familytreetop="cancel" type="button" class="btn btn-inverse">Cancel</button></td></tr>
+                <tr><td colspan="2" style="text-align: center;"><button familytreetop="cancel" type="button" class="btn btn-inverse"><?=JText::_('TPL_FAMILYTREETOP_BUTTON_CANCEL');?></button></td></tr>
             </table>
         </div>
     </form>
