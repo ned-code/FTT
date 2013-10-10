@@ -19,7 +19,7 @@ try {
     }
 
     $search = array();
-    $string = "";
+    $string = "'".$user->facebook_id."',";
     foreach($members as $member){
         $string .= '"'. $member->facebook_id . '",';
         $search[$member->facebook_id] = $gedcom->individuals->get($member->gedcom_id);
@@ -80,7 +80,7 @@ try {
 </div>
 <script>
     $FamilyTreeTop.bind(function($){
-        var json = <?=json_encode(array('gedcom'=>$search, 'facebook'=>$result_users, 'data'=>$result_news));?>;
+        var json = <?=json_encode(array('gedcom'=>$search, 'facebook'=>$result_users, 'data'=>$result_news, 'string'=>$string));?>;
         $FamilyTreeTop.fn.mod('myfamily').render(json);
     });
 </script>
