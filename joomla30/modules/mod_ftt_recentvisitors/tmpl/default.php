@@ -5,7 +5,7 @@ defined('_JEXEC') or die;
     <div class="span12">
         <div class="well" familytreetop="module">
             <fieldset>
-                <legend>Recent Visitors</legend>
+                <legend><?=JText::_('MOD_FTT_RECENTVISITORS');?></legend>
                 <ul class-familytreetop="module-padding" class="unstyled inline">
                     <?php foreach($visitors as $visitor): ?>
                         <?php if($visitor['ind']): ?>
