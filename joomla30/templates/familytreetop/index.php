@@ -183,7 +183,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                             <i class="icon-2x icon-facebook-sign"></i>
                         </div>
                         <div class="span8" style="line-height: 25px;">
-                            Facebook
+                            <?=JText::_('TPL_FAMILYTREETOP_BUTTON_FACEBOOK');?>
                         </div>
                     </div>
                 </button>
@@ -194,7 +194,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                             <i class="icon-2x  icon-white icon-facebook-sign"></i>
                         </div>
                         <div class="span6" style="line-height: 25px;">
-                            Invite
+                            <?=JText::_('TPL_FAMILYTREETOP_BUTTON_INVITE');?>
                         </div>
                     </div>
                 </button>
