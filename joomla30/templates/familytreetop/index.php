@@ -204,7 +204,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                             <i class="icon-large icon-user"></i>
                         </div>
                         <div class="span8" style="line-height: 25px;">
-                            Profile
+                             <?=JText::_('TPL_FAMILYTREETOP_BUTTON_PROFILE');?>
                         </div>
                     </div>
                 </button>
