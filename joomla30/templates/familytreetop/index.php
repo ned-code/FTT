@@ -204,7 +204,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                             <i class="icon-large icon-user"></i>
                         </div>
                         <div class="span8" style="line-height: 25px;">
-                            Profile
+                             <?=JText::_('TPL_FAMILYTREETOP_BUTTON_PROFILE');?>
                         </div>
                     </div>
                 </button>
@@ -443,7 +443,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                     <div familytreetop="gender" class="span6">
                         <label for="editProfile[gender]"><small><?=JText::_("TPL_FAMILYTREETOP_GENDER");?></small></label>
                         <select class="span12" id="editProfile[gender]" name="editProfile[gender]">
-                            <option value="default">Select gender...</option>
+                            <option value="default"><?=JText::_('TPL_FAMILYTREETOP_SELECT_GENDER');?></option>
                             <option value="1"><?=JText::_("TPL_FAMILYTREETOP_GENDER_MALE");?></option>
                             <option value="0"><?=JText::_("TPL_FAMILYTREETOP_GENDER_FEMALE");?></option>
                         </select>

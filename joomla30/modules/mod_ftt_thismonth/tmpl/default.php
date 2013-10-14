@@ -12,7 +12,7 @@ $months = array(
     'TPL_FAMILYTREETOP_SEPTEMBER',
     'TPL_FAMILYTREETOP_OCTOBER',
     'TPL_FAMILYTREETOP_NOVEMBER',
-    'November'
+    'TPL_FAMILYTREETOP_DECEMBER'
 );
 $date = date('n', strtotime('-1 month'));
 ?>

@@ -9,13 +9,13 @@ $oldest = $gedcom->individuals->getOldest();
     <div class="span12">
         <div class="well" familytreetop="module">
             <fieldset>
-                <legend>Quick Facts</legend>
+                <legend><?=JText::_('MOD_FTT_QUICK_FACTS_TITLE');?></legend>
                 <ul class-familytreetop="module-padding" class="unstyled">
                     <?php if($youngest): ?>
-                        <li><span>Youngest</span>: <span style="cursor:pointer;" gedcom_id="<?=$youngest->gedcom_id;?>" data-familytreetop-color="<?=$youngest->gender;?>"><?=$youngest->name();?></span></li>
+                        <li><span><?=JText::_('MOD_FTT_QUICK_FACTS_YOUNGEST');?></span>: <span style="cursor:pointer;" gedcom_id="<?=$youngest->gedcom_id;?>" data-familytreetop-color="<?=$youngest->gender;?>"><?=$youngest->name();?></span></li>
                     <?php endif; ?>
                     <?php if($oldest): ?>
-                        <li><span>Oldest</span>: <span style="cursor:pointer;" gedcom_id="<?=$oldest->gedcom_id;?>" data-familytreetop-color="<?=$oldest->gender;?>"><?=$oldest->name();?></span></li>
+                        <li><span><?=JText::_('MOD_FTT_QUICK_FACTS_OLDEST');?></span>: <span style="cursor:pointer;" gedcom_id="<?=$oldest->gedcom_id;?>" data-familytreetop-color="<?=$oldest->gender;?>"><?=$oldest->name();?></span></li>
                     <?php endif; ?>
                 </ul>
             </fieldset>
