@@ -90,6 +90,19 @@ $FamilyTreeTop.create("families", function($){
             function _getSpouses_(_id_){ return $this.mod('usertree').getSpouses(_id_); }
             function _getUserData_(_id_){ return $this.mod('usertree').user(_id_); }
             function _setData_(_e_){
+                var _divs_ = $(_e_.object).find('div');
+                var _avatar_ = _e_.data.avatar(["90","90"]);
+                var _img_ = $(_divs_[0]).find('img');
+
+                $(_img_).parent().append(_avatar_);
+                $(_img_).remove();
+
+                $(_divs_[1]).text(_e_.data.first_name);
+
+                Holder.run({
+                    images: _avatar_[0]
+                });
+
                 return _e_.object;
             }
             function _getSpousesSort_(_id1_, _id2_){
@@ -154,6 +167,7 @@ $FamilyTreeTop.create("families", function($){
 
                     case 3:
                     case 4:
+                        $(object).css('top', getTop(index)).css('left', getSpouseIndent(index));
                         break;
 
                     default:
@@ -203,7 +217,7 @@ $FamilyTreeTop.create("families", function($){
             }
             function getTop(index){
                 var height = getMinHeight();
-                if(index < 3){
+                if(index < 5){
                     return height * 0.1;
                 } else {
                     var rows = getRows();
@@ -232,6 +246,15 @@ $FamilyTreeTop.create("families", function($){
                     return w;
                 }
             }
+            function getSpouseIndent(index){
+                if(index == 3){
+                    var left = parseInt($fn.getCssParam(boxs[0], "left"));
+                    return left - 150;
+                } else {
+                    var left = parseInt($fn.getCssParam(boxs[1], "left"));
+                    return left + 205;
+                }
+            }
             function getParentIndent(index){
                 var width = parseInt($(settings.parent).width());
                 var halfWidth = Math.ceil(width/2);
@@ -247,7 +270,7 @@ $FamilyTreeTop.create("families", function($){
                 }
             }
             function getLeft(index){
-                var rows = getRows(), length = index - 2, step = 0, margin = 0;
+                var rows = getRows(), length = index - 4, step = 0, margin = 0;
                 if(length <= rows[1]){
                     step = length;
                 } else {
@@ -267,7 +290,7 @@ $FamilyTreeTop.create("families", function($){
                     return Math.ceil((rows[2] - count*110)/2);
                 }
                 function _getCountOnRow_(rows, index){
-                    var length = boxs.length - 3, row = Math.ceil((index - 2)/rows[1]);
+                    var length = boxs.length - 5, row = Math.ceil((index - 4)/rows[1]);
                     if(length - row*rows[1] >= 0){
                         return rows[1];
                     } else {
@@ -321,6 +344,7 @@ $FamilyTreeTop.create("families", function($){
                         }
                         break;
                     case 2: break;
+                    case 3:case 4: break;
                     default:
                         var prew = path;
                         var left = parseInt(e.left) + 50;
