@@ -1,7 +1,7 @@
 $FamilyTreeTop.create("families", function($){
     'use strict';
 
-    var $this = this, $animated, $box = $('#familiesHide'), $boxs = {}, $canvas = false, $start_id, $fn;
+    var $this = this, $animated, $box = $('#familiesHide'), $boxs = {}, $bgs = {}, $canvas = false, $start_id, $fn;
 
     $fn = {
         getSettings: function(settings){
@@ -33,6 +33,67 @@ $FamilyTreeTop.create("families", function($){
                 return false;
             } else {
                 return string.replace (/px/g, "");
+            }
+        },
+        getChildrens: function(id1, id2){
+            var colors = ["#3f48cc","#1d9441","#b97a57","#934293","#eab600","#00a2e8","#ed1c24","#7092be"], index = 0;
+            var families = _concat_(_getFamilies_(id1), _getFamilies_(id2));
+            var childrens = _getChildrens_(families);
+            var childs = [];
+            for(var key in childrens){
+                if(!childrens.hasOwnProperty(key)) continue;
+                var a = childrens[key];
+                if(a.length > 0){
+                    var fam = families[key];
+                    var color;
+                    if(_isDefaultFamily_(fam)){
+                        color = false;
+                    } else {
+                        color = colors[index];
+                        index++;
+                    }
+                    $bgs[fam.husb] = color;
+                    $bgs[fam.wife] = color;
+                    for(var k in a){
+                        if(!a.hasOwnProperty(k)) continue;
+                        var id = a[k];
+                        childs.push({
+                            color: color,
+                            gedcom_id: id
+                        })
+                    }
+                }
+            }
+
+            return childs;
+            function _isDefaultFamily_(_F_){
+                return ( ( _F_.husb == id1 && _F_.wife == id2 )
+                    || ( _F_.husb == id2 && _F_.wife == id1 ) );
+            }
+            function _getChildrens_(_F_){
+                var _C_ = {};
+                for(var key in _F_){
+                    if(!_F_.hasOwnProperty(key)) continue;
+                    _C_[key] = $this.mod('usertree').getChildrensByFamily(key);
+
+                }
+                return _C_;
+            }
+            function _getFamilies_(_id_){ return $this.mod('usertree').getFamilies(_id_); }
+            function _concat_(_f1_, _f2_){
+                var _F_ = {}, _K_;
+                __SORT__(_f1_);
+                __SORT__(_f2_);
+                return _F_;
+                function __SORT__(_ARRAY_){
+                    if("undefined" === typeof(_ARRAY_) || _ARRAY_.length == 0) return false;
+                    for(_K_ in _ARRAY_){
+                        if(!_ARRAY_.hasOwnProperty(_K_)) continue;
+                        if("undefined" === typeof(_F_[_K_])){
+                            _F_[_K_] = _ARRAY_[_K_];
+                        }
+                    }
+                }
             }
         },
         createArrow: function(type, args){
@@ -94,6 +155,9 @@ $FamilyTreeTop.create("families", function($){
                 var _avatar_ = _e_.data.avatar(["90","90"]);
                 var _img_ = $(_divs_[0]).find('img');
 
+                if("undefined" !== $bgs[_e_.data.gedcom_id] && $bgs[_e_.data.gedcom_id]){
+                    $(_img_).parent().css('border', '1px solid '+$bgs[_e_.data.gedcom_id]);
+                }
                 $(_img_).parent().append(_avatar_);
                 $(_img_).remove();
 
@@ -123,9 +187,12 @@ $FamilyTreeTop.create("families", function($){
             var cl = $($box).find('.parent-box').clone();
             return $fn.createBox(ind, cl, 'up', args);
         },
-        createChild: function(id, args){
+        createChild: function(id, color, args){
             var ind = $this.mod('usertree').user(id);
             var cl = $($box).find('.child-box').clone();
+            if(color){
+                $(cl).find('img').parent().css('border', '1px solid '+color);
+            }
             return $fn.createBox(ind, cl, 'down', args);
         },
         createEvent: function(id1, id2){
@@ -434,12 +501,13 @@ $FamilyTreeTop.create("families", function($){
 
             $fn.init(settings);
 
-            $childrens = $this.mod('usertree').getChildrens($start_id);
+            $spouses = $this.mod('usertree').getSpouses($start_id);
+            $childrens = $fn.getChildrens($start_id, $spouses[0]);
             if($childrens.length == 0 && !$this.mod('usertree').user($start_id).isSpouseExist()){
                 $start_id = $fn.getStartIdByParents($start_id);
-                $childrens = $this.mod('usertree').getChildrens($start_id);
+                $spouses = $this.mod('usertree').getSpouses($start_id);
+                $childrens = $fn.getChildrens($start_id, $spouses[0]);
             }
-            $spouses = $this.mod('usertree').getSpouses($start_id);
 
             $fn.append(settings, $fn.createParent($start_id, settings));
             $fn.append(settings, $fn.createParent($spouses[0], settings));
@@ -447,8 +515,8 @@ $FamilyTreeTop.create("families", function($){
 
             $fn.createMultiSpouse($start_id, $spouses[0], settings);
 
-            $childrens.forEach(function(gedcom_id){
-                $fn.append(settings, $fn.createChild(gedcom_id, settings));
+            $childrens.forEach(function(object){
+                $fn.append(settings, $fn.createChild(object.gedcom_id, object.color, settings));
             });
 
             $fn.setPosition($boxs[settings.id], settings);
