@@ -316,10 +316,10 @@ $FamilyTreeTop.create("families", function($){
             function getSpouseIndent(index){
                 if(index == 3){
                     var left = parseInt($fn.getCssParam(boxs[0], "left"));
-                    return left - 150;
+                    return left - 130;
                 } else {
                     var left = parseInt($fn.getCssParam(boxs[1], "left"));
-                    return left + 205;
+                    return left + 170;
                 }
             }
             function getParentIndent(index){
