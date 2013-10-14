@@ -74,6 +74,37 @@ $FamilyTreeTop.create("families", function($){
             }
             return cl;
         },
+        createMultiSpouse:function(id, sp_id, args){
+            var left = $($box).find('.multiparent-left-box').clone();
+            var right = $($box).find('.multiparent-right-box').clone();
+            $(_getSpousesSort_(id, sp_id)).each(function(i, e){
+                $(left).append(_setData_(e));
+            });
+            $(_getSpousesSort_(sp_id, id)).each(function(i, e){
+                $(right).append(_setData_(e));
+            });
+            $fn.append(args, left);
+            $fn.append(args, right);
+            return true;
+            function _getSpouseBox_(){ return $($box).find('.spouse-box').clone(); }
+            function _getSpouses_(_id_){ return $this.mod('usertree').getSpouses(_id_); }
+            function _getUserData_(_id_){ return $this.mod('usertree').user(_id_); }
+            function _setData_(_e_){
+                return _e_.object;
+            }
+            function _getSpousesSort_(_id1_, _id2_){
+                var _m_ = [];
+                $(_getSpouses_(_id1_)).each(function(_i_,_e_){
+                    if(_e_ != _id2_){
+                        _m_.push({
+                            object : _getSpouseBox_(),
+                            data : _getUserData_(_e_)
+                        });
+                    }
+                });
+                return _m_;
+            }
+        },
         createParent: function(id, args){
             var ind = $this.mod('usertree').user(id);
             var cl = $($box).find('.parent-box').clone();
@@ -119,6 +150,10 @@ $FamilyTreeTop.create("families", function($){
 
                     case 2:
                         $(object).css('top', getEventTop(object, getTop(0))).css('left', getEventLeft(object));
+                        break;
+
+                    case 3:
+                    case 4:
                         break;
 
                     default:
@@ -385,6 +420,8 @@ $FamilyTreeTop.create("families", function($){
             $fn.append(settings, $fn.createParent($start_id, settings));
             $fn.append(settings, $fn.createParent($spouses[0], settings));
             $fn.append(settings, $fn.createEvent($start_id, $spouses[0]));
+
+            $fn.createMultiSpouse($start_id, $spouses[0], settings);
 
             $childrens.forEach(function(gedcom_id){
                 $fn.append(settings, $fn.createChild(gedcom_id, settings));

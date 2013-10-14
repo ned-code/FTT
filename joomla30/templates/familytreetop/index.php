@@ -689,9 +689,18 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                 </span>
             </a>
         </div>
+        <div class="multiparent-left-box"></div>
+        <div class="multiparent-right-box"></div>
         <div class="parent-box" style="max-width: 160px;">
             <div style="width: 150px;position:relative;">
                 <img class="img-polaroid" data-src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/holder.js/150x150">
+            </div>
+            <div class="text-center"></div>
+            <div class="text-center"></div>
+        </div>
+        <div class="spouse-box" style="max-width: 110px;">
+            <div style="position:relative;">
+                <img class="img-polaroid" data-src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/holder.js/100x100">
             </div>
             <div class="text-center"></div>
             <div class="text-center"></div>
