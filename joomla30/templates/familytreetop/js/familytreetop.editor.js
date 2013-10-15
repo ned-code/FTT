@@ -189,7 +189,7 @@ $FamilyTreeTop.create("editor", function($){
             }
         },
         setUnionsData:function(parent, ind){
-            var spouses = $this.mod('usertree').getSpouses(ind.gedcom_id), forms = [];
+            var spouses = $this.mod('usertree').getSpouses(ind.gedcom_id), forms = [], default_family_button;
             spouses.forEach(function(spouse_id){
                 var form = $fn.getEditorUnionsForm(),
                     form_id = $(form).attr('id'),
@@ -207,16 +207,12 @@ $FamilyTreeTop.create("editor", function($){
 
                 if(ind.family_id != null && ind.family_id == family_id){
                     button =  $(form).find('[familytreetop="current"]');
+                    default_family_button = button;
                     $(button).show();
                 } else {
                     button = $(form).find('[familytreetop="set-current"]');
                     $(button).show();
                 }
-
-                $(button).click(function(){
-
-                    return false;
-                });
 
                 setUnion(form, 'sircar', ind);
                 setUnion(form, 'spouse', spouse);
@@ -225,6 +221,30 @@ $FamilyTreeTop.create("editor", function($){
                 forms.push(form);
                 $fn.setFormInTab(1, parent, form);
             });
+
+            $(forms).each(function(i, form){
+                $(form).find('[familytreetop="current"]').click(function(){
+                    return false;
+                });
+                $(form).find('[familytreetop="set-current"]').click(function(){
+                    var b = this, family_id = $(form).find('input[familytreetop="family_id"]').val();
+                    $this.ajax('editor.setUnion', {
+                        gedcom_id: ind.gedcom_id,
+                        family_id : family_id
+                    }, function(response){
+                        var set = $(b).parent().find('[familytreetop="current"]');
+                        $(b).hide();
+                        $(set).show();
+                        $(default_family_button[0]).hide();
+                        $(default_family_button[0]).parent().find('[familytreetop="set-current"]').show();
+                        default_family_button = $(set);
+                        $this.mod('usertree').setUserFamilyId(response.gedcom_id, response.family_id);
+                        $this.mod('usertree').call();
+                    });
+                    return false;
+                });
+            });
+
             return forms;
             function setUnion(form, type, ind){
                 var el = $(form).find('[familytreetop="'+type+'"]');

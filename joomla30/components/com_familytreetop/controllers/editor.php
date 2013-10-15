@@ -488,6 +488,21 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         exit;
     }
 
+    public function setUnion(){
+        $app = JFactory::getApplication();
+        $gedcom = GedcomHelper::getInstance();
+
+        $gedcom_id = $app->input->post->get('gedcom_id', false);
+        $family_id = $app->input->post->get('family_id', false);
+
+        $user = $gedcom->individuals->get($gedcom_id);
+        $user->family_id = $family_id;
+        $user->save();
+
+        echo json_encode(array('gedcom_id'=>$gedcom_id, 'family_id'=>$family_id));
+        exit;
+    }
+
     public function delete(){
         $app = JFactory::getApplication();
         $gedcom = GedcomHelper::getInstance();

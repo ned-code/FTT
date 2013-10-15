@@ -544,6 +544,12 @@ $FamilyTreeTop.create("usertree", function($){
         return src;
     }
 
+    $this.setUserFamilyId = function(gedcom_id, family_id){
+        if("undefined" !== typeof(data.ind[gedcom_id])){
+            data.ind[gedcom_id].family_id = family_id;
+        }
+    }
+
     $this.getRelation = function(gedcom_id){
         if(data.rel == null) return [false, true];
         if("undefined" !== typeof(data.rel[gedcom_id])){
