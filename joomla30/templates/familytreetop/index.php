@@ -376,7 +376,17 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
     <form id="formEditUnions">
         <div class="well" familytreetop="module">
             <fieldset>
-                <legend><?=JText::_("TPL_FAMILYTREETOP_EDITOR_TABS_UNIONS_UNIONS");?></legend>
+                <legend>
+                    <div style="height:40px;">
+                        <div class="pull-left"><span style="margin-left:10px;"><?=JText::_("TPL_FAMILYTREETOP_EDITOR_TABS_UNIONS_UNIONS");?></span></div>
+                        <div class="pull-right">
+                            <div style="margin-right: 10px;">
+                                <button class="btn disabled"><?=JText::_('TPL_FAMILYTREETOP_BUTTON_CURRENT');?></button>
+                                <button class="btn btn-primary"><?=JText::_('TPL_FAMILYTREETOP_BUTTON_SET_CURRENT');?></button>
+                            </div>
+                        </div>
+                    </div>
+                </legend>
                 <input style="display:none;" familytreetop="family_id" name="editUnion[family_id]" type="text" class="hidden" />
                 <div class="row-fluid">
                     <div class="span6">
