@@ -194,17 +194,35 @@ $FamilyTreeTop.create("editor", function($){
                 var form = $fn.getEditorUnionsForm(),
                     form_id = $(form).attr('id'),
                     spouse = $this.mod('usertree').user(spouse_id),
-                    family_id = $this.mod('usertree').getFamilyIdByPartners(ind.gedcom_id, spouse_id);
+                    family_id = $this.mod('usertree').getFamilyIdByPartners(ind.gedcom_id, spouse_id),
+                    text,
+                    button;
 
                 $(form).find('input[familytreetop="family_id"]').val(family_id);
                 $(form).attr('familytreetop', form_id + forms.length);
+                text = $(form).find('[familytreetop="union-title"]').text();
+                $(form).find('[familytreetop="union-title"]').text(text + " " + (1 + forms.length) );
                 $fn.setMonths(form);
                 $fn.setDays(form);
+
+                if(ind.family_id != null && ind.family_id == family_id){
+                    button =  $(form).find('[familytreetop="current"]');
+                    $(button).show();
+                } else {
+                    button = $(form).find('[familytreetop="set-current"]');
+                    $(button).show();
+                }
+
+                $(button).click(function(){
+
+                    return false;
+                });
 
                 setUnion(form, 'sircar', ind);
                 setUnion(form, 'spouse', spouse);
                 setEvent(form, family_id);
 
+                forms.push(form);
                 $fn.setFormInTab(1, parent, form);
             });
             return forms;

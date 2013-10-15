@@ -378,11 +378,11 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
             <fieldset>
                 <legend>
                     <div style="height:40px;">
-                        <div class="pull-left"><span style="margin-left:10px;"><?=JText::_("TPL_FAMILYTREETOP_EDITOR_TABS_UNIONS_UNIONS");?></span></div>
+                        <div class="pull-left"><span familytreetop="union-title" style="margin-left:10px;"><?=JText::_("TPL_FAMILYTREETOP_EDITOR_TABS_UNIONS_UNIONS");?></span></div>
                         <div class="pull-right">
-                            <div style="margin-right: 10px;">
-                                <button class="btn disabled"><?=JText::_('TPL_FAMILYTREETOP_BUTTON_CURRENT');?></button>
-                                <button class="btn btn-primary"><?=JText::_('TPL_FAMILYTREETOP_BUTTON_SET_CURRENT');?></button>
+                            <div familytreetop="union-button" style="margin-right: 10px;">
+                                <button familytreetop="current" style="display:none;" class="btn disabled"><?=JText::_('TPL_FAMILYTREETOP_BUTTON_CURRENT');?></button>
+                                <button familytreetop="set-current" style="display:none;" class="btn btn-primary"><?=JText::_('TPL_FAMILYTREETOP_BUTTON_SET_CURRENT');?></button>
                             </div>
                         </div>
                     </div>
