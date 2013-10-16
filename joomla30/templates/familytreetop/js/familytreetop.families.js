@@ -200,10 +200,11 @@ $FamilyTreeTop.create("families", function($){
         createChild: function(id, color, args){
             var ind = $this.mod('usertree').user(id);
             var cl = $($box).find('.child-box').clone();
+            var box = $fn.createBox(ind, cl, 'down', args);
             if(color){
-                $(cl).find('img').parent().css('border', '1px solid '+color);
+                $(box).find('img').css('background-color', color);
             }
-            return $fn.createBox(ind, cl, 'down', args);
+            return box;
         },
         createEvent: function(id1, id2){
             var family = _getFamily_($this.mod('usertree').getFamilies(id2));
