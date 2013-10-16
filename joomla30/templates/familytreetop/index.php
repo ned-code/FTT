@@ -701,8 +701,8 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                 </span>
             </a>
         </div>
-        <div class="multiparent-left-box" style="width: 120px;max-height: 240px;overflow: hidden;overflow-y: auto;"></div>
-        <div class="multiparent-right-box" style="width: 120px;max-height: 240px;overflow: hidden;overflow-y: auto;"></div>
+        <div class="multiparent-left-box" style="width: 120px;max-height: 250px;overflow: hidden;overflow-y: auto;"></div>
+        <div class="multiparent-right-box" style="width: 120px;max-height: 250px;overflow: hidden;overflow-y: auto;"></div>
         <div class="parent-box" style="max-width: 160px;">
             <div style="width: 150px;position:relative;">
                 <img class="img-polaroid" data-src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/holder.js/150x150">
