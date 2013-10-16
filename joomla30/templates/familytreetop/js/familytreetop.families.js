@@ -166,7 +166,7 @@ $FamilyTreeTop.create("families", function($){
                 var _img_ = $(_divs_[0]).find('img');
 
                 if("undefined" !== $bgs[_e_.data.gedcom_id] && $bgs[_e_.data.gedcom_id]){
-                    $(_img_).parent().css('border', '1px solid '+$bgs[_e_.data.gedcom_id]);
+                    $(_avatar_).css('background-color', $bgs[_e_.data.gedcom_id]);
                 }
                 $(_img_).parent().append(_avatar_);
                 $(_img_).remove();
