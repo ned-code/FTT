@@ -11,14 +11,15 @@ $FamilyTreeTop.create("usertree", function($){
 
     }
 
-    $this.trigger = function(callback){
-        trPull.push(callback);
+    $this.trigger = function(data, callback){
+        trPull.push({call:callback, data:data});
     }
 
     $this.call = function(){
         for(var prop in trPull){
             if(!trPull.hasOwnProperty(prop)) continue;
-            trPull[prop]();
+            var el = trPull[prop];
+            el.call(el.data);
         }
     }
 

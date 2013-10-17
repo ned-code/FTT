@@ -537,10 +537,6 @@ $FamilyTreeTop.create("families", function($){
             if(settings.abilityToMove){
                 $fn.setPopovers($boxs[settings.id]);
             }
-
-            $this.mod('usertree').trigger(function(){
-                $this.render(settings);
-            });
             $(window).resize(function(){
                 $fn.setPosition($boxs[settings.id], settings);
             });
@@ -563,6 +559,7 @@ $FamilyTreeTop.create("families", function($){
         } else {
             $fn.render(settings);
         }
+        $this.mod('usertree').trigger(settings, $fn.render);
     };
 
 
