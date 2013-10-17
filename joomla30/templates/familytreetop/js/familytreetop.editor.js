@@ -253,7 +253,7 @@ $FamilyTreeTop.create("editor", function($){
                 Holder.run({
                     images:av[0]
                 });
-                $(el).find('legend').text(ind.shortname());
+                $(el).find('[familytreetop="data"]').text(ind.shortname());
             }
             function setEvent(form, family_id){
                 var event;
@@ -465,6 +465,12 @@ $FamilyTreeTop.create("editor", function($){
             }
             return true;
         },
+        progressbarOn:function(m){
+            $(m).find('[familytreetop="circle-progressbar"]').css('visibility', 'visible');
+        },
+        progressbarOff:function(m){
+            $(m).find('[familytreetop="circle-progressbar"]').css('visibility', 'hidden');
+        },
         submit:function(cl, ind, task){
             if(arguments.length)
             var tasks = [
@@ -472,6 +478,7 @@ $FamilyTreeTop.create("editor", function($){
                 'editor.updateUnionsInfo'
             ];
             $(cl).find('button[familytreetop="submit"]').click(function(){
+                $fn.progressbarOn(cl);
                 var args, send, activeTab, saveButton;
                 saveButton = $(this).hasClass('btn-primary');
                 if("undefined" === typeof(task)){
@@ -488,6 +495,7 @@ $FamilyTreeTop.create("editor", function($){
                 }
                 $this.ajax(send, args, function(response){
                     $this.mod('usertree').update(response);
+                    $fn.progressbarOff(cl);
                     if(saveButton){
                         $(cl).modal('hide');
                     }

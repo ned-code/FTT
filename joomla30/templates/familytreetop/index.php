@@ -239,6 +239,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
     <div id="modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <div style="margin-right: 5px; visibility: hidden;" familytreetop="circle-progressbar" class="pull-right"><img src="<?=$this->baseurl?>/templates/<?=$this->template;?>/img/circle_progressbar.gif"></div>
             <h3 id="modalLabel"></h3>
         </div>
         <div class="modal-body">
@@ -390,30 +391,24 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                 <input style="display:none;" familytreetop="family_id" name="editUnion[family_id]" type="text" class="hidden" />
                 <div class="row-fluid">
                     <div class="span6">
-                        <div familytreetop="sircar" class="well">
-                            <fieldset>
-                                <legend></legend>
-                                <div class="row-fluid">
-                                    <div class="span6" familytreetop="avatar"></div>
-                                    <div class="span6"></div>
-                                </div>
-                            </fieldset>
+                        <div familytreetop="sircar" class="well" style="background: white;margin: 5px;">
+                             <div class="row-fluid">
+                                <div class="span4" familytreetop="avatar"></div>
+                                <div class="span8" style="text-align:left;" familytreetop="data"></div>
+                             </div>
                         </div>
                     </div>
                     <div class="span6">
-                        <div familytreetop="spouse" class="well">
-                            <fieldset>
-                                <legend></legend>
-                                <div class="row-fluid">
-                                    <div class="span6" familytreetop="avatar"></div>
-                                    <div class="span6"></div>
-                                </div>
-                            </fieldset>
+                        <div familytreetop="spouse" class="well" style="background: white;margin: 5px;">
+                            <div class="row-fluid">
+                                <div class="span4" familytreetop="avatar"></div>
+                                <div class="span8" style="text-align:left;" familytreetop="data"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="row-fluid">
-                    <div familytreetop="union-event-date" class="span12">
+                    <div familytreetop="union-event-date" class="span12" style="padding-left: 5px;">
                         <select familytreetop="months" class="span4" name="editUnion[month]">
                             <option value="0"><?=JText::_("TPL_FAMILYTREETOP_MONTH");?></option>
                             <option value="1"><?=JText::_("TPL_FAMILYTREETOP_JANUARY");?></option>
@@ -432,11 +427,11 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                         <select familytreetop="days" class="span2" name="editUnion[day]">
                             <option value="0"><?=JText::_("TPL_FAMILYTREETOP_DAY");?></option>
                         </select>
-                        <input familytreetop="year" class="span4" type="text" name="editUnion[year]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_YEAR");?>">
+                        <input familytreetop="year" style="max-width: 45px;" class="span4" type="text" maxlength="4" name="editUnion[year]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_YEAR");?>">
                     </div>
                 </div>
                 <div familytreetop="union-event-place" class="row-fluid">
-                    <div class="span12">
+                    <div class="span12" style="padding-left: 5px;">
                         <input familytreetop="city" class="span4" type="text" name="editUnion[city]"  placeholder="<?=JText::_("TPL_FAMILYTREETOP_CITY");?>">
                         <input familytreetop="state" class="span4" type="text" name="editUnion[state]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_STATE");?>">
                         <input familytreetop="country" class="span4" type="text" name="editUnion[country]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_COUNTRY");?>">
