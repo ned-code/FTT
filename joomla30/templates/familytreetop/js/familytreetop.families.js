@@ -166,7 +166,7 @@ $FamilyTreeTop.create("families", function($){
                 var _img_ = $(_divs_[0]).find('img');
 
                 if("undefined" !== $bgs[_e_.data.gedcom_id] && $bgs[_e_.data.gedcom_id]){
-                    $(_img_).parent().css('border', '1px solid '+$bgs[_e_.data.gedcom_id]);
+                    $(_avatar_).css('background-color', $bgs[_e_.data.gedcom_id]);
                 }
                 $(_img_).parent().append(_avatar_);
                 $(_img_).remove();
@@ -200,10 +200,11 @@ $FamilyTreeTop.create("families", function($){
         createChild: function(id, color, args){
             var ind = $this.mod('usertree').user(id);
             var cl = $($box).find('.child-box').clone();
+            var box = $fn.createBox(ind, cl, 'down', args);
             if(color){
-                $(cl).find('img').parent().css('border', '1px solid '+color);
+                $(box).find('img').css('background-color', color);
             }
-            return $fn.createBox(ind, cl, 'down', args);
+            return box;
         },
         createEvent: function(id1, id2){
             var family = _getFamily_($this.mod('usertree').getFamilies(id2));
