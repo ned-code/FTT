@@ -5,7 +5,11 @@ $user = FamilyTreeTopUserHelper::getInstance()->get();
 $gedcom = GedcomHelper::getInstance();
 $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
 
+$search = array();
 $result_array = array();
+$result_news = array();
+$result_users = array();
+$check_result = array();
 $data = null;
 
 try {
@@ -18,7 +22,6 @@ try {
         $members = json_decode($gedcom->getTreeUsers(true, true));
     }
 
-    $search = array();
     $string = "'".$user->facebook_id."',";
     foreach($members as $member){
         $string .= '"'. $member->facebook_id . '",';
@@ -42,8 +45,6 @@ try {
 
     $fb_news_feed = $facebook->api($fql_methods);
 
-    $result_news = array();
-    $check_result = array();
     $pre_result = $fb_news_feed[0]['fql_result_set'];
     foreach($pre_result as $key => $value){
         if(!isset($check_result[$value['post_id']])){
@@ -52,7 +53,6 @@ try {
         }
     }
 
-    $result_users = array();
     $pre_result = $fb_news_feed[1]['fql_result_set'];
     foreach($pre_result as $key => $value){
         $result_users[$value['uid']] = $value;

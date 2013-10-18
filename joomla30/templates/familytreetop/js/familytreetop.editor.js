@@ -383,8 +383,9 @@ $FamilyTreeTop.create("editor", function($){
             var sb = $this.stringBuffer();
             sb._('<div class="row-fluid">');
                 sb._('<div familytreetop="spouse" class="span12">');
-                    sb._('<label for="editProfile[spouse]">Spouse</label>');
+                    sb._('<label for="editProfile[spouse]">Other Parent</label>');
                     sb._('<select id="editProfile[spouse]" name="editProfile[spouse]">');
+                        sb._('<option value="0">Add a new person</option>');
                         spouses.forEach(function(spouse_id){
                             var spouse = $this.mod('usertree').user(spouse_id);
                             sb._('<option value="')._(spouse_id)._('">')._(spouse.name())._('</option>');
@@ -491,6 +492,7 @@ $FamilyTreeTop.create("editor", function($){
                     send = task;
                 }
                 if(!$fn.validate(args)){
+                    $fn.progressbarOff(cl);
                     return false;
                 }
                 $this.ajax(send, args, function(response){

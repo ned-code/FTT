@@ -351,7 +351,17 @@ class FamilytreetopControllerEditor extends FamilytreetopController
             $this->setEvent($ind, 'death', $form);
         }
 
-        $spouse_id = $form['spouse'];
+        $spouse = false;
+        if($form['spouse'] == 0){
+            $spouse = $gedcom->individuals->get();
+            $spouse->first_name = "unknown";
+            $spouses->gender = $user->gender?0:1;
+            $spouse->creator_id = $user->gedcom_id;
+            $spouse->save();
+            $spouse_id = $spouse->gedcom_id;
+        } else {
+            $spouse_id = $form['spouse'];
+        }
 
         if($user->gender){
             $husb = $user->gedcom_id;
@@ -361,12 +371,33 @@ class FamilytreetopControllerEditor extends FamilytreetopController
             $wife = $user->gedcom_id;
         }
 
-        $family = $gedcom->families->getByPartner($husb, $wife);
+        if($spouse){
+            $family = $gedcom->families->get();
+            $family->tree_id = $user->tree_id;
+            $family->husb = $husb;
+            $family->wife = $wife;
+            $family->save();
+        } else {
+            $family = $gedcom->families->getByPartner($husb, $wife);
+        }
+
         $child = $family->addChild($ind->gedcom_id);
 
+        $arrInd = array();
+        $arrInd[] = $ind;
+        if($spouse){
+            $arrInd[] = $spouse;
+        }
+
+        $fam = array();
+        if($spouse){
+            $fam[] = $family;
+        }
+
         echo $this->getResponse(
-            array('ind' => array($ind)),
+            array('ind' => $arrInd),
             array('chi' => array($child)),
+            array('fam' => $fam),
             array('eve' => array($ind->events)),
             array('pla' => array($ind->events)),
             array('dat' => array($ind->events))
