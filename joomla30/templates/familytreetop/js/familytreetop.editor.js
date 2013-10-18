@@ -344,6 +344,22 @@ $FamilyTreeTop.create("editor", function($){
         },
         setAutoComplete: function(editProfileForm){
             var autocomplete = $(editProfileForm).find('[familytreetop="exist_person"]');
+            var select = $(autocomplete).find('select');
+            var list = $this.mod('usertree').getAutocompleteList();
+            for(var key in list){
+                if(!list.hasOwnProperty(key)) continue;
+                var el = list[key];
+                var parents = $this.mod('usertree').getParents(key);
+                var father = $this.mod('usertree').user(parents.father);
+                var mother = $this.mod('usertree').user(parents.mother);
+                var child = el.gender ? "son" : "daughter" ;
+                var string = (parents.family_id != null)?' '+child+' '+father.name()+' and '+mother.name():"";
+                var birth = el.birth('date.start_year');
+                $(select).append('<option value="'+key+'">'
+                    +el.name()+((birth.length > 0)?' ('+birth+')':'')
+                    +string
+                    +'</option>');
+            }
             $(autocomplete).show();
         },
         setLiving:function(editProfileForm){

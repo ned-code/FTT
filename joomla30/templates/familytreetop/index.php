@@ -43,7 +43,6 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
     <noscript><link rel="stylesheet" href="templates/<?=$this->template;?>/css/jquery.fileupload-ui-noscript.css"></noscript>
     <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/holder.js"></script>
     <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/excanvas.js"></script>
-    <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/jquery.autocomplete.js"></script>
     <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.js"></script>
 	<jdoc:include type="head" />
 	<!--[if lt IE 9]>
@@ -449,7 +448,9 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                 <label for="editProfile[autocomplete]">
                     <small><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_PROFILE_ADD_EXIST_PERSON');?></small>
                 </label>
-                <input id="editProfile[autocomplete]" name="editProfile[autocomplete]" class="span12" type="text" familytreetop="autocomplete">
+                <select id="editProfile[autocomplete]" name="editProfile[autocomplete]">
+                    <option value="0"><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_PROFILE_ADD_NEW_PERSON');?></option>
+                </select>
             </div>
         </div>
         <div class="row-fluid">

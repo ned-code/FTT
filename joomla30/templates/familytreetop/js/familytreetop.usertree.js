@@ -746,6 +746,17 @@ $FamilyTreeTop.create("usertree", function($){
         }
     }
 
+    $this.getAutocompleteList = function(){
+        var list = {};
+        var users = data.ind;
+        for(var key in users){
+            if(!users.hasOwnProperty(key)) continue;
+            var user = $this.user(key);
+            list[key] = user;
+        }
+        return list;
+    }
+
     $this.getName = function(dataObject){
         if("undefined" === typeof(dataObject)) return "unknown";
         var $name = [];
