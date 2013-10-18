@@ -3,6 +3,7 @@ $FamilyTreeTop.create("usertree", function($){
     var $this = this,
         $fn,
         trPull = [],
+        cache = {},
         usermap,
         usersmap,
         data;
@@ -46,6 +47,9 @@ $FamilyTreeTop.create("usertree", function($){
     }
 
     $this.update = function(response){
+        // clear cache
+        cache = {};
+        // set variables
         var prop, items, key, id, list, i, els, k, t;
         for(prop in response){
             if(!response.hasOwnProperty(prop)) continue;
@@ -143,8 +147,9 @@ $FamilyTreeTop.create("usertree", function($){
     $this.user = function(gedcom_id){
         if("undefined" === typeof(gedcom_id)) return false;
         if("undefined" === typeof(data.ind[gedcom_id])) return false;
+        if("undefined" !== typeof(cache[gedcom_id])) return cache[gedcom_id];
         var ind = data.ind[gedcom_id], usermap = $this.usermap();
-        return {
+        var data = {
             change_time: ind.change_time,
             create_time: ind.create_time,
             creator_id: ind.creator_id,
@@ -453,6 +458,8 @@ $FamilyTreeTop.create("usertree", function($){
                 return false;
             }
         }
+        cache[gedcom_id] = data;
+        return cache[gedcom_id];
     }
 
     $this.family = function(family_id){
