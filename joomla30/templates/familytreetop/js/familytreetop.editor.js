@@ -342,6 +342,10 @@ $FamilyTreeTop.create("editor", function($){
             var tab =   $(tabs[0]).find('.tab-content #'+ tabs[1][num]);
             $(tab).append(form);
         },
+        setAutoComplete: function(editProfileForm){
+            var autocomplete = $(editProfileForm).find('[familytreetop="exist_person"]');
+            $(autocomplete).show();
+        },
         setLiving:function(editProfileForm){
             $(editProfileForm).find('[familytreetop="living"]').change(function(){
                 var selected = $(this).find('option:selected').val();
@@ -518,6 +522,7 @@ $FamilyTreeTop.create("editor", function($){
         //get form
         editProfileForm = $fn.getEditorProfileForm();
 
+        $fn.setAutoComplete(editProfileForm);
         $fn.setLiving(editProfileForm);
         $fn.setMonths(editProfileForm);
         $fn.setDays(editProfileForm);
@@ -525,6 +530,8 @@ $FamilyTreeTop.create("editor", function($){
         if(ind.isAlive()){
             $(editProfileForm).find('[familytreetop="deathday"]').hide();
         }
+
+
 
         if(type == "addChild"){
             $fn.setSpouseSelect(editProfileForm, ind);

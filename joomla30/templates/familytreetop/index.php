@@ -442,6 +442,15 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
     </form>
 
     <form id="formEditProfile">
+        <div familytreetop="exist_person" style="display:none;" class="row-fluid">
+            <div class="span3"></div>
+            <div class="span9">
+                <label for="editProfile[autocomplete]">
+                    <small><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_PROFILE_ADD_EXIST_PERSON');?></small>
+                </label>
+                <input id="editProfile[autocomplete]" name="editProfile[autocomplete]" class="span12" type="text" familytreetop="autocomplete">
+            </div>
+        </div>
         <div class="row-fluid">
             <div familytreetop="avatar" class="span3 text-center">
             </div>
