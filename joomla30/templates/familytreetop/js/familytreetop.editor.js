@@ -104,7 +104,7 @@ $FamilyTreeTop.create("editor", function($){
             }
             return true;
             function _ajax_(option, gedcom_id, call){
-                $this.ajax('editor.delete', {type:option, gedcom_id: gedcom_id}, function(res){
+                $this.ajax('editor.delete', {type:option, gedcom_id: gedcom_id }, function(res){
                     call(res);
                 });
             }

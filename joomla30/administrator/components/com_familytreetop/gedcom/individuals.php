@@ -49,18 +49,32 @@ class FamilyTreeTopGedcomIndividualsModel {
         $gedcom = GedcomHelper::getInstance();
         $spouses = $gedcom->families->getSpouses($this->gedcom_id);
         if($spouses){
-            return true;
+            return $spouses;
         }
         return false;
+    }
+
+    public function isSpousesParentExist($s){
+        if(empty($s)) return false;
+        $family_id = $gedcom->childrens->getFamilyIdByGedcomId($s[0]);
+        $family = $gedcom->families->get($family_id);
+        if(empty($family->husb) && empty($family->wife)){
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public function isCanBeDelete(){
         $isParents = $this->isParents();
         $isChildrens = $this->isChildrens();
         $isSpouses = $this->isSpouses();
+        $isSpousesParentExist = $this->isSpousesParentExist($isSpouses);
         if($isParents && !$isChildrens && !$isSpouses){
             return true;
-        } else if(!$isParents && $isChildrens && !$isSpouses){
+        } else if($isSpouses && sizeof($isSpouses) == 1 && !$isChildrens && !$isParents){
+            return true;
+        } else if(!$isParents && $isSpouses && sizeof($isSpouses) == 1 && !$isSpousesParentExist && $isChildrens){
             return true;
         }
         return false;
@@ -121,6 +135,7 @@ class FamilyTreeTopGedcomIndividualsModel {
     }
 
     public function delete(){
+        if(!$this->isCanBeDelete()) return false;
         $gedcom = GedcomHelper::getInstance();
         if(empty($this->id)) return false;
         $link = FamilyTreeTopTreeLinks::find_by_id_and_type($this->gedcom_id, 0);
