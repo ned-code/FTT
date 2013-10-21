@@ -194,7 +194,6 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         }
 
         $gender = (int)$form['gender'];
-
         $sircar = $gedcom->individuals->get();
         $sircar->tree_id = $ind->tree_id;
         $sircar->gender = $gender;
@@ -295,15 +294,20 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         $gedcom = GedcomHelper::getInstance();
         $user = $gedcom->individuals->get($gedcom_id);
 
-        $ind = $gedcom->individuals->get();
-        $ind->first_name = $form['first_name'];
-        $ind->middle_name = $form['middle_name'];
-        $ind->last_name = $form['last_name'];
-        $ind->know_as = $form['know_as'];
-        $ind->gender = $form['gender'];
-        $ind->creator_id = $user->gedcom_id;
-        $ind->save();
-
+        $ind = false;
+        if($form['autocomplete'] != 0){
+            $ind = $gedcom->individuals->get($form['autocomplete']);
+        }
+        if(!$ind){
+            $ind = $gedcom->individuals->get();
+            $ind->first_name = $form['first_name'];
+            $ind->middle_name = $form['middle_name'];
+            $ind->last_name = $form['last_name'];
+            $ind->know_as = $form['know_as'];
+            $ind->gender = $form['gender'];
+            $ind->creator_id = $user->gedcom_id;
+            $ind->save();
+        }
         $family = $gedcom->families->get();
         $family->tree_id = $ind->tree_id;
         if($user->gender){
@@ -333,15 +337,20 @@ class FamilytreetopControllerEditor extends FamilytreetopController
 
         $user = $gedcom->individuals->get($gedcom_id);
 
-        $ind = $gedcom->individuals->get();
-        $ind->first_name = $form['first_name'];
-        $ind->middle_name = $form['middle_name'];
-        $ind->last_name = $form['last_name'];
-        $ind->know_as = $form['know_as'];
-        $ind->gender = $form['gender'];
-        $ind->creator_id = $user->gedcom_id;
-        $ind->save();
-
+        $ind = false;
+        if($form['autocomplete'] != 0){
+            $ind = $gedcom->individuals->get($form['autocomplete']);
+        }
+        if(!$ind){
+            $ind = $gedcom->individuals->get();
+            $ind->first_name = $form['first_name'];
+            $ind->middle_name = $form['middle_name'];
+            $ind->last_name = $form['last_name'];
+            $ind->know_as = $form['know_as'];
+            $ind->gender = $form['gender'];
+            $ind->creator_id = $user->gedcom_id;
+            $ind->save();
+        }
         $this->setEvent($ind, 'birth', $form);
         if((int)$form['living']){
             if($event = $ind->death()){

@@ -350,13 +350,15 @@ $FamilyTreeTop.create("editor", function($){
                 if(!list.hasOwnProperty(key)) continue;
                 var el = list[key];
                 var parents = $this.mod('usertree').getParents(key);
-                var father = $this.mod('usertree').user(parents.father);
-                var mother = $this.mod('usertree').user(parents.mother);
-                var child = el.gender ? "son" : "daughter" ;
-                var string = (parents.family_id != null)?' '+child+' '+father.name()+' and '+mother.name():"";
-                var birth = el.birth('date.start_year');
+                var data = {
+                    father : $this.mod('usertree').user(parents.father),
+                    mother : $this.mod('usertree').user(parents.mother),
+                    child : el.gender ? "son" : "daughter",
+                    birth : el.birth('date.start_year')
+                }
+                var string = (parents.family_id != null)?' '+data.child+' '+data.father.name()+' and '+data.mother.name():"";
                 $(select).append('<option value="'+key+'">'
-                    +el.name()+((birth.length > 0)?' ('+birth+')':'')
+                    +el.name()+((birth.length > 0)?' ('+data.birth+')':'')
                     +string
                     +'</option>');
             }
@@ -538,7 +540,9 @@ $FamilyTreeTop.create("editor", function($){
         //get form
         editProfileForm = $fn.getEditorProfileForm();
 
-        $fn.setAutoComplete(editProfileForm);
+        if(type == "addChild" || type == "addSpouse"){
+            $fn.setAutoComplete(editProfileForm);
+        }
         $fn.setLiving(editProfileForm);
         $fn.setMonths(editProfileForm);
         $fn.setDays(editProfileForm);
@@ -546,8 +550,6 @@ $FamilyTreeTop.create("editor", function($){
         if(ind.isAlive()){
             $(editProfileForm).find('[familytreetop="deathday"]').hide();
         }
-
-
 
         if(type == "addChild"){
             $fn.setSpouseSelect(editProfileForm, ind);
