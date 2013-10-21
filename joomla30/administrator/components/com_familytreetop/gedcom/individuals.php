@@ -73,7 +73,7 @@ class FamilyTreeTopGedcomIndividualsModel {
         if($isParents && !$isChildrens && !$isSpouses){
             return true;
         } else if($isSpouses && sizeof($isSpouses) == 1 && !$isChildrens && !$isParents){
-            return true;
+            return $isSpouses[0];
         } else if(!$isParents && $isSpouses && sizeof($isSpouses) == 1 && !$isSpousesParentExist && $isChildrens){
             return true;
         }
@@ -153,8 +153,10 @@ class FamilyTreeTopGedcomIndividualsModel {
             $this->unregister();
         }
 
-        if($family){
-            $family->remove();
+        if(!empty($family)){
+            foreach($family as $f){
+                $f->delete();
+            }
         }
 
         $user->delete();

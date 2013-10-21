@@ -79,7 +79,7 @@ class FamilyTreeTopGedcomFamilyModel {
 
     }
 
-    public function remove(){
+    public function delete(){
         if(empty($this->id)) return false;
         $gedcom = GedcomHelper::getInstance();
 
@@ -90,9 +90,6 @@ class FamilyTreeTopGedcomFamilyModel {
             foreach($this->events as $event){
                 $event->remove();
             }
-        }
-        if(!empty($this->childrens)){
-            $gedcom->childrens->deleteByFamilyId($this->family_id);
         }
         $family->delete();
         $link->delete();

@@ -372,7 +372,7 @@ $FamilyTreeTop.create("usertree", function($){
                 if(_isParentExist_(parents) && !_isChildrenExist_(childrens) && !_isSpousesExist_(spouses)){
                     return true;
                 } else if(_isSpousesExist_(spouses) && spouses.length == 1 && !_isChildrenExist_(childrens) && !_isParentExist_(parents)){
-                    return true;
+                    return spouses[0];
                 } else if(!_isParentExist_(parents) && _isSpousesExist_(spouses) && spouses.length == 1 && !_isSpousesParentExist_(spouses) && _isChildrenExist(childrens)){
                     return true;
                 }
