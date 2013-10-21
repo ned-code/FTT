@@ -373,7 +373,7 @@ $FamilyTreeTop.create("usertree", function($){
                     return true;
                 } else if(_isSpousesExist_(spouses) && spouses.length == 1 && !_isChildrenExist_(childrens) && !_isParentExist_(parents)){
                     return spouses[0];
-                } else if(!_isParentExist_(parents) && _isSpousesExist_(spouses) && spouses.length == 1 && !_isSpousesParentExist_(spouses) && _isChildrenExist(childrens)){
+                } else if(!_isParentExist_(parents) && _isSpousesExist_(spouses) && spouses.length == 1 && !_isSpousesParentExist_(spouses) && _isChildrenExist_(childrens)){
                     return true;
                 }
                 return false;
