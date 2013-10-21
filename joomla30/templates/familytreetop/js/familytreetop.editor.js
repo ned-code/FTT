@@ -358,7 +358,7 @@ $FamilyTreeTop.create("editor", function($){
                 }
                 var string = (parents.family_id != null)?' '+data.child+' '+data.father.name()+' and '+data.mother.name():"";
                 $(select).append('<option value="'+key+'">'
-                    +el.name()+((birth.length > 0)?' ('+data.birth+')':'')
+                    +el.name()+((data.birth.length > 0)?' ('+data.birth+')':'')
                     +string
                     +'</option>');
             }
