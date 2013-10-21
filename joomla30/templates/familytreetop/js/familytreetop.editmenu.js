@@ -41,8 +41,6 @@ $FamilyTreeTop.create("editmenu", function($){
         box = $($box).clone().attr('gedcom_id', gedcom_id)
             .attr('style', 'position: absolute; top: 5px; right:5px;');
 
-
-
         ind = $this.mod('usertree').user(gedcom_id);
 
         if(ind.isParentsExist()){

@@ -560,16 +560,7 @@ class FamilytreetopControllerEditor extends FamilytreetopController
                 $user->clear();
                 break;
             case 3:
-                $d = $user->isCanBeDelete();
-                if(gettype($d) != "boolean"){
-                    $spouse = $gedcom->individuals->get($d);
-                    $user->delete();
-                    if($spouse){
-                        $spouse->delete();
-                    }
-                } else {
-                    $user->delete();
-                }
+                $user->delete();
                 break;
 
             case 4:

@@ -176,7 +176,9 @@ $FamilyTreeTop.create("families", function($){
                 Holder.run({
                     images: _avatar_[0]
                 });
-
+                if(args.editable){
+                    $fn.createEdit(_divs_[0], _e_.data.gedcom_id);
+                }
                 return _e_.object;
             }
             function _getSpousesSort_(_id1_, _id2_){

@@ -54,18 +54,6 @@ class FamilyTreeTopGedcomIndividualsModel {
         return false;
     }
 
-    public function isSpousesParentExist($s){
-        if(empty($s)) return false;
-        $gedcom = GedcomHelper::getInstance();
-        $family_id = $gedcom->childrens->getFamilyIdByGedcomId($s[0]);
-        $family = $gedcom->families->get($family_id);
-        if(empty($family->husb) && empty($family->wife)){
-            return false;
-        } else {
-            return true;
-        }
-    }
-
     public function isCanBeDelete(){
         $isParents = $this->isParents();
         $isChildrens = $this->isChildrens();
@@ -75,8 +63,6 @@ class FamilyTreeTopGedcomIndividualsModel {
             return true;
         } else if($isSpouses && sizeof($isSpouses) == 1 && !$isChildrens && !$isParents){
             return $isSpouses[0];
-        } else if(!$isParents && $isSpouses && sizeof($isSpouses) == 1 && !$isSpousesParentExist && $isChildrens){
-            return true;
         }
         return false;
     }

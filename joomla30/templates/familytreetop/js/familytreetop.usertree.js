@@ -373,8 +373,6 @@ $FamilyTreeTop.create("usertree", function($){
                     return true;
                 } else if(_isSpousesExist_(spouses) && spouses.length == 1 && !_isChildrenExist_(childrens) && !_isParentExist_(parents)){
                     return spouses[0];
-                } else if(!_isParentExist_(parents) && _isSpousesExist_(spouses) && spouses.length == 1 && !_isSpousesParentExist_(spouses) && _isChildrenExist_(childrens)){
-                    return true;
                 }
                 return false;
                 function _isParentExist_(p){
@@ -388,11 +386,6 @@ $FamilyTreeTop.create("usertree", function($){
                 }
                 function _isSpousesExist_(s){
                     return (s.length != 0);
-                }
-                function _isSpousesParentExist_(s){
-                    if(s.length == 0) return false;
-                    var id = s[0], p = $this.getParents(id);
-                    return _isParentExist_(p);
                 }
             },
             isRegistered:function(){
