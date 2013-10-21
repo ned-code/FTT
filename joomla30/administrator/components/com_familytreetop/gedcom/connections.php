@@ -36,11 +36,10 @@ class FamilyTreeTopGedcomConnectionsManager {
             }
 
             //set childrens
-            $family_id = GedcomHelper::getInstance()->families->getFamilyId($user_id);
-            if($family_id){
-                $childrens = GedcomHelper::getInstance()->childrens->get($family_id);
+            $childrens = GedcomHelper::getInstance()->childrens->getChildrensByGedcomId($user_id);
+            if(!empty($childrens)){
                 foreach($childrens as $child){
-                    $ambit["I".$child] = array("id"=>$child);
+                    $ambit["I".$child] = array("id"=>$child['gedcom_id']);
                 }
             }
 

@@ -102,6 +102,14 @@ class FamilyTreeTopGedcomChildrensManager {
         return false;
     }
 
+    public function getChildrensByGedcomId($gedcom_id){
+        if(!empty($this->list_by_gedcom_id[$gedcom_id])){
+            $list = $this->list_by_gedcom_id[$gedcom_id];
+            return $list;
+        }
+        return false;
+    }
+
     public function getFamilyIdByGedcomId($gedcom_id){
         if(!empty($this->list_by_gedcom_id[$gedcom_id])){
             $list = $this->list_by_gedcom_id[$gedcom_id];

@@ -213,6 +213,21 @@ class FamilyTreeTopGedcomFamiliesManager {
         return (empty($family[0]))?null:$family[0]->family_id;
     }
 
+    public function getFamilies($gedcom_id){
+        if(empty($gedcom_id)) return false;
+        $families = FamilyTreeTopFamilies::find(
+            'all',
+            array(
+                'conditions'=>array(
+                    'husb=? OR wife=?',
+                    $gedcom_id,
+                    $gedcom_id
+                )
+            )
+        );
+        return $families;
+    }
+
     public function getByPartner($husb, $wife){
         if(empty($husb) || empty($wife)) return false;
         $family = FamilyTreeTopFamilies::find(

@@ -56,6 +56,7 @@ class FamilyTreeTopGedcomIndividualsModel {
 
     public function isSpousesParentExist($s){
         if(empty($s)) return false;
+        $gedcom = GedcomHelper::getInstance();
         $family_id = $gedcom->childrens->getFamilyIdByGedcomId($s[0]);
         $family = $gedcom->families->get($family_id);
         if(empty($family->husb) && empty($family->wife)){
@@ -137,11 +138,11 @@ class FamilyTreeTopGedcomIndividualsModel {
     public function delete(){
         if(!$this->isCanBeDelete()) return false;
         $gedcom = GedcomHelper::getInstance();
+        $users = $gedcom->getTreeUsers(true);
         if(empty($this->id)) return false;
         $link = FamilyTreeTopTreeLinks::find_by_id_and_type($this->gedcom_id, 0);
         $user = FamilyTreeTopIndividuals::find_by_gedcom_id($this->gedcom_id);
-        $family_id = $gedcom->families->getFamilyId($this->gedcom_id);
-        $family = $gedcom->families->get($family_id);
+        $families = $gedcom->families->getFamilies($this->gedcom_id);
 
         if(!empty($this->events)){
             foreach($this->events as $event){
@@ -149,13 +150,16 @@ class FamilyTreeTopGedcomIndividualsModel {
             }
         }
 
-        if($this->facebook_id != 0){
+        if(isset($users[$user->gedcom_id])){
             $this->unregister();
         }
 
-        if(!empty($family)){
-            foreach($family as $f){
-                $f->delete();
+
+        if(!empty($families)){
+            foreach($families as $f){
+                $family_id = $f->family_id;
+                $family = $gedcom->families->get($family_id);
+                $family->delete();
             }
         }
 
@@ -167,6 +171,7 @@ class FamilyTreeTopGedcomIndividualsModel {
 
     public function clear(){
         $gedcom = GedcomHelper::getInstance();
+        $users = $gedcom->getTreeUsers(true);
         $date = JFactory::getDate();
 
         $name = FamilyTreeTopNames::find_by_gedcom_id($this->gedcom_id);
@@ -189,7 +194,7 @@ class FamilyTreeTopGedcomIndividualsModel {
             }
         }
 
-        if($this->facebook_id != 0){
+        if(isset($users[$user->gedcom_id])){
             $this->unregister();
         }
 
