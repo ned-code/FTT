@@ -18,7 +18,6 @@ try {
             'method' => 'fql.query',
             'query' => 'SELECT name, birthday, uid, relationship FROM family WHERE profile_id =me()',
         ));
-
         $members = json_decode($gedcom->getTreeUsers(true, true));
     }
 

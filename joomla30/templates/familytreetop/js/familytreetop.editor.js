@@ -342,27 +342,38 @@ $FamilyTreeTop.create("editor", function($){
             var tab =   $(tabs[0]).find('.tab-content #'+ tabs[1][num]);
             $(tab).append(form);
         },
-        setAutoComplete: function(editProfileForm){
-            var autocomplete = $(editProfileForm).find('[familytreetop="exist_person"]');
-            var select = $(autocomplete).find('select');
-            var list = $this.mod('usertree').getAutocompleteList();
-            for(var key in list){
-                if(!list.hasOwnProperty(key)) continue;
-                var el = list[key];
-                var parents = $this.mod('usertree').getParents(key);
-                var data = {
-                    father : $this.mod('usertree').user(parents.father),
-                    mother : $this.mod('usertree').user(parents.mother),
-                    child : el.gender ? "son" : "daughter",
-                    birth : el.birth('date.start_year')
-                }
-                var string = (parents.family_id != null)?' '+data.child+' '+data.father.name()+' and '+data.mother.name():"";
-                $(select).append('<option value="'+key+'">'
-                    +el.name()+((data.birth.length > 0)?' ('+data.birth+')':'')
-                    +string
-                    +'</option>');
-            }
-            $(autocomplete).show();
+        setParentSelection:function(editProfileForm){
+            var row = $(editProfileForm).find('[familytreetop="addChildComplexSelect"]');
+            //$fn.setSpouseSelect(editProfileForm, ind);
+            /*
+             setSpouseSelect:function(form , ind){
+            var parent = $(form).find('[familytreetop="gender"]').parent();
+            var spouses = $this.mod('usertree').getSpouses(ind.gedcom_id);
+            var sb = $this.stringBuffer();
+            sb._('<div class="row-fluid">');
+                sb._('<div familytreetop="spouse" class="span12">');
+                    sb._('<label for="editProfile[spouse]">Other Parent</label>');
+                    sb._('<select id="editProfile[spouse]" name="editProfile[spouse]">');
+                        sb._('<option value="0">Add a new person</option>');
+                        spouses.forEach(function(spouse_id){
+                            var spouse = $this.mod('usertree').user(spouse_id);
+                            sb._('<option value="')._(spouse_id)._('">')._(spouse.name())._('</option>');
+                        });
+                    sb._('</select>');
+                sb._('</div>');
+            sb._('</div>');
+            $(parent).before(sb.ret());
+        },
+             */
+            $(row).find('ul li').click(function(){
+                console.log(this);
+            })
+            $(row).find('[familytreetop="menu-title"]').click(function(){
+                $(this).parent().find('.dropdown-toggle').click();
+                return false;
+            });
+            return true;
+            
         },
         setLiving:function(editProfileForm){
             $(editProfileForm).find('[familytreetop="living"]').change(function(){
@@ -399,24 +410,7 @@ $FamilyTreeTop.create("editor", function($){
                 });
             });
         },
-        setSpouseSelect:function(form , ind){
-            var parent = $(form).find('[familytreetop="gender"]').parent();
-            var spouses = $this.mod('usertree').getSpouses(ind.gedcom_id);
-            var sb = $this.stringBuffer();
-            sb._('<div class="row-fluid">');
-                sb._('<div familytreetop="spouse" class="span12">');
-                    sb._('<label for="editProfile[spouse]">Other Parent</label>');
-                    sb._('<select id="editProfile[spouse]" name="editProfile[spouse]">');
-                        sb._('<option value="0">Add a new person</option>');
-                        spouses.forEach(function(spouse_id){
-                            var spouse = $this.mod('usertree').user(spouse_id);
-                            sb._('<option value="')._(spouse_id)._('">')._(spouse.name())._('</option>');
-                        });
-                    sb._('</select>');
-                sb._('</div>');
-            sb._('</div>');
-            $(parent).before(sb.ret());
-        },
+
         getModalBox:function(){
             var cl = $('#modal').clone().hide();
             $('body').append(cl);
@@ -476,6 +470,54 @@ $FamilyTreeTop.create("editor", function($){
                 return a;
             }
         },
+        modalExistFamilyMember:function(){
+             /*
+            var autocomplete = $(editProfileForm).find('[familytreetop="exist_person"]');
+            var select = $(autocomplete).find('select');
+            var list = $this.mod('usertree').getAutocompleteList();
+            for(var key in list){
+                if(!list.hasOwnProperty(key)) continue;
+                var el = list[key];
+                var parents = $this.mod('usertree').getParents(key);
+                var data = {
+                    father : $this.mod('usertree').user(parents.father),
+                    mother : $this.mod('usertree').user(parents.mother),
+                    child : el.gender ? "son" : "daughter",
+                    birth : el.birth('date.start_year')
+                }
+                var string = (parents.family_id != null)?' '+data.child+' '+data.father.name()+' and '+data.mother.name():"";
+                $(select).append('<option value="'+key+'">'
+                    +el.name()+((data.birth.length > 0)?' ('+data.birth+')':'')
+                    +string
+                    +'</option>');
+            }
+            $(select).change(function(){
+                $fn.modalExistFamilyMember();
+            });
+            $(autocomplete).show();
+            */
+
+
+            var cl = _getModal_();
+            //init modal
+            $(cl).modal({dynamic:true});
+            _submit_(cl);
+            return true;
+            function _getModal_(){
+                var cl = $('#modal-exist-family-member').clone().hide();
+                $('body').append(cl);
+                $(cl).on('hide', function(){
+                    $(cl).remove();
+                });
+                return cl;
+            }
+            function _submit_(m){
+                $(m).find('button[familytreetop="submit"]').click(function(){
+                    console.log('modal-exist-family-member');
+                    return false;
+                });
+            }
+        },
         validate: function(args){
             var form = args['form0'];
             for(var key in form){
@@ -495,7 +537,6 @@ $FamilyTreeTop.create("editor", function($){
             $(m).find('[familytreetop="circle-progressbar"]').css('visibility', 'hidden');
         },
         submit:function(cl, ind, task){
-            if(arguments.length)
             var tasks = [
                 'editor.updateUserInfo',
                 'editor.updateUnionsInfo'
@@ -540,9 +581,6 @@ $FamilyTreeTop.create("editor", function($){
         //get form
         editProfileForm = $fn.getEditorProfileForm();
 
-        if(type == "addChild" || type == "addSpouse"){
-            $fn.setAutoComplete(editProfileForm);
-        }
         $fn.setLiving(editProfileForm);
         $fn.setMonths(editProfileForm);
         $fn.setDays(editProfileForm);
@@ -551,8 +589,10 @@ $FamilyTreeTop.create("editor", function($){
             $(editProfileForm).find('[familytreetop="deathday"]').hide();
         }
 
-        if(type == "addChild"){
-            $fn.setSpouseSelect(editProfileForm, ind);
+        if(type=="addChild"){
+            $fn.setParentSelection(editProfileForm);
+        } else {
+            $(editProfileForm).find('[familytreetop="addChildComplexSelect"]').remove();
         }
 
         //set title
@@ -593,6 +633,7 @@ $FamilyTreeTop.create("editor", function($){
         //profile edit
         editProfileForm = $fn.getEditorProfileForm();
         $(editProfileForm).find('option[value="default"]').remove();
+        $(editProfileForm).find('[familytreetop="addChildComplexSelect"]').remove();
         $fn.setFormInTab(0, tabs, editProfileForm);
         $fn.setUserData(editProfileForm, ind);
 
