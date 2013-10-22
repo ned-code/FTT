@@ -499,6 +499,14 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                 </div>
             </div>
         </div>
+        <div familytreetop="addSpouseComplexButton" class="row-fluid">
+            <div class="span12">
+                <div class="pull-right">
+                    <input id="editProfile[spouse]" name="editProfile[spouse]" type="text" value="0" style="display:none" hidden>
+                    <a href="#" style="text-decoration: none;">Click here to select a person from your family tree</a>
+                </div>
+            </div>
+        </div>
         <div class="row-fluid">
             <div familytreetop="avatar" class="span3 text-center">
             </div>

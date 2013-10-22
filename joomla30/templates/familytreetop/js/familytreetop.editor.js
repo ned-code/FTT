@@ -342,6 +342,18 @@ $FamilyTreeTop.create("editor", function($){
             var tab =   $(tabs[0]).find('.tab-content #'+ tabs[1][num]);
             $(tab).append(form);
         },
+        setSpouseSelection:function(editProfileForm, ind){
+            var row = $(editProfileForm).find('[familytreetop="addSpouseComplexButton"]');
+            $(row).find('a').click(function(){
+                $fn.modalExistFamilyMember(function(id){
+                    var u = $this.mod('usertree').user(id);
+                    $(row).find('input').val(id);
+                    $(editProfileForm).find('[familytreetop="avatar"]').html('');
+                    $fn.setUserData(editProfileForm, u);
+                });
+                return false;
+            });
+        },
         setParentSelection:function(editProfileForm, ind){
             var row = $(editProfileForm).find('[familytreetop="addChildComplexSelect"]');
             _setOwnerParent_();
@@ -612,6 +624,12 @@ $FamilyTreeTop.create("editor", function($){
             $(editProfileForm).find('[familytreetop="addChildComplexSelect"]').remove();
         }
 
+        if(type=="addSpouse"){
+            $fn.setSpouseSelection(editProfileForm, ind);
+        } else {
+            $(editProfileForm).find('[familytreetop="addSpouseComplexButton"]').remove();
+        }
+
         //set title
         $(cl).find('#modalLabel').text("Add " + type.split('add')[1]);
         //set tabs
@@ -651,6 +669,7 @@ $FamilyTreeTop.create("editor", function($){
         editProfileForm = $fn.getEditorProfileForm();
         $(editProfileForm).find('option[value="default"]').remove();
         $(editProfileForm).find('[familytreetop="addChildComplexSelect"]').remove();
+        $(editProfileForm).find('[familytreetop="addSpouseComplexButton"]').remove();
         $fn.setFormInTab(0, tabs, editProfileForm);
         $fn.setUserData(editProfileForm, ind);
 
