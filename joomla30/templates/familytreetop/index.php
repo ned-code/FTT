@@ -503,7 +503,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
             <div class="span12">
                 <div class="pull-right">
                     <input id="editProfile[spouse]" name="editProfile[spouse]" type="text" value="0" style="display:none" hidden>
-                    <a href="#" style="text-decoration: none;">Click here to select a person from your family tree</a>
+                    <a href="#" style="text-decoration: none;"><?=JText::_('TPL_FAMILYTREETOP_MODAL_EXIST_FAMILY_MEMBER_SPOUSE_BUTTON_TEXT');?></a>
                 </div>
             </div>
         </div>
