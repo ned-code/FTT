@@ -251,10 +251,10 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
         </div>
     </div>
 
-    <div id="modal-exist-family-member" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="modalLabelExistFamilyMember" aria-hidden="true">
+    <div id="modal-exist-family-member" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal-exist-family-member" aria-hidden="true">×</button>
-            <h3 id="modalLabelExistFamilyMember"><?=JText::_('TPL_FAMILYTREETOP_MODAL_EXIST_FAMILY_MEMBER_TITLE');?></h3>
+            <h3 id="modalLabel"><?=JText::_('TPL_FAMILYTREETOP_MODAL_EXIST_FAMILY_MEMBER_TITLE');?></h3>
         </div>
         <div class="modal-body" style="text-align: center;">
             <div class="row-fluid">
