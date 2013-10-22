@@ -342,38 +342,57 @@ $FamilyTreeTop.create("editor", function($){
             var tab =   $(tabs[0]).find('.tab-content #'+ tabs[1][num]);
             $(tab).append(form);
         },
-        setParentSelection:function(editProfileForm){
+        setParentSelection:function(editProfileForm, ind){
             var row = $(editProfileForm).find('[familytreetop="addChildComplexSelect"]');
-            //$fn.setSpouseSelect(editProfileForm, ind);
-            /*
-             setSpouseSelect:function(form , ind){
-            var parent = $(form).find('[familytreetop="gender"]').parent();
-            var spouses = $this.mod('usertree').getSpouses(ind.gedcom_id);
-            var sb = $this.stringBuffer();
-            sb._('<div class="row-fluid">');
-                sb._('<div familytreetop="spouse" class="span12">');
-                    sb._('<label for="editProfile[spouse]">Other Parent</label>');
-                    sb._('<select id="editProfile[spouse]" name="editProfile[spouse]">');
-                        sb._('<option value="0">Add a new person</option>');
-                        spouses.forEach(function(spouse_id){
-                            var spouse = $this.mod('usertree').user(spouse_id);
-                            sb._('<option value="')._(spouse_id)._('">')._(spouse.name())._('</option>');
-                        });
-                    sb._('</select>');
-                sb._('</div>');
-            sb._('</div>');
-            $(parent).before(sb.ret());
-        },
-             */
+            _setOwnerParent_();
+            _setOtherSpouse_();
             $(row).find('ul li').click(function(){
-                console.log(this);
-            })
+                var type = $(this).attr('familytreetop');
+                var data = $(this).attr('familytreetop-data');
+                if(type == "button"){
+                    if(data == "new"){
+                        _setTitle_($(this).text());
+                        _setValue_(0);
+                    } else if(data == "exist"){
+                        $fn.modalExistFamilyMember(function(id){
+                            var u = $this.mod('usertree').user(id);
+                            _setTitle_(u.name());
+                            _setValue_(id);
+                        });
+                    }
+                } else if(type == "spouse"){
+                    _setTitle_($(this).text());
+                    _setValue_(data);
+                }
+                return false;
+            });
             $(row).find('[familytreetop="menu-title"]').click(function(){
                 $(this).parent().find('.dropdown-toggle').click();
                 return false;
             });
             return true;
-            
+            function _setTitle_(t){
+                $(row).find('[familytreetop="menu-title"]').text(t);
+            }
+            function _setValue_(v){
+                $(row).find('[familytreetop="parent2"]').val(v);
+            }
+            function _setOwnerParent_(){
+                $(row).find('[familytreetop="parent1"]').val(ind.name());
+            }
+            function _setOtherSpouse_(){
+                var spouses = $this.mod('usertree').getSpouses(ind.gedcom_id);
+                var divider = $(row).find('[familytreetop="other-partners"]');
+                if(spouses.length > 0){
+                    spouses.forEach(function(id){
+                        var spouse = $this.mod('usertree').user(id);
+                        var li = $('<li familytreetop="spouse" familytreetop-data="'+id+'" style="cursor:pointer; padding: 0 10px;">'+spouse.name()+'</li>');
+                        $(divider).after(li);
+                    });
+                } else {
+                    $(divider).remove();
+                }
+            }
         },
         setLiving:function(editProfileForm){
             $(editProfileForm).find('[familytreetop="living"]').change(function(){
@@ -470,38 +489,13 @@ $FamilyTreeTop.create("editor", function($){
                 return a;
             }
         },
-        modalExistFamilyMember:function(){
-             /*
-            var autocomplete = $(editProfileForm).find('[familytreetop="exist_person"]');
-            var select = $(autocomplete).find('select');
-            var list = $this.mod('usertree').getAutocompleteList();
-            for(var key in list){
-                if(!list.hasOwnProperty(key)) continue;
-                var el = list[key];
-                var parents = $this.mod('usertree').getParents(key);
-                var data = {
-                    father : $this.mod('usertree').user(parents.father),
-                    mother : $this.mod('usertree').user(parents.mother),
-                    child : el.gender ? "son" : "daughter",
-                    birth : el.birth('date.start_year')
-                }
-                var string = (parents.family_id != null)?' '+data.child+' '+data.father.name()+' and '+data.mother.name():"";
-                $(select).append('<option value="'+key+'">'
-                    +el.name()+((data.birth.length > 0)?' ('+data.birth+')':'')
-                    +string
-                    +'</option>');
-            }
-            $(select).change(function(){
-                $fn.modalExistFamilyMember();
-            });
-            $(autocomplete).show();
-            */
-
-
+        modalExistFamilyMember:function(call){
             var cl = _getModal_();
-            //init modal
+            var select = $(cl).find('#spouses');
+            _setSelect_(select);
+            _submit_(cl, select, call);
+
             $(cl).modal({dynamic:true});
-            _submit_(cl);
             return true;
             function _getModal_(){
                 var cl = $('#modal-exist-family-member').clone().hide();
@@ -511,9 +505,32 @@ $FamilyTreeTop.create("editor", function($){
                 });
                 return cl;
             }
-            function _submit_(m){
+            function _setSelect_(s){
+                var list = $this.mod('usertree').getAutocompleteList();
+                var index = 1;
+                for(var key in list){
+                    if(!list.hasOwnProperty(key)) continue;
+                    index++;
+                    var el = list[key];
+                    var parents = $this.mod('usertree').getParents(key);
+                    var data = {
+                        father : $this.mod('usertree').user(parents.father),
+                        mother : $this.mod('usertree').user(parents.mother),
+                        child : el.gender ? "son" : "daughter",
+                        birth : el.birth('date.start_year')
+                    }
+                    var string = (parents.family_id != null)?' '+data.child+' '+data.father.name()+' and '+data.mother.name():"";
+                    $(s).append('<option value="'+key+'">'
+                        +el.name()+((data.birth.length > 0)?' ('+data.birth+')':'')
+                        +string
+                        +'</option>');
+                }
+                $(s).attr('size', index);
+            }
+            function _submit_(m, s, c){
                 $(m).find('button[familytreetop="submit"]').click(function(){
-                    console.log('modal-exist-family-member');
+                    $(m).modal('hide');
+                    c($(s).find('option:selected').val());
                     return false;
                 });
             }
@@ -590,7 +607,7 @@ $FamilyTreeTop.create("editor", function($){
         }
 
         if(type=="addChild"){
-            $fn.setParentSelection(editProfileForm);
+            $fn.setParentSelection(editProfileForm, ind);
         } else {
             $(editProfileForm).find('[familytreetop="addChildComplexSelect"]').remove();
         }

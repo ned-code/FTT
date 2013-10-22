@@ -294,20 +294,14 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         $gedcom = GedcomHelper::getInstance();
         $user = $gedcom->individuals->get($gedcom_id);
 
-        $ind = false;
-        if($form['autocomplete'] != 0){
-            $ind = $gedcom->individuals->get($form['autocomplete']);
-        }
-        if(!$ind){
-            $ind = $gedcom->individuals->get();
-            $ind->first_name = $form['first_name'];
-            $ind->middle_name = $form['middle_name'];
-            $ind->last_name = $form['last_name'];
-            $ind->know_as = $form['know_as'];
-            $ind->gender = $form['gender'];
-            $ind->creator_id = $user->gedcom_id;
-            $ind->save();
-        }
+        $ind = $gedcom->individuals->get();
+        $ind->first_name = $form['first_name'];
+        $ind->middle_name = $form['middle_name'];
+        $ind->last_name = $form['last_name'];
+        $ind->know_as = $form['know_as'];
+        $ind->gender = $form['gender'];
+        $ind->creator_id = $user->gedcom_id;
+        $ind->save();
         $family = $gedcom->families->get();
         $family->tree_id = $ind->tree_id;
         if($user->gender){
@@ -337,20 +331,14 @@ class FamilytreetopControllerEditor extends FamilytreetopController
 
         $user = $gedcom->individuals->get($gedcom_id);
 
-        $ind = false;
-        if($form['autocomplete'] != 0){
-            $ind = $gedcom->individuals->get($form['autocomplete']);
-        }
-        if(!$ind){
-            $ind = $gedcom->individuals->get();
-            $ind->first_name = $form['first_name'];
-            $ind->middle_name = $form['middle_name'];
-            $ind->last_name = $form['last_name'];
-            $ind->know_as = $form['know_as'];
-            $ind->gender = $form['gender'];
-            $ind->creator_id = $user->gedcom_id;
-            $ind->save();
-        }
+        $ind = $gedcom->individuals->get();
+        $ind->first_name = $form['first_name'];
+        $ind->middle_name = $form['middle_name'];
+        $ind->last_name = $form['last_name'];
+        $ind->know_as = $form['know_as'];
+        $ind->gender = $form['gender'];
+        $ind->creator_id = $user->gedcom_id;
+        $ind->save();
         $this->setEvent($ind, 'birth', $form);
         if((int)$form['living']){
             if($event = $ind->death()){
@@ -361,7 +349,7 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         }
 
         $spouse = false;
-        if($form['spouse'] == 0){
+        if($form['addParent2'] == 0){
             $spouse = $gedcom->individuals->get();
             $spouse->first_name = "unknown";
             $spouses->gender = $user->gender?0:1;
@@ -369,7 +357,7 @@ class FamilytreetopControllerEditor extends FamilytreetopController
             $spouse->save();
             $spouse_id = $spouse->gedcom_id;
         } else {
-            $spouse_id = $form['spouse'];
+            $spouse_id = $form['addParent2'];
         }
 
         if($user->gender){
