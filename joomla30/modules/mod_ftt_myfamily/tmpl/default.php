@@ -80,6 +80,7 @@ try {
 <script>
     $FamilyTreeTop.bind(function($){
         var json = <?=json_encode(array('gedcom'=>$search, 'facebook'=>$result_users, 'data'=>$result_news, 'string'=>$string));?>;
+        console.log(json);
         $FamilyTreeTop.fn.mod('myfamily').render(json);
     });
 </script>
