@@ -484,6 +484,37 @@ $FamilyTreeTop.create("usertree", function($){
         }
     }
 
+    $this.isCommonAncestorExist = function(id1, id2){
+        var data = { a : [], b: [] }, k1,k2, a, b;
+        data.a.push([0,id1]);
+        data.b.push([0,id2]);
+        _setAncestor_(id1, "a", 1);
+        _setAncestor_(id2, "b", 1);
+        for(k1 in data.a){
+            if(!data.a.hasOwnProperty(k1)) continue;
+            a = data.a[k1];
+            for(k2 in data.b){
+                if(!data.b.hasOwnProperty(k2)) continue;
+                b = data.b[k2];
+                if(a[1] == b[1]){
+                    return [a[1], a[0], b[0]];
+                }
+            }
+        }
+        return false;
+        function _setAncestor_(id, key, level){
+            var parents = $this.getParents(id);
+            if(parents.family_id != null && parents.father != null){
+                data[key].push([level, parents.father]);
+                _setAncestor_(parents.father, key, level + 1);
+            }
+            if(parents.family_id != null && parents.mother != null){
+                data[key].push([level, parents.mother]);
+                _setAncestor_(parents.mother, key, level + 1);
+            }
+        }
+    }
+
     $this.isRegisteredUser = function(gedcom_id){
         return (gedcom_id in usersmap);
     }

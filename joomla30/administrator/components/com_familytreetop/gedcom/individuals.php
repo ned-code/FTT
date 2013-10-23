@@ -58,10 +58,9 @@ class FamilyTreeTopGedcomIndividualsModel {
         $isParents = $this->isParents();
         $isChildrens = $this->isChildrens();
         $isSpouses = $this->isSpouses();
-        $isSpousesParentExist = $this->isSpousesParentExist($isSpouses);
         if($isParents && !$isChildrens && !$isSpouses){
             return true;
-        } else ($isSpouses && !$isChildrens && !$isParents){
+        } else if($isSpouses && !$isChildrens && !$isParents){
             return true;
         }
         return false;
