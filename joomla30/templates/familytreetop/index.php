@@ -230,6 +230,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                 <li familytreetop="addChild"><a href="#"><?=JText::_("TPL_FAMILYTREETOP_ADD_CHILD");?></a></li>
                 <li familytreetop-devider="delete" data-familytreetop-devider="2" class="divider"></li>
                 <li familytreetop="delete"><a href="#">Delete</a></li>
+                <li familytreetop="deleteUnion"><a href="#">Delete*</a></li>
                 <li familytreetop-devider="sendInvite" data-familytreetop-devider="2" class="divider"></li>
                 <li familytreetop="sendInvite"><a href="#"><?=JText::_("TPL_FAMILYTREETOP_SEND_INVITE");?></a></li>
             </ul>

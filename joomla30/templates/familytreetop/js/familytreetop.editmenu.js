@@ -20,6 +20,10 @@ $FamilyTreeTop.create("editmenu", function($){
                     $this.mod('editor').add(id, gedcom_id);
                     break;
 
+                case "deleteUnion":
+                    console.log('deleteUnion');
+                    break;
+
                 case "delete":
                     $this.mod('editor').render(gedcom_id, 4);
                     break;
@@ -36,20 +40,33 @@ $FamilyTreeTop.create("editmenu", function($){
 
 
     $this.render = function(object, gedcom_id){
-        var box, ind;
+        var box, ind, user, cdelete = 0;
 
         box = $($box).clone().attr('gedcom_id', gedcom_id)
             .attr('style', 'position: absolute; top: 5px; right:5px;');
 
         ind = $this.mod('usertree').user(gedcom_id);
+        user = $this.mod('usertree').usermap();
 
         if(ind.inLaw || ind.relationId == 2){
+            if(!$this.mod('usertree').isCommonAncestorExist(ind.gedcom_id, user.gedcom_id)){
+                $(box).find('li[familytreetop="deleteUnion"]').remove();
+                cdelete++
+            }
+            if(!ind.isCanBeDelete()){
+                $(box).find('li[familytreetop="delete"]').remove();
+                cdelete++;
+            }
+            if(cdelete == 2){
+                $(box).find('li[familytreetop-devider="delete"]').remove();
+            }
             $(box).find('[data-familytreetop-devider="1"]').remove();
             $(box).find('li[familytreetop="addParent"]').remove();
             $(box).find('li[familytreetop="addSibling"]').remove();
             $(box).find('li[familytreetop="addSpouse"]').remove();
             $(box).find('li[familytreetop="addChild"]').remove();
         } else {
+            $(box).find('li[familytreetop="deleteUnion"]').remove();
             if(ind.isParentsExist()){
                 $(box).find('li[familytreetop="addParent"]').remove();
             }
@@ -62,7 +79,7 @@ $FamilyTreeTop.create("editmenu", function($){
            if(!ind.isCanBeDelete()){
                 $(box).find('li[familytreetop-devider="delete"]').remove();
                 $(box).find('li[familytreetop="delete"]').remove();
-            }
+           }
         }
 
         $(object).append(box);
