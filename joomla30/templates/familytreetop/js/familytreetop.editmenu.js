@@ -43,18 +43,26 @@ $FamilyTreeTop.create("editmenu", function($){
 
         ind = $this.mod('usertree').user(gedcom_id);
 
-        if(ind.isParentsExist()){
+        if(ind.inLaw || ind.relationId == 2){
+            $(box).find('[data-familytreetop-devider="1"]').remove();
             $(box).find('li[familytreetop="addParent"]').remove();
-        }
+            $(box).find('li[familytreetop="addSibling"]').remove();
+            $(box).find('li[familytreetop="addSpouse"]').remove();
+            $(box).find('li[familytreetop="addChild"]').remove();
+        } else {
+            if(ind.isParentsExist()){
+                $(box).find('li[familytreetop="addParent"]').remove();
+            }
 
-        if(ind.isRegistered()){
-           $(box).find('li[familytreetop-devider="sendInvite"]').remove();
-           $(box).find('li[familytreetop="sendInvite"]').remove();
-        }
+            if(ind.isRegistered()){
+               $(box).find('li[familytreetop-devider="sendInvite"]').remove();
+               $(box).find('li[familytreetop="sendInvite"]').remove();
+            }
 
-       if(!ind.isCanBeDelete()){
-            $(box).find('li[familytreetop-devider="delete"]').remove();
-            $(box).find('li[familytreetop="delete"]').remove();
+           if(!ind.isCanBeDelete()){
+                $(box).find('li[familytreetop-devider="delete"]').remove();
+                $(box).find('li[familytreetop="delete"]').remove();
+            }
         }
 
         $(object).append(box);
