@@ -130,7 +130,6 @@ $FamilyTreeTop.create("myfamily", function($){
     }
 
     $this.render = function(json){
-        //console.log(json);
         var table = $($box).find('table');
         $gedcom = json.gedcom;
         $facebook = json.facebook;
