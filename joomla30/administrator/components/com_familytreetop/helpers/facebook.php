@@ -47,4 +47,26 @@ class FacebookHelper
             'redirect_uri' => $redirect_url
         ));
     }
+
+    public function getNeewsFeed(){
+        $list = FamilyTreeTopFacebooks::find('all', array('limit' => 10, 'order' => 'updated_time desc'));
+        $result = array();
+        foreach($list as $item){
+            $result[$item->post_id] = $item;
+        }
+        return $result;
+    }
+
+    public function setNeewsFeed($data){
+        $part = explode('_', $data['post_id']);
+
+        $item = new FamilyTreeTopFacebooks();
+        $item->data = json_encode($data);
+        $item->actor_id = $data['actor_id'];
+        $item->post_id = $data['post_id'];
+        $item->second_id = $part[1];
+        $item->created_time = $data['created_time'];
+        $item->updated_time = $data['updated_time'];
+        $item->save();
+    }
 }

@@ -56,9 +56,25 @@ try {
     foreach($pre_result as $key => $value){
         $result_users[$value['uid']] = $value;
     }
-
 } catch(Exception $php_errormsg){
 
+}
+
+$list = FacebookHelper::getInstance()->getNeewsFeed();
+foreach($result_news as $item){
+    if(!isset($list[$item['post_id']])){
+        FacebookHelper::getInstance()->setNeewsFeed($item);
+    }
+}
+
+$size = sizeof($result_news);
+if($size < 6){
+    foreach($list as $item){
+        if(!isset($check_result[$item->post_id]) && $size <6){
+            $result_news[] = json_decode($item->data);
+            $size++;
+        }
+    }
 }
 ?>
 <div id="myFamilyOnFacebook" class="row-fluid">
@@ -80,7 +96,6 @@ try {
 <script>
     $FamilyTreeTop.bind(function($){
         var json = <?=json_encode(array('gedcom'=>$search, 'facebook'=>$result_users, 'data'=>$result_news, 'string'=>$string));?>;
-        console.log(json);
         $FamilyTreeTop.fn.mod('myfamily').render(json);
     });
 </script>
