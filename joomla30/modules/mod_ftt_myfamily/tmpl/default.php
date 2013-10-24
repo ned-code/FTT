@@ -60,10 +60,10 @@ try {
 
 }
 
-$list = FacebookHelper::getInstance()->getNeewsFeed();
+$list = FacebookHelper::getInstance()->getNeewsFeed($user->tree_id);
 foreach($result_news as $item){
     if(!isset($list[$item['post_id']])){
-        FacebookHelper::getInstance()->setNeewsFeed($item);
+        FacebookHelper::getInstance()->setNeewsFeed($user, $item);
     }
 }
 

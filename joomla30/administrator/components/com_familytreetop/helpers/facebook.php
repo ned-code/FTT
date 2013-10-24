@@ -48,8 +48,8 @@ class FacebookHelper
         ));
     }
 
-    public function getNeewsFeed(){
-        $list = FamilyTreeTopFacebooks::find('all', array('limit' => 10, 'order' => 'updated_time desc'));
+    public function getNeewsFeed($tree_id){
+        $list = FamilyTreeTopFacebooks::find('all', array( 'limit' => 10, 'conditions' => array('tree_id = ?', $tree_id), 'order' => 'updated_time desc'));
         $result = array();
         foreach($list as $item){
             $result[$item->post_id] = $item;
@@ -57,11 +57,12 @@ class FacebookHelper
         return $result;
     }
 
-    public function setNeewsFeed($data){
+    public function setNeewsFeed($user, $data){
         $part = explode('_', $data['post_id']);
 
         $item = new FamilyTreeTopFacebooks();
         $item->data = json_encode($data);
+        $item->tree_id = $user->tree_id;
         $item->actor_id = $data['actor_id'];
         $item->post_id = $data['post_id'];
         $item->second_id = $part[1];
