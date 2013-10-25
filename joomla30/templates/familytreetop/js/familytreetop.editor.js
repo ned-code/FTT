@@ -538,7 +538,7 @@ $FamilyTreeTop.create("editor", function($){
                         child : el.gender ? "son" : "daughter",
                         birth : el.birth('date.start_year')
                     }
-                    var string = (parents.family_id != null)?' '+data.child+' '+data.father.name()+' and '+data.mother.name():"";
+                    var string = (parents.family_id != null)?' ('+data.child+' '+data.father.name()+' and '+data.mother.name()+')':"";
                     $(s).append('<option value="'+key+'">'
                         +el.name()+((data.birth.length > 0)?' ('+data.birth+')':'')
                         +string
