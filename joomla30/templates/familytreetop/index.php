@@ -469,34 +469,42 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
 
     <form id="formEditProfile">
         <div familytreetop="addChildComplexSelect" style="" class="row-fluid">
-            <div class="span3"></div>
-            <div class="span9">
+            <div class="span12">
                 <div class="row-fluid">
-                    <div class="span5">
-                        <label for="editProfile[addParent1]"><?=JText::_('TPL_FAMILYTREETOP_MODAL_EXIST_FAMILY_MEMBER_PARENT_1');?></label>
-                        <input familytreetop="parent1" type="text" class="span12" id="editProfile[addParent1]" name="editProfile[addParent1]" disabled >
-                    </div>
-                    <div class="span1">
-                        <div style="padding-top:25px; text-align:center;">
-                            <i class="icon-plus icon-2x" style="color:red;"></i>
+                    <div class="span2"></div>
+                    <div class="span8">
+                        <div class="row-fluid">
+                            <div class="span5">
+                                <label for="editProfile[addParent1]"><?=JText::_('TPL_FAMILYTREETOP_MODAL_EXIST_FAMILY_MEMBER_PARENT_1');?></label>
+                                <input familytreetop="parent1" type="text" class="span12" id="editProfile[addParent1]" name="editProfile[addParent1]" disabled >
+                            </div>
+                            <div class="span1">
+                                <div style="padding-top:25px; text-align:center;">
+                                    <i class="icon-plus icon-2x"></i>
+                                </div>
+                            </div>
+                            <div class="span6">
+                                <label for="editProfile[addParent2]"><?=JText::_('TPL_FAMILYTREETOP_MODAL_EXIST_FAMILY_MEMBER_PARENT_2');?></label>
+                                <input familytreetop="parent2" type="text" class="span12" id="editProfile[addParent2]" name="editProfile[addParent2]" value="0" style="display:none;" disabled hidden>
+                                <div class="btn-group dropdown" style="min-width:100%;">
+                                    <button class="span10" familytreetop="menu-title" class="btn"><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_PROFILE_ADD_NEW_PERSON');?></button>
+                                    <button class="btn dropdown-toggle" data-toggle="dropdown">
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul style="max-width: 100%;" class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                        <li familytreetop="button" familytreetop-data="new" style="cursor:pointer;padding: 0 10px;"><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_PROFILE_ADD_NEW_PERSON');?></li>
+                                        <li familytreetop="other-partners" class="divider"></li>
+                                        <li familytreetop="exist-members" class="divider"></li>
+                                        <li familytreetop="button" familytreetop-data="exist" style="cursor:pointer;padding: 0 10px;"><?=JText::_('TPL_FAMILYTREETOP_MODAL_EXIST_FAMILY_MEMBER_EXIST');?></li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="span6">
-                        <label for="editProfile[addParent2]"><?=JText::_('TPL_FAMILYTREETOP_MODAL_EXIST_FAMILY_MEMBER_PARENT_2');?></label>
-                        <input familytreetop="parent2" type="text" class="span12" id="editProfile[addParent2]" name="editProfile[addParent2]" value="0" style="display:none;" disabled hidden>
-                        <div class="btn-group dropdown" style="min-width:100%;">
-                            <button familytreetop="menu-title" class="btn"><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_PROFILE_ADD_NEW_PERSON');?></button>
-                            <button class="btn dropdown-toggle" data-toggle="dropdown">
-                                <span class="caret"></span>
-                            </button>
-                            <ul style="max-width: 100%;" class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                                <li familytreetop="button" familytreetop-data="new" style="cursor:pointer;padding: 0 10px;"><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_PROFILE_ADD_NEW_PERSON');?></li>
-                                <li familytreetop="other-partners" class="divider"></li>
-                                <li familytreetop="exist-members" class="divider"></li>
-                                <li familytreetop="button" familytreetop-data="exist" style="cursor:pointer;padding: 0 10px;"><?=JText::_('TPL_FAMILYTREETOP_MODAL_EXIST_FAMILY_MEMBER_EXIST');?></li>
-                            </ul>
-                        </div>
-                    </div>
+                    <div class="span2"></div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span12"><hr></div>
                 </div>
             </div>
         </div>
