@@ -461,7 +461,7 @@ $FamilyTreeTop.create("usertree", function($){
     }
 
     $this.family = function(family_id){
-        if("undefined" === typeof(family_id)) return false;
+        if("undefined" === typeof(family_id) || family_id == null) return false;
         if("undefined" === typeof(data.fam.family_id[family_id])) return false;
         var fam = data.fam.family_id[family_id];
         return {

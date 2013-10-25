@@ -393,11 +393,18 @@ $FamilyTreeTop.create("editor", function($){
                 $(row).find('[familytreetop="parent1"]').val(ind.name());
             }
             function _setOtherSpouse_(){
+                var family = $this.mod('usertree').family(ind.family_id);
                 var spouses = $this.mod('usertree').getSpouses(ind.gedcom_id);
                 var divider = $(row).find('[familytreetop="other-partners"]');
                 if(spouses.length > 0){
                     spouses.forEach(function(id){
                         var spouse = $this.mod('usertree').user(id);
+                        if(family){
+                            if(family.wife == id || family.husb == id){
+                               _setTitle_(spouse.name());
+                               _setValue_(id);
+                            }
+                        }
                         var li = $('<li familytreetop="spouse" familytreetop-data="'+id+'" style="cursor:pointer; padding: 0 10px;">'+spouse.name()+'</li>');
                         $(divider).after(li);
                     });
