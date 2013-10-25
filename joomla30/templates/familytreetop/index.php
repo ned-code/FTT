@@ -487,7 +487,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
                                 <label for="editProfile[addParent2]"><?=JText::_('TPL_FAMILYTREETOP_MODAL_EXIST_FAMILY_MEMBER_PARENT_2');?></label>
                                 <input familytreetop="parent2" type="text" class="span12" id="editProfile[addParent2]" name="editProfile[addParent2]" value="0" style="display:none;" disabled hidden>
                                 <div class="btn-group dropdown" style="min-width:100%;">
-                                    <button class="span10" familytreetop="menu-title" class="btn"><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_PROFILE_ADD_NEW_PERSON');?></button>
+                                    <button familytreetop="menu-title" class="btn span10"><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_PROFILE_ADD_NEW_PERSON');?></button>
                                     <button class="btn dropdown-toggle" data-toggle="dropdown">
                                         <span class="caret"></span>
                                     </button>
