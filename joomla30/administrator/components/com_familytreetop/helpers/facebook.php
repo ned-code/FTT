@@ -57,11 +57,12 @@ class FacebookHelper
         return $result;
     }
 
-    public function setNeewsFeed($user, $data){
+    public function setNeewsFeed($user, $fdata, $data){
         $part = explode('_', $data['post_id']);
 
         $item = new FamilyTreeTopFacebooks();
         $item->data = json_encode($data);
+        $item->fdata = json_encode($fdata);
         $item->tree_id = $user->tree_id;
         $item->actor_id = $data['actor_id'];
         $item->post_id = $data['post_id'];

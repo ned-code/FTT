@@ -63,7 +63,7 @@ try {
 $list = FacebookHelper::getInstance()->getNeewsFeed($user->tree_id);
 foreach($result_news as $item){
     if(!isset($list[$item['post_id']])){
-        FacebookHelper::getInstance()->setNeewsFeed($user, $item);
+        FacebookHelper::getInstance()->setNeewsFeed($user, $result_users[$item['actor_id']], $item);
     }
 }
 
@@ -72,6 +72,7 @@ if($size < 6){
     foreach($list as $item){
         if(!isset($check_result[$item->post_id]) && $size <6){
             $result_news[] = json_decode($item->data);
+            $reulst_users[$item->actor_id] = json_decode($item->fdata);
             $size++;
         }
     }
