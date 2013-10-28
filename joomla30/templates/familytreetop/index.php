@@ -35,6 +35,9 @@ $doc->addStyleSheet('templates/'.$this->template.'/css/familytreetop.css');
 $user = JFactory::getUser();
 // Add familytreetop settings
 $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
+
+$data = json_encode(GedcomHelper::getInstance()->getData());
+
 ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->language; ?>" lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>">
@@ -72,7 +75,7 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
 
     $FamilyTreeTop.languagesString = '<?=LanguagesHelper::get()?>';
 
-    $FamilyTreeTop.dataString = '<?=json_encode(GedcomHelper::getInstance()->getData());?>';
+    $FamilyTreeTop.dataString = <?=$data?>;
 </script>
 <div id="fb-root"></div>
 <div id="wrap">
