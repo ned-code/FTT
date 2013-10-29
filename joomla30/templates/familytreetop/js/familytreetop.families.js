@@ -491,7 +491,7 @@ $FamilyTreeTop.create("families", function($){
             $(settings.parent).append(box);
         },
         render: function(settings){
-            var $usermap, $spouses, $childrens, spouse_id;
+            var $usermap, $spouses, $childrens, $spouse_id, $user, $husb, $wife;
 
             $this.setFirst(settings);
 
@@ -515,20 +515,31 @@ $FamilyTreeTop.create("families", function($){
             $fn.init(settings);
 
             $spouses = $this.mod('usertree').getSpouses($start_id);
-            spouse_id = $fn.getDefaultSpouse($start_id, $spouses);
-            $childrens = $fn.getChildrens($start_id, spouse_id);
+            $spouse_id = $fn.getDefaultSpouse($start_id, $spouses);
+            $childrens = $fn.getChildrens($start_id, $spouse_id);
             if($childrens.length == 0 && !$this.mod('usertree').user($start_id).isSpouseExist()){
                 $start_id = $fn.getStartIdByParents($start_id);
                 $spouses = $this.mod('usertree').getSpouses($start_id);
-                spouse_id = $fn.getDefaultSpouse($start_id, $spouses);
-                $childrens = $fn.getChildrens($start_id, spouse_id);
+                $spouse_id = $fn.getDefaultSpouse($start_id, $spouses);
+                $childrens = $fn.getChildrens($start_id, $spouse_id);
             }
 
-            $fn.append(settings, $fn.createParent($start_id, settings));
-            $fn.append(settings, $fn.createParent(spouse_id, settings));
-            $fn.append(settings, $fn.createEvent($start_id, spouse_id));
+            $user = $this.mod('usertree').user($start_id);
+            if($user.gender){
+                $husb = $start_id;
+                $wife = $spouse_id;
+            } else {
+                $husb = $spouse_id;
+                $wife = $start_id;
+            }
 
-            $fn.createMultiSpouse($start_id, spouse_id, settings);
+
+
+            $fn.append(settings, $fn.createParent($husb, settings));
+            $fn.append(settings, $fn.createParent($wife, settings));
+            $fn.append(settings, $fn.createEvent($start_id, $spouse_id));
+
+            $fn.createMultiSpouse($start_id, $spouse_id, settings);
 
             $childrens.forEach(function(object){
                 $fn.append(settings, $fn.createChild(object.gedcom_id, object.color, settings));
