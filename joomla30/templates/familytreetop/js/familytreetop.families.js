@@ -525,7 +525,7 @@ $FamilyTreeTop.create("families", function($){
             }
 
             $user = $this.mod('usertree').user($start_id);
-            if($user.gender){
+            if(parseInt($user.gender)){
                 $husb = $start_id;
                 $wife = $spouse_id;
             } else {
@@ -533,13 +533,11 @@ $FamilyTreeTop.create("families", function($){
                 $wife = $start_id;
             }
 
-
-
             $fn.append(settings, $fn.createParent($husb, settings));
             $fn.append(settings, $fn.createParent($wife, settings));
-            $fn.append(settings, $fn.createEvent($start_id, $spouse_id));
+            $fn.append(settings, $fn.createEvent($husb, $wife));
 
-            $fn.createMultiSpouse($start_id, $spouse_id, settings);
+            $fn.createMultiSpouse($husb, $wife, settings);
 
             $childrens.forEach(function(object){
                 $fn.append(settings, $fn.createChild(object.gedcom_id, object.color, settings));
