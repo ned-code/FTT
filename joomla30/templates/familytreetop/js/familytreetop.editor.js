@@ -238,7 +238,7 @@ $FamilyTreeTop.create("editor", function($){
                         $(default_family_button[0]).hide();
                         $(default_family_button[0]).parent().find('[familytreetop="set-current"]').show();
                         default_family_button = $(set);
-                        $this.mod('usertree').setUserFamilyId(response.gedcom_id, response.family_id);
+                        $this.mod('usertree').setUserFamilyId(response.husb, response.wife, response.family_id);
                         $this.mod('usertree').call();
                     });
                     return false;

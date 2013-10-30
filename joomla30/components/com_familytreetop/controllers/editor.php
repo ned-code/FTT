@@ -530,11 +530,17 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         $gedcom_id = $app->input->post->get('gedcom_id', false);
         $family_id = $app->input->post->get('family_id', false);
 
-        $user = $gedcom->individuals->get($gedcom_id);
-        $user->family_id = $family_id;
-        $user->save();
+        $family = $gedcom->families->get($family_id);
 
-        echo json_encode(array('gedcom_id'=>$gedcom_id, 'family_id'=>$family_id));
+        $husb = $gedcom->individuals->get($family->husb);
+        $husb->family_id = $family_id;
+        $husb->save();
+
+        $wife = $gedcom->individuals->get($family->wife);
+        $wife->family_id = $family_id;
+        $wife->save();
+
+        echo json_encode(array('husb'=>$family->husb, 'wife'=>$family->wife, 'family_id'=>$family_id));
         exit;
     }
 

@@ -581,9 +581,12 @@ $FamilyTreeTop.create("usertree", function($){
         return src;
     }
 
-    $this.setUserFamilyId = function(gedcom_id, family_id){
-        if("undefined" !== typeof(data.ind[gedcom_id])){
-            data.ind[gedcom_id].family_id = family_id;
+    $this.setUserFamilyId = function(husb, wife, family_id){
+        if("undefined" !== typeof(data.ind[husb])){
+            data.ind[husb].family_id = family_id;
+        }
+        if("undefined" !== typeof(data.ind[wife])){
+            data.ind[wife].family_id = family_id;
         }
     }
 
