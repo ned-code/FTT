@@ -39,7 +39,7 @@ class FamilyTreeTopGedcomConnectionsManager {
             $childrens = GedcomHelper::getInstance()->childrens->getChildrensByGedcomId($user_id);
             if(!empty($childrens)){
                 foreach($childrens as $child){
-                    $ambit["I".$child] = array("id"=>$child['gedcom_id']);
+                    $ambit["I".$child['gedcom_id']] = array("id"=>$child['gedcom_id']);
                 }
             }
 
@@ -62,7 +62,6 @@ class FamilyTreeTopGedcomConnectionsManager {
                 $wave[$k] = $v;
             }
         }
-
         return $this->setWave($waves, $wave, $level + 1);
     }
 
@@ -76,6 +75,8 @@ class FamilyTreeTopGedcomConnectionsManager {
         $this->setWave($waves, array("I".$gedcom_id => null));
 
         $this->waves = $waves;
+        //echo '<script> var _A = '.json_encode($waves).' </script>';
+        //exit;
     }
 
     protected function getConn($wave, $object){

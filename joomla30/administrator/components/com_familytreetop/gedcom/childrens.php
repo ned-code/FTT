@@ -103,11 +103,18 @@ class FamilyTreeTopGedcomChildrensManager {
     }
 
     public function getChildrensByGedcomId($gedcom_id){
-        if(!empty($this->list_by_gedcom_id[$gedcom_id])){
-            $list = $this->list_by_gedcom_id[$gedcom_id];
-            return $list;
+        $gedcom = GedcomHelper::getInstance();
+        $families = $gedcom->families->getFamilies($gedcom_id);
+        $childrens = array();
+        foreach($families as $family){
+            if(!empty($this->list_by_family_id[$family->family_id])){
+                $item = $this->list_by_family_id[$family->family_id];
+                foreach($item as $e){
+                    $childrens[] = $e;
+                }
+            }
         }
-        return false;
+        return $childrens;
     }
 
     public function getFamilyIdByGedcomId($gedcom_id){
