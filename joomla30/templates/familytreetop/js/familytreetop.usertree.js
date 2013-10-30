@@ -584,9 +584,11 @@ $FamilyTreeTop.create("usertree", function($){
     $this.setUserFamilyId = function(husb, wife, family_id){
         if("undefined" !== typeof(data.ind[husb])){
             data.ind[husb].family_id = family_id;
+            delete cache[husb];
         }
         if("undefined" !== typeof(data.ind[wife])){
             data.ind[wife].family_id = family_id;
+            delete cache[wife];
         }
     }
 
