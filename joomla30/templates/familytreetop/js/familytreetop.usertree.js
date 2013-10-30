@@ -220,6 +220,7 @@ $FamilyTreeTop.create("usertree", function($){
                 _deleteFromMed_();
                 _deleteFromRel_();
                 delete data.ind[ind.gedcom_id];
+                delete cache[ind.gedcom_id];
                 $this.call();
                 function _deleteFromChi_(){
                     if(data.chi.length == 0 || "undefined" === typeof(data.chi.gedcom_id[ind.gedcom_id])) return false;
@@ -263,24 +264,24 @@ $FamilyTreeTop.create("usertree", function($){
                 function _deleteFromFam_(){
                     if(data.fam.length == 0 || "undefined" === typeof(data.fam.gedcom_id[ind.gedcom_id]) ) return false;
                     var fam = data.fam.gedcom_id[ind.gedcom_id];
-                    var spouses = [];
                     for (var key in fam){
                         if(!fam.hasOwnProperty(key)) continue;
                         if("undefined" !==typeof(data.fam.family_id[key])){
-                            spouses.push(data.fam.family_id[key]);
+                            var el = data.fam.family_id[key];
+                            var spouse_id = (el.husb == ind.gedcom_id)?el.wife:el.husb;
+                            if("undefined" !== typeof(data.fam.gedcom_id[spouse_id])){
+                                var families = data.fam.gedcom_id[spouse_id];
+                                for(var id in families){
+                                    if(!families.hasOwnProperty(id)) continue;
+                                    if(key == id){
+                                        delete data.fam.gedcom_id[spouse_id][id];
+                                    }
+                                }
+                            }
                             delete data.fam.family_id[key];
                         }
                     }
-                    for (var k in spouses){
-                        if(!spouses.hasOwnProperty(k)) continue;
-                        var el = spouses[k];
-                        if("undefined" !== typeof(data.fam.gedcom_id[el.husb])){
-                            delete data.fam.gedcom_id[el.husb];
-                        }
-                        if("undefined" !== typeof(data.fam.gedcom_id[el.wife])){
-                            delete data.fam.gedcom_id[el.wife];
-                        }
-                    }
+                    delete data.fam.gedcom_id[ind.gedcom_id];
                 }
                 function _deleteFromMed_(){
                     if(data.med.length == 0 || "undefined" == typeof(data.med.gedcom_id[ind.gedcom_id])) return false;
