@@ -72,7 +72,7 @@ if($size < 6){
     foreach($list as $item){
         if(!isset($check_result[$item->post_id]) && $size <6){
             $result_news[] = json_decode($item->data);
-            $reulst_users[$item->actor_id] = json_decode($item->fdata);
+            $result_users[$item->actor_id] = json_decode($item->fdata);
             $size++;
         }
     }
