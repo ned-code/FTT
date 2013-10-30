@@ -4,6 +4,7 @@ defined('_JEXEC') or die;
 $gedcom = GedcomHelper::getInstance();
 $youngest = $gedcom->individuals->getYoungest();
 $oldest = $gedcom->individuals->getOldest();
+$total = $gedcom->individuals->getTotal();
 ?>
 <div id="quickFacts" class="row-fluid">
     <div class="span12">
@@ -11,6 +12,7 @@ $oldest = $gedcom->individuals->getOldest();
             <fieldset>
                 <legend><?=JText::_('MOD_FTT_QUICK_FACTS_TITLE');?></legend>
                 <ul class-familytreetop="module-padding" class="unstyled">
+                    <li><span><?=JText::_('MOD_FTT_QUICK_FACTS_TOTAL');?></span>: <span><?=$total?></span></li>
                     <?php if($youngest): ?>
                         <li><span><?=JText::_('MOD_FTT_QUICK_FACTS_YOUNGEST');?></span>: <span style="cursor:pointer;" gedcom_id="<?=$youngest->gedcom_id;?>" data-familytreetop-color="<?=$youngest->gender;?>"><?=$youngest->name();?></span></li>
                     <?php endif; ?>

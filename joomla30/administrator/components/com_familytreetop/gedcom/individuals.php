@@ -439,6 +439,9 @@ class FamilyTreeTopGedcomIndividualsManager {
         }
     }
 
+    public function getTotal(){
+        return sizeof($this->list);
+    }
 
     public function getLastUpdatedProfile(){
         $db = JFactory::getDbo();
