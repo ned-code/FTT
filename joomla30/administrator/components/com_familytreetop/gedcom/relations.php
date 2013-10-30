@@ -257,6 +257,14 @@ class FamilyTreeTopGedcomRelationsManager {
         return $relation;
     }
 
+    public function getArray($gedcom_id, $target_id){
+        $relation = $this->get($gedcom_id, $target_id);
+        if($relation && isset($this->list[$target_id])){
+            return $this->list[$target_id];
+        }
+        return false;
+    }
+
     public function getInLawRelation($id){
         $con = $this->conn[$id];
         if($con){

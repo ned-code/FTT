@@ -173,6 +173,17 @@ class FamilytreetopControllerEditor extends FamilytreetopController
                                     $result[$key][$item->gedcom_id] = $item->toList();
                                 }
                             break;
+                        case "rel":
+                                if(isset($item['target_id'])){
+                                    if(isset($item['connection'])){
+                                        $item['connection'] = json_decode(base64_decode($item['connection']));
+                                    }
+                                    if(isset($el['json'])){
+                                        $item['json'] = json_decode(base64_decode($item['json']));
+                                    }
+                                    $result[$key][$item['target_id']] = $item;
+                                }
+                            break;
                         case "med":
                         default: break;
                     }
@@ -187,6 +198,7 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         $gedcom_id = $form['gedcom_id'];
 
         $gedcom = GedcomHelper::getInstance();
+        $owner = FamilyTreeTopUserHelper::getInstance()->get();
 
         $ind = $gedcom->individuals->get($gedcom_id);
         if($ind->isParents()){
@@ -232,13 +244,19 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         $family->save();
         $child = $family->addChild($ind->gedcom_id);
 
+        $rel = array(
+            $gedcom->relations->getArray($owner->gedcom_id, $sircar),
+            $gedcom->relations->getArray($owner->gedcom_id, $spouse)
+        );
+
         echo $this->getResponse(
             array('ind' => array($sircar, $spouse)),
             array('fam' => array($family)),
             array('chi' => array($child)),
             array('eve' => array($sircar->events)),
             array('pla' => array($sircar->events)),
-            array('dat' => array($sircar->events))
+            array('dat' => array($sircar->events)),
+            array('rel' => $rel)
         );
         exit;
 
@@ -251,6 +269,7 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         $gedcom = GedcomHelper::getInstance();
 
         $user = $gedcom->individuals->get($gedcom_id);
+        $owner = FamilyTreeTopUserHelper::getInstance()->get();
         $parents = $user->getParents();
 
         if(!$parents || $user->gedcom_id == null){
@@ -282,7 +301,8 @@ class FamilytreetopControllerEditor extends FamilytreetopController
             array('chi' => array($child)),
             array('eve' => array($ind->events)),
             array('pla' => array($ind->events)),
-            array('dat' => array($ind->events))
+            array('dat' => array($ind->events)),
+            array('rel' => array($gedcom->relations->getArray($owner->gedcom_id, $ind->gedcom_id)))
         );
         exit;
     }
@@ -293,6 +313,7 @@ class FamilytreetopControllerEditor extends FamilytreetopController
 
         $gedcom = GedcomHelper::getInstance();
         $user = $gedcom->individuals->get($gedcom_id);
+        $owner = FamilyTreeTopUserHelper::getInstance()->get();
 
         $ind = false;
         if($form['spouse'] != 0){
@@ -325,7 +346,8 @@ class FamilytreetopControllerEditor extends FamilytreetopController
             array('fam' => array($family)),
             array('eve' => array($ind->events)),
             array('pla' => array($ind->events)),
-            array('dat' => array($ind->events))
+            array('dat' => array($ind->events)),
+            array('rel' => array($gedcom->relations->getArray($owner->gedcom_id, $ind->gedcom_id)))
         );
         exit;
     }
@@ -337,6 +359,7 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         $gedcom = GedcomHelper::getInstance();
 
         $user = $gedcom->individuals->get($gedcom_id);
+        $owner = FamilyTreeTopUserHelper::getInstance()->get();
 
         $ind = $gedcom->individuals->get();
         $ind->first_name = $form['first_name'];
@@ -398,13 +421,19 @@ class FamilytreetopControllerEditor extends FamilytreetopController
             $fam[] = $family;
         }
 
+        $rel = array();
+        foreach($arrInd as $e){
+            $rel[] = $gedcom->relations->getArray($owner->gedcom_id, $e->gedcom_id);
+        }
+
         echo $this->getResponse(
             array('ind' => $arrInd),
             array('chi' => array($child)),
             array('fam' => $fam),
             array('eve' => array($ind->events)),
             array('pla' => array($ind->events)),
-            array('dat' => array($ind->events))
+            array('dat' => array($ind->events)),
+            array('rel' => $rel)
         );
         exit;
     }
