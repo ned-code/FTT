@@ -495,8 +495,8 @@ $data = json_encode(GedcomHelper::getInstance()->getData());
                                         <span class="caret"></span>
                                     </button>
                                     <ul style="max-width: 100%;" class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                                        <li familytreetop="button" familytreetop-data="new" style="cursor:pointer;padding: 0 10px;"><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_PROFILE_ADD_NEW_PERSON');?></li>
                                         <li familytreetop="other-partners" class="divider"></li>
+                                        <li familytreetop="button" familytreetop-data="new" style="cursor:pointer;padding: 0 10px;"><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_PROFILE_ADD_NEW_PERSON');?></li>
                                         <li familytreetop="exist-members" class="divider"></li>
                                         <li familytreetop="button" familytreetop-data="exist" style="cursor:pointer;padding: 0 10px;"><?=JText::_('TPL_FAMILYTREETOP_MODAL_EXIST_FAMILY_MEMBER_EXIST');?></li>
                                     </ul>

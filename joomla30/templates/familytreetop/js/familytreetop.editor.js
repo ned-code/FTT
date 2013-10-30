@@ -406,7 +406,7 @@ $FamilyTreeTop.create("editor", function($){
                             }
                         }
                         var li = $('<li familytreetop="spouse" familytreetop-data="'+id+'" style="cursor:pointer; padding: 0 10px;">'+spouse.name()+'</li>');
-                        $(divider).after(li);
+                        $(divider).before(li);
                     });
                 } else {
                     $(divider).remove();
