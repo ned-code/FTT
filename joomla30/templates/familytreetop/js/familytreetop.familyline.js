@@ -45,12 +45,12 @@ $FamilyTreeTop.create("familyline", function($){
                     if($(icon).hasClass('icon-adjust-active')){
                         $(icon).removeClass('icon-adjust-active');
                         $($this).removeClass(btnGroup);
-                        args = { type:"pencil", active: 0, line: line};
+                        args = { type:"adjust", active: 0, line: line};
                         $active = false;
                     } else {
                         $(icon).addClass('icon-adjust-active');
                         $($this).addClass(btnGroup);
-                        args = {type:"pencil", active: 1, line: line};
+                        args = {type:"adjust", active: 1, line: line};
                         $active = $this;
                     }
                     break;
@@ -90,7 +90,7 @@ $FamilyTreeTop.create("familyline", function($){
                 $(el)[active]();
             }
         },
-        pencil: function(item, args){
+        adjust: function(item, args){
             var func = (args.line)?"isFatherLine":"isMotherLine",
                 user = $this.mod('usertree').user(item.gedcom_id),
                 el = item.target;

@@ -426,11 +426,17 @@ $FamilyTreeTop.create("usertree", function($){
                     if(object.length > 1){
                         _user = $this.user(object[1]);
                         id = parseInt(_user.relationId);
-                        if(id==4){
+                        if(id==4 || id==2){
                             return true;
                         } else if(id > 4 && id < 9){
                             return true;
                         } else if(id == 105 || id == 106 || id == 205 || id == 206){
+                            return true;
+                        }
+                    } else if(object.length == 1){
+                        _user = $this.user(object[0]);
+                        id = parseInt(_user.relationId);
+                        if(id == 1){
                             return true;
                         }
                     }
@@ -445,11 +451,17 @@ $FamilyTreeTop.create("usertree", function($){
                     if(object.length > 1){
                         _user = $this.user(object[1]);
                         id = parseInt(_user.relationId);
-                        if(id==3){
+                        if(id==3 || id==2){
                             return true;
                         } else if(id > 4 && id < 9){
                             return true;
                         } else if(id == 105 || id == 106 || id == 205 || id == 206){
+                            return true;
+                        }
+                    } else if(object.length == 1){
+                        _user = $this.user(object[0]);
+                        id = parseInt(_user.relationId);
+                        if(id == 1){
                             return true;
                         }
                     }
