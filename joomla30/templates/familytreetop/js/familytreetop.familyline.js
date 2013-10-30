@@ -41,14 +41,14 @@ $FamilyTreeTop.create("familyline", function($){
                 $($active).click();
             }
             switch(_class){
-                case "icon-pencil":
-                    if($(icon).hasClass('icon-pencil-active')){
-                        $(icon).removeClass('icon-pencil-active');
+                case "icon-adjust":
+                    if($(icon).hasClass('icon-adjust-active')){
+                        $(icon).removeClass('icon-adjust-active');
                         $($this).removeClass(btnGroup);
                         args = { type:"pencil", active: 0, line: line};
                         $active = false;
                     } else {
-                        $(icon).addClass('icon-pencil-active');
+                        $(icon).addClass('icon-adjust-active');
                         $($this).addClass(btnGroup);
                         args = {type:"pencil", active: 1, line: line};
                         $active = $this;
