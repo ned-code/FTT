@@ -479,7 +479,7 @@ $data = json_encode(GedcomHelper::getInstance()->getData());
                         <div class="row-fluid">
                             <div class="span5">
                                 <label for="editProfile[addParent1]"><?=JText::_('TPL_FAMILYTREETOP_MODAL_EXIST_FAMILY_MEMBER_PARENT_1');?></label>
-                                <input familytreetop="parent1" type="text" class="span12" id="editProfile[addParent1]" name="editProfile[addParent1]" disabled >
+                                <input familytreetop="parent1" type="text" class="span12" id="editProfile[addParent1]" name="editProfile[addParent1]" >
                             </div>
                             <div class="span1">
                                 <div style="padding-top:25px; text-align:center;">
@@ -488,7 +488,7 @@ $data = json_encode(GedcomHelper::getInstance()->getData());
                             </div>
                             <div class="span6">
                                 <label for="editProfile[addParent2]"><?=JText::_('TPL_FAMILYTREETOP_MODAL_EXIST_FAMILY_MEMBER_PARENT_2');?></label>
-                                <input familytreetop="parent2" type="text" class="span12" id="editProfile[addParent2]" name="editProfile[addParent2]" value="0" style="display:none;" disabled hidden>
+                                <input familytreetop="parent2" type="text" class="span12" id="editProfile[addParent2]" name="editProfile[addParent2]" value="0" style="display:none;"  hidden >
                                 <div class="btn-group dropdown" style="min-width:100%;">
                                     <button familytreetop="menu-title" class="btn span10"><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_PROFILE_ADD_NEW_PERSON');?></button>
                                     <button class="btn dropdown-toggle" data-toggle="dropdown">
