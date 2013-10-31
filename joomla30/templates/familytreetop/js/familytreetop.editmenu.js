@@ -40,13 +40,18 @@ $FamilyTreeTop.create("editmenu", function($){
 
 
     $this.render = function(object, gedcom_id){
-        var box, ind, user, cdelete = 0;
+        var box, ind, user, cdelete = 0, isRegistered;
 
         box = $($box).clone().attr('gedcom_id', gedcom_id)
             .attr('style', 'position: absolute; top: 5px; right:5px;');
 
         ind = $this.mod('usertree').user(gedcom_id);
         user = $this.mod('usertree').usermap();
+        isRegistered = ind.isRegistered();
+
+        if(isRegistered && user.gedcom_id != ind.gedcom_id){
+            $(box).find('li[familytreetop="edit"]').remove();
+        }
 
         if(ind.inLaw || ind.relationId == 2){
             if(!$this.mod('usertree').isCommonAncestorExist(ind.gedcom_id, user.gedcom_id)){
@@ -71,7 +76,7 @@ $FamilyTreeTop.create("editmenu", function($){
                 $(box).find('li[familytreetop="addParent"]').remove();
             }
 
-            if(ind.isRegistered()){
+            if(isRegistered){
                $(box).find('li[familytreetop-devider="sendInvite"]').remove();
                $(box).find('li[familytreetop="sendInvite"]').remove();
             }
