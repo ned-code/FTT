@@ -51,6 +51,7 @@ $FamilyTreeTop.create("editmenu", function($){
 
         if(isRegistered && user.gedcom_id != ind.gedcom_id){
             $(box).find('li[familytreetop="edit"]').remove();
+            $(box).find('[data-familytreetop-devider="1"]').remove();
         }
 
         if(ind.inLaw || ind.relationId == 2){
