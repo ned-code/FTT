@@ -248,7 +248,7 @@ class FamilyTreeTopGedcomRelationsManager {
                 'relation_id' => $relation[0],
                 'gedcom_id' => $gedcom_id,
                 'target_id' => $target_id,
-                'connection' => base64_encode(json_encode($this->conn[$target_id])),
+                'connection' => (isset($this->conn[$target_id]))?base64_encode(json_encode($this->conn[$target_id])):"",
                 'json' => $json,
                 'in_law' => $in_law
             ));

@@ -228,13 +228,6 @@ class FamilyTreeTopGedcomIndividualsModel {
             }
         }
 
-        if(empty($this->is_father_line)){
-            $this->checkFatherLine();
-        }
-        if(empty($this->is_mother_line)){
-            $this->checkMotherLine();
-        }
-
         $ind->gedcom_id = $this->gedcom_id;
         $ind->gender = $this->gender;
         $ind->family_id = $this->family_id;
@@ -275,7 +268,8 @@ class FamilyTreeTopGedcomIndividualsModel {
     }
 
     public function getConnection(){
-        return FamilyTreeTopGedcomConnectionsManager($this->gedcom_id);
+        $gedcom = GedcomHelper::getInstance();
+        return $gedcom->connections->get($this->gedcom_id);
     }
 
     public function addEvent($event){
@@ -301,26 +295,30 @@ class FamilyTreeTopGedcomIndividualsModel {
         return $data;
     }
 
-    private function checkFatherLine(){
-       return $this->checkLine(3);
+    public function updateLine(){
+        if(empty($this->id)) return false;
+        $ind = FamilyTreeTopIndividuals::find($this->id);
+        $ind->is_father_line = $this->checkLine(4);
+        $ind->is_mother_line = $this->checkLine(3);
+        $ind->save();
     }
-    private function checkMotherLine(){
-       return $this->checkLine(4);
-    }
-    private function checkLine($parent){
+
+    public function checkLine($parent){
+        $gedcom = GedcomHelper::getInstance();
         $con = $this->getConnection();
-        if(!$con) return false;
+        if(!$con) return 0;
         if(sizeof($con) > 1){
-            $id = $this->relationId();
+            $object = $gedcom->individuals->get($con[1]);
+            $id = $object->relationId();
             if($id == $parent){
-                return true;
+                return 1;
             } else if($id > 4 && $id < 9){
-                return true;
+                return 1;
             } else if($id == 105 || $id == 106 || $id == 205 || $id == 206){
-                return true;
+                return 1;
             }
         }
-        return false;
+        return 0;
     }
 }
 
@@ -378,8 +376,8 @@ class FamilyTreeTopGedcomIndividualsManager {
             $ind->family_id = $data['family_id'];
             $ind->create_time = $data['create_time'];
             $ind->change_time = $data['change_time'];
-            $ind->is_father_line = $data['is_father_line'];
-            $ind->is_mother_line = $data['is_mother_line'];
+            $ind->is_father_line = ($data['is_father_line']!=null)?$data['is_father_line']:0;
+            $ind->is_mother_line = ($data['is_mother_line']!=null)?$data['is_mother_line']:0;
 
             $ind->first_name = $data['first_name'];
             $ind->middle_name = $data['middle_name'];
@@ -502,6 +500,15 @@ class FamilyTreeTopGedcomIndividualsManager {
             return false;
         } else {
             return $this->get($rows[0]['gedcom_id']);
+        }
+    }
+
+    public function updateFamilyLine(){
+        $gedcom = GedcomHelper::getInstance();
+        $list = $this->list;
+        foreach($list as $id => $user){
+            $object = $gedcom->individuals->get($id);
+            $object->updateLine();
         }
     }
 

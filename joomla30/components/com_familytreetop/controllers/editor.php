@@ -244,6 +244,10 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         $family->save();
         $child = $family->addChild($ind->gedcom_id);
 
+        $ind->updateLine();
+        $sircar->updateLine();
+        $spouse->updateLine();
+
         $rel = array(
             $gedcom->relations->getArray($owner->gedcom_id, $sircar),
             $gedcom->relations->getArray($owner->gedcom_id, $spouse)
@@ -296,6 +300,8 @@ class FamilytreetopControllerEditor extends FamilytreetopController
 
         $child = $parents['family']->addChild($ind->gedcom_id);
 
+        $ind->updateLine();
+
         echo $this->getResponse(
             array('ind' => array($ind)),
             array('chi' => array($child)),
@@ -340,6 +346,8 @@ class FamilytreetopControllerEditor extends FamilytreetopController
             $family->husb = $ind->gedcom_id;
         }
         $family->save();
+
+        $ind->updateLine();
 
         echo $this->getResponse(
             array('ind' => array($ind)),
@@ -426,6 +434,11 @@ class FamilytreetopControllerEditor extends FamilytreetopController
             $rel[] = $gedcom->relations->getArray($owner->gedcom_id, $e->gedcom_id);
         }
 
+        $ind->updateLine();
+        if($spouse){
+            $spouse->updateLine();
+        }
+
         echo $this->getResponse(
             array('ind' => $arrInd),
             array('chi' => array($child)),
@@ -460,6 +473,8 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         } else {
             $this->setEvent($ind, 'death', $form);
         }
+
+        $ind->updateLine();
 
         echo $this->getResponse(
             array('ind' => array($ind)),

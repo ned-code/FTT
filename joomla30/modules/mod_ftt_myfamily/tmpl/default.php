@@ -96,7 +96,7 @@ if($size < 6){
 </div>
 <script>
     $FamilyTreeTop.bind(function($){
-        var json = <?=json_encode(array('gedcom'=>$search, 'facebook'=>$result_users, 'data'=>$result_news, 'string'=>$string));?>;
+        var json = <?=json_encode(array('gedcom'=>$search, 'facebook'=>$result_users));?>;
         $FamilyTreeTop.fn.mod('myfamily').render(json);
     });
 </script>
