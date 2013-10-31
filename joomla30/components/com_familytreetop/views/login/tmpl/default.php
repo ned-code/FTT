@@ -1,14 +1,14 @@
 <?php
 defined('_JEXEC') or die;
 ?>
-<div class="row" id="loginHeader">
+<div class="row" id="loginHeader" style="visibility: hidden;">
     <div class="span4"></div>
     <div class="span4 text-center">
         <img src="<?=$this->baseurl;?>/templates/familytreetop/images/ftt_title.png" accesskey="">
     </div>
     <div class="span4"></div>
 </div>
-<div class="row" id="loginContent">
+<div class="row" id="loginContent" style="visibility:hidden;">
     <div class="span4"></div>
     <div class="span4">
         <div class="well text-center">
@@ -20,7 +20,7 @@ defined('_JEXEC') or die;
     </div>
     <div class="span4"></div>
 </div>
-<div class="row" id="loginFooter">
+<div class="row" id="loginFooter" style="visibility:hidden;">
     <div class="span12">
         <img src="<?=$this->baseurl;?>/templates/familytreetop/images/family_line.png" accesskey="">
     </div>
@@ -67,6 +67,10 @@ defined('_JEXEC') or die;
             var h = offset.top - o.top - 100;
             $(p).css('height', h + "px");
             $('#loginHeader').css('margin-top', Math.ceil((h - 200)/2)+'px');
+
+            $("#loginHeader").css("visibility", "visible");
+            $("#loginContent").css("visibility", "visible");
+            $("#loginFooter").css("visibility", "visible");
         }
 
         setPos();
