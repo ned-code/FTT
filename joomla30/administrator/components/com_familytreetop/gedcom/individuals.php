@@ -338,6 +338,14 @@ class FamilyTreeTopGedcomIndividualsManager {
                 WHERE l.type = 0 AND i.gedcom_id = l.id AND l.tree_id = t.id AND n.gedcom_id = i.gedcom_id AND t.id = ". $tree_id;
             $db->setQuery($sql);
             $this->list = $db->loadAssocList('gedcom_id');
+            //HACK TODO REMOVE THIS STRING AFTER UPDATE ALL TREES
+            $list = $this->list;
+            foreach($list as $id => $user){
+                if($user['is_father_line'] == null || $user['is_mother_line'] == null){
+                    $object = $this->get($user['gedcom_id']);
+                    $object->updateLine();
+                }
+            }
         }
     }
 
@@ -376,8 +384,8 @@ class FamilyTreeTopGedcomIndividualsManager {
             $ind->family_id = $data['family_id'];
             $ind->create_time = $data['create_time'];
             $ind->change_time = $data['change_time'];
-            $ind->is_father_line = ($data['is_father_line']!=null)?$data['is_father_line']:0;
-            $ind->is_mother_line = ($data['is_mother_line']!=null)?$data['is_mother_line']:0;
+            $ind->is_father_line = ($data['is_father_line']!=null)?$data['is_father_line']:$ind->checkLine(4);
+            $ind->is_mother_line = ($data['is_mother_line']!=null)?$data['is_mother_line']:$ind->checkLine(3);
 
             $ind->first_name = $data['first_name'];
             $ind->middle_name = $data['middle_name'];
