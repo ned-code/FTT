@@ -627,6 +627,9 @@ $FamilyTreeTop.create("profile", function($){
         if(object.facebook_id == 0){
             $(parent).find('[familytreetop="facebook"]').hide();
         } else {
+            if(args.object.isRegistered() && $this.mod('usertree').usermap().gedcom_id != args.object.gedcom_id){
+                $(parent).find('[familytreetop="edit"]').hide();
+            }
             $(parent).find('[familytreetop="invite"]').hide();
         }
         $(parent).find('[familytreetop="facebook"]').click(function(){
