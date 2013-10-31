@@ -405,7 +405,7 @@ $FamilyTreeTop.create("editor", function($){
                                _setValue_(id);
                             }
                         }
-                        var li = $('<li familytreetop="spouse" familytreetop-data="'+id+'" style="cursor:pointer; padding: 0 10px;">'+spouse.name()+'</li>');
+                        var li = $('<li familytreetop="spouse" familytreetop-data="'+id+'" style="cursor:pointer;"><a href="#">'+spouse.name()+'</a></li>');
                         $(divider).before(li);
                     });
                 } else {
