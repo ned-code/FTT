@@ -384,8 +384,8 @@ class FamilyTreeTopGedcomIndividualsManager {
             $ind->family_id = $data['family_id'];
             $ind->create_time = $data['create_time'];
             $ind->change_time = $data['change_time'];
-            $ind->is_father_line = ($data['is_father_line']!=null)?$data['is_father_line']:$ind->checkLine(4);
-            $ind->is_mother_line = ($data['is_mother_line']!=null)?$data['is_mother_line']:$ind->checkLine(3);
+            $ind->is_father_line = ($data['is_father_line']!=null)?$data['is_father_line']:0;
+            $ind->is_mother_line = ($data['is_mother_line']!=null)?$data['is_mother_line']:0;
 
             $ind->first_name = $data['first_name'];
             $ind->middle_name = $data['middle_name'];
