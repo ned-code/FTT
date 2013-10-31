@@ -118,6 +118,11 @@ class FamilyTreeTopGedcomConnectionsManager {
         }
     }
 
+    public function get($gedcom_id){
+        if(!isset($this->list[$gedcom_id])) return false;
+        return $this->list[$gedcom_id];
+    }
+
     public function getList(){
         return $this->connections;
     }

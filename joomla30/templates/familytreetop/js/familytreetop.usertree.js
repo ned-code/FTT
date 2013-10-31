@@ -161,6 +161,8 @@ $FamilyTreeTop.create("usertree", function($){
             know_as: ind.know_as,
             last_name: ind.last_name,
             middle_name: ind.middle_name,
+            is_father_line: ind.is_father_line,
+            is_mother_line: ind.is_mother_line,
             inLaw: (function(){
                 var relation = $this.getRelation(ind.gedcom_id);
                 if(relation){
@@ -426,17 +428,11 @@ $FamilyTreeTop.create("usertree", function($){
                     if(object.length > 1){
                         _user = $this.user(object[1]);
                         id = parseInt(_user.relationId);
-                        if(id==4 || id==2){
+                        if(id==4){
                             return true;
                         } else if(id > 4 && id < 9){
                             return true;
                         } else if(id == 105 || id == 106 || id == 205 || id == 206){
-                            return true;
-                        }
-                    } else if(object.length == 1){
-                        _user = $this.user(object[0]);
-                        id = parseInt(_user.relationId);
-                        if(id == 1){
                             return true;
                         }
                     }
@@ -451,17 +447,11 @@ $FamilyTreeTop.create("usertree", function($){
                     if(object.length > 1){
                         _user = $this.user(object[1]);
                         id = parseInt(_user.relationId);
-                        if(id==3 || id==2){
+                        if(id==3){
                             return true;
                         } else if(id > 4 && id < 9){
                             return true;
                         } else if(id == 105 || id == 106 || id == 205 || id == 206){
-                            return true;
-                        }
-                    } else if(object.length == 1){
-                        _user = $this.user(object[0]);
-                        id = parseInt(_user.relationId);
-                        if(id == 1){
                             return true;
                         }
                     }

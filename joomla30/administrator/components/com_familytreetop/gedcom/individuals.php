@@ -9,6 +9,9 @@ class FamilyTreeTopGedcomIndividualsModel {
     public $family_id = null;
     public $create_time = null;
     public $change_time = null;
+    public $is_father_line = null;
+    public $is_mother_line = null;
+
     public $notes = '';
 
     public $first_name = null;
@@ -224,12 +227,22 @@ class FamilyTreeTopGedcomIndividualsModel {
                 return false;
             }
         }
+
+        if(empty($this->is_father_line)){
+            $this->checkFatherLine();
+        }
+        if(empty($this->is_mother_line)){
+            $this->checkMotherLine();
+        }
+
         $ind->gedcom_id = $this->gedcom_id;
         $ind->gender = $this->gender;
         $ind->family_id = $this->family_id;
         $ind->creator_id = $this->creator_id;
         $ind->create_time = $this->create_time;
         $ind->change_time = $date->toSql();
+        $ind->is_mother_line = $this->is_mother_line;
+        $ind->is_father_line = $this->is_father_line;
         $ind->save();
 
         $this->id = $ind->id;
@@ -261,6 +274,10 @@ class FamilyTreeTopGedcomIndividualsModel {
         return FamilyTreeTopGedcomIndividualsManager::getParents($this->gedcom_id);
     }
 
+    public function getConnection(){
+        return FamilyTreeTopGedcomConnectionsManager($this->gedcom_id);
+    }
+
     public function addEvent($event){
         $this->events[] = $event;
     }
@@ -275,11 +292,35 @@ class FamilyTreeTopGedcomIndividualsModel {
         $data['family_id'] = $this->family_id;
         $data['create_time'] = $this->create_time;
         $data['change_time'] = $this->change_time;
+        $data['is_father_line'] = $this->is_father_line;
+        $data['is_mother_line'] = $this->is_mother_line;
         $data['first_name'] = $this->first_name;
         $data['middle_name'] = $this->middle_name;
         $data['last_name'] = $this->last_name;
         $data['know_as'] = $this->know_as;
         return $data;
+    }
+
+    private function checkFatherLine(){
+       return $this->checkLine(3);
+    }
+    private function checkMotherLine(){
+       return $this->checkLine(4);
+    }
+    private function checkLine($parent){
+        $con = $this->getConnection();
+        if(!$con) return false;
+        if(sizeof($con) > 1){
+            $id = $this->relationId();
+            if($id == $parent){
+                return true;
+            } else if($id > 4 && $id < 9){
+                return true;
+            } else if($id == 105 || $id == 106 || $id == 205 || $id == 206){
+                return true;
+            }
+        }
+        return false;
     }
 }
 
@@ -293,7 +334,7 @@ class FamilyTreeTopGedcomIndividualsManager {
         $this->tree_id = $tree_id;
         if(!empty($tree_id)){
             $db = JFactory::getDbo();
-            $sql = "SELECT i.id as id, i.gedcom_id, i.creator_id, i.gender, i.family_id, i.create_time,
+            $sql = "SELECT i.id as id, i.gedcom_id, i.creator_id, i.gender, i.family_id, i.create_time, i.is_father_line, i.is_mother_line,
                     i.change_time, n.first_name, n.middle_name, n.last_name, n.know_as
                 FROM #__familytreetop_individuals as i,#__familytreetop_names as n,  #__familytreetop_tree_links as l, #__familytreetop_trees as t
                 WHERE l.type = 0 AND i.gedcom_id = l.id AND l.tree_id = t.id AND n.gedcom_id = i.gedcom_id AND t.id = ". $tree_id;
@@ -337,6 +378,8 @@ class FamilyTreeTopGedcomIndividualsManager {
             $ind->family_id = $data['family_id'];
             $ind->create_time = $data['create_time'];
             $ind->change_time = $data['change_time'];
+            $ind->is_father_line = $data['is_father_line'];
+            $ind->is_mother_line = $data['is_mother_line'];
 
             $ind->first_name = $data['first_name'];
             $ind->middle_name = $data['middle_name'];
@@ -354,7 +397,7 @@ class FamilyTreeTopGedcomIndividualsManager {
     public function getFromDb($tree_id, $gedcom_id){
         if(empty($tree_id) || empty($gedcom_id)) return false;
         $db = JFactory::getDbo();
-        $sql = "SELECT i.id as id, i.gedcom_id, i.creator_id, i.gender, i.family_id, i.create_time,
+        $sql = "SELECT i.id as id, i.gedcom_id, i.creator_id, i.gender, i.family_id, i.create_time, i.is_father_line, i.is_mother_line,
                     i.change_time, n.first_name, n.middle_name, n.last_name, n.know_as
                 FROM #__familytreetop_individuals as i,#__familytreetop_names as n,  #__familytreetop_tree_links as l, #__familytreetop_trees as t
                 WHERE l.type = 0 AND i.gedcom_id = l.id AND l.tree_id = t.id AND n.gedcom_id = i.gedcom_id AND t.id = ". $tree_id . " AND l.id=".$gedcom_id;
@@ -373,6 +416,8 @@ class FamilyTreeTopGedcomIndividualsManager {
         $ind->family_id = $rows[0]['family_id'];
         $ind->create_time = $rows[0]['create_time'];
         $ind->change_time = $rows[0]['change_time'];
+        $ind->is_father_line = $rows[0]['is_father_line'];
+        $ind->is_mother_line = $rows[0]['is_mother_line'];
 
         $ind->first_name = $rows[0]['first_name'];
         $ind->middle_name = $rows[0]['middle_name'];
@@ -463,5 +508,6 @@ class FamilyTreeTopGedcomIndividualsManager {
     public function getList(){
         return $this->list;
     }
+
 
 }
