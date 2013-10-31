@@ -81,21 +81,21 @@ $FamilyTreeTop.create("familyline", function($){
             $(el).click($fn.buttonClick);
         },
         eye: function(item, args){
-            var func = (args.line)?"isFatherLine":"isMotherLine",
+            var method = (args.line)?"is_father_line":"is_mother_line",
                 active = (args.active)?"show":"hide",
                 el = item.target,
                 user = $this.mod('usertree').user(item.gedcom_id);
 
-            if(user[func]()){
+            if(user[method]){
                 $(el)[active]();
             }
         },
         adjust: function(item, args){
-            var func = (args.line)?"isFatherLine":"isMotherLine",
+            var method = (args.line)?"is_father_line":"is_mother_line",
                 user = $this.mod('usertree').user(item.gedcom_id),
                 el = item.target;
 
-            if(user[func]()){
+            if(user[method]){
                 if(args.active){
                     $(el).addClass(args.line?"familytreetop-is-father-line":"familytreetop-is-mother-line");
                 } else {

@@ -161,8 +161,8 @@ $FamilyTreeTop.create("usertree", function($){
             know_as: ind.know_as,
             last_name: ind.last_name,
             middle_name: ind.middle_name,
-            is_father_line: ind.is_father_line,
-            is_mother_line: ind.is_mother_line,
+            is_father_line: (ind.is_father_line!=null)?parseInt(ind.is_father_line):0,
+            is_mother_line: (ind.is_mother_line!=null)?parseInt(ind.is_mother_line):0,
             inLaw: (function(){
                 var relation = $this.getRelation(ind.gedcom_id);
                 if(relation){
@@ -419,44 +419,6 @@ $FamilyTreeTop.create("usertree", function($){
                 } else {
                     return false;
                 }
-            },
-            isFatherLine:function(){
-                var object, id, _user;
-                if(data.con == null) return false;
-                if("undefined" !== typeof(data.con[ind.gedcom_id])){
-                    object = data.con[ind.gedcom_id];
-                    if(object.length > 1){
-                        _user = $this.user(object[1]);
-                        id = parseInt(_user.relationId);
-                        if(id==4){
-                            return true;
-                        } else if(id > 4 && id < 9){
-                            return true;
-                        } else if(id == 105 || id == 106 || id == 205 || id == 206){
-                            return true;
-                        }
-                    }
-                }
-                return false;
-            },
-            isMotherLine:function(){
-                var object, id, _user;
-                if(data.con == null) return false;
-                if("undefined" !== typeof(data.con[ind.gedcom_id])){
-                    object = data.con[ind.gedcom_id];
-                    if(object.length > 1){
-                        _user = $this.user(object[1]);
-                        id = parseInt(_user.relationId);
-                        if(id==3){
-                            return true;
-                        } else if(id > 4 && id < 9){
-                            return true;
-                        } else if(id == 105 || id == 106 || id == 205 || id == 206){
-                            return true;
-                        }
-                    }
-                }
-                return false;
             }
         }
         cache[gedcom_id] = res;
