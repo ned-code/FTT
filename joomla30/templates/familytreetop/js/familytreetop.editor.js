@@ -631,7 +631,7 @@ $FamilyTreeTop.create("editor", function($){
 
         if(type=="addChild"){
             $fn.setParentSelection(editProfileForm, ind);
-            $(editProfileForm).find('[familytreetop="avatar"]').append('<i class="icon-group icon-4x"></i>');
+            $(editProfileForm).find('[familytreetop="avatar"]').append('<i class="icon-group" style="font-size:145px;"></i>');
         } else {
             $(editProfileForm).find('[familytreetop="addChildComplexSelect"]').remove();
         }

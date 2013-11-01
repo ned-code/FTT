@@ -3,6 +3,8 @@ defined('_JEXEC') or die;
 $gedcom = GedcomHelper::getInstance();
 $user = FamilyTreeTopUserHelper::getInstance()->get();
 $ind = $gedcom->individuals->get($user->gedcom_id);
+$fatherLineTotal = sizeof($gedcom->individuals->getCountByFamilyLine('is_father_line'));
+$motherLineTotal = sizeof($gedcom->individuals->getCountByFamilyLine('is_mother_line'));
 ?>
 <?php
 /*
@@ -93,7 +95,7 @@ $ind = $gedcom->individuals->get($user->gedcom_id);
                     <button style="background: none;border: none;" class="btn disabled">
                         <ul class="unstyled inline">
                             <li style="padding:0; position: relative;top: -3px;"><?=JText::_('MOD_FAMILYTREETOP_FAMILY_LINE_MOTHER')?></li>
-                            <li style="padding:0;"><canvas id="mother_chart" style="height:20px; width: 40px;"></canvas></li>
+                            <li style="padding:0;"><canvas id="mother_chart" familytreetop-data="<?=$motherLineTotal;?>" style="height:20px; width: 40px;"></canvas></li>
                         </ul>
                     </button>
                 </div>
@@ -103,7 +105,7 @@ $ind = $gedcom->individuals->get($user->gedcom_id);
                 <div data-familytreetop="familyline" class="btn-group pull-right">
                     <button style="background: none;border: none;" class="btn disabled">
                         <ul class="unstyled inline">
-                            <li style="padding:0;" ><canvas id="father_chart" style="height:20px; width: 40px;"></canvas></li>
+                            <li style="padding:0;" ><canvas id="father_chart" familytreetop-data="<?=$fatherLineTotal;?>"  style="height:20px; width: 40px;"></canvas></li>
                             <li style="padding:0; position: relative;top: -3px;"><?=JText::_('MOD_FAMILYTREETOP_FAMILY_LINE_FATHER')?></li>
                         </ul>
                     </button>

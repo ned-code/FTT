@@ -7,31 +7,38 @@ $FamilyTreeTop.create("familyline", function($){
         $fn;
 
     $fn = {
-        renderChart: function(canvas, ctx, index, data){
-            var lastend = Math.PI * 1.5,
+        renderChart: function(object, total){
+            var canvas = object.canvas,
+                ctx = object.ctx,
+                index = object.index,
+                lastend = Math.PI * 1.5,
                 myTotal = 0,
                 myColor = ['#c2c3c2','#22b14c','#c2c3c2'],
                 e,
                 i;
 
-            for( e = 0; e < data.length; e++){
-                myTotal += data[e];
+            for( e = 0; e < total.length; e++){
+                myTotal += total[e];
             }
 
-            for (i = 0; i < data.length; i++){
+            for (i = 0; i < total.length; i++){
                 ctx.fillStyle = index ? myColor[i] : myColor[i+1];
                 ctx.beginPath();
                 ctx.moveTo(canvas.width/2,canvas.height/2);
-                ctx.arc(canvas.width/2,canvas.height/2,canvas.height/2,lastend,lastend+(Math.PI*2*(data[i]/myTotal)),false);
+                ctx.arc(canvas.width/2,canvas.height/2,canvas.height/2,lastend,lastend+(Math.PI*2*(total[i]/myTotal)),false);
                 ctx.lineTo(canvas.width/2,canvas.height/2);
-                ctx.fill();
-                lastend += Math.PI*2*(data[i]/myTotal);
+              ctx.fill();
+                lastend += Math.PI*2*(total[i]/myTotal);
             }
         },
-        renderCharts:function(index, el){
-            var canvas = this,
-                ctx = canvas.getContext("2d");
-            $fn.renderChart(canvas, ctx, index, [485, 343]);
+        renderCharts:function(data){
+            var cnvs = [], total;
+            $(data).each(function(i,e){
+                cnvs.push({ canvas:e, ctx: e.getContext("2d"), index: i, total: parseInt($(e).attr('familytreetop-data')) });
+            });
+            total = cnvs[0].total + cnvs[1].total;
+            $fn.renderChart(cnvs[0], [cnvs[0].total,total]);
+            $fn.renderChart(cnvs[1], [cnvs[1].total,total]);
         },
         buttonClick:function(){
             var $this = this, icon = $($this).find('i'), _class = $(icon).attr('class').split(" ")[0], args, line, btnGroup;
@@ -120,7 +127,7 @@ $FamilyTreeTop.create("familyline", function($){
     $this.init = function(){
         $box = $('.navbar div[data-familytreetop="familyline"]');
         $box.find('button:not(.disabled)').each($fn.buttonsClick);
-        $box.find('button.disabled canvas').each($fn.renderCharts);
+        $fn.renderCharts($box.find('button.disabled canvas'));
         $this.mod('tabs').bind('all', function(e){
             if($(e.target).attr('data-familytreetop') == "family_tree"){
                 $fn.hide();

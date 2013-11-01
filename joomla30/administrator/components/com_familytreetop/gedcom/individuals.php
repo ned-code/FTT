@@ -486,6 +486,17 @@ class FamilyTreeTopGedcomIndividualsManager {
         return sizeof($this->list);
     }
 
+    public function getCountByFamilyLine($type = "is_father_line"){
+        $list = $this->getList();
+        $result = array();
+        foreach($list as $id => $user){
+            if($user[$type] == 1){
+                $result[$id] = $user;
+            }
+        }
+        return $result;
+    }
+
     public function getLastUpdatedProfile(){
         $db = JFactory::getDbo();
         $sql = "SELECT i.*
