@@ -404,6 +404,9 @@ $FamilyTreeTop.create("editor", function($){
                                _setTitle_(spouse.name());
                                _setValue_(id);
                             }
+                        } else if(spouses[0] == id){
+                            _setTitle_(spouse.name());
+                             _setValue_(id);
                         }
                         var li = $('<li familytreetop="spouse" familytreetop-data="'+id+'" style="cursor:pointer;"><a href="#">'+spouse.name()+'</a></li>');
                         $(divider).before(li);
@@ -412,6 +415,7 @@ $FamilyTreeTop.create("editor", function($){
                     $(divider).remove();
                 }
             }
+
         },
         setLiving:function(editProfileForm){
             $(editProfileForm).find('[familytreetop="living"]').change(function(){
