@@ -54,7 +54,7 @@ $FamilyTreeTop.create("editmenu", function($){
             $(box).find('[data-familytreetop-devider="1"]').remove();
         }
 
-        if(ind.inLaw || ind.relationId == 2){
+        if(ind.inLaw || ind.relationId == 2 || ind.relationId == 0){
             if(!$this.mod('usertree').isCommonAncestorExist(ind.gedcom_id, user.gedcom_id)){
                 $(box).find('li[familytreetop="deleteUnion"]').remove();
                 cdelete++
