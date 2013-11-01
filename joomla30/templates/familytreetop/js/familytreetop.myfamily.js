@@ -18,7 +18,6 @@ $FamilyTreeTop.create("myfamily", function($){
             return $facebook[object.actor_id].name;
         },
         getMessage: function(object){
-            //var str = object.message || object.description || object.story || (("undefined"!==typeof(object.type)&&object.type=="link")?"Likes on " + object.application.name :"") || "";
             var str = object.message || object.description || "";
             if(str.length == 0){
                 switch(object.type){
@@ -41,13 +40,6 @@ $FamilyTreeTop.create("myfamily", function($){
         },
         getFacebookSign: function(object){
             var div = '<div familytreetop="facebook-sign" style="position:absolute; top: 0; right: 0; cursor: pointer;">';
-            /*
-            if("undefined" !== typeof(object.link)){
-                div += '<a style="text-decoration: none;" target="_blank" href="'+object.link+'"><i class="icon-facebook-sign icon-2x familytreetop-icon-muted"></i></a>';
-            } else if("undefined" !== typeof(object.actions) && "undefined" !== typeof(object.actions[0].link)){
-                div += '<a style="text-decoration: none;" target="_blank" href="'+object.actions[0].link+'"><i class="icon-facebook-sign icon-2x familytreetop-icon-muted"></i></a>';
-            }
-            */
             if("undefined" !== typeof(object.permalink) && object.permalink.length > 0){
                 div += '<a style="text-decoration: none;" target="_blank" href="'+object.permalink+'"><i class="icon-facebook-sign icon-2x familytreetop-icon-muted"></i></a>';
             }
@@ -74,7 +66,6 @@ $FamilyTreeTop.create("myfamily", function($){
             return 0;
         },
         timeAgo: function(time){
-            //var date = new Date((time || "").replace(/-/g,"/").replace(/[TZ]/g," ")),
             var date = new Date(parseInt(time)*1000),
                 diff = (((new Date()).getTime() - date.getTime()) / 1000),
                 day_diff = Math.floor(diff / 86400);
@@ -101,7 +92,6 @@ $FamilyTreeTop.create("myfamily", function($){
             $(parentDiv).find('.span12').append('<div style="color:#4c5797; font-size:12px; font-weight: bold;"><span style="cursor: pointer;" gedcom_id="'+$fn.getGedcomId(object)+'" familytreetop="profile">'+$fn.getName(object)+'</span></div>');
             $(parentDiv).find('.span12').append('<div style="color: #797979;font-size: 12px;">'+$fn.getRelation(object)+'</div>');
             $(parentDiv).find('.span12').append('<div><table><tr><td familytreetop-image style="border:none;">'+$fn.getPicture(object)+'</td><td style="border:none;vertical-align: top;">'+$fn.getMessage(object)+'</td></tr></table></div>');
-            //$(parentDiv).find('.span12').append('<div><div familytreetop-image style="border:none;">'+$fn.getPicture(object)+'</div><div style="border:none;vertical-align: top;">'+$fn.getMessage(object)+'</div></div>');
             $(parentDiv).find('.span12').append('<div class="pull-right familytreetop-myfamily-buttons"><small>'+$fn.getTime(object)+'</small></div>');
             return parentDiv;
         },
@@ -113,7 +103,8 @@ $FamilyTreeTop.create("myfamily", function($){
             return td;
         },
         createTr: function(object){
-            var tr = $('<tr></tr>');
+            var tr = $("<tr "+(($gedcom[object.actor_id])?'gedcom_id="'+$gedcom[object.actor_id].gedcom_id+'"':'')+"></tr>");
+            var tr = $('<tr gedcom_id="'+( ("undefined"!==typeof($gedcom[object.actor_id]))?$gedcom[object.actor_id]:0 )+'"></tr>');
             $(tr).append($($fn.createTd("width:50px;")).append($fn.createImage(object)));
             $(tr).append($($fn.createTd()).append($fn.createBody(object)));
             return tr;
@@ -134,7 +125,6 @@ $FamilyTreeTop.create("myfamily", function($){
         $gedcom = json.gedcom;
         $facebook = json.facebook;
         $(json.data).each(function(index, element){
-            //console.log(element);
             var tr = $fn.createTr(element);
             $(tr).find('[familytreetop-image] img').load(function(e){
                 if("undefined" !== typeof(e.target.naturalWidth)){
@@ -143,6 +133,9 @@ $FamilyTreeTop.create("myfamily", function($){
                     $(td).css('width', width + "px");
                 }
             });
+            if($(tr).attr('gedcom_id') != 0 ){
+                $this.mod('familyline').bind(tr, $(tr).attr('gedcom_id'));
+            }
             $(tr).find('[familytreetop="facebook-sign"]').hover(function(){
                 $(this).find('i').removeClass('familytreetop-icon-muted');
             }, function(){
