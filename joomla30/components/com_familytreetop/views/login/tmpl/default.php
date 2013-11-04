@@ -9,13 +9,14 @@ defined('_JEXEC') or die;
     <div class="span4"></div>
 </div>
 <div class="row" id="loginContent" style="visibility:hidden;">
-    <div class="span4"></div>
+    <div class="span4">
+        <div style="visibility: hidden; text-align: center;" familytreetop="progressbar">
+             <img src="<?=$this->baseurl;?>/templates/familytreetop/img/circle_progressbar_128_128.GIF" />
+        </div>
+    </div>
     <div class="span4">
         <div class="well text-center">
             <a id="login" data-complete-text="Login" data-loading-text="Loading..."  href="#" onclick="return false;" class="btn btn-large">Login</a>
-        </div>
-        <div style="visibility: hidden;" class="progress progress-striped active">
-            <div class="bar" style="width: 0%;"></div>
         </div>
     </div>
     <div class="span4"></div>
@@ -27,10 +28,9 @@ defined('_JEXEC') or die;
 </div>
 <script>
     $FamilyTreeTop.bind(function($){
-        var $this = this, load, setPos,progressbarTimer, progressbarPercent, progressbarAnimateStart, progressbarAnimateStop;
+        var $this = this, load, setPos,progressbarAnimateStart;
         load = function(el, args){
             $this.ajax('user.activate', args, function(response){
-                progressbarAnimateStop();
                 if(response.auth == true){
                     window.location.href = "<?=JRoute::_("index.php?option=com_familytreetop&view=myfamily", false);?>";
                 } else if("undefined" !== response.url){
@@ -43,21 +43,8 @@ defined('_JEXEC') or die;
                 }
             });
             }
-        progressbarPercent = 0;
         progressbarAnimateStart = function(){
-            $('.progress').css('visibility', 'visible');
-            var bar = $('.bar');
-            progressbarTimer = setInterval(function(){
-                progressbarPercent += 1;
-                if(progressbarPercent==98){
-                    progressbarPercent = 97;
-                }
-                $(bar).css('width', progressbarPercent+'%');
-            }, 100);
-        }
-        progressbarAnimateStop = function(){
-            clearInterval(progressbarTimer);
-            $('.bar').css('width', '100%');
+            $('[familytreetop="progressbar"]').css('visibility', 'visible');
         }
         setPos = function(){
             var offset = $('#footer').offset();
