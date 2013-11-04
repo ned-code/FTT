@@ -27,7 +27,7 @@ $FamilyTreeTop.create("familyline", function($){
                 ctx.moveTo(canvas.width/2,canvas.height/2);
                 ctx.arc(canvas.width/2,canvas.height/2,canvas.height/2,lastend,lastend+(Math.PI*2*(total[i]/myTotal)),false);
                 ctx.lineTo(canvas.width/2,canvas.height/2);
-              ctx.fill();
+                ctx.fill();
                 lastend += Math.PI*2*(total[i]/myTotal);
             }
         },
@@ -37,8 +37,8 @@ $FamilyTreeTop.create("familyline", function($){
                 cnvs.push({ canvas:e, ctx: e.getContext("2d"), index: i, total: parseInt($(e).attr('familytreetop-data')) });
             });
             total = cnvs[0].total + cnvs[1].total;
-            $fn.renderChart(cnvs[0], [cnvs[0].total,total]);
-            $fn.renderChart(cnvs[1], [cnvs[1].total,total]);
+            $fn.renderChart(cnvs[0], [cnvs[0].total, cnvs[1].total]);
+            $fn.renderChart(cnvs[1], [cnvs[0].total, cnvs[1].total]);
         },
         buttonClick:function(){
             var $this = this, icon = $($this).find('i'), _class = $(icon).attr('class').split(" ")[0], args, line, btnGroup;
