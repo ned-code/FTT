@@ -1038,13 +1038,13 @@ $FamilyTreeTop.create("usertree", function($){
         var short = ["", 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
         if("undefined" === typeof(date) || date == null) return '';
         var ret = "";
-        if(date.start_year != null){
+        if(date.start_year != null && data.start_year != 0){
             ret += date.start_year + " - ";
         }
-        if(date.start_month != null){
+        if(date.start_month != null && data.start_month != 0){
             ret += short[parseInt(date.start_month)] + " ";
         }
-        if(date.start_day != null){
+        if(date.start_day != null && date.start_day != 0){
             ret += date.start_day;
         }
         return ret;
