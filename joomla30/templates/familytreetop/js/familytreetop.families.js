@@ -411,7 +411,11 @@ $FamilyTreeTop.create("families", function($){
             var center = getCenter(parentLineCoords);
             canvas.add(drawLine(parentLineCoords));
             if(points.length > 3){
-                canvas.add(drawLine([center[0], center[1], center[0], center[1] + 100]));
+                var gedcom_id = $(points[0].object).attr('gedcom_id');
+                var user = $this.mod('usertree').user(gedcom_id);
+                if(user.isChildrensExist()){
+                    canvas.add(drawLine([center[0], center[1], center[0], center[1] + 100]));
+                }
             }
             points.forEach(function(e,i){
                 switch(i){
