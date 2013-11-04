@@ -92,7 +92,7 @@ $motherLineTotal = sizeof($gedcom->individuals->getCountByFamilyLine('is_mother_
                 <div data-familytreetop="familyline" class="btn-group pull-right">
                     <button familytreetop-tooltip="Highlight people on your mother’s side" class="btn"><i familytreetop-line="mother" class="icon-adjust"></i></button>
                     <button familytreetop-tooltip="Hide people on your mother’s side" class="btn"><i familytreetop-line="mother" class="icon-eye-open"></i></button>
-                    <button style="background: none;border: none;" class="btn disabled">
+                    <button familytreetop-tooltip="Members on mother side: <?=$motherLineTotal;?>" style="background: none;border: none;" class="btn disabled">
                         <ul class="unstyled inline">
                             <li style="padding:0; position: relative;top: -3px;"><?=JText::_('MOD_FAMILYTREETOP_FAMILY_LINE_MOTHER')?></li>
                             <li style="padding:0;"><canvas id="mother_chart" familytreetop-data="<?=$motherLineTotal;?>" style="height:20px; width: 40px;"></canvas></li>
@@ -103,7 +103,7 @@ $motherLineTotal = sizeof($gedcom->individuals->getCountByFamilyLine('is_mother_
             <li class="divider-vertical"></li>
             <li>
                 <div data-familytreetop="familyline" class="btn-group pull-right">
-                    <button style="background: none;border: none;" class="btn disabled">
+                    <button familytreetop-tooltip="Members on father side: <?=$fatherLineTotal;?>" style="background: none;border: none;" class="btn disabled">
                         <ul class="unstyled inline">
                             <li style="padding:0;" ><canvas id="father_chart" familytreetop-data="<?=$fatherLineTotal;?>"  style="height:20px; width: 40px;"></canvas></li>
                             <li style="padding:0; position: relative;top: -3px;"><?=JText::_('MOD_FAMILYTREETOP_FAMILY_LINE_FATHER')?></li>
