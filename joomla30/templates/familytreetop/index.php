@@ -911,7 +911,7 @@ GedcomHelper::getInstance()->individuals->updateFamilyLine();
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.members.js"></script>
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.myfamily.js"></script>
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.latest.events.js"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.ie.placeholdres.js"></script>
+<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.ie.placeholders.js"></script>
 <script>
     if(!$FamilyTreeTop.app.config.appId){
         console.log('Facebook App Id doesn\'t exist');
