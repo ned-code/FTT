@@ -54,10 +54,10 @@ $FamilyTreeTop.create("this_month", function($){
             return "undefined" === typeof(data) || ("undefined" !== typeof(data) && data.BIRT.length == 0 && data.DEAT.length == 0 && data.MARR.length == 0);
         },
         render: function(month){
+            $data = $fn.getData(month);
             if(month == 0 || $fn.isEmpty($data)){
                 $fn.setAllMonths();
             } else {
-                $data = $fn.getData(month);
                 $fn.setEvents($data, 'BIRT');
                 $fn.setEvents($data, 'DEAT');
                 $fn.setEvents($data, 'MARR');
@@ -68,6 +68,7 @@ $FamilyTreeTop.create("this_month", function($){
         setAllMonths: function(){
             var box = $($parent).find('[familytreetop="all"]'),
                 table = $(box).find('table'),
+                index = 0,
                 data = $this.mod('usertree').getAllMonthsEvents(),
                 prop,
                 month,
@@ -80,6 +81,7 @@ $FamilyTreeTop.create("this_month", function($){
                 wife;
 
             $(table).find('[familytreetop-row]').remove();
+            $($parent).find('[familytreetop="none"]').hide();
             $($parent).find('[familytreetop="BIRT"]').hide();
             $($parent).find('[familytreetop="MARR"]').hide();
             $($parent).find('[familytreetop="DEAT"]').hide();
@@ -88,6 +90,7 @@ $FamilyTreeTop.create("this_month", function($){
 
             for(prop in data){
                 if(!data.hasOwnProperty(prop) || prop == 0) continue;
+                index++;
                 month = data[prop];
                 tr = $('<tr familytreetop-row ><td style="text-align: center; background: #c3c3c3;" colspan="5">'+($('#months').find('[data-familytreetop="'+prop+'"]').text())+'</td></tr>');
                 $(table).append(tr);
@@ -125,7 +128,11 @@ $FamilyTreeTop.create("this_month", function($){
                     $(table).append(tr);
                 }
             }
-            $(box).show();
+            if(index == 0){
+                $($parent).find('[familytreetop="none"]').show();
+            } else {
+                $(box).show();
+            }
         },
         setEvents: function(data, type){
             var parent =  $($parent).find('[familytreetop="'+type+'"]'),
@@ -138,6 +145,7 @@ $FamilyTreeTop.create("this_month", function($){
                 $(parent.show());
             }
             $($parent).find('[familytreetop="all"]').hide();
+            $($parent).find('[familytreetop="none"]').hide();
             $(table).html('');
             $(parent).find('li span[gedcom_id]').unbind();
             $(parent).find('li').remove();
