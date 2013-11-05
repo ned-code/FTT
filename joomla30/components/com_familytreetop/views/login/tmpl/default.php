@@ -10,13 +10,13 @@ defined('_JEXEC') or die;
 </div>
 <div class="row" id="loginContent" style="visibility:hidden;">
     <div class="span4">
-        <div style="visibility: hidden; text-align: center;" familytreetop="progressbar">
-             <img src="<?=$this->baseurl;?>/templates/familytreetop/img/circle_progressbar_128_128.GIF" />
-        </div>
     </div>
     <div class="span4">
         <div class="well text-center">
             <a id="login" data-complete-text="Login" data-loading-text="Loading..."  href="#" onclick="return false;" class="btn btn-large">Login</a>
+        </div>
+        <div style="visibility: hidden; text-align: center;" familytreetop="progressbar">
+             <img src="<?=$this->baseurl;?>/templates/familytreetop/img/circle_progressbar_128_128.GIF" />
         </div>
     </div>
     <div class="span4"></div>

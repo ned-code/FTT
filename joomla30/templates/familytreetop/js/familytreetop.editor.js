@@ -566,6 +566,10 @@ $FamilyTreeTop.create("editor", function($){
                     if(form[key].value == "default"){
                         return false;
                     }
+                } else if(form[key].name == "editProfile[b_year]" || form[key].name == "editProfile[d_year]" || form[key].name == "editUnion[year]"){
+                    if(form[key].value < 1000 || form[key].value > 2050){
+                        return false;
+                    }
                 }
             }
             return true;
