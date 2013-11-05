@@ -156,6 +156,15 @@ $FamilyTreeTop.create("members", function($){
         render: function(){
             var key, object, birth, tr,td, avatar;
             $($box).find('tbody tr').remove();
+            $users.sort(function(a,b){
+                if(a.facebook_id == 0 && b.facebook_id == 0){
+                    return 0;
+                } else if(a.facebook_id != 0 && b.facebook_id == 0){
+                    return -1;
+                } else if(a.facebook_id == 0 && b.facebook_id != 0){
+                    return 1;
+                }
+            });
             for (key in $users){
                 if(!$users.hasOwnProperty(key)) continue;
                 object = $users[key];
