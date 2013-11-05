@@ -1039,10 +1039,10 @@ $FamilyTreeTop.create("usertree", function($){
         if("undefined" === typeof(date) || date == null) return '';
         var ret = "";
         if(date.start_year != null && data.start_year != 0){
-            ret += date.start_year + " - ";
+            ret += date.start_year;
         }
         if(date.start_month != null && data.start_month != 0){
-            ret += short[parseInt(date.start_month)] + " ";
+            ret += " - " + short[parseInt(date.start_month)] + " ";
         }
         if(date.start_day != null && date.start_day != 0){
             ret += date.start_day;
