@@ -180,35 +180,22 @@ GedcomHelper::getInstance()->individuals->updateFamilyLine();
         </div>
         <div class="row-fluid" familytreetop-name="footer">
             <div class="span12 familytreetop-popover-footer text-center">
-                <button familytreetop="facebook" type="button" class="btn" style="display:none;padding: 4px 12px 0px 12px;">
-                    <div class="row-fluid">
-                        <div class="span4">
-                            <i class="icon-2x icon-facebook-sign"></i>
-                        </div>
-                        <div class="span8" style="line-height: 25px;">
-                            <?=JText::_('TPL_FAMILYTREETOP_BUTTON_FACEBOOK');?>
-                        </div>
+                <button familytreetop="facebook" type="button" class="btn" style="display:none;padding:2px 5px;">
+                    <i class="icon-2x icon-facebook-sign pull-left" style="margin:0;"></i>
+                    <div class="pull-left" style="line-height: 28px; margin-left: 3px; white-space: nowrap;">
+                        <?=JText::_('TPL_FAMILYTREETOP_BUTTON_FACEBOOK');?>
                     </div>
                 </button>
-
-                <button familytreetop-invite type="button" class="btn btn-primary" style="display:none;padding: 4px 12px 0px 12px;">
-                    <div class="row-fluid">
-                        <div class="span6">
-                            <i class="icon-2x  icon-white icon-facebook-sign"></i>
-                        </div>
-                        <div class="span6" style="line-height: 25px;">
-                            <?=JText::_('TPL_FAMILYTREETOP_BUTTON_INVITE');?>
-                        </div>
+                <button familytreetop-invite type="button" class="btn btn-primary" style="display:none;padding: 2px 5px">
+                    <i class="icon-2x icon-white icon-facebook-sign pull-left" style="margin:0;"></i>
+                    <div class="pull-left" style="line-height: 28px; margin-left: 3px; white-space: nowrap;">
+                        <?=JText::_('TPL_FAMILYTREETOP_BUTTON_INVITE');?>
                     </div>
                 </button>
-                <button familytreetop="profile" type="button" class="btn" style="padding: 4px 12px 0px 12px;">
-                    <div class="row-fluid">
-                        <div class="span4">
-                            <i class="icon-large icon-user"></i>
-                        </div>
-                        <div class="span8" style="line-height: 25px;">
-                             <?=JText::_('TPL_FAMILYTREETOP_BUTTON_PROFILE');?>
-                        </div>
+                <button familytreetop="profile" type="button" class="btn" style="padding: 2px 5px">
+                    <i class="icon-user pull-left" style="margin:0;font-size: 24px;line-height: 28px;"></i>
+                    <div class="pull-left" style="line-height: 28px; margin-left: 3px; white-space: nowrap;">
+                        <?=JText::_('TPL_FAMILYTREETOP_BUTTON_PROFILE');?>
                     </div>
                 </button>
             </div>

@@ -164,7 +164,6 @@ $FamilyTreeTop.create("popovers", function($){
                 $fn.profile(args, opt);
                 $fn.facebook(args, opt);
 
-
                 $('body').bind('click.familytreetop', function(e){
                     if(!$active) return false;
                     $('body').unbind('click.familytreetop');
