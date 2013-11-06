@@ -2,6 +2,7 @@ $FamilyTreeTop.create("editor", function($){
     'use strict';
 
     var $this = this,
+        $validEl = false,
         $fn;
 
     $fn = {
@@ -452,7 +453,18 @@ $FamilyTreeTop.create("editor", function($){
                 });
             });
         },
-
+        setValidElement:function(cl, v){
+            var parent, div, width;
+            $fn.removeValid();
+            $validEl = $(cl).find('[name="'+ v.name +'"]');
+            width = $($validEl).width();
+            parent = $($validEl).parent();
+            div = $('<div class="control-group error" style="display:inline-block;"><div class="controls"></div></div>');
+            $(div).css('width', width + "px");
+            $($validEl).css('width', '100%');
+            $(div).find('.controls').append($validEl);
+            $(parent).append(div);
+        },
         getModalBox:function(){
             var cl = $('#modal').clone().hide();
             $('body').append(cl);
@@ -564,15 +576,26 @@ $FamilyTreeTop.create("editor", function($){
                 if(!form.hasOwnProperty(key)) continue;
                 if(form[key].name == "editProfile[gender]"){
                     if(form[key].value == "default"){
-                        return false;
+                        return { success: false, name: form[key].name};
                     }
                 } else if(form[key].name == "editProfile[b_year]" || form[key].name == "editProfile[d_year]" || form[key].name == "editUnion[year]"){
                     if( form[key].value.length != 0 && (form[key].value < 1000 || form[key].value > 2050) ){
-                        return false;
+                        return { success: false, name: form[key].name};
                     }
                 }
             }
-            return true;
+            return { success: true };
+        },
+        removeValid: function(){
+            var parent;
+            if($validEl){
+                parent = $($validEl).parent().parent();
+                $(parent).before($validEl);
+                $($validEl).removeAttr('style');
+                $(parent).parent().append($validEl);
+                $(parent).remove();
+                $validEl = false;
+            }
         },
         progressbarOn:function(m){
             $(m).find('[familytreetop="circle-progressbar"]').css('visibility', 'visible');
@@ -587,7 +610,7 @@ $FamilyTreeTop.create("editor", function($){
             ];
             $(cl).find('button[familytreetop="submit"]').click(function(){
                 $fn.progressbarOn(cl);
-                var args, send, activeTab, saveButton;
+                var args, send, activeTab, saveButton, validate;
                 saveButton = $(this).hasClass('btn-primary');
                 if("undefined" === typeof(task)){
                     activeTab = $(cl).find('.nav.nav-tabs li.active a').attr('href').split('_')[1];
@@ -598,10 +621,13 @@ $FamilyTreeTop.create("editor", function($){
                     args = $fn.getArgs(cl, 0, ind);
                     send = task;
                 }
-                if(!$fn.validate(args)){
+                validate = $fn.validate(args);
+                if(!validate.success){
+                    $fn.setValidElement(cl, validate);
                     $fn.progressbarOff(cl);
                     return false;
                 }
+                $fn.removeValid();
                 $this.ajax(send, args, function(response){
                     $this.mod('usertree').update(response);
                     $fn.progressbarOff(cl);
