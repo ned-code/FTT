@@ -190,6 +190,7 @@ $FamilyTreeTop.create("editor", function($){
             }
         },
         setUnionsData:function(parent, ind){
+            //#efe4b0,FAF4D9
             var spouses = $this.mod('usertree').getSpouses(ind.gedcom_id), forms = [], default_family_button;
             spouses.forEach(function(spouse_id){
                 var form = $fn.getEditorUnionsForm(),
@@ -197,6 +198,7 @@ $FamilyTreeTop.create("editor", function($){
                     spouse = $this.mod('usertree').user(spouse_id),
                     family_id = $this.mod('usertree').getFamilyIdByPartners(ind.gedcom_id, spouse_id),
                     text,
+                    fieldset,
                     button;
 
                 $(form).find('input[familytreetop="family_id"]').val(family_id);
@@ -209,6 +211,9 @@ $FamilyTreeTop.create("editor", function($){
                 if(ind.family_id != null && ind.family_id == family_id){
                     button =  $(form).find('[familytreetop="current"]');
                     default_family_button = button;
+                    fieldset = $(default_family_button).parents('fieldset')[0];
+                    $(fieldset).css('background', '#FAF4D9');
+                    $($(fieldset).find('div')[0]).css('background', '#EFE4B0');
                     $(button).show();
                 } else {
                     button = $(form).find('[familytreetop="set-current"]');
@@ -233,11 +238,17 @@ $FamilyTreeTop.create("editor", function($){
                         gedcom_id: ind.gedcom_id,
                         family_id : family_id
                     }, function(response){
-                        var set = $(b).parent().find('[familytreetop="current"]');
+                        var set = $(b).parent().find('[familytreetop="current"]'), fieldset;
                         $(b).hide();
                         $(set).show();
                         $(default_family_button[0]).hide();
                         $(default_family_button[0]).parent().find('[familytreetop="set-current"]').show();
+                        fieldset = $(default_family_button).parents('fieldset')[0];
+                        $(fieldset).css('background', 'none');
+                        $($(fieldset).find('div')[0]).css('background', 'none');
+                        fieldset = $(set).parents('fieldset')[0];
+                        $(fieldset).css('background', '#FAF4D9');
+                        $($(fieldset).find('div')[0]).css('background', '#EFE4B0');
                         default_family_button = $(set);
                         $this.mod('usertree').setUserFamilyId(response.husb, response.wife, response.family_id);
                         $this.mod('usertree').call();
