@@ -28,7 +28,6 @@ class ContentViewForm extends JViewLegacy
 
 	public function display($tpl = null)
 	{
-		$app		= JFactory::getApplication();
 		$user		= JFactory::getUser();
 
 		// Get model data.
@@ -52,6 +51,11 @@ class ContentViewForm extends JViewLegacy
 			return false;
 		}
 
+		$this->item->tags = new JHelperTags;
+		if (!empty($this->item->id))
+		{
+			$this->item->tags->getItemTags('com_content.article.', $this->item->id);
+		}
 		if (!empty($this->item) && isset($this->item->id))
 		{
 			$this->item->images = json_decode($this->item->images);
@@ -61,7 +65,6 @@ class ContentViewForm extends JViewLegacy
 			$tmp->images = $this->item->images;
 			$tmp->urls = $this->item->urls;
 			$this->form->bind($tmp);
-
 		}
 
 		// Check for errors.
@@ -96,7 +99,6 @@ class ContentViewForm extends JViewLegacy
 	{
 		$app		= JFactory::getApplication();
 		$menus		= $app->getMenu();
-		$pathway	= $app->getPathway();
 		$title 		= null;
 
 		// Because the application sets a default page title,

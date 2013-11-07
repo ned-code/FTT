@@ -66,13 +66,12 @@ class InstallerViewLanguages extends InstallerViewDefault
 	protected function addToolbar()
 	{
 		$canDo = InstallerHelper::getActions();
-		JToolBarHelper::title(JText::_('COM_INSTALLER_HEADER_' . $this->getName()), 'install.png');
+		JToolBarHelper::title(JText::_('COM_INSTALLER_HEADER_' . $this->getName()), 'puzzle install');
 
 		if ($canDo->get('core.admin'))
 		{
 			JToolBarHelper::custom('languages.install', 'upload', 'upload', 'COM_INSTALLER_TOOLBAR_INSTALL', true, false);
 			JToolBarHelper::custom('languages.find', 'refresh', 'refresh', 'COM_INSTALLER_TOOLBAR_FIND_LANGUAGES', false, false);
-			JToolBarHelper::custom('languages.purge', 'purge', 'purge', 'JTOOLBAR_PURGE_CACHE', false, false);
 			JToolBarHelper::divider();
 			parent::addToolbar();
 

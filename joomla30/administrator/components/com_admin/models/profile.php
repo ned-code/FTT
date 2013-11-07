@@ -9,7 +9,7 @@
 
 defined('_JEXEC') or die;
 
-require_once JPATH_ADMINISTRATOR.'/components/com_users/models/user.php';
+require_once JPATH_ADMINISTRATOR . '/components/com_users/models/user.php';
 
 /**
  * User model.
@@ -34,11 +34,24 @@ class AdminModelProfile extends UsersModelUser
 	{
 		// Get the form.
 		$form = $this->loadForm('com_admin.profile', 'profile', array('control' => 'jform', 'load_data' => $loadData));
+
 		if (empty($form))
 		{
 			return false;
 		}
-		if (!JComponentHelper::getParams('com_users')->get('change_login_name'))
+
+		// Check for username compliance and parameter set
+		$usernameCompliant = true;
+
+		if ($this->loadFormData()->username)
+		{
+			$username = $this->loadFormData()->username;
+			$isUsernameCompliant  = !(preg_match('#[<>"\'%;()&\\s\\\\]|\\.\\./#', $username) || strlen(utf8_decode($username)) < 2);
+		}
+
+		$this->setState('user.username.compliant', $isUsernameCompliant);
+
+		if (!JComponentHelper::getParams('com_users')->get('change_login_name') && $isUsernameCompliant)
 		{
 			$form->setFieldAttribute('username', 'required', 'false');
 			$form->setFieldAttribute('username', 'readonly', 'true');
@@ -65,25 +78,18 @@ class AdminModelProfile extends UsersModelUser
 			$data = $this->getItem();
 		}
 
-		// TODO: Maybe this can go into the parent model somehow?
-		// Get the dispatcher and load the users plugins.
-		$dispatcher	= JEventDispatcher::getInstance();
+		// Load the users plugins.
 		JPluginHelper::importPlugin('user');
 
-		// Trigger the data preparation event.
-		$results = $dispatcher->trigger('onContentPrepareData', array('com_admin.profile', $data));
-
-		// Check for errors encountered while preparing the data.
-		if (count($results) && in_array(false, $results, true))
-		{
-			$this->setError($dispatcher->getError());
-		}
+		$this->preprocessData('com_admin.profile', $data);
 
 		return $data;
 	}
 
 	/**
 	 * Method to get a single record.
+	 *
+	 * @param   integer  $pk  The id of the primary key.
 	 *
 	 * @return  mixed  Object on success, false on failure.
 	 *
@@ -113,6 +119,15 @@ class AdminModelProfile extends UsersModelUser
 		unset($data['groups']);
 		unset($data['sendEmail']);
 		unset($data['block']);
+
+		// Unset the username if it should not be overwritten
+		$username = $data['username'];
+		$isUsernameCompliant = $this->getState('user.username.compliant');
+
+		if (!JComponentHelper::getParams('com_users')->get('change_login_name') && $isUsernameCompliant)
+		{
+			unset($data['username']);
+		}
 
 		// Bind the data.
 		if (!$user->bind($data))

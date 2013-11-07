@@ -1,0 +1,127 @@
+/* Simple format with a grey outline and blue send button */
+/* Version 8.06.01 */
+
+.fcp_wrapper 
+	{background-color: #F1F1F1; border:1px solid #E5E5E5; 
+	 padding:5px; font-family:Arial, sans-serif; font-size:13px; font-weight:bold; color:#222222; 
+	 display:inline-block; width:75%;}
+
+/* line layout */
+
+div.fcp_line        {clear:left; padding-top:0.5em;}
+div.fcp_line label  {display:inline-block; vertical-align:top; text-align:right; width:12em; max-width:20%; margin-right:1em; font-weight:bold;}
+
+@media screen and (max-width: 800px) 
+{
+    .fcp_wrapper        {width:90%;}
+    div.fcp_line label  {display:block; text-align:left; width:auto; max-width:90%;}
+}
+	
+/* mandatory and errors */
+
+.fcp_mandatory:after {content:"*"; margin-left:0.25em; font-size:larger;}
+.fcp_error_msg       {display:inline-block; margin-left:5px; margin-top:2px; background: url('css_images/val_err1.png') no-repeat left top; }
+.fcp_error_msg span  {display:inline-block; height:16px; width:16px; }
+span.fcp_err         {display:none; }
+.fcp_error_field     {border:1px solid #F57777 !important; -webkit-box-shadow:0 0 2px #f00; -moz-box-shadow:0 0 2px #f00; box-shadow:0 0 2px #f00;}
+
+/* secure-image captcha */
+
+div.fcp_captcha input   {vertical-align:top;}
+div.fcp_captcha_inner   {display:inline-block; padding:2px; background:#F3F4F5 url('css_images/securimage.png') no-repeat 4% 90%;
+                         border:1px solid #DADADA; -webkit-border-radius:5px; -moz-border-radius:5px; border-radius:5px;}
+img.fcp_captcha_img     {vertical-align:middle; margin:0 5px 0 5px; 
+                         border:1px solid #DADADA; -webkit-border-radius:5px; -moz-border-radius:5px; border-radius:5px;}
+span.fcp_captcha_reload {display:inline-block; height:24px; width:24px; vertical-align:middle;
+                         background:#F3F4F5 url('css_images/reload_blue.png') no-repeat center center; cursor:pointer;}
+#fcp_err_captcha        {margin-top:20px;}                
+                         
+/* image captcha */
+
+.fcp_image_inner        {display:inline-block; }
+.fcp_inactive           {border:2px solid transparent;}
+.fcp_active             {border:2px solid #6B6B6B; -webkit-border-radius:4px; -moz-border-radius:4px; border-radius:4px;}
+#fcp_err_image          {margin-top:20px;}
+
+/* recaptcha */
+
+#recaptcha_widget_div	{display:inline-block; }
+#fcp_err_recap		{margin-top:10px;}
+
+/* fieldsets */
+
+fieldset.fcp_fieldset         
+	{display:inline-block; margin:5px; padding:5px; border:1px solid #DADADA;
+	 -webkit-box-shadow:3px 3px 3px gray; -moz-box-shadow:3px 3px 3px gray; box-shadow:3px 3px 3px gray;
+         -webkit-border-radius:6px; -moz-border-radius:6px; border-radius:6px;}
+fieldset.fcp_fieldset legend  
+	{padding:3px 10px 3px 10px;
+         width:auto; font-size:100%; line-height:1em; margin:0 0 0 10px;}
+
+/* input fields */
+
+div.fcp_line input, div.fcp_line textarea, div.fcp_line select
+	{max-width:90%; width:auto !important; border:1px inset #74B9EF; padding:0 2px 0 3px;}
+div.fcp_line textarea {height:auto;}
+div.fcp_line input:hover, div.fcp_line textarea:hover, div.fcp_line select:hover
+	{-webkit-box-shadow:0 0 5px #74B9EF; -moz-box-shadow:0 0 5px #74B9EF; box-shadow:0 0 5px #74B9EF;}
+div.fcp_line input:focus, div.fcp_line textarea:focus, div.fcp_line select:focus
+	{outline:none; border:1px solid #4D90FE; 
+	 -webkit-box-shadow:inset 0 1px 2px rgba(0, 0, 0, 0.3); -moz-box-shadow:inset 0 1px 2px rgba(0,0,0,0.3); box-shadow:inset 0 1px 2px rgba(0, 0, 0, 0.3);}
+div.fcp_radio input, div.fcp_checkbox input             {border:none;}
+div.fcp_radio input:hover, div.fcp_checkbox input:hover {border:none;}
+div.fcp_line input[type="checkbox"] {margin-top:0; vertical-align:middle;}	
+
+/* radio button and checkbox layout */
+
+div.fcp_radio_h_inner     {display:inline-block; max-width:70%;}
+span.fcp_radio_h          {display:inline-block;}
+span.fcp_radio_h label    {width:auto; padding-left:5px;}
+
+div.fcp_radio_v_inner     {display:inline-block; max-width:70%;}
+span.fcp_radio_v          {display:block;}
+span.fcp_radio_v label    {width:auto; padding-left:5px;}
+span.fcp_radio_v input    {clear:left; }
+
+div.fcp_checkbox_l input.fcp_lcb {margin-left:8em; margin-right:1em;}
+div.fcp_checkbox_l label.fcp_lcb {float:none; width:auto; max-width:70%;}
+
+@media screen and (max-width: 800px) 
+{
+	div.fcp_checkbox_l input.fcp_lcb {margin-left:0; margin-right:1em;}
+	div.fcp_checkbox_l label.fcp_lcb {float:none; width:auto; max-width:90%;}
+}
+
+div.fcp_checkbox_inner    {display:inline-block; max-width:60%;}
+span.fcp_checkbox_m       {display:inline-block;}
+span.fcp_checkbox_m label {width:auto; max-width:none; padding-left:5px;}
+
+/* fixed texts */
+
+div.fcp_fixed_text 	  {height:24px; margin:5px; }
+div.fcp_fixed_text label  {text-align:left; margin-left:1em; font-size:110%;}
+
+/* the send button */
+
+.fcp_sendrow {margin-left:10%;}
+.fcp_form input.button 
+	{background-color:#4C8EFB;
+	 background-image: -webkit-linear-gradient(top,#4D90FE,#4787ED); -moz-linear-gradient(top,#4D90FE,#4787ED); linear-gradient(top,#4D90FE,#4787ED);
+         border:1px solid #C8D9F3; -webkit-border-radius:2px; -moz-border-radius:2px; border-radius:2px;
+         width:auto; min-width:55px; margin:2px 2px 2px 5px; padding:5px; text-shadow:0 1px rgba(0, 0, 0, 0.1); text-align:center;
+         font-size:1.2em; font-weight:bold; color:white; cursor:pointer;}
+.fcp_form input.button:hover    
+	{background-color:#357AE8; border:1px solid #2F5BB7;
+         background-image: -webkit-linear-gradient(top,#4D90FE,#357AE8); -moz-linear-gradient(top,#4D90FE,#357AE8); linear-gradient(top,#4D90FE,#357AE8);}
+.fcp_form input.button:disabled 
+	{background-color:#DAD8D8; background-image:none; cursor:default;}
+#fcp_spinner {margin-top:8px;}
+.fcp_spinner {background:url('css_images/spinner.gif') no-repeat left center !important; height:16px; width:16px;}
+
+/* Tooltips (Joomla 1.5 uses tool-, Joomla 1.6+ uses tip- */
+
+.tip, .tool-tip         {float:left; padding:3px; max-width:400px; z-index:50; background:black !important; text-align:left;
+	                 border:1px solid white; -webkit-border-radius:4px; -moz-border-radius:4px; border-radius:4px; }
+.tip-title, .tool-title {color:white; white-space:normal; font-size:90%; font-weight:bold; }
+.tip-text, .tool-text   {color:white; font-size:90%; margin:0; white-space:normal;}
+

@@ -102,4 +102,23 @@ class WeblinksControllerWeblink extends JControllerForm
 
 		return parent::batch($model);
 	}
+
+	/**
+	 * Function that allows child controller access to model data after the data has been saved.
+	 *
+	 * @param   JModelLegacy  $model      The data model object.
+	 * @param   array         $validData  The validated data.
+	 *
+	 * @return	void
+	 * @since	1.6
+	 */
+	protected function postSaveHook(JModelLegacy $model, $validData = array())
+	{
+		$task = $this->getTask();
+
+		if ($task == 'save')
+		{
+			$this->setRedirect(JRoute::_('index.php?option=com_weblinks&view=weblinks', false));
+		}
+	}
 }

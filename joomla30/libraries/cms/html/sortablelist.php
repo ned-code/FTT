@@ -41,7 +41,7 @@ abstract class JHtmlSortablelist
 	public static function sortable($tableId, $formId, $sortDir = 'asc', $saveOrderingUrl, $proceedSaveOrderButton = true, $nestedList = false)
 	{
 		// Only load once
-		if (isset(self::$loaded[__METHOD__]))
+		if (isset(static::$loaded[__METHOD__]))
 		{
 			return;
 		}
@@ -49,8 +49,8 @@ abstract class JHtmlSortablelist
 		// Depends on jQuery UI
 		JHtml::_('jquery.ui', array('core', 'sortable'));
 
-		JHtml::script('jui/sortablelist.js', false, true);
-		JHtml::stylesheet('jui/sortablelist.css', false, true, false);
+		JHtml::_('script', 'jui/sortablelist.js', false, true);
+		JHtml::_('stylesheet', 'jui/sortablelist.css', false, true, false);
 
 		// Attach sortable to document
 		JFactory::getDocument()->addScriptDeclaration("
@@ -64,11 +64,11 @@ abstract class JHtmlSortablelist
 
 		if ($proceedSaveOrderButton)
 		{
-			self::_proceedSaveOrderButton();
+			static::_proceedSaveOrderButton();
 		}
 
 		// Set static array
-		self::$loaded[__METHOD__] = true;
+		static::$loaded[__METHOD__] = true;
 		return;
 	}
 

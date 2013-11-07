@@ -16,7 +16,7 @@ defined('_JEXEC') or die;
  * @subpackage  mod_login
  * @since       1.5
  */
-class modLoginHelper
+class ModLoginHelper
 {
 	public static function getReturnURL($params, $type)
 	{
@@ -26,12 +26,11 @@ class modLoginHelper
 		if ($itemid = $params->get($type))
 		{
 			$db		= JFactory::getDbo();
-			$query	= $db->getQuery(true);
-
-			$query->select($db->quoteName('link'));
-			$query->from($db->quoteName('#__menu'));
-			$query->where($db->quoteName('published') . '=1');
-			$query->where($db->quoteName('id') . '=' . $db->quote($itemid));
+			$query	= $db->getQuery(true)
+				->select($db->quoteName('link'))
+				->from($db->quoteName('#__menu'))
+				->where($db->quoteName('published') . '=1')
+				->where($db->quoteName('id') . '=' . $db->quote($itemid));
 
 			$db->setQuery($query);
 			if ($link = $db->loadResult())
@@ -48,7 +47,7 @@ class modLoginHelper
 		if (!$url)
 		{
 			// Stay on the same page
-			$uri = clone JURI::getInstance();
+			$uri = clone JUri::getInstance();
 			$vars = $router->parse($uri);
 			unset($vars['lang']);
 			if ($router->getMode() == JROUTER_MODE_SEF)
@@ -64,17 +63,17 @@ class modLoginHelper
 						$url = 'index.php?Itemid='.$itemid;
 					}
 					else {
-						$url = 'index.php?'.JURI::buildQuery($vars).'&Itemid='.$itemid;
+						$url = 'index.php?'.JUri::buildQuery($vars).'&Itemid='.$itemid;
 					}
 				}
 				else
 				{
-					$url = 'index.php?'.JURI::buildQuery($vars);
+					$url = 'index.php?'.JUri::buildQuery($vars);
 				}
 			}
 			else
 			{
-				$url = 'index.php?'.JURI::buildQuery($vars);
+				$url = 'index.php?'.JUri::buildQuery($vars);
 			}
 		}
 
@@ -85,5 +84,11 @@ class modLoginHelper
 	{
 		$user = JFactory::getUser();
 		return (!$user->get('guest')) ? 'logout' : 'login';
+	}
+
+	public static function getTwoFactorMethods()
+	{
+		require_once JPATH_ADMINISTRATOR . '/components/com_users/helpers/users.php';
+		return UsersHelper::getTwoFactorMethods();
 	}
 }

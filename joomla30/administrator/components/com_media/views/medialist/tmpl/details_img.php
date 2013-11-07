@@ -23,7 +23,7 @@ $dispatcher->trigger('onContentBeforeDisplay', array('com_media.file', &$this->_
 			<td class="description">
 				<a href="<?php echo  COM_MEDIA_BASEURL.'/'.$this->_tmp_img->path_relative; ?>" title="<?php echo $this->_tmp_img->name; ?>" rel="preview"><?php echo $this->escape($this->_tmp_img->title); ?></a>
 			</td>
-			<td>
+			<td class="dimensions">
 				<?php echo JText::sprintf('COM_MEDIA_IMAGE_DIMENSIONS', $this->_tmp_img->width, $this->_tmp_img->height); ?>
 			</td>
 			<td class="filesize">
@@ -31,7 +31,7 @@ $dispatcher->trigger('onContentBeforeDisplay', array('com_media.file', &$this->_
 			</td>
 		<?php if ($user->authorise('core.delete', 'com_media')):?>
 			<td>
-				<a class="delete-item" target="_top" href="index.php?option=com_media&amp;task=file.delete&amp;tmpl=index&amp;<?php echo JSession::getFormToken(); ?>=1&amp;folder=<?php echo $this->state->folder; ?>&amp;rm[]=<?php echo $this->_tmp_img->name; ?>" rel="<?php echo $this->_tmp_img->name; ?>"><i class="icon-remove hasTooltip" title="<?php echo JText::_('JACTION_DELETE');?>"></i></a>
+				<a class="delete-item" target="_top" href="index.php?option=com_media&amp;task=file.delete&amp;tmpl=index&amp;<?php echo JSession::getFormToken(); ?>=1&amp;folder=<?php echo $this->state->folder; ?>&amp;rm[]=<?php echo $this->_tmp_img->name; ?>" rel="<?php echo $this->_tmp_img->name; ?>"><i class="icon-remove hasTooltip" title="<?php echo JHtml::tooltipText('JACTION_DELETE');?>"></i></a>
 				<input type="checkbox" name="rm[]" value="<?php echo $this->_tmp_img->name; ?>" />
 			</td>
 		<?php endif;?>

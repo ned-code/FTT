@@ -18,6 +18,15 @@ defined('_JEXEC') or die;
  */
 class UsersModelNote extends JModelAdmin
 {
+
+	/**
+	 * The type alias for this content type.
+	 *
+	 * @var      string
+	 * @since    3.2
+	 */
+	public $typeAlias = 'com_users.note';
+
 	/**
 	 * Method to get the record form.
 	 *
@@ -58,7 +67,7 @@ class UsersModelNote extends JModelAdmin
 		JPluginHelper::importPlugin('user');
 
 		// Trigger the data preparation event.
-		$results = $dispatcher->trigger('onContentPrepareData', array('com_users.note', $result));
+		$dispatcher->trigger('onContentPrepareData', array('com_users.note', $result));
 
 		return $result;
 	}
@@ -110,8 +119,9 @@ class UsersModelNote extends JModelAdmin
 			{
 				$data->user_id = $userId;
 			}
-
 		}
+
+		$this->preprocessData('com_users.note', $data);
 
 		return $data;
 	}

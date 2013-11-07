@@ -25,6 +25,14 @@ class BannersModelBanner extends JModelAdmin
 	protected $text_prefix = 'COM_BANNERS_BANNER';
 
 	/**
+	 * The type alias for this content type.
+	 *
+	 * @var      string
+	 * @since    3.2
+	 */
+	public $typeAlias = 'com_banners.banner';
+
+	/**
 	 * Method to perform batch operations on an item or a set of items.
 	 *
 	 * @param   array   $commands   An array of commands to perform.
@@ -421,6 +429,8 @@ class BannersModelBanner extends JModelAdmin
 			}
 		}
 
+		$this->preprocessData('com_banners.banner', $data);
+
 		return $data;
 	}
 
@@ -498,7 +508,11 @@ class BannersModelBanner extends JModelAdmin
 			if (empty($table->ordering))
 			{
 				$db = JFactory::getDbo();
-				$db->setQuery('SELECT MAX(ordering) FROM #__banners');
+				$query = $db->getQuery(true)
+					->select('MAX(ordering)')
+					->from('#__banners');
+
+				$db->setQuery($query);
 				$max = $db->loadResult();
 
 				$table->ordering = $max + 1;
@@ -513,4 +527,35 @@ class BannersModelBanner extends JModelAdmin
 		// Increment the content version number.
 		$table->version++;
 	}
+
+	/**
+	 * Method to save the form data.
+	 *
+	 * @param   array  The form data.
+	 *
+	 * @return  boolean  True on success.
+	 * @since   1.6
+	 */
+
+	public function save($data)
+	{
+		$app = JFactory::getApplication();
+
+		// Alter the name for save as copy
+		if ($app->input->get('task') == 'save2copy')
+		{
+			list($name, $alias) = $this->generateNewTitle($data['catid'], $data['alias'], $data['name']);
+			$data['name']	= $name;
+			$data['alias']	= $alias;
+			$data['state']	= 0;
+		}
+
+		if (parent::save($data))
+		{
+			return true;
+		}
+
+		return false;
+	}
+
 }

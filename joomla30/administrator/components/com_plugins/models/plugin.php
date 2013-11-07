@@ -110,6 +110,8 @@ class PluginsModelPlugin extends JModelAdmin
 			$data = $this->getItem();
 		}
 
+		$this->preprocessData('com_plugins.plugin', $data);
+
 		return $data;
 	}
 
@@ -211,22 +213,19 @@ class PluginsModelPlugin extends JModelAdmin
 		$folder		= $this->getState('item.folder');
 		$element	= $this->getState('item.element');
 		$lang		= JFactory::getLanguage();
-		$client		= JApplicationHelper::getClientInfo(0);
 
 		// Load the core and/or local language sys file(s) for the ordering field.
 		$db = JFactory::getDbo();
 		$query = 'SELECT element' .
 				' FROM #__extensions' .
-				' WHERE (type =' .$db->Quote('plugin'). 'AND folder='. $db->Quote($folder) . ')';
+				' WHERE (type =' .$db->quote('plugin'). 'AND folder='. $db->quote($folder) . ')';
 		$db->setQuery($query);
 		$elements = $db->loadColumn();
 
 		foreach ($elements as $elementa)
 		{
-				$lang->load('plg_'.$folder.'_'.$elementa.'.sys', JPATH_ADMINISTRATOR, null, false, false)
-			||	$lang->load('plg_'.$folder.'_'.$elementa.'.sys', JPATH_PLUGINS.'/'.$folder.'/'.$elementa, null, false, false)
-			||	$lang->load('plg_'.$folder.'_'.$elementa.'.sys', JPATH_ADMINISTRATOR, $lang->getDefault(), false, false)
-			||	$lang->load('plg_'.$folder.'_'.$elementa.'.sys', JPATH_PLUGINS.'/'.$folder.'/'.$elementa, $lang->getDefault(), false, false);
+				$lang->load('plg_'.$folder.'_'.$elementa.'.sys', JPATH_ADMINISTRATOR, null, false, true)
+			||	$lang->load('plg_'.$folder.'_'.$elementa.'.sys', JPATH_PLUGINS.'/'.$folder.'/'.$elementa, null, false, true);
 		}
 
 		if (empty($folder) || empty($element))
@@ -242,10 +241,8 @@ class PluginsModelPlugin extends JModelAdmin
 		}
 
 		// Load the core and/or local language file(s).
-			$lang->load('plg_'.$folder.'_'.$element, JPATH_ADMINISTRATOR, null, false, false)
-		||	$lang->load('plg_'.$folder.'_'.$element, JPATH_PLUGINS.'/'.$folder.'/'.$element, null, false, false)
-		||	$lang->load('plg_'.$folder.'_'.$element, JPATH_ADMINISTRATOR, $lang->getDefault(), false, false)
-		||	$lang->load('plg_'.$folder.'_'.$element, JPATH_PLUGINS.'/'.$folder.'/'.$element, $lang->getDefault(), false, false);
+			$lang->load('plg_'.$folder.'_'.$element, JPATH_ADMINISTRATOR, null, false, true)
+		||	$lang->load('plg_'.$folder.'_'.$element, JPATH_PLUGINS.'/'.$folder.'/'.$element, null, false, true);
 
 		if (file_exists($formFile))
 		{
@@ -287,8 +284,8 @@ class PluginsModelPlugin extends JModelAdmin
 	protected function getReorderConditions($table)
 	{
 		$condition = array();
-		$condition[] = 'type = '. $this->_db->Quote($table->type);
-		$condition[] = 'folder = '. $this->_db->Quote($table->folder);
+		$condition[] = 'type = '. $this->_db->quote($table->type);
+		$condition[] = 'folder = '. $this->_db->quote($table->folder);
 		return $condition;
 	}
 

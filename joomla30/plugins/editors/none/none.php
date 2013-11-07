@@ -16,13 +16,14 @@ defined('_JEXEC') or die;
  * @subpackage  Editors.none
  * @since       1.5
  */
-class plgEditorNone extends JPlugin
+class PlgEditorNone extends JPlugin
 {
 	/**
 	 * Method to handle the onInitEditor event.
 	 *  - Initialises the Editor
 	 *
 	 * @return  string	JavaScript Initialization string
+	 *
 	 * @since 1.5
 	 */
 	public function onInit()
@@ -68,7 +69,7 @@ class plgEditorNone extends JPlugin
 	/**
 	 * Get the editor content.
 	 *
-	 * @param   string	$id		The id of the editor field.
+	 * @param   string  $id  The id of the editor field.
 	 *
 	 * @return  string
 	 */
@@ -80,8 +81,8 @@ class plgEditorNone extends JPlugin
 	/**
 	 * Set the editor content.
 	 *
-	 * @param   string	$id		The id of the editor field.
-	 * @param   string	$html	The content to set.
+	 * @param   string  $id    The id of the editor field.
+	 * @param   string  $html  The content to set.
 	 *
 	 * @return  string
 	 */
@@ -91,9 +92,9 @@ class plgEditorNone extends JPlugin
 	}
 
 	/**
-	 * @param   string	$id
+	 * @param   string  $id  The id of the editor field
 	 *
-	 * @return  string
+	 * @return  boolean  returns true when complete
 	 */
 	public function onGetInsertMethod($id)
 	{
@@ -116,17 +117,17 @@ class plgEditorNone extends JPlugin
 	/**
 	 * Display the editor area.
 	 *
-	 * @param   string	$name		The control name.
-	 * @param   string	$html		The contents of the text area.
-	 * @param   string	$width		The width of the text area (px or %).
-	 * @param   string	$height		The height of the text area (px or %).
-	 * @param   integer  $col		The number of columns for the textarea.
-	 * @param   integer  $row		The number of rows for the textarea.
-	 * @param   boolean	$buttons	True and the editor buttons will be displayed.
-	 * @param   string	$id			An optional ID for the textarea (note: since 1.6). If not supplied the name is used.
-	 * @param   string	$asset
-	 * @param   object	$author
-	 * @param   array  $params		Associative array of editor parameters.
+	 * @param   string   $name     The control name.
+	 * @param   string   $content  The contents of the text area.
+	 * @param   string   $width    The width of the text area (px or %).
+	 * @param   string   $height   The height of the text area (px or %).
+	 * @param   integer  $col      The number of columns for the textarea.
+	 * @param   integer  $row      The number of rows for the textarea.
+	 * @param   boolean  $buttons  True and the editor buttons will be displayed.
+	 * @param   string   $id       An optional ID for the textarea (note: since 1.6). If not supplied the name is used.
+	 * @param   string   $asset    The object asset
+	 * @param   object   $author   The author.
+	 * @param   array    $params   Associative array of editor parameters.
 	 *
 	 * @return  string
 	 */
@@ -154,6 +155,16 @@ class plgEditorNone extends JPlugin
 		return $editor;
 	}
 
+	/**
+	 * Displays the editor buttons.
+	 *
+	 * @param   string  $name     The control name.
+	 * @param   mixed   $buttons  [array with button objects | boolean true to display buttons]
+	 * @param   string  $asset    The object asset
+	 * @param   object  $author   The author.
+	 *
+	 * @return  string HTML
+	 */
 	public function _displayButtons($name, $buttons, $asset, $author)
 	{
 		// Load modal popup behavior
@@ -187,10 +198,10 @@ class plgEditorNone extends JPlugin
 				if ($button->get('name'))
 				{
 					$modal		= ($button->get('modal')) ? 'class="modal-button btn"' : null;
-					$href		= ($button->get('link')) ? 'class="btn" href="'.JURI::base().$button->get('link').'"' : null;
-					$onclick	= ($button->get('onclick')) ? 'onclick="'.$button->get('onclick').'"' : null;
+					$href		= ($button->get('link')) ? 'class="btn" href="' . JUri::base() . $button->get('link') . '"' : null;
+					$onclick	= ($button->get('onclick')) ? 'onclick="' . $button->get('onclick') . '"' : null;
 					$title      = ($button->get('title')) ? $button->get('title') : $button->get('text');
-					$return .= "<a ".$modal." title=\"".$title."\" ".$href." ".$onclick." rel=\"".$button->get('options')."\"><i class=\"icon-".$button->get('name')."\"></i> ".$button->get('text')."</a>\n";
+					$return .= "<a " . $modal . " title=\"" . $title . "\" " . $href . " " . $onclick . " rel=\"" . $button->get('options') . "\"><i class=\"icon-" . $button->get('name') . "\"></i> " . $button->get('text') . "</a>\n";
 				}
 			}
 

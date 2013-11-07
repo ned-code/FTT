@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension
 	type="module"
-	version="3.0"
+	version="3.1"
 	client="administrator">
 	<name>mod_status</name>
 	<author>Joomla! Project</author>
@@ -28,7 +28,7 @@
 				<field
 					name="show_loggedin_users"
 					type="radio"
-					class="btn-group"
+					class="btn-group btn-group-yesno"
 					default="1"
 					label="MOD_STATUS_FIELD_SHOW_LOGGEDIN_USERS_LABEL"
 					description="MOD_STATUS_FIELD_SHOW_LOGGEDIN_USERS_DESC">
@@ -40,7 +40,7 @@
 				<field
 					name="show_loggedin_users_admin"
 					type="radio"
-					class="btn-group"
+					class="btn-group btn-group-yesno"
 					default="1"
 					label="MOD_STATUS_FIELD_SHOW_LOGGEDIN_USERS_ADMIN_LABEL"
 					description="MOD_STATUS_FIELD_SHOW_LOGGEDIN_USERS_ADMIN_DESC">
@@ -52,7 +52,7 @@
 				<field
 					name="show_messages"
 					type="radio"
-					class="btn-group"
+					class="btn-group btn-group-yesno"
 					default="1"
 					label="MOD_STATUS_FIELD_SHOW_MESSAGES_LABEL"
 					description="MOD_STATUS_FIELD_SHOW_MESSAGES_DESC">
@@ -71,7 +71,7 @@
 
 				<field
 					name="moduleclass_sfx"
-					type="text"
+					type="textarea" rows="3"
 					label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
 					description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC" />
 

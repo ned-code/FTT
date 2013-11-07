@@ -1,0 +1,145 @@
+/* Calendar: a Javascript class for Mootools that adds accessible and unobtrusive date pickers to your form elements <http://electricprism.com/aeron/calendar> */
+/* Blue CSS for Calendar by Les Arbres */
+
+input.blue,
+select.blue {
+	width: 68px;
+}
+
+button.blue {
+	background: url(blue-icon.png) no-repeat right top;
+	border: 0;
+	cursor: pointer;
+	height: 20px;
+	width: 22px;
+	min-width: 0;
+	min-height:0;
+	margin: 2px 2px 2px 5px;
+	vertical-align:middle;
+}
+button.blue:hover {
+	background: url(blue-icon.png) no-repeat right top;
+}
+
+div.blue {
+	background: url(blue.png) no-repeat;
+	height: 175px;
+	padding: 0 12px;
+	text-align: center;
+	width: 147px;
+}	
+div.blue * {
+	margin: 0;
+	padding: 0;
+}	
+div.blue div {
+	background: none !important;
+	cursor: move;
+	height: 165px;
+	overflow: hidden;
+	padding-top: 10px;
+	position: relative;
+	width: 147px;
+}	
+
+div.blue caption {
+	color: black;
+	font: normal 12px/17px Arial, Helvetica, sans-serif;
+	padding-top: 4px;
+	text-align: center;
+	font-weight: bold;
+	width: 100%;
+}
+div.blue caption a {
+	cursor: pointer;
+	display: block;
+	height: 11px;
+	overflow: hidden;
+	position: absolute;
+	text-indent: -100px;
+	top: 16px;
+	width: 11px;
+}
+div.blue caption a.prev {
+	background-image: url(blue-prev.gif);
+	left: 1px;
+}
+div.blue caption a.next {
+	background-image: url(blue-next.gif);
+	right: 1px;
+}
+div.blue caption a:hover {
+	background-position: 0 11px;
+}
+div.blue caption span {
+	height: 25px;
+	position: relative;
+	text-align: center;
+}
+div.blue caption span.month {
+	padding-right: 8px;
+}
+div.blue caption span.month:after {
+	content: ',';
+}
+
+div.blue table {
+	border: none !important;
+	border-collapse: collapse;
+	border-spacing: 0;
+	cursor: default;
+	margin: 0 auto;
+	overflow: hidden;
+	width: 147px;
+}
+
+div.blue tr {
+	border: 0;
+}
+
+div.blue th {
+	border: 0;
+	color: black;
+	font: normal 12px Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	height: 19px;
+	text-align: center;
+	width: 21px;
+}
+
+div.blue td {
+	border: 0;
+	height: 19px;
+	color: gray;
+	font: normal 12px Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	padding-right: 5px;
+	text-align: right;
+	width: 16px;
+}
+
+div.blue td.invalid {
+	color: #666;
+}
+
+div.blue td.valid, div.blue td.inactive {
+	color: black;
+	cursor: pointer;
+	font-weight: bold;
+}
+
+div.blue td.today {
+	color: red;
+}
+
+div.blue td.active {
+	font-weight: bold;
+	text-decoration: underline;
+	color: black;
+	cursor: pointer;
+}
+
+div.blue td.hover {
+	background-color:#FEFBF1;
+	cursor: pointer;
+}
