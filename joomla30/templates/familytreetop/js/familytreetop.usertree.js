@@ -1037,14 +1037,20 @@ $FamilyTreeTop.create("usertree", function($){
     $this.parseDate = function(date){
         var short = ["", 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
         if("undefined" === typeof(date) || date == null) return '';
-        var ret = "";
-        if(date.start_year != null && data.start_year != 0){
+        var ret = "", isYear, isMonth, isDay;
+        isYear = ("undefined" !== typeof(date.start_year) && date.start_year != null && date.start_year != 0);
+        isMonth =("undefined" !== typeof(date.start_month) && date.start_month != null && date.start_month != 0);
+        isDay = ("undefined" !== typeof(date.start_day) && date.start_day != null && date.start_day != 0);
+        if(isYear){
             ret += date.start_year;
         }
-        if(date.start_month != null && data.start_month != 0){
-            ret += " - " + short[parseInt(date.start_month)] + " ";
+        if(isYear && isMonth){
+            ret += " - ";
         }
-        if(date.start_day != null && date.start_day != 0){
+        if(isMonth){
+            ret += short[parseInt(date.start_month)] + " ";
+        }
+        if(isDay){
             ret += date.start_day;
         }
         return ret;
