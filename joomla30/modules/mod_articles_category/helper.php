@@ -21,7 +21,7 @@ JModelLegacy::addIncludePath($com_path . '/models', 'ContentModel');
  * @package     Joomla.Site
  * @subpackage  mod_articles_category
  */
-abstract class modArticlesCategoryHelper
+abstract class ModArticlesCategoryHelper
 {
 	public static function getList(&$params)
 	{
@@ -293,7 +293,6 @@ abstract class modArticlesCategoryHelper
 	public static function truncate($html, $maxLength = 0)
 	{
 		$baseLength = strlen($html);
-		$diffLength = 0;
 
 		// First get the plain text string. This is the rendered text we want to end up with.
 		$ptString = JHtml::_('string.truncate', $html, $maxLength, $noSplit = true, $allowHtml = false);

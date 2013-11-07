@@ -64,13 +64,14 @@ class ContactViewContacts extends JViewLegacy
 	 */
 	protected function addToolbar()
 	{
-		require_once JPATH_COMPONENT.'/helpers/contact.php';
-		$canDo	= ContactHelper::getActions($this->state->get('filter.category_id'));
+		require_once JPATH_COMPONENT . '/helpers/contact.php';
+		$canDo	= JHelperContent::getActions($this->state->get('filter.category_id'), 0, 'com_contact');
 		$user	= JFactory::getUser();
+
 		// Get the toolbar object instance
 		$bar = JToolBar::getInstance('toolbar');
 
-		JToolbarHelper::title(JText::_('COM_CONTACT_MANAGER_CONTACTS'), 'contact.png');
+		JToolbarHelper::title(JText::_('COM_CONTACT_MANAGER_CONTACTS'), 'address contact');
 
 		if ($canDo->get('core.create') || (count($user->getAuthorisedCategories('com_contact', 'core.create'))) > 0)
 		{
@@ -100,13 +101,15 @@ class ContactViewContacts extends JViewLegacy
 		}
 
 		// Add a batch button
-		if ($user->authorise('core.edit'))
+		if ($user->authorise('core.create', 'com_contacts') && $user->authorise('core.edit', 'com_contacts') && $user->authorise('core.edit.state', 'com_contacts'))
 		{
 			JHtml::_('bootstrap.modal', 'collapseModal');
 			$title = JText::_('JTOOLBAR_BATCH');
-			$dhtml = "<button data-toggle=\"modal\" data-target=\"#collapseModal\" class=\"btn btn-small\">
-						<i class=\"icon-checkbox-partial\" title=\"$title\"></i>
-						$title</button>";
+
+			// Instantiate a new JLayoutFile instance and render the batch button
+			$layout = new JLayoutFile('joomla.toolbar.batch');
+
+			$dhtml = $layout->render(array('title' => $title));
 			$bar->appendButton('Custom', $dhtml, 'batch');
 		}
 
@@ -142,6 +145,13 @@ class ContactViewContacts extends JViewLegacy
 			'filter_language',
 			JHtml::_('select.options', JHtml::_('contentlanguage.existing', true, true), 'value', 'text', $this->state->get('filter.language'))
 		);
+
+		JHtmlSidebar::addFilter(
+		JText::_('JOPTION_SELECT_TAG'),
+		'filter_tag',
+		JHtml::_('select.options', JHtml::_('tag.options', true, true), 'value', 'text', $this->state->get('filter.tag'))
+		);
+
 	}
 
 	/**

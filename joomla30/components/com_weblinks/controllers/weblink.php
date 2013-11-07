@@ -27,6 +27,14 @@ class WeblinksControllerWeblink extends JControllerForm
 	protected $view_list = 'categories';
 
 	/**
+	 * The URL edit variable.
+	 *
+	 * @var    string
+	 * @since  3.2
+	 */
+	protected $urlVar = 'a.id';
+
+	/**
 	 * Method to add a new record.
 	 *
 	 * @return  boolean  True if the article can be added, false if not.
@@ -34,6 +42,7 @@ class WeblinksControllerWeblink extends JControllerForm
 	 */
 	public function add()
 	{
+
 		if (!parent::add())
 		{
 			// Redirect to the return page.
@@ -193,7 +202,7 @@ class WeblinksControllerWeblink extends JControllerForm
 
 		if (empty($return) || !JUri::isInternal(base64_decode($return)))
 		{
-			return JURI::base();
+			return JUri::base();
 		}
 		else
 		{
@@ -210,14 +219,9 @@ class WeblinksControllerWeblink extends JControllerForm
 	 * @return  void
 	 * @since   1.6
 	 */
-	protected function postSaveHook(JModelLegacy &$model, $validData = array())
+	protected function postSaveHook(JModelLegacy $model, $validData = array())
 	{
-		$task = $this->getTask();
-
-		if ($task == 'save')
-		{
-			$this->setRedirect(JRoute::_('index.php?option=com_weblinks&view=category&id='.$validData['catid'], false));
-		}
+		return;
 	}
 
 	/**

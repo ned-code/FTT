@@ -1,0 +1,143 @@
+/* Calendar: a Javascript class for Mootools that adds accessible and unobtrusive date pickers to your form elements <http://electricprism.com/aeron/calendar> */
+/* Gold CSS for Calendar by Les Arbres */
+
+input.gold,
+select.gold {
+	width: 68px;
+}
+
+button.gold {
+	background: url(gold-icon.png) no-repeat right top;
+	border: 0;
+	cursor: pointer;
+	height: 20px;
+	width: 22px;
+	min-width: 0;
+	min-height:0;
+	margin: 2px 2px 2px 5px;
+}
+button.gold:hover {
+	background: url(gold-icon.png) no-repeat right top;
+}
+
+div.gold {
+	background: url(gold.png) no-repeat;
+	height: 175px;
+	padding: 0 12px;
+	text-align: center;
+	width: 147px;
+}	
+div.gold * {
+	margin: 0;
+	padding: 0;
+}	
+div.gold div {
+	background: none !important;
+	cursor: move;
+	height: 165px;
+	overflow: hidden;
+	padding-top: 10px;
+	position: relative;
+	width: 147px;
+}	
+
+div.gold caption {
+	color: #FFFFFF;
+	font: normal 12px/17px Arial, Helvetica, sans-serif;
+	padding-top: 4px;
+	text-align: center;
+	font-weight: bold;
+	width: 100%;
+}
+div.gold caption a {
+	cursor: pointer;
+	display: block;
+	height: 11px;
+	overflow: hidden;
+	position: absolute;
+	text-indent: -100px;
+	top: 16px;
+	width: 11px;
+}
+div.gold caption a.prev {
+	background-image: url(gold-prev.gif);
+	left: 1px;
+}
+div.gold caption a.next {
+	background-image: url(gold-next.gif);
+	right: 1px;
+}
+div.gold caption a:hover {
+	background-position: 0 11px;
+}
+div.gold caption span {
+	height: 25px;
+	position: relative;
+	text-align: center;
+}
+div.gold caption span.month {
+	padding-right: 8px;
+}
+div.gold caption span.month:after {
+	content: ',';
+}
+
+div.gold table {
+	border: none !important;
+	border-collapse: collapse;
+	border-spacing: 0;
+	cursor: default;
+	margin: 0 auto;
+	overflow: hidden;
+	width: 147px;
+}
+
+div.gold tr {
+	border: 0;
+}
+
+div.gold th {
+	border: 0;
+	color: #FFFFFF;
+	font: normal 12px Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	height: 19px;
+	text-align: center;
+	width: 21px;
+}
+
+div.gold td {
+	border: 0;
+	height: 19px;
+	color: #666;
+	font: normal 12px Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	padding-right: 5px;
+	text-align: right;
+	width: 16px;
+}
+
+div.gold td.invalid {
+	color: #666;
+}
+
+div.gold td.valid, div.gold td.inactive {
+	color: #FFFFFF;
+	cursor: pointer;
+}
+
+div.gold td.today {
+	color: red;
+}
+
+div.gold td.active {
+	color: #FFFFFF;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+div.gold td.hover {
+	background-color:#FEFBF1;
+	color: black;
+	cursor: pointer;
+}

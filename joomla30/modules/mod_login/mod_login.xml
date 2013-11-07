@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension
 	type="module"
-	version="3.0"
+	version="3.1"
 	client="site"
 	method="upgrade">
 	<name>mod_login</name>
@@ -64,7 +64,7 @@
 				<field
 					name="greeting"
 					type="radio"
-					class="btn-group"
+					class="btn-group btn-group-yesno"
 					default="1"
 					label="MOD_LOGIN_FIELD_GREETING_LABEL"
 					description="MOD_LOGIN_FIELD_GREETING_DESC">
@@ -87,7 +87,7 @@
 				<field
 					name="usesecure"
 					type="radio"
-					class="btn-group"
+					class="btn-group btn-group-yesno"
 					default="0"
 					label="MOD_LOGIN_FIELD_USESECURE_LABEL"
 					description="MOD_LOGIN_FIELD_USESECURE_DESC">
@@ -119,7 +119,7 @@
 					description="JFIELD_ALT_MODULE_LAYOUT_DESC" />
 				<field
 					name="moduleclass_sfx"
-					type="text"
+					type="textarea" rows="3"
 					label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
 					description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC" />
 

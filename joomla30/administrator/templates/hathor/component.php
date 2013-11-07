@@ -17,8 +17,8 @@ $lang->load('tpl_hathor', JPATH_ADMINISTRATOR)
 $app	= JFactory::getApplication();
 $doc	= JFactory::getDocument();
 
-// Load optional rtl bootstrap css and bootstrap bugfixes
-JHtmlBootstrap::loadCss($includeMaincss = false, $this->direction);
+// Load optional RTL Bootstrap CSS
+JHtml::_('bootstrap.loadCss', false, $this->direction);
 
 // Load system style CSS
 $doc->addStyleSheet('templates/system/css/system.css');
@@ -66,7 +66,7 @@ $doc->addScript('templates/'.$this->template.'/js/template.js', 'text/javascript
 // Logo file
 if ($this->params->get('logoFile'))
 {
-	$logo = JURI::root() . $this->params->get('logoFile');
+	$logo = JUri::root() . $this->params->get('logoFile');
 }
 else
 {

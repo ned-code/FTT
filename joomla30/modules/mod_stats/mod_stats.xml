@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension
 	type="module"
-	version="3.0"
+	version="3.1"
 	client="site"
 	method="upgrade">
 	<name>mod_stats</name>
@@ -30,7 +30,7 @@
 				<field
 					name="serverinfo"
 					type="radio"
-					class="btn-group"
+					class="btn-group btn-group-yesno"
 					default="0"
 					label="MOD_STATS_FIELD_SERVERINFO_LABEL"
 					description="MOD_STATS_FIELD_SERVERINFO_DESC">
@@ -42,7 +42,7 @@
 				<field
 					name="siteinfo"
 					type="radio"
-					class="btn-group"
+					class="btn-group btn-group-yesno"
 					default="0"
 					label="MOD_STATS_FIELD_SITEINFO_LABEL"
 					description="MOD_STATS_FIELD_SITEINFO_DESC">
@@ -54,7 +54,7 @@
 				<field
 					name="counter"
 					type="radio"
-					class="btn-group"
+					class="btn-group btn-group-yesno"
 					default="0"
 					label="MOD_STATS_FIELD_COUNTER_LABEL"
 					description="MOD_STATS_FIELD_COUNTER_DESC">
@@ -79,7 +79,7 @@
 					description="JFIELD_ALT_MODULE_LAYOUT_DESC" />
 				<field
 					name="moduleclass_sfx"
-					type="text"
+					type="textarea" rows="3"
 					label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
 					description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC" />
 				<field

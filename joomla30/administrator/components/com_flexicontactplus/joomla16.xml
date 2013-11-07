@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="1.6.0" method="upgrade">
+<name>FlexiContactPlus</name>
+<creationDate>30 September 2013</creationDate>
+<author>Les Arbres Design</author>
+<copyright>Les Arbres Design 2009-2013</copyright>
+<license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
+<authorUrl>extensions.lesarbresdesign.info</authorUrl>
+<version>8.06.01</version>
+<description>The flexible contact page that's easy to setup</description>
+
+<scriptfile>install.flexicontactplus.php</scriptfile>
+
+<files folder="site">
+	<filename>flexicontactplus.php</filename>
+	<filename>controller.php</filename>
+	<filename>index.html</filename>
+	<folder>assets/</folder>
+	<folder>images/</folder>
+	<folder>models/</folder>
+	<folder>views/</folder>
+</files>
+
+<languages folder="site/language">
+	<language tag="af-ZA">af-ZA.com_flexicontactplus.ini</language>
+	<language tag="bs-BA">bs-BA.com_flexicontactplus.ini</language>
+	<language tag="ca-ES">ca-ES.com_flexicontactplus.ini</language>
+	<language tag="cs-CZ">cs-CZ.com_flexicontactplus.ini</language>
+	<language tag="da-DK">da-DK.com_flexicontactplus.ini</language>
+	<language tag="de-DE">de-DE.com_flexicontactplus.ini</language>
+	<language tag="el-GR">el-GR.com_flexicontactplus.ini</language>
+	<language tag="en-GB">en-GB.com_flexicontactplus.ini</language>
+	<language tag="es-ES">es-ES.com_flexicontactplus.ini</language>
+	<language tag="fa-IR">fa-IR.com_flexicontactplus.ini</language>
+	<language tag="fi-FI">fi-FI.com_flexicontactplus.ini</language>
+	<language tag="fr-FR">fr-FR.com_flexicontactplus.ini</language>
+	<language tag="he-IL">he-IL.com_flexicontactplus.ini</language>
+	<language tag="hr-HR">hr-HR.com_flexicontactplus.ini</language>
+	<language tag="hu-HU">hu-HU.com_flexicontactplus.ini</language>
+	<language tag="ja-JP">ja-JP.com_flexicontactplus.ini</language>
+	<language tag="it-IT">it-IT.com_flexicontactplus.ini</language>
+	<language tag="lt-LT">lt-LT.com_flexicontactplus.ini</language>
+	<language tag="nb-NO">nb-NO.com_flexicontactplus.ini</language>
+	<language tag="nl-NL">nl-NL.com_flexicontactplus.ini</language>
+	<language tag="pl-PL">pl-PL.com_flexicontactplus.ini</language>
+	<language tag="pt-BR">pt-BR.com_flexicontactplus.ini</language>
+	<language tag="pt-PT">pt-PT.com_flexicontactplus.ini</language>
+	<language tag="ro-RO">ro-RO.com_flexicontactplus.ini</language>
+	<language tag="ru-RU">ru-RU.com_flexicontactplus.ini</language>
+	<language tag="sk-SK">sk-SK.com_flexicontactplus.ini</language>
+	<language tag="sl-SI">sl-SI.com_flexicontactplus.ini</language>
+	<language tag="sv-SE">sv-SE.com_flexicontactplus.ini</language>
+	<language tag="tr-TR">tr-TR.com_flexicontactplus.ini</language>
+	<language tag="uk-UA">uk-UA.com_flexicontactplus.ini</language>
+	<language tag="zh-CN">zh-CN.com_flexicontactplus.ini</language>
+</languages>
+  
+<administration>
+	<menu img="../administrator/components/com_flexicontactplus/assets/flexicontactplus-16.png">FlexiContactPlus</menu>
+	<submenu>
+		<menu img="../administrator/components/com_flexicontactplus/assets/m_config.gif" controller="menu" task="display">COM_FLEXICONTACT_CONFIGURATION</menu>
+		<menu img="../administrator/components/com_flexicontactplus/assets/m_images.gif" controller="menu" view="config_images">COM_FLEXICONTACT_TOOLBAR_IMAGES</menu>
+		<menu img="../administrator/components/com_flexicontactplus/assets/m_css.gif" controller="menu" view="config_css">COM_FLEXICONTACT_CONFIG_CSS_NAME</menu>
+		<menu img="../administrator/components/com_flexicontactplus/assets/m_log.gif" controller="log" task="display">COM_FLEXICONTACT_LOG</menu>
+		<menu img="../administrator/components/com_flexicontactplus/assets/info-16.png" controller="menu" task="help">COM_FLEXICONTACT_HELP_AND_SUPPORT</menu>
+	</submenu>
+
+	<files folder="admin">
+		<filename>flexicontactplus.php</filename>
+		<filename>config.xml</filename>
+		<filename>index.html</filename>
+		<folder>controllers</folder>
+		<folder>assets</folder>
+		<folder>helpers</folder>
+		<folder>models</folder>
+		<folder>views</folder>
+ 	</files>
+	
+	<languages folder="admin/language">
+		<language tag="ca-ES">ca-ES.com_flexicontactplus.ini</language>
+		<language tag="ca-ES">ca-ES.com_flexicontactplus.menu.ini</language>
+		<language tag="ca-ES">ca-ES.com_flexicontactplus.sys.ini</language>
+		<language tag="da-DK">da-DK.com_flexicontactplus.ini</language>
+		<language tag="da-DK">da-DK.com_flexicontactplus.menu.ini</language>
+		<language tag="da-DK">da-DK.com_flexicontactplus.sys.ini</language>
+		<language tag="de-DE">de-DE.com_flexicontactplus.ini</language>
+		<language tag="de-DE">de-DE.com_flexicontactplus.menu.ini</language>
+		<language tag="de-DE">de-DE.com_flexicontactplus.sys.ini</language>
+		<language tag="en-GB">en-GB.com_flexicontactplus.ini</language>
+		<language tag="en-GB">en-GB.com_flexicontactplus.menu.ini</language>
+		<language tag="en-GB">en-GB.com_flexicontactplus.sys.ini</language>
+		<language tag="fa-IR">fa-IR.com_flexicontactplus.ini</language>
+		<language tag="fa-IR">fa-IR.com_flexicontactplus.menu.ini</language>
+		<language tag="fa-IR">fa-IR.com_flexicontactplus.sys.ini</language>
+		<language tag="fr-FR">fr-FR.com_flexicontactplus.ini</language>
+		<language tag="fr-FR">fr-FR.com_flexicontactplus.menu.ini</language>
+		<language tag="fr-FR">fr-FR.com_flexicontactplus.sys.ini</language>
+		<language tag="hr-HR">hr-HR.com_flexicontactplus.ini</language>
+		<language tag="hr-HR">hr-HR.com_flexicontactplus.menu.ini</language>
+		<language tag="hr-HR">hr-HR.com_flexicontactplus.sys.ini</language>
+		<language tag="it-IT">it-IT.com_flexicontactplus.ini</language>
+		<language tag="it-IT">it-IT.com_flexicontactplus.menu.ini</language>
+		<language tag="it-IT">it-IT.com_flexicontactplus.sys.ini</language>
+		<language tag="nl-NL">nl-NL.com_flexicontactplus.ini</language>
+		<language tag="nl-NL">nl-NL.com_flexicontactplus.menu.ini</language>
+		<language tag="nl-NL">nl-NL.com_flexicontactplus.sys.ini</language>
+		<language tag="pl-PL">pl-PL.com_flexicontactplus.ini</language>
+		<language tag="pl-PL">pl-PL.com_flexicontactplus.menu.ini</language>
+		<language tag="pl-PL">pl-PL.com_flexicontactplus.sys.ini</language>
+		<language tag="ru-RU">ru-RU.com_flexicontactplus.ini</language>
+		<language tag="ru-RU">ru-RU.com_flexicontactplus.menu.ini</language>
+		<language tag="ru-RU">ru-RU.com_flexicontactplus.sys.ini</language>
+		<language tag="tr-TR">tr-TR.com_flexicontactplus.ini</language>
+		<language tag="tr-TR">tr-TR.com_flexicontactplus.menu.ini</language>
+		<language tag="tr-TR">tr-TR.com_flexicontactplus.sys.ini</language>
+	</languages>
+
+</administration>
+
+</extension>

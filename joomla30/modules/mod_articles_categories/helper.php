@@ -17,11 +17,14 @@ require_once JPATH_SITE.'/components/com_content/helpers/route.php';
  * @package     Joomla.Site
  * @subpackage  mod_articles_categories
  */
-abstract class modArticlesCategoriesHelper
+abstract class ModArticlesCategoriesHelper
 {
 	public static function getList(&$params)
 	{
-		$categories = JCategories::getInstance('Content');
+		$options = array();
+		$options['countItems'] = $params->get('numitems', 0);
+
+		$categories = JCategories::getInstance('Content', $options);
 		$category = $categories->get($params->get('parent', 'root'));
 
 		if ($category != null)

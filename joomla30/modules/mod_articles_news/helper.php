@@ -19,7 +19,7 @@ JModelLegacy::addIncludePath(JPATH_SITE.'/components/com_content/models', 'Conte
  * @package     Joomla.Site
  * @subpackage  mod_articles_news
  */
-abstract class modArticlesNewsHelper
+abstract class ModArticlesNewsHelper
 {
 	public static function getList(&$params)
 	{
@@ -62,7 +62,7 @@ abstract class modArticlesNewsHelper
 		}
 		else
 		{
-			$model->setState('list.direction', 'DESC');
+			$model->setState('list.direction', 'ASC');
 		}
 
 		//	Retrieve Content

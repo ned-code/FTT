@@ -20,7 +20,7 @@ if ($params->get('opensearch', 1))
 	$doc = JFactory::getDocument();
 
 	$ostitle = $params->get('opensearch_title', JText::_('MOD_SEARCH_SEARCHBUTTON_TEXT').' '.$app->getCfg('sitename'));
-	$doc->addHeadLink(JURI::getInstance()->toString(array('scheme', 'host', 'port')).JRoute::_('&option=com_search&format=opensearch'), 'search', 'rel', array('title' => htmlspecialchars($ostitle), 'type' => 'application/opensearchdescription+xml'));
+	$doc->addHeadLink(JUri::getInstance()->toString(array('scheme', 'host', 'port')).JRoute::_('&option=com_search&format=opensearch'), 'search', 'rel', array('title' => htmlspecialchars($ostitle), 'type' => 'application/opensearchdescription+xml'));
 }
 
 $upper_limit = $lang->getUpperLimitSearchWord();
@@ -38,7 +38,7 @@ $moduleclass_sfx = htmlspecialchars($params->get('moduleclass_sfx'));
 
 if ($imagebutton)
 {
-	$img = modSearchHelper::getSearchImage($button_text);
+	$img = ModSearchHelper::getSearchImage($button_text);
 }
 $mitemid = $set_Itemid > 0 ? $set_Itemid : $app->input->get('Itemid');
 require JModuleHelper::getLayoutPath('mod_search', $params->get('layout', 'default'));
