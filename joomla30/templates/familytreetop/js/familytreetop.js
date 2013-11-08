@@ -282,7 +282,7 @@
 
         $FamilyTreeTop.prototype.clearUploadTemplates();
 
-        $this.app.data = $.parseJSON($this.app.data);
+        $this.app.data = jQuery.parseJSON($this.app.data);
 
         //init modules;
         $this.modulePull.forEach(function(el, id){
