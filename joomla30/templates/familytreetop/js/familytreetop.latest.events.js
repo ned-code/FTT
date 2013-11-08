@@ -104,15 +104,15 @@ $FamilyTreeTop.create("latest_events", function($){
                         m++;
                     }
                 });
-            }
-            if(args.active){
-                $($birthBox).find('[familytreetop="null"]').remove();
-                $($deathBox).find('[familytreetop="null"]').remove();
-                $($marrBox).find('[familytreetop="null"]').remove();
-            } else{
-                if(b == 0) $fn.setNull($birthBox);
-                if(d == 0) $fn.setNull($deathBox);
-                if(m == 0) $fn.setNull($marrBox);
+                if(args.active){
+                    $($birthBox).find('[familytreetop="null"]').remove();
+                    $($deathBox).find('[familytreetop="null"]').remove();
+                    $($marrBox).find('[familytreetop="null"]').remove();
+                } else{
+                    if(b == 0) $fn.setNull($birthBox);
+                    if(d == 0) $fn.setNull($deathBox);
+                    if(m == 0) $fn.setNull($marrBox);
+                }
             }
             return true;
         }
