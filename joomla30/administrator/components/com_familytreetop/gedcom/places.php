@@ -24,9 +24,9 @@ class FamilyTreeTopGedcomPlaceModel {
         }
 
         $place->event_id = $this->event_id;
-        $place->city = $gedcom->checkInputData($this->city);
-        $place->state = $gedcom->checkInputData($this->state);
-        $place->country = $gedcom->checkInputData($this->country);
+        $place->city = $this->city;
+        $place->state = $this->state;
+        $place->country = $this->country;
         $place->change_time = $this->change_time;
         $place->save();
 

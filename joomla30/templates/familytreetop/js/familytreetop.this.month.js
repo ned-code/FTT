@@ -55,10 +55,10 @@ $FamilyTreeTop.create("this_month", function($){
         },
         render: function(month){
             $data = $fn.getData(month);
-            if(month == 0 || $fn.isEmpty($data)){
+            if(month == 0/* || $fn.isEmpty($data)*/){
                 $fn.setAllMonths();
             } else {
-                $data = $fn.getData(month);
+                //$data = $fn.getData(month);
                 $fn.setEvents($data, 'BIRT');
                 $fn.setEvents($data, 'DEAT');
                 $fn.setEvents($data, 'MARR');
