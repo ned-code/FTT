@@ -133,8 +133,7 @@ $FamilyTreeTop.create("myfamily", function($){
                     if(width > Math.floor(parentWidth/2)){
                         width = Math.floor(parentWidth/2);
                     }
-                    var td = $(e.target).parent().parent();
-                    $(td).css('width', width + "px");
+                    $(e).css('width', width + "px");
                 }
             });
             if($(tr).attr('gedcom_id') != 0 ){
