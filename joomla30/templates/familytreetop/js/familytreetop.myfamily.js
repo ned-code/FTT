@@ -122,6 +122,7 @@ $FamilyTreeTop.create("myfamily", function($){
 
     $this.render = function(json){
         var table = $($box).find('table');
+        var parentWidth = $($box).width() - 70;
         $gedcom = json.gedcom;
         $facebook = json.facebook;
         $(json.data).each(function(index, element){
@@ -129,6 +130,9 @@ $FamilyTreeTop.create("myfamily", function($){
             $(tr).find('[familytreetop-image] img').load(function(e){
                 if("undefined" !== typeof(e.target.naturalWidth)){
                     var width = e.target.naturalWidth;
+                    if(width > Math.floor(parentWidth/2)){
+                        width = Math.floor(parentWidth/2);
+                    }
                     var td = $(e.target).parent().parent();
                     $(td).css('width', width + "px");
                 }
