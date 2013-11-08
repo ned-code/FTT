@@ -90,17 +90,17 @@ $FamilyTreeTop.create("latest_events", function($){
             if(args.type == "eye"){
                 var b = 0 , d = 0, m = 0;
                 $($birthBox).find('tr').each(function(i,e){
-                    if($(e).css('display') != 'none'){
+                    if($(e).css('display') != 'none' && $(e).attr('familytreetop') != 'null' ){
                         b++;
                     }
                 });
                 $($deathBox).find('tr').each(function(i,e){
-                    if($(e).css('display') != 'none'){
+                    if($(e).css('display') != 'none' && $(e).attr('familytreetop') != 'null' ){
                         d++;
                     }
                 });
                 $($marrBox).find('tr').each(function(i,e){
-                    if($(e).css('display') != 'none'){
+                    if($(e).css('display') != 'none' && (e).attr('familytreetop') != 'null' ){
                         m++;
                     }
                 });
