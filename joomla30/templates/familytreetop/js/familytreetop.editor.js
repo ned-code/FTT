@@ -204,20 +204,22 @@ $FamilyTreeTop.create("editor", function($){
                 $(form).find('input[familytreetop="family_id"]').val(family_id);
                 $(form).attr('familytreetop', form_id + forms.length);
                 text = $(form).find('[familytreetop="union-title"]').text();
-                $(form).find('[familytreetop="union-title"]').text(text + " " + (1 + forms.length) );
+                $(form).find('[familytreetop="union-title"]').text(text + getUnionCount(spouses, forms) );
                 $fn.setMonths(form);
                 $fn.setDays(form);
 
-                if(ind.family_id != null && ind.family_id == family_id){
-                    button =  $(form).find('[familytreetop="current"]');
-                    default_family_button = button;
-                    fieldset = $(default_family_button).parents('fieldset')[0];
-                    $(fieldset).css('background', '#FAF4D9');
-                    $($(fieldset).find('div')[0]).css('background', '#EFE4B0');
-                    $(button).show();
-                } else {
-                    button = $(form).find('[familytreetop="set-current"]');
-                    $(button).show();
+                if(spouses.length > 1){
+                    if(ind.family_id != null && ind.family_id == family_id){
+                        button =  $(form).find('[familytreetop="current"]');
+                        default_family_button = button;
+                        fieldset = $(default_family_button).parents('fieldset')[0];
+                        $(fieldset).css('background', '#FAF4D9');
+                        $($(fieldset).find('div')[0]).css('background', '#EFE4B0');
+                        $(button).show();
+                    } else {
+                        button = $(form).find('[familytreetop="set-current"]');
+                        $(button).show();
+                    }
                 }
 
                 setUnion(form, 'sircar', ind);
@@ -258,6 +260,13 @@ $FamilyTreeTop.create("editor", function($){
             });
 
             return forms;
+            function getUnionCount(s, f){
+                if(s.length > 1){
+                    return " " + parseInt(1 + f.length);
+                } else {
+                    return "";
+                }
+            }
             function setUnion(form, type, ind){
                 var el = $(form).find('[familytreetop="'+type+'"]');
                 var av = ind.avatar(["90","90"]);
