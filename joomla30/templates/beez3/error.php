@@ -30,10 +30,8 @@ $this->direction = $doc->direction;
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->language; ?>" lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>">
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title><?php echo $this->error->getCode(); ?> - <?php echo htmlspecialchars($this->error->getMessage()); ?></title>
 
-<meta name="language" content="<?php echo $this->language; ?>" />
-
-	<title><?php echo $this->error->getCode(); ?> - <?php echo $this->title; ?></title>
 <?php if ($this->error->getCode() >= 400 && $this->error->getCode() < 500) { 	?>
 
 
@@ -62,6 +60,15 @@ $this->direction = $doc->direction;
 				<link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/<?php echo $this->template; ?>/css/<?php echo $color ?>_rtl.css" type="text/css" />
 			<?php endif; ?>
 		<?php endif; ?>
+		<?php
+			$debug = JFactory::getConfig()->get('debug_lang');
+			if (JDEBUG || $debug)
+			{
+		?>
+			<link rel="stylesheet" href="<?php echo $this->baseurl ?>/media/cms/css/debug.css" type="text/css" />
+		<?php
+			}
+		?>
 		<!--[if lte IE 6]>
 			<link href="<?php echo $this->baseurl ?>/templates/<?php echo $this->template; ?>/css/ieonly.css" rel="stylesheet" type="text/css" />
 		<![endif]-->
@@ -228,7 +235,7 @@ if (!isset($this->error))
 
 			<p><?php echo JText::_('JERROR_LAYOUT_PLEASE_CONTACT_THE_SYSTEM_ADMINISTRATOR'); ?>.</p>
 			<div id="techinfo">
-			<p><?php echo $this->error->getMessage(); ?></p>
+			<p><?php echo htmlspecialchars($this->error->getMessage()); ?></p>
 			<p>
 				<?php if ($this->debug) :
 					echo $this->renderBacktrace();

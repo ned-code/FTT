@@ -13,7 +13,7 @@ $published = $this->state->get('filter.published');
 ?>
 <div class="modal hide fade" id="collapseModal">
 	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal">x</button>
+		<button type="button" class="close" data-dismiss="modal">&#215;</button>
 		<h3><?php echo JText::_('COM_NEWSFEEDS_BATCH_OPTIONS');?></h3>
 	</div>
 	<div class="modal-body">
@@ -28,6 +28,11 @@ $published = $this->state->get('filter.published');
 				<?php echo JHtml::_('batch.language'); ?>
 			</div>
 		</div>
+		<div class="control-group">
+			<div class="controls">
+				<?php echo JHtml::_('batch.tag');?>
+			</div>
+		</div>
 		<?php if ($published >= 0) : ?>
 		<div class="control-group">
 			<div class="controls">
@@ -37,7 +42,7 @@ $published = $this->state->get('filter.published');
 		<?php endif; ?>
 	</div>
 	<div class="modal-footer">
-		<button class="btn" type="button" onclick="document.id('batch-category-id').value='';document.id('batch-access').value='';document.id('batch-language-id').value=''" data-dismiss="modal">
+		<button class="btn" type="button" onclick="document.id('batch-category-id').value='';document.id('batch-access').value='';document.id('batch-language-id').value='';document.id('batch-tag-id)').value=''" data-dismiss="modal">
 			<?php echo JText::_('JCANCEL'); ?>
 		</button>
 		<button class="btn btn-primary" type="submit" onclick="Joomla.submitbutton('newsfeed.batch');">

@@ -16,7 +16,7 @@ defined('_JEXEC') or die;
  * @subpackage  mod_random_image
  * @since       1.5
  */
-class modRandomImageHelper
+class ModRandomImageHelper
 {
 	public static function getRandomImage(&$params, $images)
 	{
@@ -109,7 +109,7 @@ class modRandomImageHelper
 	{
 		$folder	= $params->get('folder');
 
-		$LiveSite	= JURI::base();
+		$LiveSite	= JUri::base();
 
 		// if folder includes livesite info, remove
 		if (JString::strpos($folder, $LiveSite) === 0)

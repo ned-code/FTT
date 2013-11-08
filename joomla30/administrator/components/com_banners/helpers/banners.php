@@ -16,7 +16,7 @@ defined('_JEXEC') or die;
  * @subpackage  com_banners
  * @since       1.6
  */
-class BannersHelper
+class BannersHelper extends JHelperContent
 {
 	/**
 	 * Configure the Linkbar.
@@ -39,12 +39,6 @@ class BannersHelper
 			'index.php?option=com_categories&extension=com_banners',
 			$vName == 'categories'
 		);
-		if ($vName == 'categories')
-		{
-			JToolbarHelper::title(
-				JText::sprintf('COM_CATEGORIES_CATEGORIES_TITLE', JText::_('com_banners')),
-				'banners-categories');
-		}
 
 		JHtmlSidebar::addEntry(
 			JText::_('COM_BANNERS_SUBMENU_CLIENTS'),
@@ -60,56 +54,22 @@ class BannersHelper
 	}
 
 	/**
-	 * Gets a list of the actions that can be performed.
-	 *
-	 * @param   integer  The category ID.
-	 *
-	 * @return  JObject
-	 * @since   1.6
-	 */
-	public static function getActions($categoryId = 0)
-	{
-		$user	= JFactory::getUser();
-		$result	= new JObject;
-
-		if (empty($categoryId))
-		{
-			$assetName = 'com_banners';
-			$level = 'component';
-		}
-		else
-		{
-			$assetName = 'com_banners.category.'.(int) $categoryId;
-			$level = 'category';
-		}
-
-		$actions = JAccess::getActions('com_banners', $level);
-
-		foreach ($actions as $action)
-		{
-			$result->set($action->name,	$user->authorise($action->name, $assetName));
-		}
-
-		return $result;
-	}
-
-	/**
 	 * @return  boolean
 	 * @since   1.6
 	 */
 	public static function updateReset()
 	{
 		$user = JFactory::getUser();
-		$db = JFactory::getDBO();
+		$db = JFactory::getDbo();
 		$nullDate = $db->getNullDate();
 		$now = JFactory::getDate();
-		$query = $db->getQuery(true);
-		$query->select('*');
-		$query->from('#__banners');
-		$query->where("'".$now."' >= ".$db->quoteName('reset'));
-		$query->where($db->quoteName('reset').' != '.$db->quote($nullDate).' AND '.$db->quoteName('reset').'!=NULL');
-		$query->where('('.$db->quoteName('checked_out').' = 0 OR '.$db->quoteName('checked_out').' = '.(int) $db->Quote($user->id).')');
-		$db->setQuery((string) $query);
+		$query = $db->getQuery(true)
+			->select('*')
+			->from('#__banners')
+			->where($db->quote($now) . ' >= ' . $db->quote('reset'))
+			->where($db->quoteName('reset') . ' != ' . $db->quote($nullDate) . ' AND ' . $db->quoteName('reset') . '!=NULL')
+			->where('(' . $db->quoteName('checked_out') . ' = 0 OR ' . $db->quoteName('checked_out') . ' = ' . (int) $db->quote($user->id) . ')');
+		$db->setQuery($query);
 
 		try
 		{
@@ -147,30 +107,30 @@ class BannersHelper
 					break;
 				case 2:
 					$date = JFactory::getDate('+1 year '.date('Y-m-d', strtotime('now')));
-					$reset = $db->Quote($date->toSql());
+					$reset = $db->quote($date->toSql());
 					break;
 				case 3:
 					$date = JFactory::getDate('+1 month '.date('Y-m-d', strtotime('now')));
-					$reset = $db->Quote($date->toSql());
+					$reset = $db->quote($date->toSql());
 					break;
 				case 4:
 					$date = JFactory::getDate('+7 day '.date('Y-m-d', strtotime('now')));
-					$reset = $db->Quote($date->toSql());
+					$reset = $db->quote($date->toSql());
 					break;
 				case 5:
 					$date = JFactory::getDate('+1 day '.date('Y-m-d', strtotime('now')));
-					$reset = $db->Quote($date->toSql());
+					$reset = $db->quote($date->toSql());
 					break;
 			}
 
 			// Update the row ordering field.
-			$query->clear();
-			$query->update($db->quoteName('#__banners'));
-			$query->set($db->quoteName('reset').' = '.$db->quote($reset));
-			$query->set($db->quoteName('impmade').' = '.$db->quote(0));
-			$query->set($db->quoteName('clicks').' = '.$db->quote(0));
-			$query->where($db->quoteName('id').' = '.$db->quote($row->id));
-			$db->setQuery((string) $query);
+			$query->clear()
+				->update($db->quoteName('#__banners'))
+				->set($db->quoteName('reset') . ' = ' . $db->quote($reset))
+				->set($db->quoteName('impmade') . ' = ' . $db->quote(0))
+				->set($db->quoteName('clicks') . ' = ' . $db->quote(0))
+				->where($db->quoteName('id') . ' = ' . $db->quote($row->id));
+			$db->setQuery($query);
 
 			try
 			{
@@ -190,12 +150,11 @@ class BannersHelper
 	{
 		$options = array();
 
-		$db		= JFactory::getDbo();
-		$query	= $db->getQuery(true);
-
-		$query->select('id As value, name As text');
-		$query->from('#__banner_clients AS a');
-		$query->order('a.name');
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true)
+			->select('id As value, name As text')
+			->from('#__banner_clients AS a')
+			->order('a.name');
 
 		// Get the options.
 		$db->setQuery($query);

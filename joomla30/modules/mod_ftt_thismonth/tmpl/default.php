@@ -94,7 +94,14 @@ $date = date('n', strtotime('-1 month'));
 <script>
     $FamilyTreeTop.bind(function($){
         'use strict';
-        $FamilyTreeTop.fn.mod('this_month').init('<?=($date + 1);?>');
+        $FamilyTreeTop.fn.mod('this_month').init('<?=($date + 1);?>',<?php
+            echo json_encode(array(
+                'none' => JText::_('MOD_FTT_THISMONTH_NONE_TO_SHOW'),
+                'BIRT' => JText::_('MOD_FTT_THISMONTH_EVET_BIRT'),
+                'DEAT' => JText::_('MOD_FTT_THISMONTH_EVENT_DEAT'),
+                'MARR' => JText::_('MOD_FTT_THISMONTH_EVENT_MARR')
+            ));
+        ?>);
     });
 </script>
 

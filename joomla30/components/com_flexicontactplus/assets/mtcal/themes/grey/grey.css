@@ -1,0 +1,144 @@
+/* Calendar: a Javascript class for Mootools that adds accessible and unobtrusive date pickers to your form elements <http://electricprism.com/aeron/calendar> */
+/* Grey CSS for Calendar by Les Arbres */
+
+input.grey,
+select.grey {
+	width: 68px;
+}
+
+button.grey {
+	background: url(grey-icon.png) no-repeat right top;
+	border: 0;
+	cursor: pointer;
+	height: 20px;
+	width: 22px;
+	min-width: 0;
+	min-height:0;
+	margin: 2px 2px 2px 5px;
+}
+button.grey:hover {
+	background: url(grey-icon.png) no-repeat right top;
+}
+
+div.grey {
+	background: url(grey.png) no-repeat;
+	height: 175px;
+	padding: 0 12px;
+	text-align: center;
+	width: 147px;
+}	
+div.grey * {
+	margin: 0;
+	padding: 0;
+}	
+div.grey div {
+	background: none !important;
+	cursor: move;
+	height: 165px;
+	overflow: hidden;
+	padding-top: 10px;
+	position: relative;
+	width: 147px;
+}	
+
+div.grey caption {
+	color: #400000;
+	font: normal 12px/17px Arial, Helvetica, sans-serif;
+	padding-top: 4px;
+	text-align: center;
+	font-weight: bold;
+	width: 100%;
+}
+div.grey caption a {
+	cursor: pointer;
+	display: block;
+	height: 11px;
+	overflow: hidden;
+	position: absolute;
+	text-indent: -100px;
+	top: 16px;
+	width: 11px;
+}
+div.grey caption a.prev {
+	background-image: url(grey-prev.gif);
+	left: 1px;
+}
+div.grey caption a.next {
+	background-image: url(grey-next.gif);
+	right: 1px;
+}
+div.grey caption a:hover {
+	background-position: 0 11px;
+}
+div.grey caption span {
+	height: 25px;
+	position: relative;
+	text-align: center;
+}
+div.grey caption span.month {
+	padding-right: 8px;
+}
+div.grey caption span.month:after {
+	content: ',';
+}
+
+div.grey table {
+	border: none !important;
+	border-collapse: collapse;
+	border-spacing: 0;
+	cursor: default;
+	margin: 0 auto;
+	overflow: hidden;
+	width: 147px;
+}
+
+div.grey tr {
+	border: 0;
+}
+
+div.grey th {
+	border: 0;
+	color: #400000;
+	font: normal 12px Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	height: 19px;
+	text-align: center;
+	width: 21px;
+}
+
+div.grey td {
+	border: 0;
+	height: 19px;
+	color: gray;
+	font: normal 12px Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	padding-right: 5px;
+	text-align: right;
+	width: 16px;
+}
+
+div.grey td.invalid {
+	color: #666;
+}
+
+div.grey td.valid, div.grey td.inactive {
+	color: #400000;
+	cursor: pointer;
+	font-weight: bold;
+}
+
+div.grey td.today {
+	color: red;
+}
+
+div.grey td.active {
+	color: #400000;
+	text-decoration: underline;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+div.grey td.hover {
+	background-color:#FEFBF1;
+	cursor: pointer;
+}

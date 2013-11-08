@@ -1,0 +1,94 @@
+/* Simple transparent form with minimal styling and text error messages */
+/* Version 8.06.01 */
+
+.fcp_wrapper { }
+
+/* line layout */
+
+div.fcp_line	    {clear:left; padding-top:0.5em;}
+div.fcp_line label  {display:inline-block; vertical-align:top; text-align:right; width:12em; max-width:20%; margin-right:1em;}
+
+@media screen and (max-width: 800px) 
+{
+    div.fcp_line label  {display:block; text-align:left; width:auto; max-width:90%;}
+}
+	
+/* mandatory and errors */
+
+.fcp_mandatory:after {content:"*"; margin-left:0.25em; font-size:larger;}
+.fcp_error_msg       {margin-left:5px; font-size:90%; font-weight:normal; color:#DD4134; }
+.fcp_error_field     {border:1px solid #C51818;}
+
+/* secure-image captcha */
+
+div.fcp_captcha input   {vertical-align:top;}
+div.fcp_captcha_inner   {display:inline-block; padding:2px; background:#F3F4F5 url('css_images/securimage.png') no-repeat 4% 90%;
+                         border:1px solid #7F9DB9; -webkit-border-radius:5px; -moz-border-radius:5px; border-radius:5px;}
+img.fcp_captcha_img     {vertical-align:middle; margin:0 5px 0 5px; 
+                         border:1px solid #7F9DB9; -webkit-border-radius:5px; -moz-border-radius:5px; border-radius:5px;}
+span.fcp_captcha_reload {display:inline-block; height:24px; width:24px; vertical-align:middle;
+                         background:#F3F4F5 url('css_images/reload_blue.png') no-repeat center center; cursor:pointer;}
+#fcp_err_captcha        {margin-top:20px;}                
+
+/* image captcha */
+
+.fcp_image_inner        {display:inline-block; }
+.fcp_inactive           {border:2px solid transparent;}
+.fcp_active             {border:2px solid red;}
+#fcp_err_image          {margin-top:20px;}
+
+/* recaptcha */
+
+#recaptcha_widget_div	{display:inline-block; }
+#fcp_err_recap		{margin-top:10px;}
+
+/* fieldsets */
+
+fieldset.fcp_fieldset   {clear:left; border:1px solid lightgray;}
+div.fcp_attach input    {border:1px solid lightgray; background-color:whitesmoke;}
+
+/* input fields */
+
+.fcp_form input, .fcp_form textarea, .fcp_form select     {max-width:90%; width:auto !important;}
+.fcp_form textarea {height:auto;}
+div.fcp_line input[type="checkbox"] {margin-top:0; vertical-align:middle;}	
+
+
+/* radio button and multiple checkbox layout */
+
+div.fcp_radio_h_inner     {display:inline-block; max-width:70%;}
+span.fcp_radio_h          {display:inline-block;}
+span.fcp_radio_h label    {width:auto; padding-left:5px;}
+
+div.fcp_radio_v_inner     {display:inline-block; max-width:70%;}
+span.fcp_radio_v          {display:block;}
+span.fcp_radio_v label    {width:auto; padding-left:5px;}
+span.fcp_radio_v input    {clear:left; }
+
+div.fcp_checkbox_l input.fcp_lcb {margin-left:8em; margin-right:1em;}
+div.fcp_checkbox_l label.fcp_lcb {width:auto; max-width:70%;}
+
+@media screen and (max-width: 800px) 
+{
+	div.fcp_checkbox_l input.fcp_lcb {margin-left:0; }
+	div.fcp_checkbox_l label.fcp_lcb {max-width:90%; }
+}
+
+div.fcp_checkbox_inner    {display:inline-block; max-width:60%;}
+span.fcp_checkbox_m       {display:inline-block;}
+span.fcp_checkbox_m label {width:auto; max-width:none; padding-left:5px;}
+
+span.fcp_checkbox_h	  {float:left;}
+
+/* the send row */
+.fcp_sendrow {margin-left:2em;}
+#fcp_spinner {margin-top:8px;}
+.fcp_spinner {background:url('css_images/spinner.gif') no-repeat left center !important; height:16px; width:16px;}
+
+/* Tooltips (Joomla 1.5 uses tool-, Joomla 1.6+ uses tip- */
+
+.tip, .tool-tip         {float:left; padding:5px; max-width:400px; z-index:50; background:black !important; 
+	                 border:1px solid #c7c8b2; -webkit-border-radius:4px; -moz-border-radius:4px; border-radius:4px; }
+.tip-title, .tool-title {color:white; padding:0; margin:0; margin-top:-15px; white-space:normal;
+	                 font-size:90%; font-weight:bold; padding-top:15px; padding-bottom:5px; }
+.tip-text, .tool-text   {color:white; font-size:100%; margin:0; white-space:normal; }

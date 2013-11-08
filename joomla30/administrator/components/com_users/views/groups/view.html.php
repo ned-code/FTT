@@ -56,7 +56,7 @@ class UsersViewGroups extends JViewLegacy
 	{
 		$canDo	= UsersHelper::getActions();
 
-		JToolbarHelper::title(JText::_('COM_USERS_VIEW_GROUPS_TITLE'), 'groups');
+		JToolbarHelper::title(JText::_('COM_USERS_VIEW_GROUPS_TITLE'), 'users groups');
 
 		if ($canDo->get('core.create'))
 		{
@@ -79,5 +79,20 @@ class UsersViewGroups extends JViewLegacy
 			JToolbarHelper::divider();
 		}
 		JToolbarHelper::help('JHELP_USERS_GROUPS');
+	}
+
+	/**
+	 * Returns an array of fields the table can be sorted by
+	 *
+	 * @return  array  Array containing the field name to sort by as the key and display text as value
+	 *
+	 * @since   3.0
+	 */
+	protected function getSortFields()
+	{
+		return array(
+				'a.title' => JText::_('COM_USERS_HEADING_GROUP_TITLE'),
+				'a.id' => JText::_('JGRID_HEADING_ID')
+		);
 	}
 }

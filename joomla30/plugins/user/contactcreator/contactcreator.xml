@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension version="3.0" type="plugin" group="user">
+<extension version="3.1" type="plugin" group="user">
 	<name>plg_user_contactcreator</name>
 	<author>Joomla! Project</author>
 	<creationDate>August 2009</creationDate>
@@ -33,13 +33,13 @@
 				/>
 
 				<field name="autopublish" type="radio"
-					class="btn-group"
+					class="btn-group btn-group-yesno"
 					default="0"
 					description="PLG_CONTACTCREATOR_FIELD_AUTOPUBLISH_DESC"
 					label="PLG_CONTACTCREATOR_FIELD_AUTOPUBLISH_LABEL"
 				>
-					<option value="0">JNo</option>
-					<option value="1">JYes</option>
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
 				</field>
 			</fieldset>
 

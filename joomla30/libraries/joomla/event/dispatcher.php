@@ -94,7 +94,7 @@ class JEventDispatcher extends JObject
 	 * @return  void
 	 *
 	 * @since   11.1
-	 * @throws InvalidArgumentException
+	 * @throws  InvalidArgumentException
 	 */
 	public function register($event, $handler)
 	{
@@ -161,16 +161,18 @@ class JEventDispatcher extends JObject
 				$args['event'] = $event;
 				$value = $this->_observers[$key]->update($args);
 			}
-            // Fire the event for a function based observer.
+			// Fire the event for a function based observer.
 			elseif (is_array($this->_observers[$key]))
 			{
 				$value = call_user_func_array($this->_observers[$key]['handler'], $args);
 			}
+
 			if (isset($value))
 			{
 				$result[] = $value;
 			}
 		}
+
 		return $result;
 	}
 

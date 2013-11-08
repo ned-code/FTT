@@ -105,33 +105,18 @@ class ContentControllerArticles extends JControllerAdmin
 	}
 
 	/**
-	 * Method to save the submitted ordering values for records via AJAX.
+	 * Function that allows child controller access to model data
+	 * after the item has been deleted.
+	 *
+	 * @param   JModelLegacy  $model  The data model object.
+	 * @param   integer       $ids    The array of ids for items being deleted.
 	 *
 	 * @return  void
 	 *
-	 * @since   3.0
+	 * @since   12.2
 	 */
-	public function saveOrderAjax()
+	protected function postDeleteHook(JModelLegacy $model, $ids = null)
 	{
-		$pks = $this->input->post->get('cid', array(), 'array');
-		$order = $this->input->post->get('order', array(), 'array');
-
-		// Sanitize the input
-		JArrayHelper::toInteger($pks);
-		JArrayHelper::toInteger($order);
-
-		// Get the model
-		$model = $this->getModel();
-
-		// Save the ordering
-		$return = $model->saveorder($pks, $order);
-
-		if ($return)
-		{
-			echo "1";
-		}
-
-		// Close the application
-		JFactory::getApplication()->close();
 	}
+
 }

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+
+<layout title="COM_FLEXICONTACTPLUS_VIEW_TITLE_CONTACT">
+	<message>
+	</message>
+</layout>
+
+<state>
+	<name>COM_FLEXICONTACTPLUS_VIEW_TITLE_CONTACT</name>
+	
+	<description></description>
+
+<!-- Joomla 1.6 -->
+	
+<config><fields name="params"><fieldset name="basic">
+	<field name="config_name" type="text"  size="40" default="" label="COM_FLEXICONTACT_CONFIG_NAME" description="COM_FLEXICONTACT_CONFIG_NAME_DESC" />
+	<field name="page_hdr" type="text" size="40" default="" label="COM_FLEXICONTACT_V_PAGE_TITLE" description="COM_FLEXICONTACT_V_PAGE_TITLE_DESC" />
+</fieldset></fields></config>
+
+<!-- Joomla 1.5 -->
+
+<params>
+	<param name="config_name" type="text" size="40" default="" label="COM_FLEXICONTACT_CONFIG_NAME" description="COM_FLEXICONTACT_CONFIG_NAME_DESC" />
+	<param name="page_hdr" type="text" size="40" default="" label="COM_FLEXICONTACT_V_PAGE_TITLE" description="COM_FLEXICONTACT_V_PAGE_TITLE_DESC" />
+</params>
+
+
+</state>
+
+</metadata>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension
 	type="module"
-	version="3.0"
+	version="3.1"
 	client="site"
 	method="upgrade">
 	<name>mod_banners</name>
@@ -72,7 +72,7 @@
 				<field
 					name="tag_search"
 					type="radio"
-					class="btn-group"
+					class="btn-group btn-group-yesno"
 					default="0"
 					label="MOD_BANNERS_FIELD_TAG_LABEL"
 					description="MOD_BANNERS_FIELD_TAG_DESC">
@@ -121,7 +121,7 @@
 
 				<field
 					name="moduleclass_sfx"
-					type="text"
+					type="textarea" rows="3"
 					label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
 					description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC" />
 

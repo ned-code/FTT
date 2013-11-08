@@ -1,0 +1,56 @@
+.icon-48-flexicontactplus { background-image:url(flexicontactplus-48.png); }
+
+.icon-32-download { background-image:url(download-32.png); }
+.icon-32-upload   {background-image:url(upload-32.png); }
+.icon-32-chart    {background-image:url(chart-32.png); }
+
+table.fc_table {border-collapse:separate; border-spacing:2px;}
+.fc_table td   {white-space:nowrap;}
+.fc_table td.prompt {text-align:right; width:120px; padding-right:15px;}
+
+.fcp_config_title {margin:0 5px 0 5px; border:3px double #146295; background-color:white; padding:5px;}
+	
+.fcp_button {background-color:#ECE9D8; border:2px outset #ECE9D8;}
+.fcp_button:hover {background-color:#CFCBBB; border:2px outset #ECE9D8;}
+
+.big_red_button {
+	background-color:#ECE9D8; 
+	border:2px outset #ECE9D8; 
+	padding:5px 20px 5px 20px; 
+	font-weight:bold; 
+	font:76%/150%; 
+	color:red; 
+	font-size:200%;
+	cursor:pointer;}
+.big_red_button:hover {background-color:red; color:white;}
+
+td.css_file_path {color:blue;}
+
+.jgrid span {background-repeat: no-repeat;}
+
+/* Joomla 3.x fixes */
+
+input, select, label {margin-bottom:0 !important; width:auto !important;}
+textarea {margin-bottom:0 !important; }
+.pull-left {float:none !important; }
+
+table.adminlist th .pull-right {float:none; }
+
+select.field_type {font-size:1em;}
+
+fieldset.fc_panel {margin:0 10px 10px 10px; border:1px #CCC solid; padding:5px; text-align:left; font-size:12px;}
+fieldset.fc_panel legend 
+	{width:auto; border:0; margin:0; padding-left:5px; padding-right:5px; color:#146295; font-size:1.182em; font-weight:bold;}
+
+img {max-width:500px !important;}
+
+table.key_panel img {margin:0 10px 0 10px;}
+table.key_panel td  {height:16px;}
+
+table.help_support         {border-collapse:collapse;border:1px solid #CECACA; border-spacing:0;}
+table.help_support tr      {border:1px solid #CECACA; background-color:white;   padding:5px;}
+table.help_support tr.row1 {border:1px solid #CECACA; background-color:#F0F0EE; padding:5px;}
+table.help_support td      {padding:5px 15px 5px 15px; vertical-align:top;font-weight:bold;}
+
+.tip-wrap {text-align:left !important;}
+.tip-title {font-weight:bold;}

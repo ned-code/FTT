@@ -15,6 +15,9 @@ JHtml::_('bootstrap.tooltip');
 
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn  = $this->escape($this->state->get('list.direction'));
+
+$version = new JVersion;
+
 ?>
 
 <div id="installer-languages">
@@ -34,7 +37,7 @@ $listDirn  = $this->escape($this->state->get('list.direction'));
 				<thead>
 					<tr>
 						<th width="20" class="nowrap hidden-phone">
-							<input type="checkbox" name="checkall-toggle" value="" title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)" />
+							<?php echo JHtml::_('grid.checkall'); ?>
 						</th>
 						<th class="nowrap">
 							<?php echo JHtml::_('grid.sort', 'COM_INSTALLER_HEADING_NAME', 'name', $listDirn, $listOrder); ?>
@@ -69,6 +72,12 @@ $listDirn  = $this->escape($this->state->get('list.direction'));
 						</td>
 						<td>
 							<?php echo $language->name; ?>
+
+							<?php // Display a Note if language pack version is not equal to Joomla version ?>
+							<?php if (substr($language->version, 0, 3) != $version->RELEASE
+									|| substr($language->version, 0, 5) != $version->RELEASE . "." . $version->DEV_LEVEL) : ?>
+								<div class="small"><?php echo JText::_('JGLOBAL_LANGUAGE_VERSION_NOT_PLATFORM'); ?></div>
+							<?php endif; ?>
 						</td>
 						<td class="center small">
 							<?php echo $language->version; ?>
