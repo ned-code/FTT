@@ -975,7 +975,7 @@ $FamilyTreeTop.create("usertree", function($){
         return false;
     }
 
-    $this.getFAmilyEventByType = function(family_id, type){
+    $this.getFamilyEventByType = function(family_id, type){
         if("undefined" === typeof( data.eve.family_id[family_id])) return false;
         var events =  data.eve.family_id[family_id];
         for(var key in events){
@@ -1059,13 +1059,13 @@ $FamilyTreeTop.create("usertree", function($){
     $this.parsePlace = function(place){
         if("undefined" === typeof(place) || place == null) return '';
         var ret = [];
-        if(place.city != null){
+        if(place.city != null && place.city.length != 0){
             ret.push(place.city);
         }
-        if(place.state != null){
+        if(place.state != null && place.state.length != 0){
             //ret.push(place.state);
         }
-        if(place.country != null){
+        if(place.country != null && place.country.length != 0){
             ret.push(place.country);
         }
         return ret.join(", ");
