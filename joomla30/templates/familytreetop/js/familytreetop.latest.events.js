@@ -88,19 +88,19 @@ $FamilyTreeTop.create("latest_events", function($){
         },
         onFamilyLine:function(args){
             if(args.type == "eye"){
-                var b = 0 , d = 0, m = 0;
-                $($birthBox).find('tr').each(function(i,e){
-                    if($(e).css('display') != 'none' && $(e).attr('familytreetop') != 'null' ){
+                var b = 0, d = 0, m = 0;
+                $($birthBox).find('tr.familytreetop-last-event-item').each(function(i,e){
+                    if($(e).css('display') != 'none'){
                         b++;
                     }
                 });
-                $($deathBox).find('tr').each(function(i,e){
-                    if($(e).css('display') != 'none' && $(e).attr('familytreetop') != 'null' ){
+                $($deathBox).find('tr.familytreetop-last-event-item').each(function(i,e){
+                    if($(e).css('display') != 'none'){
                         d++;
                     }
                 });
-                $($marrBox).find('tr').each(function(i,e){
-                    if($(e).css('display') != 'none' && (e).attr('familytreetop') != 'null' ){
+                $($marrBox).find('tr.familytreetop-last-event-item').each(function(i,e){
+                    if($(e).css('display') != 'none'){
                         m++;
                     }
                 });
