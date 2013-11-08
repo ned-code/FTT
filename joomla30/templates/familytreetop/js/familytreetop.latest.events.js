@@ -105,13 +105,13 @@ $FamilyTreeTop.create("latest_events", function($){
                     }
                 });
                 if(args.active){
-                    if(b != 0) $($birthBox).find('[familytreetop="null"]').remove();
-                    if(d != 0) $($deathBox).find('[familytreetop="null"]').remove();
-                    if(m != 0) $($marrBox).find('[familytreetop="null"]').remove();
+                    if(b != 0 && $($birthBox).find('[familytreetop="null"]').length == 1) $($birthBox).find('[familytreetop="null"]').remove();
+                    if(d != 0 && $($deathBox).find('[familytreetop="null"]').length == 1) $($deathBox).find('[familytreetop="null"]').remove();
+                    if(m != 0 && $($marrBox).find('[familytreetop="null"]').length == 1) $($marrBox).find('[familytreetop="null"]').remove();
                 } else{
-                    if(b == 0) $fn.setNull($birthBox);
-                    if(d == 0) $fn.setNull($deathBox);
-                    if(m == 0) $fn.setNull($marrBox);
+                    if(b == 0 && $($birthBox).find('[familytreetop="null"]').length == 0) $fn.setNull($birthBox);
+                    if(d == 0 && $($deathBox).find('[familytreetop="null"]').length == 0) $fn.setNull($deathBox);
+                    if(m == 0 && $($marrBox).find('[familytreetop="null"]').length == 0) $fn.setNull($marrBox);
                 }
             }
             return true;
