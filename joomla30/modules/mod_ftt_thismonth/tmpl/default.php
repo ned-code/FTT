@@ -44,10 +44,10 @@ $date = date('n', strtotime('-1 month'));
                 </legend>
             <div class="row-fluid">
                 <div class="span12">
-                    <div familytreetop="none" class="row-fluid" style="display:none; padding: 20px;">
-                        <div style="font-weight: bold; text-align: center; font-size: 18px;"><?=JText::_('MOD_FTT_THISMONTH_NONE_TITLE');?></div>
-                        <div style="text-align: center; margin: 20px;"><i class="icon-calendar-empty" style="font-size: 120px;"></i></div>
-                        <div style="font-weight: bold; text-align: center; font-size: 18px;"><?=JText::_('MOD_FTT_THISMONTH_NONE_DESCRIPTION');?></div>
+                    <div familytreetop="none" class="row-fluid" style="display:none; padding: 0;">
+                        <div style="margin: 30px;font-weight: bold; text-align: center; font-size: 18px;"><?=JText::_('MOD_FTT_THISMONTH_NONE_TITLE');?></div>
+                        <div style="text-align: center; margin: 30px;"><i class="icon-calendar-empty muted" style="font-size: 120px;"></i></div>
+                        <div style="margin: 30px; text-align: center; font-size: 16px;"><?=JText::_('MOD_FTT_THISMONTH_NONE_DESCRIPTION');?></div>
                     </div>
                     <div familytreetop="all" class="row-fluid" style="display:none;">
                         <div class="span12">
@@ -66,22 +66,19 @@ $date = date('n', strtotime('-1 month'));
                             </div>
                         </div>
                     </div>
-                    <div familytreetop="BIRT" class="row-fluid">
+                    <div familytreetop="BIRT" class="row-fluid" style="display:none;">
                         <div class="span12">
-                            <!--<div style="font-weight:bold; #c3c3c3; padding: 3px; padding-left: 20px;"><i class="icon-large icon-gift"></i>Birthdays</div> -->
                             <table style="margin:0;" class="table table-striped familytreetop-table familytreetop-table-td">
                             </table>
                         </div>
                     </div>
-                    <div familytreetop="MARR" class="row-fluid">
+                    <div familytreetop="MARR" class="row-fluid" style="display:none;">
                         <div class="span12">
-                            <!--<div style="font-weight:bold; background: #c3c3c3; padding: 3px; padding-left: 20px;"><i class="icon-large icon-heart"></i>Anniversary</div>-->
                             <table style="margin:0;" class="table table-striped familytreetop-table familytreetop-table-td"></table>
                         </div>
                     </div>
-                    <div familytreetop="DEAT" class="row-fluid">
+                    <div familytreetop="DEAT" class="row-fluid" style="display:none;">
                         <div class="span12">
-                            <!--<div style="font-weight:bold; background: #c3c3c3; padding: 3px; padding-left: 20px;"><i class="icon-large icon-bookmark"></i>We remember</div>-->
                             <table style="margin:0;" class="table table-striped familytreetop-table familytreetop-table-td"></table>
                         </div>
                     </div>
