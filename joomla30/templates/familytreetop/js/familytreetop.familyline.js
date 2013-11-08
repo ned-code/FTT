@@ -3,6 +3,7 @@ $FamilyTreeTop.create("familyline", function($){
     var $this = this,
         $box,
         $pull = [],
+        $response = [],
         $active = false,
         $fn;
 
@@ -95,7 +96,9 @@ $FamilyTreeTop.create("familyline", function($){
 
             if(user[method]){
                 $(el)[active]();
+                return active;
             }
+            return false;
         },
         adjust: function(item, args){
             var method = (args.line)?"is_father_line":"is_mother_line",
@@ -105,15 +108,31 @@ $FamilyTreeTop.create("familyline", function($){
             if(user[method]){
                 if(args.active){
                     $(el).addClass(args.line?"familytreetop-is-father-line":"familytreetop-is-mother-line");
+                    return true;
                 } else {
                     $(el).removeClass(args.line?"familytreetop-is-father-line":"familytreetop-is-mother-line");
+                    return true;
                 }
             }
+            return false;
         },
         send: function(args){
+            var res;
             for(var prop in $pull){
                 if(!$pull.hasOwnProperty(prop)) continue;
-                $fn[args.type]($pull[prop], args);
+                res = $fn[args.type]($pull[prop], args);
+                if("undefined" !== typeof($pull[prop].call)){
+                    $pull[prop].call({
+                        args : args,
+                        result: res,
+                        gedcom_id : $pull[prop].gedcom_id,
+                        target : $pull[prop].target
+                    });
+                }
+            }
+            for(var key in $response){
+                if(!$response.hasOwnProperty(key)) continue;
+                $response[key](args);
             }
         },
         hide: function(){
@@ -145,7 +164,11 @@ $FamilyTreeTop.create("familyline", function($){
         });
     }
 
-    $this.bind = function(el, gedcom_id){
-        $pull.push({target:el, gedcom_id: gedcom_id});
+    $this.bind = function(el, gedcom_id, call){
+        $pull.push({target:el, gedcom_id: gedcom_id, call: call});
+    }
+
+    $this.resp = function(call){
+        $response.push(call);
     }
 });

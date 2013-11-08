@@ -15,7 +15,7 @@ $FamilyTreeTop.create("latest_events", function($){
             return img;
         },
         setNull: function(box){
-            $(box).append('<tr><td colspan="3" style="text-align:center; padding: 20px;"><i class="icon-calendar-empty" style="font-size:28px;"></i> <span>'+$languages['none']+'</span></td></tr>')
+            $(box).append('<tr familytreetop="null" ><td colspan="3" style="text-align:center; padding: 20px;"><i class="icon-calendar-empty" style="font-size:28px;"></i> <span>'+$languages['none']+'</span></td></tr>')
         },
         setEvents: function(box, events, type){
             var user, family, husb, wife, div, ev, tr, td, avatar;
@@ -85,6 +85,36 @@ $FamilyTreeTop.create("latest_events", function($){
                     $this.mod('familyline').bind(element,  gedcom_id);
                 }
             });
+        },
+        onFamilyLine:function(args){
+            if(args.type == "eye"){
+                var b = 0 , d = 0, m = 0;
+                $($birthBox).find('tr').each(function(i,e){
+                    if($(e).css('display') != 'none'){
+                        b++;
+                    }
+                });
+                $($deathBox).find('tr').each(function(i,e){
+                    if($(e).css('display') != 'none'){
+                        d++;
+                    }
+                });
+                $($marrBox).find('tr').each(function(i,e){
+                    if($(e).css('display') != 'none'){
+                        m++;
+                    }
+                });
+            }
+            if(args.active){
+                $($birthBox).find('[familytreetop="null"]').remove();
+                $($deathBox).find('[familytreetop="null"]').remove();
+                $($marrBox).find('[familytreetop="null"]').remove();
+            } else{
+                if(b == 0) $fn.setNull($birthBox);
+                if(d == 0) $fn.setNull($deathBox);
+                if(m == 0) $fn.setNull($marrBox);
+            }
+            return true;
         }
     }
 
@@ -107,5 +137,6 @@ $FamilyTreeTop.create("latest_events", function($){
             $fn.setNull($marrBox);
         }
         $fn.setFamilyLine();
+        $this.mod('familyline').resp($fn.onFamilyLine);
     }
 });
