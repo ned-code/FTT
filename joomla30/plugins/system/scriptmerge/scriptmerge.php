@@ -264,7 +264,6 @@ class plgSystemScriptMerge extends JPlugin
                 }
             }
         }
-
         return $body;
     }
 

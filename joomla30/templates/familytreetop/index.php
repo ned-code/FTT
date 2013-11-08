@@ -42,7 +42,8 @@ $data = json_encode(GedcomHelper::getInstance()->getData());
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->language; ?>" lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>">
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <noscript><link rel="stylesheet" href="templates/<?=$this->template;?>/css/jquery.fileupload-ui-noscript.css"></noscript>
+    <link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/css/style.css">
+    <noscript><link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/css/jquery.fileupload-ui-noscript.css"></noscript>
     <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/holder.js"></script>
     <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/excanvas.js"></script>
     <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.js"></script>
@@ -356,30 +357,34 @@ $data = json_encode(GedcomHelper::getInstance()->getData());
 
     <form id="formEditMedia" action="<?=JRoute::_("index.php?option=com_familytreetop&task=upload.file", false);?>" method="POST" enctype="multipart/form-data">
         <div class="row-fluid fileupload-buttonbar">
-            <div class="span6">
-                <span class="btn btn-success fileinput-button">
-                    <i class="icon-plus icon-white"></i>
-                    <span><?=JText::_("TPL_FAMILYTREETOP_EDITOR_TABS_MEDIA_ADD_FILES");?></span>
-                    <input type="file" name="files[]" multiple="">
-                </span>
-                <span class="btn btn-info familytreetop-button set-avatar" style="display: none;">
-                    <i class="icon-ok-sign icon-white"></i>
-                    <span><?=JText::_("TPL_FAMILYTREETOP_EDITOR_TABS_MEDIA_SET_AVATAR");?></span>
-                </span>
-                <span class="btn btn-danger familytreetop-button unset-avatar" style="display: none;">
-                    <i class="icon-remove-sign icon-white"></i>
-                    <span><?=JText::_("TPL_FAMILYTREETOP_EDITOR_TABS_MEDIA_UNSET_AVATAR");?></span>
-                </span>
-                <span class="btn btn-danger familytreetop-button delete" style="display: none;">
-                    <i class="icon-trash icon-white"></i>
-                    <span><?=JText::_("TPL_FAMILYTREETOP_EDITOR_TABS_MEDIA_DELETE");?></span>
-                </span>
-            </div>
-            <div class="span6 fileupload-progress fade">
-                <div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-                    <div class="bar" style="width:0%;"></div>
+            <div class="row-fluid">
+                <div class="span12">
+                    <span class="btn btn-success fileinput-button">
+                        <i style="display:inline-block;" class="icon-plus icon-white"></i>
+                        <span style="display:inline-block;"><?=JText::_("TPL_FAMILYTREETOP_EDITOR_TABS_MEDIA_ADD_FILES");?></span>
+                        <input type="file" name="files[]" multiple="">
+                    </span>
+                    <span class="btn btn-info familytreetop-button set-avatar" style="display: none;">
+                        <i class="icon-ok-sign icon-white"></i>
+                        <span><?=JText::_("TPL_FAMILYTREETOP_EDITOR_TABS_MEDIA_SET_AVATAR");?></span>
+                    </span>
+                    <span class="btn btn-danger familytreetop-button unset-avatar" style="display: none;">
+                        <i class="icon-remove-sign icon-white"></i>
+                        <span><?=JText::_("TPL_FAMILYTREETOP_EDITOR_TABS_MEDIA_UNSET_AVATAR");?></span>
+                    </span>
+                    <span class="btn btn-danger familytreetop-button delete" style="display: none;">
+                        <i class="icon-trash icon-white"></i>
+                        <span><?=JText::_("TPL_FAMILYTREETOP_EDITOR_TABS_MEDIA_DELETE");?></span>
+                    </span>
                 </div>
-                <div class="progress-extended">&nbsp;</div>
+            </div>
+            <div class="row-fluid">
+                <div class="span12 fileupload-progress fade">
+                    <div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                        <div class="bar" style="width:0%;"></div>
+                    </div>
+                    <div class="progress-extended">&nbsp;</div>
+                </div>
             </div>
         </div>
         <div class="fileupload-loading"></div>
