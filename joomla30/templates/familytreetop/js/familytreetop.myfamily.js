@@ -130,8 +130,9 @@ $FamilyTreeTop.create("myfamily", function($){
             $(tr).find('[familytreetop-image] img').load(function(e){
                 if("undefined" !== typeof(e.target.naturalWidth)){
                     var width = e.target.naturalWidth;
-                    if(width > Math.floor(parentWidth/2)){
-                        width = Math.floor(parentWidth/2);
+                    var thirdWidth = Math.floor(parentWidth/3);
+                    if(width > thirdWidth){
+                        width = thirdWidth;
                     }
                     $(e.target).css('width', width + "px");
                 }
