@@ -30,6 +30,7 @@ $doc->addStyleSheet('templates/'.$this->template.'/css/csstreeview.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/csstreeview.fix.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/tdfriendselector.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/familytreetop.css');
+$doc->addStyleSheet('templates/'.$this->template.'/css/flexicontactplus.fix.css');
 
 // Add current user information
 $user = JFactory::getUser();
@@ -83,7 +84,7 @@ $data = json_encode(GedcomHelper::getInstance()->getData());
         <jdoc:include type="modules" name="navbar" style="none" />
         <div class="container">
             <div class="row">
-                <div class="span12">
+                <div class="span12" >
                     <jdoc:include type="message" />
                     <jdoc:include type="component" />
                 </div>
@@ -93,7 +94,7 @@ $data = json_encode(GedcomHelper::getInstance()->getData());
 </div>
 <div id="footer">
     <div class="container" style="text-align: center;">
-        <jdoc:include type="modules" name="footer" style="none" />
+        <jdoc:include type="modules" name="footer" style="" />
     </div>
 </div>
 <div id="familytreetop-root" style="display:none;">
