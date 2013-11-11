@@ -768,7 +768,7 @@ $FamilyTreeTop.create("usertree", function($){
     }
 
     $this.getRelName = function(obj, id, suffix, postfix){
-        var val = data.rel["_NAMES"][id], name;
+        var val = _getRel_(), name;
         if(data.rel != null && "undefined" !== typeof(val)){
             name = $('#relations').find('[data-familytreetop="'+val.name+'"]').text()
             return ((_is_(suffix))?_getSuffix_(obj):"") + " " + name + " " + ((_is_(postfix))?_getPostfix_(obj):"");
@@ -781,7 +781,18 @@ $FamilyTreeTop.create("usertree", function($){
             return (o.json!=null&&"undefined"!=typeof(o.json.suffix))?o.json.suffix:"";
         }
         function _getPostfix_(o){
-            return (parseInt(o.in_law))?"in-law":"";
+            if( (id == 6 || id == 5) && parseInt(obj.in_law) ){
+                return "";
+            } else {
+                return (parseInt(o.in_law))?"in-law":"";
+            }
+        }
+        function _getRel_(){
+            if( (id == 6 || id == 5) && parseInt(obj.in_law) ){
+                return { name: (id==5)?"DAUGHTER_IN_LAW":"SON_IN_LAW", id: id };
+            } else {
+                return data.rel["_NAMES"][id];
+            }
         }
     }
 

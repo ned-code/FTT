@@ -124,6 +124,8 @@ $data = json_encode(GedcomHelper::getInstance()->getData());
         <div data-familytreetop="FATHER"><?=JText::_("TPL_FAMILYTREETOP_FATHER");?></div>
         <div data-familytreetop="DAUGHTER"><?=JText::_("TPL_FAMILYTREETOP_DAUGHTER");?></div>
         <div data-familytreetop="SON"><?=JText::_("TPL_FAMILYTREETOP_SON");?></div>
+        <div data-familytreetop="DAUGHTER_IN_LAW"><?=JText::_("TPL_FAMILYTREETOP_DAUGHTER_IN_LAW");?></div>
+        <div data-familytreetop="SON_IN_LAW"><?=JText::_("TPL_FAMILYTREETOP_SON_IN_LAW");?></div>
         <div data-familytreetop="SISTER"><?=JText::_("TPL_FAMILYTREETOP_SISTER");?></div>
         <div data-familytreetop="BROTHER"><?=JText::_("TPL_FAMILYTREETOP_BROTHER");?></div>
         <div data-familytreetop="COUSIN"><?=JText::_("TPL_FAMILYTREETOP_COUSIN");?></div>
