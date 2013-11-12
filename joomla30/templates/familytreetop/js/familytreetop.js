@@ -257,6 +257,17 @@
             return unescape(output);
         },
         trim: function(){return this.replace(/^\s+|\s+$/g, '');},
+        textWidth: function(text, font){
+            var f = font || '12px arial',
+                o = $('<div>' + text + '</div>')
+                    .css({'position': 'absolute', 'float': 'left', 'white-space': 'nowrap', 'visibility': 'hidden', 'font': f})
+                    .appendTo($('body')),
+                w = o.width();
+
+            o.remove();
+
+            return w;
+        },
         isExist:function(array, name, value){
             var items = name.split('.'), prop, object, key, element;
             for(prop in array){
@@ -334,7 +345,7 @@
             'cookieDomain': false,                // set to false or yoursite.com
             'tipContent': '#Joyride',     // The ID of the <ol> used for content
             'postRideCallback': function(){
-                $FamilyTreeTop.prototype.fn.ajax('user.joyride', {}, $.noop);
+                //$FamilyTreeTop.prototype.fn.ajax('user.joyride', {}, $.noop);
             },           // A method to call once the tour closes
             'postStepCallback': $.noop, // A method to call after each step
             'nextOnClose': false,                 // If cookies are enabled, increment the current step on close

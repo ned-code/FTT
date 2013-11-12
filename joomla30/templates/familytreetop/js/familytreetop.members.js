@@ -39,6 +39,19 @@ $FamilyTreeTop.create("members", function($){
                 $relPull["unknown"].push(object);
             }
         },
+        setButtonSize:function(){
+            var buttons, length = 0, width = 0, item;
+            buttons = $($filter).find('[familytreetop-button="members"]');
+            $(buttons).each(function(i,e){
+                var text = $(e).text();
+                if(text.length > length){
+                    length = text.length;
+                    item = e;
+                }
+            });
+            width = $this.textWidth($(item).text(), "14px 'Helvetica Neue', Helvetica, Arial, sans-serif") + 25;
+            $(buttons).each(function(i,e){ $(e).css('width', width + 'px'); });
+        },
         createFilterList: function(){
             var ul = $($filter).find('ul'), prop, object, li;
             for(prop in $relPull){
@@ -217,6 +230,7 @@ $FamilyTreeTop.create("members", function($){
 
         //filter checkbox
         $fn.createFilterList();
+        $fn.setButtonSize();
 
         //input search
         var find = function(){
@@ -227,6 +241,8 @@ $FamilyTreeTop.create("members", function($){
                 $('#membersTable tbody td:nth-child(2):not(:contains("'+temp+'"))').parent().hide();
             }
         }
+
+
 
         $($filter).find('[class-familytreetop="module-padding"] input').click(function(){
             $sort = {};
