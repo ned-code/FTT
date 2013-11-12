@@ -189,7 +189,7 @@ $data = json_encode(GedcomHelper::getInstance()->getData());
         <div class="row-fluid" style="padding: 9px 14px;">
             <div class="span3 familytreetop-avatar"><img class="media-object" data-src="template/familytreetop/js/holder.js/75x75"></div>
             <div class="span8" familytreetop-name="content">
-                <ul class="unstyled" style="font-size:11px;">
+                <ul class="unstyled" style="font-size:14px;">
                     <li familytreetop-name="birth"><span style="color: #c3c3c3;"><?=JText::_("TPL_FAMILYTREETOP_BORN");?></span>: <span></span></li>
                     <li familytreetop-name="death"><span style="color: #c3c3c3;"><?=JText::_("TPL_FAMILYTREETOP_DIED");?></span>: <span></span></li>
                     <li familytreetop-name="relation2"><span style="color: #c3c3c3;"><?=JText::_("TPL_FAMILYTREETOP_RELATION");?></span>: <span></span></li>
@@ -308,12 +308,12 @@ $data = json_encode(GedcomHelper::getInstance()->getData());
                             <div class="row-fluid" style="padding: 5px;">
                                 <div  data-familytreetop="avatar" class="span4"></div>
                                 <div class="span8">
-                                    <ul class="unstyled">
-                                        <li><small><strong><?=JText::_("TPL_FAMILYTREETOP_FIRST_NAME");?></strong>: <span></span></small></li>
-                                        <li><small><strong><?=JText::_("TPL_FAMILYTREETOP_MIDDLE_NAME");?></strong>: <span></span></small></li>
-                                        <li><small><strong><?=JText::_("TPL_FAMILYTREETOP_LAST_NAME");?></strong>: <span></span></small></li>
-                                        <li><small><strong><?=JText::_("TPL_FAMILYTREETOP_KNOW_AS");?></strong>: <span></span></small></li>
-                                        <li><small><strong><?=JText::_("TPL_FAMILYTREETOP_RELATION");?></strong>: <span></span></small></li>
+                                    <ul class="unstyled" style="font-size:14px;">
+                                        <li><strong><?=JText::_("TPL_FAMILYTREETOP_FIRST_NAME");?></strong>: <span></span></li>
+                                        <li><strong><?=JText::_("TPL_FAMILYTREETOP_MIDDLE_NAME");?></strong>: <span></span></li>
+                                        <li><strong><?=JText::_("TPL_FAMILYTREETOP_LAST_NAME");?></strong>: <span></span></li>
+                                        <li><strong><?=JText::_("TPL_FAMILYTREETOP_KNOW_AS");?></strong>: <span></span></li>
+                                        <li><strong><?=JText::_("TPL_FAMILYTREETOP_RELATION");?></strong>: <span></span></li>
                                     </ul>
                                 </div>
                             </div>
