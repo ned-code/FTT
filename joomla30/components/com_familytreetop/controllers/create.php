@@ -76,6 +76,7 @@ class FamilytreetopControllerCreate extends FamilytreetopController
         $user->gedcom_id = $ind->gedcom_id;
         $user->tree_id = $tree->id;
         $user->role = "admin";
+        $user->joyride = 1;
         $user->save();
 
         $account->current = $user->id;

@@ -34,6 +34,7 @@ class FamilyTreeTopUserHelper
 
     protected $tree_id = null;
     protected $gedcom_id = null;
+    protected $joyride = null;
 
     protected $famous = false;
 
@@ -96,6 +97,7 @@ class FamilyTreeTopUserHelper
                     self::$instance->user = $user;
                     self::$instance->tree_id = $user->tree_id;
                     self::$instance->gedcom_id = $user->gedcom_id;
+                    self::$instance->joyride = $user->joyride;
                 }
             }
             self::$instance->users = FamilyTreeTopUsers::find_by_account_id(self::$instance->account_id);
@@ -130,6 +132,7 @@ class FamilyTreeTopUserHelper
 
         $user->tree_id = $this->tree_id;
         $user->gedcom_id = $this->gedcom_id;
+        $user->joyride = $this->joyride;
 
         $user->famous = $this->famous;
 
