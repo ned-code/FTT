@@ -262,7 +262,7 @@
             var f = font || '12px arial',
                 o = jQuery('<div>' + text + '</div>')
                     .css({'position': 'absolute', 'float': 'left', 'white-space': 'nowrap', 'visibility': 'hidden', 'font': f})
-                    .appendTo($('body')),
+                    .appendTo(jQuery('body')),
                 w = o.width();
 
             o.remove();
