@@ -194,10 +194,14 @@ $FamilyTreeTop.create("families", function($){
                 return _m_;
             }
         },
-        createParent: function(id, args){
+        createParent: function(id, args, husb){
             var ind = $this.mod('usertree').user(id);
             var cl = $($box).find('.parent-box').clone();
-            return $fn.createBox(ind, cl, 'up', args);
+            var box = $fn.createBox(ind, cl, 'up', args);
+            if(husb && $FamilyTreeTop.joyride){
+                $(box).find('img').attr('id', 'JoyrideStop1');
+            }
+            return box;
         },
         createChild: function(id, color, args){
             var ind = $this.mod('usertree').user(id);
@@ -537,8 +541,8 @@ $FamilyTreeTop.create("families", function($){
                 $wife = $start_id;
             }
 
-            $fn.append(settings, $fn.createParent($husb, settings));
-            $fn.append(settings, $fn.createParent($wife, settings));
+            $fn.append(settings, $fn.createParent($husb, settings, true));
+            $fn.append(settings, $fn.createParent($wife, settings, false));
             $fn.append(settings, $fn.createEvent($husb, $wife));
 
             $fn.createMultiSpouse($husb, $wife, settings);
@@ -575,6 +579,15 @@ $FamilyTreeTop.create("families", function($){
             $fn.render(settings);
         }
         $this.mod('usertree').trigger(settings, $fn.render);
+        if($FamilyTreeTop.joyride) {
+            var show = false;
+            $FamilyTreeTop.load(function(){
+                $('[data-familytreetop="family_tree"]').click();
+                setTimeout(function(){
+                    $FamilyTreeTop.bootjoyride();
+                }, 500);
+            });
+        }
     };
 
 

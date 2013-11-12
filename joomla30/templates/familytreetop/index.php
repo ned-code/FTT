@@ -101,16 +101,7 @@ $data = json_encode(GedcomHelper::getInstance()->getData());
 <div id="familytreetop-root" style="display:none;">
 
     <ol id="Joyride">
-        <li data-target="#JoyrideStop1" data-placement="bottom" data-title="<?=JText::_('MOD_FAMILYTREETOP_HEADER_BULLETIN_BOARD')?>">
-            <div style="width:307px;">Bulletin board</div>
-        </li>
-        <li data-target="#JoyrideStop2" data-placement="bottom" data-title="<?=JText::_('MOD_FAMILYTREETOP_HEADER_CALENDAR')?>">
-            <div style="width:307px;">Calendar</div>
-        </li>
-        <li data-target="#JoyrideStop3" data-placement="bottom" data-title="<?=JText::_('MOD_FAMILYTREETOP_HEADER_MEMBERS')?>">
-            <div style="width:307px;">Members</div>
-        </li>
-        <li data-target="#JoyrideStop4" data-placement="bottom" data-title="<?=JText::_('MOD_FAMILYTREETOP_HEADER_FAMILY_TREE')?>">
+        <li data-target="#JoyrideStop1" data-placement="right" data-title="<?=JText::_('TPL_FAMILYTREETOP_EDIT_PROFILE');?>">
                 <img width="307" height="235" src="<?=$this->baseurl;?>/templates/<?=$this->template;?>/img/tip1.png" />
         </li>
     </ol>
@@ -786,7 +777,7 @@ $data = json_encode(GedcomHelper::getInstance()->getData());
         <div class="multiparent-left-box" style="width: 120px;max-height: 250px;/*overflow: hidden;overflow-y: auto;*/"></div>
         <div class="multiparent-right-box" style="width: 120px;max-height: 250px;/*overflow: hidden;overflow-y: auto;*/"></div>
         <div class="parent-box" style="max-width: 160px;">
-            <div style="width: 150px;position:relative;">
+            <div familytreetop-avatar-box style="width: 150px;position:relative;">
                 <img class="img-polaroid" data-src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/holder.js/150x150">
             </div>
             <div class="text-center"></div>
@@ -947,10 +938,10 @@ $data = json_encode(GedcomHelper::getInstance()->getData());
             jQuery.getScript('//connect.facebook.net/en_US/all.js', function(){
                 FB.init($FamilyTreeTop.app.config);
                 FB.getLoginStatus(function(response){
-                    $FamilyTreeTop.init();
                     <?php if($fttUser->joyride): ?>
-                        $FamilyTreeTop.joyride();
+                    $FamilyTreeTop.joyride = true;
                     <?php endif; ?>
+                    $FamilyTreeTop.init();
                 }, true);
            });
        });

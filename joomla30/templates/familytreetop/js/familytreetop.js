@@ -25,6 +25,7 @@
         this.users = false;
 
         this.bindPull = [];
+        this.loadPull = [];
 
         this.moduleLinkPull = {};
         this.modulePull = [];
@@ -36,7 +37,7 @@
 
         this.languagesString = "";
 
-
+        this.joyride = false;
     }
 
     $FamilyTreeTop.prototype.fn = {
@@ -310,6 +311,10 @@
 
         //init
         $this.mod('tabs').init();
+
+        $this.loadPull.forEach(function(c){
+            c();
+        });
     }
 
     $FamilyTreeTop.prototype.clearUploadTemplates = function(){
@@ -338,14 +343,18 @@
         this.bindPull.push(call);
     }
 
-    $FamilyTreeTop.prototype.joyride = function(){
+    $FamilyTreeTop.prototype.load = function(c){
+        this.loadPull.push(c);
+    }
+
+    $FamilyTreeTop.prototype.bootjoyride = function(){
         jQuery(document.body).BootJoyride({
             'cookieMonster': false,               // true/false for whether cookies are used
             'cookieName': 'JoyrideCookie',    // choose your own cookie name
             'cookieDomain': false,                // set to false or yoursite.com
             'tipContent': '#Joyride',     // The ID of the <ol> used for content
             'postRideCallback': function(){
-                //$FamilyTreeTop.prototype.fn.ajax('user.joyride', {}, $.noop);
+                $FamilyTreeTop.prototype.fn.ajax('user.joyride', {}, $.noop);
             },           // A method to call once the tour closes
             'postStepCallback': $.noop, // A method to call after each step
             'nextOnClose': false,                 // If cookies are enabled, increment the current step on close
