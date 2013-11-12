@@ -15,6 +15,9 @@ $facebook = FacebookHelper::getInstance()->facebook;
 // Getting params from template
 $params = JFactory::getApplication()->getTemplate(true)->params;
 
+// Add current user information
+$user = JFactory::getUser();
+$fttUser = FamilyTreeTopUserHelper::getInstance()->get();
 $app = JFactory::getApplication();
 $doc = JFactory::getDocument();
 
@@ -31,10 +34,6 @@ $doc->addStyleSheet('templates/'.$this->template.'/css/csstreeview.fix.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/tdfriendselector.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/familytreetop.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/flexicontactplus.fix.css');
-
-// Add current user information
-$user = JFactory::getUser();
-$fttUser = FamilyTreeTopUserHelper::getInstance()->get();
 
 // Add familytreetop settings
 $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
@@ -86,7 +85,7 @@ $data = json_encode(GedcomHelper::getInstance()->getData());
         <jdoc:include type="modules" name="navbar" style="none" />
         <div class="container">
             <div class="row">
-                <div class="span12" >
+                <div class="span12">
                     <jdoc:include type="message" />
                     <jdoc:include type="component" />
                 </div>
@@ -100,6 +99,21 @@ $data = json_encode(GedcomHelper::getInstance()->getData());
     </div>
 </div>
 <div id="familytreetop-root" style="display:none;">
+
+    <ol id="Joyride">
+        <li data-target="#JoyrideStop1" data-placement="bottom" data-title="<?=JText::_('MOD_FAMILYTREETOP_HEADER_BULLETIN_BOARD')?>">
+            <div style="width:307px;">Bulletin board</div>
+        </li>
+        <li data-target="#JoyrideStop2" data-placement="bottom" data-title="<?=JText::_('MOD_FAMILYTREETOP_HEADER_CALENDAR')?>">
+            <div style="width:307px;">Calendar</div>
+        </li>
+        <li data-target="#JoyrideStop3" data-placement="bottom" data-title="<?=JText::_('MOD_FAMILYTREETOP_HEADER_MEMBERS')?>">
+            <div style="width:307px;">Members</div>
+        </li>
+        <li data-target="#JoyrideStop4" data-placement="bottom" data-title="<?=JText::_('MOD_FAMILYTREETOP_HEADER_FAMILY_TREE')?>">
+                <img width="307" height="235" src="<?=$this->baseurl;?>/templates/<?=$this->template;?>/img/tip1.png" />
+        </li>
+    </ol>
 
     <div class="alert alert-block alert-error fade in" id="error">
         <a class="close" data-dismiss="alert" href="#">&times;</a>
@@ -904,7 +918,7 @@ $data = json_encode(GedcomHelper::getInstance()->getData());
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/jquery.fileupload-ui.js"></script>
 <!--[if gte IE 8]><script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/jquery.xdr-transport.js"></script><![endif]-->
 <?php if($fttUser->joyride): ?>
-    <script src="<?=$this->baseurl;?>/templates/<?=$this->template;?>/js/bootstrap-joyride.min.js"></script>
+    <script src="<?=$this->baseurl;?>/templates/<?=$this->template;?>/js/bootstrap-joyride.js"></script>
 <?php endif; ?>
 <!-- uncompressed files -->
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.trees.js"></script>
@@ -934,6 +948,9 @@ $data = json_encode(GedcomHelper::getInstance()->getData());
                 FB.init($FamilyTreeTop.app.config);
                 FB.getLoginStatus(function(response){
                     $FamilyTreeTop.init();
+                    <?php if($fttUser->joyride): ?>
+                        $FamilyTreeTop.joyride();
+                    <?php endif; ?>
                 }, true);
            });
        });

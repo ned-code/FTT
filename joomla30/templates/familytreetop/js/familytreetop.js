@@ -327,5 +327,20 @@
         this.bindPull.push(call);
     }
 
+    $FamilyTreeTop.prototype.joyride = function(){
+        jQuery(document.body).BootJoyride({
+            'cookieMonster': false,               // true/false for whether cookies are used
+            'cookieName': 'JoyrideCookie',    // choose your own cookie name
+            'cookieDomain': false,                // set to false or yoursite.com
+            'tipContent': '#Joyride',     // The ID of the <ol> used for content
+            'postRideCallback': function(){
+                $FamilyTreeTop.prototype.fn.ajax('user.joyride', {}, $.noop);
+            },           // A method to call once the tour closes
+            'postStepCallback': $.noop, // A method to call after each step
+            'nextOnClose': false,                 // If cookies are enabled, increment the current step on close
+            'debug': false
+        });
+    }
+
     w.$FamilyTreeTop = new $FamilyTreeTop();
 })(window)

@@ -74,12 +74,12 @@ $motherLineTotal = sizeof($gedcom->individuals->getCountByFamilyLine('is_mother_
     <div class="navbar-inner">
         <ul id="familyTreeTopTabs" class="nav">
             <!-- BULLETIN BOARD -->
-            <li class="active"><a data-familytreetop="bulletin_board" href="#"><?=JText::_('MOD_FAMILYTREETOP_HEADER_BULLETIN_BOARD')?></a></li>
+            <li id="JoyrideStop1" class="active"><a data-familytreetop="bulletin_board" href="#"><?=JText::_('MOD_FAMILYTREETOP_HEADER_BULLETIN_BOARD')?></a></li>
             <!-- CALENDAR -->
-            <li class=""><a data-familytreetop="calendar" href="#"><?=JText::_('MOD_FAMILYTREETOP_HEADER_CALENDAR')?></a></li>
+            <li id="JoyrideStop2" class=""><a data-familytreetop="calendar" href="#"><?=JText::_('MOD_FAMILYTREETOP_HEADER_CALENDAR')?></a></li>
             <!-- MEMBERS -->
-            <li><a data-familytreetop="members" href="#"><?=JText::_('MOD_FAMILYTREETOP_HEADER_MEMBERS')?></a></li>
-            <li><a data-familytreetop="family_tree" href="#"><?=JText::_('MOD_FAMILYTREETOP_HEADER_FAMILY_TREE')?></a></li>
+            <li id="JoyrideStop3"><a data-familytreetop="members" href="#"><?=JText::_('MOD_FAMILYTREETOP_HEADER_MEMBERS')?></a></li>
+            <li id="JoyrideStop4"><a data-familytreetop="family_tree" href="#"><?=JText::_('MOD_FAMILYTREETOP_HEADER_FAMILY_TREE')?></a></li>
         </ul>
         <?php if($user->famous): ?>
             <div class="pull-right">

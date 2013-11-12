@@ -103,6 +103,15 @@ class FamilytreetopControllerUser extends FamilytreetopController
         }
     }
 
+    public function joyride(){
+        $helper = FamilyTreeTopUserHelper::getInstance()->get();
+        $helper->user->joyride = 0;
+        $helper->user->save();
+        $helper->joyride = 0;
+        echo json_encode(array('user'=>$helper));
+        exit;
+    }
+
     public function logout(){
         $user = FamilyTreeTopUserHelper::getInstance()->get();
         $app = JFactory::getApplication();
