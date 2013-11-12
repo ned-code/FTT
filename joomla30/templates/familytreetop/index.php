@@ -34,6 +34,8 @@ $doc->addStyleSheet('templates/'.$this->template.'/css/flexicontactplus.fix.css'
 
 // Add current user information
 $user = JFactory::getUser();
+$fttUser = FamilyTreeTopUserHelper::getInstance()->get();
+
 // Add familytreetop settings
 $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
 
@@ -901,6 +903,9 @@ $data = json_encode(GedcomHelper::getInstance()->getData());
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/jquery.fileupload-fp.js"></script>
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/jquery.fileupload-ui.js"></script>
 <!--[if gte IE 8]><script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/jquery.xdr-transport.js"></script><![endif]-->
+<?php if($fttUser->joyride): ?>
+    <script src="<?=$this->baseurl;?>/templates/<?=$this->template;?>/js/bootstrap-joyride.min.js"></script>
+<?php endif; ?>
 <!-- uncompressed files -->
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.trees.js"></script>
 <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.footer.js"></script>

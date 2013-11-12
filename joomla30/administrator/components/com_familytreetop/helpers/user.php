@@ -132,7 +132,7 @@ class FamilyTreeTopUserHelper
 
         $user->tree_id = $this->tree_id;
         $user->gedcom_id = $this->gedcom_id;
-        $user->joyride = $this->joyride;
+        $user->joyride = (int)$this->joyride;
 
         $user->famous = $this->famous;
 
