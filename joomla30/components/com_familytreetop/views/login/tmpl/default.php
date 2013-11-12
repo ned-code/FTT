@@ -32,7 +32,7 @@ defined('_JEXEC') or die;
         load = function(el, args){
             $this.ajax('user.activate', args, function(response){
                 if(response.auth == true){
-                    window.location.href = "<?=JRoute::_("index.php?option=com_familytreetop&view=myfamily", false);?>";
+                    window.location.href = "<?=JRoute::_(JURI::base()."index.php?option=com_familytreetop&view=myfamily", false);?>";
                 } else if("undefined" !== response.url){
                     if(args.userID != 0){
                         window.location.href = response.url;
