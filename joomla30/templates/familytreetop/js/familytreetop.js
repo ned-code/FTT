@@ -260,7 +260,7 @@
         trim: function(){return this.replace(/^\s+|\s+$/g, '');},
         textWidth: function(text, font){
             var f = font || '12px arial',
-                o = $('<div>' + text + '</div>')
+                o = jQuery('<div>' + text + '</div>')
                     .css({'position': 'absolute', 'float': 'left', 'white-space': 'nowrap', 'visibility': 'hidden', 'font': f})
                     .appendTo($('body')),
                 w = o.width();
