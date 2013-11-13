@@ -45,6 +45,22 @@ class FamilytreetopControllerCreate extends FamilytreetopController
         $ind->gender = ($userData['gender']=="male")?1:0;
         $ind->save();
 
+        $birthday = explode('/', $object->birthday);
+        $event = $gedcom->events->get();
+        $event->gedcom_id = $ind->gedcom_id;
+        $event->name = "Birthday";
+        $event->type = "BIRT";
+        $event->save();
+
+        $date = $event->date;
+        $date->type = "EVO";
+        $date->start_day = (isset($birthday[1]))?$birthday[1]:null;
+        $date->start_month = (isset($birthday[0]))?$birthday[0]:null;
+        $date->start_year = (isset($birthday[2]))?$birthday[2]:null;
+        $date->save();
+
+        $event->date = $date;
+        $ind->addEvent($event);
 
         $father = $gedcom->individuals->get();
         $father->tree_id = $tree->id;

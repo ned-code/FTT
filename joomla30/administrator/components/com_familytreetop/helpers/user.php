@@ -14,6 +14,7 @@ class FamilyTreeTopUserHelper
     protected $link = null;
     protected $locale = null;
     protected $language = null;
+    protected $birthday = null;
 
     protected $first_name = null;
     protected $last_name = null;
@@ -68,6 +69,7 @@ class FamilyTreeTopUserHelper
             self::$instance->username = (isset($response['username']))?$response['username']:null;
             self::$instance->link = (isset($response['link']))?$response['link']:null;
             self::$instance->locale = (isset($response['locale']))?$response['locale']:null;
+            self::$instance->birthday = (isset($response['birthday']))?$response['birthday']:null;
 
             self::$instance->first_name = (isset($response['first_name']))?$response['first_name']:null;
             self::$instance->last_name = (isset($response['last_name']))?$response['last_name']:null;
@@ -112,6 +114,7 @@ class FamilyTreeTopUserHelper
         $user->link = $this->link;
         $user->locale = $this->locale;
         $user->language = $this->language;
+        $user->birthday = $this->birthday;
 
         $user->first_name = $this->first_name;
         $user->last_name = $this->last_name;
