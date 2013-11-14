@@ -67,13 +67,12 @@ defined('_JEXEC') or die;
         $("#login").click(function(){
             var auth;
             if( (auth = FB.getAuthResponse()) == null){
-                FB.login(function(response){}, {scope: $FamilyTreeTop.app.permissions});
-                FB.Event.subscribe('auth.login', function(response) {
+                FB.login(function(response){
                     progressbarAnimateStart();
                     if(response.status == "connected"){
                         load(this, response.authResponse);
                     }
-                });
+                }, {scope: $FamilyTreeTop.app.permissions});
             } else {
                 load(this, auth);
             }
