@@ -1,17 +1,18 @@
 <?php
 defined('_JEXEC') or die;
+/*
 $facebook = FacebookHelper::getInstance()->facebook;
 $user = FamilyTreeTopUserHelper::getInstance()->get();
 $gedcom = GedcomHelper::getInstance();
 $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
-
+*/
 $search = array();
 $result_array = array();
 $result_news = array();
 $result_users = array();
 $check_result = array();
 $data = null;
-
+/*
 try {
     if($user->facebook_id != 0){
         $family = $facebook->api(array(
@@ -77,6 +78,7 @@ if($size < 6){
         }
     }
 }
+*/
 ?>
 <div id="myFamilyOnFacebook" class="row-fluid">
     <div class="span12">
