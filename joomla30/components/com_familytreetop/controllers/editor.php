@@ -122,9 +122,13 @@ class FamilytreetopControllerEditor extends FamilytreetopController
                             $data['gedcom_id'] = $item->gedcom_id;
                             $data['family_id'] = $item->family_id;
 
-                            $result[$key]['gedcom_id'][$item->gedcom_id] = $data;
-                            $result[$key]['family_id'][$item->family_id] = $data;
-                            $result[$key]['all'][$item->id] = $data;
+                            $result[$key]['gedcom_id'][$item->gedcom_id] = array();
+                            $result[$key]['family_id'][$item->family_id] = array();
+                            $result[$key]['all'][$item->id] = array();
+
+                            $result[$key]['gedcom_id'][$item->gedcom_id][] = $data;
+                            $result[$key]['family_id'][$item->family_id][] = $data;
+                            $result[$key]['all'][$item->id][] = $data;
                             break;
                         case "dat":
                         case "pla":

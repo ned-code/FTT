@@ -51,6 +51,7 @@ $FamilyTreeTop.create("usertree", function($){
         cache = {};
         // set variables
         var prop, items, key, id, list, i, els, k, t;
+
         for(prop in response){
             if(!response.hasOwnProperty(prop)) continue;
             items = response[prop];
