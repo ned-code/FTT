@@ -182,7 +182,7 @@ class FamilyTreeTopGedcomIndividualsModel {
             }
         }
 
-        if(isset($users[$user->gedcom_id])){
+        if(isset($users[$this->gedcom_id])){
             $this->unregister();
         }
 

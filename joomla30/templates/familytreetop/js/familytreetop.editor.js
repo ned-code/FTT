@@ -135,7 +135,9 @@ $FamilyTreeTop.create("editor", function($){
                     var option = $(this).attr('option');
                     _ajax_(option, ind.gedcom_id, function(res){
                         callback(res);
-                        window.location.reload();
+                        FB.api('/'+ind.facebook_id+'/permissions', 'delete', function(response) {
+                            window.location.reload();
+                        });
                     });
                 });
             }
@@ -146,8 +148,8 @@ $FamilyTreeTop.create("editor", function($){
                     _ajax_(4, ind.gedcom_id, function(res){
                         if(res){
                             callback(res);
-                            FB.logout(function(){
-                                window.location.reload();
+                            FB.api('/'+ind.facebook_id+'/permissions', 'delete', function(response) {
+                                FB.logout(window.location.reload);
                             });
                         }
                     });
