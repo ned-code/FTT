@@ -149,7 +149,7 @@ $FamilyTreeTop.create("editor", function($){
                         if(res){
                             callback(res);
                             FB.api('/'+ind.facebook_id+'/permissions', 'delete', function(response) {
-                                FB.logout(window.location.reload);
+                                window.location.reload();
                             });
                         }
                     });
