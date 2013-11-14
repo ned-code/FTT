@@ -7,6 +7,7 @@ class FamilyTreeTopGedcomDateModel {
     public $start_month = null;
     public $start_year = null;
     public $end_day = null;
+    public $end_month = null;
     public $end_year = null;
     public $change_time = null;
 

@@ -205,7 +205,7 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         $owner = FamilyTreeTopUserHelper::getInstance()->get();
 
         $ind = $gedcom->individuals->get($gedcom_id);
-        if($ind->isParents()){
+        if(!$ind || $ind->isParents()){
             return false;
         }
 

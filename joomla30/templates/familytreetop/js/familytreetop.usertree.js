@@ -47,93 +47,74 @@ $FamilyTreeTop.create("usertree", function($){
     }
 
     $this.update = function(response){
-        // clear cache
         cache = {};
-        // set variables
-        var prop, items, key, id, list, i, els, k, t;
-
-        for(prop in response){
-            if(!response.hasOwnProperty(prop)) continue;
-            items = response[prop];
-            switch(prop){
+        _each_(response, function(key, item){
+            switch(key){
                 case "chi":
-                    for(var key in items){
-                        if(!items.hasOwnProperty(key)) continue;
-                        list = items[key];
-                        for(id in list){
-                            if(!list.hasOwnProperty(id)) continue;
-                            els = list[id];
-                            if("undefined" === typeof(data[prop][key][id])){
-                                data[prop][key][id] = [];
-                            }
-                            data[prop][key][id].push(els);
-                        }
-                    }
+                    _setData_("chi.all", item);
+                    _setData_("chi.gedcom_id", item);
+                    _setData_("chi.family_id", item);
+                    break;
+                case "dat":
+                    _setData_("dat", item);
                     break;
                 case "eve":
-                    for(var key in items){
-                        if(!items.hasOwnProperty(key)) continue;
-                        list = items[key];
-                        for(id in list){
-                            if(!list.hasOwnProperty(id)) continue;
-                            if("all" == key){
-                                data[prop][key][id] = list[id];
-                            } else {
-                                els = list[id];
-                                for(i in els){
-                                    if(!els.hasOwnProperty(i)) continue;
-                                    if("undefined" === typeof(data[prop][key][id])){
-                                        data[prop][key][id] = {};
-                                    }
-                                    data[prop][key][id][i] = els[i];
-                                }
-                            }
-                        }
-                    }
+                    _setData_("eve.all", item);
+                    _setData_("eve.gedcom_id", item);
+                    _setData_("eve.family_id", item);
                     break;
                 case "fam":
-                    for(var key in items){
-                        if(!items.hasOwnProperty(key)) continue;
-                        list = items[key];
-                        for(id in list){
-                            if(!list.hasOwnProperty(id)) continue;
-                            if("family_id" == key){
-                                data[prop][key][id] = list[id];
-                            } else {
-                                els = list[id];
-                                for(i in els){
-                                    if(!els.hasOwnProperty(i)) continue;
-                                    if("undefined" === typeof(data[prop][key][id])){
-                                        data[prop][key][id] = {};
-                                    }
-                                    if("undefined" === typeof(data[prop][key][id][k])){
-                                            data[prop][key][id][i] = {};
-                                    }
-                                    t = els[i];
-                                    for(k in t){
-                                        if(!t.hasOwnProperty(k)) continue;
-                                        data[prop][key][id][i][k] = t[k];
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    break;
-                case "med":
+                    _setData_("fam.gedcom_id", item);
+                    _setData_("fam.family_id", item);
                     break;
                 case "ind":
+                    _setData_("ind", item);
+                    break;
                 case "pla":
-                case "dat":
+                    _setData_("pla", item);
+                    break;
                 case "rel":
-                    for(key in items){
-                        if(!items.hasOwnProperty(key)) continue;
-                        data[prop][key] = items[key];
-                    }
+                    _setData_("rel", item);
+                    break;
+                default:
                     break;
             }
-        }
+        });
         $this.call();
         return true;
+        function _setData_(key, item){
+            var parts, element;
+            parts = __getParts__(key);
+            element = __getElement__(item, parts);
+            if(parts[0] == "chi" && parts[1] == "family_id"){
+                _each_(element, function(k, i){
+                    if("undefined" === typeof(data[parts[0]][parts[1]][k])){
+                        data[parts[0]][parts[1]][k] = [];
+                    }
+                    data[parts[0]][parts[1]][k].push(i[0]);
+                });
+            } else {
+                if(parts.length == 2){
+                    jQuery.extend(true, data[parts[0]][parts[1]], element);
+                } else {
+                    jQuery.extend(true, data[parts[0]], element);
+                }
+            }
+            return true;
+            function __getParts__(k){
+                return k.split(".");
+            }
+            function __getElement__(i,p){
+                return (p.length==2)?i[p[1]]:i;
+            }
+        }
+        function _each_(a, c){
+            for(var k in a){
+                if(!a.hasOwnProperty(k)) continue;
+                c(k, a[k]);
+            }
+            return true;
+        }
     }
 
     $this.usermap = function(){
