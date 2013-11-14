@@ -253,8 +253,8 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         $spouse->updateLine();
 
         $rel = array(
-            $gedcom->relations->getArray($owner->gedcom_id, $sircar),
-            $gedcom->relations->getArray($owner->gedcom_id, $spouse)
+            $gedcom->relations->getArray($owner->gedcom_id, $sircar->gedcom_id),
+            $gedcom->relations->getArray($owner->gedcom_id, $spouse->gedcom_id)
         );
 
         echo $this->getResponse(
