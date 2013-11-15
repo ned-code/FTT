@@ -149,16 +149,17 @@ $FamilyTreeTop.create("popovers", function($){
                 window.open("http://www.facebook.com/"+facebook_id,'_blank');
             });
         },
-        click: function(args/*, opt*/){
+        click: function(args, opt){
             $(args.target).bind('click', function(e){
                 if($active == args.target) return false;
                 if($active){
                     $('body').unbind('click.familytreetop');
                     $this.hide();
                 }
-                var opt = $fn.getOptions(args);
+                console.log(opt);
+                //var opt = $fn.getOptions(args);
                 $active = args.target;
-                $(args.target).popover(opt);
+                //$(args.target).popover(opt);
                 $(args.target).popover('show');
                 $fn.friendselector(args, opt);
                 $fn.profile(args, opt);
@@ -178,9 +179,9 @@ $FamilyTreeTop.create("popovers", function($){
     $this.render = function(args){
         var options;
         if("undefined" === typeof(args) || !$fn.setData(args)) return false;
-        //options = $fn.getOptions(args);
-        //$(args.target).popover(options);
-        $fn.click(args/*, options*/);
+        options = $fn.getOptions(args);
+        $(args.target).popover(options);
+        $fn.click(args, options);
     }
 
     $this.hide = function(){
