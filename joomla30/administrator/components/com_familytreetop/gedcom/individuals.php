@@ -126,7 +126,7 @@ class FamilyTreeTopGedcomIndividualsModel {
     public function delete(){
         if(!$this->isCanBeDelete()) return false;
         $gedcom = GedcomHelper::getInstance();
-        $users = $gedcom->getTreeUsers(true);
+        $users = $gedcom->getTreeUsers('gedcom_id');
         if(empty($this->id)) return false;
         $link = FamilyTreeTopTreeLinks::find_by_id_and_type($this->gedcom_id, 0);
         $user = FamilyTreeTopIndividuals::find_by_gedcom_id($this->gedcom_id);
@@ -159,7 +159,7 @@ class FamilyTreeTopGedcomIndividualsModel {
 
     public function clear(){
         $gedcom = GedcomHelper::getInstance();
-        $users = $gedcom->getTreeUsers(true);
+        $users = $gedcom->getTreeUsers('gedcom_id');
         $date = JFactory::getDate();
 
         $name = FamilyTreeTopNames::find_by_gedcom_id($this->gedcom_id);

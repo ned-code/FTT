@@ -64,7 +64,7 @@ $data = json_encode(GedcomHelper::getInstance()->getData());
 
     $FamilyTreeTop.facebookAccessToken = '<?=$facebook->getAccessToken();?>';
 
-    $FamilyTreeTop.users = '<?=GedcomHelper::getInstance()->getTreeUsers(true, true);?>';
+    $FamilyTreeTop.users = '<?=GedcomHelper::getInstance()->getTreeUsers('gedcom_id', true);?>';
 
     $FamilyTreeTop.userString = '<?=json_encode(FamilyTreeTopUserHelper::getInstance()->get()); ?>';
 
