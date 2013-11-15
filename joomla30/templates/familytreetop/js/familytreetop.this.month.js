@@ -146,9 +146,6 @@ $FamilyTreeTop.create("this_month", function($){
 
             $($parent).find('[familytreetop="none"]').hide();
             $($parent).find('[familytreetop="all"]').hide();
-            $($parent).find('[familytreetop="BIRT"]').hide();
-            $($parent).find('[familytreetop="MARR"]').hide();
-            $($parent).find('[familytreetop="DEAT"]').hide();
             $(table).html('');
             $(parent).find('li span[gedcom_id]').unbind();
             $(parent).find('li').remove();
