@@ -5,14 +5,14 @@ $facebook = FacebookHelper::getInstance()->facebook;
 $user = FamilyTreeTopUserHelper::getInstance()->get();
 $gedcom = GedcomHelper::getInstance();
 $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
-*/
+
 $search = array();
 $result_array = array();
 $result_news = array();
 $result_users = array();
 $check_result = array();
 $data = null;
-/*
+
 try {
     if($user->facebook_id != 0){
         $family = $facebook->api(array(
@@ -79,13 +79,22 @@ if($size < 6){
     }
 }
 */
+$fhelper = FacebookHelper::getInstance();
+$user = FamilyTreeTopUserHelper::getInstance()->get();
+$gedcom = GedcomHelper::getInstance();
+
+if($user->facebook_id != 0){
+   $data = $fhelper->getFacebookNewsFeed($user->tree_id, $user->facebook_id);
+}
+
+
 ?>
 <div id="myFamilyOnFacebook" class="row-fluid">
     <div class="span12">
         <div class="well" familytreetop="module">
             <fieldset>
                 <legend class="text-center"><?=JText::_('MOD_FTT_MYFAMILY_TITLE');?></legend>
-                <?php if(!empty($result_news)): ?>
+                <?php if(!empty($data)): ?>
                     <div class="row-fluid">
                         <div class="span12">
                             <table style="margin:0;" class="table"></table>
@@ -98,7 +107,6 @@ if($size < 6){
 </div>
 <script>
     $FamilyTreeTop.bind(function($){
-        var json = <?=json_encode(array('gedcom'=>$search, 'facebook'=>$result_users, 'data'=>$result_news));?>;
-        $FamilyTreeTop.fn.mod('myfamily').render(json);
+        console.log(<?=json_encode($data);?>);
     });
 </script>

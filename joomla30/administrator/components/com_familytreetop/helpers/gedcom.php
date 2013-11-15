@@ -55,7 +55,9 @@ class GedcomHelper
                     'facebook_id' => $user->account->facebook_id,
                     'role' => $user->role
                 );
-                if($associative){
+                if($associative == "facebook_id"){
+                    $results[$user->account->facebook_id] = $object;
+                } else if($associative == "gedcom_id" || $associative){
                     $results[$user->gedcom_id] = $object;
                 } else {
                     $results[] = $object;

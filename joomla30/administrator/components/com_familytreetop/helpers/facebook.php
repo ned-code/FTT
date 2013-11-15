@@ -48,7 +48,76 @@ class FacebookHelper
         ));
     }
 
-    public function getNeewsFeed($tree_id){
+    public function getFamilyMembers(){
+        $gedcom = GedcomHelper::getInstance();
+        $members = $gedcom->getTreeUsers('facebook_id');
+        $family = $this->facebook->api(array(
+            'method' => 'fql.query',
+            'query' => 'SELECT name, birthday, uid, relationship FROM family WHERE profile_id = me()',
+        ));
+        foreach($family as $key => $val){
+            $id = $val['uid'];
+            if(!isset($members[$id])){
+                $members[$id] = array(
+                    'account_id' => false,
+                    'facebook_id' => $id,
+                    'gedcom_id' => false,
+                    'role' => false,
+                    'tree_id' => false,
+                    'name' => $val['name'],
+                    'relationship' => $val['relationship']
+                );
+            }
+        }
+        return $members;
+    }
+
+    public function getFacebookNewsFeed($tree_id, $facebook_id){
+        $members = $this->getFamilyMembers();
+        $home = $this->facebook->api('/'.$facebook_id.'/home?limit=20', 'GET', array());
+        $news = $this->getNewsFeed();
+
+        $data = $home['data'];
+        $sort_data = array();
+        $post_ids = array();
+        if(!empty($data)){
+            foreach($data as $key => $value){
+                $id = $value['from']['id'];
+                if(isset($members[$id])){
+                    $sort_data[$id] = array(
+                        'facebook' => $value,
+                        'familytreetop' => $members[$id]
+                    );
+                    $post_ids[$value['id']] = true;
+                }
+            }
+        }
+
+        foreach($sort_data as $key => $value){
+            $post_id = $value['facebook']['id'];
+            if(!isset($news[$post_id])){
+                $this->setNewsFeed($tree_id, $value);
+            }
+        }
+
+        /*
+        if(sizeof($sort_data) < 6){
+            $index = sizeof($sort_data);
+            foreach($news as $key => $value){
+                if(!isset($post_ids[$key]) && isset($members[$value->actor_id]) && $index <= 6){
+                    $sort_data[$value->actor_id] = array(
+                        'facebook' => json_decode($value->data),
+                        'familytreetop' => $members[$value->actor_id]
+                    );
+                    $index++;
+                }
+            }
+        }
+        */
+        return $sort_data;
+    }
+
+    public function getNewsFeed($tree_id){
         $list = FamilyTreeTopFacebooks::find('all', array( 'limit' => 10, 'conditions' => array('tree_id = ?', $tree_id), 'order' => 'updated_time desc'));
         $result = array();
         foreach($list as $item){
@@ -57,18 +126,17 @@ class FacebookHelper
         return $result;
     }
 
-    public function setNeewsFeed($user, $fdata, $data){
-        $part = explode('_', $data['post_id']);
+    public function setNewsFeed($tree_id, $value){
+        $data = $value['facebook'];
+        $facebook_id = $data['from']['id'];
 
         $item = new FamilyTreeTopFacebooks();
+        $item->post_id = $data['id'];
+        $item->tree_id = $tree_id;
+        $item->actor_id = $facebook_id;
         $item->data = json_encode($data);
-        $item->fdata = json_encode($fdata);
-        $item->tree_id = $user->tree_id;
-        $item->actor_id = $data['actor_id'];
-        $item->post_id = $data['post_id'];
-        $item->second_id = $part[1];
-        $item->created_time = $data['created_time'];
-        $item->updated_time = $data['updated_time'];
+        //$item->created_time =gmdate(DATE_ISO8601, strtotime($value['created_time']));
+        //$item->updated_time = gmdate(DATE_ISO8601, strtotime($value['updated_time']));
         $item->save();
     }
 }
