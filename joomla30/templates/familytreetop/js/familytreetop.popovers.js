@@ -156,7 +156,6 @@ $FamilyTreeTop.create("popovers", function($){
                     $('body').unbind('click.familytreetop');
                     $this.hide();
                 }
-                console.log(opt);
                 //var opt = $fn.getOptions(args);
                 $active = args.target;
                 //$(args.target).popover(opt);
