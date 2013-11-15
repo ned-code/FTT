@@ -51,10 +51,15 @@ class FacebookHelper
     public function getFamilyMembers(){
         $gedcom = GedcomHelper::getInstance();
         $members = $gedcom->getTreeUsers('facebook_id');
-        $family = $this->facebook->api(array(
-            'method' => 'fql.query',
-            'query' => 'SELECT name, birthday, uid, relationship FROM family WHERE profile_id = me()',
-        ));
+        $family = array();
+        try {
+            $family = $this->facebook->api(array(
+                'method' => 'fql.query',
+                'query' => 'SELECT name, birthday, uid, relationship FROM family WHERE profile_id = me()',
+            ));
+        } catch(FacebookApiException $e){
+            //empty
+        }
         foreach($family as $key => $val){
             $id = $val['uid'];
             if(!isset($members[$id])){
@@ -73,24 +78,29 @@ class FacebookHelper
     }
 
     public function getFacebookNewsFeed($tree_id, $facebook_id){
-        $members = $this->getFamilyMembers();
-        $home = $this->facebook->api('/'.$facebook_id.'/home?limit=20', 'GET', array());
-        $news = $this->getNewsFeed($tree_id);
-
-        $data = $home['data'];
         $sort_data = array();
         $post_ids = array();
-        if(!empty($data)){
-            foreach($data as $key => $value){
-                $id = $value['from']['id'];
-                if(isset($members[$id])){
-                    $sort_data[] = array(
-                        'facebook' => $value,
-                        'familytreetop' => $members[$id]
-                    );
-                    $post_ids[$value['id']] = true;
+
+        $members = $this->getFamilyMembers();
+        $news = $this->getNewsFeed($tree_id);
+
+        try {
+            $home = $this->facebook->api('/'.$facebook_id.'/home?limit=20', 'GET', array());
+            $data = $home['data'];
+            if(!empty($data)){
+                foreach($data as $key => $value){
+                    $id = $value['from']['id'];
+                    if(isset($members[$id])){
+                        $sort_data[] = array(
+                            'facebook' => $value,
+                            'familytreetop' => $members[$id]
+                        );
+                        $post_ids[$value['id']] = true;
+                    }
                 }
             }
+        } catch(FacebookApiException $e){
+            //empty
         }
 
         if(!empty($sort_data)){
@@ -136,8 +146,8 @@ class FacebookHelper
         $item->tree_id = $tree_id;
         $item->actor_id = $facebook_id;
         $item->data = json_encode($data);
-        $item->created_time = $value['created_time'];
-        $item->updated_time = $value['updated_time'];
+        $item->created_time = (isset($value['created_time']))?$value['created_time']:0;
+        $item->updated_time = (isset($value['updated_time']))?$value['updated_time']:0;
         $item->save();
     }
 }

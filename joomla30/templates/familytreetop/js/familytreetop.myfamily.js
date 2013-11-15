@@ -6,18 +6,28 @@ $FamilyTreeTop.create("myfamily", function($){
 
     $fn = {
         getRelation: function(object){
-            var facebook_id = object.actor_id;
-            var obj = $gedcom[facebook_id];
-            if("undefined" !== typeof(obj)){
-                var relation = "undefined"!==typeof(obj.gedcom_id)?$this.mod('usertree').user(obj.gedcom_id).relation:obj.relationship;
-                return '<i class="icon-leaf"></i>'+relation;
+            if(object.familytreetop.gedcom_id){
+                return $this.mod('usertree').user(object.familytreetop.gedcom_id).relation;
+            } else if("undefined" !== typeof(object.familytreetop.relationship)){
+                return object.familytreetop.relationship;
             }
             return "";
         },
         getName: function(object){
-            return $facebook[object.actor_id].name;
+            return object.facebook.from.name;
         },
         getMessage: function(object){
+            var f = object.facebook;
+            var message = f.message || f.description || f.story || f.name || _getMessageFromLink_(f);
+
+            return message;
+            function _getMessageFromLink_(f){
+                if(f.type == "link"){
+                    return "Link posted";
+                }
+                return "";
+            }
+            /*
             var str = object.message || object.description || "";
             if(str.length == 0){
                 switch(object.type){
@@ -37,54 +47,70 @@ $FamilyTreeTop.create("myfamily", function($){
                 }
             }
             return str.replace(/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/, "...");
+            */
         },
         getFacebookSign: function(object){
+            var link = object.facebook.link || _getCommentLink_();
             var div = '<div familytreetop="facebook-sign" style="position:absolute; top: 0; right: 0; cursor: pointer;">';
-            if("undefined" !== typeof(object.permalink) && object.permalink.length > 0){
-                div += '<a style="text-decoration: none;" target="_blank" href="'+object.permalink+'"><i class="icon-facebook-sign icon-2x familytreetop-icon-muted"></i></a>';
+            if(link){
+                div += '<a style="text-decoration: none;" target="_blank" href="'+link+'"><i class="icon-facebook-sign icon-2x familytreetop-icon-muted"></i></a>';
             }
             div += '</div>';
             return div;
+            function _getCommentLink_(){
+                if("undefined" !== typeof(object.facebook.actions)){
+                    return object.facebook.actions[0].link;
+                }
+                return false;
+            }
         },
         getPicture: function(object){
-            if("undefined" === typeof(object.attachment.media)) {
+            if("undefined" === typeof(object.facebook.picture)) {
                 return "";
             } else {
-                var media = object.attachment.media[0];
-                return '<a target="_blank" href="'+media.href+'"><img align="left" vspace="5" hspace="5" class="img-polaroid" src="'+media.src+'" /></a>';
+                return '<a target="_blank" href="'+object.facebook.picture+'"><img align="left" vspace="5" hspace="5" class="img-polaroid" src="'+object.facebook.picture+'" /></a>';
             }
         },
         getTime: function(object){
-            return $fn.timeAgo(object['updated_time']);
+            return $fn.timeAgo(object.facebook.updated_time);
         },
         getGedcomId: function(object){
-            var facebook_id = object.actor_id;
-            var obj = $gedcom[facebook_id];
-            if("undefined" !== typeof(obj) && "undefined" !== typeof(obj.gedcom_id)){
-                return obj.gedcom_id;
+            if(object.familytreetop.gedcom_id){
+                return object.familytreetop.gedcom_id;
             }
             return 0;
         },
-        timeAgo: function(time){
-            var date = new Date(parseInt(time)*1000),
-                diff = (((new Date()).getTime() - date.getTime()) / 1000),
-                day_diff = Math.floor(diff / 86400);
-
-            if ( isNaN(day_diff) || day_diff < 0 || day_diff >= 31 )
-                return;
-
-            return day_diff == 0 && (
-                diff < 60 && "just now" ||
-                    diff < 120 && "1 minute ago" ||
-                    diff < 3600 && Math.floor( diff / 60 ) + " minutes ago" ||
-                    diff < 7200 && "1 hour ago" ||
-                    diff < 86400 && Math.floor( diff / 3600 ) + " hours ago") ||
-                day_diff == 1 && "Yesterday" ||
-                day_diff < 7 && day_diff + " days ago" ||
-                day_diff < 31 && Math.ceil( day_diff / 7 ) + " weeks ago";
+        timeAgo: function(date_str){
+            if (!date_str) {return;}
+            date_str = $.trim(date_str);
+            date_str = date_str.replace(/\.\d\d\d+/,""); // remove the milliseconds
+            date_str = date_str.replace(/-/,"/").replace(/-/,"/"); //substitute - with /
+            date_str = date_str.replace(/T/," ").replace(/Z/," UTC"); //remove T and substitute Z with UTC
+            date_str = date_str.replace(/([\+\-]\d\d)\:?(\d\d)/," $1$2"); // +08:00 -> +0800
+            var parsed_date = new Date(date_str);
+            var relative_to = (arguments.length > 1) ? arguments[1] : new Date(); //defines relative to what ..default is now
+            var delta = parseInt((relative_to.getTime()-parsed_date)/1000);
+            delta=(delta<2)?2:delta;
+            var r = '';
+            if (delta < 60) {
+                r = delta + ' seconds ago';
+            } else if(delta < 120) {
+                r = 'a minute ago';
+            } else if(delta < (45*60)) {
+                r = (parseInt(delta / 60, 10)).toString() + ' minutes ago';
+            } else if(delta < (2*60*60)) {
+                r = 'an hour ago';
+            } else if(delta < (24*60*60)) {
+                r = '' + (parseInt(delta / 3600, 10)).toString() + ' hours ago';
+            } else if(delta < (48*60*60)) {
+                r = 'a day ago';
+            } else {
+                r = (parseInt(delta / 86400, 10)).toString() + ' days ago';
+            }
+            return 'about ' + r;
         },
         createImage: function(object){
-            return $('<img class="img-rounded" src="https://graph.facebook.com/'+object.actor_id+'/picture"/>');
+            return $('<img class="img-rounded" src="https://graph.facebook.com/'+object.facebook.from.id+'/picture"/>');
         },
         createBody: function(object){
             var parentDiv = $('<div class="row-fluid"><div class="span12" style="position:relative;"></div></div>');
@@ -103,9 +129,11 @@ $FamilyTreeTop.create("myfamily", function($){
             return td;
         },
         createTr: function(object){
-            var tr = $("<tr "+(($gedcom[object.actor_id])?'gedcom_id="'+$gedcom[object.actor_id].gedcom_id+'"':'')+"></tr>");
-            var tr = $('<tr gedcom_id="'+( ("undefined"!==typeof($gedcom[object.actor_id]))?$gedcom[object.actor_id]:0 )+'"></tr>');
-            $(tr).append($($fn.createTd("width:50px;")).append($fn.createImage(object)));
+            var tr = $('<tr></tr>');
+            if(object.familytreetop.gedcom_id){
+                $(tr).attr('gedcom_id', object.familytreetop.gedcom_id);
+            }
+            $(tr).append($($fn.createTd("width:50px")).append($fn.createImage(object)));
             $(tr).append($($fn.createTd()).append($fn.createBody(object)));
             return tr;
         },
@@ -121,13 +149,10 @@ $FamilyTreeTop.create("myfamily", function($){
     }
 
     $this.render = function(json){
-        console.log(json);
-        /*
         var table = $($box).find('table');
         var parentWidth = $($box).width() - 70;
-        $gedcom = json.gedcom;
-        $facebook = json.facebook;
-        $(json.data).each(function(index, element){
+
+        $(json).each(function(index, element){
             var tr = $fn.createTr(element);
             $(tr).find('[familytreetop-image] img').load(function(e){
                 if("undefined" !== typeof(e.target.naturalWidth)){
@@ -150,6 +175,5 @@ $FamilyTreeTop.create("myfamily", function($){
             $(table).append(tr);
         });
         $fn.initPopovers();
-        */
     }
 });
