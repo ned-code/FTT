@@ -121,6 +121,8 @@ $FamilyTreeTop.create("myfamily", function($){
     }
 
     $this.render = function(json){
+        console.log(json);
+        /*
         var table = $($box).find('table');
         var parentWidth = $($box).width() - 70;
         $gedcom = json.gedcom;
@@ -148,5 +150,6 @@ $FamilyTreeTop.create("myfamily", function($){
             $(table).append(tr);
         });
         $fn.initPopovers();
+        */
     }
 });

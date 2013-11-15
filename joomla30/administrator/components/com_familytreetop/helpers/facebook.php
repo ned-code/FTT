@@ -75,7 +75,7 @@ class FacebookHelper
     public function getFacebookNewsFeed($tree_id, $facebook_id){
         $members = $this->getFamilyMembers();
         $home = $this->facebook->api('/'.$facebook_id.'/home?limit=20', 'GET', array());
-        $news = $this->getNewsFeed();
+        $news = $this->getNewsFeed($tree_id);
 
         $data = $home['data'];
         $sort_data = array();
@@ -84,7 +84,7 @@ class FacebookHelper
             foreach($data as $key => $value){
                 $id = $value['from']['id'];
                 if(isset($members[$id])){
-                    $sort_data[$id] = array(
+                    $sort_data[] = array(
                         'facebook' => $value,
                         'familytreetop' => $members[$id]
                     );
@@ -93,19 +93,20 @@ class FacebookHelper
             }
         }
 
-        foreach($sort_data as $key => $value){
-            $post_id = $value['facebook']['id'];
-            if(!isset($news[$post_id])){
-                $this->setNewsFeed($tree_id, $value);
+        if(!empty($sort_data)){
+            foreach($sort_data as $key => $value){
+                $post_id = $value['facebook']['id'];
+                if(!isset($news[$post_id])){
+                    $this->setNewsFeed($tree_id, $value);
+                }
             }
         }
 
-        /*
-        if(sizeof($sort_data) < 6){
+        if(sizeof($sort_data) < 6 && !empty($news)){
             $index = sizeof($sort_data);
             foreach($news as $key => $value){
                 if(!isset($post_ids[$key]) && isset($members[$value->actor_id]) && $index <= 6){
-                    $sort_data[$value->actor_id] = array(
+                    $sort_data[] = array(
                         'facebook' => json_decode($value->data),
                         'familytreetop' => $members[$value->actor_id]
                     );
@@ -113,7 +114,7 @@ class FacebookHelper
                 }
             }
         }
-        */
+
         return $sort_data;
     }
 
@@ -135,8 +136,8 @@ class FacebookHelper
         $item->tree_id = $tree_id;
         $item->actor_id = $facebook_id;
         $item->data = json_encode($data);
-        //$item->created_time =gmdate(DATE_ISO8601, strtotime($value['created_time']));
-        //$item->updated_time = gmdate(DATE_ISO8601, strtotime($value['updated_time']));
+        $item->created_time = $value['created_time'];
+        $item->updated_time = $value['updated_time'];
         $item->save();
     }
 }
