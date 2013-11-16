@@ -59,8 +59,9 @@ class FamilyTreeTopUserHelper
 
         $facebook = FacebookHelper::getInstance()->facebook;
         $jUser = JFactory::getUser();
+        $username = explode('_', $jUser->username);
 
-        $facebook_id = $facebook->getUser();
+        $facebook_id = $username[1];
 
         if($facebook_id != 0){
             self::$instance->facebook_id = $facebook_id;
