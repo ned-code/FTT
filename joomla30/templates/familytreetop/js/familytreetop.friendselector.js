@@ -46,6 +46,7 @@ $FamilyTreeTop.create("friendselector", function($){
                 title: 'Send invite',
                 message: $fn.getMessage(gedcom_id),
                 exclude_ids: $fn.getExludeIds(data),
+                filters: ['app_non_users'],
                 max_recipients: 1
             }, function(response){
                 if(response != null){
@@ -55,7 +56,7 @@ $FamilyTreeTop.create("friendselector", function($){
                         if(this.success){
                             $this.success({ title: "Request has been send"});
                         } else {
-                            $this.error({ title: "The cureent user is already sent an invitation" });
+                            $this.error({ title: this.message});
                         }
                     });
                 }

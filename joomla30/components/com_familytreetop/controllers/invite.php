@@ -84,6 +84,17 @@ class FamilytreetopControllerInvite extends FamilytreetopController
         $gedcom_id = $app->input->post->get('gedcom_id', false);
         $tree_id = $user->tree_id;
 
+        $accounts = FamilyTreeTopAccounts::find_by_facebook_id($facebook_id);
+        if(!empty($accounts)){
+            echo json_encode(array(
+                'success' => false,
+                'type' => 10,
+                'message' => "The cureent user is already registered",
+                'token' => 0
+            ));
+            exit;
+        }
+
         $inviteByGedcomId = FamilyTreeTopInvitations::find_by_gedcom_id_and_tree_id($gedcom_id, $tree_id);
         $inviteByFacebookId = FamilyTreeTopInvitations::find_by_facebook_id_and_tree_id($facebook_id, $tree_id);
         if(empty($inviteByGedcomId) && empty($inviteByFacebookId)){
@@ -96,7 +107,7 @@ class FamilytreetopControllerInvite extends FamilytreetopController
             $invite->save();
             echo json_encode(array('success' => true, 'token'=>$invite->token));
         } else {
-            echo json_encode(array('success' => false));
+            echo json_encode(array('success' => false, "type"=> 100, "message" => "The cureent user is already sent an invitation", 'token' => 0));
         }
         exit;
     }
