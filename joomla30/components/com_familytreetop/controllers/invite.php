@@ -84,8 +84,8 @@ class FamilytreetopControllerInvite extends FamilytreetopController
         $gedcom_id = $app->input->post->get('gedcom_id', false);
         $tree_id = $user->tree_id;
 
-        $accounts = FamilyTreeTopAccounts::find_by_facebook_id($facebook_id);
-        if(!empty($accounts)){
+        $account = FamilyTreeTopAccounts::find_by_facebook_id($facebook_id);
+        if(!empty($account) && $account->current){
             echo json_encode(array(
                 'success' => false,
                 'type' => 10,
