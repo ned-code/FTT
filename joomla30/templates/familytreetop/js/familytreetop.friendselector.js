@@ -12,7 +12,7 @@ $FamilyTreeTop.create("friendselector", function($){
             text = text.replace('%RELATION%', user.relation);
             return text;
         },
-        getExludeIds: function(data){
+        getExludeIds: function(){
             var key, map, pull;
             map = $this.mod('usertree').usersmap();
             pull = [];
@@ -20,12 +20,6 @@ $FamilyTreeTop.create("friendselector", function($){
                 if(!map.hasOwnProperty(key)) continue;
                 if("undefined" !== typeof(map[key].facebook_id)){
                     pull.push(parseInt(map[key].facebook_id));
-                }
-            }
-            if(data != null){
-                for(key in data){
-                    if(!data.hasOwnProperty(key)) continue;
-                    pull.push(parseInt(data[key]));
                 }
             }
             return pull;
@@ -40,12 +34,12 @@ $FamilyTreeTop.create("friendselector", function($){
                 callback.call(response);
             });
         },
-        send: function(gedcom_id, data){
+        send: function(gedcom_id){
             FB.ui({
                 method: 'apprequests',
                 title: 'Send invite',
                 message: $fn.getMessage(gedcom_id),
-                exclude_ids: $fn.getExludeIds(data),
+                exclude_ids: $fn.getExludeIds(),
                 filters: ['app_non_users'],
                 max_recipients: 1
             }, function(response){
@@ -66,10 +60,13 @@ $FamilyTreeTop.create("friendselector", function($){
 
     $this.render = function(gedcom_id){
         var user = $this.mod('usertree').usermap();
+        /*
         $fn.getTreeInvitations(user.tree_id, function(response){
             if(response.success){
                 $fn.send(gedcom_id, response.data);
             }
         });
+        */
+        $fn.send(gedcom_id);
     }
 });
