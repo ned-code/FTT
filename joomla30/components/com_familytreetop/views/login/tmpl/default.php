@@ -33,13 +33,12 @@ defined('_JEXEC') or die;
             $this.ajax('user.activate', args, function(response){
                 if(response.auth == true){
                     window.location.href = "<?=JRoute::_(JURI::base()."index.php?option=com_familytreetop&view=myfamily", false);?>";
-                } else if("undefined" !== response.url){
-                    if(args.userID != 0){
-                        window.location.href = response.url;
-                    } else {
-                        console.log(response.url);
-                    }
-
+                } else if("undefined" !== typeof(response.url) && args.userID != 0){
+                    window.location.href = response.url;
+                } else {
+                    FB.logout(function(){
+                        window.location.reload();
+                    })
                 }
             });
             }
