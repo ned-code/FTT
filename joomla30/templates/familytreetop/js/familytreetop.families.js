@@ -199,7 +199,7 @@ $FamilyTreeTop.create("families", function($){
             var cl = $($box).find('.parent-box').clone();
             var box = $fn.createBox(ind, cl, 'up', args);
             if(husb && $FamilyTreeTop.joyride){
-                $(box).find('img').attr('id', 'JoyrideStop1');
+                $(box).find('#editMenu').attr('id', 'JoyrideStop1');
             }
             return box;
         },
