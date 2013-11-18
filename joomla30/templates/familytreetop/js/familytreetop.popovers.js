@@ -1,6 +1,6 @@
 $FamilyTreeTop.create("popovers", function($){
     'use strict';
-    var $this = this, $fn, $th, $pull = [],$cache = {}, $active = false;
+    var $this = this, $fn, $th, $cache = {}, $active = false;
 
     $th = {
         target: false,
@@ -10,39 +10,31 @@ $FamilyTreeTop.create("popovers", function($){
 
     $fn = {
         setData:function(args){
-            var $data = $.extend({}, $th);
-            $data.target = args.target;
+            var $data = $.extend({}, $th), guid;
             $data.gedcom_id = $(args.target).attr('gedcom_id');
             $data.object = $this.mod('usertree').user($data.gedcom_id);
             if($data.gedcom_id && $data.gedcom_id != null){
-                $pull.push({ id: $data.gedcom_id, data: $data });
-                if("undefined" === typeof($cache[$data.gedcom_id])){
-                    $cache[$data.gedcom_id] = $fn.getLastObject();
-                }
+                guid = $this.guid();
+                $(args.target).data('guid', guid);
+                $cache[guid] = { id: $data.gedcom_id, data: $data, args: args };
                 return true;
             }
             return false;
         },
-        getObject:function(args){
-            var gedcom_id = $(args.target).attr('gedcom_id');
-            if("undefined" !== typeof($cache[gedcom_id])){
-                return $cache[gedcom_id];
+        getCacheObject:function(object){
+            var data = $(object).data();
+            if("undefined" !== typeof(data.guid) && "undefined" !== typeof($cache[data.guid])){
+                return $cache[data.guid];
             }
             return false;
         },
-        getLastObject:function(){
-            if("undefined" !== typeof($pull[$pull.length - 1])){
-                return $pull[$pull.length - 1].data;
-            }
-            return false;
+        getTitle:function(cache){
+            return cache.data.object.name();
         },
-        getTitle:function(args){
-            return $fn.getObject(args).object.name();
-        },
-        getContent:function(args){
+        getContent:function(cache){
             var div = $('#familytreetop-root #popover').clone(),
                 cont = $(div).find('[familytreetop-name="content"]'),
-                object = $fn.getObject(args).object,
+                object = cache.data.object,
                 avatar;
 
             if(object.facebook_id == 0 && object.isAlive()){
@@ -79,7 +71,7 @@ $FamilyTreeTop.create("popovers", function($){
             });
 
 
-            avatar = $fn.getObject(args).object.avatar(["75","75"], "img-polaroid");
+            avatar = object.avatar(["75","75"], "img-polaroid");
             if($this.mod('usertree').isHolderImg(avatar)){
                 Holder.run({
                     images:avatar[0]
@@ -96,34 +88,38 @@ $FamilyTreeTop.create("popovers", function($){
             var object = $('#familytreetop-root .popover').clone();
             return object;
         },
-        getPlacement: function(args){
-            if("undefined" !== typeof(args.placement)){
-                return args.placement;
+        getPlacement: function(cache){
+            if("undefined" !== typeof(cache.args.placement)){
+                return cache.args.placement;
             }
-            var w = Math.floor($(window).width()/2), o = $(args.target).offset();
+            var w = Math.floor($(window).width()/2), o = $(cache.args.target).offset();
             if(o.left < w){
                 return 'right';
             } else {
-                return 'left';
+                if(o.left > w){
+                    return 'left';
+                } else {
+                    return 'right';
+                }
             }
         },
-        getOptions: function(args){
+        getOptions: function(cache){
             var options;
-            if("undefined" === typeof(args.options)){
+            if("undefined" === typeof(cache.args.options)){
                 options = {};
             } else {
-                options = args.options;
+                options = cache.args.options;
             }
             return $.extend({}, options, {
                 html: true,
                 template: $fn.getTemplate(),
                 selector: false,
-                placement: $fn.getPlacement(args),
+                placement: $fn.getPlacement(cache),
                 trigger: 'manual',
-                title: $fn.getTitle(args),
-                content: $fn.getContent(args),
+                title: $fn.getTitle(cache),
+                content: $fn.getContent(cache),
                 delay: { show: 500, hide: 100 },
-                container:  $fn.getContainer(args)
+                container:  $fn.getContainer(cache)
             });
         },
         friendselector: function(args, opt){
@@ -149,20 +145,22 @@ $FamilyTreeTop.create("popovers", function($){
                 window.open("http://www.facebook.com/"+facebook_id,'_blank');
             });
         },
-        click: function(args, opt){
+        click: function(args){
             $(args.target).bind('click', function(e){
-                if($active == args.target) return false;
+                var cache = $fn.getCacheObject(this);
+                if(!cache) return false;
+                if($active == cache.args.target) return false;
                 if($active){
                     $('body').unbind('click.familytreetop');
                     $this.hide();
                 }
-                //var opt = $fn.getOptions(args);
-                $active = args.target;
-                //$(args.target).popover(opt);
-                $(args.target).popover('show');
-                $fn.friendselector(args, opt);
-                $fn.profile(args, opt);
-                $fn.facebook(args, opt);
+                var opt = $fn.getOptions(cache);
+                $active = cache.args.target;
+                $(cache.args.target).popover(opt);
+                $(cache.args.target).popover('show');
+                $fn.friendselector(cache.args, opt);
+                $fn.profile(cache.args, opt);
+                $fn.facebook(cache.args, opt);
 
                 $('body').bind('click.familytreetop', function(e){
                     if(!$active) return false;
@@ -176,15 +174,13 @@ $FamilyTreeTop.create("popovers", function($){
     }
 
     $this.render = function(args){
-        var options;
         if("undefined" === typeof(args) || !$fn.setData(args)) return false;
-        options = $fn.getOptions(args);
-        $(args.target).popover(options);
-        $fn.click(args, options);
+        $fn.click(args);
     }
 
     $this.hide = function(){
         $($active).popover('hide');
+        $($active).popover('destroy');
         $active = false;
     }
 

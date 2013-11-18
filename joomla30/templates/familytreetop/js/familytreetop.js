@@ -257,6 +257,15 @@
 
             return unescape(output);
         },
+        guid: function(){
+            return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+                s4() + '-' + s4() + s4() + s4();
+            function s4() {
+                return Math.floor((1 + Math.random()) * 0x10000)
+                    .toString(16)
+                    .substring(1);
+            };
+        },
         trim: function(){return this.replace(/^\s+|\s+$/g, '');},
         textWidth: function(text, font){
             var f = font || '12px arial',
