@@ -158,14 +158,14 @@
             if("undefined" === typeof(type)){
                 type = "error"
             }
-            var alertObject = $("#" + type).clone();
-            $(alertObject).find('h4').text(args.title);
-            $(alertObject).find('p').text(args.content);
+            var alertObject = jQuery("#" + type).clone();
+            jQuery(alertObject).find('h4').text(args.title);
+            jQuery(alertObject).find('p').text(args.content);
 
-            $('#system-message').append(alertObject);
-            $(alertObject).alert();
+            jQuery('#system-message').append(alertObject);
+            jQuery(alertObject).alert();
             setTimeout(function(){
-                $(alertObject).alert('close');
+                jQuery(alertObject).alert('close');
             }, 3000);
             return alertObject;
         },
