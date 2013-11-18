@@ -15,7 +15,7 @@ defined('_JEXEC') or die;
 
             if(!strlen(trim($text))) $text = "";
 
-            echo $text;
+            //echo $text;
         ?>
     </div>
 </div>
