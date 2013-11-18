@@ -105,7 +105,7 @@ defined('_JEXEC') or die;
                     <div class="span12">
                         <div class="well text-center">
                             <button type="submit" class="btn btn-primary">Create Tree</button>
-                            <button type="button" class="btn">Cancel</button>
+                            <a href="<?=JRoute::_("index.php?option=com_familytreetop&view=index", false) ?>" type="button" class="btn">Cancel</a>
                             <?=JHtml::_('form.token'); ?>
                         </div>
                     </div>
