@@ -202,7 +202,7 @@ class FamilyTreeTopGedcomIndividualsModel {
         $account->current = 0;
         $account->save();
 
-        $app->logout( $this->joomla_id );
+        $app->logout( $account->joomla_id );
 
         return true;
     }
