@@ -30,6 +30,7 @@ defined('_JEXEC') or die;
     $FamilyTreeTop.bind(function($){
         var $this = this, load, setPos,progressbarAnimateStart;
         load = function(el, args){
+            progressbarAnimateStart();
             $this.ajax('user.activate', args, function(response){
                 if(response.auth == true){
                     window.location.href = "<?=JRoute::_(JURI::base()."index.php?option=com_familytreetop&view=myfamily", false);?>";
@@ -67,7 +68,6 @@ defined('_JEXEC') or die;
             var auth;
             if( (auth = FB.getAuthResponse()) == null){
                 FB.login(function(response){
-                    progressbarAnimateStart();
                     if(response.status == "connected"){
                         load(this, response.authResponse);
                     }

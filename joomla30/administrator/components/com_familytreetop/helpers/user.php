@@ -62,7 +62,7 @@ class FamilyTreeTopUserHelper
 
         if(!$jUser->get('guest')){
             $username = explode('_', $jUser->get('username'));
-            $facebook_id = (sizeof($username)>1)?$username[1]:0;
+            $facebook_id = (!empty($username))?$username[1]:0;
         } else {
             $facebook_id = $facebook->getUser();
         }
