@@ -37,7 +37,7 @@ class FamilytreetopController extends JControllerLegacy
                         $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=invitation", false));
                         return;
                     } else if($user->tree_id == null){
-                        $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=create", false));
+                        $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=create&layout=form", false));
                         return;
                     } else {
                         $model = $this->getModel($vName);
@@ -72,12 +72,16 @@ class FamilytreetopController extends JControllerLegacy
                     break;
 
 				default:
+                    /*
                     if($vName == "index" || $vName == "famous"){
                         $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=login", false));
                         return;
                     } else {
                         $model = $this->getModel($vName);
                     }
+                    */
+                    $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=login", false));
+                    return;
 					break;
 			}
 
