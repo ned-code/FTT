@@ -938,6 +938,7 @@ $data = json_encode(GedcomHelper::getInstance()->getData());
             jQuery.getScript('//connect.facebook.net/en_US/all.js', function(){
                 FB.init($FamilyTreeTop.app.config);
                 FB.getLoginStatus(function(response){
+                    TDFriendSelector.init({debug: false});
                     <?php if($fttUser->joyride): ?>
                     $FamilyTreeTop.joyride = true;
                     <?php endif; ?>

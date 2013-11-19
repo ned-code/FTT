@@ -128,8 +128,7 @@ var TDFriendSelector = (function(module, $) {
 			callbackFriendSelected   : null,
 			callbackFriendUnselected : null,
 			callbackMaxSelection     : null,
-			callbackSubmit           : null,
-            callbackBeforeShow: null
+			callbackSubmit           : null
 		};
 
 		// Override defaults with arguments
@@ -167,13 +166,10 @@ var TDFriendSelector = (function(module, $) {
 				// Update paging
 				$selectedCount.html(selectedFriendIds.length);
 				$selectedCountMax.html(instanceSettings.maxSelection);
-                if("undefined" !== typeof($friends) && "function" === typeof(instanceSettings.callbackBeforeShow)){
-                    $friends = instanceSettings.callbackBeforeShow($friends);
-                }
 				updateFriendsContainer(1);
 				updatePaginationButtons(1);
 				$container.fadeIn(500);
-                if (typeof callback === 'function') {
+				if (typeof callback === 'function') {
 					callback();
 				}
 			}
@@ -452,7 +448,7 @@ var TDFriendSelector = (function(module, $) {
 		buildFriendMarkup = function(friend) {
 			return '<a href="#" class="TDFriendSelector_friend TDFriendSelector_clearfix" data-id="' + friend.id + '">' +
 					'<img src="//graph.facebook.com/' + friend.id + '/picture?type=square" width="50" height="50" alt="' + friend.name + '" class="TDFriendSelector_friendAvatar" />' +
-					'<div class="TDFriendSelector_friendName">' +
+					'<div class="TDFriendSelector_friendName">' + 
 						'<span>' + friend.name + '</span>' +
 						'<span class="TDFriendSelector_friendSelect">' + settings.textSelect + '</span>' +
 					'</div>' +
