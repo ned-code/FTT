@@ -364,6 +364,7 @@
             'tipContent': '#Joyride',     // The ID of the <ol> used for content
             'postRideCallback': function(){
                 $FamilyTreeTop.prototype.fn.ajax('user.joyride', {}, jQuery.noop);
+                return false;
             },           // A method to call once the tour closes
             'postStepCallback': jQuery.noop, // A method to call after each step
             'nextOnClose': false,                 // If cookies are enabled, increment the current step on close
