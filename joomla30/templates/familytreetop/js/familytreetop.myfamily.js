@@ -27,36 +27,9 @@ $FamilyTreeTop.create("myfamily", function($){
                 }
                 return "";
             }
-            /*
-            var str = object.message || object.description || "";
-            if(str.length == 0){
-                switch(object.type){
-                    case 11: str = '- Group created';
-                    case 12: str = '- Event created';
-                    case 46: str = '- Status update';
-                    case 56: str = '- Post on wall from another user';
-                    case 66: str = '- Note created';
-                    case 80: str = '- Link posted';
-                    case 128: str = '- Video posted';
-                    case 247: str = '- Photos posted';
-                    case 237: str = '- App story';
-                    case 257: str = '- Comment created';
-                    case 272: str = '- App story';
-                    case 285: str = '- Checkin to a place';
-                    case 308: str = '- Post in Group';
-                }
-            }
-            return str.replace(/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/, "...");
-            */
         },
-        getFacebookSign: function(object){
-            var link = object.facebook.link || _getCommentLink_();
-            var div = '<div familytreetop="facebook-sign" style="position:absolute; top: 0; right: 0; cursor: pointer;">';
-            if(link){
-                div += '<a style="text-decoration: none;" target="_blank" href="'+link+'"><i class="icon-facebook-sign icon-2x familytreetop-icon-muted"></i></a>';
-            }
-            div += '</div>';
-            return div;
+        getLink: function(object){
+            return object.facebook.link || _getCommentLink_();
             function _getCommentLink_(){
                 if("undefined" !== typeof(object.facebook.actions)){
                     return object.facebook.actions[0].link;
@@ -64,11 +37,20 @@ $FamilyTreeTop.create("myfamily", function($){
                 return false;
             }
         },
+        getFacebookSign: function(object){
+            var link = $fn.getLink(object);
+            var div = '<div familytreetop="facebook-sign" style="position:absolute; top: 0; right: 0; cursor: pointer;">';
+            if(link){
+                div += '<a style="text-decoration: none;" target="_blank" href="'+link+'"><i class="icon-facebook-sign icon-2x familytreetop-icon-muted"></i></a>';
+            }
+            div += '</div>';
+            return div;
+        },
         getPicture: function(object){
             if("undefined" === typeof(object.facebook.picture)) {
                 return "";
             } else {
-                return '<a target="_blank" href="'+object.facebook.picture+'"><img align="left" vspace="5" hspace="5" class="img-polaroid" src="'+object.facebook.picture+'" /></a>';
+                return '<a target="_blank" href="'+$fn.getLink(object)+'"><img align="left" vspace="5" hspace="5" class="img-polaroid" src="'+object.facebook.picture+'" /></a>';
             }
         },
         getTime: function(object){
@@ -151,17 +133,17 @@ $FamilyTreeTop.create("myfamily", function($){
     $this.render = function(json){
         var table = $($box).find('table');
         var parentWidth = $($box).width() - 70;
-
         $(json).each(function(index, element){
             var tr = $fn.createTr(element);
             $(tr).find('[familytreetop-image] img').load(function(e){
                 if("undefined" !== typeof(e.target.naturalWidth)){
                     var width = e.target.naturalWidth;
-                    var thirdWidth = Math.floor(parentWidth/3);
-                    if(width > thirdWidth){
-                        width = thirdWidth;
+                    var halfWidth = Math.floor(parentWidth/2) - 40;
+                    if(width > halfWidth){
+                        width = halfWidth;
                     }
                     $(e.target).css('width', width + "px");
+                    $(e.target).parent().parent().css('width', (width + 20) + 'px');
                 }
             });
             if($(tr).attr('gedcom_id') != 0 ){

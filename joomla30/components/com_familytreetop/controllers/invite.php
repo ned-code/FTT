@@ -6,6 +6,27 @@ require_once JPATH_COMPONENT.'/controller.php';
 class FamilytreetopControllerInvite extends FamilytreetopController
 {
 
+    protected function _checkUser_ ($facebook_id, $gedcom_id, $tree_id){
+        $account = FamilyTreeTopAccounts::find_by_facebook_id($facebook_id);
+        if(!empty($account) && $account->current){
+            return array(
+                'success' => false,
+                'type' => 10,
+                'message' => "The cureent user is already registered",
+                'token' => 0
+            );
+        }
+
+        $inviteByGedcomId = FamilyTreeTopInvitations::find_by_gedcom_id_and_tree_id($gedcom_id, $tree_id);
+        $inviteByFacebookId = FamilyTreeTopInvitations::find_by_facebook_id_and_tree_id($facebook_id, $tree_id);
+        if(empty($inviteByGedcomId) && empty($inviteByFacebookId)){
+            return array('success' => true);
+        } else {
+            return array('success' => false, "type"=> 100, "message" => "The cureent user is already sent an invitation", 'token' => 0);
+        }
+
+    }
+
     public function addToTree(){
         $invite = FamilyTreeTopUserHelper::getInstance()->isUserInInvitationsList();
         $user = FamilyTreeTopUserHelper::getInstance()->get();
@@ -31,27 +52,6 @@ class FamilytreetopControllerInvite extends FamilytreetopController
             echo json_encode(array('success' => false));
         }
         exit;
-    }
-
-    protected function _checkUser_ ($facebook_id, $gedcom_id, $tree_id){
-        $account = FamilyTreeTopAccounts::find_by_facebook_id($facebook_id);
-        if(!empty($account) && $account->current){
-            return array(
-                'success' => false,
-                'type' => 10,
-                'message' => "The cureent user is already registered",
-                'token' => 0
-            );
-        }
-
-        $inviteByGedcomId = FamilyTreeTopInvitations::find_by_gedcom_id_and_tree_id($gedcom_id, $tree_id);
-        $inviteByFacebookId = FamilyTreeTopInvitations::find_by_facebook_id_and_tree_id($facebook_id, $tree_id);
-        if(empty($inviteByGedcomId) && empty($inviteByFacebookId)){
-            return array('success' => true);
-        } else {
-            return array('success' => false, "type"=> 100, "message" => "The cureent user is already sent an invitation", 'token' => 0);
-        }
-
     }
 
     public function checkUser($method = false){
