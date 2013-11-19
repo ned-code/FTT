@@ -115,7 +115,7 @@ class FamilytreetopControllerUser extends FamilytreetopController
         $helper->user->joyride = 0;
         $helper->user->save();
         $helper->joyride = 0;
-        echo json_encode(array('user'=>$helper));
+        echo json_encode(array('success'=>true));
         exit;
     }
 
