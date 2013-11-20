@@ -58,7 +58,29 @@ class FamilytreetopController extends JControllerLegacy
                         $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=login", false));
                         return;
                     } else {
-                        $model = $this->getModel($vName);
+                        //$model = $this->getModel($vName);
+                        $invite = FamilyTreeTopUserHelper::getInstance()->isUserInInvitationsList();
+                        $user = FamilyTreeTopUserHelper::getInstance()->get();
+                        if(!empty($invite)){
+                            $usersRow = new FamilyTreeTopUsers();
+                            $usersRow->account_id = $user->account_id;
+                            $usersRow->gedcom_id = $invite->gedcom_id;
+                            $usersRow->tree_id = $invite->tree_id;
+                            $usersRow->role = "user";
+                            $usersRow->save();
+
+                            $account = FamilyTreeTopAccounts::find($user->account_id);
+                            $account->current = $usersRow->id;
+                            $account->save();
+
+                            $invite->delete();
+
+                            $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=myfamily", false));
+                            return;
+                        } else {
+                            $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=create&layout=form", false));
+                            return;
+                        }
                     }
                     break;
 
