@@ -722,15 +722,15 @@ $data = json_encode(GedcomHelper::getInstance()->getData());
                 <tr>
                     <td><div style="font-weight: bold;"><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_OPTION_1');?></div><div><img class="img-polaroid" style="width:67px;height:49px;" src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/images/m_options_unlink.jpg" /></div></td>
                     <td>
-                        <div familytreetop="option" option="1" style="cursor:pointer;color:blue;font-weight: bold;">Unregister but do not change my profile</div>
-                        <div>Your profile information will remain visible to existing family members</div>
+                        <div familytreetop="option" option="1" style="cursor:pointer;color:blue;font-weight: bold;"><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_UNREGISTER_MY_PROFILE');?></div>
+                        <div><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_YOUR_PROFILE_INFO_VISIBLE');?></div>
                     </td>
                 </tr>
                 <tr>
                     <td><div style="font-weight: bold;"><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_OPTION_2');?></div><div><img class="img-polaroid" style="width:67px;height:49px;" src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/images/m_options_remove.jpg" /></div></td>
                     <td>
-                        <div familytreetop="option" option="2" style="cursor:pointer;color:blue;font-weight: bold;">Unregister and delete my profile information</div>
-                        <div>Your name, dates and other profile data will be deleted and replaced with “unknown”</div>
+                        <div familytreetop="option" option="2" style="cursor:pointer;color:blue;font-weight: bold;"><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_UNREGISTER_AND_DELETE');?></div>
+                        <div><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_YOU_DATA_WILL_BE_DELETE');?></div>
                     </td>
                 </tr>
                 <tr>
@@ -742,20 +742,20 @@ $data = json_encode(GedcomHelper::getInstance()->getData());
                     </td>
                     <td>
                         <div familytreetop="valid">
-                           <div familytreetop="option" option="3" style="cursor:pointer;color:blue;font-weight: bold;">Unregister and remove me from this family tree</div>
+                           <div familytreetop="option" option="3" style="cursor:pointer;color:blue;font-weight: bold;"><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_UNREGISTER_AND_REMOVE');?></div>
                             <div>
-                                Your place in this family tree will be completely removed. Note that you must first delete any spouses or descendants.
+                                <?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_NEED_TO_DELE_SPOUSE_AND_DESCENANTS');?>.
                             </div>
                         </div>
                         <div familytreetop="invalid" style="display:none;">
                             <div style="color:gray;">
-                                Unregister and remove me from this family tree<span style="color:red;">*</span>
+                                <?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_UNREGISTER_AND_REMOVE');?><span style="color:red;">*</span>
                             </div>
                             <div style="color:gray;">
-                               Your place in this family tree will be completely removed. Note that you must first delete any spouses or descendants.
+                                <?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_NEED_TO_DELE_SPOUSE_AND_DESCENANTS');?>
                             </div>
                             <div style="color:red;">
-                                *Option available. You must first delete any spouses or children.
+                                <?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_YOU_MUST_DELETE');?>
                             </div>
                         </div>
                     </td>
