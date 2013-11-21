@@ -147,10 +147,12 @@ class FamilytreetopControllerEditor extends FamilytreetopController
                                 foreach($item as $event){
                                     $result[$key]['all'][$event->id] = $event->toList();
                                     if($event->family_id != null){
-                                        $result[$key]['family_id'][$event->id] = $event->toList();
+                                        $result[$key]['family_id'][$event->family_id] = array();
+                                        $result[$key]['family_id'][$event->family_id][$event->id] = $event->toList();
                                     }
                                     if($event->gedcom_id != null){
-                                        $result[$key]['gedcom_id'][$event->id] = $event->toList();
+                                        $result[$key]['gedcom_id'][$event->gedcom_id] = array();
+                                        $result[$key]['gedcom_id'][$event->gedcom_id][$event->id] = $event->toList();
                                     }
                                 }
                             }
