@@ -761,7 +761,7 @@ $FamilyTreeTop.create("editor", function($){
         $(tabs[0]).on('shown', function (e) {
             var target = e.target ;
             var tab = $(target).attr('familytreetop-tab');
-            if("options" == tab){
+            if("options" == tab || "media" == tab){
                 $(cl).find('.modal-footer button[familytreetop="submit"]').hide();
             } else {
                 $(cl).find('.modal-footer button').show();
