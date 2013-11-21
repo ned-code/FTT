@@ -32,13 +32,14 @@ defined('_JEXEC') or die;
         load = function(el, args){
             progressbarAnimateStart();
             $this.ajax('user.activate', args, function(response){
+                var w = window != window.top ? window.top : window;
                 if(response.auth == true){
-                    window.location.href = "<?=JRoute::_(JURI::base()."index.php?option=com_familytreetop&view=myfamily", false);?>";
+                    w.location.href = "<?=JRoute::_(JURI::base()."index.php?option=com_familytreetop&view=myfamily", false);?>";
                 } else if("undefined" !== typeof(response.url) && args.userID != 0){
-                    window.location.href = response.url;
+                    w.location.href = response.url;
                 } else {
                     FB.logout(function(){
-                        window.location.reload();
+                        w.location.reload();
                     })
                 }
             });

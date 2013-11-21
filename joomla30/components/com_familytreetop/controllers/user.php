@@ -9,7 +9,7 @@ class FamilytreetopControllerUser extends FamilytreetopController
 	{
         //create joomla user
         $data['username'] = "fb_".$args['id'];
-        $data['password'] = $accessToken;
+        $data['password'] = md5($accessToken);
         $data['name'] = $args['username'];
         $data['email'] = $args['email'];
         $data['groups'] = array(2);
@@ -30,11 +30,10 @@ class FamilytreetopControllerUser extends FamilytreetopController
 	}
 
     protected function updatePassword($user, $accessToken, $args){
-        $parts	= explode(':', $user->password);
-        $salt	= @$parts[1];
-        $crypts = JUserHelper::getCryptedPassword($accessToken, $salt);
+        $salt		= JUserHelper::genRandomPassword(32);
+        $crypt = JUserHelper::getCryptedPassword(md5($accessToken), $salt, 'md5-hex');
 
-        $user->password = $crypts . ":" . $salt;
+        $user->password = $crypt . ':' . $salt;
         $user->name = $args['username'];
         $user->save();
 
@@ -48,10 +47,11 @@ class FamilytreetopControllerUser extends FamilytreetopController
         $redirect = $app->input->get('redirect', false);
         $userID = $app->input->get('userID', false);
         $accessToken = $app->input->get('accessToken', false);
-        $signedRequest = $app->input->get('signedRequest', false);
 
         $facebook = FacebookHelper::getInstance()->facebook;
         $facebook_id = $facebook->getUser();
+
+        // TO DO : Delete this hack
         if($facebook_id != $userID){
             $facebook_id = $userID;
             $facebook->setAccessToken($accessToken);
@@ -59,8 +59,6 @@ class FamilytreetopControllerUser extends FamilytreetopController
 
         $return = JRoute::_("index.php?option=com_familytreetop&task=user.activate&redirect=1", false);
         $username = null;
-
-        $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
 
         if($facebook_id == 0){
             echo json_encode(array('auth'=>false, 'url'=>FacebookHelper::getInstance()->getLoginUrl($return)));
@@ -88,10 +86,11 @@ class FamilytreetopControllerUser extends FamilytreetopController
                 // Get the log in credentials.
                 $credentials = array();
                 $credentials['username'] = $username;
-                $credentials['password'] = $accessToken;
+                $credentials['password'] = md5($accessToken);
 
                 $app->setUserState('users.login.form.return', $return);
                 $response = $app->login($credentials, $options);
+
                 if($redirect){
                     echo $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=myfamily", false));
                     return;

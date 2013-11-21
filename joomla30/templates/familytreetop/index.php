@@ -812,7 +812,7 @@ $data = json_encode(GedcomHelper::getInstance()->getData());
                 <p><?=JText::_("TPL_FAMILYTREETOP_TDFRIENDSELECTOR_SELECT_YOUR_FRIENDS");?></p>
             </div>
             <div class="TDFriendSelector_content">
-                <p><?=JText::_("TPL_FAMILYTREETOP_TDFRIENDSELECTOR_INVITE_TO_APP");?></p>
+                <!--<p><?=JText::_("TPL_FAMILYTREETOP_TDFRIENDSELECTOR_INVITE_TO_APP");?></p>-->
                 <div class="TDFriendSelector_searchContainer TDFriendSelector_clearfix">
                     <input type="text" placeholder="Search Friend" id="TDFriendSelector_searchField" />
                 </div>
