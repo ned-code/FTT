@@ -67,16 +67,10 @@ $FamilyTreeTop.create("myfamily", function($){
                 var width = img.naturalWidth;
                 var halfWidth = Math.floor(parentWidth/2);
                 var isBigImg = (width>halfWidth);
-                $(img).css('width', ((isBigImg)?"90%":width+"px"));
-                $(img).parent().parent().css('width', ((isBigImg)?"40%":(width+20)+"px"));
+                var percent = Math.floor(width*100/parentWidth);
+                $(img).css('width', "90%");
+                $(img).parent().parent().css('width', ((isBigImg)?"40%":percent+"%"));
             }
-        },
-        setWidnowResize:function(){
-            var parentWidth = $($box).width() - 70;
-            var table = $($box).find('table');
-            $(window).resize(function(){
-                console.log(parentWidth);
-            });
         },
         timeAgo: function(date_str){
             if (!date_str) {return;}
@@ -164,7 +158,6 @@ $FamilyTreeTop.create("myfamily", function($){
             });
             $(table).append(tr);
         });
-        //$fn.setWidnowResize();
         $fn.initPopovers();
     }
 });
