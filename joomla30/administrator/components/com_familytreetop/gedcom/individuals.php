@@ -331,13 +331,7 @@ class FamilyTreeTopGedcomIndividualsManager {
     public function __construct($tree_id){
         $this->tree_id = $tree_id;
         if(!empty($tree_id)){
-            $db = JFactory::getDbo();
-            $sql = "SELECT i.id as id, i.gedcom_id, i.creator_id, i.gender, i.family_id, i.create_time, i.is_father_line, i.is_mother_line,
-                    i.change_time, n.first_name, n.middle_name, n.last_name, n.know_as
-                FROM #__familytreetop_individuals as i,#__familytreetop_names as n,  #__familytreetop_tree_links as l, #__familytreetop_trees as t
-                WHERE l.type = 0 AND i.gedcom_id = l.id AND l.tree_id = t.id AND n.gedcom_id = i.gedcom_id AND t.id = ". $tree_id;
-            $db->setQuery($sql);
-            $this->list = $db->loadAssocList('gedcom_id');
+            $this->list = $this->getListByTreeId($tree_id);
         }
     }
 
@@ -523,6 +517,16 @@ class FamilyTreeTopGedcomIndividualsManager {
                 $object->updateLine();
             }
         }
+    }
+
+    public function getListByTreeId($tree_id){
+        $db = JFactory::getDbo();
+        $sql = "SELECT i.id as id, i.gedcom_id, i.creator_id, i.gender, i.family_id, i.create_time, i.is_father_line, i.is_mother_line,
+                    i.change_time, n.first_name, n.middle_name, n.last_name, n.know_as
+                FROM #__familytreetop_individuals as i,#__familytreetop_names as n,  #__familytreetop_tree_links as l, #__familytreetop_trees as t
+                WHERE l.type = 0 AND i.gedcom_id = l.id AND l.tree_id = t.id AND n.gedcom_id = i.gedcom_id AND t.id = ". $tree_id;
+        $db->setQuery($sql);
+        return $db->loadAssocList('gedcom_id');
     }
 
     public function getList(){
