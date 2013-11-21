@@ -62,6 +62,22 @@ $FamilyTreeTop.create("myfamily", function($){
             }
             return 0;
         },
+        setImageSize:function(img, parentWidth){
+            if("undefined" !== typeof(img.naturalWidth)){
+                var width = img.naturalWidth;
+                var halfWidth = Math.floor(parentWidth/2);
+                var isBigImg = (width>halfWidth);
+                $(img).css('width', ((isBigImg)?"90%":width+"px"));
+                $(img).parent().parent().css('width', ((isBigImg)?"40%":(width+20)+"px"));
+            }
+        },
+        setWidnowResize:function(){
+            var parentWidth = $($box).width() - 70;
+            var table = $($box).find('table');
+            $(window).resize(function(){
+                console.log(parentWidth);
+            });
+        },
         timeAgo: function(date_str){
             if (!date_str) {return;}
             date_str = $.trim(date_str);
@@ -136,15 +152,7 @@ $FamilyTreeTop.create("myfamily", function($){
         $(json).each(function(index, element){
             var tr = $fn.createTr(element);
             $(tr).find('[familytreetop-image] img').load(function(e){
-                if("undefined" !== typeof(e.target.naturalWidth)){
-                    var width = e.target.naturalWidth;
-                    var halfWidth = Math.floor(parentWidth/2) - 40;
-                    if(width > halfWidth){
-                        width = halfWidth;
-                    }
-                    $(e.target).css('width', width + "px");
-                    $(e.target).parent().parent().css('width', (width + 20) + 'px');
-                }
+                $fn.setImageSize(e.target, parentWidth);
             });
             if($(tr).attr('gedcom_id') != 0 ){
                 $this.mod('familyline').bind(tr, $(tr).attr('gedcom_id'));
@@ -156,6 +164,7 @@ $FamilyTreeTop.create("myfamily", function($){
             });
             $(table).append(tr);
         });
+        //$fn.setWidnowResize();
         $fn.initPopovers();
     }
 });
