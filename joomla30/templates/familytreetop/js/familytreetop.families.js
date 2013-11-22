@@ -305,7 +305,7 @@ $FamilyTreeTop.create("families", function($){
                     return height * 0.1;
                 } else {
                     var rows = getRows();
-                    var row = Math.ceil((index - 2)/rows[1]);
+                    var row = Math.ceil((index - 4)/rows[1]);
                     return height * 0.1 + 250 + 190*(row - 1);
                 }
 
