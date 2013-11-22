@@ -799,8 +799,9 @@ $data = json_encode(GedcomHelper::getInstance()->getData());
     </div>
 
     <div id="familytreetopFriendSelector">
-        <div familytreetop="link">What is Family TreeTop?</div>
-        <div familytreetop="description">Your %RELATION%, %NAME%, has invited you to join your family tree on Family TreeTop. This is a private space that can only be seen by members of your family.</div>
+        <div familytreetop="link"><?=JText::_('TPL_FAMILYTREETOP_TDFRIENDSELECTOR_LINK');?></div>
+        <div familytreetop="title"><?=JText::_('TPL_FAMILYTREETOP_TDFRIENDSELECTOR_MESSAGE_TITLE');?></div>
+        <div familytreetop="description"><?=JText::_('TPL_FAMILYTREETOP_TDFRIENDSELECTOR_MESSAGE_DESCRIPTION');?></div>
     </div>
 </div>
 <!-- friend selector -->

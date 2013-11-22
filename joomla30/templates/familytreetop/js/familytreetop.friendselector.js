@@ -12,10 +12,14 @@ $FamilyTreeTop.create("friendselector", function($){
     $fn = {
         getMessage: function(gedcom_id){
             var text = $($box).find('[familytreetop="description"]').text();
+            var owner = $this.mod('usertree').user($this.mod('usertree').usermap().gedcom_id);
             var user = $this.mod('usertree').user(gedcom_id);
-            text = text.replace('%NAME%', user.shortname());
+            text = text.replace('%NAME%', owner.shortname());
             text = text.replace('%RELATION%', user.relation);
             return text;
+        },
+        getTitle: function(){
+            return $($box).find('[familytreetop="title"]').text();
         },
         getExludeIds: function(){
             var key, map, pull;
@@ -73,7 +77,7 @@ $FamilyTreeTop.create("friendselector", function($){
             FB.ui({
                 to: facebook_id,
                 method: 'apprequests',
-                title: 'Send invite',
+                title: $fn.getTitle(),
                 message: $fn.getMessage(gedcom_id),
                 exclude_ids: $fn.getExludeIds(),
                 filters: ['app_non_users'],
