@@ -75,7 +75,18 @@ $FamilyTreeTop.create("families", function($){
                 }
             }
 
-            return childs;
+            return childs.sort(function(a,b){
+                var userA, userB, yearA, yearB;
+                userA = $this.mod('usertree').user(a.gedcom_id);
+                userB = $this.mod('usertree').user(b.gedcom_id);
+                yearA = int(userA.birth('date.start_year'));
+                yearB = int(userB.birth('date.start_year'));
+                return yearA - yearB;
+                function int(y){
+                    var i = parseInt(y);
+                    return (isNaN(i))?9999:i;
+                }
+            });
             function _isDefaultFamily_(_F_){
                 return ( ( _F_.husb == id1 && _F_.wife == id2 )
                     || ( _F_.husb == id2 && _F_.wife == id1 ) );
