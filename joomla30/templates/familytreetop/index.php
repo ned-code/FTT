@@ -75,7 +75,7 @@ $data = json_encode(GedcomHelper::getInstance()->getData());
     $FamilyTreeTop.baseurl = '<?=$this->baseurl;?>';
     $FamilyTreeTop.templateurl = '<?=$this->baseurl;?>/templates/<?=$this->template;?>';
 
-    $FamilyTreeTop.languagesString = '<?=LanguagesHelper::get()?>';
+    $FamilyTreeTop.languagesString = '<?=FamilyTreeTopLanguagesHelper::get()?>';
 
     $FamilyTreeTop.dataString = <?=$data?>;
 </script>
