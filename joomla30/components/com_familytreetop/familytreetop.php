@@ -12,6 +12,7 @@ require_once JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familyt
 ActiverecrdHelper::getInstance();
 FacebookHelper::getInstance();
 FamilyTreeTopSettingsHelper::getInstance();
+FamilyTreeTopUserHelper::getInstance();
 FamilyTreeTopLanguagesHelper::init();
 
 $controller = JControllerLegacy::getInstance('Familytreetop');
