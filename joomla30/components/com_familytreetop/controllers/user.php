@@ -23,7 +23,7 @@ class FamilytreetopControllerUser extends FamilytreetopController
         $account->joomla_id = $user->id;
         $account->access_token = $accessToken;
         $account->facebook_id = $args['id'];
-        $account->local = $args['locale'];
+        $account->local = FamilyTreeTopLanguagesHelper::getTag($args['locale']);
         $account->save();
 
         return $user;
