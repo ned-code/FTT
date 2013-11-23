@@ -313,6 +313,14 @@ $FamilyTreeTop.create("usertree", function($){
                 if(ind.last_name != null) $name.push(ind.last_name);
                 return $name.join(' ').replace(/[ \t]{2,}/g, ' ');
             },
+            nickname:function(short){
+                var k = ind.know_as;
+                if($this.parseBoolean(k)){
+                    return k;
+                } else {
+                    return ($this.parseBoolean(short))?ind.first_name:this.name();
+                }
+            },
             medias: function(){
               return $this.getMedias(ind.gedcom_id);
             },

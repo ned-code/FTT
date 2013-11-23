@@ -134,7 +134,7 @@ $FamilyTreeTop.create("families", function($){
             if(!ind) return [];
             var divs = $(cl).find('div');
             $(cl).attr('gedcom_id', ind.gedcom_id);
-            $(divs[1]).text((type=="up")?ind.name():ind.first_name);
+            $(divs[1]).text(ind.nickname(("up"!=type)));
             $(divs[2]).text(ind.date());
             var img = $(divs[0]).find('img');
             var avatar = ind.avatar((type=="up")?["140","140"]:["90","90"]);

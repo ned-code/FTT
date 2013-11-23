@@ -285,6 +285,25 @@
             }
             return _n;
         },
+        parseBoolean:function(s){
+            switch(typeof(s)){
+                case "undefined": return false; break;
+                case "number": case "string": return (!!s); break;
+                case "boolean": return s; break;
+                case "object":
+                    var isArray = (Object.prototype.toString.call( s ) === '[object Array]');
+                    if(isArray && s.length == 0){
+                        return false;
+                    } else if(s == null) {
+                        return false;
+                    }
+                    return true;
+                    break;
+                case "function": return true; break;
+            }
+
+            return (!!s==true);
+        },
         isExist:function(array, name, value){
             var items = name.split('.'), prop, object, key, element;
             for(prop in array){
