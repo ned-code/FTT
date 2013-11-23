@@ -182,6 +182,15 @@
             var s4 = function(){return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);}
             return s4()+s4()+s4()+s4()+s4()+s4()+s4()+s4();
         },
+        guid: function(){
+            return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+                s4() + '-' + s4() + s4() + s4();
+            function s4() {
+                return Math.floor((1 + Math.random()) * 0x10000)
+                    .toString(16)
+                    .substring(1);
+            };
+        },
         encode64: function(input) {
             input = escape(input);
             var output = "";
@@ -257,15 +266,6 @@
 
             return unescape(output);
         },
-        guid: function(){
-            return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-                s4() + '-' + s4() + s4() + s4();
-            function s4() {
-                return Math.floor((1 + Math.random()) * 0x10000)
-                    .toString(16)
-                    .substring(1);
-            };
-        },
         trim: function(){return this.replace(/^\s+|\s+$/g, '');},
         textWidth: function(text, font){
             var f = font || '12px arial',
@@ -277,6 +277,13 @@
             o.remove();
 
             return w;
+        },
+        parseNum: function(n){
+            var _n = parseInt(n);
+            if(isNaN(_n)){
+                return 0;
+            }
+            return _n;
         },
         isExist:function(array, name, value){
             var items = name.split('.'), prop, object, key, element;

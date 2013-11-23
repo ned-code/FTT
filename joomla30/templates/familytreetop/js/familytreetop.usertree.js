@@ -317,20 +317,20 @@ $FamilyTreeTop.create("usertree", function($){
               return $this.getMedias(ind.gedcom_id);
             },
             birth:function(path){
-                var e = $this.getUserEventByType(ind.gedcom_id, 'BIRT'), st, prop, val = "";
-                if(!e) return "";
-                if("undefined" === typeof(path)){
-                    return e || "";
-                }
-                st = path.split('.');
-                for(prop in st){
-                    if(!st.hasOwnProperty(prop)) continue;
-                    val = (val=="")?e[st[prop]]:val[st[prop]];
-                }
-                return ("undefined"!==typeof(val))?val:"";
+                return $this.getParseUserEventByType(ind.gedcom_id, 'BIRT', path);
             },
-            death:function(){
-                return $this.getUserEventByType(ind.gedcom_id, 'DEAT');
+            death:function(path){
+                return $this.getParseUserEventByType(ind.gedcom_id, 'DEAT', path);
+            },
+            date: function(){
+                var b = $this.parseNum(this.birth('date.start_year'));
+                var d = $this.parseNum(this.death('date.start_year'));
+                if(!b && d){ return '... - '+d; }
+                else if(b && !d){ return b; }
+                else if(b && d){ return b + ' - ' + d; }
+                else {
+                    return '';
+                }
             },
             event:function(id){
                 if("undefined" === typeof(id)) return false;
@@ -928,6 +928,7 @@ $FamilyTreeTop.create("usertree", function($){
         return childrens;
     }
 
+
     $this.getEvent = function(event_id){
         var ret = {event: false, place: false, date: false };
         if("undefined" !== typeof(data.eve.all[event_id])){
@@ -981,6 +982,20 @@ $FamilyTreeTop.create("usertree", function($){
 
         }
         return false;
+    }
+
+    $this.getParseUserEventByType = function(gedcom_id, type, path){
+        var e = $this.getUserEventByType(gedcom_id, type), st, prop, val = "";
+        if(!e) return "";
+        if("undefined" === typeof(path) || !path){
+            return e || "";
+        }
+        st = path.split('.');
+        for(prop in st){
+            if(!st.hasOwnProperty(prop)) continue;
+            val = (val=="")?e[st[prop]]:val[st[prop]];
+        }
+        return ("undefined"!==typeof(val))?val:"";
     }
 
     $this.getAllMonthsEvents = function(){
