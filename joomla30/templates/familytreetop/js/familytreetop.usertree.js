@@ -27,7 +27,6 @@ $FamilyTreeTop.create("usertree", function($){
     $this.init = function(dataString, userString, usersString){
         if(dataString){
             data = dataString;
-            window._A = data;
             //console.log(data);
         } else {
             data = null;
