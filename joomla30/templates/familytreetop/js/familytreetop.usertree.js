@@ -790,7 +790,7 @@ $FamilyTreeTop.create("usertree", function($){
             if( (id == 6 || id == 5) && parseInt(obj.in_law) ){
                 return { name: (id==5)?"DAUGHTER_IN_LAW":"SON_IN_LAW", id: id };
             } else if(id == 9 && $this.parseBoolean(user)){
-                return { name:($this.parseBoolean(user.gender))?"COUSIN_MALE":"COUSIN_FEMALE", id: id};
+                return { name:($this.parseNum(user.gender))?"COUSIN_MALE":"COUSIN_FEMALE", id: id};
             } else {
                 return data.rel["_NAMES"][id];
             }
