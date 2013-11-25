@@ -161,14 +161,14 @@ $FamilyTreeTop.create("usertree", function($){
             relation: (function(){
                 var relation = $this.getRelation(ind.gedcom_id);
                 if(relation){
-                    return $this.getRelationName(relation);
+                    return $this.getRelationName(relation, false, ind);
                 }
                 return "unknown";
             })(),
             relation2: (function(){
                 var relation = $this.getRelation(ind.gedcom_id);
                 if(relation){
-                    return $this.getRelationName(relation, true);
+                    return $this.getRelationName(relation, true, ind);
                 }
                 return "unknown";
             })(),
@@ -756,8 +756,8 @@ $FamilyTreeTop.create("usertree", function($){
         return $name.join(' ').replace(/[ \t]{2,}/g, ' ');
     }
 
-    $this.getRelName = function(obj, id, suffix, postfix){
-        var val = _getRel_(), name;
+    $this.getRelName = function(obj, id, suffix, postfix, user){
+        var val = _getRel_(user), name;
         if(data.rel != null && "undefined" !== typeof(val)){
             name = $('#relations').find('[data-familytreetop="'+val.name+'"]').text()
             return ((_is_(suffix))?_getSuffix_(obj):"") + " " + name + " " + ((_is_(postfix))?_getPostfix_(obj):"");
@@ -767,25 +767,37 @@ $FamilyTreeTop.create("usertree", function($){
             return "undefined" === typeof(k) || ( "undefined"!==typeof(k)&&k );
         }
         function _getSuffix_(o){
+            var suf = (o.json!=null&&"undefined"!=typeof(o.json.suffix))?o.json.suffix:0;
+            switch(suf){
+                case 0: return "";
+                case "1st": return $('#relations').find('[data-familytreetop="1ST"]').text();
+                case "2st": return $('#relations').find('[data-familytreetop="2ST"]').text();
+                case "3st": return $('#relations').find('[data-familytreetop="3ST"]').text();
+                case "4st": return $('#relations').find('[data-familytreetop="4ST"]').text();
+                case "5st": return $('#relations').find('[data-familytreetop="5ST"]').text();
+                default: return "";
+            }
             return (o.json!=null&&"undefined"!=typeof(o.json.suffix))?o.json.suffix:"";
         }
         function _getPostfix_(o){
             if( (id == 6 || id == 5) && parseInt(obj.in_law) ){
                 return "";
             } else {
-                return (parseInt(o.in_law))?"in-law":"";
+                return (parseInt(o.in_law))?$('#relations').find('[data-familytreetop="IN_LAW"]').text():"";
             }
         }
-        function _getRel_(){
+        function _getRel_(user){
             if( (id == 6 || id == 5) && parseInt(obj.in_law) ){
                 return { name: (id==5)?"DAUGHTER_IN_LAW":"SON_IN_LAW", id: id };
+            } else if(id == 9){
+                return ($this.parseBoolean(user.gender))?"TPL_FAMILYTREETOP_COUSIN_MALE":"TPL_FAMILYTREETOP_COUSIN_FEMALE";
             } else {
                 return data.rel["_NAMES"][id];
             }
         }
     }
 
-    $this.getRelationName = function(object, flag){
+    $this.getRelationName = function(object, flag, user){
         var rel = $this.getRelationId(object.target_id), name;
         if("object" === typeof(rel) && "undefined" !== typeof(flag)){
             name = _getName_(rel[1].obj, rel[1].id, true, false) + " your " + _getName_(rel[0].obj, rel[0].id);
@@ -798,7 +810,7 @@ $FamilyTreeTop.create("usertree", function($){
         }
         return (name)?name:"undefined";
         function _getName_(obj, id, suffix, postfix){
-            return $this.getRelName(obj, id, suffix, postfix);
+            return $this.getRelName(obj, id, suffix, postfix, user);
         }
     }
 
