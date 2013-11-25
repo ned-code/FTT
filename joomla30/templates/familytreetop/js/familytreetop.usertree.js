@@ -1155,12 +1155,14 @@ $FamilyTreeTop.create("usertree", function($){
         for(var key in data.med.gedcom_id[gedcom_id]){
             if(!data.med.gedcom_id[gedcom_id].hasOwnProperty(key)) continue;
             if(data.med.gedcom_id[gedcom_id][key].id == media_id){
-                data.med.gedcom_id[gedcom_id].role = "AVAT";
+                data.med.gedcom_id[gedcom_id][key].role = "AVAT";
             } else {
-                data.med.gedcom_id[gedcom_id].role = "IMAG";
+                data.med.gedcom_id[gedcom_id][key].role = "IMAG";
             }
         }
         data.med.all[media_id].role = "AVAT";
+        delete cache[gedcom_id];
+        $this.call();
     }
     $this.unsetAvatar = function(gedcom_id, media_id){
         if("undefined" === typeof(data.med.gedcom_id[gedcom_id])) return false;
@@ -1168,10 +1170,12 @@ $FamilyTreeTop.create("usertree", function($){
         for(var key in data.med.gedcom_id[gedcom_id]){
             if(!data.med.gedcom_id[gedcom_id].hasOwnProperty(key)) continue;
             if(data.med.gedcom_id[gedcom_id][key].id == media_id){
-                data.med.gedcom_id[gedcom_id].role = "IMAG";
+                data.med.gedcom_id[gedcom_id][key].role = "IMAG";
             }
         }
         data.med.all[media_id].role = "IMAG";
+        delete cache[gedcom_id];
+        $this.call();
     }
 
     $this.mediaRemove = function(media_id){
