@@ -35,7 +35,7 @@ if($session->get('famous')){
                 </li>
             </ul>
             <?php endif; ?>
-            <a class="brand" href="<?=JRoute::_("index.php?option=com_familytreetop&view=index", false); ?>"><i style="background: url(templates/familytreetop/img/glyphicons_317_tree_deciduous_green.png) no-repeat; padding-left: 25px;">Family TreeTop</i></a>
+            <a class="brand" familytreetop-link="familytreetop" href="<?=JRoute::_("index.php?option=com_familytreetop&view=index", false); ?>"><i style="background: url(templates/familytreetop/img/glyphicons_317_tree_deciduous_green.png) no-repeat; padding-left: 25px;">Family TreeTop</i></a>
             <!--
             <div  id="navProfileUser" class="nav-collapse collapse">
                 <ul class="nav">
@@ -163,6 +163,14 @@ if($session->get('famous')){
                 default: return false;
             }
             return false;
+        });
+
+        $('[familytreetop-link="familytreetop"]').click(function(){
+            if(window != window.top){
+                window.top.location.href = $(this).attr('href');
+            } else {
+                window.location.href = $(this).attr('href');
+            }
         });
 
         $('#navProfileUser ul.nav li a').click(function(){
