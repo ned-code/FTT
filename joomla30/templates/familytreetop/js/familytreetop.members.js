@@ -319,6 +319,8 @@ $FamilyTreeTop.create("members", function($){
             $fn.render();
         });
 
+        $this.mod('usertree').trigger({}, $fn.render);
+
         $('html').keyup(function(e){if(e.keyCode == 8)find()});
         $('input.input-medium.search-query').keypress(find);
     }

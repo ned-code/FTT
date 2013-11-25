@@ -115,28 +115,35 @@ $FamilyTreeTop.create("latest_events", function($){
                 }
             }
             return true;
+        },
+        render: function(events){
+            var birth = events.BIRT, death = events.DEAT, marr = events.MARR;
+            $($birthBox).html('');
+            $($deathBox).html('');
+            $($marrBox).html('');
+            if("undefined" !== typeof(birth)){
+                $fn.setEvents($birthBox, birth, 'birth');
+            } else {
+                $fn.setNull($birthBox);
+            }
+            if("undefined" !== typeof(death)){
+                $fn.setEvents($deathBox, death, 'death');
+            }else {
+                $fn.setNull($deathBox);
+            }
+            if("undefined" !== typeof(marr)){
+                $fn.setEvents($marrBox, marr, 'marr');
+            }else {
+                $fn.setNull($marrBox);
+            }
         }
     }
 
     $this.init = function(events, languages){
         $languages = languages;
-        var birth = events.BIRT, death = events.DEAT, marr = events.MARR;
-        if("undefined" !== typeof(birth)){
-            $fn.setEvents($birthBox, birth, 'birth');
-        } else {
-            $fn.setNull($birthBox);
-        }
-        if("undefined" !== typeof(death)){
-            $fn.setEvents($deathBox, death, 'death');
-        }else {
-            $fn.setNull($deathBox);
-        }
-        if("undefined" !== typeof(marr)){
-            $fn.setEvents($marrBox, marr, 'marr');
-        }else {
-            $fn.setNull($marrBox);
-        }
+        $fn.render(events);
         $fn.setFamilyLine();
+        $this.mod('usertree').trigger(events, $fn.render);
         $this.mod('familyline').resp($fn.onFamilyLine);
     }
 });

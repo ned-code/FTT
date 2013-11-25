@@ -301,6 +301,7 @@ $FamilyTreeTop.create("this_month", function($){
         $fn.setMonthSelectChange($parent);
         $month = $fn.getDefaultMonth(month);
         $fn.render($month);
+        $this.mod('usertree').trigger($month, $fn.render);
     }
 
 });
