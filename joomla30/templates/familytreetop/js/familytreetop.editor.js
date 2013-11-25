@@ -677,9 +677,7 @@ $FamilyTreeTop.create("editor", function($){
         $fn.setMonths(editProfileForm);
         $fn.setDays(editProfileForm);
 
-        if(ind.isAlive()){
-            $(editProfileForm).find('[familytreetop="deathday"]').hide();
-        }
+        $(editProfileForm).find('[familytreetop="deathday"]').hide();
 
         if(type=="addChild"){
             $fn.setParentSelection(editProfileForm, ind);
