@@ -292,6 +292,19 @@ $FamilyTreeTop.create("this_month", function($){
                 $month = $(this).find('option:selected').val();
                 $fn.render($month);
             });
+        },
+        setMonthSelectWidth:function(p){
+            var select = $(p).find('[familytreetop="months"]'), size = 0, text, element, width;
+            $(select).find('option').each(function(i,el){
+                var t = $(el).text();
+                if(t.length > size){
+                    size = t.length;
+                    element = el;
+                    text = t;
+                }
+            });
+            width = $this.mod('usertree').textWidth(text, "14px 'Helvetica Neue', Helvetica, Arial, sans-serif");
+            $(select).css('width',(width+40)+'px');
         }
     }
 
@@ -299,6 +312,7 @@ $FamilyTreeTop.create("this_month", function($){
         $languages = lang;
         $parent = $('#thisMonth');
         $fn.setMonthSelectChange($parent);
+        $fn.setMonthSelectWidth($parent);
         $month = $fn.getDefaultMonth(month);
         $fn.render($month);
         $this.mod('usertree').trigger($month, $fn.render);

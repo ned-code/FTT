@@ -24,7 +24,7 @@ $date = date('n', strtotime('-1 month'));
                     <div class="row-fluid">
                         <div class="span12">
                             <?php
-                            echo '<select familytreetop="months" style="margin:0;  width: 130px;" name="ThisMonth[month]">';
+                            echo '<select familytreetop="months" style="margin:0;" name="ThisMonth[month]">';
                             echo '<option value="0">'.JText::_("TPL_FAMILYTREETOP_ALL_MONTH").'</option>';
                             foreach($months as $key => $month){
                                 $option = '<option ';
