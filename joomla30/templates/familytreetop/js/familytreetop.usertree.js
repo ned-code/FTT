@@ -788,14 +788,15 @@ $FamilyTreeTop.create("usertree", function($){
             }
         }
         function _getRel_(user){
+            var gender = ("undefined"!=typeof(user)&&$this.parseNum(user.gender));
             if(id == 2){
-                return { name:($this.parseNum(user.gender))?"SPOUSE_MALE":"SPOUSE_FEMALE", id: id};
+                return { name:(gender)?"SPOUSE_MALE":"SPOUSE_FEMALE", id: id};
             } else if( (id == 6 || id == 5) && parseInt(obj.in_law) ){
                 return { name: (id==5)?"DAUGHTER_IN_LAW":"SON_IN_LAW", id: id };
             } else if( (id == 7 || id == 8) && parseInt(obj.in_law) ){
                 return { name: (id==7)?"SISTER_IN_LAW":"BROTHER_IN_LAW", id: id };
-            } else if(id == 9 && $this.parseBoolean(user)){
-                return { name:($this.parseNum(user.gender))?"COUSIN_MALE":"COUSIN_FEMALE", id: id};
+            } else if(id == 9){
+                return { name:(gender)?"COUSIN_MALE":"COUSIN_FEMALE", id: id};
             } else {
                 return ("undefined"!==typeof(data.rel['_NAMES'][id]))?data.rel["_NAMES"][id]:false;
             }
