@@ -1158,6 +1158,19 @@ $FamilyTreeTop.create("usertree", function($){
         data.med.gedcom_id[media.gedcom_id].push(media);
     }
 
+    $this.mediaRemove = function(media_id){
+        if("undefined" === typeof(data.med.all[media_id])) return false;
+        var gedcom_id = data.med.all[media_id].gedcom_id;
+        var d = data.med.gedcom_id[gedcom_id];
+        for(var key in d){
+            if(!d.hasOwnProperty(key)) continue;
+            if(d[key].id == media_id){
+                data.med.gedcom_id[gedcom_id].splice(key, 1);
+            }
+        }
+        delete data.med.all[media_id];
+    }
+
     $this.getAvatar = function(gedcom_id){
         var medias = $this.getMedias(gedcom_id);
         var ret = false;
@@ -1201,24 +1214,6 @@ $FamilyTreeTop.create("usertree", function($){
         data.med.all[media_id].role = "IMAG";
         delete cache[gedcom_id];
         $this.call();
-    }
-
-    $this.mediaRemove = function(media_id){
-        if("undefined" === typeof(data.med.all[media_id])) return false;
-        var d =  data.med.all[media_id]
-        for(var key in d){
-            if(!d.hasOwnProperty(key)) continue;
-            var gedcom_id = d.gedcom_id;
-            if("undefined" !== typeof(data.med.gedcom_id[gedcom_id])){
-                for(var index in data.med.gedcom_id[gedcom_id]){
-                    if(!data.med.gedcom_id[gedcom_id].hasOwnProperty(index)) continue;
-                    if(data.med.gedcom_id[gedcom_id][index].id = media_id){
-                        data.med.gedcom_id[gedcom_id].splice(index, 1);
-                    }
-                }
-            }
-        }
-        delete data.med.all[media_id];
     }
 
     $this.getData = function(){
