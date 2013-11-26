@@ -134,6 +134,8 @@ $data = json_encode(GedcomHelper::getInstance()->getData());
         <div data-familytreetop="RELATIVE"><?=JText::_("TPL_FAMILYTREETOP_RELATIVE");?></div>
         <div data-familytreetop="SELF"><?=JText::_("TPL_FAMILYTREETOP_SELF");?></div>
         <div data-familytreetop="SPOUSE"><?=JText::_("TPL_FAMILYTREETOP_SPOUSE");?></div>
+        <div data-familytreetop="SPOUSE_FEMALE"><?=JText::_("TPL_FAMILYTREETOP_SPOUSE_FEMALE");?></div>
+        <div data-familytreetop="SPOUSE_MALE"><?=JText::_("TPL_FAMILYTREETOP_SPOUSE_MALE");?></div>
         <div data-familytreetop="MOTHER"><?=JText::_("TPL_FAMILYTREETOP_MOTHER");?></div>
         <div data-familytreetop="FATHER"><?=JText::_("TPL_FAMILYTREETOP_FATHER");?></div>
         <div data-familytreetop="DAUGHTER"><?=JText::_("TPL_FAMILYTREETOP_DAUGHTER");?></div>
@@ -141,7 +143,9 @@ $data = json_encode(GedcomHelper::getInstance()->getData());
         <div data-familytreetop="DAUGHTER_IN_LAW"><?=JText::_("TPL_FAMILYTREETOP_DAUGHTER_IN_LAW");?></div>
         <div data-familytreetop="SON_IN_LAW"><?=JText::_("TPL_FAMILYTREETOP_SON_IN_LAW");?></div>
         <div data-familytreetop="SISTER"><?=JText::_("TPL_FAMILYTREETOP_SISTER");?></div>
+        <div data-familytreetop="SISTER_IN_LAW"><?=JText::_("TPL_FAMILYTREETOP_SISTER_IN_LAW");?></div>
         <div data-familytreetop="BROTHER"><?=JText::_("TPL_FAMILYTREETOP_BROTHER");?></div>
+        <div data-familytreetop="BROTHER_IN_LAW"><?=JText::_("TPL_FAMILYTREETOP_BROTHER_IN_LAW");?></div>
         <div data-familytreetop="COUSIN"><?=JText::_("TPL_FAMILYTREETOP_COUSIN");?></div>
         <div data-familytreetop="COUSIN_FEMALE"><?=JText::_("TPL_FAMILYTREETOP_COUSIN_FEMALE");?></div>
         <div data-familytreetop="COUSIN_MALE"><?=JText::_("TPL_FAMILYTREETOP_COUSIN_MALE");?></div>
