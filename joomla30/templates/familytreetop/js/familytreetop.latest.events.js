@@ -15,7 +15,7 @@ $FamilyTreeTop.create("latest_events", function($){
             return img;
         },
         setNull: function(box){
-            $(box).append('<tr familytreetop="null" ><td colspan="3" style="text-align:center; padding: 20px;"><i class="icon-calendar-empty" style="font-size:28px;"></i> <span>'+$languages['none']+'</span></td></tr>')
+            $(box).append('<tr familytreetop="null" ><td colspan="3" style="text-align:center; padding: 20px;"><i class="icon-calendar-empty muted" style="font-size:28px;"></i> <span>'+$languages['none']+'</span></td></tr>')
         },
         setEvents: function(box, events, type){
             var user, family, husb, wife, div, ev, tr, td, avatar;
