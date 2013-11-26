@@ -17,26 +17,7 @@ $FamilyTreeTop.create("editor", function($){
                 $(li).attr('data-familytreetop-delete', el.delete_url);
                 $(li).data(el);
                 $(ul).append(li);
-            });
-
-            $(ul).find('li').click(function(){
-                if($(this).hasClass('active')) return false;
-                $(ul).find('li').removeClass('active');
-                $(this).addClass('active');
-                var el = $(this).data();
-                var data = $this.mod('usertree').getMedia(el.id);
-
-                if(data.role == "AVAT"){
-                    $(parent).find('.unset-avatar').show();
-                    $(parent).find('.set-avatar').hide();
-                    $(parent).find('.unset-avatar').data({data:data, object: this });
-                } else {
-                    $(parent).find('.unset-avatar').hide();
-                    $(parent).find('.set-avatar').show();
-                    $(parent).find('.set-avatar').data({data:data, object: this });
-                }
-                $(parent).find('.delete').show();
-                $(parent).find('.delete').data({data:data, object: this });
+                _click_(li);
             });
 
             $(parent).find('.set-avatar').click(function(){
@@ -72,10 +53,49 @@ $FamilyTreeTop.create("editor", function($){
             });
 
             $(parent).fileupload({
-                formData:{gedcom_id: ind.gedcom_id}
+                formData:{gedcom_id: ind.gedcom_id},
+                done: function(event, object){
+                    var response = object.jqXHR.responseJSON;
+                    var files = response.files;
+                    $(files).each(function(index, el){
+                        $this.mod('usertree').updateMedia(el.familytreetop.media);
+                        var media = el.familytreetop.media;
+                        var li = $('<li><img style="cursor:pointer;" class="img-polaroid" src=""></li>');
+                        $(li).find('img').attr('src', el.thumbnail_url);
+                        $(li).attr('data-familytreetop-delete', el.delete_url);
+                        $(li).data(media);
+                        $(ul).append(li);
+                        _click_(li);
+                    });
+                    $(object.context).each(function(index, el){
+                        $(el).remove();
+                    });
+                    return true;
+                }
             });
 
             return true;
+            function _click_(el){
+                $(el).click(function(){
+                    if($(this).hasClass('active')) return false;
+                    $(ul).find('li').removeClass('active');
+                    $(this).addClass('active');
+                    var el = $(this).data();
+                    var data = $this.mod('usertree').getMedia(el.id);
+
+                    if(data.role == "AVAT"){
+                        $(parent).find('.unset-avatar').show();
+                        $(parent).find('.set-avatar').hide();
+                        $(parent).find('.unset-avatar').data({data:data, object: this });
+                    } else {
+                        $(parent).find('.unset-avatar').hide();
+                        $(parent).find('.set-avatar').show();
+                        $(parent).find('.set-avatar').data({data:data, object: this });
+                    }
+                    $(parent).find('.delete').show();
+                    $(parent).find('.delete').data({data:data, object: this });
+                });
+            }
         },
         setOptions: function(parent, ind, callback){
             if(_isOwner_(ind)){

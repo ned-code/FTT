@@ -45,6 +45,9 @@ class UploadHandlerHelper extends UploadHandler {
         $media->save();
 
         $file = new stdClass();
+        $file->familytreetop = array(
+            'media' => $media
+        );
         $file->original_name = $this->get_file_name($name, $type, $index, $content_range);
         $file->name = $this->get_file_name_custom($name, $media);
         $file->size = $this->fix_integer_overflow(intval($size));

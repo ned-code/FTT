@@ -1150,6 +1150,14 @@ $FamilyTreeTop.create("usertree", function($){
         return data.med.all[media_id]
     }
 
+    $this.updateMedia = function(media){
+        data.med.all[media.id] = media;
+        if("undefined" === typeof(data.med.gedcom_id[media.gedcom_id])){
+            data.med.gedcom_id[media.gedcom_id] = [];
+        }
+        data.med.gedcom_id[media.gedcom_id].push(media);
+    }
+
     $this.getAvatar = function(gedcom_id){
         var medias = $this.getMedias(gedcom_id);
         var ret = false;
