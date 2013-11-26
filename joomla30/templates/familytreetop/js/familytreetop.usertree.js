@@ -6,6 +6,7 @@ $FamilyTreeTop.create("usertree", function($){
         cache = {},
         usermap,
         usersmap,
+        relationList = {},
         data;
 
     $fn = {
@@ -43,6 +44,12 @@ $FamilyTreeTop.create("usertree", function($){
         } else {
             usersmap = [];
         }
+
+        var relations = $('#relations div');
+        $(relations).each(function(index, element){
+            var key = $(element).attr('data-familytreetop');
+            relationList[key] = $(element).text();
+        });
     }
 
     $this.update = function(response){
@@ -759,7 +766,7 @@ $FamilyTreeTop.create("usertree", function($){
     $this.getRelName = function(obj, id, suffix, postfix, user){
         var val = _getRel_(user), name;
         if(data.rel != null && "undefined" !== typeof(val)){
-            name = $('#relations').find('[data-familytreetop="'+val.name+'"]').text()
+            name = (val)?relationList[val.name]:"";
             return ((_is_(suffix))?_getSuffix_(obj):"") + " " + name + " " + ((_is_(postfix))?_getPostfix_(obj):"");
         }
         return false;
@@ -768,31 +775,29 @@ $FamilyTreeTop.create("usertree", function($){
         }
         function _getSuffix_(o){
             var suf = (o.json!=null&&"undefined"!=typeof(o.json.suffix))?o.json.suffix:0;
-            switch(suf){
-                case 0: return "";
-                case "1st": return $('#relations').find('[data-familytreetop="1ST"]').text();
-                case "2st": return $('#relations').find('[data-familytreetop="2ST"]').text();
-                case "3st": return $('#relations').find('[data-familytreetop="3ST"]').text();
-                case "4st": return $('#relations').find('[data-familytreetop="4ST"]').text();
-                case "5st": return $('#relations').find('[data-familytreetop="5ST"]').text();
-                default: return "";
+            if(suf){
+                return ("undefined" !== typeof(relationList[suf]))?relationList[suf]:suf;
             }
-            return (o.json!=null&&"undefined"!=typeof(o.json.suffix))?o.json.suffix:"";
+            return "";
         }
         function _getPostfix_(o){
-            if( (id == 6 || id == 5) && parseInt(obj.in_law) ){
+            if( (id == 6 || id == 5 || id == 6 || id == 7) && parseInt(obj.in_law) ){
                 return "";
             } else {
-                return (parseInt(o.in_law))?$('#relations').find('[data-familytreetop="IN_LAW"]').text():"";
+                return (parseInt(o.in_law))?relationList["IN_LAW"]:"";
             }
         }
         function _getRel_(user){
-            if( (id == 6 || id == 5) && parseInt(obj.in_law) ){
+            if(id == 2){
+                return { name:($this.parseNum(user.gender))?"SPOUSE_MALE":"SPOUSE_FEMALE", id: id};
+            } else if( (id == 6 || id == 5) && parseInt(obj.in_law) ){
                 return { name: (id==5)?"DAUGHTER_IN_LAW":"SON_IN_LAW", id: id };
+            } else if( (id == 7 || id == 8) && parseInt(obj.in_law) ){
+                return { name: (id==7)?"SISTER_IN_LAW":"BROTHER_IN_LAW", id: id };
             } else if(id == 9 && $this.parseBoolean(user)){
                 return { name:($this.parseNum(user.gender))?"COUSIN_MALE":"COUSIN_FEMALE", id: id};
             } else {
-                return data.rel["_NAMES"][id];
+                return ("undefined"!==typeof(data.rel['_NAMES'][id]))?data.rel["_NAMES"][id]:false;
             }
         }
     }
