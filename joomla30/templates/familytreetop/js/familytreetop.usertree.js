@@ -764,9 +764,14 @@ $FamilyTreeTop.create("usertree", function($){
     }
 
     $this.getRelName = function(obj, id, suffix, postfix, user){
-        var val = _getRel_(user), name;
+        var val = _getRel_(user), name, suf, post;
         if(data.rel != null && "undefined" !== typeof(val)){
             name = (val)?relationList[val.name]:"";
+            suf = ((_is_(suffix))?_getSuffix_(obj):"");
+            post =  ((_is_(postfix))?_getPostfix_(obj):"");
+            if(val.id == 9){
+                return name + " " + suf + " " + post;
+            }
             return ((_is_(suffix))?_getSuffix_(obj):"") + " " + name + " " + ((_is_(postfix))?_getPostfix_(obj):"");
         }
         return false;
