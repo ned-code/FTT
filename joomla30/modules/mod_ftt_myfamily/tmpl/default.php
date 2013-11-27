@@ -6,7 +6,7 @@ $user = FamilyTreeTopUserHelper::getInstance()->get();
 $data = array();
 
 if($user->facebook_id != 0){
-   //$data = $fhelper->getFacebookNewsFeed($user->tree_id, $user->facebook_id);
+   $data = $fhelper->getFacebookNewsFeed($user->tree_id, $user->facebook_id);
 }
 ?>
 <div id="myFamilyOnFacebook" class="row-fluid">
