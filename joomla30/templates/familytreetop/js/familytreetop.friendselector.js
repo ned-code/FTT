@@ -64,7 +64,6 @@ $FamilyTreeTop.create("friendselector", function($){
                     $fn.send($data.gedcom_id, facebook_id);
                 } else {
                     $this.error({ title: response.message });
-                    $selector.showFriendSelector();
                 }
             });
         },
@@ -84,7 +83,7 @@ $FamilyTreeTop.create("friendselector", function($){
                 max_recipients: 1
             }, function(response){
                 if(response == null){
-                    $selector.showFriendSelector();
+                    $this.warning({title: "Invitation Cancelled"});
                 } else {
                     var alert = $this.warning({title: "Preparing invitation...", timeout: false});
                     $fn.addInvitation(response.to[0], gedcom_id, function(){
