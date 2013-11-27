@@ -465,31 +465,44 @@ $FamilyTreeTop.create("editor", function($){
         setParentSelection:function(editProfileForm, ind){
             var row = $(editProfileForm).find('[familytreetop="addChildComplexSelect"]');
             _setOwnerParent_();
-            _setOtherSpouse_();
-            $(row).find('ul li').click(function(){
-                var type = $(this).attr('familytreetop');
-                var data = $(this).attr('familytreetop-data');
-                if(type == "button"){
-                    if(data == "new"){
+            if(ind.inLaw || ind.relationId == 2 || ind.relationId == 0){
+                var spouses = $this.mod('usertree').getSpouses(ind.gedcom_id);
+                var spouse = $this.mod('usertree').user(spouses[0]);
+                _setTitle_(spouse.name());
+                _setValue_(spouse.gedcom_id);
+                $(row).find('.btn.dropdown-toggle').click(function(){
+                    return false;
+                });
+                $(row).find('[familytreetop="menu-title"]').click(function(){
+                    return false;
+                });
+            } else {
+                _setOtherSpouse_();
+                $(row).find('ul li').click(function(){
+                    var type = $(this).attr('familytreetop');
+                    var data = $(this).attr('familytreetop-data');
+                    if(type == "button"){
+                        if(data == "new"){
+                            _setTitle_($(this).text());
+                            _setValue_(0);
+                        } else if(data == "exist"){
+                            $fn.modalExistFamilyMember(function(id){
+                                var u = $this.mod('usertree').user(id);
+                                _setTitle_(u.name());
+                                _setValue_(id);
+                            });
+                        }
+                    } else if(type == "spouse"){
                         _setTitle_($(this).text());
-                        _setValue_(0);
-                    } else if(data == "exist"){
-                        $fn.modalExistFamilyMember(function(id){
-                            var u = $this.mod('usertree').user(id);
-                            _setTitle_(u.name());
-                            _setValue_(id);
-                        });
+                        _setValue_(data);
                     }
-                } else if(type == "spouse"){
-                    _setTitle_($(this).text());
-                    _setValue_(data);
-                }
-                return false;
-            });
-            $(row).find('[familytreetop="menu-title"]').click(function(){
-                $(this).parent().find('.dropdown-toggle').click();
-                return false;
-            });
+                    return false;
+                });
+                $(row).find('[familytreetop="menu-title"]').click(function(){
+                    $(this).parent().find('.dropdown-toggle').click();
+                    return false;
+                });
+            }
             return true;
             function _setTitle_(t){
                 $(row).find('[familytreetop="menu-title"]').text(t);

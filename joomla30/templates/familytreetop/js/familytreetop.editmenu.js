@@ -66,7 +66,7 @@ $FamilyTreeTop.create("editmenu", function($){
             if(cdelete == 2){
                 $(box).find('li[familytreetop-devider="delete"]').remove();
             }
-            $(box).find('[data-familytreetop-devider="1"]').remove();
+            //$(box).find('[data-familytreetop-devider="1"]').remove();
             $(box).find('li[familytreetop="addParent"]').remove();
             $(box).find('li[familytreetop="addSibling"]').remove();
             $(box).find('li[familytreetop="addSpouse"]').remove();
