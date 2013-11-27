@@ -781,7 +781,7 @@ $FamilyTreeTop.create("usertree", function($){
             return "";
         }
         function _getPostfix_(o){
-            if( (id == 6 || id == 5 || id == 6 || id == 7) && parseInt(obj.in_law) ){
+            if( (id == 6 || id == 5 || id == 7 || id == 8) && parseInt(obj.in_law) ){
                 return "";
             } else {
                 return (parseInt(o.in_law))?relationList["IN_LAW"]:"";
