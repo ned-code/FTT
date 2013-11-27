@@ -8,93 +8,158 @@ $FamilyTreeTop.create("editor", function($){
     $fn = {
         setUserMedia: function(parent, ind){
             var dataBox = $('#dataEditMedia').clone(),
+                buttons = {
+                    set:$(parent).find('.set-avatar'),
+                    unset:$(parent).find('.unset-avatar'),
+                    delete:$(parent).find('.delete'),
+                },
+                medias = ind.medias(),
+                itemActive = false,
+                avatarLi = false,
                 ul = $(dataBox).find('ul');
+
             $(parent).after(dataBox);
-
-            ind.medias().forEach(function(el, index){
-                var li = $('<li><img style="cursor:pointer;" class="img-polaroid" src=""></li>');
-                $(li).find('img').attr('src', el.thumbnail_url);
-                $(li).attr('data-familytreetop-delete', el.delete_url);
-                $(li).data(el);
-                $(ul).append(li);
-                _click_(li);
+            $(medias).each(function(index, element){
+                _createPhoto_(element);
             });
-
-            $(parent).find('.set-avatar').click(function(){
-                var ret = $(this).data();
-                $this.ajax('editor.setAvatar', ret.data, function(){
-                    $(parent).find('.unset-avatar').show();
-                    $(parent).find('.set-avatar').hide();
-                    $(parent).find('.unset-avatar').data(ret.data);
-                    $this.mod('usertree').setAvatar(ret.data.gedcom_id, ret.data.id);
-                });
-            });
-
-            $(parent).find('.unset-avatar').click(function(){
-                var ret = $(this).data();
-                $this.ajax('editor.unsetAvatar', ret.data, function(){
-                    $(parent).find('.unset-avatar').hide();
-                    $(parent).find('.set-avatar').show();
-                    $(parent).find('.set-avatar').data(ret.data);
-                    $this.mod('usertree').unsetAvatar(ret.data.gedcom_id, ret.data.id);
-                });
-            });
-
-            $(parent).find('.delete').click(function(){
-                var ret = $(this).data();
-                $this.ajax('editor.deletePhoto', ret.data, function(){
-                    $(parent).find('.unset-avatar').hide();
-                    $(parent).find('.set-avatar').hide();
-                    $(parent).find('.delete').hide();
-                    $(ret.object).removeClass('active');
-                    $(ret.object).remove();
-                    $this.mod('usertree').mediaRemove(ret.data.id);
-                });
-            });
-
-            $(parent).fileupload({
-                formData:{gedcom_id: ind.gedcom_id},
-                done: function(event, object){
-                    var response = object.jqXHR.responseJSON;
-                    var files = response.files;
-                    $(files).each(function(index, el){
-                        $this.mod('usertree').updateMedia(el.familytreetop.media);
-                        var media = el.familytreetop.media;
-                        var li = $('<li><img style="cursor:pointer;" class="img-polaroid" src=""></li>');
-                        $(li).find('img').attr('src', el.thumbnail_url);
-                        $(li).attr('data-familytreetop-delete', el.delete_url);
-                        $(li).data(media);
-                        $(ul).append(li);
-                        _click_(li);
-                    });
-                    $(object.context).each(function(index, el){
-                        $(el).remove();
-                    });
-                    return true;
-                }
-            });
-
+            _onFileUpload_(parent, ind);
             return true;
-            function _click_(el){
-                $(el).click(function(){
-                    if($(this).hasClass('active')) return false;
-                    $(ul).find('li').removeClass('active');
-                    $(this).addClass('active');
-                    var el = $(this).data();
-                    var data = $this.mod('usertree').getMedia(el.id);
-
-                    if(data.role == "AVAT"){
-                        $(parent).find('.unset-avatar').show();
-                        $(parent).find('.set-avatar').hide();
-                        $(parent).find('.unset-avatar').data({data:data, object: this });
-                    } else {
-                        $(parent).find('.unset-avatar').hide();
-                        $(parent).find('.set-avatar').show();
-                        $(parent).find('.set-avatar').data({data:data, object: this });
+            function _getButton_(type){
+                return $(buttons[type]).clone();
+            }
+            function _getButtons_(){
+                return {
+                    set:_getButton_('set'),
+                    unset:_getButton_('unset'),
+                    delete:_getButton_('delete')
+                }
+            }
+            function _getImg_(){
+                return $('<img style="cursor: pointer; margin:3px;" class="img-polaroid" src=""  />');
+            }
+            function _getPhotoCont_(){
+                return $('<li style="padding: 5px;text-align: center;border: 1px solid white;"></li>');
+            }
+            function _getData_(button){
+                var li = $(button).parent().parent();
+                return $(li).data();
+            }
+            function _setData_(li, item){
+                $(li).data(item);
+            }
+            function _setButtons_(li){
+                var _buttons_ = _getButtons_();
+                for(var key in _buttons_){
+                    if(!_buttons_.hasOwnProperty(key)) continue;
+                    var div = $('<div></div>');
+                    $(div).append(_buttons_[key]);
+                    $(li).append(div);
+                }
+                return li;
+            }
+            function _setImg_(li, img, src){
+                $(img).attr('src', src);
+                $(li).append(img);
+                return li;
+            }
+            function _setButtonsVisible_(li, item){
+                var _buttons_ = {
+                    set:$(li).find('.set-avatar'),
+                    unset:$(li).find('.unset-avatar'),
+                    delete:$(li).find('.delete'),
+                }
+                if(item.role == "AVAT"){
+                    avatarLi = li;
+                    $(_buttons_.unset).show();
+                } else {
+                    $(_buttons_.set).show()
+                }
+                $(_buttons_.delete).show();
+                return _buttons_;
+            }
+            function _setHandlers_(li, item){
+                var _buttons_ = _setButtonsVisible_(li, item);
+                _onClickImg_(li, item);
+                _onClickSet_(_buttons_, li, item);
+                _onClickUnset_(_buttons_, li, item);
+                _onClickDetele_(_buttons_, li, item);
+            }
+            function _onFileUpload_(p, _ind_){
+                $(p).fileupload({
+                    formData:{gedcom_id: _ind_.gedcom_id},
+                    done: function(event, object){
+                        var response = object.jqXHR.responseJSON;
+                        var files = response.files;
+                        $(files).each(function(index, el){
+                            $this.mod('usertree').updateMedia(el.familytreetop.media);
+                            var item = el.familytreetop.media;
+                            _createPhoto_(item);
+                        });
+                        $(object.context).each(function(index, el){
+                            $(el).remove();
+                        });
+                        return true;
                     }
-                    $(parent).find('.delete').show();
-                    $(parent).find('.delete').data({data:data, object: this });
                 });
+            }
+            function _onClickImg_(li, item){
+                $(li).find('img').click(function(){
+                    var _li_ = $(this).parent();
+                    if(itemActive && itemActive == _li_) return false;
+                    $(itemActive).css('border', '1px solid white');
+                    $(itemActive).css('background', 'none');
+                    itemActive = _li_;
+                    $(itemActive).css('border', '1px solid #ccc');
+                    $(itemActive).css('background', '#efe4b0')
+                });
+            }
+            function _onClickSet_(_buttons_, li, item){
+                $(_buttons_.set).click(function(){
+                    var data = _getData_(this);
+                    $this.ajax('editor.setAvatar', data, function(){
+                        if(avatarLi){
+                            $(avatarLi).find('.unset-avatar').hide();
+                            $(avatarLi).find('.set-avatar').show();
+                        }
+                        $(_buttons_.set).hide();
+                        $(_buttons_.unset).show();
+                        avatarLi= li;
+                        $this.mod('usertree').setAvatar(data.gedcom_id, data.id);
+                    });
+                    return false;
+                });
+            }
+            function _onClickUnset_(_buttons_, li, item){
+                $(_buttons_.unset).click(function(){
+                    var data = _getData_(this);
+                    $this.ajax('editor.unsetAvatar', data, function(){
+                        $(_buttons_.set).show();
+                        $(_buttons_.unset).hide();
+                        $this.mod('usertree').unsetAvatar(data.gedcom_id, data.id);
+                    });
+                    return false;
+                });
+            }
+            function _onClickDetele_(_buttons_, li, item){
+                $(_buttons_.delete).click(function(){
+                    var data = _getData_(this);
+                    $this.ajax('editor.deletePhoto', data, function(){
+                        $this.mod('usertree').mediaRemove(data.id);
+                        $(li).remove();
+                    });
+                    return false;
+                });
+            }
+            function _createPhoto_(item){
+                var li = _getPhotoCont_();
+                var img = _getImg_();
+
+                _setData_(li, item);
+                _setImg_(li, img, item.thumbnail_url);
+                _setButtons_(li);
+                _setHandlers_(li, item);
+
+                $(ul).append(li);
             }
         },
         setOptions: function(parent, ind, callback){

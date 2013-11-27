@@ -386,18 +386,18 @@ $data = json_encode(GedcomHelper::getInstance()->getData());
                         <span style="display:inline-block;"><?=JText::_("TPL_FAMILYTREETOP_EDITOR_TABS_MEDIA_ADD_FILES");?></span>
                         <input type="file" name="files[]" multiple="">
                     </span>
-                    <span class="btn btn-info familytreetop-button set-avatar" style="display: none;">
+                    <button class="btn btn-info familytreetop-button set-avatar" style="display:none;">
                         <i class="icon-ok-sign icon-white"></i>
                         <span><?=JText::_("TPL_FAMILYTREETOP_EDITOR_TABS_MEDIA_SET_AVATAR");?></span>
-                    </span>
-                    <span class="btn btn-danger familytreetop-button unset-avatar" style="display: none;">
+                    </button>
+                    <button class="btn btn-danger familytreetop-button unset-avatar" style="display: none;">
                         <i class="icon-remove-sign icon-white"></i>
                         <span><?=JText::_("TPL_FAMILYTREETOP_EDITOR_TABS_MEDIA_UNSET_AVATAR");?></span>
-                    </span>
-                    <span class="btn btn-danger familytreetop-button delete" style="display: none;">
+                    </button>
+                    <button class="btn btn-danger familytreetop-button delete" style="display: none;">
                         <i class="icon-trash icon-white"></i>
                         <span><?=JText::_("TPL_FAMILYTREETOP_EDITOR_TABS_MEDIA_DELETE");?></span>
-                    </span>
+                    </button>
                 </div>
             </div>
             <div class="row-fluid">
