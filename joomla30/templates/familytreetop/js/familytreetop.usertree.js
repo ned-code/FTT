@@ -781,6 +781,7 @@ $FamilyTreeTop.create("usertree", function($){
         function _getSuffix_(o){
             var suf = (o.json!=null&&"undefined"!=typeof(o.json.suffix))?o.json.suffix:0;
             if(suf){
+                suf = suf.toUpperCase();
                 return ("undefined" !== typeof(relationList[suf]))?relationList[suf]:suf;
             }
             return "";
