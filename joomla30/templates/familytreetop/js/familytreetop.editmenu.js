@@ -70,7 +70,7 @@ $FamilyTreeTop.create("editmenu", function($){
             $(box).find('li[familytreetop="addParent"]').remove();
             $(box).find('li[familytreetop="addSibling"]').remove();
             $(box).find('li[familytreetop="addSpouse"]').remove();
-            $(box).find('li[familytreetop="addChild"]').remove();
+            //$(box).find('li[familytreetop="addChild"]').remove();
         } else {
             $(box).find('li[familytreetop="deleteUnion"]').remove();
             if(ind.isParentsExist()){
