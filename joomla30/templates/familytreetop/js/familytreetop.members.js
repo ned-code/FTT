@@ -84,31 +84,9 @@ $FamilyTreeTop.create("members", function($){
             return (compA < compB) ? -1 : (compA > compB) ? 1 : 0;
         },
         orderByYear: function(a,b){
-            /*
-            var aB = a.birth();
-            var bB = b.birth();
-            if(!aB && !bB){
-                return 0;
-            } else if(aB && !bB){
-                return -1;
-            } else if(!aB && bB){
-                return 1;
-            } else {
-                var aDate = (aB.date.start_year!=null)?parseInt(aB.date.start_year):0;
-                var bDate = (bB.date.start_year!=null)?parseInt(bB.date.start_year):0;
-                if(aDate > bDate){
-                    return -1;
-                } else if(aDate < bDate){
-                    return 1;
-                } else {
-                    return 0;
-                }
-            }
-            */
             var a = new Date(_getDate_(a));
             var b = new Date(_getDate_(b));
             //return a<b?-1:a>b?1:0;
-            console.log(a,b);
             return a>b?-1:a<b?1:0;
             function _getDate_(object){
                 var event = object.birth();
@@ -124,18 +102,27 @@ $FamilyTreeTop.create("members", function($){
             }
         },
         orderByPlace: function(a,b){
-            var aB = a.birth();
-            var bB = b.birth();
-            if(!aB && !bB){
-                return 0;
-            } else if(aB && !bB){
-                return -1;
-            } else if(!aB && bB){
-                return 1;
-            } else {
-                var aPlace = (aB.place.country!=null)?aB.place.country.toUpperCase():"";
-                var bPlace = (bB.place.country!=null)?bB.place.country.toUpperCase():"";
-                return (aPlace < bPlace) ? -1 : (aPlace > bPlace) ? 1 : 0;
+            var longString = "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ";
+            return _localeCompare_(_getPlace_(a), _getPlace_(b), 0);
+            function _localeCompare_(obj1,obj2, level){
+                if(level == 3) return 0;
+                var res = obj1[level].localeCompare(obj2[level]);
+                if(!res){
+                    return _localeCompare_(obj1, obj2, level+1);
+                }
+                return res;
+            }
+            function _getPlace_(object){
+                var event = object.birth();
+                if($this.parseBoolean(event)){
+                    var place = event.place;
+                    return [
+                        place.country!=null&&place.country.length>0?place.country.toUpperCase():longString,
+                        place.state!=null&&place.state.length>0?place.state.toUpperCase():longString,
+                        place.city!=null&&place.city.length>0?place.city.toUpperCase():longString
+                    ];
+                }
+                return [longString,longString,longString];
             }
         },
         order: function(type){
