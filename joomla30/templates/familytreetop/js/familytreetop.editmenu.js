@@ -40,7 +40,7 @@ $FamilyTreeTop.create("editmenu", function($){
 
 
     $this.render = function(object, gedcom_id){
-        var box, ind, user, cdelete = 0, isRegistered;
+        var box, ind, user, isCantEditable = false, isCantUnionDelete = false, isCantDelete = false, isRegistered = false;
 
         box = $($box).clone().attr('gedcom_id', gedcom_id)
             .attr('style', 'position: absolute; top: 5px; right:5px;');
@@ -49,28 +49,34 @@ $FamilyTreeTop.create("editmenu", function($){
         user = $this.mod('usertree').usermap();
         isRegistered = ind.isRegistered();
 
-        if(isRegistered && user.gedcom_id != ind.gedcom_id){
+        if( (isRegistered && user.gedcom_id != ind.gedcom_id) || ind.isSpouseParent()){
             $(box).find('li[familytreetop="edit"]').remove();
             $(box).find('[data-familytreetop-devider="1"]').remove();
+            isCantEditable = true;
         }
 
         if(ind.inLaw || ind.relationId == 2 || ind.relationId == 0){
             if(!$this.mod('usertree').isCommonAncestorExist(ind.gedcom_id, user.gedcom_id)){
                 $(box).find('li[familytreetop="deleteUnion"]').remove();
-                cdelete++
+                isCantUnionDelete = true;
             }
             if(!ind.isCanBeDelete()){
                 $(box).find('li[familytreetop="delete"]').remove();
-                cdelete++;
+                isCantDelete = true;
             }
-            if(cdelete == 2){
+            if(isCantUnionDelete && isCantDelete){
                 $(box).find('li[familytreetop-devider="delete"]').remove();
             }
-            //$(box).find('[data-familytreetop-devider="1"]').remove();
             $(box).find('li[familytreetop="addParent"]').remove();
             $(box).find('li[familytreetop="addSibling"]').remove();
             $(box).find('li[familytreetop="addSpouse"]').remove();
-            //$(box).find('li[familytreetop="addChild"]').remove();
+            if(!ind.isSpouse()){
+                if(isCantEditable){
+                    $(box).find('li[familytreetop-devider="sendInvite"]').remove();
+                }
+                $(box).find('[data-familytreetop-devider="1"]').remove();
+                $(box).find('li[familytreetop="addChild"]').remove();
+            }
         } else {
             $(box).find('li[familytreetop="deleteUnion"]').remove();
             if(ind.isParentsExist()){

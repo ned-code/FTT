@@ -396,6 +396,26 @@ $FamilyTreeTop.create("usertree", function($){
                 }
                 return true;
             },
+            isSpouse:function(){
+                var usermap = $this.mod('usertree').usermap();
+                var spouses = $this.getSpouses(usermap.gedcom_id);
+                for(var key in spouses){
+                    if(!spouses.hasOwnProperty(key)) continue;
+                    if(spouses[key] == ind.gedcom_id) return true;
+                }
+                return false;
+            },
+            isSpouseParent:function(){
+                var usermap = $this.mod('usertree').usermap();
+                var spouses = $this.getSpouses(usermap.gedcom_id);
+                for(var key in spouses){
+                    if(!spouses.hasOwnProperty(key)) continue;
+                    var parents = $this.getParents(spouses[key]);
+                    if(parents.father == ind.gedcom_id) return true;
+                    if(parents.mother == ind.gedcom_id) return true;
+                }
+                return false;
+            },
             isParentsExist:function(){
                 var parents = $this.getParents(gedcom_id);
                 return parents.father || parents.mother || false;
