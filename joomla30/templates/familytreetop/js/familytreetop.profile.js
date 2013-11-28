@@ -593,6 +593,8 @@ $FamilyTreeTop.create("profile", function($){
                        });
                    });
                 });
+            } else {
+                fn.init();
             }
         },
         getLabelHtml:function(label, node){
