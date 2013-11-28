@@ -11,6 +11,7 @@ $FamilyTreeTop.create("members", function($){
         $isLiving = true,
         $isMembers = true,
         $isRegistered = true,
+        $lastOrderType = false,
         $fn;
 
     $fn = {
@@ -83,6 +84,7 @@ $FamilyTreeTop.create("members", function($){
             return (compA < compB) ? -1 : (compA > compB) ? 1 : 0;
         },
         orderByYear: function(a,b){
+            /*
             var aB = a.birth();
             var bB = b.birth();
             if(!aB && !bB){
@@ -102,6 +104,24 @@ $FamilyTreeTop.create("members", function($){
                     return 0;
                 }
             }
+            */
+            var a = new Date(_getDate_(a));
+            var b = new Date(_getDate_(b));
+            //return a<b?-1:a>b?1:0;
+            console.log(a,b);
+            return a>b?-1:a<b?1:0;
+            function _getDate_(object){
+                var event = object.birth();
+                if($this.parseBoolean(event)){
+                    var date = event.date;
+                    return [
+                        (date.start_year!=null)?date.start_year:100,
+                        (date.start_month!=null)?date.start_month:1,
+                        (date.start_day!=null)?date.start_day:1
+                    ];
+                }
+                return [100,1,1];
+            }
         },
         orderByPlace: function(a,b){
             var aB = a.birth();
@@ -119,9 +139,12 @@ $FamilyTreeTop.create("members", function($){
             }
         },
         order: function(type){
+            var orderType = 'orderBy'+type;
+            if(orderType == $lastOrderType) return false;
             $users.sort(function(a,b){
                 return $fn['orderBy'+type](a,b);
-            })
+            });
+            $lastOrderType = orderType;
         },
         isSortable: function(object){
             if(!$sort){
@@ -166,18 +189,20 @@ $FamilyTreeTop.create("members", function($){
                 return true;
             }
         },
-        render: function(){
+        render: function(order){
             var key, object, birth, tr,td, avatar;
             $($box).find('tbody tr').remove();
-            $users.sort(function(a,b){
-                if(a.facebook_id == 0 && b.facebook_id == 0){
-                    return 0;
-                } else if(a.facebook_id != 0 && b.facebook_id == 0){
-                    return -1;
-                } else if(a.facebook_id == 0 && b.facebook_id != 0){
-                    return 1;
-                }
-            });
+            if("undefined" === typeof(order)){
+                $users.sort(function(a,b){
+                    if(a.facebook_id == 0 && b.facebook_id == 0){
+                        return 0;
+                    } else if(a.facebook_id != 0 && b.facebook_id == 0){
+                        return -1;
+                    } else if(a.facebook_id == 0 && b.facebook_id != 0){
+                        return 1;
+                    }
+                });
+            }
             for (key in $users){
                 if(!$users.hasOwnProperty(key)) continue;
                 object = $users[key];
@@ -224,7 +249,7 @@ $FamilyTreeTop.create("members", function($){
         $($box).find('[familytreetop="sort"]').click(function(){
             var type = $(this).attr('familytreetop-type');
             $fn.order(type);
-            $fn.render();
+            $fn.render(true);
             return false;
         });
 
@@ -241,8 +266,6 @@ $FamilyTreeTop.create("members", function($){
                 $('#membersTable tbody td:nth-child(2):not(:contains("'+temp+'"))').parent().hide();
             }
         }
-
-
 
         $($filter).find('[class-familytreetop="module-padding"] input').click(function(){
             $sort = {};
@@ -278,7 +301,7 @@ $FamilyTreeTop.create("members", function($){
                     case "unknown": $sort["unknown"] = true;
                 }
             });
-            $fn.render();
+            $fn.render(true);
         });
 
         $($filter).find('.btn').click(function(){
@@ -316,7 +339,7 @@ $FamilyTreeTop.create("members", function($){
                     }
                     break;
             }
-            $fn.render();
+            $fn.render(true);
         });
 
         $this.mod('usertree').trigger({}, $fn.render);
