@@ -135,14 +135,6 @@ class FamilytreetopController extends JControllerLegacy
                     break;
 
 				default:
-                    /*
-                    if($vName == "index" || $vName == "famous"){
-                        $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=login", false));
-                        return;
-                    } else {
-                        $model = $this->getModel($vName);
-                    }
-                    */
                     $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=login", false));
                     return;
 					break;
