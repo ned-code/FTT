@@ -118,15 +118,7 @@ if($session->get('famous')){
                 window.top.location = $FamilyTreeTop.rooturl;
             },
             logout: function(object){
-                $FamilyTreeTop.fn.ajax('user.logout', null, function(response){
-                    if(FB.getAuthResponse() != null){
-                        FB.logout(function(r){
-                            window.location = response.url;
-                        });
-                    } else {
-                        window.location = response.url;
-                    }
-                });
+                $FamilyTreeTop.fn.logout();
             }
         }
 

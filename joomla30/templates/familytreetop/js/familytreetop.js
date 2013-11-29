@@ -49,6 +49,17 @@
                 dataType:"json"
             }).done(callback);
         },
+        logout:function(){
+            $FamilyTreeTop.fn.ajax('user.logout', null, function(response){
+                if(FB.getAuthResponse() != null){
+                    FB.logout(function(r){
+                        window.location = response.url;
+                    });
+                } else {
+                    window.location = response.url;
+                }
+            });
+        },
         accessToken: function(){
             return this.facebookAccessToken;
         },
@@ -350,6 +361,15 @@
         $this.loadPull.forEach(function(c){
             c();
         });
+
+        //init update timer
+        setInterval(function(){
+            $FamilyTreeTop.prototype.fn.ajax('api.update', null, function(response){
+                if(!response.success){
+                    $FamilyTreeTop.prototype.fn.logout();
+                }
+            });
+        }, 60*1000);
     }
 
     $FamilyTreeTop.prototype.clearUploadTemplates = function(){
