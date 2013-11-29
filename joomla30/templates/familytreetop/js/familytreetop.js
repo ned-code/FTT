@@ -50,7 +50,7 @@
             }).done(callback);
         },
         logout:function(){
-            $FamilyTreeTop.fn.ajax('user.logout', null, function(response){
+            $FamilyTreeTop.prototype.fn.ajax('user.logout', null, function(response){
                 if(FB.getAuthResponse() != null){
                     FB.logout(function(r){
                         window.location = response.url;
