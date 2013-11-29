@@ -387,6 +387,12 @@ $FamilyTreeTop.create("usertree", function($){
                     return (s.length != 0);
                 }
             },
+            isCanBeInvite: function(){
+                var isRegistered = this.isRegistered();
+                var isAlive = this.isAlive();
+                if(isRegistered || !isAlive) return false;
+                return true;
+            },
             isRegistered:function(){
                 return $this.isRegisteredUser(ind.gedcom_id);
             },

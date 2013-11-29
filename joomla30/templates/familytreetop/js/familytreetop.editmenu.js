@@ -40,7 +40,7 @@ $FamilyTreeTop.create("editmenu", function($){
 
 
     $this.render = function(object, gedcom_id){
-        var box, ind, user, isCantEditable = false, isCantUnionDelete = false, isCantDelete = false, isRegistered = false;
+        var box, ind, user, isCantEditable = false, isCantUnionDelete = false, isCantDelete = false, isRegistered = false, isInLaw = false, lis;
 
         box = $($box).clone().attr('gedcom_id', gedcom_id)
             .attr('style', 'position: absolute; top: 5px; right:5px;');
@@ -48,14 +48,16 @@ $FamilyTreeTop.create("editmenu", function($){
         ind = $this.mod('usertree').user(gedcom_id);
         user = $this.mod('usertree').usermap();
         isRegistered = ind.isRegistered();
+        isInLaw = (ind.inLaw || ind.relationId == 2 || ind.relationId == 0);
 
-        if( (isRegistered && user.gedcom_id != ind.gedcom_id) || ind.isSpouseParent()){
+
+        if( (isRegistered && user.gedcom_id != ind.gedcom_id) || isInLaw){
             $(box).find('li[familytreetop="edit"]').remove();
             $(box).find('[data-familytreetop-devider="1"]').remove();
             isCantEditable = true;
         }
 
-        if(ind.inLaw || ind.relationId == 2 || ind.relationId == 0){
+        if(isInLaw){
             if(!$this.mod('usertree').isCommonAncestorExist(ind.gedcom_id, user.gedcom_id)){
                 $(box).find('li[familytreetop="deleteUnion"]').remove();
                 isCantUnionDelete = true;
@@ -70,20 +72,20 @@ $FamilyTreeTop.create("editmenu", function($){
             $(box).find('li[familytreetop="addParent"]').remove();
             $(box).find('li[familytreetop="addSibling"]').remove();
             $(box).find('li[familytreetop="addSpouse"]').remove();
+
             if(!ind.isSpouse()){
-                if(isCantEditable){
-                    $(box).find('li[familytreetop-devider="sendInvite"]').remove();
-                }
-                $(box).find('[data-familytreetop-devider="1"]').remove();
                 $(box).find('li[familytreetop="addChild"]').remove();
             }
+
+            $(box).find('li[familytreetop-devider="sendInvite"]').remove();
+            $(box).find('li[familytreetop="sendInvite"]').remove();
         } else {
             $(box).find('li[familytreetop="deleteUnion"]').remove();
             if(ind.isParentsExist()){
                 $(box).find('li[familytreetop="addParent"]').remove();
             }
 
-            if(isRegistered){
+            if(!ind.isCanBeInvite()){
                $(box).find('li[familytreetop-devider="sendInvite"]').remove();
                $(box).find('li[familytreetop="sendInvite"]').remove();
             }
@@ -92,6 +94,11 @@ $FamilyTreeTop.create("editmenu", function($){
                 $(box).find('li[familytreetop-devider="delete"]').remove();
                 $(box).find('li[familytreetop="delete"]').remove();
            }
+        }
+
+        if($(box).find('li').length == 0) return false;
+        if($(box).find('li:not(.divider)').length == 1){
+            $(box).find('.divider').remove();
         }
 
         $(object).append(box);
