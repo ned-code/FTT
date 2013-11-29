@@ -727,8 +727,10 @@ $FamilyTreeTop.create("editor", function($){
             var tasks = [
                 'editor.updateUserInfo',
                 'editor.updateUnionsInfo'
-            ];
+            ], requestSend = false;
             $(cl).find('button[familytreetop="submit"]').click(function(){
+                if(requestSend) return false;
+                requestSend = true;
                 $fn.progressbarOn(cl);
                 var args, send, activeTab, saveButton, validate;
                 saveButton = $(this).hasClass('btn-primary');
@@ -745,6 +747,7 @@ $FamilyTreeTop.create("editor", function($){
                 if(!validate.success){
                     $fn.setValidElement(cl, validate);
                     $fn.progressbarOff(cl);
+                    requestSend = false;
                     return false;
                 }
                 $fn.removeValid();
@@ -754,6 +757,7 @@ $FamilyTreeTop.create("editor", function($){
                     if(saveButton){
                         $(cl).modal('hide');
                     }
+                    requestSend = false;
                 });
             });
         }
