@@ -36,6 +36,7 @@ $FamilyTreeTop.create("families", function($){
             }
         },
         getDefaultSpouse: function(gedcom_id, spouses){
+            if(spouses.length == 0) return 0;
             var user = $this.mod('usertree').user(gedcom_id), spouse_id = spouses[0];
             $(spouses).each(function(i, id){
                 var family_id = $this.mod('usertree').getFamilyIdByPartners(gedcom_id, id);
@@ -46,6 +47,7 @@ $FamilyTreeTop.create("families", function($){
             return spouse_id;
         },
         getChildrens: function(id1, id2){
+            if(!id2) return [];
             var colors = ["#3f48cc","#1d9441","#b97a57","#934293","#eab600","#00a2e8","#ed1c24","#7092be"], index = 0;
             var families = _concat_(_getFamilies_(id1), _getFamilies_(id2));
             var childrens = _getChildrens_(families);
@@ -537,6 +539,7 @@ $FamilyTreeTop.create("families", function($){
             $childrens = $fn.getChildrens($start_id, $spouse_id);
             if($childrens.length == 0 && !$this.mod('usertree').user($start_id).isSpouseExist()){
                 $start_id = $fn.getStartIdByParents($start_id);
+                if($start_id == null) return false;
                 $spouses = $this.mod('usertree').getSpouses($start_id);
                 $spouse_id = $fn.getDefaultSpouse($start_id, $spouses);
                 $childrens = $fn.getChildrens($start_id, $spouse_id);
