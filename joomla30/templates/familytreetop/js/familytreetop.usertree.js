@@ -368,7 +368,7 @@ $FamilyTreeTop.create("usertree", function($){
                 parents = $this.getParents(ind.gedcom_id);
                 childrens = $this.getChildrens(ind.gedcom_id);
                 spouses = $this.getSpouses(ind.gedcom_id);
-                if(_isParentExist_(parents) && !_isChildrenExist_(childrens) && !_isSpousesExist_(spouses)){
+                if(!_isChildrenExist_(childrens) && !_isSpousesExist_(spouses)){
                     return true;
                 } else if(_isSpousesExist_(spouses) && spouses.length == 1 && !_isChildrenExist_(childrens) && !_isParentExist_(parents)){
                     return true;
