@@ -204,6 +204,9 @@ class FamilyTreeTopGedcomIndividualsModel {
 
         $app->logout( $account->joomla_id );
 
+        $joomlaUser = JoomlaUsers::find_by_id($account->joomla_id);
+        $joomlaUser->delete();
+
         return true;
     }
 
