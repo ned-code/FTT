@@ -77,8 +77,10 @@ $FamilyTreeTop.create("editmenu", function($){
                 $(box).find('li[familytreetop="addChild"]').remove();
             }
 
-            $(box).find('li[familytreetop-devider="sendInvite"]').remove();
-            $(box).find('li[familytreetop="sendInvite"]').remove();
+            if(ind.facebook_id == 0 && ind.isAlive()){
+                $(box).find('li[familytreetop-devider="sendInvite"]').remove();
+                $(box).find('li[familytreetop="sendInvite"]').remove();
+            }
         } else {
             $(box).find('li[familytreetop="deleteUnion"]').remove();
             if(ind.isParentsExist()){
