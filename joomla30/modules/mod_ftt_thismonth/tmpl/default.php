@@ -45,9 +45,9 @@ $date = date('n', strtotime('-1 month'));
             <div class="row-fluid">
                 <div class="span12">
                     <div familytreetop="none" class="row-fluid" style="display:none; padding: 0;">
-                        <div style="margin: 30px;font-weight: bold; text-align: center; font-size: 18px;"><?=JText::_('MOD_FTT_THISMONTH_NONE_TITLE');?></div>
-                        <div style="text-align: center; margin: 30px;"><i class="icon-calendar-empty muted" style="font-size: 120px;"></i></div>
-                        <div style="margin: 30px; text-align: center; font-size: 16px;"><?=JText::_('MOD_FTT_THISMONTH_NONE_DESCRIPTION');?></div>
+                        <div style="margin: 30px;font-weight: bold; text-align: center; font-size: 18px; color: #959595;"><?=JText::_('MOD_FTT_THISMONTH_NONE_TITLE');?></div>
+                        <div style="text-align: center; margin: 30px;"><i class="icon-calendar-empty muted" style="font-size: 120px; color: #acacac;"></i></div>
+                        <div style="margin: 30px; text-align: center; font-size: 16px; color: #959595;"><?=JText::_('MOD_FTT_THISMONTH_NONE_DESCRIPTION');?></div>
                     </div>
                     <div familytreetop="all" class="row-fluid" style="display:none;">
                         <div class="span12">

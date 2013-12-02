@@ -22,9 +22,9 @@ if($user->facebook_id != 0){
                     </div>
                 <?php else: ?>
                     <div style="text-align: center;padding: 10px;">
-                        <div style="font-weight: bold;"><?=JText::_('MOD_FTT_MYFAMILY_NULL_TITLE');?></div>
-                        <div><a href="https://facebook.com/<?=$user->username;?>" target="_blank" style="text-decoration: none;"><i class="icon-facebook-sign familytreetop-icon-muted" style="font-size:120px;"></i></a></div>
-                        <div><?=JText::_('MOD_FTT_MYFAMILY_NULL_DESCRIPTION');?></div>
+                        <div style="font-weight: bold; font-size: 18px; color: #959595;"><?=JText::_('MOD_FTT_MYFAMILY_NULL_TITLE');?></div>
+                        <div><a href="https://facebook.com/<?=$user->username;?>" target="_blank" style="text-decoration: none; color: #acacac;"><i class="icon-facebook-sign familytreetop-icon-muted" style="font-size:120px;"></i></a></div>
+                        <div style="color: #959595;"><?=JText::_('MOD_FTT_MYFAMILY_NULL_DESCRIPTION');?></div>
                     </div>
                 <?php endif; ?>
             </fieldset>
