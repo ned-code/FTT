@@ -162,7 +162,7 @@ $FamilyTreeTop.create("this_month", function($){
                 case "DEAT":
                     $(table).append('<tr class="familytreetop-this-month-header"><td>'+$fn.getEventIcon({type:type})+'</td><td colspan="2">'+$fn.getEventName(type)+'</td></tr>');
                     if(data[type].length == 0){
-                        $(table).append('<tr><td colspan="3" style="text-align:center; padding: 20px;"><i class="icon-calendar-empty muted" style="font-size:28px;color: #acacac;"></i> <span>'+$languages['none']+'</span></td></tr>');
+                        $(table).append('<tr><td colspan="3" style="text-align:center; padding: 20px;"><i class="icon-calendar-empty muted" style="font-size:28px;color: #acacac;"></i> <span style="color: #acacac;">'+$languages['none']+'</span></td></tr>');
                     } else {
                         data[type].forEach(function(e){
                             var tr = $('<tr class="familytreetop-hover-effect" gedcom_id="'+e.gedcom_id+'" style="cursor:pointer;"></re>'),
