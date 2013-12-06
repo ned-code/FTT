@@ -130,7 +130,7 @@ $FamilyTreeTop.create("families", function($){
             $this.mod('editmenu').render(object, gedcom_id);
         },
         createFacebookIcon: function(object, ind){
-            $(object).append('<div style="bottom: 5px;position: absolute;right: 5px;"><a style="text-decoration: none;" target="_blank" href="https://www.facebook.com/'+ind.facebook_id+'"><i class="icon-facebook-sign icon-2x"></i></a></div>')
+            $(object).append('<div style="width:24px;height:24px;background:white;clear:both;border-radius:5px;bottom: 5px;position: absolute;right: 5px;"><a style="text-decoration: none;" target="_blank" href="https://www.facebook.com/'+ind.facebook_id+'"><i style="line-height: 25px;" class="icon-facebook-sign icon-2x"></i></a></div>')
         },
         createBox: function(ind, cl, type, args){
             if(!ind) return [];
