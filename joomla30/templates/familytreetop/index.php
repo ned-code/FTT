@@ -298,6 +298,9 @@ $data = json_encode(GedcomHelper::getInstance()->getData());
             <h3 id="profileLabel"></h3>
         </div>
         <div class="modal-body">
+            <div data-familytreetop-profile="creator" style="position:absolute; top:5px; right:5px;">
+                <div style="color: #c3c3c3;"><span><?=JText::_('TPL_FAMILYTREETOP_CREATOR_DESCRIPTION');?></span><span familytreetop="name"></span></div>
+            </div>
             <div data-familytreetop-profile="facebook" class="row-fluid">
                 <div class="span12">
 

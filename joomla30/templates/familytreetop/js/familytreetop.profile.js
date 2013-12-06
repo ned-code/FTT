@@ -17,6 +17,18 @@ $FamilyTreeTop.create("profile", function($){
             }
             return false;
         },
+        setCreator:function(args){
+            var creator_id = args.object.creator_id,
+                box = $(this).find('[data-familytreetop-profile="creator"]'),
+                user;
+            if(!$this.parseBoolean(creator_id)){
+                $(box).hide();
+                return false;
+            }
+            user = $this.mod('usertree').user(creator_id);
+            $(box).find('[familytreetop="name"]').text(user.name());
+            return true;
+        },
         setAbout:function(args){
             var box = $(this).find('[data-familytreetop-profile="about"] fieldset'), avatar;
             avatar = args.object.avatar(["90","90"]);
@@ -655,6 +667,7 @@ $FamilyTreeTop.create("profile", function($){
             $this.mod('friendselector').render(gedcom_id);
         });
 
+        $fn.setCreator.call(parent, args)
         $fn.setAbout.call(parent, args);
         $fn.setPhotos.call(parent, args);
         $(parent).on('shown', function(){
