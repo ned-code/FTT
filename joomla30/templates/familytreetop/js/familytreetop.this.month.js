@@ -209,7 +209,7 @@ $FamilyTreeTop.create("this_month", function($){
                 case "MARR":
                     $(table).append('<tr class="familytreetop-this-month-header"><td><i class="icon-large icon-heart"></i></td><td colspan="2">'+$fn.getEventName(type)+'</td></tr>');
                     if(data[type].length == 0){
-                        $(table).append('<tr><td colspan="3" style="text-align:center; padding: 20px;"><i class="icon-calendar-empty" style="font-size:28px;"></i> <span>'+$languages['none']+'</span></td></tr>');
+                        $(table).append('<tr><td colspan="3" style="text-align:center; padding: 20px;"><i class="icon-calendar-empty muted" style="font-size:28px;color: #acacac;"></i> <span style="color: #acacac;">'+$languages['none']+'</span></td></tr>');
                     } else {
                         data[type].forEach(function(e){
                             var tr = $('<tr class="familytreetop-hover-effect" style="cursor:pointer;"></tr>'),
