@@ -243,7 +243,7 @@ class FamilyTreeTopGedcomFamiliesManager {
         return $this->get($family[0]->family_id);
     }
 
-    public function getViewList($relations){
+    public function getViewList($individuals){
         $list = $this->list;
         $listByGedcomId = $this->list_by_gedcom_id;
 
@@ -251,13 +251,13 @@ class FamilyTreeTopGedcomFamiliesManager {
         $gedcomIdList = array();
 
         foreach($list as $id => $family){
-            if(isset($relations[$family['husb']]) && isset($relations[$family['wife']])){
+            if(isset($individuals[$family['husb']]) && isset($individuals[$family['wife']])){
                 $familyIdList[$id] = $family;
             }
         }
 
         foreach($listByGedcomId as $id => $data){
-            if(isset($relations[$id])){
+            if(isset($individuals[$id])){
                 foreach($data as $familyId => $family){
                     if(isset($familyIdList[$familyId])){
                         if(!isset($gedcomIdList[$id])){

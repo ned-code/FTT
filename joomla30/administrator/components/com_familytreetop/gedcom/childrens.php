@@ -85,7 +85,7 @@ class FamilyTreeTopGedcomChildrensManager {
         return $row;
     }
 
-    public function getViewList($relations){
+    public function getViewList($individuals){
         $list = $this->list;
         $listByGedcomId = $this->list_by_gedcom_id;
         $listByFamilyId = $this->list_by_family_id;
@@ -95,20 +95,20 @@ class FamilyTreeTopGedcomChildrensManager {
         $gedcomIds = array();
 
         foreach($list as $id => $value){
-            if(isset($value[0]) && isset($relations[$value[0]['gedcom_id']])){
+            if(isset($value[0]) && isset($individuals[$value[0]['gedcom_id']])){
                 $all[$id] = $value;
             }
         }
 
         foreach($listByGedcomId as $id => $value){
-            if(isset($value[0]) && isset($relations[$value[0]['gedcom_id']])){
+            if(isset($value[0]) && isset($individuals[$value[0]['gedcom_id']])){
                 $all[$id] = $value;
             }
         }
 
         foreach($listByFamilyId as $familyId => $value){
             foreach($value as $item){
-                if(isset($relations[$item['gedcom_id']])){
+                if(isset($individuals[$item['gedcom_id']])){
                     if(!isset($familyIds[$familyId])){
                         $familyIds[$familyId] = array();
                     }

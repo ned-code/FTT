@@ -175,6 +175,52 @@ class FamilyTreeTopGedcomEventsManager {
         return json_encode($result);
     }
 
+    public function getViewList($individuals, $families){
+        $list = $this->list;
+        $listByGedcomId = $this->list_by_gedcom_id;
+        $listByFamilyId = $this->list_by_family_id;
+
+        $all = array();
+        $familyIds = array();
+        $gedcomIds = array();
+
+        foreach($list as $id => $value){
+           if($value['gedcom_id']!=null && isset($individuals[$value['gedcom_id']])){
+               $all[$id] = $value;
+           } else if($value['family_id']!=null && isset($families[$value['family_id']])){
+               $all[$id] = $value;
+           }
+        }
+
+        foreach($listByGedcomId as $gedcomId => $value){
+            foreach($value as $id => $item){
+                if($item['gedcom_id']!=null && isset($individuals[$item['gedcom_id']])){
+                    if(!isset($gedcomIds[$gedcomId])){
+                        $gedcomIds[$gedcomId] = array();
+                    }
+                    $gedcomIds[$gedcomId][$id] = $item;
+                }
+            }
+        }
+
+        foreach($listByFamilyId as $familyId => $value){
+            foreach($value as $id => $item){
+                if($item['family_id']!=null && isset($families[$item['family_id']])){
+                    if(!isset($familyIds[$familyId])){
+                        $familyIds[$familyId] = array();
+                    }
+                    $familyIds[$familyId][$id] = $item;
+                }
+            }
+        }
+
+        return array(
+            'all' => $all,
+            'gedcom_id' => $gedcomIds,
+            'family_id' => $familyIds
+        );
+    }
+
     public function getList(){
         return array(
             'all' => $this->list,
