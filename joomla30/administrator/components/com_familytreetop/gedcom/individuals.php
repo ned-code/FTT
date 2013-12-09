@@ -536,6 +536,17 @@ class FamilyTreeTopGedcomIndividualsManager {
         return $db->loadAssocList('gedcom_id');
     }
 
+    public function getViewList($relations){
+        $list = $this->list;
+        $result = array();
+        foreach($list as $id => $item){
+            if(isset($relations[$id])){
+                $result[$id] = $item;
+            }
+        }
+        return $result;
+    }
+
     public function getList(){
         return $this->list;
     }

@@ -39,7 +39,6 @@ class GedcomHelper
         $this->medias = new FamilyTreeTopGedcomMediasManager($tree_id);
         $this->connections = new FamilyTreeTopGedcomConnectionsManager($tree_id, $gedcom_id);
         $this->relations = new FamilyTreeTopGedcomRelationsManager($tree_id, $gedcom_id);
-
     }
 
     public function getTreeUsers($associative = false, $json = false){
@@ -79,15 +78,16 @@ class GedcomHelper
     }
 
     public function getData(){
+        $relationList = $this->relations->getList();
         return array(
-            'ind' => $this->individuals->getList(),
-            'fam' => $this->families->getList(),
+            'ind' => $this->individuals->getViewList($relationList),
+            'fam' => $this->families->getViewList($relationList),
             'chi' => $this->childrens->getList(),
             'eve' => $this->events->getList(),
             'dat' => $this->dates->getList(),
             'pla' => $this->places->getList(),
             'med' => $this->medias->getList(),
-            'rel' => $this->relations->getList(),
+            'rel' => $relationList,
             'con' => $this->connections->getList()
         );
     }

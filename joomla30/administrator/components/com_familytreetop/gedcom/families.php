@@ -243,6 +243,35 @@ class FamilyTreeTopGedcomFamiliesManager {
         return $this->get($family[0]->family_id);
     }
 
+    public function getViewList($relations){
+        $list = $this->list;
+        $listByGedcomId = $this->list_by_gedcom_id;
+
+        $familyIdList = array();
+        $gedcomIdList = array();
+
+        foreach($list as $id => $family){
+            if(isset($relations[$family['husb']]) && isset($relations[$family['wife']])){
+                $familyIdList[$id] = $family;
+            }
+        }
+
+        foreach($listByGedcomId as $id => $data){
+            if(isset($relations[$id])){
+                foreach($data as $familyId => $family){
+                    if(isset($familyIdList[$familyId])){
+                        if(!isset($gedcomIdList[$id])){
+                            $gedcomIdList[$id] = array();
+                        }
+                        $gedcomIdList[$id][$familyId] = $family;
+                    }
+                }
+            }
+        }
+
+        return array('family_id'=>$familyIdList, 'gedcom_id'=>$gedcomIdList);
+    }
+
     public function getList(){
         return array('family_id'=>$this->list, 'gedcom_id'=>$this->list_by_gedcom_id);
     }
