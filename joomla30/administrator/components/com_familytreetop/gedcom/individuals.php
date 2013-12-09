@@ -11,6 +11,7 @@ class FamilyTreeTopGedcomIndividualsModel {
     public $change_time = null;
     public $is_father_line = null;
     public $is_mother_line = null;
+    public $is_can_be_delete = null;
 
     public $notes = '';
 
@@ -239,6 +240,7 @@ class FamilyTreeTopGedcomIndividualsModel {
         $ind->change_time = $date->toSql();
         $ind->is_mother_line = $this->is_mother_line;
         $ind->is_father_line = $this->is_father_line;
+        $ind->is_can_be_delete = $this->isCanBeDelete();
         $ind->save();
 
         $this->id = $ind->id;
