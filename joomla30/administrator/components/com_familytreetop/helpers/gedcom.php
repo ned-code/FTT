@@ -79,10 +79,13 @@ class GedcomHelper
 
     public function getData(){
         $relationList = $this->relations->getList();
+        $individualList = $this->individuals->getViewList($relationList);
+        $familyList = $this->families->getViewList($relationList);
+        $childList = $this->childrens->getViewList($relationList);
         return array(
-            'ind' => $this->individuals->getViewList($relationList),
-            'fam' => $this->families->getViewList($relationList),
-            'chi' => $this->childrens->getList(),
+            'ind' => $individualList,
+            'fam' => $familyList,
+            'chi' => $childList,
             'eve' => $this->events->getList(),
             'dat' => $this->dates->getList(),
             'pla' => $this->places->getList(),

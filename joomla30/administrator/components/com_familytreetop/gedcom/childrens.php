@@ -85,6 +85,44 @@ class FamilyTreeTopGedcomChildrensManager {
         return $row;
     }
 
+    public function getViewList($relations){
+        $list = $this->list;
+        $listByGedcomId = $this->list_by_gedcom_id;
+        $listByFamilyId = $this->list_by_family_id;
+
+        $all = array();
+        $familyIds = array();
+        $gedcomIds = array();
+
+        foreach($list as $id => $value){
+            if(isset($value[0]) && isset($relations[$value[0]['gedcom_id']])){
+                $all[$id] = $value;
+            }
+        }
+
+        foreach($listByGedcomId as $id => $value){
+            if(isset($value[0]) && isset($relations[$value[0]['gedcom_id']])){
+                $all[$id] = $value;
+            }
+        }
+
+        foreach($listByFamilyId as $familyId => $value){
+            foreach($value as $item){
+                if(isset($relations[$item['gedcom_id']])){
+                    if(!isset($familyIds[$familyId])){
+                        $familyIds[$familyId] = array();
+                    }
+                    $familyIds[$familyId][] = $item;
+                }
+            }
+        }
+
+        return array(
+            'all' => $all,
+            'gedcom_id' => $gedcomIds,
+            'family_id' => $familyIds
+        );
+    }
 
     public function getList(){
         return array(
