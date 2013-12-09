@@ -151,6 +151,7 @@ $FamilyTreeTop.create("usertree", function($){
             middle_name: ind.middle_name,
             is_father_line: (ind.is_father_line!=null)?parseInt(ind.is_father_line):0,
             is_mother_line: (ind.is_mother_line!=null)?parseInt(ind.is_mother_line):0,
+            is_can_be_delete: (ind.is_can_be_delete!=null)?parseInt(ind.is_can_be_delete):1,
             inLaw: (function(){
                 var relation = $this.getRelation(ind.gedcom_id);
                 if(relation){
@@ -172,35 +173,12 @@ $FamilyTreeTop.create("usertree", function($){
                 }
                 return "unknown";
             })(),
-            relation2: (function(){
-                var relation = $this.getRelation(ind.gedcom_id);
-                if(relation){
-                    return $this.getRelationName(relation, true, ind);
-                }
-                return "unknown";
-            })(),
             relationId:(function(){
                 var relation = $this.getRelation(ind.gedcom_id);
                 if(relation){
                     return relation.relation_id;
                 }
                 return 0;
-            })(),
-            proxyRelation: (function(){
-                var relation = $this.getRelationId(ind.gedcom_id);
-                if("object" === typeof(relation)){
-                    var n = _name_(relation[1].obj.target_id), rn = $this.getRelationName($this.getRelation(ind.gedcom_id), true);
-                    return n + " is the " + rn;
-                } else {
-                    if("undefined" !== typeof(relation)){
-                        var rel = $this.getRelation(ind.gedcom_id);
-                        return $this.getRelationName(rel)
-                    } else {
-                        return "unknown";
-                    }
-                }
-                return true;
-                function _name_(id){ return $this.getName(data.ind[id]); }
             })(),
             delete: function(){
                 _deleteFromChi_();
@@ -587,74 +565,6 @@ $FamilyTreeTop.create("usertree", function($){
         return false;
     }
 
-    $this.getRelationId = function(gedcom_id){
-        return  _getRelationId_($this.getRelation(gedcom_id));
-        function _getRelationId_(o){
-            var s1,s2,id;
-            if(parseInt(o.in_law)){
-                s1 = $this.getRelation(o.in_law);
-                if(parseInt(s1.in_law)){
-                    s2 = $this.getRelation(s1.in_law);
-                    if(parseInt(s2.in_law)){
-                        id = 1000;
-                    } else {
-                        if(s1.relation_id == 2){
-                            id = [];
-                            id.push({obj:s1, id: _getSubRelationId_(s2.relation_id)});
-                            id.push({obj:o, id: parseInt(o.relation_id)});
-                        } else {
-                            id = 1000;
-                        }
-                    }
-                } else {
-                    if(s1.relation_id == 2){
-                        id = o.relation_id;
-                    } else if(o.relation_id == 2){
-                        id = _getSubRelationId_(s1.relation_id);
-                    } else {
-                        id = 1000;
-                    }
-                }
-            } else {
-                id = o.relation_id;
-            }
-            return id;
-        }
-        function _getSubRelationId_(id){
-            switch(parseInt(id)){
-                case 2:	return 0;   //SPOUSE
-                case 3:	return 4;   //MOTHER
-                case 4:	return 3;   //FATHER
-                case 5:	return 6;   //DAUGHTER
-                case 6:	return 5;   //SON
-                case 7:	return 8;   //SISTER
-                case 8:	return 7;   //BROTHER
-                case 9:	return 9;   //COUSIN
-                case 10: //AUNT
-                case 11: //UNCLE
-                case 12: //NIECE
-                case 13: //NEPHEW
-                case 103: //GRAND_MOTHER
-                case 104: //GRAND_FATHER
-                case 105: //GRAND_DAUGHTER
-                case 106: //GRAND_SON
-                case 110: //GRAND_AUNT
-                case 111: //GRAND_UNCLE
-                case 112: //GRAND_NIECE
-                case 113: //GRAND_NEPHEW
-                case 203: //GREAT_GRAND_MOTHER
-                case 204: //GREAT_GRAND_FATHER
-                case 205: //GREAT_GRAND_DAUGHTER
-                case 206: //GREAT_GRAND_SON
-                case 210: //GREAT_GRAND_AUNT
-                case 211: //GREAT_GRAND_UNCLE
-                case 212: //GREAT_GRAND_NIECE
-                case 213: //GREAT_GRAND_NEPHEW
-                    return 1000;
-            }
-        }
-    }
-
     $this.getConnectionMap = function(gedcom_id){
         var object;
         if(data.con == null) return false;
@@ -789,21 +699,25 @@ $FamilyTreeTop.create("usertree", function($){
         return $name.join(' ').replace(/[ \t]{2,}/g, ' ');
     }
 
-    $this.getRelName = function(obj, id, suffix, postfix, user){
-        var val = _getRel_(user), name, suf, post;
-        if(data.rel != null && "undefined" !== typeof(val)){
-            name = (val)?relationList[val.name]:"";
-            suf = ((_is_(suffix))?_getSuffix_(obj):"");
-            post =  ((_is_(postfix))?_getPostfix_(obj):"");
-            if(val.id == 9){
-                return name + " " + suf + " " + post;
+    $this.getRelationName = function(object, flag, user){
+        var name,
+            relation_id,
+            suffix,
+            postfix,
+            nameString;
+        if("undefined" === typeof(object)){
+            relation_id = parseInt(object.relation_id,10);
+            name = _getName_(relation_id, user);
+            suffix = _getSuffix_(object);
+            postfix = _getPostfix_(object);
+            if(relation_id == 9){
+                nameString = name + " " + suffix + " " + postfix;
+            } else {
+                nameString = suffix + " " + name + " " + postfix;
             }
-            return ((_is_(suffix))?_getSuffix_(obj):"") + " " + name + " " + ((_is_(postfix))?_getPostfix_(obj):"");
+            return $this.trim.call(nameString);
         }
-        return false;
-        function _is_(k){
-            return "undefined" === typeof(k) || ( "undefined"!==typeof(k)&&k );
-        }
+        return name;
         function _getSuffix_(o){
             var suf = (o.json!=null&&"undefined"!=typeof(o.json.suffix))?o.json.suffix:0;
             if(suf){
@@ -813,45 +727,19 @@ $FamilyTreeTop.create("usertree", function($){
             return "";
         }
         function _getPostfix_(o){
-            if( (id == 6 || id == 5 || id == 7 || id == 8) && parseInt(obj.in_law) ){
-                return "";
-            } else {
-                return (parseInt(o.in_law))?relationList["IN_LAW"]:"";
-            }
+            return (parseInt(o.in_law))?relationList["IN_LAW"]:"";
         }
-        function _getRel_(user){
+        function _getName_(id, user){
             var gender = ("undefined"!=typeof(user)&&$this.parseNum(user.gender));
             if(id == 2){
-                return { name:(gender)?"SPOUSE_MALE":"SPOUSE_FEMALE", id: id};
-            } else if( (id == 6 || id == 5) && parseInt(obj.in_law) ){
-                return { name: (id==5)?"DAUGHTER_IN_LAW":"SON_IN_LAW", id: id };
-            } else if( (id == 7 || id == 8) && parseInt(obj.in_law) ){
-                return { name: (id==7)?"SISTER_IN_LAW":"BROTHER_IN_LAW", id: id };
+                return (gender)?"SPOUSE_MALE":"SPOUSE_FEMALE";
             } else if(id == 9){
-                return { name:(gender)?"COUSIN_MALE":"COUSIN_FEMALE", id: id};
+                return (gender)?"COUSIN_MALE":"COUSIN_FEMALE";
             } else {
                 return ("undefined"!==typeof(data.rel['_NAMES'][id]))?data.rel["_NAMES"][id]:false;
             }
         }
     }
-
-    $this.getRelationName = function(object, flag, user){
-        var rel = $this.getRelationId(object.target_id), name;
-        if("object" === typeof(rel) && "undefined" !== typeof(flag)){
-            name = _getName_(rel[1].obj, rel[1].id, true, false) + " your " + _getName_(rel[0].obj, rel[0].id);
-        } else {
-            if("object" === typeof(rel)){
-                name = _getName_({in_law:1}, 1000);
-            } else {
-                name = _getName_(object, rel);
-            }
-        }
-        return (name)?name:"undefined";
-        function _getName_(obj, id, suffix, postfix){
-            return $this.getRelName(obj, id, suffix, postfix, user);
-        }
-    }
-
 
     $this.getExistParent = function(p){
         if("undefined" === typeof(f) || !p) return false;
