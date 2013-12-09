@@ -275,23 +275,18 @@ class FamilyTreeTopGedcomRelationsManager {
         return false;
     }
 
-    public function getInLawRelation($id){
-        $con = $this->conn[$id];
-        if($con){
-            $gedcom_id = false;
-            foreach($con as $index => $key){
-                if(!isset($this->list[$key])){
-                    if($con[$index - 1] == $gedcom_id){
-                        return $gedcom_id;
-                    }
-                } else {
-                    $user = $this->list[$key];
-                    if($user['in_law'] == 0){
-                        $gedcom_id = $key;
-                    }
+    public function getInLawRelation($gedcom_id){
+        if(isset($this->conn[$gedcom_id])){
+            $con = $this->conn[$gedcom_id];
+            $ret = false;
+            foreach($con as $id){
+                if(isset($this->list[$id]) && $this->list[$id]['in_law'] == 0){
+                    $ret = $id;
                 }
             }
+            return $ret;
         }
+        return false;
     }
 
     public function getInLawRelationId($gedcom_id){

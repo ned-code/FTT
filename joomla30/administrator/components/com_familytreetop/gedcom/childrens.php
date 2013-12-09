@@ -102,7 +102,7 @@ class FamilyTreeTopGedcomChildrensManager {
 
         foreach($listByGedcomId as $id => $value){
             if(isset($value[0]) && isset($individuals[$value[0]['gedcom_id']])){
-                $all[$id] = $value;
+                $gedcomIds[$id] = $value;
             }
         }
 

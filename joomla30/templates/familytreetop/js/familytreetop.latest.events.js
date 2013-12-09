@@ -27,6 +27,7 @@ $FamilyTreeTop.create("latest_events", function($){
 
                 if(type == "marr"){
                     family = $this.mod('usertree').family(events[prop].family_id);
+                    if(!family) continue;
                     husb =  $this.mod('usertree').user(family.husb);
                     wife =  $this.mod('usertree').user(family.wife);
 
@@ -56,6 +57,7 @@ $FamilyTreeTop.create("latest_events", function($){
                     });
                 } else {
                     user = $this.mod('usertree').user(events[prop].gedcom_id);
+                    if(!user) continue;
                     ev = user[type]();
                     avatar = user.avatar(["25","25"]);
                     $fn.setHolderImage(avatar[0]);
