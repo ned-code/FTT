@@ -705,19 +705,19 @@ $FamilyTreeTop.create("usertree", function($){
             suffix,
             postfix,
             nameString;
-        if("undefined" === typeof(object)){
-            relation_id = parseInt(object.relation_id,10);
+        if("undefined" !== typeof(object)){
+            relation_id = parseInt(object.relation_id, 10);
             name = _getName_(relation_id, user);
             suffix = _getSuffix_(object);
             postfix = _getPostfix_(object);
             if(relation_id == 9){
-                nameString = name + " " + suffix + " " + postfix;
+                nameString = relationList[name] + " " + suffix + " " + postfix;
             } else {
-                nameString = suffix + " " + name + " " + postfix;
+                nameString = suffix + " " + relationList[name] + " " + postfix;
             }
             return $this.trim.call(nameString);
         }
-        return name;
+        return "";
         function _getSuffix_(o){
             var suf = (o.json!=null&&"undefined"!=typeof(o.json.suffix))?o.json.suffix:0;
             if(suf){
@@ -736,7 +736,7 @@ $FamilyTreeTop.create("usertree", function($){
             } else if(id == 9){
                 return (gender)?"COUSIN_MALE":"COUSIN_FEMALE";
             } else {
-                return ("undefined"!==typeof(data.rel['_NAMES'][id]))?data.rel["_NAMES"][id]:false;
+                return ("undefined"!==typeof(data.rel['_NAMES'][id]))?data.rel["_NAMES"][id].name:false;
             }
         }
     }
