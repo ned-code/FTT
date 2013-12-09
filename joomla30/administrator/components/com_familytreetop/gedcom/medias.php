@@ -180,6 +180,31 @@ class FamilyTreeTopGedcomMediasManager {
         return false;
     }
 
+    public function getViewList($individuals){
+        $list = $this->list;
+        $listByGedcomId = $this->list_by_gedcom_id;
+
+        $all = array();
+        $gedcomIds = array();
+
+        foreach($list as $id => $item){
+            if(isset($individuals[$item['gedcom_id']])){
+                $all[$id] = $item;
+            }
+        }
+
+        foreach($listByGedcomId as $gedcomId => $data){
+            if(isset($individuals[$gedcomId])){
+                $gedcomIds[$gedcomId] = $data;
+            }
+        }
+
+        return array(
+            'all' => $all,
+            'gedcom_id' => $gedcomIds
+        );
+    }
+
     public function getList(){
         return array(
             'all'=> $this->list,

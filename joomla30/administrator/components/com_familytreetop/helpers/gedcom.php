@@ -83,16 +83,20 @@ class GedcomHelper
         $familyList = $this->families->getViewList($individualList);
         $childList = $this->childrens->getViewList($individualList);
         $eventList = $this->events->getViewList($individualList, $familyList);
+        $dateList = $this->dates->getList($eventList);
+        $placeList = $this->places->getList($eventList);
+        $mediaList = $this->medias->getList($individualList);
+        $conList = $this->connections->getList($individualList);
         return array(
             'ind' => $individualList,
             'fam' => $familyList,
             'chi' => $childList,
             'eve' => $eventList,
-            'dat' => $this->dates->getList(),
-            'pla' => $this->places->getList(),
-            'med' => $this->medias->getList(),
+            'dat' => $dateList,
+            'pla' => $placeList,
+            'med' => $mediaList,
             'rel' => $relationList,
-            'con' => $this->connections->getList()
+            'con' => $conList
         );
     }
 }

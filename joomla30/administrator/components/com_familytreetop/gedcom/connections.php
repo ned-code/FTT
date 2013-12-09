@@ -123,6 +123,17 @@ class FamilyTreeTopGedcomConnectionsManager {
         return $this->connections[$gedcom_id];
     }
 
+    public function getViewList($individuals){
+        $list = $this->connections;
+        $result = array();
+        foreach($list as $id => $item){
+            if(isset($individuals[$id])){
+                $result[$id] = $item;
+            }
+        }
+        return $result;
+    }
+
     public function getList(){
         return $this->connections;
     }

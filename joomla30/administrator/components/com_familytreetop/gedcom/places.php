@@ -98,6 +98,20 @@ class FamilyTreeTopGedcomPlacesManager {
         $this->list[$place->id] = $data;
     }
 
+    public function getViewList($eventList){
+        $list = $this->list;
+        $events = $eventList['all'];
+        $result = array();
+
+        foreach($list as $id => $item){
+            if(isset($events[$id])){
+                $result[$id] = $item;
+            }
+        }
+
+        return $result;
+    }
+
     public function getList(){
         return $this->list;
     }
