@@ -293,6 +293,7 @@ class FamilyTreeTopGedcomIndividualsModel {
         $data['change_time'] = $this->change_time;
         $data['is_father_line'] = $this->is_father_line;
         $data['is_mother_line'] = $this->is_mother_line;
+        $data['is_can_be_delete'] = $this->is_can_be_delete;
         $data['first_name'] = $this->first_name;
         $data['middle_name'] = $this->middle_name;
         $data['last_name'] = $this->last_name;
@@ -377,6 +378,7 @@ class FamilyTreeTopGedcomIndividualsManager {
             $ind->change_time = $data['change_time'];
             $ind->is_father_line = ($data['is_father_line']!=null)?$data['is_father_line']:0;
             $ind->is_mother_line = ($data['is_mother_line']!=null)?$data['is_mother_line']:0;
+            $ind->is_can_be_delete = ($data['is_can_be_delete']!=null)?$data['is_can_be_delete']:1;
 
             $ind->first_name = $data['first_name'];
             $ind->middle_name = $data['middle_name'];
@@ -527,7 +529,7 @@ class FamilyTreeTopGedcomIndividualsManager {
     public function getListByTreeId($tree_id){
         $db = JFactory::getDbo();
         $sql = "SELECT i.id as id, i.gedcom_id, i.creator_id, i.gender, i.family_id, i.create_time, i.is_father_line, i.is_mother_line,
-                    i.change_time, n.first_name, n.middle_name, n.last_name, n.know_as
+                    i.is_can_be_delete, i.change_time, n.first_name, n.middle_name, n.last_name, n.know_as
                 FROM #__familytreetop_individuals as i,#__familytreetop_names as n,  #__familytreetop_tree_links as l, #__familytreetop_trees as t
                 WHERE l.type = 0 AND i.gedcom_id = l.id AND l.tree_id = t.id AND n.gedcom_id = i.gedcom_id AND t.id = ". $tree_id;
         $db->setQuery($sql);
