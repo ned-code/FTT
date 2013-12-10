@@ -128,9 +128,9 @@ class FamilyTreeTopGedcomEventsManager {
             return new FamilyTreeTopGedcomEventModel();
         }
         if($family){
-            $list = $this->cache_list_by_family_id;
+            $list = $this->list_by_family_id;
         } else {
-            $list = $this->cache_list_by_gedcom_id;
+            $list = $this->list_by_gedcom_id;
         }
         if(isset($list[$id]) && !empty($list[$id])){
             $data = $list[$id];

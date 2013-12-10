@@ -338,7 +338,6 @@ class FamilyTreeTopGedcomIndividualsModel {
 
 class FamilyTreeTopGedcomIndividualsManager {
     protected $list = array();
-    protected $cache_list = array();
     protected $tree_id;
     protected $events;
 
@@ -357,18 +356,12 @@ class FamilyTreeTopGedcomIndividualsManager {
         if(empty($model->id)) return false;
         $data = $model->toList();
 
-        if(!isset($this->cache_list[$model->gedcom_id])){
-            $this->cache_list[$model->gedcom_id] = $data;
-        }
         if(!isset($this->list[$model->gedcom_id])){
             $this->list[$model->gedcom_id] = $data;
         }
     }
 
     public function removeFromList($gedcom_id){
-        if(isset($this->cache_list[$gedcom_id])){
-            unset($this->cache_list[$gedcom_id]);
-        }
         if(isset($this->list[$gedcom_id])){
             unset($this->list[$gedcom_id]);
         }
@@ -380,8 +373,8 @@ class FamilyTreeTopGedcomIndividualsManager {
             return $this->getObject();
         }
         $ind = $this->getObject();
-        if(isset($this->cache_list[$gedcom_id])){
-            $data = $this->cache_list[$gedcom_id];
+        if(isset($this->list[$gedcom_id])){
+            $data = $this->list[$gedcom_id];
 
             $ind->id = $data['id'];
             $ind->gedcom_id = $data['gedcom_id'];
@@ -452,8 +445,8 @@ class FamilyTreeTopGedcomIndividualsManager {
     }
 
     public function getGender($gedcom_id){
-        if(empty($gedcom_id) || !isset($this->cache_list[$gedcom_id])) return false;
-        return $this->cache_list[$gedcom_id]['gender'];
+        if(empty($gedcom_id) || !isset($this->list[$gedcom_id])) return false;
+        return $this->list[$gedcom_id]['gender'];
     }
 
     public function getYoungest(){
@@ -498,7 +491,7 @@ class FamilyTreeTopGedcomIndividualsManager {
     }
 
     public function getTotal(){
-        return sizeof($this->cache_list);
+        return sizeof($this->list);
     }
 
     public function getCountByFamilyLine($type = "is_father_line"){
@@ -531,7 +524,7 @@ class FamilyTreeTopGedcomIndividualsManager {
 
     public function updateFamilyLine(){
         $gedcom = GedcomHelper::getInstance();
-        $list = $this->cache_list;
+        $list = $this->list;
         foreach($list as $id => $user){
             if($user['is_father_line'] == null || $user['is_mother_line'] == null){
                 $object = $gedcom->individuals->get($id);
@@ -569,7 +562,6 @@ class FamilyTreeTopGedcomIndividualsManager {
                 $result[$id] = $item;
             }
         }
-        $this->cache_list = $result;
         return $result;
     }
 

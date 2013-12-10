@@ -80,8 +80,8 @@ class FamilyTreeTopGedcomPlacesManager {
         if(empty($id)){
             return new FamilyTreeTopGedcomPlaceModel();
         }
-        if(isset($this->cache_list[$id])){
-            $item = $this->cache_list[$id];
+        if(isset($this->list[$id])){
+            $item = $this->list[$id];
             $place = new FamilyTreeTopGedcomPlaceModel();
             $place->id = $item['id'];
             $place->event_id = $item['event_id'];
@@ -97,7 +97,6 @@ class FamilyTreeTopGedcomPlacesManager {
         if(empty($place) || empty($place->id)) return false;
         $data = $place->toList();
         $this->list[$place->id] = $data;
-        $this->cache_list[$place->id] = $data;
     }
 
     public function getViewList($eventList){

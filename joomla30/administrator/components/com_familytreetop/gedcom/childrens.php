@@ -166,10 +166,11 @@ class FamilyTreeTopGedcomChildrensManager {
         return $childrens;
     }
 
-    public function getFamilyIdByGedcomId($gedcom_id){
-        if(isset($this->cache_list_by_gedcom_id[$gedcom_id]) && !empty($this->list_by_gedcom_id[$gedcom_id])){
-            $list = $this->cache_list_by_gedcom_id[$gedcom_id];
-            return $list[0]['family_id'];
+    public function getFamilyIdByGedcomId($gedcom_id, $all = false){
+        $list = ($all)?$this->list_by_gedcom_id:$this->cache_list_by_gedcom_id;
+        if(isset($list[$gedcom_id]) && !empty($list[$gedcom_id])){
+            $data = $list[$gedcom_id];
+            return $data[0]['family_id'];
         }
         return false;
     }

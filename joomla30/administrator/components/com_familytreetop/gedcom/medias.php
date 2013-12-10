@@ -111,9 +111,9 @@ class FamilyTreeTopGedcomMediasManager {
         if(empty($gedcom_id)){
             return new FamilyTreeTopGedcomMediaModel();
         }
-        if(!isset($this->cache_list_by_gedcom_id[$gedcom_id])) return false;
+        if(!isset($this->list_by_gedcom_id[$gedcom_id])) return false;
         $medias = array();
-        $data = $this->cache_list_by_gedcom_id[$gedcom_id];
+        $data = $this->list_by_gedcom_id[$gedcom_id];
         foreach($data as $item){
             $model = new FamilyTreeTopGedcomMediaModel();
             $model->id = $item['id'];
