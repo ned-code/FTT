@@ -20,6 +20,8 @@ class GedcomHelper
     public $relations;
     public $connections;
 
+    public $data;
+
     public function getInstance(){
         if ( is_null(self::$instance) ) {
             self::$instance = new GedcomHelper ();
@@ -39,6 +41,7 @@ class GedcomHelper
         $this->medias = new FamilyTreeTopGedcomMediasManager($tree_id);
         $this->connections = new FamilyTreeTopGedcomConnectionsManager($tree_id, $gedcom_id);
         $this->relations = new FamilyTreeTopGedcomRelationsManager($tree_id, $gedcom_id);
+        $this->data = $this->getCacheData();
     }
 
     public function getTreeUsers($associative = false, $json = false){
@@ -77,7 +80,7 @@ class GedcomHelper
         return sizeof($rows);
     }
 
-    public function getData(){
+    public function getCacheData(){
         $relationList = $this->relations->getList();
         $individualList = $this->individuals->getViewList($relationList);
         $familyList = $this->families->getViewList($individualList);
@@ -98,5 +101,9 @@ class GedcomHelper
             'rel' => $relationList,
             'con' => $conList
         );
+    }
+
+    public function getData(){
+       return $this->data;
     }
 }

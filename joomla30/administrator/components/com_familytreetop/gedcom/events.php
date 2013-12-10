@@ -69,6 +69,9 @@ class FamilyTreeTopGedcomEventsManager {
     protected $list = array();
     protected $list_by_family_id = array();
     protected $list_by_gedcom_id = array();
+    protected $cache_list = array();
+    protected $cache_list_by_family_id = array();
+    protected $cache_list_by_gedcom_id = array();
 
     public function __construct($tree_id){
         $this->tree_id = $tree_id;
@@ -111,9 +114,11 @@ class FamilyTreeTopGedcomEventsManager {
         $data = $event->toList();
         if($event->gedcom_id != null){
             $this->list_by_gedcom_id[$event->gedcom_id] = $data;
+            $this->cache_list_by_gedcom_id[$event->gedcom_id] = $data;
         }
         if($event->family_id != null){
             $this->list_by_family_id[$event->family_id] = $data;
+            $this->cache_list_by_family_id[$event->family_id] = $data;
         }
     }
 
@@ -123,9 +128,9 @@ class FamilyTreeTopGedcomEventsManager {
             return new FamilyTreeTopGedcomEventModel();
         }
         if($family){
-            $list = $this->list_by_family_id;
+            $list = $this->cache_list_by_family_id;
         } else {
-            $list = $this->list_by_gedcom_id;
+            $list = $this->cache_list_by_gedcom_id;
         }
         if(isset($list[$id]) && !empty($list[$id])){
             $data = $list[$id];
@@ -213,6 +218,10 @@ class FamilyTreeTopGedcomEventsManager {
                 }
             }
         }
+
+        $this->cache_list = $all;
+        $this->cache_list_by_family_id = $listByFamilyId;
+        $this->cache_list_by_gedcom_id = $listByGedcomId;
 
         return array(
             'all' => $all,

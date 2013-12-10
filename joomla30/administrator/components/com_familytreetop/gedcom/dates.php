@@ -66,7 +66,8 @@ class FamilyTreeTopGedcomDateModel {
 
 class FamilyTreeTopGedcomDatesManager {
     protected $tree_id;
-    protected $list;
+    protected $list = array();
+    protected $cache_list = array();
 
     public function __construct($tree_id){
         $this->tree_id = $tree_id;
@@ -97,8 +98,8 @@ class FamilyTreeTopGedcomDatesManager {
         if(empty($id)){
             return new FamilyTreeTopGedcomDateModel();
         }
-        if(isset($this->list[$id])){
-            $item = $this->list[$id];
+        if(isset($this->cache_list[$id])){
+            $item = $this->cache_list[$id];
             $date = new FamilyTreeTopGedcomDateModel();
             $date->id = $item['id'];
             $date->event_id = $item['event_id'];
@@ -118,6 +119,7 @@ class FamilyTreeTopGedcomDatesManager {
         if(empty($date) || empty($date->id)) return false;
         $data = $date->toList();
         $this->list[$date->id] = $data;
+        $this->cache_list[$date->id] = $data;
     }
 
     public function getViewList($eventList){
@@ -130,7 +132,7 @@ class FamilyTreeTopGedcomDatesManager {
                 $result[$id] = $item;
             }
         }
-
+        $this->cache_list = $result;
         return $result;
     }
 

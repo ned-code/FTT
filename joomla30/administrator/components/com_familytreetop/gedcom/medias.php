@@ -80,6 +80,8 @@ class FamilyTreeTopGedcomMediasManager {
     protected $tree_id;
     protected $list = array();
     protected $list_by_gedcom_id = array();
+    protected $cache_list = array();
+    protected $cache_list_by_gedcom_id = array();
 
     public function __construct($tree_id){
         $this->tree_id = $tree_id;
@@ -109,9 +111,9 @@ class FamilyTreeTopGedcomMediasManager {
         if(empty($gedcom_id)){
             return new FamilyTreeTopGedcomMediaModel();
         }
-        if(!isset($this->list_by_gedcom_id[$gedcom_id])) return false;
+        if(!isset($this->cache_list_by_gedcom_id[$gedcom_id])) return false;
         $medias = array();
-        $data = $this->list_by_gedcom_id[$gedcom_id];
+        $data = $this->cache_list_by_gedcom_id[$gedcom_id];
         foreach($data as $item){
             $model = new FamilyTreeTopGedcomMediaModel();
             $model->id = $item['id'];
@@ -198,6 +200,9 @@ class FamilyTreeTopGedcomMediasManager {
                 $gedcomIds[$gedcomId] = $data;
             }
         }
+
+        $this->cache_list = $all;
+        $this->cache_list_by_gedcom_id;
 
         return array(
             'all' => $all,

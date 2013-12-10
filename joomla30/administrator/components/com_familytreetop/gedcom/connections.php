@@ -4,6 +4,7 @@ class FamilyTreeTopGedcomConnectionsManager {
     protected $list = array();
     protected $waves = array();
     protected $connections = array();
+    protected $cache_connections = array();
     protected $tmp = array();
 
     public function __construct($tree_id, $gedcom_id){
@@ -119,8 +120,8 @@ class FamilyTreeTopGedcomConnectionsManager {
     }
 
     public function get($gedcom_id){
-        if(!isset($this->connections[$gedcom_id])) return false;
-        return $this->connections[$gedcom_id];
+        if(!isset($this->cache_connections[$gedcom_id])) return false;
+        return $this->cache_connections[$gedcom_id];
     }
 
     public function getViewList($individuals){
@@ -131,6 +132,7 @@ class FamilyTreeTopGedcomConnectionsManager {
                 $result[$id] = $item;
             }
         }
+        $this->cache_connections = $result;
         return $result;
     }
 

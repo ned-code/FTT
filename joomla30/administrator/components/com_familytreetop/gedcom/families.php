@@ -111,6 +111,8 @@ class FamilyTreeTopGedcomFamilyModel {
 class FamilyTreeTopGedcomFamiliesManager {
     protected $list = array();
     protected $list_by_gedcom_id = array();
+    protected $cache_list = array();
+    protected $cache_list_by_gedcom_id = array();
     protected $tree_id;
 
     public function __construct($tree_id){
@@ -144,20 +146,20 @@ class FamilyTreeTopGedcomFamiliesManager {
     }
 
     protected function getObject(){
-        return new FamilyTreeTopGedcomFamilyModel($this->tree_id, $this->list);
+        return new FamilyTreeTopGedcomFamilyModel($this->tree_id, $this->cache_list);
     }
 
     public function updateList(&$model){
         if(empty($model->family_id)) return false;
         $data = $model->toList();
 
-        if(!isset($this->list[$model->family_id])){
+        if(!isset($this->cache_list[$model->family_id])){
             $this->list[$model->family_id] = $data;
             if(!empty($model->husb)){
-                $this->list_by_gedcom_id[$model->husb][] = $data;
+                $this->cache_list_by_gedcom_id[$model->husb][] = $data;
             }
             if(!empty($model->wife)){
-                $this->list_by_gedcom_id[$model->wife][] = $data;
+                $this->cache_list_by_gedcom_id[$model->wife][] = $data;
             }
         }
      }
@@ -168,8 +170,8 @@ class FamilyTreeTopGedcomFamiliesManager {
             return $this->getObject();
         }
         $family = $this->getObject();
-        if(isset($this->list[$family_id])){
-            $data = $this->list[$family_id];
+        if(isset($this->cache_list[$family_id])){
+            $data = $this->cache_list[$family_id];
             $family->id = $data['id'];
             $family->family_id = $data['family_id'];
             $family->husb = $data['husb'];
@@ -187,8 +189,8 @@ class FamilyTreeTopGedcomFamiliesManager {
 
     public function getSpouses($gedcom_id){
         if(empty($gedcom_id)) return false;
-        if(isset($this->list_by_gedcom_id[$gedcom_id])){
-            $rows = $this->list_by_gedcom_id[$gedcom_id];
+        if(isset($this->cache_list_by_gedcom_id[$gedcom_id])){
+            $rows = $this->cache_list_by_gedcom_id[$gedcom_id];
             $result = array();
             foreach($rows as $row){
                 $result[] = ($row['husb'] == $gedcom_id)?$row['wife']:$row['husb'];
@@ -268,6 +270,9 @@ class FamilyTreeTopGedcomFamiliesManager {
                 }
             }
         }
+
+        $this->cache_list = $familyIdList;
+        $this->cache_list_by_gedcom_id = $gedcomIdList;
 
         return array('family_id'=>$familyIdList, 'gedcom_id'=>$gedcomIdList);
     }
