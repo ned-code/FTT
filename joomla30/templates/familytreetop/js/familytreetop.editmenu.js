@@ -40,67 +40,53 @@ $FamilyTreeTop.create("editmenu", function($){
 
 
     $this.render = function(object, gedcom_id){
-        var box, ind, user, isCantEditable = false, isCantUnionDelete = false, isCantDelete = false, isRegistered = false, isInLaw = false, lis;
+        var box, ind, first;
 
         box = $($box).clone().attr('gedcom_id', gedcom_id)
             .attr('style', 'position: absolute; top: 5px; right:5px;');
 
         ind = $this.mod('usertree').user(gedcom_id);
-        user = $this.mod('usertree').usermap();
-        isRegistered = ind.isRegistered();
-        isInLaw = (ind.inLaw || ind.relationId == 2 || ind.relationId == 0);
 
-
-        if( (isRegistered && user.gedcom_id != ind.gedcom_id) || isInLaw){
-            $(box).find('li[familytreetop="edit"]').remove();
+        if(!ind.isCanBeEdit()){
+            $(box).find('[familytreetop="edit"]').remove();
             $(box).find('[data-familytreetop-devider="1"]').remove();
-            isCantEditable = true;
         }
 
-        if(isInLaw){
-            if(!$this.mod('usertree').isCommonAncestorExist(ind.gedcom_id, user.gedcom_id)){
-                $(box).find('li[familytreetop="deleteUnion"]').remove();
-                isCantUnionDelete = true;
-            }
-            if(!ind.isCanBeDelete()){
-                $(box).find('li[familytreetop="delete"]').remove();
-                isCantDelete = true;
-            }
-            if(isCantUnionDelete && isCantDelete){
-                $(box).find('li[familytreetop-devider="delete"]').remove();
-            }
-            $(box).find('li[familytreetop="addParent"]').remove();
-            $(box).find('li[familytreetop="addSibling"]').remove();
-            $(box).find('li[familytreetop="addSpouse"]').remove();
+        if(!ind.isCanBeInvite()){
+            $(box).find('[data-familytreetop-devider="3"]').remove();
+            $(box).find('[familytreetop="sendInvite"]').remove();
+        }
 
-            if(!ind.isSpouse()){
-                $(box).find('li[familytreetop="addChild"]').remove();
-            }
+        $(box).find('[familytreetop="deleteUnion"]').remove();
 
-            if(ind.facebook_id == 0 && ind.isAlive()){
-                $(box).find('li[familytreetop-devider="sendInvite"]').remove();
-                $(box).find('li[familytreetop="sendInvite"]').remove();
-            }
+        if(ind.inLaw){
+            $(box).find('[familytreetop="addParent"]').remove();
+            $(box).find('[familytreetop="addSibling"]').remove();
+            $(box).find('[familytreetop="addSpouse"]').remove();
+            $(box).find('[familytreetop="addChild"]').remove();
         } else {
-            $(box).find('li[familytreetop="deleteUnion"]').remove();
             if(ind.isParentsExist()){
-                $(box).find('li[familytreetop="addParent"]').remove();
+                $(box).find('[familytreetop="addParent"]').remove();
             }
-
-            if(!ind.isCanBeInvite()){
-               $(box).find('li[familytreetop-devider="sendInvite"]').remove();
-               $(box).find('li[familytreetop="sendInvite"]').remove();
+            if(ind.isSpouse()){
+                $(box).find('[familytreetop="addParent"]').remove();
+                $(box).find('[familytreetop="addSibling"]').remove();
+                $(box).find('[familytreetop="addSpouse"]').remove();
             }
-
-           if(!ind.isCanBeDelete()){
-                $(box).find('li[familytreetop-devider="delete"]').remove();
-                $(box).find('li[familytreetop="delete"]').remove();
-           }
         }
 
-        if($(box).find('li').length == 0) return false;
-        if($(box).find('li:not(.divider)').length == 1){
-            $(box).find('.divider').remove();
+        if(!ind.isCanBeDelete()){
+            $(box).find('[data-familytreetop-devider="2"]').remove();
+            $(box).find('[familytreetop="delete"]').remove();
+        }
+
+        if($(box).find('li').length == 0){
+            return false;
+        } else {
+            first = $(box).find('li').first();
+            if($(first).hasClass('divider')){
+                $(first).remove();
+            }
         }
 
         $(object).append(box);

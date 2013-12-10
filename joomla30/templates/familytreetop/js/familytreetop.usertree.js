@@ -151,7 +151,7 @@ $FamilyTreeTop.create("usertree", function($){
             middle_name: ind.middle_name,
             is_father_line: (ind.is_father_line!=null)?parseInt(ind.is_father_line):0,
             is_mother_line: (ind.is_mother_line!=null)?parseInt(ind.is_mother_line):0,
-            is_can_be_delete: (ind.is_can_be_delete!=null)?parseInt(ind.is_can_be_delete):1,
+            is_can_be_delete: (ind.is_can_be_delete!=null)?parseInt(ind.is_can_be_delete):0,
             inLaw: (function(){
                 var relation = $this.getRelation(ind.gedcom_id);
                 if(relation){
@@ -342,33 +342,25 @@ $FamilyTreeTop.create("usertree", function($){
                 return "";
             },
             isCanBeDelete: function(){
-                var parents, childrens, spouses;
-                parents = $this.getParents(ind.gedcom_id);
-                childrens = $this.getChildrens(ind.gedcom_id);
-                spouses = $this.getSpouses(ind.gedcom_id);
-                if(!_isChildrenExist_(childrens) && !_isSpousesExist_(spouses)){
-                    return true;
-                } else if(_isSpousesExist_(spouses) && spouses.length == 1 && !_isChildrenExist_(childrens) && !_isParentExist_(parents)){
-                    return true;
-                }
+                var isCanBeDelete = this.is_can_be_delete;
+                var isInLaw = this.inLaw;
+                if(isInLaw) return false;
+                if(isCanBeDelete) return true;
                 return false;
-                function _isParentExist_(p){
-                    if(p.father == null && p.mother == null){
-                        return false;
-                    }
-                    return true;
-                }
-                function _isChildrenExist_(c){
-                    return (c.length != 0);
-                }
-                function _isSpousesExist_(s){
-                    return (s.length != 0);
-                }
+            },
+            isCanBeEdit: function(){
+                var usermap = $this.usermap();
+                var isRegistered = this.isRegistered();
+                var inLaw = this.inLaw;
+                if(usermap.gedcom_id == ind.gedcom_id) return true;
+                if(isRegistered || inLaw) return false;
+                return true;
             },
             isCanBeInvite: function(){
                 var isRegistered = this.isRegistered();
                 var isAlive = this.isAlive();
-                if(isRegistered || !isAlive) return false;
+                var inLaw = this.inLaw;
+                if(isRegistered || !isAlive || inLaw) return false;
                 return true;
             },
             isRegistered:function(){
