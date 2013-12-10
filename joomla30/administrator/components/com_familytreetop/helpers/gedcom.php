@@ -42,6 +42,7 @@ class GedcomHelper
         $this->connections = new FamilyTreeTopGedcomConnectionsManager($tree_id, $gedcom_id);
         $this->relations = new FamilyTreeTopGedcomRelationsManager($tree_id, $gedcom_id);
         $this->data = $this->getCacheData();
+        $this->individuals->updateIsCanBeDelete();
     }
 
     public function getTreeUsers($associative = false, $json = false){
