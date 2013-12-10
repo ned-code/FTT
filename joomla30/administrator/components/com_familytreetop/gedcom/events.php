@@ -114,11 +114,9 @@ class FamilyTreeTopGedcomEventsManager {
         $data = $event->toList();
         if($event->gedcom_id != null){
             $this->list_by_gedcom_id[$event->gedcom_id] = $data;
-            $this->cache_list_by_gedcom_id[$event->gedcom_id] = $data;
         }
         if($event->family_id != null){
             $this->list_by_family_id[$event->family_id] = $data;
-            $this->cache_list_by_family_id[$event->family_id] = $data;
         }
     }
 
@@ -218,10 +216,6 @@ class FamilyTreeTopGedcomEventsManager {
                 }
             }
         }
-
-        $this->cache_list = $all;
-        $this->cache_list_by_family_id = $listByFamilyId;
-        $this->cache_list_by_gedcom_id = $listByGedcomId;
 
         return array(
             'all' => $all,

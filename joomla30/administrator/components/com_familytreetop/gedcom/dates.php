@@ -131,7 +131,6 @@ class FamilyTreeTopGedcomDatesManager {
                 $result[$id] = $item;
             }
         }
-        $this->cache_list = $result;
         return $result;
     }
 

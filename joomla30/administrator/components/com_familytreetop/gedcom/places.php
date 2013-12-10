@@ -110,8 +110,6 @@ class FamilyTreeTopGedcomPlacesManager {
             }
         }
 
-        $this->cache_list = $result;
-
         return $result;
     }
 

@@ -201,9 +201,6 @@ class FamilyTreeTopGedcomMediasManager {
             }
         }
 
-        $this->cache_list = $all;
-        $this->cache_list_by_gedcom_id;
-
         return array(
             'all' => $all,
             'gedcom_id' => $gedcomIds

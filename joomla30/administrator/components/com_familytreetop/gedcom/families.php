@@ -111,8 +111,6 @@ class FamilyTreeTopGedcomFamilyModel {
 class FamilyTreeTopGedcomFamiliesManager {
     protected $list = array();
     protected $list_by_gedcom_id = array();
-    protected $cache_list = array();
-    protected $cache_list_by_gedcom_id = array();
     protected $tree_id;
 
     public function __construct($tree_id){
@@ -146,20 +144,20 @@ class FamilyTreeTopGedcomFamiliesManager {
     }
 
     protected function getObject(){
-        return new FamilyTreeTopGedcomFamilyModel($this->tree_id, $this->cache_list);
+        return new FamilyTreeTopGedcomFamilyModel($this->tree_id, $this->list);
     }
 
     public function updateList(&$model){
         if(empty($model->family_id)) return false;
         $data = $model->toList();
 
-        if(!isset($this->cache_list[$model->family_id])){
+        if(!isset($this->list[$model->family_id])){
             $this->list[$model->family_id] = $data;
             if(!empty($model->husb)){
-                $this->cache_list_by_gedcom_id[$model->husb][] = $data;
+                $this->list_by_gedcom_id[$model->husb][] = $data;
             }
             if(!empty($model->wife)){
-                $this->cache_list_by_gedcom_id[$model->wife][] = $data;
+                $this->list_by_gedcom_id[$model->wife][] = $data;
             }
         }
      }
@@ -270,9 +268,6 @@ class FamilyTreeTopGedcomFamiliesManager {
                 }
             }
         }
-
-        $this->cache_list = $familyIdList;
-        $this->cache_list_by_gedcom_id = $gedcomIdList;
 
         return array('family_id'=>$familyIdList, 'gedcom_id'=>$gedcomIdList);
     }

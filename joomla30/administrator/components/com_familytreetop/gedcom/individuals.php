@@ -535,7 +535,7 @@ class FamilyTreeTopGedcomIndividualsManager {
 
     public function updateIsCanBeDelete(){
         $gedcom = GedcomHelper::getInstance();
-        $list = $this->cache_list;
+        $list = $this->list;
         foreach($list as $id => $user){
             if($user['is_can_be_delete'] == null){
                 $object = $gedcom->individuals->get($id);
