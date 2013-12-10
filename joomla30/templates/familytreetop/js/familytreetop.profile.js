@@ -638,20 +638,17 @@ $FamilyTreeTop.create("profile", function($){
         $(parent).find('[familytreetop="facebook"]').attr('facebook_id', object.facebook_id);
         $(parent).find('[familytreetop="invite"]').attr('gedcom_id', object.gedcom_id);
         $(parent).find('[familytreetop="edit"]').attr('gedcom_id', object.gedcom_id);
+
         if(object.facebook_id == 0){
             $(parent).find('[familytreetop="facebook"]').hide();
-            if(!object.isAlive()){
-                $(parent).find('[familytreetop="invite"]').hide();
-            }
-            if(object.isSpouseParent()){
-                $(parent).find('[familytreetop="edit"]').hide();
-            }
-        } else {
-            if(args.object.isRegistered() && $this.mod('usertree').usermap().gedcom_id != args.object.gedcom_id){
-                $(parent).find('[familytreetop="edit"]').hide();
-            }
+        }
+        if(!object.isCanBeInvite()){
             $(parent).find('[familytreetop="invite"]').hide();
         }
+        if(!object.isCanBeEdit()){
+            $(parent).find('[familytreetop="edit"]').hide();
+        }
+
         $(parent).find('[familytreetop="facebook"]').click(function(){
             var facebook_id = $(this).attr('facebook_id');
             window.open("http://www.facebook.com/"+facebook_id,'_blank');
