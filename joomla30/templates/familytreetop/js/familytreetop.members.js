@@ -211,7 +211,7 @@ $FamilyTreeTop.create("members", function($){
                 if($fn.isSortable(object)&&$fn.isGender(object)&&$fn.isLiving(object)&&$fn.isRegistered(object)&&$fn.isMembers(object, ancestorList, descendantList)){
                     avatar = object.avatar(["25","25"]);
                     $fn.setRelPullObject(object);
-                    $(tr).append('<td><i class="icon-leaf"></i>'+object.relation+'</td>');
+                    $(tr).append('<td><i class="icon-leaf"></i> '+object.relation+'</td>');
                     td = $('<td style="'+getPadding(avatar)+'" data-familytreetop-color="'+object.gender+'" gedcom_id="'+object.gedcom_id+'"></td>');
                     if($this.mod('usertree').isAvatar(avatar)){
                         var div = $(document.createElement('div'));
