@@ -89,9 +89,12 @@ $FamilyTreeTop.create("members", function($){
             //return a<b?-1:a>b?1:0;
             return a>b?-1:a<b?1:0;
             function _getDate_(object){
+                //console.log(object);
                 var event = object.birth();
+                //console.log($this.parseBoolean(event));
                 if($this.parseBoolean(event)){
                     var date = event.date;
+                    //console.log(date);
                     return [
                         (date.start_year!=null)?date.start_year:100,
                         (date.start_month!=null)?date.start_month:1,
@@ -324,7 +327,7 @@ $FamilyTreeTop.create("members", function($){
                         $isLiving['alive'] = (type[1]=="yes");
                     }
                     break;
-               
+
                 case "registered":
                     if(type[1] == "both"){
                         $isRegistered = true;
