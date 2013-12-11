@@ -219,7 +219,7 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         $sircar->middle_name = $form['middle_name'];
         $sircar->last_name = $form['last_name'];
         $sircar->know_as = $form['know_as'];
-        $sircar->creator_id = $ind->gedcom_id;
+        $sircar->creator_id = $owner->gedcom_id;
         $sircar->save();
 
         $this->setEvent($sircar, 'birth', $form);
@@ -292,7 +292,7 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         $ind->last_name = $form['last_name'];
         $ind->know_as = $form['know_as'];
         $ind->gender = $form['gender'];
-        $ind->creator_id = $user->gedcom_id;
+        $ind->creator_id = $owner->gedcom_id;
         $ind->save();
 
         $this->setEvent($ind, 'birth', $form);
@@ -338,7 +338,7 @@ class FamilytreetopControllerEditor extends FamilytreetopController
             $ind->last_name = $form['last_name'];
             $ind->know_as = $form['know_as'];
             $ind->gender = $form['gender'];
-            $ind->creator_id = $user->gedcom_id;
+            $ind->creator_id = $owner->gedcom_id;
             $ind->save();
         }
 
@@ -381,7 +381,7 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         $ind->last_name = $form['last_name'];
         $ind->know_as = $form['know_as'];
         $ind->gender = $form['gender'];
-        $ind->creator_id = $user->gedcom_id;
+        $ind->creator_id = $owner->gedcom_id;
         $ind->save();
         $this->setEvent($ind, 'birth', $form);
         if((int)$form['living']){
