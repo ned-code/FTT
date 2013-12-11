@@ -176,8 +176,16 @@ $FamilyTreeTop.create("members", function($){
                 return true;
             }
         },
+        isMembers: function(object, aList, dList){
+            if("object" == typeof($isMembers)){
+                var list = ($isMembers['ancestors'])?aList:dList;
+                return ("undefined" !== typeof(list[object.gedcom_id]));
+            } else {
+                return true;
+            }
+        },
         render: function(order){
-            var key, object, birth, tr,td, avatar;
+            var key, object, birth, tr,td, avatar, ancestorList, descendantList;
             $($box).find('tbody tr').remove();
             if("undefined" === typeof(order)){
                 $users.sort(function(a,b){
@@ -190,12 +198,14 @@ $FamilyTreeTop.create("members", function($){
                     }
                 });
             }
+            ancestorList = $this.mod('usertree').getAncestorList();
+            descendantList = $this.mod('usertree').getDescendantList();
             for (key in $users){
                 if(!$users.hasOwnProperty(key)) continue;
                 object = $users[key];
                 birth = object.birth();
                 tr = $('<tr class="familytreetop-hover-effect" gedcom_id="'+object.gedcom_id+'"></tr>');
-                if($fn.isSortable(object)&&$fn.isGender(object)&&$fn.isLiving(object)&&$fn.isRegistered(object)){
+                if($fn.isSortable(object)&&$fn.isGender(object)&&$fn.isLiving(object)&&$fn.isRegistered(object)&&$fn.isMembers(object, ancestorList, descendantList)){
                     avatar = object.avatar(["25","25"]);
                     $fn.setRelPullObject(object);
                     $(tr).append('<td><i class="icon-leaf"></i>'+object.relation+'</td>');
@@ -314,15 +324,22 @@ $FamilyTreeTop.create("members", function($){
                         $isLiving['alive'] = (type[1]=="yes");
                     }
                     break;
-                case "members":
-
-                    break;
+               
                 case "registered":
                     if(type[1] == "both"){
                         $isRegistered = true;
                     } else {
                         $isRegistered = {};
                         $isRegistered['registered'] = (type[1]=="yes");
+                    }
+                    break;
+
+                case "members":
+                    if(type[1] == "both"){
+                        $isMembers = true;
+                    } else {
+                        $isMembers = {};
+                        $isMembers['ancestors'] = (type[1]=="ancestors");
                     }
                     break;
             }

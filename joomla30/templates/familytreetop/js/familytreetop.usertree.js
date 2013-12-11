@@ -1133,6 +1133,45 @@ $FamilyTreeTop.create("usertree", function($){
         $this.call();
     }
 
+    $this.getAncestorList = function(){
+        var um = $this.usermap();
+        var list = {};
+        setAncestorList(um.gedcom_id);
+        return list;
+        function setAncestorList(id){
+            var p = $this.getParents(id);
+            if(p.family_id == null) return false;
+            if(p.father != null){
+                list[p.father] = true;
+                setAncestorList(p.father);
+            }
+            if(p.mother != null){
+                list[p.mother] = true;
+                setAncestorList(p.mother);
+            }
+        }
+    }
+
+    $this.getDescendantList = function(){
+        var um = $this.usermap();
+        var list = {};
+        setDescendantsList(um.gedcom_id);
+        return list;
+        function setDescendantsList(id){
+            var c = $this.getChildrens(id);
+            if(c.length > 0){
+                for(var key in c){
+                    if(!c.hasOwnProperty(key)) continue;
+                    var e = c[key];
+                    if(e != null){
+                        list[e] = true;
+                        setDescendantsList(e);
+                    }
+                }
+            }
+        }
+    }
+
     $this.getData = function(){
         return data;
     }
