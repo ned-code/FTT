@@ -12,7 +12,7 @@ $total = $gedcom->individuals->getTotal();
     <div class="span12">
         <div class="well" familytreetop="module">
             <fieldset>
-                <legend><?=JText::_('MOD_FTT_QUICK_FACTS_TITLE');?></legend>
+                <legend class="familytreetop-module-header"><?=JText::_('MOD_FTT_QUICK_FACTS_TITLE');?></legend>
                 <ul class-familytreetop="module-padding" class="unstyled">
                     <li><span><?=JText::_('MOD_FTT_QUICK_FACTS_TOTAL');?></span>: <span><?=$total?></span></li>
                     <li><span><?=JText::_('MOD_FTT_QUICK_FACTS_TOTAL_FATHER_SIDE');?></span>: <span><?=$fatherLineTotal?></span></li>

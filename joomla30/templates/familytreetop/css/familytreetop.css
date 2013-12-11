@@ -20,6 +20,9 @@ body > #wrap {
 [data-familytreetop-color="1"]{
     color: #415981;
 }
+.familytreetop-module-header {
+    color: #7e7e73;
+}
 .familytreetop-is-mother-line {
     background: #ffcc99 !important;
 }

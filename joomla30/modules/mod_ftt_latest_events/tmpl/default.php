@@ -8,7 +8,7 @@ defined('_JEXEC') or die;
             <div class="span12">
                 <div class="well" familytreetop="module">
                     <fieldset>
-                        <legend><?=JText::_('MOD_FTT_LATEST_EVENTS_BIRTHS');?></legend>
+                        <legend class="familytreetop-module-header"><?=JText::_('MOD_FTT_LATEST_EVENTS_BIRTHS');?></legend>
                     </fieldset>
                     <table style="margin:0;" id="latestBriths" class="table table-striped familytreetop-table familytreetop-table-td">
                     </table>
@@ -19,7 +19,7 @@ defined('_JEXEC') or die;
             <div class="span12">
                 <div class="well" familytreetop="module">
                     <fieldset>
-                        <legend><?=JText::_('MOD_FTT_LATEST_EVENTS_MARRIAGES');?></legend>
+                        <legend class="familytreetop-module-header"><?=JText::_('MOD_FTT_LATEST_EVENTS_MARRIAGES');?></legend>
                     </fieldset>
                     <table style="margin:0;" id="latestMarriages" class="table table-striped familytreetop-table familytreetop-table-td">
                     </table>
@@ -30,7 +30,7 @@ defined('_JEXEC') or die;
             <div class="span12">
                 <div class="well" familytreetop="module">
                     <fieldset>
-                        <legend><?=JText::_('MOD_FTT_LATEST_EVENTS_DEATHS');?></legend>
+                        <legend class="familytreetop-module-header"><?=JText::_('MOD_FTT_LATEST_EVENTS_DEATHS');?></legend>
                     </fieldset>
                     <table style="margin:0;" id="latestDeaths" class="table table-striped familytreetop-table familytreetop-table-td">
                     </table>
