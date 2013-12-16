@@ -20,8 +20,9 @@ $FamilyTreeTop.create("profile", function($){
         setCreator:function(args){
             var creator_id = args.object.creator_id,
                 box = $(this).find('[data-familytreetop-profile="creator"]'),
+                users = $this.mod('usertree').usersmap(),
                 user;
-            if(!$this.parseBoolean(creator_id)){
+            if(!$this.parseBoolean(creator_id) || "undefined" === typeof(users[creator_id])){
                 $(box).hide();
                 return false;
             }
