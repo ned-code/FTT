@@ -111,7 +111,7 @@ $FamilyTreeTop.create("this_month", function($){
                         user = $this.mod('usertree').user(item.event.gedcom_id);
                         $(tr).attr('gedcom_id', user.gedcom_id);
                         $(tr).append('<td data-familytreetop-color="'+user.gender+'" gedcom_id="'+user.gedcom_id+'">'+user.name()+'</td>');
-                        $(tr).append('<td style="font-size: 12px;color:#b7b7b7;">'+$fn.getNote(user, item.event)+'</td>');
+                        $(tr).append('<td style="font-size: 12px;color:#797979;">'+$fn.getNote(user, item.event)+'</td>');
                         $(tr).append('<td class="familytreetop-this-month-relation"><i class="icon-leaf"> </i>'+user.relation+'</td>');
                         $this.mod('popovers').render({
                             target: $(tr).find('td[gedcom_id]')
@@ -122,7 +122,7 @@ $FamilyTreeTop.create("this_month", function($){
                         wife = $this.mod('usertree').user(family.wife);
                         $(tr).attr('gedcom_id', "family:" + husb.gedcom_id + "," + wife.gedcom_id);
                         $(tr).append('<td><div data-familytreetop-color="'+husb.gender+'" gedcom_id="'+husb.gedcom_id+'">'+husb.name()+'</div><div data-familytreetop-color="'+wife.gender+'" gedcom_id="'+wife.gedcom_id+'">'+wife.name()+'</div></td>');
-                        $(tr).append('<td style="font-size: 12px;color:#b7b7b7;">'+$fn.getNote(family, item.event)+'</td>');
+                        $(tr).append('<td style="font-size: 12px;color:#797979;">'+$fn.getNote(family, item.event)+'</td>');
                         $(tr).append('<td class="familytreetop-this-month-relation"><div><i class="icon-leaf"> </i>'+husb.relation+'</div><div><i class="icon-leaf"> </i>'+wife.relation+'</div></td>');
 
                         $(tr).find('div[gedcom_id]').each(function(i, el){
@@ -160,7 +160,7 @@ $FamilyTreeTop.create("this_month", function($){
             switch(type){
                 case "BIRT":
                 case "DEAT":
-                    $(table).append('<tr class="familytreetop-this-month-header"><td style="padding-left: 20px;">'+$fn.getEventIcon({type:type})+'</td><td colspan="2">'+$fn.getEventName(type)+'</td></tr>');
+                    $(table).append('<tr class="familytreetop-this-month-header"><td style="padding-left: 20px;width:20px;">'+$fn.getEventIcon({type:type})+'</td><td colspan="2">'+$fn.getEventName(type)+'</td></tr>');
                     if(data[type].length == 0){
                         $(table).append('<tr><td colspan="3" style="text-align:center; padding: 20px;"><i class="icon-calendar-empty muted" style="font-size:28px;color: #acacac;"></i> <span style="color: #acacac;">'+$languages['none']+'</span></td></tr>');
                     } else {
@@ -185,7 +185,7 @@ $FamilyTreeTop.create("this_month", function($){
 
 
                             sb._('</td>');
-                            sb._('<td style="text-align: right; font-size: 12px;color:#b7b7b7; padding-right: 10px;">')._((type=="BIRT")?user.turns():user.died())._('</td>');
+                            sb._('<td style="text-align: right; font-size: 12px;color:#797979; padding-right: 10px;">')._((type=="BIRT")?user.turns():user.died())._('</td>');
 
                             html = $(sb.ret());
 
@@ -207,7 +207,7 @@ $FamilyTreeTop.create("this_month", function($){
                     break;
 
                 case "MARR":
-                    $(table).append('<tr class="familytreetop-this-month-header"><td style="padding-left:20px;"><i class="icon-large icon-heart"></i></td><td colspan="2">'+$fn.getEventName(type)+'</td></tr>');
+                    $(table).append('<tr class="familytreetop-this-month-header"><td style="padding-left:20px;width:20px;"><i class="icon-large icon-heart"></i></td><td colspan="2">'+$fn.getEventName(type)+'</td></tr>');
                     if(data[type].length == 0){
                         $(table).append('<tr><td colspan="3" style="text-align:center; padding: 20px;"><i class="icon-calendar-empty muted" style="font-size:28px;color: #acacac;"></i> <span style="color: #acacac;">'+$languages['none']+'</span></td></tr>');
                     } else {
@@ -240,7 +240,7 @@ $FamilyTreeTop.create("this_month", function($){
                                     sb._('</tr>');
                                 sb._('</table>');
                             sb._('</td>');
-                            sb._('<td style="text-align: right; font-size: 12px;color:#b7b7b7;padding-right: 10px;">')._(family.married())._('</td>');
+                            sb._('<td style="text-align: right; font-size: 12px;color:#797979;padding-right: 10px;">')._(family.married())._('</td>');
 
                             html = $(sb.ret());
 
