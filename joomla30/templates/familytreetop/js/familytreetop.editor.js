@@ -380,6 +380,44 @@ $FamilyTreeTop.create("editor", function($){
                 }
             }
         },
+        setClearData:function(parent, ind){
+            var avatar = $('<i class="icon-group" style="font-size:145px;"></i>');
+            $(parent).find('input,select').each(function(index, el){
+                var name = $(el).attr('name').match(/\[(\w+)\]/i);
+                switch($(el).prop('tagName')){
+                    case "INPUT":
+                        if($(el).attr('type') != 'file'){
+                            if(name[1] != 'addParent1' && name[1] != 'addParent2'){
+                                $(el).val('');
+                            }
+                        }
+                        break;
+
+                    case "SELECT":
+                        var value;
+                        switch(name[1]){
+                            case "living":
+                                $(parent).find('[familytreetop="deathday"]').hide();
+                                value = 1;
+                                break;
+
+                            default:
+                                if( (/^b_|d_/i).test(name[1])){
+                                    value = 0;
+                                } else {
+                                    value = "default";
+                                }
+                                break;
+                        }
+                        $(el).find('option[value="'+value+'"]').attr('selected', 'selected');
+                        break;
+
+                    default: break;
+                }
+            });
+
+            $(parent).find('[familytreetop="avatar"]').html('').append(avatar);
+        },
         setUserData:function(parent, ind){
             $(parent).find('input,select').each(function(index, el){
                 var name = $(el).attr('name').match(/\[(\w+)\]/i);
@@ -407,7 +445,9 @@ $FamilyTreeTop.create("editor", function($){
                                     }
                                 }
                             } else {
-                                $(el).val(ind[name[1]]);
+                                if(name[1] != 'addParent1' && name[1] != 'addParent2'){
+                                    $(el).val(ind[name[1]]);
+                                }
                             }
                         }
                         break;
@@ -444,7 +484,7 @@ $FamilyTreeTop.create("editor", function($){
                     default: break;
                 }
             });
-            $(parent).find('[familytreetop="avatar"]').append(ind.avatar(["140","140"]))
+            $(parent).find('[familytreetop="avatar"]').html('').append(ind.avatar(["140","140"]))
         },
         setFormInTab:function(num, tabs, form){
             var tab =   $(tabs[0]).find('.tab-content #'+ tabs[1][num]);
@@ -470,6 +510,7 @@ $FamilyTreeTop.create("editor", function($){
                 var spouse = $this.mod('usertree').user(spouses[0]);
                 _setTitle_(spouse.name());
                 _setValue_(spouse.gedcom_id);
+                _setUserData_(spouse.gedcom_id);
                 $(row).find('.btn.dropdown-toggle').click(function(){
                     return false;
                 });
@@ -485,16 +526,19 @@ $FamilyTreeTop.create("editor", function($){
                         if(data == "new"){
                             _setTitle_($(this).text());
                             _setValue_(0);
+                            _setClearData_();
                         } else if(data == "exist"){
                             $fn.modalExistFamilyMember(function(id){
                                 var u = $this.mod('usertree').user(id);
                                 _setTitle_(u.name());
                                 _setValue_(id);
+                                _setUserData_(id);
                             });
                         }
                     } else if(type == "spouse"){
                         _setTitle_($(this).text());
                         _setValue_(data);
+                        _setUserData_(data);
                     }
                     return false;
                 });
@@ -504,6 +548,13 @@ $FamilyTreeTop.create("editor", function($){
                 });
             }
             return true;
+            function _setClearData_(){
+                $fn.setClearData(editProfileForm, ind);
+            }
+            function _setUserData_(id){
+                var _data_ = $this.mod('usertree').user(id);
+                $fn.setUserData(editProfileForm, _data_);
+            }
             function _setTitle_(t){
                 $(row).find('[familytreetop="menu-title"]').text(t);
             }
@@ -528,6 +579,7 @@ $FamilyTreeTop.create("editor", function($){
                         } else if(spouses[0] == id){
                             _setTitle_(spouse.name());
                              _setValue_(id);
+                            _setUserData_(id);
                         }
                         var li = $('<li familytreetop="spouse" familytreetop-data="'+id+'" style="cursor:pointer;"><a href="#">'+spouse.name()+'</a></li>');
                         $(divider).before(li);
@@ -644,11 +696,13 @@ $FamilyTreeTop.create("editor", function($){
                 return a;
             }
         },
-        modalExistFamilyMember:function(call){
+        modalExistFamilyMember:function(ret){
             var cl = _getModal_();
             var select = $(cl).find('#spouses');
             _setSelect_(select);
-            _submit_(cl, select, call);
+            _submit_(cl, select, function(id){
+                ret(id);
+            });
 
             $(cl).modal({dynamic:true});
             return true;
@@ -782,8 +836,8 @@ $FamilyTreeTop.create("editor", function($){
         $(editProfileForm).find('[familytreetop="deathday"]').hide();
 
         if(type=="addChild"){
-            $fn.setParentSelection(editProfileForm, ind);
             $(editProfileForm).find('[familytreetop="avatar"]').append('<i class="icon-group" style="font-size:145px;"></i>');
+            $fn.setParentSelection(editProfileForm, ind);
         } else {
             $(editProfileForm).find('[familytreetop="addChildComplexSelect"]').remove();
         }
