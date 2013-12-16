@@ -20,6 +20,9 @@ body > #wrap {
 [data-familytreetop-color="1"]{
     color: #415981;
 }
+.familytreetop-module-header {
+    color: #7e7e73;
+}
 .familytreetop-is-mother-line {
     background: #ffcc99 !important;
 }
@@ -65,6 +68,7 @@ body > #wrap {
     text-align: center;
     font-weight: bold;
     line-height: 30px;
+    margin-left: 10px;
 }
 .popover-title {
     background-color: #efe4b0;

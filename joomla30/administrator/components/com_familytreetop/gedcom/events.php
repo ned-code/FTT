@@ -69,6 +69,9 @@ class FamilyTreeTopGedcomEventsManager {
     protected $list = array();
     protected $list_by_family_id = array();
     protected $list_by_gedcom_id = array();
+    protected $cache_list = array();
+    protected $cache_list_by_family_id = array();
+    protected $cache_list_by_gedcom_id = array();
 
     public function __construct($tree_id){
         $this->tree_id = $tree_id;

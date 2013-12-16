@@ -4,6 +4,9 @@ class FamilyTreeTopGedcomChildrensManager {
     protected $list = array();
     protected $list_by_gedcom_id = array();
     protected $list_by_family_id = array();
+    protected $cache_list = array();
+    protected $cache_list_by_gedcom_id = array();
+    protected $cache_list_by_family_id = array();
 
     public function __construct($tree_id){
         $this->tree_id = $tree_id;
@@ -156,9 +159,10 @@ class FamilyTreeTopGedcomChildrensManager {
     }
 
     public function getFamilyIdByGedcomId($gedcom_id){
-        if(isset($this->list_by_gedcom_id[$gedcom_id]) && !empty($this->list_by_gedcom_id[$gedcom_id])){
-            $list = $this->list_by_gedcom_id[$gedcom_id];
-            return $list[0]['family_id'];
+        $list = $this->list_by_gedcom_id;
+        if(isset($list[$gedcom_id]) && !empty($list[$gedcom_id])){
+            $data = $list[$gedcom_id];
+            return $data[0]['family_id'];
         }
         return false;
     }

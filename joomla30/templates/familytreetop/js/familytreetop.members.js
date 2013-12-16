@@ -89,9 +89,12 @@ $FamilyTreeTop.create("members", function($){
             //return a<b?-1:a>b?1:0;
             return a>b?-1:a<b?1:0;
             function _getDate_(object){
+                //console.log(object);
                 var event = object.birth();
+                //console.log($this.parseBoolean(event));
                 if($this.parseBoolean(event)){
                     var date = event.date;
+                    //console.log(date);
                     return [
                         (date.start_year!=null)?date.start_year:100,
                         (date.start_month!=null)?date.start_month:1,
@@ -176,8 +179,16 @@ $FamilyTreeTop.create("members", function($){
                 return true;
             }
         },
+        isMembers: function(object, aList, dList){
+            if("object" == typeof($isMembers)){
+                var list = ($isMembers['ancestors'])?aList:dList;
+                return ("undefined" !== typeof(list[object.gedcom_id]));
+            } else {
+                return true;
+            }
+        },
         render: function(order){
-            var key, object, birth, tr,td, avatar;
+            var key, object, birth, tr,td, avatar, ancestorList, descendantList;
             $($box).find('tbody tr').remove();
             if("undefined" === typeof(order)){
                 $users.sort(function(a,b){
@@ -190,15 +201,17 @@ $FamilyTreeTop.create("members", function($){
                     }
                 });
             }
+            ancestorList = $this.mod('usertree').getAncestorList();
+            descendantList = $this.mod('usertree').getDescendantList();
             for (key in $users){
                 if(!$users.hasOwnProperty(key)) continue;
                 object = $users[key];
                 birth = object.birth();
                 tr = $('<tr class="familytreetop-hover-effect" gedcom_id="'+object.gedcom_id+'"></tr>');
-                if($fn.isSortable(object)&&$fn.isGender(object)&&$fn.isLiving(object)&&$fn.isRegistered(object)){
+                if($fn.isSortable(object)&&$fn.isGender(object)&&$fn.isLiving(object)&&$fn.isRegistered(object)&&$fn.isMembers(object, ancestorList, descendantList)){
                     avatar = object.avatar(["25","25"]);
                     $fn.setRelPullObject(object);
-                    $(tr).append('<td><i class="icon-leaf"></i>'+object.relation+'</td>');
+                    $(tr).append('<td><i class="icon-leaf"></i> '+object.relation+'</td>');
                     td = $('<td style="'+getPadding(avatar)+'" data-familytreetop-color="'+object.gender+'" gedcom_id="'+object.gedcom_id+'"></td>');
                     if($this.mod('usertree').isAvatar(avatar)){
                         var div = $(document.createElement('div'));
@@ -314,15 +327,22 @@ $FamilyTreeTop.create("members", function($){
                         $isLiving['alive'] = (type[1]=="yes");
                     }
                     break;
-                case "members":
 
-                    break;
                 case "registered":
                     if(type[1] == "both"){
                         $isRegistered = true;
                     } else {
                         $isRegistered = {};
                         $isRegistered['registered'] = (type[1]=="yes");
+                    }
+                    break;
+
+                case "members":
+                    if(type[1] == "both"){
+                        $isMembers = true;
+                    } else {
+                        $isMembers = {};
+                        $isMembers['ancestors'] = (type[1]=="ancestors");
                     }
                     break;
             }

@@ -7,7 +7,7 @@ $filterButtonsWidth = 100;
     <div class="span8">
         <div class="well" familytreetop="module">
             <fieldset>
-                <legend>
+                <legend class="familytreetop-module-header">
                     <div class="row-fluid">
                         <div class="span12">
                             <div style="position:relative;" class="text-center">
@@ -35,7 +35,7 @@ $filterButtonsWidth = 100;
     <div id="filterMembers" class="span4 visible-desktop">
         <div class="well" familytreetop="module">
             <fieldset>
-                <legend class="text-center"><?=JText::_('MOD_FTT_MEMBERS_FILTER');?></legend>
+                <legend class="text-center familytreetop-module-header"><?=JText::_('MOD_FTT_MEMBERS_FILTER');?></legend>
                 <div class="row-fluid">
                     <div class="span12">
                         <ul style="margin: 0 auto;width: 200px;" class-familytreetop="module-padding" class="unstyled">

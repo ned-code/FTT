@@ -309,6 +309,13 @@ class FamilyTreeTopGedcomIndividualsModel {
         $ind->save();
     }
 
+    public function updateCanBeDeleteParam(){
+        if(empty($this->id)) return false;
+        $ind = FamilyTreeTopIndividuals::find($this->id);
+        $ind->is_can_be_delete = $this->isCanBeDelete();
+        $ind->save();
+    }
+
     public function checkLine($parent){
         $gedcom = GedcomHelper::getInstance();
         $con = $this->getConnection();
@@ -522,6 +529,17 @@ class FamilyTreeTopGedcomIndividualsManager {
             if($user['is_father_line'] == null || $user['is_mother_line'] == null){
                 $object = $gedcom->individuals->get($id);
                 $object->updateLine();
+            }
+        }
+    }
+
+    public function updateIsCanBeDelete(){
+        $gedcom = GedcomHelper::getInstance();
+        $list = $this->list;
+        foreach($list as $id => $user){
+            if($user['is_can_be_delete'] == null){
+                $object = $gedcom->individuals->get($id);
+                $object->updateCanBeDeleteParam();
             }
         }
     }

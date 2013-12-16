@@ -37,7 +37,7 @@ $FamilyTreeTop.create("popovers", function($){
                 object = cache.data.object,
                 avatar;
 
-            if(object.facebook_id == 0 && object.isAlive()){
+            if(object.isCanBeInvite()){
                 $(div).find('[familytreetop-name="footer"] button[familytreetop-invite]').show();
             }
             if(object.facebook_id != 0 && object.isAlive()){

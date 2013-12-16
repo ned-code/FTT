@@ -13,7 +13,7 @@ if($user->facebook_id != 0){
     <div class="span12">
         <div class="well" familytreetop="module">
             <fieldset>
-                <legend class="text-center"><?=JText::_('MOD_FTT_MYFAMILY_TITLE');?></legend>
+                <legend class="text-center familytreetop-module-header"><?=JText::_('MOD_FTT_MYFAMILY_TITLE');?></legend>
                 <?php if(!empty($data)): ?>
                     <div class="row-fluid">
                         <div class="span12">

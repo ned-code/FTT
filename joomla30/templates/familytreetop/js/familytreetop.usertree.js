@@ -151,7 +151,7 @@ $FamilyTreeTop.create("usertree", function($){
             middle_name: ind.middle_name,
             is_father_line: (ind.is_father_line!=null)?parseInt(ind.is_father_line):0,
             is_mother_line: (ind.is_mother_line!=null)?parseInt(ind.is_mother_line):0,
-            is_can_be_delete: (ind.is_can_be_delete!=null)?parseInt(ind.is_can_be_delete):1,
+            is_can_be_delete: (ind.is_can_be_delete!=null)?parseInt(ind.is_can_be_delete):0,
             inLaw: (function(){
                 var relation = $this.getRelation(ind.gedcom_id);
                 if(relation){
@@ -342,33 +342,30 @@ $FamilyTreeTop.create("usertree", function($){
                 return "";
             },
             isCanBeDelete: function(){
-                var parents, childrens, spouses;
-                parents = $this.getParents(ind.gedcom_id);
-                childrens = $this.getChildrens(ind.gedcom_id);
-                spouses = $this.getSpouses(ind.gedcom_id);
-                if(!_isChildrenExist_(childrens) && !_isSpousesExist_(spouses)){
-                    return true;
-                } else if(_isSpousesExist_(spouses) && spouses.length == 1 && !_isChildrenExist_(childrens) && !_isParentExist_(parents)){
+                var usermap = $this.usermap();
+                var isRegistered = this.isRegistered();
+                var isCanBeDelete = this.is_can_be_delete;
+                var isInLaw = this.inLaw;
+                if(isCanBeDelete){
+                    if(isInLaw) return false;
+                    if(isRegistered && usermap.gedcom_id != ind.gedcom_id) return false;
                     return true;
                 }
                 return false;
-                function _isParentExist_(p){
-                    if(p.father == null && p.mother == null){
-                        return false;
-                    }
-                    return true;
-                }
-                function _isChildrenExist_(c){
-                    return (c.length != 0);
-                }
-                function _isSpousesExist_(s){
-                    return (s.length != 0);
-                }
+            },
+            isCanBeEdit: function(){
+                var usermap = $this.usermap();
+                var isRegistered = this.isRegistered();
+                var inLaw = this.inLaw;
+                if(usermap.gedcom_id == ind.gedcom_id) return true;
+                if(isRegistered || inLaw) return false;
+                return true;
             },
             isCanBeInvite: function(){
                 var isRegistered = this.isRegistered();
                 var isAlive = this.isAlive();
-                if(isRegistered || !isAlive) return false;
+                var inLaw = this.inLaw;
+                if(isRegistered || !isAlive || inLaw) return false;
                 return true;
             },
             isRegistered:function(){
@@ -1134,6 +1131,45 @@ $FamilyTreeTop.create("usertree", function($){
         data.med.all[media_id].role = "IMAG";
         delete cache[gedcom_id];
         $this.call();
+    }
+
+    $this.getAncestorList = function(){
+        var um = $this.usermap();
+        var list = {};
+        setAncestorList(um.gedcom_id);
+        return list;
+        function setAncestorList(id){
+            var p = $this.getParents(id);
+            if(p.family_id == null) return false;
+            if(p.father != null){
+                list[p.father] = true;
+                setAncestorList(p.father);
+            }
+            if(p.mother != null){
+                list[p.mother] = true;
+                setAncestorList(p.mother);
+            }
+        }
+    }
+
+    $this.getDescendantList = function(){
+        var um = $this.usermap();
+        var list = {};
+        setDescendantsList(um.gedcom_id);
+        return list;
+        function setDescendantsList(id){
+            var c = $this.getChildrens(id);
+            if(c.length > 0){
+                for(var key in c){
+                    if(!c.hasOwnProperty(key)) continue;
+                    var e = c[key];
+                    if(e != null){
+                        list[e] = true;
+                        setDescendantsList(e);
+                    }
+                }
+            }
+        }
     }
 
     $this.getData = function(){

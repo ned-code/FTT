@@ -66,7 +66,8 @@ class FamilyTreeTopGedcomDateModel {
 
 class FamilyTreeTopGedcomDatesManager {
     protected $tree_id;
-    protected $list;
+    protected $list = array();
+    protected $cache_list = array();
 
     public function __construct($tree_id){
         $this->tree_id = $tree_id;
@@ -130,7 +131,6 @@ class FamilyTreeTopGedcomDatesManager {
                 $result[$id] = $item;
             }
         }
-
         return $result;
     }
 
