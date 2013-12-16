@@ -435,14 +435,14 @@ class FamilytreetopControllerEditor extends FamilytreetopController
             $fam[] = $family;
         }
 
-        $rel = array();
-        foreach($arrInd as $e){
-            $rel[] = $gedcom->relations->getArray($owner->gedcom_id, $e->gedcom_id);
-        }
-
         $ind->updateLine();
         if($spouse){
             $spouse->updateLine();
+        }
+
+        $rel = array();
+        foreach($arrInd as $e){
+            $rel[] = $gedcom->relations->getArray($owner->gedcom_id, $e->gedcom_id);
         }
 
         echo $this->getResponse(
