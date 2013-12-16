@@ -297,12 +297,7 @@ $FamilyTreeTop.create("editor", function($){
 
                 if(spouses.length > 1){
                     if(ind.family_id != null && ind.family_id == family_id){
-                        button =  $(form).find('[familytreetop="current"]');
-                        default_family_button = button;
-                        fieldset = $(default_family_button).parents('fieldset')[0];
-                        $(fieldset).css('background', '#FAF4D9');
-                        $($(fieldset).find('div')[0]).css('background', '#EFE4B0');
-                        $(button).show();
+                        setDefaultButton(form);
                     } else {
                         button = $(form).find('[familytreetop="set-current"]');
                         $(button).show();
@@ -316,6 +311,10 @@ $FamilyTreeTop.create("editor", function($){
                 forms.push(form);
                 $fn.setFormInTab(1, parent, form);
             });
+
+            if("undefined" === typeof(default_family_button) && spouses.length > 0){
+                setDefaultButton(forms[0]);
+            }
 
             $(forms).each(function(i, form){
                 $(form).find('[familytreetop="current"]').click(function(){
@@ -353,6 +352,15 @@ $FamilyTreeTop.create("editor", function($){
                 } else {
                     return "";
                 }
+            }
+            function setDefaultButton(form){
+                var button, fieldset;
+                button =  $(form).find('[familytreetop="current"]');
+                default_family_button = button;
+                fieldset = $(default_family_button).parents('fieldset')[0];
+                $(fieldset).css('background', '#FAF4D9');
+                $($(fieldset).find('div')[0]).css('background', '#EFE4B0');
+                $(button).show();
             }
             function setUnion(form, type, ind){
                 var el = $(form).find('[familytreetop="'+type+'"]');
