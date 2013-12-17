@@ -201,10 +201,12 @@ $FamilyTreeTop.create("profile", function($){
                 });
             }
             function calcPoints(){
-                var key, user, spouses, object, cords, prew;
+                var key, id, user, spouses, object, cords, prew, cache = {};
                 points = [];
                 for(key in connection){
-                    user = $this.mod('usertree').user(connection[key]);
+                    id = connection[key];
+                    if("undefined"!==typeof(cache[id])) continue;
+                    user = $this.mod('usertree').user(id);
                     cords = _getCords_(user, key);
                     prew = _getPrew_(key);
 
@@ -215,6 +217,11 @@ $FamilyTreeTop.create("profile", function($){
                     object.spouse = (spouses.length != 0)?$this.mod('usertree').user(spouses[0]):0;
 
                     points[key] = object;
+
+                    cache[user.gedcom_id] = true;
+                    if(object.spouse){
+                        cache[object.spouse.gedcom_id] = true;
+                    }
                 }
                 return true;
                 function _getPrew_(key){
@@ -465,12 +472,15 @@ $FamilyTreeTop.create("profile", function($){
             }
             function getBackgroundColor(pos, spouse){
                 var point = points[pos];
-                var user = point.user;
+                var user;
                 if(spouse){
-                    return "#c3c3c3";
-                } else if(connection[0] == user.gedcom_id){
+                    user = point.spouse;
+                } else {
+                    user = point.user;
+                }
+                if(connection[0] == user.gedcom_id){
                     return "#efe4b0";
-                } else if(connection[connection.length - 1] == user.gedcom_id){
+                } else if(args.gedcom_id == user.gedcom_id){
                     return "#ffc90e";
                 } else {
                     return "#c3c3c3";
