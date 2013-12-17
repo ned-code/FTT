@@ -48,7 +48,7 @@ $FamilyTreeTop.create("profile", function($){
             })
         },
         setRelation:function(args){
-            var box, canvas, cont, connection, settings, points;
+            var box, canvas, cont, connection, conobj, settings, points;
             
             box = $(this).find('[data-familytreetop-profile="relation"] fieldset');
             canvas = $('<canvas></canvas>');
@@ -63,6 +63,9 @@ $FamilyTreeTop.create("profile", function($){
                 $(this).find('[data-familytreetop-profile="relation"]').remove();
                 return false;
             }
+
+            conobj = getConObject(connection);
+
             settings = {
                 width: $(box).width(),
                 node:{
@@ -213,9 +216,8 @@ $FamilyTreeTop.create("profile", function($){
                     object = {x:prew.x + cords.x, y:prew.y + cords.y, user:user, pos:parseInt(key)};
 
                     spouses = $this.mod('usertree').getSpouses(user.gedcom_id);
-
-                    object.spouse = (spouses.length != 0)?$this.mod('usertree').user(spouses[0]):0;
-
+                    object.spouses = _getSpouses_(spouses);
+                    object.spouse = _getSpouse_(user, object.spouses);
                     points[key] = object;
 
                     cache[user.gedcom_id] = true;
@@ -224,6 +226,30 @@ $FamilyTreeTop.create("profile", function($){
                     }
                 }
                 return true;
+                function _getSpouses_(spouses){
+                    var k, spss, spouse, spouse_id;
+                    spss = [];
+                    for(k in spouses){
+                        spouse_id = spouses[k];
+                        spouse = $this.mod('usertree').user(spouse_id);
+                        spss.push(spouse);
+                    }
+                    return spss;
+                }
+                function _getSpouse_(u, s){
+                    var k, spouse, ret = false;
+                    if(s.length == 0) return 0;
+                    for(k in s){
+                        if(!s.hasOwnProperty(k)) continue;
+                        spouse = s[k];
+                        if("undefined" !== typeof(conobj[spouse.gedcom_id])){
+                            return spouse;
+                        } else if(u.family_id != null && spouse.family_id == u.family_id){
+                            ret = spouse;
+                        }
+                    }
+                    return (ret)?ret:s[0];
+                }
                 function _getPrew_(key){
                     if("undefined" !== typeof(points[(key - 1)])){
                         return points[(key-1)];
@@ -458,6 +484,14 @@ $FamilyTreeTop.create("profile", function($){
                         _setOffset_(index, shift);
                     }
                 }
+            }
+            function getConObject(c){
+                var key, cobj = {};
+                for(key in c){
+                    if(!c.hasOwnProperty(key)) continue;
+                    cobj[c[key]] = true;
+                }
+                return cobj;
             }
             function getMaxRow(){
                 var min = 0, max = 0, key;
