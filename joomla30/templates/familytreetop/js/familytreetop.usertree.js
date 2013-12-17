@@ -698,15 +698,26 @@ $FamilyTreeTop.create("usertree", function($){
 
     $this.getRelationName = function(object, flag, user){
         var name,
+            con,
+            rel,
             relation_id,
             suffix,
             postfix,
             nameString;
         if("undefined" !== typeof(object)){
+            con = $this.getConnection(object.target_id);
             relation_id = parseInt(object.relation_id, 10);
             name = _getName_(relation_id, user);
             suffix = _getSuffix_(object);
             postfix = _getPostfix_(object);
+
+            if( (relation_id == 10 || relation_id == 11) && postfix.length > 0 && con.length > 1 ){
+                rel = $this.getRelation(con[con.length - 2]);
+                if("undefined"!==typeof(rel) && rel && !$this.parseNum(rel.in_law)){
+                    postfix = "";
+                }
+            }
+
             if(relation_id == 9){
                 nameString = relationList[name] + " " + suffix + " " + postfix;
             } else {
