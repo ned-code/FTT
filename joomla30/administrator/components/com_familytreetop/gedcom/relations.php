@@ -249,20 +249,39 @@ class FamilyTreeTopGedcomRelationsManager {
         );
     }
 
-    public function get($gedcom_id, $target_id, $in_law = 0, $by_spouse = 0){
+    public function get($gedcom_id, $target_id, $in_law = 0, $by_spouse = 0, $cache = false){
         $relation = $this->_get((!$in_law)?$gedcom_id:$in_law, $target_id);
-        if($relation && !isset($this->list[$target_id])){
-            $json = $this->getJSON($relation);
-            $item = $this->set(array(
-                'relation_id' => $relation[0],
-                'gedcom_id' => $gedcom_id,
-                'target_id' => $target_id,
-                'connection' => (isset($this->conn[$target_id]))?base64_encode(json_encode($this->conn[$target_id])):"",
-                'json' => $json,
-                'in_law' => $in_law,
-                'by_spouse' => $by_spouse
-            ));
-            $this->list[$target_id] = $item;
+        if($cache){
+            if($relation){
+                /*
+                $json = $this->getJSON($relation);
+                $item = $this->set(array(
+                    'relation_id' => $relation[0],
+                    'gedcom_id' => $gedcom_id,
+                    'target_id' => $target_id,
+                    'connection' => (isset($this->conn[$target_id]))?base64_encode(json_encode($this->conn[$target_id])):"",
+                    'json' => $json,
+                    'in_law' => $in_law,
+                    'by_spouse' => $by_spouse
+                ));
+                return $item;
+                */
+                return true;
+            }
+        } else {
+            if($relation && !isset($this->list[$target_id])){
+                $json = $this->getJSON($relation);
+                $item = $this->set(array(
+                    'relation_id' => $relation[0],
+                    'gedcom_id' => $gedcom_id,
+                    'target_id' => $target_id,
+                    'connection' => (isset($this->conn[$target_id]))?base64_encode(json_encode($this->conn[$target_id])):"",
+                    'json' => $json,
+                    'in_law' => $in_law,
+                    'by_spouse' => $by_spouse
+                ));
+                $this->list[$target_id] = $item;
+            }
         }
         return $relation;
     }
@@ -317,6 +336,55 @@ class FamilyTreeTopGedcomRelationsManager {
         }
     }
 
+    public function getListById($gedcom_id){
+        $gedcom = GedcomHelper::getInstance();
+        $list = $gedcom->individuals->getList();
+        $mass = array();
+        $unknowns = array();
+        foreach($list as $key => $member){
+            if($key != "_NAMES"){
+                $item = $this->get($gedcom_id, $member['gedcom_id'], 0, 0, true);
+                if($item){
+                    $mass[$member['gedcom_id']] = $item;
+                }
+                $unknowns[$member['gedcom_id']] = $member;
+            }
+        }
+        if(sizeof($unknowns) > 0){
+            $spouses = $this->get_spouses($gedcom_id, true);
+            foreach($unknowns as $item){
+                if(!isset($mass[$item['gedcom_id']])){
+                    $gedcom_id = $this->getInLawRelation($item['gedcom_id']);
+                    if(isset($spouses[$gedcom_id])){
+                        $e = $this->get($this->owner_id, $item['gedcom_id'], $gedcom_id, 1, true);
+                        if($e){
+                            $mass[$item['gedcom_id']] = $e;
+                        }
+                    } else {
+                        $relation = $this->_get($gedcom_id, $item['gedcom_id']);
+                        if($relation && $relation[0] == 2){
+                            $json = $this->getJSON($relation);
+                            $rel = $this->getInLawRelationId($gedcom_id);
+                            if($rel != 1000){
+                                $i = $this->set(array(
+                                    'relation_id' => $rel,
+                                    'gedcom_id' => $this->owner_id,
+                                    'target_id' => $item['gedcom_id'],
+                                    'connection' => (isset($this->conn[$item['gedcom_id']]))?base64_encode(json_encode($this->conn[$item['gedcom_id']])):"",
+                                    'json' => $json,
+                                    'in_law' => 1,
+                                    'by_spouse' => 0
+                                ));
+                                $mass[$item['gedcom_id']] = $i;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return $mass;
+    }
+
     public function getList(){
         if($members = $this->isRelationsNotExist()){
             $unknowns = array();
@@ -338,7 +406,7 @@ class FamilyTreeTopGedcomRelationsManager {
                                 $json = $this->getJSON($relation);
                                 $rel = $this->getInLawRelationId($gedcom_id);
                                 if($rel != 1000){
-                                    $item = $this->set(array(
+                                    $i = $this->set(array(
                                         'relation_id' => $rel,
                                         'gedcom_id' => $this->owner_id,
                                         'target_id' => $item['gedcom_id'],
@@ -347,7 +415,7 @@ class FamilyTreeTopGedcomRelationsManager {
                                         'in_law' => 1,
                                         'by_spouse' => 0
                                     ));
-                                    $this->list[$item['gedcom_id']] = $item;
+                                    $this->list[$item['gedcom_id']] = $i;
                                 }
                             }
                         }
