@@ -67,6 +67,17 @@ class GedcomHelper
         return false;
     }
 
+    public function sortUsersByView($users, $data){
+        $list = $data['ind'];
+        $result = array();
+        foreach($users as $id => $user){
+            if(isset($list[$id])){
+                $result[$id] = $user;
+            }
+        }
+        return json_encode($result);
+    }
+
     public function getTreeMembersCount($tree_id){
         $db = JFactory::getDbo();
         $sql = "SELECT i.id as id, i.gedcom_id, i.creator_id, i.gender, i.family_id, i.create_time,
