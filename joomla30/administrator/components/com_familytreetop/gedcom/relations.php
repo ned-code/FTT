@@ -366,6 +366,7 @@ class FamilyTreeTopGedcomRelationsManager {
                             $json = $this->getJSON($relation);
                             $rel = $this->getInLawRelationId($gedcom_id);
                             if($rel != 1000){
+                                /*
                                 $i = $this->set(array(
                                     'relation_id' => $rel,
                                     'gedcom_id' => $this->owner_id,
@@ -375,7 +376,8 @@ class FamilyTreeTopGedcomRelationsManager {
                                     'in_law' => 1,
                                     'by_spouse' => 0
                                 ));
-                                $mass[$item['gedcom_id']] = $i;
+                                */
+                                $mass[$item['gedcom_id']] = true;
                             }
                         }
                     }
