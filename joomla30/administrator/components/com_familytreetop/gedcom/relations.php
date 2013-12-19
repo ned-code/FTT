@@ -356,10 +356,12 @@ class FamilyTreeTopGedcomRelationsManager {
                 if(!isset($mass[$item['gedcom_id']])){
                     $gedcom_id = $this->getInLawRelation($item['gedcom_id']);
                     if(isset($spouses[$gedcom_id])){
+                        /*
                         $e = $this->get($this->owner_id, $item['gedcom_id'], $gedcom_id, 1, true);
                         if($e){
                             $mass[$item['gedcom_id']] = $e;
                         }
+                        */
                     } else {
                         $relation = $this->_get($gedcom_id, $item['gedcom_id']);
                         if($relation && $relation[0] == 2){

@@ -78,6 +78,34 @@ class GedcomHelper
         return sizeof($rows);
     }
 
+    public function getUniqueUserRelated($gedcom_id){
+        $gedcom = GedcomHelper::getInstance();
+
+        $users = $gedcom->getTreeUsers();
+
+        $mass = array();
+
+        $ownerArray = $gedcom->relations->getListById($gedcom_id);
+        foreach($users as $user){
+            if($user['gedcom_id'] != $gedcom_id){
+                $mass[$user['gedcom_id']] = $gedcom->relations->getListById($user['gedcom_id']);
+            }
+        }
+
+        foreach($ownerArray as $id => $e){
+            if($id==$gedcom_id) unset($ownerArray[$id]);
+            foreach($mass as $data){
+                foreach($data as $k => $i){
+                    if($id == $k){
+                        unset($ownerArray[$id]);
+                    }
+                }
+            }
+        }
+
+        return $ownerArray;
+    }
+
     public function getData(){
         $relationList = $this->relations->getList();
         $individualList = $this->individuals->getViewList($relationList);

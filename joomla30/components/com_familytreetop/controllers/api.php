@@ -14,23 +14,4 @@ class FamilytreetopControllerApi extends FamilytreetopController
         echo json_encode(array('success'=>true));
         exit;
     }
-
-    public function delete(){
-        $gedcom = GedcomHelper::getInstance();
-
-        $owner = FamilyTreeTopUserHelper::getInstance()->get();
-        $users = $gedcom->getTreeUsers();
-
-        $mass = array();
-
-        foreach($users as $user){
-            $mass[$user['gedcom_id']] = $gedcom->relations->getListById($user['gedcom_id']);
-        }
-
-        echo '----------------<br>';
-
-        var_dump($mass);
-
-        exit;
-    }
 }
