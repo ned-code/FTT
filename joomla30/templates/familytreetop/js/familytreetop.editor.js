@@ -168,11 +168,15 @@ $FamilyTreeTop.create("editor", function($){
                     _hideButtons_();
                     _showDeleteTreeButton_();
                     _click_('delete-tree',function(){
-                         _deleteTree_();
+                        _deleteTree_();
                     });
                 } else {
                     _click_('delete', function(){
-                        _deleteTable_();
+                        $this.ajax('editor.getOrganeUsers', {gedcom_id: ind.gedcom_id}, function(res){
+                            _orangeDeleteConfirm_(res, function(){
+                                _deleteTable_();
+                            });
+                        });
                     });
                 }
             } else {
@@ -212,6 +216,14 @@ $FamilyTreeTop.create("editor", function($){
                     if(res) ind.delete();
                     callback(res);
                 });
+            }
+            function _orangeDeleteConfirm_(res, call){
+                var data = res.data;
+                for(var key in data){
+                    var user = $this.mod('usertree').user(key);
+                    //console.log(user.name());
+                }
+                call();
             }
             function _deleteTable_(){
                 _hideButtons_();

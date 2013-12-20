@@ -594,6 +594,17 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         exit;
     }
 
+    public function getOrganeUsers(){
+        $app = JFactory::getApplication();
+        $gedcom = GedcomHelper::getInstance();
+
+        $gedcom_id = $app->input->post->get('gedcom_id', false);
+        $users = $gedcom->getUniqueUserRelated($gedcom_id);
+
+        echo json_encode(array('success' => true, 'data'=>$users));
+        exit;
+    }
+
     public function delete(){
         $app = JFactory::getApplication();
         $gedcom = GedcomHelper::getInstance();
