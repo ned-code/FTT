@@ -205,12 +205,14 @@ $FamilyTreeTop.create("editor", function($){
             function _hideButtonInvalidRegister_(){ $(parent).find('[familytreetop="delete-invalid-register"]').hide(); }
             function _hideDeleteConfirm_(){ $(parent).find('[familytreetop="delete-confirm"]').hide(); }
             function _hideDeleteTable_(){ $(parent).find('[familytreetop="delete"]').hide(); }
+            function _hideOrangeListBox_(){ $(parent).find('[familytreetop="orange-users"]').hide(); }
             function _showButtons_(){ $(parent).find('[familytreetop="buttons"]').show(); }
             function _showDeleteTreeButton_(){ $(parent).find('[familytreetop="delete-tree"]').show(); }
             function _showButtonInvalid_(){ $(parent).find('[familytreetop="delete-invalid"]').show(); }
             function _showButtonInvalidRegister_(){ $(parent).find('[familytreetop="delete-invalid-register"]').show(); }
             function _showDeleteConfirm_(){ $(parent).find('[familytreetop="delete-confirm"]').show(); }
             function _showDeleteTable_(){ $(parent).find('[familytreetop="delete"]').show(); }
+            function _showOrangeListBox_(){ $(parent).find('[familytreetop="orange-users"]').show(); }
             function _delete_(){
                 _ajax_(3, ind.gedcom_id, function(res){
                     if(res) ind.delete();
@@ -218,12 +220,24 @@ $FamilyTreeTop.create("editor", function($){
                 });
             }
             function _orangeDeleteConfirm_(res, call){
+                _hideButtons_();
+                _showOrangeListBox_();
+                var box = $(parent).find('[familytreetop="orange-users"]');
+                var list = $(box).find('ul');
                 var data = res.data;
                 for(var key in data){
                     var user = $this.mod('usertree').user(key);
-                    //console.log(user.name());
+                    $(ul).append('<li>'+user.name()+'</li>');
                 }
-                call();
+                $(box).find('button').unbind();
+                $(box).find('[familytreetop="orange-confirm"]').click(function(){
+                    _hideOrangeListBox_();
+                    call();
+                });
+                $(box).find('[familytreetop="orange-cancel"]').click(function(){
+                    _hideOrangeListBox_();
+                    _showButtons_();
+                });
             }
             function _deleteTable_(){
                 _hideButtons_();

@@ -673,6 +673,26 @@ $treeViewUsers = GedcomHelper::getInstance()->sortUsersByView($treeUsers, $data)
                 <div class="span4"></div>
             </div>
         </div>
+        <div familytreetop="orange-users" style="display:none;">
+            <div class="row-fluid">
+                <div class="span4"></div>
+                <div class="span4">
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <ul familytreetop="orange-list"></ul>
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <button familytreetop="orange-confirm" type="button" class="btn">Confirm</button>
+                            <button familytreetop="orange-cancel" type="button" class="btn">Cancel</button>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="span4"></div>
+            </div>
+        </div>
         <div familytreetop="delete-tree" style="display:none;">
             <div class="row-fluid">
                 <div class="span4"></div>
