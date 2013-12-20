@@ -172,7 +172,9 @@ $FamilyTreeTop.create("editor", function($){
                     });
                 } else {
                     _click_('delete', function(){
+                        $fn.progressbarOn();
                         $this.ajax('editor.getOrganeUsers', {gedcom_id: ind.gedcom_id}, function(res){
+                            $fn.progressbarOff();
                             _orangeDeleteConfirm_(res, function(){
                                 _deleteTable_();
                             });
@@ -198,7 +200,9 @@ $FamilyTreeTop.create("editor", function($){
                     call(res);
                 });
             }
-            function _click_(button, callback){ $(parent).find('[familytreetop-button="'+button+'"]').click(callback);}
+            function _click_(button, callback){
+                $(parent).find('[familytreetop-button="'+button+'"]').click(callback);
+            }
             function _hideButtons_(){ $(parent).find('[familytreetop="buttons"]').hide(); }
             function _hideDeleteTreeButton_(){ $(parent).find('[familytreetop="delete-tree"]').hide(); }
             function _hideButtonInvalid_(){ $(parent).find('[familytreetop="delete-invalid"]').hide(); }
