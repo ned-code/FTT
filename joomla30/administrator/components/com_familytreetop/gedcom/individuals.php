@@ -124,6 +124,33 @@ class FamilyTreeTopGedcomIndividualsModel {
         return true;
     }
 
+    public function hardDelete(){
+        if(empty($this->id)) return false;
+        $gedcom = GedcomHelper::getInstance();
+        $link = FamilyTreeTopTreeLinks::find_by_id_and_type($this->gedcom_id, 0);
+        $user = FamilyTreeTopIndividuals::find_by_gedcom_id($this->gedcom_id);
+        $families = $gedcom->families->getFamilies($this->gedcom_id);
+
+        if(!empty($this->events)){
+            foreach($this->events as $event){
+                $event->remove();
+            }
+        }
+
+        if(!empty($families)){
+            foreach($families as $f){
+                $family_id = $f->family_id;
+                $family = $gedcom->families->get($family_id);
+                $family->delete();
+            }
+        }
+
+        $user->delete();
+        $link->delete();
+
+        $gedcom->individuals->removeFromList($this->gedcom_id);
+    }
+
     public function delete(){
         if(!$this->isCanBeDelete()) return false;
         $gedcom = GedcomHelper::getInstance();
