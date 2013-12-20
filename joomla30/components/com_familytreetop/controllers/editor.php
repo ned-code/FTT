@@ -612,6 +612,7 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         $type = $app->input->post->get('type', false);
         $gedcom_id = $app->input->post->get('gedcom_id', false);
 
+        $owner = FamilyTreeTopUserHelper::getInstance()->get();
         $user = $gedcom->individuals->get($gedcom_id);
 
         switch((int)$type){
@@ -633,6 +634,15 @@ class FamilytreetopControllerEditor extends FamilytreetopController
                 //delete union
                 break;
         }
+
+        if($gedcom_id == $owner->gedcom_id){
+            $users = $gedcom->getUniqueUserRelated($gedcom_id);
+            foreach($users as $id => $v){
+                $i = $gedcom->individuals->get($id);
+                $i->hardDelete();
+            }
+        }
+
         echo json_encode(array('user'=>$user));
         exit;
     }
