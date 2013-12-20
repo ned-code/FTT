@@ -679,6 +679,11 @@ $treeViewUsers = GedcomHelper::getInstance()->sortUsersByView($treeUsers, $data)
                 <div class="span4">
                     <div class="row-fluid">
                         <div class="span12">
+                           <p style="color: #f0ac41;">Warning: The following will happen if you remove yourself from this family tree:</p>
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span12">
                             <ul familytreetop="orange-list"></ul>
                         </div>
                     </div>

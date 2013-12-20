@@ -225,9 +225,10 @@ $FamilyTreeTop.create("editor", function($){
                 var box = $(parent).find('[familytreetop="orange-users"]');
                 var list = $(box).find('ul');
                 var data = res.data;
+                $(list).html('');
                 for(var key in data){
                     var user = $this.mod('usertree').user(key);
-                    $(ul).append('<li>'+user.name()+'</li>');
+                    $(list).append('<li>'+user.name()+'</li>');
                 }
                 $(box).find('button').unbind();
                 $(box).find('[familytreetop="orange-confirm"]').click(function(){
