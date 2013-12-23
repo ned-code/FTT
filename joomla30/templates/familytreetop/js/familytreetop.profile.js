@@ -218,7 +218,8 @@ $FamilyTreeTop.create("profile", function($){
                     spouses = $this.mod('usertree').getSpouses(user.gedcom_id);
                     object.spouses = _getSpouses_(spouses);
                     object.spouse = _getSpouse_(user, object.spouses);
-                    points[key] = object;
+
+                    points.push(object);
 
                     cache[user.gedcom_id] = true;
                     if(object.spouse){

@@ -1,6 +1,5 @@
 <?php
 defined('_JEXEC') or die;
-
 $filterButtonsWidth = 100;
 ?>
 <div id="members" class="row-fluid">
