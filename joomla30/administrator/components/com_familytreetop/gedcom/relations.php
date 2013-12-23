@@ -18,7 +18,7 @@ class FamilyTreeTopGedcomRelationsManager {
 
     protected function getRelations($gedcom_id){
         $db = JFactory::getDbo();
-        $sql = "SELECT r.id, r.relation_id, r.gedcom_id, r.target_id, r.json, r.in_law, r.change_time
+        $sql = "SELECT r.id, r.relation_id, r.gedcom_id, r.target_id, r.json, r.in_law, r.by_spouse, r.change_time
                     FROM #__familytreetop_relation_links as r, #__familytreetop_tree_links as l, #__familytreetop_trees as t
                     WHERE r.gedcom_id = l.id AND l.tree_id = t.id AND t.id = " . $this->tree_id . " AND r.gedcom_id = " . $gedcom_id;
         $db->setQuery($sql);

@@ -366,8 +366,12 @@ $FamilyTreeTop.create("usertree", function($){
                 var isRegistered = this.isRegistered();
                 var isAlive = this.isAlive();
                 var inLaw = this.inLaw;
-                if(inLaw && !con[con.length - 2].inLaw){
-                    inLaw = false;
+                if(inLaw && con.length > 1){
+                    var id = con[con.length - 2];
+                    var rel = $this.getRelation(id);
+                    if(rel && parseInt(rel.relation_id) != 2 && !parseInt(rel.in_law) && !parseInt(rel.by_spouse)){
+                        inLaw = 0;
+                    }
                 }
                 if(isRegistered || !isAlive || inLaw) return false;
                 return true;
@@ -565,7 +569,7 @@ $FamilyTreeTop.create("usertree", function($){
     }
 
     $this.getRelation = function(gedcom_id){
-        if(data.rel == null) return [false, true];
+        if(data.rel == null) return false;
         if("undefined" !== typeof(data.rel[gedcom_id])){
             return data.rel[gedcom_id];
         }
