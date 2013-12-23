@@ -362,9 +362,13 @@ $FamilyTreeTop.create("usertree", function($){
                 return true;
             },
             isCanBeInvite: function(){
+                var con = $this.getConnection(ind.gedcom_id);
                 var isRegistered = this.isRegistered();
                 var isAlive = this.isAlive();
                 var inLaw = this.inLaw;
+                if(inLaw && !con[con.length - 2].inLaw){
+                    inLaw = false;
+                }
                 if(isRegistered || !isAlive || inLaw) return false;
                 return true;
             },
