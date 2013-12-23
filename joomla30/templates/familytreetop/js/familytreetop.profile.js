@@ -204,11 +204,10 @@ $FamilyTreeTop.create("profile", function($){
                 });
             }
             function calcPoints(){
-                var key, id, user, spouses, object, cords, prew, index = 0, cache = {};
+                var key, id, last, user, spouses, object, cords, prew, index = 0;
                 points = [];
                 for(key in connection){
                     id = connection[key];
-                    if("undefined"!==typeof(cache[id])) continue;
                     user = $this.mod('usertree').user(id);
                     cords = _getCords_(user, index);
                     prew = _getPrew_(index);
@@ -220,14 +219,20 @@ $FamilyTreeTop.create("profile", function($){
                     object.spouse = _getSpouse_(user, object.spouses);
 
                     points.push(object);
-
-                    cache[user.gedcom_id] = true;
-                    if(object.spouse){
-                        cache[object.spouse.gedcom_id] = true;
-                    }
                     index++;
+
+                    if(_isTarget_(object.spouse)){
+                        break;
+                    }
                 }
                 return true;
+                function _isTarget_(spouse){
+                    if(spouse){
+                        var target_id = parseInt(connection[connection.length - 1]);
+                        return spouse.gedcom_id == target_id;
+                    }
+                    return false;
+                }
                 function _getSpouses_(spouses){
                     var k, spss, spouse, spouse_id;
                     spss = [];
