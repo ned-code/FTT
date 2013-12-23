@@ -209,30 +209,25 @@ $FamilyTreeTop.create("profile", function($){
                 for(key in connection){
                     id = connection[key];
                     user = $this.mod('usertree').user(id);
-                    cords = _getCords_(user, index);
-                    prew = _getPrew_(index);
-
-                    object = {x:prew.x + cords.x, y:prew.y + cords.y, user:user, pos:parseInt(index)};
+                    object = {};
 
                     spouses = $this.mod('usertree').getSpouses(user.gedcom_id);
+
                     object.spouses = _getSpouses_(spouses);
                     object.spouse = _getSpouse_(user, object.spouses);
+                    object.user = user;
+                    object.pos = parseInt(index);
+
+                    cords = _getCords_(object);
+                    prew = _getPrew_(index);
+
+                    object.x = prew.x + cords.x;
+                    object.y = prew.y + cords.y;
 
                     points.push(object);
                     index++;
-
-                    if(_isTarget_(object.spouse)){
-                        break;
-                    }
                 }
                 return true;
-                function _isTarget_(spouse){
-                    if(spouse){
-                        var target_id = parseInt(connection[connection.length - 1]);
-                        return spouse.gedcom_id == target_id;
-                    }
-                    return false;
-                }
                 function _getSpouses_(spouses){
                     var k, spss, spouse, spouse_id;
                     spss = [];
@@ -244,18 +239,31 @@ $FamilyTreeTop.create("profile", function($){
                     return spss;
                 }
                 function _getSpouse_(u, s){
-                    var k, spouse, ret = false;
+                    var k, spouse, next_id, is_parent, parents, parent_id, ret = false;
                     if(s.length == 0) return 0;
+                    next_id = __getNext__(u.gedcom_id);
+                    is_parent = $this.mod('usertree').isParent(u.gedcom_id, next_id);
                     for(k in s){
                         if(!s.hasOwnProperty(k)) continue;
                         spouse = s[k];
                         if("undefined" !== typeof(conobj[spouse.gedcom_id])){
                             return spouse;
+                        } else if(is_parent){
+                            parents = $this.mod('usertree').getParents(next_id);
+                            parent_id = (parseInt(u.gender))?parents.mother:parents.father;
+                            return $this.mod('usertree').user(parent_id);
                         } else if(u.family_id != null && spouse.family_id == u.family_id){
                             ret = spouse;
                         }
                     }
                     return (ret)?ret:s[0];
+                    function __getNext__(id){
+                        for(var key in connection){
+                            if(!connection.hasOwnProperty(key)) continue;
+                            if(connection[key] == id && "undefined" !== typeof(connection[parseInt(key) + 1])) return connection[parseInt(key) + 1];
+                        }
+                        return false;
+                    }
                 }
                 function _getPrew_(key){
                     if("undefined" !== typeof(points[(key - 1)])){
@@ -263,8 +271,13 @@ $FamilyTreeTop.create("profile", function($){
                     }
                     return {x:0,y:0,user:false};
                 }
-                function _getCords_(u,k){
-                    var relId = parseInt(u.relationId);
+                function _getCords_(o){
+                    var relId = parseInt(o.user.relationId);
+                    var prew = ("undefined"!==typeof(points[o.pos - 1]))?points[o.pos - 1]:false;
+                    if(prew && prew.spouse && prew.spouse.gedcom_id == o.user.gedcom_id){
+                        prew.spouse = false;
+                        return {x:1,y:0};
+                    }
                     switch(relId){
                         case 1:
                             return {x:0,y:0};
@@ -426,7 +439,7 @@ $FamilyTreeTop.create("profile", function($){
                             }
                         }
                     });
-                    _correctLeft_();
+                    //_correctLeft_();
                     return true;
                     function _correctLeft_(){
                         var left = 0, right, ident;

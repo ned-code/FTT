@@ -503,6 +503,12 @@ $FamilyTreeTop.create("usertree", function($){
         return false;
     }
 
+    $this.isParent = function(parent_id, gedcom_id){
+        if(!gedcom_id) return false;
+        var p =$this.getParents(gedcom_id);
+        return (p.father == parent_id || p.mother == parent_id);
+    }
+
     $this.isHolderImg = function(src){
         return $this.isImg('holder.js', src)
     }
