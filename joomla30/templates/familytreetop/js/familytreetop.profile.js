@@ -442,18 +442,18 @@ $FamilyTreeTop.create("profile", function($){
                     _correctLeft_();
                     return true;
                     function _correctLeft_(){
-                        var item, right, left = 0, ident = 0;
+                        var right = 0, r = 0, ident = 0;
                         points.forEach(function(e,i){
-                            if(left < e.left){
-                                item = e;
-                                left = e.left;
+                            r = 0;
+                            if(e.spouse){
+                                r = e.left + settings.node.width*2 + 40;
+                            } else {
+                                r = e.left + settings.node.width;
+                            }
+                            if(right < r){
+                                right = r;
                             }
                         });
-                        if(item.spouse){
-                            right = left + settings.node.width*2 + 40;
-                        } else {
-                            right = left + settings.node.width;
-                        }
                         if(right < settings.width){
                             ident = Math.ceil((settings.width - (right))/2);
                             points.forEach(function(e,i){
