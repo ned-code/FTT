@@ -68,6 +68,7 @@ $FamilyTreeTop.create("profile", function($){
 
             settings = {
                 width: $(box).width(),
+                ident: 20,
                 node:{
                     width: 150,
                     height: 60
@@ -77,7 +78,7 @@ $FamilyTreeTop.create("profile", function($){
             calcPoints();
             calcPointsOffset();
 
-            $(canvas).attr('height', (getMaxRow() * (settings.node.height + 40)) + "px");
+            $(canvas).attr('height', (getMaxRow() * (settings.node.height + settings.ident)) + "px");
             $(canvas).attr('width', $(box).width() + "px");
 
             render();
@@ -89,7 +90,7 @@ $FamilyTreeTop.create("profile", function($){
                     if(object.spouse){
                         var spouse = $.extend({}, object);
                         spouse.user = object.spouse;
-                        spouse.left = object.left + settings.node.width + 40;
+                        spouse.left = object.left + settings.node.width + settings.ident;
                         object.spouseBox = renderBox(spouse, true);
                     }
                     renderLines(object, cnvs)
@@ -135,7 +136,7 @@ $FamilyTreeTop.create("profile", function($){
                 return true;
                 function _drawPlusLines_(o){
                     var center = [
-                        o.left + settings.node.width + 20,
+                        o.left + settings.node.width + Math.ceil(settings.ident/2),
                         o.top + (settings.node.height/2) - 15
                     ]
                     //hor
@@ -157,7 +158,7 @@ $FamilyTreeTop.create("profile", function($){
                     cnvs.add(drawLine([
                         o.left + settings.node.width,
                         o.top + Math.ceil(settings.node.height/2),
-                        o.left + settings.node.width + 40,
+                        o.left + settings.node.width + settings.ident,
                         o.top + Math.ceil(settings.node.height/2)
                     ]));
                 }
@@ -166,23 +167,23 @@ $FamilyTreeTop.create("profile", function($){
                         o.left + Math.ceil(settings.node.width/2),
                         o.top,
                         o.left + Math.ceil(settings.node.width/2),
-                        o.top - 40 - Math.ceil(settings.node.height/2)
+                        o.top - settings.ident - Math.ceil(settings.node.height/2)
                     ]));
                 }
                 function _drawHorLine_(p,o){
                     cnvs.add(drawLine([
                         p.left + Math.ceil(settings.node.width/2),
-                        p.top - 20,
-                        o.left + settings.node.width + 20,
-                        p.top - 20
+                        p.top - Math.ceil(settings.ident/2),
+                        o.left + settings.node.width + Math.ceil(settings.ident/2),
+                        p.top - Math.ceil(settings.ident/2)
                     ]));
                 }
                 function _drawVertLine1_(o){
                     cnvs.add(drawLine([
-                        o.left + settings.node.width + 20,
+                        o.left + settings.node.width + Math.ceil(settings.ident/2),
                         o.top + Math.ceil(settings.node.height/2),
-                        o.left + settings.node.width + 20,
-                        o.top + settings.node.height + 20
+                        o.left + settings.node.width + Math.ceil(settings.ident/2),
+                        o.top + settings.node.height + Math.ceil(settings.ident/2)
                     ]));
                 }
                 function _drawVertLine2_(o){
@@ -190,7 +191,7 @@ $FamilyTreeTop.create("profile", function($){
                         o.left + Math.ceil(settings.node.width/2),
                         o.top,
                         o.left + Math.ceil(settings.node.width/2),
-                        o.top - 20
+                        o.top - Math.ceil(settings.ident/2)
                     ]));
                 }
 
@@ -365,12 +366,12 @@ $FamilyTreeTop.create("profile", function($){
                         } else if("undefined" !== typeof(next) && next.user.gedcom_id == object.spouse.gedcom_id){
                             return settings.node.width;
                         }
-                        return settings.node.width*2 + 40;
+                        return settings.node.width*2 + settings.ident;
                     }
                     return settings.node.width;
                 }
                 function _getTop_(object){
-                    return ((settings.node.height + 40) * _getRow_(object)) + 20;
+                    return ((settings.node.height + settings.ident) * _getRow_(object)) + 20;
                 }
                 function _getRow_(object){
                     var min = 0, max = 0, index = 0, key;
@@ -403,7 +404,7 @@ $FamilyTreeTop.create("profile", function($){
                                 e.width = settings.node.width;
                             }
                             if(prew.direction == "shift"){
-                                e.left = prew.left + prew.width + 40;
+                                e.left = prew.left + prew.width + settings.ident;
                             } else if(prew.direction == "top"){
                                 if(e.direction == "bottom" && e.spouse || !e.spouse){
                                     e.left = prew.left;
@@ -416,7 +417,7 @@ $FamilyTreeTop.create("profile", function($){
                             } else if(prew.direction == "bottom"){
                                 if(prew.spouse){
                                     if("undefined" !== typeof(prew.prewObject) && prew.prewObject.direction == "top"){
-                                        e.left = prew.prewObject.left + prew.prewObject.width + 40;
+                                        e.left = prew.prewObject.left + prew.prewObject.width + settings.ident;
                                     } else {
                                         e.left = prew.left + Math.ceil(prew.width/2) - Math.ceil(settings.node.width/2);
                                     }
@@ -446,7 +447,7 @@ $FamilyTreeTop.create("profile", function($){
                         points.forEach(function(e,i){
                             r = 0;
                             if(e.spouse){
-                                r = e.left + settings.node.width*2 + 40;
+                                r = e.left + settings.node.width*2 + settings.ident;
                             } else {
                                 r = e.left + settings.node.width;
                             }
@@ -470,7 +471,7 @@ $FamilyTreeTop.create("profile", function($){
                                 if(a.x <= b.y && a.x >= b.x
                                     || a.y >= b.x && a.y <= b.y
                                     || b.x >= a.x && b.y <= a.y){
-                                    object.left = e.left + e.width + 40;
+                                    object.left = e.left + e.width + settings.ident;
                                 }
                             }
                         });
