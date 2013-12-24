@@ -356,29 +356,12 @@ class FamilyTreeTopGedcomRelationsManager {
                 if(!isset($mass[$item['gedcom_id']])){
                     $gedcom_id = $this->getInLawRelation($item['gedcom_id']);
                     if(isset($spouses[$gedcom_id])){
-                        /*
-                        $e = $this->get($this->owner_id, $item['gedcom_id'], $gedcom_id, 1, true);
-                        if($e){
-                            $mass[$item['gedcom_id']] = $e;
-                        }
-                        */
+                        //
                     } else {
                         $relation = $this->_get($gedcom_id, $item['gedcom_id']);
                         if($relation && $relation[0] == 2){
-                            $json = $this->getJSON($relation);
                             $rel = $this->getInLawRelationId($gedcom_id);
                             if($rel != 1000){
-                                /*
-                                $i = $this->set(array(
-                                    'relation_id' => $rel,
-                                    'gedcom_id' => $this->owner_id,
-                                    'target_id' => $item['gedcom_id'],
-                                    'connection' => (isset($this->conn[$item['gedcom_id']]))?base64_encode(json_encode($this->conn[$item['gedcom_id']])):"",
-                                    'json' => $json,
-                                    'in_law' => 1,
-                                    'by_spouse' => 0
-                                ));
-                                */
                                 $mass[$item['gedcom_id']] = true;
                             }
                         }
