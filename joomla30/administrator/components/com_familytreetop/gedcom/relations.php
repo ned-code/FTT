@@ -389,6 +389,13 @@ class FamilyTreeTopGedcomRelationsManager {
         return $mass;
     }
 
+    public function getFromList($gedcom_id){
+        if(isset($this->list[$gedcom_id])){
+            return $this->list[$gedcom_id];
+        }
+        return false;
+    }
+
     public function getList(){
         if($members = $this->isRelationsNotExist()){
             $unknowns = array();

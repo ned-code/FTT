@@ -59,10 +59,25 @@ class FamilyTreeTopGedcomIndividualsModel {
     }
 
     public function isCanBeDelete(){
+        $gedcom = GedcomHelper::getInstance();
+
         $isParents = $this->isParents();
         $isChildrens = $this->isChildrens();
         $isSpouses = $this->isSpouses();
-        if(!$isChildrens && !$isSpouses){
+
+        $con = $gedcom->connections->get($this->gedcom_id);
+        $prew = $con[sizeof($con) - 2];
+        $rel = $gedcom->relations->getFromList($this->gedcom_id);
+        $prewRel = $gedcom->relations->getFromList($prew);
+
+        if($prew
+            && $rel
+            && $rel['relation_id'] == 2
+            && $prewRel['in_law'] == 0
+            && (!$isChildrens && !$isParents)
+        ){
+            return true;
+        } else if(!$isChildrens && !$isSpouses){
             return true;
         } else if($isSpouses && sizeof($isSpouses) == 1 && !$isChildrens && !$isParents){
             return true;
