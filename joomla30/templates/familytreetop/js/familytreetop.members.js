@@ -84,8 +84,10 @@ $FamilyTreeTop.create("members", function($){
             return (compA < compB) ? -1 : (compA > compB) ? 1 : 0;
         },
         orderByYear: function(a,b){
-            var a = new Date(_getDate_(a));
-            var b = new Date(_getDate_(b));
+            var adate = _getDate_(a);
+            var bdate = _getDate_(b);
+            var a = new Date(adate[0], adate[1], adate[2]);
+            var b = new Date(bdate[0], bdate[1], bdate[2]);
             //return a<b?-1:a>b?1:0;
             return a>b?-1:a<b?1:0;
             function _getDate_(object){
