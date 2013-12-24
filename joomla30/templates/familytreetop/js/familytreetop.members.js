@@ -88,15 +88,11 @@ $FamilyTreeTop.create("members", function($){
             var bdate = _getDate_(b);
             var a = new Date(adate[0], adate[1], adate[2]);
             var b = new Date(bdate[0], bdate[1], bdate[2]);
-            //return a<b?-1:a>b?1:0;
             return a>b?-1:a<b?1:0;
             function _getDate_(object){
-                //console.log(object);
                 var event = object.birth();
-                //console.log($this.parseBoolean(event));
                 if($this.parseBoolean(event)){
                     var date = event.date;
-                    //console.log(date);
                     return [
                         (date.start_year!=null)?date.start_year:100,
                         (date.start_month!=null)?date.start_month:1,
