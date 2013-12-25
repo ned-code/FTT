@@ -889,6 +889,7 @@ $FamilyTreeTop.create("usertree", function($){
         var childrens = [];
         var childs = data.chi.family_id[family_id];
         for(var k in childs){
+            if(!childs.hasOwnProperty(k)) continue;
             var child = childs[k];
             childrens.push(child.gedcom_id);
         }
