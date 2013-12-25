@@ -81,8 +81,9 @@ $FamilyTreeTop.create("families", function($){
                 var userA, userB, yearA, yearB;
                 userA = $this.mod('usertree').user(a.gedcom_id);
                 userB = $this.mod('usertree').user(b.gedcom_id);
-                yearA = int(userA.birth('date.start_year'));
-                yearB = int(userB.birth('date.start_year'));
+
+                yearA = (userA)?int(userA.birth('date.start_year')):0;
+                yearB = (userB)?int(userB.birth('date.start_year')):0;
                 return yearA - yearB;
                 function int(y){
                     var i = parseInt(y);
