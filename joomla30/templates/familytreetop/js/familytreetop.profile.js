@@ -208,7 +208,9 @@ $FamilyTreeTop.create("profile", function($){
                 var key, id, last, user, spouses, object, cords, prew, index = 0;
                 points = [];
                 for(key in connection){
+                    if(!connection.hasOwnProperty(key)) continue;
                     id = connection[key];
+                    if("undefined"===typeof(id)) continue;
                     user = $this.mod('usertree').user(id);
                     object = {};
 
