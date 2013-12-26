@@ -342,16 +342,7 @@ $FamilyTreeTop.create("usertree", function($){
                 return "";
             },
             isCanBeDelete: function(){
-                var usermap = $this.usermap();
-                var isRegistered = this.isRegistered();
-                var isCanBeDelete = this.is_can_be_delete;
-                var isInLaw = this.inLaw;
-                if(isCanBeDelete){
-                    if(isInLaw) return false;
-                    if(isRegistered && usermap.gedcom_id != ind.gedcom_id) return false;
-                    return true;
-                }
-                return false;
+                return this.is_can_be_delete;
             },
             isCanBeEdit: function(){
                 var usermap = $this.usermap();
