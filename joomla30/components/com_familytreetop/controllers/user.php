@@ -112,6 +112,11 @@ class FamilytreetopControllerUser extends FamilytreetopController
         exit;
     }
 
+    public function getJoomlaUser(){
+        echo json_encode(array('user'=>JFactory::getUser()));
+        exit;
+    }
+
     public function logout(){
         $method = $_SERVER['REQUEST_METHOD'];
 
@@ -126,7 +131,6 @@ class FamilytreetopControllerUser extends FamilytreetopController
         $url = JRoute::_("index.php?option=com_familytreetop&view=login", false);
         $login_url = "https://" . JUri::getInstance()->getHost() . $url;
         $logout_url = $facebook->getLogoutUrl(null, $access_token);
-
         switch($method){
             case "POST":
                 echo json_encode(array(
