@@ -130,7 +130,7 @@ class FamilytreetopControllerUser extends FamilytreetopController
         $login_url = "https://" . JUri::getInstance()->getHost() . $url;
         $logout_url = $facebook->getLogoutUrl(null, $access_token);
 
-        $site_logout_url = JRoute::_("index.php?option=com_user&task=logout&return=".$login_url, false);
+        $site_logout_url = JRoute::_("index.php?option=com_users&task=logout&return=".$login_url, false);
         switch($method){
             case "POST":
                 echo json_encode(array(
