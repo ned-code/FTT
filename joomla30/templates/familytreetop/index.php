@@ -42,6 +42,7 @@ $data = GedcomHelper::getInstance()->getData();
 $json_data = json_encode($data);
 $treeUsers = GedcomHelper::getInstance()->getTreeUsers('gedcom_id');
 $treeViewUsers = GedcomHelper::getInstance()->sortUsersByView($treeUsers, $data);
+$script = time();
 ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->language; ?>" lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>">
@@ -51,7 +52,7 @@ $treeViewUsers = GedcomHelper::getInstance()->sortUsersByView($treeUsers, $data)
     <noscript><link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/css/jquery.fileupload-ui-noscript.css"></noscript>
     <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/holder.js"></script>
     <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/excanvas.js"></script>
-    <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.js"></script>
+    <script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.js?<?=$script;?>"></script>
 	<jdoc:include type="head" />
 	<!--[if lt IE 9]>
 		<script src="<?php echo $this->baseurl ?>/media/jui/js/html5.js"></script>
@@ -956,23 +957,23 @@ $treeViewUsers = GedcomHelper::getInstance()->sortUsersByView($treeUsers, $data)
     <script src="<?=$this->baseurl;?>/templates/<?=$this->template;?>/js/bootstrap-joyride.js"></script>
 <?php endif; ?>
 <!-- uncompressed files -->
-<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.trees.js"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.footer.js"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.form.js"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.familyline.js"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.tabs.js"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.usertree.js"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.popovers.js"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.friendselector.js"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.this.month.js"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.editmenu.js"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.editor.js"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.profile.js"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.families.js"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.members.js"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.myfamily.js"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.latest.events.js"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.ie.placeholders.js"></script>
+<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.trees.js?<?=$script;?>"></script>
+<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.footer.js?<?=$script;?>"></script>
+<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.form.js?<?=$script;?>"></script>
+<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.familyline.js?<?=$script;?>"></script>
+<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.tabs.js?<?=$script;?>"></script>
+<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.usertree.js?<?=$script;?>"></script>
+<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.popovers.js?<?=$script;?>"></script>
+<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.friendselector.js?<?=$script;?>"></script>
+<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.this.month.js?<?=$script;?>"></script>
+<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.editmenu.js?<?=$script;?>"></script>
+<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.editor.js?<?=$script;?>"></script>
+<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.profile.js?<?=$script;?>"></script>
+<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.families.js?<?=$script;?>"></script>
+<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.members.js?<?=$script;?>"></script>
+<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.myfamily.js?<?=$script;?>"></script>
+<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.latest.events.js?<?=$script;?>"></script>
+<script src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/js/familytreetop.ie.placeholders.js?<?=$script;?>"></script>
 <script>
     if(!$FamilyTreeTop.app.config.appId){
         console.log('Facebook App Id doesn\'t exist');
