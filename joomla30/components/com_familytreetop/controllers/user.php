@@ -123,10 +123,12 @@ class FamilytreetopControllerUser extends FamilytreetopController
         $user = FamilyTreeTopUserHelper::getInstance()->get();
         $app = JFactory::getApplication();
         $facebook = FacebookHelper::getInstance();
+        $session = JSession::getInstance();
 
         $access_token = $app->input->post('accessToken', 0);
 
         $app->logout( $user->id );
+        $session->destroy();
 
         $url = JRoute::_("index.php?option=com_familytreetop&view=login", false);
         $login_url = "https://" . JUri::getInstance()->getHost() . $url;
