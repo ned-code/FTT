@@ -112,11 +112,6 @@ class FamilytreetopControllerUser extends FamilytreetopController
         exit;
     }
 
-    public function getJoomlaUser(){
-        echo json_encode(array('user'=>JFactory::getUser()));
-        exit;
-    }
-
     public function logout(){
         $method = $_SERVER['REQUEST_METHOD'];
 
