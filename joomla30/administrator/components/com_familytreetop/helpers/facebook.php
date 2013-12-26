@@ -48,6 +48,17 @@ class FacebookHelper
         ));
     }
 
+    public function getLogoutUrl($redirect = null){
+        if(empty($redirect)){
+            $redirect = JRoute::_("index.php?option=com_familytreetop&view=login", false);
+        }
+        $redirect_url = "https://" . JUri::getInstance()->getHost() . $redirect;
+
+        return $this->facebook->getLoginUrl(array(
+            'next' => $redirect_url
+        ));
+    }
+
     public function getFamilyMembers(){
         $gedcom = GedcomHelper::getInstance();
         $members = $gedcom->getTreeUsers('facebook_id');
