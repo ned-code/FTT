@@ -35,10 +35,6 @@ class FacebookHelper
         return self::$instance;
     }
 
-    public function logout(){
-
-    }
-
     public function getLoginUrl($redirect = null){
         $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
         if(empty($redirect)){
@@ -59,7 +55,8 @@ class FacebookHelper
         $redirect_url = "https://" . JUri::getInstance()->getHost() . $redirect;
 
         return $this->facebook->getLogoutUrl(array(
-            'next' => $redirect_url
+            'next' => $redirect_url,
+            'access_token'=>$this->facebook->getAccessToken()
         ));
     }
 
