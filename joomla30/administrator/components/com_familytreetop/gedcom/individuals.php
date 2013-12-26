@@ -579,10 +579,14 @@ class FamilyTreeTopGedcomIndividualsManager {
         $gedcom = GedcomHelper::getInstance();
         $list = $this->list;
         foreach($list as $id => $user){
+            $object = $gedcom->individuals->get($id);
+            $object->updateCanBeDeleteParam();
+            /*
             if($user['is_can_be_delete'] == null){
                 $object = $gedcom->individuals->get($id);
                 $object->updateCanBeDeleteParam();
             }
+            */
         }
     }
 
