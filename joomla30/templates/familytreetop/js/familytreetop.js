@@ -53,12 +53,17 @@
             $FamilyTreeTop.prototype.fn.ajax('user.logout', {accessToken: $FamilyTreeTop.prototype.fn.accessToken()}, function(response){
                 if(FB.getAuthResponse() != null){
                     FB.logout(function(res){
-                        window.location.href = response.login_url;
+                        $FamilyTreeTop.prototype.fn.locationHref(response.login_url);
                     });
                 } else {
-                    window.location.href = response.login_url;
+                    $FamilyTreeTop.prototype.fn.locationHref(response.login_url);
                 }
             });
+        },
+        locationHref: function(url){
+            setTimeout(function(){
+                window.location.href = url;
+            }, 1);
         },
         accessToken: function(){
             return this.facebookAccessToken;
