@@ -127,8 +127,8 @@ class FamilytreetopControllerUser extends FamilytreetopController
 
         $access_token = $app->input->post('accessToken', 0);
 
-        $app->logout( $user->id );
-        $session->destroy();
+        $success = $app->logout( $user->id );
+        //$session->destroy();
 
         $url = JRoute::_("index.php?option=com_familytreetop&view=login", false);
         $login_url = "https://" . JUri::getInstance()->getHost() . $url;
@@ -136,6 +136,7 @@ class FamilytreetopControllerUser extends FamilytreetopController
         switch($method){
             case "POST":
                 echo json_encode(array(
+                    'success' => $success,
                     'login_url' => $login_url,
                     'logout_url' => $logout_url
                 ));

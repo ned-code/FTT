@@ -51,12 +51,16 @@
         },
         logout:function(){
             $FamilyTreeTop.prototype.fn.ajax('user.logout', {accessToken: $FamilyTreeTop.prototype.fn.accessToken()}, function(response){
-                if(FB.getAuthResponse() != null){
-                    FB.logout(function(res){
+                if(response.success){
+                    if(FB.getAuthResponse() != null){
+                        FB.logout(function(res){
+                            $FamilyTreeTop.prototype.fn.locationHref(response.login_url);
+                        });
+                    } else {
                         $FamilyTreeTop.prototype.fn.locationHref(response.login_url);
-                    });
+                    }
                 } else {
-                    $FamilyTreeTop.prototype.fn.locationHref(response.login_url);
+                    $FamilyTreeTop.prototype.fn.locationHref(response.logout_url);
                 }
             });
         },
