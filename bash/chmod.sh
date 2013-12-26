@@ -1,4 +1,6 @@
 #!/bin/bash
+find . -type f -exec chmod 644 {} \;
+find . -type d -exec chmod 755 {} \;
 chmod 777 administrator/components/
 chmod 777 administrator/language/
 chmod 777 administrator/language/en-GB/
