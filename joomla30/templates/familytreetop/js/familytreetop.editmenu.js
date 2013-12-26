@@ -60,6 +60,7 @@ $FamilyTreeTop.create("editmenu", function($){
         $(box).find('[familytreetop="deleteUnion"]').remove();
 
         if(ind.inLaw){
+            $(box).find('[data-familytreetop-devider="1"]').remove();
             $(box).find('[familytreetop="addParent"]').remove();
             $(box).find('[familytreetop="addSibling"]').remove();
             $(box).find('[familytreetop="addSpouse"]').remove();
