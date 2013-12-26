@@ -53,10 +53,10 @@
             $FamilyTreeTop.prototype.fn.ajax('user.logout', {accessToken: $FamilyTreeTop.prototype.fn.accessToken()}, function(response){
                 if(FB.getAuthResponse() != null){
                     FB.logout(function(res){
-                        window.location = response.login_url;
+                        window.location.href = response.login_url;
                     });
                 } else {
-                    window.location = response.login_url;
+                    window.location.href = response.login_url;
                 }
             });
         },
