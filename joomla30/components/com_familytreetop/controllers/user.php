@@ -119,10 +119,10 @@ class FamilytreetopControllerUser extends FamilytreetopController
         $app = JFactory::getApplication();
         $app->logout( $user->id );
         $url = JRoute::_("index.php?option=com_familytreetop&view=login", false);
-
+        $logouturl = FacebookHelper::getInstance()->getLogoutUrl($url);
         switch($method){
             case "POST":
-                echo json_encode(array('url' => $url));
+                echo json_encode(array('url' => $logouturl));
                 exit;
 
             case "GET":
