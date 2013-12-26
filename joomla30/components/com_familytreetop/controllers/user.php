@@ -126,14 +126,18 @@ class FamilytreetopControllerUser extends FamilytreetopController
         //$session->destroy();
 
         $url = JRoute::_("index.php?option=com_familytreetop&view=login", false);
+
         $login_url = "https://" . JUri::getInstance()->getHost() . $url;
         $logout_url = $facebook->getLogoutUrl(null, $access_token);
+
+        $site_logout_url = JRoute::_("index.php?option=com_user&task=logout&return=".$login_url, false);
         switch($method){
             case "POST":
                 echo json_encode(array(
                     'success' => $success,
                     'login_url' => $login_url,
-                    'logout_url' => $logout_url
+                    'logout_url' => $logout_url,
+                    'site_logout_url' => $site_logout_url
                 ));
                 exit;
 

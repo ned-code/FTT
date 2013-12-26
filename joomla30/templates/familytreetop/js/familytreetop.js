@@ -51,16 +51,13 @@
         },
         logout:function(){
             $FamilyTreeTop.prototype.fn.ajax('user.logout', {accessToken: $FamilyTreeTop.prototype.fn.accessToken()}, function(response){
-                if(response.success){
-                    if(FB.getAuthResponse() != null){
-                        FB.logout(function(res){
-                            $FamilyTreeTop.prototype.fn.locationHref(response.login_url);
-                        });
-                    } else {
-                        $FamilyTreeTop.prototype.fn.locationHref(response.login_url);
-                    }
+                var url = (response.succes)?response.login_url:response.site_logout_url;
+                if(FB.getAuthResponse() != null){
+                    FB.logout(function(res){
+                        $FamilyTreeTop.prototype.fn.locationHref(url);
+                    });
                 } else {
-                    $FamilyTreeTop.prototype.fn.locationHref(response.logout_url);
+                    $FamilyTreeTop.prototype.fn.locationHref(url);
                 }
             });
         },
