@@ -48,7 +48,7 @@ class FacebookHelper
         ));
     }
 
-    public function getLogoutUrl($redirect = null){
+    public function getLogoutUrl($redirect = null, $token){
         if(empty($redirect)){
             $redirect = JRoute::_("index.php?option=com_familytreetop&view=login", false);
         }
@@ -56,7 +56,7 @@ class FacebookHelper
 
         return $this->facebook->getLogoutUrl(array(
             'next' => $redirect_url,
-            'access_token'=>$this->facebook->getAccessToken()
+            'access_token'=>$token
         ));
     }
 

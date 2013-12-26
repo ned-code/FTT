@@ -50,13 +50,13 @@
             }).done(callback);
         },
         logout:function(){
-            $FamilyTreeTop.prototype.fn.ajax('user.logout', null, function(response){
+            $FamilyTreeTop.prototype.fn.ajax('user.logout', {accessToken: $FamilyTreeTop.prototype.fn.accessToken()}, function(response){
                 if(FB.getAuthResponse() != null){
-                    FB.logout(function(r){
-                        window.location = response.url;
+                    FB.logout(function(res){
+                        window.location = response.login_url;
                     });
                 } else {
-                    window.location = response.url;
+                    window.location = response.login_url;
                 }
             });
         },
