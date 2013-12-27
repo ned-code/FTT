@@ -621,8 +621,8 @@ $FamilyTreeTop.create("editor", function($){
                             }
                         } else if(spouses[0] == id){
                             _setTitle_(spouse.name());
-                             _setValue_(id);
-                            _setUserData_(id);
+                            _setValue_(id);
+                            //_setUserData_(id);
                         }
                         var li = $('<li familytreetop="spouse" familytreetop-data="'+id+'" style="cursor:pointer;"><a href="#">'+spouse.name()+'</a></li>');
                         $(divider).before(li);
