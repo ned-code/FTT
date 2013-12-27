@@ -8,7 +8,7 @@ class FamilytreetopControllerInvite extends FamilytreetopController
 
     protected function _checkUser_ ($facebook_id, $gedcom_id, $tree_id){
         $account = FamilyTreeTopAccounts::find_by_facebook_id($facebook_id);
-        if(!empty($account) && $account->current){
+        if(!empty($account) && !empty($account->current)){
             return array(
                 'success' => false,
                 'type' => 10,
