@@ -60,7 +60,7 @@ $FamilyTreeTop.create("popovers", function($){
                         _value.push($this.mod('usertree').parseDate(value.date));
                         place = $this.mod('usertree').parsePlace(value.place);
                         if(place != ""){
-                            _value.push("(" + place + ")");
+                            _value.push(" (" + place + ")");
                         }
                         value = _value.join("");
                     }

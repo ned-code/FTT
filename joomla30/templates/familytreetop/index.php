@@ -197,7 +197,7 @@ $script = "";
         <div class="row-fluid" style="padding: 9px 14px;">
             <div class="span3 familytreetop-avatar"><img class="media-object" data-src="template/familytreetop/js/holder.js/75x75"></div>
             <div class="span8" familytreetop-name="content">
-                <ul class="unstyled" style="font-size:14px;">
+                <ul class="unstyled" style="font-size:13px;">
                     <li familytreetop-name="birth"><span style="color: #c3c3c3;"><?=JText::_("TPL_FAMILYTREETOP_BORN");?></span>: <span></span></li>
                     <li familytreetop-name="death"><span style="color: #c3c3c3;"><?=JText::_("TPL_FAMILYTREETOP_DIED");?></span>: <span></span></li>
                     <li familytreetop-name="relation"><span style="color: #c3c3c3;"><?=JText::_("TPL_FAMILYTREETOP_RELATION");?></span>: <span></span></li>
