@@ -42,7 +42,8 @@ $data = GedcomHelper::getInstance()->getData();
 $json_data = json_encode($data);
 $treeUsers = GedcomHelper::getInstance()->getTreeUsers('gedcom_id');
 $treeViewUsers = GedcomHelper::getInstance()->sortUsersByView($treeUsers, $data);
-$script = time();
+//$script = time();
+$script = "";
 ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->language; ?>" lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>">
