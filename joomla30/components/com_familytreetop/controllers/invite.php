@@ -22,7 +22,7 @@ class FamilytreetopControllerInvite extends FamilytreetopController
         if(empty($inviteByGedcomId) && empty($inviteByFacebookId)){
             return array('success' => true);
         } else {
-            return array('success' => false, "type"=> 100, "message" => "The cureent user is already sent an invitation", 'token' => 0);
+            return array('success' => false, "type"=> 100, "message" => JText::_('TPL_FAMILYTREETOP_INVITE_ERROR_THE_CURRENT_USER_EXIST'), 'token' => 0);
         }
 
     }
