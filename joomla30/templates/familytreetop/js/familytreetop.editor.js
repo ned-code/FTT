@@ -553,7 +553,7 @@ $FamilyTreeTop.create("editor", function($){
                 var spouse = $this.mod('usertree').user(spouses[0]);
                 _setTitle_(spouse.name());
                 _setValue_(spouse.gedcom_id);
-                _setUserData_(spouse.gedcom_id);
+                //_setUserData_(spouse.gedcom_id);
                 $(row).find('.btn.dropdown-toggle').click(function(){
                     return false;
                 });
@@ -569,19 +569,19 @@ $FamilyTreeTop.create("editor", function($){
                         if(data == "new"){
                             _setTitle_($(this).text());
                             _setValue_(0);
-                            _setClearData_();
+                            //_setClearData_();
                         } else if(data == "exist"){
                             $fn.modalExistFamilyMember(function(id){
                                 var u = $this.mod('usertree').user(id);
                                 _setTitle_(u.name());
                                 _setValue_(id);
-                                _setUserData_(id);
+                                //_setUserData_(id);
                             });
                         }
                     } else if(type == "spouse"){
                         _setTitle_($(this).text());
                         _setValue_(data);
-                        _setUserData_(data);
+                        //_setUserData_(data);
                     }
                     return false;
                 });
