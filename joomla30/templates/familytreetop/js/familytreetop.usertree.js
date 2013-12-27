@@ -808,7 +808,7 @@ $FamilyTreeTop.create("usertree", function($){
             husb = _getInd_(f.husb);
             wife = _getInd_(f.wife);
             if(male && parseInt(husb.gender) == male){
-                return return husb.gedcom_id;
+                return husb.gedcom_id;
             } else if(male && parseInt(husb.gender) != male && parseInt(wife.gender) == male){
                 return wife.gedcom_id;
             } else if(!male && parseInt(wife.gender) == male){
