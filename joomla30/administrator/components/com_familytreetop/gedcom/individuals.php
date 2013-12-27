@@ -553,7 +553,7 @@ class FamilyTreeTopGedcomIndividualsManager {
     public function getLastUpdatedProfile(){
         $db = JFactory::getDbo();
         $sql = "SELECT i.*
-                    FROM geicz_familytreetop_individuals as i, geicz_familytreetop_tree_links as l, geicz_familytreetop_trees as t
+                    FROM #__familytreetop_individuals as i, #__familytreetop_tree_links as l, #__familytreetop_trees as t
                     WHERE i.gedcom_id = l.id AND l.tree_id = t.id AND t.id = ".$this->tree_id."
                     ORDER BY i.change_time DESC";
 
