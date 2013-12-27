@@ -792,11 +792,32 @@ $FamilyTreeTop.create("usertree", function($){
         if("undefined" !== typeof(data.fam.family_id[family_id])){
             var family = data.fam.family_id[family_id];
             obj.family_id = family.family_id;
-            obj.father = family.husb;
-            obj.mother = family.wife;
+            obj.father = _getParent_(family, 1);
+            obj.mother = _getParent_(family, 0);
             return obj;
         }
         return obj;
+        function _getInd_(id){
+            if("undefined"!==typeof(data.ind[id])){
+                return data.ind[id];
+            }
+            return false;
+        }
+        function _getParent_(f, male){
+            var husb,wife;
+            husb = _getInd_(f.husb);
+            wife = _getInd_(f.wife);
+            if(male && parseInt(husb.gender) == male){
+                return return husb.gedcom_id;
+            } else if(male && parseInt(husb.gender) != male && parseInt(wife.gender) == male){
+                return wife.gedcom_id;
+            } else if(!male && parseInt(wife.gender) == male){
+                return wife.gedcom_id;
+            } else if(!male && parseInt(wife.gender) != male && parseInt(husb.gender) == male){
+                return husb.gedcom_id;
+            }
+            return null;
+        }
     }
 
     $this.getSpouses = function(gedcom_id, how_object){
