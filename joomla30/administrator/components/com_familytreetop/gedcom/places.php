@@ -104,12 +104,13 @@ class FamilyTreeTopGedcomPlacesManager {
         $events = $eventList['all'];
         $result = array();
 
-        foreach($list as $id => $item){
-            if(isset($events[$id])){
-                $result[$id] = $item;
+        if(!empty($list)){
+            foreach($list as $id => $item){
+                if(isset($events[$id])){
+                    $result[$id] = $item;
+                }
             }
         }
-
         return $result;
     }
 

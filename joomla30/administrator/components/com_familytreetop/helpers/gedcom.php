@@ -47,19 +47,21 @@ class GedcomHelper
         if(!empty($user->tree_id) && !empty($user->account_id) && !empty($user->gedcom_id)){
             $results = array();
             $users = FamilyTreeTopUsers::find('all', array('conditions' => array('tree_id = ?', $user->tree_id)));
-            foreach($users as $user){
-                $object = array(
-                    'tree_id' => $user->tree_id,
-                    'account_id' => $user->account_id,
-                    'gedcom_id' => $user->gedcom_id,
-                    'facebook_id' => $user->account->facebook_id,
-                    'role' => $user->role
-                );
-                switch($associative){
-                    case "facebook_id": $results[$user->account->facebook_id] = $object; break;
-                    case "gedcom_id": $results[$user->gedcom_id] = $object; break;
-                    default: $results[] = $object; break;
+            if(!empty($users)){
+                foreach($users as $user){
+                    $object = array(
+                        'tree_id' => $user->tree_id,
+                        'account_id' => $user->account_id,
+                        'gedcom_id' => $user->gedcom_id,
+                        'facebook_id' => $user->account->facebook_id,
+                        'role' => $user->role
+                    );
+                    switch($associative){
+                        case "facebook_id": $results[$user->account->facebook_id] = $object; break;
+                        case "gedcom_id": $results[$user->gedcom_id] = $object; break;
+                        default: $results[] = $object; break;
 
+                    }
                 }
             }
             return ($json)?json_encode($results):$results;
@@ -70,9 +72,11 @@ class GedcomHelper
     public function sortUsersByView($users, $data){
         $list = $data['ind'];
         $result = array();
-        foreach($users as $id => $user){
-            if(isset($list[$id])){
-                $result[$id] = $user;
+        if(!empty($users)){
+            foreach($users as $id => $user){
+                if(isset($list[$id])){
+                    $result[$id] = $user;
+                }
             }
         }
         return json_encode($result);

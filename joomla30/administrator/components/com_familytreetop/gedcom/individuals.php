@@ -66,10 +66,13 @@ class FamilyTreeTopGedcomIndividualsModel {
         $isSpouses = $this->isSpouses();
 
         $con = $gedcom->connections->get($this->gedcom_id);
-        $prew = $con[sizeof($con) - 2];
-        $rel = $gedcom->relations->getFromList($this->gedcom_id);
-        $prewRel = $gedcom->relations->getFromList($prew);
-
+        if(sizeof($con)>1){
+            $prew = $con[sizeof($con) - 2];
+            $rel = $gedcom->relations->getFromList($this->gedcom_id);
+            $prewRel = $gedcom->relations->getFromList($prew);
+        } else {
+            $pres = false;
+        }
         if($prew
             && $rel
             && $rel['relation_id'] == 2
