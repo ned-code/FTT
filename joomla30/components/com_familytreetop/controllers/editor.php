@@ -601,7 +601,7 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         $gedcom_id = $app->input->post->get('gedcom_id', false);
         $users = $gedcom->getUniqueUserRelated($gedcom_id);
 
-        echo json_encode(array('success' => true, 'data'=>$users));
+        echo json_encode(array('success' => true, 'data'=>$users, 'length'=>sizeof($users)));
         exit;
     }
 

@@ -175,9 +175,13 @@ $FamilyTreeTop.create("editor", function($){
                         $fn.progressbarOn();
                         $this.ajax('editor.getOrganeUsers', {gedcom_id: ind.gedcom_id}, function(res){
                             $fn.progressbarOff();
-                            _orangeDeleteConfirm_(res, function(){
+                            if(res.length != 0){
+                                _orangeDeleteConfirm_(res, function(){
+                                    _deleteTable_();
+                                });
+                            } else {
                                 _deleteTable_();
-                            });
+                            }
                         });
                     });
                 }
