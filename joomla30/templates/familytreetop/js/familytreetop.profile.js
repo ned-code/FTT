@@ -253,7 +253,7 @@ $FamilyTreeTop.create("profile", function($){
                             return spouse;
                         } else if(is_parent){
                             parents = $this.mod('usertree').getParents(next_id);
-                            parent_id = (parseInt(u.gender))?parents.father:parents.mother;
+                            parent_id = (!parseInt(u.gender))?parents.father:parents.mother;
                             return $this.mod('usertree').user(parent_id);
                         } else if(u.family_id != null && spouse.family_id == u.family_id){
                             ret = spouse;
