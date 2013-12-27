@@ -12,7 +12,7 @@ class FamilytreetopControllerInvite extends FamilytreetopController
             return array(
                 'success' => false,
                 'type' => 10,
-                'message' => "The cureent user is already registered",
+                'message' => JText::_('TPL_FAMILYTREETOP_INVITE_ERROR_THE_CURRENT_USER_EXIST'),
                 'token' => 0
             );
         }
