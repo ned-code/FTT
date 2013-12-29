@@ -117,7 +117,7 @@ class FamilytreetopController extends JControllerLegacy
                             $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=myfamily", false));
                             return;
                         } else {
-                            $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=myfamily", false));
+                            $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=login", false));
                             return;
                         }
                     }
