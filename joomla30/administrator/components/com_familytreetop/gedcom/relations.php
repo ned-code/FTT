@@ -328,7 +328,7 @@ class FamilyTreeTopGedcomRelationsManager {
     public function getListById($gedcom_id){
         $gedcom = GedcomHelper::getInstance();
         $list = $gedcom->individuals->getList();
-        $conn = $gedcom->connections>getListById($gedcom_id);
+        $conn = $gedcom->connections->getListById($gedcom_id);
         $rels = $this->getRelations($gedcom_id);
 
         $mass = array();
