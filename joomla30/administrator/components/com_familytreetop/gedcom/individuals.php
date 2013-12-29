@@ -71,7 +71,7 @@ class FamilyTreeTopGedcomIndividualsModel {
             $rel = $gedcom->relations->getFromList($this->gedcom_id);
             $prewRel = $gedcom->relations->getFromList($prew);
         } else {
-            $pres = false;
+            $prew = false;
         }
         if($prew
             && $rel
