@@ -253,19 +253,6 @@ class FamilyTreeTopGedcomRelationsManager {
         $relation = $this->_get((!$in_law)?$gedcom_id:$in_law, $target_id);
         if($cache){
             if($relation){
-                /*
-                $json = $this->getJSON($relation);
-                $item = $this->set(array(
-                    'relation_id' => $relation[0],
-                    'gedcom_id' => $gedcom_id,
-                    'target_id' => $target_id,
-                    'connection' => (isset($this->conn[$target_id]))?base64_encode(json_encode($this->conn[$target_id])):"",
-                    'json' => $json,
-                    'in_law' => $in_law,
-                    'by_spouse' => $by_spouse
-                ));
-                return $item;
-                */
                 return true;
             }
         } else {
@@ -294,12 +281,14 @@ class FamilyTreeTopGedcomRelationsManager {
         return false;
     }
 
-    public function getInLawRelation($gedcom_id){
-        if(isset($this->conn[$gedcom_id])){
-            $con = $this->conn[$gedcom_id];
+    public function getInLawRelation($gedcom_id, $conn = false, $rels = false){
+        $c = ($conn)?$conn:$this->conn;
+        $r = ($rels)?$rels:$this->list;
+        if(isset($c[$gedcom_id])){
+            $con = $c[$gedcom_id];
             $ret = false;
             foreach($con as $id){
-                if(isset($this->list[$id]) && $this->list[$id]['in_law'] == 0){
+                if(isset($r[$id]) && $r[$id]['in_law'] == 0){
                     $ret = $id;
                 }
             }
@@ -339,6 +328,9 @@ class FamilyTreeTopGedcomRelationsManager {
     public function getListById($gedcom_id){
         $gedcom = GedcomHelper::getInstance();
         $list = $gedcom->individuals->getList();
+        $conn = $gedcom->connections>getListById($gedcom_id);
+        $rels = $this->getRelations($gedcom_id);
+
         $mass = array();
         $unknowns = array();
         foreach($list as $key => $member){
@@ -354,7 +346,7 @@ class FamilyTreeTopGedcomRelationsManager {
             $spouses = $this->get_spouses($gedcom_id, true);
             foreach($unknowns as $item){
                 if(!isset($mass[$item['gedcom_id']])){
-                    $gedcom_id = $this->getInLawRelation($item['gedcom_id']);
+                    $gedcom_id = $this->getInLawRelation($item['gedcom_id'], $conn, $rels);
                     if(isset($spouses[$gedcom_id])){
                         //
                     } else {

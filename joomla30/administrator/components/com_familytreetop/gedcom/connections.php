@@ -118,6 +118,24 @@ class FamilyTreeTopGedcomConnectionsManager {
         }
     }
 
+    public function getListById($gedcom_id){
+        if($gedcom_id == null) return array();
+
+        $waves = array();
+
+        $this->setWave($waves, array("I".$gedcom_id => null));
+
+        $users = GedcomHelper::getInstance()->individuals->getList();
+
+        $connections = array();
+        foreach($users as $user){
+            $connection = $this->getConnection($user['gedcom_id'], $waves);
+            $connections[$user['gedcom_id']] = $connection;
+        }
+
+        return $connections;
+    }
+
     public function get($gedcom_id){
         if(!isset($this->connections[$gedcom_id])) return false;
         return $this->connections[$gedcom_id];
