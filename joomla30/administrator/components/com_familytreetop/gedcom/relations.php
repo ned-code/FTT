@@ -300,6 +300,8 @@ class FamilyTreeTopGedcomRelationsManager {
     public function getInLawRelationId($gedcom_id){
         $relation = $this->_get($this->owner_id, $gedcom_id);
         switch($relation[0]){
+            case 3: return 4; // father in_law
+            case 4: return 3; // mother in_law
             case 5: return 6; // son in_law
             case 6: return 5; // daughter in_law
             case 7: return 8; // brother in_law
