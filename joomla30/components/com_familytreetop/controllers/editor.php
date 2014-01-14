@@ -409,7 +409,7 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         if($form['addParent2'] == 0){
             $spouse = $gedcom->individuals->get();
             $spouse->first_name = "unknown";
-            $spouses->gender = $user->gender?0:1;
+            $spouse->gender = $user->gender?0:1;
             $spouse->creator_id = $user->gedcom_id;
             $spouse->save();
             $spouse_id = $spouse->gedcom_id;
