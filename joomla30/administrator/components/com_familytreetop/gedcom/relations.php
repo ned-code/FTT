@@ -274,11 +274,60 @@ class FamilyTreeTopGedcomRelationsManager {
     }
 
     public function getArray($gedcom_id, $target_id){
-        $relation = $this->get($gedcom_id, $target_id);
-        if($relation && isset($this->list[$target_id])){
-            return $this->list[$target_id];
+        if(!isset($this->list[$target_id])){
+            $relation = $this->_get($gedcom_id, $target_id);
+            if($relation){
+                $json = $this->getJSON($relation);
+                $item = $this->set(array(
+                    'relation_id' => $relation[0],
+                    'gedcom_id' => $gedcom_id,
+                    'target_id' => $target_id,
+                    'connection' => (isset($this->conn[$target_id]))?base64_encode(json_encode($this->conn[$target_id])):"",
+                    'json' => $json,
+                    'in_law' => 0,
+                    'by_spouse' => 0
+                ));
+                $this->list[$target_id] = $item;
+            } else {
+                $gedcom = GedcomHelper::getInstance();
+                $spouses = $this->get_spouses($this->owner_id, true);
+                $conn = $gedcom->connections->getListById($gedcom_id);
+                $rels = $this->getRelations($gedcom_id);
+                $id = $this->getInLawRelation($target_id, $conn, $rels);
+                if(isset($spouses[$id])){
+                    $json = $this->getJSON($relation);
+                    $item = $this->set(array(
+                        'relation_id' => $relation[0],
+                        'gedcom_id' => $gedcom_id,
+                        'target_id' => $target_id,
+                        'connection' => (isset($conn[$target_id]))?base64_encode(json_encode($conn[$target_id])):"",
+                        'json' => $json,
+                        'in_law' => $id,
+                        'by_spouse' => 1
+                    ));
+                    $this->list[$target_id] = $item;
+                } else {
+                    $relation = $this->_get($id, $target_id);
+                    if($relation && $relation[0] == 2){
+                        $json = $this->getJSON($relation);
+                        $rel = $this->getInLawRelationId($id, $conn, $rels);
+                        if($rel != 1000){
+                            $i = $this->set(array(
+                                'relation_id' => $rel,
+                                'gedcom_id' => $this->owner_id,
+                                'target_id' => $target_id,
+                                'connection' => (isset($conn[$target_id]))?base64_encode(json_encode($conn[$target_id])):"",
+                                'json' => $json,
+                                'in_law' => 1,
+                                'by_spouse' => 0
+                            ));
+                            $this->list[$target_id] = $i;
+                        }
+                    }
+                }
+            }
         }
-        return false;
+        return $this->list[$target_id];
     }
 
     public function getInLawRelation($gedcom_id, $conn = false, $rels = false){

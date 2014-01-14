@@ -125,7 +125,7 @@ class FamilyTreeTopGedcomConnectionsManager {
 
         $this->setWave($waves, array("I".$gedcom_id => null));
 
-        $users = GedcomHelper::getInstance()->individuals->getList();
+        $users = GedcomHelper::getInstance()->individuals->getList(true);
 
         $connections = array();
         foreach($users as $user){

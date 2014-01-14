@@ -79,13 +79,13 @@ class FamilyTreeTopGedcomIndividualsModel {
             && $prewRel['in_law'] == 0
             && (!$isChildrens && !$isParents)
         ){
-            return true;
+            return 1;
         } else if(!$isChildrens && !$isSpouses){
-            return true;
+            return 1;
         } else if($isSpouses && sizeof($isSpouses) == 1 && !$isChildrens && !$isParents){
-            return true;
+            return 1;
         }
-        return false;
+        return 0;
     }
 
     public function relationId(){
@@ -285,7 +285,9 @@ class FamilyTreeTopGedcomIndividualsModel {
         $ind->change_time = $date->toSql();
         $ind->is_mother_line = $this->is_mother_line;
         $ind->is_father_line = $this->is_father_line;
-        $ind->is_can_be_delete = $this->isCanBeDelete();
+        $this->is_can_be_delete = $this->isCanBeDelete();
+        $ind->is_can_be_delete = $this->is_can_be_delete;
+
         $ind->save();
 
         $this->id = $ind->id;
@@ -349,8 +351,10 @@ class FamilyTreeTopGedcomIndividualsModel {
     public function updateLine(){
         if(empty($this->id)) return false;
         $ind = FamilyTreeTopIndividuals::find($this->id);
-        $ind->is_father_line = $this->checkLine(4);
-        $ind->is_mother_line = $this->checkLine(3);
+        $this->is_father_line = $this->checkLine(4);
+        $this->is_mother_line = $this->checkLine(3);
+        $ind->is_father_line = $this->is_father_line;
+        $ind->is_mother_line = $this->is_mother_line;
         $ind->save();
     }
 
@@ -614,7 +618,10 @@ class FamilyTreeTopGedcomIndividualsManager {
         return $result;
     }
 
-    public function getList(){
+    public function getList($update = false){
+        if($update&&!empty($this->tree_id)){
+            $this->list = $this->getListByTreeId($this->tree_id);
+        }
         return $this->list;
     }
 
