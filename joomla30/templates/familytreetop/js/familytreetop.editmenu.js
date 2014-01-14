@@ -60,11 +60,15 @@ $FamilyTreeTop.create("editmenu", function($){
         $(box).find('[familytreetop="deleteUnion"]').remove();
 
         if(ind.inLaw){
-            $(box).find('[data-familytreetop-devider="1"]').remove();
+            //$(box).find('[data-familytreetop-devider="1"]').remove();
             $(box).find('[familytreetop="addParent"]').remove();
             $(box).find('[familytreetop="addSibling"]').remove();
             $(box).find('[familytreetop="addSpouse"]').remove();
-            $(box).find('[familytreetop="addChild"]').remove();
+            //$(box).find('[familytreetop="addChild"]').remove();
+            if(!ind.isCanAddChild()){
+                $(box).find('[data-familytreetop-devider="1"]').remove();
+                $(box).find('[familytreetop="addChild"]').remove();
+            }
         } else {
             if(ind.isParentsExist()){
                 $(box).find('[familytreetop="addParent"]').remove();

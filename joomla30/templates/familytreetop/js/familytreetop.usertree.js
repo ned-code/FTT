@@ -360,6 +360,24 @@ $FamilyTreeTop.create("usertree", function($){
                 }
                 return true;
             },
+            isCanAddChild: function(){
+                var con = $this.getConnection(ind.gedcom_id);
+                var inLaw = this.inLaw;
+                if(inLaw && con.length > 1){
+                    var id = con[con.length - 2];
+                    var families = $this.getFamilies(id);
+                    for(var key in families){
+                        if(!families.hasOwnProperty(key)) continue;
+                        var family = families[key];
+                        if( (family.husb == id && family.wife == this.gedcom_id)
+                            || (family.wife == id && family.husb == this.gedcom_id)
+                            ){
+                            return true;
+                        }
+                    }
+                }
+                return !inLaw;
+            },
             isCanBeInvite: function(){
                 var con = $this.getConnection(ind.gedcom_id);
                 var isRegistered = this.isRegistered();
