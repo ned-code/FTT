@@ -371,9 +371,7 @@
         //init update timer
         setInterval(function(){
             $FamilyTreeTop.prototype.fn.ajax('api.update', null, function(response){
-                if(!response.success){
-                    $FamilyTreeTop.prototype.fn.logout();
-                }
+
             });
         }, 60*1000);
     }

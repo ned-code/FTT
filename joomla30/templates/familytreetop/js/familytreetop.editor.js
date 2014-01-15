@@ -223,7 +223,10 @@ $FamilyTreeTop.create("editor", function($){
             function _showOrangeListBox_(){ $(parent).find('[familytreetop="orange-users"]').show(); }
             function _delete_(){
                 _ajax_(3, ind.gedcom_id, function(res){
-                    if(res) ind.delete();
+                    if(res){
+                        $this.mod('usertree').update(res);
+                        ind.delete();
+                    };
                     callback(res);
                 });
             }

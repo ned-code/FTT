@@ -360,8 +360,10 @@ class FamilyTreeTopGedcomIndividualsModel {
 
     public function updateCanBeDeleteParam(){
         if(empty($this->id)) return false;
+        $this->is_can_be_delete = $this->isCanBeDelete();
+
         $ind = FamilyTreeTopIndividuals::find($this->id);
-        $ind->is_can_be_delete = $this->isCanBeDelete();
+        $ind->is_can_be_delete = $this->is_can_be_delete;
         $ind->save();
     }
 
@@ -580,6 +582,36 @@ class FamilyTreeTopGedcomIndividualsManager {
                 $object->updateLine();
             }
         }
+    }
+
+    public function updateIsCanBeDeleteArea($gedcom_id){
+        $gedcom = GedcomHelper::getInstance();
+
+        $user = $gedcom->individuals->get($gedcom_id);
+        $user->updateCanBeDeleteParam();
+
+        $parents = $gedcom->individuals->getParents($gedcom_id);
+        $spouses = $gedcom->families->getSpouses($gedcom_id);
+
+        $result = array();
+        $result[] = $user;
+
+        if($parents['father']){
+            $parents['father']->updateCanBeDeleteParam();
+            $result[] = $parents['father'];
+        }
+        if($parents['mother']){
+            $parents['mother']->updateCanBeDeleteParam();
+            $result[] = $parents['mother'];
+        }
+        if($spouses){
+            foreach($spouses as $id => $spouse){
+                $object = $gedcom->individuals->get($id);
+                $object->updateCanBeDeleteParam();
+                $result[] = $object;
+            }
+        }
+        return $result;
     }
 
     public function updateIsCanBeDelete(){
