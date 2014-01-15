@@ -642,6 +642,8 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         $owner = FamilyTreeTopUserHelper::getInstance()->get();
         $user = $gedcom->individuals->get($gedcom_id);
 
+        $area = $gedcom->individuals->getArea($gedcom_id);
+
         switch((int)$type){
             case 1:
                 $user->unregister();
@@ -670,7 +672,7 @@ class FamilytreetopControllerEditor extends FamilytreetopController
             }
         }
 
-        $inds = $gedcom->individuals->updateIsCanBeDeleteArea($gedcom_id);
+        $inds = $gedcom->individuals->updateIsCanBeDeleteArea($area);
 
         echo $this->getResponse(
             array('ind' => $inds)

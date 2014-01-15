@@ -91,6 +91,15 @@ class FamilyTreeTopGedcomFamilyModel {
                 $event->remove();
             }
         }
+        $gedcom->families->removeFromFamilyList($this->family_id);
+
+        if(!empty($this->husb)){
+            $gedcom->families->removeFromGedcomList($this->husb);
+        }
+        if(!empty($this->wife)){
+            $gedcom->families->removeFromGedcomList($this->wife);
+        }
+
         $family->delete();
         $link->delete();
     }
@@ -126,6 +135,18 @@ class FamilyTreeTopGedcomFamiliesManager {
             $this->list_by_gedcom_id = $this->sortList($rows);
         }
 
+    }
+
+    public function removeFromGedcomList($gedcom_id){
+        if(isset($this->list_by_gedcom_id[$gedcom_id])){
+            unset($this->list_by_gedcom_id[$gedcom_id]);
+        }
+    }
+
+    public function removeFromFamilyList($family_id){
+        if(isset($this->list[$family_id])){
+            unset($this->list[$family_id]);
+        }
     }
 
     protected function sortList( $rows){

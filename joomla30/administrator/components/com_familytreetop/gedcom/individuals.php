@@ -584,28 +584,32 @@ class FamilyTreeTopGedcomIndividualsManager {
         }
     }
 
-    public function updateIsCanBeDeleteArea($gedcom_id){
+    public function getArea($gedcom_id){
         $gedcom = GedcomHelper::getInstance();
-
-        $user = $gedcom->individuals->get($gedcom_id);
-        $user->updateCanBeDeleteParam();
 
         $parents = $gedcom->individuals->getParents($gedcom_id);
         $spouses = $gedcom->families->getSpouses($gedcom_id);
 
         $result = array();
-        $result[] = $user;
-
-        if($parents['father']){
-            $parents['father']->updateCanBeDeleteParam();
-            $result[] = $parents['father'];
+        if($parents['father'] && !empty($parents['father']->id)){
+            $result[] = $parents['father']->gedcom_id;
         }
-        if($parents['mother']){
-            $parents['mother']->updateCanBeDeleteParam();
-            $result[] = $parents['mother'];
+        if($parents['mother'] && !empty($parents['mother']->id)){
+            $result[] = $parents['mother']->gedcom_id;
         }
         if($spouses){
-            foreach($spouses as $id => $spouse){
+            foreach($spouses as $id){
+                $result[] = $id;
+            }
+        }
+        return $result;
+    }
+
+    public function updateIsCanBeDeleteArea($area){
+        $gedcom = GedcomHelper::getInstance();
+        $result = array();
+        if(!empty($area)){
+            foreach($area as $id){
                 $object = $gedcom->individuals->get($id);
                 $object->updateCanBeDeleteParam();
                 $result[] = $object;
