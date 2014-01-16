@@ -397,12 +397,20 @@ class FamilytreetopControllerEditor extends FamilytreetopController
             $rel[] = $gedcom->relations->getArray($owner->gedcom_id, $e->gedcom_id);
         }
 
+        $events = array();
+        foreach($ind->events as $e){
+            $events[] = $e;
+        }
+        foreach($family->events as $e){
+            $events[] = $e;
+        }
+
         echo $this->getResponse(
             array('ind' => $arrInd),
             array('fam' => array($family)),
-            array('eve' => array($ind->events)),
-            array('pla' => array($ind->events)),
-            array('dat' => array($ind->events)),
+            array('eve' => array($events)),
+            array('pla' => array($events)),
+            array('dat' => array($events)),
             array('rel' => $rel),
             array('con' => $rel)
         );

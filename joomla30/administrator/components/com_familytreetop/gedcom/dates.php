@@ -32,7 +32,12 @@ class FamilyTreeTopGedcomDateModel {
             $this->type == "EVO";
         }
 
+        settype($this->start_day, 'integer');
+        settype($this->start_month, 'integer');
+        settype($this->start_year, 'integer');
+
         $date->event_id = $this->event_id;
+        $date->type = $this->type;
         $date->start_day = $this->start_day;
         $date->start_month = $this->start_month;
         $date->start_year = $this->start_year;
