@@ -554,22 +554,19 @@ class FamilytreetopControllerEditor extends FamilytreetopController
                     continue;
                 }
                 $marr = $family->marriage();
-                if(!empty($marr->id) && $form['unknown'] == "on"){
-                    $marr->remove();
-                } else {
-                    $marr->type = "MARR";
-                    $marr->name = "Marriage";
-                    $marr->family_id = $form['family_id'];
-                    $marr->place->city = $form['city'];
-                    $marr->place->state = $form['state'];
-                    $marr->place->country = $form['country'];
-                    $marr->date->type = "EVO";
-                    $marr->date->start_day = $form['day'];
-                    $marr->date->start_month = $form['month'];
-                    $marr->date->start_year = $form['year'];
-                    $marr->save();
-                }
+                $marr->type = "MARR";
+                $marr->name = "Marriage";
+                $marr->family_id = $form['family_id'];
+                $marr->place->city = $form['city'];
+                $marr->place->state = $form['state'];
+                $marr->place->country = $form['country'];
+                $marr->date->type = "EVO";
+                $marr->date->start_day = $form['day'];
+                $marr->date->start_month = $form['month'];
+                $marr->date->start_year = $form['year'];
+                $marr->save();
             }
+
         }
 
         echo json_encode(array('forms'=>$forms));

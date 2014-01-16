@@ -190,7 +190,7 @@ class FamilyTreeTopGedcomEventsManager {
         foreach($list as $id => $value){
            if($value['gedcom_id']!=null && isset($individuals[$value['gedcom_id']])){
                $all[$id] = $value;
-           } else if($value['family_id']!=null && isset($families[$value['family_id']])){
+           } else if($value['family_id']!=null && isset($families['family_id'][$value['family_id']])){
                $all[$id] = $value;
            }
         }
@@ -208,7 +208,7 @@ class FamilyTreeTopGedcomEventsManager {
 
         foreach($listByFamilyId as $familyId => $value){
             foreach($value as $id => $item){
-                if($item['family_id']!=null && isset($families[$item['family_id']])){
+                if($item['family_id']!=null && isset($families['family_id'][$item['family_id']])){
                     if(!isset($familyIds[$familyId])){
                         $familyIds[$familyId] = array();
                     }
