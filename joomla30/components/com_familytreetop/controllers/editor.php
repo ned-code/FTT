@@ -555,6 +555,9 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         $forms = $this->getPostForm(true);
         $gedcom = GedcomHelper::getInstance();
 
+        $families = array();
+        $events = array();
+
         foreach($forms as $form){
             if($form['family_id'] != 0){
                 $family = $gedcom->families->get($form['family_id']);
@@ -573,11 +576,18 @@ class FamilytreetopControllerEditor extends FamilytreetopController
                 $marr->date->start_month = $form['month'];
                 $marr->date->start_year = $form['year'];
                 $marr->save();
+
+                $families[] = $family;
+                $events[] = $marr;
             }
 
         }
-
-        echo json_encode(array('forms'=>$forms));
+        echo $this->getResponse(
+            array('fam' => $families),
+            array('eve' => array($events)),
+            array('pla' => array($events)),
+            array('dat' => array($events))
+        );
         exit;
     }
 
