@@ -274,6 +274,9 @@ class FamilyTreeTopGedcomRelationsManager {
     }
 
     public function getArray($gedcom_id, $target_id){
+        $gedcom = GedcomHelper::getInstance();
+        $conn = $gedcom->connections->getListById($gedcom_id);
+        $rels = $this->getRelations($gedcom_id);
         if(!isset($this->list[$target_id])){
             $relation = $this->_get($gedcom_id, $target_id);
             if($relation){
@@ -282,17 +285,14 @@ class FamilyTreeTopGedcomRelationsManager {
                     'relation_id' => $relation[0],
                     'gedcom_id' => $gedcom_id,
                     'target_id' => $target_id,
-                    'connection' => (isset($this->conn[$target_id]))?base64_encode(json_encode($this->conn[$target_id])):"",
+                    'connection' => (isset($conn[$target_id]))?base64_encode(json_encode($conn[$target_id])):"",
                     'json' => $json,
                     'in_law' => 0,
                     'by_spouse' => 0
                 ));
                 $this->list[$target_id] = $item;
             } else {
-                $gedcom = GedcomHelper::getInstance();
                 $spouses = $this->get_spouses($this->owner_id, true);
-                $conn = $gedcom->connections->getListById($gedcom_id);
-                $rels = $this->getRelations($gedcom_id);
                 $id = $this->getInLawRelation($target_id, $conn, $rels);
                 if(isset($spouses[$id])){
                     $json = $this->getJSON($relation);

@@ -82,6 +82,9 @@ $FamilyTreeTop.create("usertree", function($){
                 case "rel":
                     _setData_("rel", item);
                     break;
+                case "con":
+                    _setData_("con", item);
+                    break;
                 default:
                     break;
             }

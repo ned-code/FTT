@@ -86,6 +86,14 @@ class FamilyTreeTopGedcomFamilyModel {
         $link = FamilyTreeTopTreeLinks::find_by_id_and_type($this->family_id, 1);
         $family = FamilyTreeTopFamilies::find_by_family_id($this->family_id);
 
+
+        $gedcom->childrens->removeFromFamilyList($this->family_id);
+        if(!empty($this->childrens)){
+            foreach($this->childrens as $child){
+                $gedcom->childrens->removeFromGedcomList($child);
+            }
+        }
+
         if(!empty($this->events)){
             foreach($this->events as $event){
                 $event->remove();

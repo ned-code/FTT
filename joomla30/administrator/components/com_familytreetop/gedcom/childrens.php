@@ -46,6 +46,46 @@ class FamilyTreeTopGedcomChildrensManager {
         $this->list_by_gedcom_id[$row->gedcom_id][] = $data;
     }
 
+    public function removeFromList($id){
+        if(isset($this->list[$id])){
+            unset($this->list[$id]);
+        }
+    }
+    public function removeFromGedcomList($gedcom_id){
+        if(isset($this->list_by_gedcom_id[$gedcom_id])){
+            $list = $this->list_by_gedcom_id[$gedcom_id];
+            unset($this->list_by_gedcom_id[$gedcom_id]);
+            foreach($list as $item){
+                if(isset($this->list_by_family_id[$item['family_id']])){
+                    $familyList = $this->list_by_family_id[$item['family_id']];
+                    foreach($familyList as $index => $e){
+                        if($e['gedcom_id'] == $gedcom_id){
+                            unset($this->list_by_family_id[$item['family_id']][$index]);
+                        }
+                    }
+                }
+                $this->removeFromList($item['id']);
+            }
+        }
+    }
+    public function removeFromFamilyList($family_id){
+        if(isset($this->list_by_family_id[$family_id])){
+            $list = $this->list_by_family_id[$family_id];
+            unset($this->list_by_family_id[$family_id]);
+            foreach($list as $item){
+                if(isset($this->list_by_gedcom_id[$item['gedcom_id']])){
+                    $indList = $this->list_by_gedcom_id[$item['gedcom_id']];
+                    foreach($indList as $index => $e){
+                        if($e['family_id'] == $family_id){
+                            unset($this->list_by_gedcom_id[$item['gedcom_id']][$index]);
+                        }
+                    }
+                }
+                $this->removeFromList($item['id']);
+            }
+        }
+    }
+
     public function get($id = false){
         $result = array();
         if($id && isset($this->list_by_family_id[$id])){

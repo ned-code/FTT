@@ -192,7 +192,7 @@ class FamilytreetopControllerEditor extends FamilytreetopController
                             break;
                         case "con":
                             if(isset($item['target_id'])){
-                                if(isset($item['connection'])){
+                                if(isset($item['connection']) && strlen($item['connection']) > 0 ){
                                     $con = json_decode(base64_decode($item['connection']));
                                     $result[$key][$item['target_id']] = $con;
                                 }
@@ -267,6 +267,7 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         $spouse->updateCanBeDeleteParam();
 
         $rel = array(
+            $gedcom->relations->getArray($owner->gedcom_id, $ind->gedcom_id),
             $gedcom->relations->getArray($owner->gedcom_id, $sircar->gedcom_id),
             $gedcom->relations->getArray($owner->gedcom_id, $spouse->gedcom_id)
         );
@@ -279,7 +280,7 @@ class FamilytreetopControllerEditor extends FamilytreetopController
             array('pla' => array($sircar->events)),
             array('dat' => array($sircar->events)),
             array('rel' => $rel),
-            array('con' => $con)
+            array('con' => $rel)
         );
         exit;
 
@@ -321,17 +322,28 @@ class FamilytreetopControllerEditor extends FamilytreetopController
 
         $ind->updateLine();
         $ind->updateCanBeDeleteParam();
-        $user->updateCanBeDeleteParam();
-        $rel = $gedcom->relations->getArray($owner->gedcom_id, $ind->gedcom_id);
+
+        $area = $gedcom->individuals->getArea($ind->gedcom_id);
+        $inds = $gedcom->individuals->updateIsCanBeDeleteArea($area);
+        $arrInd = array();
+        foreach($inds as $e){
+            $arrInd[] = $e;
+        }
+        $arrInd[] = $ind;
+
+        $rel = array();
+        foreach($arrInd as $e){
+            $rel[] = $gedcom->relations->getArray($owner->gedcom_id, $e->gedcom_id);
+        }
 
         echo $this->getResponse(
-            array('ind' => array($ind,$user)),
+            array('ind' => $arrInd),
             array('chi' => array($child)),
             array('eve' => array($ind->events)),
             array('pla' => array($ind->events)),
             array('dat' => array($ind->events)),
-            array('rel' => array($rel)),
-            array('con' => array($rel))
+            array('rel' => $rel),
+            array('con' => $rel)
         );
         exit;
     }
@@ -371,18 +383,28 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         $family->save();
 
         $ind->updateLine();
-        $user->updateCanBeDeleteParam();
 
-        $rel = $gedcom->relations->getArray($owner->gedcom_id, $ind->gedcom_id);
+        $area = $gedcom->individuals->getArea($ind->gedcom_id);
+        $inds = $gedcom->individuals->updateIsCanBeDeleteArea($area);
+        $arrInd = array();
+        foreach($inds as $e){
+            $arrInd[] = $e;
+        }
+        $arrInd[] = $ind;
+
+        $rel = array();
+        foreach($arrInd as $e){
+            $rel[] = $gedcom->relations->getArray($owner->gedcom_id, $e->gedcom_id);
+        }
 
         echo $this->getResponse(
-            array('ind' => array($ind,$user)),
+            array('ind' => $arrInd),
             array('fam' => array($family)),
             array('eve' => array($ind->events)),
             array('pla' => array($ind->events)),
             array('dat' => array($ind->events)),
-            array('rel' => array($rel)),
-            array('con' => array($rel))
+            array('rel' => $rel),
+            array('con' => $rel)
         );
         exit;
     }
@@ -445,8 +467,6 @@ class FamilytreetopControllerEditor extends FamilytreetopController
 
         $child = $family->addChild($ind->gedcom_id);
 
-        $user->updateCanBeDeleteParam();
-
         $ind->updateLine();
         $ind->updateCanBeDeleteParam();
         if($spouse){
@@ -456,7 +476,6 @@ class FamilytreetopControllerEditor extends FamilytreetopController
 
         $arrInd = array();
         $arrInd[] = $ind;
-        $arrInd[] = $user;
         if($spouse){
             $arrInd[] = $spouse;
         }
@@ -464,6 +483,12 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         $fam = array();
         if($spouse){
             $fam[] = $family;
+        }
+
+        $area = $gedcom->individuals->getArea($ind->gedcom_id);
+        $inds = $gedcom->individuals->updateIsCanBeDeleteArea($area);
+        foreach($inds as $e){
+            $arrInd[] = $e;
         }
 
         $rel = array();
@@ -479,7 +504,7 @@ class FamilytreetopControllerEditor extends FamilytreetopController
             array('pla' => array($ind->events)),
             array('dat' => array($ind->events)),
             array('rel' => $rel),
-            array('con' => $con)
+            array('con' => $rel)
         );
         exit;
     }
@@ -674,8 +699,15 @@ class FamilytreetopControllerEditor extends FamilytreetopController
 
         $inds = $gedcom->individuals->updateIsCanBeDeleteArea($area);
 
+        $rel = array();
+        foreach($inds as $e){
+            $rel[] = $gedcom->relations->getArray($owner->gedcom_id, $e->gedcom_id);
+        }
+
         echo $this->getResponse(
-            array('ind' => $inds)
+            array('ind' => $inds),
+            array('rel' => $rel),
+            array('con' => $rel)
         );
         exit;
     }

@@ -201,6 +201,7 @@ class FamilyTreeTopGedcomIndividualsModel {
         $link->delete();
 
         $gedcom->individuals->removeFromList($this->gedcom_id);
+        $gedcom->childrens->removeFromGedcomList($this->gedcom_id);
     }
 
     public function clear(){
