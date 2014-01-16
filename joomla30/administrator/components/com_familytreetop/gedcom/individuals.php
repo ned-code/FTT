@@ -438,10 +438,10 @@ class FamilyTreeTopGedcomIndividualsManager {
             $ind->is_mother_line = ($data['is_mother_line']!=null)?$data['is_mother_line']:0;
             $ind->is_can_be_delete = ($data['is_can_be_delete']!=null)?$data['is_can_be_delete']:1;
 
-            $ind->first_name = $data['first_name'];
-            $ind->middle_name = $data['middle_name'];
-            $ind->last_name = $data['last_name'];
-            $ind->know_as = $data['know_as'];
+            $ind->first_name = $gedcom->cnv($data['first_name']);
+            $ind->middle_name = $gedcom->cnv($data['middle_name']);
+            $ind->last_name = $gedcom->cnv($data['last_name']);
+            $ind->know_as = $gedcom->cnv($data['know_as']);
         } else {
             return false;
         }

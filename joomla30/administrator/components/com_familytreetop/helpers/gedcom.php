@@ -42,6 +42,10 @@ class GedcomHelper
         $this->individuals->updateIsCanBeDelete();
     }
 
+    public function cnv($text){
+        return iconv(mb_detect_encoding($text, mb_detect_order(), true), "UTF-8", $text);
+    }
+
     public function getTreeUsers($associative = false, $json = false){
         $user = FamilyTreeTopUserHelper::getInstance()->get();
         if(!empty($user->tree_id) && !empty($user->account_id) && !empty($user->gedcom_id)){
