@@ -23,9 +23,22 @@ class UploadHandlerHelper extends UploadHandler {
         $media->size = $file->size;
         $media->type = $file->type;
         $media->url = $file->url;
-        $media->path = $file->path;
         $media->thumbnail_url = $file->thumbnail_url;
+        $media->path = $file->path;
         $media->delete_url = $file->delete_url;
+
+        $json = array();
+        $json['natural']['url'] = $file->url;
+        list($img_width, $img_height) = @getimagesize($file->url);
+        $json['natural']['width'] = $img_width;
+        $json['natural']['height'] = $img_height;
+
+        $json['thumbnail']['url'] = $file->thumbnail_url;
+        list($img_width, $img_height) = @getimagesize($file->thumbnail_url);
+        $json['thumbnail']['width'] = $img_width;
+        $json['thumbnail']['height'] = $img_height;
+
+        $media->json = $json;
         $media->save();
     }
 
@@ -110,6 +123,7 @@ class UploadHandlerHelper extends UploadHandler {
             $file->path = $file_path;
             $this->set_file_delete_properties($file);
             $this->set_file_into_bd($file, $media);
+            $file->familytreetop['media']->json = json_decode($file->familytreetop['media']->json);
         }
         return $file;
     }

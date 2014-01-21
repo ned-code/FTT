@@ -6,13 +6,13 @@ class FamilyTreeTopGedcomMediaModel {
     public $name = "";
     public $original_name = "";
     public $size = "";
-    public $width = 0;
-    public $height = 0;
     public $type = "";
     public $path = "";
     public $url = "";
-    public $thumbnail_url = "";
     public $delete_url = "";
+    public $thumbnail_url = "";
+    public $json = array();
+    public $thumbnail_sizes = array();
     public $change_time = null;
 
     public function __construct(){
@@ -29,22 +29,18 @@ class FamilyTreeTopGedcomMediaModel {
             $link = false;
             $media = FamilyTreeTopMedias::find($this->id);
         }
-        if(strlen($this->path) > 0){
-            list($img_width, $img_height) = @getimagesize($this->path);
-            $this->width = $img_width;
-            $this->height = $img_height;
+        if(gettype($this->json) != "string"){
+            $this->json = json_encode($this->json);
         }
-
         $media->name = $this->name;
         $media->original_name = $this->original_name;
         $media->size = $this->size;
-        $media->width = $this->width;
-        $media->height = $this->height;
         $media->type = $this->type;
         $media->path = $this->path;
         $media->url = $this->url;
-        $media->thumbnail_url = $this->thumbnail_url;
         $media->delete_url = $this->delete_url;
+        $media->thumbnail_url = $this->thumbnail_url;
+        $media->json = $this->json;
         $media->change_time = $this->change_time;
         $media->save();
 
@@ -134,13 +130,12 @@ class FamilyTreeTopGedcomMediasManager {
             $model->name = $item['name'];
             $model->original_name = $item['original_name'];
             $model->size = $item['size'];
-            $model->width = $item['width'];
-            $model->height = $item['height'];
             $model->type = $item['type'];
             $model->path = $item['path'];
             $model->url = $item['url'];
-            $model->thumbnail_url = $item['thumbnail_url'];
             $model->delete_url = $item['delete_url'];
+            $model->thumbnail_url = $item['thumbnail_url'];
+            $model->json = json_decode($item['json']);
             $model->change_time = $item['change_time'];
             $medias[] = $model;
         }
@@ -164,13 +159,12 @@ class FamilyTreeTopGedcomMediasManager {
             $model->name = $media->name;
             $model->original_name = $media->original_name;
             $model->size = $media->size;
-            $model->width = $media->width;
-            $model->height = $media->height;
             $model->type = $media->type;
             $model->path = $media->path;
             $model->url = $media->url;
-            $model->thumbnail_url = $media->thumbnail_url;
             $model->delete_url = $media->delete_url;
+            $model->thumbnail_url = $media->thumbnail_url;
+            $model->json = json_decode($media->json);
             $model->change_time = $media->change_time;
             return $model;
         }
@@ -190,13 +184,12 @@ class FamilyTreeTopGedcomMediasManager {
             $model->name = $media->name;
             $model->original_name = $media->original_name;
             $model->size = $media->size;
-            $model->width = $media->width;
-            $model->height = $media->height;
             $model->type = $media->type;
             $model->path = $media->path;
             $model->url = $media->url;
-            $model->thumbnail_url = $media->thumbnail_url;
             $model->delete_url = $media->delete_url;
+            $model->thumbnail_url = $media->thumbnail_url;
+            $model->json = json_decode($media->json);
             $model->change_time = $media->change_time;
             return $model;
         }
@@ -212,12 +205,16 @@ class FamilyTreeTopGedcomMediasManager {
 
         foreach($list as $id => $item){
             if(isset($individuals[$item['gedcom_id']])){
+                $item['json'] = json_decode($item['json']);
                 $all[$id] = $item;
             }
         }
 
         foreach($listByGedcomId as $gedcomId => $data){
             if(isset($individuals[$gedcomId])){
+                foreach($data as $index => $e){
+                    $data[$index]['json'] = json_decode($e['json']);
+                }
                 $gedcomIds[$gedcomId] = $data;
             }
         }

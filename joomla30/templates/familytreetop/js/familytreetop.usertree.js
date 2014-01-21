@@ -1102,12 +1102,21 @@ $FamilyTreeTop.create("usertree", function($){
     $this.getImage = function(gedcom_id, size, style, src){
         var el = (gedcom_id)?$this.getAvatar(gedcom_id):false,
             user = $this.user(gedcom_id),
+            scalesize = false,
+            k,
             data = [],
             url;
 
         style = (style)?style:"img-polaroid";
         if(el){
-            data = [el.thumbnail_url, $('<img class="'+style+'" />')];
+            if(el.json != null && el.thumbnail_url == ""){
+                url = el.json.thumbnail.url;
+            } else if(el.json == null && el.thumbnail_url != ""){
+                url = el.thumbnail_url;
+            } else {
+                url = el.url;
+            }
+            data = [url, $('<img class="'+style+'" />')];
         } else if(gedcom_id && gedcom_id in usersmap){
             data = [
                 'https://graph.facebook.com/'+usersmap[gedcom_id].facebook_id+'/picture?width='+size[0]+'&height='+size[1],
@@ -1128,6 +1137,23 @@ $FamilyTreeTop.create("usertree", function($){
             ];
         }
         if(size){
+            if(el && el.json != null){
+                if("undefined" !== el.json.thumbnail){
+                    scalesize = [el.json.thumbnail.width, el.json.thumbnail.height];
+                } else if("undefined" !== el.json.natural){
+                    scalesize = [el.json.natural.width, el.json.natural.height];
+                }
+                if(scalesize && scalesize[0] > scalesize[1]){
+                    k = size[0] / scalesize[0];
+
+                } else if(scalesize && scalesize[0] < scalesize[1]){
+                    k = size[1] / scalesize[1];
+                }
+                if(scalesize){
+                    size[0] = scalesize[0] * k;
+                    size[1] = scalesize[1] * k;
+                }
+            }
             data[1].attr('width', size[0] + "px");
             data[1].attr('height', size[1] + "px");
             data[1].css('width', size[0] + "px");
