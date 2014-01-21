@@ -6,7 +6,10 @@ class FamilyTreeTopGedcomMediaModel {
     public $name = "";
     public $original_name = "";
     public $size = "";
+    public $width = 0;
+    public $height = 0;
     public $type = "";
+    public $path = "";
     public $url = "";
     public $thumbnail_url = "";
     public $delete_url = "";
@@ -26,10 +29,19 @@ class FamilyTreeTopGedcomMediaModel {
             $link = false;
             $media = FamilyTreeTopMedias::find($this->id);
         }
+        if(strlen($this->path) > 0){
+            list($img_width, $img_height) = @getimagesize($this->path);
+            $this->width = $img_width;
+            $this->height = $img_height;
+        }
+
         $media->name = $this->name;
         $media->original_name = $this->original_name;
         $media->size = $this->size;
+        $media->width = $this->width;
+        $media->height = $this->height;
         $media->type = $this->type;
+        $media->path = $this->path;
         $media->url = $this->url;
         $media->thumbnail_url = $this->thumbnail_url;
         $media->delete_url = $this->delete_url;
@@ -122,7 +134,10 @@ class FamilyTreeTopGedcomMediasManager {
             $model->name = $item['name'];
             $model->original_name = $item['original_name'];
             $model->size = $item['size'];
+            $model->width = $item['width'];
+            $model->height = $item['height'];
             $model->type = $item['type'];
+            $model->path = $item['path'];
             $model->url = $item['url'];
             $model->thumbnail_url = $item['thumbnail_url'];
             $model->delete_url = $item['delete_url'];
@@ -149,7 +164,10 @@ class FamilyTreeTopGedcomMediasManager {
             $model->name = $media->name;
             $model->original_name = $media->original_name;
             $model->size = $media->size;
+            $model->width = $media->width;
+            $model->height = $media->height;
             $model->type = $media->type;
+            $model->path = $media->path;
             $model->url = $media->url;
             $model->thumbnail_url = $media->thumbnail_url;
             $model->delete_url = $media->delete_url;
@@ -172,7 +190,10 @@ class FamilyTreeTopGedcomMediasManager {
             $model->name = $media->name;
             $model->original_name = $media->original_name;
             $model->size = $media->size;
+            $model->width = $media->width;
+            $model->height = $media->height;
             $model->type = $media->type;
+            $model->path = $media->path;
             $model->url = $media->url;
             $model->thumbnail_url = $media->thumbnail_url;
             $model->delete_url = $media->delete_url;

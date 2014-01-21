@@ -23,6 +23,7 @@ class UploadHandlerHelper extends UploadHandler {
         $media->size = $file->size;
         $media->type = $file->type;
         $media->url = $file->url;
+        $media->path = $file->path;
         $media->thumbnail_url = $file->thumbnail_url;
         $media->delete_url = $file->delete_url;
         $media->save();
@@ -106,6 +107,7 @@ class UploadHandlerHelper extends UploadHandler {
                 $file->error = 'abort';
             }
             $file->size = $file_size;
+            $file->path = $file_path;
             $this->set_file_delete_properties($file);
             $this->set_file_into_bd($file, $media);
         }
