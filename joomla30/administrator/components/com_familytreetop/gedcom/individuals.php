@@ -374,8 +374,11 @@ class FamilyTreeTopGedcomIndividualsModel {
         if(!$con) return 0;
         if(sizeof($con) > 1){
             $object = $gedcom->individuals->get($con[1]);
+            $relId = $this->relationId();
             $id = $object->relationId();
             if($id == $parent){
+                return 1;
+            } if( ($id == 3 || $id == 4) && ( $relId == 7 || $relId == 8 ) ){
                 return 1;
             } else if($id > 4 && $id < 9){
                 return 1;

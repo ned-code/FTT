@@ -40,6 +40,7 @@ class GedcomHelper
         $this->connections = new FamilyTreeTopGedcomConnectionsManager($tree_id, $gedcom_id);
         $this->relations = new FamilyTreeTopGedcomRelationsManager($tree_id, $gedcom_id);
         $this->individuals->updateIsCanBeDelete();
+        $this->individuals->updateFamilyLine();
     }
 
     public function cnv($text){
