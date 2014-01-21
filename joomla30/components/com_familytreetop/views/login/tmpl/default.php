@@ -13,7 +13,7 @@ defined('_JEXEC') or die;
     </div>
     <div class="span4">
         <div class="well text-center">
-            <a id="login" data-complete-text="Login" data-loading-text="Loading..."  href="#" onclick="return false;" class="btn btn-large">Login</a>
+            <a id="login" data-complete-text="Login" data-loading-text="Please wait..."  href="#" onclick="return false;" class="btn btn-large">Login</a>
         </div>
         <div style="visibility: hidden; text-align: center;" familytreetop="progressbar">
              <img src="<?=$this->baseurl;?>/templates/familytreetop/img/circle_progressbar_128_128.GIF" />
@@ -46,6 +46,7 @@ defined('_JEXEC') or die;
             }
         progressbarAnimateStart = function(){
             $('[familytreetop="progressbar"]').css('visibility', 'visible');
+            $('#login').html('<span style="color:#00AEE3;">Please wait...</span>');
         }
         setPos = function(){
             var offset = $('#footer').offset();
