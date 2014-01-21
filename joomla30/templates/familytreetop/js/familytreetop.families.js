@@ -133,6 +133,9 @@ $FamilyTreeTop.create("families", function($){
         createFacebookIcon: function(object, ind){
             $(object).append('<div style="width:24px;height:24px;background:white;clear:both;border-radius:5px;bottom: 5px;position: absolute;right: 5px;"><a style="text-decoration: none;" target="_blank" href="https://www.facebook.com/'+ind.facebook_id+'"><i style="line-height: 25px;" class="icon-facebook-sign icon-2x"></i></a></div>')
         },
+        createDeceased: function(object){
+            $(object).append('<div class="familytreetop-deceased-triangle"></div>');
+        },
         createBox: function(ind, cl, type, args){
             if(!ind) return [];
             var divs = $(cl).find('div');
@@ -155,6 +158,9 @@ $FamilyTreeTop.create("families", function($){
             }
             if(args.editable){
                 $fn.createEdit(divs[0], ind.gedcom_id);
+            }
+            if(ind.isDeceased()){
+                $fn.createDeceased(divs[0]);
             }
             return cl;
         },
