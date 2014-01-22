@@ -581,10 +581,14 @@ class FamilyTreeTopGedcomIndividualsManager {
         $gedcom = GedcomHelper::getInstance();
         $list = $this->list;
         foreach($list as $id => $user){
+            $object = $gedcom->individuals->get($id);
+            $object->updateLine();
+            /*
             if($user['is_father_line'] == null || $user['is_mother_line'] == null){
                 $object = $gedcom->individuals->get($id);
                 $object->updateLine();
             }
+            */
         }
     }
 
