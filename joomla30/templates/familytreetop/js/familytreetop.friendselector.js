@@ -59,6 +59,8 @@ $FamilyTreeTop.create("friendselector", function($){
         },
         onSubmit: function(data){
             var facebook_id = data[0];
+            $fn.send($data.gedcom_id, facebook_id);
+            /*
             $this.ajax('invite.checkUser', {facebook_id: facebook_id, gedcom_id: $data.gedcom_id}, function(response){
                 if(response.success){
                     $fn.send($data.gedcom_id, facebook_id);
@@ -66,6 +68,7 @@ $FamilyTreeTop.create("friendselector", function($){
                     $this.error({ title: response.message });
                 }
             });
+            */
         },
         addInvitation:function(facebook_id, gedcom_id, callback){
             $this.ajax('invite.addInvitation', {facebook_id:facebook_id, gedcom_id: gedcom_id}, function(response){
@@ -88,11 +91,14 @@ $FamilyTreeTop.create("friendselector", function($){
                     var alert = $this.warning({title: "Preparing invitation...", timeout: false});
                     $fn.addInvitation(response.to[0], gedcom_id, function(){
                         $(alert).alert('close');
+                        $this.success({ title: "Request has been send"});
+                        /*
                         if(this.success){
                             $this.success({ title: "Request has been send"});
                         } else {
                             $this.error({ title: this.message});
                         }
+                        */
                     });
                 }
             });
