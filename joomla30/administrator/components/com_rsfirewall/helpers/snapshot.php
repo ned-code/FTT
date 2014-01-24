@@ -102,13 +102,23 @@ abstract class RSFirewallSnapshot
 					if (!is_object($value)) {
 						continue;
 					}
-					$query = $db->getQuery(true);
-					$query->insert('#__'.$adjacent_table)
-						  ->columns(array_keys(get_object_vars($value)))
-						  ->values(array_values(get_object_vars($value)));
-					
+					$query = $db->getQuery(true);					
+					$query->select('*')
+						  ->from($db->qn('#__'.$adjacent_table));
+					// Let's check if the data already matches
+					foreach (get_object_vars($value) as $k => $v) {
+						$query->where($db->qn($k).'='.$db->q($v));
+					}
 					$db->setQuery($query);
-					$db->execute();
+					if (!$db->loadObject()) {
+						$query->clear();
+						$query->insert('#__'.$adjacent_table)
+							  ->columns(array_keys(get_object_vars($value)))
+							  ->values(implode(',',array_values(get_object_vars($value))));
+						
+						$db->setQuery($query);
+						$db->execute();
+					}
 				}
 			}
 		}

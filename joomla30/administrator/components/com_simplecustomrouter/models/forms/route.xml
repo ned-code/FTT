@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fieldset name="details">
+        <field
+            name="id"
+            type="hidden"
+        />
+        <field
+            name="path"
+            type="text"
+            label="COM_SIMPLECUSTOMROUTER_ROUTE_FIELD_PATH_LABEL"
+            description="COM_SIMPLECUSTOMROUTER_ROUTE_FIELD_PATH_DESC"
+            size="100"
+            class="inputbox"
+            required="true"
+        />
+        <field
+            name="query"
+            type="text"
+            label="COM_SIMPLECUSTOMROUTER_ROUTE_FIELD_QUERY_LABEL"
+            description="COM_SIMPLECUSTOMROUTER_ROUTE_FIELD_QUERY_DESC"
+            size="100"
+            class="inputbox"
+            required="true"
+        />
+        <field
+            name="itemId"
+            type="menuitem"
+            class="inputbox"
+            label="COM_SIMPLECUSTOMROUTER_ROUTE_FIELD_ITEMID_LABEL"
+            description="COM_SIMPLECUSTOMROUTER_ROUTE_FIELD_ITEMID_DESC"
+        >
+            <option
+                    value="">COM_SIMPLECUSTOMROUTER_ROUTE_FIELD_ITEMID_NONE</option>
+
+        </field>
+    </fieldset>
+</form>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5" type="plugin" group="system" method="upgrade">
+	<name>PLG_SYS_SUPERBROWSERUPDATE_XML_NAME</name>
+	<author>Mustaq Sheikh</author>
+	<creationDate>24 August 2013</creationDate>
+	<authorEmail>no-reply@herdboy.com</authorEmail>
+	<authorUrl>http://herdboy.com</authorUrl>
+	<version>2.5.2</version>
+	<copyright>Copyright (c) 2012 HerdBoy Web Design and Development. All rights reserved.</copyright>
+	<license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
+	<description>PLG_SYS_SUPERBROWSERUPDATE_XML_DESC</description>
+	<files>
+		<filename plugin="superbrowserupdate">superbrowserupdate.php</filename>
+		<filename>index.html</filename>
+		<folder>assets</folder>
+		<folder>language</folder>
+	</files>
+	<languages>
+			<language tag="en-GB">language/en-GB/en-GB.plg_system_superbrowserupdate.ini</language>
+			<language tag="en-GB">language/en-GB/en-GB.plg_system_superbrowserupdate.sys.ini</language>
+	</languages>
+	<config>
+		<fields name="params" >
+		<fieldset name="Basic">
+        <field name="sdl" type="textarea" default="'chrome','firefox','opera','safari','msie'" label="PLG_SYS_SUPERMARK_SUPERBROWSERUPDATE_DL_LABEL" description="PLG_SYS_SUPERBROWSERUPDATE_DL_DESCRIPTION" rows="2" cols="33" filter="raw"/>
+    	<field name="sie" type="list" default="false" label="PLG_SYS_SUPERBROWSERUPDATE_IE_LABEL" description="PLG_SYS_SUPERBROWSERUPDATE_IE_DESC">
+			<option value="true">JTRUE</option>
+			<option value="false">JFALSE</option>
+    	</field>
+    	<field name="sie8" type="list" default="false" label="PLG_SYS_SUPERBROWSERUPDATE_IE8_LABEL" description="PLG_SYS_SUPERBROWSERUPDATE_IE8_DESC">
+			<option value="true">JTRUE</option>
+			<option value="false">JFALSE</option>
+    	</field>    	
+    	<field name="sff" type="list" default="false" label="PLG_SYS_SUPERBROWSERUPDATE_FF_LABEL" description="PLG_SYS_SUPERBROWSERUPDATE_FF_DESC">
+			<option value="true">JTRUE</option>
+			<option value="false">JFALSE</option>
+    	</field>
+     	<field name="schr" type="list" default="false" label="PLG_SYS_SUPERBROWSERUPDATE_SCHR_LABEL" description="PLG_SYS_SUPERBROWSERUPDATE_SCHR_DESC">
+			<option value="true">JTRUE</option>
+			<option value="false">JFALSE</option>
+    	</field>
+    	<field name="sop" type="list" default="false" label="PLG_SYS_SUPERBROWSERUPDATE_OP_LABEL" description="PLG_SYS_SUPERBROWSERUPDATE_OP_DESC">
+			<option value="true">JTRUE</option>
+			<option value="false">JFALSE</option>
+    	</field>
+     	<field name="ssaf" type="list" default="false" label="PLG_SYS_SUPERBROWSERUPDATE_SSAF_LABEL" description="PLG_SYS_SUPERBROWSERUPDATE_SSAF_DESC">
+			<option value="true">JTRUE</option>
+			<option value="false">JFALSE</option>
+    	</field>
+    	<field name="skon" type="list" default="false" label="PLG_SYS_SUPERBROWSERUPDATE_SKON_LABEL" description="PLG_SYS_SUPERBROWSERUPDATE_SKON_DESC">
+			<option value="true">JTRUE</option>
+			<option value="false">JFALSE</option>
+    	</field>     	     	     	  
+    	<field name="sdmob" type="list" default="1" label="PLG_SYS_SUPERBROWSERUPDATE_MOBILE_LABEL" description="PLG_SYS_SUPERBROWSERUPDATE_MOBILE_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+    	</field>
+    	<field name="scook" type="list" default="false" label="PLG_SYS_SUPERBROWSERUPDATE_SCOOK_LABEL" description="PLG_SYS_SUPERBROWSERUPDATE_SCOOK_DESC">
+			<option value="true">JTRUE</option>
+			<option value="false">JFALSE</option>
+    	</field>
+        <field name="scooke" type="text" default="0" label="PLG_SYS_SUPERBROWSERUPDATE_CE_LABEL" description="PLG_SYS_SUPERBROWSERUPDATE_CE_DESCRIPTION" size="10" />
+        <field name="sobg" type="text" default="#000000" label="PLG_SYS_SUPERBROWSERUPDATE_BG_LABEL" description="PLG_SYS_SUPERBROWSERUPDATE_BG_DESCRIPTION" size="10" />
+    	<field name="sdc" type="list" default="False" label="PLG_SYS_SUPERBROWSERUPDATE_SDC_LABEL" description="PLG_SYS_SUPERBROWSERUPDATE_SDC_DESC">
+			<option value="false">JTRUE</option>
+			<option value="true">JFALSE</option>
+    	</field>     	     	        
+		</fieldset>
+		</fields>
+	</config>
+</extension>

@@ -272,15 +272,22 @@ class plgSystemRSFirewall extends JPlugin
 		return false;
 	}
 	
-	protected function showForbiddenMessage($count=true) {
-		// no passing through here
-		header('HTTP/1.1 403 Forbidden');
-		
+	protected function createView($options=array()) {
 		$class = $this->isJ30 ? 'JViewLegacy' : 'JView';
 		if ($class == 'JView') {
 			jimport('joomla.application.component.view');
 		}
-		$view = new $class(array(
+		if (!defined('JPATH_COMPONENT')) {
+			define('JPATH_COMPONENT', JPATH_SITE.'/components/com_rsfirewall');
+		}
+		return new $class($options);
+	}
+	
+	protected function showForbiddenMessage($count=true) {
+		// no passing through here
+		header('HTTP/1.1 403 Forbidden');
+		
+		$view = $this->createView(array(
 			'name' => 'forbidden',
 			'base_path' => JPATH_SITE.'/components/com_rsfirewall'
 		));
@@ -303,11 +310,7 @@ class plgSystemRSFirewall extends JPlugin
 		}
 		
 		$input = RSInput::create();		
-		$class = $this->isJ30 ? 'JViewLegacy' : 'JView';
-		if ($class == 'JView') {
-			jimport('joomla.application.component.view');
-		}
-		$view  = new $class(array(
+		$view  = $this->createView(array(
 			'name' => 'login',
 			'base_path' => JPATH_SITE.'/components/com_rsfirewall'
 		));

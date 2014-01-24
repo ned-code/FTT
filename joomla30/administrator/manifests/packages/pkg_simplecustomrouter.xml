@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="package" method="upgrade" version="3.0">
+    <name>PKG_SIMPLECUSTOMROUTER</name>
+    <packagename>simplecustomrouter</packagename>
+    <author>Daniel Calviño Sánchez</author>
+    <authorEmail>danxuliu@gmail.com</authorEmail>
+    <creationDate>May 2012</creationDate>
+    <copyright>Copyright (C) 2012 Daniel Calviño Sánchez</copyright>
+    <license>GNU Affero General Public License version 3 or later; see LICENSE.txt</license>
+    <version>0.1.1</version>
+    <description>PKG_SIMPLECUSTOMROUTER_DESCRIPTION</description>
+    
+    <files>
+        <file type="component" id="com_simplecustomrouter">com_simplecustomrouter.zip</file>
+        <file type="plugin" id="simplecustomrouter" group="system">simplecustomrouter.zip</file>
+    </files>
+
+    <languages folder="language">
+        <language tag="en-GB">en-GB/en-GB.pkg_simplecustomrouter.sys.ini</language>
+    </languages>
+</extension>

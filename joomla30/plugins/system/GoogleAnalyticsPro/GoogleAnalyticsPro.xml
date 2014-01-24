@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5" type="plugin" group="system" method="upgrade">
+    <name>System - Google Analytics Pro</name>
+    <author>Peter Bui</author>
+    <creationDate>19th April 2010</creationDate>
+    <authorEmail>peter@pbwebdev.com.au</authorEmail>
+    <authorUrl>http://pbwebdev.com</authorUrl>
+    <version>3.0 Pro</version>
+    <copyright>Copyright (c) 2012 PB Web Development. All rights reserved.</copyright>
+    <license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
+    <description>
+        Asynchronous Google Analytics Pro allows for a faster loading Google Analytics code and tracking.
+        Read the documentation at: http://pbwebdev.com/blog/asynchronous-google-analytics-plugin-for-joomla for more information
+    </description>
+    <updateservers>
+        <server type="extension" priority="1" name="Google Analytics Update">http://pbwebdev.com/extensions/google-analytics/update.xml</server>
+    </updateservers>
+    <files>
+        <filename plugin="GoogleAnalyticsPro">GoogleAnalyticsPro.php</filename>
+    </files>
+    <config>
+        <fields name="params" >
+            <fieldset name="Basic">
+                <field name="code" type="text" default="UA-XXXXX-X" label="Google Analytics Web Property ID." description=" e.g. UA-12345-67. This code can be found in your Google Analytics account. Your site will not be tracked unless this code is entered."></field>
+                <field name="domain" type="text" default="domain.com" label="Domain" description="Please enter in the domain name that you are tracking. e.g pbwebdev.com"></field>
+                <field name="verify" type="text" default="" label="Google webmaster tools verification code." description="Just copy what is displayed within the inverted commas for content e.g. 3Gddk6S0A4yuAAxAIzF0IqBo2PxEKdsy26TuCuKBYV4 . This value is found in your Google Webmaster tools verification process. "></field>
+                <field name="position" type="radio" default="0" label="Code position" description="Option to place Google Analytics code in the end of the head or at the end of the body">
+                    <option value="0">Head</option>
+                    <option value="1">Body</option>
+                </field>
+            </fieldset>
+            <fieldset name="Advanced">
+                <field name="enhanced" type="radio" default="0" label="Enhanced link tracking" description="Adds enhanced link tracking for Google Analytics . Must be enabled in Google Analytics - https://support.google.com/analytics/answer/2558867?hl=en">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </field>
+                <field name="ipTracking" type="radio" default="1" label="Anonymous IP tracking" description="This option removes the last digits from a users IP address e.g. 192.168.0.xxx ">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </field>
+                <field name="multiSub" type="radio" default="0" label="Tracking on Subdomains" description="This is used when you're using Google Analytics to track across multiple sub domains on your website. Examples: www.example.com.au, apps.example.com.au, store.example.com.au">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </field>
+                <field name="multiTop" type="radio" default="0" label="Tracking on Multi top level domains" description="This is used when tracking websites with multiple top level domains from different countries. Examples: www.example.com.au, www.example.com, www.example.co.uk">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </field>
+                <field name="remarketing" type="radio" default="0" label="Remarketing with Google Analytics" description="Update Your Analytics Tracking Code to Support Display Advertising">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </field>
+                <field name="sampleRate" type="text" default="" label="Sample rate" description="If you don't know what you're doing here please leave this blank. Goolge recommends a setting of 80. Sets the new sample rate. If your website is particularly large and subject to heavy traffic spikes, then setting the sample rate ensures un-interrupted report tracking. Sampling in Google Analytics occurs consistently across unique visitors, so there is integrity in trending and reporting even when sampling is enabled, because unique visitors remain included or excluded from the sample, as set from the initiation of sampling. "></field>
+                <field name="setCookieTimeout" type="text" default="" label="Set cookie timeout" description="If you don't know what you're doing here please leave this blank.\n\n Goolge recommends a setting of 1800000 (30 minutes). Sets the new session cookie timeout in milliseconds. By default, session timeout is set to 30 minutes. Session timeout is used to compute visits, since a visit ends after 30 minutes of browser inactivity or upon browser exit. If you want to change the definition of a 'session' for your particular needs, you can pass in the number of milliseconds to define a new value. This will impact the Visits reports in every section where the number of visits are calculated, and where visits are used in computing other values. For example, the number of visits will increase if you shorten the session timeout, and will decrease if you increase the session timeout. You can change the expiration timeout to 0 to indicate that this cookie should be deleted when the browser is closed.
+">
+                </field>
+                <field name="siteSpeedSampleRate" type="text" default="" label="Set site speed sample rate" description="If you don't know what you're doing here please leave this blank. Google recommends a setting of 5. 10 is the maximum setting. Defines a new sample set size for Site Speed data collection. By default, a fixed 1% sampling of your site visitors make up the data pool from which the Site Speed metrics are derived. If you have a relatively small number of daily visitors to your site, such as 100,000 or fewer, you might want to adjust the sampling to a larger rate. This will provide increased granularity for page load time and other Site Speed metrics."></field>
+                <field name="visitorCookieTimeout" type="text" default="" label="Set visitor cookie timeout" description="If you don't know what you're doing here please leave this blank. Google recommends a setting of 63072000000. Sets the Google Analytics visitor cookie expiration in milliseconds. By default, the visitor cookie is set to expire in 2 years. If you prefer, you can change the expiration date of the visitor cookie using this method. You can change the expiration timeout to 0 to indicate that this cookie should be deleted when the browser is closed.
+">
+                </field>
+            </fieldset>
+        </fields>
+    </config>
+</extension>

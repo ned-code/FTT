@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="plugin" group="system" method="upgrade" version="3.0">
+    <name>plg_system_simplecustomrouter</name>
+    <author>Daniel Calviño Sánchez</author>
+    <authorEmail>danxuliu@gmail.com</authorEmail>
+    <creationDate>May 2012</creationDate>
+    <copyright>Copyright (C) 2012 Daniel Calviño Sánchez</copyright>
+    <license>GNU Affero General Public License version 3 or later; see LICENSE.txt</license>
+    <version>0.1.1</version>
+    <description>PLG_SYSTEM_SIMPLECUSTOMROUTER_DESCRIPTION</description>
+    
+    <files>
+        <filename plugin="simplecustomrouter">simplecustomrouter.php</filename>
+        <filename>index.html</filename>
+    </files>
+    
+    <languages folder="language">
+        <language tag="en-GB">en-GB/en-GB.plg_system_simplecustomrouter.ini</language>
+        <language tag="en-GB">en-GB/en-GB.plg_system_simplecustomrouter.sys.ini</language>
+    </languages>
+    
+    <config>
+        <fields name="params">
+            <fieldset
+                name="cache"
+                label="PLG_SYSTEM_SIMPLECUSTOMROUTER_CONFIG_CACHE_SETTINGS_LABEL">
+                <field
+                    name="overrideDefaultConfiguration"
+                    type="radio"
+                    label="PLG_SYSTEM_SIMPLECUSTOMROUTER_CONFIG_FIELD_OVERRIDE_DEFAULT_CONFIGURATION_LABEL"
+                    description="PLG_SYSTEM_SIMPLECUSTOMROUTER_CONFIG_FIELD_OVERRIDE_DEFAULT_CONFIGURATION_DESC"
+                    default="0"
+                    class="btn-group">
+                    <option value="0">JNO</option>
+                    <option value="1">JYES</option>
+                </field>
+                <field
+                    name="enableCache"
+                    type="radio"
+                    label="PLG_SYSTEM_SIMPLECUSTOMROUTER_CONFIG_FIELD_ENABLE_CACHE_LABEL"
+                    description="PLG_SYSTEM_SIMPLECUSTOMROUTER_CONFIG_FIELD_ENABLE_CACHE_DESC"
+                    default="0"
+                    class="btn-group">
+                    <option value="0">JNO</option>
+                    <option value="1">JYES</option>
+                </field>
+            </fieldset>
+        </fields>
+    </config>
+</extension>

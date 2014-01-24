@@ -1,0 +1,106 @@
+.icon-48-generic {
+	background-image:url(../images/icons/icon-48-user.png) !important;
+}
+
+.icon-32-import{ 
+   background-image: url(../images/icons/joomlarra_import.png); 
+}
+
+.icon-32-joomlarra_delete{
+	background-image: url(../images/icons/joomlarra_delete.png); 
+}
+
+td.td_settings{
+   padding-left: 5px;
+}
+
+td.td_settings_options{
+	background-color:#E9E9E9;
+  	border-bottom:1px solid #CCCCCC;
+	border-right:1px solid #CCCCCC;
+	border-left:1px solid #CCCCCC;
+	border-top:1px solid #CCCCCC;
+   	color:#666666;
+   	font-weight:bold;
+   	text-align:left;
+   	padding:5px 5px 5px 5px;
+}
+
+td.td_settings_2{
+   padding-left:5px;
+   color:#666666;
+   font-weight:bold;
+}
+
+div.space{
+    margin-bottom:5px;
+}
+
+div.truncate_message{
+   size:40px;
+   float:left;
+}
+
+legend.errors_legend{
+   color:#FF0000;
+   font-size:12px;
+   font-weight:bold;
+}
+
+.underline{
+	text-decoration:underline;
+}
+
+fieldset.adminform {
+	margin:0px !important;
+}
+
+#file_content{
+	margin-top:8px;
+	border:1px solid #CCCCCC;
+}
+
+.td_utf_notice{
+	background-color:#EFE7B8;
+  	border-bottom:1px solid #E9E9E9;
+   	border-right:1px solid #E9E9E9;
+   	color:#FF0000;
+   	font-weight:bold;
+	margin-bottom:
+}
+
+#submenu a:hover, #submenu a.active,#submenu span.nolink.active {
+	color:#FF6D00 !important;
+}
+
+#submenu li a, #submenu span.nolink {
+	color:#025A8D !important;
+}
+
+div.pagetitle h2 {
+	color:#FF6D00 !important;
+}
+
+div.current select{
+	margin:3px !important;
+}
+
+.link_arra_video{
+	color:#FF0000 !important;
+}
+
+input[type="radio"], input[type="checkbox"] {
+	float: left !important;
+}
+
+select{
+	width:80px !important;
+}
+
+.adminform input[type="text"], .adminform textarea {
+    width: 100px !important;
+}
+
+select {
+    width: auto !important;
+}

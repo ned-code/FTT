@@ -1,0 +1,29 @@
+.icon-48-generic {
+	background-image:url(../images/icons/icon-48-user.png) !important;
+}
+
+table.table_about td{
+    border:#CCCCCC solid 1px;
+	padding:3px 3px 3px 5px;
+	border-collapse:collapse;
+}
+
+.adminlist_about{
+	background-color:#FFFFFF;
+	border-spacing:5px;
+	color:#666666;
+	width:100%;
+}
+
+
+#submenu a:hover, #submenu a.active,#submenu span.nolink.active {
+	color:#FF6D00 !important;
+}
+
+#submenu li a, #submenu span.nolink {
+	color:#025A8D !important;
+}
+
+div.pagetitle h2 {
+	color:#FF6D00 !important;
+}

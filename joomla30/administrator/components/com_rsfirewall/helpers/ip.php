@@ -17,7 +17,7 @@ class RSFirewallIP {
 			$ip    = $input->server->get('REMOTE_ADDR', '', 'string');
 			
 			if ($check_for_proxy) {
-				$headers = array('HTTP_X_REAL_IP', 'HTTP_TRUE_CLIENT_IP', 'HTTP_X_FWD_IP_ADDR', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'HTTP_VIA', 'HTTP_X_COMING_FROM', 'HTTP_COMING_FROM');
+				$headers = array('HTTP_X_REAL_IP', 'HTTP_CLIENT_IP', 'HTTP_TRUE_CLIENT_IP', 'HTTP_X_FWD_IP_ADDR', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'HTTP_VIA', 'HTTP_X_COMING_FROM', 'HTTP_COMING_FROM');
 				foreach ($headers as $header) {
 					if ($proxy = $input->server->get($header, '', 'string')) {
 						// let's see if it's an IPv4

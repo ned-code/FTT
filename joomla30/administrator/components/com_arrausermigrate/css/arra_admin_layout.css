@@ -1,0 +1,62 @@
+.icon-48-generic {
+	background-image:url(../images/icons/icon-48-user.png) !important;
+}
+
+span  {
+	display:block;
+	text-align:left;
+}
+
+div.icon  {
+	float:left;
+	margin-left:5px;
+	margin-bottom:5px;
+	margin-right:5px;
+	text-align:center;
+}
+
+h2{
+    color:#FF6D00;
+	padding-left:10px;
+}
+
+#submenu a:hover, #submenu a.active,#submenu span.nolink.active {
+	color:#FF6D00 !important;
+}
+  
+#submenu li a, #submenu span.nolink {
+	color:#025A8D !important;
+}
+
+div.pagetitle h2 {
+	color:#FF6D00 !important;
+}
+
+input[type="radio"], input[type="checkbox"] {
+	float: left !important;
+}
+
+div.adminlist{
+	background-color:#F4F4F4;
+	border-radius:15px;
+	border-style:solid;
+	border-width:1px;
+	border-color:#CCCCCC;
+	padding:10px;
+}
+div.panel{
+	border-color:#CCCCCC;
+	border-style:solid;
+	border-width:1px;
+	margin-bottom:10px;
+}
+
+div.pane-slider{
+	background-color:#FFFFFF;
+}
+div.user_row{
+	padding-bottom:5px;
+}
+h3.title{
+	padding-left:5px;
+}

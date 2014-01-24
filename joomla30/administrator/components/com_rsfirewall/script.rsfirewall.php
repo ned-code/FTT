@@ -696,8 +696,10 @@ class com_rsfirewallInstallerScript
 			<?php } ?>
 		</p>
 		<ul class="version-history">
-			<li><span class="version-new">New</span> Hashes for Joomla! 2.5.14</li>
-			<li><span class="version-new">New</span> Hashes for Joomla! 3.1.5</li>
+			<li><span class="version-new">New</span> Hashes for Joomla! 2.5.17</li>
+			<li><span class="version-new">New</span> Hashes for Joomla! 3.2.1</li>
+			<li><span class="version-fixed">Fix</span> RSS Feeds handling has been rewritten.</li>
+			<li><span class="version-fixed">Fix</span> Limit for RSS Feeds items wasn't being used.</li>
 		</ul>
 		<a class="com-rsfirewall-button" href="index.php?option=com_rsfirewall">Start using RSFirewall!</a>
 		<a class="com-rsfirewall-button" href="http://www.rsjoomla.com/customer-support/documentations/48-rsfirewall-user-guide.html" target="_blank">Read the RSFirewall! User Guide</a>

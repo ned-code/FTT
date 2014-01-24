@@ -1,0 +1,135 @@
+div.user_statistic{
+    float:inherit;
+}
+
+div.users_criteria{
+    float:inherit;
+}
+
+div.user_row{
+    float:left;
+	width:100%;
+}
+
+div.user_row_border{
+    float:left;
+	width:100%;
+	border-bottom:1px solid #000000;
+	padding-bottom:5px;
+}
+
+div.user_type{
+    float:left;
+	width:30%;
+	padding-top:5px;
+	padding-left:5px;
+}
+
+.icon-48-generic {
+	background-image:url(../images/icons/icon-48-user.png) !important;
+}
+
+div.user_type2{
+    float:left;
+	width:20%;
+	padding-top:5px;
+	padding-left:5px;
+}
+
+div.no_user_type{
+    float:left;
+	width:20%;
+	padding-top:5px;
+	padding-left:5px;
+	color:#FF0033;
+}
+
+div.user_count{
+    float:left;	
+	width:23%;
+    padding-top:5px;
+}
+
+div.user_count2{
+    float:left;	
+	width:20%;
+    padding-top:5px;
+}
+
+div.no_user_count{
+    float:left;	
+	width:10%;
+	color:#FF0033;
+    padding-top:5px;
+}
+
+div.user_percent{
+    float:left;
+	width:15;
+    padding-top:5px;
+}
+
+div.user_percent2{
+    float:left;
+	width:14;
+    padding-top:5px;
+}
+
+div.no_user_percent{
+    float:left;
+	width:15;
+	color:#FF0033;
+    padding-top:5px;
+}
+
+div.grafic_statistic{
+    float:right;
+	width:35%;
+    padding-top:5px;
+}
+
+div.grafic_statistic2{
+    float:right;
+	/*width:28%;*/
+    padding-top:5px;
+}
+
+div.all_users{
+    float:left;
+	width:100px;
+	border:1px solid #ff6d00;
+}
+
+div.calculate_users{
+    float:left;
+    background-color:#ff6d00;
+}
+
+
+div.row_criteria{
+   text-align:center;
+}
+
+
+div.left_radio_content{
+    float:left;
+	width:50%;
+}
+
+
+div.right_radio_content{
+    float:right;
+	width:50%;
+}
+
+table.adminlist{
+   background-color:#cccccc;
+}
+
+table.adminlist td{
+   background-color:#F6F6F6 !important;
+}
+
+.heading{
+	color:#666666;
+}

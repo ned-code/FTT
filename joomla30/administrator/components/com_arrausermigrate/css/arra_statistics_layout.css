@@ -1,0 +1,54 @@
+td .td_class_statistics{	
+	background-color:#E9E9E9;
+	border-bottom:1px solid #CCCCCC;
+	border-right:1px solid #CCCCCC;
+	border-left:1px solid #CCCCCC;
+	border-top:1px solid #CCCCCC;
+	color:#666666;
+	font-weight:bold;
+	text-align:left;
+}
+
+td .td_class_statistics2{	
+	background-color:#E9E9E9;
+	border-bottom:1px solid #CCCCCC;
+	border-right:1px solid #CCCCCC;
+	border-left:1px solid #CCCCCC;
+	border-top:1px solid #CCCCCC;
+	color:#666666;
+	font-weight:bold;
+	text-align:center;
+}
+
+#users_number, #users_percente{
+	text-align:center;
+}
+
+
+#image_diagram{
+	text-align:center;
+	padding-top:80px;
+}
+
+#diagram_element{
+	width:30px;
+	height:270px;
+	float:left;
+	background-color:#FF6D00;
+	border:1px solid red;
+	margin:2px;
+}
+
+#text_diagram{
+	float:left;
+}
+
+#text_diagram_element{
+	-moz-transform:rotate(50deg);
+	float:left;
+	font-family:Verdana,Arial,Helvetica,sans-serif;
+	margin:2px;
+	padding-left:5px;
+	padding-top:10px;
+	width:28px;
+}

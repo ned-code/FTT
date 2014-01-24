@@ -1,0 +1,5 @@
+name,username,email,usertype,sendEmail
+Jeffery,jeff,jeff@example.com,Registered,1
+William,joe,joe@example.com,Author,1
+Miguel Abla,miguel,mig_abla@example.com,Edithor,0
+Alejandro,alex,alex_paul@example.com,Edithor,

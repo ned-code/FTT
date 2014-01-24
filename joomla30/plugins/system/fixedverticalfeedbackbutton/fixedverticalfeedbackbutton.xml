@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.0" type="plugin" group="system" method="upgrade">
+        <name>System - Fixedverticalfeedbackbutton</name>
+        <author>Sabuj Kundu</author>
+        <creationDate>06.01.2011</creationDate>
+        <copyright>Copyright (C) 2011 sabuj@idea52.com. All rights reserved.</copyright>
+        <license>GNU/GPL v2 or later http://www.gnu.org/licenses/gpl-2.0.html</license>
+        <authorEmail>sabuj@codeboxr.com</authorEmail>
+        <authorUrl>http://codeboxr.com</authorUrl>
+        <version>3.2</version>
+        <description>Show vertical feedback button in left/right/custom fixed position in px or percentage and up to 6 buttons</description>
+        <files>
+                <filename plugin="fixedverticalfeedbackbutton">fixedverticalfeedbackbutton.php</filename>
+                <filename>index.html</filename>
+                <folder>fixedverticalfeedbackbutton</folder>                
+        </files>
+        <config>
+            <fields name="params" addfieldpath="/plugins/system/fixedverticalfeedbackbutton/fixedverticalfeedbackbutton/fields">
+                <fieldset name="basic"> 
+                    <field name="spacer" type="spacer" class="text" label="&lt;b&gt;Basic Config&lt;/b&gt;"/>
+                    <!--field name="adminpreview" type="radio" class="btn-group" default="0" label="Admin Preview" description="Show/hide the button preview in admin panel">
+                        <option value="0">Hide</option>
+                        <option value="1">Show</option>
+                    </field-->
+                    <field name="optionalpopup" type="radio" class="btn-group" default="1" label="Remove On Popup"  description="Remove widget while popup up">
+                                <option value="1">JYES</option>
+                            <option value="0">JNO</option>            
+                    </field>
+                    <field name="optionalrss" type="radio" class="btn-group" default="1" label="Remove From RSS"  description="Remove widget from RSS Feed">
+                            <option value="1">JYES</option>
+                            <option value="0">JNO</option>            
+                    </field>
+                    <field name="optionalajax" type="radio" class="btn-group" default="1" label="Remove From Ajax"  description="Remove widget from Ajax output">
+                            <option value="1">JYES</option>
+                            <option value="0">JNO</option>            
+                    </field>
+                    <field name="skipfront" type="radio" class="btn-group" default="1" label="Skip Home page"  description="Active plugin for home page.">
+                            <option value="1">JNO</option>
+                            <option value="0">JYES</option>
+                    </field>
+                    <field name="disabeonoffline" type="radio" class="btn-group" default="1" label="Disable on offline"  description="Disable if site is offline.">
+                            <option value="0">JNO</option>
+                            <option value="1">JYES</option>
+                    </field>                    
+                    <field name="itemidfiltertype" type="radio" class="btn-group" default="1" label="Menu ID Filter"  description="Filter type for Menu id.">
+                            <option value="0">Exclude Only</option>
+                            <option value="1">Include Only</option>
+                    </field>
+                    <!--field name="skipitemid" type="text" default="" label="Filter Itemids"  description="Show/Hide for any itemids, put comma separated."/-->
+                    <field name="skipitemids" type="menus" default="" label="Select Menu(s)" description="Select menu to show or hide the plugin. Hold control key to select multiple menus." />                        
+                    <field name="mview" type="radio" class="btn-group" default="1" label="Disable for Mobile Devices"  description="Active plugin for handheld devices.">
+                        <option value="1">JYES</option>
+                        <option value="0">JNO</option>
+                    </field>
+                    <!--field name="skipitemid" type="text" default="" label="Skip Itemids"  description="Hide button for any itemid, put comma separated."/-->
+                    <field name="spacerhr0" type="spacer" hr="true" />
+                    </fieldset>
+                    <!--field name="spacer1" type="spacer" class="text" label="&lt;b&gt;Setting for Button1&lt;/b&gt;"/-->
+                    <fieldset name="button1setting" label="&lt;b&gt;Setting for Button1&lt;/b&gt;">
+                    <field name="showb1" type="radio" class="btn-group" default="1" label="Show/Hide" description="Show/hide the button">
+                        <option value="0">JHIDE</option>
+                        <option value="1">JSHOW</option>
+                    </field>
+                    <field name="button1" type="list" default="feedback1.png" label="Choose Button"    description="Choose button from list, check in admin preview">
+                        <option value="feedback1.png">feedback</option>
+                        <option value="feedback2.png">Feedback</option>
+                        <option value="feedback3.png">FEEDBACK</option>
+                        <option value="contact1.png">Contact</option>
+                        <option value="contact2.png">CONTACT</option>
+                        <option value="contact3.png">Contact Us</option>
+                        <option value="contact4.png">CONTACT US</option>
+                        <option value="COMENTARIOS.png">COMENTARIOS</option>
+                        <option value="COMENTARIOS-FEEDBACK.png">COMENTARIOS-FEEDBACK</option>
+                        <option value="callback_caps.png">CALL BACK</option>
+                        <option value="callback_small.png">call back</option>
+                        <option value="requestacallback_caps.png">REQUEST A CALL BACK</option>
+                        <option value="requestacallback_small.png">Request a call back</option>
+                    </field>
+                    <field name="cbutton1" type="text" default="" label="Custom Image url" description="Put full path for custom image with width 22px, height can be any thing" />
+                    <field name="cbuttonw1" type="text" default="" label="Custom Image width" description="Custom image width" />			            
+                    <field name="cbuttonh1" type="text" default="" label="Custom Image height" description="Custom image height" />
+                    <field name="halign1" type="text" default="100" label="Horizontal Position" description="Show in left(0) or right(100) or custom(x) side. Positoin can be in px or %"/>
+                    <field name="valign1" type="text" default="0" label="Vertical Position" description="Vertical Position 0-100, position can be in px or %" />
+                    <field name="calhpos1" type="radio" class="btn-group" default="1" label="Horizontal position in" description="Calculate horizontal position in px or percentage">
+                        <option value="1">%(Percentage)</option>
+                        <option value="0">px(Pixel)</option>
+                    </field>
+                    <field name="calvpos1" type="radio" class="btn-group" default="1" label="Vertical position in" description="Calculate vertical position in px or percentage">
+                        <option value="1">%(Percentage)</option>
+                        <option value="0">px(Pixel)</option>
+                    </field>
+                    <field name="transparent1" type="radio" class="btn-group" default="0" label="Transparent Background" description="Here transparent does not mean opacity.It not will use background and hover color">
+                        <option value="1">JYES</option>
+                        <option value="0">JNO</option>
+                    </field>
+                    <field name="bcolor1" type="color" default="#FCB03F"  class="inputbox" label="Background Color" description="Hex code for background color with hash(#)" />
+                    <field name="hcolor1" type="color" default="#646464" class="inputbox" label="Hover Color" description="Hex code for hover color with hash(#)" />
+                    <field name="anchor1" type="text" default="#" label="Link" description="Link" />
+                    <field name="buttonr1" type="radio" class="btn-group" default="0" label="Round Corner" description="Make the button rounded on open side">
+                        <option value="0">JNO</option>
+                        <option value="1">JYES</option>
+                    </field>                                        
+                    <field name="linktarget1" type="radio" class="btn-group" default="0" label="Link Target" description="Link target. For Native popup append tmpl=component at end of your link. See plugin documentation page">
+                        <option value="0">Normal</option>
+                        <option value="1">New window</option>
+                        <option value="2">Native popup</option>
+                    </field>
+                    <field name="linktargetw1" type="text" default="680" label="Window width" description="Popup window width if link target is choose native popup. Default 670px" />
+                    <field name="linktargeth1" type="text" default="370" label="Window height" description="Popup window height if link target is choose native popup. Default 370px." />
+					<field name="spacerhr1" type="spacer" hr="true" />
+                    </fieldset>
+                    <fieldset name="button2setting" label="&lt;b&gt;Setting for Button2&lt;/b&gt;">
+                    <!--field name="spacer2" type="spacer" class="text" label="&lt;b&gt;Setting for Button2&lt;/b&gt;"/-->
+                    <field name="showb2" type="radio" class="btn-group" default="1" label="Show/Hide" description="Show/hide the button">
+                        <option value="0">JHIDE</option>
+                        <option value="1">JSHOW</option>
+                    </field>
+                    <field name="button2" type="list" default="feedback1.png" label="Choose Button"    description="Choose button from list, check in admin preview">
+                        <option value="feedback1.png">feedback</option>
+                        <option value="feedback2.png">Feedback</option>
+                        <option value="feedback3.png">FEEDBACK</option>
+                        <option value="contact1.png">Contact</option>
+                        <option value="contact2.png">CONTACT</option>
+                        <option value="contact3.png">Contact Us</option>
+                        <option value="contact4.png">CONTACT US</option>
+                        <option value="COMENTARIOS.png">COMENTARIOS</option>
+                        <option value="COMENTARIOS-FEEDBACK.png">COMENTARIOS-FEEDBACK</option>
+                        <option value="callback_caps.png">CALL BACK</option>
+                        <option value="callback_small.png">call back</option>
+                        <option value="requestacallback_caps.png">REQUEST A CALL BACK</option>
+                        <option value="requestacallback_small.png">Request a call back</option>
+                    </field>
+                    <field name="cbutton2" type="text" default="" label="Custom Image url" description="Put full path for custom image with width 22px, height can be any thing" />
+                    <field name="cbuttonw2" type="text" default="" label="Custom Image width" description="Custom image width" />			            
+                    <field name="cbuttonh2" type="text" default="" label="Custom Image height" description="Custom image height" />			            
+                    <field name="halign2" type="text" default="100" label="Horizontal Position" description="Show in left(0) or right(100) or custom(x) side. Positoin can be in px or %"/>										
+                    <field name="valign2" type="text" default="0" label="Vertical Position" description="Vertical Position 0-100, position can be in px or %" />                       
+                    <field name="calhpos2" type="radio" class="btn-group" default="1" label="Horizontal position in" description="Calculate horizontal position in px or percentage">
+                        <option value="1">%(Percentage)</option>
+                        <option value="0">px(Pixel)</option>
+                    </field>            
+                    <field name="calvpos2" type="radio" class="btn-group" default="1" label="Vertical position in" description="Calculate vertical position in px or percentage">
+                        <option value="1">%(Percentage)</option>
+                        <option value="0">px(Pixel)</option>
+                    </field>            
+                    <field name="transparent2" type="radio" class="btn-group" default="0" label="Transparent Background" description="Here transparent does not mean opacity.It not will use background and hover color">
+                        <option value="1">JYES</option>
+                        <option value="0">JNO</option>
+                    </field>            
+                    <field name="bcolor2" type="color" default="#FCB03F"  class="inputbox" label="Background Color" description="Hex code for background color with hash(#)" />
+                    <field name="hcolor2" type="color" default="#646464" class="inputbox" label="Hover Color" description="Hex code for hover color with hash(#)" />
+                    <field name="anchor2" type="text" default="#" label="Link" description="Link" />
+                    <field name="buttonr2" type="radio" class="btn-group" default="0" label="Round Corner" description="Make the button rounded on open side">
+                        <option value="0">JNO</option>
+                        <option value="1">JYES</option>
+                    </field>                                        
+                    <field name="linktarget2" type="radio" class="btn-group" default="0" label="Link Target" description="Link target. For Native popup append tmpl=component at end of your link. See plugin documentation page">
+                        <option value="0">Normal</option>
+                        <option value="1">New window</option>
+                        <option value="2">Native popup</option>
+                    </field>
+                    <field name="linktargetw2" type="text" default="680" label="Window width" description="Popup window width if link target is choose native popup. Default 670px" />
+                    <field name="linktargeth2" type="text" default="370" label="Window height" description="Popup window height if link target is choose native popup. Default 370px." />
+					<field name="spacerhr3" type="spacer" hr="true" />
+                    </fieldset>
+                    <fieldset name="button3setting" label="&lt;b&gt;Setting for Button3&lt;/b&gt;">
+                    <!--field name="spacer3" type="spacer" class="text" label="&lt;b&gt;Setting for Button3&lt;/b&gt;"/-->
+                    <field name="showb3" type="radio" class="btn-group" default="1" label="Show/Hide" description="Show/hide the button">
+                        <option value="0">JHIDE</option>
+                        <option value="1">JSHOW</option>
+                    </field>
+                    <field name="button3" type="list" default="feedback1.png" label="Choose Button"    description="Choose button from list, check in admin preview">
+                        <option value="feedback1.png">feedback</option>
+                        <option value="feedback2.png">Feedback</option>
+                        <option value="feedback3.png">FEEDBACK</option>
+                        <option value="contact1.png">Contact</option>
+                        <option value="contact2.png">CONTACT</option>
+                        <option value="contact3.png">Contact Us</option>
+                        <option value="contact4.png">CONTACT US</option>
+                        <option value="COMENTARIOS.png">COMENTARIOS</option>
+                        <option value="COMENTARIOS-FEEDBACK.png">COMENTARIOS-FEEDBACK</option>
+                        <option value="callback_caps.png">CALL BACK</option>
+                        <option value="callback_small.png">call back</option>
+                        <option value="requestacallback_caps.png">REQUEST A CALL BACK</option>
+                        <option value="requestacallback_small.png">Request a call back</option>
+                    </field>
+                    <field name="cbutton3" type="text" default="" label="Custom Image url" description="Put full path for custom image with width 22px, height can be any thing" />
+                    <field name="cbuttonw3" type="text" default="" label="Custom Image width" description="Custom image width" />			            
+                    <field name="cbuttonh3" type="text" default="" label="Custom Image height" description="Custom image height" />			            
+                    <field name="halign3" type="text" default="100" label="Horizontal Position" description="Show in left(0) or right(100) or custom(x) side. Positoin can be in px or %"/>										
+                    <field name="valign3" type="text" default="0" label="Vertical Position" description="Vertical Position 0-100, position can be in px or %" />                       
+                    <field name="calhpos3" type="radio" class="btn-group" default="1" label="Horizontal position in" description="Calculate horizontal position in px or percentage">
+                        <option value="1">%(Percentage)</option>
+                        <option value="0">px(Pixel)</option>
+                    </field>            
+                    <field name="calvpos3" type="radio" class="btn-group" default="1" label="Vertical position in" description="Calculate vertical position in px or percentage">
+                        <option value="1">%(Percentage)</option>
+                        <option value="0">px(Pixel)</option>
+                    </field>            
+                    <field name="transparent3" type="radio" class="btn-group" default="0" label="Transparent Background" description="Here transparent does not mean opacity.It not will use background and hover color">
+                        <option value="1">JYES</option>
+                        <option value="0">JNO</option>
+                    </field>            
+                    <field name="bcolor3" type="color" default="#FCB03F"  class="inputbox" label="Background Color" description="Hex code for background color with hash(#)" />
+                    <field name="hcolor3" type="color" default="#646464" class="inputbox" label="Hover Color" description="Hex code for hover color with hash(#)" />
+                    <field name="anchor3" type="text" default="#" label="Link" description="Link" />
+                    <field name="buttonr3" type="radio" class="btn-group" default="0" label="Round Corner" description="Make the button rounded on open side">
+                        <option value="0">JNO</option>
+                        <option value="1">JYES</option>
+                    </field>                                        
+                    <field name="linktarget3" type="radio" class="btn-group" default="0" label="Link Target" description="Link target. For Native popup append tmpl=component at end of your link. See plugin documentation page">
+                        <option value="0">Normal</option>
+                        <option value="1">New window</option>
+                        <option value="2">Native popup</option>
+                    </field>
+                    <field name="linktargetw3" type="text" default="680" label="Window width" description="Popup window width if link target is choose native popup. Default 670px" />
+                    <field name="linktargeth3" type="text" default="370" label="Window height" description="Popup window height if link target is choose native popup. Default 370px." />
+                    <field name="spacerhr4" type="spacer" hr="true" />
+                    </fieldset>
+                    <fieldset name="button4setting" label="&lt;b&gt;Setting for Button4&lt;/b&gt;">
+                    <!--field name="spacer4" type="spacer" class="text" label="&lt;b&gt;Setting for Button4&lt;/b&gt;"/-->
+                    <field name="showb4" type="radio" class="btn-group" default="1" label="Show/Hide" description="Show/hide the button">
+                        <option value="0">JHIDE</option>
+                        <option value="1">JSHOW</option>
+                    </field>
+                    <field name="button4" type="list" default="feedback1.png" label="Choose Button"    description="Choose button from list, check in admin preview">
+                        <option value="feedback1.png">feedback</option>
+                        <option value="feedback2.png">Feedback</option>
+                        <option value="feedback3.png">FEEDBACK</option>
+                        <option value="contact1.png">Contact</option>
+                        <option value="contact2.png">CONTACT</option>
+                        <option value="contact3.png">Contact Us</option>
+                        <option value="contact4.png">CONTACT US</option>
+                        <option value="COMENTARIOS.png">COMENTARIOS</option>
+                        <option value="COMENTARIOS-FEEDBACK.png">COMENTARIOS-FEEDBACK</option>
+                        <option value="callback_caps.png">CALL BACK</option>
+                        <option value="callback_small.png">call back</option>
+                        <option value="requestacallback_caps.png">REQUEST A CALL BACK</option>
+                        <option value="requestacallback_small.png">Request a call back</option>
+                    </field>
+                    <field name="cbutton4" type="text" default="" label="Custom Image url" description="Put full path for custom image with width 22px, height can be any thing" />
+                    <field name="cbuttonw4" type="text" default="" label="Custom Image width" description="Custom image width" />			            
+                    <field name="cbuttonh4" type="text" default="" label="Custom Image height" description="Custom image height" />			            
+                    <field name="halign4" type="text" default="100" label="Horizontal Position" description="Show in left(0) or right(100) or custom(x) side. Positoin can be in px or %"/>										
+                    <field name="valign4" type="text" default="0" label="Vertical Position" description="Vertical Position 0-100, position can be in px or %" />                       
+                    <field name="calhpos4" type="radio" class="btn-group" default="1" label="Horizontal position in" description="Calculate horizontal position in px or percentage">
+                        <option value="1">%(Percentage)</option>
+                        <option value="0">px(Pixel)</option>
+                    </field>            
+                    <field name="calvpos4" type="radio" class="btn-group" default="1" label="Vertical position in" description="Calculate vertical position in px or percentage">
+                        <option value="1">%(Percentage)</option>
+                        <option value="0">px(Pixel)</option>
+                    </field>            
+                    <field name="transparent4" type="radio" class="btn-group" default="0" label="Transparent Background" description="Here transparent does not mean opacity.It not will use background and hover color">
+                        <option value="1">JYES</option>
+                        <option value="0">JNO</option>
+                    </field>            
+                    <field name="bcolor4" type="color" default="#FCB03F"  class="inputbox" label="Background Color" description="Hex code for background color with hash(#)" />
+                    <field name="hcolor4" type="color" default="#646464" class="inputbox" label="Hover Color" description="Hex code for hover color with hash(#)" />
+                    <field name="anchor4" type="text" default="#" label="Link" description="Link" />
+                    <field name="buttonr4" type="radio" class="btn-group" default="0" label="Round Corner" description="Make the button rounded on open side">
+                        <option value="0">JNO</option>
+                        <option value="1">JYES</option>
+                    </field>                                        
+                    <field name="linktarget4" type="radio" class="btn-group" default="0" label="Link Target" description="Link target. For Native popup append tmpl=component at end of your link. See plugin documentation page">
+                        <option value="0">Normal</option>
+                        <option value="1">New window</option>
+                        <option value="2">Native popup</option>
+                    </field>
+                    <field name="linktargetw4" type="text" default="680" label="Window width" description="Popup window width if link target is choose native popup. Default 670px" />
+                    <field name="linktargeth4" type="text" default="370" label="Window height" description="Popup window height if link target is choose native popup. Default 370px." />
+                    <field name="spacerhr5" type="spacer" hr="true" />
+                    </fieldset>
+                    <fieldset name="button5setting" label="&lt;b&gt;Setting for Button5&lt;/b&gt;">
+                    <!--field name="spacer5" type="spacer" class="text" label="&lt;b&gt;Setting for Button5&lt;/b&gt;"/-->
+                    <field name="showb5" type="radio" class="btn-group" default="1" label="Show/Hide" description="Show/hide the button">
+                        <option value="0">JHIDE</option>
+                        <option value="1">JSHOW</option>
+                    </field>
+                    <field name="button5" type="list" default="feedback1.png" label="Choose Button"    description="Choose button from list, check in admin preview">
+                        <option value="feedback1.png">feedback</option>
+                        <option value="feedback2.png">Feedback</option>
+                        <option value="feedback3.png">FEEDBACK</option>
+                        <option value="contact1.png">Contact</option>
+                        <option value="contact2.png">CONTACT</option>
+                        <option value="contact3.png">Contact Us</option>
+                        <option value="contact4.png">CONTACT US</option>
+                        <option value="COMENTARIOS.png">COMENTARIOS</option>
+                        <option value="COMENTARIOS-FEEDBACK.png">COMENTARIOS-FEEDBACK</option>
+                        <option value="callback_caps.png">CALL BACK</option>
+                        <option value="callback_small.png">call back</option>
+                        <option value="requestacallback_caps.png">REQUEST A CALL BACK</option>
+                        <option value="requestacallback_small.png">Request a call back</option>
+                    </field>
+                    <field name="cbutton5" type="text" default="" label="Custom Image url" description="Put full path for custom image with width 22px, height can be any thing" />
+                    <field name="cbuttonw5" type="text" default="" label="Custom Image width" description="Custom image width" />			            
+                    <field name="cbuttonh5" type="text" default="" label="Custom Image height" description="Custom image height" />			            
+                    <field name="halign5" type="text" default="100" label="Horizontal Position" description="Show in left(0) or right(100) or custom(x) side. Positoin can be in px or %"/>										
+                    <field name="valign5" type="text" default="0" label="Vertical Position" description="Vertical Position 0-100, position can be in px or %" />                       
+                    <field name="calhpos5" type="radio" class="btn-group" default="1" label="Horizontal position in" description="Calculate horizontal position in px or percentage">
+                        <option value="1">%(Percentage)</option>
+                        <option value="0">px(Pixel)</option>
+                    </field>            
+                    <field name="calvpos5" type="radio" class="btn-group" default="1" label="Vertical position in" description="Calculate vertical position in px or percentage">
+                        <option value="1">%(Percentage)</option>
+                        <option value="0">px(Pixel)</option>
+                    </field>            
+                    <field name="transparent5" type="radio" class="btn-group" default="0" label="Transparent Background" description="Here transparent does not mean opacity.It not will use background and hover color">
+                        <option value="1">JYES</option>
+                        <option value="0">JNO</option>
+                    </field>            
+                    <field name="bcolor5" type="color" default="#FCB03F"  class="inputbox" label="Background Color" description="Hex code for background color with hash(#)" />
+                    <field name="hcolor5" type="color" default="#646464" class="inputbox" label="Hover Color" description="Hex code for hover color with hash(#)" />
+                    <field name="anchor5" type="text" default="#" label="Link" description="Link" />
+                    <field name="buttonr5" type="radio" class="btn-group" default="0" label="Round Corner" description="Make the button rounded on open side">
+                        <option value="0">JNO</option>
+                        <option value="1">JYES</option>
+                    </field>                                        
+                    <field name="linktarget5" type="radio" class="btn-group" default="0" label="Link Target" description="Link target. For Native popup append tmpl=component at end of your link. See plugin documentation page">
+                        <option value="0">Normal</option>
+                        <option value="1">New window</option>
+                        <option value="2">Native popup</option>
+                    </field>
+                    <field name="linktargetw5" type="text" default="680" label="Window width" description="Popup window width if link target is choose native popup. Default 670px" />
+                    <field name="linktargeth5" type="text" default="370" label="Window height" description="Popup window height if link target is choose native popup. Default 370px." />
+                    <field name="spacerhr6" type="spacer" hr="true" />
+                    </fieldset>
+                    <fieldset name="button6setting" label="&lt;b&gt;Setting for Button6&lt;/b&gt;">
+                    <!--field name="spacer6" type="spacer" class="text" label="&lt;b&gt;Setting for Button6&lt;/b&gt;"/-->
+                    <field name="showb6" type="radio" class="btn-group" default="1" label="Show/Hide" description="Show/hide the button">
+                        <option value="0">JHIDE</option>
+                        <option value="1">JSHOW</option>
+                    </field>
+                    <field name="button6" type="list" default="feedback1.png" label="Choose Button"    description="Choose button from list, check in admin preview">
+                        <option value="feedback1.png">feedback</option>
+                        <option value="feedback2.png">Feedback</option>
+                        <option value="feedback3.png">FEEDBACK</option>
+                        <option value="contact1.png">Contact</option>
+                        <option value="contact2.png">CONTACT</option>
+                        <option value="contact3.png">Contact Us</option>
+                        <option value="contact4.png">CONTACT US</option>
+                        <option value="COMENTARIOS.png">COMENTARIOS</option>
+                        <option value="COMENTARIOS-FEEDBACK.png">COMENTARIOS-FEEDBACK</option>
+                        <option value="callback_caps.png">CALL BACK</option>
+                        <option value="callback_small.png">call back</option>
+                        <option value="requestacallback_caps.png">REQUEST A CALL BACK</option>
+                        <option value="requestacallback_small.png">Request a call back</option>
+                    </field>
+                    <field name="cbutton6" type="text" default="" label="Custom Image url" description="Put full path for custom image with width 22px, height can be any thing" />
+                    <field name="cbuttonw6" type="text" default="" label="Custom Image width" description="Custom image width" />			            
+                    <field name="cbuttonh6" type="text" default="" label="Custom Image height" description="Custom image height" />			            
+                    <field name="halign6" type="text" default="100" label="Horizontal Position" description="Show in left(0) or right(100) or custom(x) side. Positoin can be in px or %"/>										
+                    <field name="valign6" type="text" default="0" label="Vertical Position" description="Vertical Position 0-100, position can be in px or %" />                       
+                    <field name="calhpos6" type="radio" class="btn-group" default="1" label="Horizontal position in" description="Calculate horizontal position in px or percentage">
+                            <option value="1">%(Percentage)</option>
+                            <option value="0">px(Pixel)</option>
+                    </field>            
+                    <field name="calvpos6" type="radio" class="btn-group" default="1" label="Vertical position in" description="Calculate vertical position in px or percentage">
+                            <option value="1">%(Percentage)</option>
+                            <option value="0">px(Pixel)</option>
+                    </field>            
+                    <field name="transparent6" type="radio" class="btn-group" default="0" label="Transparent Background" description="Here transparent does not mean opacity.It not will use background and hover color">
+                            <option value="1">JYES</option>
+                            <option value="0">JNO</option>
+                    </field>            
+                    <field name="bcolor6" type="color" default="#FCB03F"  class="inputbox" label="Background Color" description="Hex code for background color with hash(#)" />
+                    <field name="hcolor6" type="color" default="#646464" class="inputbox" label="Hover Color" description="Hex code for hover color with hash(#)" />
+                    <field name="anchor6" type="text" default="#" label="Link" description="Link" />
+                    <field name="buttonr6" type="radio" class="btn-group" default="0" label="Round Corner" description="Make the button rounded on open side">
+                        <option value="0">JNO</option>
+                        <option value="1">JYES</option>
+                    </field>                                        
+                    <field name="linktarget6" type="radio" class="btn-group" default="0" label="Link Target" description="Link target. For Native popup append tmpl=component at end of your link. See plugin documentation page">
+                        <option value="0">Normal</option>
+                        <option value="1">New window</option>
+                        <option value="2">Native popup</option>
+                    </field>
+                    <field name="linktargetw6" type="text" default="680" label="Window width" description="Popup window width if link target is choose native popup. Default 670px" />
+                    <field name="linktargeth6" type="text" default="370" label="Window height" description="Popup window height if link target is choose native popup. Default 370px." />
+                </fieldset>
+            </fields>
+        </config>
+</extension>

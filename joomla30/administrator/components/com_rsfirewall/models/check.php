@@ -292,16 +292,40 @@ class RSFirewallModelCheck extends JModelLegacy
 	}
 	
 	public function checkAdminPasswords() {
-		$passwords = $this->_loadPasswords();
-		$users	   = $this->getAdminUsers();
+		$passwords 	= $this->_loadPasswords();
+		$users	   	= $this->getAdminUsers();
+		$return 	= array();
 		
-		$return = array();
 		foreach ($users as $user) {
-			@list($crypt, $salt) = explode(':', $user->password, 2);
 			foreach ($passwords as $password) {
-				$testcrypt = JUserHelper::getCryptedPassword($password, $salt);
-			
-				if ($crypt == $testcrypt) {
+				$match = false;
+				if (substr($user->password, 0, 4) == '$2y$') {
+					// Cracking these passwords is extremely CPU intensive, skip.
+					continue 2;
+				} elseif (substr($user->password, 0, 8) == '{SHA256}') {
+					// Check the password
+					$parts	= explode(':', $user->password);
+					$crypt	= $parts[0];
+					$salt	= @$parts[1];
+					$testcrypt = JUserHelper::getCryptedPassword($password, $salt, 'sha256', false);
+
+					if ($user->password == $testcrypt) {
+						$match = true;
+					}
+				} else {
+					// Check the password
+					$parts	= explode(':', $user->password);
+					$crypt	= $parts[0];
+					$salt	= @$parts[1];
+
+					$testcrypt = JUserHelper::getCryptedPassword($password, $salt, 'md5-hex', false);
+
+					if ($crypt == $testcrypt) {
+						$match = true;
+					}
+				}
+				
+				if ($match === true) {
 					$found = new stdClass();
 					$found->username = $user->username;
 					$found->password = $password;

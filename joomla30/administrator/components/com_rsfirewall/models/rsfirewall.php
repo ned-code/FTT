@@ -25,10 +25,6 @@ class RSFirewallModelRSFirewall extends JModelLegacy
 	public function getButtons() {
 		JFactory::getLanguage()->load('com_rsfirewall.sys', JPATH_ADMINISTRATOR);
 		
-		/* $button = array(
-				'access', 'id', 'link', 'target', 'onclick', 'title', 'image', 'alt', 'text'
-			); */
-		
 		$buttons = array(
 			array(
 				'link' => JRoute::_('index.php?option=com_rsfirewall&view=check'),
@@ -174,12 +170,77 @@ class RSFirewallModelRSFirewall extends JModelLegacy
 		$db->setQuery($query);
 		$items = $db->loadObjectList();
 		foreach ($items as $item) {
-			if ($feed = JSimplepieFactory::getFeedParser($item->url)) {
+			if ($feed = $this->getParsedFeed($item)) {
 				$feeds[] = $feed;
 			}
 		}
 		
 		return $feeds;
+	}
+	
+	protected function getParsedFeed($item) {
+		$parsedFeed = new stdClass;
+		$url	 	= $item->url;
+		
+		if ($this->isJ30) {
+			// 3.x
+			$parser = new JFeedFactory;
+			try {
+				$feed = $parser->getFeed($url);
+			} catch (Exception $e) {
+				JError::raiseError($e->getCode(), $e->getMessage());
+				return false;
+			}
+			
+			$parsedFeed->title = $feed->title;
+			$parsedFeed->items = array();
+			
+			if (!empty($feed[0])) {
+				for ($i = 0; $i < $item->limit; $i++) {
+					if (!empty($feed[$i])) {
+						$uri = !empty($feed[$i]->guid) || !is_null($feed[$i]->guid) ? $feed[$i]->guid : $feed[$i]->uri;
+						$uri = substr($uri, 0, 4) != 'http' ? '' : $uri;
+						
+						$parsedFeed->items[] = (object) array(
+							'title' => $feed[$i]->title,
+							'date' 	=> $feed[$i]->updatedDate,
+							'link'	=> $uri
+						);
+					}
+				}				
+				
+			}
+			
+			return $parsedFeed;
+		} else {
+			// 2.5
+			
+			// SimplePie throws Strict Standards, so a workaround is in place.
+			$errorReporting = error_reporting(0);
+			
+			$parser = JFactory::getFeedParser($url);
+			
+			$parsedFeed->title = $parser->get_title();
+			$parsedFeed->items = array();
+			
+			foreach ($parser->get_items() as $count => $feed) {
+				if ($count >= $item->limit) {
+					break;
+				}
+				$parsedFeed->items[] = (object) array(
+					'title' => $feed->get_title(),
+					'date' 	=> $feed->get_date(),
+					'link' 	=> $feed->get_link()
+				);
+			}
+			
+			// Revert error reporting
+			error_reporting($errorReporting);
+			
+			return $parsedFeed;
+		}
+		
+		return false;
 	}
 	
 	public function getModifiedFiles() {

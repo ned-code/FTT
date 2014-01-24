@@ -9,7 +9,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 foreach ($this->feeds as $feed) { ?>
-	<h3><?php echo JText::sprintf('COM_RSFIREWALL_FEED', $this->escape($feed->get_title())); ?></h3>
+	<h3><?php echo JText::sprintf('COM_RSFIREWALL_FEED', $this->escape($feed->title)); ?></h3>
 	<table class="adminlist table table-striped">
 	<thead>
 	<tr>
@@ -18,10 +18,10 @@ foreach ($this->feeds as $feed) { ?>
 	</tr>
 	</thead>
 	<tbody>
-	<?php foreach ($feed->get_items() as $i => $item) { ?>
+	<?php foreach ($feed->items as $i => $item) { ?>
 	<tr class="row<?php echo $i % 2; ?>">
-		<td width="1%" nowrap="nowrap"><?php echo $this->escape($item->get_date()); ?></td>
-		<td><a href="<?php echo $item->get_link(); ?>" target="_blank"><?php echo $this->escape($item->get_title()); ?></a></td>
+		<td width="1%" nowrap="nowrap"><?php echo $this->escape($item->date); ?></td>
+		<td><a href="<?php echo $this->escape($item->link); ?>" target="_blank"><?php echo $this->escape($item->title); ?></a></td>
 	</tr>
 	<?php } ?>
 	</tbody>

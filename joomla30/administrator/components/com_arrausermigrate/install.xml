@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="3.0" method="upgrade">
+	<name>COM_ARRAUSERMIGRATE</name>
+	<creationDate>October 31, 2013</creationDate>
+	<author>joomlarra</author>
+	<authorEmail>joomlarra@gmail.com</authorEmail>
+	<authorUrl>http://www.joomlarra.com</authorUrl>
+	<copyright>@ 2010 - 2013 joomlarra.com</copyright>
+	<license>GPL v2</license>
+	<version>4.0.7</version>
+	<description></description>
+	<installfile>install.com_arrausermigrate.php</installfile>
+	
+	<install>
+		<sql>
+			<file charset="utf8" driver="mysql">install.sql</file>
+		</sql>
+	</install>
+	<uninstall>
+		<sql>
+			<file charset="utf8" driver="mysql">uninstall.sql</file>
+		</sql>
+	</uninstall>	
+ 
+    <files folder="site">
+		<filename>LICENSE.txt</filename>
+		<filename>controller.php</filename>
+		<filename>arrausermigrate.php</filename>
+		<folder>views</folder>
+		<folder>controllers</folder>
+    </files>
+  
+	<administration>
+	    <!-- Administrator language File Copy -->
+		<languages folder="admin">
+				<language tag="en-GB">language/en-GB/en-GB.com_arrausermigrate.ini</language>
+				<language tag="en-GB">language/en-GB/en-GB.com_arrausermigrate.sys.ini</language>						
+		</languages>
+		<!-- Administration Menu Section -->
+		<menu link="option=com_arrausermigrate"
+			img="components/com_arrausermigrate/images/icons/menu_image.png">COM_ARRAUSERMIGRATE</menu>
+		<files folder="admin">
+			<!-- Site Main File Copy Section -->
+			<filename>install.sql</filename>
+			<filename>uninstall.sql</filename>
+			<filename>update.sql</filename>
+			<filename>arrausermigrate.php</filename>
+			<filename>index.html</filename>
+			<filename>controller.php</filename>
+			<folder>files</folder>			
+			<folder>helpers</folder>			
+			<folder>controllers</folder>			
+			<folder>css</folder>						
+			<folder>images</folder>						
+			<folder>includes</folder>		
+			<folder>models</folder>
+			<folder>views</folder>
+		</files>				
+	</administration>
+</extension>
