@@ -118,7 +118,8 @@ class FamilytreetopControllerUser extends FamilytreetopController
         $user = FamilyTreeTopUserHelper::getInstance()->get();
         $app = JFactory::getApplication();
         $facebook = FacebookHelper::getInstance();
-        $session = JSession::getInstance();
+        //$session = JSession::getInstance();
+        $session = &JFactory::getSession();
 
         $access_token = $app->input->post('accessToken', 0);
 
