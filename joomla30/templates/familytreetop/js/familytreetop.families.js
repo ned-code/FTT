@@ -237,7 +237,7 @@ $FamilyTreeTop.create("families", function($){
             var div = $(document.createElement('div'));
             $(div).append(_getData_(event.date));
             $(div).append(_getPlace_(event.place));
-            $(div).css('font-size', '10px');
+            $(div).css('font-size', '10px').css('color', '#c3c3c3');
             return div;
             function _getData_(d){
                 return $(document.createElement('div')).text($this.mod('usertree').parseDate(d));

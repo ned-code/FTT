@@ -334,13 +334,11 @@ class FamilyTreeTopGedcomRelationsManager {
         $c = ($conn)?$conn:$this->conn;
         $r = ($rels)?$rels:$this->list;
         if(isset($c[$gedcom_id])){
-            $_con = $c[$gedcom_id];
+            $con = $c[$gedcom_id];
             $ret = false;
-            if(gettype($_con) == 'array'){
-                foreach($_con as $id){
-                    if(isset($r[$id]) && $r[$id]['in_law'] == 0){
-                        $ret = $id;
-                    }
+            foreach($con as $id){
+                if(isset($r[$id]) && $r[$id]['in_law'] == 0){
+                    $ret = $id;
                 }
             }
             return $ret;
