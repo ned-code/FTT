@@ -49,6 +49,7 @@ class FamilytreetopControllerUser extends FamilytreetopController
         $accessToken = $app->input->get('accessToken', false);
 
         $facebook = FacebookHelper::getInstance()->facebook;
+
         $facebook_id = $facebook->getUser();
 
         $return = JRoute::_("index.php?option=com_familytreetop&task=user.activate&redirect=1", false);

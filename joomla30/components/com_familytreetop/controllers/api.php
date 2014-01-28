@@ -5,23 +5,9 @@ require_once JPATH_COMPONENT.'/controller.php';
 
 class FamilytreetopControllerApi extends FamilytreetopController
 {
-    private function log($var){
-        echo $this->getVarName($var).": <br>";
-        var_dump($var);
-        echo "<br><br>";
-    }
-
-    private function getVarName($var){
-        foreach($GLOBALS as $var_name => $value) {
-            if ($value === $var) {
-                return $var_name;
-            }
-        }
-        return false;
-    }
-
     public function update(){
         echo json_encode(array('success'=>true));
         exit;
     }
+
 }
