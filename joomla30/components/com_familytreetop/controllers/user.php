@@ -30,11 +30,17 @@ class FamilytreetopControllerUser extends FamilytreetopController
 	}
 
     protected function updatePassword($user, $accessToken, $args){
+        /*
         $salt		= JUserHelper::genRandomPassword(32);
         $crypt = JUserHelper::getCryptedPassword(md5($accessToken), $salt, 'md5-hex');
 
         $user->password = $crypt . ':' . $salt;
         $user->name = $args['username'];
+        $user->save();
+        */
+
+        $user = new JUser($user->id);
+        $user->password = JUserHelper::hashPassword(md5($accessToken));
         $user->save();
 
         $account = FamilyTreeTopAccounts::find_by_joomla_id($user->id);
@@ -73,6 +79,8 @@ class FamilytreetopControllerUser extends FamilytreetopController
                     $username = $user->username;
                 }
 
+
+                /*
                 // Get the log in options.
                 $options = array();
                 $options['remember'] = true;
@@ -86,12 +94,38 @@ class FamilytreetopControllerUser extends FamilytreetopController
                 $app->setUserState('users.login.form.return', $return);
                 $response = $app->login($credentials, $options);
 
-                if($redirect){
-                    echo $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=myfamily", false));
-                    return;
-                } else {
-                    echo json_encode(array('auth'=>$response));
-                    exit;
+                if($options['remember'] == true){
+                    $app->setUserState('rememberLogin', true);
+                }
+                */
+                // Get the log in options.
+                $options = array();
+                $options['remember'] = true;
+                $options['return'] = $return;
+
+                // Get the log in credentials.
+                $credentials = array();
+                $credentials['username']  = $username;
+                $credentials['password']  = md5($accessToken);
+                $credentials['secretkey'] = "";
+
+                // Perform the log in.
+                if (true === $app->login($credentials, $options))
+                {
+                    // Success
+                    if ($options['remember'] = true)
+                    {
+                        $app->setUserState('rememberLogin', true);
+                    }
+
+                    $app->setUserState('users.login.form.data', array());
+                    if($redirect){
+                        echo $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=myfamily", false));
+                        return;
+                    } else {
+                        echo json_encode(array('auth'=>true));
+                        exit;
+                    }
                 }
             }
         }
