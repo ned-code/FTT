@@ -6,25 +6,29 @@ require_once JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familyt
 class FacebookHelper
 {
     protected static $instance;
+
     private function __constuctor(){}
     private function __clone(){}
     private function __wakeup(){}
 
+    private $settings;
+
     public $facebook;
     public $data = array();
+
 
     public function getInstance(){
         if ( is_null(self::$instance) ) {
             self::$instance = new FacebookHelper ();
-            $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
+            self::$instance->settings = FamilyTreeTopSettingsHelper::getInstance()->get();
 
             self::$instance->facebook = new Facebook(array(
-                'appId' => $settings->facebook_app_id->value,
-                'secret' => trim($settings->facebook_app_secret->value),
+                'appId' => self::$instance->settings->facebook_app_id->value,
+                'secret' => trim(self::$instance->settings->facebook_app_secret->value),
                 'cookie' => true
             ));
 
-            $data = self::$instance->facebook->api('/' . $settings->facebook_app_id->value);
+            $data = self::$instance->facebook->api('/' . self::$instance->settings->facebook_app_id->value);
             if(isset($data['link'])){
                 self::$instance->data['link'] = $data['link'];
             }
@@ -36,14 +40,13 @@ class FacebookHelper
     }
 
     public function getLoginUrl($redirect = null){
-        $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
         if(empty($redirect)){
             $redirect = JRoute::_("index.php?option=com_familytreetop&view=myfamily", false);
         }
         $redirect_url = "https://" . JUri::getInstance()->getHost() . $redirect;
 
         return $this->facebook->getLoginUrl(array(
-            'scope' => $settings->facebook_permission->value,
+            'scope' => $this->settings->facebook_permission->value,
             'redirect_uri' => $redirect_url
         ));
     }
@@ -58,6 +61,30 @@ class FacebookHelper
             'next' => $redirect_url,
             'access_token'=>$token
         ));
+    }
+
+    public function checkAuth(){
+        /*
+        $app = JFactory::getApplication();
+        $fb = $this->facebook;
+
+        $code = $app->input->get('code', false);
+        $state = $app->input->get('state', false);
+
+        $url = JRoute::_(JUri::base(). "index.php?option=com_familytreetop&view=myfamily");
+
+        $token_url = "https://graph.facebook.com/oauth/access_token?"
+            . "client_id=" . $this->settings->facebook_app_id->value . "&redirect_uri=" . urlencode($url)
+            . "&client_secret=" . $this->settings->facebook_app_secret->value . "&code=" . $code;
+
+        $response = file_get_contents($token_url);
+        $params = null;
+        parse_str($response, $params);
+
+        $graph_url = "https://graph.facebook.com/me?access_token=" . $params['access_token'];
+
+            $user = json_decode(file_get_contents($graph_url));
+        */
     }
 
     public function getFamilyMembers(){

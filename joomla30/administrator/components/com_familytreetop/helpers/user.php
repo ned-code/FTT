@@ -58,6 +58,7 @@ class FamilyTreeTopUserHelper
         }
 
         $facebook = FacebookHelper::getInstance()->facebook;
+
         $jUser = JFactory::getUser();
 
         if(!$jUser->get('guest')){

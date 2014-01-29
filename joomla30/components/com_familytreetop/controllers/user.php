@@ -44,49 +44,77 @@ class FamilytreetopControllerUser extends FamilytreetopController
         exit;
     }
 
+    public function auth(){
+        var_dump(1);
+        exit;
+    }
+
     public function activate(){
         $app = JFactory::getApplication();
+
+        $token = $app->input->get('accessToken', "");
+        $fid = $app->input->get('userID', 0);
 
         $user = FamilyTreeTopUserHelper::getInstance()->get();
 
         $facebook = FacebookHelper::getInstance()->facebook;
-        $facebook_id = $facebook->getUser();
+        $facebook->setExtendedAccessToken();
+        $facebook_id = $fid;
+        $facebook->setAccessToken($token);
+        $facebookToken = $token;
+
+        // TODO fixed it;
+        //$facebook_id = $facebook->getUser();
+        //$facebookToken = $facebook->getAccessToken();
+
+        /*
+        if("" != $token){
+            $graph_url = "https://graph.facebook.com/me?access_token=" . $token;
+            $response = json_decode(file_get_contents($graph_url));
+            if(0 != $response['id']){
+                $facebook_id = $response['id'];
+                $facebook->setAccessToken($token);
+                $facebookToken = $token;
+            }
+        }
+        */
 
         $data = array();
         $data['return_to_myfamily'] = JRoute::_(JURI::base() . "index.php?option=com_familytreetop&view=myfamily");
         $data['return_to_login'] = JRoute::_(JURI::base() . "index.php?option=com_familytreetop&view=login");
-        $data['facebook_login_url'] = FacebookHelper::getInstance()->getLoginUrl($data['return_to_login']);
+        $data['facebook_login_url'] = FacebookHelper::getInstance()->getLoginUrl(
+            JRoute::_("index.php?option=com_familytreetop&task=user.auth")
+        );
 
         if(!$user->guest){
             $this->response(array(
                 'auth' => true,
                 'url' => $data['return_to_myfamily'],
-                'message' => ''
+                'message' => 1
             ));
         } else if($facebook_id == 0){
             $this->response(array(
                 'auth' => false,
                 'url' => $data['facebook_login_url'],
-                'message' => ''
+                'message' => 2
             ));
         } else {
              $args = $facebook->api('/'.$facebook_id);
-             if($args['facebook_id'] != 0){
+             if($args['id'] != 0){
                  $db_user = JoomlaUsers::find_by_username('fb_' . $facebook_id);
-                 $facebookToken = $facebook->getAccessToken();
                  if(empty($facebookToken)){
                      $this->response(array(
                          'auth' => false,
                          'url' => $data['return_to_login'],
-                         'message' => ''
+                         'message' => 3
                      ));
                  }
                  $username = false;
                  if(empty($db_user)){
                     $username = $this->create($args, $facebookToken);
                  } else {
-                    $this->updatePassword($user, $facebookToken, $args);
-                    $username = $user->username;
+                    $this->updatePassword($db_user, $facebookToken, $args);
+                    $username = $db_user->username;
                  }
 
                  $app->setUserState('users.login.form.return', $data['return_to_myfamily']);
@@ -108,18 +136,16 @@ class FamilytreetopControllerUser extends FamilytreetopController
                      $this->response(array(
                          'auth' => true,
                          'url' => $data['return_to_myfamily'],
-                         'message' => ''
+                         'message' => 4
                      ));
                  }
-             } else {
-                 $this->response(array(
-                     'auth' => false,
-                     'url' => $data['facebook_login_url'],
-                     'message' => ''
-                 ));
              }
         }
-        exit;
+        $this->response(array(
+            'auth' => false,
+            'url' => $data['facebook_login_url'],
+            'message' => 5
+        ));
     }
 
     public function joyride(){
