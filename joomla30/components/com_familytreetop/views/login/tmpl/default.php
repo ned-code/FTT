@@ -30,19 +30,19 @@ defined('_JEXEC') or die;
     $FamilyTreeTop.bind(function($){
         var $this = this, load, setPos,progressbarAnimateStart;
         load = function(el, args){
-            //progressbarAnimateStart();
+            progressbarAnimateStart();
             $this.ajax('user.activate', args, function(response){
-                console.log(response);
-                return;
                 var w = window != window.top ? window.top : window;
-                if(response.auth == true){
-                    w.location.href = "<?=JRoute::_(JURI::base()."index.php?option=com_familytreetop&view=myfamily", false);?>";
-                } else if("undefined" !== typeof(response.url) && args.userID != 0){
+                if(true == response.auth){
                     w.location.href = response.url;
                 } else {
-                    FB.logout(function(){
-                        w.location.reload();
-                    })
+                    if(null != FB.getAuthResponse()){
+                        FB.logout(function(){
+                            w.location.href = response.url;
+                        });
+                    } else {
+                        w.location.href = response.url;
+                    }
                 }
             });
             }
