@@ -30,8 +30,10 @@ defined('_JEXEC') or die;
     $FamilyTreeTop.bind(function($){
         var $this = this, load, setPos,progressbarAnimateStart;
         load = function(el, args){
-            progressbarAnimateStart();
+            //progressbarAnimateStart();
             $this.ajax('user.activate', args, function(response){
+                console.log(response);
+                return;
                 var w = window != window.top ? window.top : window;
                 if(response.auth == true){
                     w.location.href = "<?=JRoute::_(JURI::base()."index.php?option=com_familytreetop&view=myfamily", false);?>";

@@ -31,7 +31,6 @@ class UsersController extends JControllerLegacy
 	{
 		// Get the document object.
 		$document	= JFactory::getDocument();
-
 		// Set the default view name and format from the Request.
 		$vName   = $this->input->getCmd('view', 'login');
 		$vFormat = $document->getType();
