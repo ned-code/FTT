@@ -20,7 +20,7 @@ class GedcomHelper
     public $relations;
     public $connections;
 
-    public function getInstance(){
+    public static function getInstance(){
         if ( is_null(self::$instance) ) {
             self::$instance = new GedcomHelper ();
             $user = FamilyTreeTopUserHelper::getInstance()->get();

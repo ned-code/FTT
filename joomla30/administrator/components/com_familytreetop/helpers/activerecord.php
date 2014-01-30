@@ -10,7 +10,7 @@ class ActiverecrdHelper
     private function __clone(){}
     private function __wakeup(){}
 
-    public function getInstance(){
+    public static function getInstance(){
         if ( is_null(self::$instance) ) {
             ActiveRecord\Config::initialize(function($cfg){
                 $config = JFactory::getConfig();

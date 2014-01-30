@@ -17,7 +17,7 @@ class FacebookHelper
     public $data = array();
 
 
-    public function getInstance(){
+    public static function getInstance(){
         if ( is_null(self::$instance) ) {
             self::$instance = new FacebookHelper ();
             self::$instance->settings = FamilyTreeTopSettingsHelper::getInstance()->get();

@@ -39,7 +39,7 @@ class FamilyTreeTopUserHelper
 
     protected $famous = false;
 
-    public function getInstance(){
+    public static function getInstance(){
         if ( is_null(self::$instance) ) {
             self::$instance = new FamilyTreeTopUserHelper ();
             self::init();

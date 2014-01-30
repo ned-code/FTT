@@ -7,7 +7,7 @@ class FamilyTreeTopSettingsHelper
     protected static $instance;
     protected $settings;
 
-    public function getInstance(){
+    public static function getInstance(){
         if ( is_null(self::$instance) ) {
             self::$instance = new FamilyTreeTopSettingsHelper ();
             self::init();
