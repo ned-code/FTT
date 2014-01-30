@@ -15,7 +15,7 @@ class FamilyTreeTopSettingsHelper
         return self::$instance;
     }
 
-    protected function init(){
+    protected static function init(){
         $objects = FamilyTreeTopSettings::find('all');
         $settings = new stdClass;
         foreach($objects as $object){
