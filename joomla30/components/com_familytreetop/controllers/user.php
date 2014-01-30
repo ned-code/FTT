@@ -5,13 +5,13 @@ require_once JPATH_COMPONENT.'/controller.php';
 
 class FamilytreetopControllerUser extends FamilytreetopController
 {
-    protected function create($args, $accessToken)
+    protected function create($auth)
 	{
         //create joomla user
-        $data['username'] = "fb_".$args['id'];
-        $data['password'] = JUserHelper::hashPassword(md5($accessToken));
-        $data['name'] = $args['username'];
-        $data['email'] = $args['email'];
+        $data['username'] = "fb_".$auth->id;
+        $data['password'] = JUserHelper::hashPassword(md5($auth->accessToken));
+        $data['name'] = $auth->username;
+        $data['email'] = $auth->email;
         $data['groups'] = array(2);
 
         $user = new JUser;
@@ -21,21 +21,21 @@ class FamilytreetopControllerUser extends FamilytreetopController
         //create familytreetop accounts
         $account = new FamilyTreeTopAccounts();
         $account->joomla_id = $user->id;
-        $account->access_token = $accessToken;
-        $account->facebook_id = $args['id'];
-        $account->local = FamilyTreeTopLanguagesHelper::getTag($args['locale']);
+        $account->access_token = $auth->accessToken;
+        $account->facebook_id = $auth->id;
+        $account->local = FamilyTreeTopLanguagesHelper::getTag($auth->locale);
         $account->save();
 
-        return $args['username'];
+        return $auth->username;
 	}
 
-    protected function updatePassword($user, $accessToken, $args){
-        $user->password = JUserHelper::hashPassword(md5($accessToken));
-        $user->name = $args['username'];
+    protected function updatePassword($user, $auth){
+        $user->password = JUserHelper::hashPassword(md5($auth->accessToken));
+        $user->name = $auth->username;
         $user->save();
 
         $account = FamilyTreeTopAccounts::find_by_joomla_id($user->id);
-        $account->access_token = $accessToken;
+        $account->access_token = $auth->accessToken;
         $account->save();
     }
 
@@ -45,45 +45,39 @@ class FamilytreetopControllerUser extends FamilytreetopController
     }
 
     public function auth(){
-        var_dump(1);
-        exit;
+        $session = JFactory::getSession();
+
+        $facebookHelper = FacebookHelper::getInstance();
+        $facebook = $facebookHelper->facebook;
+
+        $facebook_id = $facebook->getUser();
+        $session->clear('redirect_uri');
+        if($facebook_id == 0){
+            $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=login"));
+        } else {
+            $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=myfamily"));
+        }
+        return;
     }
 
     public function activate(){
         $app = JFactory::getApplication();
 
         $token = $app->input->get('accessToken', "");
-        $fid = $app->input->get('userID', 0);
 
         $user = FamilyTreeTopUserHelper::getInstance()->get();
 
-        $facebook = FacebookHelper::getInstance()->facebook;
+        $facebookHelper = FacebookHelper::getInstance();
+        $facebook = $facebookHelper->facebook;
         $facebook->setExtendedAccessToken();
-        $facebook_id = $fid;
-        $facebook->setAccessToken($token);
-        $facebookToken = $token;
-
-        // TODO fixed it;
-        //$facebook_id = $facebook->getUser();
-        //$facebookToken = $facebook->getAccessToken();
-
-        /*
-        if("" != $token){
-            $graph_url = "https://graph.facebook.com/me?access_token=" . $token;
-            $response = json_decode(file_get_contents($graph_url));
-            if(0 != $response['id']){
-                $facebook_id = $response['id'];
-                $facebook->setAccessToken($token);
-                $facebookToken = $token;
-            }
-        }
-        */
+        $auth = $facebookHelper->getAuth($token);
 
         $data = array();
         $data['return_to_myfamily'] = JRoute::_(JURI::base() . "index.php?option=com_familytreetop&view=myfamily");
         $data['return_to_login'] = JRoute::_(JURI::base() . "index.php?option=com_familytreetop&view=login");
         $data['facebook_login_url'] = FacebookHelper::getInstance()->getLoginUrl(
-            JRoute::_("index.php?option=com_familytreetop&task=user.auth")
+            JRoute::_("index.php?option=com_familytreetop&task=user.auth"),
+            true
         );
 
         if(!$user->guest){
@@ -92,54 +86,44 @@ class FamilytreetopControllerUser extends FamilytreetopController
                 'url' => $data['return_to_myfamily'],
                 'message' => 1
             ));
-        } else if($facebook_id == 0){
+        } else if($auth->facebook_id == 0){
             $this->response(array(
                 'auth' => false,
                 'url' => $data['facebook_login_url'],
                 'message' => 2
             ));
         } else {
-             $args = $facebook->api('/'.$facebook_id);
-             if($args['id'] != 0){
-                 $db_user = JoomlaUsers::find_by_username('fb_' . $facebook_id);
-                 if(empty($facebookToken)){
-                     $this->response(array(
-                         'auth' => false,
-                         'url' => $data['return_to_login'],
-                         'message' => 3
-                     ));
-                 }
-                 $username = false;
-                 if(empty($db_user)){
-                    $username = $this->create($args, $facebookToken);
-                 } else {
-                    $this->updatePassword($db_user, $facebookToken, $args);
-                    $username = $db_user->username;
-                 }
+            $db_user = JoomlaUsers::find_by_username('fb_' . $auth->facebook_id);
+            $username = false;
+            if(empty($db_user)){
+                $username = $this->create($auth);
+            } else {
+                $this->updatePassword($db_user, $auth);
+                $username = $db_user->username;
+            }
 
-                 $app->setUserState('users.login.form.return', $data['return_to_myfamily']);
+            $app->setUserState('users.login.form.return', $data['return_to_myfamily']);
 
-                 // Get the log in options.
-                 $options = array();
-                 $options['remember'] = true;
-                 $options['return'] = $data['return_to_myfamily'];
+            // Get the log in options.
+            $options = array();
+            $options['remember'] = true;
+            $options['return'] = $data['return_to_myfamily'];
 
-                 // Get the log in credentials.
-                 $credentials = array();
-                 $credentials['username']  = $username;
-                 $credentials['password']  = md5($facebookToken);
-                 $credentials['secretkey'] = "";
+            // Get the log in credentials.
+            $credentials = array();
+            $credentials['username']  = $username;
+            $credentials['password']  = md5($auth->accessToken);
+            $credentials['secretkey'] = "";
 
-                 if (true === $app->login($credentials, $options)){
-                     $app->setUserState('rememberLogin', true);
-                     $app->setUserState('users.login.form.data', array());
-                     $this->response(array(
-                         'auth' => true,
-                         'url' => $data['return_to_myfamily'],
-                         'message' => 4
-                     ));
-                 }
-             }
+            if (true === $app->login($credentials, $options)){
+                $app->setUserState('rememberLogin', true);
+                $app->setUserState('users.login.form.data', array());
+                $this->response(array(
+                    'auth' => true,
+                    'url' => $data['return_to_myfamily'],
+                    'message' => 4
+                ));
+            }
         }
         $this->response(array(
             'auth' => false,

@@ -39,16 +39,24 @@ class FacebookHelper
         return self::$instance;
     }
 
-    public function getLoginUrl($redirect = null){
-        if(empty($redirect)){
-            $redirect = JRoute::_("index.php?option=com_familytreetop&view=myfamily", false);
+    public function getLoginUrl($redirect = null, $_session = false){
+        if($_session){
+            $session = JFactory::getSession();
+            $session->set('redirect_uri', $redirect);
+            $redirect_url = "https://" .JURI::getInstance()->getHost()
+                . JRoute::_("index.php?option=com_familytreetop");
+        } else {
+            if(empty($redirect)){
+                $redirect = JRoute::_("index.php?option=com_familytreetop&view=myfamily", false);
+            }
+            $redirect_url = "https://" . JUri::getInstance()->getHost() . $redirect;
         }
-        $redirect_url = "https://" . JUri::getInstance()->getHost() . $redirect;
-
-        return $this->facebook->getLoginUrl(array(
-            'scope' => $this->settings->facebook_permission->value,
-            'redirect_uri' => $redirect_url
-        ));
+        return //htmlspecialchars_decode(urldecode(
+            $this->facebook->getLoginUrl(array(
+                'scope' => $this->settings->facebook_permission->value,
+                'redirect_uri' => $redirect_url
+            ));
+        //));
     }
 
     public function getLogoutUrl($redirect = null, $token){
@@ -57,34 +65,45 @@ class FacebookHelper
         }
         $redirect_url = "https://" . JUri::getInstance()->getHost() . $redirect;
 
-        return $this->facebook->getLogoutUrl(array(
-            'next' => $redirect_url,
-            'access_token'=>$token
-        ));
+        return //htmlspecialchars_decode(urldecode(
+            $this->facebook->getLogoutUrl(array(
+                'next' => $redirect_url,
+                'access_token'=>$token
+            ));
+        //));
     }
 
-    public function checkAuth(){
-        /*
-        $app = JFactory::getApplication();
-        $fb = $this->facebook;
+    public function getAuth($token){
+        $response = new stdClass;
+        $access_token = null;
 
-        $code = $app->input->get('code', false);
-        $state = $app->input->get('state', false);
+        $_token = $this->facebook->getAccessToken();
 
-        $url = JRoute::_(JUri::base(). "index.php?option=com_familytreetop&view=myfamily");
+        if(empty($_token)){
+            $access_token = $token;
+        } else if($token == $_token){
+            $access_token = $_token;
+        } else {
+            $access_token = $token;
+        }
 
-        $token_url = "https://graph.facebook.com/oauth/access_token?"
-            . "client_id=" . $this->settings->facebook_app_id->value . "&redirect_uri=" . urlencode($url)
-            . "&client_secret=" . $this->settings->facebook_app_secret->value . "&code=" . $code;
+        $graph_url = "https://graph.facebook.com/me?access_token=" . $access_token;
+        $resp = json_decode(file_get_contents((string)$graph_url));
 
-        $response = file_get_contents($token_url);
-        $params = null;
-        parse_str($response, $params);
+        if($resp->id != 0 && !empty($access_token)){
+            $this->facebook->setAccessToken($access_token);
+            $response->facebook_id = $this->facebook->getUser();
+            $response->user = $resp;
+            $response->access_token = $access_token;
+            $response->status = "connected";
+        } else {
+            $response->facebook_id = 0;
+            $response->user = new stdClass;
+            $response->access_token = null;
+            $response->status = "unknown";
+        }
 
-        $graph_url = "https://graph.facebook.com/me?access_token=" . $params['access_token'];
-
-            $user = json_decode(file_get_contents($graph_url));
-        */
+        return $response;
     }
 
     public function getFamilyMembers(){

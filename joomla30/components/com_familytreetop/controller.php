@@ -7,8 +7,14 @@ class FamilytreetopController extends JControllerLegacy
 	public function display($cachable = false, $urlparams = false)
 	{
         // Get the document object.
+        $app = JFactory::getApplication();
 		$document	= JFactory::getDocument();
         $session = JFactory::getSession();
+
+        if(null !== ($redirect = $session->get('redirect_uri'))){
+            $this->setRedirect(htmlspecialchars_decode($redirect));
+            return;
+        }
 
 		// Set the default view name and format from the Request.
 		// $vName   = $this->input->getCmd('view', 'index');
