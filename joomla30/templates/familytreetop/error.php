@@ -24,6 +24,7 @@ $user = JFactory::getUser();
     <!--[if lt IE 9]>
     <script src="<?php echo $this->baseurl ?>/media/jui/js/html5.js"></script>
     <![endif]-->
+    <jdoc:include type="message" />
 </head>
 <body>
 <jdoc:include type="modules" name="debug" style="none" />
