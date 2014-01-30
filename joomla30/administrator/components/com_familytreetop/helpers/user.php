@@ -47,7 +47,7 @@ class FamilyTreeTopUserHelper
         return self::$instance;
     }
 
-    protected function init(){
+    protected static function init(){
         $session = JFactory::getSession();
 
         if($session->get('famous')){
