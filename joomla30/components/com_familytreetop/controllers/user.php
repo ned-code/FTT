@@ -5,38 +5,48 @@ require_once JPATH_COMPONENT.'/controller.php';
 
 class FamilytreetopControllerUser extends FamilytreetopController
 {
+
+    protected function createAccount($user, $auth){
+        //create familytreetop accounts
+        $account = new FamilyTreeTopAccounts();
+        $account->joomla_id = $user->id;
+        $account->access_token = $auth->accessToken;
+        $account->facebook_id = $auth->facebook_id;
+        $account->local = FamilyTreeTopLanguagesHelper::getTag($auth->user->locale);
+        $account->save();
+    }
+
     protected function create($auth)
 	{
         //create joomla user
-        $data['username'] = "fb_".$auth->id;
+        $data['username'] = "fb_".$auth->facebook_id;
         $data['password'] = JUserHelper::hashPassword(md5($auth->accessToken));
-        $data['name'] = $auth->username;
-        $data['email'] = $auth->email;
+        $data['name'] = $auth->user->username;
+        $data['email'] = $auth->user->email;
         $data['groups'] = array(2);
 
         $user = new JUser;
         $user->bind($data);
         $user->save();
 
-        //create familytreetop accounts
-        $account = new FamilyTreeTopAccounts();
-        $account->joomla_id = $user->id;
-        $account->access_token = $auth->accessToken;
-        $account->facebook_id = $auth->id;
-        $account->local = FamilyTreeTopLanguagesHelper::getTag($auth->locale);
-        $account->save();
+        $this->createAccount($user, $auth);
 
-        return $auth->username;
+        return $auth->user->username;
 	}
 
     protected function updatePassword($user, $auth){
         $user->password = JUserHelper::hashPassword(md5($auth->accessToken));
-        $user->name = $auth->username;
+        $user->name = $auth->user->username;
         $user->save();
 
         $account = FamilyTreeTopAccounts::find_by_joomla_id($user->id);
-        $account->access_token = $auth->accessToken;
-        $account->save();
+        if(empty($account)){
+            $j_user = JUser::getInstance($user->id);
+            $this->createAccount($j_user, $auth);
+        } else {
+            $account->access_token = $auth->accessToken;
+            $account->save();
+        }
     }
 
     protected function response($data){
@@ -70,6 +80,7 @@ class FamilytreetopControllerUser extends FamilytreetopController
         $facebookHelper = FacebookHelper::getInstance();
         $facebook = $facebookHelper->facebook;
         $facebook->setExtendedAccessToken();
+
         $auth = $facebookHelper->getAuth($token);
 
         $data = array();
@@ -114,6 +125,7 @@ class FamilytreetopControllerUser extends FamilytreetopController
             $credentials['username']  = $username;
             $credentials['password']  = md5($auth->accessToken);
             $credentials['secretkey'] = "";
+
 
             if (true === $app->login($credentials, $options)){
                 $app->setUserState('rememberLogin', true);

@@ -22,6 +22,7 @@ class GedcomHelper
 
     protected function setTimeUpdate(){
         $session = JFactory::getSession();
+        $session->clear('gedcom.update');
         $session->set('gedcom.update', time());
     }
 
@@ -29,7 +30,7 @@ class GedcomHelper
         $session = JFactory::getSession();
         $gedcomUpdate = $session->get('gedcom.update');
         if(empty($gedcomUpdate)){
-            $gedcomUpdate = ( time() - ($check + 100 ));
+            $gedcomUpdate = ( time() - ($check + 100));
         }
         $end = time() - $gedcomUpdate;
         return ($end > $check);
