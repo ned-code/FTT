@@ -57,8 +57,8 @@ class GedcomHelper
         $this->relations = new FamilyTreeTopGedcomRelationsManager($tree_id, $gedcom_id);
 
         if($this->isUpdateTime(300)){
-            $this->individuals->updateIsCanBeDelete();
-            $this->individuals->updateFamilyLine();
+            //$this->individuals->updateIsCanBeDelete();
+            //$this->individuals->updateFamilyLine();
             $this->setTimeUpdate();
         }
     }

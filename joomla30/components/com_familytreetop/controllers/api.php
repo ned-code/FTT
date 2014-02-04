@@ -9,5 +9,4 @@ class FamilytreetopControllerApi extends FamilytreetopController
         echo json_encode(array('success'=>true));
         exit;
     }
-
 }
