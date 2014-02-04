@@ -20,6 +20,21 @@ class GedcomHelper
     public $relations;
     public $connections;
 
+    protected function setTimeUpdate(){
+        $session = JFactory::getSession();
+        $session->set('gedcom.update', time());
+    }
+
+    protected function isUpdateTime($check){
+        $session = JFactory::getSession();
+        $gedcomUpdate = $session->get('gedcom.update');
+        if(empty($gedcomUpdate)){
+            $gedcomUpdate = ( time() - ($check + 100 ));
+        }
+        $end = time() - $gedcomUpdate;
+        return ($end > $check);
+    }
+
     public static function getInstance(){
         if ( is_null(self::$instance) ) {
             self::$instance = new GedcomHelper ();
@@ -39,8 +54,12 @@ class GedcomHelper
         $this->medias = new FamilyTreeTopGedcomMediasManager($tree_id);
         $this->connections = new FamilyTreeTopGedcomConnectionsManager($tree_id, $gedcom_id);
         $this->relations = new FamilyTreeTopGedcomRelationsManager($tree_id, $gedcom_id);
-        $this->individuals->updateIsCanBeDelete();
-        $this->individuals->updateFamilyLine();
+
+        if($this->isUpdateTime(300)){
+            $this->individuals->updateIsCanBeDelete();
+            $this->individuals->updateFamilyLine();
+            $this->setTimeUpdate();
+        }
     }
 
     public function cnv($text){

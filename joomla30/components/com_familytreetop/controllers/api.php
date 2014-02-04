@@ -10,15 +10,4 @@ class FamilytreetopControllerApi extends FamilytreetopController
         exit;
     }
 
-    public function gen(){
-        //echo JUserHelper::hashPassword('!QA2ws#ED');
-        $salt		= JUserHelper::genRandomPassword(32);
-        $crypt = JUserHelper::getCryptedPassword('!QA2ws#ED', $salt, 'md5-hex');
-
-        echo $salt;
-        echo "<br>";
-        echo $crypt;
-        exit;
-    }
-
 }
