@@ -70,7 +70,8 @@ class FamilytreetopController extends JControllerLegacy
                         $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=login", false));
                         return;
                     } else {
-                        $invite = FamilyTreeTopUserHelper::getInstance()->isUserInInvitationsList();
+                        $invites = FamilyTreeTopUserHelper::getInstance()->isUserInInvitationsList();
+                        $invite = $invites[0];
                         if($invite != null){
                             $gedcom = GedcomHelper::getInstance();
 
@@ -87,7 +88,10 @@ class FamilytreetopController extends JControllerLegacy
                             $account->current = $usersRow->id;
                             $account->save();
 
-                            $invite->delete();
+                            foreach($invites as $i){
+                                $i->delete();
+                            }
+                            //$invite->delete();
 
                             $individual = GedcomHelper::getInstance()->individuals->get($usersRow->gedcom_id);
                             if(!$individual){

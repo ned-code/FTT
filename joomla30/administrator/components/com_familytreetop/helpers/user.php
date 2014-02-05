@@ -156,9 +156,9 @@ class FamilyTreeTopUserHelper
 
     public function isUserInInvitationsList(){
         if($this->facebook_id != null ){
-            $invite = FamilyTreeTopInvitations::find_by_facebook_id($this->facebook_id);
-            if($invite != null){
-                return $invite;
+            $invites = FamilyTreeTopInvitations::find('all', array('conditions'=>array('facebook_id = ?', $this->facebook_id)));
+            if($invites != null){
+                return $invites;
             }
         }
         return false;
