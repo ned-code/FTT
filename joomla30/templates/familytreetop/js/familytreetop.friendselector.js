@@ -65,7 +65,11 @@ $FamilyTreeTop.create("friendselector", function($){
         },
         onSubmit: function(data){
             var facebook_id = data[0];
-            $fn.send($data.gedcom_id, facebook_id);
+            $this.ajax('invite.checkUser', {gedcom_id: $data.gedcom_id, facebook_id: facebook_id}, function(response){
+                if(response.success){
+                    $fn.send($data.gedcom_id, facebook_id);
+                }
+            });
         },
         addInvitation:function(facebook_id, data, callback){
             $this.ajax('invite.addInvitation', {

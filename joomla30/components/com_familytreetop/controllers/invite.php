@@ -16,6 +16,16 @@ class FamilytreetopControllerInvite extends FamilytreetopController
                 'token' => 0
             );
         }
+
+        $inviteByFacebookId = FamilyTreeTopInvitations::find_by_facebook_id_and_tree_id($facebook_id, $tree_id);
+        if(!empty($inviteByFacebookId) && $inviteByFacebookId->gedcom_id != $gedcom_id){
+            return array(
+                'success' => false,
+                'type' => 20,
+                'message' => 'ERROR_20',
+                'token' => 0
+            );
+        }
         return array('success' => true);
     }
 
