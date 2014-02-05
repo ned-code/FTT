@@ -44,6 +44,12 @@ $FamilyTreeTop.create("friendselector", function($){
                 autoDeselection          : true
             });
         },
+        getInviteToken: function(){
+            return $this.generateKey();
+        },
+        getInviteUrl: function(token){
+            return $this.url(token).base();
+        },
         setData: function(gedcom_id){
             $data.gedcom_id = gedcom_id;
             $data.object = $this.mod('usertree').user(gedcom_id);
@@ -60,45 +66,38 @@ $FamilyTreeTop.create("friendselector", function($){
         onSubmit: function(data){
             var facebook_id = data[0];
             $fn.send($data.gedcom_id, facebook_id);
-            /*
-            $this.ajax('invite.checkUser', {facebook_id: facebook_id, gedcom_id: $data.gedcom_id}, function(response){
-                if(response.success){
-                    $fn.send($data.gedcom_id, facebook_id);
-                } else {
-                    $this.error({ title: response.message });
-                }
-            });
-            */
         },
-        addInvitation:function(facebook_id, gedcom_id, callback){
-            $this.ajax('invite.addInvitation', {facebook_id:facebook_id, gedcom_id: gedcom_id}, function(response){
+        addInvitation:function(facebook_id, data, callback){
+            $this.ajax('invite.addInvitation', {
+                facebook_id: facebook_id,
+                gedcom_id: data.gedcom_id,
+                message: data.message,
+                request_id : data.request_id,
+                token : data.token
+            }, function(response){
                 callback.call(response);
             });
         },
         send: function(gedcom_id, facebook_id){
+            var message = $fn.getMessage(gedcom_id),
+                token = $fn.getInviteToken();
             FB.ui({
                 to: facebook_id,
                 method: 'apprequests',
                 title: $fn.getTitle(),
-                message: $fn.getMessage(gedcom_id),
+                message: message,
                 exclude_ids: $fn.getExludeIds(),
                 filters: ['app_non_users'],
+                data: $fn.getInviteUrl(token),
                 max_recipients: 1
             }, function(response){
                 if(response == null){
                     $this.warning({title: "Invitation Cancelled"});
                 } else {
                     var alert = $this.warning({title: "Preparing invitation...", timeout: false});
-                    $fn.addInvitation(response.to[0], gedcom_id, function(){
+                    $fn.addInvitation(response.to[0], { request_id: response.request, gedcom_id: gedcom_id, message: message, token : token }, function(){
                         $(alert).alert('close');
                         $this.success({ title: "Request has been send"});
-                        /*
-                        if(this.success){
-                            $this.success({ title: "Request has been send"});
-                        } else {
-                            $this.error({ title: this.message});
-                        }
-                        */
                     });
                 }
             });

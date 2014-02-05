@@ -72,17 +72,25 @@ class FamilytreetopControllerInvite extends FamilytreetopController
         $date = JFactory::getDate();
 
         $facebook_id = $app->input->post->get('facebook_id', false);
+        $request_id = $app->input->post->get('request_id', false);
         $gedcom_id = $app->input->post->get('gedcom_id', false);
+        $message = $app->input->post->get('message', false);
+        $sender_id = $user->facebook_id;
+        $token = $app->input->post->get('token', false);
         $tree_id = $user->tree_id;
 
         $check = $this->_checkUser_($facebook_id, $gedcom_id, $tree_id);
 
         if($check['success']){
             $invite = new FamilyTreeTopInvitations();
+            $invite->request_id = $request_id;
+            $invite->sender_id = $sender_id;
             $invite->gedcom_id = $gedcom_id;
             $invite->facebook_id = $facebook_id;
             $invite->tree_id = $user->tree_id;
             $invite->token = md5($tree_id.$gedcom_id.$facebook_id);
+            $invite->url_token = $token;
+            $invite->message = $message;
             $invite->create_time = $date->toSql();
             $invite->save();
 
