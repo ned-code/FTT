@@ -81,6 +81,7 @@ $FamilyTreeTop.create("friendselector", function($){
         send: function(gedcom_id, facebook_id){
             var message = $fn.getMessage(gedcom_id),
                 token = $fn.getInviteToken();
+
             FB.ui({
                 to: facebook_id,
                 method: 'apprequests',

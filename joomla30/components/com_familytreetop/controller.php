@@ -11,10 +11,10 @@ class FamilytreetopController extends JControllerLegacy
 		$document	= JFactory::getDocument();
         $session = JFactory::getSession();
 
-        $request_ids = $app->input->get('request_ids', false);
+        $request_ids = $app->input->getCmd('request_ids', false);
 
         if($request_ids){
-            $session->set('invite.request.id', $request_ids);
+            $session->set('invite.request_ids', $_REQUEST['request_ids']);
         }
 
         if(null !== ($redirect = $session->get('redirect_uri'))){

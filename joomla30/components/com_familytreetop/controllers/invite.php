@@ -16,15 +16,7 @@ class FamilytreetopControllerInvite extends FamilytreetopController
                 'token' => 0
             );
         }
-
-        $inviteByGedcomId = FamilyTreeTopInvitations::find_by_gedcom_id_and_tree_id($gedcom_id, $tree_id);
-        $inviteByFacebookId = FamilyTreeTopInvitations::find_by_facebook_id_and_tree_id($facebook_id, $tree_id);
-        if(empty($inviteByGedcomId) && empty($inviteByFacebookId)){
-            return array('success' => true);
-        } else {
-            return array('success' => false, "type"=> 100, "message" => JText::_('TPL_FAMILYTREETOP_INVITE_ERROR_THE_CURRENT_USER_EXIST'), 'token' => 0);
-        }
-
+        return array('success' => true);
     }
 
     public function addToTree(){
@@ -74,8 +66,9 @@ class FamilytreetopControllerInvite extends FamilytreetopController
         $facebook_id = $app->input->post->get('facebook_id', false);
         $request_id = $app->input->post->get('request_id', false);
         $gedcom_id = $app->input->post->get('gedcom_id', false);
-        $message = $app->input->post->get('message', false);
-        $sender_id = $user->facebook_id;
+        $message = (isset($_REQUEST['message']))?$_REQUEST['message']:false;
+        $inviter_id = $user->facebook_id;
+        $inviter_name = $user->name;
         $token = $app->input->post->get('token', false);
         $tree_id = $user->tree_id;
 
@@ -84,13 +77,14 @@ class FamilytreetopControllerInvite extends FamilytreetopController
         if($check['success']){
             $invite = new FamilyTreeTopInvitations();
             $invite->request_id = $request_id;
-            $invite->sender_id = $sender_id;
+            $invite->inviter_id = $inviter_id;
+            $invite->inviter_name = $inviter_name;
             $invite->gedcom_id = $gedcom_id;
             $invite->facebook_id = $facebook_id;
             $invite->tree_id = $user->tree_id;
             $invite->token = md5($tree_id.$gedcom_id.$facebook_id);
             $invite->url_token = $token;
-            $invite->message = $message;
+            $invite->message = base64_encode($message);
             $invite->create_time = $date->toSql();
             $invite->save();
 
@@ -99,7 +93,7 @@ class FamilytreetopControllerInvite extends FamilytreetopController
             echo json_encode($check);
             exit;
         }
-        echo json_encode($check);
+        echo json_encode($message);
         exit;
     }
 
