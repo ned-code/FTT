@@ -587,12 +587,6 @@ class FamilyTreeTopGedcomIndividualsManager {
         foreach($list as $id => $user){
             $object = $gedcom->individuals->get($id);
             $object->updateLine();
-            /*
-            if($user['is_father_line'] == null || $user['is_mother_line'] == null){
-                $object = $gedcom->individuals->get($id);
-                $object->updateLine();
-            }
-            */
         }
     }
 
@@ -636,12 +630,6 @@ class FamilyTreeTopGedcomIndividualsManager {
         foreach($list as $id => $user){
             $object = $gedcom->individuals->get($id);
             $object->updateCanBeDeleteParam();
-            /*
-            if($user['is_can_be_delete'] == null){
-                $object = $gedcom->individuals->get($id);
-                $object->updateCanBeDeleteParam();
-            }
-            */
         }
     }
 

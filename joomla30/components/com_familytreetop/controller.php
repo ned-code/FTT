@@ -91,7 +91,6 @@ class FamilytreetopController extends JControllerLegacy
                             foreach($invites as $i){
                                 $i->delete();
                             }
-                            //$invite->delete();
 
                             $individual = GedcomHelper::getInstance()->individuals->get($usersRow->gedcom_id);
                             if(!$individual){
