@@ -3,13 +3,13 @@ defined('_JEXEC') or die;
 $session = JFactory::getSession();
 
 $invite = false;
-/*
 $request_ids = $session->get('invite.request_ids', false);
 if($request_ids){
     $ids = explode(',', $request_ids);
-    $invite = FamilyTreeTopInvitations::find_by_request_id($ids);
+    if(!empty($ids)){
+        $invite = FamilyTreeTopInvitations::find_by_request_id($ids);
+    }
 }
-*/
 ?>
 <? if(!empty($invite)): ?>
 <div class="row" id="inviteMessage">
