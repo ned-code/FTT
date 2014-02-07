@@ -68,7 +68,7 @@ class FamilyTreeTopGedcomIndividualsModel {
         $con = $gedcom->connections->get($this->gedcom_id);
         if(sizeof($con)>1){
             $prew = $con[sizeof($con) - 2];
-            $rel = $gedcom->relations->getFromList($this->gedcom_id);
+            $rel = $gedcom->relations->getArray($this->gedcom_id, $prew, true);
             $prewRel = $gedcom->relations->getFromList($prew);
         } else {
             $prew = false;

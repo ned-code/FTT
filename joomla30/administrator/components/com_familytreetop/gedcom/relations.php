@@ -273,10 +273,11 @@ class FamilyTreeTopGedcomRelationsManager {
         return $relation;
     }
 
-    public function getArray($gedcom_id, $target_id){
+    public function getArray($gedcom_id, $target_id, $isSave = true){
         $gedcom = GedcomHelper::getInstance();
         $conn = $gedcom->connections->getListById($gedcom_id);
         $rels = $this->getRelations($gedcom_id);
+        $listItem = false;
         if(!isset($this->list[$target_id])){
             $relation = $this->_get($gedcom_id, $target_id);
             if($relation){
@@ -290,7 +291,11 @@ class FamilyTreeTopGedcomRelationsManager {
                     'in_law' => 0,
                     'by_spouse' => 0
                 ));
-                $this->list[$target_id] = $item;
+                if($isSave){
+                    $this->list[$target_id] = $item;
+                } else {
+                    $listItem = $item;
+                }
             } else {
                 $spouses = $this->get_spouses($this->owner_id, true);
                 $id = $this->getInLawRelation($target_id, $conn, $rels);
@@ -305,7 +310,11 @@ class FamilyTreeTopGedcomRelationsManager {
                         'in_law' => $id,
                         'by_spouse' => 1
                     ));
-                    $this->list[$target_id] = $item;
+                    if($isSave){
+                        $this->list[$target_id] = $item;
+                    } else {
+                        $listItem = $item;
+                    }
                 } else {
                     $relation = $this->_get($id, $target_id);
                     if($relation && $relation[0] == 2){
@@ -321,13 +330,17 @@ class FamilyTreeTopGedcomRelationsManager {
                                 'in_law' => 1,
                                 'by_spouse' => 0
                             ));
-                            $this->list[$target_id] = $i;
+                            if($isSave){
+                                $this->list[$target_id] = $i;
+                            } else {
+                                $listItem = $item;
+                            }
                         }
                     }
                 }
             }
         }
-        return $this->list[$target_id];
+        return ($isSave)?$listItem:$this->list[$target_id];
     }
 
     public function getInLawRelation($gedcom_id, $conn = false, $rels = false){
