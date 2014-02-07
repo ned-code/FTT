@@ -33,7 +33,7 @@ class plgSystemSuperbrowserupdate extends JPlugin
 			return;
 		}
 
-  	    $doc = & JFactory :: getDocument();
+  	    $doc = JFactory::getDocument();
     	$doc->addStyleSheet( JURI::root(true) .'/plugins/system/superbrowserupdate/assets/css/superbrowserupdate.css');
 
         if (version_compare(JVERSION,'3','ge')) {

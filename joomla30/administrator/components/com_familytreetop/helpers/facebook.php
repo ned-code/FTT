@@ -16,6 +16,31 @@ class FacebookHelper
     public $facebook;
     public $data = array();
 
+    protected function create_guid($namespace = '') {
+        static $guid = '';
+        $uid = uniqid("", true);
+        $data = $namespace;
+        $data .= $_SERVER['REQUEST_TIME'];
+        $data .= $_SERVER['HTTP_USER_AGENT'];
+        $data .= $_SERVER['LOCAL_ADDR'];
+        $data .= $_SERVER['LOCAL_PORT'];
+        $data .= $_SERVER['REMOTE_ADDR'];
+        $data .= $_SERVER['REMOTE_PORT'];
+        $hash = strtoupper(hash('ripemd128', $uid . $guid . md5($data)));
+        $guid = substr($hash,  0,  8) .
+            substr($hash,  8,  4) .
+            substr($hash, 12,  4) .
+            substr($hash, 16,  4) .
+            substr($hash, 20, 12);
+        return $guid;
+    }
+
+    protected function setData(&$a, $v, $s){
+        if(!isset($a[$v])){
+            $a[$v] = $s;
+        }
+    }
+
 
     public static function getInstance(){
         if ( is_null(self::$instance) ) {
@@ -73,6 +98,7 @@ class FacebookHelper
         //));
     }
 
+
     public function getAuth($token){
         $response = new stdClass;
         $access_token = null;
@@ -88,9 +114,12 @@ class FacebookHelper
         }
 
         $graph_url = "https://graph.facebook.com/me?access_token=" . $access_token;
-        $resp = json_decode(file_get_contents((string)$graph_url));
+        $resp = json_decode(file_get_contents((string)$graph_url), true);
+        $this->setData($resp, 'username', $this->create_guid());
+        $this->setData($resp, 'email', 'a@a.com');
+        $this->setData($resp, 'locale', 'en-GB');
 
-        if($resp->id != 0 && !empty($access_token)){
+        if($resp['id'] != 0 && !empty($access_token)){
             $this->facebook->setAccessToken($access_token);
             $response->facebook_id = $this->facebook->getUser();
             $response->user = $resp;

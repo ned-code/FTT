@@ -10,9 +10,9 @@ class FamilytreetopControllerUser extends FamilytreetopController
         //create familytreetop accounts
         $account = new FamilyTreeTopAccounts();
         $account->joomla_id = $user->id;
-        $account->access_token = $auth->accessToken;
+        $account->access_token = $auth->access_token;
         $account->facebook_id = $auth->facebook_id;
-        $account->local = FamilyTreeTopLanguagesHelper::getTag($auth->user->locale);
+        $account->local = FamilyTreeTopLanguagesHelper::getTag($auth->user['locale']);
         $account->save();
     }
 
@@ -20,9 +20,9 @@ class FamilytreetopControllerUser extends FamilytreetopController
 	{
         //create joomla user
         $data['username'] = "fb_".$auth->facebook_id;
-        $data['password'] = JUserHelper::hashPassword(md5($auth->accessToken));
-        $data['name'] = $auth->user->username;
-        $data['email'] = $auth->user->email;
+        $data['password'] = JUserHelper::hashPassword(md5($auth->access_token));
+        $data['name'] = $auth->user['username'];
+        $data['email'] = $auth->user['email'];
         $data['groups'] = array(2);
 
         $user = new JUser;
@@ -31,12 +31,12 @@ class FamilytreetopControllerUser extends FamilytreetopController
 
         $this->createAccount($user, $auth);
 
-        return $auth->user->username;
+        return $auth->user['username'];
 	}
 
     protected function updatePassword($user, $auth){
-        $user->password = JUserHelper::hashPassword(md5($auth->accessToken));
-        $user->name = $auth->user->username;
+        $user->password = JUserHelper::hashPassword(md5($auth->access_token));
+        $user->name = $auth->user['username'];
         $user->save();
 
         $account = FamilyTreeTopAccounts::find_by_joomla_id($user->id);
@@ -44,7 +44,7 @@ class FamilytreetopControllerUser extends FamilytreetopController
             $j_user = JUser::getInstance($user->id);
             $this->createAccount($j_user, $auth);
         } else {
-            $account->access_token = $auth->accessToken;
+            $account->access_token = $auth->access_token;
             $account->save();
         }
     }
@@ -123,7 +123,7 @@ class FamilytreetopControllerUser extends FamilytreetopController
             // Get the log in credentials.
             $credentials = array();
             $credentials['username']  = $username;
-            $credentials['password']  = md5($auth->accessToken);
+            $credentials['password']  = md5($auth->access_token);
             $credentials['secretkey'] = "";
 
 
