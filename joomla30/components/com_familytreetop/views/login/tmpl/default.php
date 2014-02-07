@@ -11,7 +11,7 @@ if($request_ids){
     }
 }
 ?>
-<? if(!empty($invite)): ?>
+<?php if(!empty($invite)): ?>
 <div class="row" id="inviteMessage">
     <div class="span3"></div>
     <div class="span6 well">
@@ -30,7 +30,7 @@ if($request_ids){
     </div>
     <div class="span3"></div>
 </div>
-<? endif; ?>
+<?php endif; ?>
 <div class="row" id="loginHeader" style="visibility: hidden;">
     <div class="span4"></div>
     <div class="span4 text-center">
