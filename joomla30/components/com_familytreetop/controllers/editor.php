@@ -541,6 +541,7 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         }
 
         $ind->updateLine();
+        $ind->updateCanBeDeleteParam();
 
         echo $this->getResponse(
             array('ind' => array($ind)),
