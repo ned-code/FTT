@@ -64,15 +64,20 @@ class FamilytreetopController extends JControllerLegacy
                     } else if($user->facebook_id != 0 && $user->tree_id != null){
                         $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=myfamily", false));
                         return;
+                    } else if(FamilyTreeTopUserHelper::getInstance()->isUserInInvitationsList()){
+                        $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=invitation", false));
+                        return;
                     } else {
                         $model = $this->getModel($vName);
                     }
                     break;
 
                 case "invitation":
-                    if($user->guest || $user->facebook_id == 0){
+                    if($user->guest && $user->facebook_id == 0){
                         $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=login", false));
                         return;
+                    } else if($user->facebook_id != 0 && !$state){
+                        $model = $this->getModel($vName);
                     } else {
                         $invites = FamilyTreeTopUserHelper::getInstance()->isUserInInvitationsList();
                         $invite = $invites[0];
@@ -144,7 +149,7 @@ class FamilytreetopController extends JControllerLegacy
                     break;
 
                 case "create":
-                    if(FamilyTreeTopUserHelper::getInstance()->isUserInInvitationsList() != null){
+                    if(FamilyTreeTopUserHelper::getInstance()->isUserInInvitationsList() != null && !$state){
                         $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=invitation", false));
                         return;
                     } else if($user->facebook_id != 0 && $user->tree_id != null){

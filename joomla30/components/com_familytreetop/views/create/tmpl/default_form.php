@@ -105,7 +105,7 @@ defined('_JEXEC') or die;
                     <div class="span12">
                         <div class="well text-center">
                             <button type="submit" class="btn btn-primary"><?=JText::_('TPL_FAMILYTREETOP_CREATE_FORM_BUTTON_CREATE');?></button>
-                            <a id="formCancel" href="<?=JRoute::_("index.php?option=com_familytreetop&view=index", false) ?>" type="button" class="btn"><?=JText::_('TPL_FAMILYTREETOP_CREATE_FORM_BUTTON_CANCEL');?></a>
+                            <a id="formCancel" href="<?=JRoute::_("index.php?option=com_familytreetop&view=login", false) ?>" type="button" class="btn"><?=JText::_('TPL_FAMILYTREETOP_CREATE_FORM_BUTTON_CANCEL');?></a>
                             <?=JHtml::_('form.token'); ?>
                         </div>
                     </div>

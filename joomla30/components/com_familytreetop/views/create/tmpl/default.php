@@ -23,7 +23,7 @@ defined('_JEXEC') or die;
     <div class="span12 center">
         <div class="well text-center">
             <a href="<?=JRoute::_("index.php?option=com_familytreetop&view=create&layout=form", false) ?>" class="btn btn-large btn-primary">Continue</a>
-            <a href="<?=JRoute::_("index.php?option=com_familytreetop&view=index", false) ?>" class="btn btn-large">Cancel</a>
+            <a href="<?=JRoute::_("index.php?option=com_familytreetop&view=login", false) ?>" class="btn btn-large">Cancel</a>
         </div>
     </div>
 </div>

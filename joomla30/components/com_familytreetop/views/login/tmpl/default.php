@@ -2,6 +2,8 @@
 defined('_JEXEC') or die;
 $session = JFactory::getSession();
 
+$user = FamilyTreeTopUserHelper::getInstance()->get();
+
 $invite = false;
 $request_ids = $session->get('invite.request_ids', false);
 if($request_ids){
