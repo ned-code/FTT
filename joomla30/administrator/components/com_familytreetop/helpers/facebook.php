@@ -20,12 +20,12 @@ class FacebookHelper
         static $guid = '';
         $uid = uniqid("", true);
         $data = $namespace;
-        $data .= $_SERVER['REQUEST_TIME'];
-        $data .= $_SERVER['HTTP_USER_AGENT'];
-        $data .= $_SERVER['LOCAL_ADDR'];
-        $data .= $_SERVER['LOCAL_PORT'];
-        $data .= $_SERVER['REMOTE_ADDR'];
-        $data .= $_SERVER['REMOTE_PORT'];
+        $data .= (isset($_SERVER['REQUEST_TIME']))?$_SERVER['REQUEST_TIME']:"";
+        $data .= (isset($_SERVER['HTTP_USER_AGENT']))?$_SERVER['HTTP_USER_AGENT']:"";
+        $data .= (isset($_SERVER['LOCAL_ADDR']))?$_SERVER['LOCAL_ADDR']:"";
+        $data .= (isset($_SERVER['LOCAL_PORT']))?$_SERVER['LOCAL_PORT']:"";
+        $data .= (isset($_SERVER['REMOTE_ADDR']))?$_SERVER['REMOTE_ADDR']:"";
+        $data .= (isset($_SERVER['REMOTE_PORT']))?$_SERVER['REMOTE_PORT']:"";
         $hash = strtoupper(hash('ripemd128', $uid . $guid . md5($data)));
         $guid = substr($hash,  0,  8) .
             substr($hash,  8,  4) .
