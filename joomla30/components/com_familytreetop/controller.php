@@ -18,7 +18,7 @@ class FamilytreetopController extends JControllerLegacy
         }
 
         if(null !== ($redirect = $session->get('redirect_uri'))){
-            $this->setRedirect(htmlspecialchars_decode($redirect));
+            $this->setRedirect($redirect);
             return;
         }
 
@@ -57,7 +57,10 @@ class FamilytreetopController extends JControllerLegacy
                     break;
 
                 case "login":
-                    if($user->facebook_id != 0 && $user->tree_id != null){
+                    if ($user->facebook_id != 0 && $user->guest) {
+                        $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&task=user.authorization", false));
+                        return;
+                    } else if($user->facebook_id != 0 && $user->tree_id != null){
                         $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=myfamily", false));
                         return;
                     } else {

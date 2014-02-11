@@ -54,6 +54,46 @@ class FamilytreetopControllerUser extends FamilytreetopController
         exit;
     }
 
+    protected function login($username, $password, $redirect_uri){
+        $app = JFactory::getApplication();
+
+        // Get the log in options.
+        $options = array();
+        $options['remember'] = true;
+        $options['return'] = $redirect_uri;
+
+        // Get the log in credentials.
+        $credentials = array();
+        $credentials['username']  = $username;
+        $credentials['password']  = $password;
+        $credentials['secretkey'] = "";
+
+        return $app->login($credentials, $options);
+    }
+
+    public function authorization(){
+        $facebookHelper = FacebookHelper::getInstance();
+        $fb = $facebookHelper->facebook;
+
+        $facebook_id = $fb->getUser();
+        if($facebook_id){
+            $joomla_user = JoomlaUsers::find_by_username('fb_' . $facebook_id);
+            if($joomla_user){
+                $account = FamilyTreeTopAccounts::find_by_joomla_id($joomla_user->id);
+                if(!empty($account) && $account->access_token != null){
+                    $username = $joomla_user->username;
+                    $password = md5($account->access_token);
+                    $redirect_uri = JRoute::_(JURI::base() . "index.php?option=com_familytreetop&view=myfamily");
+                    if(true === $this->login($username, $password, $redirect_uri)){
+                        $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=myfamily"));
+                    }
+                }
+            }
+        }
+        $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=login"));
+        return;
+    }
+
     public function auth(){
         $session = JFactory::getSession();
 
@@ -115,19 +155,7 @@ class FamilytreetopControllerUser extends FamilytreetopController
 
             $app->setUserState('users.login.form.return', $data['return_to_myfamily']);
 
-            // Get the log in options.
-            $options = array();
-            $options['remember'] = true;
-            $options['return'] = $data['return_to_myfamily'];
-
-            // Get the log in credentials.
-            $credentials = array();
-            $credentials['username']  = $username;
-            $credentials['password']  = md5($auth->access_token);
-            $credentials['secretkey'] = "";
-
-
-            if (true === $app->login($credentials, $options)){
+            if(true === $this->login($username, md5($auth->access_token), $data['return_to_myfamily'])){
                 $app->setUserState('rememberLogin', true);
                 $app->setUserState('users.login.form.data', array());
                 $this->response(array(

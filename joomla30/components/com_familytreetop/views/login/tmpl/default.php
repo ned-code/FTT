@@ -10,6 +10,7 @@ if($request_ids){
         $invite = FamilyTreeTopInvitations::find_by_request_id($ids);
     }
 }
+
 ?>
 <?php if(!empty($invite)): ?>
 <div class="row" id="inviteMessage">

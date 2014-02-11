@@ -98,7 +98,6 @@ class FacebookHelper
         //));
     }
 
-
     public function getAuth($token){
         $response = new stdClass;
         $access_token = null;
