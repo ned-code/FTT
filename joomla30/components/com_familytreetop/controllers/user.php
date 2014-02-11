@@ -90,7 +90,7 @@ class FamilytreetopControllerUser extends FamilytreetopController
                 }
             }
         }
-        $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=login"));
+        $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=login&state=unregister"));
         return;
     }
 
@@ -130,7 +130,9 @@ class FamilytreetopControllerUser extends FamilytreetopController
             JRoute::_("index.php?option=com_familytreetop&task=user.auth"),
             true
         );
-
+        if(!$user->guest && $user->username == null){
+            $app->logout($user->id);
+        }
         if(!$user->guest){
             $this->response(array(
                 'auth' => true,

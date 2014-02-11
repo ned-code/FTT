@@ -27,6 +27,7 @@ class FamilytreetopController extends JControllerLegacy
 		$vName   = $this->input->getCmd('view', 'login');
 		$vFormat = $document->getType();
 		$lName   = $this->input->getCmd('layout', 'default');
+        $state   = $this->input->getCmd('state', false);
 
         $user = FamilyTreeTopUserHelper::getInstance()->get();
 
@@ -57,7 +58,7 @@ class FamilytreetopController extends JControllerLegacy
                     break;
 
                 case "login":
-                    if ($user->facebook_id != 0 && $user->guest) {
+                    if ($user->facebook_id != 0 && $user->guest && !$state) {
                         $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&task=user.authorization", false));
                         return;
                     } else if($user->facebook_id != 0 && $user->tree_id != null){

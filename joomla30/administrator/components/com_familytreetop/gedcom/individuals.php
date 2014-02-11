@@ -255,7 +255,7 @@ class FamilyTreeTopGedcomIndividualsModel {
         $joomlaUser = JoomlaUsers::find_by_id($account->joomla_id);
         $joomlaUser->delete();
 
-        $joomlaUserUsergroupMap = $joomlaUserUsergroupMap::find_by_user_id($account->joomla_id);
+        $joomlaUserUsergroupMap = JoomlaUserUsergroupMap::find_by_user_id($account->joomla_id);
         $joomlaUserUsergroupMap->delete();
 
         $account->delete();
