@@ -156,7 +156,6 @@ class FamilytreetopControllerUser extends FamilytreetopController
             }
 
             $app->setUserState('users.login.form.return', $data['return_to_myfamily']);
-
             if(true === $this->login($username, md5($auth->access_token), $data['return_to_myfamily'])){
                 $app->setUserState('rememberLogin', true);
                 $app->setUserState('users.login.form.data', array());

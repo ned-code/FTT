@@ -20,7 +20,7 @@ class FamilyTreeTopLanguagesHelper {
         return json_encode($db->loadAssocList());
     }
 
-    public function getTag($tag){
+    public static function getTag($tag){
         $p = explode('_', $tag);
         if(sizeof($p) == 2){
             return implode('-', $p);

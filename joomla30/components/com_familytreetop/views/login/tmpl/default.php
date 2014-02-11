@@ -1,38 +1,8 @@
 <?php
 defined('_JEXEC') or die;
 $session = JFactory::getSession();
-
 $user = FamilyTreeTopUserHelper::getInstance()->get();
-
-$invite = false;
-$request_ids = $session->get('invite.request_ids', false);
-if($request_ids){
-    $ids = explode(',', $request_ids);
-    if(!empty($ids)){
-        $invite = FamilyTreeTopInvitations::find_by_request_id($ids);
-    }
-}
 ?>
-<?php if(!empty($invite)): ?>
-<div class="row" id="inviteMessage">
-    <div class="span3"></div>
-    <div class="span6 well">
-        <div style="float: left;"><img src="https://graph.facebook.com/<?=$invite->inviter_id;?>/picture?width=90&height=90" /></div>
-        <div style="float: left;width:75%;margin-left:19px;">
-            <div><b><?=$invite->inviter_name?></b> send you a <b>FamilyTreeTop</b> request:</div>
-            <div style="width:100%;">
-                <div style="float: left;"><img src="<?=JUri::base();?>templates/familytreetop/images/ftt_invitation.png"></div>
-                <div style="float: left; width: 75%; margin-left:12px;">
-                    <p style="color:gray; font-family: 'lucida grande',tahoma,verdana,arial,sans-serif; font-size: 11px;">
-                        <?=base64_decode($invite->message);?>
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="span3"></div>
-</div>
-<?php endif; ?>
 <div class="row" id="loginHeader" style="visibility: hidden;">
     <div class="span4"></div>
     <div class="span4 text-center">

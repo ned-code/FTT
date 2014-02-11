@@ -18,8 +18,8 @@ class FamilytreetopController extends JControllerLegacy
         }
 
         if(null !== ($redirect = $session->get('redirect_uri'))){
-            $this->setRedirect($redirect);
-            return;
+            //$this->setRedirect($redirect);
+            //return;
         }
 
 		// Set the default view name and format from the Request.
@@ -64,7 +64,7 @@ class FamilytreetopController extends JControllerLegacy
                     } else if($user->facebook_id != 0 && $user->tree_id != null){
                         $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=myfamily", false));
                         return;
-                    } else if(FamilyTreeTopUserHelper::getInstance()->isUserInInvitationsList()){
+                    } else if(!$user->guest && FamilyTreeTopUserHelper::getInstance()->isUserInInvitationsList()){
                         $this->setRedirect(JRoute::_("index.php?option=com_familytreetop&view=invitation", false));
                         return;
                     } else {
@@ -93,7 +93,7 @@ class FamilytreetopController extends JControllerLegacy
 
                             $gedcom->init($usersRow->tree_id, $usersRow->gedcom_id);
 
-                            $account = FamilyTreeTopAccounts::find($user->account_id);
+                            $account = FamilyTreeTopAccounts::find_by_id($user->account_id);
                             $account->current = $usersRow->id;
                             $account->save();
 
@@ -126,7 +126,6 @@ class FamilytreetopController extends JControllerLegacy
 
                             $date = $individualBirth->date;
                             $date->type = "EVO";
-
 
                             $date->event_id = $individualBirth->id;
                             $date->start_day = (isset($userBirthday[1]))?$userBirthday[1]:null;
