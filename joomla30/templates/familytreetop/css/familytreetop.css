@@ -85,7 +85,18 @@ body > #wrap {
     -moz-border-radius: 5px 5px 0 0;
     border-radius: 5px 5px 0 0;
 }
-
+.familytreetop-table-not-border .hover:hover {
+    background: #dff0d8 !important;
+}
+.familytreetop-table-not-border .white {
+    background: white !important;
+}
+.familytreetop-table-not-border td {
+    border: none;
+}
+.familytreetop-table-not-border tr {
+    border: 1px solid white;
+}
 .familytreetop-table-td td {
     padding: 4px;
 }

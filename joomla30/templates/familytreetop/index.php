@@ -757,34 +757,51 @@ $script = "";
             </div>
         </div>
         <div familytreetop="delete" style="display:none;">
-            <table class="table">
+            <table class="table familytreetop-table-not-border">
                 <tr>
                     <td><i style="color:red;" class="icon-4x icon-warning-sign"></i></td>
                     <td><p style="font-weight: bold;"><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_YOU_ABOUT_UNREGISTERED');?>.</p></td>
                 </tr>
-                <tr><td></td><td><span style="font-weight: bold;"><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_PLEASE_SELECT_OPTION');?>:</span></td></tr>
                 <tr>
-                    <td><div style="font-weight: bold;"><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_OPTION_1');?></div><div><img class="img-polaroid" style="width:67px;height:49px;" src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/images/m_options_unlink.jpg" /></div></td>
+                    <td></td>
                     <td>
-                        <div familytreetop="option" option="1" style="cursor:pointer;color:blue;font-weight: bold;"><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_UNREGISTER_MY_PROFILE');?></div>
+                        <div><span style="font-weight: bold;"><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_PLEASE_SELECT_OPTION');?>:</span></div>
+                        <div><hr></div>
+                    </td>
+                </tr>
+                <tr class="info">
+                    <td class="white">
+                        <div>
+                            <img src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/images/m_options_unlink.jpg" />
+                        </div>
+                    </td>
+                    <td class="hover">
+                        <div familytreetop="option" option="1" style="cursor:pointer;color:blue;font-weight: bold;">
+                            <?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_UNREGISTER_MY_PROFILE');?>
+                        </div>
                         <div><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_YOUR_PROFILE_INFO_VISIBLE');?></div>
                     </td>
                 </tr>
-                <tr>
-                    <td><div style="font-weight: bold;"><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_OPTION_2');?></div><div><img class="img-polaroid" style="width:67px;height:49px;" src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/images/m_options_remove.jpg" /></div></td>
-                    <td>
-                        <div familytreetop="option" option="2" style="cursor:pointer;color:blue;font-weight: bold;"><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_UNREGISTER_AND_DELETE');?></div>
+                <tr class="info">
+                    <td class="white">
+                        <div>
+                            <img src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/images/m_options_remove.jpg" />
+                        </div>
+                    </td>
+                    <td class="hover">
+                        <div familytreetop="option" option="2" style="cursor:pointer;color:blue;font-weight: bold;">
+                            <?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_UNREGISTER_AND_DELETE');?>
+                        </div>
                         <div><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_YOU_DATA_WILL_BE_DELETE');?></div>
                     </td>
                 </tr>
-                <tr>
-                    <td>
-                        <div style="font-weight: bold;"><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_OPTION_3');?></div>
+                <tr class="info">
+                    <td class="white">
                         <div>
-                            <img class="img-polaroid" style="width:67px;height:49px;" src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/images/m_options_delete.jpg" />
+                            <img src="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/images/m_options_delete.jpg" />
                         </div>
                     </td>
-                    <td>
+                    <td class="hover">
                         <div familytreetop="valid">
                            <div familytreetop="option" option="3" style="cursor:pointer;color:blue;font-weight: bold;"><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_UNREGISTER_AND_REMOVE');?></div>
                             <div>
