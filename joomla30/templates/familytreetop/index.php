@@ -671,7 +671,14 @@ $script = "";
         <div familytreetop="buttons">
             <div class="row-fluid">
                 <div class="span4"></div>
-                <div class="span4"><button familytreetop-button="delete" type="button" class="btn btn-danger"><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_DELETE_THIS_PERSON');?></button></div>
+                <div class="span4">
+                    <div familytreetop="progressbar" style="margin-left: 50%;height: 70px;margin-top: 70px;"></div>
+                    <div style="text-align:center;">
+                        <button familytreetop-button="delete" type="button" class="btn btn-danger">
+                            <?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_DELETE_THIS_PERSON');?>
+                        </button>
+                    </div>
+                </div>
                 <div class="span4"></div>
             </div>
         </div>

@@ -3,7 +3,27 @@ $FamilyTreeTop.create("editor", function($){
 
     var $this = this,
         $validEl = false,
+        $spinner = false,
         $fn;
+
+    $spinner = new Spinner({
+        lines: 13, // The number of lines to draw
+        length: 20, // The length of each line
+        width: 10, // The line thickness
+        radius: 30, // The radius of the inner circle
+        corners: 1, // Corner roundness (0..1)
+        rotate: 8, // The rotation offset
+        direction: 1, // 1: clockwise, -1: counterclockwise
+        color: '#000', // #rgb or #rrggbb or array of colors
+        speed: 1.4, // Rounds per second
+        trail: 60, // Afterglow percentage
+        shadow: false, // Whether to render a shadow
+        hwaccel: false, // Whether to use hardware acceleration
+        className: 'spinner', // The CSS class to assign to the spinner
+        zIndex: 2e9, // The z-index (defaults to 2000000000)
+        top: 'auto', // Top position relative to parent in px
+        left:'auto' // Left position relative to parent in px
+    }).spin();
 
     $fn = {
         setUserMedia: function(parent, ind){
@@ -173,8 +193,10 @@ $FamilyTreeTop.create("editor", function($){
                 } else {
                     _click_('delete', function(){
                         $fn.progressbarOn();
+                        _progress_(true);
                         $this.ajax('editor.getOrganeUsers', {gedcom_id: ind.gedcom_id}, function(res){
                             $fn.progressbarOff();
+                            _progress_(false);
                             if(res.length != 0){
                                 _orangeDeleteConfirm_(res, function(){
                                     _deleteTable_();
@@ -206,6 +228,13 @@ $FamilyTreeTop.create("editor", function($){
             }
             function _click_(button, callback){
                 $(parent).find('[familytreetop-button="'+button+'"]').click(callback);
+            }
+            function _progress_(flag){
+                if(flag){
+                    $(parent).find('[familytreetop="progressbar"]').append($spinner.el);
+                } else {
+                    $($spinner.el).remove();
+                }
             }
             function _hideButtons_(){ $(parent).find('[familytreetop="buttons"]').hide(); }
             function _hideDeleteTreeButton_(){ $(parent).find('[familytreetop="delete-tree"]').hide(); }
