@@ -126,6 +126,7 @@ class GedcomHelper
         $mass = array();
 
         $ownerArray = $gedcom->relations->getListById($gedcom_id);
+        $r = $ownerArray;
         foreach($users as $user){
             if($user['gedcom_id'] != $gedcom_id){
                 $mass[$user['gedcom_id']] = $gedcom->relations->getListById($user['gedcom_id']);

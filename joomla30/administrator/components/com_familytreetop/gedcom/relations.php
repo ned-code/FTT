@@ -320,7 +320,7 @@ class FamilyTreeTopGedcomRelationsManager {
                     if($relation && $relation[0] == 2){
                         $json = $this->getJSON($relation);
                         $rel = $this->getInLawRelationId($id, $conn, $rels);
-                        if($rel != 1000){
+                        if($rel && $rel[0] != 1000){
                             $i = $this->set(array(
                                 'relation_id' => $rel,
                                 'gedcom_id' => $this->owner_id,
@@ -404,8 +404,9 @@ class FamilyTreeTopGedcomRelationsManager {
                 $item = $this->get($gedcom_id, $member['gedcom_id'], 0, 0, true);
                 if($item){
                     $mass[$member['gedcom_id']] = $item;
+                } else {
+                    $unknowns[$member['gedcom_id']] = $member;
                 }
-                $unknowns[$member['gedcom_id']] = $member;
             }
         }
         if(sizeof($unknowns) > 0){
@@ -419,7 +420,7 @@ class FamilyTreeTopGedcomRelationsManager {
                         $relation = $this->_get($gedcom_id, $item['gedcom_id']);
                         if($relation && $relation[0] == 2){
                             $rel = $this->getInLawRelationId($gedcom_id);
-                            if($rel != 1000){
+                            if($rel && $rel[0] != 1000){
                                 $mass[$item['gedcom_id']] = true;
                             }
                         }
@@ -457,7 +458,7 @@ class FamilyTreeTopGedcomRelationsManager {
                             if($relation && $relation[0] == 2){
                                 $json = $this->getJSON($relation);
                                 $rel = $this->getInLawRelationId($gedcom_id);
-                                if($rel != 1000){
+                                if($rel && $rel[0] != 1000){
                                     $i = $this->set(array(
                                         'relation_id' => $rel,
                                         'gedcom_id' => $this->owner_id,
