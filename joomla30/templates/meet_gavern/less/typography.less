@@ -1,0 +1,240 @@
+/** 
+ *
+ * Template typography
+ *
+ **/
+
+/* Header elements */
+.gk-big-header {
+	color: @darkcolor;
+	font-size: 5.6*@baseHeadersFontSize;
+	font-weight: 700;
+	line-height: 1.6;
+	margin-top: 40px;
+	text-align: center;
+	.filter(blur(35px));
+	-webkit-transition: -webkit-filter 2.0s ease-out, font-size 0.5s ease-out, line-height 0.5s ease-out;
+	   -moz-transition: -moz-filter 2.0s ease-out, font-size 0.5s ease-out, line-height 0.5s ease-out;
+	    -ms-transition: font-size 0.5s ease-out, line-height 0.5s ease-out;
+	     -o-transition: font-size 0.5s ease-out, line-height 0.5s ease-out;
+	        transition: filter 2.0s ease-out, font-size 0.5s ease-out, line-height 0.5s ease-out;
+	
+	span {
+		color: @color1;
+	}
+}
+
+body.loaded .gk-big-header {
+	.filter(blur(0px));
+}
+
+.gk-medium-header {
+	color: @darkcolor;
+	font-size: 1.4*@baseHeadersFontSize;
+	font-weight: 300;
+	line-height: 1.2;
+}
+
+.gk-small-header {
+	color: @textcolor;
+	font-size: 1.2*@baseHeadersFontSize;
+	font-weight: 100;
+	line-height: 1.2;
+	text-align: center;
+	.transition(font-size 0.5s ease-out);
+}
+
+.gk-buttons {
+	padding: 80px 0;
+	text-align: center;
+	.transition(padding 0.5s ease-out);
+}
+
+.gk-blue-button,
+.gk-yellow-button {
+	.border-radius(5px);
+	color: @lightcolor;
+	display: inline-block;
+	font-size: 2.3*@baseBodyFontSize;
+	font-weight: 300;
+	height: 60px;
+	line-height: 4.7*@baseBodyFontSize;
+	margin-left: 25px;
+	padding: 0 45px;
+	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.21);
+	.transition(all 0.3s ease-out);
+
+	&:active,
+	&:focus,
+	&:hover {
+		background: @darkcolor;
+		color: @lightcolor;
+	}
+
+	&:first-child,
+	&:first-child {
+		margin-left: 0;
+	}
+}
+
+.gk-blue-button {
+	background: @color1;
+}
+
+.gk-yellow-button {
+	background: @color2;
+}
+
+/* demo content */
+.gk-demo-content {
+	padding: 0 15px;
+	text-align: center;
+
+	img {
+		display: block;
+		height: auto;
+		margin: 30px auto;
+		max-width: 100%;
+		.transform(scale(1.0));
+		.transition(transform 0.5s ease-out);
+	}	
+
+	&:hover img {
+		.animate(gkbounce; 0.75s; infinite; linear);
+	}
+}
+
+@-webkit-keyframes gkbounce {
+	0% {
+		-webkit-transform: scale(1.0);
+	}
+	
+	25% {
+		-webkit-transform: scale(0.9);
+	}
+	
+	50% {
+		-webkit-transform: rotateZ(1.0);
+	}
+	
+	75% {
+		-webkit-transform: rotateZ(1.1);
+	}
+	
+	100% {
+		-webkit-transform: rotateZ(1.0);
+	}
+}
+
+@-moz-keyframes gkbounce {
+	0% {
+		-moz-transform: scale(1.0);
+	}
+	
+	25% {
+		-moz-transform: scale(0.9);
+	}
+	
+	50% {
+		-moz-transform: rotateZ(1.0);
+	}
+	
+	75% {
+		-moz-transform: rotateZ(1.1);
+	}
+	
+	100% {
+		-moz-transform: rotateZ(1.0);
+	}
+}
+
+@keyframes gkbounce {
+	0% {
+		transform: scale(1.0);
+	}
+	
+	25% {
+		transform: scale(0.9);
+	}
+	
+	50% {
+		transform: rotateZ(1.0);
+	}
+	
+	75% {
+		transform: rotateZ(1.1);
+	}
+	
+	100% {
+		transform: rotateZ(1.0);
+	}
+}
+
+.gk-demo-content {
+	h2 {
+		font-size: 1.2*@baseHeadersFontSize;
+	}
+	
+	p {
+		color: @textcolor;
+		font-size: 1.1*@baseBodyFontSize;
+		line-height: 1.6;
+		padding: 20px 0;
+	}
+}
+
+/* Demo button */
+#gk-download-btn {
+	width: 155px;
+}
+
+/* Typography demo */
+.demo-typo-col4 {
+	float: left;
+	width: 25%;
+}
+.demo-typo-col2 {
+	float: left;
+	width: 50%;
+}
+.demo-typo-col1 {
+	float: left;
+	width: 100%;
+	clear: both;
+}
+.demo-typo-col2 .btn {
+	margin-bottom: 10px;
+}
+.demo-typoDiv {
+	clear: both;
+	margin: 0 0 30px;
+	overflow: hidden
+}
+.demo-typoDiv h3 {
+	clear: both;
+	margin: 20px 0;
+}
+ul.the-icons {
+	list-style: none;
+	margin-left: 4px;
+
+	i {
+		color: @iconcolor;
+		margin-right: 15px;
+		transition: all 0.1s ease-in;  
+	}
+
+	li {
+		line-height: 2.0;
+
+		&:hover  {
+			cursor: pointer;
+		}
+
+		&:hover i {
+			font-size: 1.55*@baseBodyFontSize;
+			margin-right: 12px;
+			margin-left: -4px;
+		}
+	}
+}

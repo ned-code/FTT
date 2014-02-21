@@ -1,0 +1,158 @@
+/** 
+ *
+ * Template menu code
+ *
+ **/
+
+.gk-mainmenu-toggle {
+	float: right;
+	
+	a {
+		background: transparent url('../images/mobile_menu_btn.png') no-repeat 0 0;
+		display: block;
+		height: 30px;
+		margin-top: 20px;
+		text-indent: -9999px;
+		width: 30px;
+	}
+}
+
+
+.gk-main-menu {
+	float: right;
+	position: relative;
+	height: auto;
+	display: block;
+	
+	> ul {
+		margin: 0!important;
+		overflow: hidden;
+		clear: both;
+		
+		> li {
+			border: none;
+			float: left;
+			font-size: 1.1*@baseBodyFontSize;
+			min-height: 67px;
+			line-height: 5.15*@baseBodyFontSize;
+			margin: 0;
+			
+			> a {
+				color: @textcolor;
+				margin: 0;
+				padding: 0 14px;
+				.transition(color .3s ease-out);
+				
+				&:hover {
+					background: transparent;
+					color: @color1;
+				}
+			}
+		}
+		
+		li.current > a,
+		li.active > a {
+			background: transparent!important;
+			color: @color1!important;
+		}
+		
+		> li.active,
+		> li:hover {
+			color: @color1;
+			
+			> a {
+				background: transparent;
+				color: @color1;
+			}
+			
+			li.current > a,
+			li.active > a {
+				background: transparent!important;
+				color: @color1!important;
+			}
+		}
+	}	
+	// Submenu
+	ul {
+		ul {
+			background: @lightcolor;
+			.border-radius(3px);
+			.box-shadow(0 0 6px @darkshadow);
+			display: block;
+			font-size: @baseBodyFontSize;
+			left: -9999px;
+			margin-top: -3px;
+			padding: 0!important;
+			position: absolute;
+			width: 200px;
+			z-index: 10;
+			
+			ul:before {
+				display: none;
+			}
+			
+			li {
+				border-top: 1px solid @lightgrey;
+				min-height: 22px;
+				.transition(background-color .3s ease-out);
+				
+				a {
+					color: @textcolor;
+					display: block;
+					line-height: 1.7*@baseBodyFontSize;
+					padding: 10px 26px;
+					
+					&:active,
+					&:focus,
+					&:hover {
+						color: @headerscolor!important;
+						text-decoration: none;
+					}
+				}
+				
+				&:hover {
+					background: @lightbg;
+				}
+			}
+			
+			li:first-child {
+				border-top: none;
+			}
+			
+			li:hover {
+				ul {
+					left: auto!important;
+				}
+				
+				a {
+					color: @headerscolor!important;
+					text-decoration: none;	
+				}
+			}
+			
+			ul {
+				border-top: 1px solid @lightgrey;
+				left: -9999px!important;
+				margin-left: 180px;
+				margin-top: -24px;
+			}
+		}
+		
+		ul:before {
+			background: transparent url('../images/menu_arrow.png') no-repeat 0 0;
+			content: "";
+			display: block;
+			height: 10px;
+			left: 26px;
+			position: absolute;
+			top: -10px;
+			width: 14px;
+		}
+		
+		li:hover{
+			ul {
+				left: auto;
+			}
+		}
+	} 
+}

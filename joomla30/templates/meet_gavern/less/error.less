@@ -1,0 +1,61 @@
+/** 
+ *
+ * Template error page
+ *
+ **/
+
+@import "variables";
+@import "mixins.less";
+
+@page: 'offline';
+
+body {
+	color: @textcolor;
+	font-family: Arial, Verdana, sans-serif; /* ToDo */
+	font-size: @baseBodyFontSize;
+	font-weight: 400;
+	padding: 0 20px;
+}
+a {
+	color: @color1;
+	outline: none!important;
+	text-decoration: none;
+
+	&:active,
+	&:focus,
+	&:hover {
+		color: @lightcolor1;
+		text-decoration: none;
+	}
+}
+h1,
+h2,
+h3 {
+	color: @headerscolor;
+	font-family: 'Colaborate', sans-serif; /* ToDo */
+	font-weight: 500;
+}
+/* Header */
+@import 'logo.less';
+
+h2 {
+	color: @color1;
+	font-size: 2.1*@baseHeadersFontSize;
+	margin: 10px 0;
+}
+h3 {
+	font-weight: 300;
+	margin: 0
+}
+#frame {
+	text-align: center;
+}
+#errorDescription {
+	margin: 50px 0 24px
+}
+#errorboxbody {
+	width: 300px;
+	margin: 0 auto;
+	padding: 9px 0;
+	border-top: 1px solid @lightgrey;
+}

@@ -1,0 +1,542 @@
+/** 
+ *
+ * Template Joomla! components code
+ *
+ **/
+
+/**
+ *
+ * Common component rules
+ *
+ **/
+
+.hidelabeltxt {
+	display: none;
+}
+.form-limit,
+.display-limit {
+	float: right;
+	margin: 20px 0;
+}
+.form-limit select,
+.display-limit select {
+	width: 64px;
+}
+.btn-toolbar.article-info {
+	border-top: 4px solid @lightgrey;
+	padding: 10px 0;
+}
+#gk-content hr {
+	display: none;
+}
+#gk-content h2 small {
+	clear: both;
+	display: block;
+	font-size: 0.5*@baseHeadersFontSize;
+	line-height: 1.0;
+}
+.gk-article-content {
+	font-size: 1.1*@baseBodyFontSize;
+}
+// messages
+body > .container-fluid.gk-message .alert {
+	margin: 15px 0;
+}
+/**
+ *
+ * com_contact component
+ *
+ **/
+ 
+.contact {
+	fieldset legend {
+		font-size: 0.85*@baseBodyFontSize;
+	}
+	.jicons-icons {
+		display: none;
+	}
+	.contact-position dd,
+	.contact-address dd {
+		margin: 8px 0;
+	}
+}
+
+/**
+ *
+ * com_content component
+ *
+ **/
+ 
+/* single article */
+.item-page {
+	position: relative;
+
+	aside {
+		float: left;
+		position: absolute;
+		width: 85px;
+	}
+
+	.item-page {
+		min-height: 400px;
+	}
+}
+.item-image {
+	margin: 0 0 20px 0;
+	width: 100%;
+}
+.gk-article {
+	font-size: 1.1*@baseBodyFontSize;
+	line-height: 2*@baseBodyFontSize !important;
+	margin: 0 0 56px 116px;
+}
+.item-page,
+.itemAsideInfo {
+	time {
+		display: block;
+		width: 66px;
+		height: 66px;
+		line-height: 4*@baseBodyFontSize;
+		margin: 0 0 12px 0!important;
+		float: left;
+		padding: 6px;
+		text-align: center;
+		background: @color2;
+		font-size: 3.7*@baseBodyFontSize;
+		font-weight: 600;
+		color: @lightcolor;
+		
+		span {
+			display: block;
+			font-size: 1.4 * @baseBodyFontSize;
+			line-height: 0;
+		}
+	}
+}
+.item-page time {
+	margin-bottom: 10px;
+}
+.article-info,
+.itemAsideInfo {
+	margin: 0;
+	text-align: right;
+	font-size: 0.85*@baseBodyFontSize
+}
+.article-info {
+	dd {
+		margin: 0 0 12px;
+	}
+	
+	a {
+		color: @lighttext;
+		&:hover { color: @darkcolor}
+	}
+}
+
+.gk-item-page .gk-article {
+	min-height: 400px;
+}
+.gk-article .article-header {
+	clear: both;
+	color: @headerscolor;
+	font-size: 2.4*@baseHeadersFontSize;
+	line-height: 2.6*@baseHeadersFontSize;
+	margin: 0 0 24px;
+}
+.gk-article {
+	.item-image + .article-header,
+	.img-intro-left + .article-header,
+	.img-intro-none + .article-header,
+	.img-intro-right + .article-header  {
+		margin-top: 32px;
+	}
+}
+.gk-article {
+	.article-header a {
+		color: @darkcolor
+
+		&:hover {
+			color: @lightcolor1;
+		}
+	}
+
+	.content-links {
+		margin: 32px 0 0
+	}
+}
+
+/* all categories */
+.cat-items {
+	ul {
+		list-style-type: none;
+	}
+	li {
+		clear: both;
+
+		h4 {
+			float: left;
+		}
+	}
+}
+
+/* archive */
+.archive .filter-search {
+	float: right;
+
+	select {
+		margin-right: 10px;
+		width: 100px;
+	}
+}
+
+/**
+ *
+ * com_finder component
+ *
+ **/
+
+#advancedSearch {
+	font-size: 0.85*@baseBodyFontSize;
+
+	> div {
+		border: 1px solid @lightgrey;
+		.border-radius(3px);
+		margin: 10px 0;
+		padding: 10px 15px;
+	}
+}
+#search-results {
+	margin: 20px 0 40px 0;
+
+	.result-title {
+		font-size: 1.4*@baseBodyFontSize;
+		margin: 0 0 10px 0;
+	}
+}
+#finder-filter-select-list {
+	list-style-type: none;
+	margin-left: 0;
+
+	li {
+		padding: 0 0 5px 0;
+	}
+
+	label {
+		min-width: 135px;
+		padding-right: 10px;
+		text-align: right;
+	}
+}
+
+/**
+ *
+ * com_search component
+ *
+ **/
+
+#searchForm {
+	label {
+		display: inline-block;
+		margin-left: 5px;
+		margin-right: 10px;
+	}
+	fieldset div {
+		padding: 10px 0;
+	}
+	legend {
+		font-size: 0.92*@baseBodyFontSize;
+		margin-bottom: 5px;
+	}
+}
+.search-results {
+	clear: both;
+	
+	.result-title {
+		font-size: 1.4*@baseBodyFontSize;
+		margin: 0 0 10px 0;
+	}
+}
+/**
+ *
+ * com_wrapper component
+ *
+ **/
+ 
+.contentpane iframe {
+	border: 1px solid @lightgrey;
+}
+
+/**
+ *
+ * com_weblinks and com_newsfeeds component
+ *
+ **/
+
+.categories-list .item-title {
+	display: block;
+	margin-bottom: 10px;
+}
+.categories-list li .item-title {
+	margin-bottom: 0px;
+}
+.contact-category .cat-children,
+.weblink-category .cat-children,
+.categories-list {
+	ul {
+		list-style-type: none;
+		margin-left: 0;	
+
+		li {
+			font-size: 1.4*@baseBodyFontSize;
+			line-height: 1.4;
+
+			li {
+				font-size: 0.92*@baseBodyFontSize;
+			}
+		}
+	}
+	
+	ul ul {
+		clear: both;
+		margin-left: 20px;
+	}
+}
+
+.categories-list ul li li {
+	font-size: 1.1*@baseBodyFontSize;
+	
+	li {
+		font-size: 0.92*@baseBodyFontSize;
+	}
+}
+
+.contact-category .cat-children dl,
+.weblink-category .cat-children dl,
+.category-desc,
+.categories-list dl {
+	color: @textcolor;
+	font-size: 0.85*@baseBodyFontSize;
+}
+.contact-category .cat-children,
+.weblink-category .cat-children,
+.categories-list {
+	dt,
+	dd {
+		float: left;
+	}
+}
+.newsfeed {
+	.feed-description {
+		border-bottom: 1px solid @lightgrey;
+		color: @lighttext;
+		font-size: 1.25*@baseBodyFontSize;
+		margin: 10px 0 20px 0;
+		padding: 0 0 10px 0;
+	}
+	> ol {
+		list-style-type: none;
+		margin: 0;
+
+		> li {
+			border-top: 1px solid @lightgrey;
+			font-size: 1.4*@baseBodyFontSize;
+			padding: 20px 0;
+
+			&:first-child {
+				border-top: none;
+			}
+
+			> a {
+				display: block;
+				padding: 0 0 15px 0;
+			}
+
+			.feed-item-description {
+				font-size: 0.92*@baseBodyFontSize;
+			}
+		}
+	}
+}
+
+/**
+ *
+ * com_users component
+ *
+ **/
+
+.profile dl dt,
+.profile dl dd {
+	line-height: 1.6*@baseBodyFontSize;
+	padding: 6px 0;
+}
+.reset fieldset,
+.remind fieldset {
+	margin-top: 50px;
+}
+
+/**
+ * 
+ * Plugins 
+ *
+ **/
+
+/* Caption plugin */
+div.img_caption {
+	border: 1px solid @lightgrey;
+	.border-radius(5px);
+	padding: 15px 10px 5px 10px;
+}
+p.img_caption {
+	clear: both;
+	color: @lighttext;
+	font-size: 0.85*@baseBodyFontSize;
+	line-height: 1.6;
+	padding-top: 10px;
+	text-align: center;
+}
+/* Page Break plugin */
+.article-index {
+	margin-left: 40px;
+
+	h3 {
+		font-size: @baseHeadersFontSize;
+		margin-bottom: 10px;
+	}
+}
+.pagenavcounter {
+	color: @lighttext;
+	font-size: 0.85*@baseBodyFontSize;
+	margin: 10px 0 30px 0;
+}
+.toclink.active {
+	color: @darkcolor;
+	font-weight: bold;
+}
+
+/* Social API */
+#gkSocialAPI {
+	border-top: 1px solid @lightgrey;
+	clear: both;
+	margin: 16px 0;
+	padding: 16px 0 0;
+
+	#___plus_0 {
+		margin-right: 10px!important;
+		position: relative;
+		top: -5px;
+		vertical-align: top;
+		max-width: 200px;
+	}
+
+	> a {
+		top: -5px
+	}
+
+	> iframe,
+	> #___plusone_0 {
+		position: relative;
+		top: -5px
+	}
+}
+
+#fb-auth small {	
+	background: transparent url('../images/fb_icon.png') no-repeat 0 0;
+	display: block;
+	float: left;
+	position: relative;
+	text-indent: -9999px;
+	top: 2px;
+	width: 16px;
+}
+
+/* Newsflash */
+ul.latestnews li {
+	border-bottom: 1px solid @lightgrey;
+	padding: 8px 0!important;
+}
+
+/* Tags */
+aside div.tags a.label {
+	float: right;
+}
+div.tags a.label,
+.tag-category h3 a {
+	font-size: 0.6*@baseHeadersFontSize;
+	display: block!important;
+	color: @lightcolor;
+	float: left;
+	padding: 3px 6px;
+	margin: 0 5px 5px 0;
+	font-family: Arial, Helvetica, sans-serif;
+	border-radius: 3px;
+	background: @color1;
+	text-shadow: none !important;
+	
+	&:hover {
+		background: @headerscolor;
+		.transition(all .3ms linear);
+	}
+}
+.tag-category {
+	h3 a {
+		margin-bottom: 0;
+	}
+
+	.thumbnails > li {
+		margin-left: 0 !important;
+	}
+
+	.caption,
+	.tag-body {
+		clear: both;
+		width: 100%;
+		display: block;
+		padding-top: 8px;
+	}
+}	
+
+/* popover */
+div.popover {
+	img { 
+		max-width: 75px;
+		height: auto;
+		float: left;
+		margin: 0 10px 10px 0;
+	}
+	
+	.popover-content {
+		font-size: 0.92*@baseBodyFontSize !important;
+		line-height: 1.1*@baseBodyFontSize;
+	}
+}
+
+/* login form */
+#form-login-username, 
+#form-login-password {
+	span.add-on {
+		min-width: 100px; 
+		text-align: left; 
+		margin-left: 5px;
+	}
+}
+#form-login-username,  
+#form-login-password {
+	a i.icon-question-sign {
+		vertical-align: text-top!important;
+	}
+}
+#modlgn-username,
+#modlgn-passwd {
+	clear: both;
+	width: 95%;
+}
+#login-form #modlgn-remember {
+	margin: 6px 8px 0 5px;
+}
+
+div.edit #adminForm label {
+	display: block!important;
+}
+div.edit #adminForm input {
+	display: inline-block!important;
+}
