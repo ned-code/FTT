@@ -1,5 +1,6 @@
 <?php
 defined('_JEXEC') or die;
+$tpl_path = JPATH_BASE . DIRECTORY_SEPARATOR . 'components/com_familytreetop/tpl/';
 ?>
 <div class="row-fluid">
     <div class="span6 hidden-phone text-center">
@@ -29,3 +30,5 @@ defined('_JEXEC') or die;
 
     });
 </script>
+<?php include($tpl_path . "familytreetop-root.php"); ?>
+<?php include($tpl_path . "familytreetop-scripts.php"); ?>

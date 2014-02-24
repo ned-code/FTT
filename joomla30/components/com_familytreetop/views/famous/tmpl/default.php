@@ -2,6 +2,7 @@
 defined('_JEXEC') or die;
 $famous = FamilyTreeTopFamous::find('all');
 $gedcom = GedcomHelper::getInstance();
+$tpl_path = JPATH_BASE . DIRECTORY_SEPARATOR . 'components/com_familytreetop/tpl/';
 ?>
 <div data-familytreetop-box="famous" class="row">
     <div class="span12">
@@ -35,4 +36,5 @@ $gedcom = GedcomHelper::getInstance();
         <?php endforeach; ?>
     </div>
 </div>
-
+<?php include($tpl_path . "familytreetop-root.php"); ?>
+<?php include($tpl_path . "familytreetop-scripts.php"); ?>

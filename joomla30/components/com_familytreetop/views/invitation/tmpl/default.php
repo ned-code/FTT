@@ -4,6 +4,7 @@ $invites = FamilyTreeTopUserHelper::getInstance()->isUserInInvitationsList();
 if(!empty($invites)){
     $invite = $invites[0];
 }
+$tpl_path = JPATH_BASE . DIRECTORY_SEPARATOR . 'components/com_familytreetop/tpl/';
 ?>
 <div class="row" id="loginHeader" style="visibility: visible; margin-top: 20px; margin-bottom:20px;">
     <div class="span4"></div>
@@ -36,3 +37,5 @@ if(!empty($invites)){
         <img src="<?=$this->baseurl;?>/templates/familytreetop/images/family_line.png" accesskey="">
     </div>
 </div>
+<?php include($tpl_path . "familytreetop-root.php"); ?>
+<?php include($tpl_path . "familytreetop-scripts.php"); ?>

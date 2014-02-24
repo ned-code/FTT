@@ -2,6 +2,7 @@
 defined('_JEXEC') or die;
 $session = JFactory::getSession();
 $user = FamilyTreeTopUserHelper::getInstance()->get();
+$tpl_path = JPATH_BASE . DIRECTORY_SEPARATOR . 'components/com_familytreetop/tpl/';
 ?>
 <div class="row" id="loginHeader" style="visibility: hidden;">
     <div class="span4"></div>
@@ -107,3 +108,5 @@ $user = FamilyTreeTopUserHelper::getInstance()->get();
         });
     });
 </script>
+<?php include($tpl_path . "familytreetop-root.php"); ?>
+<?php include($tpl_path . "familytreetop-scripts.php"); ?>
