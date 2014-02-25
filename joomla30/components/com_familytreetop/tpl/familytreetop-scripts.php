@@ -4,44 +4,44 @@ $fttUser = FamilyTreeTopUserHelper::getInstance()->get();
 $template = $app->getTemplate();
 $script = "";
 ?>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/js/jquery-2.0.3.min.js"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/js/spin.min.js"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/js/superbrowserupdate.js"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/js/bootstrap.min.js"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/js/bootstrap-scroll-modal.js"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/js/tdfriendselector.js"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/js/fabric.all.min.js"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/jquery-2.0.3.min.js"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/spin.min.js"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/superbrowserupdate.js"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/bootstrap.min.js"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/bootstrap-scroll-modal.js"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/tdfriendselector.js"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/fabric.all.min.js"></script>
 <!-- file upload plugin files -->
-<script src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/js/jquery.ui.widget.js"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/js/tmpl.min.js"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/js/load-image.min.js"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/js/canvas-to-blob.min.js"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/js/jquery.iframe-transport.js"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/js/jquery.fileupload.js"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/js/jquery.fileupload-fp.js"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/js/jquery.fileupload-ui.js"></script>
-<!--[if gte IE 8]><script src="<?php echo $this->baseurl; ?>/templates/<?=$template; ?>/js/jquery.xdr-transport.js"></script><![endif]-->
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/jquery.ui.widget.js"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/tmpl.min.js"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/load-image.min.js"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/canvas-to-blob.min.js"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/jquery.iframe-transport.js"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/jquery.fileupload.js"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/jquery.fileupload-fp.js"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/jquery.fileupload-ui.js"></script>
+<!--[if gte IE 8]><script src="<?php echo $this->baseurl; ?>/components/com_familytreetop/js/jquery.xdr-transport.js"></script><![endif]-->
 <?php if($fttUser->joyride): ?>
-    <script src="<?=$this->baseurl;?>/templates/<?=$template;?>/js/bootstrap-joyride.js"></script>
+    <script src="<?=$this->baseurl;?>/components/com_familytreetop/js/bootstrap-joyride.js"></script>
 <?php endif; ?>
 <!-- uncompressed files -->
-<script src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/js/familytreetop.trees.js?<?=$script;?>"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/js/familytreetop.footer.js?<?=$script;?>"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/js/familytreetop.form.js?<?=$script;?>"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/js/familytreetop.familyline.js?<?=$script;?>"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/js/familytreetop.tabs.js?<?=$script;?>"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/js/familytreetop.usertree.js?<?=$script;?>"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/js/familytreetop.popovers.js?<?=$script;?>"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/js/familytreetop.friendselector.js?<?=$script;?>"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/js/familytreetop.this.month.js?<?=$script;?>"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/js/familytreetop.editmenu.js?<?=$script;?>"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/js/familytreetop.editor.js?<?=$script;?>"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/js/familytreetop.profile.js?<?=$script;?>"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/js/familytreetop.families.js?<?=$script;?>"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/js/familytreetop.members.js?<?=$script;?>"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/js/familytreetop.myfamily.js?<?=$script;?>"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/js/familytreetop.latest.events.js?<?=$script;?>"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/js/familytreetop.ie.placeholders.js?<?=$script;?>"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/familytreetop.trees.js?<?=$script;?>"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/familytreetop.footer.js?<?=$script;?>"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/familytreetop.form.js?<?=$script;?>"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/familytreetop.familyline.js?<?=$script;?>"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/familytreetop.tabs.js?<?=$script;?>"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/familytreetop.usertree.js?<?=$script;?>"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/familytreetop.popovers.js?<?=$script;?>"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/familytreetop.friendselector.js?<?=$script;?>"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/familytreetop.this.month.js?<?=$script;?>"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/familytreetop.editmenu.js?<?=$script;?>"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/familytreetop.editor.js?<?=$script;?>"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/familytreetop.profile.js?<?=$script;?>"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/familytreetop.families.js?<?=$script;?>"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/familytreetop.members.js?<?=$script;?>"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/familytreetop.myfamily.js?<?=$script;?>"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/familytreetop.latest.events.js?<?=$script;?>"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/familytreetop.ie.placeholders.js?<?=$script;?>"></script>
 <script>
     if(!$FamilyTreeTop.app.config.appId){
         console.log('Facebook App Id doesn\'t exist');

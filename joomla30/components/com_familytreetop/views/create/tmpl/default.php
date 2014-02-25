@@ -2,6 +2,7 @@
 defined('_JEXEC') or die;
 $tpl_path = JPATH_BASE . DIRECTORY_SEPARATOR . 'components/com_familytreetop/tpl/';
 ?>
+<?php include($tpl_path . "familytreetop-header-init.php"); ?>
 <div class="row">
     <div id="" class="span12">
         <?php

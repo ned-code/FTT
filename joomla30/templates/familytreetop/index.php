@@ -1,34 +1,5 @@
 <?php
 defined('_JEXEC') or die;
-require_once JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familytreetop/helpers/settings.php';
-require_once JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familytreetop/helpers/activerecord.php';
-require_once JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familytreetop/helpers/facebook.php';
-require_once JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familytreetop/helpers/gedcom.php';
-require_once JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familytreetop/helpers/user.php';
-require_once JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familytreetop/helpers/upload.php';
-require_once JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familytreetop/helpers/languages.php';
-
-ActiverecrdHelper::getInstance();
-FamilyTreeTopSettingsHelper::getInstance();
-$facebook = FacebookHelper::getInstance()->facebook;
-
-// Getting params from template
-$params = JFactory::getApplication()->getTemplate(true)->params;
-
-// Add current user information
-$user = JFactory::getUser();
-$fttUser = FamilyTreeTopUserHelper::getInstance()->get();
-$app = JFactory::getApplication();
-
-// Add familytreetop settings
-$settings = FamilyTreeTopSettingsHelper::getInstance()->get();
-
-$data = GedcomHelper::getInstance()->getData();
-$json_data = json_encode($data);
-$treeUsers = GedcomHelper::getInstance()->getTreeUsers('gedcom_id');
-$treeViewUsers = GedcomHelper::getInstance()->sortUsersByView($treeUsers, $data);
-//$script = time();
-$script = "";
 ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->language; ?>" lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>">
@@ -42,30 +13,6 @@ $script = "";
 	<![endif]-->
 </head>
 <body>
-<script>
-    $FamilyTreeTop.app.config.appId = '<?=$settings->facebook_app_id->value;?>';
-    $FamilyTreeTop.app.config.channelUrl = '<?=JURI::base(); ?>templates/<?=$this->template; ?>/channel.html';
-
-    $FamilyTreeTop.app.permissions = '<?=$settings->facebook_permission->value;?>';
-    $FamilyTreeTop.app.data = '<?=json_encode(FacebookHelper::getInstance()->data); ?>';
-
-    $FamilyTreeTop.facebookAccessToken = '<?=$facebook->getAccessToken();?>';
-
-    $FamilyTreeTop.users = '<?=$treeViewUsers?>';
-
-    $FamilyTreeTop.userString = '<?=json_encode(FamilyTreeTopUserHelper::getInstance()->get()); ?>';
-
-    $FamilyTreeTop.template = '<?=$this->template?>';
-
-    $FamilyTreeTop.currenturl = '<?=JUri::current();?>';
-    $FamilyTreeTop.rooturl = '<?=substr(JUri::base(), 0, strlen(JUri::base()) - 1);?>';
-    $FamilyTreeTop.baseurl = '<?=$this->baseurl;?>';
-    $FamilyTreeTop.templateurl = '<?=$this->baseurl;?>/templates/<?=$this->template;?>';
-
-    $FamilyTreeTop.languagesString = '<?=FamilyTreeTopLanguagesHelper::get()?>';
-
-    $FamilyTreeTop.dataString = <?=$json_data?>;
-</script>
 <div id="fb-root"></div>
 <div id="wrap">
     <div id="main" class="clearfix">

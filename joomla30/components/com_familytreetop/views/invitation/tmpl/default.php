@@ -6,6 +6,7 @@ if(!empty($invites)){
 }
 $tpl_path = JPATH_BASE . DIRECTORY_SEPARATOR . 'components/com_familytreetop/tpl/';
 ?>
+<?php include($tpl_path . "familytreetop-header-init.php"); ?>
 <div class="row" id="loginHeader" style="visibility: visible; margin-top: 20px; margin-bottom:20px;">
     <div class="span4"></div>
     <div class="span4 text-center">

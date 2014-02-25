@@ -4,6 +4,7 @@ $famous = FamilyTreeTopFamous::find('all');
 $gedcom = GedcomHelper::getInstance();
 $tpl_path = JPATH_BASE . DIRECTORY_SEPARATOR . 'components/com_familytreetop/tpl/';
 ?>
+<?php include($tpl_path . "familytreetop-header-init.php"); ?>
 <div data-familytreetop-box="famous" class="row">
     <div class="span12">
         <?php foreach($famous as $family): ?>

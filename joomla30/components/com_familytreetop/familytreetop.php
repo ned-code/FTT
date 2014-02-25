@@ -33,9 +33,9 @@ $doc->addStyleSheet('templates/'.$template.'/css/tdfriendselector.css');
 $doc->addStyleSheet('templates/'.$template.'/css/familytreetop.css');
 $doc->addStyleSheet('templates/'.$template.'/css/flexicontactplus.fix.css');
 
-$doc->addScript(JURI::base()."/templates/".$template."/js/holder.js");
-$doc->addScript(JURI::base()."/templates/".$template."/js/excanvas.js");
-$doc->addScript(JURI::base()."/templates/".$template."/js/familytreetop.js");
+$doc->addScript(JURI::base()."/components/com_familytreetop/js/holder.js");
+$doc->addScript(JURI::base()."/components/com_familytreetop/js/excanvas.js");
+$doc->addScript(JURI::base()."/components/com_familytreetop/js/familytreetop.js");
 
 $controller = JControllerLegacy::getInstance('Familytreetop');
 $controller->execute(JFactory::getApplication()->input->get('task', 'display'));

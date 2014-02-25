@@ -4,6 +4,7 @@ $session = JFactory::getSession();
 $user = FamilyTreeTopUserHelper::getInstance()->get();
 $tpl_path = JPATH_BASE . DIRECTORY_SEPARATOR . 'components/com_familytreetop/tpl/';
 ?>
+<?php include($tpl_path . "familytreetop-header-init.php"); ?>
 <div class="row" id="loginHeader" style="visibility: hidden;">
     <div class="span4"></div>
     <div class="span4 text-center">
