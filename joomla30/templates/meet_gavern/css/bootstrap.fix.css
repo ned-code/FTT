@@ -1,0 +1,40 @@
+.icon-large-white{
+    background-image:url("../img/glyphicons-white.png") !important;
+    background-position: 24px 24px;
+}
+.modal {
+    width: 900px;
+    margin-left: -450px;
+}
+.well[familytreetop="module"] {
+    padding: 0;
+}
+.well[familytreetop="module"] fieldset {
+    width: 100%;
+}
+.well[familytreetop="module"] fieldset legend{
+    border-bottom: 2px solid white;
+    text-align: center;
+    font-size: 20px;
+    background: gray;
+    margin: 0;
+    padding: 0;
+    background: #e8e8e8;
+}
+
+.accordion td.familytreetop-accordion-active {
+    background: #FFFF99 !important;
+}
+.familytreetop-icon-muted {
+    color: gray;
+}
+
+.modal-header {
+    background-color: #efe4b0;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+}
+
+.modal-wrapper {
+    left: 40%;
+}

@@ -1,0 +1,11 @@
+.fcp_page{
+    width: 50%;
+    margin: 0 auto;
+}
+
+.fcp_page input[type="text"], .fcp_page textarea{
+    width: 60% !important;
+}
+.fcp_line.fcp_sendrow {
+    text-align: center;
+}

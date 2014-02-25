@@ -1,0 +1,157 @@
+html, body, #wrap {
+    height: 100%;
+}
+body > #wrap {
+    height: auto;
+    min-height: 100%;
+}
+#main {
+    padding-bottom: 60px;
+}
+#footer {
+    position: relative;
+    margin-top: -60px;
+    height: 60px;
+    clear:both;
+}
+[data-familytreetop-color="0"]{
+    color: #924192;
+}
+[data-familytreetop-color="1"]{
+    color: #415981;
+}
+.familytreetop-module-header {
+    color: #7e7e73;
+}
+.familytreetop-is-mother-line {
+    background: #ffcc99 !important;
+}
+.familytreetop-is-mother-line > * {
+    background: none !important;
+}
+.familytreetop-is-father-line {
+    background: #ccff99 !important;
+}
+.familytreetop-is-father-line > * {
+    background: none !important;
+}
+[class-familytreetop="module-padding"] {
+    padding: 20px;
+}
+.familytreetop-hover-effect > tr, .familytreetop-hover-effect > td {
+    vertical-align: middle;
+}
+.familytreetop-hover-effect:hover {
+    background: #dff0d8 !important;
+}
+.familytreetop-hover-effect:hover  td {
+    background: none !important;
+}
+.familytreetop-gallery li{
+    border: 1px solid white;
+    padding: 5px 0px;
+}
+.familytreetop-gallery li.active{
+    border: 1px solid yellow;
+}
+.parent-box img:hover, .child-box img:hover {
+    border-color: #0088cc;
+    -webkit-box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
+    -moz-box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
+    box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
+}
+
+.familytreetop-this-month-data {
+    background: url('../images/calendar-icon-25x25.png');
+    width: 25px;
+    height: 25px;
+    text-align: center;
+    font-weight: bold;
+    line-height: 30px;
+    margin-left: 10px;
+}
+.popover-title {
+    background-color: #efe4b0;
+}
+.familytreetop-popover-footer {
+    padding: 8px 14px;
+    margin: 0;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 18px;
+    background-color: #efe4b0;
+    border-top: 1px solid #ebebeb;
+    -webkit-border-radius: 5px 5px 0 0;
+    -moz-border-radius: 5px 5px 0 0;
+    border-radius: 5px 5px 0 0;
+}
+.familytreetop-table-not-border .hover:hover {
+    background: #dff0d8 !important;
+}
+.familytreetop-table-not-border .white {
+    background: white !important;
+}
+.familytreetop-table-not-border td {
+    border: none;
+}
+.familytreetop-table-not-border tr {
+    border: 1px solid white;
+}
+.familytreetop-table-td td {
+    padding: 4px;
+}
+.familytreetop-this-month-header {
+    font-weight:bold;
+    background: #c3c3c3;
+    padding: 3px;
+    padding-left: 20px;
+}
+.familytreetop-this-month-header td{
+    background: none !important;
+    vertical-align: middle;
+}
+
+.familytreetop-this-month-in td {
+   border-top: none;
+   background: none !important;
+}
+.familytreetop-this-month-relation {
+    color:#797979;
+    font-size: 12px;
+}
+.familytreetop-myfamily-buttons {
+    color: #999;
+    line-height: 1.28;
+}
+
+.familytreetop-myfamily-buttons li.button {
+    font-family: 'lucida grande',tahoma,verdana,arial,sans-serif;
+    font-size: 11px;
+    color:#6d84b4;
+    cursor: pointer;
+    text-decoration: none;
+}
+.familytreetop-header-button {
+    float: right;
+    padding: 0px 5px;
+    margin-right: 30px;
+}
+
+.familytreetop-header-button span {
+    position: relative;
+    top: -6px;
+}
+.familytreetop-last-event-item div[gedcom_id] {
+    cursor:pointer;
+}
+.familytreetop-deceased-triangle {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0px;
+    height: 0px;
+    border-style: solid;
+    border-width: 10px 10px 0 0;
+    border-color: #000000 transparent transparent transparent;
+    -webkit-transform:rotate(360deg);
+}
