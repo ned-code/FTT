@@ -14,24 +14,8 @@ defined('_JEXEC') or die;
 </head>
 <body>
 <div id="fb-root"></div>
-<div id="wrap">
-    <div id="main" class="clearfix">
-        <jdoc:include type="modules" name="navbar" style="none" />
-        <div class="container">
-            <div class="row">
-                <div class="span12">
-                    <jdoc:include type="message" />
-                    <jdoc:include type="component" />
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div id="footer">
-    <div class="container" style="text-align: center;">
-        <jdoc:include type="modules" name="footer" style="" />
-    </div>
-</div>
+<jdoc:include type="message" />
+<jdoc:include type="component" />
 <!-- The template to display files available for upload -->
 <script id="template-upload" type="text/x-tmpl">
     {% for (var i=0, file; file=o.files[i]; i++) { %}
