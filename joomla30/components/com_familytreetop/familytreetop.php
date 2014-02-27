@@ -37,6 +37,9 @@ $doc->addScript(JURI::base()."/components/com_familytreetop/js/holder.js");
 $doc->addScript(JURI::base()."/components/com_familytreetop/js/excanvas.js");
 $doc->addScript(JURI::base()."/components/com_familytreetop/js/familytreetop.js");
 
+$language =& JFactory::getLanguage();
+$language->load('tpl_familytreetop', JPATH_SITE, $language->getTag(), true);
+
 $controller = JControllerLegacy::getInstance('Familytreetop');
 $controller->execute(JFactory::getApplication()->input->get('task', 'display'));
 $controller->redirect();
