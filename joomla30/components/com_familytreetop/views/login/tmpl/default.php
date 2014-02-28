@@ -3,6 +3,7 @@ defined('_JEXEC') or die;
 $session = JFactory::getSession();
 $user = FamilyTreeTopUserHelper::getInstance()->get();
 $tpl_path = JPATH_BASE . DIRECTORY_SEPARATOR . 'components/com_familytreetop/tpl/';
+
 ?>
 <?php include($tpl_path . "familytreetop-header-init.php"); ?>
     <div id="wrap">

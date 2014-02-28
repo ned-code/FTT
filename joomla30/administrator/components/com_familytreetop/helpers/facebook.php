@@ -48,8 +48,8 @@ class FacebookHelper
             self::$instance->settings = FamilyTreeTopSettingsHelper::getInstance()->get();
 
             self::$instance->facebook = new Facebook(array(
-                'appId' => self::$instance->settings->facebook_app_id->value,
-                'secret' => trim(self::$instance->settings->facebook_app_secret->value),
+                'appId' => self::$instance->settings->{self::$instance->settings->SERVER_NAME.'.facebook_app_id'}->value,
+                'secret' => trim(self::$instance->settings->{self::$instance->settings->SERVER_NAME.'.facebook_app_secret'}->value),
                 'cookie' => true
             ));
 

@@ -25,6 +25,7 @@ class FamilyTreeTopSettingsHelper
             $args->params = $object->params;
             $settings->{$object->name} = $args;
         }
+        $settings->{'SERVER_NAME'} = $_SERVER['SERVER_NAME'];
         self::$instance->settings = $settings;
     }
 

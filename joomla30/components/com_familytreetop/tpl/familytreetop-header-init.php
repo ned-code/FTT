@@ -12,7 +12,7 @@ $treeViewUsers = GedcomHelper::getInstance()->sortUsersByView($treeUsers, $data)
 
 ?>
 <script>
-    $FamilyTreeTop.app.config.appId = '<?=$settings->facebook_app_id->value;?>';
+    $FamilyTreeTop.app.config.appId = '<?=$settings->{$settings->SERVER_NAME.'.facebook_app_id'}->value;?>';
     $FamilyTreeTop.app.config.channelUrl = '<?=JURI::base(); ?>templates/<?=$template; ?>/channel.html';
 
     $FamilyTreeTop.app.permissions = '<?=$settings->facebook_permission->value;?>';
