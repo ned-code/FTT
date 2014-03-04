@@ -124,11 +124,10 @@ class FamilytreetopControllerUser extends FamilytreetopController
         $auth = $facebookHelper->getAuth($token);
 
         $data = array();
-        $data['return_to_myfamily'] = JRoute::_(JURI::base() . "index.php?option=com_familytreetop&view=myfamily");
-        $data['return_to_login'] = JRoute::_(JURI::base() . "index.php?option=com_familytreetop&view=login");
+        $data['return_to_myfamily'] = JRoute::_("index.php?option=com_familytreetop&view=myfamily");
+        $data['return_to_login'] = JRoute::_("index.php?option=com_familytreetop&view=login");
         $data['facebook_login_url'] = FacebookHelper::getInstance()->getLoginUrl(
-            JRoute::_("index.php?option=com_familytreetop&task=user.auth"),
-            true
+            JRoute::_("index.php?option=com_familytreetop&task=user.auth")
         );
         if(!$user->guest && $user->username == null){
             $app->logout($user->id);

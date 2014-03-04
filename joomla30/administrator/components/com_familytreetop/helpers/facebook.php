@@ -68,17 +68,7 @@ class FacebookHelper
     }
 
     public function getLoginUrl($redirect = null, $_session = false){
-        if($_session){
-            $session = JFactory::getSession();
-            $session->set('redirect_uri', $redirect);
-            $redirect_url = "https://" .JURI::getInstance()->getHost()
-                . JRoute::_("index.php?option=com_familytreetop");
-        } else {
-            if(empty($redirect)){
-                $redirect = JRoute::_("index.php?option=com_familytreetop&view=myfamily", false);
-            }
-            $redirect_url = "https://" . JUri::getInstance()->getHost() . $redirect;
-        }
+        $redirect_url =  JRoute::_("index.php?option=com_familytreetop&view=myfamily");
         return //htmlspecialchars_decode(urldecode(
             $this->facebook->getLoginUrl(array(
                 'scope' => $this->settings->facebook_permission->value,
