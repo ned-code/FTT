@@ -15,40 +15,36 @@ FamilyTreeTopSettingsHelper::getInstance();
 FamilyTreeTopUserHelper::getInstance();
 FamilyTreeTopLanguagesHelper::init();
 
-$settings = FamilyTreeTopSettingsHelper::getInstance()->get();
-$host = $settings->host->value . "/";
-
 $doc = JFactory::getDocument();
 $app = & JFactory::getApplication();
 $template = $app->getTemplate();
 
-echo $template;
-exit;
+$prefix = JURI::base();
 
 $stylelink = "<!--[if lt IE 9]>\n";
-$stylelink .= '<script src="'.$host.'/media/jui/js/html5.js"></script>' ."\n";
+$stylelink .= '<script src="/media/jui/js/html5.js"></script>' ."\n";
 $stylelink .= '<![endif]-->' ."\n";
 
-$doc->addCustomTag('<noscript><link rel="stylesheet" href="'.$host.'templates/<?=$this->template; ?>/css/jquery.fileupload-ui-noscript.css"></noscript>');
+$doc->addCustomTag('<noscript><link rel="stylesheet" href="/templates/'.$template.'/css/jquery.fileupload-ui-noscript.css"></noscript>');
 $doc->addCustomTag($stylelink);
 
-$doc->addStyleSheet($host . 'templates/'.$template.'/css/bootstrap.min.css');
-$doc->addStyleSheet($host . 'templates/'.$template.'/css/bootstrap-responsive.min.css');
-$doc->addStyleSheet($host . 'templates/'.$template.'/css/bootstrap-combined.no-icons.min.css');
-$doc->addStyleSheet($host .  'templates/'.$template.'/css/font-awesome.css');
+$doc->addStyleSheet($prefix . 'templates/'.$template.'/css/bootstrap.min.css');
+$doc->addStyleSheet($prefix . 'templates/'.$template.'/css/bootstrap-responsive.min.css');
+$doc->addStyleSheet($prefix . 'templates/'.$template.'/css/bootstrap-combined.no-icons.min.css');
+$doc->addStyleSheet($prefix . 'templates/'.$template.'/css/font-awesome.css');
 //$doc->addStyleSheet('templates/'.$template.'/css/bootstrap.icon-large.min.css');
-$doc->addStyleSheet($host . 'templates/'.$template.'/css/bootstrap-scroll-modal.css');
-$doc->addStyleSheet($host . 'templates/'.$template.'/css/bootstrap.fix.css');
-$doc->addStyleSheet($host . 'templates/'.$template.'/css/jquery.fileupload-ui.css');
-$doc->addStyleSheet($host . 'templates/'.$template.'/css/csstreeview.css');
-$doc->addStyleSheet($host . 'templates/'.$template.'/css/csstreeview.fix.css');
-$doc->addStyleSheet($host . 'templates/'.$template.'/css/tdfriendselector.css');
-$doc->addStyleSheet($host . 'templates/'.$template.'/css/familytreetop.css');
-$doc->addStyleSheet($host . 'templates/'.$template.'/css/flexicontactplus.fix.css');
+$doc->addStyleSheet($prefix . 'templates/'.$template.'/css/bootstrap-scroll-modal.css');
+$doc->addStyleSheet($prefix . 'templates/'.$template.'/css/bootstrap.fix.css');
+$doc->addStyleSheet($prefix . 'templates/'.$template.'/css/jquery.fileupload-ui.css');
+$doc->addStyleSheet($prefix . 'templates/'.$template.'/css/csstreeview.css');
+$doc->addStyleSheet($prefix . 'templates/'.$template.'/css/csstreeview.fix.css');
+$doc->addStyleSheet($prefix . 'templates/'.$template.'/css/tdfriendselector.css');
+$doc->addStyleSheet($prefix . 'templates/'.$template.'/css/familytreetop.css');
+$doc->addStyleSheet($prefix . 'templates/'.$template.'/css/flexicontactplus.fix.css');
 
-$doc->addScript($host . "components/com_familytreetop/js/holder.js");
-$doc->addScript($host . "components/com_familytreetop/js/excanvas.js");
-$doc->addScript($host . "components/com_familytreetop/js/familytreetop.js");
+$doc->addScript($prefix . "components/com_familytreetop/js/holder.js");
+$doc->addScript($prefix . "components/com_familytreetop/js/excanvas.js");
+$doc->addScript($prefix . "components/com_familytreetop/js/familytreetop.js");
 
 $language =& JFactory::getLanguage();
 $language->load('tpl_familytreetop', JPATH_SITE, $language->getTag(), true);

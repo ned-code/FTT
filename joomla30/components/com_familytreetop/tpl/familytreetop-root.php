@@ -1,15 +1,12 @@
 <?php
 $app = & JFactory::getApplication();
 $template = $app->getTemplate();
-
-$settings = FamilyTreeTopSettingsHelper::getInstance()->get();
-$host = $settings->host->value . "/";
 ?>
 <div id="familytreetop-root" style="display:none;">
 
 <ol id="Joyride">
     <li data-target="#JoyrideStop1" data-placement="right" data-title="<?=JText::_('TPL_FAMILYTREETOP_JOYRIDE_EDIT_PROFILE');?>">
-        <img width="307" height="235" src="<?=$host;?>templates/<?=$template;?>/img/tip1.png" />
+        <img width="307" height="235" src="<?=$this->baseurl;?>/templates/<?=$template;?>/img/tip1.png" />
     </li>
 </ol>
 
@@ -158,7 +155,7 @@ $host = $settings->host->value . "/";
 <div id="modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <div style="margin-right: 5px; visibility: hidden;" familytreetop="circle-progressbar" class="pull-right"><img src="<?=$host?>/templates/<?=$template;?>/img/circle_progressbar.gif"></div>
+        <div style="margin-right: 5px; visibility: hidden;" familytreetop="circle-progressbar" class="pull-right"><img src="<?=$this->baseurl?>/templates/<?=$template;?>/img/circle_progressbar.gif"></div>
         <h3 id="modalLabel"></h3>
     </div>
     <div class="modal-body">
@@ -681,7 +678,7 @@ $host = $settings->host->value . "/";
             <tr class="info">
                 <td class="white">
                     <div>
-                        <img src="<?php echo $host ?>/templates/<?=$template; ?>/images/m_options_unlink.jpg" />
+                        <img src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/images/m_options_unlink.jpg" />
                     </div>
                 </td>
                 <td class="hover">
@@ -694,7 +691,7 @@ $host = $settings->host->value . "/";
             <tr class="info">
                 <td class="white">
                     <div>
-                        <img src="<?php echo $host ?>/templates/<?=$template; ?>/images/m_options_remove.jpg" />
+                        <img src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/images/m_options_remove.jpg" />
                     </div>
                 </td>
                 <td class="hover">
@@ -707,7 +704,7 @@ $host = $settings->host->value . "/";
             <tr class="info">
                 <td class="white">
                     <div>
-                        <img src="<?php echo $host ?>/templates/<?=$template; ?>/images/m_options_delete.jpg" />
+                        <img src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/images/m_options_delete.jpg" />
                     </div>
                 </td>
                 <td class="hover">
@@ -748,20 +745,20 @@ $host = $settings->host->value . "/";
     <div class="multiparent-right-box" style="width: 120px;max-height: 250px;/*overflow: hidden;overflow-y: auto;*/"></div>
     <div class="parent-box" style="max-width: 160px;">
         <div familytreetop-avatar-box style="width: 150px;position:relative;">
-            <img class="img-polaroid" data-src="<?php echo $host ?>/templates/<?=$template; ?>/js/holder.js/150x150">
+            <img class="img-polaroid" data-src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/js/holder.js/150x150">
         </div>
         <div class="text-center"></div>
         <div class="text-center"></div>
     </div>
     <div class="spouse-box" style="max-width: 102px;">
         <div style="position:relative;">
-            <img class="img-polaroid" data-src="<?php echo $host ?>/templates/<?=$template; ?>/js/holder.js/100x100">
+            <img class="img-polaroid" data-src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/js/holder.js/100x100">
         </div>
         <div class="text-center"></div>
     </div>
     <div class="child-box" style="max-width: 110px;">
         <div style="position:relative;">
-            <img class="img-polaroid" data-src="<?php echo $host ?>/templates/<?=$template; ?>/js/holder.js/100x100">
+            <img class="img-polaroid" data-src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/js/holder.js/100x100">
         </div>
         <div class="text-center"></div>
         <div class="text-center"></div>
