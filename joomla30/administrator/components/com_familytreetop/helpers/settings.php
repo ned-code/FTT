@@ -7,6 +7,15 @@ class FamilyTreeTopSettingsHelper
     protected static $instance;
     protected $settings;
 
+    private function getServerName(){
+        $server = $_SERVER['SERVER_NAME'];
+        $parts = explode('.', $server);
+        if($parts[0] == "www"){
+            array_shift($parts);
+        }
+        return implode('.', $parts);
+    }
+
     public static function getInstance(){
         if ( is_null(self::$instance) ) {
             self::$instance = new FamilyTreeTopSettingsHelper ();
@@ -25,6 +34,8 @@ class FamilyTreeTopSettingsHelper
             $args->params = $object->params;
             $settings->{$object->name} = $args;
         }
+
+
         $settings->{'SERVER_NAME'} = $_SERVER['SERVER_NAME'];
         $settings->_template = $settings->{$settings->SERVER_NAME . ".template"};
         self::$instance->settings = $settings;
