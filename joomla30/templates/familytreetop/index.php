@@ -5,12 +5,7 @@ defined('_JEXEC') or die;
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->language; ?>" lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>">
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/css/style.css">
-    <noscript><link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/<?=$this->template; ?>/css/jquery.fileupload-ui-noscript.css"></noscript>
 	<jdoc:include type="head" />
-	<!--[if lt IE 9]>
-		<script src="<?php echo $this->baseurl ?>/media/jui/js/html5.js"></script>
-	<![endif]-->
 </head>
 <body>
 <div id="fb-root"></div>
