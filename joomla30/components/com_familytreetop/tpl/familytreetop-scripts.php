@@ -1,7 +1,8 @@
 <?php
 $app = & JFactory::getApplication();
 $fttUser = FamilyTreeTopUserHelper::getInstance()->get();
-$template = $app->getTemplate();
+$settings = FamilyTreeTopSettingsHelper::getInstance()->get();
+$template = $settings->_template->value;
 $script = "";
 ?>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/jquery-2.0.3.min.js"></script>

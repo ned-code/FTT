@@ -1,6 +1,7 @@
 <?php
 $app = & JFactory::getApplication();
-$template = $app->getTemplate();
+$settings = FamilyTreeTopSettingsHelper::getInstance()->get();
+$template = $settings->_template->value;
 
 $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
 $facebook = FacebookHelper::getInstance()->facebook;

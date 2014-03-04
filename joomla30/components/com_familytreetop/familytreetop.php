@@ -20,6 +20,8 @@ $app = & JFactory::getApplication();
 $template = $app->getTemplate();
 
 $prefix = JURI::base();
+$settings = FamilyTreeTopSettingsHelper::getInstance()->get();
+$template = $settings->_template->value;
 
 $stylelink = "<!--[if lt IE 9]>\n";
 $stylelink .= '<script src="/media/jui/js/html5.js"></script>' ."\n";

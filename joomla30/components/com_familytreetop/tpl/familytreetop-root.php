@@ -1,6 +1,7 @@
 <?php
 $app = & JFactory::getApplication();
-$template = $app->getTemplate();
+$settings = FamilyTreeTopSettingsHelper::getInstance()->get();
+$template = $settings->_template->value;
 ?>
 <div id="familytreetop-root" style="display:none;">
 
