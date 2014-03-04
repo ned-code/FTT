@@ -7,7 +7,7 @@ $template = $settings->_template->value;
 
 <ol id="Joyride">
     <li data-target="#JoyrideStop1" data-placement="right" data-title="<?=JText::_('TPL_FAMILYTREETOP_JOYRIDE_EDIT_PROFILE');?>">
-        <img width="307" height="235" src="<?=$this->baseurl;?>/templates/<?=$template;?>/img/tip1.png" />
+        <img width="307" height="235" src="<?=$this->baseurl;?>templates/<?=$template;?>/img/tip1.png" />
     </li>
 </ol>
 

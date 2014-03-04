@@ -47,13 +47,16 @@ class FacebookHelper
             self::$instance = new FacebookHelper ();
             self::$instance->settings = FamilyTreeTopSettingsHelper::getInstance()->get();
 
+            $app_id = self::$instance->settings->{self::$instance->settings->SERVER_NAME.'.facebook_app_id'}->value;
+            $app_secret = trim(self::$instance->settings->{self::$instance->settings->SERVER_NAME.'.facebook_app_secret'}->value);
+
             self::$instance->facebook = new Facebook(array(
-                'appId' => self::$instance->settings->{self::$instance->settings->SERVER_NAME.'.facebook_app_id'}->value,
-                'secret' => trim(self::$instance->settings->{self::$instance->settings->SERVER_NAME.'.facebook_app_secret'}->value),
+                'appId' => $app_id,
+                'secret' => $app_secret,
                 'cookie' => true
             ));
 
-            $data = self::$instance->facebook->api('/' . self::$instance->settings->facebook_app_id->value);
+            $data = self::$instance->facebook->api('/' . $app_id);
             if(isset($data['link'])){
                 self::$instance->data['link'] = $data['link'];
             }
