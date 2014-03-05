@@ -1,9 +1,11 @@
 <?php
+$settings = FamilyTreeTopSettingsHelper::getInstance()->get();
+$template = $settings->_template->value;
 ?>
 <div class="row" id="loginHeader" style="visibility: hidden;">
     <div class="span4"></div>
     <div class="span4 text-center">
-        <img src="<?=$this->baseurl;?>/templates/familytreetop/images/ftt_title.png" accesskey="">
+        <img src="<?=$this->baseurl;?>/templates/<?=$template?>/images/ftt_title.png" accesskey="">
     </div>
     <div class="span4"></div>
 </div>
@@ -22,7 +24,7 @@
 </div>
 <div class="row" id="loginFooter" style="visibility:hidden;">
     <div class="span12">
-        <img src="<?=$this->baseurl;?>/templates/familytreetop/images/family_line.png" accesskey="">
+        <img src="<?=$this->baseurl;?>/templates/<?=$temaplate?>/images/family_line.png" accesskey="">
     </div>
 </div>
 <script>
