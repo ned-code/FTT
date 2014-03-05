@@ -24,7 +24,7 @@ $template = $settings->_template->value;
 </div>
 <div class="row" id="loginFooter" style="visibility:hidden;">
     <div class="span12">
-        <img src="<?=$this->baseurl;?>/templates/<?=$temaplate?>/images/family_line.png" accesskey="">
+        <img src="<?=$this->baseurl;?>/templates/<?=$template?>/images/family_line.png" accesskey="">
     </div>
 </div>
 <script>
