@@ -30,7 +30,7 @@ class FamilytreetopControllerEditor extends FamilytreetopController
             return;
         }
 
-        if(empty($event) && $data) {
+        if(empty($event) && ($data || $create)) {
             $event = GedcomHelper::getInstance()->events->get();
             $event->gedcom_id = $ind->gedcom_id;
         }

@@ -874,12 +874,12 @@ $FamilyTreeTop.create("editor", function($){
                 }
                 validate = $fn.validate(args);
                 if(!validate.success){
-                    $fn.setValidElement(cl, validate);
+                    //$fn.setValidElement(cl, validate);
                     $fn.progressbarOff(cl);
                     requestSend = false;
                     return false;
                 }
-                $fn.removeValid();
+                //$fn.removeValid();
                 $this.ajax(send, args, function(response){
                     $this.mod('usertree').update(response);
                     $fn.progressbarOff(cl);
