@@ -330,6 +330,14 @@ class FamilyTreeTopGedcomIndividualsModel {
         return $gedcom->connections->get($this->gedcom_id);
     }
 
+    public function delEvent($event){
+        foreach($this->events as $key => $_event){
+            if($event->id == $_event->id){
+                unset($this->events[$key]);
+            }
+        }
+    }
+
     public function addEvent($event){
         $this->events[] = $event;
     }
@@ -352,6 +360,11 @@ class FamilyTreeTopGedcomIndividualsModel {
         $data['last_name'] = $this->last_name;
         $data['know_as'] = $this->know_as;
         return $data;
+    }
+
+    public function updateEvents(){
+        $gedcom = GedcomHelper::getInstance();
+        $this->events = $gedcom->events->get($this->gedcom_id);
     }
 
     public function updateLine(){

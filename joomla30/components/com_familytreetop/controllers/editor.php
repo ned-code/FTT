@@ -18,12 +18,12 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         );
     }
 
-    protected function setEvent(&$ind, $type, $form){
+    protected function setEvent(&$ind, $type, $form, $create = false){
         $data = $this->isEntryValid($form, $type);
         $prefix = substr($type, 0, 1). "_";
         $event = $ind->{$type}();
 
-        if(empty($event) && !$data) return false;
+        if(!$create && empty($event) && !$data) return false;
 
         if(!empty($event) && !$data){
             $event->remove();
@@ -534,14 +534,16 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         $this->setEvent($ind, 'birth', $form);
         if((int)$form['living']){
             if($event = $ind->death()){
+                $ind->delEvent($event);
                 $event->remove();
             }
         } else {
-            $this->setEvent($ind, 'death', $form);
+            $this->setEvent($ind, 'death', $form, true);
         }
 
         $ind->updateLine();
         $ind->updateCanBeDeleteParam();
+
 
         echo $this->getResponse(
             array('ind' => array($ind)),
