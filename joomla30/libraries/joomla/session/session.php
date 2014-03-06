@@ -808,7 +808,14 @@ class JSession implements IteratorAggregate
 
 		if ($config->get('cookie_domain', '') != '')
 		{
-			$cookie['domain'] = $config->get('cookie_domain');
+            $server = $_SERVER['SERVER_NAME'];
+            $parts = explode('.', $server);
+            if($parts[0] == "www"){
+                array_shift($parts);
+            }
+            $server_name = implode('.', $parts);
+            $cookie['domain'] = $server_name;
+            //$cookie['domain'] = $config->get('cookie_domain');
 		}
 
 		if ($config->get('cookie_path', '') != '')
