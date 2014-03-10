@@ -38,3 +38,43 @@
 .modal-wrapper {
     left: 40%;
 }
+/* BOOTSTRAP TEMPLATE FIX */
+/* set the background-color to red */
+.familytreetop-nav .navbar-inner {
+    background-color: #752f05;
+    /* remove the gradient */
+    background-image: none;
+    /* set font color to white */
+    color: white;
+}
+/* menu items */
+/* set the background of the menu items to pink and default color to white */
+.familytreetop-nav .navbar .nav > li > a {
+    background-color: #752f05;
+    color: white;
+}
+/* set hover and focus to lightblue */
+.familytreetop-nav .navbar .nav > li > a:focus,
+.familytreetop-nav .navbar .nav > li > a:hover {
+    background-color: lightblue;
+    color: white;
+}
+/* set active item to darkgreen */
+.familytreetop-nav .navbar .nav > .active > a,
+.familytreetop-nav .navbar .nav > .active > a:hover,
+.familytreetop-nav .navbar .nav > .active > a:focus {
+    background-color: darkgreen;
+    color: white;
+}
+.navbar .nav li.dropdown.open>.dropdown-toggle,
+.navbar .nav li.dropdown.active>.dropdown-toggle,
+.navbar .nav li.dropdown.open.active>.dropdown-toggle {
+    background-color: #752f05;
+    color: white;
+}
+/* set font color and background of the project name (brand) */
+.familytreetop-nav .navbar .brand
+{
+    background-color: #752f05;
+    color: navy;
+}

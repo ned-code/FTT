@@ -1,5 +1,7 @@
 <?php
 defined('_JEXEC') or die;
+$settings = FamilyTreeTopSettingsHelper::getInstance()->get();
+$template = $settings->_template->value;
 $session = JFactory::getSession();
 $user = FamilyTreeTopUserHelper::getInstance()->get();
 $gedcom = GedcomHelper::getInstance();
@@ -11,8 +13,8 @@ if($session->get('famous')){
     $ind = false;
 }
 ?>
-<div class="navbar navbar-inverse">
-    <div style="border-radius: 0;" class="navbar-inner">
+<div class="navbar familytreetop-nav" style="b">
+    <div style="border-radius: 0; border:none;" class="navbar-inner">
         <div class="container">
             <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
                 <span class="icon-bar"></span>
@@ -35,7 +37,11 @@ if($session->get('famous')){
                 </li>
             </ul>
             <?php endif; ?>
-            <a class="brand" familytreetop-link="familytreetop" href="<?=JRoute::_("index.php?option=com_familytreetop&view=index", false); ?>"><i style="background: url(templates/familytreetop/img/glyphicons_317_tree_deciduous_green.png) no-repeat; padding-left: 25px;">Family TreeTop</i></a>
+            <?php if($template == "familytreetop"): ?>
+                <a class="brand" familytreetop-link="familytreetop" href="<?=JRoute::_("index.php?option=com_familytreetop&view=index", false); ?>"><i style="background: url(templates/familytreetop/img/glyphicons_317_tree_deciduous_green.png) no-repeat; padding-left: 25px;">Family TreeTop</i></a>
+            <?php else: ?>
+                <a class="brand" familytreetop-link="familytreetop" href="<?=JRoute::_("index.php?option=com_familytreetop&view=index", false); ?>"><i class="icon-leaf"></i> Family TreeTop</a>
+            <?php endif ?>
             <!--
             <div  id="navProfileUser" class="nav-collapse collapse">
                 <ul class="nav">
