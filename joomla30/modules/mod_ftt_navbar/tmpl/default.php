@@ -26,7 +26,7 @@ $navbar_name = ($template == "familytreetop")?"Family TreeTop":"MyNativeRoots";
             <ul id="profileUser" class="nav pull-right hidden-phone">
                 <li><img style="margin: 4px;" src="https://graph.facebook.com/<?=$user->facebook_id;?>/picture?width=30&height=30"/></li>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?=$ind->name();?> <b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle" style="color: white;text-shadow: none;" data-toggle="dropdown"><?=$ind->name();?> <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li><a  familytreetop="profile" href="#"><?=JText::_('MOD_FTT_NAVBAR_PROFILE_PROFILE');?></a></li>
                         <li><a  familytreetop="languages" href="#"><?=JText::_('MOD_FTT_NAVBAR_PROFILE_LANGUAGES');?></a></li>
@@ -39,9 +39,9 @@ $navbar_name = ($template == "familytreetop")?"Family TreeTop":"MyNativeRoots";
             </ul>
             <?php endif; ?>
             <?php if($template == "familytreetop"): ?>
-                <a class="brand" familytreetop-link="familytreetop" href="<?=JRoute::_("index.php?option=com_familytreetop&view=index", false); ?>"><i style="background: url(templates/familytreetop/img/glyphicons_317_tree_deciduous_green.png) no-repeat; padding-left: 25px;"><?=$navbar_name;?></i></a>
+                <a style="color: white;text-shadow: none;" class="brand" familytreetop-link="familytreetop" href="<?=JRoute::_("index.php?option=com_familytreetop&view=index", false); ?>"><i style="background: url(templates/familytreetop/img/glyphicons_317_tree_deciduous_green.png) no-repeat; padding-left: 25px;"><?=$navbar_name;?></i></a>
             <?php else: ?>
-                <a class="brand" familytreetop-link="familytreetop" href="<?=JRoute::_("index.php?option=com_familytreetop&view=index", false); ?>"><i class="icon-leaf"></i> <?=$navbar_name;?></a>
+                <a style="color: white;text-shadow: none;" class="brand" familytreetop-link="familytreetop" href="<?=JRoute::_("index.php?option=com_familytreetop&view=index", false); ?>"><i class="icon-leaf"></i> <?=$navbar_name;?></a>
             <?php endif ?>
             <!--
             <div  id="navProfileUser" class="nav-collapse collapse">
