@@ -664,7 +664,7 @@ $template = $settings->_template->value;
         </div>
     </div>
     <div familytreetop="delete" style="display:none;">
-        <table class="table familytreetop-table-not-border">
+        <table cellspacing="10" cellpadding="20" class="table familytreetop-table-not-border" style="width:98%;">
             <tr>
                 <td><i style="color:red;" class="icon-4x icon-warning-sign"></i></td>
                 <td><p style="font-weight: bold;"><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_YOU_ABOUT_UNREGISTERED');?>.</p></td>
