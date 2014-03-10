@@ -12,6 +12,7 @@ if($session->get('famous')){
 } else {
     $ind = false;
 }
+$navbar_name = ($template == "familytreetop")?"Family TreeTop":"MyNativeRoots";
 ?>
 <div class="navbar familytreetop-nav" style="b">
     <div style="border-radius: 0; border:none;" class="navbar-inner">
@@ -38,9 +39,9 @@ if($session->get('famous')){
             </ul>
             <?php endif; ?>
             <?php if($template == "familytreetop"): ?>
-                <a class="brand" familytreetop-link="familytreetop" href="<?=JRoute::_("index.php?option=com_familytreetop&view=index", false); ?>"><i style="background: url(templates/familytreetop/img/glyphicons_317_tree_deciduous_green.png) no-repeat; padding-left: 25px;">Family TreeTop</i></a>
+                <a class="brand" familytreetop-link="familytreetop" href="<?=JRoute::_("index.php?option=com_familytreetop&view=index", false); ?>"><i style="background: url(templates/familytreetop/img/glyphicons_317_tree_deciduous_green.png) no-repeat; padding-left: 25px;"><?=$navbar_name;?></i></a>
             <?php else: ?>
-                <a class="brand" familytreetop-link="familytreetop" href="<?=JRoute::_("index.php?option=com_familytreetop&view=index", false); ?>"><i class="icon-leaf"></i> Family TreeTop</a>
+                <a class="brand" familytreetop-link="familytreetop" href="<?=JRoute::_("index.php?option=com_familytreetop&view=index", false); ?>"><i class="icon-leaf"></i> <?=$navbar_name;?></a>
             <?php endif ?>
             <!--
             <div  id="navProfileUser" class="nav-collapse collapse">
