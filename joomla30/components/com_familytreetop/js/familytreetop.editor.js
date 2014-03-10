@@ -215,7 +215,9 @@ $FamilyTreeTop.create("editor", function($){
                     _hideButtons_();
                     _showButtonInvalid_();
                 } else {
+                    _progress_(true);
                     _click_('delete',function(){
+                        _progress_(false);
                         _delete_();
                     });
                 }
