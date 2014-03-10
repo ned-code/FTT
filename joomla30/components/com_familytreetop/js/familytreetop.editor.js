@@ -215,9 +215,7 @@ $FamilyTreeTop.create("editor", function($){
                     _hideButtons_();
                     _showButtonInvalid_();
                 } else {
-                    _progress_(true);
                     _click_('delete',function(){
-                        _progress_(false);
                         _delete_();
                     });
                 }
@@ -253,7 +251,9 @@ $FamilyTreeTop.create("editor", function($){
             function _showDeleteTable_(){ $(parent).find('[familytreetop="delete"]').show(); }
             function _showOrangeListBox_(){ $(parent).find('[familytreetop="orange-users"]').show(); }
             function _delete_(){
+                _progress_(true);
                 _ajax_(3, ind.gedcom_id, function(res){
+                    _progress_(false);
                     if(res){
                         $this.mod('usertree').update(res);
                         ind.delete();
