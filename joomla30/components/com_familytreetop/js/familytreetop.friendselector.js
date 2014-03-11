@@ -68,8 +68,9 @@ $FamilyTreeTop.create("friendselector", function($){
             var alert = $this.warning({title: "Check User Invitation...", timeout: false});
             $this.ajax('invite.checkUser', {gedcom_id: $data.gedcom_id, facebook_id: facebook_id}, function(response){
                 $(alert).alert('close');
+                $fn.options($data.gedcom_id, facebook_id);
                 if(response.success){
-                    $fn.send($data.gedcom_id, facebook_id);
+                    $fn.options($data.gedcom_id, facebook_id);
                 } else {
                     var alert = $this.error({title: response.message});
                 }
@@ -85,6 +86,11 @@ $FamilyTreeTop.create("friendselector", function($){
             }, function(response){
                 callback.call(response);
             });
+        },
+        options: function(gedcom_id, facebook_id){
+            //$fn.send(gedcom_id, facebook_id);
+            var box = $('#TDFriendSelectorInvitationOptions').clone();
+            $(document.body).append(box);
         },
         send: function(gedcom_id, facebook_id){
             var message = $fn.getMessage(gedcom_id),
