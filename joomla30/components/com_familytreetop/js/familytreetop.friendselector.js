@@ -68,7 +68,6 @@ $FamilyTreeTop.create("friendselector", function($){
             var alert = $this.warning({title: "Check User Invitation...", timeout: false});
             $this.ajax('invite.checkUser', {gedcom_id: $data.gedcom_id, facebook_id: facebook_id}, function(response){
                 $(alert).alert('close');
-                $fn.options($data.gedcom_id, facebook_id);
                 if(response.success){
                     $fn.options($data.gedcom_id, facebook_id);
                 } else {
@@ -88,9 +87,53 @@ $FamilyTreeTop.create("friendselector", function($){
             });
         },
         options: function(gedcom_id, facebook_id){
-            //$fn.send(gedcom_id, facebook_id);
             var box = $('#TDFriendSelectorInvitationOptions').clone();
+            setLeft();
+            setData();
             $(document.body).append(box);
+            $(box).find('li[familytreetop="send_notification"]').click(function(){
+                $(this).find('input').click();
+                return false;
+            });
+            $(box).find('li[familytreetop="send_notification"] input').change(function(){
+                return false;
+            });
+            $(box).find('li[familytreetop="send_email"]').click(function(){
+                $(this).find('input').click();
+            });
+            $(box).find('li[familytreetop="send_email"] input').change(function(){
+                if(this.checked){
+                    $(box).find('li[familytreetop="notification"]').hide();
+                    $(box).find('li[familytreetop="email"]').show();
+                    $(box).find('[familytreetop="message"]').show();
+                } else {
+                    $(box).find('li[familytreetop="notification"]').show();
+                    $(box).find('li[familytreetop="email"]').hide();
+                    $(box).find('[familytreetop="message"]').hide();
+                }
+            });
+            $(box).find('button[familytreetop="send"]').click(function(){
+                $fn.send(gedcom_id, facebook_id);
+            });
+            $(box).find('button[familytreetop="cancel"]').click(function(){
+                $(box).remove();
+            });
+            return true;
+            function setLeft(){
+                $(box).css('left', (Math.floor($(window).width()/2)-300)+'px');
+            }
+            function setData(){
+                var user = $this.mod('usertree').user(gedcom_id);
+                var owner = $this.mod('usertree').user($this.mod('usertree').usermap().gedcom_id);
+                var message = $fn.getMessage(gedcom_id);
+                FB.api('/'+facebook_id, function(r){
+                    $(box).find('[familytreetop="header_name"]').text(r.name);
+                    $(box).find('[familytreetop="message_name"]').text(r.name);
+                    var avatar = owner.avatar(["75","75"], "img-polaroid");
+                    $(box).find('[familytreetop="avatar"]').append(avatar);
+                    $(box).find('[familytreetop="text"]').text(message);
+                });
+            }
         },
         send: function(gedcom_id, facebook_id){
             var message = $fn.getMessage(gedcom_id),

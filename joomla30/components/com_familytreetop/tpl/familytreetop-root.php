@@ -776,18 +776,18 @@ $template = $settings->_template->value;
     <div class="ex-cont">
         <div class="ex-header">
             <div style="display:inline-block;">To: </div>
-            <div style="display:inline-block;">Alexander Potashko</div>
+            <div style="display:inline-block;" familytreetop="header_name"></div>
         </div>
         <div class="ex-body">
             <ul class="unstyled" style="margin: 20px;">
-                <li familytreetop="send_notification"> <input type="checkbox" checked="checked"> Send to Facebook Notification</li>
-                <li familytreetop="send_email"> <input type="checkbox"> Send to Email Address</li>
-                <li familytreetop="notification"><div style="color:red; margin-left: 10px;">Email are more effective than the Facebook Notification system</div></li>
-                <li familytreetop="email" style="display:none;">email: <input disabled="disabled" name="email" value=""> <i class="icon-leaf"></i></li>
+                <li familytreetop="send_notification" style="cursor:pointer;"> <input type="checkbox" checked="checked"> Send to Facebook Notification</li>
+                <li familytreetop="send_email" style="cursor:pointer;"> <input type="checkbox"> Send to Email Address</li>
+                <li familytreetop="notification"><div style="color:red; margin-left: 18px;">Email are more effective than the Facebook Notification system</div></li>
+                <li familytreetop="email" style="display:none; padding-left: 18px;">email: <input type="text" name="email" value=""> <i class="icon-leaf"></i></li>
             </ul>
-            <div style="display:none; margin: 20px; background: #4d67a2;border: 2px solid #4d67a2;">
+            <div familytreetop="message" style="display:none; margin: 20px; background: #4d67a2;border: 2px solid #4d67a2;">
                 <div style="position: relative;height: 35px;">
-                    <div style="position: absolute;top: 5px;left: 5px;color: white;">To: <span familytreetop="header_email">usermail@email.com</span></div>
+                    <div style="position: absolute;top: 5px;left: 5px;color: white;">To: <span familytreetop="message_name"></span></div>
                     <div style="position: absolute;top: 2px;right: 5px;">
                         <select>
                             <option>English</option>
@@ -799,8 +799,8 @@ $template = $settings->_template->value;
                     <div style="padding: 10px;">
                         <table>
                             <tr>
-                                <td><div style="border:1px solid #000; width: 100px; height: 100px;"></div></td>
-                                <td style="vertical-align: top;"><p familytreetop="text"></p></td>
+                                <td><div familytreetop="avatar"></div></td>
+                                <td style="vertical-align: top;"><p familytreetop="text" style="margin:10px;"></p></td>
                             </tr>
                         </table>
                     </div>
