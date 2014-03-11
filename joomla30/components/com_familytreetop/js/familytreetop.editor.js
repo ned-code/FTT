@@ -829,13 +829,23 @@ $FamilyTreeTop.create("editor", function($){
                     if(form[key].value == "default"){
                         return { success: false, name: form[key].name};
                     }
-                } else if(form[key].name == "editProfile[b_year]" || form[key].name == "editProfile[d_year]" || form[key].name == "editUnion[year]"){
+                } else if(form[key].name == "editProfile[b_year]" || (form[key].name == "editProfile[d_year]" && !_isAlive_() ) || form[key].name == "editUnion[year]"){
+
                     if( form[key].value.length != 0 && (form[key].value < 1000 || form[key].value > 2050) ){
                         return { success: false, name: form[key].name};
                     }
                 }
             }
             return { success: true };
+            function _isAlive_(){
+                for(var key in form){
+                    if(!form.hasOwnProperty(key)) continue;
+                    if(form[key].name == "editProfile[living]" && form[key].value == 1){
+                        return true;
+                    }
+                }
+                return false;
+            }
         },
         removeValid: function(){
             var parent;

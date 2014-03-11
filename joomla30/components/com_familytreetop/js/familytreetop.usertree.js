@@ -54,6 +54,7 @@ $FamilyTreeTop.create("usertree", function($){
 
     $this.update = function(response){
         cache = {};
+        _clearData_(response);
         _each_(response, function(key, item){
             switch(key){
                 case "chi":
@@ -91,6 +92,29 @@ $FamilyTreeTop.create("usertree", function($){
         });
         $this.call();
         return true;
+        function _clearData_(r){
+            _each_(r, function(key, item){
+                switch(key){
+                    case "ind":
+                        var id = __getId__(item);
+                        __clearEve__(id);
+                        break;
+                }
+            });
+            return true;
+            function __getId__(item){
+                for(var key in item) return key;
+            }
+            function __clearEve__(id){
+                delete data.eve.gedcom_id[id];
+                for(var key in data.eve.all){
+                    if(!data.eve.all.hasOwnProperty(key)) continue;
+                    if(data.eve.all[key].gedcom_id == id){
+                        delete data.eve.all[key];
+                    }
+                }
+            }
+        }
         function _setData_(key, item){
             var parts, element;
             parts = __getParts__(key);
@@ -103,10 +127,12 @@ $FamilyTreeTop.create("usertree", function($){
                     data[parts[0]][parts[1]][k].push(i[0]);
                 });
             } else {
-                if(parts.length == 2){
-                    jQuery.extend(true, data[parts[0]][parts[1]], element);
-                } else {
-                    jQuery.extend(true, data[parts[0]], element);
+                if(item.length != 0){
+                    if(parts.length == 2){
+                        jQuery.extend(true, data[parts[0]][parts[1]], element);
+                    } else {
+                        jQuery.extend(true, data[parts[0]], element);
+                    }
                 }
             }
             return true;
