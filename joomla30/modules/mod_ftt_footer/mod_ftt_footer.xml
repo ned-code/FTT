@@ -20,8 +20,4 @@
 		<filename>index.html</filename>		
         <filename>mod_ftt_footer.xml</filename>
 	</files>
-	<languages>
-		<language tag="en-GB">en-GB.mod_ftt_footer.ini</language>
-		<language tag="en-GB">en-GB.mod_ftt_footer.sys.ini</language>
-	</languages>
 </extension>

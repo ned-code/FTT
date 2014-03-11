@@ -3,6 +3,9 @@ defined('_JEXEC') or die;
 
 class FamilyTreeTopLanguagesHelper {
     public static function init($extension = 'com_familytreetop'){
+        $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
+        $template = $settings->_template->value;
+
         $user = FamilyTreeTopUserHelper::getInstance()->get();
         $lang = JFactory::getLanguage();
 
@@ -10,7 +13,14 @@ class FamilyTreeTopLanguagesHelper {
         $base_dir = JPATH_SITE;
         $language_tag = $user->language;
         $reload = true;
-        $lang->load($extension, $base_dir, $language_tag, $reload);
+
+        if($template == 'familytreetop') {
+            $lang->setLanguage($user->language);
+            $lang->load($extension, $base_dir, $language_tag, $reload);
+        } else {
+            $lang->setLanguage('en-GB');
+            $lang->load($extension, $base_dir, 'en-GB', $reload);
+        }
     }
 
     public static function get(){

@@ -29,7 +29,7 @@ $navbar_name = ($template == "familytreetop")?"Family TreeTop":"MyNativeRoots";
                     <a href="#" class="dropdown-toggle" style="color: white;text-shadow: none;" data-toggle="dropdown"><?=$ind->name();?> <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li><a  familytreetop="profile" href="#"><?=JText::_('MOD_FTT_NAVBAR_PROFILE_PROFILE');?></a></li>
-                        <li><a  familytreetop="languages" href="#"><?=JText::_('MOD_FTT_NAVBAR_PROFILE_LANGUAGES');?></a></li>
+                        <?php if($template == "familytreetop"): ?><li><a  familytreetop="languages" href="#"><?=JText::_('MOD_FTT_NAVBAR_PROFILE_LANGUAGES');?></a></li><?php endif; ?>
                         <li><a  familytreetop="facebook" href="#"><?=JText::_('MOD_FTT_NAVBAR_PROFILE_REDIRECT_TO_FACEBOOK');?></a></li>
                         <li><a  familytreetop="familytreetop" href="#"><?=JText::_('MOD_FTT_NAVBAR_PROFILE_REDIRECT_TO_FAMILYTREETOP');?></a></li>
                         <li class="divider"></li>
