@@ -10,8 +10,10 @@ $FamilyTreeTop.create("friendselector", function($){
         $fn;
 
     $fn = {
-        getMessage: function(gedcom_id){
-            var text = $($box).find('[familytreetop="description"]').text();
+        getMessage: function(gedcom_id, text){
+            if("undefined"===typeof(text)){
+                text = $($box).find('[familytreetop="description"]').text();
+            }
             var owner = $this.mod('usertree').user($this.mod('usertree').usermap().gedcom_id);
             var user = $this.mod('usertree').user(gedcom_id);
             text = text.replace('%NAME%', owner.shortname());
@@ -113,10 +115,55 @@ $FamilyTreeTop.create("friendselector", function($){
                 }
             });
             $(box).find('button[familytreetop="send"]').click(function(){
-                $fn.send(gedcom_id, facebook_id);
+                var isSendNotification = $(box).find('li[familytreetop="send_notification"] input').is(':checked');
+                var isSendEmail = $(box).find('li[familytreetop="send_email"] input').is(":checked");
+                var token = $fn.getInviteToken();
+                if(isSendEmail){
+                    var text = $(box).find('[familytreetop="text"]').text();
+                    if(text.length > 0){
+                        var email = $(box).find('[familytreetop="email"] input').val();
+                        if(validateEmail(email)){
+                            $this.ajax('invite.sendEmail', {
+                                gedcom_id : gedcom_id,
+                                facebook_id : facebook_id,
+                                email : email,
+                                message : text,
+                                token : token
+                            }, function(response){
+                                $(box).remove();
+                                if(isSendNotification){
+                                    $fn.send(gedcom_id, facebook_id, token);
+                                }
+                            })
+                        } else {
+                            var alert = $this.error({title: "Invalid Email"});
+                        }
+                    } else {
+                        $this.warning({title: "Loading..."});
+                    }
+                } else {
+                    $fn.send(gedcom_id, facebook_id, token);
+                }
             });
             $(box).find('button[familytreetop="cancel"]').click(function(){
                 $(box).remove();
+            });
+            $(box).find('select[name="languages"]').change(function(){
+                var user = $this.mod('usertree').user(gedcom_id);
+                var text = $(box).find('[familytreetop="text"]');
+                var spinner = $fn.spinner(text);
+                $(text).text('');
+                $(text).append(spinner.el);
+                $this.ajax('invite.getInviteText', {
+                    relation_id: user.relationId,
+                    gender:user.gender,
+                    tag: $(this).find('option:selected').val()
+                }, function(response){
+                    $(spinner.el).remove();
+                    if(response.success){
+                        $(text).text($fn.getMessage(gedcom_id, response.message));
+                    }
+                });
             });
             return true;
             function setLeft(){
@@ -134,10 +181,36 @@ $FamilyTreeTop.create("friendselector", function($){
                     $(box).find('[familytreetop="text"]').text(message);
                 });
             }
+            function validateEmail(email) {
+                var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                return re.test(email);
+            }
         },
-        send: function(gedcom_id, facebook_id){
-            var message = $fn.getMessage(gedcom_id),
-                token = $fn.getInviteToken();
+        spinner:function(target){
+            var spinner = new Spinner({
+                lines: 13, // The number of lines to draw
+                length: 20, // The length of each line
+                width: 10, // The line thickness
+                radius: 30, // The radius of the inner circle
+                corners: 1, // Corner roundness (0..1)
+                rotate: 8, // The rotation offset
+                direction: 1, // 1: clockwise, -1: counterclockwise
+                color: '#000', // #rgb or #rrggbb or array of colors
+                speed: 1.4, // Rounds per second
+                trail: 60, // Afterglow percentage
+                shadow: false, // Whether to render a shadow
+                hwaccel: false, // Whether to use hardware acceleration
+                className: 'spinner', // The CSS class to assign to the spinner
+                zIndex: 2e9, // The z-index (defaults to 2000000000)
+                top: 'auto', // Top position relative to parent in px
+                left:'auto' // Left position relative to parent in px
+            }).spin();
+            var width = $(target).width();
+            $(spinner.el).css('top', '50px').css('left', Math.ceil(width/2)+'px');
+            return spinner;
+        },
+        send: function(gedcom_id, facebook_id, token){
+            var message = $fn.getMessage(gedcom_id);
             FB.ui({
                 to: facebook_id,
                 method: 'apprequests',

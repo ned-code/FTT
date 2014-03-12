@@ -29,6 +29,17 @@ class FamilytreetopControllerInvite extends FamilytreetopController
         return array('success' => true);
     }
 
+    protected function _getRelationName_($id,$gender){
+        $names = GedcomHelper::getInstance()->relations->getNames();
+        if($id == 2){
+            return ($gender)?"SPOUSE_MALE":"SPOUSE_FEMALE";
+        } else if($id == 9){
+            return ($gender)?"COUSIN_MALE":"COUSIN_FEMALE";
+        } else {
+            return $names[$id];
+        }
+    }
+
     public function addToTree(){
         $invite = FamilyTreeTopUserHelper::getInstance()->isUserInInvitationsList();
         $user = FamilyTreeTopUserHelper::getInstance()->get();
@@ -123,6 +134,73 @@ class FamilytreetopControllerInvite extends FamilytreetopController
         } else {
             echo json_encode(array('success' => false));
         }
+        exit;
+    }
+
+    public function getInviteText(){
+        $app = JFactory::getApplication();
+        $lang = JFactory::getLanguage();
+
+        $default_tag = FamilyTreeTopLanguagesHelper::getDefaultTag();
+
+        $tag = $app->input->get('tag', $default_tag);
+        $relation_id = $app->input->get('relation_id', false);
+        $gender = $app->input->get('gender', false);
+
+        $rel_name = false;
+        if($relation_id&&$gender){
+            $rel_name = $this->_getRelationName_($relation_id, $gender);
+        }
+
+        $lang->setLanguage($tag);
+        $lang->load('tpl_familytreetop', JPATH_SITE, $tag, true);
+        $message = JText::_('TPL_FAMILYTREETOP_TDFRIENDSELECTOR_MESSAGE_DESCRIPTION');
+
+        if($rel_name){
+            $name = JText::_('TPL_FAMILYTREETOP_' . $rel_name['name']);
+            $message = str_replace("%RELATION%",  $name, $message);
+        }
+
+        echo json_encode(array('success' => true, 'tag' => $tag, 'message' => $message));
+        exit;
+    }
+
+    public function sendEmail(){
+        $app = JFactory::getApplication();
+
+        $gedcom_id = $app->input->get('gedcom_id', false);
+        $facebook_id = $app->input->get('facebook_id', false);
+        $email = (isset($_POST['email']))?$_POST['email']:false;
+        $message = (isset($_POST['message']))?htmlspecialchars($_POST['message']):false;
+        $token = $app->input->get('token', false);
+
+        $config	= JFactory::getConfig();
+        $sender = array(
+            $config->get( 'mailfrom' ),
+            $config->get( 'fromname' )
+        );
+
+        $mailer = JFactory::getMailer();
+        $mailer->setSender($sender);
+        $mailer->addRecipient($email);
+        $mailer->setSubject('Invite Message');
+        $mailer->isHTML(true);
+
+        $body = "<div>".$message."</div>";
+        $body .= "<div>".JUri::base()."index.php?token=".$token."</div>";
+
+        $mailer->setBody($body);
+
+        $success = $mailer->Send();
+
+        echo json_encode(array(
+            'success' => $success,
+            'gedcom_id' => $gedcom_id,
+            'facebook_id' => $facebook_id,
+            'email' => $email,
+            'message' => $message,
+            'token' => $token
+        ));
         exit;
     }
 }

@@ -438,6 +438,10 @@ class FamilyTreeTopGedcomRelationsManager {
         return false;
     }
 
+    public function getNames(){
+        return $this->list['_NAMES'];
+    }
+
     public function getList(){
         if($members = $this->isRelationsNotExist()){
             $unknowns = array();

@@ -2,6 +2,8 @@
 $app = & JFactory::getApplication();
 $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
 $template = $settings->_template->value;
+$languages = FamilyTreeTopLanguagesHelper::get(false);
+$language_tag = FamilyTreeTopLanguagesHelper::getDefaultTag();
 ?>
 <div id="familytreetop-root" style="display:none;">
 
@@ -789,8 +791,10 @@ $template = $settings->_template->value;
                 <div style="position: relative;height: 35px;">
                     <div style="position: absolute;top: 5px;left: 5px;color: white;">To: <span familytreetop="message_name"></span></div>
                     <div style="position: absolute;top: 2px;right: 5px;">
-                        <select>
-                            <option>English</option>
+                        <select name="languages" familytreetop="<?=$language_tag;?>">
+                            <?php foreach($languages as $key => $lang): ?>
+                                <option <?=($language_tag==$lang['lang_code'])?'selected="selected"':'';?> value="<?=$lang['lang_code'];?>"><?=$lang['title']?></option>
+                            <?php endforeach; ?>
                         </select>
                     </div>
                 </div>
@@ -799,8 +803,8 @@ $template = $settings->_template->value;
                     <div style="padding: 10px;">
                         <table>
                             <tr>
-                                <td><div familytreetop="avatar"></div></td>
-                                <td style="vertical-align: top;"><p familytreetop="text" style="margin:10px;"></p></td>
+                                <td style="vertical-align: top;"><div familytreetop="avatar" style="width:80px;"></div></td>
+                                <td style="vertical-align: top;"><p familytreetop="text" style="margin:10px;min-height:100px;"></p></td>
                             </tr>
                         </table>
                     </div>

@@ -2,7 +2,7 @@
 defined('_JEXEC') or die;
 
 class FamilyTreeTopLanguagesHelper {
-    public static function init($extension = 'com_familytreetop'){
+    public static function init($extension = 'tpl_familytreetop'){
         $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
         $template = $settings->_template->value;
 
@@ -23,11 +23,12 @@ class FamilyTreeTopLanguagesHelper {
         }
     }
 
-    public static function get(){
+    public static function get($json = true){
         $db = JFactory::getDbo();
         $sql = "SELECT lang_code, title FROM #__languages";
         $db->setQuery($sql);
-        return json_encode($db->loadAssocList());
+        $result = $db->loadAssocList();
+        return ($json)?json_encode($result):$result;
     }
 
     public static function getTag($tag){
@@ -36,5 +37,10 @@ class FamilyTreeTopLanguagesHelper {
             return implode('-', $p);
         }
         return $tag;
+    }
+
+    public function getDefaultTag(){
+        $lang = JFactory::getLanguage();
+        return $lang->getTag();
     }
 }
