@@ -155,3 +155,42 @@ body > #wrap {
     border-color: #000000 transparent transparent transparent;
     -webkit-transform:rotate(360deg);
 }
+.familytreetop-invite-options-ex {
+    width: 600px;
+    padding: 10px;
+    position: absolute;
+    top: 20px;
+    left: 0;
+    background: rgba(82, 82, 82, 0.7);
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    border-radius: 8px;
+}
+.familytreetop-invite-options-ex .ex-cont {
+    background: white;
+}
+.familytreetop-invite-options-ex .ex-header {
+    background: #e5e9f4;
+    padding: 8px;
+}
+.familytreetop-invite-options-ex .ex-body {
+    padding: 8px;
+}
+.familytreetop-invite-options-ex .ex-footer {
+    background: #e5e9f4;
+    padding : 8px;
+    height: 30px;
+}
+.familytreetop-invite-options-ex .ex-button {
+    float: right;
+    background: #3B5998;
+    color: #FFF;
+    padding: 4px 20px 5px 20px;
+    border: 1px solid;
+    border-color: #D9DFEA #0E1F5B #0E1F5B #D9DFEA;
+    margin-right: 3px;
+}
+.familytreetop-invite-options-ex .ex-button.white {
+    background: white;
+    color: #000;
+}
