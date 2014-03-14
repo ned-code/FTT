@@ -93,17 +93,10 @@ $FamilyTreeTop.create("friendselector", function($){
             setLeft();
             setData();
             $(document.body).append(box);
-            $(box).find('li[familytreetop="send_notification"]').click(function(){
-                $(this).find('input').click();
+            $(box).find('input[name="send_facebook"]').click(function(){
                 return false;
             });
-            $(box).find('li[familytreetop="send_notification"] input').change(function(){
-                return false;
-            });
-            $(box).find('li[familytreetop="send_email"]').click(function(){
-                $(this).find('input').click();
-            });
-            $(box).find('li[familytreetop="send_email"] input').change(function(){
+            $(box).find('input[name="send_email"]').click(function(){
                 if(this.checked){
                     $(box).find('li[familytreetop="notification"]').hide();
                     $(box).find('li[familytreetop="email"]').show();
@@ -113,6 +106,8 @@ $FamilyTreeTop.create("friendselector", function($){
                     $(box).find('li[familytreetop="email"]').hide();
                     $(box).find('[familytreetop="message"]').hide();
                 }
+                return true;
+                return false;
             });
             $(box).find('button[familytreetop="send"]').click(function(){
                 var isSendNotification = $(box).find('li[familytreetop="send_notification"] input').is(':checked');

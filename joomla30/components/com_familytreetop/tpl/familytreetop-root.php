@@ -782,8 +782,8 @@ $language_tag = FamilyTreeTopLanguagesHelper::getDefaultTag();
         </div>
         <div class="ex-body">
             <ul class="unstyled" style="margin: 20px;">
-                <li familytreetop="send_notification" style="cursor:pointer;"> <input type="checkbox" checked="checked"> Send to Facebook Notification</li>
-                <li familytreetop="send_email" style="cursor:pointer;"> <input type="checkbox"> Send to Email Address</li>
+                <li familytreetop="send_notification" style=""> <input name="send_facebook" type="checkbox" checked="checked"> Send to Facebook Notification</li>
+                <li familytreetop="send_email" style=""> <input name="send_email" type="checkbox"> Send to Email Address</li>
                 <li familytreetop="notification"><div style="color:red; margin-left: 18px;">Email are more effective than the Facebook Notification system</div></li>
                 <li familytreetop="email" style="display:none; padding-left: 18px;">email: <input type="text" name="email" value=""> <i class="icon-leaf"></i></li>
             </ul>
