@@ -39,7 +39,7 @@ $navbar_name = ($template == "familytreetop")?"Family TreeTop":"MyNativeRoots";
             </ul>
             <?php endif; ?>
             <?php if($template == "familytreetop"): ?>
-                <a style="color: white;text-shadow: none;" class="brand" familytreetop-link="familytreetop" href="<?=JRoute::_("index.php?option=com_familytreetop&view=index", false); ?>"><i style="background: url(templates/familytreetop/img/glyphicons_317_tree_deciduous_green.png) no-repeat; padding-left: 25px;"><?=$navbar_name;?></i></a>
+                <a style="color: white;text-shadow: none;" class="brand" familytreetop-link="familytreetop" href="<?=JRoute::_("index.php?option=com_familytreetop&view=index", false); ?>"><i style="background: url(templates/familytreetop/img/glyphicons_317_tree_deciduous_white.png) no-repeat; padding-left: 25px;"><?=$navbar_name;?></i></a>
             <?php else: ?>
                 <a style="color: white;text-shadow: none;" class="brand" familytreetop-link="familytreetop" href="<?=JRoute::_("index.php?option=com_familytreetop&view=index", false); ?>"><i class="icon-leaf"></i> <?=$navbar_name;?></a>
             <?php endif ?>
