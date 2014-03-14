@@ -141,8 +141,8 @@ RewriteRule .* index.php [L]
 # Allow access from all domains for webfonts.
 # Alternatively you could only whitelist your
 # subdomains like "subdomain.example.com".
-<IfModule mod_headers.c>
-  <FilesMatch ".(eot|ttf|otf|woff)">
-          Header set Access-Control-Allow-Origin "*"
-  </FilesMatch>
-</IfModule>
+<FilesMatch ".(ttf|otf|eot|woff)$">
+  <IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+  </IfModule>
+</FilesMatch>
