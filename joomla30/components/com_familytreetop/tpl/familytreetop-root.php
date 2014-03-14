@@ -782,14 +782,14 @@ $language_tag = FamilyTreeTopLanguagesHelper::getDefaultTag();
         </div>
         <div class="ex-body">
             <ul class="unstyled" style="margin: 20px;">
-                <li familytreetop="send_notification" style=""> <input name="send_facebook" type="checkbox" checked="checked"> Send to Facebook Notification</li>
-                <li familytreetop="send_email" style=""> <input name="send_email" type="checkbox"> Send to Email Address</li>
-                <li familytreetop="notification"><div style="color:red; margin-left: 18px;">Email are more effective than the Facebook Notification system</div></li>
-                <li familytreetop="email" style="display:none; padding-left: 18px;">email: <input type="text" name="email" value=""> <i class="icon-leaf"></i></li>
+                <li familytreetop="send_notification" style=""> <input name="send_facebook" type="checkbox" checked="checked"> <?=JText::_('TPL_FAMILYTREETOP_TDFRIENDSELECTOR_SEND_TO_FACEBOOK');?></li>
+                <li familytreetop="send_email" style=""> <input name="send_email" type="checkbox"> <?=JText::_('TPL_FAMILYTREETOP_TDFRIENDSELECTOR_SEND_TO_EMAIL');?></li>
+                <li familytreetop="notification"><div style="color:red; margin-left: 18px;"><?=JText::_('TPL_FAMILYTREETOP_TDFRIENDSELECTOR_EMAIL_NOTIFCATION');?></div></li>
+                <li familytreetop="email" style="display:none; padding-left: 18px;"><?=JText::_('TPL_FAMILYTREETOP_TDFRIENDSELECTOR_EMAIL');?>: <input type="text" name="email" value=""> <i class="icon-leaf"></i></li>
             </ul>
             <div familytreetop="message" style="display:none; margin: 20px; background: #4d67a2;border: 2px solid #4d67a2;">
                 <div style="position: relative;height: 35px;">
-                    <div style="position: absolute;top: 5px;left: 5px;color: white;">To: <span familytreetop="message_name"></span></div>
+                    <div style="position: absolute;top: 5px;left: 5px;color: white;"><?=JText::_('TPL_FAMILYTREETOP_TDFRIENDSELECTOR_TO');?>: <span familytreetop="message_name"></span></div>
                     <div style="position: absolute;top: 2px;right: 5px;">
                         <select name="languages" familytreetop="<?=$language_tag;?>">
                             <?php foreach($languages as $key => $lang): ?>
@@ -799,7 +799,7 @@ $language_tag = FamilyTreeTopLanguagesHelper::getDefaultTag();
                     </div>
                 </div>
                 <div style="background: white;">
-                    <div style="padding-left: 10px;padding-top: 5px;">Preview:</div>
+                    <div style="padding-left: 10px;padding-top: 5px;"><?=JText::_('TPL_FAMILYTREETOP_TDFRIENDSELECTOR_PREVIEW');?>:</div>
                     <div style="padding: 10px;">
                         <table>
                             <tr>
@@ -813,8 +813,8 @@ $language_tag = FamilyTreeTopLanguagesHelper::getDefaultTag();
         </div>
         <div class="ex-footer">
             <div>
-                <button familytreetop="send" class="ex-button">Send Request</button>
-                <button familytreetop="cancel" class="ex-button white">Cancel</button>
+                <button familytreetop="send" class="ex-button"><?=JText::_('TPL_FAMILYTREETOP_TDFRIENDSELECTOR_BUTTON_SEND');?></button>
+                <button familytreetop="cancel" class="ex-button white"><?=JText::_('TPL_FAMILYTREETOP_TDFRIENDSELECTOR_BUTTON_CANCEL');?></button>
             </div>
         </div>
     </div>
