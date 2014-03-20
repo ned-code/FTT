@@ -86,7 +86,7 @@ $FamilyTreeTop.create("editor", function($){
                 var _buttons_ = {
                     set:$(li).find('.set-avatar'),
                     unset:$(li).find('.unset-avatar'),
-                    delete:$(li).find('.delete'),
+                    delete:$(li).find('.delete')
                 }
                 if(item.role == "AVAT"){
                     avatarLi = li;
@@ -859,9 +859,12 @@ $FamilyTreeTop.create("editor", function($){
         },
         progressbarOn:function(m){
             $(m).find('[familytreetop="circle-progressbar"]').css('visibility', 'visible');
+            $($spinner.el).css('position', 'absolute').css('top', '50%').css('left', '50%');
+            $(m).find('#formEditProfile').parent().append($spinner.el);
         },
         progressbarOff:function(m){
             $(m).find('[familytreetop="circle-progressbar"]').css('visibility', 'hidden');
+            $($spinner.el).remove();
         },
         submit:function(cl, ind, task){
             var tasks = [
