@@ -822,6 +822,7 @@ $FamilyTreeTop.create("editor", function($){
             }
         },
         validate: function(args){
+            console.log(args);
             var form = args['form0'];
             for(var key in form){
                 if(!form.hasOwnProperty(key)) continue;
@@ -831,7 +832,7 @@ $FamilyTreeTop.create("editor", function($){
                     }
                 } else if(form[key].name == "editProfile[b_year]" || (form[key].name == "editProfile[d_year]" && !_isAlive_() ) || form[key].name == "editUnion[year]"){
 
-                    if( form[key].value.length != 0 && (form[key].value < 1000 || form[key].value > 2050) ){
+                    if( form[key].value.length != 0 && form[key].value != "" && (form[key].value < 1000 || form[key].value > 2050) ){
                         return { success: false, name: form[key].name};
                     }
                 }
