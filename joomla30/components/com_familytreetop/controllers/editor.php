@@ -534,7 +534,7 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         $this->setEvent($ind, 'birth', $form);
         if((int)$form['living']){
             if($event = $ind->death()){
-                $ind->delEvent($event);
+                //$ind->delEvent($event);
                 $event->remove();
             }
         } else {

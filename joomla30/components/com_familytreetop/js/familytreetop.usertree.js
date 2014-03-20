@@ -372,7 +372,7 @@ $FamilyTreeTop.create("usertree", function($){
             },
             isDeceased : function(){
                 var $self = this, date = new Date(), d = $self.death(), b = $self.birth(), end = 0;
-                if(b && b.date && b.date.start_year != null){
+                if(b && b.date && b.date.start_year != null && b.date.start_year != 0){
                     end = (date.getFullYear() - b.date.start_year);
                     if(end > 150) return true;
                 }

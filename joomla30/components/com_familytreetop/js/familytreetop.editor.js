@@ -507,7 +507,7 @@ $FamilyTreeTop.create("editor", function($){
                                 if(event){
                                     switch(n[1]){
                                         case "year":
-                                            if(event.date && event.date.start_year != null){
+                                            if(event.date && event.date.start_year != null && event.date.start_year != 0){
                                                 $(el).val(event.date.start_year);
                                             }
                                             break;
@@ -830,7 +830,7 @@ $FamilyTreeTop.create("editor", function($){
                         return { success: false, name: form[key].name};
                     }
                 } else if(form[key].name == "editProfile[b_year]" || (form[key].name == "editProfile[d_year]" && !_isAlive_() ) || form[key].name == "editUnion[year]"){
-                    if(form[key].value.length == 0 || form[key].value == "" || form[key].value < 1000 || form[key].value > 2050){
+                    if(form[key].value != 0 && (form[key].value < 1000 || form[key].value > 2050)){
                         return { success: false, name: form[key].name};
                     }
                 }
