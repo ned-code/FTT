@@ -625,6 +625,58 @@ $FamilyTreeTop.create("usertree", function($){
         }
     }
 
+    $this.getOwnerRelationName = function(user){
+        var owner = $this.usermap();
+        var rel = $this.getRelation(user.gedcom_id);
+        var id = $this.getOwnerRelation(user);
+        return $this.getRelationName({
+            by_spouse: rel.by_spouse,
+            change_time: rel.change_time,
+            gedcom_id: owner.gedcom_id,
+            id: rel.id,
+            in_law: rel.in_law,
+            json: rel.json,
+            relation_id: id,
+            target_id: user.gedcom_id
+        }, false, user);
+    }
+
+    $this.getOwnerRelation = function(user){
+        var G = user.gender;
+        switch(user.relationId){
+            case 1: return 1; break;
+            case 2: return 2; break;
+            case 3: return (G)?6:5; break;
+            case 4: return (G)?6:5; break;
+            case 5: return (G)?4:3; break;
+            case 6: return (G)?4:3; break;
+            case 7: return (G)?8:7; break;
+            case 8: return (G)?8:7; break;
+            case 9: return 9; break;
+            case 10: return (G)?13:12; break;
+            case 11: return (G)?13:12 break;
+            case 12: return (G)?11:10; break;
+            case 13: return (G)?11:10; break;
+            case 103: return (G)?106:105; break;
+            case 104: return (G)?106:105; break;
+            case 105: return (G)?104:103; break;
+            case 106: return (G)?104:103; break;
+            case 110: return (G)?113:112; break;
+            case 111: return (G)?113:112; break;
+            case 112: return (G)?111:110; break;
+            case 113: return (G)?111:110; break;
+            case 203: return (G)?206:205; break;
+            case 204: return (G)?206:205; break;
+            case 205: return (G)?204:203; break;
+            case 206: return (G)?204:203; break;
+            case 210: return (G)?213:212; break;
+            case 211: return (G)?213:212; break;
+            case 212: return (G)?211:210; break;
+            case 213: return (G)?211:210; break;
+            case 1000: return 1000; break;
+        }
+    }
+
     $this.getRelation = function(gedcom_id){
         if(data.rel == null) return false;
         if("undefined" !== typeof(data.rel[gedcom_id])){

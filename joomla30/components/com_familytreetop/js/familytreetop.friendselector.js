@@ -17,7 +17,7 @@ $FamilyTreeTop.create("friendselector", function($){
             var owner = $this.mod('usertree').user($this.mod('usertree').usermap().gedcom_id);
             var user = $this.mod('usertree').user(gedcom_id);
             text = text.replace('%NAME%', owner.shortname());
-            text = text.replace('%RELATION%', user.relation);
+            text = text.replace('%RELATION%', $this.mod('usertree').getOwnerRelationName(user));
             return text;
         },
         getTitle: function(){
