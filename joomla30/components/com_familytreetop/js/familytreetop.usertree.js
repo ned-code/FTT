@@ -642,8 +642,8 @@ $FamilyTreeTop.create("usertree", function($){
     }
 
     $this.getOwnerRelation = function(user){
-        var G = user.gender;
-        switch(user.relationId){
+        var G = $this.parseBoolean(user.gender);
+        switch($this.parseNum(user.relationId)){
             case 1: return 1; break;
             case 2: return 2; break;
             case 3: return (G)?6:5; break;
@@ -654,7 +654,7 @@ $FamilyTreeTop.create("usertree", function($){
             case 8: return (G)?8:7; break;
             case 9: return 9; break;
             case 10: return (G)?13:12; break;
-            case 11: return (G)?13:12 break;
+            case 11: return (G)?13:12; break;
             case 12: return (G)?11:10; break;
             case 13: return (G)?11:10; break;
             case 103: return (G)?106:105; break;
