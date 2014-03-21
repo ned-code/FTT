@@ -46,24 +46,29 @@ class FamilytreetopControllerInvite extends FamilytreetopController
             $html .= "<div style='border: 1px solid #3b5998;'>";
                 $html .= "<div style='background: #69a74e;height: 30px;line-height: 30px;padding-left: 20px;color: white;'>".$data["TITLE"]."</div>";
                 $html .= "<div style='background: #ffffff;padding: 10px;'>";
+                    $html .= "<div>".$data['HEADER'].",</div>";
                     $html .= "<table style='width:100%;'>";
                         $html .= "<tr>";
-                            $html .= "<td>";
-                                $html .= "<div>";
-                                    $html .= "<div>".$data['HEADER'].",</div>";
-                                    $html .= "<div>".$data["MESSAGE"]."</div>";
-                                $html .= "</div>";
-                            $html .= "</td>";
                             $html .= "<td style='width:100px;'><img src='".$data["IMG_SRC"]."' style='padding: 4px;background-color: #fff;border: 1px solid #ccc;border: 1px solid rgba(0, 0, 0, 0.2);-webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);-moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);' /></td>";
+                            $html .= "<td>";
+                                $html .= "<div>".$data["MESSAGE"]."</div>";
+                            $html .= "</td>";
                         $html .= "</tr>";
                     $html .= "</table>";
                     $html .= "<div style='text-align: center; margin: 10px;'><a href='".$data["A_SRC"]."' style='background: #fff9d7;border: 1px solid #e2c822;padding: 10px;cursor: pointer;'>".$data["BUTTON"]."</a></div>";
                 $html .= "</div>";
             $html .= "</div>";
+            $html .= "<div>";
+                $html .= "<p style='color:gray;'>";
+                    $html .= $data["ALTERNATIVE_TEXT"] . ":";
+                    $html .= $data["ALTERNATIVE_URL"];
+                $html .= "</p>";
+            $html .= "</div>";
+            $html .= "<hr style='width:100%;'>";
             $html .= "<div style='padding:10px;'>";
-                $html .= "<div>".$data["SENT_BY"].": ".$data["SENTER"]." (<a href='".$data["FACEBOOK_URL"]."'>".$data["VIEW_FACEBOOK_PROFILE"]."</a>)</div>";
-                $html .= "<div>".$data["SENT_TO"].": ".$data["RECIEVER"]."</div>";
-                $html .= "<div>".$data["SITE"]." ".$data["FOOTER_MESSAGE"].".</div>";
+                $html .= "<div><span style='color:gray;'>".$data["SENT_BY"]."</span>: ".$data["SENTER"]." (<a href='".$data["FACEBOOK_URL"]."'>".$data["VIEW_FACEBOOK_PROFILE"]."</a>)</div>";
+                $html .= "<div><span style='color:gray;'".$data["SENT_TO"].": ".$data["RECIEVER"]."</div>";
+                $html .= "<div>".$data["SITE"]." <span style='color:gray;'>".$data["FOOTER_MESSAGE"]."</span>.</div>";
             $html .= "</div>";
         $html .= "</div>";
         return $html;
@@ -227,13 +232,17 @@ class FamilytreetopControllerInvite extends FamilytreetopController
         $mailer->setSubject($owner->name . " " . JText::_("TPL_FAMILYTREETOP_EMAIL_TITLE"));
         $mailer->isHTML(true);
 
+        $invite_url = JUri::base()."index.php?token=".$token;
+
         $body = $this->_getBody_(array(
-            'TITLE' => $owner->name . " " . JText::_("TPL_FAMILYTREETOP_EMAIL_TITLE"),
+            'TITLE' => $this->_getServerName_(),
             'HEADER' => JText::_('TPL_FAMILYTREETOP_EMAIL_DEAR') . " " . $user->name(),
             'MESSAGE' => $message,
-            'IMG_SRC' => 'https://graph.facebook.com/'.$facebook_id.'/picture',
-            'A_SRC' => JUri::base()."index.php?token=".$token,
+            'IMG_SRC' => 'https://graph.facebook.com/'.$owner->facebook_id.'/picture',
+            'A_SRC' => $invite_url,
             'BUTTON' => JText::_("TPL_FAMILYTREETOP_EMAIL_BUTTON"),
+            'ALTERNATIVE_TEXT' => JText::_("TPL_FAMILYTREETOP_EMAIL_ALTERNATIVE_TEXT"),
+            'ALTERNATIVE_URL' => htmlspecialchars($invite_url),
             'SENT_BY' => JText::_("TPL_FAMILYTREETOP_EMAIL_SENT_BY"),
             'SENTER' => $owner->email,
             'FACEBOOK_URL' => "https://facebook.com/" . $facebook_id,
