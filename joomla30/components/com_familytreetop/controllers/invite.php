@@ -42,7 +42,7 @@ class FamilytreetopControllerInvite extends FamilytreetopController
 
     private function _getBody_($data){
         $html = "";
-        $html .= "<div style='background: #f7f7f7;width: 600px;padding: 20px;'>";
+        $html .= "<div style='background: #f7f7f7;width: 600px;padding: 20px; font: 12px Colibri;'>";
             $html .= "<div style='border: 1px solid #3b5998;'>";
                 $html .= "<div style='background: #69a74e;height: 30px;line-height: 30px;padding-left: 20px;color: white;'>".$data["TITLE"]."</div>";
                 $html .= "<div style='background: #ffffff;padding: 10px;'>";
