@@ -122,7 +122,7 @@ $FamilyTreeTop.create("families", function($){
         },
         createArrow: function(type, args){
             var left = Math.ceil(((type  == 'up')?150:100)/2) - 12;
-            return $('<div style="position:absolute;left:'+left+'px;top: -30px; cursor:pointer;background:white;"><a style="text-decoration: none;" onclick="return false;"><i class="icon-2x icon-circle-arrow-'+type+'"></i></a></div>')
+            return $('<div style="position:absolute;left:'+left+'px;top: -30px; cursor:pointer;background:white;"><a style="text-decoration: none;" onclick="return false;"><i class="fa fa-arrow-circle-'+type+' fa-2x"></i></a></div>')
                 .click(function(){
                     $fn.click.call(this, args);
                 });
@@ -131,7 +131,7 @@ $FamilyTreeTop.create("families", function($){
             $this.mod('editmenu').render(object, gedcom_id);
         },
         createFacebookIcon: function(object, ind){
-            $(object).append('<div style="width:24px;height:24px;background:white;clear:both;border-radius:5px;bottom: 5px;position: absolute;right: 5px;"><a style="text-decoration: none;" target="_blank" href="https://www.facebook.com/'+ind.facebook_id+'"><i style="line-height: 25px;" class="icon-facebook-sign icon-2x"></i></a></div>')
+            $(object).append('<div style="width:24px;height:24px;background:white;clear:both;border-radius:5px;bottom: 5px;position: absolute;right: 13px;"><a style="text-decoration: none;" target="_blank" href="https://www.facebook.com/'+ind.facebook_id+'"><i style="line-height: 25px;" class="fa fa-facebook-square fa-2x"></i></a></div>')
         },
         createDeceased: function(object){
             $(object).append('<div class="familytreetop-deceased-triangle"></div>');
@@ -300,8 +300,9 @@ $FamilyTreeTop.create("families", function($){
                 return [rows, limit, width];
             }
             function getMinHeight(){
-                 var height = (getRows()[0] * 170);
-                 return ((settings.editable)?400:280) + height + getRows()[0] * 30;
+                 var rows = getRows();
+                 var height = (rows[0] * 170);
+                 return ((settings.editable)?400:280) + height + rows[0] * 30;
             }
             function getEventTop(obj, top){
                 var h = $(obj).height();
@@ -444,7 +445,7 @@ $FamilyTreeTop.create("families", function($){
             points.forEach(function(e,i){
                 switch(i){
                     case 0:case 1:
-                        var img = $(e.object).find('.icon-circle-arrow-up');
+                        var img = $(e.object).find('.fa-arrow-circle-up');
                         if(img.length == 1){
                             var top = parseInt(e.top);
                             var ident = parseInt(e.left) + 76;

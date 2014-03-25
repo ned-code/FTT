@@ -43,7 +43,7 @@ $FamilyTreeTop.create("editmenu", function($){
         var box, ind, first;
 
         box = $($box).clone().attr('gedcom_id', gedcom_id)
-            .attr('style', 'position: absolute; top: 5px; right:5px;');
+            .attr('style', 'position: absolute; top: 5px; right:15px;');
 
         ind = $this.mod('usertree').user(gedcom_id);
 

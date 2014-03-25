@@ -142,7 +142,7 @@ $language_tag = FamilyTreeTopLanguagesHelper::getDefaultTag();
 
 <div id="editMenu">
     <div class="btn-group dropdown">
-        <button class="btn btn-default btn-sm" data-toggle="dropdown"><i class="fa fa-pencil"></i></button>
+        <button class="btn btn-default btn-xs" data-toggle="dropdown"><i class="fa fa-pencil"></i></button>
         <ul class="dropdown-menu">
             <li familytreetop="edit"><a href="#"><?=JText::_("TPL_FAMILYTREETOP_EDIT_PROFILE");?></a></li>
             <li data-familytreetop-devider="1" class="divider"></li>
@@ -683,7 +683,7 @@ $language_tag = FamilyTreeTopLanguagesHelper::getDefaultTag();
     <div familytreetop="delete" style="display:none;">
         <table cellspacing="10" cellpadding="20" class="table familytreetop-table-not-border" style="width:98%;">
             <tr>
-                <td><i style="color:red;" class="fa fa-warning fa-4"></i></td>
+                <td><i style="color:red;" class="fa fa-warning fa-4x"></i></td>
                 <td><p style="font-weight: bold;"><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_YOU_ABOUT_UNREGISTERED');?>.</p></td>
             </tr>
             <tr>
@@ -763,20 +763,20 @@ $language_tag = FamilyTreeTopLanguagesHelper::getDefaultTag();
     <div class="multiparent-right-box" style="width: 120px;max-height: 250px;/*overflow: hidden;overflow-y: auto;*/"></div>
     <div class="parent-box" style="max-width: 160px;">
         <div familytreetop-avatar-box style="width: 150px;position:relative;">
-            <img class="img-polaroid" data-src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/js/holder.js/150x150">
+            <img class="img-thumbnail" data-src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/js/holder.js/150x150">
         </div>
         <div class="text-center"></div>
         <div class="text-center"></div>
     </div>
     <div class="spouse-box" style="max-width: 102px;">
         <div style="position:relative;">
-            <img class="img-polaroid" data-src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/js/holder.js/100x100">
+            <img class="img-thumbnail" data-src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/js/holder.js/100x100">
         </div>
         <div class="text-center"></div>
     </div>
     <div class="child-box" style="max-width: 110px;">
         <div style="position:relative;">
-            <img class="img-polaroid" data-src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/js/holder.js/100x100">
+            <img class="img-thumbnail" data-src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/js/holder.js/100x100">
         </div>
         <div class="text-center"></div>
         <div class="text-center"></div>

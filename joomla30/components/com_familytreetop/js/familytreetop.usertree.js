@@ -1185,7 +1185,7 @@ $FamilyTreeTop.create("usertree", function($){
             data = [],
             url;
 
-        style = (style)?style:"img-polaroid";
+        style = (style)?style:"img-thumbnail";
         if(el){
             if(el.json != null && el.thumbnail_url == ""){
                 url = el.json.thumbnail.url;
