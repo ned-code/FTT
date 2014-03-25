@@ -44,31 +44,34 @@ class FamilytreetopControllerInvite extends FamilytreetopController
         $html = "";
         $html .= "<div style='background: #f7f7f7;width: 600px;padding: 20px; font: 12px Calibri;'>";
             $html .= "<div style='border: 1px solid #3b5998;'>";
-                $html .= "<div style='background: #69a74e;height: 30px;line-height: 30px;padding-left: 20px;color: white;'>".$data["TITLE"]."</div>";
+                $html .= "<div style='background: #69a74e;height: 30px; line-height: 30px;color:white;'>";
+                    $html .= "<span style='float: left; margin-left: 10px;font-size:14px;'>" . $data["TITLE"]. "</span>";
+                    $html .= "<span style='float: right; margin-right: 10px;'><a style='color:white;' href='" . $data["TITLE_URL"]. "'>".$data['TITLE_URL']."</a></span>";
+                $html .= "</div>";
                 $html .= "<div style='background: #ffffff;padding: 10px;'>";
-                    $html .= "<div>".$data['HEADER'].",</div>";
-                    $html .= "<table style='width:100%;'>";
+                    $html .= "<div style='margin-left:70px;'>".$data['HEADER'].",</div>";
+                    $html .= "<table style='width:100%;margin-top:5px;'>";
                         $html .= "<tr>";
-                            $html .= "<td style='width:100px;'><img src='".$data["IMG_SRC"]."' style='padding: 4px;background-color: #fff;border: 1px solid #ccc;border: 1px solid rgba(0, 0, 0, 0.2);-webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);-moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);' /></td>";
-                            $html .= "<td>";
-                                $html .= "<div>".$data["MESSAGE"]."</div>";
+                            $html .= "<td style='width:60px;'><img src='".$data["IMG_SRC"]."' style='padding: 4px;background-color: #fff;border: 1px solid #ccc;border: 1px solid rgba(0, 0, 0, 0.2);-webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);-moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);' /></td>";
+                            $html .= "<td style='vertical-align: top;'>";
+                                $html .= "<div style='margin-left:3px;'>".$data["MESSAGE"]."</div>";
                             $html .= "</td>";
                         $html .= "</tr>";
                     $html .= "</table>";
-                    $html .= "<div style='text-align: center; margin: 10px;'><a href='".$data["A_SRC"]."' style='background: #fff9d7;border: 1px solid #e2c822;padding: 10px;cursor: pointer;'>".$data["BUTTON"]."</a></div>";
+                    $html .= "<div style='text-align: center; margin: 30px;'><a href='".$data["A_SRC"]."' style='background: #fff9d7;border: 1px solid #e2c822;padding: 10px;cursor: pointer; font-size:12px;'>".$data["BUTTON"]."</a></div>";
                 $html .= "</div>";
             $html .= "</div>";
-            $html .= "<div>";
+            $html .= "<div style='margin-left: 5px;'>";
                 $html .= "<p style='color:gray;'>";
                     $html .= $data["ALTERNATIVE_TEXT"] . ": ";
                     $html .= $data["ALTERNATIVE_URL"];
                 $html .= "</p>";
             $html .= "</div>";
-            $html .= "<hr style='width:100%;'>";
-            $html .= "<div style='padding:10px;'>";
+            $html .= "<hr style='width:100%; margin-left: 5px;'>";
+            $html .= "<div style='margin-left: 5px;;'>";
                 $html .= "<div><span style='color:gray;'>".$data["SENT_BY"]."</span>: ".$data["SENTER"]." (<a href='".$data["FACEBOOK_URL"]."'>".$data["VIEW_FACEBOOK_PROFILE"]."</a>)</div>";
-                $html .= "<div><span style='color:gray;'".$data["SENT_TO"].": ".$data["RECIEVER"]."</div>";
-                $html .= "<div>".$data["SITE"]." <span style='color:gray;'>".$data["FOOTER_MESSAGE"]."</span>.</div>";
+                $html .= "<div><span style='color:gray;'>".$data["SENT_TO"]."</span>: ".$data["RECIEVER"]."</div>";
+                $html .= "<div style='margin-top:10px;'>".$data["SITE"]." <span style='color:gray;'>".$data["FOOTER_MESSAGE"]."</span>.</div>";
             $html .= "</div>";
         $html .= "</div>";
         return $html;
@@ -210,6 +213,7 @@ class FamilytreetopControllerInvite extends FamilytreetopController
 
     public function sendEmail(){
         $app = JFactory::getApplication();
+        $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
 
         $gedcom_id = $app->input->get('gedcom_id', false);
         $facebook_id = $app->input->get('facebook_id', false);
@@ -232,10 +236,11 @@ class FamilytreetopControllerInvite extends FamilytreetopController
         $mailer->setSubject($owner->name . " " . JText::_("TPL_FAMILYTREETOP_EMAIL_TITLE"));
         $mailer->isHTML(true);
 
-        $invite_url = JUri::base()."index.php?token=".$token;
+        $invite_url = "https://www.".$this->_getServerName_()."/index.php?token=".$token;
 
         $body = $this->_getBody_(array(
-            'TITLE' => $this->_getServerName_(),
+            'TITLE' => ($settings->_template=="familytreetop")?"FamilyTreeTop":"MyNativeRoots",
+            'TITLE_URL' => $this->_getServerName_(),
             'HEADER' => JText::_('TPL_FAMILYTREETOP_EMAIL_DEAR') . " " . $user->name(),
             'MESSAGE' => $message,
             'IMG_SRC' => 'https://graph.facebook.com/'.$owner->facebook_id.'/picture',
@@ -245,7 +250,7 @@ class FamilytreetopControllerInvite extends FamilytreetopController
             'ALTERNATIVE_URL' => htmlspecialchars($invite_url),
             'SENT_BY' => JText::_("TPL_FAMILYTREETOP_EMAIL_SENT_BY"),
             'SENTER' => $owner->email,
-            'FACEBOOK_URL' => "https://facebook.com/" . $facebook_id,
+            'FACEBOOK_URL' => "https://facebook.com/" . $owner->facebook_id,
             'VIEW_FACEBOOK_PROFILE' => JText::_("TPL_FAMILYTREETOP_EMAIL_VIEW_FACEBOOK_PROFILE"),
             'SENT_TO' => JText::_("TPL_FAMILYTREETOP_EMAIL_SENT_TO"),
             'RECIEVER' => $email,
