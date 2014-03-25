@@ -2,10 +2,10 @@
 defined('_JEXEC') or die;
 
 ?>
-<div id="latest_events" class="row-fluid">
-    <div class="span12">
-        <div class="row-fluid">
-            <div class="span12">
+<div id="latest_events" class="row">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-12">
                 <div class="well" familytreetop="module">
                     <fieldset>
                         <legend class="familytreetop-module-header"><?=JText::_('MOD_FTT_LATEST_EVENTS_BIRTHS');?></legend>
@@ -15,8 +15,8 @@ defined('_JEXEC') or die;
                 </div>
             </div>
         </div>
-        <div class="row-fluid">
-            <div class="span12">
+        <div class="row">
+            <div class="col-md-12">
                 <div class="well" familytreetop="module">
                     <fieldset>
                         <legend class="familytreetop-module-header"><?=JText::_('MOD_FTT_LATEST_EVENTS_MARRIAGES');?></legend>
@@ -26,8 +26,8 @@ defined('_JEXEC') or die;
                 </div>
             </div>
         </div>
-        <div class="row-fluid">
-            <div class="span12">
+        <div class="row">
+            <div class="col-md-12">
                 <div class="well" familytreetop="module">
                     <fieldset>
                         <legend class="familytreetop-module-header"><?=JText::_('MOD_FTT_LATEST_EVENTS_DEATHS');?></legend>

@@ -96,36 +96,40 @@ $language_tag = FamilyTreeTopLanguagesHelper::getDefaultTag();
 
 
 <div id="popover">
-    <div class="row-fluid" style="padding: 9px 14px;">
-        <div class="span3 familytreetop-avatar"><img class="media-object" data-src="template/<?=$template;?>/js/holder.js/75x75"></div>
-        <div class="span8" familytreetop-name="content">
-            <ul class="unstyled" style="font-size:13px;">
-                <li familytreetop-name="birth"><span style="color: #c3c3c3;"><?=JText::_("TPL_FAMILYTREETOP_BORN");?></span>: <span></span></li>
-                <li familytreetop-name="death"><span style="color: #c3c3c3;"><?=JText::_("TPL_FAMILYTREETOP_DIED");?></span>: <span></span></li>
-                <li familytreetop-name="relation"><span style="color: #c3c3c3;"><?=JText::_("TPL_FAMILYTREETOP_RELATION");?></span>: <span></span></li>
-            </ul>
+    <div class="container-fluid">
+        <div class="row" style="padding: 9px 14px;">
+            <div class="col-md-3 familytreetop-avatar"><img class="media-object" data-src="template/<?=$template;?>/js/holder.js/75x75"></div>
+            <div class="col-md-8" familytreetop-name="content">
+                <ul class="list-unstyled" style="font-size:13px;">
+                    <li familytreetop-name="birth"><span style="color: #c3c3c3;"><?=JText::_("TPL_FAMILYTREETOP_BORN");?></span>: <span></span></li>
+                    <li familytreetop-name="death"><span style="color: #c3c3c3;"><?=JText::_("TPL_FAMILYTREETOP_DIED");?></span>: <span></span></li>
+                    <li familytreetop-name="relation"><span style="color: #c3c3c3;"><?=JText::_("TPL_FAMILYTREETOP_RELATION");?></span>: <span></span></li>
+                </ul>
+            </div>
         </div>
     </div>
-    <div class="row-fluid" familytreetop-name="footer">
-        <div class="span12 familytreetop-popover-footer text-center">
-            <button familytreetop="facebook" type="button" class="btn" style="display:none;padding:2px 5px;">
-                <i class="icon-2x icon-facebook-sign pull-left" style="margin:0;"></i>
-                <div class="pull-left" style="line-height: 28px; margin-left: 3px; white-space: nowrap;">
-                    <?=JText::_('TPL_FAMILYTREETOP_BUTTON_FACEBOOK');?>
-                </div>
-            </button>
-            <button familytreetop-invite type="button" class="btn btn-primary" style="display:none;padding: 2px 5px">
-                <i class="icon-2x icon-white icon-facebook-sign pull-left" style="margin:0;"></i>
-                <div class="pull-left" style="line-height: 28px; margin-left: 3px; white-space: nowrap;">
-                    <?=JText::_('TPL_FAMILYTREETOP_BUTTON_INVITE');?>
-                </div>
-            </button>
-            <button familytreetop="profile" type="button" class="btn" style="padding: 2px 5px">
-                <i class="icon-user pull-left" style="margin:0;font-size: 24px;line-height: 28px;"></i>
-                <div class="pull-left" style="line-height: 28px; margin-left: 3px; white-space: nowrap;">
-                    <?=JText::_('TPL_FAMILYTREETOP_BUTTON_PROFILE');?>
-                </div>
-            </button>
+    <div class="container-fluid">
+        <div class="row" familytreetop-name="footer">
+            <div class="col-md-12 familytreetop-popover-footer text-center">
+                <button familytreetop="facebook" type="button" class="btn btn-default" style="display:none;padding:2px 5px;">
+                    <i class="fa fa-facebook-square pull-left" style="margin:0;font-size:28px;"></i>
+                    <div class="pull-left" style="line-height: 28px; margin-left: 3px; white-space: nowrap;">
+                        <?=JText::_('TPL_FAMILYTREETOP_BUTTON_FACEBOOK');?>
+                    </div>
+                </button>
+                <button familytreetop-invite type="button" class="btn btn-primary" style="display:none;padding: 2px 5px">
+                    <i class="fa fa-facebook-square pull-left" style="margin:0;font-size:28px;"></i>
+                    <div class="pull-left" style="line-height: 28px; margin-left: 3px; white-space: nowrap;">
+                        <?=JText::_('TPL_FAMILYTREETOP_BUTTON_INVITE');?>
+                    </div>
+                </button>
+                <button familytreetop="profile" type="button" class="btn btn-default" style="padding: 2px 5px">
+                    <i class="fa fa-user pull-left" style="margin:0;font-size: 24px;line-height: 28px;"></i>
+                    <div class="pull-left" style="line-height: 28px; margin-left: 3px; white-space: nowrap;">
+                        <?=JText::_('TPL_FAMILYTREETOP_BUTTON_PROFILE');?>
+                    </div>
+                </button>
+            </div>
         </div>
     </div>
 </div>
@@ -138,7 +142,7 @@ $language_tag = FamilyTreeTopLanguagesHelper::getDefaultTag();
 
 <div id="editMenu">
     <div class="btn-group dropdown">
-        <button class="btn  btn-mini" data-toggle="dropdown"><i class="icon-pencil"></i></button>
+        <button class="btn btn-default btn-sm" data-toggle="dropdown"><i class="fa fa-pencil"></i></button>
         <ul class="dropdown-menu">
             <li familytreetop="edit"><a href="#"><?=JText::_("TPL_FAMILYTREETOP_EDIT_PROFILE");?></a></li>
             <li data-familytreetop-devider="1" class="divider"></li>
@@ -155,113 +159,124 @@ $language_tag = FamilyTreeTopLanguagesHelper::getDefaultTag();
     </div>
 </div>
 
-<div id="modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <div style="margin-right: 5px; visibility: hidden;" familytreetop="circle-progressbar" class="pull-right"><img src="<?=$this->baseurl?>/templates/<?=$template;?>/img/circle_progressbar.gif"></div>
-        <h3 id="modalLabel"></h3>
-    </div>
-    <div class="modal-body">
-    </div>
-    <div class="modal-footer">
-        <button class="btn" data-dismiss="modal" aria-hidden="true"><?=JText::_("TPL_FAMILYTREETOP_MODAL_CLOSE");?></button>
-        <button familytreetop="submit" class="btn"><?=JText::_("TPL_FAMILYTREETOP_MODAL_SAVE");?></button>
-        <button familytreetop="submit" class="btn btn-primary"><?=JText::_("TPL_FAMILYTREETOP_MODAL_SAVE_AND_CLOSE");?></button>
-    </div>
-</div>
-
-<div id="modal-exist-family-member" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="modalLabel"><?=JText::_('TPL_FAMILYTREETOP_MODAL_EXIST_FAMILY_MEMBER_TITLE');?></h3>
-    </div>
-    <div class="modal-body" style="text-align: center;">
-        <div class="row-fluid">
-            <div class="span12">
-                <?=JText::_('TPL_FAMILYTREETOP_MODAL_EXIST_FAMILY_MEMBER_DESCRIPTION')?>
+<div id="modal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 id="modalLabel" class="modal-title"></h4>
             </div>
-        </div>
-        <div class="row-fluid">
-            <div class="span12">
-                <select style="margin:10px; min-width:80%;" id="spouses">
-
-                </select>
+            <div class="modal-body">
             </div>
-        </div>
-    </div>
-    <div class="modal-footer">
-        <button class="btn" data-dismiss="modal" aria-hidden="true"><?=JText::_("TPL_FAMILYTREETOP_MODAL_CLOSE");?></button>
-        <button familytreetop="submit" class="btn"><?=JText::_("TPL_FAMILYTREETOP_MODAL_SAVE");?></button>
-    </div>
-</div>
-
-<div id="profile" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="profileLabel" aria-hidden="true">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <button type="button" familytreetop="edit" class="btn familytreetop-header-button" style="padding: 5px 10px;"><i class="icon-pencil"></i><span style="top: 0;margin-left: 3px;"><?=JText::_('TPL_FAMILYTREETOP_BUTTON_EDIT');?></span></button>
-        <button type="button" familytreetop="facebook" class="btn familytreetop-header-button"><i class="icon-2x icon-facebook-sign"></i><span style="margin-left:3px;"><?=JText::_('TPL_FAMILYTREETOP_BUTTON_FACEBOOK');?></span></button>
-        <button type="button" familytreetop="invite" class="btn btn-primary familytreetop-header-button"> <i class="icon-2x icon--white icon-facebook-sign"></i><span><?=JText::_('TPL_FAMILYTREETOP_BUTTON_INVITE');?></span></button>
-        <h3 id="profileLabel"></h3>
-    </div>
-    <div class="modal-body">
-        <div data-familytreetop-profile="creator" style="position:absolute; top:5px; right:5px;">
-            <div style="color: #c3c3c3;"><span><?=JText::_('TPL_FAMILYTREETOP_CREATOR_DESCRIPTION');?></span><span familytreetop="name"></span></div>
-        </div>
-        <div data-familytreetop-profile="facebook" class="row-fluid">
-            <div class="span12">
-
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><?=JText::_("TPL_FAMILYTREETOP_MODAL_CLOSE");?></button>
+                <button type="button" familytreetop="submit" class="btn btn-default"><?=JText::_("TPL_FAMILYTREETOP_MODAL_SAVE");?></button>
+                <button type="button" familytreetop="submit" class="btn btn-primary"><?=JText::_("TPL_FAMILYTREETOP_MODAL_SAVE_AND_CLOSE");?></button>
             </div>
-        </div>
-        <div data-familytreetop-profile="about" class="row-fluid">
-            <div class="span7">
-                <div class="well" familytreetop="module">
-                    <fieldset>
-                        <legend><?=JText::_("TPL_FAMILYTREETOP_ABOUT");?></legend>
-                        <div class="row-fluid" style="padding: 5px;">
-                            <div  data-familytreetop="avatar" class="span4"></div>
-                            <div class="span8">
-                                <ul class="unstyled" style="font-size:14px;">
-                                    <li><strong><?=JText::_("TPL_FAMILYTREETOP_FIRST_NAME");?></strong>: <span></span></li>
-                                    <li><strong><?=JText::_("TPL_FAMILYTREETOP_MIDDLE_NAME");?></strong>: <span></span></li>
-                                    <li><strong><?=JText::_("TPL_FAMILYTREETOP_LAST_NAME");?></strong>: <span></span></li>
-                                    <li><strong><?=JText::_("TPL_FAMILYTREETOP_KNOW_AS");?></strong>: <span></span></li>
-                                    <li><strong><?=JText::_("TPL_FAMILYTREETOP_RELATION");?></strong>: <span></span></li>
-                                </ul>
-                            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div id="modal-exist-family-member" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 id="modalLabel" class="modal-title"><?=JText::_('TPL_FAMILYTREETOP_MODAL_EXIST_FAMILY_MEMBER_TITLE');?></h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <?=JText::_('TPL_FAMILYTREETOP_MODAL_EXIST_FAMILY_MEMBER_DESCRIPTION')?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <select style="margin:10px; min-width:80%;" id="spouses">
+
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal"><?=JText::_("TPL_FAMILYTREETOP_MODAL_CLOSE");?></button>
+                <button familytreetop="submit" class="btn btn-default"><?=JText::_("TPL_FAMILYTREETOP_MODAL_SAVE");?></button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div id="profile" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <button type="button" familytreetop="edit" class="btn btn-default familytreetop-header-button" style="padding: 5px 10px;"><i class="fa fa-pencil"></i><span style="top: 0;margin-left: 3px;"><?=JText::_('TPL_FAMILYTREETOP_BUTTON_EDIT');?></span></button>
+                <button type="button" familytreetop="facebook" class="btn btn-default familytreetop-header-button"><i class="fa fa-facebook-square"></i><span style="margin-left:3px;"><?=JText::_('TPL_FAMILYTREETOP_BUTTON_FACEBOOK');?></span></button>
+                <button type="button" familytreetop="invite" class="btn btn-primary familytreetop-header-button"> <i class="fa fa-facebook-square"></i><span><?=JText::_('TPL_FAMILYTREETOP_BUTTON_INVITE');?></span></button>
+                <h4 id="profileLabel"></h4>
+            </div>
+            <div class="modal-body">
+                <div data-familytreetop-profile="creator" style="position:absolute; top:5px; right:5px;">
+                    <div style="color: #c3c3c3;"><span><?=JText::_('TPL_FAMILYTREETOP_CREATOR_DESCRIPTION');?></span><span familytreetop="name"></span></div>
+                </div>
+                <div data-familytreetop-profile="facebook" class="row-fluid">
+                    <div class="span12">
+
+                    </div>
+                </div>
+                <div data-familytreetop-profile="about" class="row-fluid">
+                    <div class="span7">
+                        <div class="well" familytreetop="module">
+                            <fieldset>
+                                <legend><?=JText::_("TPL_FAMILYTREETOP_ABOUT");?></legend>
+                                <div class="row-fluid" style="padding: 5px;">
+                                    <div  data-familytreetop="avatar" class="span4"></div>
+                                    <div class="span8">
+                                        <ul class="unstyled" style="font-size:14px;">
+                                            <li><strong><?=JText::_("TPL_FAMILYTREETOP_FIRST_NAME");?></strong>: <span></span></li>
+                                            <li><strong><?=JText::_("TPL_FAMILYTREETOP_MIDDLE_NAME");?></strong>: <span></span></li>
+                                            <li><strong><?=JText::_("TPL_FAMILYTREETOP_LAST_NAME");?></strong>: <span></span></li>
+                                            <li><strong><?=JText::_("TPL_FAMILYTREETOP_KNOW_AS");?></strong>: <span></span></li>
+                                            <li><strong><?=JText::_("TPL_FAMILYTREETOP_RELATION");?></strong>: <span></span></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </fieldset>
                         </div>
-                    </fieldset>
+                    </div>
+                </div>
+                <div data-familytreetop-profile="relation" class="row-fluid">
+                    <div class="span12">
+                        <div class="well" familytreetop="module">
+                            <fieldset>
+                                <legend><?=JText::_("TPL_FAMILYTREETOP_RELATION_MAP");?></legend>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+                <div data-familytreetop-profile="family" class="row-fluid">
+                    <div class="span12">
+                        <div class="well" familytreetop="module">
+                            <fieldset>
+                                <legend><?=JText::_("TPL_FAMILYTREETOP_FAMILY");?></legend>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+                <div data-familytreetop-profile="photos" class="row-fluid">
+                    <div class="span12">
+                        <div class="well" familytreetop="module">
+                            <fieldset>
+                                <legend><?=JText::_("TPL_FAMILYTREETOP_PHOTOS");?></legend>
+                            </fieldset>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div data-familytreetop-profile="relation" class="row-fluid">
-            <div class="span12">
-                <div class="well" familytreetop="module">
-                    <fieldset>
-                        <legend><?=JText::_("TPL_FAMILYTREETOP_RELATION_MAP");?></legend>
-                    </fieldset>
-                </div>
-            </div>
-        </div>
-        <div data-familytreetop-profile="family" class="row-fluid">
-            <div class="span12">
-                <div class="well" familytreetop="module">
-                    <fieldset>
-                        <legend><?=JText::_("TPL_FAMILYTREETOP_FAMILY");?></legend>
-                    </fieldset>
-                </div>
-            </div>
-        </div>
-        <div data-familytreetop-profile="photos" class="row-fluid">
-            <div class="span12">
-                <div class="well" familytreetop="module">
-                    <fieldset>
-                        <legend><?=JText::_("TPL_FAMILYTREETOP_PHOTOS");?></legend>
-                    </fieldset>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 <div id="editorTabs">
     <ul class="nav nav-tabs">
@@ -278,39 +293,39 @@ $language_tag = FamilyTreeTopLanguagesHelper::getDefaultTag();
     </div>
 </div>
 
-<div id="dataEditMedia" class="row-fluid familytreetop-gallery">
-    <div class="span12">
-        <ul class="unstyled inline">
+<div id="dataEditMedia" class="row familytreetop-gallery">
+    <div class="col-md-12">
+        <ul class="list-unstyled list-inline">
 
         </ul>
     </div>
 </div>
 
 <form id="formEditMedia" action="<?=JRoute::_("index.php?option=com_familytreetop&task=upload.file", false);?>" method="POST" enctype="multipart/form-data">
-    <div class="row-fluid fileupload-buttonbar">
-        <div class="row-fluid">
-            <div class="span12">
+    <div class="row fileupload-buttonbar">
+        <div class="row">
+            <div class="col-md-12">
                     <span class="btn btn-success fileinput-button">
                         <i style="display:inline-block;" class="icon-plus icon-white"></i>
                         <span style="display:inline-block;"><?=JText::_("TPL_FAMILYTREETOP_EDITOR_TABS_MEDIA_ADD_FILES");?></span>
                         <input type="file" name="files[]" multiple="">
                     </span>
                 <button class="btn btn-info familytreetop-button set-avatar" style="display:none;">
-                    <i class="icon-ok-sign icon-white"></i>
+                    <i class="fa fa-check"></i>
                     <span><?=JText::_("TPL_FAMILYTREETOP_EDITOR_TABS_MEDIA_SET_AVATAR");?></span>
                 </button>
                 <button class="btn btn-danger familytreetop-button unset-avatar" style="display: none;">
-                    <i class="icon-remove-sign icon-white"></i>
+                    <i class="fa fa-minuse-circle"></i>
                     <span><?=JText::_("TPL_FAMILYTREETOP_EDITOR_TABS_MEDIA_UNSET_AVATAR");?></span>
                 </button>
                 <button class="btn btn-danger familytreetop-button delete" style="display: none;">
-                    <i class="icon-trash icon-white"></i>
+                    <i class="fa fa-trash-o"></i>
                     <span><?=JText::_("TPL_FAMILYTREETOP_EDITOR_TABS_MEDIA_DELETE");?></span>
                 </button>
             </div>
         </div>
-        <div class="row-fluid">
-            <div class="span12 fileupload-progress fade">
+        <div class="row">
+            <div class="col-md-12 fileupload-progress fade">
                 <div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
                     <div class="bar" style="width:0%;"></div>
                 </div>
@@ -340,27 +355,27 @@ $language_tag = FamilyTreeTopLanguagesHelper::getDefaultTag();
                 </div>
             </legend>
             <input style="display:none;" familytreetop="family_id" name="editUnion[family_id]" type="text" class="hidden" />
-            <div class="row-fluid">
-                <div class="span6">
+            <div class="row">
+                <div class="col-md-6">
                     <div familytreetop="sircar" class="well" style="background: white;margin: 5px;">
-                        <div class="row-fluid">
-                            <div class="span4" familytreetop="avatar"></div>
-                            <div class="span8" style="text-align:left;" familytreetop="data"></div>
+                        <div class="row">
+                            <div class="col-md-4" familytreetop="avatar"></div>
+                            <div class="col-md-8" style="text-align:left;" familytreetop="data"></div>
                         </div>
                     </div>
                 </div>
-                <div class="span6">
+                <div class="col-md-6">
                     <div familytreetop="spouse" class="well" style="background: white;margin: 5px;">
-                        <div class="row-fluid">
-                            <div class="span4" familytreetop="avatar"></div>
-                            <div class="span8" style="text-align:left;" familytreetop="data"></div>
+                        <div class="row">
+                            <div class="col-md-4" familytreetop="avatar"></div>
+                            <div class="col-md-8" style="text-align:left;" familytreetop="data"></div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row-fluid">
-                <div familytreetop="union-event-date" class="span12" style="padding-left: 5px;">
-                    <select familytreetop="months" class="span4" name="editUnion[month]">
+            <div class="row">
+                <div familytreetop="union-event-date" class="col-md-12" style="padding-left: 5px;">
+                    <select familytreetop="months" class="col-md-4" name="editUnion[month]">
                         <option value="0"><?=JText::_("TPL_FAMILYTREETOP_MONTH");?></option>
                         <option value="1"><?=JText::_("TPL_FAMILYTREETOP_JANUARY");?></option>
                         <option value="2"><?=JText::_("TPL_FAMILYTREETOP_FEBRUARY");?></option>
@@ -375,17 +390,17 @@ $language_tag = FamilyTreeTopLanguagesHelper::getDefaultTag();
                         <option value="11"><?=JText::_("TPL_FAMILYTREETOP_NOVEMBER");?></option>
                         <option value="12"><?=JText::_("TPL_FAMILYTREETOP_DECEMBER");?></option>
                     </select>
-                    <select familytreetop="days" class="span2" name="editUnion[day]">
+                    <select familytreetop="days" class="col-md-2" name="editUnion[day]">
                         <option value="0"><?=JText::_("TPL_FAMILYTREETOP_DAY");?></option>
                     </select>
                     <input familytreetop="year" style="max-width: 45px;" class="span4" type="text" maxlength="4" name="editUnion[year]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_YEAR");?>">
                 </div>
             </div>
-            <div familytreetop="union-event-place" class="row-fluid">
-                <div class="span12" style="padding-left: 5px;">
-                    <input familytreetop="city" class="span4" type="text" name="editUnion[city]"  placeholder="<?=JText::_("TPL_FAMILYTREETOP_CITY");?>">
-                    <input familytreetop="state" class="span4" type="text" name="editUnion[state]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_STATE");?>">
-                    <input familytreetop="country" class="span4" type="text" name="editUnion[country]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_COUNTRY");?>">
+            <div familytreetop="union-event-place" class="row">
+                <div class="col-md-12" style="padding-left: 5px;">
+                    <input familytreetop="city" class="col-md-4" type="text" name="editUnion[city]"  placeholder="<?=JText::_("TPL_FAMILYTREETOP_CITY");?>">
+                    <input familytreetop="state" class="col-md-4" type="text" name="editUnion[state]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_STATE");?>">
+                    <input familytreetop="country" class="col-md-4" type="text" name="editUnion[country]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_COUNTRY");?>">
                 </div>
             </div>
         </fieldset>
@@ -393,22 +408,22 @@ $language_tag = FamilyTreeTopLanguagesHelper::getDefaultTag();
 </form>
 
 <form id="formEditProfile">
-    <div familytreetop="addChildComplexSelect" style="" class="row-fluid">
-        <div class="span12">
-            <div class="row-fluid">
-                <div class="span2"></div>
-                <div class="span8">
-                    <div class="row-fluid">
-                        <div class="span5">
+    <div familytreetop="addChildComplexSelect" style="" class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-5">
                             <label for="editProfile[addParent1]"><?=JText::_('TPL_FAMILYTREETOP_MODAL_EXIST_FAMILY_MEMBER_PARENT_1');?></label>
                             <input familytreetop="parent1" type="text" class="span12" id="editProfile[addParent1]" name="editProfile[addParent1]" >
                         </div>
-                        <div class="span1">
+                        <div class="col-md-1">
                             <div style="padding-top:25px; text-align:center;">
                                 <i class="icon-plus icon-2x"></i>
                             </div>
                         </div>
-                        <div class="span6">
+                        <div class="col-md-6">
                             <label for="editProfile[addParent2]"><?=JText::_('TPL_FAMILYTREETOP_MODAL_EXIST_FAMILY_MEMBER_PARENT_2');?></label>
                             <input familytreetop="parent2" type="text" class="span12" id="editProfile[addParent2]" name="editProfile[addParent2]" value="0" style="display:none;"  hidden >
                             <div class="btn-group dropdown" style="min-width:100%;">
@@ -426,81 +441,81 @@ $language_tag = FamilyTreeTopLanguagesHelper::getDefaultTag();
                         </div>
                     </div>
                 </div>
-                <div class="span2"></div>
+                <div class="col-md-2"></div>
             </div>
-            <div class="row-fluid">
-                <div class="span12"><hr></div>
+            <div class="row">
+                <div class="col-md-12"><hr></div>
             </div>
         </div>
     </div>
-    <div familytreetop="addSpouseComplexButton" class="row-fluid">
-        <div class="span12">
+    <div familytreetop="addSpouseComplexButton" class="row">
+        <div class="col-md-12">
             <div class="pull-right">
                 <input id="editProfile[spouse]" name="editProfile[spouse]" type="text" value="0" style="display:none" hidden>
                 <a href="#" style="text-decoration: none;"><?=JText::_('TPL_FAMILYTREETOP_MODAL_EXIST_FAMILY_MEMBER_SPOUSE_BUTTON_TEXT');?></a>
             </div>
         </div>
     </div>
-    <div class="row-fluid">
-        <div familytreetop="avatar" class="span3 text-center">
+    <div class="row">
+        <div familytreetop="avatar" class="col-md-3 text-center">
         </div>
-        <div class="span9">
-            <div class="row-fluid">
-                <div familytreetop="gender" class="span6">
+        <div class="col-md-9">
+            <div class="row">
+                <div familytreetop="gender" class="col-md-6">
                     <label for="editProfile[gender]"><small><?=JText::_("TPL_FAMILYTREETOP_GENDER");?></small></label>
-                    <select class="span12" id="editProfile[gender]" name="editProfile[gender]">
+                    <select class="col-md-12" id="editProfile[gender]" name="editProfile[gender]">
                         <option value="default"><?=JText::_('TPL_FAMILYTREETOP_SELECT_GENDER');?></option>
                         <option value="1"><?=JText::_("TPL_FAMILYTREETOP_GENDER_MALE");?></option>
                         <option value="0"><?=JText::_("TPL_FAMILYTREETOP_GENDER_FEMALE");?></option>
                     </select>
                 </div>
-                <div familytreetop="living" class="span6">
+                <div familytreetop="living" class="col-md-6">
                     <label for="editProfile[living]"><small><?=JText::_("TPL_FAMILYTREETOP_LIVING");?></small></label>
-                    <select class="span12" id="editProfile[living]" name="editProfile[living]">
+                    <select class="col-md-12" id="editProfile[living]" name="editProfile[living]">
                         <option value="1"><?=JText::_("TPL_FAMILYTREETOP_YES");?></option>
                         <option value="0"><?=JText::_("TPL_FAMILYTREETOP_NO");?></option>
                     </select>
                 </div>
             </div>
-            <div class="row-fluid">
-                <div familytreetop="firstName" class="span6">
+            <div class="row">
+                <div familytreetop="firstName" class="col-md-6">
                     <label for="editProfile[firstName]"><small><?=JText::_("TPL_FAMILYTREETOP_FIRST_NAME");?></small></label>
                     <div class="controls">
-                        <input class="span12" name="editProfile[first_name]" type="text" id="editProfile[firstName]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_FIRST_NAME");?>">
+                        <input class="col-md-12" name="editProfile[first_name]" type="text" id="editProfile[firstName]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_FIRST_NAME");?>">
                     </div>
                 </div>
-                <div familytreetop="middleName" class="span6">
+                <div familytreetop="middleName" class="col-md-6">
                     <label for="editProfile[middleName]"><small><?=JText::_("TPL_FAMILYTREETOP_MIDDLE_NAME");?></small></label>
                     <div class="controls">
-                        <input class="span12" name="editProfile[middle_name]" type="text" id="editProfile[middleName]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_MIDDLE_NAME");?>">
+                        <input class="col-md-12" name="editProfile[middle_name]" type="text" id="editProfile[middleName]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_MIDDLE_NAME");?>">
                     </div>
                 </div>
             </div>
-            <div class="row-fluid">
-                <div familytreetop="lastName" class="span6">
+            <div class="row">
+                <div familytreetop="lastName" class="col-md-6">
                     <label for="editProfile[firstName]"><small><?=JText::_("TPL_FAMILYTREETOP_LAST_NAME");?></small></label>
                     <div class="controls">
-                        <input class="span12" name="editProfile[last_name]" type="text" id="editProfile[lastName]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_LAST_NAME");?>">
+                        <input class="col-md-12" name="editProfile[last_name]" type="text" id="editProfile[lastName]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_LAST_NAME");?>">
                     </div>
                 </div>
-                <div familytreetop="knowAs" class="span6">
+                <div familytreetop="knowAs" class="col-md-6">
                     <label for="editProfile[knowAs]"><small><?=JText::_("TPL_FAMILYTREETOP_KNOW_AS");?></small></label>
                     <div class="controls">
-                        <input class="span12" name="editProfile[know_as]" type="text" id="editProfile[knowAs]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_KNOW_AS");?>">
+                        <input class="col-md-12" name="editProfile[know_as]" type="text" id="editProfile[knowAs]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_KNOW_AS");?>">
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row-fluid">
-        <div familytreetop="birthday" class="span12">
+    <div class="row">
+        <div familytreetop="birthday" class="col-md-12">
             <p>
                 <?=JText::_("TPL_FAMILYTREETOP_BIRTHDAY");?>:
             </p>
         </div>
     </div>
-    <div class="row-fluid">
-        <div familytreetop="birthday" class="span12">
+    <div class="row">
+        <div familytreetop="birthday" class="col-md-12">
             <select familytreetop="months" class="span4" name="editProfile[b_month]">
                 <option value="0"><?=JText::_("TPL_FAMILYTREETOP_MONTH");?></option>
                 <option value="1"><?=JText::_("TPL_FAMILYTREETOP_JANUARY");?></option>
@@ -522,24 +537,24 @@ $language_tag = FamilyTreeTopLanguagesHelper::getDefaultTag();
             <input familytreetop="year" class="span4" type="text" name="editProfile[b_year]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_YEAR");?>">
         </div>
     </div>
-    <div familytreetop="birthday" class="row-fluid">
-        <div class="span12">
+    <div familytreetop="birthday" class="row">
+        <div class="col-md-12">
             <input class="span4" type="text" name="editProfile[b_city]"  placeholder="<?=JText::_("TPL_FAMILYTREETOP_CITY");?>">
             <input class="span4" type="text" name="editProfile[b_state]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_STATE");?>">
             <input class="span4" type="text" name="editProfile[b_country]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_COUNTRY");?>">
         </div>
     </div>
 
-    <div class="row-fluid">
-        <div familytreetop="deathday" class="span12">
+    <div class="row">
+        <div familytreetop="deathday" class="col-md-12">
             <p>
                 <?=JText::_("TPL_FAMILYTREETOP_DEATHDAY");?>:
             </p>
         </div>
     </div>
-    <div class="row-fluid">
-        <div familytreetop="deathday" class="span12">
-            <select familytreetop="months" class="span4" name="editProfile[d_month]">
+    <div class="row">
+        <div familytreetop="deathday" class="col-md-12">
+            <select familytreetop="months" class="col-md-4" name="editProfile[d_month]">
                 <option value="0"><?=JText::_("TPL_FAMILYTREETOP_MONTH");?></option>
                 <option value="1"><?=JText::_("TPL_FAMILYTREETOP_JANUARY");?></option>
                 <option value="2"><?=JText::_("TPL_FAMILYTREETOP_FEBRUARY");?></option>
@@ -554,26 +569,26 @@ $language_tag = FamilyTreeTopLanguagesHelper::getDefaultTag();
                 <option value="11"><?=JText::_("TPL_FAMILYTREETOP_NOVEMBER");?></option>
                 <option value="12"><?=JText::_("TPL_FAMILYTREETOP_DECEMBER");?></option>
             </select>
-            <select familytreetop="days" class="span2" name="editProfile[d_day]">
+            <select familytreetop="days" class="col-md-2" name="editProfile[d_day]">
                 <option value="0"><?=JText::_("TPL_FAMILYTREETOP_DAY");?></option>
             </select>
-            <input familytreetop="year" class="span4" type="text" name="editProfile[d_year]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_YEAR");?>">
+            <input familytreetop="year" class="col-md-4" type="text" name="editProfile[d_year]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_YEAR");?>">
         </div>
     </div>
-    <div familytreetop="deathday" class="row-fluid">
-        <div class="span12">
-            <input class="span4" type="text" name="editProfile[d_city]"  placeholder="<?=JText::_("TPL_FAMILYTREETOP_CITY");?>">
-            <input class="span4" type="text" name="editProfile[d_state]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_STATE");?>">
-            <input class="span4" type="text" name="editProfile[d_country]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_COUNTRY");?>">
+    <div familytreetop="deathday" class="row">
+        <div class="col-md-12">
+            <input class="col-md-4" type="text" name="editProfile[d_city]"  placeholder="<?=JText::_("TPL_FAMILYTREETOP_CITY");?>">
+            <input class="col-md-4" type="text" name="editProfile[d_state]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_STATE");?>">
+            <input class="col-md-4" type="text" name="editProfile[d_country]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_COUNTRY");?>">
         </div>
     </div>
 </form>
 
 <form id="formEditOptions" action="<?=JRoute::_("index.php?option=com_familytreetop&task=upload.file", false);?>" method="POST" enctype="multipart/form-data">
     <div familytreetop="buttons">
-        <div class="row-fluid">
-            <div class="span4"></div>
-            <div class="span4">
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
                 <div familytreetop="progressbar" style="margin-left: 50%;height: 70px;margin-top: 70px;"></div>
                 <div style="text-align:center;">
                     <button familytreetop-button="delete" type="button" class="btn btn-danger">
@@ -581,47 +596,47 @@ $language_tag = FamilyTreeTopLanguagesHelper::getDefaultTag();
                     </button>
                 </div>
             </div>
-            <div class="span4"></div>
+            <div class="col-md-4"></div>
         </div>
     </div>
     <div familytreetop="orange-users" style="display:none;">
-        <div class="row-fluid">
-            <div class="span4"></div>
-            <div class="span4">
-                <div class="row-fluid">
-                    <div class="span12">
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="col-md-12">
                         <p style="color: #f0ac41;">Warning: The following will happen if you remove yourself from this family tree:</p>
                     </div>
                 </div>
-                <div class="row-fluid">
-                    <div class="span12">
+                <div class="row">
+                    <div class="col-md-12">
                         <ul familytreetop="orange-list"></ul>
                     </div>
                 </div>
-                <div class="row-fluid">
-                    <div class="span12">
-                        <button familytreetop="orange-confirm" type="button" class="btn">Confirm</button>
-                        <button familytreetop="orange-cancel" type="button" class="btn">Cancel</button>
+                <div class="row">
+                    <div class="col-md-12">
+                        <button familytreetop="orange-confirm" type="button" class="btn btn-default">Confirm</button>
+                        <button familytreetop="orange-cancel" type="button" class="btn btn-default">Cancel</button>
                     </div>
                 </div>
 
             </div>
-            <div class="span4"></div>
+            <div class="col-md-4"></div>
         </div>
     </div>
     <div familytreetop="delete-tree" style="display:none;">
-        <div class="row-fluid">
-            <div class="span4"></div>
-            <div class="span4">
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
                 <button familytreetop-button="delete-tree" type="button" class="btn btn-danger"><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_DELETE_MY_FAMILY_TREE');?></button>
             </div>
-            <div class="span4"></div>
+            <div class="col-md-4"></div>
         </div>
     </div>
     <div familytreetop="delete-invalid" style="display:none;">
-        <div class="row-fluid">
-            <div class="span4"></div>
-            <div class="span4" style="text-align: center;">
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4" style="text-align: center;">
                 <div>
                     <button familytreetop-button="delete-invalid" type="button" class="btn disabled"><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_DELETE_THIS_PERSON');?></button>
                 </div>
@@ -631,13 +646,13 @@ $language_tag = FamilyTreeTopLanguagesHelper::getDefaultTag();
                     </p>
                 </div>
             </div>
-            <div class="span4"></div>
+            <div class="col-md-4"></div>
         </div>
     </div>
     <div familytreetop="delete-invalid-register" style="display:none;">
-        <div class="row-fluid">
-            <div class="span4"></div>
-            <div class="span4" style="text-align: center;">
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4" style="text-align: center;">
                 <div>
                     <button familytreetop-button="delete-invalid" type="button" class="btn disabled"><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_DELETE_THIS_PERSON');?></button>
                 </div>
@@ -647,28 +662,28 @@ $language_tag = FamilyTreeTopLanguagesHelper::getDefaultTag();
                     </p>
                 </div>
             </div>
-            <div class="span4"></div>
+            <div class="col-md-4"></div>
         </div>
     </div>
     <div familytreetop="delete-confirm" style="display:none;">
-        <div class="row-fluid" style="text-align: center;">
-            <div class="span4"></div>
-            <div class="span4">
+        <div class="row" style="text-align: center;">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
                 <div><i style="color:red;" class="icon-4x icon-warning-sign"></i></div>
                 <div><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_YOU_ABOUT_DELETE');?></div>
                 <div><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_ARE_YOU_SURE');?></div>
                 <div style="margin:10px;">
                     <div familytreetop-button="delete-confirm-delete" class="btn btn-danger"><?=JText::_('TPL_FAMILYTREETOP_BUTTON_DELETE');?></div>
-                    <div familytreetop-button="delete-confirm-cancel" class="btn"><?=JText::_('TPL_FAMILYTREETOP_BUTTON_CANCEL');?></div>
+                    <div familytreetop-button="delete-confirm-cancel" class="btn btn-default"><?=JText::_('TPL_FAMILYTREETOP_BUTTON_CANCEL');?></div>
                 </div>
             </div>
-            <div class="span4"></div>
+            <div class="col-md-4"></div>
         </div>
     </div>
     <div familytreetop="delete" style="display:none;">
         <table cellspacing="10" cellpadding="20" class="table familytreetop-table-not-border" style="width:98%;">
             <tr>
-                <td><i style="color:red;" class="icon-4x icon-warning-sign"></i></td>
+                <td><i style="color:red;" class="fa fa-warning fa-4"></i></td>
                 <td><p style="font-weight: bold;"><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_YOU_ABOUT_UNREGISTERED');?>.</p></td>
             </tr>
             <tr>

@@ -6,7 +6,7 @@ $template = $settings->_template->value;
 ?>
 <?php if($template == "familytreetop"): ?>
     <hr>
-    <ul class="unstuled inline">
+    <ul class="list-unstuled list-inline">
         <li><a href="<?=JRoute::_("index.php?option=com_familytreetop&view=myfamily", false);?>">Home</a></li>
         <li><a href="<?=JRoute::_("index.php?option=com_content&view=article&id=1", false);?>">About</a></li>
         <li><a href="<?=JRoute::_("index.php?option=com_content&view=article&id=2", false);?>">Terms</a></li>
@@ -16,7 +16,7 @@ $template = $settings->_template->value;
     </ul>
 <?php else: ?>
     <hr>
-    <ul class="unstuled inline">
+    <ul class="list-unstuled list-inline">
         <li><a href="<?=JRoute::_("index.php?option=com_familytreetop&view=myfamily", false);?>">Home</a></li>
         <li><a href="<?=JRoute::_("index.php?option=com_content&view=article&id=10", false);?>">About</a></li>
         <li><a href="<?=JRoute::_("index.php?option=com_content&view=article&id=11", false);?>">Terms</a></li>

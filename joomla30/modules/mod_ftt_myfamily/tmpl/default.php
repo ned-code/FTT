@@ -9,14 +9,14 @@ if($user->facebook_id != 0){
    $data = $fhelper->getFacebookNewsFeed($user->tree_id, $user->facebook_id);
 }
 ?>
-<div id="myFamilyOnFacebook" class="row-fluid">
-    <div class="span12">
+<div id="myFamilyOnFacebook" class="row">
+    <div class="col-md-12">
         <div class="well" familytreetop="module">
             <fieldset>
                 <legend class="text-center familytreetop-module-header"><?=JText::_('MOD_FTT_MYFAMILY_TITLE');?></legend>
                 <?php if(!empty($data)): ?>
-                    <div class="row-fluid">
-                        <div class="span12">
+                    <div class="row">
+                        <div class="col-md-12">
                             <table style="margin:0;" class="table"></table>
                         </div>
                     </div>

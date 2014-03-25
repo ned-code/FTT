@@ -9,12 +9,12 @@ if($profile){
 }
 
 ?>
-<div id="latestUpdates" class="row-fluid">
-    <div class="span12">
+<div id="latestUpdates" class="row">
+    <div class="col-md-12">
         <div class="well" familytreetop="module">
             <fieldset>
                 <legend class="familytreetop-module-header"><?=JText::_('MOD_FTT_LATEST_UPDATES_TITLE');?></legend>
-                <ul class-familytreetop="module-padding" class="unstyled">
+                <ul class-familytreetop="module-padding" class="list-unstyled">
                     <?php if($ind): ?>
                     <li><span><?=JText::_('MOD_FTT_LATEST_UPDATES_PROFLIE_CHANGES');?></span>: <span style="cursor:pointer;" gedcom_id="<?=$ind->gedcom_id;?>" data-familytreetop-color="<?=$ind->gender;?>"><?=$ind->name();?></span></li>
                     <?php endif; ?>

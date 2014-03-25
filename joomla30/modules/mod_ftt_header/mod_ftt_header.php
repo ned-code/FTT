@@ -13,7 +13,7 @@ defined('_JEXEC') or die;
 require_once __DIR__ . '/helper.php';
 
 
-$layout = $params->get('layout', 'default');
+$layout = $params->get('layout', 'default_new');
 
 // Logged users must load the logout sublayout
 

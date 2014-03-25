@@ -8,12 +8,12 @@ $fatherLineTotal = sizeof($gedcom->individuals->getCountByFamilyLine('is_father_
 $motherLineTotal = sizeof($gedcom->individuals->getCountByFamilyLine('is_mother_line'));
 $total = $gedcom->individuals->getTotal();
 ?>
-<div id="quickFacts" class="row-fluid">
-    <div class="span12">
+<div id="quickFacts" class="row">
+    <div class="col-md-12">
         <div class="well" familytreetop="module">
             <fieldset>
                 <legend class="familytreetop-module-header"><?=JText::_('MOD_FTT_QUICK_FACTS_TITLE');?></legend>
-                <ul class-familytreetop="module-padding" class="unstyled">
+                <ul class-familytreetop="module-padding" class="list-unstyled">
                     <li><span><?=JText::_('MOD_FTT_QUICK_FACTS_TOTAL');?></span>: <span><?=$total?></span></li>
                     <li><span><?=JText::_('MOD_FTT_QUICK_FACTS_TOTAL_FATHER_SIDE');?></span>: <span><?=$fatherLineTotal?></span></li>
                     <li><span><?=JText::_('MOD_FTT_QUICK_FACTS_TOTAL_MOTHER_SIDE');?></span>: <span><?=$motherLineTotal?></span></li>

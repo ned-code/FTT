@@ -1,0 +1,18 @@
+/**
+*   FAMILYTREETOP MODULES
+*/
+.well[familytreetop="module"] {
+    padding: 0;
+}
+.well[familytreetop="module"] fieldset {
+    width: 100%;
+}
+.well[familytreetop="module"] fieldset legend{
+    border-bottom: 2px solid white;
+    text-align: center;
+    font-size: 20px;
+    background: gray;
+    margin: 0;
+    padding: 0;
+    background: #e8e8e8;
+}

@@ -14,6 +14,43 @@ if($session->get('famous')){
 }
 $navbar_name = ($template == "familytreetop")?"Family TreeTop":"MyNativeRoots";
 ?>
+<nav class="navbar navbar-inverse familytreetop-nav" role="navigation">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <?php if($template == "familytreetop"): ?>
+                <a style="color: white;text-shadow: none;" class="navbar-brand" familytreetop-link="familytreetop" href="<?=JRoute::_("index.php?option=com_familytreetop&view=index", false); ?>"><i style="background: url(templates/familytreetop/img/glyphicons_317_tree_deciduous_white.png) no-repeat; padding-left: 25px;"><?=$navbar_name;?></i></a>
+            <?php else: ?>
+                <a style="color: white;text-shadow: none;" class="navbar-brand" familytreetop-link="familytreetop" href="<?=JRoute::_("index.php?option=com_familytreetop&view=index", false); ?>"><i class="icon-leaf"></i> <?=$navbar_name;?></a>
+            <?php endif ?>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li><img style="margin: 4px;" src="https://graph.facebook.com/<?=$user->facebook_id;?>/picture?width=30&height=30"/></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" style="color: white;text-shadow: none;" data-toggle="dropdown"><?=$ind->name();?> <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a  familytreetop="profile" href="#"><?=JText::_('MOD_FTT_NAVBAR_PROFILE_PROFILE');?></a></li>
+                        <?php if($template == "familytreetop"): ?><li><a  familytreetop="languages" href="#"><?=JText::_('MOD_FTT_NAVBAR_PROFILE_LANGUAGES');?></a></li><?php endif; ?>
+                        <li><a  familytreetop="facebook" href="#"><?=JText::_('MOD_FTT_NAVBAR_PROFILE_REDIRECT_TO_FACEBOOK');?></a></li>
+                        <li><a  familytreetop="familytreetop" href="#"><?=JText::_('MOD_FTT_NAVBAR_PROFILE_REDIRECT_TO_FAMILYTREETOP');?></a></li>
+                        <li class="divider"></li>
+                        <li><a  familytreetop="logout" href="<?=JRoute::_("index.php?option=com_familytreetop&task=user.logout", false);?>"><?=JText::_('MOD_FTT_NAVBAR_PROFILE_LOG_OUT');?></a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+
+<!--
 <div class="navbar familytreetop-nav" style="b">
     <div style="border-radius: 0; border:none;" class="navbar-inner">
         <div class="container">
@@ -43,7 +80,6 @@ $navbar_name = ($template == "familytreetop")?"Family TreeTop":"MyNativeRoots";
             <?php else: ?>
                 <a style="color: white;text-shadow: none;" class="brand" familytreetop-link="familytreetop" href="<?=JRoute::_("index.php?option=com_familytreetop&view=index", false); ?>"><i class="icon-leaf"></i> <?=$navbar_name;?></a>
             <?php endif ?>
-            <!--
             <div  id="navProfileUser" class="nav-collapse collapse">
                 <ul class="nav">
                     <li <?=($view=="myfamily")?'class="active"':''; ?> > <a href="<?=JRoute::_("index.php?option=com_familytreetop&view=myfamily", false); ?>"><?=JText::_('MOD_FTT_NAVBAR_MENU_MY_FAMILY');?></a></li>
@@ -55,10 +91,10 @@ $navbar_name = ($template == "familytreetop")?"Family TreeTop":"MyNativeRoots";
                     <li class="visible-phone"><a familytreetop="logout" href="#"><?=JText::_('MOD_FTT_NAVBAR_MENU_LOG_OUT');?></a></li>
                 </ul>
             </div>
-            -->
         </div>
     </div>
 </div>
+-->
 <script>
     $FamilyTreeTop.bind(function($){
         'use strict';

@@ -1,12 +1,12 @@
 <?php
 defined('_JEXEC') or die;
 ?>
-<div id="recentVisitors" class="row-fluid">
-    <div class="span12">
+<div id="recentVisitors" class="row">
+    <div class="col-md-12">
         <div class="well" familytreetop="module">
             <fieldset>
                 <legend class="familytreetop-module-header"><?=JText::_('MOD_FTT_RECENTVISITORS');?></legend>
-                <ul class-familytreetop="module-padding" class="unstyled inline">
+                <ul class-familytreetop="module-padding" class="list-unstyled list-inline">
                     <?php foreach($visitors as $visitor): ?>
                         <?php if($visitor['ind']): ?>
                             <li gedcom_id="<?=$visitor['ind']->gedcom_id;?>" style="margin-top:5px;">

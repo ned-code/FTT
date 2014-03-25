@@ -8,8 +8,9 @@ $script = "";
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/jquery-2.0.3.min.js"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/spin.min.js"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/superbrowserupdate.js"></script>
-<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/bootstrap.min.js"></script>
-<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/bootstrap-scroll-modal.js"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/bootstrap.min.3.1.1.js"></script>
+<!--<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/bootstrap-scroll-modal.js"></script>-->
+<!--<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/bootstrap-image-gallery.min.js"></script>-->
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/tdfriendselector.js"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/fabric.all.min.js"></script>
 <!-- file upload plugin files -->
