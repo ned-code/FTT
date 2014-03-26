@@ -375,39 +375,59 @@ $language_tag = FamilyTreeTopLanguagesHelper::getDefaultTag();
                 </div>
             </div>
             </div>
-            <div class="container-fluid">
-            <div class="row">
-                <div familytreetop="union-event-date" class="col-md-12" style="padding-left: 5px;">
-                    <select familytreetop="months" class="col-md-4 form-control" name="editUnion[month]">
-                        <option value="0"><?=JText::_("TPL_FAMILYTREETOP_MONTH");?></option>
-                        <option value="1"><?=JText::_("TPL_FAMILYTREETOP_JANUARY");?></option>
-                        <option value="2"><?=JText::_("TPL_FAMILYTREETOP_FEBRUARY");?></option>
-                        <option value="3"><?=JText::_("TPL_FAMILYTREETOP_MARCH");?></option>
-                        <option value="4"><?=JText::_("TPL_FAMILYTREETOP_APRIL");?></option>
-                        <option value="5"><?=JText::_("TPL_FAMILYTREETOP_MAY");?></option>
-                        <option value="6"><?=JText::_("TPL_FAMILYTREETOP_JUNE");?></option>
-                        <option value="7"><?=JText::_("TPL_FAMILYTREETOP_JULY");?></option>
-                        <option value="8"><?=JText::_("TPL_FAMILYTREETOP_AUGUST");?></option>
-                        <option value="9"><?=JText::_("TPL_FAMILYTREETOP_SEPTEMBER");?></option>
-                        <option value="10"><?=JText::_("TPL_FAMILYTREETOP_OCTOBER");?></option>
-                        <option value="11"><?=JText::_("TPL_FAMILYTREETOP_NOVEMBER");?></option>
-                        <option value="12"><?=JText::_("TPL_FAMILYTREETOP_DECEMBER");?></option>
-                    </select>
-                    <select familytreetop="days" class="col-md-2 form-control" name="editUnion[day]">
-                        <option value="0"><?=JText::_("TPL_FAMILYTREETOP_DAY");?></option>
-                    </select>
-                    <input familytreetop="year" class="col-md-4 form-control" type="text" maxlength="4" name="editUnion[year]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_YEAR");?>">
+            <div class="container-fluid" style="margin-top:10px;">
+                <div class="row">
+                    <div familytreetop="union-event-date" class="col-md-12" style="padding-left: 5px;">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <select familytreetop="months" class="form-control" name="editUnion[month]">
+                                        <option value="0"><?=JText::_("TPL_FAMILYTREETOP_MONTH");?></option>
+                                        <option value="1"><?=JText::_("TPL_FAMILYTREETOP_JANUARY");?></option>
+                                        <option value="2"><?=JText::_("TPL_FAMILYTREETOP_FEBRUARY");?></option>
+                                        <option value="3"><?=JText::_("TPL_FAMILYTREETOP_MARCH");?></option>
+                                        <option value="4"><?=JText::_("TPL_FAMILYTREETOP_APRIL");?></option>
+                                        <option value="5"><?=JText::_("TPL_FAMILYTREETOP_MAY");?></option>
+                                        <option value="6"><?=JText::_("TPL_FAMILYTREETOP_JUNE");?></option>
+                                        <option value="7"><?=JText::_("TPL_FAMILYTREETOP_JULY");?></option>
+                                        <option value="8"><?=JText::_("TPL_FAMILYTREETOP_AUGUST");?></option>
+                                        <option value="9"><?=JText::_("TPL_FAMILYTREETOP_SEPTEMBER");?></option>
+                                        <option value="10"><?=JText::_("TPL_FAMILYTREETOP_OCTOBER");?></option>
+                                        <option value="11"><?=JText::_("TPL_FAMILYTREETOP_NOVEMBER");?></option>
+                                        <option value="12"><?=JText::_("TPL_FAMILYTREETOP_DECEMBER");?></option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <select familytreetop="days" class="form-control" name="editUnion[day]">
+                                        <option value="0"><?=JText::_("TPL_FAMILYTREETOP_DAY");?></option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <input familytreetop="year" class="form-control" type="text" maxlength="4" name="editUnion[year]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_YEAR");?>">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            </div>
-            <div class="container-fluid">
-            <div familytreetop="union-event-place" class="row">
-                <div class="col-md-12" style="padding-left: 5px;">
-                    <input familytreetop="city" class="col-md-4 form-control" type="text" name="editUnion[city]"  placeholder="<?=JText::_("TPL_FAMILYTREETOP_CITY");?>">
-                    <input familytreetop="state" class="col-md-4 form-control" type="text" name="editUnion[state]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_STATE");?>">
-                    <input familytreetop="country" class="col-md-4 form-control" type="text" name="editUnion[country]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_COUNTRY");?>">
+            <div class="container-fluid" style="margin-top:10px;">
+                <div familytreetop="union-event-place" class="row">
+                    <div class="col-md-12" style="padding-left: 5px;">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <input familytreetop="city" class="form-control" type="text" name="editUnion[city]"  placeholder="<?=JText::_("TPL_FAMILYTREETOP_CITY");?>">
+                                </div>
+                                <div class="col-md-4">
+                                    <input familytreetop="state" class="form-control" type="text" name="editUnion[state]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_STATE");?>">
+                                </div>
+                                <div class="col-md-4">
+                                    <input familytreetop="country" class="form-control" type="text" name="editUnion[country]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_COUNTRY");?>">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
             </div>
         </fieldset>
     </div>
