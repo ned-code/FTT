@@ -19,30 +19,27 @@ $motherLineTotal = sizeof($gedcom->individuals->getCountByFamilyLine('is_mother_
                 <li><a data-familytreetop="members" href="#"><?=JText::_('MOD_FAMILYTREETOP_HEADER_MEMBERS')?></a></li>
                 <li><a data-familytreetop="family_tree" href="#"><?=JText::_('MOD_FAMILYTREETOP_HEADER_FAMILY_TREE')?></a></li>
             </ul>
-            <ul class="nav navbar-nav pull-right" style="border-left: 1px solid #d4d4d4;border-right: 1px solid #d4d4d4;padding-left: 10px;padding-right: 10px;background: white;">
+
+            <ul class="nav navbar-nav pull-right" familytreetop-module="family_line">
                 <li>
-                    <div data-familytreetop="familyline" class="btn-group pull-right">
-                        <button type="button" familytreetop-tooltip="Highlight people on your mother’s side" class="btn btn-default"><i familytreetop-line="mother" class="fa fa-adjust"></i></button>
-                        <button type="button" familytreetop-tooltip="Hide people on your mother’s side" class="btn btn-default"><i familytreetop-line="mother" class="fa fa-eye"></i></button>
-                        <button type="button" familytreetop-tooltip="Members on mother side: <?=$motherLineTotal;?>" style="background: none;border: none;" class="disabled">
-                            <ul class="list-unstyled list-inline">
-                                <li style="padding:0; position: relative;top: -3px;"><?=JText::_('MOD_FAMILYTREETOP_FAMILY_LINE_MOTHER')?></li>
-                                <li style="padding:0;"><canvas id="mother_chart" familytreetop-data="<?=$motherLineTotal;?>" style="height:20px; width: 40px;"></canvas></li>
-                            </ul>
+                    <div class="btn-group">
+                        <button familytreetop-tooltip="Highlight people on your mother’s side"  type="button" class="btn btn-default"><i familytreetop-line="mother" class="fa fa-adjust"></i></button>
+                        <button familytreetop-tooltip="Hide people on your mother’s side" class="btn btn-default" type="button" class="btn btn-default"><i familytreetop-line="mother" class="fa fa-eye"></i></button>
+                        <button familytreetop-tooltip="Members on mother side: <?=$motherLineTotal;?>" type="button" class="btn btn-default" disabled="disabled">
+                            <?=JText::_('MOD_FAMILYTREETOP_FAMILY_LINE_MOTHER')?>
+                            <canvas id="mother_chart" style="width:40px;height:20px;position: relative;top: 5px;" familytreetop-data="<?=$motherLineTotal;?>"></canvas>
                         </button>
                     </div>
                 </li>
-                <li class="divider-vertical"></li>
+                <li class="familytreetop-vertical-divider">&nbsp;</li>
                 <li>
-                    <div data-familytreetop="familyline" class="btn-group pull-right">
-                        <button type="button" familytreetop-tooltip="Members on father side: <?=$fatherLineTotal;?>" style="background: none;border: none;" class="btn btn-default disabled">
-                            <ul class="list-unstyled list-inline">
-                                <li style="padding:0;" ><canvas id="father_chart" familytreetop-data="<?=$fatherLineTotal;?>"  style="height:20px; width: 40px;"></canvas></li>
-                                <li style="padding:0; position: relative;top: -3px;"><?=JText::_('MOD_FAMILYTREETOP_FAMILY_LINE_FATHER')?></li>
-                            </ul>
+                    <div class="btn-group">
+                        <button familytreetop-tooltip="Members on father side: <?=$fatherLineTotal;?>" type="button" class="btn btn-default" disabled="disabled">
+                            <canvas id="father_chart" style="width:40px;height:20px;position: relative;top: 5px;" familytreetop-data="<?=$fatherLineTotal;?>"></canvas>
+                            <?=JText::_('MOD_FAMILYTREETOP_FAMILY_LINE_FATHER')?>
                         </button>
-                        <button type="button" familytreetop-tooltip="Hide people on your father’s side" class="btn btn-default"><i familytreetop-line="father" class="fa fa-eye"></i></button>
-                        <button type="button" familytreetop-tooltip="Highlight people on your father’s side" class="btn btn-default"><i familytreetop-line="father" class="fa fa-adjust"></i></button>
+                        <button familytreetop-tooltip="Hide people on your father’s side"  type="button" class="btn btn-default"><i familytreetop-line="father" class="fa fa-eye"></i></button>
+                        <button familytreetop-tooltip="Highlight people on your father’s side" type="button" class="btn btn-default"><i familytreetop-line="father" class="fa fa-adjust"></i></button>
                     </div>
                 </li>
             </ul>

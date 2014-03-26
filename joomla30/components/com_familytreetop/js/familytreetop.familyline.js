@@ -42,39 +42,39 @@ $FamilyTreeTop.create("familyline", function($){
             $fn.renderChart(cnvs[1], [cnvs[0].total, cnvs[1].total]);
         },
         buttonClick:function(){
-            var $this = this, icon = $($this).find('i'), _class = $(icon).attr('class').split(" ")[0], args, line, btnGroup;
+            var $this = this, icon = $($this).find('i'), _class = $(icon).attr('class').split(" ")[1], args, line, btnGroup;
             line = ($(icon).attr('familytreetop-line') == "father")?1:0;
             btnGroup = (line)?"btn-success":"btn-warning";
             if($active && $this != $active){
                 $($active).click();
             }
             switch(_class){
-                case "icon-adjust":
-                    if($(icon).hasClass('icon-adjust-active')){
-                        $(icon).removeClass('icon-adjust-active');
-                        $($this).removeClass(btnGroup);
+                case "fa-adjust":
+                    if($($this).hasClass('btn-warning')){
+                        $($this).removeClass('btn-warning');
+                        $($this).addClass('btn-default');
                         args = { type:"adjust", active: 0, line: line};
                         $active = false;
                     } else {
-                        $(icon).addClass('icon-adjust-active');
-                        $($this).addClass(btnGroup);
+                        $($this).removeClass('btn-default');
+                        $($this).addClass('btn-warning');
                         args = {type:"adjust", active: 1, line: line};
                         $active = $this;
                     }
                     break;
 
-                case "icon-eye-open":
-                    $(icon).removeClass('icon-eye-open');
+                case "fa-eye":
+                    $(icon).removeClass('fa-eye');
                     $($this).addClass(btnGroup);
-                    $(icon).addClass('icon-eye-close');
+                    $(icon).addClass('fa-eye-slash');
                     args = {type:"eye", active: 0, line: line};
                     $active = $this;
                     break;
 
-                case "icon-eye-close":
-                    $(icon).removeClass('icon-eye-close');
+                case "fa-eye-slash":
+                    $(icon).removeClass('fa-eye-slash');
                     $($this).removeClass(btnGroup);
-                    $(icon).addClass('icon-eye-open');
+                    $(icon).addClass('fa-eye');
                     args = {type:"eye", active: 1, line: line};
                     $active = false;
                     break;
@@ -136,17 +136,17 @@ $FamilyTreeTop.create("familyline", function($){
             }
         },
         hide: function(){
-            $($box).find('.btn:not(.disabled)').hide();
+            $($box).find('.btn:not([disabled="disabled"])').hide();
         },
         show: function(){
-            $($box).find('.btn:not(.disabled)').show();
+            $($box).find('.btn:not([disabled="disabled"])').show();
         }
     }
 
     $this.init = function(){
-        $box = $('.navbar div[data-familytreetop="familyline"]');
-        $box.find('button:not(.disabled)').each($fn.buttonsClick);
-        $fn.renderCharts($box.find('button.disabled canvas'));
+        $box = $('[familytreetop-module="family_line"]');
+        $box.find('button:not([disabled="disabled"])').each($fn.buttonsClick);
+        $fn.renderCharts($box.find('button[disabled="disabled"] canvas'));
         $this.mod('tabs').bind('all', function(e){
             if($(e.target).attr('data-familytreetop') == "family_tree"){
                 $fn.hide();

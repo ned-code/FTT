@@ -21,14 +21,14 @@
 * FAMILYTREETOP NAV
 */
 .familytreetop-nav.navbar-inverse {
-    background-color: #365f18;
-    border-color: #365f18;
+    background-color: #752f05;
+    border-color: #752f05;
 }
 .familytreetop-nav.navbar-inverse {
-    background-image: -webkit-linear-gradient(top,#365f18 0,#365f18 100%);
-    background-image: linear-gradient(to bottom,#365f18 0,#365f18 100%);
+    background-image: -webkit-linear-gradient(top,#752f05 0,#752f05 100%);
+    background-image: linear-gradient(to bottom,#752f05 0,#752f05 100%);
     background-repeat: repeat-x;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#365f18', endColorstr='#365f18', GradientType=0);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#752f05', endColorstr='#752f05', GradientType=0);
     filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
 }
 .familytreetop-nav.navbar {
