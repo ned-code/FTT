@@ -11,8 +11,8 @@ $filterButtonsWidth = 100;
                         <div class="col-md-12">
                             <div style="position:relative;" class="text-center">
                                 <span><?=JText::_('MOD_FTT_MEMBERS_FAMILY_MEMBERS');?></span>
-                                <div style="position:absolute;top: 0;right: 0;">
-                                    <input type="text" class="search" placeholder="Search"><i class="fa fa-search" style="position:absolute; right: 7px;top: 7px;"></i>
+                                <div style="position:absolute;top: 4px;right: 4px;">
+                                    <input type="text" class="form-control" placeholder="Search"><i class="fa fa-search" style="position:absolute; right: 7px;top: 7px;"></i>
                                 </div>
                             </div>
                         </div>
@@ -37,7 +37,7 @@ $filterButtonsWidth = 100;
                 <legend class="text-center familytreetop-module-header"><?=JText::_('MOD_FTT_MEMBERS_FILTER');?></legend>
                 <div class="row">
                     <div class="col-md-12">
-                        <ul style="margin: 0 auto;width: 200px;" class-familytreetop="module-padding" class="list-unstyled">
+                        <ul style="margin: 0 auto;width: 260px;" class-familytreetop="module-padding" class="list-unstyled">
                             <li familytreetop="immediate_family"><label class="checkbox"><input type="checkbox" checked><span familytreetop="count">0</span> <span><?=JText::_('MOD_FTT_MEMBERS_IMMEDIATE_FAMILY');?></span></label></li>
                             <li familytreetop="grandparents"><label class="checkbox"><input type="checkbox" checked><span familytreetop="count">0</span> <span><?=JText::_('MOD_FTT_MEMBERS_GRANDPARENTS');?></span></label></li>
                             <li familytreetop="grandchildren"><label class="checkbox"><input type="checkbox" checked><span familytreetop="count">0</span> <span><?=JText::_('MOD_FTT_MEMBERS_GRANDCHILDREN');?></span></label></li>

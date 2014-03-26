@@ -306,7 +306,7 @@ $language_tag = FamilyTreeTopLanguagesHelper::getDefaultTag();
         <div class="row">
             <div class="col-md-12">
                     <span class="btn btn-success fileinput-button">
-                        <i style="display:inline-block;" class="icon-plus icon-white"></i>
+                        <i style="display:inline-block;" class="fa fa-pencil"></i>
                         <span style="display:inline-block;"><?=JText::_("TPL_FAMILYTREETOP_EDITOR_TABS_MEDIA_ADD_FILES");?></span>
                         <input type="file" name="files[]" multiple="">
                     </span>
@@ -420,7 +420,7 @@ $language_tag = FamilyTreeTopLanguagesHelper::getDefaultTag();
                         </div>
                         <div class="col-md-1">
                             <div style="padding-top:25px; text-align:center;">
-                                <i class="icon-plus icon-2x"></i>
+                                <i class="fa fa-plus fa-2x"></i>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -669,7 +669,7 @@ $language_tag = FamilyTreeTopLanguagesHelper::getDefaultTag();
         <div class="row" style="text-align: center;">
             <div class="col-md-4"></div>
             <div class="col-md-4">
-                <div><i style="color:red;" class="icon-4x icon-warning-sign"></i></div>
+                <div><i style="color:red;" class="fa fa-warning fa-4x"></i></div>
                 <div><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_YOU_ABOUT_DELETE');?></div>
                 <div><?=JText::_('TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_ARE_YOU_SURE');?></div>
                 <div style="margin:10px;">
@@ -753,10 +753,7 @@ $language_tag = FamilyTreeTopLanguagesHelper::getDefaultTag();
 <div id="familiesHide">
     <div familytreetop="home" style="position: absolute;top: 0;left: 50%; margin-left: -20px; cursor: pointer;">
         <a style="text-decoration: none;" onclick="return false;">
-                <span class="icon-stack">
-                     <i class="icon-circle icon-stack-base"></i>
-                     <i class="icon-home icon-light"></i>
-                </span>
+                <i class="fa fa-home"></i>
         </a>
     </div>
     <div class="multiparent-left-box" style="width: 120px;max-height: 250px;/*overflow: hidden;overflow-y: auto;*/"></div>
@@ -800,7 +797,7 @@ $language_tag = FamilyTreeTopLanguagesHelper::getDefaultTag();
                 <li familytreetop="send_notification" style=""> <input name="send_facebook" type="checkbox" checked="checked"> <?=JText::_('TPL_FAMILYTREETOP_TDFRIENDSELECTOR_SEND_TO_FACEBOOK');?></li>
                 <li familytreetop="send_email" style=""> <input name="send_email" type="checkbox"> <?=JText::_('TPL_FAMILYTREETOP_TDFRIENDSELECTOR_SEND_TO_EMAIL');?></li>
                 <li familytreetop="notification"><div style="color:red; margin-left: 18px;"><?=JText::_('TPL_FAMILYTREETOP_TDFRIENDSELECTOR_EMAIL_NOTIFCATION');?></div></li>
-                <li familytreetop="email" style="display:none; padding-left: 18px;"><?=JText::_('TPL_FAMILYTREETOP_TDFRIENDSELECTOR_EMAIL');?>: <input type="text" name="email" value=""> <i class="icon-leaf"></i></li>
+                <li familytreetop="email" style="display:none; padding-left: 18px;"><?=JText::_('TPL_FAMILYTREETOP_TDFRIENDSELECTOR_EMAIL');?>: <input type="text" name="email" value=""> <i class="fa fa-leaf"></i></li>
             </ul>
             <div familytreetop="message" style="display:none; margin: 20px; background: #4d67a2;border: 2px solid #4d67a2;">
                 <div style="position: relative;height: 35px;">
