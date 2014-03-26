@@ -860,11 +860,11 @@ $language_tag = FamilyTreeTopLanguagesHelper::getDefaultTag();
             <div style="display:inline-block;" familytreetop="header_name"></div>
         </div>
         <div class="ex-body">
-            <ul class="unstyled" style="margin: 20px;">
+            <ul class="list-unstyled" style="margin: 20px;">
                 <li familytreetop="send_notification" style=""> <input name="send_facebook" type="checkbox" checked="checked"> <?=JText::_('TPL_FAMILYTREETOP_TDFRIENDSELECTOR_SEND_TO_FACEBOOK');?></li>
                 <li familytreetop="send_email" style=""> <input name="send_email" type="checkbox"> <?=JText::_('TPL_FAMILYTREETOP_TDFRIENDSELECTOR_SEND_TO_EMAIL');?></li>
                 <li familytreetop="notification"><div style="color:red; margin-left: 18px;"><?=JText::_('TPL_FAMILYTREETOP_TDFRIENDSELECTOR_EMAIL_NOTIFCATION');?></div></li>
-                <li familytreetop="email" style="display:none; padding-left: 18px;"><?=JText::_('TPL_FAMILYTREETOP_TDFRIENDSELECTOR_EMAIL');?>: <input class="form-control" type="text" name="email" value=""> <i class="fa fa-leaf"></i></li>
+                <li familytreetop="email" style="display:none; padding-left: 18px;" class="form-group has-feedback"><label class="control-label" for="tdFriendSelectorEmail"><?=JText::_('TPL_FAMILYTREETOP_TDFRIENDSELECTOR_EMAIL');?></label><input id="tdFriendSelectorEmail" class="form-control" type="text" name="email" value=""><span class="fa fa-envelope fa-2x form-control-feedback"></span></li>
             </ul>
             <div familytreetop="message" style="display:none; margin: 20px; background: #4d67a2;border: 2px solid #4d67a2;">
                 <div style="position: relative;height: 35px;">
