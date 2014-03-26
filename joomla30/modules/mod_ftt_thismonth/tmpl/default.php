@@ -16,91 +16,78 @@ $months = array(
 );
 $date = date('n', strtotime('-1 month'));
 ?>
-<div class="container-fluid">
 <div id="thisMonth" class="row">
     <div class="col-md-12">
         <div class="well" familytreetop="module">
             <fieldset>
                 <legend>
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <?php
-                                echo '<select familytreetop="months" style="margin:0;" name="ThisMonth[month]">';
-                                echo '<option value="0">'.JText::_("TPL_FAMILYTREETOP_ALL_MONTH").'</option>';
-                                foreach($months as $key => $month){
-                                    $option = '<option ';
-                                    if($key == $date){
-                                        $option .= ' selected="selected"';
-                                    }
-                                    $option .= ' value="' . ($key + 1);
-                                    $option .= '">' ;
-                                    $option .= JText::_($month);;
-                                    $option .= '</option>';
-                                    echo $option;
+                    <div class="row">
+                        <div class="col-md-12">
+                            <?php
+                            echo '<select familytreetop="months" class="form-control" style="margin:0 auto;" name="ThisMonth[month]">';
+                            echo '<option value="0">'.JText::_("TPL_FAMILYTREETOP_ALL_MONTH").'</option>';
+                            foreach($months as $key => $month){
+                                $option = '<option ';
+                                if($key == $date){
+                                    $option .= ' selected="selected"';
                                 }
-                                echo '</select>';
-                                ?>
-                            </div>
+                                $option .= ' value="' . ($key + 1);
+                                $option .= '">' ;
+                                $option .= JText::_($month);;
+                                $option .= '</option>';
+                                echo $option;
+                            }
+                            echo '</select>';
+                            ?>
                         </div>
                     </div>
                 </legend>
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div familytreetop="none" class="row-fluid" style="display:none; padding: 0;">
-                            <div style="margin: 30px;font-weight: bold; text-align: center; font-size: 18px; color: #959595;"><?=JText::_('MOD_FTT_THISMONTH_NONE_TITLE');?></div>
-                            <div style="text-align: center; margin: 30px;"><i class="icon-calendar-empty muted" style="font-size: 120px; color: #acacac;"></i></div>
-                            <div style="margin: 30px; text-align: center; font-size: 16px; color: #959595;"><?=JText::_('MOD_FTT_THISMONTH_NONE_DESCRIPTION');?></div>
-                        </div>
-                        <div class="container-fluid">
-                            <div familytreetop="all" class="row" style="display:none;">
-                                <div class="col-md-12">
-                                    <div familytreetop="subbox">
-                                        <table style="margin:0;" class="table table-striped table-bordered familytreetop-table familytreetop-table-td">
-                                            <thead>
-                                                <tr style="background: #efe4b0;">
-                                                    <td><?=JText::_('MOD_FTT_THISMONTH_DAY');?></td>
-                                                    <td><?=JText::_('MOD_FTT_THISMONTH_EVENT');?></td>
-                                                    <td><?=JText::_('MOD_FTT_THISMONTH_NAME');?></td>
-                                                    <td><?=JText::_('MOD_FTT_THISMONTH_NOTE');?></td>
-                                                    <td><?=JText::_('MOD_FTT_THISMONTH_RELATION');?></td>
-                                                </tr>
-                                            </thead>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="container-fluid">
-                            <div familytreetop="BIRT" class="row" style="display:none;">
-                                <div class="col-md-12">
-                                    <table style="margin:0;" class="table table-striped familytreetop-table familytreetop-table-td">
+            <div class="row">
+                <div class="col-md-12">
+                    <div familytreetop="none" class="row-fluid" style="display:none; padding: 0;">
+                        <div style="margin: 30px;font-weight: bold; text-align: center; font-size: 18px; color: #959595;"><?=JText::_('MOD_FTT_THISMONTH_NONE_TITLE');?></div>
+                        <div style="text-align: center; margin: 30px;"><i class="icon-calendar-empty muted" style="font-size: 120px; color: #acacac;"></i></div>
+                        <div style="margin: 30px; text-align: center; font-size: 16px; color: #959595;"><?=JText::_('MOD_FTT_THISMONTH_NONE_DESCRIPTION');?></div>
+                    </div>
+                        <div familytreetop="all" class="row" style="display:none;">
+                            <div class="col-md-12">
+                                <div familytreetop="subbox">
+                                    <table style="margin:0;" class="table table-striped table-bordered familytreetop-table familytreetop-table-td">
+                                        <thead>
+                                            <tr style="background: #efe4b0;">
+                                                <td><?=JText::_('MOD_FTT_THISMONTH_DAY');?></td>
+                                                <td><?=JText::_('MOD_FTT_THISMONTH_EVENT');?></td>
+                                                <td><?=JText::_('MOD_FTT_THISMONTH_NAME');?></td>
+                                                <td><?=JText::_('MOD_FTT_THISMONTH_NOTE');?></td>
+                                                <td><?=JText::_('MOD_FTT_THISMONTH_RELATION');?></td>
+                                            </tr>
+                                        </thead>
                                     </table>
                                 </div>
                             </div>
                         </div>
-                        <div class="container-fluid">
-                            <div familytreetop="MARR" class="row" style="display:none;">
-                                <div class="col-md-12">
-                                    <table style="margin:0;" class="table table-striped familytreetop-table familytreetop-table-td"></table>
-                                </div>
+                        <div familytreetop="BIRT" class="row" style="display:none;">
+                            <div class="col-md-12">
+                                <table style="margin:0;" class="table table-striped familytreetop-table familytreetop-table-td">
+                                </table>
                             </div>
                         </div>
-                        <div class="container-fluid">
-                            <div familytreetop="DEAT" class="row" style="display:none;">
-                                <div class="col-md-12">
-                                    <table style="margin:0;" class="table table-striped familytreetop-table familytreetop-table-td"></table>
-                                </div>
+                        <div familytreetop="MARR" class="row" style="display:none;">
+                            <div class="col-md-12">
+                                <table style="margin:0;" class="table table-striped familytreetop-table familytreetop-table-td"></table>
                             </div>
                         </div>
-                    </div>
+                        <div familytreetop="DEAT" class="row" style="display:none;">
+                            <div class="col-md-12">
+                                <table style="margin:0;" class="table table-striped familytreetop-table familytreetop-table-td"></table>
+                            </div>
+                        </div>
                 </div>
             </div>
+
             </fieldset>
         </div>
     </div>
-</div>
 </div>
 <script>
     $FamilyTreeTop.bind(function($){

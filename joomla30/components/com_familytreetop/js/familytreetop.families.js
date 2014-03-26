@@ -131,7 +131,7 @@ $FamilyTreeTop.create("families", function($){
             $this.mod('editmenu').render(object, gedcom_id);
         },
         createFacebookIcon: function(object, ind){
-            $(object).append('<div style="width:24px;height:24px;background:white;clear:both;border-radius:5px;bottom: 5px;position: absolute;right: 13px;"><a style="text-decoration: none;" target="_blank" href="https://www.facebook.com/'+ind.facebook_id+'"><i style="line-height: 25px;" class="fa fa-facebook-square fa-2x"></i></a></div>')
+            $(object).append('<div style="width:24px;height:24px;background:white;clear:both;border-radius:5px;bottom: 5px;position: absolute;right: 5px;"><a style="text-decoration: none;" target="_blank" href="https://www.facebook.com/'+ind.facebook_id+'"><i style="line-height: 25px;" class="fa fa-facebook-square fa-2x"></i></a></div>')
         },
         createDeceased: function(object){
             $(object).append('<div class="familytreetop-deceased-triangle"></div>');
@@ -280,7 +280,7 @@ $FamilyTreeTop.create("families", function($){
                 }
                 boxes.push(object);
             });
-            $(settings.parent).css('position', 'relative').css('min-height', getMinHeight());
+            $(settings.parent).css('position', 'relative').css('min-height', getMinHeight()).css('padding', 0);
             if($canvas){
                 $($canvas).remove();
             }
@@ -291,7 +291,7 @@ $FamilyTreeTop.create("families", function($){
             return true;
             function getRows(){
                 var length = boxs.length - 3;
-                var width = parseInt($(settings.parent).width());
+                var width = $(settings.parent).width();
                 var rows = Math.ceil( (120 * length) / width );
                 var limit = Math.ceil(length / rows);
                 if(limit * rows < length){
@@ -309,7 +309,7 @@ $FamilyTreeTop.create("families", function($){
                 if(h == 0){
                     h = getTextHeight.call(obj);
                 }
-                return top + Math.ceil(150/2) - h - 10;
+                return top + Math.ceil(140/2) - h - 10;
                 function getTextHeight(font){
                     var f = font || '14px "Helvetica Neue",Helvetica,Arial,sans-serif',
                         o = $('<div>' + (this).html() + '</div>')
@@ -366,7 +366,7 @@ $FamilyTreeTop.create("families", function($){
                 var space = getSpace(halfWidth);
                 return (index)?halfWidth + space:space;
                 function getSpace(w){
-                    var s = w - 150;
+                    var s = w - 140;
                     if(s <= 0){
                         return s;
                     } else {
@@ -433,6 +433,7 @@ $FamilyTreeTop.create("families", function($){
             canvas = new fabric.StaticCanvas($canvas[0]);
 
             var parentLineCoords = [parseInt(points[0].left) + 70, parseInt(points[0].top) + 70, parseInt(points[1].left) + 70, parseInt(points[1].top) + 70];
+            console.log(parentLineCoords);
             var center = getCenter(parentLineCoords);
             canvas.add(drawLine(parentLineCoords));
             if(points.length > 3){
@@ -484,7 +485,8 @@ $FamilyTreeTop.create("families", function($){
         },
         click:function(settings){
             var gedcom_id = $(this).parent().parent().attr('gedcom_id');
-            var arrow = $(this).find('i').attr('class').split('-').pop();
+            var classes = $(this).find('i').attr('class').split(' ');
+            var arrow = classes[1].split('-').pop();
             settings.gedcom_id = (arrow == "down")?gedcom_id:$fn.getStartIdByParents(gedcom_id);
             $this.mod('popovers').hide();
             $this.render(settings);
@@ -580,6 +582,14 @@ $FamilyTreeTop.create("families", function($){
             }
             $(window).resize(function(){
                 $fn.setPosition($boxs[settings.id], settings);
+            });
+
+            $this.mod('tabs').bind('all', function(e){
+                if($(e.currentTarget).attr('data-familytreetop') == 'family_tree' ){
+                    setTimeout(function(){
+                        $fn.setPosition($boxs[settings.id], settings);
+                    }, 1);
+                }
             });
         },
         animation: function(){}

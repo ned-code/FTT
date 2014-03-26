@@ -284,6 +284,18 @@
             return unescape(output);
         },
         trim: function(){return this.replace(/^\s+|\s+$/g, '');},
+        width: function(obj){
+            var cl = $(obj).clone(), h;
+            $(cl).css({
+                position: 'absolute',
+                visibility : 'hidden',
+                display: 'block'
+            });
+            $(document.body).append(cl);
+            h = $(cl).height();
+            $(cl).remove();
+            return parseInt(h);
+        },
         textWidth: function(text, font){
             var f = font || '12px arial',
                 o = jQuery('<div>' + text + '</div>')

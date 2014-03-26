@@ -3,27 +3,27 @@ $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
 $template = $settings->_template->value;
 ?>
 <div class="row" id="loginHeader" style="visibility: hidden;">
-    <div class="span4"></div>
-    <div class="span4 text-center">
+    <div class="com-md-4"></div>
+    <div class="com-md-4 text-center">
         <img src="<?=$this->baseurl;?>/templates/<?=$template?>/images/ftt_title.png" accesskey="">
     </div>
-    <div class="span4"></div>
+    <div class="com-md-4"></div>
 </div>
 <div class="row" id="loginContent" style="visibility:hidden;">
-    <div class="span4">
+    <div class="com-md-4">
     </div>
-    <div class="span4">
+    <div class="com-md-4">
         <div class="well text-center">
-            <a id="login" data-complete-text="Login" data-loading-text="Please wait..."  href="#" onclick="return false;" class="btn btn-large">Login</a>
+            <a id="login" data-complete-text="Login" data-loading-text="Please wait..."  href="#" onclick="return false;" class="btn btn-default btn-large">Login</a>
         </div>
         <div style="visibility: hidden; text-align: center; width: 100%; height: 140px;" familytreetop="progressbar" >
             <!--<img src="<?=$this->baseurl;?>/templates/familytreetop/img/circle_progressbar_128_128.GIF" /> -->
         </div>
     </div>
-    <div class="span4"></div>
+    <div class="com-md-4"></div>
 </div>
 <div class="row" id="loginFooter" style="visibility:hidden;">
-    <div class="span12">
+    <div class="com-md-12">
         <img src="<?=$this->baseurl;?>/templates/<?=$template?>/images/family_line.png" accesskey="">
     </div>
 </div>

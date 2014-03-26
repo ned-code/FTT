@@ -31,6 +31,7 @@ $navbar_name = ($template == "familytreetop")?"Family TreeTop":"MyNativeRoots";
             <?php endif ?>
         </div>
         <!-- Collect the nav links, forms, and other content for toggling -->
+        <?php if($user->facebook_id != 0 && $ind): ?>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
                 <li><img style="margin: 4px;" src="https://graph.facebook.com/<?=$user->facebook_id;?>/picture?width=30&height=30"/></li>
@@ -47,6 +48,7 @@ $navbar_name = ($template == "familytreetop")?"Family TreeTop":"MyNativeRoots";
                 </li>
             </ul>
         </div><!-- /.navbar-collapse -->
+        <?php endif; ?>
     </div><!-- /.container-fluid -->
 </nav>
 

@@ -304,7 +304,7 @@ $FamilyTreeTop.create("this_month", function($){
                 }
             });
             width = $this.mod('usertree').textWidth(text, "14px 'Helvetica Neue', Helvetica, Arial, sans-serif");
-            $(select).css('width',(width+40)+'px');
+            $(select).css('width',(width+60)+'px');
         }
     }
 

@@ -761,8 +761,8 @@ $language_tag = FamilyTreeTopLanguagesHelper::getDefaultTag();
     </div>
     <div class="multiparent-left-box" style="width: 120px;max-height: 250px;/*overflow: hidden;overflow-y: auto;*/"></div>
     <div class="multiparent-right-box" style="width: 120px;max-height: 250px;/*overflow: hidden;overflow-y: auto;*/"></div>
-    <div class="parent-box" style="max-width: 160px;">
-        <div familytreetop-avatar-box style="width: 150px;position:relative;">
+    <div class="parent-box" style="max-width: 140px;">
+        <div familytreetop-avatar-box style="width: 140px;position:relative;">
             <img class="img-thumbnail" data-src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/js/holder.js/150x150">
         </div>
         <div class="text-center"></div>
@@ -774,7 +774,7 @@ $language_tag = FamilyTreeTopLanguagesHelper::getDefaultTag();
         </div>
         <div class="text-center"></div>
     </div>
-    <div class="child-box" style="max-width: 110px;">
+    <div class="child-box" style="max-width: 90px;">
         <div style="position:relative;">
             <img class="img-thumbnail" data-src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/js/holder.js/100x100">
         </div>
