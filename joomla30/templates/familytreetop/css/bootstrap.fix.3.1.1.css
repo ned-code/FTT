@@ -44,6 +44,11 @@
 .familytreetop-modal .modal-dialog {
     width: 70%;
 }
+.modal-header {
+    background-color: #efe4b0;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+}
 /**
 * FAMILYTREETOP FAMILY_LINE
 */

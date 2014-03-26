@@ -211,29 +211,29 @@ $language_tag = FamilyTreeTopLanguagesHelper::getDefaultTag();
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">×</button>
-                <button type="button" familytreetop="edit" class="btn btn-default familytreetop-header-button" style="padding: 5px 10px;"><i class="fa fa-pencil"></i><span style="top: 0;margin-left: 3px;"><?=JText::_('TPL_FAMILYTREETOP_BUTTON_EDIT');?></span></button>
-                <button type="button" familytreetop="facebook" class="btn btn-default familytreetop-header-button"><i class="fa fa-facebook-square"></i><span style="margin-left:3px;"><?=JText::_('TPL_FAMILYTREETOP_BUTTON_FACEBOOK');?></span></button>
-                <button type="button" familytreetop="invite" class="btn btn-primary familytreetop-header-button"> <i class="fa fa-facebook-square"></i><span><?=JText::_('TPL_FAMILYTREETOP_BUTTON_INVITE');?></span></button>
+                <button type="button" familytreetop="edit" class="btn btn-default pull-right"><i class="fa fa-pencil"></i><span><?=JText::_('TPL_FAMILYTREETOP_BUTTON_EDIT');?></span></button>
+                <button type="button" familytreetop="facebook" class="btn btn-default pull-right"><i class="fa fa-facebook-square"></i><span><?=JText::_('TPL_FAMILYTREETOP_BUTTON_FACEBOOK');?></span></button>
+                <button type="button" familytreetop="invite" class="btn btn-primary pull-right"><i class="fa fa-facebook-square"></i><span><?=JText::_('TPL_FAMILYTREETOP_BUTTON_INVITE');?></span></button>
                 <h4 id="profileLabel"></h4>
             </div>
             <div class="modal-body">
                 <div data-familytreetop-profile="creator" style="position:absolute; top:5px; right:5px;">
                     <div style="color: #c3c3c3;"><span><?=JText::_('TPL_FAMILYTREETOP_CREATOR_DESCRIPTION');?></span><span familytreetop="name"></span></div>
                 </div>
-                <div data-familytreetop-profile="facebook" class="row-fluid">
-                    <div class="span12">
+                <div data-familytreetop-profile="facebook" class="row">
+                    <div class="col-md-12">
 
                     </div>
                 </div>
-                <div data-familytreetop-profile="about" class="row-fluid">
-                    <div class="span7">
+                <div data-familytreetop-profile="about" class="row">
+                    <div class="col-md-12">
                         <div class="well" familytreetop="module">
                             <fieldset>
                                 <legend><?=JText::_("TPL_FAMILYTREETOP_ABOUT");?></legend>
-                                <div class="row-fluid" style="padding: 5px;">
-                                    <div  data-familytreetop="avatar" class="span4"></div>
-                                    <div class="span8">
-                                        <ul class="unstyled" style="font-size:14px;">
+                                <div class="row" style="padding: 5px;">
+                                    <div  data-familytreetop="avatar" style="min-width:120px;" class="col-md-1"></div>
+                                    <div class="col-md-9">
+                                        <ul class="list-unstyled" style="font-size:14px;">
                                             <li><strong><?=JText::_("TPL_FAMILYTREETOP_FIRST_NAME");?></strong>: <span></span></li>
                                             <li><strong><?=JText::_("TPL_FAMILYTREETOP_MIDDLE_NAME");?></strong>: <span></span></li>
                                             <li><strong><?=JText::_("TPL_FAMILYTREETOP_LAST_NAME");?></strong>: <span></span></li>
@@ -246,8 +246,8 @@ $language_tag = FamilyTreeTopLanguagesHelper::getDefaultTag();
                         </div>
                     </div>
                 </div>
-                <div data-familytreetop-profile="relation" class="row-fluid">
-                    <div class="span12">
+                <div data-familytreetop-profile="relation" class="row">
+                    <div class="col-md-12">
                         <div class="well" familytreetop="module">
                             <fieldset>
                                 <legend><?=JText::_("TPL_FAMILYTREETOP_RELATION_MAP");?></legend>
@@ -255,8 +255,8 @@ $language_tag = FamilyTreeTopLanguagesHelper::getDefaultTag();
                         </div>
                     </div>
                 </div>
-                <div data-familytreetop-profile="family" class="row-fluid">
-                    <div class="span12">
+                <div data-familytreetop-profile="family" class="row">
+                    <div class="col-md-12">
                         <div class="well" familytreetop="module">
                             <fieldset>
                                 <legend><?=JText::_("TPL_FAMILYTREETOP_FAMILY");?></legend>
@@ -264,8 +264,8 @@ $language_tag = FamilyTreeTopLanguagesHelper::getDefaultTag();
                         </div>
                     </div>
                 </div>
-                <div data-familytreetop-profile="photos" class="row-fluid">
-                    <div class="span12">
+                <div data-familytreetop-profile="photos" class="row">
+                    <div class="col-md-12">
                         <div class="well" familytreetop="module">
                             <fieldset>
                                 <legend><?=JText::_("TPL_FAMILYTREETOP_PHOTOS");?></legend>

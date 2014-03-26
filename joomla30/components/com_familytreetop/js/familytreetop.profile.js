@@ -571,7 +571,7 @@ $FamilyTreeTop.create("profile", function($){
                      return $('<div class="row-fluid"><div class="span12"></div></div>');
                 },
                 createUl: function(){
-                    return $('<ul style="margin: 10px 20px;" class="unstyled inline"></ul>');
+                    return $('<ul style="margin: 10px 20px;" class="list-unstyled list-inline"></ul>');
                 },
                 createProfilePhotos: function(photos){
                     if(photos.length == 0) return false;
@@ -583,10 +583,10 @@ $FamilyTreeTop.create("profile", function($){
                     $(photos).each(function(index, photo){
                         var li, picture;
                         if("undefined"===typeof(photo.gedcom_id)){
-                            li = $('<li><a target="_blank" href="'+photo.link+'"><img style="cursor:pointer;" class="img-polaroid" src=""></a></li>');
+                            li = $('<li><a target="_blank" href="'+photo.link+'"><img style="cursor:pointer;" class="img-thumbnail" src=""></a></li>');
                             picture = photo.picture;
                         } else {
-                            li = $('<li><img style="cursor:pointer;" class="img-polaroid" src=""></li>');
+                            li = $('<li><img style="cursor:pointer;" class="img-thumbnail" src=""></li>');
                             picture = photo.thumbnail_url;
                         }
                         $(li).find('img').attr('src', picture);
@@ -602,7 +602,7 @@ $FamilyTreeTop.create("profile", function($){
                     $(div).append(ul);
                     $(box).append(div);
                     $(photos).each(function(index, photo){
-                        var li = $('<li><a target="_blank" href="'+photo.link+'"><img style="cursor:pointer;" class="img-polaroid" src=""></a></li>');
+                        var li = $('<li><a target="_blank" href="'+photo.link+'"><img style="cursor:pointer;" class="img-thumbnail" src=""></a></li>');
                         $(li).find('img').attr('src', photo.picture);
                         $(ul).append(li);
                     });
@@ -617,7 +617,7 @@ $FamilyTreeTop.create("profile", function($){
                         var max = count + interval;
                         for(var i = count ; i < max ; i++){
                             if("undefined" !== typeof(photos[i])){
-                                var li = $('<li><a target="_blank" href="'+photos[i].link+'"><img style="cursor:pointer;" class="img-polaroid" src=""></a></li>');
+                                var li = $('<li><a target="_blank" href="'+photos[i].link+'"><img style="cursor:pointer;" class="img-thumbnail" src=""></a></li>');
                                 $(li).find('img').attr('src', photos[i].picture);
                                 $(photosCont).append(li);
                             } else {

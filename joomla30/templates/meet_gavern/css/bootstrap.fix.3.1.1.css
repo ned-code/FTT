@@ -35,7 +35,7 @@
    border-radius: 0;
 }
 .familytreetop-nav.navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:hover, .navbar-inverse .navbar-nav>.open>a:focus {
-    background-color: #365f18;
+    background-color: #752f05;
     color: #fff;
 }
 /**
@@ -43,6 +43,11 @@
 */
 .familytreetop-modal .modal-dialog {
     width: 70%;
+}
+.modal-header {
+    background-color: #efe4b0;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
 }
 /**
 * FAMILYTREETOP FAMILY_LINE
