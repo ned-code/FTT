@@ -34,3 +34,13 @@
 .familytreetop-nav.navbar {
    border-radius: 0;
 }
+.familytreetop-nav.navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:hover, .navbar-inverse .navbar-nav>.open>a:focus {
+    background-color: #365f18;
+    color: #fff;
+}
+/**
+* FAMILYTREETOP MODAL
+*/
+.familytreetop-modal .modal-dialog {
+    width: 70%;
+}

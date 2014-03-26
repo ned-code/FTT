@@ -433,7 +433,6 @@ $FamilyTreeTop.create("families", function($){
             canvas = new fabric.StaticCanvas($canvas[0]);
 
             var parentLineCoords = [parseInt(points[0].left) + 70, parseInt(points[0].top) + 70, parseInt(points[1].left) + 70, parseInt(points[1].top) + 70];
-            console.log(parentLineCoords);
             var center = getCenter(parentLineCoords);
             canvas.add(drawLine(parentLineCoords));
             if(points.length > 3){
