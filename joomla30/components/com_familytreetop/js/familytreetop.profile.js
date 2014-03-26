@@ -740,7 +740,7 @@ $FamilyTreeTop.create("profile", function($){
         $fn.setCreator.call(parent, args)
         $fn.setAbout.call(parent, args);
         $fn.setPhotos.call(parent, args);
-        $(parent).on('shown', function(){
+        $(parent).on('shown.bs.modal', function(){
             $fn.setRelation.call(parent, args);
             $fn.setFamily.call(parent, args);
         });
