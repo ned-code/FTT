@@ -209,7 +209,7 @@ $FamilyTreeTop.create("members", function($){
                 if($fn.isSortable(object)&&$fn.isGender(object)&&$fn.isLiving(object)&&$fn.isRegistered(object)&&$fn.isMembers(object, ancestorList, descendantList)){
                     avatar = object.avatar(["25","25"]);
                     $fn.setRelPullObject(object);
-                    $(tr).append('<td><i class="icon-leaf"></i> '+object.relation+'</td>');
+                    $(tr).append('<td><i class="fa fa-leaf"></i> '+object.relation+'</td>');
                     td = $('<td style="'+getPadding(avatar)+'" data-familytreetop-color="'+object.gender+'" gedcom_id="'+object.gedcom_id+'"></td>');
                     if($this.mod('usertree').isAvatar(avatar)){
                         var div = $(document.createElement('div'));
@@ -219,7 +219,7 @@ $FamilyTreeTop.create("members", function($){
                     }
                     $(td).append('<div class="pull-left" style="'+getMaxWidth(avatar)+'"> <span style="cursor:pointer;">'+object.name()+'</span></div>');
                     $(tr).append(td);
-                    $(tr).append('<td style="width:95px;">'+$this.mod('usertree').parseDate(birth.date)+'</td>');
+                    $(tr).append('<td style="width:120px;">'+$this.mod('usertree').parseDate(birth.date)+'</td>');
                     $(tr).append('<td style="text-align: right;">'+$this.mod('usertree').parsePlace(birth.place)+'</td>');
                     $($box).append(tr);
                     $this.mod('popovers').render({
