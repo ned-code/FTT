@@ -226,7 +226,7 @@ $language_tag = FamilyTreeTopLanguagesHelper::getDefaultTag();
                     </div>
                 </div>
                 <div data-familytreetop-profile="about" class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         <div class="well" familytreetop="module">
                             <fieldset>
                                 <legend><?=JText::_("TPL_FAMILYTREETOP_ABOUT");?></legend>

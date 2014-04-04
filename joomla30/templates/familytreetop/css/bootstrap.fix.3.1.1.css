@@ -59,6 +59,14 @@
 .familytreetop-modal .modal-dialog {
     width: 70%;
 }
+.familytreetop-modal .modal-header h4 {
+    margin: 0;
+}
+.familytreetop-modal .modal-header button.btn {
+    position: relative;
+    top: -8px;
+    margin-right: 10px;
+}
 .modal-header {
     background-color: #efe4b0;
     border-top-left-radius: 6px;

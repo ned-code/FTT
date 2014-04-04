@@ -39,10 +39,32 @@
     color: #fff;
 }
 /**
+* FAMILYTREETOP NAVS[BULLETIN_BOARD, etc]
+*/
+.navbar-familytreetop .navbar {
+    position: relative;
+    min-height: 30px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+}
+.navbar-familytreetop .navbar-nav>li>a {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    line-height: 20px;
+}
+/**
 * FAMILYTREETOP MODAL
 */
 .familytreetop-modal .modal-dialog {
     width: 70%;
+}
+.familytreetop-modal .modal-header h4 {
+    margin: 0;
+}
+.familytreetop-modal .modal-header button.btn {
+    position: relative;
+    top: -8px;
+    margin-right: 10px;
 }
 .modal-header {
     background-color: #efe4b0;
@@ -53,7 +75,7 @@
 * FAMILYTREETOP FAMILY_LINE
 */
 [familytreetop-module="family_line"] {
-    height: 50px;
+    height: 40px;
     background: white;
     padding-right: 5px;
     padding-left: 5px;
@@ -70,11 +92,11 @@
     line-height: 30px;
 }
 [familytreetop-module="family_line"] .familytreetop-vertical-divider {
-    height: 50px;
+    height: 40px;
     margin: 0 9px;
     border-left: 1px solid #f2f2f2;
     border-right: 1px solid #ffffff;
 }
 [familytreetop-module="family_line"] .btn-group {
-    margin-top:8px;
+    margin-top:3px;
 }
