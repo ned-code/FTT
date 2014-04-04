@@ -860,7 +860,7 @@ $FamilyTreeTop.create("editor", function($){
         progressbarOn:function(m){
             $(m).find('[familytreetop="circle-progressbar"]').css('visibility', 'visible');
             $($spinner.el).css('position', 'absolute').css('top', '50%').css('left', '50%');
-            $(m).find('#formEditProfile').parent().append($spinner.el);
+            $(m).find('.tab-pane.active').append($spinner.el);
         },
         progressbarOff:function(m){
             $(m).find('[familytreetop="circle-progressbar"]').css('visibility', 'hidden');
@@ -874,7 +874,6 @@ $FamilyTreeTop.create("editor", function($){
             $(cl).find('button[familytreetop="submit"]').click(function(){
                 if(requestSend) return false;
                 requestSend = true;
-                $fn.progressbarOn(cl);
                 var args, send, activeTab, saveButton, validate;
                 saveButton = $(this).hasClass('btn-primary');
                 if("undefined" === typeof(task)){
@@ -893,6 +892,7 @@ $FamilyTreeTop.create("editor", function($){
                     requestSend = false;
                     return false;
                 }
+                $fn.progressbarOn(cl);
                 //$fn.removeValid();
                 $this.ajax(send, args, function(response){
                     $this.mod('usertree').update(response);
@@ -1001,14 +1001,14 @@ $FamilyTreeTop.create("editor", function($){
         //init modal
         $(cl).modal({dynamic:true});
 
-        $(tabs[0]).on('shown', function (e) {
-            var target = e.target ;
-            var tab = $(target).attr('familytreetop-tab');
-            if("options" == tab || "media" == tab){
-                $(cl).find('.modal-footer button[familytreetop="submit"]').hide();
-            } else {
-                $(cl).find('.modal-footer button').show();
-            }
+        $(tabs[0]).find('.nav-tabs a').click(function(){
+          var target = this ;
+          var tab = $(target).attr('familytreetop-tab');
+          if("options" == tab || "media" == tab){
+            $(cl).find('.modal-footer button[familytreetop="submit"]').hide();
+          } else {
+            $(cl).find('.modal-footer button').show();
+          }
         })
 
         $(cl).on('shown', function () {
