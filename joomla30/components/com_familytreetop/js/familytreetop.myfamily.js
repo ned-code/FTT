@@ -41,7 +41,7 @@ $FamilyTreeTop.create("myfamily", function($){
             var link = $fn.getLink(object);
             var div = '<div familytreetop="facebook-sign" style="position:absolute; top: 0; right: 0; cursor: pointer;">';
             if(link){
-                div += '<a style="text-decoration: none;" target="_blank" href="'+link+'"><i class="icon-facebook-sign icon-2x familytreetop-icon-muted"></i></a>';
+                div += '<a style="text-decoration: none;" target="_blank" href="'+link+'"><i style="color:gray;" class="fa fa-facebook-square fa-2x"></i></a>';
             }
             div += '</div>';
             return div;
