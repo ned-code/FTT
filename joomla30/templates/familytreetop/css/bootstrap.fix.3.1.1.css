@@ -46,7 +46,6 @@
     position: relative;
     min-height: 30px;
     margin-bottom: 20px;
-    border: 1px solid transparent;
 }
 .navbar-familytreetop .navbar-nav>li>a {
     padding-top: 10px;
