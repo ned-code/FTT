@@ -211,9 +211,9 @@ $language_tag = FamilyTreeTopLanguagesHelper::getDefaultTag();
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">×</button>
-                <button type="button" familytreetop="edit" class="btn btn-default pull-right"><i class="fa fa-pencil"></i><span><?=JText::_('TPL_FAMILYTREETOP_BUTTON_EDIT');?></span></button>
-                <button type="button" familytreetop="facebook" class="btn btn-default pull-right"><i class="fa fa-facebook-square"></i><span><?=JText::_('TPL_FAMILYTREETOP_BUTTON_FACEBOOK');?></span></button>
-                <button type="button" familytreetop="invite" class="btn btn-primary pull-right"><i class="fa fa-facebook-square"></i><span><?=JText::_('TPL_FAMILYTREETOP_BUTTON_INVITE');?></span></button>
+                <button type="button" familytreetop="edit" class="btn btn-default pull-right"><i class="fa fa-pencil"></i> <span><?=JText::_('TPL_FAMILYTREETOP_BUTTON_EDIT');?></span></button>
+                <button type="button" familytreetop="facebook" class="btn btn-default pull-right"><i style="font-size:18px;" class="fa fa-facebook-square"></i> <span><?=JText::_('TPL_FAMILYTREETOP_BUTTON_FACEBOOK');?></span></button>
+                <button type="button" familytreetop="invite" class="btn btn-primary pull-right"><i class="fa fa-facebook-square"></i> <span><?=JText::_('TPL_FAMILYTREETOP_BUTTON_INVITE');?></span></button>
                 <h4 id="profileLabel"></h4>
             </div>
             <div class="modal-body">
