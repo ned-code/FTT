@@ -19,7 +19,7 @@ $navbar_name = ($template == "familytreetop")?"Family TreeTop":"MyNativeRoots";
         <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-familytreetop-navbar-collapse">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -33,8 +33,20 @@ $navbar_name = ($template == "familytreetop")?"Family TreeTop":"MyNativeRoots";
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <?php if($user->facebook_id != 0 && $ind): ?>
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul id="profileUser"  class="nav navbar-nav navbar-right">
+            <div class="collapse navbar-collapse" id="bs-familytreetop-navbar-collapse">
+                <ul id="mobileMenu" class="nav navbar-nav navbar-right visible-xs">
+                    <li ><a href="#" familytreetop="profile" style="color:white;" ><img style="margin: 4px;" src="https://graph.facebook.com/<?=$user->facebook_id;?>/picture?width=30&height=30"/> <?=$ind->name();?></a></li>
+                    <li style="height: 1px;background: black;" ></li>
+                    <li><a style="color:white;" href="#"><?=JText::_('MOD_FAMILYTREETOP_HEADER_BULLETIN_BOARD')?></a></li>
+                    <li><a style="color:white;" href="#"><?=JText::_('MOD_FAMILYTREETOP_HEADER_CALENDAR')?></a></li>
+                    <li><a style="color:white;" href="#"><?=JText::_('MOD_FAMILYTREETOP_HEADER_MEMBERS')?></a></li>
+                    <li style="height: 1px;background: black;"></li>
+                    <li><a  familytreetop="facebook" href="#" style="color:white;"><?=JText::_('MOD_FTT_NAVBAR_PROFILE_REDIRECT_TO_FACEBOOK');?></a></li>
+                    <li><a  familytreetop="familytreetop" href="#" style="color:white;"><?=JText::_('MOD_FTT_NAVBAR_PROFILE_REDIRECT_TO_FAMILYTREETOP');?></a></li>
+                    <li style="height: 1px;background: black;"></li>
+                    <li><a style="color:white;"  familytreetop="logout" href="<?=JRoute::_("index.php?option=com_familytreetop&task=user.logout", false);?>"><?=JText::_('MOD_FTT_NAVBAR_PROFILE_LOG_OUT');?></a></li>
+                </ul>
+                <ul id="profileUser"  class="nav navbar-nav navbar-right hidden-xs">
                     <li><img style="margin: 4px;" src="https://graph.facebook.com/<?=$user->facebook_id;?>/picture?width=30&height=30"/></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" style="color: white;text-shadow: none;" data-toggle="dropdown"><?=$ind->name();?> <b class="caret"></b></a>
