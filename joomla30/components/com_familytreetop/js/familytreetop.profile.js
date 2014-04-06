@@ -567,49 +567,58 @@ $FamilyTreeTop.create("profile", function($){
             interval = 100;
             media = {};
             fn = {
-                createBox: function(){
-                     return $('<div class="row-fluid"><div class="span12"></div></div>');
+                createBox: function(gallery){
+                     return $('<div class="row-fluid"><div class="span12" '+(("undefined"===typeof(gallery))?"":'data-familytreetop="links"')+'></div></div>');
                 },
                 createUl: function(){
                     return $('<ul style="margin: 10px 20px;" class="list-unstyled list-inline"></ul>');
                 },
                 createProfilePhotos: function(photos){
                     if(photos.length == 0) return false;
-                    var div = fn.createBox();
-                    var ul = fn.createUl();
-                    $(div).append('<div style="font-weight: bold;margin-left: 10px;">Photos of '+args.object.first_name+':</div>');
-                    $(div).append(ul);
+                    var div = fn.createBox(true);
+                    var cont = (div).children(':first');
+                    //var ul = fn.createUl();
+                    //$(div).append('<div style="font-weight: bold;margin-left: 10px;">Photos of '+args.object.first_name+':</div>');
+                    $(box).append('<div >Photos of '+args.object.first_name+':/div>');
                     $(box).append(div);
                     $(photos).each(function(index, photo){
                         var li, picture;
                         if("undefined"===typeof(photo.gedcom_id)){
-                            li = $('<li><a target="_blank" href="'+photo.link+'"><img style="cursor:pointer;" class="img-thumbnail" src=""></a></li>');
+                            //li = $('<li><a target="_blank" href="'+photo.link+'"><img style="cursor:pointer;" class="img-thumbnail" src=""></a></li>');
+                            li = $('<a target="_blank" href="'+photo.link+'"><img style="cursor:pointer;" rc=""></a>');
                             picture = photo.picture;
                         } else {
-                            li = $('<li><img style="cursor:pointer;" class="img-thumbnail" src=""></li>');
+                            //li = $('<li><a href="'+photo.url+'" data-gallery><img style="cursor:pointer;" class="img-thumbnail" src=""></a></li>');
+                            li = $('<a href="'+photo.url+'" data-gallery><img style="cursor:pointer;" src=""></a>');
                             picture = photo.thumbnail_url;
                         }
                         $(li).find('img').attr('src', picture);
-                        $(ul).append(li);
+                        //$(ul).append(li);
+                        $(cont).append(li);
                     });
                 },
                 createAllPhotos: function(photos){
                     if(photos.length == 0) return false;
                     var div = fn.createBox();
-                    var ul = fn.createUl();
-                    photosCont = ul;
-                    $(div).append('<div style="font-weight: bold;margin-left: 10px;">Other photos in '+args.object.first_name+'\'s gallery:</div>');
-                    $(div).append(ul);
+                    var cont = (div).children(':first');
+                    //var ul = fn.createUl();
+                    photosCont = div;
+                    //$(div).append('<div style="font-weight: bold;margin-left: 10px;">Other photos in '+args.object.first_name+'\'s gallery:</div>');
+                    $(box).append('<div>Other photos in '+args.object.first_name+'\'s gallery:</div>');
+                    //$(div).append(ul);
                     $(box).append(div);
                     $(photos).each(function(index, photo){
-                        var li = $('<li><a target="_blank" href="'+photo.link+'"><img style="cursor:pointer;" class="img-thumbnail" src=""></a></li>');
+                        //var li = $('<li><a target="_blank" href="'+photo.link+'" data-gallery><img style="cursor:pointer;" class="img-thumbnail" src=""></a></li>');
+                        var li = $('<a target="_blank" href="'+photo.link+'"><img style="cursor:pointer;" src=""></a>');
                         $(li).find('img').attr('src', photo.picture);
-                        $(ul).append(li);
+                        //$(ul).append(li);
+                        $(cont).append(li);
                     });
                 },
                 createOtherPhotos: function(photos){
                     if(photos.length == 0) return false;
                     var div = fn.createBox();
+                    var cont = (div).children(':first');
                     $(div).css('text-align', 'center').css('margin', '10px');
                     $(div).append('<button class="btn">Click here to view more photos.</button>');
                     $(box).append(div);
@@ -617,7 +626,8 @@ $FamilyTreeTop.create("profile", function($){
                         var max = count + interval;
                         for(var i = count ; i < max ; i++){
                             if("undefined" !== typeof(photos[i])){
-                                var li = $('<li><a target="_blank" href="'+photos[i].link+'"><img style="cursor:pointer;" class="img-thumbnail" src=""></a></li>');
+                                //var li = $('<li><a target="_blank" href="'+photos[i].link+'" data-gallery><img style="cursor:pointer;" class="img-thumbnail" src=""></a></li>');
+                                var li = $('<a target="_blank" href="'+photos[i].link+'"><img style="cursor:pointer;" src=""></a>');
                                 $(li).find('img').attr('src', photos[i].picture);
                                 $(photosCont).append(li);
                             } else {
@@ -656,6 +666,16 @@ $FamilyTreeTop.create("profile", function($){
                     if(arr.other.length > 0){
                        fn.createOtherPhotos(arr.other);
                     }
+                    $(box).find('[data-familytreetop="links"]').click(function(event){
+                        event = event || window.event;
+                        var target = event.target || event.srcElement,
+                            link = target.src ? target.parentNode : target,
+                            options = {index: link, event: event},
+                            links = this.getElementsByTagName('a');
+                        if("undefined" !== typeof($(target).parent().attr('data-gallery'))){
+                            blueimp.Gallery(links, options);
+                        }
+                    });
                 }
             }
             media.familytreetop = args.object.medias();

@@ -36,7 +36,8 @@ $doc->addStyleSheet($prefix . 'templates/'.$template.'/css/bootstrap-theme.min.3
 //$doc->addStyleSheet($prefix . 'templates/'.$template.'/css/bootstrap-responsive.min.css');
 //$doc->addStyleSheet($prefix . 'templates/'.$template.'/css/bootstrap-combined.no-icons.min.css');
 $doc->addStyleSheet($prefix . 'templates/'.$template.'/css/font-awesome.min.4.0.3.css');
-//$doc->addStyleSheet($prefix . 'templates/'.$template.'/css/bootstrap-image-gallery.min.css');
+$doc->addStyleSheet($prefix . 'templates/'.$template.'/css/blueimp-gallery.min.css');
+$doc->addStyleSheet($prefix . 'templates/'.$template.'/css/bootstrap-image-gallery.min.css');
 //$doc->addStyleSheet('templates/'.$template.'/css/bootstrap.icon-large.min.css');
 //$doc->addStyleSheet($prefix . 'templates/'.$template.'/css/bootstrap-scroll-modal.css');
 //$doc->addStyleSheet($prefix . 'templates/'.$template.'/css/bootstrap.fix.css');
