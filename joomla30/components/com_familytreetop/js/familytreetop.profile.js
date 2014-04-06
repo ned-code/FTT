@@ -579,7 +579,7 @@ $FamilyTreeTop.create("profile", function($){
                     var cont = (div).children(':first');
                     //var ul = fn.createUl();
                     //$(div).append('<div style="font-weight: bold;margin-left: 10px;">Photos of '+args.object.first_name+':</div>');
-                    $(box).append('<div >Photos of '+args.object.first_name+':/div>');
+                    $(box).append('<div >Photos of '+args.object.first_name+':</div>');
                     $(box).append(div);
                     $(photos).each(function(index, photo){
                         var li, picture;
