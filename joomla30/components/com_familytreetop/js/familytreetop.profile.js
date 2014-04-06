@@ -585,11 +585,11 @@ $FamilyTreeTop.create("profile", function($){
                         var li, picture;
                         if("undefined"===typeof(photo.gedcom_id)){
                             //li = $('<li><a target="_blank" href="'+photo.link+'"><img style="cursor:pointer;" class="img-thumbnail" src=""></a></li>');
-                            li = $('<a target="_blank" href="'+photo.link+'"><img style="cursor:pointer;" rc=""></a>');
+                            li = $('<a target="_blank" href="'+photo.link+'"><img class="img-thumbnail" style="cursor:pointer;" rc=""></a>');
                             picture = photo.picture;
                         } else {
                             //li = $('<li><a href="'+photo.url+'" data-gallery><img style="cursor:pointer;" class="img-thumbnail" src=""></a></li>');
-                            li = $('<a href="'+photo.url+'" data-gallery><img style="cursor:pointer;" src=""></a>');
+                            li = $('<a href="'+photo.url+'" data-gallery><img class="img-thumbnail" style="cursor:pointer;" src=""></a>');
                             picture = photo.thumbnail_url;
                         }
                         $(li).find('img').attr('src', picture);
@@ -609,7 +609,7 @@ $FamilyTreeTop.create("profile", function($){
                     $(box).append(div);
                     $(photos).each(function(index, photo){
                         //var li = $('<li><a target="_blank" href="'+photo.link+'" data-gallery><img style="cursor:pointer;" class="img-thumbnail" src=""></a></li>');
-                        var li = $('<a target="_blank" href="'+photo.link+'"><img style="cursor:pointer;" src=""></a>');
+                        var li = $('<a target="_blank" href="'+photo.link+'"><img class="img-thumbnail" style="cursor:pointer;" src=""></a>');
                         $(li).find('img').attr('src', photo.picture);
                         //$(ul).append(li);
                         $(cont).append(li);
@@ -627,7 +627,7 @@ $FamilyTreeTop.create("profile", function($){
                         for(var i = count ; i < max ; i++){
                             if("undefined" !== typeof(photos[i])){
                                 //var li = $('<li><a target="_blank" href="'+photos[i].link+'" data-gallery><img style="cursor:pointer;" class="img-thumbnail" src=""></a></li>');
-                                var li = $('<a target="_blank" href="'+photos[i].link+'"><img style="cursor:pointer;" src=""></a>');
+                                var li = $('<a target="_blank" href="'+photos[i].link+'"><img class="img-thumbnail" style="cursor:pointer;" src=""></a>');
                                 $(li).find('img').attr('src', photos[i].picture);
                                 $(photosCont).append(li);
                             } else {
