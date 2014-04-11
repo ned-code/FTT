@@ -60,7 +60,7 @@ $filterButtonsWidth = 100;
                 <div class="row">
                     <div class="col-md-12 text-center">
                         <div class="btn-group" style="padding: 5px;">
-                            <button type="button" familytreetop-button="members" familytreetop="living:yes" class="btn btn-defauly" ><?=JText::_('MOD_FTT_MEMBERS_LIVING');?></button>
+                            <button type="button" familytreetop-button="members" familytreetop="living:yes" class="btn btn-default" ><?=JText::_('MOD_FTT_MEMBERS_LIVING');?></button>
                             <button type="button" familytreetop-button="members" familytreetop="living:no" class="btn btn-default" ><?=JText::_('MOD_FTT_MEMBERS_DEACEASE');?></button>
                             <button type="button" familytreetop-button="members" familytreetop="living:both" class="btn btn-default disabled" ><?=JText::_('MOD_FTT_MEMBERS_BOTH');?></button>
                         </div>

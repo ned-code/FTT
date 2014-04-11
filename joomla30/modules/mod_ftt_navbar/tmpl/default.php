@@ -166,7 +166,7 @@ $navbar_name = ($template == "familytreetop")?"Family TreeTop":"MyNativeRoots";
             $('#mobileMenu [familytreetop="facebook"]').parent().remove();
         } else {
             $('#profileUser ul.dropdown-menu li a[familytreetop="familytreetop"]').remove();
-            $('#profileUser [familytreetop="familytreetop"]').parent().remove();
+            $('#mobileMenu [familytreetop="familytreetop"]').parent().remove();
         }
 
         $('#mobileMenu a[familytreetop]').click(function(){
