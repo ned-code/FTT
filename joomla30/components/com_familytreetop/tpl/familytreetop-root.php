@@ -226,13 +226,13 @@ $language_tag = FamilyTreeTopLanguagesHelper::getDefaultTag();
                     </div>
                 </div>
                 <div data-familytreetop-profile="about" class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-6 col-xs-12">
                         <div class="well" familytreetop="module">
                             <fieldset>
                                 <legend><?=JText::_("TPL_FAMILYTREETOP_ABOUT");?></legend>
                                 <div class="row" style="padding: 5px;">
-                                    <div  data-familytreetop="avatar" style="min-width:120px;" class="col-md-1"></div>
-                                    <div class="col-md-9">
+                                    <div  data-familytreetop="avatar" style="min-width:120px;" class="col-md-6"></div>
+                                    <div class="col-md-6">
                                         <ul class="list-unstyled" style="font-size:14px;">
                                             <li><strong><?=JText::_("TPL_FAMILYTREETOP_FIRST_NAME");?></strong>: <span></span></li>
                                             <li><strong><?=JText::_("TPL_FAMILYTREETOP_MIDDLE_NAME");?></strong>: <span></span></li>
