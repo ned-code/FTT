@@ -14,6 +14,11 @@ body > #wrap {
     height: 60px;
     clear:both;
 }
+.familytreetop-divider-vertical {
+    height: 1px;
+    background: white;
+}
+
 [data-familytreetop-color="0"]{
     color: #924192;
 }

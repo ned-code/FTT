@@ -36,14 +36,14 @@ $navbar_name = ($template == "familytreetop")?"Family TreeTop":"MyNativeRoots";
             <div class="collapse navbar-collapse" id="bs-familytreetop-navbar-collapse">
                 <ul id="mobileMenu" class="nav navbar-nav navbar-right visible-xs">
                     <li ><a href="#" familytreetop="profile" style="color:white;" ><img style="margin: 4px;" src="https://graph.facebook.com/<?=$user->facebook_id;?>/picture?width=30&height=30"/> <?=$ind->name();?></a></li>
-                    <li style="height: 1px;background: black;" ></li>
+                    <li class="familytreetop-divider-vertical" ></li>
                     <li><a data-familytreetop="bulletin_board" style="color:white;" href="#"><?=JText::_('MOD_FAMILYTREETOP_HEADER_BULLETIN_BOARD')?></a></li>
                     <li><a data-familytreetop="calendar" style="color:white;" href="#"><?=JText::_('MOD_FAMILYTREETOP_HEADER_CALENDAR')?></a></li>
                     <li><a data-familytreetop="members" style="color:white;" href="#"><?=JText::_('MOD_FAMILYTREETOP_HEADER_MEMBERS')?></a></li>
-                    <li style="height: 1px;background: black;"></li>
+                    <li class="familytreetop-divider-vertical"></li>
                     <li><a  familytreetop="facebook" href="#" style="color:white;"><?=JText::_('MOD_FTT_NAVBAR_PROFILE_REDIRECT_TO_FACEBOOK');?></a></li>
                     <li><a  familytreetop="familytreetop" href="#" style="color:white;"><?=JText::_('MOD_FTT_NAVBAR_PROFILE_REDIRECT_TO_FAMILYTREETOP');?></a></li>
-                    <li style="height: 1px;background: black;"></li>
+                    <li class="familytreetop-divider-vertical"></li>
                     <li><a style="color:white;"  familytreetop="logout" href="<?=JRoute::_("index.php?option=com_familytreetop&task=user.logout", false);?>"><?=JText::_('MOD_FTT_NAVBAR_PROFILE_LOG_OUT');?></a></li>
                 </ul>
                 <ul id="profileUser"  class="nav navbar-nav navbar-right hidden-xs">
@@ -163,16 +163,20 @@ $navbar_name = ($template == "familytreetop")?"Family TreeTop":"MyNativeRoots";
 
         if(window!=window.top){
             $('#profileUser ul.dropdown-menu li a[familytreetop="facebook"]').remove();
+            $('#mobileMenu [familytreetop="facebook"]').parent().remove();
         } else {
             $('#profileUser ul.dropdown-menu li a[familytreetop="familytreetop"]').remove();
+            $('#profileUser [familytreetop="familytreetop"]').parent().remove();
         }
 
         $('#mobileMenu a[familytreetop]').click(function(){
             $fn.menu(this);
+            $('[data-toggle="collapsed"]').click();
         });
         $('#mobileMenu a[data-familytreetop]').click(function(){
             var data = this.dataset.familytreetop;
             $('#familyTreeTopTabs').find('[data-familytreetop="'+data+'"]').click();
+            $('[data-toggle="collapsed"]').click();
         });
 
         $('#profileUser ul.dropdown-menu li a').click(function(){
