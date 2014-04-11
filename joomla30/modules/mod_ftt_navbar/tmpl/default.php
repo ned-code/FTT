@@ -19,7 +19,7 @@ $navbar_name = ($template == "familytreetop")?"Family TreeTop":"MyNativeRoots";
         <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-familytreetop-navbar-collapse">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -33,8 +33,24 @@ $navbar_name = ($template == "familytreetop")?"Family TreeTop":"MyNativeRoots";
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <?php if($user->facebook_id != 0 && $ind): ?>
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul id="profileUser"  class="nav navbar-nav navbar-right">
+            <div class="collapse navbar-collapse" id="bs-familytreetop-navbar-collapse">
+                <ul id="mobileMenu" class="nav navbar-nav visible-xs">
+                    <li>
+                        <a style="color:white;" href="#">
+                            <img style="margin: 4px;" src="https://graph.facebook.com/<?=$user->facebook_id;?>/picture?width=30&height=30"/> <?=$ind->name();?>
+                        </a>
+                    </li>
+                    <li style="background: black;height: 1px;"></li>
+                    <li><a style="color:white;" data-familytreetop="bulletin_board" href="#">Bulletin Board</a></li>
+                    <li><a style="color:white;" data-familytreetop="calendar" href="#">Calendar</a></li>
+                    <li><a style="color:white;" data-familytreetop="members"  href="#">Members</a></li>
+                    <li style="background: black;height: 1px;"></li>
+                    <li><a style="color:white;" href="#">Goto Facebook</a></li>
+                    <li><a style="color:white;" href="#">Language</a></li>
+                    <li style="background: black;height: 1px;"></li>
+                    <li><a style="color:white;" href="#">Log out</a></li>
+                </ul>
+                <ul id="profileUser"  class="nav navbar-nav navbar-right hidden-xs">
                     <li><img style="margin: 4px;" src="https://graph.facebook.com/<?=$user->facebook_id;?>/picture?width=30&height=30"/></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" style="color: white;text-shadow: none;" data-toggle="dropdown"><?=$ind->name();?> <b class="caret"></b></a>

@@ -6,7 +6,7 @@ $ind = $gedcom->individuals->get($user->gedcom_id);
 $fatherLineTotal = sizeof($gedcom->individuals->getCountByFamilyLine('is_father_line'));
 $motherLineTotal = sizeof($gedcom->individuals->getCountByFamilyLine('is_mother_line'));
 ?>
-<div class="navbar-familytreetop">
+<div class="navbar-familytreetop hidden-xs">
     <nav class="navbar navbar-default" role="navigation">
         <div class="container-fluid">
             <!-- Collect the nav links, forms, and other content for toggling -->

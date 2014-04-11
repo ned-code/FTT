@@ -76,3 +76,9 @@
     background-color: #365f18;
     color: navy;
 }
+/*
+*
+*/
+.list-familytreetop li {
+    font-weight: normal;
+}

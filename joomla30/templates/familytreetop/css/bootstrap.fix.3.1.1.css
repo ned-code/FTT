@@ -39,6 +39,12 @@
     background-color: #365f18;
     color: #fff;
 }
+.familytreetop-nav.navbar-inverse .navbar-toggle {
+    border-color: #c3c3c3;
+}
+.familytreetop-nav.navbar-inverse .navbar-toggle:hover, .navbar-inverse .navbar-toggle:focus {
+    background-color: #c3c3c3;
+}
 /**
 * FAMILYTREETOP NAVS[BULLETIN_BOARD, etc]
 */
