@@ -13,7 +13,7 @@ $template = $settings->_template->value;
     <div class="com-md-4">
     </div>
     <div class="com-md-4">
-        <div class="well text-center">
+        <div class="well text-center" style="max-width:120px; margin: 0 auto;">
             <a id="login" data-complete-text="Login" data-loading-text="Please wait..."  href="#" onclick="return false;" class="btn btn-default btn-large">Login</a>
         </div>
         <div style="visibility: hidden; text-align: center; width: 100%; height: 140px;" familytreetop="progressbar" >

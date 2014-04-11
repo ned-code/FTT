@@ -211,9 +211,9 @@ $language_tag = FamilyTreeTopLanguagesHelper::getDefaultTag();
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">×</button>
-                <button type="button" familytreetop="edit" class="btn btn-default pull-right"><i class="fa fa-pencil"></i><span><?=JText::_('TPL_FAMILYTREETOP_BUTTON_EDIT');?></span></button>
-                <button type="button" familytreetop="facebook" class="btn btn-default pull-right"><i class="fa fa-facebook-square"></i><span><?=JText::_('TPL_FAMILYTREETOP_BUTTON_FACEBOOK');?></span></button>
-                <button type="button" familytreetop="invite" class="btn btn-primary pull-right"><i class="fa fa-facebook-square"></i><span><?=JText::_('TPL_FAMILYTREETOP_BUTTON_INVITE');?></span></button>
+                <button type="button" familytreetop="edit" class="btn btn-default pull-right"><i class="fa fa-pencil"></i> <span><?=JText::_('TPL_FAMILYTREETOP_BUTTON_EDIT');?></span></button>
+                <button type="button" familytreetop="facebook" class="btn btn-default pull-right"><i style="font-size:18px;" class="fa fa-facebook-square"></i> <span><?=JText::_('TPL_FAMILYTREETOP_BUTTON_FACEBOOK');?></span></button>
+                <button type="button" familytreetop="invite" class="btn btn-primary pull-right"><i class="fa fa-facebook-square"></i> <span><?=JText::_('TPL_FAMILYTREETOP_BUTTON_INVITE');?></span></button>
                 <h4 id="profileLabel"></h4>
             </div>
             <div class="modal-body">
@@ -922,6 +922,40 @@ $language_tag = FamilyTreeTopLanguagesHelper::getDefaultTag();
                     <?=JText::_("TPL_FAMILYTREETOP_TDFRIENDSELECTOR_PAGE");?> <span id="TDFriendSelector_pageNumber">1</span> / <span id="TDFriendSelector_pageNumberTotal">1</span>
                 </div>
                 <a href="#" id="TDFriendSelector_buttonOK"><?=JText::_("TPL_FAMILYTREETOP_TDFRIENDSELECTOR_OK");?></a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- The Bootstrap Image Gallery lightbox, should be a child element of the document body -->
+<div id="blueimp-gallery" class="blueimp-gallery">
+    <!-- The container for the modal slides -->
+    <div class="slides"></div>
+    <!-- Controls for the borderless lightbox -->
+    <h3 class="title"></h3>
+    <a class="prev">‹</a>
+    <a class="next">›</a>
+    <a class="close">×</a>
+    <a class="play-pause"></a>
+    <ol class="indicator"></ol>
+    <!-- The modal dialog, which will be used to wrap the lightbox content -->
+    <div class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body next"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left prev">
+                        <i class="glyphicon glyphicon-chevron-left"></i>
+                        Previous
+                    </button>
+                    <button type="button" class="btn btn-primary next">
+                        Next
+                        <i class="glyphicon glyphicon-chevron-right"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </div>

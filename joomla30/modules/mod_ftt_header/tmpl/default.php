@@ -70,7 +70,7 @@ $motherLineTotal = sizeof($gedcom->individuals->getCountByFamilyLine('is_mother_
 </div>
  */
 ?>
-<div class="navbar">
+<div class="navbar hidden-xs">
     <div class="navbar-inner">
         <ul id="familyTreeTopTabs" class="nav">
             <!-- BULLETIN BOARD -->

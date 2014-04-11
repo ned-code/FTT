@@ -28,27 +28,23 @@ $navbar_name = ($template == "familytreetop")?"Family TreeTop":"MyNativeRoots";
                 <?php if($template == "familytreetop"): ?>
                     <a style="font-size:24px; color: white;text-shadow: none;" class="navbar-brand" familytreetop-link="familytreetop" href="<?=JRoute::_("index.php?option=com_familytreetop&view=index", false); ?>"><?=$navbar_name;?></i></a>
                 <?php else: ?>
-                    <a style="font-size:24px; color: white;text-shadow: none;" class="navbar-brand" familytreetop-link="familytreetop" href="<?=JRoute::_("index.php?option=com_familytreetop&view=index", false); ?>"><?=$navbar_name;?></a>
+                    <a style="font-size:24px; color: white;text-shadow: none;" class="navbar-brand" familytreetop-link="familytreetop" href="<?=JRoute::_("index.php?option=com_familytreetop&view=index", false); ?>"><i class="fa fa-leaf"></i> <?=$navbar_name;?></a>
                 <?php endif ?>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <?php if($user->facebook_id != 0 && $ind): ?>
             <div class="collapse navbar-collapse" id="bs-familytreetop-navbar-collapse">
-                <ul id="mobileMenu" class="nav navbar-nav visible-xs">
-                    <li>
-                        <a style="color:white;" href="#">
-                            <img style="margin: 4px;" src="https://graph.facebook.com/<?=$user->facebook_id;?>/picture?width=30&height=30"/> <?=$ind->name();?>
-                        </a>
-                    </li>
-                    <li style="background: black;height: 1px;"></li>
-                    <li><a style="color:white;" data-familytreetop="bulletin_board" href="#">Bulletin Board</a></li>
-                    <li><a style="color:white;" data-familytreetop="calendar" href="#">Calendar</a></li>
-                    <li><a style="color:white;" data-familytreetop="members"  href="#">Members</a></li>
-                    <li style="background: black;height: 1px;"></li>
-                    <li><a style="color:white;" href="#">Goto Facebook</a></li>
-                    <li><a style="color:white;" href="#">Language</a></li>
-                    <li style="background: black;height: 1px;"></li>
-                    <li><a style="color:white;" href="#">Log out</a></li>
+                <ul id="mobileMenu" class="nav navbar-nav navbar-right visible-xs">
+                    <li ><a href="#" familytreetop="profile" style="color:white;" ><img style="margin: 4px;" src="https://graph.facebook.com/<?=$user->facebook_id;?>/picture?width=30&height=30"/> <?=$ind->name();?></a></li>
+                    <li style="height: 1px;background: black;" ></li>
+                    <li><a data-familytreetop="bulletin_board" style="color:white;" href="#"><?=JText::_('MOD_FAMILYTREETOP_HEADER_BULLETIN_BOARD')?></a></li>
+                    <li><a data-familytreetop="calendar" style="color:white;" href="#"><?=JText::_('MOD_FAMILYTREETOP_HEADER_CALENDAR')?></a></li>
+                    <li><a data-familytreetop="members" style="color:white;" href="#"><?=JText::_('MOD_FAMILYTREETOP_HEADER_MEMBERS')?></a></li>
+                    <li style="height: 1px;background: black;"></li>
+                    <li><a  familytreetop="facebook" href="#" style="color:white;"><?=JText::_('MOD_FTT_NAVBAR_PROFILE_REDIRECT_TO_FACEBOOK');?></a></li>
+                    <li><a  familytreetop="familytreetop" href="#" style="color:white;"><?=JText::_('MOD_FTT_NAVBAR_PROFILE_REDIRECT_TO_FAMILYTREETOP');?></a></li>
+                    <li style="height: 1px;background: black;"></li>
+                    <li><a style="color:white;"  familytreetop="logout" href="<?=JRoute::_("index.php?option=com_familytreetop&task=user.logout", false);?>"><?=JText::_('MOD_FTT_NAVBAR_PROFILE_LOG_OUT');?></a></li>
                 </ul>
                 <ul id="profileUser"  class="nav navbar-nav navbar-right hidden-xs">
                     <li><img style="margin: 4px;" src="https://graph.facebook.com/<?=$user->facebook_id;?>/picture?width=30&height=30"/></li>
@@ -73,6 +69,32 @@ $navbar_name = ($template == "familytreetop")?"Family TreeTop":"MyNativeRoots";
     $FamilyTreeTop.bind(function($){
         'use strict';
         var $fn = {
+            menu : function(obj){
+                var id = $(obj).attr('familytreetop');
+                switch(id){
+                    case "profile":
+                        $fn.profile(obj);
+                        break;
+
+                    case "languages":
+                        $fn.languages(obj);
+                        break;
+
+                    case "facebook":
+                        $fn.facebook(obj);
+                        break;
+
+                    case "familytreetop":
+                        $fn.familytreetop(obj);
+                        break;
+
+                    case "logout":
+                        $fn.logout(obj);
+                        break;
+
+                    default: return false;
+                }
+            },
             profile: function(object){
                 var gedcom_id =  $FamilyTreeTop.mod('usertree').usermap().gedcom_id;
                 var user =  $FamilyTreeTop.mod('usertree').user(gedcom_id);
@@ -145,32 +167,16 @@ $navbar_name = ($template == "familytreetop")?"Family TreeTop":"MyNativeRoots";
             $('#profileUser ul.dropdown-menu li a[familytreetop="familytreetop"]').remove();
         }
 
+        $('#mobileMenu a[familytreetop]').click(function(){
+            $fn.menu(this);
+        });
+        $('#mobileMenu a[data-familytreetop]').click(function(){
+            var data = this.dataset.familytreetop;
+            $('#familyTreeTopTabs').find('[data-familytreetop="'+data+'"]').click();
+        });
+
         $('#profileUser ul.dropdown-menu li a').click(function(){
-            var id = $(this).attr('familytreetop');
-            var a = $(this);
-            switch(id){
-                case "profile":
-                        $fn.profile(this);
-                    break;
-
-                case "languages":
-                        $fn.languages(this);
-                    break;
-
-                case "facebook":
-                        $fn.facebook(this);
-                    break;
-
-                case "familytreetop":
-                        $fn.familytreetop(this);
-                    break;
-
-                case "logout":
-                        $fn.logout(this);
-                    break;
-
-                default: return false;
-            }
+            $fn.menu(this);
             return false;
         });
 
@@ -179,20 +185,6 @@ $navbar_name = ($template == "familytreetop")?"Family TreeTop":"MyNativeRoots";
                 window.top.location.href = $(this).attr('href');
             } else {
                 window.location.href = $(this).attr('href');
-            }
-        });
-
-        $('#navProfileUser ul.nav li a').click(function(){
-            var id = $(this).attr('familytreetop');
-            var a = $(this);
-            switch(id){
-                case "profile":
-                    $fn.profile();
-                    break;
-
-                case "logout":
-                    $fn.logout();
-                    break;
             }
         });
     });
