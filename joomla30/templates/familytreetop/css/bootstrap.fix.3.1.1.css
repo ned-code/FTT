@@ -110,3 +110,9 @@
 [familytreetop-module="family_line"] .btn-group {
     margin-top:3px;
 }
+/*
+*
+*/
+.list-familytreetop span {
+    font-weight: normal;
+}
