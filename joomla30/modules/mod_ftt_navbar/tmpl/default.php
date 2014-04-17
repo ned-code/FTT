@@ -171,12 +171,12 @@ $navbar_name = ($template == "familytreetop")?"Family TreeTop":"MyNativeRoots";
 
         $('#mobileMenu a[familytreetop]').click(function(){
             $fn.menu(this);
-            $('[data-toggle="collapsed"]').click();
+            $('#bs-familytreetop-navbar-collapse').removeClass('in');
         });
         $('#mobileMenu a[data-familytreetop]').click(function(){
             var data = this.dataset.familytreetop;
             $('#familyTreeTopTabs').find('[data-familytreetop="'+data+'"]').click();
-            $('[data-toggle="collapsed"]').click();
+            $('#bs-familytreetop-navbar-collapse').removeClass('in');
         });
 
         $('#profileUser ul.dropdown-menu li a').click(function(){
