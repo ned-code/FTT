@@ -33,6 +33,7 @@ $doc->addCustomTag($stylelink);
 $doc->addStyleSheet($prefix . 'templates/'.$template.'/css/bootstrap.min.3.1.1.css');
 $doc->addStyleSheet($prefix . 'templates/'.$template.'/css/bootstrap.fix.3.1.1.css');
 $doc->addStyleSheet($prefix . 'templates/'.$template.'/css/bootstrap-theme.min.3.1.1.css');
+$doc->addStyleSheet($prefix . 'templates/'.$template.'/css/jquery.panorama.css');
 //$doc->addStyleSheet($prefix . 'templates/'.$template.'/css/bootstrap-responsive.min.css');
 //$doc->addStyleSheet($prefix . 'templates/'.$template.'/css/bootstrap-combined.no-icons.min.css');
 $doc->addStyleSheet($prefix . 'templates/'.$template.'/css/font-awesome.min.4.0.3.css');

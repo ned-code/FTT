@@ -6,6 +6,7 @@ $template = $settings->_template->value;
 $script = "";
 ?>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/jquery-2.0.3.min.js"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/jquery.panorama.js"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/spin.min.js"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/superbrowserupdate.js"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/bootstrap.min.3.1.1.js"></script>
@@ -45,22 +46,4 @@ $script = "";
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/familytreetop.myfamily.js?<?=$script;?>"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/familytreetop.latest.events.js?<?=$script;?>"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/familytreetop.ie.placeholders.js?<?=$script;?>"></script>
-<script>
-    if(!$FamilyTreeTop.app.config.appId){
-        console.log('Facebook App Id doesn\'t exist');
-    } else {
-        jQuery(document).ready(function() {
-            jQuery.ajaxSetup({ cache: true });
-            jQuery.getScript('//connect.facebook.net/en_US/all.js', function(){
-                FB.init($FamilyTreeTop.app.config);
-                FB.getLoginStatus(function(response){
-                    TDFriendSelector.init({debug: false});
-                    <?php if($fttUser->joyride): ?>
-                    $FamilyTreeTop.joyride = true;
-                    <?php endif; ?>
-                    $FamilyTreeTop.init();
-                }, true);
-            });
-        });
-    }
-</script>
+

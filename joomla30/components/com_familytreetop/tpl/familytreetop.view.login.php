@@ -2,14 +2,14 @@
 $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
 $template = $settings->_template->value;
 ?>
-<div class="row" id="loginHeader" style="visibility: hidden;">
+<div class="row" id="loginHeader" style="/*visibility: hidden;*/">
     <div class="com-md-4"></div>
     <div class="com-md-4 text-center">
         <img src="<?=$this->baseurl;?>/templates/<?=$template?>/images/ftt_title.png" accesskey="">
     </div>
     <div class="com-md-4"></div>
 </div>
-<div class="row" id="loginContent" style="visibility:hidden;">
+<div class="row" id="loginContent" style="/*visibility:hidden;*/">
     <div class="com-md-4">
     </div>
     <div class="com-md-4">
@@ -22,14 +22,15 @@ $template = $settings->_template->value;
     </div>
     <div class="com-md-4"></div>
 </div>
+
 <div class="row" id="loginFooter" style="visibility:hidden;">
     <div class="com-md-12">
-        <img src="<?=$this->baseurl;?>/templates/<?=$template?>/images/family_line.png" accesskey="">
+        <img id="autoscroll" src="<?=$this->baseurl;?>/templates/<?=$template?>/images/family_line.png" width="1588" height="124" class="panorama" accesskey="">
     </div>
 </div>
 <script>
     $FamilyTreeTop.bind(function($){
-        var $this = this, load, setPos,progressbarAnimateStart;
+        var $this = this, load, setPos, progressbarAnimateStart;
         load = function(el, args){
             progressbarAnimateStart();
             $this.ajax('user.activate', args, function(response){
@@ -73,6 +74,7 @@ $template = $settings->_template->value;
             $(spinner.el).css('top', '70px').css('left', Math.ceil(width/2)+'px');
             $(target).append(spinner.el);
         }
+        /*
         setPos = function(){
             var offset = $('#footer').offset();
             $("#loginFooter").css('position', 'absolute').css('top',(offset.top - 100)+'px');
@@ -92,6 +94,11 @@ $template = $settings->_template->value;
         $(window).resize(function(){
             setPos();
         });
+        */
+
+        $('#autoscroll').panorama();
+        $('#autoscroll').closest('.row').css('visibility', 'visible');
+
         $("#login").click(function(){
             var auth;
             if( (auth = FB.getAuthResponse()) == null){

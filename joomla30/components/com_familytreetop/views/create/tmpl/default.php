@@ -3,7 +3,8 @@ defined('_JEXEC') or die;
 $tpl_path = JPATH_BASE . DIRECTORY_SEPARATOR . 'components/com_familytreetop/tpl/';
 ?>
 <?php include($tpl_path . "familytreetop-header-init.php"); ?>
-<?php include($tpl_path . "familytreetop-header-init.php"); ?>
+<?php include($tpl_path . "familytreetop-root.php"); ?>
+<?php include($tpl_path . "familytreetop-scripts.php"); ?>
     <div id="wrap">
         <div id="main" class="clearfix">
             <?php
@@ -27,5 +28,4 @@ $tpl_path = JPATH_BASE . DIRECTORY_SEPARATOR . 'components/com_familytreetop/tpl
             ?>
         </div>
     </div>
-<?php include($tpl_path . "familytreetop-root.php"); ?>
-<?php include($tpl_path . "familytreetop-scripts.php"); ?>
+<?php include($tpl_path . "familytreetop-init.php"); ?>
