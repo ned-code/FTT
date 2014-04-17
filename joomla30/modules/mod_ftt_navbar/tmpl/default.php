@@ -26,9 +26,9 @@ $navbar_name = ($template == "familytreetop")?"Family TreeTop":"MyNativeRoots";
                     <span class="icon-bar"></span>
                 </button>
                 <?php if($template == "familytreetop"): ?>
-                    <a style="font-size:24px; color: white;text-shadow: none;" class="navbar-brand" familytreetop-link="familytreetop" href="<?=JRoute::_("index.php?option=com_familytreetop&view=index", false); ?>"><i class="glyphicon glyphicon-tree-deciduous"></i> <?=$navbar_name;?></i></a>
+                    <a style="font-size:24px; color: white;text-shadow: none; padding: 5px;" class="navbar-brand" familytreetop-link="familytreetop" href="<?=JRoute::_("index.php?option=com_familytreetop&view=index", false); ?>"><i class="glyphicon glyphicon-tree-deciduous"></i> <?=$navbar_name;?></i></a>
                 <?php else: ?>
-                    <a style="font-size:24px; color: white;text-shadow: none;" class="navbar-brand" familytreetop-link="familytreetop" href="<?=JRoute::_("index.php?option=com_familytreetop&view=index", false); ?>"><i class="fa fa-leaf"></i> <?=$navbar_name;?></a>
+                    <a style="font-size:24px; color: white;text-shadow: none; padding: 5px;" class="navbar-brand" familytreetop-link="familytreetop" href="<?=JRoute::_("index.php?option=com_familytreetop&view=index", false); ?>"><i class="fa fa-leaf"></i> <?=$navbar_name;?></a>
                 <?php endif ?>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
