@@ -1,15 +1,16 @@
 <?php
 $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
 $template = $settings->_template->value;
-?>
-<div class="row" id="loginHeader" style="/*visibility: hidden;*/">
+/*
+
+<div class="row" id="loginHeader" style="visibility: hidden;">
     <div class="com-md-4"></div>
     <div class="com-md-4 text-center">
         <img src="<?=$this->baseurl;?>/templates/<?=$template?>/images/ftt_title.png" accesskey="">
     </div>
     <div class="com-md-4"></div>
 </div>
-<div class="row" id="loginContent" style="/*visibility:hidden;*/">
+<div class="row" id="loginContent" style="visibility:hidden;">
     <div class="com-md-4">
     </div>
     <div class="com-md-4">
@@ -28,6 +29,17 @@ $template = $settings->_template->value;
         <img id="autoscroll" src="<?=$this->baseurl;?>/templates/<?=$template?>/images/family_line.png" width="1588" height="124" class="panorama" accesskey="">
     </div>
 </div>
+
+
+ */
+
+?>
+<img src="<?=$this->baseurl;?>/templates/<?=$template?>/images/ftt_title.png" accesskey="">
+<div class="well text-center" style="">
+    <a id="login" href="#" onclick="return false;" class="btn btn-success btn-lg">Login</a>
+</div>
+<div style="visibility: hidden; text-align: center; width: 100%; height: 140px;" familytreetop="progressbar" ></div>
+
 <script>
     $FamilyTreeTop.bind(function($){
         var $this = this, load, setPos, progressbarAnimateStart;
