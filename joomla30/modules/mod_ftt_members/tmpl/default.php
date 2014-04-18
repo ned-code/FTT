@@ -53,7 +53,7 @@ $filterButtonsWidth = 100;
                         <div class="btn-group" style="padding: 5px;">
                             <button type="button" familytreetop-button="members" familytreetop="gender:male" class="btn btn-default" ><?=JText::_('MOD_FTT_MEMBERS_MALE');?></button>
                             <button type="button" familytreetop-button="members" familytreetop="gender:female" class="btn btn-default" ><?=JText::_('MOD_FTT_MEMBERS_FEMALE');?></button>
-                            <button type="button" familytreetop-button="members" familytreetop="gender:both" class="btn btn-default" disabled="disabled" ><?=JText::_('MOD_FTT_MEMBERS_BOTH');?></button>
+                            <button type="button" familytreetop-button="members" familytreetop="gender:both" class="btn btn-success"  ><?=JText::_('MOD_FTT_MEMBERS_BOTH');?></button>
                         </div>
                     </div>
                 </div>
@@ -62,7 +62,7 @@ $filterButtonsWidth = 100;
                         <div class="btn-group" style="padding: 5px;">
                             <button type="button" familytreetop-button="members" familytreetop="living:yes" class="btn btn-default" ><?=JText::_('MOD_FTT_MEMBERS_LIVING');?></button>
                             <button type="button" familytreetop-button="members" familytreetop="living:no" class="btn btn-default" ><?=JText::_('MOD_FTT_MEMBERS_DEACEASE');?></button>
-                            <button type="button" familytreetop-button="members" familytreetop="living:both" class="btn btn-default" disabled="disabled" ><?=JText::_('MOD_FTT_MEMBERS_BOTH');?></button>
+                            <button type="button" familytreetop-button="members" familytreetop="living:both" class="btn btn-success"  ><?=JText::_('MOD_FTT_MEMBERS_BOTH');?></button>
                         </div>
                     </div>
                 </div>
@@ -71,7 +71,7 @@ $filterButtonsWidth = 100;
                         <div class="btn-group" style="padding: 5px;">
                             <button type="button" familytreetop-button="members" familytreetop="members:ancestors" class="btn btn-default" ><?=JText::_('MOD_FTT_MEMBERS_ANCESTORS');?></button>
                             <button type="button" familytreetop-button="members" familytreetop="members:descendants" class="btn btn-default" ><?=JText::_('MOD_FTT_MEMBERS_DESCENDANTS');?></button>
-                            <button type="button" familytreetop-button="members" familytreetop="members:both" class="btn btn-default" disabled="disabled" ><?=JText::_('MOD_FTT_MEMBERS_BOTH');?></button>
+                            <button type="button" familytreetop-button="members" familytreetop="members:both" class="btn btn-success"  ><?=JText::_('MOD_FTT_MEMBERS_BOTH');?></button>
                         </div>
                     </div>
                 </div>
@@ -80,7 +80,7 @@ $filterButtonsWidth = 100;
                         <div class="btn-group" style="padding: 5px;">
                             <button type="button" familytreetop-button="members" familytreetop="registered:yes" class="btn btn-default"><?=JText::_('MOD_FTT_MEMBERS_REGISTERED');?></button>
                             <button type="button" familytreetop-button="members" familytreetop="registered:no" class="btn btn-default" ><?=JText::_('MOD_FTT_MEMBERS_UNREGISTRED');?></button>
-                            <button type="button" familytreetop-button="members" familytreetop="registered:both" class="btn btn-default" disabled="disabled"><?=JText::_('MOD_FTT_MEMBERS_BOTH');?></button>
+                            <button type="button" familytreetop-button="members" familytreetop="registered:both" class="btn btn-success" ><?=JText::_('MOD_FTT_MEMBERS_BOTH');?></button>
                         </div>
                     </div>
                 </div>

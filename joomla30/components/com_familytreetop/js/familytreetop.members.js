@@ -304,8 +304,8 @@ $FamilyTreeTop.create("members", function($){
 
         $($filter).find('.btn').click(function(){
             if($(this).hasClass('disabled')) return false;
-            $(this).parent().find('[disabled="disabled"]').removeAttr('disabled');
-            $(this).attr('disabled', 'disabled');
+            $(this).parent().find('.btn-success').removeClass('btn-success').addClass('btn-default');
+            $(this).removeClass('btn-default').addClass('btn-success');
 
             var type = $(this).attr('familytreetop').split(':');
             switch(type[0]){
