@@ -1214,18 +1214,25 @@ $FamilyTreeTop.create("usertree", function($){
       if(avatar){
         (function(data){
           var scale, k;
+          scale = [data.json.natural.width, data.json.natural.height];
+          /*
           if("undefined" !== typeof(data.json.thumbnail)){
             scale = [data.json.thumbnail.width, data.json.thumbnail.height];
           } else {
             scale = [data.json.natural.width, data.json.natural.height];
           }
+          */
 
           if(scale[0] < scale[1]){
             k = innerSize[0] / scale[0];
           } else if(scale[0] > scale[1]){
             k = innerSize[1] / scale[1];
           } else {
-            k = 1;
+            if(innerSize[0] < innerSize[1]){
+              k = innerSize[0] / scale[0];
+            } else {
+              k = innerSize[1] / scale[1];
+            }
           }
 
           imgSize.push(scale[0]*k);
