@@ -44,7 +44,7 @@ class FamilytreetopControllerInvite extends FamilytreetopController
         $html = "";
         $html .= "<div style='background: #f7f7f7;width: 600px;padding: 20px; font: 12px Calibri;'>";
             $html .= "<div style='border: 1px solid #c3c3c3;'>";
-                $html .= "<div style='background: #69a74e;height: 30px; line-height: 30px;color:white;'>";
+                $html .= "<div style='background: #69a74e;height: 30px; line-height: 30px;color:white;width:100%;'>";
                     $html .= "<span style='float: left; margin-left: 10px;font-size:14px;'>" . $data["TITLE"]. "</span>";
                     $html .= "<span style='float: right; margin-right: 10px;'><a style='color:white;' href='" . $data["TITLE_URL"]. "'>".$data['TITLE_URL']."</a></span>";
                 $html .= "</div>";
@@ -221,7 +221,7 @@ class FamilytreetopControllerInvite extends FamilytreetopController
         $message = (isset($_POST['message']))?htmlspecialchars($_POST['message']):false;
         $token = $app->input->get('token', false);
 
-        if($settings->_template!="familytreetop"){
+        if($settings->_template->value != "familytreetop"){
             $message = str_replace("Family TreeTop", "MyNativeRoots", $message);
         }
 
@@ -243,7 +243,7 @@ class FamilytreetopControllerInvite extends FamilytreetopController
         $invite_url = "https://www.".$this->_getServerName_()."/index.php?token=".$token;
 
         $body = $this->_getBody_(array(
-            'TITLE' => ($settings->_template=="familytreetop")?"FamilyTreeTop":"MyNativeRoots",
+            'TITLE' => ($settings->_template->value=="familytreetop")?"FamilyTreeTop":"MyNativeRoots",
             'TITLE_URL' => $this->_getServerName_(),
             'HEADER' => JText::_('TPL_FAMILYTREETOP_EMAIL_DEAR') . " " . $user->name(),
             'MESSAGE' => $message,
