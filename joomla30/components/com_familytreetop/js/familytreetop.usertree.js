@@ -603,8 +603,8 @@ $FamilyTreeTop.create("usertree", function($){
     $this.getImgSrc = function(src){
         var _src, _data_src;
         if("object" === typeof(src)){
-            _src = $(src).attr('src');
-            _data_src = $(src).attr('data-src');
+            _src = $(src).find('img').attr('src');
+            _data_src = $(src).find('img').attr('data-src');
             if(_src != ""){
                 src = _src;
             } else {
@@ -1177,71 +1177,87 @@ $FamilyTreeTop.create("usertree", function($){
         return ret.join(", ");
     }
 
-    $this.getImage = function(gedcom_id, size, style, src){
-        var el = (gedcom_id)?$this.getAvatar(gedcom_id):false,
-            user = $this.user(gedcom_id),
-            scalesize = false,
-            k,
-            data = [],
-            url;
+    $this.getImage = function(gedcom_id, size){
+      var user = $this.user(gedcom_id),
+          innerSize = [],
+          imgSize = [],
+          avatar = (gedcom_id)?$this.getAvatar(gedcom_id):false,
+          $img = $('<img></img>'),
+          $outerDiv = $('<div></div>'),
+          $innerDiv = $('<div></div>');
 
-        style = (style)?style:"img-thumbnail";
-        if(el){
-            if(el.json != null && el.thumbnail_url == ""){
-                url = el.json.thumbnail.url;
-            } else if(el.json == null && el.thumbnail_url != ""){
-                url = el.thumbnail_url;
+      if(size[0] > 50 && size[1] > 50){
+        $($outerDiv).addClass('img-thumbnail');
+        innerSize.push(parseInt(size[0]) - 10 );
+        innerSize.push(parseInt(size[0]) - 10 );
+      } else {
+        $($outerDiv).addClass('img-rounded');
+        innerSize.push(parseInt(size[0]));
+        innerSize.push(parseInt(size[0]));
+      }
+      $outerDiv.attr({
+        'gedcom_id' : gedcom_id,
+        style : "overflow:hidden;width:"+size[0]+"px;height:"+size[1]+"px;"
+      });
+      $innerDiv.attr({
+        'gedcom_id' : gedcom_id,
+        'class' : "text-center",
+        'style' : "overflow:hidden;width:"+innerSize[0]+"px;height:"+innerSize[1]+"px;"
+      });
+      $img.attr({
+        'gedcom_id' : gedcom_id
+
+      });
+
+      if(avatar){
+        (function(data){
+          var scale, k;
+          if("undefined" !== typeof(data.json.thumbnail)){
+            scale = [data.json.thumbnail.width, data.json.thumbnail.height];
+          } else {
+            scale = [data.json.natural.width, data.json.natural.height];
+          }
+
+          if(scale[0] > scale[1]){
+            k = size[0] / scale[0];
+          } else if(scale[0] < scale[1]){
+            k = size[1] / scale[1];
+          } else {
+            k = 1;
+          }
+
+          imgSize.push(scale[0]*k);
+          imgSize.push(scale[1]*k);
+        })(avatar);
+
+        $img.attr({
+          src : (function(data){
+            if(data.json != null && data.thumbnail_url == ""){
+              return data.json.thumbnail.url;
+            } else if(data.json == null && data.thumbnail_url != ""){
+              return data.thumbnail_url;
             } else {
-                url = el.url;
-            }
-            data = [url, $('<img class="'+style+'" />')];
-        } else if(gedcom_id && gedcom_id in usersmap){
-            data = [
-                'https://graph.facebook.com/'+usersmap[gedcom_id].facebook_id+'/picture?width='+size[0]+'&height='+size[1],
-                $('<img class="'+style+'" />')
-            ];
-        } else if(size[0] in {"25":true, "35":true, "50":true,"75":true, "90":true, "140":true}) {
-            url = ($this.url().base()+"/templates/familytreetop/images/"+((parseInt(user.gender))?"male":"female")+size[0]+".png");
-            data = [
-                url,
-                $('<img class="'+style+'" src="'+url+'" />')
-            ];
-        } else {
-            url = ($this.url().base()+"/templates/familytreetop/js/holder.js/"+((size)?size.join('x'):"100x100"));
-            data = [
-                false,
-                $('<img class="'+style+'" data-src="'+url+'" />'),
-                url
-            ];
-        }
-        if(size){
-            if(el && el.json != null){
-                if("undefined" !== el.json.thumbnail){
-                    scalesize = [el.json.thumbnail.width, el.json.thumbnail.height];
-                } else if("undefined" !== el.json.natural){
-                    scalesize = [el.json.natural.width, el.json.natural.height];
-                }
-                if(scalesize && scalesize[0] > scalesize[1]){
-                    k = size[0] / scalesize[0];
+              return data.url;
+            };
+          })(avatar),
+          style : "weight: "+imgSize[0]+"px; height: "+imgSize[1]+"px"
 
-                } else if(scalesize && scalesize[0] < scalesize[1]){
-                    k = size[1] / scalesize[1];
-                }
-                if(scalesize){
-                    size[0] = scalesize[0] * k;
-                    size[1] = scalesize[1] * k;
-                }
-            }
-            data[1].attr('width', size[0] + "px");
-            data[1].attr('height', size[1] + "px");
-            data[1].css('width', size[0] + "px");
-            data[1].css('height', size[1] + "px");
+        });
+      } else {
+        if(gedcom_id && "undefined" !== typeof(usersmap[gedcom_id])){
+          $img.attr({
+            src :  'https://graph.facebook.com/'+usersmap[gedcom_id].facebook_id+'/picture?width='+size[0]+'&height='+size[1]
+          });
+        } else if(size[0] in {"25":true, "35":true, "50":true,"75":true, "90":true, "140":true}){
+          $img.attr({
+            src : $this.url().base()+"/templates/familytreetop/images/"+((parseInt(user.gender))?"male":"female")+size[0]+".png"
+          });
         }
-        return (src)
-            ?data[0]
-            :data[1]
-            .attr('gedcom_id', gedcom_id)
-            .attr('src', data[0] || "");
+      }
+
+      $innerDiv.append($img);
+      $outerDiv.append($innerDiv);
+      return $outerDiv;
     }
 
     $this.getMedia = function(media_id){

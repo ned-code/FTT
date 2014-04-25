@@ -230,10 +230,10 @@ $FamilyTreeTop.create("members", function($){
             }
             return true;
             function getMaxWidth(a){
-                return ($this.mod('usertree').isAvatar(avatar))?"max-width:200px;line-height: 35px;padding-left: 5px;":"";
+                return ($this.mod('usertree').isAvatar(a))?"max-width:200px;line-height: 35px;padding-left: 5px;":"";
             }
             function getPadding(a){
-                return ($this.mod('usertree').isAvatar(avatar))?"padding:5px;":"padding:10px;";
+                return ($this.mod('usertree').isAvatar(a))?"padding:5px;":"padding:10px;";
             }
         }
     }
