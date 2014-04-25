@@ -1181,6 +1181,8 @@ $FamilyTreeTop.create("usertree", function($){
       var user = $this.user(gedcom_id),
           innerSize = [],
           imgSize = [],
+          imgMarginLeft = "",
+          imgMarginTop = "",
           avatar = (gedcom_id)?$this.getAvatar(gedcom_id):false,
           $img = $('<img></img>'),
           $outerDiv = $('<div></div>'),
@@ -1218,10 +1220,10 @@ $FamilyTreeTop.create("usertree", function($){
             scale = [data.json.natural.width, data.json.natural.height];
           }
 
-          if(scale[0] > scale[1]){
-            k = size[0] / scale[0];
-          } else if(scale[0] < scale[1]){
-            k = size[1] / scale[1];
+          if(scale[0] < scale[1]){
+            k = innerSize[0] / scale[0];
+          } else if(scale[0] > scale[1]){
+            k = innerSize[1] / scale[1];
           } else {
             k = 1;
           }
@@ -1229,6 +1231,19 @@ $FamilyTreeTop.create("usertree", function($){
           imgSize.push(scale[0]*k);
           imgSize.push(scale[1]*k);
         })(avatar);
+
+        if(imgSize[0] > innerSize[0]){
+          imgMarginLeft = "margin-left: -"+(function(imgWidth, optWidth){
+            var width = imgWidth - optWidth;
+            return width/2;
+          })(imgSize[0], innerSize[0])+"px";
+        }
+        if(imgSize[1] > innerSize[1]){
+          imgMarginTop = "margin-top: -"+(function(imgHeight, optHeight){
+            var width = imgHeight - optHeight;
+            return width/2;
+          })(imgSize[1], innerSize[1])+"px";
+        }
 
         $img.attr({
           src : (function(data){
@@ -1240,9 +1255,10 @@ $FamilyTreeTop.create("usertree", function($){
               return data.url;
             };
           })(avatar),
-          style : "weight: "+imgSize[0]+"px; height: "+imgSize[1]+"px"
+          style : "width: "+imgSize[0]+"px; height: "+imgSize[1]+"px;"+imgMarginLeft+imgMarginTop
 
         });
+
       } else {
         if(gedcom_id && "undefined" !== typeof(usersmap[gedcom_id])){
           $img.attr({
