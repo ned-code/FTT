@@ -43,13 +43,13 @@ class FamilytreetopControllerInvite extends FamilytreetopController
     private function _getBody_($data){
         $html = "";
         $html .= "<div style='background: #f7f7f7;width: 600px;padding: 20px; font: 12px Calibri;'>";
-            $html .= "<div style='border: 1px solid #3b5998;'>";
+            $html .= "<div style='border: 1px solid #c3c3c3;'>";
                 $html .= "<div style='background: #69a74e;height: 30px; line-height: 30px;color:white;'>";
                     $html .= "<span style='float: left; margin-left: 10px;font-size:14px;'>" . $data["TITLE"]. "</span>";
                     $html .= "<span style='float: right; margin-right: 10px;'><a style='color:white;' href='" . $data["TITLE_URL"]. "'>".$data['TITLE_URL']."</a></span>";
                 $html .= "</div>";
                 $html .= "<div style='background: #ffffff;padding: 10px;'>";
-                    $html .= "<div style='margin-left:70px;'>".$data['HEADER'].",</div>";
+                    $html .= "<div style='margin-left:70px;font-size:16px;'>".$data['HEADER'].",</div>";
                     $html .= "<table style='width:100%;margin-top:5px;'>";
                         $html .= "<tr>";
                             $html .= "<td style='width:60px;'><img src='".$data["IMG_SRC"]."' style='padding: 4px;background-color: #fff;border: 1px solid #ccc;border: 1px solid rgba(0, 0, 0, 0.2);-webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);-moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);' /></td>";
@@ -220,6 +220,10 @@ class FamilytreetopControllerInvite extends FamilytreetopController
         $email = (isset($_POST['email']))?$_POST['email']:false;
         $message = (isset($_POST['message']))?htmlspecialchars($_POST['message']):false;
         $token = $app->input->get('token', false);
+
+        if($settings->_template!="familytreetop"){
+            $message = str_replace("Family TreeTop", "MyNativeRoots", $message);
+        }
 
         $owner = FamilyTreeTopUserHelper::getInstance()->get();
         $user = GedcomHelper::getInstance()->individuals->get($gedcom_id);
