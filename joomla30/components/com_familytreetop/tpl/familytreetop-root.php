@@ -98,7 +98,7 @@ $language_tag = FamilyTreeTopLanguagesHelper::getDefaultTag();
 <div id="popover">
     <div class="container-fluid">
         <div class="row" style="padding: 9px 14px;">
-            <div class="col-md-3 familytreetop-avatar"><img class="media-object" data-src="template/<?=$template;?>/js/holder.js/75x75"></div>
+            <div class="col-md-4 familytreetop-avatar"><img class="media-object" data-src="template/<?=$template;?>/js/holder.js/75x75"></div>
             <div class="col-md-8" familytreetop-name="content">
                 <ul class="list-unstyled" style="font-size:13px;">
                     <li familytreetop-name="birth"><span style="color: #c3c3c3;"><?=JText::_("TPL_FAMILYTREETOP_BORN");?></span>: <span></span></li>
