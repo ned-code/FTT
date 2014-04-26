@@ -102,7 +102,12 @@ $FamilyTreeTop.create("myfamily", function($){
             return 'about ' + r;
         },
         createImage: function(object){
-            return $('<img class="img-rounded" src="https://graph.facebook.com/'+object.facebook.from.id+'/picture"/>');
+            if(object.familytreetop.gedcom_id){
+                var user = $this.mod('usertree').user(object.familytreetop.gedcom_id);
+                return user.avatar(['50','50']);
+            } else {
+                return $('<img class="img-rounded" src="https://graph.facebook.com/'+object.facebook.from.id+'/picture"/>');
+            }
         },
         createBody: function(object){
             var parentDiv = $('<div class="row-fluid"><div class="span12" style="position:relative;"></div></div>');
