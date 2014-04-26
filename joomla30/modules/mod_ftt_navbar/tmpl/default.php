@@ -35,7 +35,12 @@ $navbar_name = ($template == "familytreetop")?"Family TreeTop":"MyNativeRoots";
             <?php if($user->facebook_id != 0 && $ind): ?>
             <div class="collapse navbar-collapse" id="bs-familytreetop-navbar-collapse">
                 <ul id="mobileMenu" class="nav navbar-nav navbar-right visible-xs">
-                    <li ><a href="#" familytreetop="profile" style="color:white;" ><img style="margin: 4px;" src="https://graph.facebook.com/<?=$user->facebook_id;?>/picture?width=30&height=30"/> <?=$ind->name();?></a></li>
+                    <li >
+                        <a href="#" familytreetop="profile" style="color:white;" >
+                            <span data-familytreetop-avatar></span>
+                            <?=$ind->name();?>
+                        </a>
+                    </li>
                     <li class="familytreetop-divider-vertical" ></li>
                     <li><a data-familytreetop="bulletin_board" style="color:white;" href="#"><?=JText::_('MOD_FAMILYTREETOP_HEADER_BULLETIN_BOARD')?></a></li>
                     <li><a data-familytreetop="calendar" style="color:white;" href="#"><?=JText::_('MOD_FAMILYTREETOP_HEADER_CALENDAR')?></a></li>
@@ -47,7 +52,7 @@ $navbar_name = ($template == "familytreetop")?"Family TreeTop":"MyNativeRoots";
                     <li><a style="color:white;"  familytreetop="logout" href="<?=JRoute::_("index.php?option=com_familytreetop&task=user.logout", false);?>"><?=JText::_('MOD_FTT_NAVBAR_PROFILE_LOG_OUT');?></a></li>
                 </ul>
                 <ul id="profileUser"  class="nav navbar-nav navbar-right hidden-xs">
-                    <li><img style="margin: 4px;" src="https://graph.facebook.com/<?=$user->facebook_id;?>/picture?width=30&height=30"/></li>
+                    <li data-familytreetop-avatar></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" style="color: white;text-shadow: none;" data-toggle="dropdown"><?=$ind->name();?> <b class="caret"></b></a>
                         <ul class="dropdown-menu">
@@ -191,5 +196,13 @@ $navbar_name = ($template == "familytreetop")?"Family TreeTop":"MyNativeRoots";
                 window.location.href = $(this).attr('href');
             }
         });
+
+        (function(gedcom_id){
+            var user = $FamilyTreeTop.fn.mod('usertree').user(gedcom_id);
+            var avatar = user.avatar(['35','35']);
+            $('#profileUser [data-familytreetop-avatar]').append(avatar);
+            $('#mobileMenu [data-familytreetop-avatar]').append($(avatar).clone());
+        })($FamilyTreeTop.mod('usertree').usermap().gedcom_id);
+
     });
 </script>
