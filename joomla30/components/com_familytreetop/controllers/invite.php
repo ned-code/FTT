@@ -45,7 +45,7 @@ class FamilytreetopControllerInvite extends FamilytreetopController
         $html .= "<div style='background: #f7f7f7;width: 600px;padding: 20px; font: 12px Calibri;'>";
             $html .= "<div style='border: 1px solid #c3c3c3;'>";
                 $html .= "<div style='background: #69a74e;height: 30px; line-height: 30px;color:white;width:100%;'>";
-                    $html .= "<span style='float: left; margin-left: 10px;font-size:14px;'>" . $data["TITLE"]. "</span>";
+                    $html .= "<span style='float: left; margin-left: 10px;font-size:16px;font-weight: bold;'>" . $data["TITLE"]. "</span>";
                     $html .= "<span style='float: right; margin-right: 10px;'><a style='color:white;' href='" . $data["TITLE_URL"]. "'>".$data['TITLE_URL']."</a></span>";
                 $html .= "</div>";
                 $html .= "<div style='background: #ffffff;padding: 10px;'>";
@@ -63,7 +63,7 @@ class FamilytreetopControllerInvite extends FamilytreetopController
             $html .= "</div>";
             $html .= "<div style='margin-left: 5px;'>";
                 $html .= "<p style='color:gray;'>";
-                    $html .= $data["ALTERNATIVE_TEXT"] . ": ";
+                    $html .= $data["ALTERNATIVE_TEXT"] . ": <br>";
                     $html .= $data["ALTERNATIVE_URL"];
                 $html .= "</p>";
             $html .= "</div>";
