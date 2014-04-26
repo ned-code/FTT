@@ -1183,6 +1183,7 @@ $FamilyTreeTop.create("usertree", function($){
           imgSize = [],
           imgMarginLeft = "",
           imgMarginTop = "",
+          attr = {},
           avatar = (gedcom_id)?$this.getAvatar(gedcom_id):false,
           $img = $('<img></img>'),
           $outerDiv = $('<div></div>'),
@@ -1197,9 +1198,10 @@ $FamilyTreeTop.create("usertree", function($){
         innerSize.push(parseInt(size[0]));
         innerSize.push(parseInt(size[0]));
       }
+
       $outerDiv.attr({
         'gedcom_id' : gedcom_id,
-        style : "overflow:hidden;width:"+size[0]+"px;height:"+size[1]+"px;"
+        'style' : "overflow:hidden;width:"+size[0]+"px;height:"+size[1]+"px;"
       });
       $innerDiv.attr({
         'gedcom_id' : gedcom_id,
@@ -1212,72 +1214,60 @@ $FamilyTreeTop.create("usertree", function($){
       });
 
       if(avatar){
-        (function(data){
-          var scale, k;
-          scale = [data.json.natural.width, data.json.natural.height];
-          /*
-          if("undefined" !== typeof(data.json.thumbnail)){
-            scale = [data.json.thumbnail.width, data.json.thumbnail.height];
-          } else {
-            scale = [data.json.natural.width, data.json.natural.height];
-          }
-          */
-
-          if(scale[0] < scale[1]){
-            k = innerSize[0] / scale[0];
-          } else if(scale[0] > scale[1]){
-            k = innerSize[1] / scale[1];
-          } else {
-            if(innerSize[0] < innerSize[1]){
-              k = innerSize[0] / scale[0];
-            } else {
-              k = innerSize[1] / scale[1];
-            }
-          }
-
-          imgSize.push(scale[0]*k);
-          imgSize.push(scale[1]*k);
-        })(avatar);
-
-        if(imgSize[0] > innerSize[0]){
-          imgMarginLeft = "margin-left: -"+(function(imgWidth, optWidth){
-            var width = imgWidth - optWidth;
-            return width/2;
-          })(imgSize[0], innerSize[0])+"px";
-        }
-        if(imgSize[1] > innerSize[1]){
-          imgMarginTop = "margin-top: -"+(function(imgHeight, optHeight){
-            var width = imgHeight - optHeight;
-            return width/2;
-          })(imgSize[1], innerSize[1])+"px";
-        }
-
-        $img.attr({
-          src : (function(data){
+        attr.src = (function(data){
             if(data.json != null && data.thumbnail_url == ""){
-              return data.json.thumbnail.url;
+                return data.json.thumbnail.url;
             } else if(data.json == null && data.thumbnail_url != ""){
-              return data.thumbnail_url;
+                return data.thumbnail_url;
             } else {
-              return data.url;
+                return data.url;
             };
-          })(avatar),
-          style : "width: "+imgSize[0]+"px; height: "+imgSize[1]+"px;"+imgMarginLeft+imgMarginTop
-
-        });
-
+        })(avatar);
+      } else if(gedcom_id && "undefined" !== typeof(usersmap[gedcom_id])){
+        attr.src = 'https://graph.facebook.com/'+usersmap[gedcom_id].facebook_id+'/picture?width='+size[0]+'&height='+size[1];
       } else {
-        if(gedcom_id && "undefined" !== typeof(usersmap[gedcom_id])){
-          $img.attr({
-            src :  'https://graph.facebook.com/'+usersmap[gedcom_id].facebook_id+'/picture?width='+size[0]+'&height='+size[1]
-          });
-        } else if(size[0] in {"25":true, "35":true, "50":true,"75":true, "90":true, "140":true}){
-          $img.attr({
-            src : $this.url().base()+"/templates/familytreetop/images/"+((parseInt(user.gender))?"male":"female")+size[0]+".png"
-          });
-        }
+        attr.src = $this.url().base()+"/templates/familytreetop/images/"+((parseInt(user.gender))?"male":"female")+size[0]+".png";
       }
 
+      (function(){
+        var scale, k;
+        if(avatar){
+            scale = [avatar.json.natural.width, avatar.json.natural.height];
+            if(scale[0] < scale[1]){
+                k = innerSize[0] / scale[0];
+            } else if(scale[0] > scale[1]){
+                k = innerSize[1] / scale[1];
+            } else {
+                if(innerSize[0] < innerSize[1]){
+                    k = innerSize[0] / scale[0];
+                } else {
+                    k = innerSize[1] / scale[1];
+                }
+            }
+            imgSize.push(scale[0]*k);
+            imgSize.push(scale[1]*k);
+        } else {
+            imgSize.push(innerSize[0]);
+            imgSize.push(innerSize[1]);
+        }
+      })();
+
+        if(imgSize[0] > innerSize[0]){
+            imgMarginLeft = "margin-left: -"+(function(imgWidth, optWidth){
+                var width = imgWidth - optWidth;
+                return width/2;
+            })(imgSize[0], innerSize[0])+"px";
+        }
+        if(imgSize[1] > innerSize[1]){
+            imgMarginTop = "margin-top: -"+(function(imgHeight, optHeight){
+                var width = imgHeight - optHeight;
+                return width/2;
+            })(imgSize[1], innerSize[1])+"px";
+        }
+
+      attr.style = "width: "+imgSize[0]+"px; height: "+imgSize[1]+"px;"+imgMarginLeft+imgMarginTop;
+
+      $img.attr(attr);
       $innerDiv.append($img);
       $outerDiv.append($innerDiv);
       return $outerDiv;
