@@ -1,38 +1,6 @@
 <?php
 $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
 $template = $settings->_template->value;
-/*
-
-<div class="row" id="loginHeader" style="visibility: hidden;">
-    <div class="com-md-4"></div>
-    <div class="com-md-4 text-center">
-        <img src="<?=$this->baseurl;?>/templates/<?=$template?>/images/ftt_title.png" accesskey="">
-    </div>
-    <div class="com-md-4"></div>
-</div>
-<div class="row" id="loginContent" style="visibility:hidden;">
-    <div class="com-md-4">
-    </div>
-    <div class="com-md-4">
-        <div class="well text-center" style="max-width:120px; margin: 0 auto;">
-            <a id="login" data-complete-text="Login" data-loading-text="Please wait..."  href="#" onclick="return false;" class="btn btn-default btn-large">Login</a>
-        </div>
-        <div style="visibility: hidden; text-align: center; width: 100%; height: 140px;" familytreetop="progressbar" >
-            <!--<img src="<?=$this->baseurl;?>/templates/familytreetop/img/circle_progressbar_128_128.GIF" /> -->
-        </div>
-    </div>
-    <div class="com-md-4"></div>
-</div>
-
-<div class="row" id="loginFooter" style="visibility:hidden;">
-    <div class="com-md-12">
-        <img id="autoscroll" src="<?=$this->baseurl;?>/templates/<?=$template?>/images/family_line.png" width="1588" height="124" class="panorama" accesskey="">
-    </div>
-</div>
-
-
- */
-
 ?>
 <img src="<?=$this->baseurl;?>/templates/<?=$template?>/images/ftt_title.png" accesskey="">
 <div class="well text-center" style="">
@@ -86,27 +54,6 @@ $template = $settings->_template->value;
             $(spinner.el).css('top', '70px').css('left', Math.ceil(width/2)+'px');
             $(target).append(spinner.el);
         }
-        /*
-        setPos = function(){
-            var offset = $('#footer').offset();
-            $("#loginFooter").css('position', 'absolute').css('top',(offset.top - 100)+'px');
-            var p = $("#loginHeader").parent().parent();
-            var o = $(p).offset();
-            var d = (<?=(empty($invite))?1:0;?>)?100:0;
-            var h = offset.top - o.top - d;
-            $(p).css('height', h + "px");
-            $('#loginHeader').css('margin-top', Math.ceil((h - ((d)?200:h))/2)+'px');
-
-            $("#loginHeader").css("visibility", "visible");
-            $("#loginContent").css("visibility", "visible");
-            $("#loginFooter").css("visibility", "visible");
-        }
-
-        setPos();
-        $(window).resize(function(){
-            setPos();
-        });
-        */
 
         $('#autoscroll').panorama();
         $('#autoscroll').closest('.row').css('visibility', 'visible');

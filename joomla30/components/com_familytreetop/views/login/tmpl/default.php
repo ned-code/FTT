@@ -8,7 +8,7 @@ $tpl_path = JPATH_BASE . DIRECTORY_SEPARATOR . 'components/com_familytreetop/tpl
 <?php include($tpl_path . "familytreetop-header-init.php"); ?>
 <?php include($tpl_path . "familytreetop-root.php"); ?>
 <div id="wrap">
-    <div id="main" class="clearfix" style="padding-bottom:300px;">
+    <div id="main" class="clearfix">
         <?php
         $module = JModuleHelper::getModule('ftt_navbar');
         echo JModuleHelper::renderModule($module);
@@ -30,6 +30,7 @@ $tpl_path = JPATH_BASE . DIRECTORY_SEPARATOR . 'components/com_familytreetop/tpl
         </div>
     </div>
 </div>
+<!--
 <div>
 <div class="hidden-xs" style="display: table;position: relative;margin-top: -18px;">
     <div class="panorama-box" style="visibility: hidden;position: relative;height: 124px;margin-top: -184px;clear: both; overflow: hidden;">
@@ -37,6 +38,10 @@ $tpl_path = JPATH_BASE . DIRECTORY_SEPARATOR . 'components/com_familytreetop/tpl
     </div>
     </div>
     </div>
+-->
+<div class="panorama-box hidden-xs">
+    <img id="autoscroll" src="<?=$this->baseurl;?>/templates/<?=$template?>/images/family_line.png" width="1588" height="124" class="panorama" accesskey="">
+</div>
 <div id="footer">
     <div class="container" style="text-align: center;">
         <?php
@@ -49,9 +54,10 @@ $tpl_path = JPATH_BASE . DIRECTORY_SEPARATOR . 'components/com_familytreetop/tpl
     $FamilyTreeTop.bind(function($){
         var $this = this;
         $('.panorama-box').width($('#wrap').width());
-        $('#autoscroll').panorama();
+        $('#autoscroll').panorama({
+            attachElement : $('#footer')
+        });
         $('#autoscroll').closest('.panorama-box').css('visibility', 'visible');
-
         $('#login').click(function(){
             FB.login(function(response){
                 if(response.status == "connected"){
