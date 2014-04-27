@@ -197,12 +197,14 @@ $navbar_name = ($template == "familytreetop")?"Family TreeTop":"MyNativeRoots";
             }
         });
 
+        <?php if($user->facebook_id != 0 && $ind): ?>
         (function(gedcom_id){
             var user = $FamilyTreeTop.fn.mod('usertree').user(gedcom_id);
             var avatar = user.avatar(['35','35']);
             $('#profileUser [data-familytreetop-avatar]').append(avatar);
             $('#mobileMenu [data-familytreetop-avatar]').append($(avatar).clone());
         })($FamilyTreeTop.mod('usertree').usermap().gedcom_id);
+        <?php endif; ?>
 
     });
 </script>
