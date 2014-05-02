@@ -102,6 +102,26 @@ $tpl_path = JPATH_BASE . DIRECTORY_SEPARATOR . 'components/com_familytreetop/tpl
                 }
             }, {scope: $FamilyTreeTop.app.permissions});
         });
+
+        function autoHeight(){
+            var div = $('#main .container'),
+                wrap = $('#wrap'),
+                bottomIdent = (wrap.width() < 768)?60:204,
+                height = wrap.height() - div.height() - 52 - bottomIdent;
+
+            if(wrap.height() < div.height() + 52 + bottomIdent){
+                $('.panorama-box').addClass('hidden');
+            } else {
+                $('.panorama-box').removeClass('hidden');
+            }
+
+            if(height > 0){
+                div.css('margin-top', height*0.45);
+            }
+
+        }
+        $(window).resize(autoHeight);
+        autoHeight();
     });
 </script>
 <?php include($tpl_path . "familytreetop-scripts.php"); ?>

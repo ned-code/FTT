@@ -31,13 +31,13 @@ $FamilyTreeTop.create("latest_events", function($){
                     husb =  $this.mod('usertree').user(family.husb);
                     wife =  $this.mod('usertree').user(family.wife);
 
-                    avatar = husb.avatar(["25", "25"]);
+                    avatar = husb.avatar(["35", "35"]);
                     $fn.setHolderImage(avatar[0]);
                     div = $('<div></div>');
                     $(div).append(avatar);
                     $(td).append(div);
 
-                    avatar = wife.avatar(["25", "25"]);
+                    avatar = wife.avatar(["35", "35"]);
                     $fn.setHolderImage(avatar[0]);
                     div = $('<div style="margin-top: 5px;"></div>');
                     $(div).append(avatar);
@@ -59,7 +59,7 @@ $FamilyTreeTop.create("latest_events", function($){
                     user = $this.mod('usertree').user(events[prop].gedcom_id);
                     if(!user) continue;
                     ev = user[type]();
-                    avatar = user.avatar(["25","25"]);
+                    avatar = user.avatar(["35","35"]);
                     $fn.setHolderImage(avatar[0]);
                     $(tr).addClass('familytreetop-hover-effect');
                     //$(tr).attr('gedcom_id', user.gedcom_id);

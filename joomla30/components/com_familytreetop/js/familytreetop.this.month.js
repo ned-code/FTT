@@ -168,12 +168,12 @@ $FamilyTreeTop.create("this_month", function($){
                             var tr = $('<tr class="familytreetop-hover-effect" gedcom_id="'+e.gedcom_id+'" style="cursor:pointer;"></re>'),
                                 event = $this.mod('usertree').getEvent(e.id),
                                 user = $this.mod('usertree').user(e.gedcom_id),
-                                avatar = user.avatar(["25","25"]),
+                                avatar = user.avatar(["35","35"]),
                                 sb = $this.stringBuffer(),
                                 div,
                                 html;
 
-                            sb._('<td style="vertical-align: middle; text-align: center;width:25px;"><div class="familytreetop-this-month-data">')._(event.date.start_day || "")._('</div></td>');
+                            sb._('<td style="vertical-align: middle; text-align: center;width:35px;"><div class="familytreetop-this-month-data">')._(event.date.start_day || "")._('</div></td>');
                             sb._('<td>');
                                 sb._('<table class="familytreetop-this-month-in">');
                                     sb._('<tr>');
@@ -218,8 +218,8 @@ $FamilyTreeTop.create("this_month", function($){
                                 husb = $this.mod('usertree').user(family.husb),
                                 wife = $this.mod('usertree').user(family.wife),
                                 av = {
-                                    husb:husb.avatar(["25","25"]),
-                                    wife:wife.avatar(["25","25"])
+                                    husb:husb.avatar(["35","35"]),
+                                    wife:wife.avatar(["35","35"])
                                 },
                                 sb = $this.stringBuffer(),
                                 html;
@@ -228,7 +228,7 @@ $FamilyTreeTop.create("this_month", function($){
 
                             $(tr).attr('gedcom_id', "family:" + husb.gedcom_id + "," + wife.gedcom_id);
 
-                            sb._('<td style="vertical-align: middle;text-align: center; width:25px;"><div class="familytreetop-this-month-data">')._(event.date.start_day || "")._('</div></td>');
+                            sb._('<td style="vertical-align: middle;text-align: center; width:35px;"><div class="familytreetop-this-month-data">')._(event.date.start_day || "")._('</div></td>');
                             sb._('<td style="padding-left:10px;">');
                                 sb._('<table class="familytreetop-this-month-in">');
                                     sb._('<tr>');

@@ -207,7 +207,7 @@ $FamilyTreeTop.create("members", function($){
                 birth = object.birth();
                 tr = $('<tr class="familytreetop-hover-effect" gedcom_id="'+object.gedcom_id+'"></tr>');
                 if($fn.isSortable(object)&&$fn.isGender(object)&&$fn.isLiving(object)&&$fn.isRegistered(object)&&$fn.isMembers(object, ancestorList, descendantList)){
-                    avatar = object.avatar(["25","25"]);
+                    avatar = object.avatar(["35","35"]);
                     $fn.setRelPullObject(object);
                     $(tr).append('<td><i class="fa fa-leaf"></i> '+object.relation+'</td>');
                     td = $('<td style="'+getPadding(avatar)+'" data-familytreetop-color="'+object.gender+'" gedcom_id="'+object.gedcom_id+'"></td>');
