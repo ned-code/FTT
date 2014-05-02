@@ -357,39 +357,39 @@
     }
 
     $FamilyTreeTop.prototype.init = function(){
-        var $this = this;
+      var $this = this;
 
+      $this.app.data = jQuery.parseJSON($this.app.data);
+
+      //init modules;
+      $this.modulePull.forEach(function(el, id){
+        var F = el.constructor;
+        F.prototype = $FamilyTreeTop.prototype.fn;
+        $this.modulePull[id].object = new F(jQuery);
+      });
+
+      $this.mod('l10n').init(function(){
         $FamilyTreeTop.prototype.clearUploadTemplates();
 
-        $this.app.data = jQuery.parseJSON($this.app.data);
-
-        //init modules;
-        $this.modulePull.forEach(function(el, id){
-            var F = el.constructor;
-            F.prototype = $FamilyTreeTop.prototype.fn;
-            $this.modulePull[id].object = new F(jQuery);
-        });
         //init scripts
         $this.bindPull.forEach(function(el){
-            var F = function(){};
-            F.prototype = $FamilyTreeTop.prototype.fn;
-            el.call(new F(), jQuery);
+          var F = function(){};
+          F.prototype = $FamilyTreeTop.prototype.fn;
+          el.call(new F(), jQuery);
         });
 
         //init
         $this.mod('tabs').init();
-        $this.mod('l10n').init();
 
         $this.loadPull.forEach(function(c){
-            c();
+          c();
         });
+      });
 
-        //init update timer
-        setInterval(function(){
-            $FamilyTreeTop.prototype.fn.ajax('api.update', null, function(response){
-
-            });
-        }, 60*1000);
+      //init update timer
+      setInterval(function(){
+          $FamilyTreeTop.prototype.fn.ajax('api.update', null, function(response){});
+      }, 60*1000);
     }
 
     $FamilyTreeTop.prototype.clearUploadTemplates = function(){
