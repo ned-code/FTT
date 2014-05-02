@@ -29,6 +29,7 @@ $script = "";
     <script src="<?=$this->baseurl;?>/components/com_familytreetop/js/bootstrap-joyride.js"></script>
 <?php endif; ?>
 <!-- uncompressed files -->
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/familytreetop.l10n.js?<?=$script;?>"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/familytreetop.trees.js?<?=$script;?>"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/familytreetop.footer.js?<?=$script;?>"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/familytreetop.form.js?<?=$script;?>"></script>

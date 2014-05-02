@@ -1,0 +1,164 @@
+<div class="row">
+    <div familytreetop="avatar" style="padding-top:10px;" class="col-md-3 text-center"></div>
+    <div class="col-md-9">
+        <div class="row">
+            <div familytreetop="gender" class="col-md-6">
+                <label for="editProfile[gender]" class="control-label"><small><?=JText::_("TPL_FAMILYTREETOP_GENDER");?></small></label>
+                <select class="form-control" id="editProfile[gender]" name="editProfile[gender]">
+                    <option value="default"><?=JText::_('TPL_FAMILYTREETOP_SELECT_GENDER');?></option>
+                    <option value="1"><?=JText::_("TPL_FAMILYTREETOP_GENDER_MALE");?></option>
+                    <option value="0"><?=JText::_("TPL_FAMILYTREETOP_GENDER_FEMALE");?></option>
+                </select>
+            </div>
+            <div familytreetop="living" class="col-md-6">
+                <label for="editProfile[living]" class="control-label"><small><?=JText::_("TPL_FAMILYTREETOP_LIVING");?></small></label>
+                <select class="form-control" id="editProfile[living]" name="editProfile[living]">
+                    <option value="1"><?=JText::_("TPL_FAMILYTREETOP_YES");?></option>
+                    <option value="0"><?=JText::_("TPL_FAMILYTREETOP_NO");?></option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div familytreetop="firstName" class="col-md-6">
+                <label for="editProfile[firstName]" class="control-label"><small><?=JText::_("TPL_FAMILYTREETOP_FIRST_NAME");?></small></label>
+                <div class="controls">
+                    <input class="form-control" name="editProfile[first_name]" type="text" id="editProfile[firstName]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_FIRST_NAME");?>">
+                </div>
+            </div>
+            <div familytreetop="middleName" class="col-md-6">
+                <label for="editProfile[middleName]" class="control-label"><small><?=JText::_("TPL_FAMILYTREETOP_MIDDLE_NAME");?></small></label>
+                <div class="controls">
+                    <input class="form-control" name="editProfile[middle_name]" type="text" id="editProfile[middleName]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_MIDDLE_NAME");?>">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div familytreetop="lastName" class="col-md-6">
+                <label for="editProfile[firstName]"><small><?=JText::_("TPL_FAMILYTREETOP_LAST_NAME");?></small></label>
+                <div class="controls">
+                    <input class="col-md-12 form-control" name="editProfile[last_name]" type="text" id="editProfile[lastName]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_LAST_NAME");?>">
+                </div>
+            </div>
+            <div familytreetop="knowAs" class="col-md-6">
+                <label for="editProfile[knowAs]"><small><?=JText::_("TPL_FAMILYTREETOP_KNOW_AS");?></small></label>
+                <div class="controls">
+                    <input class="col-md-12 form-control" name="editProfile[know_as]" type="text" id="editProfile[knowAs]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_KNOW_AS");?>">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" style="margin-top:10px;">
+    <div familytreetop="birthday" class="col-md-12">
+        <p>
+            <?=JText::_("TPL_FAMILYTREETOP_BIRTHDAY");?>:
+        </p>
+    </div>
+</div>
+<div class="row">
+    <div familytreetop="birthday" class="col-md-12">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-4">
+                    <select familytreetop="months" class="form-control" name="editProfile[b_month]">
+                        <option value="0"><?=JText::_("TPL_FAMILYTREETOP_MONTH");?></option>
+                        <option value="1"><?=JText::_("TPL_FAMILYTREETOP_JANUARY");?></option>
+                        <option value="2"><?=JText::_("TPL_FAMILYTREETOP_FEBRUARY");?></option>
+                        <option value="3"><?=JText::_("TPL_FAMILYTREETOP_MARCH");?></option>
+                        <option value="4"><?=JText::_("TPL_FAMILYTREETOP_APRIL");?></option>
+                        <option value="5"><?=JText::_("TPL_FAMILYTREETOP_MAY");?></option>
+                        <option value="6"><?=JText::_("TPL_FAMILYTREETOP_JUNE");?></option>
+                        <option value="7"><?=JText::_("TPL_FAMILYTREETOP_JULY");?></option>
+                        <option value="8"><?=JText::_("TPL_FAMILYTREETOP_AUGUST");?></option>
+                        <option value="9"><?=JText::_("TPL_FAMILYTREETOP_SEPTEMBER");?></option>
+                        <option value="10"><?=JText::_("TPL_FAMILYTREETOP_OCTOBER");?></option>
+                        <option value="11"><?=JText::_("TPL_FAMILYTREETOP_NOVEMBER");?></option>
+                        <option value="12"><?=JText::_("TPL_FAMILYTREETOP_DECEMBER");?></option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <select familytreetop="days" class="form-control" name="editProfile[b_day]">
+                        <option value="0"><?=JText::_("TPL_FAMILYTREETOP_DAY");?></option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <input familytreetop="year" class="form-control" type="text" name="editProfile[b_year]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_YEAR");?>">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div familytreetop="birthday" class="row" style="margin-top:10px;">
+    <div class="col-md-12">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-4">
+                    <input class="form-control" type="text" name="editProfile[b_city]"  placeholder="<?=JText::_("TPL_FAMILYTREETOP_CITY");?>">
+                </div>
+                <div class="col-md-4">
+                    <input class="form-control" type="text" name="editProfile[b_state]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_STATE");?>">
+                </div>
+                <div class="col-md-4">
+                    <input class="form-control" type="text" name="editProfile[b_country]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_COUNTRY");?>">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" style="margin-top:10px;">
+    <div familytreetop="deathday" class="col-md-12">
+        <p>
+            <?=JText::_("TPL_FAMILYTREETOP_DEATHDAY");?>:
+        </p>
+    </div>
+</div>
+<div class="row">
+    <div familytreetop="deathday" class="col-md-12" style="">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-4">
+                    <select familytreetop="months" class="form-control" name="editProfile[d_month]">
+                        <option value="0"><?=JText::_("TPL_FAMILYTREETOP_MONTH");?></option>
+                        <option value="1"><?=JText::_("TPL_FAMILYTREETOP_JANUARY");?></option>
+                        <option value="2"><?=JText::_("TPL_FAMILYTREETOP_FEBRUARY");?></option>
+                        <option value="3"><?=JText::_("TPL_FAMILYTREETOP_MARCH");?></option>
+                        <option value="4"><?=JText::_("TPL_FAMILYTREETOP_APRIL");?></option>
+                        <option value="5"><?=JText::_("TPL_FAMILYTREETOP_MAY");?></option>
+                        <option value="6"><?=JText::_("TPL_FAMILYTREETOP_JUNE");?></option>
+                        <option value="7"><?=JText::_("TPL_FAMILYTREETOP_JULY");?></option>
+                        <option value="8"><?=JText::_("TPL_FAMILYTREETOP_AUGUST");?></option>
+                        <option value="9"><?=JText::_("TPL_FAMILYTREETOP_SEPTEMBER");?></option>
+                        <option value="10"><?=JText::_("TPL_FAMILYTREETOP_OCTOBER");?></option>
+                        <option value="11"><?=JText::_("TPL_FAMILYTREETOP_NOVEMBER");?></option>
+                        <option value="12"><?=JText::_("TPL_FAMILYTREETOP_DECEMBER");?></option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <select familytreetop="days" class="form-control" name="editProfile[d_day]">
+                        <option value="0"><?=JText::_("TPL_FAMILYTREETOP_DAY");?></option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <input familytreetop="year" class="form-control" type="text" name="editProfile[d_year]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_YEAR");?>">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div familytreetop="deathday" class="row" style="margin-top:10px;">
+    <div class="col-md-12">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-4">
+                    <input class="form-control" type="text" name="editProfile[d_city]"  placeholder="<?=JText::_("TPL_FAMILYTREETOP_CITY");?>">
+                </div>
+                <div class="col-md-4">
+                    <input class="form-control" type="text" name="editProfile[d_state]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_STATE");?>">
+                </div>
+                <div class="col-md-4">
+                    <input class="form-control" type="text" name="editProfile[d_country]" placeholder="<?=JText::_("TPL_FAMILYTREETOP_COUNTRY");?>">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

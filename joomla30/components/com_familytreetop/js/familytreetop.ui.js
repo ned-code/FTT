@@ -62,19 +62,40 @@
     (settings.footer) ? $modal.find('.modal-footer').append(settings.footer) : "" ;
 
     (!settings.close) ? $modal.find('.close').addClass('hidden') : "" ;
-    $modal.find('.close').click(settings.events.onClose);
+    $modal.find('.close').click(function(){
+      Array.prototype.unshift.call(arguments, this);
+      return settings.events.onClose.apply($modal, arguments);
+    });
 
     settings.buttons.forEach(function(button){
       var btn = $(button);
-      $(btn).click(settings.events.onButtonClick);
+      $(btn).click(function(){
+        Array.prototype.unshift.call(arguments, this);
+        return settings.events.onButtonClick.apply($modal, arguments);
+      });
       $modal.find('.modal-footer').append(btn);
     });
 
-    $modal.on('show.bs.modal', settings.events.show);
-    $modal.on('shown.bs.modal', settings.events.shown);
-    $modal.on('hide.bs.modal', settings.events.hide);
-    $modal.on('hidden.bs.modal', settings.events.hudden);
-    $modal.on('loaded.bs.modal', settings.events.loaded);
+    $modal.on('show.bs.modal', function(){
+      Array.prototype.unshift.call(arguments, this);
+      settings.events.show.apply($modal, arguments);
+    });
+    $modal.on('shown.bs.modal', function(){
+      Array.prototype.unshift.call(arguments, this);
+      settings.events.shown.apply($modal, arguments);
+    });
+    $modal.on('hide.bs.modal', function(){
+      Array.prototype.unshift.call(arguments, this);
+      settings.events.hide.apply($modal, arguments);
+    });
+    $modal.on('hidden.bs.modal', function(){
+      Array.prototype.unshift.call(arguments, this);
+      settings.events.hidden.apply($modal, arguments);
+    });
+    $modal.on('loaded.bs.modal', function(){
+      Array.prototype.unshift.call(arguments, this);
+      settings.events.loaded.apply($modal, arguments);
+    });
 
     $modal.addClass('hidden');
     $('body').append($modal);
@@ -109,16 +130,20 @@
 
   $FTT.ui.tabs = function(options){
     var
-      $cont = $('<div></div>'),
+      $cont = false,
       $tabs = false,
+      $tabsCont = false,
       pull = [],
       settings = {},
       defaults = {
         items : [],
         contAttributes : {
-
+          class : "familytreetop-tab-box"
         },
-        navAttributes : {
+        tabsAttributes : {
+          class : "tab-content"
+        },
+        navsAttributes : {
           class : "nav nav-tabs"
         },
         events : {
@@ -128,10 +153,14 @@
 
     settings = $.extend(true, {}, defaults, options);
 
+    $cont = $('<div></div>');
     $cont.attr(settings.contAttributes);
 
     $tabs = $('<ul></ul>');
-    $tabs.attr(settings.navAttributes);
+    $tabs.attr(settings.navsAttributes);
+
+    $tabsCont = $('<div></div>');
+    $tabsCont.attr(settings.tabsAttributes);
 
     settings.items.forEach(function(item, index){
       var $toggle, $pane;
@@ -151,44 +180,52 @@
         $toggle.attr(opt.attributes);
 
         (opt.active) ? $toggle.addClass('active') : "" ;
-        $toggle.find('a').attr('href', opt.href + opt.id);
+        $toggle.find('a').attr('href', "#" + opt.href + opt.id);
         $toggle.find('a').append(opt.text);
       } else {
         $toggle = $(item.toggle);
         $toggle.append(item.toggle);
       }
       $($toggle).find('a').click(function(e){
+        var el = this;
         e.preventDefault();
-        $(this).tab('show');
+        $(el).tab('show');
         settings.events.onClick.apply(this, arguments);
       });
 
       if("object" === typeof(item.pane)){
         var opt = $.extend(true, {}, {
           attributes : {
-            class : "tab-pane"
+            class : "tab-pane fade"
           },
-          text : ""
-        }, item);
+          text : false,
+          tpl : false
+        }, item.pane);
         $pane = $('<div></div>');
         $pane.attr(opt.attributes);
-        $pane.append(opt.text);
+        if(opt.text) {
+          $pane.append(opt.text);
+        } else if (opt.tpl){
+          var url = $FTT.baseurl + '/components/com_familytreetop/tpl/' + opt.tpl;
+          $pane.load( url );
+        }
       } else if("string" === typeof(item.pane)){
         $pane = $(item.pane);
       } else {
-        $pane = $('<div class="tab-pane"></div>');
+        $pane = $('<div class="tab-pane fade"></div>');
       }
 
-      if($toggle.hasClass('active')) $pane.addClass('active');
-      $pane.attr('id', $toggle.find('a').attr('href'));
+      if($toggle.hasClass('active')) $pane.addClass('active').addClass('in');
+      $pane.attr('id', $toggle.find('a').attr('href').slice(1));
 
       pull.push({ toggle : $toggle, pane : $pane });
     });
 
     $cont.append($tabs);
+    $cont.append($tabsCont);
     pull.forEach(function(item){
       $tabs.append(item.toggle);
-      $cont.append(item.pane);
+      $tabsCont.append(item.pane);
     });
 
     return $cont;

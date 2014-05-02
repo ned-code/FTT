@@ -5,7 +5,10 @@ $FamilyTreeTop.create("editor", function($){
 
   $this.render = function(options){
     var
-      settings = {},
+      $tabs = false,
+      modal = false,
+      settings = false,
+      user = false,
       defaults = {
         gedcom_id : false,
         active_tab : false
@@ -14,6 +17,68 @@ $FamilyTreeTop.create("editor", function($){
     settings = $.extend(true, {}, defaults, options);
 
     if(!settings.gedcom_id) return false;
+
+    //get user data
+    user = $this.mod('usertree').user(settings.gedcom_id);
+
+    $tabs = $FamilyTreeTop.ui.tabs({
+      items : [
+        {
+          toggle : {
+            active : true,
+            href : "profile",
+            text : $this.l10n('editor_tabs_profile')
+          },
+          pane : {
+            tpl : "editor.tabs.profile.html"
+          }
+        },
+        {
+          toggle : {
+            href : "unions",
+            text : $this.l10n('editor_tabs_unions')
+          },
+          pane : {
+            text : ""
+          }
+        },
+        {
+          toggle : {
+            href : "media",
+            text : $this.l10n('editor_tabs_media')
+          },
+          pane : {
+            text : ""
+          }
+        },
+        {
+          toggle : {
+            href : "options",
+            text : $this.l10n('editor_tabs_options')
+          },
+          pane : {
+            text : ""
+          }
+        }
+      ],
+      events : {
+        onClick : function(){
+          return false;
+        }
+      }
+    });
+
+    modal = $FamilyTreeTop.ui.modal({
+      title : user.name(),
+      body : $tabs,
+      events : {
+        hidden : function(){
+          this.remove();
+        }
+      }
+    });
+
+    modal.render();
 
   };
 });

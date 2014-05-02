@@ -69,6 +69,9 @@
         accessToken: function(){
             return this.facebookAccessToken;
         },
+        l10n : function(name){
+          return w.$FamilyTreeTop.mod('l10n').get(name);
+        },
         mod: function(name){
             return w.$FamilyTreeTop.mod(name);
         },
@@ -375,6 +378,7 @@
 
         //init
         $this.mod('tabs').init();
+        $this.mod('l10n').init();
 
         $this.loadPull.forEach(function(c){
             c();
