@@ -52,6 +52,7 @@ $doc->addStyleSheet($prefix . 'templates/'.$template.'/css/familytreetop.css');
 $doc->addScript($prefix . "components/com_familytreetop/js/holder.js");
 $doc->addScript($prefix . "components/com_familytreetop/js/excanvas.js");
 $doc->addScript($prefix . "components/com_familytreetop/js/familytreetop.js");
+$doc->addScript($prefix . "components/com_familytreetop/js/familytreetop.ui.js");
 
 $controller = JControllerLegacy::getInstance('Familytreetop');
 $controller->execute(JFactory::getApplication()->input->get('task', 'display'));

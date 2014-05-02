@@ -37,7 +37,7 @@ $filterButtonsWidth = 100;
                 <legend class="text-center familytreetop-module-header"><?=JText::_('MOD_FTT_MEMBERS_FILTER');?></legend>
                 <div class="row">
                     <div class="col-md-12">
-                        <ul style="margin: 0 auto;width: 260px;" class-familytreetop="module-padding" class="list-unstyled list-familytreetop">
+                        <ul style="margin: 0 auto;width: 220px; padding: 0" class-familytreetop="module-padding" class="list-unstyled list-familytreetop">
                             <li familytreetop="immediate_family"><label class="checkbox"><input type="checkbox" checked><span familytreetop="count">0</span> <span><?=JText::_('MOD_FTT_MEMBERS_IMMEDIATE_FAMILY');?></span></label></li>
                             <li familytreetop="grandparents"><label class="checkbox"><input type="checkbox" checked><span familytreetop="count">0</span> <span><?=JText::_('MOD_FTT_MEMBERS_GRANDPARENTS');?></span></label></li>
                             <li familytreetop="grandchildren"><label class="checkbox"><input type="checkbox" checked><span familytreetop="count">0</span> <span><?=JText::_('MOD_FTT_MEMBERS_GRANDCHILDREN');?></span></label></li>
@@ -47,7 +47,6 @@ $filterButtonsWidth = 100;
                         </ul>
                     </div>
                 </div>
-                <hr>
                 <div class="row">
                     <div class="col-md-12 text-center">
                         <div class="btn-group" style="padding: 5px;">
