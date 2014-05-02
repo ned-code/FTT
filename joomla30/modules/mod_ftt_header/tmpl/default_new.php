@@ -20,7 +20,7 @@ $motherLineTotal = sizeof($gedcom->individuals->getCountByFamilyLine('is_mother_
                     <li><a data-familytreetop="members" href="#"><?=JText::_('MOD_FAMILYTREETOP_HEADER_MEMBERS')?></a></li>
                     <li><a data-familytreetop="family_tree" href="#"><?=JText::_('MOD_FAMILYTREETOP_HEADER_FAMILY_TREE')?></a></li>
                 </ul>
-                <ul class="nav navbar-nav pull-right" familytreetop-module="family_line">
+                <ul class="nav navbar-nav pull-right visible-lg visible-md" familytreetop-module="family_line">
                     <li>
                         <div class="btn-group">
                             <button familytreetop-tooltip="Highlight people on your mother’s side"  type="button" class="btn btn-default"><i familytreetop-line="mother" class="fa fa-adjust"></i></button>

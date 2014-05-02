@@ -87,7 +87,7 @@ $motherLineTotal = sizeof($gedcom->individuals->getCountByFamilyLine('is_mother_
                 <a class="btn" href="<?=JRoute::_("index.php?option=com_familytreetop&task=famous.ext", false);?>" ><?=JText::_('MOD_FAMILYTREETOP_HEADER_EXIT')?></a>
             </div>
         <?php endif;?>
-        <ul class="nav pull-right visible-desktop" style="border-left: 1px solid #d4d4d4;border-right: 1px solid #d4d4d4;padding-left: 10px;padding-right: 10px;background: white;">
+        <ul class="nav pull-right visible-lg" style="border-left: 1px solid #d4d4d4;border-right: 1px solid #d4d4d4;padding-left: 10px;padding-right: 10px;background: white;">
             <li>
                 <div data-familytreetop="familyline" class="btn-group pull-right">
                     <button familytreetop-tooltip="Highlight people on your mother’s side" class="btn"><i familytreetop-line="mother" class="icon-adjust"></i></button>
