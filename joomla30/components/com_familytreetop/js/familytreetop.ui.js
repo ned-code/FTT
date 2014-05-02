@@ -1,7 +1,21 @@
 (function(w, undefined){
   'use strict';
   var $FTT = window.$FamilyTreeTop;
+
   $FTT.ui = {};
+  $FTT.ui.fn = {};
+
+  $FTT.ui.fn.uid = function(){
+    var s4 = function(){return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);}
+    return s4()+s4()+s4()+s4()+s4()+s4()+s4()+s4();
+  };
+
+  $FTT.ui.fn.set_data = function(object, data){
+    for(var key in data){
+      if(!data.hasOwnProperty(key)) continue;
+      object.attr('data-'+key, data[key]);
+    }
+  }
 
   $FTT.ui.modal = function(options){
     var
@@ -29,28 +43,15 @@
         }
     };
 
-    function uid(){
-      var s4 = function(){return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);}
-      return s4()+s4()+s4()+s4()+s4()+s4()+s4()+s4();
-    }
-
     function get_id(selector){
       return ((!selector)? "" : "#" ) + 'familytreetop-modal-' + settings.data.id;
     }
 
-    function set_data(){
-      var data = settings.data;
-      for(var key in data){
-        if(!data.hasOwnProperty(key)) continue;
-        $modal.attr('data-'+key, data[key]);
-      }
-    }
-
     $modal = $('#familytreetop-modal').clone();
     settings = $.extend(true, {}, defaults, options);
-    settings.data.id = uid();
+    settings.data.id = $FTT.ui.fn.uid();
 
-    set_data();
+    $FTT.ui.fn.set_data($modal, settings.data);
 
     $modal.attr(settings.attributes);
     $modal.attr('id', $modal.attr('id') + "-" + settings.data.id);
@@ -104,7 +105,105 @@
         $modal.remove();
       }
     };
+  };
+
+  $FTT.ui.tabs = function(options){
+    var
+      $cont = $('<div></div>'),
+      $tabs = false,
+      pull = [],
+      settings = {},
+      defaults = {
+        items : [],
+        contAttributes : {
+
+        },
+        navAttributes : {
+          class : "nav nav-tabs"
+        },
+        events : {
+          onClick : $.noop
+        }
+    }
+
+    settings = $.extend(true, {}, defaults, options);
+
+    $cont.attr(settings.contAttributes);
+
+    $tabs = $('<ul></ul>');
+    $tabs.attr(settings.navAttributes);
+
+    settings.items.forEach(function(item, index){
+      var $toggle, $pane;
+      if("object" === typeof(item.toggle)){
+        var
+          opt = $.extend(true, {}, {
+          id : $FTT.ui.fn.uid(),
+          attributes : {},
+          href : false,
+          text : false,
+          active : false
+        }, item.toggle);
+        opt.href = (opt.href) ? opt.href + "-" : index + "-" ;
+        opt.text = (opt.text) ? opt.text : "" ;
+
+        $toggle = $('<li><a href="" data-toggle="tab"></a></li>');
+        $toggle.attr(opt.attributes);
+
+        (opt.active) ? $toggle.addClass('active') : "" ;
+        $toggle.find('a').attr('href', opt.href + opt.id);
+        $toggle.find('a').append(opt.text);
+      } else {
+        $toggle = $(item.toggle);
+        $toggle.append(item.toggle);
+      }
+      $($toggle).find('a').click(function(e){
+        e.preventDefault();
+        $(this).tab('show');
+        settings.events.onClick.apply(this, arguments);
+      });
+
+      if("object" === typeof(item.pane)){
+        var opt = $.extend(true, {}, {
+          attributes : {
+            class : "tab-pane"
+          },
+          text : ""
+        }, item);
+        $pane = $('<div></div>');
+        $pane.attr(opt.attributes);
+        $pane.append(opt.text);
+      } else if("string" === typeof(item.pane)){
+        $pane = $(item.pane);
+      } else {
+        $pane = $('<div class="tab-pane"></div>');
+      }
+
+      if($toggle.hasClass('active')) $pane.addClass('active');
+      $pane.attr('id', $toggle.find('a').attr('href'));
+
+      pull.push({ toggle : $toggle, pane : $pane });
+    });
+
+    $cont.append($tabs);
+    pull.forEach(function(item){
+      $tabs.append(item.toggle);
+      $cont.append(item.pane);
+    });
+
+    return $cont;
   }
+
+  $FTT.ui.formworker = function(){
+    var
+      defaults = {
+
+      }
+
+    return {
+
+    };
+  };
 
 
 })(window);

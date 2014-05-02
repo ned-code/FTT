@@ -1,4 +1,25 @@
 $FamilyTreeTop.create("editor", function($){
+  var
+    $this = this,
+    $fn = {};
+
+  $this.render = function(options){
+    var
+      settings = {},
+      defaults = {
+        gedcom_id : false,
+        active_tab : false
+    }
+
+    settings = $.extend(true, {}, defaults, options);
+
+    if(!settings.gedcom_id) return false;
+
+  };
+});
+
+/*
+$FamilyTreeTop.create("editor", function($){
     'use strict';
 
     var $this = this,
@@ -1021,3 +1042,4 @@ $FamilyTreeTop.create("editor", function($){
         $fn.submit(cl, ind);
     }
 });
+*/
