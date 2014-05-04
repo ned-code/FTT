@@ -63,6 +63,7 @@ $FamilyTreeTop.create("editor", function($){
       ],
       events : {
         onClick : function(){
+          $FamilyTreeTop.ui.formworker({ cont: $(this).attr('href') }).ser();
           return false;
         }
       }

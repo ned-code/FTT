@@ -236,7 +236,7 @@
   $FTT.ui.formworker = function(options){
     var
       fn = {},
-      items = [],
+      groups = {},
       settings = false,
       defaults = {
         $cont : false,
@@ -244,14 +244,41 @@
         cont : false,
         pull : false,
         data : false,
-        schema : {
-        }
+        schema : false
       };
 
-    settings = $.extend(true, {}, defaults, settings);
+    settings = $.extend(true, {}, defaults, options);
     if(!settings.cont) return false;
 
-    fn.serialize = function(){};
+    fn.serialize = function(){
+      var ser =  {};
+      settings.pull.forEach(function(item, index){
+        if("undefined" !== typeof item.dataset.formworkerGroup){
+          var groupName = item.dataset.formworkerGroup;
+          if("undefined" === typeof(groups[groupName])){
+            groups[groupName] = [];
+          }
+          groups[groupName].push(item);
+        } else {
+          ser[item.name] = fn.getValue(item.el);
+        }
+      });
+      fn.each(groups, function(group, name){
+        var s = {};
+        group.forEach(function(it){
+          s[it.name] = fn.getValue(it.el);
+        });
+        ser[name] = s;
+      });
+      console.log(ser);
+    };
+
+    fn.each = function(object, callback){
+      for(var key in object){
+        if(!object.hasOwnProperty(key)) continue;
+        callback.call(object, object[key], key);
+      }
+    }
 
     fn.getValue = function(element){
       switch(element.tagName){
@@ -326,22 +353,23 @@
     settings.$cont = $(settings.cont);
     settings.$items = settings.$cont.find('input[name],select[name],textarea[name]');
 
-    settings.data = {};
     settings.pull = [];
 
     settings.$items.each(function(index, element){
       var object = {}, opts;
 
+      object.el = element;
+      object.$el = $(element);
       object.name = $(element).attr('name');
       object.dataset = element.dataset;
-      object.default = fn.getValue(element);
-      object.value = object.default;
+      object.def = fn.getValue(element);
+      object.value = object.def;
 
       if("undefined" !== typeof(settings.schema[object.name])){
         opts = $.extend(true, {}, {
           attr : {},
           value : false,
-          serialize : {}
+          events : false
         }, settings.schema[object.name]);
 
         $(element).attr(opts.attr);
@@ -355,13 +383,18 @@
         }
         fn.setValue(element, object.value);
 
+        if(opts.events){
+          fn.each(opts.events, function(fn, selector){
+            $(element).bind(selector, fn);
+          });
+        }
+
       } else if("undefined" !== typeof(settings.data) && "undefined" !== typeof(settings.data[object.name])){
         object.value =  settings.data[object.name];
         fn.setValue(element, object.value);
       }
 
       settings.pull.push(object);
-      settings.data[object.name] = object;
     });
 
 
