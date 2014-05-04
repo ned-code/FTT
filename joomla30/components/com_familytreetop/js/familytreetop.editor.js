@@ -6,6 +6,7 @@ $FamilyTreeTop.create("editor", function($){
   $this.render = function(options){
     var
       $tabs = false,
+      $btns = false,
       modal = false,
       settings = false,
       user = false,
@@ -21,6 +22,14 @@ $FamilyTreeTop.create("editor", function($){
     //get user data
     user = $this.mod('usertree').user(settings.gedcom_id);
 
+    $btns = [
+      $('<button class="btn btn-default" data-familytreetop-button="close" data-l10n-id="TPL_FAMILYTREETOP_MODAL_CLOSE"></button>'),
+      $('<button class="btn btn-primary" data-familytreetop-button="save_changes" data-l10n-id="TPL_FAMILYTREETOP_MODAL_SAVE_CHANGES"></button>'),
+      $('<button class="btn btn-primary" data-familytreetop-button="save" data-l10n-id="TPL_FAMILYTREETOP_MODAL_SAVE"></button>'),
+      $('<button class="btn btn-primary" data-familytreetop-button="save_and_close" data-l10n-id="TPL_FAMILYTREETOP_MODAL_SAVE_AND_CLOSE"></button>')
+    ];
+    $this.mod('l10n').parse($btns);
+
     $tabs = $FamilyTreeTop.ui.tabs({
       items : [
         {
@@ -30,7 +39,10 @@ $FamilyTreeTop.create("editor", function($){
             text : $this.l10n('tpl_familytreetop_editor_tabs_profile')
           },
           pane : {
-            tpl : "editor.tabs.profile.html"
+            tpl : "editor.tabs.profile.html",
+            onLoad : function(pane){
+              console.log(pane);
+            }
           }
         },
         {
@@ -63,7 +75,6 @@ $FamilyTreeTop.create("editor", function($){
       ],
       events : {
         onClick : function(){
-          $FamilyTreeTop.ui.formworker({ cont: $(this).attr('href') }).ser();
           return false;
         }
       }
@@ -72,9 +83,13 @@ $FamilyTreeTop.create("editor", function($){
     modal = $FamilyTreeTop.ui.modal({
       title : user.name(),
       body : $tabs,
+      buttons : $btns,
       events : {
         hidden : function(){
           this.remove();
+        },
+        onButtonClick : function(){
+          console.log(this, arguments);
         }
       }
     });

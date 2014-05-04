@@ -198,8 +198,10 @@
           attributes : {
             class : "tab-pane fade"
           },
+          formworker : false,
           text : false,
-          tpl : false
+          tpl : false,
+          onLoad : $.noop
         }, item.pane);
         $pane = $('<div></div>');
         $pane.attr(opt.attributes);
@@ -209,6 +211,7 @@
           var url = $FTT.baseurl + '/components/com_familytreetop/tpl/' + opt.tpl;
           $pane.load( url , function(){
             $FamilyTreeTop.fn.mod('l10n').parse($pane);
+            opt.onLoad($pane);
           } );
         }
       } else if("string" === typeof(item.pane)){
@@ -244,7 +247,9 @@
         cont : false,
         pull : false,
         data : false,
-        schema : false
+        schema : false,
+        submit : false,
+        onSubmit : false
       };
 
     settings = $.extend(true, {}, defaults, options);
@@ -270,7 +275,7 @@
         });
         ser[name] = s;
       });
-      console.log(ser);
+      return ser;
     };
 
     fn.each = function(object, callback){
@@ -294,7 +299,6 @@
               case "text":
                 return $(element).val();
                 break;
-              case "submit": break;
             }
           break;
 
@@ -393,10 +397,16 @@
         object.value =  settings.data[object.name];
         fn.setValue(element, object.value);
       }
-
       settings.pull.push(object);
     });
 
+    if(settings.submit){
+      $(settings.submit).click(function(){
+        if(!settings.onSubmit) return true;
+        Array.prototype.unshift.call(arguments, fn.serialize());
+        return settings.onSubmit.apply(this, arguments);
+      });
+    }
 
     return {
       get : fn.getValue,
