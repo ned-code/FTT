@@ -27,7 +27,7 @@ $FamilyTreeTop.create("editor", function($){
           toggle : {
             active : true,
             href : "profile",
-            text : $this.l10n('editor_tabs_profile')
+            text : $this.l10n('tpl_familytreetop_editor_tabs_profile')
           },
           pane : {
             tpl : "editor.tabs.profile.html"
@@ -36,7 +36,7 @@ $FamilyTreeTop.create("editor", function($){
         {
           toggle : {
             href : "unions",
-            text : $this.l10n('editor_tabs_unions')
+            text : $this.l10n('tpl_familytreetop_editor_tabs_unions')
           },
           pane : {
             text : ""
@@ -45,7 +45,7 @@ $FamilyTreeTop.create("editor", function($){
         {
           toggle : {
             href : "media",
-            text : $this.l10n('editor_tabs_media')
+            text : $this.l10n('tpl_familytreetop_editor_tabs_media')
           },
           pane : {
             text : ""
@@ -54,7 +54,7 @@ $FamilyTreeTop.create("editor", function($){
         {
           toggle : {
             href : "options",
-            text : $this.l10n('editor_tabs_options')
+            text : $this.l10n('tpl_familytreetop_editor_tabs_options')
           },
           pane : {
             text : ""

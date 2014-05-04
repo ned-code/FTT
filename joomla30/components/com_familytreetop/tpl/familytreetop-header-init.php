@@ -3,6 +3,8 @@ $app = & JFactory::getApplication();
 $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
 $template = $settings->_template->value;
 
+$langData = FamilyTreeTopLanguagesHelper::getLangData();
+
 $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
 $facebook = FacebookHelper::getInstance()->facebook;
 
@@ -35,4 +37,6 @@ $treeViewUsers = GedcomHelper::getInstance()->sortUsersByView($treeUsers, $data)
     $FamilyTreeTop.languagesString = '<?=FamilyTreeTopLanguagesHelper::get()?>';
 
     $FamilyTreeTop.dataString = <?=$json_data?>;
+
+    $FamilyTreeTop.l10n = <?=json_encode($langData);?>;
 </script>

@@ -207,7 +207,9 @@
           $pane.append(opt.text);
         } else if (opt.tpl){
           var url = $FTT.baseurl + '/components/com_familytreetop/tpl/' + opt.tpl;
-          $pane.load( url );
+          $pane.load( url , function(){
+            $FamilyTreeTop.fn.mod('l10n').parse($pane);
+          } );
         }
       } else if("string" === typeof(item.pane)){
         $pane = $(item.pane);

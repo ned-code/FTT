@@ -43,4 +43,13 @@ class FamilyTreeTopLanguagesHelper {
         $lang = JFactory::getLanguage();
         return $lang->getTag();
     }
+
+    public function getLangData(){
+        $lg = &JFactory::getLanguage();
+        $tag = $lg->getTag();
+        $file = 'language/' . $tag . "/" . $tag . ".tpl_familytreetop.ini";
+        $data = parse_ini_file($file);
+
+        return $data;
+    }
 }

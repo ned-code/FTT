@@ -38,6 +38,7 @@
         this.languagesString = "";
 
         this.joyride = false;
+        this.l10n = false;
     }
 
     $FamilyTreeTop.prototype.fn = {
@@ -368,22 +369,21 @@
         $this.modulePull[id].object = new F(jQuery);
       });
 
-      $this.mod('l10n').init(function(){
-        $FamilyTreeTop.prototype.clearUploadTemplates();
+      //init
+      $this.mod('l10n').init($this.l10n);
+      $this.mod('tabs').init();
 
-        //init scripts
-        $this.bindPull.forEach(function(el){
-          var F = function(){};
-          F.prototype = $FamilyTreeTop.prototype.fn;
-          el.call(new F(), jQuery);
-        });
+      $FamilyTreeTop.prototype.clearUploadTemplates();
 
-        //init
-        $this.mod('tabs').init();
+      //init scripts
+      $this.bindPull.forEach(function(el){
+        var F = function(){};
+        F.prototype = $FamilyTreeTop.prototype.fn;
+        el.call(new F(), jQuery);
+      });
 
-        $this.loadPull.forEach(function(c){
-          c();
-        });
+      $this.loadPull.forEach(function(c){
+        c();
       });
 
       //init update timer
