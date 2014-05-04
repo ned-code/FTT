@@ -6,14 +6,6 @@ $languages = FamilyTreeTopLanguagesHelper::get(false);
 $language_tag = FamilyTreeTopLanguagesHelper::getDefaultTag();
 ?>
 <div id="familytreetop-root" style="display:none;">
-
-<ul id="localization">
-    <li data-l10n="EDITOR_TABS_PROFILE"><?=JText::_("TPL_FAMILYTREETOP_EDITOR_TABS_PROFILE");?></li>
-    <li data-l10n="EDITOR_TABS_UNIONS"><?=JText::_("TPL_FAMILYTREETOP_EDITOR_TABS_UNIONS");?></li>
-    <li data-l10n="EDITOR_TABS_MEDIA"><?=JText::_("TPL_FAMILYTREETOP_EDITOR_TABS_MEDIA");?></li>
-    <li data-l10n="EDITOR_TABS_OPTIONS"><?=JText::_("TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS");?></li>
-</ul>
-
 <ol id="Joyride">
     <li data-target="#JoyrideStop1" data-placement="right" data-title="<?=JText::_('TPL_FAMILYTREETOP_JOYRIDE_EDIT_PROFILE');?>">
         <img width="307" height="235" src="<?=$this->baseurl;?>/templates/<?=$template;?>/img/tip1.png" />

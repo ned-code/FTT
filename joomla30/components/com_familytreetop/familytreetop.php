@@ -47,6 +47,7 @@ $doc->addStyleSheet($prefix . 'templates/'.$template.'/css/jquery.fileupload-ui.
 //$doc->addStyleSheet($prefix . 'templates/'.$template.'/css/csstreeview.fix.css');
 $doc->addStyleSheet($prefix . 'templates/'.$template.'/css/tdfriendselector.css');
 $doc->addStyleSheet($prefix . 'templates/'.$template.'/css/familytreetop.css');
+$doc->addStyleSheet($prefix . 'templates/'.$template.'/css/familytreetop.bootstrap.css');
 //$doc->addStyleSheet($prefix . 'templates/'.$template.'/css/flexicontactplus.fix.css');
 
 $doc->addScript($prefix . "components/com_familytreetop/js/holder.js");

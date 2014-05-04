@@ -233,14 +233,142 @@
     return $cont;
   }
 
-  $FTT.ui.formworker = function(){
+  $FTT.ui.formworker = function(options){
     var
+      fn = {},
+      items = [],
+      settings = false,
       defaults = {
+        $cont : false,
+        $items : false,
+        cont : false,
+        pull : false,
+        data : false,
+        schema : {
+        }
+      };
 
+    settings = $.extend(true, {}, defaults, settings);
+    if(!settings.cont) return false;
+
+    fn.serialize = function(){};
+
+    fn.getValue = function(element){
+      switch(element.tagName){
+        case "INPUT":
+            switch($(element).attr('type')){
+              case "checkbox":
+                if(element.checked) return true;
+                return false;
+                break;
+              case "radio":
+                if(element.checked) $(element).val();
+                break;
+              case "text":
+                return $(element).val();
+                break;
+              case "submit": break;
+            }
+          break;
+
+        case "SELECT":
+          return $(element).find('option:selected').val();
+          break;
+
+        case "TEXTAREA":
+            return $(element).val();
+          break;
+      }
+      return "undefined";
+    };
+
+    fn.setValue = function(element, value){
+      switch(element.tagName){
+        case "INPUT":
+          switch($(element).attr('type')){
+            case "checkbox":
+              if(element.check != value) $(element).click();
+              break;
+
+            case "radio":
+              if($(element).val() == value) $(element).click();
+              break;
+
+            case "text":
+              $(element).val(value);
+              break;
+
+            case "submit": break;
+          }
+          break;
+
+        case "SELECT":
+          if((Object.prototype.toString.call( value ) === '[object Array]')){
+            value.forEach(function(val){
+              if("object" === typeof(val)){
+                $(element).append('<option value="'+val.value+'">'+val.option+'</option>');
+              } else {
+                $(element).append('<option value="'+val+'">'+val+'</option>');
+              }
+            });
+          } else {
+            $(element).find('option[value="'+value+'"]').attr('selected', 'selected')
+          }
+          break;
+
+        case "TEXTAREA":
+          $(element).val(value);
+          break;
+      }
+      return true;
+    };
+
+    settings.$cont = $(settings.cont);
+    settings.$items = settings.$cont.find('input[name],select[name],textarea[name]');
+
+    settings.data = {};
+    settings.pull = [];
+
+    settings.$items.each(function(index, element){
+      var object = {}, opts;
+
+      object.name = $(element).attr('name');
+      object.dataset = element.dataset;
+      object.default = fn.getValue(element);
+      object.value = object.default;
+
+      if("undefined" !== typeof(settings.schema[object.name])){
+        opts = $.extend(true, {}, {
+          attr : {},
+          value : false,
+          serialize : {}
+        }, settings.schema[object.name]);
+
+        $(element).attr(opts.attr);
+
+        if("function" === typeof(opts.value)){
+          object.value = opts.value.call(element, settings.data[object.name]);
+        } else if("undefined" !== typeof(settings.data[object.name])){
+          object.value =  settings.data[object.name];
+        } else if("undefined" !== typeof(opts.value)){
+          object.value = opts.value;
+        }
+        fn.setValue(element, object.value);
+
+      } else if("undefined" !== typeof(settings.data) && "undefined" !== typeof(settings.data[object.name])){
+        object.value =  settings.data[object.name];
+        fn.setValue(element, object.value);
       }
 
-    return {
+      settings.pull.push(object);
+      settings.data[object.name] = object;
+    });
 
+
+    return {
+      get : fn.getValue,
+      set : fn.setValue,
+      ser : fn.serialize
     };
   };
 
