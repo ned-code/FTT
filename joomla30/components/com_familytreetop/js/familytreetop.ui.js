@@ -239,6 +239,296 @@
   $FTT.ui.formworker = function(options){
     var
       fn = {},
+      defaults = false,
+      settings = false,
+      objects = false,
+      itemOpts = false,
+      $ = jQuery,
+      $items = false;
+
+    defaults = {
+      serialize : false,
+      fill : false,
+      except : false,
+      $cont : false,
+      groups : false,
+      data : false,
+      schema : false,
+      onSerialize : $.noop,
+      onFill : $.noop
+    };
+
+    itemOpts = {
+      events : false,
+      setValue : false,
+      setRule : false,
+      getValue : false,
+      groupBy : false,
+      range : false,
+      value : false
+    };
+
+    settings = $.extend(true, {}, defaults, options);
+
+    if(!settings.$cont) return false;
+
+    fn.isNumber = function(n){
+      return !isNaN(parseFloat(n)) && isFinite(n);
+    };
+
+    fn.inArray = function(needle, haystack) {
+      var length = haystack.length;
+      for(var i = 0; i < length; i++) {
+        if(haystack[i] == needle) return true;
+      }
+      return false;
+    };
+
+    fn.setRange = function(object, range){
+      if(range.length == 2 && "number" === typeof(range[0]) && "number" === typeof(range[1])){
+        for(var i = range[0] ; i <= range[1] ; i++){
+          object.$el.append('<option value="'+i+'">'+i+'</option>');
+        }
+      } else {
+        range.forEach(function(opt){
+          if("object" === typeof(opt)){
+            object.$el.append('<option value="'+opt.value+'">'+opt.text+'</option>');
+          } else {
+            opt = "" + opt;
+            object.$el.append('<option value="'+opt.toLowerCase()+'">'+opt+'</option>');
+          }
+
+        });
+      }
+    }
+
+    fn.setValue = function(object, val){
+      var value = object.setValue(val);
+      switch(object.el.tagName){
+        case "INPUT":
+          switch(object.$el.attr('type')){
+            case "checkbox":
+              if(object.el.checked != value) object.$el.click();
+              break;
+
+            case "radio":
+              if(object.$el.val() == value) object.$el.click();
+              break;
+
+            case "text":
+              object.$el.val(value);
+              break;
+          }
+          break;
+
+        case "SELECT":
+          if((Object.prototype.toString.call( value ) === '[object Array]')){
+            value.forEach(function(val){
+              if("object" === typeof(val)){
+                object.$el.append('<option value="'+val.value+'">'+val.option+'</option>');
+              } else {
+                object.$el.append('<option value="'+val+'">'+val+'</option>');
+              }
+            });
+          } else {
+            object.$el.find('option[value="'+value+'"]').attr('selected', 'selected');
+            object.$el.change();
+          }
+          break;
+
+        case "TEXTAREA":
+          object.$el.val(value);
+          break;
+      }
+      return true;
+    };
+
+    fn.getValue = function(object){
+      switch(object.el.tagName){
+        case "INPUT":
+          switch(object.$el.attr('type')){
+            case "checkbox":
+              if(object.el.checked) return object.getValue({name: object.name, value: true});
+              return false;
+              break;
+            case "radio":
+              if(object.el.checked) return object.getValue({ name: object.name, value: object.$el.val()});
+              break;
+            case "text":
+              return object.getValue({ name: object.name, value: object.$el.val()});
+              break;
+          }
+          break;
+
+        case "SELECT":
+          return object.getValue({ name: object.name, value: object.$el.find('option:selected').val()});
+          break;
+
+        case "TEXTAREA":
+          return object.getValue({ name: object.name, value: object.$el.val()});
+          break;
+      }
+      return object.getValue({ name: "", value: "undefined"});
+    };
+
+    fn.serialize = function(){
+      var response = {}, grps = {};
+      fn.each(objects, function(object){
+        if(object.groupBy){
+          if("undefined" === typeof(grps[object.groupBy])){
+            grps[object.groupBy] = [];
+          }
+          grps[object.groupBy].push(object);
+        } else {
+          var val = fn.getValue(object);
+          if(val.name != "") response[val.name] = val.value;
+        }
+      });
+      fn.each(grps, function(grp, grpName){
+        var val;
+        if("undefined" !== typeof(settings.groups[grpName])){
+           val = settings.groups[grpName].apply(null, grp);
+           if(val.name != "") response[val.name] = val.value;
+        } else {
+          if("undefined" === typeof(response[grpName])){
+            response[grpName] = {};
+          }
+          fn.each(grp, function(object){
+            val = fn.getValue(object);
+            if(val.name != "") response[grpName][val.name] = val.value;
+          });
+        }
+      });
+      settings.onSerialize.call(null, response);
+      return response;
+    };
+
+    fn.fill = function(){
+      // setRuleQuery = NAME | FUNC : ARGS1 [, ARGS2]
+      var grps = {};
+      if(!settings.data) return false;
+      fn.each(objects, function(object){
+        if(object.setRule){
+          var parse = {}, side, parts, name, func, args;
+          side = object.setRule.split('|');
+          parts = ("undefined"!==typeof(side[1]))?side[1].split(':'):false;
+          name = (side[0] != "")?side[0]:false;
+          func = (parts && "undefined"!==typeof(parts[0]))?parts[0]:false;
+          args = (parts && "undefined"!==typeof(parts[1]))?parts[1].split(','):[];
+
+          if(name){
+            if("undefined" === typeof(grps[name])){
+              grps[name] = [];
+            }
+            grps[name].push({
+              obj : object,
+              name : name,
+              func : func,
+              args : args
+            });
+          } else {
+            if("undefined" !== typeof(settings.data[func])){
+              fn.setValue(object, settings.data[func].apply(null, args));
+            }
+          }
+        } else {
+          if("undefined" !== typeof(settings.data[object.name])) fn.setValue(object, settings.data[object.name]);
+        }
+      });
+      fn.each(grps, function(grp, grpName){
+        if("undefined"===typeof(settings.groups[grpName])) return false;
+        var vars = [];
+        grp.forEach(function(item){
+          if("undefined" !== typeof(settings.data[item.func])){
+            vars.push(settings.data[item.func].call(null, item.args));
+          }
+        });
+        settings.groups[grpName].call(null, vars);
+      });
+      settings.onFill.call(null);
+      return true;
+    };
+
+    fn.each = function(object, callback){
+      for(var key in object){
+        if(!object.hasOwnProperty(key)) continue;
+        callback.call(object, object[key], key);
+      }
+    }
+
+    fn.parseItems = function(its){
+      var objs = [];
+      its.each(function(index, element){
+        var object = {}, opts = false;
+        object.el = element;
+        object.$el = $(element);
+        object.name = $(element).attr('name');
+        object.dataset = element.dataset;
+
+        if(settings.except && fn.inArray(object.name, settings.except)) return true;
+
+        object.setRule = false;
+        object.groupBy = false;
+
+        object.setValue = function(value){ return value; };
+        object.getValue = function(value){ return value; };
+
+        if(settings.schema && "undefined" !== typeof(settings.schema[object.name])){
+          opts = $.extend(true, {}, itemOpts, settings.schema[object.name]);
+          if( opts.events
+            && "object" === typeof(opts.events)
+            && (Object.prototype.toString.call( opts.events ) !== '[object Array]')){
+            fn.each(opts.events, function(func, selector){
+              object.$el.bind(selector, func);
+            });
+          };
+          if(opts.setRule) object.setRule = opts.setRule;
+          if(opts.groupBy) object.groupBy = opts.groupBy;
+          if(opts.setValue) object.setValue = opts.setValue;
+          if(opts.getValue) object.getValue = opts.getValue;
+
+          if(opts.range
+            && object.el.tagName == "SELECT"
+            && (Object.prototype.toString.call( opts.range ) === '[object Array]')){
+            fn.setRange(object, opts.range);
+          }
+        }
+
+        if("undefined" !== typeof(object.dataset.formworkerSetRule)){
+          object.setRule = object.dataset.formworkerSetRule;
+        }
+
+        if("undefined" !== typeof(object.dataset.formworkerGroupBy)){
+          object.groupBy = object.dataset.formworkerGroupBy;
+        }
+
+        if(opts && opts.value) {
+          fn.setValue(object, opts.value);
+        }
+
+        objs.push(object);
+      });
+      return objs;
+    };
+
+    settings.$cont = $(settings.$cont);
+    $items = settings.$cont.find('input[name],select[name],textarea[name]');
+    objects = fn.parseItems($items);
+
+    if(settings.fill) fn.fill.call(null);
+    if(settings.serialize) fn.serialize.call(null);
+
+    return {
+      objects : objects,
+      serialize : fn.serialize,
+      fill : fn.fill
+    };
+  }
+
+  /*
+  $FTT.ui.formworker = function(options){
+    var
+      fn = {},
       fillData = {},
       settings = false,
       defaults = {
@@ -318,25 +608,35 @@
       // GROUP_NAME | DATA.FN _ args1,args2,args3
       var sides = rule.split('|');
       var name = sides[0];
-      var right = ("undefined"!==typeof(sides[1]))?sides[1].split('_'):false;
-      var fn = (right)?right[0]:false;
+      var right = ("undefined"!==typeof(sides[1]))?sides[1].split(':'):false;
+      var func = (right)?right[0]:false;
       var args = (right&&"undefined"!==typeof(right[1]))?right[1].split(','):false;
 
-      if("undefined"!==typeof(fillData[name])){
-        fillData[name] = [];
-      }
-      if(fn && "undefined" !== typeof(settings.data[fn])){
-        object.value = settings.data[fn].apply(null, args);
+      if(func && "undefined" !== typeof(settings.data[func])){
+        object.value = settings.data[func].apply(null, (args)?args:[]);
       } else {
-        if(opts && "function" === typeof(opts.value)){
-          object.value = opts.value.call(element, settings.data[object.name]);
-        } else if("undefined" !== typeof(settings.data[object.name])){
-          object.value =  settings.data[object.name];
-        } else if(opts && "undefined" !== typeof(opts.value)){
-          object.value = opts.value;
+        if(opts){
+          if("function" === typeof(opts.value)){
+            object.value = opts.value.call(element, settings.data[object.name]);
+          } else if(opts && "undefined" !== typeof(opts.value)){
+            object.value = opts.value;
+          } else if("undefined" !== typeof(settings.data[object.name])){
+            object.value =  settings.data[object.name];
+          }
+        } else {
+          if("undefined" !== typeof(settings.data[object.name])){
+            object.value =  settings.data[object.name];
+          }
         }
       }
-      fillData.push(object);
+      if(opts && !opts.fillOnce){
+        if("undefined"!==typeof(fillData[name])){
+          fillData[name] = [];
+        }
+        fillData.push(object);
+      } else {
+        fn.setValue(object.el, object.value);
+      }
     };
 
     fn.setValue = function(element, value){
@@ -387,7 +687,6 @@
 
     settings.$items.each(function(index, element){
       var object = {}, opts;
-
       object.el = element;
       object.$el = $(element);
       object.name = $(element).attr('name');
@@ -399,6 +698,7 @@
         opts = $.extend(true, {}, {
           attr : {},
           fillRule : false,
+          fillOnce : false,
           value : false,
           events : false
         }, settings.schema[object.name]);
@@ -424,10 +724,10 @@
           });
         }
 
-      } else if("undefined" !== typeof(settings.data) && "undefined" !== typeof(settings.data[object.name])){
+      } else if("undefined" !== typeof(settings.data)){
         if("undefined" !== typeof(object.dataset.formworkerFillRule)){
           fn.setFillItem(object, false, object.dataset.formworkerFillRule);
-        } else {
+        } else if("undefined" != typeof(settings.data[object.name])){
           object.value =  settings.data[object.name];
           fn.setValue(element, object.value);
         }
@@ -457,6 +757,7 @@
 
     };
   };
+  */
 
 
 })(window);

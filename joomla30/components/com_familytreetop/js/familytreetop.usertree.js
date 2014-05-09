@@ -309,7 +309,7 @@ $FamilyTreeTop.create("usertree", function($){
                 return $this.getImage(ind.gedcom_id, size, style, src);
             },
             username:function(){
-               return this.name().toLowerCase().split(' ').join('.');
+               return res.name().toLowerCase().split(' ').join('.');
             },
             name:function(){
                 var $name = [];
@@ -331,7 +331,7 @@ $FamilyTreeTop.create("usertree", function($){
                 if($this.parseBoolean(k)){
                     return k;
                 } else {
-                    return ($this.parseBoolean(short))?ind.first_name:this.name();
+                    return ($this.parseBoolean(short))?ind.first_name:res.name();
                 }
             },
             medias: function(){
@@ -344,8 +344,8 @@ $FamilyTreeTop.create("usertree", function($){
                 return $this.getParseUserEventByType(ind.gedcom_id, 'DEAT', path);
             },
             date: function(){
-                var b = $this.parseNum(this.birth('date.start_year'));
-                var d = $this.parseNum(this.death('date.start_year'));
+                var b = $this.parseNum(res.birth('date.start_year'));
+                var d = $this.parseNum(res.death('date.start_year'));
                 if(!b && d){ return '... - '+d; }
                 else if(b && !d){ return b; }
                 else if(b && d){ return b + ' - ' + d; }
@@ -357,21 +357,21 @@ $FamilyTreeTop.create("usertree", function($){
                 if("undefined" === typeof(id)) return false;
             },
             turns: function(){
-                var $self = this, date = new Date(), e = $self.birth();
+                var $self = res, date = new Date(), e = $self.birth();
                 if(e && e.date && e.date.start_year != null){
                     return "turns " + (date.getFullYear() - e.date.start_year);
                 }
                 return "";
             },
             died: function(){
-                var $self = this, date = new Date(), e = $self.death();
+                var $self = res, date = new Date(), e = $self.death();
                 if(e && e.date && e.date.start_year != null){
                     return "<div><div>died</div><div>" + (date.getFullYear() - e.date.start_year) + " years ago</div>";
                 }
                 return "";
             },
             isDeceased : function(){
-                var $self = this, date = new Date(), d = $self.death(), b = $self.birth(), end = 0;
+                var $self = res, date = new Date(), d = $self.death(), b = $self.birth(), end = 0;
                 if(b && b.date && b.date.start_year != null && b.date.start_year != 0){
                     end = (date.getFullYear() - b.date.start_year);
                     if(end > 150) return true;
@@ -382,16 +382,16 @@ $FamilyTreeTop.create("usertree", function($){
                 return false;
             },
             isCanBeDelete: function(){
-                return this.is_can_be_delete;
+                return res.is_can_be_delete;
             },
             isCanBeEdit: function(){
                 var usermap = $this.usermap();
-                var isRegistered = this.isRegistered();
-                var inLaw = this.inLaw;
+                var isRegistered = res.isRegistered();
+                var inLaw = res.inLaw;
                 if(usermap.gedcom_id == ind.gedcom_id) return true;
                 if(isRegistered) return false;
                 if(inLaw){
-                    var con = $this.getConnection(this.gedcom_id);
+                    var con = $this.getConnection(res.gedcom_id);
                     var prew = con[con.length - 2];
                     var rel = $this.getRelation(prew);
                     if(parseInt(rel.in_law)){
@@ -402,15 +402,15 @@ $FamilyTreeTop.create("usertree", function($){
             },
             isCanAddChild: function(){
                 var con = $this.getConnection(ind.gedcom_id);
-                var inLaw = this.inLaw;
+                var inLaw = res.inLaw;
                 if(inLaw && con.length > 1){
                     var id = con[con.length - 2];
                     var families = $this.getFamilies(id);
                     for(var key in families){
                         if(!families.hasOwnProperty(key)) continue;
                         var family = families[key];
-                        if( (family.husb == id && family.wife == this.gedcom_id)
-                            || (family.wife == id && family.husb == this.gedcom_id)
+                        if( (family.husb == id && family.wife == res.gedcom_id)
+                            || (family.wife == id && family.husb == res.gedcom_id)
                             ){
                             return true;
                         }
@@ -420,9 +420,9 @@ $FamilyTreeTop.create("usertree", function($){
             },
             isCanBeInvite: function(){
                 var con = $this.getConnection(ind.gedcom_id);
-                var isRegistered = this.isRegistered();
-                var isAlive = this.isAlive();
-                var inLaw = this.inLaw;
+                var isRegistered = res.isRegistered();
+                var isAlive = res.isAlive();
+                var inLaw = res.inLaw;
                 if(inLaw && con.length > 1){
                     var id = con[con.length - 2];
                     var rel = $this.getRelation(id);
@@ -437,7 +437,7 @@ $FamilyTreeTop.create("usertree", function($){
                 return $this.isRegisteredUser(ind.gedcom_id);
             },
             isAlive:function(){
-                if(this.death()){
+                if(res.death()){
                     return false;
                 }
                 return true;
@@ -491,7 +491,7 @@ $FamilyTreeTop.create("usertree", function($){
         if("undefined" === typeof(family_id) || family_id == null) return false;
         if("undefined" === typeof(data.fam.family_id[family_id])) return false;
         var fam = data.fam.family_id[family_id];
-        return {
+        var res = {
             change_time: fam.change_time,
             family_id: fam.family_id,
             husb: fam.husb,
@@ -502,13 +502,14 @@ $FamilyTreeTop.create("usertree", function($){
                 return $this.getFamilyEventByType(family_id, 'MARR');
             },
             married: function(){
-                var $self = this, date = new Date(), e = $self.event();
+                var $self = res, date = new Date(), e = $self.event();
                 if(e && e.date && e.date.start_year != null){
                     return "<div>married</div><div>" + (date.getFullYear() - e.date.start_year) + " years ago</div>";
                 }
                 return "";
             }
         }
+        return res;
     }
 
     $this.isCommonAncestorExist = function(id1, id2){

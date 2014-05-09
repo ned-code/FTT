@@ -24,7 +24,6 @@ $FamilyTreeTop.create("editor", function($){
 
     $btns = [
       $('<button class="btn btn-default" data-familytreetop-button="close" data-l10n-id="TPL_FAMILYTREETOP_MODAL_CLOSE"></button>'),
-      $('<button class="btn btn-primary" data-familytreetop-button="save_changes" data-l10n-id="TPL_FAMILYTREETOP_MODAL_SAVE_CHANGES"></button>'),
       $('<button class="btn btn-primary" data-familytreetop-button="save" data-l10n-id="TPL_FAMILYTREETOP_MODAL_SAVE"></button>'),
       $('<button class="btn btn-primary" data-familytreetop-button="save_and_close" data-l10n-id="TPL_FAMILYTREETOP_MODAL_SAVE_AND_CLOSE"></button>')
     ];
@@ -36,13 +35,42 @@ $FamilyTreeTop.create("editor", function($){
           toggle : {
             active : true,
             href : "profile",
-            text : $this.l10n('tpl_familytreetop_editor_tabs_profile')
+            text : '<i class="fa fa-user spaced-right-md"></i><span class="hidden-xs">' + $this.l10n('tpl_familytreetop_editor_tabs_profile') + '</span>'
           },
           pane : {
             tpl : "editor.tabs.profile.html",
             onLoad : function($pane){
               $pane.find('[data-familytreetop-avatar]').append(user.avatar(['90','90']));
               $FamilyTreeTop.ui.formworker({
+                $cont : $pane,
+                schema : {
+                  'living' : {
+                    events : {
+                      'change' : function(){
+                        var row = $pane.find('.row.spaced-top-md');
+                        if($(this).find('option:selected').val() == "true"){
+                          $(row[3]).addClass('hidden');
+                          $(row[4]).addClass('hidden');
+                          $(row[5]).addClass('hidden');
+                        } else {
+                          $(row[3]).removeClass('hidden');
+                          $(row[4]).removeClass('hidden');
+                          $(row[5]).removeClass('hidden');
+                        }
+                      }
+                    }
+                  },
+                  'start_day' : {
+                    range : [1, 31]
+                  },
+                  'start_year' : {
+                    setValue : function(v){
+                      if(v == "0") return "";
+                      return v;
+                    }
+                  }
+                },
+                fill : true,
                 data : user
               });
             }
@@ -51,7 +79,7 @@ $FamilyTreeTop.create("editor", function($){
         {
           toggle : {
             href : "unions",
-            text : $this.l10n('tpl_familytreetop_editor_tabs_unions')
+            text : '<i class="fa fa-users spaced-right-md"></i><span class="hidden-xs">' + $this.l10n('tpl_familytreetop_editor_tabs_unions') + '</span>'
           },
           pane : {
             text : ""
@@ -60,7 +88,7 @@ $FamilyTreeTop.create("editor", function($){
         {
           toggle : {
             href : "media",
-            text : $this.l10n('tpl_familytreetop_editor_tabs_media')
+            text : '<i class="fa fa-paperclip spaced-right-md"></i><span class="hidden-xs">' + $this.l10n('tpl_familytreetop_editor_tabs_media') + '</span>'
           },
           pane : {
             text : ""
@@ -69,7 +97,7 @@ $FamilyTreeTop.create("editor", function($){
         {
           toggle : {
             href : "options",
-            text : $this.l10n('tpl_familytreetop_editor_tabs_options')
+            text : '<i class="fa fa-asterisk spaced-right-md"></i><span class="hidden-xs">' + $this.l10n('tpl_familytreetop_editor_tabs_options') + '</span>'
           },
           pane : {
             text : ""
@@ -78,6 +106,21 @@ $FamilyTreeTop.create("editor", function($){
       ],
       events : {
         onClick : function(){
+          var target = $(this).attr('href').slice(1).split('-')[0];
+          switch(target){
+            case "profile" :
+              $btns[0].removeClass('hidden');
+              $btns[1].removeClass('hidden');
+              $btns[2].removeClass('hidden');
+              break;
+            case "unions" :
+            case "media" :
+            case "options" :
+              $btns[0].addClass('hidden');
+              $btns[1].addClass('hidden');
+              $btns[2].addClass('hidden');
+              break;
+          }
           return false;
         }
       }
