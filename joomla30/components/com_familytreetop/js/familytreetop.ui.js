@@ -239,12 +239,13 @@
   $FTT.ui.formworker = function(options){
     var
       fn = {},
-      groups = {},
+      fillData = {},
       settings = false,
       defaults = {
         $cont : false,
         $items : false,
         cont : false,
+        groups : false,
         pull : false,
         data : false,
         schema : false,
@@ -256,7 +257,7 @@
     if(!settings.cont) return false;
 
     fn.serialize = function(){
-      var ser =  {};
+      var ser =  {}, groups = {};
       settings.pull.forEach(function(item, index){
         if("undefined" !== typeof item.dataset.formworkerGroup){
           var groupName = item.dataset.formworkerGroup;
@@ -311,6 +312,31 @@
           break;
       }
       return "undefined";
+    };
+
+    fn.setFillItem = function(object, opts, rule){
+      // GROUP_NAME | DATA.FN _ args1,args2,args3
+      var sides = rule.split('|');
+      var name = sides[0];
+      var right = ("undefined"!==typeof(sides[1]))?sides[1].split('_'):false;
+      var fn = (right)?right[0]:false;
+      var args = (right&&"undefined"!==typeof(right[1]))?right[1].split(','):false;
+
+      if("undefined"!==typeof(fillData[name])){
+        fillData[name] = [];
+      }
+      if(fn && "undefined" !== typeof(settings.data[fn])){
+        object.value = settings.data[fn].apply(null, args);
+      } else {
+        if(opts && "function" === typeof(opts.value)){
+          object.value = opts.value.call(element, settings.data[object.name]);
+        } else if("undefined" !== typeof(settings.data[object.name])){
+          object.value =  settings.data[object.name];
+        } else if(opts && "undefined" !== typeof(opts.value)){
+          object.value = opts.value;
+        }
+      }
+      fillData.push(object);
     };
 
     fn.setValue = function(element, value){
@@ -372,32 +398,47 @@
       if("undefined" !== typeof(settings.schema[object.name])){
         opts = $.extend(true, {}, {
           attr : {},
+          fillRule : false,
           value : false,
           events : false
         }, settings.schema[object.name]);
 
         $(element).attr(opts.attr);
 
-        if("function" === typeof(opts.value)){
-          object.value = opts.value.call(element, settings.data[object.name]);
-        } else if("undefined" !== typeof(settings.data[object.name])){
-          object.value =  settings.data[object.name];
-        } else if("undefined" !== typeof(opts.value)){
-          object.value = opts.value;
+        if(opts.fillRule){
+          fn.setFillItem(object, opts, opts.fillRule);
+        } else {
+          if("function" === typeof(opts.value)){
+            object.value = opts.value.call(element, settings.data[object.name]);
+          } else if("undefined" !== typeof(settings.data[object.name])){
+            object.value =  settings.data[object.name];
+          } else if("undefined" !== typeof(opts.value)){
+            object.value = opts.value;
+          }
+          fn.setValue(element, object.value);
         }
-        fn.setValue(element, object.value);
 
         if(opts.events){
-          fn.each(opts.events, function(fn, selector){
+          fn.each(opts.events, function(selector, fn){
             $(element).bind(selector, fn);
           });
         }
 
       } else if("undefined" !== typeof(settings.data) && "undefined" !== typeof(settings.data[object.name])){
-        object.value =  settings.data[object.name];
-        fn.setValue(element, object.value);
+        if("undefined" !== typeof(object.dataset.formworkerFillRule)){
+          fn.setFillItem(object, false, object.dataset.formworkerFillRule);
+        } else {
+          object.value =  settings.data[object.name];
+          fn.setValue(element, object.value);
+        }
       }
       settings.pull.push(object);
+    });
+
+    fn.each(fillData, function(item, name){
+      if("undefined" !== typeof(settings.groups[name])){
+        settings.groups[name].call(this, item);
+      }
     });
 
     if(settings.submit){
@@ -411,7 +452,9 @@
     return {
       get : fn.getValue,
       set : fn.setValue,
-      ser : fn.serialize
+      ser : fn.serialize,
+      fil : fn.fill
+
     };
   };
 

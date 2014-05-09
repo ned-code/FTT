@@ -40,8 +40,11 @@ $FamilyTreeTop.create("editor", function($){
           },
           pane : {
             tpl : "editor.tabs.profile.html",
-            onLoad : function(pane){
-              console.log(pane);
+            onLoad : function($pane){
+              $pane.find('[data-familytreetop-avatar]').append(user.avatar(['90','90']));
+              $FamilyTreeTop.ui.formworker({
+                data : user
+              });
             }
           }
         },
