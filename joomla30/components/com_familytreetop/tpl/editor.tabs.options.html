@@ -1,0 +1,154 @@
+<div familytreetop="buttons">
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <div familytreetop="progressbar" style="margin-left: 50%;height: 70px;margin-top: 70px;"></div>
+            <div style="text-align:center;">
+                <button familytreetop-button="delete" type="button" class="btn btn-danger" data-l10n-id="TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_DELETE_THIS_PERSON">
+                </button>
+            </div>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+</div>
+<div familytreetop="orange-users" style="display:none;">
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <div class="row">
+                <div class="col-md-12">
+                    <p style="color: #f0ac41;">Warning: The following will happen if you remove yourself from this family tree:</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <ul familytreetop="orange-list"></ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <button familytreetop="orange-confirm" type="button" class="btn btn-default">Confirm</button>
+                    <button familytreetop="orange-cancel" type="button" class="btn btn-default">Cancel</button>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+</div>
+<div familytreetop="delete-tree" style="display:none;">
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <button familytreetop-button="delete-tree" type="button" class="btn btn-danger" data-l10n-id="TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_DELETE_MY_FAMILY_TREE"></button>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+</div>
+<div familytreetop="delete-invalid" style="display:none;">
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4" style="text-align: center;">
+            <div>
+                <button familytreetop-button="delete-invalid" type="button" class="btn disabled" data-l10n-id="TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_DELETE_THIS_PERSON"></button>
+            </div>
+            <div>
+                <p style="color:red; font-weight: bold;" data-l10n-id="TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_OPTION_AVAILABLE_1">
+                </p>
+            </div>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+</div>
+<div familytreetop="delete-invalid-register" style="display:none;">
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4" style="text-align: center;">
+            <div>
+                <button familytreetop-button="delete-invalid" type="button" class="btn disabled" data-l10n-id="TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_DELETE_THIS_PERSON"></button>
+            </div>
+            <div>
+                <p style="color:red; font-weight: bold;" data-l10n-id="TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_OPTION_AVAILABLE_2">
+                </p>
+            </div>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+</div>
+<div familytreetop="delete-confirm" style="display:none;">
+    <div class="row" style="text-align: center;">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <div><i style="color:red;" class="fa fa-warning fa-4x"></i></div>
+            <div data-l10n-id="TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_YOU_ABOUT_DELETE"></div>
+            <div data-l10n-id="TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_ARE_YOU_SURE"></div>
+            <div style="margin:10px;">
+                <div familytreetop-button="delete-confirm-delete" class="btn btn-danger" data-l10n-id="TPL_FAMILYTREETOP_BUTTON_DELETE"></div>
+                <div familytreetop-button="delete-confirm-cancel" class="btn btn-default" data-l10n-id="TPL_FAMILYTREETOP_BUTTON_CANCEL"></div>
+            </div>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+</div>
+<div familytreetop="delete" style="display:none;">
+    <table cellspacing="10" cellpadding="20" class="table familytreetop-table-not-border" style="width:98%;">
+        <tr>
+            <td><i style="color:red;" class="fa fa-warning fa-4x"></i></td>
+            <td><p style="font-weight: bold;" data-l10n-id="TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_YOU_ABOUT_UNREGISTERED">.</p></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <div><span style="font-weight: bold;" data-l10n-id="TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_PLEASE_SELECT_OPTION">:</span></div>
+                <div><hr></div>
+            </td>
+        </tr>
+        <tr class="info">
+            <td class="white">
+                <div>
+                    <img src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/images/m_options_unlink.jpg" />
+                </div>
+            </td>
+            <td class="hover">
+                <div familytreetop="option" option="1" style="cursor:pointer;color:blue;font-weight: bold;" data-l10n-id="TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_UNREGISTER_MY_PROFILE">
+                </div>
+                <div data-l10n-id="TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_YOUR_PROFILE_INFO_VISIBLE"></div>
+            </td>
+        </tr>
+        <tr class="info">
+            <td class="white">
+                <div>
+                    <img src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/images/m_options_remove.jpg" />
+                </div>
+            </td>
+            <td class="hover">
+                <div familytreetop="option" option="2" style="cursor:pointer;color:blue;font-weight: bold;" data-l10n-id="TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_UNREGISTER_AND_DELETE">
+                </div>
+                <div data-l10n-id="TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_YOU_DATA_WILL_BE_DELETE"></div>
+            </td>
+        </tr>
+        <tr class="info">
+            <td class="white">
+                <div>
+                    <img src="<?php echo $this->baseurl ?>/templates/<?=$template; ?>/images/m_options_delete.jpg" />
+                </div>
+            </td>
+            <td class="hover">
+                <div familytreetop="valid">
+                    <div familytreetop="option" option="3" style="cursor:pointer;color:blue;font-weight: bold;" data-l10n-id="TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_UNREGISTER_AND_REMOVE"></div>
+                    <div data-l10n-id="TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_NEED_TO_DELE_SPOUSE_AND_DESCENANTS">
+                    </div>
+                </div>
+                <div familytreetop="invalid" style="display:none;">
+                    <div style="color:gray;" data-l10n-id="TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_UNREGISTER_AND_REMOVE">
+                    </div>
+                    <div style="color:gray;" data-l10n-id="TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_NEED_TO_DELE_SPOUSE_AND_DESCENANTS">
+                    </div>
+                    <div style="color:red;" data-l10n-id="TPL_FAMILYTREETOP_EDITOR_TABS_OPTIONS_YOU_MUST_DELETE">
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr><td colspan="2" style="text-align: center;"><button familytreetop="cancel" type="button" class="btn btn-inverse" data-l10n-id="TPL_FAMILYTREETOP_BUTTON_CANCEL"></button></td></tr>
+    </table>
+</div>

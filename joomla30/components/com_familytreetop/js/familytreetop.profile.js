@@ -749,7 +749,7 @@ $FamilyTreeTop.create("profile", function($){
         $(parent).find('[familytreetop="edit"]').click(function(){
             var gedcom_id = $(this).attr('gedcom_id');
             $(parent).modal('hide');
-            $this.mod('editor').render(gedcom_id);
+            $this.mod('editor').render({gedcom_id : gedcom_id});
         });
         $(parent).find('[familytreetop="invite"]').click(function(){
             var gedcom_id = $(this).attr('gedcom_id');

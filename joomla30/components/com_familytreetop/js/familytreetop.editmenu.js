@@ -10,22 +10,22 @@ $FamilyTreeTop.create("editmenu", function($){
             var id = $(this).attr('familytreetop');
             switch(id){
                 case "edit":
-                    $this.mod('editor').render(gedcom_id);
+                    $this.mod('editor').render({ gedcom_id: gedcom_id});
                     break;
 
                 case "addParent":
                 case "addSibling":
                 case "addSpouse":
                 case "addChild":
-                    $this.mod('editor').add(id, gedcom_id);
+                    //$this.mod('editor').add(id, gedcom_id);
                     break;
 
                 case "deleteUnion":
-                    console.log('deleteUnion');
+                    //console.log('deleteUnion');
                     break;
 
                 case "delete":
-                    $this.mod('editor').render(gedcom_id, 4);
+                    //$this.mod('editor').render(gedcom_id, 4);
                     break;
 
                 case "sendInvite":

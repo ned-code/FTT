@@ -82,7 +82,45 @@ $FamilyTreeTop.create("editor", function($){
             text : '<i class="fa fa-users spaced-right-md"></i><span class="hidden-xs">' + $this.l10n('tpl_familytreetop_editor_tabs_unions') + '</span>'
           },
           pane : {
-            text : ""
+            tpl : "editor.tabs.unions.html",
+            onLoad: function($pane){
+              var
+                families = $FamilyTreeTop.fn.mod('usertree').getFamilies(user.gedcom_id),
+                $standart = $pane.find('[familytreetop="module"]');
+              for(var family_id in families){
+                if(!families.hasOwnProperty(family_id)) continue;
+                var $box = $standart.clone(),
+                    family = $FamilyTreeTop.fn.mod('usertree').family(family_id),
+                    event = family.event();
+                $box.find('[data-familytreetop-avatar]').each(function(index, div){
+                  var gedcomId = (index)?family.husb:family.wife,
+                      partner = $FamilyTreeTop.fn.mod('usertree').user(gedcomId);
+                      $(div).append(partner.avatar(["90","90"]));
+                });
+                $box.find('[data-familytreetop-user-data]').each(function(index, div){
+                  var gedcomId = (index)?family.husb:family.wife,
+                    partner = $FamilyTreeTop.fn.mod('usertree').user(gedcomId);
+                  $(div).append(partner.name());
+                });
+                $FamilyTreeTop.ui.formworker({
+                  $cont : $box,
+                  data : {
+                    family_id: family_id,
+                    start_month : event.date.start_month,
+                    start_day : event.date.start_day,
+                    start_year : event.date.start_year,
+                    city : event.place.city,
+                    state : event.place.state,
+                    country : event.place.country
+                  },
+                  fill : true,
+                  onFill : function(){
+                    $box.removeClass('hidden');
+                    $pane.append($box);
+                  }
+                });
+              }
+            }
           }
         },
         {
@@ -91,7 +129,9 @@ $FamilyTreeTop.create("editor", function($){
             text : '<i class="fa fa-paperclip spaced-right-md"></i><span class="hidden-xs">' + $this.l10n('tpl_familytreetop_editor_tabs_media') + '</span>'
           },
           pane : {
-            text : ""
+            tpl : "editor.tabs.media.html",
+            onLoad: function($pane){
+            }
           }
         },
         {
@@ -100,7 +140,9 @@ $FamilyTreeTop.create("editor", function($){
             text : '<i class="fa fa-asterisk spaced-right-md"></i><span class="hidden-xs">' + $this.l10n('tpl_familytreetop_editor_tabs_options') + '</span>'
           },
           pane : {
-            text : ""
+            tpl : "editor.tabs.options.html",
+            onLoad: function($pane){
+            }
           }
         }
       ],
@@ -109,11 +151,11 @@ $FamilyTreeTop.create("editor", function($){
           var target = $(this).attr('href').slice(1).split('-')[0];
           switch(target){
             case "profile" :
+            case "unions" :
               $btns[0].removeClass('hidden');
               $btns[1].removeClass('hidden');
               $btns[2].removeClass('hidden');
               break;
-            case "unions" :
             case "media" :
             case "options" :
               $btns[0].addClass('hidden');
@@ -128,14 +170,40 @@ $FamilyTreeTop.create("editor", function($){
 
     modal = $FamilyTreeTop.ui.modal({
       title : user.name(),
-      body : $tabs,
+      body : $tabs.object,
       buttons : $btns,
       events : {
         hidden : function(){
           this.remove();
         },
-        onButtonClick : function(){
-          console.log(this, arguments);
+        onButtonClick : function(button){
+          var type = button.dataset.familytreetopButton;
+          if("undefined" === typeof(type)) return false;
+          switch(type){
+            case "close" :
+              modal.hide();
+              break;
+            case "save_and_close":
+              $FamilyTreeTop.ui.formworker({
+                $cont : $tabs.getActiveTab(),
+                serialize : true,
+                onSerialize : function(data){
+                  console.log(data);
+                  modal.hide();
+                }
+              });
+              break;
+            case "save" :
+              $FamilyTreeTop.ui.formworker({
+                $cont : $tabs.getActiveTab(),
+                serialize : true,
+                onSerialize : function(data){
+                  console.log(data);
+                }
+              });
+              break;
+            default : return false;
+          }
         }
       }
     });

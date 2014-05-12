@@ -233,7 +233,14 @@
       $tabsCont.append(item.pane);
     });
 
-    return $cont;
+    return {
+      object : $cont,
+      getActiveTab : function(){
+        var $link = $cont.find('ul.nav.nav-tabs li.active a');
+        var href = $link.attr('href');
+        return $cont.find('.tab-content '+href);
+      }
+    };
   }
 
   $FTT.ui.formworker = function(options){
@@ -244,6 +251,8 @@
       objects = false,
       itemOpts = false,
       $ = jQuery,
+      $blocks = false,
+      blocksPull = false,
       $items = false;
 
     defaults = {
@@ -372,81 +381,95 @@
     };
 
     fn.serialize = function(){
-      var response = {}, grps = {};
-      fn.each(objects, function(object){
-        if(object.groupBy){
-          if("undefined" === typeof(grps[object.groupBy])){
-            grps[object.groupBy] = [];
+      var res;
+      if(blocksPull){
+        res = [];
+        blocksPull.forEach(function(objs){
+          res.push(_(objs));
+        });
+      } else {
+        res = _(objects);
+      }
+      settings.onSerialize.call(null, res);
+      return res;
+      function _(objs){
+        var response = {}, grps = {};
+        fn.each(objs, function(object){
+          if(object.groupBy){
+            if("undefined" === typeof(grps[object.groupBy])){
+              grps[object.groupBy] = [];
+            }
+            grps[object.groupBy].push(object);
+          } else {
+            var val = fn.getValue(object);
+            if(val.name != "") response[val.name] = val.value;
           }
-          grps[object.groupBy].push(object);
-        } else {
-          var val = fn.getValue(object);
-          if(val.name != "") response[val.name] = val.value;
-        }
-      });
-      fn.each(grps, function(grp, grpName){
-        var val;
-        if("undefined" !== typeof(settings.groups[grpName])){
-           val = settings.groups[grpName].apply(null, grp);
-           if(val.name != "") response[val.name] = val.value;
-        } else {
-          if("undefined" === typeof(response[grpName])){
-            response[grpName] = {};
+        });
+        fn.each(grps, function(grp, grpName){
+          var val;
+          if("undefined" !== typeof(settings.groups[grpName])){
+            val = settings.groups[grpName].apply(null, grp);
+            if(val.name != "") response[val.name] = val.value;
+          } else {
+            if("undefined" === typeof(response[grpName])){
+              response[grpName] = {};
+            }
+            fn.each(grp, function(object){
+              val = fn.getValue(object);
+              if(val.name != "") response[grpName][val.name] = val.value;
+            });
           }
-          fn.each(grp, function(object){
-            val = fn.getValue(object);
-            if(val.name != "") response[grpName][val.name] = val.value;
-          });
-        }
-      });
-      settings.onSerialize.call(null, response);
-      return response;
+        });
+        return response;
+      }
     };
 
     fn.fill = function(){
-      // setRuleQuery = NAME | FUNC : ARGS1 [, ARGS2]
-      var grps = {};
-      if(!settings.data) return false;
-      fn.each(objects, function(object){
-        if(object.setRule){
-          var parse = {}, side, parts, name, func, args;
-          side = object.setRule.split('|');
-          parts = ("undefined"!==typeof(side[1]))?side[1].split(':'):false;
-          name = (side[0] != "")?side[0]:false;
-          func = (parts && "undefined"!==typeof(parts[0]))?parts[0]:false;
-          args = (parts && "undefined"!==typeof(parts[1]))?parts[1].split(','):[];
+      _(objects);
+      return true;
+      function _(objs){
+        var grps = {};
+        if(!settings.data) return false;
+        fn.each(objs, function(object){
+          if(object.setRule){
+            var parse = {}, side, parts, name, func, args;
+            side = object.setRule.split('|');
+            parts = ("undefined"!==typeof(side[1]))?side[1].split(':'):false;
+            name = (side[0] != "")?side[0]:false;
+            func = (parts && "undefined"!==typeof(parts[0]))?parts[0]:false;
+            args = (parts && "undefined"!==typeof(parts[1]))?parts[1].split(','):[];
 
-          if(name){
-            if("undefined" === typeof(grps[name])){
-              grps[name] = [];
+            if(name){
+              if("undefined" === typeof(grps[name])){
+                grps[name] = [];
+              }
+              grps[name].push({
+                obj : object,
+                name : name,
+                func : func,
+                args : args
+              });
+            } else {
+              if("undefined" !== typeof(settings.data[func])){
+                fn.setValue(object, settings.data[func].apply(null, args));
+              }
             }
-            grps[name].push({
-              obj : object,
-              name : name,
-              func : func,
-              args : args
-            });
           } else {
-            if("undefined" !== typeof(settings.data[func])){
-              fn.setValue(object, settings.data[func].apply(null, args));
-            }
-          }
-        } else {
-          if("undefined" !== typeof(settings.data[object.name])) fn.setValue(object, settings.data[object.name]);
-        }
-      });
-      fn.each(grps, function(grp, grpName){
-        if("undefined"===typeof(settings.groups[grpName])) return false;
-        var vars = [];
-        grp.forEach(function(item){
-          if("undefined" !== typeof(settings.data[item.func])){
-            vars.push(settings.data[item.func].call(null, item.args));
+            if("undefined" !== typeof(settings.data[object.name])) fn.setValue(object, settings.data[object.name]);
           }
         });
-        settings.groups[grpName].call(null, vars);
-      });
-      settings.onFill.call(null);
-      return true;
+        fn.each(grps, function(grp, grpName){
+          if("undefined"===typeof(settings.groups[grpName])) return false;
+          var vars = [];
+          grp.forEach(function(item){
+            if("undefined" !== typeof(settings.data[item.func])){
+              vars.push(settings.data[item.func].call(null, item.args));
+            }
+          });
+          settings.groups[grpName].call(null, vars);
+        });
+        settings.onFill.call(null);
+      }
     };
 
     fn.each = function(object, callback){
@@ -512,8 +535,17 @@
     };
 
     settings.$cont = $(settings.$cont);
-    $items = settings.$cont.find('input[name],select[name],textarea[name]');
-    objects = fn.parseItems($items);
+    $blocks = settings.$cont.find('[data-formworker-block]');
+    if($blocks.length > 0){
+      blocksPull = [];
+      $blocks.each(function(index, block){
+        var items = $(block).find('input[name],select[name],textarea[name]');
+        blocksPull.push(fn.parseItems(items));
+      });
+    } else {
+      $items = settings.$cont.find('input[name],select[name],textarea[name]');
+      objects = fn.parseItems($items);
+    }
 
     if(settings.fill) fn.fill.call(null);
     if(settings.serialize) fn.serialize.call(null);

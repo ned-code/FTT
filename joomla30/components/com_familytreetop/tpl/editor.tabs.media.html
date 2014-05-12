@@ -1,0 +1,38 @@
+<form role="form" class="margin-top-15" action="index.php?option=com_familytreetop&task=upload.file" method="POST" enctype="multipart/form-data">
+<div class="row fileupload-buttonbar">
+    <div class="row">
+        <div class="col-md-12">
+            <span class="btn btn-success fileinput-button pull-right">
+                <i style="display:inline-block;" class="fa fa-pencil"></i>
+                <span style="display:inline-block;" data-l10n-id="TPL_FAMILYTREETOP_EDITOR_TABS_MEDIA_ADD_FILES"></span>
+                <input type="file" name="files[]" multiple="">
+            </span>
+            <button class="btn btn-info pull-right hidden">
+                <i class="fa fa-check"></i>
+                <span data-l10n-id="TPL_FAMILYTREETOP_EDITOR_TABS_MEDIA_SET_AVATAR"></span>
+            </button>
+            <button class="btn btn-danger pull-right hidden">
+                <i class="fa fa-minuse-circle"></i>
+                <span data-l10n-id="TPL_FAMILYTREETOP_EDITOR_TABS_MEDIA_UNSET_AVATAR"></span>
+            </button>
+            <button class="btn btn-danger pull-right hidden">
+                <i class="fa fa-trash-o"></i>
+                <span data-l10n-id="TPL_FAMILYTREETOP_EDITOR_TABS_MEDIA_DELETE"></span>
+            </button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 fileupload-progress fade">
+            <div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                <div class="bar" style="width:0%;"></div>
+            </div>
+            <div class="progress-extended">&nbsp;</div>
+        </div>
+    </div>
+</div>
+<div class="fileupload-loading"></div>
+<br>
+<table role="presentation" class="table table-striped">
+    <tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody>
+</table>
+</form>
