@@ -6,6 +6,8 @@ $template = $settings->_template->value;
 $script = "";
 ?>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/jquery-2.0.3.min.js"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/underscore-min.js"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/backbone-min.js"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/jquery.panorama.js"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/spin.min.js"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/superbrowserupdate.js"></script>

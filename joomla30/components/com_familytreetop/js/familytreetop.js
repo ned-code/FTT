@@ -39,6 +39,12 @@
 
         this.joyride = false;
         this.l10n = false;
+
+        this.Underscore = _;
+        this.Backbone = false;
+        this.BackboneCollections = [];
+        this.BackboneModels = [];
+        this.BackboneViews = [];
     }
 
     $FamilyTreeTop.prototype.fn = {

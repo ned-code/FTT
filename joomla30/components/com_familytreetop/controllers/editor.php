@@ -5,7 +5,7 @@ require_once JPATH_COMPONENT.'/controller.php';
 
 class FamilytreetopControllerEditor extends FamilytreetopController
 {
-
+/*
     protected function isEntryValid($form, $type){
         $prefix = substr($type, 0, 1). "_";
         if(isset($form[$prefix.'exist']) && $form[$prefix.'exist'] == "on" ) return false;
@@ -729,5 +729,6 @@ class FamilytreetopControllerEditor extends FamilytreetopController
         );
         exit;
     }
+    */
 
 }
