@@ -2,8 +2,13 @@
   'use strict';
   var Family = Backbone.Model.extend({
     url: function(){
-      return $FamilyTreeTop.currenturl + '?option=com_familytreetop&task=api.family';
+      var url = $FamilyTreeTop.currenturl + '?option=com_familytreetop&task=api.family';
+      if(this.isNew()){
+        return url;
+      } else {
+        return url + '&id=' + this.get('id');
+      }
     }
   });
-  this.BackboneModels['Family'] = new Family;
+  this.BackboneModels['Family'] = Family;
 }).call($FamilyTreeTop);

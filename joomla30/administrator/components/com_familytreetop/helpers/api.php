@@ -32,8 +32,9 @@ class FamilyTreeTopApiHelper {
     }
 
     public function request($class){
+        header('Content-Type: application/json');
         $method = $_SERVER['REQUEST_METHOD'];
-        return $this->{$class}->{$method}();
+        return json_encode($this->{$class}->{$method}());
     }
 
 }

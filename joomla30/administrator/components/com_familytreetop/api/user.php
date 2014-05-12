@@ -3,15 +3,19 @@
 class FamilyTreeTopApiUser {
 
     public function get(){
-        return json_encode(array('response'=>'get'));
+        return array(
+            'id' => 1,
+            'first_name' => 'first_name',
+            'last_name' => 'last_name'
+        );
     }
     public function post(){
-        return json_encode(array('response'=>'post'));
+        return array('response'=>'post');
     }
     public function put(){
-        return json_encode(array('response'=>'put'));
+        return array('response'=>'put');
     }
     public function delete(){
-        return json_encode(array('response'=>'delete'));
+        return array('response'=>'delete');
     }
 }

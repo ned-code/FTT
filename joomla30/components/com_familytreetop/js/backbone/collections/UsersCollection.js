@@ -2,7 +2,7 @@
   'use strict';
   var $FTT = this;
   var UsersCollection = Backbone.Collection.extend({
-    model : $FTT.BackboneModels.User,
+    model : new $FTT.BackboneModels.User,
     url: function(){
       return $FamilyTreeTop.currenturl + '?option=com_familytreetop&task=api.users';
     }

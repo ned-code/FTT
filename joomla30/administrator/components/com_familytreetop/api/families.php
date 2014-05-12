@@ -3,16 +3,23 @@
 class FamilyTreeTopApiFamilies {
 
     public function get(){
-        return json_encode(array('response'=>'get'));
+        $families = array();
+        $family = array(
+            'id' => 1,
+            'husb' => 'husb',
+            'wife' => 'wife'
+        );
+        array_push($families, $family);
+        return $families;
     }
     public function post(){
-        return json_encode(array('response'=>'post'));
+        return array('response'=>'post');
     }
     public function put(){
-        return json_encode(array('response'=>'put'));
+        return array('response'=>'put');
     }
     public function delete(){
-        return json_encode(array('response'=>'delete'));
+        return array('response'=>'delete');
     }
 
 
