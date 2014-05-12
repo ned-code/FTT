@@ -1,7 +1,7 @@
 (function(){
   'use strict';
   var FamiliesCollection = Backbone.Collection.extend({
-    model : new this.BackboneModels.Family,
+    model : this.BackboneModels.Family,
     url: function(){
       return $FamilyTreeTop.currenturl + '?option=com_familytreetop&task=api.families';
     }

@@ -8,6 +8,7 @@ $script = "";
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/jquery-2.0.3.min.js"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/underscore-min.js"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/backbone-min.js"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/backbone-sync.js"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/backbone/models/UserModel.js"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/backbone/models/FamilyModel.js"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/backbone/collections/UsersCollection.js"></script>
