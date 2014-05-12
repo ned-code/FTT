@@ -40,11 +40,10 @@
         this.joyride = false;
         this.l10n = false;
 
-        this.Underscore = _;
+        this.Underscore = false;
         this.Backbone = false;
-        this.BackboneCollections = [];
-        this.BackboneModels = [];
-        this.BackboneViews = [];
+        this.BackboneModels = {};
+        this.BackboneCollections = {};
     }
 
     $FamilyTreeTop.prototype.fn = {
@@ -365,6 +364,9 @@
 
     $FamilyTreeTop.prototype.init = function(){
       var $this = this;
+
+      $this.Backbone = Backbone;
+      $this.Underscore = _;
 
       $this.app.data = jQuery.parseJSON($this.app.data);
 
