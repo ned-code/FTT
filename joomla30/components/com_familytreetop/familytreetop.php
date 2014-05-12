@@ -8,12 +8,14 @@ require_once JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familyt
 require_once JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familytreetop/helpers/user.php';
 require_once JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familytreetop/helpers/upload.php';
 require_once JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familytreetop/helpers/languages.php';
+require_once JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familytreetop/helpers/api.php';
 
 ActiverecrdHelper::getInstance();
 FacebookHelper::getInstance();
 FamilyTreeTopSettingsHelper::getInstance();
 FamilyTreeTopUserHelper::getInstance();
 FamilyTreeTopLanguagesHelper::init();
+FamilyTreeTopApiHelper::getInstance();
 
 $doc = JFactory::getDocument();
 $app = & JFactory::getApplication();

@@ -1,7 +1,9 @@
 (function(){
   'use strict';
   var Family = Backbone.Model.extend({
-    urlRoot: '/api/user'
+    url: function(){
+      return $FamilyTreeTop.currenturl + '?option=com_familytreetop&task=api.family';
+    }
   });
   this.BackboneModels['Family'] = new Family;
 }).call($FamilyTreeTop);

@@ -1,8 +1,11 @@
 (function(){
   'use strict';
+  var $FTT = this;
   var UsersCollection = Backbone.Collection.extend({
-    model : this.BackboneModels.User,
-    url : 'api/users'
+    model : $FTT.BackboneModels.User,
+    url: function(){
+      return $FamilyTreeTop.currenturl + '?option=com_familytreetop&task=api.users';
+    }
   });
-  this.BackboneCollections['Families'] = new UsersCollection;
+  this.BackboneCollections['Users'] = new UsersCollection;
 }).call($FamilyTreeTop);

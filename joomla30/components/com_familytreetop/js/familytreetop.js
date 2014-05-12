@@ -368,6 +368,9 @@
       $this.Backbone = Backbone;
       $this.Underscore = _;
 
+      $this.BackboneCollections.Users.fetch();
+      $this.BackboneCollections.Families.fetch();
+
       $this.app.data = jQuery.parseJSON($this.app.data);
 
       //init modules;
