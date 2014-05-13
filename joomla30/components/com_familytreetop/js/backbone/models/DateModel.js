@@ -1,8 +1,8 @@
 (function(){
   'use strict';
-  var User = Backbone.Model.extend({
+  var Date = Backbone.Model.extend({
     url: function(){
-      var url = $FamilyTreeTop.currenturl + '?option=com_familytreetop&task=api.send&class=user';
+      var url = $FamilyTreeTop.currenturl + '?option=com_familytreetop&task=api.send&class=date';
       if(this.isNew()){
         return url;
       } else {
@@ -10,6 +10,6 @@
       }
     }
   });
-  this.BackboneModels['User'] = User;
+  this.BackboneModels['Date'] = Date;
 }).call($FamilyTreeTop);
 

@@ -6,28 +6,11 @@ require_once JPATH_COMPONENT.'/controller.php';
 class FamilytreetopControllerApi extends FamilytreetopController
 {
 
-
-    public function user(){
+    // request rest api method
+    public function send(){
+        $app = & JFactory::getApplication();
         $api = FamilyTreeTopApiHelper::getInstance();
-        echo $api->request('user');
-        exit;
-    }
-
-    public function family(){
-        $api = FamilyTreeTopApiHelper::getInstance();
-        echo $api->request('family');
-        exit;
-    }
-
-    public function users(){
-        $api = FamilyTreeTopApiHelper::getInstance();
-        echo $api->request('users');
-        exit;
-    }
-
-    public function families(){
-        $api = FamilyTreeTopApiHelper::getInstance();
-        echo $api->request('families');
+        echo $api->request($app->input->get('class', false), $app->input->get('id', false));
         exit;
     }
 

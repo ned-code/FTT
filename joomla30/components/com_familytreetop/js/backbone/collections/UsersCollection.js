@@ -4,7 +4,7 @@
   var UsersCollection = Backbone.Collection.extend({
     model : $FTT.BackboneModels.User,
     url: function(){
-      return $FamilyTreeTop.currenturl + '?option=com_familytreetop&task=api.users';
+      return $FamilyTreeTop.currenturl + '?option=com_familytreetop&task=api.send&class=users';
     }
   });
   this.BackboneCollections['Users'] = new UsersCollection;

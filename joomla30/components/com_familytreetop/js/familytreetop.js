@@ -368,9 +368,11 @@
       $this.Backbone = Backbone;
       $this.Underscore = _;
 
-      $this.BackboneCollections.Users.fetch();
-      $this.BackboneCollections.Families.fetch();
-
+      for(var collectionName in $this.BackboneCollections){
+        if(!$this.BackboneCollections.hasOwnProperty(collectionName)) continue;
+        var collection = $this.BackboneCollections[collectionName];
+        collection.fetch();
+      }
       $this.app.data = jQuery.parseJSON($this.app.data);
 
       //init modules;

@@ -1,20 +1,40 @@
 <?php
 
-require_once JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familytreetop/api/user.php';
-require_once JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familytreetop/api/family.php';
-require_once JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familytreetop/api/users.php';
-require_once JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familytreetop/api/families.php';
-
 class FamilyTreeTopApiHelper {
     protected static $instance;
     private function __constuctor(){}
     private function __clone(){}
     private function __wakeup(){}
 
-    private $user;
-    private $family;
-    private $users;
-    private $families;
+    private $collections = array(
+        'children',
+        'dates',
+        'events',
+        'families',
+        'medias',
+        'names',
+        'places',
+        'relations',
+        'users'
+    );
+    private $models = array(
+        'child',
+        'date',
+        'event',
+        'family',
+        'media',
+        'name',
+        'place',
+        'relation',
+        'user'
+    );
+    private $methods = array(
+        'post' => 'create',
+        'get' => 'read',
+        'put' => 'update',
+        'delete' => 'destroy'
+    );
+    private $instances = array();
 
     public static function getInstance(){
         if ( is_null(self::$instance) ) {
@@ -25,16 +45,26 @@ class FamilyTreeTopApiHelper {
     }
 
     private function init(){
-        $this->user = new FamilyTreeTopApiUser();
-        $this->family = new FamilyTreeTopApiFamily();
-        $this->users = new FamilyTreeTopApiUsers();
-        $this->families = new FamilyTreeTopApiFamilies();
+        $path = JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familytreetop/api/';
+        foreach($this->collections as $collection){
+            require_once $path . "/collections/" . $collection . ".php";
+            $className = 'FamilyTreeTopApiCollection' . ucfirst(strtolower($collection));
+            $this->instances[$collection] = new $className;
+        }
+
+        foreach($this->models as $model){
+            require_once $path . "/models/" . $model . ".php";
+            $className = 'FamilyTreeTopApiModel' . ucfirst(strtolower($model));
+            $this->instances[$model] = new $className;
+        }
     }
 
-    public function request($class){
+    public function request($class, $id){
+        if(!$class || !isset($this->methods[$_SERVER['REQUEST_METHOD']])) return json_encode( array() );
         header('Content-Type: application/json');
-        $method = $_SERVER['REQUEST_METHOD'];
-        return json_encode($this->{$class}->{$method}());
+        $method = $this->methods[ $_SERVER['REQUEST_METHOD'] ];
+        $class = $this->objects[$class];
+        return json_encode($class->{$method}($id));
     }
 
 }
