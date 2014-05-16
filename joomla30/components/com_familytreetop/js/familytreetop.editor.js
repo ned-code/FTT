@@ -198,7 +198,29 @@ $FamilyTreeTop.create("editor", function($){
                 $cont : $tabs.getActiveTab(),
                 serialize : true,
                 onSerialize : function(data){
-                  console.log(data);
+                  switch($(this).attr('id').split('-')[0]){
+                    case "profile":
+                        var ind = $this.mod('controller').instance('Individuals').findWhere({ gedcom_id : user.gedcom_id });
+                        ind.set({
+                          gender : data.gender
+                        });
+                        if(ind.isValid(true)){
+                          ind.save();
+                        }
+
+                        var name = $this.mod('controller').instance('Names').findWhere({ gedcom_id : user.gedcom_id });
+                        name.set({
+                          first_name : data.first_name,
+                          middle_name : data.middle_name,
+                          last_name : data.last_name,
+                          know_as : data.know_as
+                        });
+                        if(name.isValid(true)){
+                          name.save();
+                        }
+                      break;
+                    case "unions": break;
+                  }
                 }
               });
               break;

@@ -1,4 +1,5 @@
 <?php
+require JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familytreetop/api/Slim/Slim.php';
 
 class FamilyTreeTopApiHelper {
     protected static $instance;
@@ -62,14 +63,28 @@ class FamilyTreeTopApiHelper {
             $className = 'FamilyTreeTopApiModel' . ucfirst(strtolower($model));
             $this->instances[$model] = new $className;
         }
+
+        \Slim\Slim::registerAutoloader();
+    }
+
+    public function Slim(){
+        return new \Slim\Slim();
+    }
+
+    public function getBody(){
+        return json_decode($this->Slim()->request->getBody());
+    }
+
+    private function response($q){
+        header('Content-Type: application/json');
+        return json_encode($q);
     }
 
     public function request($class, $id){
-        header('Content-Type: application/json');
-        if(!$class || !isset($this->methods[$_SERVER['REQUEST_METHOD']])) return json_encode( array() );
+        if(!$class || !isset($this->methods[$_SERVER['REQUEST_METHOD']])) return $this->response(array());
         $method = $this->methods[ $_SERVER['REQUEST_METHOD'] ];
         $class = $this->instances[$class];
-        return json_encode($class->{$method}($id));
+        return $this->response($class->{$method}($id));
     }
 
 }

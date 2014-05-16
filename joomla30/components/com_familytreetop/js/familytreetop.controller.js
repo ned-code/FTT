@@ -4,8 +4,10 @@ $FamilyTreeTop.create("controller", function($){
     $this = this,
     schema = {};
 
-
-
+  $this.instance = function(collectionName){
+    if("undefined" === typeof( $FamilyTreeTop.BackboneCollections[collectionName] )) return false;
+    return $FamilyTreeTop.BackboneCollections[collectionName];
+  }
 
   $this.model = function(modelName, options){
     var settings, model;
