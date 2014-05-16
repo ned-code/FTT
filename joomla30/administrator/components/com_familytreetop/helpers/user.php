@@ -112,6 +112,16 @@ class FamilyTreeTopUserHelper
         }
     }
 
+    public function nget(){
+        $user = new stdClass;
+
+        $user->treeId = $this->tree_id;
+        $user->gedcomId = $this->gedcom_id;
+        $user->facebookId = $this->facebook_id;
+
+        return $user;
+    }
+
     public function get(){
         $user = new stdClass;
 

@@ -377,15 +377,25 @@
       $this.Underscore = _;
       $this.Handlebars = Handlebars;
       $this.Backbone = Backbone;
+      $this.Instances = {};
 
       $this._ = $this.Underscore;
       $this.hbr = $this.Handlebars;
 
-      for(var collectionName in $this.BackboneCollections){
-        if(!$this.BackboneCollections.hasOwnProperty(collectionName)) continue;
-        var collection = $this.BackboneCollections[collectionName];
-        collection.fetch();
-      }
+
+      $this.user = new $this.BackboneModels.User;
+      $this.user.fetch({
+        success : function(data){
+          for(var collectionName in $this.BackboneCollections){
+            if(!$this.BackboneCollections.hasOwnProperty(collectionName)) continue;
+            var collection = new $this.BackboneCollections[collectionName];
+            collection.treeId = $this.user.get('treeId');
+            collection.fetch();
+            $this.Instances[collectionName] = collection;
+          }
+        }
+      });
+
       $this.app.data = jQuery.parseJSON($this.app.data);
 
       //init modules;

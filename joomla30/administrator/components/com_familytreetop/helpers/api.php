@@ -11,28 +11,31 @@ class FamilyTreeTopApiHelper {
         'dates',
         'events',
         'families',
+        'individuals',
         'medias',
+        'members',
         'names',
         'places',
-        'relations',
-        'users'
+        'relations'
     );
     private $models = array(
         'child',
         'date',
         'event',
         'family',
+        'individual',
         'media',
+        'member',
         'name',
         'place',
         'relation',
         'user'
     );
     private $methods = array(
-        'post' => 'create',
-        'get' => 'read',
-        'put' => 'update',
-        'delete' => 'destroy'
+        'POST' => 'create',
+        'GET' => 'read',
+        'PUT' => 'update',
+        'DELETE' => 'destroy'
     );
     private $instances = array();
 
@@ -60,10 +63,10 @@ class FamilyTreeTopApiHelper {
     }
 
     public function request($class, $id){
-        if(!$class || !isset($this->methods[$_SERVER['REQUEST_METHOD']])) return json_encode( array() );
         header('Content-Type: application/json');
+        if(!$class || !isset($this->methods[$_SERVER['REQUEST_METHOD']])) return json_encode( array() );
         $method = $this->methods[ $_SERVER['REQUEST_METHOD'] ];
-        $class = $this->objects[$class];
+        $class = $this->instances[$class];
         return json_encode($class->{$method}($id));
     }
 
