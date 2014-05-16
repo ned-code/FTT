@@ -200,24 +200,9 @@ $FamilyTreeTop.create("editor", function($){
                 onSerialize : function(data){
                   switch($(this).attr('id').split('-')[0]){
                     case "profile":
-                        var ind = $this.mod('controller').instance('Individuals').findWhere({ gedcom_id : user.gedcom_id });
-                        ind.set({
-                          gender : data.gender
-                        });
-                        if(ind.isValid(true)){
-                          ind.save();
-                        }
-
-                        var name = $this.mod('controller').instance('Names').findWhere({ gedcom_id : user.gedcom_id });
-                        name.set({
-                          first_name : data.first_name,
-                          middle_name : data.middle_name,
-                          last_name : data.last_name,
-                          know_as : data.know_as
-                        });
-                        if(name.isValid(true)){
-                          name.save();
-                        }
+                        data.gedcom_id = user.gedcom_id;
+                        var ind = $this.mod('usertree').individual(data);
+                        ind.update();
                       break;
                     case "unions": break;
                   }

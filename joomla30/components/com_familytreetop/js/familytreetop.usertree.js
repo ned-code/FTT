@@ -161,6 +161,192 @@ $FamilyTreeTop.create("usertree", function($){
     }
 
 
+    /* NEW  START*/
+    $this.event = function(gedcom_id, type, options){
+      var
+        controller = $this.mod('controller'),
+        fn = {},
+        data = $.extend(true, {}, {
+        start_day : false,
+        start_month : false,
+        start_year : false,
+        city : false,
+        state : false,
+        country : false,
+        instances : {
+          event : false,
+          date : false,
+          place : false
+        }
+      }, options);
+
+      fn.setValue = function(from, to, value){
+        if("undefined" !== typeof(from[value])
+          && from[value]
+          && from[value] != 0
+          && from[value] != ""
+          && to
+          && to.get(value) != from[value]
+          ){
+          to.set(value, from[value]);
+        }
+      }
+
+      if(gedcom_id){
+        data.instances.event = controller.instance('Events').findWhere({ gedcom_id: gedcom_id, type : type });
+        if(!data.instances.event){
+          data.instances.event = controller.instance('Events').add({
+            gedcom_id : gedcom_id,
+            type : type,
+            name : (type=="BIRT")?"Birthday":"Deathday"
+          }).last();
+        }
+        if(data.instances.event.has('id')){
+          data.instances.date = controller.instance('Dates').findWhere({ event_id : data.instances.event.get('id') });
+          data.instances.place = controller.instance('Places').findWhere({ event_id : data.instances.event.get('id') });
+          if(!data.instances.date)  data.instances.date = controller.instance('Dates').add({ event_id : data.instances.event.get('id') }).last()
+          if(!data.instances.place)  data.instances.place = controller.instance('Places').add({ event_id : data.instances.event.get('id') }).last()
+        } else {
+          data.instances.date = controller.instance('Dates').add({  }).last()
+          data.instances.place = controller.instance('Places').add({  }).last()
+        }
+
+        fn.setValue(data, data.instances.date, 'start_day');
+        fn.setValue(data, data.instances.date, 'start_month');
+        fn.setValue(data, data.instances.date, 'start_year');
+
+        fn.setValue(data, data.instances.place, 'city');
+        fn.setValue(data, data.instances.place, 'state');
+        fn.setValue(data, data.instances.place, 'country');
+      }
+
+
+      return {
+        create : function(){
+          if(data.instances.event.isValid(true)){
+            data.instances.event.save({
+              success : function(){
+                data.instances.date.save({ event_id : data.instances.event.get('id') });
+                data.instances.place.save({ event_id : data.instances.event.get('id') });
+              }
+            })
+          }
+        },
+        read : function(){},
+        update : function(){
+          if(!data.instances.event) return false;
+          if(data.instances.event.isNew()
+            && (
+            data.instances.date.hasChanged()
+              || data.instances.place.hasChanged()
+            )) return this.create();
+          for(var instanceName in data.instances){
+            if(!data.instances.hasOwnProperty(instanceName)) continue;
+            var instance = data.instances[instanceName];
+            if(instance.hasChanged() && instance.isValid(true)){
+              instance.save();
+            }
+          }
+        },
+        delete : function(){}
+      }
+    }
+
+
+    $this.fam = function(options){
+      return {
+        create : function(){},
+        read : function(){},
+        update : function(){},
+        delete : function(){}
+      }
+    }
+
+    $this.ind = function(){
+      $this.individual.call(this, arguments);
+    }
+
+    $this.individual = function(options){
+      var
+        controller = false,
+        data = false,
+        fn = {};
+
+      controller = $this.mod('controller');
+
+      data = $.extend(true, {}, {
+        id : false,
+        gedcom_id : false,
+        creator_id : false,
+        gender : false,
+        family_id : false,
+        first_name : false,
+        middle_name : false,
+        last_name : false,
+        know_as : false,
+        birth : false,
+        death : false,
+        events : [],
+        parents : [],
+        children : [],
+        families : [],
+        medias : [],
+        notes : [],
+        instances : {
+          individual : false,
+          name : false
+        }
+      }, options);
+
+      if(data.gedcom_id){
+        data.instances.individual = controller.instance('Individuals').findWhere({ gedcom_id : data.gedcom_id });
+        data.instances.name = controller.instance('Names').findWhere({ gedcom_id : data.gedcom_id });
+      }
+      // Individual
+      if(data.instances.individual && data.gender && data.instances.individual.get('gender') != data.gender){
+        data.instances.individual.set("gender", data.gender);
+      }
+
+      // Name
+      if(data.instances.name && data.first_name && data.instances.name.get('gender') != data.first_name){
+        data.instances.name.set("first_name", data.first_name);
+      }
+      if(data.instances.name && data.middle_name && data.instances.name.get('middle_name') != data.middle_name){
+        data.instances.name.set("middle_name", data.middle_name);
+      }
+      if(data.instances.name && data.last_name && data.instances.name.get('last_name') != data.last_name){
+        data.instances.name.set("first_name", data.first_name);
+      }
+      if(data.instances.name && data.know_as && data.instances.name.get('know_as') != data.know_as){
+        data.instances.name.set("know_as", data.know_as);
+      }
+
+      if(data.gedcom_id && data.birth){
+        $this.event(data.gedcom_id, 'BIRT', data.birth).update();
+      }
+
+      if(data.gedcom_id && data.death){
+        $this.event(data.gedcom_id, 'DEAT', data.death).update();
+      }
+
+      return {
+        create : function(){},
+        read : function(){},
+        update : function(){
+          for(var instanceName in data.instances){
+            if(!data.instances.hasOwnProperty(instanceName)) continue;
+            var instance = data.instances[instanceName];
+            if(instance.hasChanged() && instance.isValid(true)){
+              instance.save();
+            }
+          }
+        },
+        delete : function(){}
+      }
+    }
+
+    /* NEW END */
+
     $this.user = function(gedcom_id){
         if("undefined" === typeof(gedcom_id)) return false;
         if("undefined" === typeof(data.ind[gedcom_id])) return false;
