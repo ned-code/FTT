@@ -21,6 +21,7 @@ $script = "";
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/backbone/models/NameModel.js"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/backbone/models/PlaceModel.js"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/backbone/models/RelationModel.js"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/backbone/models/RelationNameModel.js"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/backbone/models/UserModel.js"></script>
 <!-- backbone collections -->
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/backbone/collections/ChildrenCollection.js"></script>
@@ -32,6 +33,7 @@ $script = "";
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/backbone/collections/MembersCollection.js"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/backbone/collections/NamesCollection.js"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/backbone/collections/PlacesCollection.js"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/backbone/collections/RelationNamesCollection.js"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/backbone/collections/RelationsCollection.js"></script>
 <!-- plugins -->
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/jquery.panorama.js"></script>

@@ -1,6 +1,11 @@
 $FamilyTreeTop.create("controller", function($){
   'use strict';
-  var $this = this, schema = {};
+  var
+    $this = this,
+    schema = {};
+
+
+
 
   $this.model = function(modelName, options){
     var settings, model;

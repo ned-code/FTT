@@ -6,7 +6,7 @@ class FamilyTreeTopApiCollectionIndividuals {
     }
     public function read(){
         $app = & JFactory::getApplication();
-        $treeId = $app->input->get('treeId', false);
+        $treeId = $app->input->get('tree_id', false);
         if(!$treeId) return array();
 
         $db = JFactory::getDbo();

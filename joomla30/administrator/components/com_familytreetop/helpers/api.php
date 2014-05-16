@@ -16,6 +16,7 @@ class FamilyTreeTopApiHelper {
         'members',
         'names',
         'places',
+        'relationNames',
         'relations'
     );
     private $models = array(
@@ -29,6 +30,7 @@ class FamilyTreeTopApiHelper {
         'name',
         'place',
         'relation',
+        'relationName',
         'user'
     );
     private $methods = array(
@@ -51,7 +53,7 @@ class FamilyTreeTopApiHelper {
         $path = JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familytreetop/api/';
         foreach($this->collections as $collection){
             require_once $path . "/collections/" . $collection . ".php";
-            $className = 'FamilyTreeTopApiCollection' . ucfirst(strtolower($collection));
+            $className = 'FamilyTreeTopApiCollection' . ucfirst($collection);
             $this->instances[$collection] = new $className;
         }
 

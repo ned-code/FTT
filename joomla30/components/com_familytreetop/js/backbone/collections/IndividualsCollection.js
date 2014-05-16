@@ -7,7 +7,7 @@
       console.log(data);
     },
     url: function(){
-      return $FamilyTreeTop.currenturl + '?option=com_familytreetop&task=api.send&class=individuals&treeId=' + this.treeId;
+      return $FamilyTreeTop.currenturl + '?option=com_familytreetop&task=api.send&class=individuals&tree_id=' + this.tree_id;
     }
   });
   this.BackboneCollections['Individuals'] = IndividualsCollection;

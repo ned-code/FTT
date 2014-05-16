@@ -198,10 +198,7 @@ $FamilyTreeTop.create("editor", function($){
                 $cont : $tabs.getActiveTab(),
                 serialize : true,
                 onSerialize : function(data){
-                  var model = $this.mod('controller').model('User', {
-                    data : data
-                  });
-                  model.save();
+                  console.log(data);
                 }
               });
               break;

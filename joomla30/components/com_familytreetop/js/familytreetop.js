@@ -389,7 +389,8 @@
           for(var collectionName in $this.BackboneCollections){
             if(!$this.BackboneCollections.hasOwnProperty(collectionName)) continue;
             var collection = new $this.BackboneCollections[collectionName];
-            collection.treeId = $this.user.get('treeId');
+            collection.tree_id = $this.user.get('tree_id');
+            collection.user_gedcom_id = $this.user.get('gedcom_id');
             collection.fetch();
             $this.Instances[collectionName] = collection;
           }
