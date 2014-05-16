@@ -201,6 +201,10 @@
           formworker : false,
           text : false,
           tpl : false,
+          tplVars : {
+            baseurl : $FamilyTreeTop.fn.url().current(true),
+            template : $FamilyTreeTop.template
+          },
           onLoad : $.noop
         }, item.pane);
         $pane = $('<div></div>');
@@ -208,11 +212,18 @@
         if(opt.text) {
           $pane.append(opt.text);
         } else if (opt.tpl){
-          var url = $FTT.baseurl + '/components/com_familytreetop/tpl/' + opt.tpl;
-          $pane.load( url , function(){
-            $FamilyTreeTop.fn.mod('l10n').parse($pane);
-            opt.onLoad($pane);
-          } );
+          jQuery.ajax({
+            url:"index.php?option=com_familytreetop&task=api.tpl",
+            data:{ tpl : opt.tpl },
+            type: "POST",
+            dataType:"html",
+            success : function(source){
+              var template = Handlebars.compile(source);
+              $pane.append(template(opt.tplVars));
+              $FamilyTreeTop.fn.mod('l10n').parse($pane);
+              opt.onLoad($pane);
+            }
+          });
         }
       } else if("string" === typeof(item.pane)){
         $pane = $(item.pane);

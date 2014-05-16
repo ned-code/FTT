@@ -101,6 +101,15 @@
                 app: function(){
                     return $FamilyTreeTop.prototype.fn.app().link() ;
                 },
+                current : function(f){
+                  if("undefined" != typeof(f) && f){
+                    var urlPath = ftt.currenturl.split('/');
+                    urlPath.splice(-1, 1);
+                    return urlPath.join('/');
+                  } else {
+                    return ftt.currenturl;
+                  }
+                },
                 base: function(e){
                     if("undefined" !== typeof(e)){
                         return ftt.baseurl + path;
@@ -365,8 +374,12 @@
     $FamilyTreeTop.prototype.init = function(){
       var $this = this;
 
-      $this.Backbone = Backbone;
       $this.Underscore = _;
+      $this.Handlebars = Handlebars;
+      $this.Backbone = Backbone;
+
+      $this._ = $this.Underscore;
+      $this.hbr = $this.Handlebars;
 
       for(var collectionName in $this.BackboneCollections){
         if(!$this.BackboneCollections.hasOwnProperty(collectionName)) continue;

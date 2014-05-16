@@ -14,6 +14,14 @@ class FamilytreetopControllerApi extends FamilytreetopController
         exit;
     }
 
+    public function tpl(){
+        $app = & JFactory::getApplication();
+        $tpl = $app->input->get('tpl', false);
+        if(!$tpl) return "";
+        echo file_get_contents(JPATH_BASE . "/components/com_familytreetop/tpl/".$tpl);
+        exit;
+    }
+
     public function update(){
         echo json_encode(array('success'=>true));
         exit;
