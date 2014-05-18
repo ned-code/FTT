@@ -22,6 +22,7 @@ class FamilyTreeTopApiModelName {
         $name->middle_name = $middle_name;
         $name->last_name = $last_name;
         $name->know_as = $know_as;
+        $name->change_time = JFactory::getDate()->toSql();
 
         $name->save();
         return array(

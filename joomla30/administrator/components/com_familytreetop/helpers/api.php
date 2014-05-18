@@ -84,7 +84,10 @@ class FamilyTreeTopApiHelper {
         if(!$class || !isset($this->methods[$_SERVER['REQUEST_METHOD']])) return $this->response(array());
         $method = $this->methods[ $_SERVER['REQUEST_METHOD'] ];
         $class = $this->instances[$class];
-        return $this->response($class->{$method}($id));
+        if(method_exists($class, $method)){
+            return $this->response(call_user_func_array(array($class, $method), array($id)));
+        }
+        return $this->response(array());
     }
 
 }

@@ -200,11 +200,20 @@ $FamilyTreeTop.create("editor", function($){
                 onSerialize : function(data){
                   switch($(this).attr('id').split('-')[0]){
                     case "profile":
-                        data.gedcom_id = user.gedcom_id;
-                        /*
-                        var ind = $this.mod('usertree').individual(data);
-                        ind.update();
-                        */
+                        var ind = $this.mod('usertree').individual({ gedcom_id : user.gedcom_id });
+                        ind.update({
+                          Individual : { gender : data.gender },
+                          Name : {
+                            first_name : data.first_name,
+                            middle_name : data.middle_name,
+                            last_name : data.last_name,
+                            know_as : data.know_as
+                          },
+                          Events : {
+                            'BIRT' : data.birth,
+                            'DEAT' : (data.living!="true")?data.death:false
+                          }
+                        });
                       break;
                     case "unions": break;
                   }

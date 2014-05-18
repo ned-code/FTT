@@ -33,8 +33,10 @@ class FamilyTreeTopApiModelEvent {
     public function update($id){
         return array('response'=>'event:update');
     }
-    public function destroy(){
-        return array('response'=>'event:destroy');
+    public function destroy($id){
+        $event = FamilyTreeTopEvents::find($id);
+        $event->delete();
+        return array();
     }
 
 }

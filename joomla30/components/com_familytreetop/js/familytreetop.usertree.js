@@ -263,10 +263,52 @@ $FamilyTreeTop.create("usertree", function($){
     $this.individual = function(options){
       var
         controller = false,
+        _ = $FamilyTreeTop._,
         settings = false,
+        $data = {},
         fn = {};
 
+      fn.getEvent = function(type, create){
+        var e = _.find(settings.instances.events, function(Event){
+          return Event.get('type') == type;
+        });
+        if("undefined" === typeof(e) && create){
+          e = controller.instance('Events').add({ type : type, gedcom_id : settings.gedcom_id }).last();
+          settings.instances.events.push(e);
+          return e;
+        }
+        return e;
+      };
+
+      fn.getEventDate = function(event){
+        var d;
+        if(event.isNew()){
+          d = controller.instance('Dates').add({ type : "EVO" }).last();
+        } else {
+          d = controller.instance('Dates').findWhere({ event_id : event.get('id') });
+          if("undefined" === typeof(d)){
+            d = controller.instance('Dates').add({ type : "EVO" }).last();
+          }
+        }
+        return d;
+      };
+
+      fn.getEventPlace = function(event){
+        var p;
+        if(event.isNew()){
+          p = controller.instance('Places').add({}).last();
+        } else {
+          p = controller.instance('Places').findWhere({ event_id : event.get('id') });
+          if("undefined" === typeof(p)){
+            p = controller.instance('Places').add({}).last();
+          }
+        }
+        return p;
+      };
+
       controller = $this.mod('controller');
+      $data.destroys = {};
+      $data.events = {};
 
       if("undefined" !== typeof(options.gedcom_id)){
         options.gedcom_id = parseInt(options.gedcom_id);
@@ -286,6 +328,8 @@ $FamilyTreeTop.create("usertree", function($){
           notes : []
         }
       }, options);
+
+      settings.fn = fn;
 
       if(settings.gedcom_id){
         settings.instances.ind = controller.instance('Individuals').findWhere({ gedcom_id : settings.gedcom_id });
@@ -345,13 +389,20 @@ $FamilyTreeTop.create("usertree", function($){
         settings.instances.events = controller.instance('Events').filter(function(Event){
           return Event.get('gedcom_id') == settings.gedcom_id;
         });
+        _.each(settings.instances.events, function(Event){
+          $data.events[Event.cid] = {
+            event : Event,
+            date : controller.instance('Dates').findWhere({ event_id : Event.event_id }),
+            place : controller.instance('Places').findWhere({ event_id : Event.event_id })
+          }
+        });
         settings.instances.notes = [];
       }
 
       return {
         create : function(){},
         read : function(){
-          return settings.instances;
+          return settings;
         },
         update : function(data){
           if(!settings.instances.ind) return false;
@@ -361,10 +412,10 @@ $FamilyTreeTop.create("usertree", function($){
                 if("undefined" !== typeof(item.gender)) settings.instances.ind.set('gender', parseInt(item.gender));
                 break;
               case "Name":
-                if("undefined" !== typeof(item.first_name)) settings.instances.name.set('gender', item.first_name);
-                if("undefined" !== typeof(item.last_name)) settings.instances.name.set('gender', item.last_name);
-                if("undefined" !== typeof(item.middle_name)) settings.instances.name.set('gender', item.middle_name);
-                if("undefined" !== typeof(item.know_as)) settings.instances.name.set('gender', item.know_as);
+                if("undefined" !== typeof(item.first_name)) settings.instances.name.set('first_name', item.first_name);
+                if("undefined" !== typeof(item.last_name)) settings.instances.name.set('last_name', item.last_name);
+                if("undefined" !== typeof(item.middle_name)) settings.instances.name.set('middle_name', item.middle_name);
+                if("undefined" !== typeof(item.know_as)) settings.instances.name.set('know_as', item.know_as);
                 break;
               case "Relation": break;
               case "Medias": break;
@@ -372,7 +423,32 @@ $FamilyTreeTop.create("usertree", function($){
               case "Families" : break;
               case "Spouses": break;
               case "Children": break;
-              case "Events" : break;
+              case "Events" :
+                $FamilyTreeTop._.each(item, function(args, type){
+                  var e = fn.getEvent(type, true);
+                  if(type == 'DEAT' && !args){
+                    $data.destroys[e.cid] = e;
+                  } else {
+                    var d = fn.getEventDate(e);
+                    if(args.start_day) d.set('start_day', parseInt(args.start_day));
+                    if(args.start_month) d.set('start_month', parseInt(args.start_month));
+                    if(args.start_year) d.set('start_year', parseInt(args.start_year));
+
+                    var p = fn.getEventPlace(e);
+                    if(args.city) p.set('city', args.city);
+                    if(args.state) p.set('state', args.state);
+                    if(args.country) p.set('country', args.country);
+
+                    if("undefined" !== typeof($data.events[e.cid])) delete $data.events[e.cid];
+                    $data.events[e.cid] = {
+                      event : e,
+                      date : d,
+                      place : p
+                    }
+                  }
+
+                });
+                break;
               case "Notes" : break;
             }
           });
@@ -380,14 +456,45 @@ $FamilyTreeTop.create("usertree", function($){
             if(instance instanceof $FamilyTreeTop.Backbone.Model){
               save(instance);
             } else if(Object.prototype.toString.call( instance ) === '[object Array]'){
-
+              switch(name){
+                case "medias": break;
+                case "parents": break;
+                case "families": break;
+                case "spouses": break;
+                case "children": break;
+                case "events":
+                  _.each(instance, function(event, index){
+                    if(event.cid in $data.destroys){
+                      delete $data.events[event.cid];
+                      instance.splice(index, 1);
+                      event.destroy();
+                    } else {
+                      var dat = $data.events[event.cid];
+                      if(event.isNew()){
+                        save(event, {}, function(){
+                          if("undefined" !== typeof(dat)){
+                            save(dat.date, { event_id : event.event_id });
+                            save(dat.place, { event_id : event.event_id });
+                          }
+                        });
+                      } else {
+                        save(dat.date);
+                        save(dat.place);
+                      }
+                    }
+                  });
+                  break;
+              }
             }
           });
           return true;
-          function save(instance){
+          function save(instance, args, callback){
             if(!instance || "undefined" === typeof(instance)) return false;
-            if(instance.hasChanged() && instance.isValid(true)){
-              instance.save();
+            if(instance.hasChanged()&& instance.isValid(true)){
+              if("undefined" === typeof(args)) args = {};
+              if("undefined" === typeof(callback)) callback = $.noop;
+              args.success = callback;
+              instance.save(args);
             }
             return true;
           }
