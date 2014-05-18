@@ -201,8 +201,10 @@ $FamilyTreeTop.create("editor", function($){
                   switch($(this).attr('id').split('-')[0]){
                     case "profile":
                         data.gedcom_id = user.gedcom_id;
+                        /*
                         var ind = $this.mod('usertree').individual(data);
                         ind.update();
+                        */
                       break;
                     case "unions": break;
                   }

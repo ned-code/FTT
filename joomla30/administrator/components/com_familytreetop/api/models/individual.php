@@ -25,19 +25,16 @@ class FamilyTreeTopApiModelIndividual {
         if(!$id) return array('success' => 0);
         $ind = FamilyTreeTopIndividuals::find($id);
 
-        if('undefined' != $gender) $ind->gender = $gender;
+        $ind->gender = $gender;
 
         $ind->save();
 
         return array(
-            'success' => 1,
-            'ind' => array(
-                'id' => $ind->id,
-                'gedcom_id' => $ind->gedcom_id,
-                'creator_id' => $ind->creator_id,
-                'gender' => $ind->gender,
-                'family_id' => $ind->family_id
-            )
+            'id' => $ind->id,
+            'gedcom_id' => $ind->gedcom_id,
+            'creator_id' => $ind->creator_id,
+            'gender' => $ind->gender,
+            'family_id' => $ind->family_id
         );
     }
     public function destroy(){

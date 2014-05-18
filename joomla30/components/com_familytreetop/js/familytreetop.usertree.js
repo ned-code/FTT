@@ -162,6 +162,7 @@ $FamilyTreeTop.create("usertree", function($){
 
 
     /* NEW  START*/
+    /*
     $this.event = function(gedcom_id, type, options){
       var
         controller = $this.mod('controller'),
@@ -232,7 +233,10 @@ $FamilyTreeTop.create("usertree", function($){
             })
           }
         },
-        read : function(){},
+        read : function(){
+
+
+        },
         update : function(){
           if(!data.instances.event) return false;
           if(data.instances.event.isNew()
@@ -251,17 +255,7 @@ $FamilyTreeTop.create("usertree", function($){
         delete : function(){}
       }
     }
-
-
-    $this.fam = function(options){
-      return {
-        create : function(){},
-        read : function(){},
-        update : function(){},
-        delete : function(){}
-      }
-    }
-
+    */
     $this.ind = function(){
       $this.individual.call(this, arguments);
     }
@@ -269,79 +263,136 @@ $FamilyTreeTop.create("usertree", function($){
     $this.individual = function(options){
       var
         controller = false,
-        data = false,
+        settings = false,
         fn = {};
 
       controller = $this.mod('controller');
 
-      data = $.extend(true, {}, {
-        id : false,
+      if("undefined" !== typeof(options.gedcom_id)){
+        options.gedcom_id = parseInt(options.gedcom_id);
+      }
+      settings = $.extend(true, {}, {
         gedcom_id : false,
-        creator_id : false,
-        gender : false,
-        family_id : false,
-        first_name : false,
-        middle_name : false,
-        last_name : false,
-        know_as : false,
-        birth : false,
-        death : false,
-        events : [],
-        parents : [],
-        children : [],
-        families : [],
-        medias : [],
-        notes : [],
         instances : {
-          individual : false,
-          name : false
+          ind : false,
+          name : false,
+          relation : false,
+          medias : [],
+          parents : [],
+          families : [],
+          spouses : [],
+          children : [],
+          events : [],
+          notes : []
         }
       }, options);
 
-      if(data.gedcom_id){
-        data.instances.individual = controller.instance('Individuals').findWhere({ gedcom_id : data.gedcom_id });
-        data.instances.name = controller.instance('Names').findWhere({ gedcom_id : data.gedcom_id });
-      }
-      // Individual
-      if(data.instances.individual && data.gender && data.instances.individual.get('gender') != data.gender){
-        data.instances.individual.set("gender", data.gender);
-      }
+      if(settings.gedcom_id){
+        settings.instances.ind = controller.instance('Individuals').findWhere({ gedcom_id : settings.gedcom_id });
+        if("undefined" === typeof(settings.instances.ind)) settings.ind = false;
+        settings.instances.name = controller.instance('Names').findWhere({ gedcom_id : settings.gedcom_id });
+        if("undefined" === typeof(settings.instances.name)) settings.name = false;
+        settings.instances.relation = controller.instance('Relations').findWhere({ gedcom_id : settings.gedcom_id });
+        if("undefined" === typeof(settings.instances.relation)) settings.relation = false;
+        settings.instances.medias = controller.instance('Medias').filter(function(Media){
+          return Media.get('gedcom_id') == settings.gedcom_id;
+        });
+        settings.instances.parents = (function(con){
+            var
+              that = this,
+              pull = [],
+              data = con.instance('Children').filter(function(Child){
+              return that.gedcom_id == Child.get('gedcom_id');
+            });
 
-      // Name
-      if(data.instances.name && data.first_name && data.instances.name.get('gender') != data.first_name){
-        data.instances.name.set("first_name", data.first_name);
-      }
-      if(data.instances.name && data.middle_name && data.instances.name.get('middle_name') != data.middle_name){
-        data.instances.name.set("middle_name", data.middle_name);
-      }
-      if(data.instances.name && data.last_name && data.instances.name.get('last_name') != data.last_name){
-        data.instances.name.set("first_name", data.first_name);
-      }
-      if(data.instances.name && data.know_as && data.instances.name.get('know_as') != data.know_as){
-        data.instances.name.set("know_as", data.know_as);
-      }
-
-      if(data.gedcom_id && data.birth){
-        $this.event(data.gedcom_id, 'BIRT', data.birth).update();
-      }
-
-      if(data.gedcom_id && data.death){
-        $this.event(data.gedcom_id, 'DEAT', data.death).update();
+          data.forEach(function(el){
+            var family = con.instance('Families').findWhere({ family_id : el.get('family_id') });
+            var husb = con.instance('Individuals').findWhere({ gedcom_id : family.get('husb') });
+            var wife = con.instance('Individuals').findWhere({ gedcom_id : family.get('wife') });
+            if(husb.get('gender') == wife.get('gender')){
+              pull.push({
+                father : husb.get('gedcom_id'),
+                mother : wife.get('gedcom_id')
+              });
+            } else {
+              pull.push({
+                father : (parseInt(husb.get('gender')))?husb.get('gedcom_id'):wife.get('gedcom_id'),
+                mother : (!parseInt(wife.get('gender')))?wife.get('gedcom_id'):husb.get('gedcom_id')
+              });
+            }
+          });
+          return pull;
+        }).apply(settings, [controller]);
+        settings.instances.families = controller.instance('Families').filter(function(Family){
+          return Family.get('husb') == settings.gedcom_id || Family.get('wife') == settings.gedcom_id;
+        });
+        settings.instances.spouses = (function(con){
+          var that = this, pull = [];
+          that.instances.families.forEach(function(Family){
+            var gedcom_id = (Family.get('husb') == that.gedcom_id)?Family.get('wife'):Family.get('husb');
+            pull.push(gedcom_id);
+          });
+          return pull;
+        }).apply(settings, [controller]);
+        settings.instances.children = (function(con){
+          var that = this, pull = [];
+          that.instances.families.forEach(function(Family){
+            var child = con.instance('Children').findWhere({ family_id : Family.get('family_id') });
+            if("undefined" !== typeof(child)) pull.push(child.get('gedcom_id'));
+          });
+          return pull;
+        }).apply(settings, [controller]);
+        settings.instances.events = controller.instance('Events').filter(function(Event){
+          return Event.get('gedcom_id') == settings.gedcom_id;
+        });
+        settings.instances.notes = [];
       }
 
       return {
         create : function(){},
-        read : function(){},
-        update : function(){
-          for(var instanceName in data.instances){
-            if(!data.instances.hasOwnProperty(instanceName)) continue;
-            var instance = data.instances[instanceName];
+        read : function(){
+          return settings.instances;
+        },
+        update : function(data){
+          if(!settings.instances.ind) return false;
+          $FamilyTreeTop._.each(data, function(item, key){
+            switch(key){
+              case "Individual":
+                if("undefined" !== typeof(item.gender)) settings.instances.ind.set('gender', parseInt(item.gender));
+                break;
+              case "Name":
+                if("undefined" !== typeof(item.first_name)) settings.instances.name.set('gender', item.first_name);
+                if("undefined" !== typeof(item.last_name)) settings.instances.name.set('gender', item.last_name);
+                if("undefined" !== typeof(item.middle_name)) settings.instances.name.set('gender', item.middle_name);
+                if("undefined" !== typeof(item.know_as)) settings.instances.name.set('gender', item.know_as);
+                break;
+              case "Relation": break;
+              case "Medias": break;
+              case "Parents" : break;
+              case "Families" : break;
+              case "Spouses": break;
+              case "Children": break;
+              case "Events" : break;
+              case "Notes" : break;
+            }
+          });
+          $FamilyTreeTop._.each(settings.instances, function(instance, name){
+            if(instance instanceof $FamilyTreeTop.Backbone.Model){
+              save(instance);
+            } else if(Object.prototype.toString.call( instance ) === '[object Array]'){
+
+            }
+          });
+          return true;
+          function save(instance){
+            if(!instance || "undefined" === typeof(instance)) return false;
             if(instance.hasChanged() && instance.isValid(true)){
               instance.save();
             }
+            return true;
           }
         },
-        delete : function(){}
+        destroy : function(){}
       }
     }
 

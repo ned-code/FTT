@@ -25,7 +25,13 @@ class FamilyTreeTopApiModelName {
 
         $name->save();
         return array(
-            'success' => 1
+            'id' => $name->id,
+            'gedcom_id' => $name->gedcom_id,
+            'first_name' => $name->first_name,
+            'middle_name' => $name->middle_name,
+            'last_name' => $name->last_name,
+            'know_as' =>  $name->know_as,
+            'change_time' => $name->change_time
         );
     }
     public function destroy(){

@@ -26,7 +26,12 @@ class FamilyTreeTopApiCollectionPlaces {
 
                 GROUP BY id";
         $db->setQuery(sprintf($sql, $tree_id));
-        return $db->loadObjectList();
+        $rows = $db->loadObjectList();
+        foreach($rows as $index => $row){
+            $rows[$index]->id = (int)$row->id;
+            $rows[$index]->event_id = (int)$row->event_id;
+        }
+        return $rows;
     }
     public function update(){
         return array('response'=>'places:update');

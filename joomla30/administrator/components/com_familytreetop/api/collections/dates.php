@@ -26,7 +26,15 @@ class FamilyTreeTopApiCollectionDates {
                         ) AND  l.tree_id = t.id AND t.id = %s
                 GROUP BY id";
         $db->setQuery(sprintf($sql, $tree_id));
-        return $db->loadObjectList();
+        $rows = $db->loadObjectList();
+        foreach($rows as $index => $row){
+            $rows[$index]->id = (int)$row->id;
+            $rows[$index]->event_id = (int)$row->event_id;
+            $rows[$index]->start_day = (int)$row->start_day;
+            $rows[$index]->start_month = (int)$row->start_month;
+            $rows[$index]->start_year = (int)$row->start_year;
+        }
+        return $rows;
     }
     public function update(){
         return array('response'=>'dates:update');

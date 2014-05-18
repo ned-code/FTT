@@ -23,7 +23,13 @@ class FamilyTreeTopApiCollectionEvents {
                         ) AND  l.tree_id = t.id AND t.id = %s
                 GROUP BY id";
         $db->setQuery(sprintf($sql, $tree_id));
-        return $db->loadObjectList();
+        $rows = $db->loadObjectList();
+        foreach($rows as $index => $row){
+            $rows[$index]->id = (int)$row->id;
+            $rows[$index]->gedcom_id = (int)$row->gedcom_id;
+            $rows[$index]->family_id = (int)$row->family_id;
+        }
+        return $rows;
     }
     public function update(){
         return array('response'=>'events:update');
