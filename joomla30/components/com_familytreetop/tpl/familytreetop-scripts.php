@@ -3,30 +3,39 @@ $app = & JFactory::getApplication();
 $fttUser = FamilyTreeTopUserHelper::getInstance()->get();
 $settings = FamilyTreeTopSettingsHelper::getInstance()->get();
 $template = $settings->_template->value;
-$script = "";
+$script = "?"+time();
 ?>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/jquery-2.0.3.min.js"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/underscore-min.js"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/handlebars-v1.3.0.js"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/backbone-min.js"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/backbone-sync.js"></script>
+<!-- backbone models -->
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/backbone/models/ChildModel.js"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/backbone/models/DateModel.js"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/backbone/models/EventModel.js"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/backbone/models/FamilyModel.js"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/backbone/models/IndividualModel.js"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/backbone/models/MediaModel.js"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/backbone/models/MemberModel.js"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/backbone/models/NameModel.js"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/backbone/models/PlaceModel.js"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/backbone/models/RelationModel.js"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/backbone/models/RelationNameModel.js"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/backbone/models/UserModel.js"></script>
+<!-- backbone collections -->
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/backbone/collections/ChildrenCollection.js"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/backbone/collections/DatesCollection.js"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/backbone/collections/EventsCollection.js"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/backbone/collections/FamiliesCollection.js"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/backbone/collections/IndividualsCollection.js"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/backbone/collections/MediasCollection.js"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/backbone/collections/MembersCollection.js"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/backbone/collections/NamesCollection.js"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/backbone/collections/PlacesCollection.js"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/backbone/collections/RelationNamesCollection.js"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/backbone/collections/RelationsCollection.js"></script>
-<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/backbone/collections/UsersCollection.js"></script>
+<!-- plugins -->
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/jquery.panorama.js"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/spin.min.js"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/superbrowserupdate.js"></script>
@@ -51,6 +60,7 @@ $script = "";
 <?php endif; ?>
 <!-- uncompressed files -->
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/familytreetop.l10n.js?<?=$script;?>"></script>
+<script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/familytreetop.controller.js?<?=$script;?>"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/familytreetop.trees.js?<?=$script;?>"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/familytreetop.footer.js?<?=$script;?>"></script>
 <script src="<?php echo $this->baseurl ?>/components/com_familytreetop/js/familytreetop.form.js?<?=$script;?>"></script>

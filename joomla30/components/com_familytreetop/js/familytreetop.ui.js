@@ -201,6 +201,10 @@
           formworker : false,
           text : false,
           tpl : false,
+          tplVars : {
+            baseurl : $FamilyTreeTop.fn.url().current(true),
+            template : $FamilyTreeTop.template
+          },
           onLoad : $.noop
         }, item.pane);
         $pane = $('<div></div>');
@@ -208,11 +212,18 @@
         if(opt.text) {
           $pane.append(opt.text);
         } else if (opt.tpl){
-          var url = $FTT.baseurl + '/components/com_familytreetop/tpl/' + opt.tpl;
-          $pane.load( url , function(){
-            $FamilyTreeTop.fn.mod('l10n').parse($pane);
-            opt.onLoad($pane);
-          } );
+          jQuery.ajax({
+            url:"index.php?option=com_familytreetop&task=api.tpl",
+            data:{ tpl : opt.tpl },
+            type: "POST",
+            dataType:"html",
+            success : function(source){
+              var template = Handlebars.compile(source);
+              $pane.append(template(opt.tplVars));
+              $FamilyTreeTop.fn.mod('l10n').parse($pane);
+              opt.onLoad($pane);
+            }
+          });
         }
       } else if("string" === typeof(item.pane)){
         $pane = $(item.pane);
@@ -390,7 +401,7 @@
       } else {
         res = _(objects);
       }
-      settings.onSerialize.call(null, res);
+      settings.onSerialize.call(settings.$cont, res);
       return res;
       function _(objs){
         var response = {}, grps = {};
@@ -556,240 +567,4 @@
       fill : fn.fill
     };
   }
-
-  /*
-  $FTT.ui.formworker = function(options){
-    var
-      fn = {},
-      fillData = {},
-      settings = false,
-      defaults = {
-        $cont : false,
-        $items : false,
-        cont : false,
-        groups : false,
-        pull : false,
-        data : false,
-        schema : false,
-        submit : false,
-        onSubmit : false
-      };
-
-    settings = $.extend(true, {}, defaults, options);
-    if(!settings.cont) return false;
-
-    fn.serialize = function(){
-      var ser =  {}, groups = {};
-      settings.pull.forEach(function(item, index){
-        if("undefined" !== typeof item.dataset.formworkerGroup){
-          var groupName = item.dataset.formworkerGroup;
-          if("undefined" === typeof(groups[groupName])){
-            groups[groupName] = [];
-          }
-          groups[groupName].push(item);
-        } else {
-          ser[item.name] = fn.getValue(item.el);
-        }
-      });
-      fn.each(groups, function(group, name){
-        var s = {};
-        group.forEach(function(it){
-          s[it.name] = fn.getValue(it.el);
-        });
-        ser[name] = s;
-      });
-      return ser;
-    };
-
-    fn.each = function(object, callback){
-      for(var key in object){
-        if(!object.hasOwnProperty(key)) continue;
-        callback.call(object, object[key], key);
-      }
-    }
-
-    fn.getValue = function(element){
-      switch(element.tagName){
-        case "INPUT":
-            switch($(element).attr('type')){
-              case "checkbox":
-                if(element.checked) return true;
-                return false;
-                break;
-              case "radio":
-                if(element.checked) $(element).val();
-                break;
-              case "text":
-                return $(element).val();
-                break;
-            }
-          break;
-
-        case "SELECT":
-          return $(element).find('option:selected').val();
-          break;
-
-        case "TEXTAREA":
-            return $(element).val();
-          break;
-      }
-      return "undefined";
-    };
-
-    fn.setFillItem = function(object, opts, rule){
-      // GROUP_NAME | DATA.FN _ args1,args2,args3
-      var sides = rule.split('|');
-      var name = sides[0];
-      var right = ("undefined"!==typeof(sides[1]))?sides[1].split(':'):false;
-      var func = (right)?right[0]:false;
-      var args = (right&&"undefined"!==typeof(right[1]))?right[1].split(','):false;
-
-      if(func && "undefined" !== typeof(settings.data[func])){
-        object.value = settings.data[func].apply(null, (args)?args:[]);
-      } else {
-        if(opts){
-          if("function" === typeof(opts.value)){
-            object.value = opts.value.call(element, settings.data[object.name]);
-          } else if(opts && "undefined" !== typeof(opts.value)){
-            object.value = opts.value;
-          } else if("undefined" !== typeof(settings.data[object.name])){
-            object.value =  settings.data[object.name];
-          }
-        } else {
-          if("undefined" !== typeof(settings.data[object.name])){
-            object.value =  settings.data[object.name];
-          }
-        }
-      }
-      if(opts && !opts.fillOnce){
-        if("undefined"!==typeof(fillData[name])){
-          fillData[name] = [];
-        }
-        fillData.push(object);
-      } else {
-        fn.setValue(object.el, object.value);
-      }
-    };
-
-    fn.setValue = function(element, value){
-      switch(element.tagName){
-        case "INPUT":
-          switch($(element).attr('type')){
-            case "checkbox":
-              if(element.check != value) $(element).click();
-              break;
-
-            case "radio":
-              if($(element).val() == value) $(element).click();
-              break;
-
-            case "text":
-              $(element).val(value);
-              break;
-
-            case "submit": break;
-          }
-          break;
-
-        case "SELECT":
-          if((Object.prototype.toString.call( value ) === '[object Array]')){
-            value.forEach(function(val){
-              if("object" === typeof(val)){
-                $(element).append('<option value="'+val.value+'">'+val.option+'</option>');
-              } else {
-                $(element).append('<option value="'+val+'">'+val+'</option>');
-              }
-            });
-          } else {
-            $(element).find('option[value="'+value+'"]').attr('selected', 'selected')
-          }
-          break;
-
-        case "TEXTAREA":
-          $(element).val(value);
-          break;
-      }
-      return true;
-    };
-
-    settings.$cont = $(settings.cont);
-    settings.$items = settings.$cont.find('input[name],select[name],textarea[name]');
-
-    settings.pull = [];
-
-    settings.$items.each(function(index, element){
-      var object = {}, opts;
-      object.el = element;
-      object.$el = $(element);
-      object.name = $(element).attr('name');
-      object.dataset = element.dataset;
-      object.def = fn.getValue(element);
-      object.value = object.def;
-
-      if("undefined" !== typeof(settings.schema[object.name])){
-        opts = $.extend(true, {}, {
-          attr : {},
-          fillRule : false,
-          fillOnce : false,
-          value : false,
-          events : false
-        }, settings.schema[object.name]);
-
-        $(element).attr(opts.attr);
-
-        if(opts.fillRule){
-          fn.setFillItem(object, opts, opts.fillRule);
-        } else {
-          if("function" === typeof(opts.value)){
-            object.value = opts.value.call(element, settings.data[object.name]);
-          } else if("undefined" !== typeof(settings.data[object.name])){
-            object.value =  settings.data[object.name];
-          } else if("undefined" !== typeof(opts.value)){
-            object.value = opts.value;
-          }
-          fn.setValue(element, object.value);
-        }
-
-        if(opts.events){
-          fn.each(opts.events, function(selector, fn){
-            $(element).bind(selector, fn);
-          });
-        }
-
-      } else if("undefined" !== typeof(settings.data)){
-        if("undefined" !== typeof(object.dataset.formworkerFillRule)){
-          fn.setFillItem(object, false, object.dataset.formworkerFillRule);
-        } else if("undefined" != typeof(settings.data[object.name])){
-          object.value =  settings.data[object.name];
-          fn.setValue(element, object.value);
-        }
-      }
-      settings.pull.push(object);
-    });
-
-    fn.each(fillData, function(item, name){
-      if("undefined" !== typeof(settings.groups[name])){
-        settings.groups[name].call(this, item);
-      }
-    });
-
-    if(settings.submit){
-      $(settings.submit).click(function(){
-        if(!settings.onSubmit) return true;
-        Array.prototype.unshift.call(arguments, fn.serialize());
-        return settings.onSubmit.apply(this, arguments);
-      });
-    }
-
-    return {
-      get : fn.getValue,
-      set : fn.setValue,
-      ser : fn.serialize,
-      fil : fn.fill
-
-    };
-  };
-  */
-
-
 })(window);

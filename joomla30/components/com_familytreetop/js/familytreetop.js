@@ -101,6 +101,15 @@
                 app: function(){
                     return $FamilyTreeTop.prototype.fn.app().link() ;
                 },
+                current : function(f){
+                  if("undefined" != typeof(f) && f){
+                    var urlPath = ftt.currenturl.split('/');
+                    urlPath.splice(-1, 1);
+                    return urlPath.join('/');
+                  } else {
+                    return ftt.currenturl;
+                  }
+                },
                 base: function(e){
                     if("undefined" !== typeof(e)){
                         return ftt.baseurl + path;
@@ -365,14 +374,28 @@
     $FamilyTreeTop.prototype.init = function(){
       var $this = this;
 
-      $this.Backbone = Backbone;
       $this.Underscore = _;
+      $this.Handlebars = Handlebars;
+      $this.Backbone = Backbone;
+      $this.Instances = {};
 
-      for(var collectionName in $this.BackboneCollections){
-        if(!$this.BackboneCollections.hasOwnProperty(collectionName)) continue;
-        var collection = $this.BackboneCollections[collectionName];
-        collection.fetch();
-      }
+      $this._ = $this.Underscore;
+      $this.hbr = $this.Handlebars;
+
+
+      $this.user = new $this.BackboneModels.User;
+      $this.user.fetch({
+        success : function(data){
+          for(var collectionName in $this.BackboneCollections){
+            if(!$this.BackboneCollections.hasOwnProperty(collectionName)) continue;
+            var collection = new $this.BackboneCollections[collectionName];
+            collection.tree_id = $this.user.get('tree_id');
+            collection.user_gedcom_id = $this.user.get('gedcom_id');
+            collection.fetch();
+            $this.Instances[collectionName] = collection;
+          }
+        }
+      });
 
       $this.app.data = jQuery.parseJSON($this.app.data);
 

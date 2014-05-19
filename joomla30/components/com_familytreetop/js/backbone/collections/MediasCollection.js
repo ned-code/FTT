@@ -4,8 +4,8 @@
   var MediasCollection = Backbone.Collection.extend({
     model : $FTT.BackboneModels.Media,
     url: function(){
-      return $FamilyTreeTop.currenturl + '?option=com_familytreetop&task=api.send&class=medias';
+      return $FamilyTreeTop.currenturl + '?option=com_familytreetop&task=api.send&class=medias&tree_id='+this.tree_id;
     }
   });
-  this.BackboneCollections['Medias'] = new MediasCollection;
+  this.BackboneCollections['Medias'] = MediasCollection;
 }).call($FamilyTreeTop);

@@ -161,6 +161,370 @@ $FamilyTreeTop.create("usertree", function($){
     }
 
 
+    /* NEW  START*/
+    /*
+    $this.event = function(gedcom_id, type, options){
+      var
+        controller = $this.mod('controller'),
+        fn = {},
+        data = $.extend(true, {}, {
+        start_day : false,
+        start_month : false,
+        start_year : false,
+        city : false,
+        state : false,
+        country : false,
+        instances : {
+          event : false,
+          date : false,
+          place : false
+        }
+      }, options);
+
+      fn.setValue = function(from, to, value){
+        if("undefined" !== typeof(from[value])
+          && from[value]
+          && from[value] != 0
+          && from[value] != ""
+          && to
+          && to.get(value) != from[value]
+          ){
+          to.set(value, from[value]);
+        }
+      }
+
+      if(gedcom_id){
+        data.instances.event = controller.instance('Events').findWhere({ gedcom_id: gedcom_id, type : type });
+        if(!data.instances.event){
+          data.instances.event = controller.instance('Events').add({
+            gedcom_id : gedcom_id,
+            type : type,
+            name : (type=="BIRT")?"Birthday":"Deathday"
+          }).last();
+        }
+        if(data.instances.event.has('id')){
+          data.instances.date = controller.instance('Dates').findWhere({ event_id : data.instances.event.get('id') });
+          data.instances.place = controller.instance('Places').findWhere({ event_id : data.instances.event.get('id') });
+          if(!data.instances.date)  data.instances.date = controller.instance('Dates').add({ event_id : data.instances.event.get('id') }).last()
+          if(!data.instances.place)  data.instances.place = controller.instance('Places').add({ event_id : data.instances.event.get('id') }).last()
+        } else {
+          data.instances.date = controller.instance('Dates').add({  }).last()
+          data.instances.place = controller.instance('Places').add({  }).last()
+        }
+
+        fn.setValue(data, data.instances.date, 'start_day');
+        fn.setValue(data, data.instances.date, 'start_month');
+        fn.setValue(data, data.instances.date, 'start_year');
+
+        fn.setValue(data, data.instances.place, 'city');
+        fn.setValue(data, data.instances.place, 'state');
+        fn.setValue(data, data.instances.place, 'country');
+      }
+
+
+      return {
+        create : function(){
+          if(data.instances.event.isValid(true)){
+            data.instances.event.save({
+              success : function(){
+                data.instances.date.save({ event_id : data.instances.event.get('id') });
+                data.instances.place.save({ event_id : data.instances.event.get('id') });
+              }
+            })
+          }
+        },
+        read : function(){
+
+
+        },
+        update : function(){
+          if(!data.instances.event) return false;
+          if(data.instances.event.isNew()
+            && (
+            data.instances.date.hasChanged()
+              || data.instances.place.hasChanged()
+            )) return this.create();
+          for(var instanceName in data.instances){
+            if(!data.instances.hasOwnProperty(instanceName)) continue;
+            var instance = data.instances[instanceName];
+            if(instance.hasChanged() && instance.isValid(true)){
+              instance.save();
+            }
+          }
+        },
+        delete : function(){}
+      }
+    }
+    */
+    $this.ind = function(){
+      $this.individual.call(this, arguments);
+    }
+
+    $this.individual = function(options){
+      var
+        controller = false,
+        _ = $FamilyTreeTop._,
+        settings = false,
+        $data = {},
+        fn = {};
+
+      fn.getEvent = function(type, create){
+        var e = _.find(settings.instances.events, function(Event){
+          return Event.get('type') == type;
+        });
+        if("undefined" === typeof(e) && create){
+          e = controller.instance('Events').add({ type : type, gedcom_id : settings.gedcom_id }).last();
+          settings.instances.events.push(e);
+          return e;
+        }
+        return e;
+      };
+
+      fn.getEventDate = function(event){
+        var d;
+        if(event.isNew()){
+          d = controller.instance('Dates').add({ type : "EVO" }).last();
+        } else {
+          d = controller.instance('Dates').findWhere({ event_id : event.get('id') });
+          if("undefined" === typeof(d)){
+            d = controller.instance('Dates').add({ type : "EVO" }).last();
+          }
+        }
+        return d;
+      };
+
+      fn.getEventPlace = function(event){
+        var p;
+        if(event.isNew()){
+          p = controller.instance('Places').add({}).last();
+        } else {
+          p = controller.instance('Places').findWhere({ event_id : event.get('id') });
+          if("undefined" === typeof(p)){
+            p = controller.instance('Places').add({}).last();
+          }
+        }
+        return p;
+      };
+
+      fn.set = function(instance, data, array){
+        var sendData = {};
+        $FamilyTreeTop._.each(array, function(val){
+          var parts = val.split(':');
+          var key = parts.length == 2 ? parts[1] : parts[0];
+          if("undefined" !== typeof(data[key])){
+            if(parts.length == 2){
+              switch(parts[0]){
+                case "number" :
+                  _set_(parts[1], parseInt(data[key]));
+                  break;
+
+                default :
+                  _set_(parts[1], data[key]);
+                  break;
+              }
+            } else {
+              _set_(key, data[key]);
+            }
+          }
+        });
+        instance.set(sendData);
+        return true;
+        function _set_(k, v){
+          sendData[k] = v;
+        }
+      }
+
+      controller = $this.mod('controller');
+      $data.destroys = {};
+      $data.events = {};
+
+      if("undefined" !== typeof(options.gedcom_id)){
+        options.gedcom_id = parseInt(options.gedcom_id);
+      }
+      settings = $.extend(true, {}, {
+        gedcom_id : false,
+        instances : {
+          ind : false,
+          name : false,
+          relation : false,
+          medias : [],
+          parents : [],
+          families : [],
+          spouses : [],
+          children : [],
+          events : [],
+          notes : []
+        }
+      }, options);
+
+      settings.fn = fn;
+
+      if(settings.gedcom_id){
+        settings.instances.ind = controller.instance('Individuals').findWhere({ gedcom_id : settings.gedcom_id });
+        if("undefined" === typeof(settings.instances.ind)) settings.ind = false;
+        settings.instances.name = controller.instance('Names').findWhere({ gedcom_id : settings.gedcom_id });
+        if("undefined" === typeof(settings.instances.name)) settings.name = false;
+        settings.instances.relation = controller.instance('Relations').findWhere({ gedcom_id : settings.gedcom_id });
+        if("undefined" === typeof(settings.instances.relation)) settings.relation = false;
+        settings.instances.medias = controller.instance('Medias').filter(function(Media){
+          return Media.get('gedcom_id') == settings.gedcom_id;
+        });
+        settings.instances.parents = (function(con){
+            var
+              that = this,
+              pull = [],
+              data = con.instance('Children').filter(function(Child){
+              return that.gedcom_id == Child.get('gedcom_id');
+            });
+
+          data.forEach(function(el){
+            var family = con.instance('Families').findWhere({ family_id : el.get('family_id') });
+            var husb = con.instance('Individuals').findWhere({ gedcom_id : family.get('husb') });
+            var wife = con.instance('Individuals').findWhere({ gedcom_id : family.get('wife') });
+            if(husb.get('gender') == wife.get('gender')){
+              pull.push({
+                father : husb.get('gedcom_id'),
+                mother : wife.get('gedcom_id')
+              });
+            } else {
+              pull.push({
+                father : (parseInt(husb.get('gender')))?husb.get('gedcom_id'):wife.get('gedcom_id'),
+                mother : (!parseInt(wife.get('gender')))?wife.get('gedcom_id'):husb.get('gedcom_id')
+              });
+            }
+          });
+          return pull;
+        }).apply(settings, [controller]);
+        settings.instances.families = controller.instance('Families').filter(function(Family){
+          return Family.get('husb') == settings.gedcom_id || Family.get('wife') == settings.gedcom_id;
+        });
+        settings.instances.spouses = (function(con){
+          var that = this, pull = [];
+          that.instances.families.forEach(function(Family){
+            var gedcom_id = (Family.get('husb') == that.gedcom_id)?Family.get('wife'):Family.get('husb');
+            pull.push(gedcom_id);
+          });
+          return pull;
+        }).apply(settings, [controller]);
+        settings.instances.children = (function(con){
+          var that = this, pull = [];
+          that.instances.families.forEach(function(Family){
+            var child = con.instance('Children').findWhere({ family_id : Family.get('family_id') });
+            if("undefined" !== typeof(child)) pull.push(child.get('gedcom_id'));
+          });
+          return pull;
+        }).apply(settings, [controller]);
+        settings.instances.events = controller.instance('Events').filter(function(Event){
+          return Event.get('gedcom_id') == settings.gedcom_id;
+        });
+        _.each(settings.instances.events, function(Event){
+          $data.events[Event.cid] = {
+            event : Event,
+            date : controller.instance('Dates').findWhere({ event_id : Event.event_id }),
+            place : controller.instance('Places').findWhere({ event_id : Event.event_id })
+          }
+        });
+        settings.instances.notes = [];
+      }
+
+      return {
+        create : function(){},
+        read : function(){
+          return settings;
+        },
+        update : function(data){
+          if(!settings.instances.ind) return false;
+          $FamilyTreeTop._.each(data, function(item, key){
+            switch(key){
+              case "Individual":
+                fn.set(settings.instances.ind, item, ['number:gender']);
+                break;
+              case "Name":
+                fn.set(settings.instances.name, item, ['first_name', 'middle_name', 'last_name', 'know_as']);
+                break;
+              case "Relation": break;
+              case "Medias": break;
+              case "Parents" : break;
+              case "Families" : break;
+              case "Spouses": break;
+              case "Children": break;
+              case "Events" :
+                $FamilyTreeTop._.each(item, function(args, type){
+                  var e = fn.getEvent(type, true);
+                  if(type == 'DEAT' && !args){
+                    $data.destroys[e.cid] = e;
+                  } else {
+                    var d = fn.getEventDate(e);
+                    fn.set(d, args, ['number:start_day', 'number:start_month', 'number:start_year']);
+                    var p = fn.getEventPlace(e);
+                    fn.set(p, args, ['city', 'state', 'country']);
+
+                    if("undefined" !== typeof($data.events[e.cid])) delete $data.events[e.cid];
+                    $data.events[e.cid] = {
+                      event : e,
+                      date : d,
+                      place : p
+                    }
+                  }
+
+                });
+                break;
+              case "Notes" : break;
+            }
+          });
+          $FamilyTreeTop._.each(settings.instances, function(instance, name){
+            if(instance instanceof $FamilyTreeTop.Backbone.Model){
+              save(instance);
+            } else if(Object.prototype.toString.call( instance ) === '[object Array]'){
+              switch(name){
+                case "medias": break;
+                case "parents": break;
+                case "families": break;
+                case "spouses": break;
+                case "children": break;
+                case "events":
+                  _.each(instance, function(event, index){
+                    if(event.cid in $data.destroys){
+                      delete $data.events[event.cid];
+                      instance.splice(index, 1);
+                      event.destroy();
+                    } else {
+                      var dat = $data.events[event.cid];
+                      if(event.isNew()){
+                        save(event, {}, function(){
+                          if("undefined" !== typeof(dat)){
+                            save(dat.date, { event_id : event.event_id });
+                            save(dat.place, { event_id : event.event_id });
+                          }
+                        });
+                      } else {
+                        save(dat.date);
+                        save(dat.place);
+                      }
+                    }
+                  });
+                  break;
+              }
+            }
+          });
+          return true;
+          function save(instance, args, callback){
+            if(!instance || "undefined" === typeof(instance)) return false;
+            if(instance.hasChanged()&& instance.isValid(true)){
+              if("undefined" === typeof(args)) args = {};
+              if("undefined" === typeof(callback)) callback = $.noop;
+              args.success = callback;
+              instance.save(args);
+            }
+            return true;
+          }
+        },
+        destroy : function(){}
+      }
+    }
+
+    /* NEW END */
+
     $this.user = function(gedcom_id){
         if("undefined" === typeof(gedcom_id)) return false;
         if("undefined" === typeof(data.ind[gedcom_id])) return false;

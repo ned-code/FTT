@@ -1,4 +1,5 @@
 <?php
+require JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familytreetop/api/Slim/Slim.php';
 
 class FamilyTreeTopApiHelper {
     protected static $instance;
@@ -11,28 +12,33 @@ class FamilyTreeTopApiHelper {
         'dates',
         'events',
         'families',
+        'individuals',
         'medias',
+        'members',
         'names',
         'places',
-        'relations',
-        'users'
+        'relationNames',
+        'relations'
     );
     private $models = array(
         'child',
         'date',
         'event',
         'family',
+        'individual',
         'media',
+        'member',
         'name',
         'place',
         'relation',
+        'relationName',
         'user'
     );
     private $methods = array(
-        'post' => 'create',
-        'get' => 'read',
-        'put' => 'update',
-        'delete' => 'destroy'
+        'POST' => 'create',
+        'GET' => 'read',
+        'PUT' => 'update',
+        'DELETE' => 'destroy'
     );
     private $instances = array();
 
@@ -48,7 +54,7 @@ class FamilyTreeTopApiHelper {
         $path = JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'components/com_familytreetop/api/';
         foreach($this->collections as $collection){
             require_once $path . "/collections/" . $collection . ".php";
-            $className = 'FamilyTreeTopApiCollection' . ucfirst(strtolower($collection));
+            $className = 'FamilyTreeTopApiCollection' . ucfirst($collection);
             $this->instances[$collection] = new $className;
         }
 
@@ -57,14 +63,31 @@ class FamilyTreeTopApiHelper {
             $className = 'FamilyTreeTopApiModel' . ucfirst(strtolower($model));
             $this->instances[$model] = new $className;
         }
+
+        \Slim\Slim::registerAutoloader();
+    }
+
+    public function Slim(){
+        return new \Slim\Slim();
+    }
+
+    public function getBody(){
+        return json_decode($this->Slim()->request->getBody());
+    }
+
+    private function response($q){
+        header('Content-Type: application/json');
+        return json_encode($q);
     }
 
     public function request($class, $id){
-        if(!$class || !isset($this->methods[$_SERVER['REQUEST_METHOD']])) return json_encode( array() );
-        header('Content-Type: application/json');
+        if(!$class || !isset($this->methods[$_SERVER['REQUEST_METHOD']])) return $this->response(array());
         $method = $this->methods[ $_SERVER['REQUEST_METHOD'] ];
-        $class = $this->objects[$class];
-        return json_encode($class->{$method}($id));
+        $class = $this->instances[$class];
+        if(method_exists($class, $method)){
+            return $this->response(call_user_func_array(array($class, $method), array($id)));
+        }
+        return $this->response(array());
     }
 
 }

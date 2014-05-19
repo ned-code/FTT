@@ -3,9 +3,9 @@
   var EventsCollection = Backbone.Collection.extend({
     model : this.BackboneModels.Event,
     url: function(){
-      return $FamilyTreeTop.currenturl + '?option=com_familytreetop&task=api.send&class=events';
+      return $FamilyTreeTop.currenturl + '?option=com_familytreetop&task=api.send&class=events&tree_id='+this.tree_id;
     }
   });
-  this.BackboneCollections['Events'] = new EventsCollection;
+  this.BackboneCollections['Events'] = EventsCollection;
 }).call($FamilyTreeTop);
 

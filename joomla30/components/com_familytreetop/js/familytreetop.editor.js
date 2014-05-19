@@ -198,7 +198,25 @@ $FamilyTreeTop.create("editor", function($){
                 $cont : $tabs.getActiveTab(),
                 serialize : true,
                 onSerialize : function(data){
-                  console.log(data);
+                  switch($(this).attr('id').split('-')[0]){
+                    case "profile":
+                        var ind = $this.mod('usertree').individual({ gedcom_id : user.gedcom_id });
+                        ind.update({
+                          Individual : { gender : data.gender },
+                          Name : {
+                            first_name : data.first_name,
+                            middle_name : data.middle_name,
+                            last_name : data.last_name,
+                            know_as : data.know_as
+                          },
+                          Events : {
+                            'BIRT' : data.birth,
+                            'DEAT' : (data.living!="true")?data.death:false
+                          }
+                        });
+                      break;
+                    case "unions": break;
+                  }
                 }
               });
               break;

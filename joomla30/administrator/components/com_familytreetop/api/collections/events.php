@@ -5,7 +5,31 @@ class FamilyTreeTopApiCollectionEvents {
         return array('response'=>'events:create');
     }
     public function read(){
-        return array('response'=>'events:read');
+        $app = & JFactory::getApplication();
+        $tree_id = $app->input->get('tree_id', false);
+        if(!$tree_id) return array();
+
+        $db = JFactory::getDbo();
+        $sql = "SELECT e.*
+                FROM #__familytreetop_events as e,
+                    #__familytreetop_families as f,
+                    #__familytreetop_tree_links as l,
+                    #__familytreetop_trees as t
+
+                WHERE IF(
+                    e.gedcom_id  IS NULL,
+                            e.family_id = l.id AND l.type = 1,
+                            e.gedcom_id  = l.id AND l.type = 0
+                        ) AND  l.tree_id = t.id AND t.id = %s
+                GROUP BY id";
+        $db->setQuery(sprintf($sql, $tree_id));
+        $rows = $db->loadObjectList();
+        foreach($rows as $index => $row){
+            $rows[$index]->id = (int)$row->id;
+            $rows[$index]->gedcom_id = (int)$row->gedcom_id;
+            $rows[$index]->family_id = (int)$row->family_id;
+        }
+        return $rows;
     }
     public function update(){
         return array('response'=>'events:update');
