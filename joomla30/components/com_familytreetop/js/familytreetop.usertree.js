@@ -268,12 +268,24 @@ $FamilyTreeTop.create("usertree", function($){
         $data = {},
         fn = {};
 
-      fn.getEvent = function(type, create){
+      fn.getEventByType = function(type, create){
         var e = _.find(settings.instances.events, function(Event){
           return Event.get('type') == type;
         });
         if("undefined" === typeof(e) && create){
           e = controller.instance('Events').add({ type : type, gedcom_id : settings.gedcom_id }).last();
+          settings.instances.events.push(e);
+          return e;
+        }
+        return e;
+      };
+
+      fn.getFamilyEvent = function(family_id, create){
+        var e = _.find(settings.instances.events, function(Event){
+          return Event.get('family_id') == family_id;
+        });
+        if("undefined" === typeof(e) && create){
+          e = controller.instance('Events').add({ type : 'MARR', family_id : family_id }).last();
           settings.instances.events.push(e);
           return e;
         }
@@ -414,9 +426,16 @@ $FamilyTreeTop.create("usertree", function($){
           });
           return pull;
         }).apply(settings, [controller]);
-        settings.instances.events = controller.instance('Events').filter(function(Event){
-          return Event.get('gedcom_id') == settings.gedcom_id;
-        });
+        settings.instances.events = (function(con){
+          var family_ids = {}, pull;
+          $FamilyTreeTop._.each(this.instances.families, function(Family){
+            family_ids[Family.get('family_id')] = true;
+          });
+          return con.instance('Events').filter(function(Event){
+            return Event.get('gedcom_id') == settings.gedcom_id || Event.get('family_id') in family_ids;
+          });
+        }).apply(settings, [controller]);
+
         _.each(settings.instances.events, function(Event){
           $data.events[Event.cid] = {
             event : Event,
@@ -445,12 +464,29 @@ $FamilyTreeTop.create("usertree", function($){
               case "Relation": break;
               case "Medias": break;
               case "Parents" : break;
-              case "Families" : break;
+              case "Families" :
+                $FamilyTreeTop._.each(item, function(family, index){
+                  if("undefined" !== typeof(family.marriage)){
+                    var marr = fn.getFamilyEvent(family.family_id, false);
+                    var d = fn.getEventDate(marr);
+                    fn.set(d, family.marriage, ['number:start_day', 'number:start_month', 'number:start_year']);
+                    var p = fn.getEventPlace(marr);
+                    fn.set(p, family.marriage, ['city', 'state', 'country']);
+
+                    if("undefined" !== typeof($data.events[marr.cid])) delete $data.events[marr.cid];
+                    $data.events[marr.cid] = {
+                      event : marr,
+                      date : d,
+                      place : p
+                    }
+                  }
+                });
+                break;
               case "Spouses": break;
               case "Children": break;
               case "Events" :
                 $FamilyTreeTop._.each(item, function(args, type){
-                  var e = fn.getEvent(type, true);
+                  var e = fn.getEventByType(type, true);
                   if(type == 'DEAT' && !args){
                     $data.destroys[e.cid] = e;
                   } else {
@@ -479,7 +515,8 @@ $FamilyTreeTop.create("usertree", function($){
               switch(name){
                 case "medias": break;
                 case "parents": break;
-                case "families": break;
+                case "families":
+                  break;
                 case "spouses": break;
                 case "children": break;
                 case "events":

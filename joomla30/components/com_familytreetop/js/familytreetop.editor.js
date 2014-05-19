@@ -215,7 +215,13 @@ $FamilyTreeTop.create("editor", function($){
                           }
                         });
                       break;
-                    case "unions": break;
+                    case "unions":
+                      data = data.slice(1);
+                      var ind = $this.mod('usertree').individual({ gedcom_id : user.gedcom_id });
+                      ind.update({
+                        Families : data
+                      });
+                      break;
                   }
                 }
               });
