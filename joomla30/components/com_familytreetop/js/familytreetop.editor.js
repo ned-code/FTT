@@ -131,6 +131,22 @@ $FamilyTreeTop.create("editor", function($){
           pane : {
             tpl : "editor.tabs.media.html",
             onLoad: function($pane){
+              $($pane).fileupload({
+                formData:{ gedcom_id: user.gedcom_id},
+                done: function(event, object){
+                  var response = object.jqXHR.responseJSON;
+                  var files = response.files;
+                  $(files).each(function(index, el){
+                    //$this.mod('usertree').updateMedia(el.familytreetop.media);
+                    //var item = el.familytreetop.media;
+                    console.log(index, el);
+                  });
+                  $(object.context).each(function(index, el){
+                    $(el).remove();
+                  });
+                  return true;
+                }
+              });
             }
           }
         },
