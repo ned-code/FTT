@@ -373,6 +373,7 @@
         var collection = $this.BackboneCollections[collectionName];
         collection.fetch();
       }
+
       $this.app.data = jQuery.parseJSON($this.app.data);
 
       //init modules;
