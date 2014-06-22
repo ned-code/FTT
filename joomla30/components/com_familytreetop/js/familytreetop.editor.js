@@ -3,6 +3,72 @@ $FamilyTreeTop.create("editor", function($){
     $this = this,
     $fn = {};
 
+
+  $fn.createImageBox = function(media){
+    var $div = $('<div class="familytreetop-editor-media-container img-thumbnail">'
+                 + '<div class="familytreetop-editor-media-content"></div>'
+                 + '<div class="familytreetop-editor-media-buttons">'
+                    + '<button class="btn btn-primary"><i class="fa fa-check"></i>Avatar</button>'
+                    + '<button class="btn btn-default">Avatar</button>'
+                    + '<button class="btn btn-danger"><i class="fa fa-trash-o"></i></button>'
+                 + '</div>'
+                + '</div>'),
+        $img  = $this.mod('usertree').getImage(media.get('gedcom_id'), ["100","100"], media, 'medias');
+    if(media.get('role') == 'AVAT'){
+      $($div).find('.btn-default').addClass('hidden');
+    } else {
+      $($div).find('.btn-primary').addClass('hidden');
+    }
+    $div.find('.btn-danger').on('click', media, $fn.onDeleteAvatar);
+    $div.find('.btn-default').on('click', media, $fn.onSetAvatar);
+    $div.find('.btn-primary').on('click', media, $fn.onUnsetAvatar);
+    $div.find('.familytreetop-editor-media-content').append($img);
+    return $div;
+  };
+
+  $fn.onSetAvatar = function(e){
+    var model = e.data,
+        medias = $this.mod('controller').instance('Medias'),
+        ind = $this.mod('usertree').individual({ gedcom_id : model.get('gedcom_id') }),
+        avatar, old, $div;
+
+    avatar = medias.findWhere({ role : "AVAT" });
+    old = ind.read().fn.getModelByCID('medias', avatar.cid);
+    old.save({ role : "IMAG" });
+    model.save({ role : "AVAT" });
+
+    avatar = $('.familytreetop-medias-container').find('img[role="AVAT"]').closest('.familytreetop-editor-media-container');
+    avatar.find('.btn-default').removeClass('hidden');
+    avatar.find('.btn-primary').addClass('hidden');
+
+    $div = $(this).closest('.familytreetop-editor-media-container');
+    $div.find('.btn-default').addClass('hidden');
+    $div.find('.btn-primary').removeClass('hidden');
+
+    $('img[gedcom_id="'+model.get('gedcom_id')+'"]').each(function(index, image){
+      //console.log(image);
+      if($(image).attr('is') == "medias") return true;
+      $(image).attr('src', model.get('thumbnail_url'));
+    });
+
+
+  };
+  $fn.onUnsetAvatar = function(e){
+    var model = e.data;
+    model.save({ role : "IMAG" });
+  };
+  $fn.onDeleteAvatar = function(e){
+    var target = this,
+        $div = $(target).closest('.familytreetop-editor-media-container'),
+        model = e.data;
+
+    $div.remove();
+    $this.mod('controller').instance('Medias').remove(model);
+    model.destroy({
+      url : model.get('delete_url')
+    });
+  };
+
   $this.render = function(options){
     var
       $tabs = false,
@@ -131,19 +197,31 @@ $FamilyTreeTop.create("editor", function($){
           pane : {
             tpl : "editor.tabs.media.html",
             onLoad: function($pane){
+              var ind = $this.mod('usertree').individual({ gedcom_id : user.gedcom_id });
+              var medias = ind.read().instances.medias;
+              var $cont = $('<div class="familytreetop-medias-container"></div>');
+              $pane.append($cont);
+              _.map(medias, function(media){
+                var $div = $fn.createImageBox(media);
+                $cont.append($div);
+                return media;
+              });
               $($pane).fileupload({
                 formData:{ gedcom_id: user.gedcom_id},
                 done: function(event, object){
                   var response = object.jqXHR.responseJSON;
                   var files = response.files;
                   $(files).each(function(index, el){
-                    //$this.mod('usertree').updateMedia(el.familytreetop.media);
-                    //var item = el.familytreetop.media;
-                    console.log(index, el);
+                    ind.update({
+                      Medias : { data : el }
+                    });
                   });
                   $(object.context).each(function(index, el){
                     $(el).remove();
                   });
+                  var media = _.last(ind.read().instances.medias);
+                  var $div = $fn.createImageBox(media);
+                  $cont.append($div);
                   return true;
                 }
               });
@@ -193,22 +271,14 @@ $FamilyTreeTop.create("editor", function($){
           this.remove();
         },
         onButtonClick : function(button){
-          var type = button.dataset.familytreetopButton;
+          var type = button.dataset.familytreetopButton, isClose = false;
           if("undefined" === typeof(type)) return false;
           switch(type){
             case "close" :
               modal.hide();
               break;
             case "save_and_close":
-              $FamilyTreeTop.ui.formworker({
-                $cont : $tabs.getActiveTab(),
-                serialize : true,
-                onSerialize : function(data){
-                  console.log(data);
-                  modal.hide();
-                }
-              });
-              break;
+              isClose = true;
             case "save" :
               $FamilyTreeTop.ui.formworker({
                 $cont : $tabs.getActiveTab(),
@@ -239,6 +309,7 @@ $FamilyTreeTop.create("editor", function($){
                       });
                       break;
                   }
+                  if(isClose) modal.hide();
                 }
               });
               break;

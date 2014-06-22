@@ -211,3 +211,14 @@ body > #wrap {
     background: white;
     color: #000;
 }
+.familytreetop-medias-container {
+
+}
+.familytreetop-editor-media-container {
+    display : inline-block;
+    width: 130px;
+    text-align: center;
+    margin: 3px;
+}
+.familytreetop-editor-media-content {}
+.familytreetop-editor-media-buttons {}

@@ -318,6 +318,10 @@ $FamilyTreeTop.create("usertree", function($){
         return p;
       };
 
+      fn.getModelByCID = function(instanceName, cid){
+        return _.findWhere(settings.instances[instanceName], { cid : cid });
+      }
+
       fn.set = function(instance, data, array){
         var sendData = {};
         $FamilyTreeTop._.each(array, function(val){
@@ -462,7 +466,13 @@ $FamilyTreeTop.create("usertree", function($){
                 fn.set(settings.instances.name, item, ['first_name', 'middle_name', 'last_name', 'know_as']);
                 break;
               case "Relation": break;
-              case "Medias": break;
+              case "Medias":
+                var obj = item.data;
+                var data = $.extend(true, {}, obj, obj.familytreetop.media);
+                data.json = JSON.stringify(data.json);
+                var model = controller.instance('Medias').add(data).last();
+                settings.instances.medias.push(model);
+                break;
               case "Parents" : break;
               case "Families" :
                 $FamilyTreeTop._.each(item, function(family, index){
@@ -1579,7 +1589,7 @@ $FamilyTreeTop.create("usertree", function($){
         return ret.join(", ");
     }
 
-    $this.getImage = function(gedcom_id, size){
+    $this.getImage = function(gedcom_id, size, media, is){
       var user = $this.user(gedcom_id),
           innerSize = [],
           imgSize = [],
@@ -1587,9 +1597,17 @@ $FamilyTreeTop.create("usertree", function($){
           imgMarginTop = "",
           attr = {},
           avatar = (gedcom_id)?$this.getAvatar(gedcom_id):false,
-          $img = $('<img></img>'),
+          $img = $('<img>'),
           $outerDiv = $('<div></div>'),
           $innerDiv = $('<div></div>');
+
+      if(media instanceof Backbone.Model){
+        avatar = _.clone(media.attributes);
+        avatar.json = $.parseJSON(avatar.json);
+      }
+      if("unefined" !== typeof(is)){
+        attr.is = is;
+      }
 
       if(size[0] > 50 && size[1] > 50){
         $($outerDiv).addClass('img-thumbnail');
@@ -1625,10 +1643,13 @@ $FamilyTreeTop.create("usertree", function($){
                 return data.url;
             };
         })(avatar);
+        attr.role = avatar.role;
       } else if(gedcom_id && "undefined" !== typeof(usersmap[gedcom_id])){
         attr.src = 'https://graph.facebook.com/'+usersmap[gedcom_id].facebook_id+'/picture?width='+size[0]+'&height='+size[1];
+        attr.role = "facebook";
       } else {
         attr.src = $this.url().base()+"/templates/familytreetop/images/"+((parseInt(user.gender))?"male":"female")+size[0]+".png";
+        attr.role = "media";
       }
 
       (function(){
