@@ -150,7 +150,7 @@ $FamilyTreeTop.create("editor", function($){
         {
           toggle : {
             href : "unions",
-            text : '<i class="fa fa-users spaced-right-md"></i><span class="hidden-xs">' + $this.l10n('tpl_familytreetop_editor_tabs_unions') + '</span>'
+            text : '<i class="glyphicon glyphicon-link spaced-right-md"></i><span class="hidden-xs">' + $this.l10n('tpl_familytreetop_editor_tabs_unions') + '</span>'
           },
           pane : {
             tpl : "editor.tabs.unions.html",
@@ -197,7 +197,7 @@ $FamilyTreeTop.create("editor", function($){
         {
           toggle : {
             href : "media",
-            text : '<i class="fa fa-paperclip spaced-right-md"></i><span class="hidden-xs">' + $this.l10n('tpl_familytreetop_editor_tabs_media') + '</span>'
+            text : '<i class="glyphicon glyphicon-camera spaced-right-md"></i><span class="hidden-xs">' + $this.l10n('tpl_familytreetop_editor_tabs_media') + '</span>'
           },
           pane : {
             tpl : "editor.tabs.media.html",
