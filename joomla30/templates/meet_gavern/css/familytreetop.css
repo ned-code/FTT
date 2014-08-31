@@ -199,3 +199,6 @@ body > #wrap {
     background: white;
     color: #000;
 }
+.familytreetop-modal .modal-dialog {
+    width: 90%;
+}

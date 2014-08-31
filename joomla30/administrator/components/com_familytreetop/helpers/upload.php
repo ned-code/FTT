@@ -56,7 +56,7 @@ class UploadHandlerHelper extends UploadHandler {
         $gedcom = GedcomHelper::getInstance();
         $media = $gedcom->medias->get();
         $media->gedcom_id = $this->options['gedcom_id'];
-        $media->save();
+        //$media->save();
 
         $file = new stdClass();
         $file->familytreetop = array(

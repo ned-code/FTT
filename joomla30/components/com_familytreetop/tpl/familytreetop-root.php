@@ -158,7 +158,7 @@ $language_tag = FamilyTreeTopLanguagesHelper::getDefaultTag();
     </div>
 </div>
 
-<div id="familytreetop-modal" class="modal fade">
+<div id="familytreetop-modal" class="modal fade familytreetop-modal">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
